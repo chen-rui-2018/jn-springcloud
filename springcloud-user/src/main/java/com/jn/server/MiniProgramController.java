@@ -2,9 +2,11 @@ package com.jn.server;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
+import com.jn.common.util.Assert;
 import com.jn.miniprogram.register.service.MiniProgramRegistersService;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.user.api.MiniProgramRegisterClient;
+import com.jn.user.enums.MiniProgramRegisterExceptionEnum;
 import com.jn.user.model.RegisterInfoParam;
 import com.jn.user.model.WeChatRequestParam;
 import io.swagger.annotations.Api;
@@ -40,7 +42,8 @@ public class MiniProgramController extends BaseController implements MiniProgram
     @ApiOperation(value = "判断OpenId是否已绑定")
     @RequestMapping(value = "/isBindingAccountByOpenId",method = RequestMethod.POST)
     @Override
-    public Result isBindingAccountByOpenId(@RequestBody @Validated WeChatRequestParam weChatRequestParam) {
+    public Result<String> isBindingAccountByOpenId(@RequestBody @Validated WeChatRequestParam weChatRequestParam) {
+        logger.info("----进入判断OpenId是否已绑定API,入参：{}----",weChatRequestParam.toString());
         return new Result(miniprogramRegistersService.isBindingAccountByOpenId(weChatRequestParam));
     }
 
@@ -50,7 +53,18 @@ public class MiniProgramController extends BaseController implements MiniProgram
     @ApiOperation(value = "注册并绑定", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/registerAndBinding")
     @Override
-    public Result registerAndBinding(@RequestBody @Validated RegisterInfoParam registerInfoParam) {
+    public Result<String> registerAndBinding(@RequestBody @Validated RegisterInfoParam registerInfoParam) {
+        logger.info("----进入注册并绑定的API,入参：{}----",registerInfoParam.toString());
         return new Result(miniprogramRegistersService.registerAndBinding(registerInfoParam));
+    }
+
+    @ControllerLog(doAction = "根据账号获取openId")
+    @ApiOperation(value = "根据账号获取openId", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/getOpenIdByAccount")
+    @Override
+    public Result<String> getOpenIdByAccount(@RequestBody String account) {
+        Assert.notNull(account, MiniProgramRegisterExceptionEnum.PHONE_NUMBER_CANNOT_EMPTY.getMessage());
+        logger.info("----进入根据账号获取openId的API,入参：{}----",account);
+        return new Result(miniprogramRegistersService.getOpenIdByAccount(account));
     }
 }

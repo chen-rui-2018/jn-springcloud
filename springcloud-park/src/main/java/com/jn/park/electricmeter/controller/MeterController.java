@@ -247,7 +247,7 @@ public class MeterController extends BaseController {
     @ApiOperation(value = "趋势明细图表",notes = "趋势明细图表", httpMethod = "POST")
     @PostMapping(value = "/trendChartDetail")
     @RequiresPermissions("/meter/trendChartDetail")
-    public Result trendChartDetail(@RequestBody @Validated TrendChartParam param){
+    public Result trendChartDetail(@RequestBody @Validated TrendChartPageParam param){
         return meterService.trendChartDetail(param);
     }
 
@@ -257,5 +257,13 @@ public class MeterController extends BaseController {
     @RequiresPermissions("/meter/trendChart")
     public Result trendChart(@RequestBody @Validated TrendChartParam param){
         return meterService.trendChart(param);
+    }
+
+    @ControllerLog(doAction = "手动调用电表定时计价无参数")
+    @ApiOperation(value = "手动调用电表定时计价无参数",notes = "手动调用电表定时计价无参数", httpMethod = "GET")
+    @GetMapping(value = "/calcCostEverday")
+    @RequiresPermissions("/meter/calcCostEverday")
+    public void calcCostEverday(){
+        meterCalcCostService.calcCostEverday();
     }
 }

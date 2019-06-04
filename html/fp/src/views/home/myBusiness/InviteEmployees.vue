@@ -1,7 +1,7 @@
 <template>
   <div class="inviteProduct">
     <div class="ordinary_title">
-      <div>邀请员工</div>
+      <div class="font16">邀请员工</div>
     </div>
     <div class="ordinary_content">
        <el-form label-width="120px" class="postJobInfo">
@@ -60,13 +60,19 @@ export default {
      url:'getInviteStaffList',
      data:{phone :this.searchFiled },
      callback:(res=>{
-         this.nickName=res.data.rows[0].nickName
-         this.name=res.data.rows[0].name
-         this.sex=res.data.rows[0].sex
-         this.account=res.data.rows[0].account
-         this.jobs=res.data.rows[0].jobs
-         this.signature=res.data.rows[0].signature
-         this.hobbys=res.data.rows[0].hobbys
+       console.log(res)
+       if(res.code==='0000'){
+
+          this.nickName=res.data.nickName
+          this.name=res.data.name
+          this.sex=res.data.sex
+          this.account=res.data.account
+          this.jobs=res.data.jobs
+          this.signature=res.data.signature
+          this.hobbys=res.data.hobbys
+       }else{
+          this.$message.error(res.result);
+       }
      })
  })
       },
@@ -107,6 +113,7 @@ export default {
       .el-input__inner{
         height: 33px;
         line-height: 33px;
+        width:220px;
       }
       .el-form-item__content{
          height: 33px;
@@ -130,7 +137,6 @@ export default {
       background-color: #fff;
 
       padding:24px 28px;
-      font-size: 13px;
       border-radius: 5px;
     }
     .ordinary_content{
@@ -145,8 +151,9 @@ export default {
     border-left: 0;
         }
         .postJobInfo{
-            width: 50%;
-            margin: 0 auto;
+            // width: 50%;
+            // margin: 0 auto;
+            padding-left: 140px;
 
             .el-form-item__content,.el-select{
                 width: 266px;

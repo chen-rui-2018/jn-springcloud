@@ -116,8 +116,8 @@
               </div>
             </div>
           </div>
-          <div class="orgBtn fr mainColor">
-            <a href="">在线联系</a>
+          <div class="orgBtn fr mainColor pointer" @click="onlineContat(i.orgAccount,i.orgName)">
+            <a href="javascript:;">在线联系</a>
           </div>
         </li>
       </ul>
@@ -140,9 +140,9 @@ export default {
       sortTypes: "",
       keyW: "",
       businessType: "",
-      industrySector:"",
-      developmentStage:"",
-      companyNature:"",
+      industrySector: "",
+      developmentStage: "",
+      companyNature: "",
       colorFlag: "",
       filterFlag1: "",
       filterFlag2: "",
@@ -162,8 +162,27 @@ export default {
   mounted() {
     this.initList();
     this.selectIndustryList();
+    if (this.$route.query.searchData) {
+      this.keyW = this.$route.query.searchData;
+      this.initList();
+    }
   },
   methods: {
+    //在线联系
+    onlineContat(orgAccount, orgName) {
+      if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
+      this.$router.push({
+        path: "/chat",
+        query: {
+          fromUser: JSON.parse(sessionStorage.userInfo).account,
+          toUser: orgAccount,
+          nickName: orgName
+        }
+      });
+    },
     widFun(i) {
       let doc = document.getElementsByClassName(i);
       let num = 0;
@@ -186,26 +205,25 @@ export default {
     },
     //领域搜索
     handleFilter(i) {
-      this.businessType=`${i}`,
-      this.filterFlag = i;
+      (this.businessType = `${i}`), (this.filterFlag = i);
       this.initList();
     },
     handleFilter1(i) {
-      this.industrySector=`${i}`,
-      // this.industrySector=[]
-      // this.industrySector.push(i);
-      this.filterFlag1 = i;
+      (this.industrySector = `${i}`),
+        // this.industrySector=[]
+        // this.industrySector.push(i);
+        (this.filterFlag1 = i);
       this.initList();
     },
     handleFilter2(i) {
-      this.developmentStage=`${i}`,
-      // this.developmentStage=[]
-      // this.developmentStage.push(i);
-      this.filterFlag2 = i;
+      (this.developmentStage = `${i}`),
+        // this.developmentStage=[]
+        // this.developmentStage.push(i);
+        (this.filterFlag2 = i);
       this.initList();
     },
-    handleFilter3(i) {  
-      this.companyNature=`${i}`
+    handleFilter3(i) {
+      this.companyNature = `${i}`;
       this.filterFlag3 = i;
       this.initList();
     },
@@ -233,25 +251,25 @@ export default {
     initList() {
       let _this = this;
       let data = {
-          businessType: _this.businessType,
-          industrySector: _this.industrySector,
-          developmentStage: _this.developmentStage,
-          companyNature: _this.companyNature,
-          page: _this.page,
-          rows: _this.row,
-          sortTypes: _this.sortTypes,
-          orgName: _this.keyW
-        }
+        businessType: _this.businessType,
+        industrySector: _this.industrySector,
+        developmentStage: _this.developmentStage,
+        companyNature: _this.companyNature,
+        page: _this.page,
+        rows: _this.row,
+        sortTypes: _this.sortTypes,
+        orgName: _this.keyW
+      };
       this.api.get({
         url: "selectServiceOrgList",
         data: data,
-        dataFlag:true,
+        dataFlag: true,
         callback: function(res) {
           if (res.code == "0000") {
             _this.serverAgent = res.data.rows;
             for (let it in _this.serverAgent) {
               _this.serverAgent[it].attitudeScore =
-              _this.serverAgent[it].attitudeScore * 1;
+                _this.serverAgent[it].attitudeScore * 1;
             }
             _this.total = res.data.total;
           } else {
@@ -293,7 +311,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.serverOrg{
-  padding-top:65px;
+.serverOrg {
+  padding-top: 65px;
 }
 </style>

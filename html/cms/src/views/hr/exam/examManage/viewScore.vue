@@ -74,6 +74,10 @@
     </el-table>
     <!-- 分页 -->
     <el-pagination v-show="total>0" :current-page="listQuery.page" :page-sizes="[5,10,20,30, 50]" :page-size="listQuery.rows" :total="total" class="tablePagination" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+    <el-footer style="text-align: center;">
+      <!-- <el-button type="primary" @click="submitForm('ruleForm')">保存 & 去设计试卷</el-button> -->
+      <el-button @click="$router.go(-1)">返回</el-button>
+    </el-footer>
   </div>
 </template>
 

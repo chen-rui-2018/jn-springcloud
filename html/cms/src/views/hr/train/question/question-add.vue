@@ -1,7 +1,7 @@
 <template>
   <el-card>
     <!-- 标题 -->
-    <el-tabs v-model="activeName">
+    <el-tabs v-model="activeName" @tab-click="tabsCLick">
       <el-tab-pane label="编辑问卷" name="first"/>
       <el-tab-pane label="发放问卷" name="second"/>
       <el-tab-pane label="问卷结果" name="third"/>
@@ -139,13 +139,25 @@ export default {
           if (latestView) {
             this.$router.push('question-invest')
           } else {
-            this.$router.push('/')
+            // this.$router.push('/')
+            this.$router.push('question-invest')
           }
         }
       })
     },
     isActive(route) {
       return route.path === this.$route.path
+    },
+    tabsCLick(item) {
+      if (this.activeName === 'first') {
+        this.$router.push({ path: 'question-edit', query: { id: this.$route.query.id }})
+      }
+      if (this.activeName === 'second') {
+        this.$router.push({ path: 'question-give', query: { id: this.$route.query.id }})
+      }
+      if (this.activeName === 'third') {
+        this.$router.push({ path: 'question-result', query: { id: this.$route.query.id }})
+      }
     }
   }
 }

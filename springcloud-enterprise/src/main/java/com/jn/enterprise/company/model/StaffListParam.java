@@ -19,7 +19,7 @@ import java.io.Serializable;
 public class StaffListParam extends Page implements Serializable {
 
     @ApiModelProperty(value = "是否需要分页 1:分页 0:不分页", required = true, example = "1")
-    @Pattern(regexp = "^[01]$", message = "{isDefault:'默认值只允许为0,1'}")
+    @Pattern(regexp = "^[01]$", message = "是否需要分页校验错误'")
     @NotNull(message="是否需要分页不能为空")
     private String needPage;
 

@@ -77,7 +77,7 @@
         </div>
         <!-- 提需求弹框 -->
         <template v-if="serverProVisible">
-            <el-dialog :visible.sync="serverProVisible" width="530px" top="30vh">
+            <el-dialog :visible.sync="serverProVisible" width="530px" top="30vh" :modal-append-to-body=false>
                 <el-form ref="financialProform" :model="serverProform" label-position="right" label-width="100px" style="max-width:436px;">
                     <el-form-item label="需求描述:" prop="requireDetail" style="font-size:13px">
                         <el-input v-model.trim="serverProform.requireDetail" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
@@ -121,6 +121,10 @@ export default {
   mounted() {
     this.selectIndustryList();
     this.initList();
+    if(this.$route.query.searchData){
+      this.keyW=this.$route.query.searchData
+      this.initList();
+    }
   },
   methods: {
     widFun(i) {
@@ -136,6 +140,10 @@ export default {
       }
     },
     demandRaise(i) {
+       if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
       this.serverProVisible = true;
       this.serverProform.requireDetail = "";
       this.serverProform.productId = i.productId;

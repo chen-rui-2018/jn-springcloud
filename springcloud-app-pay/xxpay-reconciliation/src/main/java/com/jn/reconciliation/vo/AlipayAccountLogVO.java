@@ -18,12 +18,14 @@ package com.jn.reconciliation.vo;
 import java.math.BigDecimal;
 import java.util.Date;
 
+
 /**
- * 支付宝对账文件vo转换实体.
- *
- * 龙果学院：www.roncoo.com
- * 
- * @author：shenjialong
+ * @ClassName：支付宝对账文件vo转换实体
+ * @Descript：
+ * @Author： hey
+ * @Date： Created on 2019/5/20 15:54
+ * @Version： v1.0
+ * @Modified By:
  */
 public class AlipayAccountLogVO {
 

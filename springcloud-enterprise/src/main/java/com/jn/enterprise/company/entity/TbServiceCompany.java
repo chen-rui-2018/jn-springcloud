@@ -39,11 +39,11 @@ public class TbServiceCompany implements Serializable {
 
     private String comProperty;
 
-    private Long regCapital;
+    private BigDecimal regCapital;
 
     private String addCapital;
 
-    private Long comScale;
+    private String comScale;
 
     private Date foundingTime;
 
@@ -267,11 +267,11 @@ public class TbServiceCompany implements Serializable {
         this.comProperty = comProperty == null ? null : comProperty.trim();
     }
 
-    public Long getRegCapital() {
+    public BigDecimal getRegCapital() {
         return regCapital;
     }
 
-    public void setRegCapital(Long regCapital) {
+    public void setRegCapital(BigDecimal regCapital) {
         this.regCapital = regCapital;
     }
 
@@ -283,12 +283,12 @@ public class TbServiceCompany implements Serializable {
         this.addCapital = addCapital == null ? null : addCapital.trim();
     }
 
-    public Long getComScale() {
+    public String getComScale() {
         return comScale;
     }
 
-    public void setComScale(Long comScale) {
-        this.comScale = comScale;
+    public void setComScale(String comScale) {
+        this.comScale = comScale == null ? null : comScale.trim();
     }
 
     public Date getFoundingTime() {

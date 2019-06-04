@@ -46,7 +46,7 @@ import java.util.*;
 @Service
 public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
     private static final Logger logger = LoggerFactory.getLogger(EmployeeBasicInfoServiceImpl.class);
-    public static final long ONE_YEAR=31536000;
+    public static final long ONE_YEAR = 31536000;
     @Autowired
     private TbManpowerEmployeeBasicInfoMapper tbManpowerEmployeeBasicInfoMapper;
     @Autowired
@@ -71,7 +71,7 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
     private SocialSecurityMapper socialSecurityMapper;
 
     @Autowired
-    private RedisTemplate<String,Object> redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Autowired
     private CommonService commonService;
@@ -82,7 +82,7 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
     @Value("${spring.application.name}")
     private String applicationName;
 
-    public static final String prefix="NJ";
+    public static final String prefix = "NJ";
 
     @Override
     @ServiceLog(doAction = "添加员工花名册")
@@ -92,7 +92,7 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
             throw new JnSpringCloudException(EmployeeExceptionEnums.EmployeeDEPARTMENT_NOT_EXISTS);
         }*/
         //用户接口
-        User  adduser=new User();
+        User adduser = new User();
         adduser.setAccount(employeeBasicInfoAdd.getUserAccount());
         adduser.setName(employeeBasicInfoAdd.getName());
         adduser.setPhone(employeeBasicInfoAdd.getPhone());
@@ -102,21 +102,21 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
         adduser.setPassword("123456");
         adduser.setCreatedTime(new Date());
         adduser.setCreatorAccount(user.getAccount());
-        Result result= systemClient.addSysUser(adduser);
-        if(result==null || result.getData()==null || !"0000".equals(result.getCode())){
+        Result result = systemClient.addSysUser(adduser);
+        if (result == null || result.getData() == null || !"0000".equals(result.getCode())) {
             logger.error("新增用户接口addSysUser调用失败,用户账号{},错误码{},错误原因{}",
                     employeeBasicInfoAdd.getUserAccount(),
-                    result!=null?result.getCode():"",result!=null?result.getResult():"");
+                    result != null ? result.getCode() : "", result != null ? result.getResult() : "");
             throw new JnSpringCloudException(EmployeeExceptionEnums.ADD_USER_ERROR,
-                    result!=null?result.getResult():"新增用户接口调用错误");
+                    result != null ? result.getResult() : "新增用户接口调用错误");
         }
 
-        if(result.getData()!=null){
-            String userId=((Map<String,String>)result.getData()).get("id");
+        if (result.getData() != null) {
+            String userId = ((Map<String, String>) result.getData()).get("id");
             employeeBasicInfoAdd.setUserId(userId);
         }
-        TbManpowerEmployeeBasicInfo tbEmployeeBasicInfo=new TbManpowerEmployeeBasicInfo();
-        BeanUtils.copyProperties(employeeBasicInfoAdd,tbEmployeeBasicInfo);
+        TbManpowerEmployeeBasicInfo tbEmployeeBasicInfo = new TbManpowerEmployeeBasicInfo();
+        BeanUtils.copyProperties(employeeBasicInfoAdd, tbEmployeeBasicInfo);
 
         String jobNumber = getJobNumber();
         tbEmployeeBasicInfo.setJobNumber(jobNumber);
@@ -127,49 +127,48 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
         tbEmployeeBasicInfo.setModifierAccount(user.getAccount());
         tbEmployeeBasicInfo.setModifiedTime(new Date());
         tbManpowerEmployeeBasicInfoMapper.insert(tbEmployeeBasicInfo);
-        if(!CollectionUtils.isEmpty(employeeBasicInfoAdd.getEducationExperienceList())){
-            List<TbManpowerEducationExperience> educationList= BeanCopyUtil.copyList(employeeBasicInfoAdd.getEducationExperienceList(),
+        if (!CollectionUtils.isEmpty(employeeBasicInfoAdd.getEducationExperienceList())) {
+            List<TbManpowerEducationExperience> educationList = BeanCopyUtil.copyList(employeeBasicInfoAdd.getEducationExperienceList(),
                     TbManpowerEducationExperience.class);
-            educationList.forEach(e->{
+            educationList.forEach(e -> {
                 e.setId(UUID.randomUUID().toString());
                 e.setJobNumber(tbEmployeeBasicInfo.getJobNumber());
             });
             educationExperienceMapper.insertBatch(educationList);
         }
-        if(!CollectionUtils.isEmpty(employeeBasicInfoAdd.getWorkExperienceList())){
-            List<TbManpowerWorkExperience> workList= BeanCopyUtil.copyList(employeeBasicInfoAdd.getWorkExperienceList(),
+        if (!CollectionUtils.isEmpty(employeeBasicInfoAdd.getWorkExperienceList())) {
+            List<TbManpowerWorkExperience> workList = BeanCopyUtil.copyList(employeeBasicInfoAdd.getWorkExperienceList(),
                     TbManpowerWorkExperience.class);
-            workList.forEach(e->{
+            workList.forEach(e -> {
                 e.setId(UUID.randomUUID().toString());
                 e.setJobNumber(tbEmployeeBasicInfo.getJobNumber());
             });
             workExperienceMapper.insertBatch(workList);
         }
-        if(!CollectionUtils.isEmpty(employeeBasicInfoAdd.getHonorWallList())){
-            List<TbManpowerHonorWall> wallList= BeanCopyUtil.copyList(employeeBasicInfoAdd.getHonorWallList(),
+        if (!CollectionUtils.isEmpty(employeeBasicInfoAdd.getHonorWallList())) {
+            List<TbManpowerHonorWall> wallList = BeanCopyUtil.copyList(employeeBasicInfoAdd.getHonorWallList(),
                     TbManpowerHonorWall.class);
-            wallList.forEach(e->{
+            wallList.forEach(e -> {
                 e.setId(UUID.randomUUID().toString());
                 e.setJobNumber(tbEmployeeBasicInfo.getJobNumber());
             });
             honorWallMapper.insertBatch(wallList);
         }
-        DirectlyLeader leader=employeeBasicInfoAdd.getDirectlyLeader();
-        if(leader!=null && !StringUtils.isBlank(leader.getDirectLeaderName())){
+        DirectlyLeader leader = employeeBasicInfoAdd.getDirectlyLeader();
+        if (leader != null && !StringUtils.isBlank(leader.getDirectLeaderName())) {
             leader.setJobNumber(tbEmployeeBasicInfo.getJobNumber());
             leader.setId(UUID.randomUUID().toString());
-            TbManpowerDirectlyLeader tbLeader=BeanCopyUtil.copyObject(leader,TbManpowerDirectlyLeader.class);
+            TbManpowerDirectlyLeader tbLeader = BeanCopyUtil.copyObject(leader, TbManpowerDirectlyLeader.class);
             tbManpowerDirectlyLeaderMapper.insert(tbLeader);
         }
-        SocialSecurity socialSecurity= employeeBasicInfoAdd.getSocialSecurity();
-        if(socialSecurity!=null){
-            TbManpowerSocialSecurity tbManpowerSocialSecurity=BeanCopyUtil.copyObject(socialSecurity,
+        SocialSecurity socialSecurity = employeeBasicInfoAdd.getSocialSecurity();
+        if (socialSecurity != null) {
+            TbManpowerSocialSecurity tbManpowerSocialSecurity = BeanCopyUtil.copyObject(socialSecurity,
                     TbManpowerSocialSecurity.class);
             tbManpowerSocialSecurity.setJobNumber(tbEmployeeBasicInfo.getJobNumber());
             tbManpowerSocialSecurity.setId(UUID.randomUUID().toString());
             tbManpowerSocialSecurityMapper.insert(tbManpowerSocialSecurity);
         }
-
 
 
         logger.info("[员工花名册管理] 新增员工花名册成功,id:{}", tbEmployeeBasicInfo.getId());
@@ -179,8 +178,8 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
     @ServiceLog(doAction = "修改员工花名册")
     @Transactional(rollbackFor = Exception.class)
     public void updateEmployeeBasicInfo(EmployeeBasicInfoAdd employeeBasicInfoAdd, User user) {
-        TbManpowerEmployeeBasicInfo tbFile=tbManpowerEmployeeBasicInfoMapper.selectByPrimaryKey(employeeBasicInfoAdd.getId());
-        if(tbFile==null){
+        TbManpowerEmployeeBasicInfo tbFile = tbManpowerEmployeeBasicInfoMapper.selectByPrimaryKey(employeeBasicInfoAdd.getId());
+        if (tbFile == null) {
             logger.warn("[员工花名册管理] 修改员工花名册失败,修改信息不存在,id:{}", employeeBasicInfoAdd.getId());
             throw new JnSpringCloudException(HrExceptionEnums.UPDATEDATA_NOT_EXIST);
         }
@@ -189,8 +188,8 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
         }*/
 
         //用户接口
-        if(StringUtils.isEmpty(tbFile.getUserId())){
-            User  adduser=new User();
+        if (StringUtils.isEmpty(tbFile.getUserId())) {
+            User adduser = new User();
             adduser.setAccount(employeeBasicInfoAdd.getUserAccount());
             adduser.setName(employeeBasicInfoAdd.getName());
             adduser.setPhone(employeeBasicInfoAdd.getPhone());
@@ -200,36 +199,38 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
             adduser.setPassword("123456");
             adduser.setCreatedTime(new Date());
             adduser.setCreatorAccount(user.getAccount());
-            Result result= systemClient.addSysUser(adduser);
-            if(result==null || result.getData()==null || !"0000".equals(result.getCode())){
+            Result result = systemClient.addSysUser(adduser);
+            if (result == null || result.getData() == null || !"0000".equals(result.getCode())) {
                 logger.error("新增用户接口addSysUser调用失败,用户账号{},错误码{},错误原因{}",
                         employeeBasicInfoAdd.getUserAccount(),
-                        result!=null?result.getCode():"",result!=null?result.getResult():"");
+                        result != null ? result.getCode() : "", result != null ? result.getResult() : "");
                 throw new JnSpringCloudException(EmployeeExceptionEnums.ADD_USER_ERROR,
-                        result!=null?result.getResult():"新增用户接口调用错误");
+                        result != null ? result.getResult() : "新增用户接口调用错误");
             }
 
-            if(result.getData()!=null){
-                String userId=((Map<String,String>)result.getData()).get("id");
+            if (result.getData() != null) {
+                String userId = ((Map<String, String>) result.getData()).get("id");
                 employeeBasicInfoAdd.setUserId(userId);
             }
         }
 
 
         employeeBasicInfoAdd.setJobNumber(tbFile.getJobNumber());
-        TbManpowerEmployeeBasicInfo database=new TbManpowerEmployeeBasicInfo();
-        BeanUtils.copyProperties(employeeBasicInfoAdd,database);
+        TbManpowerEmployeeBasicInfo database = new TbManpowerEmployeeBasicInfo();
+        BeanUtils.copyProperties(employeeBasicInfoAdd, database);
         database.setRecordStatus(Byte.parseByte(HrStatusEnums.EFFECTIVE.getCode()));
         database.setModifiedTime(new Date());
         database.setModifierAccount(user.getAccount());
-        tbManpowerEmployeeBasicInfoMapper.updateByPrimaryKeySelective(database);
+        database.setCreatedTime(tbFile.getCreatedTime());
+        database.setCreatorAccount(tbFile.getCreatorAccount());
+        tbManpowerEmployeeBasicInfoMapper.updateByPrimaryKey(database);
 
 
         educationExperienceMapper.deleteByJobNumber(employeeBasicInfoAdd.getJobNumber());
-        if(!CollectionUtils.isEmpty(employeeBasicInfoAdd.getEducationExperienceList())){
-            List<TbManpowerEducationExperience> educationList= BeanCopyUtil.copyList(employeeBasicInfoAdd.getEducationExperienceList(),
+        if (!CollectionUtils.isEmpty(employeeBasicInfoAdd.getEducationExperienceList())) {
+            List<TbManpowerEducationExperience> educationList = BeanCopyUtil.copyList(employeeBasicInfoAdd.getEducationExperienceList(),
                     TbManpowerEducationExperience.class);
-            educationList.forEach(e->{
+            educationList.forEach(e -> {
                 e.setId(UUID.randomUUID().toString());
                 e.setJobNumber(tbFile.getJobNumber());
             });
@@ -237,10 +238,10 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
         }
 
         workExperienceMapper.deleteByJobNumber(employeeBasicInfoAdd.getJobNumber());
-        if(!CollectionUtils.isEmpty(employeeBasicInfoAdd.getWorkExperienceList())){
-            List<TbManpowerWorkExperience> workList= BeanCopyUtil.copyList(employeeBasicInfoAdd.getWorkExperienceList(),
+        if (!CollectionUtils.isEmpty(employeeBasicInfoAdd.getWorkExperienceList())) {
+            List<TbManpowerWorkExperience> workList = BeanCopyUtil.copyList(employeeBasicInfoAdd.getWorkExperienceList(),
                     TbManpowerWorkExperience.class);
-            workList.forEach(e->{
+            workList.forEach(e -> {
                 e.setId(UUID.randomUUID().toString());
                 e.setJobNumber(tbFile.getJobNumber());
             });
@@ -248,38 +249,38 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
         }
 
         honorWallMapper.deleteByJobNumber(employeeBasicInfoAdd.getJobNumber());
-        if(!CollectionUtils.isEmpty(employeeBasicInfoAdd.getHonorWallList())){
-            List<TbManpowerHonorWall> wallList= BeanCopyUtil.copyList(employeeBasicInfoAdd.getHonorWallList(),
+        if (!CollectionUtils.isEmpty(employeeBasicInfoAdd.getHonorWallList())) {
+            List<TbManpowerHonorWall> wallList = BeanCopyUtil.copyList(employeeBasicInfoAdd.getHonorWallList(),
                     TbManpowerHonorWall.class);
-            wallList.forEach(e->{
+            wallList.forEach(e -> {
                 e.setId(UUID.randomUUID().toString());
                 e.setJobNumber(tbFile.getJobNumber());
             });
             honorWallMapper.insertBatch(wallList);
         }
-        DirectlyLeader leader=employeeBasicInfoAdd.getDirectlyLeader();
-        if(leader!=null && !StringUtils.isEmpty(leader.getJobNumber())){
-            if(StringUtils.isBlank(leader.getId())){
+        DirectlyLeader leader = employeeBasicInfoAdd.getDirectlyLeader();
+        if (leader != null && !StringUtils.isEmpty(leader.getJobNumber())) {
+            if (StringUtils.isBlank(leader.getId())) {
                 leader.setJobNumber(employeeBasicInfoAdd.getJobNumber());
                 leader.setId(UUID.randomUUID().toString());
-                TbManpowerDirectlyLeader tbLeader=BeanCopyUtil.copyObject(leader,TbManpowerDirectlyLeader.class);
+                TbManpowerDirectlyLeader tbLeader = BeanCopyUtil.copyObject(leader, TbManpowerDirectlyLeader.class);
                 tbManpowerDirectlyLeaderMapper.insert(tbLeader);
-            }else{
-                TbManpowerDirectlyLeader tbLeader=BeanCopyUtil.copyObject(leader,TbManpowerDirectlyLeader.class);
+            } else {
+                TbManpowerDirectlyLeader tbLeader = BeanCopyUtil.copyObject(leader, TbManpowerDirectlyLeader.class);
                 tbLeader.setJobNumber(employeeBasicInfoAdd.getJobNumber());
                 tbManpowerDirectlyLeaderMapper.updateByPrimaryKey(tbLeader);
             }
         }
-        SocialSecurity socialSecurity=employeeBasicInfoAdd.getSocialSecurity();
-        if(socialSecurity!=null && !StringUtils.isEmpty(socialSecurity.getJobNumber())){
-            if(StringUtils.isBlank(socialSecurity.getId())){
+        SocialSecurity socialSecurity = employeeBasicInfoAdd.getSocialSecurity();
+        if (socialSecurity != null && !StringUtils.isEmpty(socialSecurity.getJobNumber())) {
+            if (StringUtils.isBlank(socialSecurity.getId())) {
                 socialSecurity.setJobNumber(employeeBasicInfoAdd.getJobNumber());
                 socialSecurity.setId(UUID.randomUUID().toString());
-                TbManpowerSocialSecurity tbManpowerSocialSecurity=BeanCopyUtil.copyObject(socialSecurity,
+                TbManpowerSocialSecurity tbManpowerSocialSecurity = BeanCopyUtil.copyObject(socialSecurity,
                         TbManpowerSocialSecurity.class);
                 tbManpowerSocialSecurityMapper.insert(tbManpowerSocialSecurity);
-            }else{
-                TbManpowerSocialSecurity tbManpowerSocialSecurity=BeanCopyUtil.copyObject(socialSecurity,
+            } else {
+                TbManpowerSocialSecurity tbManpowerSocialSecurity = BeanCopyUtil.copyObject(socialSecurity,
                         TbManpowerSocialSecurity.class);
                 tbManpowerSocialSecurity.setJobNumber(employeeBasicInfoAdd.getJobNumber());
                 tbManpowerSocialSecurityMapper.updateByPrimaryKey(tbManpowerSocialSecurity);
@@ -291,11 +292,11 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
     }
 
     private String getJobNumber() {
-        RedisAtomicLong counter = new RedisAtomicLong(applicationName+":"+
-                "employee:"+"employeeBasicInfo:jobNumber",
+        RedisAtomicLong counter = new RedisAtomicLong(applicationName + ":" +
+                "employee:" + "employeeBasicInfo:jobNumber",
                 redisTemplate.getConnectionFactory());
-        long count=counter.getAndAdd(1);
-        return prefix+String.format("%06d",count);
+        long count = counter.getAndAdd(1);
+        return prefix + String.format("%06d", count);
     }
 
     @Override
@@ -317,13 +318,13 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
     @Override
     @ServiceLog(doAction = "查询员工花名册详情")
     public EmployeeBasicInfo getEmployeeBasicInfoById(String id) {
-        TbManpowerEmployeeBasicInfo tbFile=tbManpowerEmployeeBasicInfoMapper.selectByPrimaryKey(id);
-        if(tbFile==null || new Byte(HrStatusEnums.DELETED.getCode()).equals(tbFile.getRecordStatus())){
+        TbManpowerEmployeeBasicInfo tbFile = tbManpowerEmployeeBasicInfoMapper.selectByPrimaryKey(id);
+        if (tbFile == null || new Byte(HrStatusEnums.DELETED.getCode()).equals(tbFile.getRecordStatus())) {
             logger.warn("[员工花名册管理] 查询员工花名册详情失败,id:{}", id);
             throw new JnSpringCloudException(EmployeeExceptionEnums.EmployeeBasicInfo_NOT_EXISTS);
         }
-        EmployeeBasicInfo employeeBasicInfo=new EmployeeBasicInfo();
-        BeanUtils.copyProperties(tbFile,employeeBasicInfo);
+        EmployeeBasicInfo employeeBasicInfo = new EmployeeBasicInfo();
+        BeanUtils.copyProperties(tbFile, employeeBasicInfo);
         List<EducationExperience> educationExperiences = educationExperienceMapper.
                 selectByJobNumber(employeeBasicInfo.getJobNumber());
         employeeBasicInfo.setEducationExperienceList(educationExperiences);
@@ -331,80 +332,95 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
         employeeBasicInfo.setWorkExperienceList(workExperiences);
         List<HonorWall> honorWalls = honorWallMapper.selectByJobNumber(employeeBasicInfo.getJobNumber());
         employeeBasicInfo.setHonorWallList(honorWalls);
-        DirectlyLeader sLeader=directlyLeaderMapper.selectByJobNumber(employeeBasicInfo.getJobNumber());
+        DirectlyLeader sLeader = directlyLeaderMapper.selectByJobNumber(employeeBasicInfo.getJobNumber());
         employeeBasicInfo.setDirectlyLeader(sLeader);
-        SocialSecurity socialSecurity=socialSecurityMapper.selectByJobNumber(employeeBasicInfo.getJobNumber());
+        SocialSecurity socialSecurity = socialSecurityMapper.selectByJobNumber(employeeBasicInfo.getJobNumber());
         employeeBasicInfo.setSocialSecurity(socialSecurity);
 
-        employeeBasicInfo.setSexStr(CodeAndMsgUtil.getMsgByCode(EmploySexEnum.class,employeeBasicInfo.getSex()));
-        employeeBasicInfo.setCreatedTimeStr(DateUtils.formatDate(employeeBasicInfo.getCreatedTime(),"yyyy-MM-dd HH:mm:ss"));
-        employeeBasicInfo.setEntryDateStr(DateUtils.formatDate(employeeBasicInfo.getEntryDate(),"yyyy-MM-dd HH:mm:ss"));
-        employeeBasicInfo.setBirthDateStr(DateUtils.formatDate(employeeBasicInfo.getBirthDate(),"yyyy-MM-dd HH:mm:ss"));
-        employeeBasicInfo.setStartCurrentStr(DateUtils.formatDate(employeeBasicInfo.getStartCurrent(),"yyyy-MM-dd HH:mm:ss"));
-        employeeBasicInfo.setEndCurrentStr(DateUtils.formatDate(employeeBasicInfo.getEndCurrent(),"yyyy-MM-dd HH:mm:ss"));
-        employeeBasicInfo.setExpirationDateStr(DateUtils.formatDate(employeeBasicInfo.getExpirationDate(),"yyyy-MM-dd HH:mm:ss"));
-        employeeBasicInfo.setEmployeeTypeStr(CodeAndMsgUtil.getMsgByCode(EmployeeTypeEnum.class,employeeBasicInfo.getEmployeeType()));
-        employeeBasicInfo.setRegisteredTypeStr(CodeAndMsgUtil.getMsgByCode(RegisteredTypeEnum.class,employeeBasicInfo.getRegisteredType()));
-        employeeBasicInfo.setPoliticalOutlookStr(CodeAndMsgUtil.getMsgByCode(PoliticalOutlookEnum.class,employeeBasicInfo.getPoliticalOutlook()));
-        employeeBasicInfo.setMaritalStatusStr(CodeAndMsgUtil.getMsgByCode(MaritalStatusEnum.class,employeeBasicInfo.getMaritalStatus()));
-        employeeBasicInfo.setEmployStatusStr(CodeAndMsgUtil.getMsgByCode(EmployStatusEnum.class,String.valueOf(employeeBasicInfo.getEmployStatus())));
+        employeeBasicInfo.setSexStr(CodeAndMsgUtil.getMsgByCode(EmploySexEnum.class, employeeBasicInfo.getSex()));
+        employeeBasicInfo.setCreatedTimeStr(DateUtils.formatDate(employeeBasicInfo.getCreatedTime(), "yyyy-MM-dd HH:mm:ss"));
+        employeeBasicInfo.setEntryDateStr(DateUtils.formatDate(employeeBasicInfo.getEntryDate(), "yyyy-MM-dd HH:mm:ss"));
+        employeeBasicInfo.setBirthDateStr(DateUtils.formatDate(employeeBasicInfo.getBirthDate(), "yyyy-MM-dd HH:mm:ss"));
+        employeeBasicInfo.setStartCurrentStr(DateUtils.formatDate(employeeBasicInfo.getStartCurrent(), "yyyy-MM-dd HH:mm:ss"));
+        employeeBasicInfo.setEndCurrentStr(DateUtils.formatDate(employeeBasicInfo.getEndCurrent(), "yyyy-MM-dd HH:mm:ss"));
+        employeeBasicInfo.setExpirationDateStr(DateUtils.formatDate(employeeBasicInfo.getExpirationDate(), "yyyy-MM-dd HH:mm:ss"));
+        employeeBasicInfo.setEmployeeTypeStr(CodeAndMsgUtil.getMsgByCode(EmployeeTypeEnum.class, employeeBasicInfo.getEmployeeType()));
+        employeeBasicInfo.setRegisteredTypeStr(CodeAndMsgUtil.getMsgByCode(RegisteredTypeEnum.class, employeeBasicInfo.getRegisteredType()));
+        employeeBasicInfo.setPoliticalOutlookStr(CodeAndMsgUtil.getMsgByCode(PoliticalOutlookEnum.class, employeeBasicInfo.getPoliticalOutlook()));
+        employeeBasicInfo.setMaritalStatusStr(CodeAndMsgUtil.getMsgByCode(MaritalStatusEnum.class, employeeBasicInfo.getMaritalStatus()));
+        employeeBasicInfo.setEmployStatusStr(CodeAndMsgUtil.getMsgByCode(EmployStatusEnum.class, String.valueOf(employeeBasicInfo.getEmployStatus())));
         return employeeBasicInfo;
     }
 
     @Override
     @ServiceLog(doAction = "分页查询员工花名册信息")
-    public PaginationData<List<EmployeeBasicInfo>> list(EmployeeBasicInfoPage employeeBasicInfoPage,boolean calcHoliday) {
+    public PaginationData<List<EmployeeBasicInfo>> list(EmployeeBasicInfoPage employeeBasicInfoPage, boolean calcHoliday) {
         Page<Object> objects = PageHelper.startPage(employeeBasicInfoPage.getPage(), employeeBasicInfoPage.getRows());
+        if (!StringUtils.isEmpty(employeeBasicInfoPage.getDepartmentId())) {
+            List<String> rootList = new ArrayList<String>();
+            Result result = systemClient.selectDeptByParentId(employeeBasicInfoPage.getDepartmentId(), true);
+            if (result == null || !"0000".equals(result.getCode()) || result.getData() == null) {
+                throw new JnSpringCloudException(HrExceptionEnums.DEPARTMENT_QUERY_ERRPR);
+            }
+            HashMap<String, Object> childMap = (HashMap<String, Object>) result.getData();
+            rootList.add((String) childMap.get("id"));
+            if (childMap.get("children") != null) {
+                List<HashMap<String, Object>> childrenSub = (List<HashMap<String, Object>>) childMap.get("children");
+                getChildrenDepartment(rootList, childrenSub);
+            }
+            employeeBasicInfoPage.setDepartmentIds(rootList);
+        }
+
         List<EmployeeBasicInfo> noticeList = employeeBasicInfoMapper.list(employeeBasicInfoPage);
         PaginationData<List<EmployeeBasicInfo>> data = new PaginationData(noticeList, objects.getTotal());
-        if(objects.getTotal()>0L){
-            List<HolidayRule> rules=null;
-            if(calcHoliday){
-                rules=holidayRuleMapper.list();
+        if (objects.getTotal() > 0L) {
+            List<HolidayRule> rules = null;
+            if (calcHoliday) {
+                rules = holidayRuleMapper.list();
             }
             for (EmployeeBasicInfo e : noticeList) {
-                e.setSexStr(CodeAndMsgUtil.getMsgByCode(EmploySexEnum.class,e.getSex()));
-                e.setCreatedTimeStr(DateUtils.formatDate(e.getCreatedTime(),"yyyy-MM-dd HH:mm:ss"));
-                e.setEntryDateStr(DateUtils.formatDate(e.getEntryDate(),"yyyy-MM-dd HH:mm:ss"));
-                e.setBirthDateStr(DateUtils.formatDate(e.getBirthDate(),"yyyy-MM-dd HH:mm:ss"));
-                e.setStartCurrentStr(DateUtils.formatDate(e.getStartCurrent(),"yyyy-MM-dd HH:mm:ss"));
-                e.setEndCurrentStr(DateUtils.formatDate(e.getEndCurrent(),"yyyy-MM-dd HH:mm:ss"));
-                e.setExpirationDateStr(DateUtils.formatDate(e.getExpirationDate(),"yyyy-MM-dd HH:mm:ss"));
-                e.setEmployeeTypeStr(CodeAndMsgUtil.getMsgByCode(EmployeeTypeEnum.class,e.getEmployeeType()));
-                e.setRegisteredTypeStr(CodeAndMsgUtil.getMsgByCode(RegisteredTypeEnum.class,e.getRegisteredType()));
-                e.setPoliticalOutlookStr(CodeAndMsgUtil.getMsgByCode(PoliticalOutlookEnum.class,e.getPoliticalOutlook()));
-                e.setMaritalStatusStr(CodeAndMsgUtil.getMsgByCode(MaritalStatusEnum.class,e.getMaritalStatus()));
-                e.setEmployStatusStr(CodeAndMsgUtil.getMsgByCode(EmployStatusEnum.class,String.valueOf(e.getEmployStatus())));
-                if(calcHoliday){
-                    long diff=0;
+                e.setSexStr(CodeAndMsgUtil.getMsgByCode(EmploySexEnum.class, e.getSex()));
+                e.setCreatedTimeStr(DateUtils.formatDate(e.getCreatedTime(), "yyyy-MM-dd HH:mm:ss"));
+                e.setEntryDateStr(DateUtils.formatDate(e.getEntryDate(), "yyyy-MM-dd HH:mm:ss"));
+                e.setBirthDateStr(DateUtils.formatDate(e.getBirthDate(), "yyyy-MM-dd HH:mm:ss"));
+                e.setStartCurrentStr(DateUtils.formatDate(e.getStartCurrent(), "yyyy-MM-dd HH:mm:ss"));
+                e.setEndCurrentStr(DateUtils.formatDate(e.getEndCurrent(), "yyyy-MM-dd HH:mm:ss"));
+                e.setExpirationDateStr(DateUtils.formatDate(e.getExpirationDate(), "yyyy-MM-dd HH:mm:ss"));
+                e.setEmployeeTypeStr(CodeAndMsgUtil.getMsgByCode(EmployeeTypeEnum.class, e.getEmployeeType()));
+                e.setRegisteredTypeStr(CodeAndMsgUtil.getMsgByCode(RegisteredTypeEnum.class, e.getRegisteredType()));
+                e.setPoliticalOutlookStr(CodeAndMsgUtil.getMsgByCode(PoliticalOutlookEnum.class, e.getPoliticalOutlook()));
+                e.setMaritalStatusStr(CodeAndMsgUtil.getMsgByCode(MaritalStatusEnum.class, e.getMaritalStatus()));
+                e.setEmployStatusStr(CodeAndMsgUtil.getMsgByCode(EmployStatusEnum.class, String.valueOf(e.getEmployStatus())));
+                if (calcHoliday) {
+                    long diff = 0;
                     List<WorkExperience> workExperiences = workExperienceMapper.selectByJobNumber(e.getJobNumber());
-                    if(!CollectionUtils.isEmpty(workExperiences)){
+                    if (!CollectionUtils.isEmpty(workExperiences)) {
                         //计算工龄 用系统时间-最早参加工作时间
-                        diff=(System.currentTimeMillis()-workExperiences.get(0).getEntryDate().getTime())/1000;
+                        diff = (System.currentTimeMillis() - workExperiences.get(0).getEntryDate().getTime()) / 1000;
                     }
 
-                    if(diff<=0){
+                    if (diff <= 0) {
                         e.setWorkingAge(0);
                         e.setAnnualLeave(0);
                         continue;
-                    }else{
-                        Long age=diff/ONE_YEAR;
+                    } else {
+                        Long age = diff / ONE_YEAR;
                         e.setWorkingAge(age.intValue());
                     }
                     //设置年休假为0天
-                    if(CollectionUtils.isEmpty(rules)){
+                    if (CollectionUtils.isEmpty(rules)) {
                         e.setAnnualLeave(0);
                         continue;
                     }
                     //计算工龄落在哪个区间
-                    boolean flag=false;
+                    boolean flag = false;
                     for (HolidayRule rule : rules) {
-                        if(e.getWorkingAge()>=rule.getReachedYear() && e.getWorkingAge()<=rule.getNotFullYear()){
+                        if (e.getWorkingAge() >= rule.getReachedYear() && e.getWorkingAge() <= rule.getNotFullYear()) {
                             e.setAnnualLeave(rule.getAnnualLeave());
-                            flag=true;
+                            flag = true;
                         }
                     }
-                    if(!flag){
+                    if (!flag) {
                         //规则表未找到，默认年休假为0天
                         e.setAnnualLeave(0);
                     }
@@ -413,6 +429,16 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
             }
         }
         return data;
+    }
+
+    private void getChildrenDepartment(List<String> rootList, List<HashMap<String, Object>> children) {
+        for (HashMap<String, Object> childMap : children) {
+            rootList.add((String) childMap.get("id"));
+            if (childMap.get("children") != null) {
+                List<HashMap<String, Object>> childrenSub = (List<HashMap<String, Object>>) childMap.get("children");
+                getChildrenDepartment(rootList, childrenSub);
+            }
+        }
     }
 
     @Override
@@ -425,48 +451,91 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
 
         //2.使用工具类,解析导入文件
         EmployeeBasicInfo employeeBasicInfo = new EmployeeBasicInfo();
-        List<Object> resultList= ExcelUtil.readExcel(file, employeeBasicInfo, 1, 1);
-        if(CollectionUtils.isEmpty(resultList)){
+        List<Object> resultList = ExcelUtil.readExcel(file, employeeBasicInfo, 1, 1);
+        if (CollectionUtils.isEmpty(resultList)) {
             return "没有数据，导入失败";
         }
-        int i=0;
-        StringBuffer sb=new StringBuffer();
-        List<TbManpowerEmployeeBasicInfo> batchResult=new ArrayList<TbManpowerEmployeeBasicInfo>();
+        int i = 0;
+        StringBuffer sb = new StringBuffer();
+        List<TbManpowerEmployeeBasicInfo> batchResult = new ArrayList<TbManpowerEmployeeBasicInfo>();
 
 
-        Result deptResult= systemClient.selectDeptByParentId("",true);
-        if(deptResult==null || !"0000".equals(deptResult.getCode()) || deptResult.getData()==null){
+        Result deptResult = systemClient.selectDeptByParentId("", true);
+        if (deptResult == null || !"0000".equals(deptResult.getCode()) || deptResult.getData() == null) {
             throw new JnSpringCloudException(HrExceptionEnums.DEPARTMENT_QUERY_ERRPR);
         }
-        Map<String,String>  departMap= DepartMentUtil.convertDepartList((List<HashMap<String, Object>>)deptResult.getData());
-        Result<List<SysPost>> postResult=systemClient.getPostAll();
-        if(postResult==null || !"0000".equals(postResult.getCode()) || CollectionUtils.isEmpty(postResult.getData())){
+        Map<String, String> departMap = DepartMentUtil.convertDepartList((List<HashMap<String, Object>>) deptResult.getData());
+        Result<List<SysPost>> postResult = systemClient.getPostAll();
+        if (postResult == null || !"0000".equals(postResult.getCode()) || CollectionUtils.isEmpty(postResult.getData())) {
             throw new JnSpringCloudException(HrExceptionEnums.POST_QUERY_ERRPR);
         }
-        List<SysPost>  postList=postResult.getData();
-        List<SysDictKeyValue>  certificateTypeList= commonService.queryDictList
-                ("employee","certificate_type");
-        List<SysDictKeyValue>  educationList= commonService.queryDictList
-                ("employee","education");
-        List<SysDictKeyValue>  jobList= commonService.queryDictList
-                ("employee","job");
-        List<SysDictKeyValue>  contractList= commonService.queryDictList
-                ("employee","contract");
-        List<SysDictKeyValue>  nationalityList= commonService.queryDictList
-                ("employee","nationality");
+        List<SysPost> postList = postResult.getData();
+        List<SysDictKeyValue> certificateTypeList = commonService.queryDictList
+                ("employee", "certificate_type");
+        List<SysDictKeyValue> educationList = commonService.queryDictList
+                ("employee", "education");
+        List<SysDictKeyValue> jobList = commonService.queryDictList
+                ("employee", "job");
+        List<SysDictKeyValue> contractList = commonService.queryDictList
+                ("employee", "contract");
+        List<SysDictKeyValue> nationalityList = commonService.queryDictList
+                ("employee", "nationality");
 
+        Set<String> phoneSet=new HashSet<String>();
+        Set<String> mailboxSet=new HashSet<String>();
+        Set<String> certificateNumberSet=new HashSet<String>();
 
-        for(Object result:resultList){
+        Map<String,EmployeeBasicInfo> phoneMap=new HashMap<String,EmployeeBasicInfo>();
+        Map<String,EmployeeBasicInfo> mailboxMap=new HashMap<String,EmployeeBasicInfo>();
+        Map<String,EmployeeBasicInfo> certificateNumberMap=new HashMap<String,EmployeeBasicInfo>();
+        List<EmployeeBasicInfo> infoList = employeeBasicInfoMapper.list(new EmployeeBasicInfoPage());
+        infoList.forEach(e->{
+            phoneMap.put(e.getPhone(),e);
+            mailboxMap.put(e.getMailbox(),e);
+            certificateNumberMap.put(e.getCertificateNumber(),e);
+        });
+        for (Object result : resultList) {
             i++;
-            EmployeeBasicInfo database= (EmployeeBasicInfo) result;
-            String str=checkImportValue(database,departMap,postList,certificateTypeList,educationList,
-                    jobList,contractList,nationalityList);
-            if(!StringUtils.isBlank(str)){
-                sb.append("第"+i+"行:"+str+";");
+            EmployeeBasicInfo database = (EmployeeBasicInfo) result;
+            String str = checkImportValue(database, departMap, postList, certificateTypeList, educationList,
+                    jobList, contractList, nationalityList);
+            if (!StringUtils.isBlank(str)) {
+                sb.append("第" + i + "行:" + str + ";");
                 continue;
             }
-            TbManpowerEmployeeBasicInfo tbFile =new TbManpowerEmployeeBasicInfo();
-            BeanUtils.copyProperties(database,tbFile);
+
+            if(phoneSet.contains(database.getPhone())){
+                sb.append("第"+i+"行:"+database.getPhone()+"号码在当前EXCEL中重复;");
+                continue;
+            }
+            if(phoneMap.containsKey(database.getPhone())){
+                sb.append("第"+i+"行:"+database.getPhone()+"号码在员工花名册中已经存在记录;");
+                continue;
+            }
+            phoneSet.add(database.getPhone());
+
+            if(mailboxSet.contains(database.getMailbox())){
+                sb.append("第"+i+"行:"+database.getMailbox()+"邮箱在当前EXCEL中重复;");
+                continue;
+            }
+            if(mailboxMap.containsKey(database.getMailbox())){
+                sb.append("第"+i+"行:"+database.getMailbox()+"邮箱在员工花名册中已经存在记录;");
+                continue;
+            }
+
+            mailboxSet.add(database.getMailbox());
+            if(certificateNumberSet.contains(database.getCertificateNumber())){
+                sb.append("第"+i+"行:"+database.getCertificateNumber()+"证件号码在当前EXCEL中重复;");
+                continue;
+            }
+            if(certificateNumberMap.containsKey(database.getCertificateNumber())){
+                sb.append("第"+i+"行:"+database.getCertificateNumber()+"证件号码在员工花名册中已经存在记录;");
+                continue;
+            }
+            certificateNumberSet.add(database.getCertificateNumber());
+
+            TbManpowerEmployeeBasicInfo tbFile = new TbManpowerEmployeeBasicInfo();
+            BeanUtils.copyProperties(database, tbFile);
             tbFile.setId(UUID.randomUUID().toString());
             tbFile.setRecordStatus(Byte.parseByte(HrStatusEnums.EFFECTIVE.getCode()));
             tbFile.setCreatedTime(new Date());
@@ -475,17 +544,17 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
             tbFile.setModifiedTime(new Date());
             batchResult.add(tbFile);
         }
-        if(sb.length()>0){
-            sb.deleteCharAt(sb.length()-1);
-            logger.warn("[员工基本信息] 导入失败:{}",sb.toString());
+        if (sb.length() > 0) {
+            sb.deleteCharAt(sb.length() - 1);
+            logger.warn("[员工基本信息] 导入失败:{}", sb.toString());
             return sb.toString();
-        }else{
-            if(!CollectionUtils.isEmpty(batchResult)){
-                List<TbManpowerEmployeeBasicInfo> finalResult=new ArrayList<TbManpowerEmployeeBasicInfo>();
-                batchResult.forEach(e->{
+        } else {
+            if (!CollectionUtils.isEmpty(batchResult)) {
+                List<TbManpowerEmployeeBasicInfo> finalResult = new ArrayList<TbManpowerEmployeeBasicInfo>();
+                batchResult.forEach(e -> {
                     e.setUserAccount(e.getPhone());
                     e.setJobNumber(getJobNumber());
-                    User  adduser=new User();
+                    User adduser = new User();
                     adduser.setAccount(e.getPhone());
                     adduser.setName(e.getName());
                     adduser.setPhone(e.getPhone());
@@ -495,23 +564,23 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
                     adduser.setPassword("123456");
                     adduser.setCreatedTime(new Date());
                     adduser.setCreatorAccount(user.getAccount());
-                    Result addUserResult= systemClient.addSysUser(adduser);
-                    if(addUserResult==null || addUserResult.getData()==null || !"0000".equals(addUserResult.getCode())){
+                    Result addUserResult = systemClient.addSysUser(adduser);
+                    if (addUserResult == null || addUserResult.getData() == null || !"0000".equals(addUserResult.getCode())) {
                         logger.error("新增用户接口addSysUser调用失败,用户账号{},错误码{},错误原因{}",
                                 e.getUserAccount(),
-                                addUserResult!=null?addUserResult.getCode():"",
-                                addUserResult!=null?addUserResult.getResult():"");
+                                addUserResult != null ? addUserResult.getCode() : "",
+                                addUserResult != null ? addUserResult.getResult() : "");
                     }
-                    if(addUserResult.getData()!=null){
-                        String userId=((Map<String,String>)addUserResult.getData()).get("id");
+                    if (addUserResult.getData() != null) {
+                        String userId = ((Map<String, String>) addUserResult.getData()).get("id");
                         e.setUserId(userId);
                         finalResult.add(e);
                     }
                 });
-                if(!CollectionUtils.isEmpty(finalResult)){
+                if (!CollectionUtils.isEmpty(finalResult)) {
                     employeeBasicInfoMapper.insertBatch(finalResult);
-                    logger.info("[员工基本信息] 成功导入{}条数据",finalResult.size());
-                }else{
+                    logger.info("[员工基本信息] 成功导入{}条数据", finalResult.size());
+                } else {
                     return "新增用户接口调用失败,导入失败";
                 }
             }
@@ -529,45 +598,45 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
 
         //2.使用工具类,解析导入文件
         DirectlyLeader directlyLeader = new DirectlyLeader();
-        List<Object> resultList= ExcelUtil.readExcel(file, directlyLeader, 1, 1);
-        if(CollectionUtils.isEmpty(resultList)){
+        List<Object> resultList = ExcelUtil.readExcel(file, directlyLeader, 1, 1);
+        if (CollectionUtils.isEmpty(resultList)) {
             return "没有数据，导入失败";
         }
-        int i=0;
-        StringBuffer sb=new StringBuffer();
-        List<TbManpowerDirectlyLeader> batchResult=new ArrayList<TbManpowerDirectlyLeader>();
+        int i = 0;
+        StringBuffer sb = new StringBuffer();
+        List<TbManpowerDirectlyLeader> batchResult = new ArrayList<TbManpowerDirectlyLeader>();
 
 
-        Result<List<SysPost>> postResult=systemClient.getPostAll();
-        if(postResult==null || !"0000".equals(postResult.getCode()) || CollectionUtils.isEmpty(postResult.getData())){
+        Result<List<SysPost>> postResult = systemClient.getPostAll();
+        if (postResult == null || !"0000".equals(postResult.getCode()) || CollectionUtils.isEmpty(postResult.getData())) {
             logger.error("导入直属领导，查询岗位出错");
             throw new JnSpringCloudException(HrExceptionEnums.POST_QUERY_ERRPR);
         }
-        List<SysPost>  postList=postResult.getData();
-        List<SysDictKeyValue>  jobList= commonService.queryDictList
-                ("employee","job");
+        List<SysPost> postList = postResult.getData();
+        List<SysDictKeyValue> jobList = commonService.queryDictList
+                ("employee", "job");
 
-        for(Object result:resultList){
+        for (Object result : resultList) {
             i++;
-            DirectlyLeader database= (DirectlyLeader) result;
-            String str=checkImportDirectlyLeader(database,postList,jobList);
-            if(!StringUtils.isBlank(str)){
-                sb.append("第"+i+"行:"+str+";");
+            DirectlyLeader database = (DirectlyLeader) result;
+            String str = checkImportDirectlyLeader(database, postList, jobList);
+            if (!StringUtils.isBlank(str)) {
+                sb.append("第" + i + "行:" + str + ";");
                 continue;
             }
-            TbManpowerDirectlyLeader tbFile =new TbManpowerDirectlyLeader();
-            BeanUtils.copyProperties(database,tbFile);
+            TbManpowerDirectlyLeader tbFile = new TbManpowerDirectlyLeader();
+            BeanUtils.copyProperties(database, tbFile);
             tbFile.setId(UUID.randomUUID().toString());
             batchResult.add(tbFile);
         }
-        if(sb.length()>0){
-            sb.deleteCharAt(sb.length()-1);
-            logger.warn("[直属领导] 导入失败:{}",sb.toString());
+        if (sb.length() > 0) {
+            sb.deleteCharAt(sb.length() - 1);
+            logger.warn("[直属领导] 导入失败:{}", sb.toString());
             return sb.toString();
-        }else{
-            if(!CollectionUtils.isEmpty(batchResult)){
+        } else {
+            if (!CollectionUtils.isEmpty(batchResult)) {
                 directlyLeaderMapper.insertBatch(batchResult);
-                logger.info("[直属领导] 成功导入{}条数据",batchResult.size());
+                logger.info("[直属领导] 成功导入{}条数据", batchResult.size());
             }
             return "导入成功";
         }
@@ -583,34 +652,34 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
 
         //2.使用工具类,解析导入文件
         SocialSecurity socialSecurity = new SocialSecurity();
-        List<Object> resultList= ExcelUtil.readExcel(file, socialSecurity, 1, 1);
-        if(CollectionUtils.isEmpty(resultList)){
+        List<Object> resultList = ExcelUtil.readExcel(file, socialSecurity, 1, 1);
+        if (CollectionUtils.isEmpty(resultList)) {
             return "没有数据，导入失败";
         }
-        int i=0;
-        StringBuffer sb=new StringBuffer();
-        List<TbManpowerSocialSecurity> batchResult=new ArrayList<TbManpowerSocialSecurity>();
-        for(Object result:resultList){
+        int i = 0;
+        StringBuffer sb = new StringBuffer();
+        List<TbManpowerSocialSecurity> batchResult = new ArrayList<TbManpowerSocialSecurity>();
+        for (Object result : resultList) {
             i++;
-            SocialSecurity database= (SocialSecurity) result;
-            String str=checkImportDirectlyLeader(database);
-            if(!StringUtils.isBlank(str)){
-                sb.append("第"+i+"行:"+str+";");
+            SocialSecurity database = (SocialSecurity) result;
+            String str = checkImportDirectlyLeader(database);
+            if (!StringUtils.isBlank(str)) {
+                sb.append("第" + i + "行:" + str + ";");
                 continue;
             }
-            TbManpowerSocialSecurity tbFile =new TbManpowerSocialSecurity();
-            BeanUtils.copyProperties(database,tbFile);
+            TbManpowerSocialSecurity tbFile = new TbManpowerSocialSecurity();
+            BeanUtils.copyProperties(database, tbFile);
             tbFile.setId(UUID.randomUUID().toString());
             batchResult.add(tbFile);
         }
-        if(sb.length()>0){
-            sb.deleteCharAt(sb.length()-1);
-            logger.warn("[社保福利] 导入失败:{}",sb.toString());
+        if (sb.length() > 0) {
+            sb.deleteCharAt(sb.length() - 1);
+            logger.warn("[社保福利] 导入失败:{}", sb.toString());
             return sb.toString();
-        }else{
-            if(!CollectionUtils.isEmpty(batchResult)){
+        } else {
+            if (!CollectionUtils.isEmpty(batchResult)) {
                 socialSecurityMapper.insertBatch(batchResult);
-                logger.info("[社保福利] 成功导入{}条数据",batchResult.size());
+                logger.info("[社保福利] 成功导入{}条数据", batchResult.size());
             }
             return "导入成功";
         }
@@ -626,38 +695,38 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
 
         //2.使用工具类,解析导入文件
         EducationExperience educationExperience = new EducationExperience();
-        List<Object> resultList= ExcelUtil.readExcel(file, educationExperience, 1, 1);
-        if(CollectionUtils.isEmpty(resultList)){
+        List<Object> resultList = ExcelUtil.readExcel(file, educationExperience, 1, 1);
+        if (CollectionUtils.isEmpty(resultList)) {
             return "没有数据，导入失败";
         }
-        int i=0;
-        StringBuffer sb=new StringBuffer();
-        List<TbManpowerEducationExperience> batchResult=new ArrayList<TbManpowerEducationExperience>();
+        int i = 0;
+        StringBuffer sb = new StringBuffer();
+        List<TbManpowerEducationExperience> batchResult = new ArrayList<TbManpowerEducationExperience>();
 
-        List<SysDictKeyValue>  educationList= commonService.queryDictList
-                ("employee","education");
+        List<SysDictKeyValue> educationList = commonService.queryDictList
+                ("employee", "education");
 
-        for(Object result:resultList){
+        for (Object result : resultList) {
             i++;
-            EducationExperience database= (EducationExperience) result;
-            String str=checkImportEducation(database,educationList);
-            if(!StringUtils.isBlank(str)){
-                sb.append("第"+i+"行:"+str+";");
+            EducationExperience database = (EducationExperience) result;
+            String str = checkImportEducation(database, educationList);
+            if (!StringUtils.isBlank(str)) {
+                sb.append("第" + i + "行:" + str + ";");
                 continue;
             }
-            TbManpowerEducationExperience tbFile =new TbManpowerEducationExperience();
-            BeanUtils.copyProperties(database,tbFile);
+            TbManpowerEducationExperience tbFile = new TbManpowerEducationExperience();
+            BeanUtils.copyProperties(database, tbFile);
             tbFile.setId(UUID.randomUUID().toString());
             batchResult.add(tbFile);
         }
-        if(sb.length()>0){
-            sb.deleteCharAt(sb.length()-1);
-            logger.warn("[教育经历] 导入失败:{}",sb.toString());
+        if (sb.length() > 0) {
+            sb.deleteCharAt(sb.length() - 1);
+            logger.warn("[教育经历] 导入失败:{}", sb.toString());
             return sb.toString();
-        }else{
-            if(!CollectionUtils.isEmpty(batchResult)){
+        } else {
+            if (!CollectionUtils.isEmpty(batchResult)) {
                 educationExperienceMapper.insertBatch(batchResult);
-                logger.info("[教育经历] 成功导入{}条数据",batchResult.size());
+                logger.info("[教育经历] 成功导入{}条数据", batchResult.size());
             }
             return "导入成功";
         }
@@ -673,318 +742,328 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
 
         //2.使用工具类,解析导入文件
         WorkExperience workExperience = new WorkExperience();
-        List<Object> resultList= ExcelUtil.readExcel(file, workExperience, 1, 1);
-        if(CollectionUtils.isEmpty(resultList)){
+        List<Object> resultList = ExcelUtil.readExcel(file, workExperience, 1, 1);
+        if (CollectionUtils.isEmpty(resultList)) {
             return "没有数据，导入失败";
         }
-        int i=0;
-        StringBuffer sb=new StringBuffer();
-        List<TbManpowerWorkExperience> batchResult=new ArrayList<TbManpowerWorkExperience>();
-        for(Object result:resultList){
+        int i = 0;
+        StringBuffer sb = new StringBuffer();
+        List<TbManpowerWorkExperience> batchResult = new ArrayList<TbManpowerWorkExperience>();
+        for (Object result : resultList) {
             i++;
-            WorkExperience database= (WorkExperience) result;
-            String str=checkImportWork(database);
-            if(!StringUtils.isBlank(str)){
-                sb.append("第"+i+"行:"+str+";");
+            WorkExperience database = (WorkExperience) result;
+            String str = checkImportWork(database);
+            if (!StringUtils.isBlank(str)) {
+                sb.append("第" + i + "行:" + str + ";");
                 continue;
             }
-            TbManpowerWorkExperience tbFile =new TbManpowerWorkExperience();
-            BeanUtils.copyProperties(database,tbFile);
+            TbManpowerWorkExperience tbFile = new TbManpowerWorkExperience();
+            BeanUtils.copyProperties(database, tbFile);
             tbFile.setId(UUID.randomUUID().toString());
             batchResult.add(tbFile);
         }
-        if(sb.length()>0){
-            sb.deleteCharAt(sb.length()-1);
-            logger.warn("[工作经历] 导入失败:{}",sb.toString());
+        if (sb.length() > 0) {
+            sb.deleteCharAt(sb.length() - 1);
+            logger.warn("[工作经历] 导入失败:{}", sb.toString());
             return sb.toString();
-        }else{
-            if(!CollectionUtils.isEmpty(batchResult)){
+        } else {
+            if (!CollectionUtils.isEmpty(batchResult)) {
                 workExperienceMapper.insertBatch(batchResult);
-                logger.info("[工作经历] 成功导入{}条数据",batchResult.size());
+                logger.info("[工作经历] 成功导入{}条数据", batchResult.size());
             }
             return "导入成功";
         }
     }
 
-    private String checkImportValue(EmployeeBasicInfo database,Map<String,String> departMap,List<SysPost> postList,
-                                    List<SysDictKeyValue> certificateTypeList,List<SysDictKeyValue> educationList,
-                                    List<SysDictKeyValue> jobList,List<SysDictKeyValue> contractList,
-                                    List<SysDictKeyValue> nationalityList){
-        if(StringUtils.isBlank(database.getName())){
+    private String checkImportValue(EmployeeBasicInfo database, Map<String, String> departMap, List<SysPost> postList,
+                                    List<SysDictKeyValue> certificateTypeList, List<SysDictKeyValue> educationList,
+                                    List<SysDictKeyValue> jobList, List<SysDictKeyValue> contractList,
+                                    List<SysDictKeyValue> nationalityList) {
+        if (StringUtils.isBlank(database.getName())) {
             return "姓名不能为空";
         }
 
-        if(StringUtils.isBlank(database.getSexStr())){
+        if (StringUtils.isBlank(database.getSexStr())) {
             return "性别不能为空";
         }
-        if(!"男".equals(database.getSexStr()) && !"女".equals(database.getSexStr())){
+        if (!"男".equals(database.getSexStr()) && !"女".equals(database.getSexStr())) {
             return "性别错误";
         }
-        if("男".equals(database.getSexStr())){
+        if ("男".equals(database.getSexStr())) {
             database.setSex("1");
-        }else{
+        } else {
             database.setSex("2");
         }
-        if(StringUtils.isBlank(database.getPhone())){
+        if (StringUtils.isBlank(database.getPhone())) {
             return "手机号码不能为空";
         }
-        if(!ValidateUtil.isMobile(database.getPhone())){
+        if (!ValidateUtil.isMobile(database.getPhone())) {
             return "手机号码格式不正确";
         }
-        if(StringUtils.isBlank(database.getMailbox())){
+        if (StringUtils.isBlank(database.getMailbox())) {
             return "个人邮箱不能为空";
         }
-        if(!ValidateUtil.isEmail(database.getMailbox())){
+        if (!ValidateUtil.isEmail(database.getMailbox())) {
             return "邮箱格式不正确";
         }
-        if(StringUtils.isBlank(database.getDepartmentName())){
+        if (StringUtils.isBlank(database.getDepartmentName())) {
             return "部门名称不能为空";
         }
 
         database.setDepartmentId(departMap.get(database.getDepartmentName()));
-        if(StringUtils.isEmpty(database.getDepartmentId())){
+        if (StringUtils.isEmpty(database.getDepartmentId())) {
             return "部门名称错误";
         }
 
 
-        if(StringUtils.isBlank(database.getJobName())){
+        if (StringUtils.isBlank(database.getJobName())) {
             return "职级名称不能为空";
         }
-        database.setJobId(SysDictKeyValueUtil.getKeyByLabel(jobList,database.getJobName()));
-        if(StringUtils.isBlank(database.getJobId())){
+        database.setJobId(SysDictKeyValueUtil.getKeyByLabel(jobList, database.getJobName()));
+        if (StringUtils.isBlank(database.getJobId())) {
             return "职级名称错误";
         }
 
-        if(StringUtils.isBlank(database.getCertificateType())){
+        if (StringUtils.isBlank(database.getCertificateType())) {
             return "证件类型不能为空";
         }
-        database.setCertificateId(SysDictKeyValueUtil.getKeyByLabel(certificateTypeList,database.getCertificateType()));
-        if(StringUtils.isBlank(database.getCertificateId())){
+        database.setCertificateId(SysDictKeyValueUtil.getKeyByLabel(certificateTypeList, database.getCertificateType()));
+        if (StringUtils.isBlank(database.getCertificateId())) {
             return "证件类型错误";
         }
 
-        if(StringUtils.isBlank(database.getCertificateNumber())){
+        if (StringUtils.isBlank(database.getCertificateNumber())) {
             return "证件号码不能为空";
         }
 
-        if(StringUtils.isBlank(database.getPostName())){
+        if("身份证".equals(database.getCertificateType())){
+            if(!IDCardUtil.validateIdCard(database.getCertificateNumber())){
+                return "证件号码错误";
+            }
+        }else{
+            if(!ValidateUtil.validCommonZjhm(database.getCertificateNumber())){
+                return "证件号码错误";
+            }
+        }
+
+        if (StringUtils.isBlank(database.getPostName())) {
             return "岗位名称不能为空";
         }
-        database.setPostId(SysDictKeyValueUtil.getPostIdByName(postList,database.getPostName()));
-        if(StringUtils.isBlank(database.getPostId())){
+        database.setPostId(SysDictKeyValueUtil.getPostIdByName(postList, database.getPostName()));
+        if (StringUtils.isBlank(database.getPostId())) {
             return "岗位名称错误";
         }
 
 
-        if(StringUtils.isBlank(database.getContractName())){
+        if (StringUtils.isBlank(database.getContractName())) {
             return "合同类型名称不能为空";
         }
-        database.setContractId(SysDictKeyValueUtil.getKeyByLabel(contractList,database.getContractName()));
-        if(StringUtils.isBlank(database.getContractId())){
+        database.setContractId(SysDictKeyValueUtil.getKeyByLabel(contractList, database.getContractName()));
+        if (StringUtils.isBlank(database.getContractId())) {
             return "合同类型名称错误";
         }
 
-        if(database.getEmployeeTypeStr()==null){
+        if (database.getEmployeeTypeStr() == null) {
             return "员工类型不能为空";
         }
-        if(!"正式".equals(database.getEmployeeTypeStr()) && !"实习生".equals(database.getEmployeeTypeStr())){
+        if (!"正式".equals(database.getEmployeeTypeStr()) && !"实习生".equals(database.getEmployeeTypeStr())) {
             return "员工类型错误";
         }
-        if("正式".equals(database.getEmployeeTypeStr())){
+        if ("正式".equals(database.getEmployeeTypeStr())) {
             database.setEmployeeType("1");
-        }else{
+        } else {
             database.setEmployeeType("2");
         }
-        if(StringUtils.isBlank(database.getEntryDateStr())){
+        if (StringUtils.isBlank(database.getEntryDateStr())) {
             return "入职日期不能为空";
         }
-        database.setEntryDate(HrDataUtil.getPOIDate(false,Double.parseDouble(database.getEntryDateStr())));
+        database.setEntryDate(HrDataUtil.getPOIDate(false, Double.parseDouble(database.getEntryDateStr())));
 
-        if(StringUtils.isBlank(database.getBirthDateStr())){
+        if (StringUtils.isBlank(database.getBirthDateStr())) {
             return "出生日期不能为空";
         }
-        database.setBirthDate(HrDataUtil.getPOIDate(false,Double.parseDouble(database.getBirthDateStr())));
+        database.setBirthDate(HrDataUtil.getPOIDate(false, Double.parseDouble(database.getBirthDateStr())));
 
-        if(StringUtils.isBlank(database.getNationalityName())){
+        if (StringUtils.isBlank(database.getNationalityName())) {
             return "国籍名称不能为空";
         }
-        database.setNationalityId(SysDictKeyValueUtil.getKeyByLabel(nationalityList,database.getNationalityName()));
+        database.setNationalityId(SysDictKeyValueUtil.getKeyByLabel(nationalityList, database.getNationalityName()));
 
-        if(StringUtils.isBlank(database.getNationalityId())){
+        if (StringUtils.isBlank(database.getNationalityId())) {
             return "国籍名称错误";
         }
-        if(StringUtils.isBlank(database.getWorkAddress())){
+        if (StringUtils.isBlank(database.getWorkAddress())) {
             return "工作地址不能为空";
         }
-        if(StringUtils.isBlank(database.getContactAddress())){
+        if (StringUtils.isBlank(database.getContactAddress())) {
             return "联系地址不能为空";
         }
 
-        if(StringUtils.isBlank(database.getStartCurrentStr())){
+        if (StringUtils.isBlank(database.getStartCurrentStr())) {
             return "当前合同起始日不能为空";
         }
         database.setStartCurrent(HrDataUtil.getPOIDate(false,
                 Double.parseDouble(database.getStartCurrentStr())));
 
-        if(StringUtils.isBlank(database.getEndCurrentStr())){
+        if (StringUtils.isBlank(database.getEndCurrentStr())) {
             return "当前合同终止日不能为空";
         }
         database.setEndCurrent(HrDataUtil.getPOIDate(false,
                 Double.parseDouble(database.getEndCurrentStr())));
 
-        if(database.getExpirationDateStr()==null){
+        if (database.getExpirationDateStr() == null) {
             return "试用期到期日不能为空";
         }
         database.setExpirationDate(HrDataUtil.getPOIDate(false,
                 Double.parseDouble(database.getExpirationDateStr())));
 
-        if(StringUtils.isBlank(database.getEmployStatusStr())){
+        if (StringUtils.isBlank(database.getEmployStatusStr())) {
             return "员工状态不能为空";
         }
-        if(!"在职".equals(database.getEmployStatusStr()) && !"医疗期".equals(database.getEmployStatusStr())){
+        if (!"在职".equals(database.getEmployStatusStr()) && !"医疗期".equals(database.getEmployStatusStr())) {
             return "员工状态错误";
         }
-        if("在职".equals(database.getEmployStatusStr())){
+        if ("在职".equals(database.getEmployStatusStr())) {
             database.setEmployStatus(Byte.parseByte("1"));
-        }else{
+        } else {
             database.setEmployStatus(Byte.parseByte("2"));
         }
         return "";
     }
 
-    private String checkImportDirectlyLeader(DirectlyLeader database,List<SysPost> postList,List<SysDictKeyValue> jobList) {
-        if(StringUtils.isBlank(database.getJobNumber())){
+    private String checkImportDirectlyLeader(DirectlyLeader database, List<SysPost> postList, List<SysDictKeyValue> jobList) {
+        if (StringUtils.isBlank(database.getJobNumber())) {
             return "工号不能为空";
         }
-        if(StringUtils.isBlank(database.getDirectLeaderName()) && StringUtils.isBlank(database.getDirectLeaderLevelName())
-        && StringUtils.isBlank(database.getDirectLeadershipName())){
+        if (StringUtils.isBlank(database.getDirectLeaderName()) && StringUtils.isBlank(database.getDirectLeaderLevelName())
+                && StringUtils.isBlank(database.getDirectLeadershipName())) {
             return "必填字段不能都为空";
         }
         //查询工号是否存在
-        TbManpowerEmployeeBasicInfo tbManpowerEmployeeBasicInfo=new TbManpowerEmployeeBasicInfo();
+        TbManpowerEmployeeBasicInfo tbManpowerEmployeeBasicInfo = new TbManpowerEmployeeBasicInfo();
         tbManpowerEmployeeBasicInfo.setJobNumber(database.getJobNumber());
-        List<TbManpowerEmployeeBasicInfo> basicInfos= employeeBasicInfoMapper.getList(tbManpowerEmployeeBasicInfo);
-        if(CollectionUtils.isEmpty(basicInfos)){
+        List<TbManpowerEmployeeBasicInfo> basicInfos = employeeBasicInfoMapper.getList(tbManpowerEmployeeBasicInfo);
+        if (CollectionUtils.isEmpty(basicInfos)) {
             return "工号不存在";
         }
         //查询直属领导表判断是否存在
-        DirectlyLeader directlyLeader=directlyLeaderMapper.selectByJobNumber(database.getJobNumber());
-        if(directlyLeader!=null){
+        DirectlyLeader directlyLeader = directlyLeaderMapper.selectByJobNumber(database.getJobNumber());
+        if (directlyLeader != null) {
             return "直属领导表已经存在当前工号的记录";
         }
 
-        if(!StringUtils.isBlank(database.getDirectLeaderLevelName())){
-            database.setDirectLeaderLevel(SysDictKeyValueUtil.getKeyByLabel(jobList,database.getDirectLeaderLevelName()));
-            if(StringUtils.isBlank(database.getDirectLeaderLevel())){
+        if (!StringUtils.isBlank(database.getDirectLeaderLevelName())) {
+            database.setDirectLeaderLevel(SysDictKeyValueUtil.getKeyByLabel(jobList, database.getDirectLeaderLevelName()));
+            if (StringUtils.isBlank(database.getDirectLeaderLevel())) {
                 return "直属领导职级错误";
             }
         }
 
-        if(!StringUtils.isBlank(database.getDirectLeadershipName())){
-            database.setDirectLeadership(SysDictKeyValueUtil.getPostIdByName(postList,database.getDirectLeadershipName()));
-            if(StringUtils.isBlank(database.getDirectLeadership())){
+        if (!StringUtils.isBlank(database.getDirectLeadershipName())) {
+            database.setDirectLeadership(SysDictKeyValueUtil.getPostIdByName(postList, database.getDirectLeadershipName()));
+            if (StringUtils.isBlank(database.getDirectLeadership())) {
                 return "直属领导岗位错误";
             }
         }
         return "";
     }
 
-    private String checkImportEducation(EducationExperience database,List<SysDictKeyValue> educationList) {
-        if(StringUtils.isBlank(database.getJobNumber())){
+    private String checkImportEducation(EducationExperience database, List<SysDictKeyValue> educationList) {
+        if (StringUtils.isBlank(database.getJobNumber())) {
             return "工号不能为空";
         }
 
-        if(StringUtils.isBlank(database.getSchool())){
+        if (StringUtils.isBlank(database.getSchool())) {
             return "学校不能为空";
         }
 
-        if(StringUtils.isBlank(database.getAdmissionTimeStr())){
+        if (StringUtils.isBlank(database.getAdmissionTimeStr())) {
             return "入校时间不能为空";
         }
         database.setAdmissionTime(HrDataUtil.getPOIDate(false,
                 Double.parseDouble(database.getAdmissionTimeStr())));
 
-        if(StringUtils.isBlank(database.getCompletionTimeStr())){
+        if (StringUtils.isBlank(database.getCompletionTimeStr())) {
             return "结业时间不能为空";
         }
         database.setCompletionTime(HrDataUtil.getPOIDate(false,
                 Double.parseDouble(database.getCompletionTimeStr())));
 
-        if(!StringUtils.isBlank(database.getIsAcademicDegreeStr())){
-            if(!"是".equals(database.getIsAcademicDegreeStr()) && !"否".equals(database.getIsAcademicDegreeStr())){
+        if (!StringUtils.isBlank(database.getIsAcademicDegreeStr())) {
+            if (!"是".equals(database.getIsAcademicDegreeStr()) && !"否".equals(database.getIsAcademicDegreeStr())) {
                 return "是否取得学位字段错误";
             }
-            if("是".equals(database.getIsAcademicDegreeStr())){
+            if ("是".equals(database.getIsAcademicDegreeStr())) {
                 database.setIsAcademicDegree(Byte.parseByte("1"));
-            }else{
+            } else {
                 database.setIsAcademicDegree(Byte.parseByte("2"));
             }
         }
-        if(!StringUtils.isBlank(database.getEducationName())){
-            database.setEducationCode(SysDictKeyValueUtil.getKeyByLabel(educationList,database.getEducationName()));
-            if(StringUtils.isBlank(database.getEducationCode())){
+        if (!StringUtils.isBlank(database.getEducationName())) {
+            database.setEducationCode(SysDictKeyValueUtil.getKeyByLabel(educationList, database.getEducationName()));
+            if (StringUtils.isBlank(database.getEducationCode())) {
                 return "学历错误";
             }
         }
 
         //查询工号是否存在
-        TbManpowerEmployeeBasicInfo tbManpowerEmployeeBasicInfo=new TbManpowerEmployeeBasicInfo();
+        TbManpowerEmployeeBasicInfo tbManpowerEmployeeBasicInfo = new TbManpowerEmployeeBasicInfo();
         tbManpowerEmployeeBasicInfo.setJobNumber(database.getJobNumber());
-        List<TbManpowerEmployeeBasicInfo> basicInfos= employeeBasicInfoMapper.getList(tbManpowerEmployeeBasicInfo);
-        if(CollectionUtils.isEmpty(basicInfos)){
+        List<TbManpowerEmployeeBasicInfo> basicInfos = employeeBasicInfoMapper.getList(tbManpowerEmployeeBasicInfo);
+        if (CollectionUtils.isEmpty(basicInfos)) {
             return "工号不存在";
         }
         //查询直属领导表判断是否存在
-        List<EducationExperience> educationExpList=educationExperienceMapper.selectByJobNumber(database.getJobNumber());
-        if(!CollectionUtils.isEmpty(educationExpList)){
+        List<EducationExperience> educationExpList = educationExperienceMapper.selectByJobNumber(database.getJobNumber());
+        if (!CollectionUtils.isEmpty(educationExpList)) {
             return "教育经历表已经存在当前工号的记录";
         }
         return "";
     }
 
     private String checkImportWork(WorkExperience database) {
-        if(StringUtils.isBlank(database.getJobNumber())){
+        if (StringUtils.isBlank(database.getJobNumber())) {
             return "工号不能为空";
         }
 
-        if(StringUtils.isBlank(database.getCorporateName())){
+        if (StringUtils.isBlank(database.getCorporateName())) {
             return "公司名称不能为空";
         }
 
-        if(StringUtils.isBlank(database.getEntryDateStr())){
+        if (StringUtils.isBlank(database.getEntryDateStr())) {
             return "入职日期不能为空";
         }
         database.setLeaveDate(HrDataUtil.getPOIDate(false,
                 Double.parseDouble(database.getLeaveDateStr())));
 
-        if(StringUtils.isBlank(database.getLeaveDateStr())){
+        if (StringUtils.isBlank(database.getLeaveDateStr())) {
             return "离职日期不能为空";
         }
         database.setEntryDate(HrDataUtil.getPOIDate(false,
                 Double.parseDouble(database.getEntryDateStr())));
 
-        if(StringUtils.isBlank(database.getWorkTypeStr())){
+        if (StringUtils.isBlank(database.getWorkTypeStr())) {
             return "工作类型不能为空";
         }
-        if(!"社会实践".equals(database.getWorkTypeStr()) && !"工作经历".equals(database.getWorkTypeStr())){
+        if (!"社会实践".equals(database.getWorkTypeStr()) && !"工作经历".equals(database.getWorkTypeStr())) {
             return "是否取得学位字段错误";
         }
-        if("社会实践".equals(database.getWorkTypeStr())){
+        if ("社会实践".equals(database.getWorkTypeStr())) {
             database.setWorkType(Byte.parseByte("1"));
-        }else{
+        } else {
             database.setWorkType(Byte.parseByte("2"));
         }
 
         //查询工号是否存在
-        TbManpowerEmployeeBasicInfo tbManpowerEmployeeBasicInfo=new TbManpowerEmployeeBasicInfo();
+        TbManpowerEmployeeBasicInfo tbManpowerEmployeeBasicInfo = new TbManpowerEmployeeBasicInfo();
         tbManpowerEmployeeBasicInfo.setJobNumber(database.getJobNumber());
-        List<TbManpowerEmployeeBasicInfo> basicInfos= employeeBasicInfoMapper.getList(tbManpowerEmployeeBasicInfo);
-        if(CollectionUtils.isEmpty(basicInfos)){
+        List<TbManpowerEmployeeBasicInfo> basicInfos = employeeBasicInfoMapper.getList(tbManpowerEmployeeBasicInfo);
+        if (CollectionUtils.isEmpty(basicInfos)) {
             return "工号不存在";
         }
         //查询直属领导表判断是否存在
-        List<WorkExperience> educationList=workExperienceMapper.selectByJobNumber(database.getJobNumber());
-        if(!CollectionUtils.isEmpty(educationList)){
+        List<WorkExperience> educationList = workExperienceMapper.selectByJobNumber(database.getJobNumber());
+        if (!CollectionUtils.isEmpty(educationList)) {
             return "工作经历表已经存在当前工号的记录";
         }
         return "";
@@ -992,33 +1071,33 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
 
 
     private String checkImportDirectlyLeader(SocialSecurity database) {
-        if(StringUtils.isBlank(database.getJobNumber())){
+        if (StringUtils.isBlank(database.getJobNumber())) {
             return "工号不能为空";
         }
 
         //查询工号是否存在
-        TbManpowerEmployeeBasicInfo tbManpowerEmployeeBasicInfo=new TbManpowerEmployeeBasicInfo();
+        TbManpowerEmployeeBasicInfo tbManpowerEmployeeBasicInfo = new TbManpowerEmployeeBasicInfo();
         tbManpowerEmployeeBasicInfo.setJobNumber(database.getJobNumber());
-        List<TbManpowerEmployeeBasicInfo> basicInfos= employeeBasicInfoMapper.getList(tbManpowerEmployeeBasicInfo);
-        if(CollectionUtils.isEmpty(basicInfos)){
+        List<TbManpowerEmployeeBasicInfo> basicInfos = employeeBasicInfoMapper.getList(tbManpowerEmployeeBasicInfo);
+        if (CollectionUtils.isEmpty(basicInfos)) {
             return "工号不存在";
         }
         //查询直属领导表判断是否存在
-        SocialSecurity socialSecurity=socialSecurityMapper.selectByJobNumber(database.getJobNumber());
-        if(socialSecurity!=null){
+        SocialSecurity socialSecurity = socialSecurityMapper.selectByJobNumber(database.getJobNumber());
+        if (socialSecurity != null) {
             return "社保福利表已经存在当前工号的记录";
         }
         return "";
     }
 
-    public boolean checkDepartment(String departmentId){
-        TbManpowerDepartment depart=tbManpowerDepartmentMapper.selectByPrimaryKey(departmentId);
-        return depart!=null ? true : false;
+    public boolean checkDepartment(String departmentId) {
+        TbManpowerDepartment depart = tbManpowerDepartmentMapper.selectByPrimaryKey(departmentId);
+        return depart != null ? true : false;
     }
 
     @Override
     public void updateEmployStatus(String id, String employStatus, User user) {
-        TbManpowerEmployeeBasicInfo record=new TbManpowerEmployeeBasicInfo();
+        TbManpowerEmployeeBasicInfo record = new TbManpowerEmployeeBasicInfo();
         record.setId(id);
         record.setEmployStatus(Byte.parseByte(employStatus));
         record.setModifierAccount(user.getAccount());
@@ -1028,12 +1107,12 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
 
     @Override
     public List<TreeModel> selectDepartEmployee() {
-        Result result= systemClient.selectDeptByParentId("",true);
-        if(result==null || !"0000".equals(result.getCode()) || result.getData()==null){
+        Result result = systemClient.selectDeptByParentId("", true);
+        if (result == null || !"0000".equals(result.getCode()) || result.getData() == null) {
             throw new JnSpringCloudException(HrExceptionEnums.DEPARTMENT_QUERY_ERRPR);
         }
-        List<TreeModel> rootList=new ArrayList<TreeModel>();
-        List<HashMap<String,Object>> list= (List<HashMap<String, Object>>) result.getData();
+        List<TreeModel> rootList = new ArrayList<TreeModel>();
+        List<HashMap<String, Object>> list = (List<HashMap<String, Object>>) result.getData();
 
         for (HashMap<String, Object> stringObjectHashMap : list) {
             TreeModel treeModel = getTreeModel(stringObjectHashMap);
@@ -1043,15 +1122,15 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
         return rootList;
     }
 
-    private void setTreeChildren(TreeModel rootModel,List<HashMap<String,Object>> children){
-        if(children==null || children.size()==0){
+    private void setTreeChildren(TreeModel rootModel, List<HashMap<String, Object>> children) {
+        if (children == null || children.size() == 0) {
             return;
         }
-        List<TreeModel> childList=null;
-        if(rootModel.getChildren()==null){
-            childList=new ArrayList<TreeModel>();
-        }else{
-            childList=rootModel.getChildren();
+        List<TreeModel> childList = null;
+        if (rootModel.getChildren() == null) {
+            childList = new ArrayList<TreeModel>();
+        } else {
+            childList = rootModel.getChildren();
         }
 
         for (HashMap<String, Object> childMap : children) {
@@ -1061,15 +1140,15 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
         rootModel.setChildren(childList);
     }
 
-    private void setTreeEmployeeChildren(TreeModel rootModel,List<TbManpowerEmployeeBasicInfo> children){
-        if(children==null || children.size()==0){
+    private void setTreeEmployeeChildren(TreeModel rootModel, List<TbManpowerEmployeeBasicInfo> children) {
+        if (children == null || children.size() == 0) {
             return;
         }
-        List<TreeModel> childList=null;
-        if(rootModel.getChildren()==null){
-            childList=new ArrayList<TreeModel>();
-        }else{
-            childList=rootModel.getChildren();
+        List<TreeModel> childList = null;
+        if (rootModel.getChildren() == null) {
+            childList = new ArrayList<TreeModel>();
+        } else {
+            childList = rootModel.getChildren();
         }
 
         for (TbManpowerEmployeeBasicInfo child : children) {
@@ -1099,18 +1178,36 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
         treeModel.setJobNumber("");
         treeModel.setMailbox("");
 
-        List<TbManpowerEmployeeBasicInfo> employees=employeeBasicInfoMapper.selectByDepartment(treeModel.getId());
-        if(!CollectionUtils.isEmpty(employees)){
-            setTreeEmployeeChildren(treeModel,employees);
+        List<TbManpowerEmployeeBasicInfo> employees = employeeBasicInfoMapper.selectByDepartment(treeModel.getId());
+        if (!CollectionUtils.isEmpty(employees)) {
+            setTreeEmployeeChildren(treeModel, employees);
         }
         if (childMap.get("children") != null) {
             List<HashMap<String, Object>> childrenSub = (List<HashMap<String, Object>>) childMap.get("children");
             setTreeChildren(treeModel, childrenSub);
 
         }
-        if(treeModel.getChildren()==null){
+        if (treeModel.getChildren() == null) {
             treeModel.setChildren(new ArrayList<TreeModel>());
         }
         return treeModel;
+    }
+
+    @Override
+    public boolean checkPhoneExist(String phone,String id) {
+        TbManpowerEmployeeBasicInfo info=employeeBasicInfoMapper.selectByPhone(phone,id);
+        return info==null ? true:false;
+    }
+
+    @Override
+    public boolean checkMailboxExist(String mailBox,String id) {
+        TbManpowerEmployeeBasicInfo info=employeeBasicInfoMapper.selectByMailbox(mailBox,id);
+        return info==null ? true:false;
+    }
+
+    @Override
+    public boolean checkCertificateNumberExist(String certificateNumber,String id) {
+        TbManpowerEmployeeBasicInfo info=employeeBasicInfoMapper.selectByCertificateNumber(certificateNumber,id);
+        return info==null ? true:false;
     }
 }

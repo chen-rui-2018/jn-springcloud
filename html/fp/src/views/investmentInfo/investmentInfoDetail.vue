@@ -12,7 +12,7 @@
             <div class="agentTil">{{getGuideDetal.title}}</div>
           </div>
           <div class="agent2 clearfix color2">
-            <div class="agentImg">
+            <div>
               <p>{{ getGuideDetal.subTitle }}</p>
               <div class="tag-btn" v-if="getGuideDetal.adFlag">
                 <el-tag
@@ -24,12 +24,11 @@
                 >{{ tag }}</el-tag>
               </div>
             </div>
-            <!--            <div class="agent2Info fr">-->
-            <!--              <p class="lastP color3">-->
-            <!--                <span>阅读量：{{getGuideDetal.readNum}}</span>-->
-            <!--                <span>发布时间：<i class="mainColor">{{getGuideDetal.releaseDate}}</i></span>-->
-            <!--              </p>-->
-            <!--            </div>-->
+            <div class="agent2Info fr">
+              <p class="lastP color3">
+                <span>发布时间：<i class="mainColor">{{getGuideDetal.startTime}}</i></span>
+              </p>
+            </div>
           </div>
         </el-card>
       </div>
@@ -50,7 +49,7 @@
               </div>
             </div>
             <div class="agent2 color2" v-if="zankaiFlag">
-              <div class="agent2Con">
+              <div class="agent2Content">
                 <div v-html="getGuideDetal.content"></div>
                 <div>
                   <img class="detail-adCover" :src="getGuideDetal.adCover" alt="">
@@ -281,13 +280,9 @@
           margin-top: 20px;
           font-size: 13px;
 
-          .agentImg {
-            //   width: 150px;
-            //   height: 120px;
-            span.tag-list {
-              display: inline-block;
-              width: 200px;
-            }
+          span.tag-list {
+            display: inline-block;
+            width: 200px;
           }
 
           .agent2Info {
@@ -328,11 +323,9 @@
           }
           .agent2 {
             padding: 23px 0;
-            .agent2Con {
-              min-height: 150px;
-              overflow: hidden;
-              // white-space: nowrap;
-              // text-overflow: ellipsis;
+            .agent2Content {
+              max-height: 400px;
+              overflow: auto;
             }
             .orgBtn1 {
               font-size: 13px;

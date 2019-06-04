@@ -10,16 +10,17 @@
                 <el-breadcrumb-item class="mainColor">报名情况</el-breadcrumb-item>
             </el-breadcrumb> -->
       <span class="pointer" @click="$router.push({ path: '/enterpriseservice'})">企业服务/</span>
-      <span class="pointer" @click="$router.push({ path: '/actiDetail'})">活动详情/</span>
+       <span class="pointer" @click="$router.push({ path: '/actiTrainDetail',query:{activityId:$route.query.activityId}})">活动详情/</span>
       <span class="mainColor">报名情况</span>
     </div>
     <el-card>
       <div class="regContent">
         <ul class="clearfix">
           <li v-for="(i,k) in statusList" :key="k" @click="handleInfo(i.account)">
-            <img :src="i.avatar" alt="">
+            <div class="imgItem"><img :src="i.avatar" alt=""></div>
+
             <p>{{i.name}}
-              <i v-if="i.sex==2" class="iconfont icon-xingbienv"></i>
+              <i v-if="i.sex==0" class="iconfont icon-xingbienv"></i>
               <i v-if="i.sex==1" class="iconfont icon-xingbienan"></i>
             </p>
             <p>{{i.post}}</p>
@@ -63,7 +64,11 @@ export default {
       this.init();
     },
     handleInfo(account) {
-      this.$router.push({ path: "regData", query: { account: account } });
+       if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
+      this.$router.push({ path: "regData", query: { account: account ,activityId:this.$route.query.activityId} });
     },
     init() {
       let _this = this;
@@ -109,6 +114,20 @@ export default {
         margin-right: 30px;
         margin-bottom: 20px;
         float: left;
+        text-align: center;
+            font-size: 13px;
+        .imgItem{
+          width: 50px;
+          height: 50px;
+           border-radius: 50%;
+           margin: 0 auto;
+          img{
+            width: 100%;
+            height: 100%;
+            vertical-align: middle;
+            border-radius: 50%;
+          }
+                  }
       }
       > li:nth-child(7n) {
         margin-right: 0;
@@ -121,4 +140,3 @@ export default {
   }
 }
 </style>
-

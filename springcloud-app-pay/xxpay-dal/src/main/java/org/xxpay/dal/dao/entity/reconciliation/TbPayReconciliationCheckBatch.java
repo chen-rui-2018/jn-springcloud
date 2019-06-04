@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class TbPayReconciliationCheckBatch implements Serializable {
-    private String id;
+    private Integer id;
 
     private Integer version;
 
@@ -63,12 +63,12 @@ public class TbPayReconciliationCheckBatch implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Integer getVersion() {

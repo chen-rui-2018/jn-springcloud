@@ -65,25 +65,25 @@
     END paymentState,
      payment_type AS paymentType,
      CASE ac_book_type
-      WHEN '1' THEN
+      WHEN 'ELECTRIC' THEN
       '电费'
-      WHEN '2' THEN
+      WHEN 'PROPERTY' THEN
       '物业费'
-      WHEN '3' THEN
+      WHEN 'REPAIR' THEN
       '维修费'
-      WHEN '4' THEN
+      WHEN 'ROOM_LEASE' THEN
       '房租费'
-      WHEN '5' THEN
+      WHEN 'GOODS_LEASE' THEN
       '物品租赁费'
-      WHEN '6' THEN
+      WHEN 'TEMPORARY_PARKING' THEN
       '停车费'
-      WHEN '7' THEN
+      WHEN 'PARKING_LEASE' THEN
       '车位费'
-      WHEN '8' THEN
+      WHEN 'WATER' THEN
       '水费'
-      WHEN '9' THEN
+      WHEN 'PROMOTION' THEN
       '宣传费'
-      WHEN '10' THEN
+      WHEN 'HEALTH' THEN
       '体检费'
     ELSE
         '其他'
@@ -173,26 +173,27 @@ and obj_id = #{payBill.objId,jdbcType=VARCHAR}
         ELSE
         '支付异常'
         END paymentState,
+        ac_book_type AS payType,
         CASE ac_book_type
-        WHEN '1' THEN
+        WHEN 'ELECTRIC' THEN
         '电费'
-        WHEN '2' THEN
+        WHEN 'PROPERTY' THEN
         '物业费'
-        WHEN '3' THEN
+        WHEN 'REPAIR' THEN
         '维修费'
-        WHEN '4' THEN
+        WHEN 'ROOM_LEASE' THEN
         '房租费'
-        WHEN '5' THEN
+        WHEN 'GOODS_LEASE' THEN
         '物品租赁费'
-        WHEN '6' THEN
+        WHEN 'TEMPORARY_PARKING' THEN
         '停车费'
-        WHEN '7' THEN
+        WHEN 'PARKING_LEASE' THEN
         '车位费'
-        WHEN '8' THEN
+        WHEN 'WATER' THEN
         '水费'
-        WHEN '9' THEN
+        WHEN 'PROMOTION' THEN
         '宣传费'
-        WHEN '10' THEN
+        WHEN 'HEALTH' THEN
         '体检费'
         ELSE
         '其他'

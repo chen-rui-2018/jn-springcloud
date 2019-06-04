@@ -12,13 +12,15 @@
             </el-breadcrumb> -->
             <span class="pointer" @click="$router.push({ path: '/serMatHp'})">首页/</span>
             <span class="pointer" @click="$router.push({ path: '/actiTrain'})">活动培训/</span>
-            <span class="pointer" @click="$router.push({ path: '/actiTrainDetail'})">活动详情/</span>
+            <span class="pointer" @click="$router.push({ path: '/actiTrainDetail',query:{activityId:$route.query.activityId}})">活动详情/</span>
             <span class="mainColor">报名人资料</span>
         </div>
         <div class="regDataContent">
             <el-card>
                 <div class="dataImg">
-                    <img :src="actiInfo.avatar" alt="">
+                    <div class="imgItem">
+                      <img :src="actiInfo.avatar" alt="">
+                    </div>
                     <div class="dataName">{{actiInfo.name}}</div>
                     <i class="iconfont icon-xingbienv">{{actiInfo.age}}</i>
                     <p>个性签名：
@@ -41,7 +43,9 @@
                     <div class="dataRight fl">
                         <div>{{actiInfo.companyName}}11</div>
                         <div>{{actiInfo.post}}</div>
-                        <div>{{actiInfo.hobbys}}</div>
+                        <div>
+                          <span class="hobbryb" v-for="(item,k) in actiInfo.hobbys" :key="k">{{item}}</span>
+                        </div>
                     </div>
                 </div>
             </el-card>
@@ -85,6 +89,9 @@ export default {
 <style lang="scss">
 .regData {
   padding-top: 65px;
+   .hobbryb{
+    margin-right:10px;
+  }
   .regDataNav {
     margin: 20px 0;
   }
@@ -94,6 +101,17 @@ export default {
       height: 300px;
       text-align: center;
     }
+      .imgItem{
+width: 100px;
+height: 100px;
+margin:0 auto;
+ border-radius: 50%;
+img{
+  width: 100%;
+  height: 100%;
+  vertical-align: middle;
+  border-radius: 50%;
+}}
     .dataInfo {
       padding: 30px;
       .dataLeft {
@@ -126,4 +144,3 @@ export default {
   }
 }
 </style>
-

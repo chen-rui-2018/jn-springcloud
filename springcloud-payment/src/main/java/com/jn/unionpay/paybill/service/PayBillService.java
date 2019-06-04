@@ -4,6 +4,7 @@ import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.pay.model.CreateOrderAndPayReqModel;
+import com.jn.pay.model.CreatePayReqModel;
 import com.jn.pay.model.PayOrderNotify;
 import com.jn.pay.model.PayOrderRsp;
 import com.jn.paybill.model.*;
@@ -57,11 +58,11 @@ public interface PayBillService {
 
     /**
      * 缴费单支付发起
-     * @param createOrderAndPayReqModel
+     * @param createPayReqModel
      * @return
      */
 
-    Result<PayOrderRsp> createPayOrder(CreateOrderAndPayReqModel createOrderAndPayReqModel);
+    Result<PayOrderRsp> createPayOrder(CreatePayReqModel createPayReqModel);
 
     /**
      * 支付回调接口

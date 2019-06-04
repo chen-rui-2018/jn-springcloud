@@ -13,7 +13,8 @@
         <el-aside style="width: 200px;margin-right: 20px;" v-if="$store.state.hiddenNav">
           <div class="userImg">
             <div class="imgItem">
-              <img src="@/../static/img/larImg.png" alt="">
+              <img v-if="!avartImg" src="@/../static/img/larImg.png" alt="">
+              <img v-else :src="avartImg" alt="">
             </div>
             <!-- <p>{{account}}</p> -->
           </div>
@@ -24,9 +25,9 @@
               </template>
               <el-menu-item-group>
                 <el-menu-item index="/parkNotice">园区通知</el-menu-item>
-                <!-- <el-menu-item index="1-2">私人订单</el-menu-item>
-                <el-menu-item index="1-2">信用动态</el-menu-item>
-                <el-menu-item index="1-2">消费汇总</el-menu-item>
+                <el-menu-item index="/corporateInvitation">企业邀请</el-menu-item>
+                <el-menu-item index="/institutionInvitation">机构邀请</el-menu-item>
+                <!-- <el-menu-item index="1-2">消费汇总</el-menu-item>
                 <el-menu-item index="1-2">收入汇总</el-menu-item>
                 <el-menu-item index="1-2">付款通知</el-menu-item> -->
               </el-menu-item-group>
@@ -43,7 +44,7 @@
                 <el-menu-item index="/dataReminder">数据上报提醒</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
-            <el-menu-item index="/messageCenter/chat">
+            <el-menu-item index="/chat">
               <span slot="title">社区交流</span>
             </el-menu-item>
           </el-menu>
@@ -59,12 +60,21 @@
 <script>
 export default {
   name: "MessageCenter",
-  computed:{
-    key(){
+  data() {
+    return {
+      avartImg: ""
+    };
+  },
+  computed: {
+    key() {
       return this.$route.path + Date.now();
     }
+  },
+  mounted() {
+    const userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
+    this.avartImg = userInfo.avatar;
   }
-}
+};
 </script>
 
 <style lang="scss">
@@ -99,7 +109,7 @@ $bg-gray: #f3f3f3;
           width: 100%;
           position: absolute;
           top: 0;
-          left:0;
+          left: 0;
           z-index: 1;
         }
         .chat-main {
@@ -129,6 +139,9 @@ $bg-gray: #f3f3f3;
     padding: 15px 0;
     background-color: $bg-gray;
   }
+  .el-breadcrumb {
+    font-weight: bold;
+  }
   .el-menu {
     border-right: none;
     .el-menu-item {
@@ -137,8 +150,15 @@ $bg-gray: #f3f3f3;
         color: $--color-primary;
         border-left: 2px solid $--color-primary;
       }
+      padding: 0;
+      padding-left: 20px !important;
+    }
+    .el-menu-item:hover{
+      background: #00a041;
+      color:#fff;
+    }
+    .el-menu-item-group__title{
       padding:0;
-      padding-left:20px !important;
     }
   }
   .userImg {
@@ -154,6 +174,7 @@ $bg-gray: #f3f3f3;
         width: 100%;
         height: 100%;
         vertical-align: middle;
+        border-radius: 50%;
         // margin: 0 auto;
       }
     }

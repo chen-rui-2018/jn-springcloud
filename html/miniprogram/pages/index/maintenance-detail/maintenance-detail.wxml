@@ -1,5 +1,4 @@
 <wxs module="filter" src="../../../utils/common.wxs"></wxs>
-<nav-bar navbar-data="{{navbarData}}"></nav-bar>
 <view class="row-block">
   <!-- <view class="cell-row">
     <cell>

@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
@@ -116,10 +117,12 @@ public class OrgDetailParameter implements Serializable {
     @ApiModelProperty(value = "企业工商经营范围",example = "计算机销售、软件开发及出售、计算机....")
     private String orgBusinScope;
 
-    @ApiModelProperty(value = "机构咨询电话",required = true,example = "800888555")
+    @ApiModelProperty(value = "机构咨询电话",required = true,example = "025-68225612")
     @NotNull(message = "机构咨询电话不能为空")
+    @Pattern(regexp = "(^(((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\\d{8})$)"
+            +"|(^0\\d{2,3}-[1-9]\\d{6,7}$)",
+            message = "{'机构咨询电话格式不正确的，只能是手机号，座机号'}")
     private String orgPhone;
-
     @ApiModelProperty(value = "省",required = true,example = "湖南")
     @NotNull(message = "省不能为空")
     private String orgProvince;
@@ -135,15 +138,15 @@ public class OrgDetailParameter implements Serializable {
     @ApiModelProperty(value = "联系人姓名",required = true,example = "张三")
     @NotNull(message = "联系人姓名不能为空")
     private String conName;
-
     @ApiModelProperty(value = "联系人电话",required = true,example = "18155552222")
     @NotNull(message = "联系人电话不能为空")
+    @Pattern(regexp = "(^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\\d{8}$)",
+            message = "联系人电话格式不正确")
     private String conPhone;
-
     @ApiModelProperty(value = "联系人邮箱",required = true,example = "123@163.com")
     @NotNull(message = "联系人邮箱不能为空")
+    @Pattern(regexp="^(\\w)+(\\.\\w+)*@(\\w)+((\\.\\w+)+)$",message="请正确联系人邮箱")
     private String conEmail;
-
     @ApiModelProperty(value = "公司网网址",example = "www.baidu.com")
     private String orgWeb;
 

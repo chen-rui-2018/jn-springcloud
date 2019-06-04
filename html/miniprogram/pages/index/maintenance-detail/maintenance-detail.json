@@ -1,7 +1,12 @@
 {
   "usingComponents": {
-    "nav-bar": "./../../templates/header/header",
     "cell": "./../../templates/cell/cell",
     "sub-button": "./../../templates/sub-button/sub-button"
-  }
+  },
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black",
+  "navigationBarTitleText": "设备详情",
+  "backgroundColor": "#eeeeee",
+  "backgroundTextStyle": "light",
+  "enablePullDownRefresh": true
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="approveAdvisory">
-    <div class="advisory_title">
+    <div class="advisory_title font16" >
       <div>审批顾问</div>
       <div @click="toCounselorManagement">返回列表</div>
     </div>
@@ -44,7 +44,7 @@
             <span>{{contactEmail}}</span>
           </el-form-item>
           <el-form-item
-            label="执业资源:"
+            label="执业资质:"
             class="inline"
           >
             <span>{{practiceQualification}}</span>
@@ -165,6 +165,7 @@
     </div>
        <el-dialog
   :visible.sync="dialogVisible"
+  :modal-append-to-body="false"
   width="50%">
   <img :src="certificatePhoto" alt="图片" style="width:100%">
   <span slot="footer" class="dialog-footer">
@@ -370,7 +371,7 @@ color: #00A041;
       justify-content: space-between;
       align-items: center;
       padding:17px;
-      font-size: 13px;
+      // font-size: 13px;
       border-radius: 5px;
       div:nth-child(2){
                 width:88px;

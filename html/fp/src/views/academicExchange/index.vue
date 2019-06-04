@@ -7,23 +7,23 @@
                         <div class="swiper-slide" style="width:100%">
                             <img src="@/../static/img/scient.png" alt="">
                         </div>
-                        <div class="swiper-slide" style="width:100%">
+                        <!-- <div class="swiper-slide" style="width:100%">
                             <img src="@/../static/img/scient.png" alt="">
                         </div>
                         <div class="swiper-slide" style="width:100%">
                             <img src="@/../static/img/scient.png" alt="">
-                        </div>
+                        </div> -->
                     </div>
                     <!-- 如果需要分页器 -->
-                    <div class="swiper-pagination"></div>
+                    <!-- <div class="swiper-pagination"></div> -->
 
                     <!-- 如果需要导航按钮 -->
-                    <div class="swiper-button-prev">
+                    <!-- <div class="swiper-button-prev">
                         <i class="iconfont icon-leftarrow pointer"></i>
                     </div>
                     <div class="swiper-button-next">
                         <i class="iconfont icon-rightarrow pointer"></i>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -37,6 +37,7 @@
                 <div id="nav1" class="nav1 clearfix">
                     <div class="nav1Tit fl">所有类别：</div>
                     <ul class="nav1Ul fl clearfix">
+                        <li class="wid1" :class="{'active1':flag1==''}" @click="handleFilter('')">全部</li>
                         <li class="wid1" :class="{'active1':flag1=='science'}" @click="handleFilter('science')">学术</li>
                         <li class="wid1" :class="{'active1':flag1=='technology'}" @click="handleFilter('technology')">科技</li>
                     </ul>
@@ -46,7 +47,7 @@
                 <div class="con1 clearfix">
                     <div class="con1Tit fl mainColor">全部</div>
                     <div class="filRight fr">
-                        <input type="text" placeholder="搜学术" v-model="title">
+                        <input type="text" placeholder="搜索名称" v-model="title">
                         <i class="iconfont icon-sousuo" @click="handleSearchList"></i>
                     </div>
                 </div>
@@ -64,7 +65,7 @@
                                 <p class="p2">
                                     成果类型：<span v-if="i.type=='technology'">科技</span><span v-if="i.type=='science'">学术</span>
                                 </p>
-                                <p class="color22">{{i.details}}</p>
+                                <p class="color22" v-html="i.details"></p>
                                 <!-- <div class="firInfo">{{i.briefContent}}</div> -->
                             </div>
                             <div class="fir2 fr mainColor"  @click="$router.push({path:'/technologyDetails',query:{achievementId:i.id}})">详情</div>
@@ -94,6 +95,11 @@ export default {
   },
   mounted() {
       this.getAchievementList()
+      if(this.$route.query.type){
+        this.type=this.$route.query.type
+        this.flag1=this.$route.query.type
+        this.getAchievementList()
+      }
   },
   methods: {
     handleSizeChange(val) {
@@ -180,6 +186,7 @@ export default {
   .incubatorNav {
     padding: 15px 0;
     font-size: 13px;
+    font-weight: bold;
   }
   .serverOrgNav {
     padding: 0 20px;
@@ -252,6 +259,31 @@ export default {
         height: 100%;
         width: 95%;
       }
+         input::-webkit-input-placeholder {
+          /* WebKit browsers*/
+          color: #999;
+          font-size: 13px;
+        }
+    
+        input:-moz-placeholder {
+          /* Mozilla Firefox 4 to 18*/
+          color: #999;
+          font-size: 13px;
+        }
+    
+    
+        input::-moz-placeholder {
+          /* Mozilla Firefox 19+*/
+          color: #999;
+          font-size: 13px;
+        }
+    
+    
+        input:-ms-input-placeholder {
+          /* Internet Explorer 10+*/
+          color: #999;
+          font-size: 13px;
+        }
       input,
       textarea,
       select,

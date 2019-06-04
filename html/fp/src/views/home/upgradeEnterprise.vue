@@ -33,8 +33,8 @@
           </el-form-item>
         </div>
         <div style="display:flex">
-          <el-form-item label="联系电话:" class="inline" prop="con_phone">
-            <el-input v-model="businessForm.con_phone"></el-input>
+          <el-form-item label="联系电话:" class="inline" prop="ownerPhone">
+            <el-input v-model="businessForm.ownerPhone"></el-input>
             <!-- <span>{{conPhone}}</span> -->
           </el-form-item>
           <el-form-item label="注册时间:" class="inline" prop="foundingTime">
@@ -65,11 +65,11 @@
           </el-form-item>
         </div>
         <div style="display:flex">
-          <el-form-item label="注册资金:" lass="inline" prop="regCapital">
+          <el-form-item label="注册资金(万元):" lass="inline" prop="regCapital">
             <el-input v-model="businessForm.regCapital"></el-input>
             <!-- <span>{{regCapital}}</span> -->
           </el-form-item>
-          <el-form-item label="企业规模:" lass="inline" prop="comScale">
+          <el-form-item label="企业规模(人):" lass="inline" prop="comScale">
             <el-input v-model="businessForm.comScale"></el-input>
             <!-- <span>{{comScale}}</span> -->
           </el-form-item>
@@ -79,8 +79,8 @@
             <el-input v-model="businessForm.unifyCode"></el-input>
             <!-- <span>{{unifyCode}}</span> -->
           </el-form-item>
-          <el-form-item label="企业性质:" lass="inline" prop="comPropertys">
-            <el-select multiple v-model="businessForm.comPropertys" placeholder="请选择企业性质">
+          <el-form-item label="企业性质:" lass="inline" prop="comProperty">
+            <el-select v-model="businessForm.comProperty" placeholder="请选择企业性质">
               <el-option v-for="item in comPropertyOptions" :key="item.id" :label="item.preValue" :value="item.id">
               </el-option>
             </el-select>
@@ -120,25 +120,25 @@
           </el-form-item>
         </div>
         <el-form-item label="企业LOGO:" class="br enterprise_bottom" prop="avatar">
-          <el-upload class="avatar-uploader" action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload" :headers="headers" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeUpload">
+          <el-upload class="avatar-uploader" :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'" :headers="headers" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeUpload">
             <img v-if="businessForm.avatar" :src="businessForm.avatar" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
         <el-form-item label="三证一体或营业执照:" class="br" prop="businessLicense">
-          <!-- <el-upload action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload" :headers="headers" :on-exceed=" handleExceed" :limit="1" list-type="picture-card" :on-success="handleBusinessLicenseSuccess" :before-upload="beforeUpload" :on-preview="handleBusinessLicensePictureCardPreview" :on-remove="handleBusinessLicenseRemove">
+          <el-upload :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'" :headers="headers" :on-exceed=" handleExceed" :limit="1" list-type="picture-card" :on-success="handleBusinessLicenseSuccess" :before-upload="beforeUpload" :on-preview="handleBusinessLicensePictureCardPreview" :on-remove="handleBusinessLicenseRemove">
             <i class="el-icon-plus"></i>
           </el-upload>
           <el-dialog :visible.sync="businessLicenseDialogVisible">
             <img width="100%" :src="businessLicenseUrl" alt="LOGO图片">
-          </el-dialog> -->
-          <el-upload class="avatar-uploader" action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload" :headers="headers" :show-file-list="false" :on-success="handleBusinessLicenseSuccess" :before-upload="beforeUpload">
+          </el-dialog>
+          <el-upload class="avatar-uploader" :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'" :headers="headers" :show-file-list="false" :on-success="handleBusinessLicenseSuccess" :before-upload="beforeUpload">
             <img v-if="businessForm.businessLicense" :src="businessForm.businessLicense" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
-        <el-form-item prop="region">
-          <el-input v-model="input" class="input1" placeholder="请输入验证码" style="width:200px"></el-input>
+        <el-form-item prop="checkCode">
+          <el-input v-model="businessForm.checkCode" class="input1" placeholder="请输入验证码" style="width:200px"></el-input>
           <!-- <span class="getCode">获取验证码</span> -->
           <span class="getCode" v-if="sendAuthCode" @click="getCode">获取验证码</span>
           <span class="getCode" v-else style="padding: 0px 15px;">
@@ -160,12 +160,29 @@ export default {
     var checkPhoneNumber = (rule, value, callback) => {
       const reg = /^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\d{8}$/;
       if (!reg.test(value)) {
-        callback(new Error("请输入正确的手机号码"));
+        callback("请输入正确的手机号码");
+      } else {
+        callback();
+      }
+    };
+    var checkWeb = (rule, value, callback) => {
+      const reg = /^(http|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?$/;
+      if (!reg.test(value)) {
+        callback("请输入正确的网址");
+      } else {
+        callback();
+      }
+    };
+    var checkTel = (rule, value, callback) => {
+      const reg = /^0\\d{2,3}-[1-9]\\d{6,7}$/;
+      if (!reg.test(value)) {
+        callback("请输入正确的电话格式");
       } else {
         callback();
       }
     };
     return {
+      baseUrl:this.api.host,
       fileList: [],
       showImg: false,
       auth_time: 0,
@@ -185,7 +202,7 @@ export default {
           label: "招商企业"
         }
       ],
-      parkList:[],
+      parkList: [],
       imgParamsDialogVisible: false,
       imgParamsUrl: "",
       businessLicenseDialogVisible: false,
@@ -196,7 +213,7 @@ export default {
       induTypeOptions: [],
       userAccount: "",
       businessForm: {
-        comPropertys: [],
+        comProperty: "",
         affiliatedPark: "",
         comServer: "", //我的服务
         comDemand: "", //我的需求
@@ -211,7 +228,7 @@ export default {
         unifyCode: "", //统一社会信用代码
         comAddress: "", //注册地址
         addrPark: "", //公司园区地址-实际经营地址
-        con_phone: "", //联系电话
+        ownerPhone: "", //联系电话
         regCapital: "", //注册资本 万元
         comScale: "", //企业规模
         comType: "", //企业类型
@@ -219,6 +236,7 @@ export default {
         comWeb: "", //企业官网地址
         avatar: "", //企业logo
         businessLicense: "", //营业执照
+        checkCode: ""
       },
       rules: {
         comName: [
@@ -231,7 +249,7 @@ export default {
           { required: true, message: "请选择产业领域", trigger: "change" }
         ],
         ownerLaw: [{ required: true, message: "请输入法人", trigger: "blur" }],
-        conPhone: [
+        ownerPhone: [
           { required: true, message: "请输入联系电话", trigger: "blur" },
           { validator: checkPhoneNumber, trigger: "blur" }
         ],
@@ -244,9 +262,10 @@ export default {
         addrPark: [
           { required: true, message: "请输入实际经营地址", trigger: "blur" }
         ],
-        // comTele: [
-        //   { required: true, message: "请输入固定电话", trigger: "blur" }
-        // ],
+        comTele: [
+          { required: false, message: "", trigger: "blur" },
+          { validator: checkTel, trigger: "blur" }
+        ],
         regCapital: [
           { required: true, message: "请输入注册资金", trigger: "blur" }
         ],
@@ -269,12 +288,13 @@ export default {
         //   { required: true, message: "请输入我的需求", trigger: "blur" }
         // ],
         comWeb: [
-          { required: true, message: "请输入企业官网地址", trigger: "blur" }
+          { required: true, message: "请输入企业官网地址", trigger: "blur" },
+          { validator: checkWeb, trigger: "blur" }
         ],
         comAddress: [
           { required: true, message: "请输入注册地址", trigger: "blur" }
         ],
-        comPropertys: [
+        comProperty: [
           { required: true, message: "请选择企业性质", trigger: "change" }
         ],
         avatar: [
@@ -298,7 +318,7 @@ export default {
   mounted() {
     this.selectIndustryList();
     this.getComPropertyOptions();
-    this.getParkList()
+    this.getParkList();
   },
   methods: {
     submitCompany(formName) {
@@ -312,7 +332,7 @@ export default {
               comName: _this.businessForm.comName,
               induType: _this.businessForm.induType,
               ownerLaw: _this.businessForm.ownerLaw,
-              con_phone: _this.businessForm.con_phone,
+              ownerPhone: _this.businessForm.ownerPhone,
               foundingTime: _this.businessForm.foundingTime,
               runTime: _this.businessForm.runTime,
               comAddress: _this.businessForm.comAddress,
@@ -329,15 +349,17 @@ export default {
               comWeb: _this.businessForm.comWeb,
               avatar: _this.businessForm.avatar,
               businessLicense: _this.businessForm.businessLicense,
+              checkCode: _this.businessForm.checkCode
             },
             callback: function(res) {
               if (res.code == "0000") {
-                console.log(res);
+                _this.$message.success("提交成功，等待审核");
+                _this.$refs["businessForm"].resetFields();
               }
             }
           });
         } else {
-          console.log("error submit!!");
+          _this.$message.error(res.result);
           return false;
         }
       });
@@ -350,7 +372,7 @@ export default {
         data: {},
         callback: function(res) {
           if (res.code == "0000") {
-           _this.parkList=res.data
+            _this.parkList = res.data;
           } else {
             _this.$message.error(res.result);
           }
@@ -361,13 +383,10 @@ export default {
     getCode() {
       let _this = this;
       this.api.get({
-        url: "getCode",
-        data: {
-          phone: _this.businessForm.con_phone
-        },
+        url: "getUserCode",
+        data: {},
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
             _this.sendAuthCode = false;
             _this.auth_time = 60;
             var auth_timetimer = setInterval(() => {
@@ -486,7 +505,7 @@ export default {
     overflow: hidden;
   }
   .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
+    border-color: #409eff;
   }
   .avatar-uploader-icon {
     font-size: 28px;
@@ -501,13 +520,13 @@ export default {
     height: 85px;
     display: block;
   }
-//   .el-input.is-active .el-input__inner,
-//   .el-input__inner:focus {
-//     border-color: #00a041;
-//   }
-//   .el-select .el-input.is-focus .el-input__inner {
-//     border-color: #00a041;
-// }
+  //   .el-input.is-active .el-input__inner,
+  //   .el-input__inner:focus {
+  //     border-color: #00a041;
+  //   }
+  //   .el-select .el-input.is-focus .el-input__inner {
+  //     border-color: #00a041;
+  // }
   .tipPsw {
     font-size: 13px;
   }
@@ -596,7 +615,7 @@ export default {
   }
 
   .business_title {
-    width: 813px;
+    // width: 813px;
     background-color: #fff;
     display: flex;
     justify-content: space-between;
@@ -616,7 +635,7 @@ export default {
   .business_content {
     background: #fff;
     margin-top: 14px;
-    width: 813px;
+    // width: 813px;
     padding: 21px 28px;
     .enterprise {
       margin-bottom: 32px;
@@ -647,7 +666,7 @@ export default {
     margin-top: 58px;
     text-align: center;
     margin-bottom: 17px;
-    > span { 
+    > span {
       display: inline-block;
       color: rgba(0, 160, 65, 1);
       font-size: 12px;

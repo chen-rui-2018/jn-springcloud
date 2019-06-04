@@ -8,10 +8,13 @@ Page({
    * 页面的初始数据
    */
   data: {
-    navbarData: {
-      title: '设备列表',
+    equipmentList: [],
+    query: {
+      page: 1,
+      rows: 100
     },
-    equipmentList: []
+    loading: false,
+    noMore: false
   },
 
   /**
@@ -20,13 +23,17 @@ Page({
   onLoad: function (options) {
     wxHttp.send({
       url: '/springcloud-park/asset/maintain/maintainList',
-      method: 'GET'
+      method: 'GET',
+      data: this.data.query
     })
       .then(res => {
         this.setData({
           equipmentList: res.data.data.rows
         })
       })
+  },
+  onPageScroll: function (e) {
+    // console.log(e);//{scrollTop:99}
   },
 
   /**

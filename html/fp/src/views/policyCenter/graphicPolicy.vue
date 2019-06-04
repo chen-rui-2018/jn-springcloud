@@ -382,9 +382,9 @@ export default {
         .agent2 {
           padding: 10px 0;
           .agent2Con {
-            height: 150px;
-            width: 80%;
-            overflow: hidden;
+            // height: 150px;
+            // width: 80%;
+            // overflow: hidden;
             // white-space: nowrap;
             // text-overflow: ellipsis;
           }

@@ -22,10 +22,9 @@
           <div class="accessory">
             <span>附件下载:</span>
             <div class="accessory_right">
-              <a href="javascript:;">附件一  企业发展沙龙活动承办须知.docx</a>
-              <a href="javascript:;">附件一  企业发展沙龙活动承办须知.docx</a>
+              <a v-if="fileList.length===0" href="javascript:;">暂无</a>
+              <a  :href="item.filePath" v-for="(item,index) in fileList " :key="index">附件{{index+1}}  {{item.fileName}}</a>
               <p>
-                <!-- <span>反馈表递交截止日期{{talentDetailList.deadline|time}}</span> -->
                 <span>发布时间:<span class="color">{{talentDetailList.createdTime|time}}</span> </span>
                 <span>阅读量: {{talentDetailList.browseTimes}}次</span> 
               </p>
@@ -48,7 +47,8 @@ export default {
   data () {
     return {
       id:"",
-      talentDetailList:{}
+      talentDetailList:{},
+      fileList:[]
     }
   },
   filters: {
@@ -75,8 +75,10 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-            // console.log(res)
             _this.talentDetailList = res.data;
+            if(res.data.fileUrl!==''){
+              _this.fileList=JSON.parse(res.data.fileUrl)
+            }
           }
         }
       });
@@ -100,6 +102,7 @@ export default {
 
 <style lang="scss">
   .talentsServiceDetail{
+     padding-top: 67px;
     .talentsServiceDetail_content{
       width: 1190px;
       margin: 0 auto;

@@ -1,6 +1,6 @@
 <template>
   <div class="basicInformation">
-    <div class="investorCertification-header">
+    <div class="investorCertification-header font16">
       <div>服务机构认证</div>
     </div>
     <el-main style="padding:0 25px;text-align:left;background:#fff;">
@@ -18,7 +18,7 @@
           <div class="basicInfo pr">
             <div class="setdistance uploadImgItem">
               <!-- <span class="textRight mg">照片：</span> -->
-              <el-upload class="avatar-uploader avatarImg" :show-file-list="false" action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
+              <el-upload class="avatar-uploader avatarImg" :show-file-list="false" :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
                 :on-success="handleAvaSuccess" :headers="headers" :before-upload="beforeAvaUpload" style="display:inline-block">
                 <img v-if="OrgBasicForm.orgLogo" :src="OrgBasicForm.orgLogo" class="avatar">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -105,10 +105,11 @@
                   </template>
                 </el-table-column>
                 <el-table-column align="center" label="上传附件">
-                  <template>
+                  <template  slot-scope="scope">
                     <el-upload class="avatar-uploader avatarImg" :show-file-list="false" :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
                       :on-success="handlelicense" :headers="headers" :before-upload="beforelicense" style="display:inline-block">
-                      <img v-if="fileUrl" :src="fileUrl" class="avatar">
+                      <img v-if="licenseList[scope.$index].fileUrl" :src="licenseList[scope.$index].fileUrl" class="avatar">
+
                       <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
                   </template>
@@ -123,7 +124,7 @@
                 </span>
               </el-form-item>
               <div class="marBtn" v-if="!isShowOtherList">
-                <el-table :data="otherList" style="width: 100%">
+                <el-table :data="otherList" style="width: 99%">
                   <el-table-column prop="certName" label="资质荣誉名称" align="center"></el-table-column>
                   <el-table-column label="特色标签" align="center">
                     <template>
@@ -225,7 +226,7 @@
             </el-form>
             <div>
               <div class="marBtn" v-if="!isShowKernelList">
-                <el-table :data="kernelList" style="width: 100%">
+                <el-table :data="kernelList" style="width: 99%">
                   <el-table-column prop="conName" label="姓名" align="center"></el-table-column>
                   <el-table-column label="职务" align="center" prop="conPosition">
                   </el-table-column>
@@ -312,7 +313,7 @@
         </div>
       </div>
     </el-main>
-    <el-dialog :visible.sync="dialogVisible" width="50%">
+    <el-dialog :visible.sync="dialogVisible" width="50%" :modal-append-to-body="false">
       <img :src="otherPhoto" alt="图片" style="width:100%">
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">返 回</el-button>
@@ -324,8 +325,33 @@
 import axios from "axios";
 export default {
   data() {
+      var checkPhone = (rule, value, callback) => {
+      const reg = /^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\d{8}$/;
+      if (!reg.test(value)) {
+        callback("请输入正确的手机号码");
+      } else {
+        callback();
+      }
+    };
+     var checkTel = (rule, value, callback) => {
+      const reg = /^0\\d{2,3}-[1-9]\\d{6,7}$/;
+      if (!reg.test(value)) {
+        callback("请输入正确的电话格式");
+      } else {
+        callback();
+      }
+    };
+      var checkWeb = (rule, value, callback) => {
+      const reg = /^(http|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?$/;
+      if (!reg.test(value)) {
+        callback("请输入正确的网址");
+      } else {
+        callback();
+      }
+    };
+
     return {
-      baseUrl:this.api.host,
+      baseUrl: this.api.host,
       num1:1,
       btnText:'保存并继续',
       showBtn: false,
@@ -335,7 +361,7 @@ export default {
       otherPhoto: "",
       dialogVisible: false,
       isShowOtherList: false,
-      fileUrl: "",
+      // fileUrl: "",
       licensesForm: {
         businessType: ""
       },
@@ -350,7 +376,11 @@ export default {
       companyNatureOptions: [],
       disabled: false,
       orgOptions: [],
-      licenseList: [{}],
+      licenseList: [{
+           awardTime:'',
+           awardDepart:'',
+           fileUrl:''
+      }],
       otherForm: {
         id: 0,
         certType: "3",
@@ -530,13 +560,16 @@ export default {
           }
         ],
         conPhone: [
-          { required: true, message: "请输入联系人电话", trigger: "blur" }
+          { required: true, message: "请输入联系人手机", trigger: "blur" },
+          { validator: checkPhone, trigger: 'blur' }
         ],
          orgPhone: [
-          { required: true, message: "请输入咨询电话", trigger: "blur" }
+          { required: true, message: "请输入咨询电话", trigger: "blur" },
+           { validator: checkTel, trigger: 'blur' }
         ],
         orgWeb: [
-          { required: true, message: "请输入机构网址", trigger: "blur" }
+          { required: true, message: "请输入机构网址", trigger: "blur" },
+          { validator: checkWeb, trigger: 'blur' }
         ],
         orgProvince: [{ required: true, message: "请选择省份", trigger: "change" }],
         orgAddress: [{ required: true, message: "请填写详细地址", trigger: "blur" }]
@@ -590,18 +623,18 @@ export default {
       } else if (this.investorCertificationTitle == "机构资质") {
         this.$refs["licensesForm"].validate(valid => {
           if (valid) {
-            if (!this.fileUrl) {
+            if (!this.licenseList[0].fileUrl) {
               this.$message.error("请上传企业营业执照照片");
               return;
             }
             this.status = 2;
             this.investorCertificationTitle = "团队信息";
             this.OrgBasicForm.businessType = this.licensesForm.businessType;
-            this.licenseList = this.licenseList.map(item =>
-              item.fileUrl
-                ? item
-                : Object.assign(item, { fileUrl: this.fileUrl })
-            );
+            // this.licenseList = this.licenseList.map(item =>
+            //   item.fileUrl
+            //     ? item
+            //     : Object.assign(item, { fileUrl: this.fileUrl })
+            // );
             this.licenseList = this.licenseList.map(item =>
               item.isFeatures ? item : Object.assign(item, { isFeatures: "0" })
             );
@@ -976,8 +1009,9 @@ export default {
       }
     },
     handlelicense(file) {
-      this.fileUrl = file.data;
-      console.log(this.fileUrl)
+      console.log(file)
+      this.licenseList[0].fileUrl = file.data;
+      // console.log(this.fileUrl)
     },
     handleOtherSuccess(file) {
       this.otherForm.fileUrl = file.data;
@@ -1044,6 +1078,7 @@ export default {
       .otherAvatar {
         width: 96px;
         height: 96px;
+        vertical-align: inherit;
       }
     }
   }
@@ -1167,12 +1202,13 @@ export default {
     background-color: #fff;
     padding: 17px;
     margin-bottom: 14px;
-    font-size: 13px;
+    // font-size: 13px;
     border-radius: 5px;
   }
   .el-table__header {
     border-right: 1px solid rgba(65, 215, 135, 1);
     border-left: 1px solid rgba(65, 215, 135, 1);
+    table-layout: auto;
   }
   .cancel {
     margin-left: 15px;

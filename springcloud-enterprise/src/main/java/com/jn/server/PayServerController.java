@@ -79,7 +79,7 @@ public class PayServerController extends BaseController implements PayClient {
         Assert.notNull(payBillCreateParamVo.getBillId(),"账本编号不能为空");
         Assert.notNull(payBillCreateParamVo.getLatePayment(),"最迟缴费时间不能为空");
         Assert.notNull(payBillCreateParamVo.getObjType(),"对象类型不能为空");
-        Result result=myPayBillService.billCreate(payBillCreateParamVo,user);
+        Result result=myPayBillService.billCreate(payBillCreateParamVo);
         return result;
     }
 
@@ -87,7 +87,7 @@ public class PayServerController extends BaseController implements PayClient {
     @Override
     public Result<PayOrderRsp> createOrderAndPay(@RequestBody CreateOrderAndPayReqModel createOrderAndPayReqModel) {
         User user=(User) SecurityUtils.getSubject().getPrincipal();
-        return new Result(myPayBillService.startPayment(createOrderAndPayReqModel,user));
+        return myPayBillService.startPayment(createOrderAndPayReqModel,user);
     }
 
     @ControllerLog(doAction = "支付回调接口")

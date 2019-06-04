@@ -176,7 +176,7 @@ public interface MeterDao {
      * @param param
      * @return
      */
-    List<TrendChartDetailStatisticsModel> trendChartDetail(TrendChartParam param) ;
+    List<TrendChartDetailStatisticsModel> trendChartDetail(TrendChartPageParam param) ;
 
     /**
      * 趋势图

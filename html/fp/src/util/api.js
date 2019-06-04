@@ -1,6 +1,7 @@
 ﻿import axios from "axios"
+import { BASE_URL } from './url'
 export default {
-    host:"http://112.94.22.222:8000/",//api的域名提出来放这里
+    host: BASE_URL,//api的域名提出来放这里
     apiURL:{ //API路径统一管理,需要的路径在这里加就可以了
         loginURL:"springcloud-app-system/login",
         getDynamicMenu:"springcloud-app-system/system/sysMenu/getDynamicMenu",
@@ -15,6 +16,8 @@ export default {
         activityLike:"springcloud-park/activity/activityLike/activityLike",//活动点赞
         CancelLike:"springcloud-park/activity/activityLike/cancelLike",//取消点赞
         commentActivity:"springcloud-park/comment/review/commentActivity",//活动评论/回复
+        commentActivityCancelLike:"springcloud-park/comment/review/commentActivityCancelLike",//评论取消点赞
+        commentActivityLike:"springcloud-park/comment/review/commentActivityLike",//评论取消点赞
         activityApplyInfo:"springcloud-park/activity/activityApply/activityApplyInfo",//报名人资料
         findActivityRegistration:"springcloud-park/guest/activity/findActivityRegistration",//用户中心-已报名活动列表
         basic:"springcloud-park/guest/portal/park/basic",//获取园区概况
@@ -29,6 +32,7 @@ export default {
         getUserCode:"springcloud-user/guest/userJoin/getUserCode",//获取短信验证码[当前用户]
         getCode:"springcloud-user/guest/userJoin/getCode",//获取短信验证码
         addUser:"springcloud-user/guest/userJoin/addUser",//用户注册
+        accountIsExist:"springcloud-user/guest/userJoin/accountIsExist",//当前账号是否已存在
         updatePassword:"springcloud-user/guest/userJoin/updatePassword",//修改密码
         getUserPersonInfo:"springcloud-user/user/center/getUserPersonInfo",//根据用户账号获取用户资料信息
         modifyUserPassword:"springcloud-user/user/center/modifyUserPassword",//修改用户密码
@@ -110,7 +114,6 @@ export default {
         findEvaluateManage:"springcloud-enterprise/userCenter/Index/findEvaluateManage", // 评价管理
         findReportedData:"springcloud-enterprise/userCenter/Index/findReportedData", // 数据上报
         findRequirementManage:"springcloud-enterprise/userCenter/Index/findRequirementManage", // 需求管理
-
         //im即时聊天
         selectMsg:"im/selectMsg", // 获取聊天记录
         isSended:"im/isSended", // 消息设置为已读
@@ -122,6 +125,8 @@ export default {
         acceptInvite:"springcloud-enterprise/enterprise/InvitationController/acceptInvite",//接受企业邀请
         refuseInvite:"springcloud-enterprise/enterprise/InvitationController/refuseInvite",//拒绝企业邀请
         getUserAccount:"springcloud-app-system/system/sysUser/getUserInfo",//获取用户账号
+        leaveCompany:"springcloud-enterprise/enterprise/ColleagueController/leaveCompany",//离开企业
+        getUserApprovalStatus:"springcloud-enterprise/serviceMarket/advisorEditController/getUserApprovalStatus",//判断当前登录用户认证顾问的状态
         postJob:"springcloud-enterprise/enterprise/RecruitController/publishRecruitInfo",//发布招聘
         getInviteStaffList:"springcloud-enterprise/enterprise/InvitationController/getInviteStaffList",//获取邀请员工的资料
         getCompensation:"springcloud-enterprise/guest/CommonController/getServiceCodeList",//获取薪资待遇
@@ -141,6 +146,7 @@ export default {
         getBusinessPromotionList:"springcloud-enterprise/propaganda/businessPromotionController/getBusinessPromotionList",//获取企业宣传列表
         getPropagandaFeeRulesList:"springcloud-enterprise/propaganda/businessPromotionController/getPropagandaFeeRulesList",//获取企业宣传费用规则
         saveBusinessPromotion:"springcloud-enterprise/propaganda/businessPromotionController/saveBusinessPromotion",//发布企业宣传
+        submitAudit:"springcloud-enterprise/propaganda/businessPromotionController/submitAudit",//提交审核
         getPropagandaTypeList:"springcloud-enterprise/propaganda/businessPromotionController/getPropagandaTypeList",//获取企业宣传类型
         getPropagandaAreaList:"springcloud-enterprise/propaganda/businessPromotionController/getPropagandaAreaList",//获取企业宣传区域信息
         getBusinessPromotionDetails:"springcloud-enterprise/propaganda/businessPromotionController/getBusinessPromotionDetails",//获取企业宣传详情
@@ -168,18 +174,19 @@ export default {
         getOrgInfoForManage:"springcloud-enterprise/guest/serviceMarket/org/getOrgInfoForManage",//获取服机构信息[机构详情+产品列表](pc/app机构信息)
         // 角色认证
         getInvestorMainRound:"springcloud-enterprise//guest/technologyFinancial/investorController/getInvestorMainRound",//获取主投领域
-        getAffiliationUnit:"springcloud-enterprise/technologyFinancial/investorController/getAffiliationUnit",//获取所属单位
+        getAffiliationUnit:"springcloud-enterprise/guest/technologyFinancial/investorController/getAffiliationUnit",//获取所属单位
         addInvestorInfo:"springcloud-enterprise/technologyFinancial/investorController/addInvestorInfo",//提交投资人认证资料
         saveOrUpdateOrgDetail:"springcloud-enterprise/guest/orgJoinPark/saveOrUpdateOrgDetail",//服务机构认证
         selectOrgInfo:"springcloud-enterprise/serviceMarket/advisorApproveController/selectOrgInfo",//获取服务机构列表
         serviceAdvisorInfo:"springcloud-enterprise/serviceMarket/advisorEditController/getServiceAdvisorInfo",//服务顾问详情回显
+        sendApproval:"springcloud-enterprise/serviceMarket/advisorEditController/sendApproval", // 发送申请/提交审批(将顾问信息审批状态由未反馈改为待审批)
 
 
 
         enterpriseGetPcAd:"springcloud-enterprise/data/company/getPcAd",// 页面广告获取
-        selectCompany:"springcloud-enterprise/guest/userUpgrade/selectCompany", // 查询公司列表
-        changeToStaff:"springcloud-enterprise/guest/userUpgrade/changeToStaff", // 升级员工
-        changeToCompany:"springcloud-enterprise/guest/userUpgrade/changeToCompany", // 升级员工
+        selectCompany:"springcloud-enterprise/joinPark/userUpgrade/selectCompany", // 查询公司列表
+        changeToStaff:"springcloud-enterprise/joinPark/userUpgrade/changeToStaff", // 升级员工
+        changeToCompany:"springcloud-enterprise/joinPark/userUpgrade/changeToCompany", // 升级企业
 
 
 
@@ -217,7 +224,9 @@ export default {
         getRecruitList:"springcloud-enterprise/guest/RecruitController/getWebRecruitList",//招聘列表（门户首页）
         getPromotionList:"springcloud-enterprise/guest/businessHomePageController/getBusinessPromotionList",//(门户各首页企业宣传列表查询)
         getPromotionDetails:"springcloud-enterprise/guest/businessHomePageController/getBusinessPromotionDetails",// (门户各首页企业宣传详情)
+        findAllApp:"springcloud-park/message/list/findAllList",//获取一级消息类别下所有消息(APP端)
         getMessageList:"springcloud-park/message/list/findAll",//消息列表
+        updateIsReadStatus:"springcloud-park/message/list/updateIsReadStatus",//修改已读状态
         getMessageOneTort:"springcloud-park/message/list/getMessageOneTort",//获取二级消息类别
         getParkList:"springcloud-park/guest/portal/park/list",//获取全部园区数据列表
         getIncubatorList:"springcloud-park/guest/hatch/incubator/list",//众创空间-首页信息查询
@@ -230,8 +239,11 @@ export default {
         getAchievementList:"springcloud-park/guest/IndexController/getAchievementList",//门户首页-成果展览
         achievementDetails:"springcloud-park/guest/IndexController/getAchievementDetails",//成果详情
         getParkDetails:"springcloud-park/guest/portal/park/get",// 根据ID获取对应园区详情
-        getCompanyDetail:"springcloud-enterprise/guest/company/getCompanyDetailByAccountOrCompanyId",//根据用户账号查询企业信息
+        getCompanyDetailByAccountOrCompanyId:"springcloud-enterprise/guest/company/getCompanyDetailByAccountOrCompanyId",//根据用户账号查询企业信息
+        getCompanyDetails:"springcloud-enterprise/guest/company/getCompanyDetails",//查询企业详情-新版
         getComCommentInfo:"springcloud-enterprise/guest/company/getCommentInfo",//获取评论/留言信息
+        getcommentActivity:"springcloud-enterprise/guest/company/commentActivity",//企业留言/留言回复
+        getCompanyContactAccount:"springcloud-enterprise/guest/company/getCompanyContactAccount",//获取企业在线联系人账号
         addCareOperate:"springcloud-park/park/manage/care/addCareOperate",// 用户添加关注操作
         cancelCareOperate:"springcloud-park/park/manage/care/cancelCareOperate",//用户取消关注操作
 
@@ -266,8 +278,18 @@ export default {
             }
         })
             .then(function (response) {
-                if (typeof callback === "function")
+                if (typeof callback === "function"){
+                    if(response.data.code == "index"){
+                        window.sessionStorage.removeItem('token')
+                        window.sessionStorage.removeItem('account')
+                        window.sessionStorage.removeItem('userInfo')
+                        alert(response.data.result);
+                        location.href="#login";
+                        return
+                    }
                     callback(response.data);
+                }
+
             })
             .catch(function (err) {
                 if (typeof error === "function")
@@ -334,8 +356,18 @@ export default {
             }
         })
           .then(function (response) {
-            if (typeof callback === "function")
+            if (typeof callback === "function"){
+                if(response.data.code == "index"){
+                    window.sessionStorage.removeItem('token')
+                    window.sessionStorage.removeItem('account')
+                    window.sessionStorage.removeItem('userInfo')
+                    alert(response.data.result);
+                    location.href="#login";
+                    return
+                }
                 callback(response.data);
+            }
+
 
           })
           .catch(function (err) {
@@ -408,7 +440,7 @@ export default {
         }
         return obj;
     },
-    AddMinTime(x,type,n){
+    AddMinTime(x,type,n,d){
 		var t = new Date(x);
 		var t_s = t.getTime(); //转化为时间戳毫秒数
 		var time = new Date(t_s + 1000 * 60 * (n || 0));
@@ -431,8 +463,12 @@ export default {
 		dd = dd < 10 ? '0' + dd : dd;
 		hh = hh < 10 ? '0' + hh : hh;
 		mm = mm < 10 ? '0' + mm : mm;
-		ss = ss < 10 ? '0' + ss : ss;
-		return yyyy + '-' + MM + '-' + dd;
+        ss = ss < 10 ? '0' + ss : ss;
+        if(d == ":"){
+            return yyyy + ':' + MM + ':' + dd;
+        }else{
+            return yyyy + '-' + MM + '-' + dd;
+        }
     },
     getCurrentTime() {//获取当前时间
 	var date = new Date();
@@ -442,6 +478,9 @@ export default {
 	var strDate = date.getDate()<10? "0" + date.getDate():date.getDate();
 	var currentdate = date.getFullYear() + seperator1  + month  + seperator1  + strDate
 	return currentdate;
-}
+    },
+    tokenInvalid(){
+
+    }
 
 }

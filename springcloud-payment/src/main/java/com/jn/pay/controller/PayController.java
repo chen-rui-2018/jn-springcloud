@@ -63,13 +63,13 @@ public class PayController {
             case GOODS_LEASE://
                 return loadBalancerUtil.getClientPostForEntity("springcloud-park","/api/order/createArticlePay",JSONObject.toJSONString(createPayReqModel));
             case TEMPORARY_PARKING://
-                return NOT_SUPPORT_RESULT;
+                return loadBalancerUtil.getClientPostForEntity("springcloud-payment","/api/pay/bill/createPayOrder",JSONObject.toJSONString(createPayReqModel));
             case PARKING_LEASE://
-                return NOT_SUPPORT_RESULT;
+                return loadBalancerUtil.getClientPostForEntity("springcloud-payment","/api/pay/bill/createPayOrder",JSONObject.toJSONString(createPayReqModel));
             case WATER://
                 return NOT_SUPPORT_RESULT;
             case PROMOTION://
-                return NOT_SUPPORT_RESULT;
+                return loadBalancerUtil.getClientPostForEntity("springcloud-payment","/api/pay/bill/createPayOrder",JSONObject.toJSONString(createPayReqModel));
             case HEALTH://
                 return NOT_SUPPORT_RESULT;
             case ELECTRIC_RECHARGE:
@@ -99,13 +99,13 @@ public class PayController {
             case GOODS_LEASE://
                 return NOT_SUPPORT_RESULT;
             case TEMPORARY_PARKING://
-                return loadBalancerUtil.getClientPostForEntity("springcloud-payment","/api/pay/bill/createOrderAndPay",JSONObject.toJSONString(createOrderAndPayReqModel));
+                return NOT_SUPPORT_RESULT;
             case PARKING_LEASE://
-                return loadBalancerUtil.getClientPostForEntity("springcloud-payment","/api/pay/bill/createOrderAndPay",JSONObject.toJSONString(createOrderAndPayReqModel));
+                return NOT_SUPPORT_RESULT;
             case WATER://
                 return NOT_SUPPORT_RESULT;
             case PROMOTION://
-                return loadBalancerUtil.getClientPostForEntity("springcloud-payment","/api/pay/bill/createOrderAndPay",JSONObject.toJSONString(createOrderAndPayReqModel));
+                return NOT_SUPPORT_RESULT;
             case HEALTH://
                 return NOT_SUPPORT_RESULT;
             case ELECTRIC_RECHARGE:

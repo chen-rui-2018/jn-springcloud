@@ -7,7 +7,15 @@
       </div>
       <div class="user-header-r">
         <router-link
-          v-for="(tag, index) in tagList"
+          to="/userHome"
+          class="tag-list">
+          <tag
+            type="blue"
+            title="用户资料设置"
+          />
+        </router-link>
+        <router-link
+          v-for="(tag, index) in jurisdictionTagList"
           :key="index"
           :to="tag.path"
           class="tag-list">
@@ -18,52 +26,74 @@
         </router-link>
       </div>
     </div>
-    <div v-loading="loading" class="user-main">
+    <div class="user-main">
       <notice
+        v-if="messageData.company"
         title="企业邀请"
-        :content="messageData.company.data.messageContent"
+        :content="messageData.company.data.length > 0"
         slotContent
         type="primary"
       >
-        <div>
-          {{ messageData.company.data.messageContent }}邀请您加入他们的企业，点击
-          <router-link :to="`/myBusiness/businesInvitation?${messageData.company.data.messageConnect}`" style="color: #00a041;">查看详情</router-link>。
+        <div
+          v-for="(item, index) in messageData.company.data"
+          :key="index"
+          class="notice-content">
+          <div class="notice-dot"></div>
+          <div v-if="item.messageContent">
+            {{ item.messageContent }}邀请您加入他们的企业，点击
+            <router-link :to="`/myBusiness/businesInvitation?comId=${item.messageConnect.comId}&comName=${item.messageConnect.comName}&messageId=${item.id}`" style="color: #00a041;">查看详情</router-link>。
+          </div>
         </div>
       </notice>
-      <router-link to="">
+      <router-link to="/myBusiness/staffManagement">
         <notice
+          v-if="cardData.findEmployeeRequisition || cardData.findEmployeeRequisition === ''"
           :content="cardData.findEmployeeRequisition | wrapNumber"
           title="员工申请"
           type="info"
         ></notice>
       </router-link>
       <notice
-        :content="messageData.organization.data.messageContent"
+        v-if="roleJurisdiction"
+        :content="messageData.organization.data.length > 0"
         title="机构邀请"
         type="primary"
         slotContent
       >
-        <div>
-          {{ messageData.organization.data.messageContent }}邀请您加入他们机构的顾问，点击
-          <router-link :to="`/myBody/acceptInvitation?${messageData.organization.data.messageConnect}`" style="color: #00a041;">查看详情</router-link>。
+        <div
+          v-for="(item, index) in messageData.organization.data"
+          :key="index"
+          class="notice-content">
+          <div class="notice-dot"></div>
+          <div v-if="item.messageContent">
+            {{ item.messageContent }}邀请您加入他们机构的顾问，点击
+            <router-link
+              v-if="item.messageConnect && item.messageConnect.comId"
+              :to="`/myBody/acceptInvitation?comId=${item.messageConnect.comId}&comName=${item.messageConnect.comName}&messageId=${item.id}`" style="color: #00a041;"
+            >查看详情</router-link>。
+          </div>
         </div>
+
       </notice>
       <router-link to="/myBody/counselorManagement">
         <notice
+          v-if="cardData.findAdviserInvitation || cardData.findAdviserInvitation === ''"
           title="顾问管理"
           type="info"
           :content="cardData.findAdviserInvitation | wrapNumber"
         ></notice>
       </router-link>
-      <router-link to="">
+      <router-link to="/serviceMarket/requireManagementController/forothersneed">
         <notice
+          v-if="cardData.findRequirementManage || cardData.findRequirementManage === ''"
           title="需求管理"
           type="primary"
           :content="cardData.findRequirementManage | wrapNumber"
         ></notice>
       </router-link>
-      <router-link to="/myBody/counselorManagement">
+      <router-link to="/serviceMarket/comment/forOthersevaluate">
         <notice
+          v-if="cardData.findEvaluateManage || cardData.findEvaluateManage === ''"
           title="评价管理"
           type="info"
           :content="cardData.findEvaluateManage | wrapNumber"
@@ -71,18 +101,20 @@
       </router-link>
       <router-link to="/actiManagent">
         <notice
+          v-if="cardData.findActivityManage || cardData.findActivityManage === ''"
           title="活动管理"
           type="primary"
           :content="cardData.findActivityManage | wrapNumber"
         ></notice>
       </router-link>
-      <router-link to="/servicemarket/product/productService/dataReport">
-        <notice
-          title="数据上报"
-          type="info"
-          :content="cardData.findReportedData | wrapNumber"
-        ></notice>
-      </router-link>
+<!--      <router-link to="/servicemarket/product/productService/dataReport">-->
+<!--        <notice-->
+<!--          v-if="cardData.findReportedData || cardData.findReportedData === ''"-->
+<!--          title="数据上报"-->
+<!--          type="info"-->
+<!--          :content="cardData.findReportedData | wrapNumber"-->
+<!--        ></notice>-->
+<!--      </router-link>-->
     </div>
   </div>
 </template>
@@ -98,13 +130,11 @@
     },
     data() {
       return {
+        roleJurisdiction: false,
         loading: true,
         userInfo: '',
+        jurisdictionTagList: [],
         tagList: [{
-          type: 'blue',
-          title: '用户资料设置',
-          path: '/userHome'
-        }, {
           type: 'green',
           title: '投资人认证',
           path: '/roleCertifications/investorCertification'
@@ -118,23 +148,9 @@
           path: '/roleCertifications/basicInformation'
         }],
         cardData: {
-          // findEmployeeRequisition: '', // 员工申请
-          findActivityManage: '', // 活动管理
-          findAdviserInvitation: '', // 顾问管理
-          findEvaluateManage: '', // 评价管理
-          findReportedData: '', // 数据上报
-          findRequirementManage: '' // 需求管理
+          // findReportedData: '', // 数据上报
         },
-        messageData: {
-          company: {  // 企业邀请
-            data: {},
-            messageTowTort: 8
-          },
-          organization: { // 机构邀请
-            data: {},
-            messageTowTort: 7
-          }
-        },
+        messageData: {},
         requestList: []
       }
     },
@@ -153,9 +169,71 @@
     },
     methods: {
       init() {
-        this.getUserInfo()
-        this.getCardData()
-        this.getMessage()
+        this.setJurisdiction()
+          .then(() => {
+            this.getUserInfo()
+            this.getCardData()
+            this.getMessage()
+          })
+      },
+      setJurisdiction() {
+        return new Promise(resolve => {
+          // 上方4个导航
+          const menuItems = JSON.parse(sessionStorage.menuItems)
+          console.log(menuItems)
+          menuItems.forEach(item => {
+            // 角色认证
+            if (item.label === '角色认证') {
+              this.jurisdictionTagList = this.tagList
+              this.roleJurisdiction = true
+              // 机构邀请
+              this.$set(this.messageData, 'organization', {
+                data: {},
+                messageTowTort: 7
+              })
+            }
+
+            // 企业邀请
+            if (item.label === '加入园区') {
+              this.$set(this.messageData, 'company', {
+                data: {},
+                messageTowTort: 8
+              })
+            }
+
+            // 员工申请
+            if (item.label === '我的企业') {
+              for (const list of item.resourcesList) {
+                if (list.resourcesName === '编辑企业信息') {
+                  this.$set(this.cardData, 'findEmployeeRequisition', '')
+                  break
+                }
+              }
+            }
+            // 顾问管理
+            if (item.label === '我的机构') {
+              for (const list of item.resourcesList) {
+                if (list.resourcesName === '顾问管理') {
+                  this.$set(this.cardData, 'findAdviserInvitation', '')
+                  break
+                }
+              }
+            }
+            // 评价管理
+            if (item.label === '评价管理') {
+              this.$set(this.cardData, 'findEvaluateManage', '')
+            }
+            // 活动管理
+            if (item.label === '活动管理') {
+              this.$set(this.cardData, 'findActivityManage', '')
+            }
+            // 需求管理
+            if (item.label === '需求管理') {
+              this.$set(this.cardData, 'findRequirementManage', '')
+            }
+          })
+          resolve()
+        })
       },
       getMessage() {
         for (const key in this.messageData) {
@@ -167,7 +245,15 @@
             },
             callback: (res) => {
               if (res.code === "0000") {
-                this.messageData[key].data = res.data && res.data.rows && res.data.rows.length > 0 ? res.data.rows[0] : {}
+                if (res.data && res.data.rows && res.data.rows.length > 0) {
+                  // this.messageData[key].data = res.data.rows
+                  this.messageData[key].data = [res.data.rows[0]]
+                  this.messageData[key].data.forEach(item => {
+                    item.messageConnect = JSON.parse(item.messageConnect)
+                  })
+                } else {
+                  this.messageData[key].data = []
+                }
               } else {
                 this.$message.error(res.result)
               }
@@ -209,12 +295,22 @@
   @import "~@/css/common";
   .user-center {
     color: #333333;
-
+    .notice-content {
+      padding: trsw(23);
+      @include flex($h: flex-start, $v: center);
+    }
+    .notice-dot {
+      width: trsw(9);
+      height: trsw(9);
+      margin-right: 6px;
+      border-radius: 50%;
+      background-color: $--color-primary;
+    }
     .user-header {
-      padding: 32px;
+      padding: 20px 25px;
       background-color: #fff;
+      border-radius: 3px;
       @include flex($h: space-between);
-
       .user-header-l {
         @include flex($h: space-between);
 
@@ -241,6 +337,9 @@
           margin-right: 0;
         }
       }
+    }
+    .user-main {
+      margin-top: 12px;
     }
   }
 </style>

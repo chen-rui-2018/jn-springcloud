@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api(tags = "加班管理")
 @RestController
-@RequestMapping("/oa/overTime")
+@RequestMapping("/oa/overtime")
 public class OverTimeController extends BaseController {
 
     @Autowired

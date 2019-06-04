@@ -60,7 +60,12 @@ public class AdvisorManagementController extends BaseController {
     @RequestMapping(value = "/getAdvisorManagementInfo",method = RequestMethod.GET)
     public Result<PaginationData<List<AdvisorManagementShow>>> getAdvisorManagementInfo(@Validated AdvisorManagementParam advisorManagementParam){
         Assert.notNull(advisorManagementParam.getApprovalStatus(), AdvisorExceptionEnum.APPROVAL_STATUS_NOT_NULL.getMessage());
-        PaginationData advisorManagementInfo = advisorManagementService.getAdvisorManagementInfo(advisorManagementParam);
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        if(user==null || user.getAccount()==null){
+            logger.info("顾问管理获取用户账号失败");
+            return new Result(AdvisorExceptionEnum.NETWORK_ANOMALY.getCode(),AdvisorExceptionEnum.NETWORK_ANOMALY.getMessage());
+        }
+        PaginationData advisorManagementInfo = advisorManagementService.getAdvisorManagementInfo(advisorManagementParam,user.getAccount());
         return  new Result(advisorManagementInfo);
     }
 

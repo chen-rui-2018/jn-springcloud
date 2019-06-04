@@ -66,7 +66,7 @@
         <div class="setphone pr">
           <div class="setdistance uploadImgItem">
             <span class="textRight mg">选择文件：</span>
-            <el-upload class="avatar-uploader avatarImg" :show-file-list="false" action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload" :on-success="handleAvaSuccess" :headers="headers" :before-upload="beforeAvaUpload" style="display:inline-block">
+            <el-upload class="avatar-uploader avatarImg" :show-file-list="false" :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'" :on-success="handleAvaSuccess" :headers="headers" :before-upload="beforeAvaUpload" style="display:inline-block">
               <img v-if="avarUrl" :src="avarUrl" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
@@ -154,6 +154,7 @@ export default {
   props:['userData'],
   data() {
     return {
+      baseUrl:this.api.host,
       signature: "",
       oldPassword: "",
       newPassword: "",

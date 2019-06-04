@@ -99,6 +99,7 @@
   import avatar from './common/avatar'
   import messageRow from './common/messageRow'
   import sockHttp from '@/util/sockHttp'
+  import { WS_URL } from '@/util/url'
   export default {
     name: "Chat",
     components: {
@@ -201,13 +202,13 @@
          *  2.pc端路由参数可以只有发送人账号fromUser, 因为pc端有联系人列表
          */
         const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
-        this.param.fromUser = this.$route.query.fromUser || userInfo.account
+
+        this.userListParam.fromUser = this.param.fromUser = this.$route.query.fromUser || userInfo.account
         if (!this.param.fromUser) {
           this.$message.error('缺少发送人账号')
           return
         }
         this.toUserNickName = this.$route.query.nickName
-        this.userListParam.fromUser = this.param.fromUser = this.$route.query.fromUser
         this.getFromUserInfo()
           .then(() => {
             this.connect()
@@ -226,13 +227,13 @@
         }
       },
       getFromUserInfo() {
+        console.dir(this.param.fromUser)
         return new Promise(resolve => {
           this.api.get({
             url: "getUserPersonInfo",
             data: {
-              account: this.$route.query.fromUser
+              account: this.param.fromUser
             },
-            dataFlag: false,
             callback:(res) => {
               if (res.code === "0000") {
                 const data = res.data
@@ -368,7 +369,7 @@
           alert("您的浏览器版本太低，请升级浏览器版本！")
           return
         }
-        const wsUrl = "ws://192.168.10.31:8888/websocket"
+        const wsUrl = WS_URL + '/websocket'
         const token = "IM_123_qwe**_X_Q"
         this.websocket = new WebSocket(wsUrl + "/" + this.param.fromUser + "/" + token + "?accessToken=123qwe")
         //连接成功建立的回调方法
@@ -431,7 +432,7 @@
       },
       tabChat(item) {
         this.$router.push({
-          path: '/messageCenter/chat',
+          path: '/chat',
           query: {
             toUser: item.sendId,
             fromUser: this.param.fromUser,

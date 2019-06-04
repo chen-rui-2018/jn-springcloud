@@ -130,6 +130,14 @@ export function signInActivityBackend(query) {
     data: query
   })
 }
+// 报名审核接口
+export function signInActivityCheck(query) {
+  return request({
+    url: 'http://192.168.10.31:1101/springcloud-park/activity/activityApply/signInActivityCheck',
+    method: 'post',
+    data: query
+  })
+}
 // 活动报名人数导出
 export function exportDataExcel(query) {
   return request({

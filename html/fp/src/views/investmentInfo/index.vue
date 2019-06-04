@@ -105,7 +105,7 @@
         yearBefore: "",
         query: {
           page: 1,
-          rows: 10,
+          rows: 500,
           parkId: '',
           keyWords: ''
         },
@@ -167,7 +167,6 @@
         }
         return scroll_top;
       },
-      //政策中心首页
       getPolicyCenterList() {
         let _this = this;
         this.api.get({

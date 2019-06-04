@@ -21,7 +21,7 @@
                     <li @click='$router.push({path:"/actiTrain"})'>活动培训</li>
                     <li @click='$router.push({path:"/aboutUs"})'>关于我们</li>
                 </div>
-                <div class="headerRight">
+                <div class="headerRight pr">
                   <div class="search" >
                     <i class="el-icon-search" style="font-size:20px" @click="show3=true"></i>
                   </div>
@@ -77,9 +77,7 @@
     <div class="banner" ref="banner">
       <div class="swiper-container">
           <div class="swiper-wrapper">
-              <div class="swiper-slide"> <img src="@/../static/img/serMatHp.png" alt=""> </div>
-              <div class="swiper-slide"> <img src="@/../static/img/serMatHp.png" alt=""> </div>
-              <div class="swiper-slide"> <img src="@/../static/img/serMatHp.png" alt=""> </div>
+              <div class="swiper-slide" v-for="(item,index) in bannerList" :key="index"> <img :src="item.posterUrl" alt=""> </div>
           </div>
           <!-- 如果需要分页器 -->
           <div class="swiper-pagination"></div>
@@ -127,11 +125,6 @@
           <div class="nav_icon"><i class="iconfont icon-jigou11"></i></div>
           <div class="nav_discribe"> <span>已入驻顾问<span>3786</span>人</span> </div>
           <div class="nav_todo" @click="isVisibility=true"><span>申请顾问</span></div>
-        </a>
-        <a href="javascript:;">
-          <div class="nav_icon"><i class="iconfont icon-shangwuqianbiqian"></i></div>
-          <div class="nav_discribe"> <span>已入驻投资人<span>956</span>人</span> </div>
-          <div class="nav_todo"><span @click="$router.push({path:'/roleCertifications/investorCertification'})">投资人入驻</span></div>
         </a>
       </div>
       <!-- 申请顾问弹窗 -->
@@ -380,7 +373,8 @@ export default {
        menuShow:true,
        sliderData:[],
        sekectShow:false,
-       partnerLogo:[]
+       partnerLogo:[],
+       bannerList:[]
     };
   },
   filters: {
@@ -409,13 +403,29 @@ export default {
     this.getRatingList()
     this.selectIndustryProductList()
     window.addEventListener('scroll', this.handleScroll)
+    this.getBannarList()
     this.scrollpartner()
     this.getPartner()
+    // 轮播图
   },
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
   },
   methods: {
+    getBannarList(){
+      this.api.get({
+        url: "getPromotionList",
+        data: {
+          issuePlatform:'1',
+          needPage:'1',
+          propagandaArea:'top',
+          propagandaType:'market_banner'
+        },
+        callback: res=>{
+          this.bannerList=res.data.rows
+        }
+      });
+    },
     goSearch(){
       if(this.select==='1'){
         this.$router.push({path:'/serverOrg',query:{searchData:this.searchData}})

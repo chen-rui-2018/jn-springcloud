@@ -1,6 +1,5 @@
 // pages/meeting/makeMeeting/makeMeeting.js
-import {CreateHeader} from "./../../../utils/require"
-
+import request from "./../../../utils/http"
 const date = new Date()
 const years = []
 const months = []
@@ -66,7 +65,6 @@ Page({
     nvabarData: {
       title: '会议室预约', 
     },
-    token:'',
     years: years,
     year: date.getFullYear(),
     months: months,
@@ -95,7 +93,7 @@ Page({
   // 预约
   makeMeeting(){
     if(this.data.endTime!=''&&this.data.meetingRoomId!=''&&this.data.oaMeetingContent!=''&&this.data.organizationalUser!=''&&this.data.participantsStr!=''&&this.data.startTime!=''&&this.data.title!=''){
-      wx.request({
+     /*  wx.request({
         url: 'http://192.168.10.31:1101/springcloud-oa/oa/oaMeeting/add',
         data: {
           createdTime: this.data.createdTime,
@@ -134,10 +132,44 @@ Page({
               mask:true
             })
           }
+        }
+      }); */
+      request.send({
+        url: '/springcloud-oa/oa/oaMeeting/add',
+        data:  {
+          createdTime: this.data.createdTime,
+          endTime: this.data.endTime,
+          meetingRoomId: this.data.meetingRoomId,//会议室id
+          oaMeetingContent: this.data.oaMeetingContent,
+          organizationalUser: this.data.organizationalUser,//组织人id
+          participantsStr: this.data.participantsStr,//参会人员
+          startTime: this.data.startTime,
+          title:this.data.title,
         },
-        fail: ()=>{},
-        complete: ()=>{}
-      });
+        method: 'POST',
+      }).then(res=>{
+        if(res.data.code==='0000'){
+          wx.showToast({
+            title: "预约成功",
+            icon:'none',
+            duration: 1000,
+            mask:true
+          })
+          setTimeout(
+            wx.navigateBack({
+              delta: 1
+            }),
+            1500
+          )
+        }else{
+          wx.showToast({
+            title: res.data.result,
+            icon:'none',
+            duration: 1500,
+            mask:true
+          })
+        }
+      })
     }else{
       wx.showToast({
         title: '亲，表格不能留空哦！！！',
@@ -303,11 +335,6 @@ Page({
     this.setData({
       meetingRoomId:options.meetingRoomId,
       roomName:options.name
-    })
-    CreateHeader()
-    .then(header=>{
-      this.data.token=header.token
-      // this.getUserList()
     })
    },
   onReady: function () { },

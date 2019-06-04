@@ -4,7 +4,8 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import './assets/iconfont/iconfont.css'
-import { XHeader, Selector, Checker, CheckerItem, Group, Icon, Search, XInput, XTable, Scroller, Popover, Toast, ToastPlugin, LoadMore, PopupPicker, Datetime, XTextarea, Cell, XNumber, XDialog, Tab, TabItem, Swiper, SwiperItem } from 'vux'
+import 'swiper/dist/css/swiper.css'
+import { XHeader, Selector, Checker, CheckerItem, PopupRadio, Group, Icon, Search, XInput, XTable, Scroller, Popover, Toast, ToastPlugin, LoadMore, PopupPicker, Datetime, XTextarea, Cell, XNumber, XDialog, Tab, TabItem, Swiper, SwiperItem } from 'vux'
 // import BaiduMap from 'vue-baidu-map'
 // import { get, post} from '@/api/http'
 // import MintUI from 'mint-ui'
@@ -14,11 +15,14 @@ import './assets/font-awesome/css/font-awesome.min.css'
 // Vue.prototype.$get = get
 // Vue.prototype.$post = post
 import api from '@/api/api'
+
 // Vue.use(BaiduMap, {
 //   ak: 'KVelCif7fs2D19DQVz9W6fYEnNbEWE8k'
 // })
 Vue.prototype.api = api
+
 Vue.component('x-table', XTable)
+Vue.component('popup-radio', PopupRadio)
 Vue.component('icon', Icon)
 Vue.component('swiper', Swiper)
 Vue.component('swiper-item', SwiperItem)

@@ -155,7 +155,7 @@ export default {
   },
   mounted() {
     this.initList();
-    this.getActiType();
+    // this.getActiType();
   },
   methods: {
     //立即报名

@@ -335,7 +335,6 @@ export default {
         this.listQuery,
         'post'
       ).then(res => {
-        console.log(res)
         if (res.data.code === this.GLOBAL.code) {
           this.activityList = res.data.data.rows
           this.total = res.data.data.total

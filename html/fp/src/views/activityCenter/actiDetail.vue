@@ -74,7 +74,7 @@
       <el-card>
         <div class="delContent">
           <!-- <img src="@/../static/img/detail1.png" alt=""> -->
-          <p>{{this.activityDetail.actiDetail}}</p>
+          <p v-html="activityDetail.actiDetail"></p>
           <!-- <img src="@/../static/img/detail2.png" alt=""> -->
         </div>
       </el-card>
@@ -470,6 +470,7 @@ export default {
   .delnav {
     padding: 20px 0;
     font-size: 13px;
+    font-weight: bold;
   }
   .delinfo {
     margin-top: 40px;

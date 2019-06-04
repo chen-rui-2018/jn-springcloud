@@ -73,9 +73,7 @@
       <div class="delTil">详情</div>
       <el-card>
         <div class="delContent">
-          <!-- <img src="@/../static/img/detail1.png" alt=""> -->
-          <p>{{this.activityDetail.actiDetail}}</p>
-          <!-- <img src="@/../static/img/detail2.png" alt=""> -->
+          <p v-html="activityDetail.actiDetail"></p>
         </div>
       </el-card>
     </div>
@@ -470,6 +468,7 @@ export default {
   .delnav {
     padding: 20px 0;
     font-size: 13px;
+    font-weight: bold;
   }
   .delinfo {
     margin-top: 40px;

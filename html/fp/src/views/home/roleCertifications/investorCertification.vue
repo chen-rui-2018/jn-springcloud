@@ -348,10 +348,10 @@ export default {
     submit(investorForm) {
       this.$refs[investorForm].validate(valid => {
         if (valid) {
-          // if (!this.investorForm.avatar) {
-          //   this.$message.error("请选择照片后在提交");
-          //   return;
-          // }
+          if (!this.investorForm.avatar) {
+            this.$message.error("请选择照片后在提交");
+            return;
+          }
           if (!this.investorForm.addressProvince) {
             this.$message.error("请选择常住省份");
           } else if (!this.investorForm.addressCity) {
@@ -368,7 +368,7 @@ export default {
             callback: res => {
               if (res.code == "0000") {
                 this.$message({
-                  message: "认证成功",
+                  message: "操作成功",
                   type: "success"
                 });
            this.$router.push({

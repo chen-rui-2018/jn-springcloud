@@ -197,9 +197,6 @@
           </el-form-item>
         </div>
       </el-form>
-      <div class="business_footer" @click="toUserCenter">
-        离开机构
-      </div>
      </div>
     </div>
 
@@ -295,9 +292,6 @@ export default {
     },
     toCounselorManagement(){
         this.$router.push({ name: "counselorManagement" });
-    },
-    toUserCenter(){
-        this.$router.push({ path: "/home" });
     },
     toBasicInformation(){
         this.$router.push({ path: "/roleCertifications/basicInformation" });
@@ -485,20 +479,6 @@ margin-bottom: 59px;
         // height: 69px;
       }
     }
-  }
-  .business_footer {
-    margin: 0 auto;
-    margin-top: 58px;
-    border-radius: 4px;
-    text-align: center;
-    cursor: pointer;
-    height: 29px;
-    line-height: 29px;
-    width: 90px;
-    color: #41d787;
-    background: rgba(236, 252, 242, 1);
-    border: 1px solid rgba(65, 215, 135, 1);
-    margin-bottom: 17px;
   }
 }
 </style>

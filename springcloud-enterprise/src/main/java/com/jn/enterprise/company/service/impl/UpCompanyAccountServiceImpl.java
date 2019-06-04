@@ -1,11 +1,14 @@
 package com.jn.enterprise.company.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
-import com.jn.enterprise.company.entity.TbServiceCompany;
 import com.jn.enterprise.company.enums.CompanyDataEnum;
 import com.jn.enterprise.company.model.ServiceCompany;
 import com.jn.enterprise.company.service.UpCompanyAccountService;
+import com.jn.pay.model.PayAccountBookCreateParam;
+import com.jn.send.api.DelaySendMessageClient;
+import com.jn.send.model.Delay;
 import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.SysRole;
@@ -17,6 +20,7 @@ import com.jn.user.model.UserCompanyInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +35,7 @@ import java.util.Set;
  * @author： shaobao
  * @date： Created on 2019/5/28 19:24
  * @version： v1.0
- * @modified By:
+ * @modified By: huxw
  **/
 @Service
 public class UpCompanyAccountServiceImpl implements UpCompanyAccountService {
@@ -47,6 +51,12 @@ public class UpCompanyAccountServiceImpl implements UpCompanyAccountService {
 
     @Autowired
     private UserExtensionClient userExtensionClient;
+
+    @Autowired
+    private DelaySendMessageClient delaySendMessageClient;
+
+    @Value("${spring.application.name}")
+    private String applicationName;
 
     /**
      * 升级企业账号,设置企业申请人为企业管理员
@@ -97,6 +107,20 @@ public class UpCompanyAccountServiceImpl implements UpCompanyAccountService {
             userCompanyInfo.setCompanyName(comName);
             userExtensionClient.updateCompanyInfo(userCompanyInfo);
             logger.info("[升级企业账号] 调用用户服务 修改用户所属企业 接口 用户账号:{}", comAdmin);
+
+            //4.创建企业的账本信息-延迟调度
+            PayAccountBookCreateParam payAccountBookCreateParam = new PayAccountBookCreateParam();
+            payAccountBookCreateParam.setComAdmin(comAdmin);
+            payAccountBookCreateParam.setEnterId(companyId);
+
+            Delay delay = new Delay();
+            delay.setServiceId(applicationName);
+            delay.setServiceUrl("/api/payment/payAccount/createPayAccountBook");
+            delay.setTtl("30");
+            delay.setDataString(JSONObject.toJSONString(payAccountBookCreateParam));
+            logger.info("开始回调");
+            Result<Boolean> delayResult = delaySendMessageClient.delaySend(delay);
+            logger.info("结束回调,返回结果，【{}】", delayResult.toString());
         }
     }
 

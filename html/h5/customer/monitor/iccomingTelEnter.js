@@ -208,6 +208,9 @@ function login(){
 	var agentId = document.getElementById("agentId").value;
 	var agentName = document.getElementById("agentName").value;
 	var ext = document.getElementById("extension").value;
+	if(ext==null || ext==''){
+		alert("请输入分机号码");
+	}
 	var groupId = document.getElementById("groupId").value;
 	var levelId = document.getElementById("levelId").value;
 	var rightId = 0;

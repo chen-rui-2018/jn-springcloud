@@ -27,8 +27,11 @@ public class LoadCompanyDataTargetReq implements Serializable {
     @ApiModelProperty(value = "指标ID（指标表：tb_data_reporting_snapshot_target）")
     String[] targetIds;
 
-    @ApiModelProperty(value = "填报账期(月YYYYMM，年YYYY)")
-    String dealTime;
+    @ApiModelProperty(value = "开始填报账期(月YYYYMM，年YYYY)")
+    String dealTimeStart;
+
+    @ApiModelProperty(value = "结束填报账期(月YYYYMM，年YYYY)")
+    String dealTimeEnd;
 
     public String getEnterpriseId() {
         return enterpriseId;
@@ -46,12 +49,20 @@ public class LoadCompanyDataTargetReq implements Serializable {
         this.targetIds = targetIds;
     }
 
-    public String getDealTime() {
-        return dealTime;
+    public String getDealTimeStart() {
+        return dealTimeStart;
     }
 
-    public void setDealTime(String dealTime) {
-        this.dealTime = dealTime;
+    public void setDealTimeStart(String dealTimeStart) {
+        this.dealTimeStart = dealTimeStart;
+    }
+
+    public String getDealTimeEnd() {
+        return dealTimeEnd;
+    }
+
+    public void setDealTimeEnd(String dealTimeEnd) {
+        this.dealTimeEnd = dealTimeEnd;
     }
 
     @Override
@@ -59,7 +70,8 @@ public class LoadCompanyDataTargetReq implements Serializable {
         return "LoadCompanyDataTargetReq{" +
                 "enterpriseId='" + enterpriseId + '\'' +
                 ", targetIds=" + Arrays.toString(targetIds) +
-                ", dealTime='" + dealTime + '\'' +
+                ", dealTimeStart='" + dealTimeStart + '\'' +
+                ", dealTimeEnd='" + dealTimeEnd + '\'' +
                 '}';
     }
 }

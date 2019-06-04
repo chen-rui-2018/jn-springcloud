@@ -75,8 +75,8 @@
       <ul>
         <li class="clearfix" v-for="(i,k) in serverAgent" :key='k'>
           <div class="orgImg fl" @click="handleOrgDel(i.orgId)">
-            <!-- <img src="@/../static/img/ins1.png" alt=""> -->
             <img :src="i.orgLogo" alt="">
+            <!-- <img v-else src="@/../static/img/product.png" alt=""> -->
           </div>
           <div class="orgCon fl">
             <div class="conTil">{{i.orgName}}</div>

@@ -35,8 +35,8 @@
             <span>{{actiInfo.signature}}</span>
           </p>
         </div>
-        <div class="dataInfo clearfix">
-          <div class="dataLeft fl">
+        <div class="dataInfo">
+          <!-- <div class="dataLeft fl">
             <div>所属公司</div>
             <div>担任职务</div>
             <div>兴趣爱好</div>
@@ -52,6 +52,31 @@
             <div>{{actiInfo.company}}</div>
             <div>{{actiInfo.position}}</div>
             <div>
+              <span class="hobbryb" v-for="(item,k) in actiInfo.hobbys" :key="k">{{item}}</span>
+            </div>
+          </div> -->
+          <div class="info1 clearfix">
+            <span class="fl color1">所属公司</span>
+            <div class="dataCircle fl">
+              <img src="@/../static/img/yuandian.png" alt="">
+            </div>
+            <span class="fl color2">{{actiInfo.company}}</span>
+          </div>
+          <div class="dataLine"></div>
+          <div class="info1 clearfix">
+            <span class="fl color1">担任职务</span>
+            <div class="dataCircle fl">
+              <img src="@/../static/img/yuandian.png" alt="">
+            </div>
+            <span class="fl color2">{{actiInfo.position}}</span>
+          </div>
+          <div class="dataLine"></div>
+          <div class="info1 clearfix">
+            <span class="fl color1">兴趣爱好</span>
+            <div class="dataCircle fl">
+              <img src="@/../static/img/yuandian.png" alt="">
+            </div>
+            <div class="fl color2">
               <span class="hobbryb" v-for="(item,k) in actiInfo.hobbys" :key="k">{{item}}</span>
             </div>
           </div>
@@ -125,13 +150,13 @@ export default {
       .icon-xingbienv {
         color: #e72e60;
         font-size: 20px;
-         display: inline-block;
+        display: inline-block;
         vertical-align: middle;
       }
       .icon-xingbienan {
         color: #7c90f6;
         font-size: 20px;
-         display: inline-block;
+        display: inline-block;
         vertical-align: middle;
       }
       .ageNum {
@@ -161,7 +186,23 @@ export default {
       }
     }
     .dataInfo {
-      padding: 30px;
+      padding: 30px 30px 50px;
+      font-size: 13px;
+      .dataCircle{
+        width: 15px;
+        height: 15px;
+        margin: 0 20px;
+        img{
+          width: 100%;
+          height: 100%;
+        }
+      }
+       .dataLine {
+          width: 2px;
+          height: 40px;
+          margin-left: 78px;
+          background-color: #00a041;
+        }
       .dataLeft {
         font-size: 13px;
         color: #333;
@@ -178,12 +219,12 @@ export default {
           border: 1px solid #ccc;
           background: #00a041;
         }
-        .dataLine {
-          width: 2px;
-          height: 40px;
-          margin-left: 9px;
-          background-color: #00a041;
-        }
+        // .dataLine {
+        //   width: 2px;
+        //   height: 40px;
+        //   margin-left: 9px;
+        //   background-color: #00a041;
+        // }
       }
       .dataRight {
         font-size: 13px;

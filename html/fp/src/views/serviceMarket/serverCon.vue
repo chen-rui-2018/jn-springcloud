@@ -37,8 +37,8 @@
                 <!-- <li class="clearfix" v-for="(i,k) in serverAgent" :key='k'> -->
                 <li class="clearfix" v-for="(i,k) in serverConList" :key='k'>
                     <div class="orgImg fl" @click="handleConDel(i.orgId,i.advisorAccount)">
-                        <!-- <img src="@/../static/img/ins1.png" alt=""> -->
-                        <img :src="i.avatar" alt="">
+                        <img v-if="i.avatar" :src="i.avatar" alt="">
+                        <img v-else src="@/../static/img/product.png" alt="">
                     </div>
                     <div class="orgCon fl">
                         <div class="conTil">{{i.advisorName}}</div>

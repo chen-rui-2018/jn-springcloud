@@ -295,7 +295,7 @@ export default {
     },
     handCheck(id) {
       //跳转报名人列表
-      this.$router.push({ path: "regStatus", query: { activityId: id } });
+      this.$router.push({ path: "actiTrainStatus", query: { activityId: id } });
     },
     quickApply(id) {
       //立即报名

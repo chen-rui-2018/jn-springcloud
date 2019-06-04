@@ -62,7 +62,7 @@ export default {
         return;
       }
       this.$router.push({
-        path: "regData",
+        path: "actiTrainData",
         query: { account: account, activityId: this.$route.query.activityId }
       });
     },

@@ -263,33 +263,33 @@
             <a href="javascript:;">筛选：</a>
           </li>
           <li class="list-item current" :class="{'active3':flag1==''}" @click="screenPro('')">
-            <a href="javascript:;"  v-if="serverPro.length>0" data="%">全部({{serverPro[0].serviceTotal}})</a>
-            <a href="javascript:;"  v-else data="%">全部(0)</a>
+            <a href="javascript:;" v-if="serverPro.length>0" data="%">全部({{serverPro[0].serviceTotal}})</a>
+            <a href="javascript:;" v-else data="%">全部(0)</a>
           </li>
           <li class="list-item " :class="{'active3':flag1=='0'}" @click="screenPro('0')">
-            <a href="javascript:;"  v-if="serverPro.length>0" data="常规服务">常规服务({{serverPro[0].commonTotal}})</a>
-            <a href="javascript:;"  v-else data="%">常规服务(0)</a>
+            <a href="javascript:;" v-if="serverPro.length>0" data="常规服务">常规服务({{serverPro[0].commonTotal}})</a>
+            <a href="javascript:;" v-else data="%">常规服务(0)</a>
           </li>
           <li class="list-item " :class="{'active3':flag1=='1'}" @click="screenPro('1')">
-            <a href="javascript:;"  v-if="serverPro.length>0" data="特色服务">特色服务({{serverPro[0].featureTotal}})</a>
-            <a href="javascript:;"  v-else data="%">特色服务(0)</a>
+            <a href="javascript:;" v-if="serverPro.length>0" data="特色服务">特色服务({{serverPro[0].featureTotal}})</a>
+            <a href="javascript:;" v-else data="%">特色服务(0)</a>
           </li>
         </ul>
         <ul class="select-list clearfix" v-if="showFlag2">
-          <li >
+          <li>
             <a href="javascript:;">排序：</a>
           </li>
           <li class="list-item current" :class="{'active3':flag2=='integrate'}" @click="screenSerCon('integrate')">
-            <a href="javascript:;" >综合</a>
+            <a href="javascript:;">综合</a>
           </li>
           <li class="list-item " :class="{'active3':flag2=='popularity'}" @click="screenSerCon('popularity')">
-            <a href="javascript:;" >人气</a>
+            <a href="javascript:;">人气</a>
           </li>
           <li class="list-item " :class="{'active3':flag2=='praise'}" @click="screenSerCon('praise')">
             <a href="javascript:;">好评</a>
           </li>
           <li class="list-item " :class="{'active3':flag2=='serviceNum'}" @click="screenSerCon('serviceNum')">
-            <a href="javascript:;" >服务量</a>
+            <a href="javascript:;">服务量</a>
           </li>
         </ul>
         <ul class="select-list clearfix" v-if="showFlag3">
@@ -328,7 +328,7 @@
         </ul>
       </div>
       <el-tabs v-model="activeName1" @tab-click="handleSerpro">
-        <el-tab-pane name="serverPro" >
+        <el-tab-pane name="serverPro">
           <span slot="label" v-if="serverPro.length>0">服务产品({{serverPro[0].serviceTotal}})</span>
           <span slot="label" v-else>服务产品(0)</span>
           <div class="serverPro">
@@ -339,7 +339,8 @@
                 <!-- 上架时间 end -->
                 <!-- 左侧logo begin-->
                 <div class="list-imgleft-container product nopic" @click="$router.push({path: '/serverProDetail',query: { productId: i.productId, signoryId: i.signoryId }})">
-                  <img :src="i.pictureUrl" alt="">
+                  <img v-if="i.pictureUrl" :src="i.pictureUrl" alt="">
+                  <img v-else src="@/../static/img/product.png" alt="">
                 </div>
                 <!-- 左侧logo end-->
                 <!-- 中间信息 beign -->
@@ -371,7 +372,7 @@
                         <!-- <el-rate :model="parseInt(i.evaluationScore)" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
                       </el-rate> -->
                         <el-rate v-model="i.evaluationScore*1" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
-                      </el-rate>
+                        </el-rate>
                         <span class="c_default b">{{i.evaluationNumber}}</span>
                         <span>条评价</span>
                       </div>
@@ -400,14 +401,15 @@
             </div>
           </div>
         </el-tab-pane>
-        <el-tab-pane  name="serConsultant" >
+        <el-tab-pane name="serConsultant">
           <span slot="label">服务顾问({{total2}})</span>
           <div class="serConsultant">
             <ul class="list-imgleft adviser">
               <li class="list-item" v-for="(i,k) in serviceConsultant" :key='k'>
                 <!-- 左侧logo begin-->
                 <div class="list-imgleft-container noconsultant" @click="$router.push({path: 'serverConDetail',query: { orgId: i.orgId,advisorAccount:i.advisorAccount }})">
-                  <img :src="i.avatar" alt="">
+                  <img v-if="i.avatar" :src="i.avatar" alt="">
+                  <img v-else src="@/../static/img/product.png" alt="">
                 </div>
                 <!-- 左侧logo end-->
                 <!-- 中间信息 beign -->
@@ -442,7 +444,7 @@
                     <div class="detail-evaluate inner-consultant">
                       <div class="score">
                         <el-rate v-model="i.evaluationScore*1" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
-                      </el-rate>
+                        </el-rate>
                         <span class="c_default b">{{i.evaluationNum}}</span>
                         <span>条评价</span>
                       </div>
@@ -472,7 +474,7 @@
             </div>
           </div>
         </el-tab-pane>
-        <el-tab-pane name="serEvaluation" >
+        <el-tab-pane name="serEvaluation">
           <span slot="label">服务评价({{evaCount.evaluationTotal}})</span>
           <div class="serEvaluation">
             <ul class="list-imgleft">
@@ -515,7 +517,7 @@
                         <!-- <el-rate disabled text-color="#00a041" style="display:inline-block" score-template="{value}">
                         </el-rate> -->
                         <el-rate v-model="i.evaluationScore*1" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
-                      </el-rate>
+                        </el-rate>
                         <span class="c_default b">1</span>
                         <span>条评价</span>
                       </div>
@@ -589,53 +591,53 @@
         </el-tab-pane>
       </el-tabs>
     </div>
-     <!-- 提需求弹框 -->
-      <template v-if="serverOrgVisible">
-            <el-dialog :visible.sync="serverOrgVisible" width="530px" top="30vh" :modal-append-to-body=false>
-              <div>
-                <el-form ref="financialProform" :model="serverProform" label-position="right" label-width="100px" style="max-width:436px;">
-                    <el-form-item label="需求描述:" prop="requireDetail" style="font-size:13px">
-                        <el-input v-model.trim="serverProform.requireDetail" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
-                    </el-form-item>
-                </el-form>
-                <div class="demandLine"></div>
-                <div class="serverTip mainColor">市场提醒：请务必在线订购，线下交易无法享受市场交易安全保障</div>
-                <div class="demandDia" @click="demandDia()">提交需求</div>
-              </div>
-               <!-- <div v-else>
+    <!-- 提需求弹框 -->
+    <template v-if="serverOrgVisible">
+      <el-dialog :visible.sync="serverOrgVisible" width="530px" top="30vh" :modal-append-to-body=false>
+        <div>
+          <el-form ref="financialProform" :model="serverProform" label-position="right" label-width="100px" style="max-width:436px;">
+            <el-form-item label="需求描述:" prop="requireDetail" style="font-size:13px">
+              <el-input v-model.trim="serverProform.requireDetail" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
+            </el-form-item>
+          </el-form>
+          <div class="demandLine"></div>
+          <div class="serverTip mainColor">市场提醒：请务必在线订购，线下交易无法享受市场交易安全保障</div>
+          <div class="demandDia" @click="demandDia()">提交需求</div>
+        </div>
+        <!-- <div v-else>
                  你还未
                  <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
                  /
                  <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
                  企业账号
                 </div>  -->
-            </el-dialog>
-      </template>
+      </el-dialog>
+    </template>
   </div>
 </template>
 <script>
 export default {
   data() {
     return {
-      islogin:true,
+      islogin: true,
       zankaiFlag: false,
       activeName: "baseInfo",
       activeName1: "serverPro",
       serverOrgDetailList: {},
-      serverOrgVisible:false,
+      serverOrgVisible: false,
       serverProform: {
         requireDetail: "",
         productId: "",
         productName: ""
       },
-      flag1:"",
-      flag2:"",
-      flag3:"",
-      flag4:"0",
-      showFlag1:true,
-      showFlag2:false,
-      showFlag3:false,
-      showFlag4:false,
+      flag1: "",
+      flag2: "",
+      flag3: "",
+      flag4: "0",
+      showFlag1: true,
+      showFlag2: false,
+      showFlag3: false,
+      showFlag4: false,
       serverPro: [],
       currentPage1: 1,
       row1: 5,
@@ -653,52 +655,61 @@ export default {
       row4: 5,
       page4: 1,
       total4: 0,
-      evaCount:{},
-      sortTypes:'',
-      ratingType:'',
-      timeInterval:'0',
-      token1:'',
+      evaCount: {},
+      sortTypes: "",
+      ratingType: "",
+      timeInterval: "0",
+      token1: ""
     };
   },
   created() {
-    this.isLogin()
+    this.isLogin();
     this.initList();
     this.findOrgCountProductList();
     this.getServiceConList();
     this.selActiList();
     this.getServiceRatingInfo();
-    this.getEvaluationCountInfo()
+    this.getEvaluationCountInfo();
   },
   methods: {
-      //在线联系
-    onlineContat(orgAccount,ogeName){
-       if (!sessionStorage.userInfo) {
+    //在线联系
+    onlineContat(orgAccount, ogeName) {
+      if (!sessionStorage.userInfo) {
         this.$message.error("请先登录");
         return;
       }
-      this.$router.push({path:'/chat',query:{fromUser: JSON.parse(sessionStorage.userInfo).account,toUser:orgAccount,nickName:ogeName}})
+      this.$router.push({
+        path: "/chat",
+        query: {
+          fromUser: JSON.parse(sessionStorage.userInfo).account,
+          toUser: orgAccount,
+          nickName: ogeName
+        }
+      });
     },
     //判断是否登录
-    isLogin(){
-      if(!sessionStorage.userInfo){
-        this.islogin=false
+    isLogin() {
+      if (!sessionStorage.userInfo) {
+        this.islogin = false;
       }
     },
-     demandRaise(i) { //提需求
+    demandRaise(i) {
+      //提需求
       // this.accout=sessionStorage.getItem('account')
       // if(!this.accout){
       //   debugger
       //   this.islogin=false
       // }
-       if (!sessionStorage.userInfo) {
+      if (!sessionStorage.userInfo) {
         this.$message.error("请先登录");
-        return;}
+        return;
+      }
       this.serverOrgVisible = true;
       this.serverProform.requireDetail = "";
       this.serverProform.productId = i.productId;
       this.serverProform.productName = i.productName;
     },
-     demandDia() {
+    demandDia() {
       let _this = this;
       this.api.post({
         url: "userDemand",
@@ -717,56 +728,60 @@ export default {
         }
       });
     },
-     screenPro(i){ //服务产品筛选
-        this.productType=i,
-        this.flag1=i,
-        this.page1=1,
+    screenPro(i) {
+      //服务产品筛选
+      (this.productType = i),
+        (this.flag1 = i),
+        (this.page1 = 1),
         this.findOrgCountProductList();
     },
-    screenSerCon(i){ //筛选服务顾问
-        this.sortTypes=i,
-        this.flag2=i,
-        this.page2=1,
+    screenSerCon(i) {
+      //筛选服务顾问
+      (this.sortTypes = i),
+        (this.flag2 = i),
+        (this.page2 = 1),
         this.getServiceConList();
     },
-    screenEva(i){ //筛选评价
-        this.ratingType=i,
-        this.flag3=i,
-        this.page4=1,
+    screenEva(i) {
+      //筛选评价
+      (this.ratingType = i),
+        (this.flag3 = i),
+        (this.page4 = 1),
         this.getServiceRatingInfo();
     },
-    screenActi(i){  //筛选活动
-        this.timeInterval=i,
-        this.flag4=i,
-        this.page3=1,
-        this.selActiList()
+    screenActi(i) {
+      //筛选活动
+      (this.timeInterval = i),
+        (this.flag4 = i),
+        (this.page3 = 1),
+        this.selActiList();
     },
     handleSerpro(tab, event) {
-      if(tab.name=='serConsultant'){
+      if (tab.name == "serConsultant") {
         //  this.getServiceConList()
-         this.showFlag2=true
-         this.showFlag1=false
-         this.showFlag3=false
-         this.showFlag4=false
-      } else if(tab.name=='serEvaluation'){
+        this.showFlag2 = true;
+        this.showFlag1 = false;
+        this.showFlag3 = false;
+        this.showFlag4 = false;
+      } else if (tab.name == "serEvaluation") {
         // this.getServiceRatingInfo()
         // this.getEvaluationCountInfo()
-         this.showFlag2=false
-         this.showFlag1=false
-         this.showFlag3=true
-         this.showFlag4=false
-      } else if(tab.name=='actiConsultation'){
+        this.showFlag2 = false;
+        this.showFlag1 = false;
+        this.showFlag3 = true;
+        this.showFlag4 = false;
+      } else if (tab.name == "actiConsultation") {
         // this.selActiList()
-        this.showFlag2=false
-         this.showFlag1=false
-         this.showFlag3=false
-         this.showFlag4=true
-      } else{
+        this.showFlag2 = false;
+        this.showFlag1 = false;
+        this.showFlag3 = false;
+        this.showFlag4 = true;
+      } else {
         // this.findOrgCountProductList()
-         this.showFlag2=false
-         this.showFlag1=true
-         this.showFlag3=false
-         this.showFlag4=false
+        this.showFlag2 = false;
+        this.showFlag1 = true;
+        this.showFlag3 = false;
+        this.showFlag4 = false;
       }
     },
     handleZk() {
@@ -853,7 +868,7 @@ export default {
           // actiType: "org_activity",
           page: _this.page3,
           rows: _this.row3,
-          timeInterval:'0',
+          timeInterval: "0"
         },
         callback: function(res) {
           if (res.code == "0000") {
@@ -877,7 +892,7 @@ export default {
           isPublicPage: 0,
           page: _this.page4,
           rows: _this.row4,
-          ratingType:_this.ratingType,
+          ratingType: _this.ratingType
         },
         callback: function(res) {
           if (res.code == "0000") {
@@ -899,7 +914,7 @@ export default {
           // orgId: "1001211",
           page: _this.page2,
           rows: _this.row2,
-          sortTypes:_this.sortTypes,
+          sortTypes: _this.sortTypes
         },
         callback: function(res) {
           if (res.code == "0000") {
@@ -920,7 +935,7 @@ export default {
           orgd: _this.$route.query.orgId,
           page: _this.page1,
           rows: _this.row1,
-          productType:_this.productType,
+          productType: _this.productType
         },
         callback: function(res) {
           if (res.code == "0000") {
@@ -964,7 +979,7 @@ export default {
   .el-textarea__inner:focus {
     outline: 0;
     border-color: #00a041;
-}
+  }
   .serverTip {
     display: inline-block;
     font-size: 12px;

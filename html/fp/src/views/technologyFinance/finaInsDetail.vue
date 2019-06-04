@@ -14,8 +14,8 @@
         </div>
         <div class="agent2 clearfix color2">
           <div class="agentImg fl">
-            <!-- <img src="@/../static/img/ins1.png" alt=""> -->
             <img :src="serverOrgDetailList.orgLogo" alt="">
+            <!-- <img v-else src="@/../static/img/product.png" alt=""> -->
           </div>
           <div class="agent2Info fl color2">
             <p>客户偏好：{{serverOrgDetailList.orgHobby}}</p>
@@ -321,7 +321,8 @@
                 <!-- 上架时间 end -->
                 <!-- 左侧logo begin-->
                 <div class="list-imgleft-container product nopic">
-                  <img :src="i.pictureUrl" alt="">
+                  <img v-if="i.pictureUrl" :src="i.pictureUrl" alt="">
+                  <img v-else src="@/../static/img/product.png" alt="">
                 </div>
                 <!-- 左侧logo end-->
                 <!-- 中间信息 beign -->

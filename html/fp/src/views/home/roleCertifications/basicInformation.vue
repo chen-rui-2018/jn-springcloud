@@ -333,22 +333,23 @@ export default {
         callback();
       }
     };
-     var checkTel = (rule, value, callback) => {
-      const reg = /^0\\d{2,3}-[1-9]\\d{6,7}$/;
-      if (!reg.test(value)) {
-        callback("请输入正确的电话格式");
-      } else {
-        callback();
-      }
-    };
-      var checkWeb = (rule, value, callback) => {
-      const reg = /^(http|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?$/;
-      if (!reg.test(value)) {
-        callback("请输入正确的网址");
-      } else {
-        callback();
-      }
-    };
+    //  var checkTel = (rule, value, callback) => {
+    //   // const reg = /^0\\d{2,3}-[1-9]\\d{6,7}$/;
+    //    const reg = /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/;
+    //   if (!reg.test(value)) {
+    //     callback("请输入正确的电话格式");
+    //   } else {
+    //     callback();
+    //   }
+    // };
+    //   var checkWeb = (rule, value, callback) => {
+    //   const reg = /^(http|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?$/;
+    //   if (!reg.test(value)) {
+    //     callback("请输入正确的网址");
+    //   } else {
+    //     callback();
+    //   }
+    // };
 
     return {
       baseUrl: this.api.host,
@@ -565,11 +566,11 @@ export default {
         ],
          orgPhone: [
           { required: true, message: "请输入咨询电话", trigger: "blur" },
-           { validator: checkTel, trigger: 'blur' }
+          //  { validator: checkTel, trigger: 'blur' }
         ],
         orgWeb: [
           { required: true, message: "请输入机构网址", trigger: "blur" },
-          { validator: checkWeb, trigger: 'blur' }
+          // { validator: checkWeb, trigger: 'blur' }
         ],
         orgProvince: [{ required: true, message: "请选择省份", trigger: "change" }],
         orgAddress: [{ required: true, message: "请填写详细地址", trigger: "blur" }]

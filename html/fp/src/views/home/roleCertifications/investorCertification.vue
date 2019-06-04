@@ -9,11 +9,11 @@
         <div class="basicInfo pr">
           <div class="setdistance uploadImgItem">
             <span class="textRight mg">照片：</span>
-            <el-upload class="avatar-uploader avatar-img" :show-file-list="false" :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'" :headers="headers" :before-upload="beforeAvaUpload" style="display:inline-block">
+            <el-upload class="avatar-uploader avatar-img" :show-file-list="false" :on-success="handleAvaSuccess" :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'" :headers="headers" :before-upload="beforeAvaUpload" style="display:inline-block">
               <img v-if="investorForm.avatar" :src="investorForm.avatar" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
-            <div class="textImg">只支持JPG格式，大小不要超过500k<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;建议使用一寸证件照70*100像素</div>
+            <div class="textImg">只支持JPG、PNG格式，大小不要超过2M<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;建议使用一寸证件照70*100像素</div>
           </div>
           <el-form :rules="rules" :model="investorForm" label-width="100px" ref="investorForm">
             <el-form-item label="姓名:" prop="investorName" class="maxWidth">
@@ -30,7 +30,7 @@
             </el-form-item>
 
             <el-form-item label="所属单位:">
-              <el-select v-model="investorForm.orgId" placeholder="请选择所属单位">
+              <el-select v-model="investorForm.orgId" placeholder="请选择所属单位" clearable>
                 <el-option v-for="item in orgOptions" :key="item.orgId" :label="item.orgName" :value="item.orgId">
                 </el-option>
               </el-select>
@@ -362,7 +362,6 @@ export default {
           this.disabled = true;
           this.investorForm.investorWorkExperienceParamList = this.workList;
           this.investorForm.investorEducationExperienceParamList = this.educationList;
-          console.log(this.investorForm);
           this.api.post({
             url: "addInvestorInfo",
             data: this.investorForm,
@@ -642,15 +641,15 @@ export default {
     },
     init() {},
     beforeAvaUpload(file) {
-      const isJPG = file.type === "image/jpeg";
-      const isLt2M = file.size / 1024 < 500;
+      const isJPG = file.type === "image/jpeg"||file.type === "image/png";
+      const isLt2M = file.size / 1024 < 1024<2;
 
       if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
+        this.$message.error("上传头像图片只能是 JPG或PNG 格式!");
         return false;
       }
       if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 500kb!");
+        this.$message.error("上传头像图片大小不能超过 2M!");
         return false;
       }
     },
@@ -690,7 +689,6 @@ export default {
         url: "getAffiliationUnit",
         data: { needPage: "0" },
         callback: res => {
-          console.log(res)
           if (res.code == "0000") {
             this.orgOptions = res.data.rows;
           } else {

@@ -257,7 +257,7 @@ export default {
         this.api.get({
           url: 'getBusinessAdDynamic',
           callback: (res) => {
-            if (res.code === "0000") {
+            if (res.code === '0000') {
               this.businessAdDynamic = res.data
               resolve()
             } else {
@@ -273,7 +273,7 @@ export default {
         this.api.get({
           url: 'getBusinessAdPolicy',
           callback: (res) => {
-            if (res.code === "0000") {
+            if (res.code === '0000') {
               this.businessAdPolicy = res.data
               resolve()
             } else {
@@ -289,7 +289,7 @@ export default {
         this.api.get({
           url: 'parkList',
           callback: (res) => {
-            if (res.code === "0000") {
+            if (res.code === '0000') {
               this.parkList = res.data
               resolve()
             } else {
@@ -307,7 +307,7 @@ export default {
             parkId: parkId
           },
           callback: (res) => {
-            if (res.code === "0000") {
+            if (res.code === '0000') {
               resolve(res.data)
             } else {
               reject()

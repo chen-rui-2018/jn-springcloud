@@ -338,6 +338,7 @@ from tb_service_product t1
          and (t1.template_id is null or t1.template_id = "")
          and t1.status='1' and t1.record_status='1'and t1.signory_id =
               ( select t3.business_type from tb_service_org t3 where t3.org_id_=#{orgId})
+        and t1.product_type = 0
     </select>
     <!--服务产品列表,只包含服务Id和服务名称,用于评价的筛选条件-->
     <select  id="productQueryList" resultType = "com.jn.enterprise.servicemarket.product.model.CommonServiceShelf">

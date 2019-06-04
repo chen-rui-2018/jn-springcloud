@@ -122,18 +122,21 @@
         </div>
         <div class="agentCon">
             <div class="agentFil mainBorder">
-                <ul class="select-list clearfix" v-if="serverPro&&serverPro.length>0,showFlag==true">
+                <ul class="select-list clearfix" v-if="showFlag==true">
                     <li>
                         <a href="javascript:;">筛选：</a>
                     </li>
                     <li class="list-item current" :class="{'active3':flag1==''}" @click="screenPro('')">
-                        <a href="javascript:;" data="%">全部({{serverPro[0].serviceTotal}})</a>
+                        <a href="javascript:;" v-if="serverPro&&serverPro.length>0" data="%">全部({{serverPro[0].serviceTotal}})</a>
+                        <a href="javascript:;" v-else data="%">全部(0)</a>
                     </li>
                     <li class="list-item" :class="{'active3':flag1=='0'}" @click="screenPro('0')">
-                        <a href="javascript:;" data="常规服务">常规服务({{serverPro[0].commonTotal}})</a>
+                        <a href="javascript:;" v-if="serverPro&&serverPro.length>0" data="常规服务">常规服务({{serverPro[0].commonTotal}})</a>
+                        <a href="javascript:;" v-else data="常规服务">常规服务(0)</a>
                     </li>
                     <li class="list-item" :class="{'active3':flag1=='1'}" @click="screenPro('1')">
-                        <a href="javascript:;" data="特色服务">特色服务({{serverPro[0].featureTotal}})</a>
+                        <a href="javascript:;" data="特色服务" v-if="serverPro&&serverPro.length>0">特色服务({{serverPro[0].featureTotal}})</a>
+                        <a href="javascript:;" v-else data="常规服务">特色服务(0)</a>
                     </li>
                 </ul>
                 <ul class="select-list clearfix" v-else>

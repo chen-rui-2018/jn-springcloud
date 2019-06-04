@@ -1,13 +1,20 @@
 <template>
     <div class="no-data-bg">
       <img class="no-data-pic" src="@/../static/img/no-data.png" alt="">
-      <div class="no-data-desc">抱歉，没有找到相关信息</div>
+      <div class="no-data-desc">{{ title }}</div>
     </div>
 </template>
 
 <script>
   export default {
-    name: "NoData"
+    name: "NoData",
+    props: {
+      title: {
+        type: [String, Number],
+        required: false,
+        default: '抱歉，没有找到相关信息'
+      }
+    }
   }
 </script>
 

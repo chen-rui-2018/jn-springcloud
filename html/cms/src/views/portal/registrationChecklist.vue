@@ -166,9 +166,10 @@ export default {
     this.getApplyActivityList()
   },
   methods: {
+    // 根据报名状态查询活动报名列表
     getApplyActivityList() {
       this.actiList.activityId = this.$route.query.id
-      api(`${this.GLOBAL.parkUrl}activity/applyActivityList`, this.actiList, 'post').then(res => {
+      api(`${this.GLOBAL.parkUrl}activity/applyActivityListByApplyStatus`, this.actiList, 'get').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           this.actiListData = res.data.data.rows
           this.total = res.data.data.total

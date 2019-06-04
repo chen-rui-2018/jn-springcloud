@@ -337,9 +337,7 @@ public class PayChannel4AlipayController {
         //渠道ID
         map.put("channelId",payOrder.getChannelId());
         //封装orderInfo(发起支付需要的参数JSON格式)
-        JSONObject orderInfo = new JSONObject();
-        orderInfo.put("payUrl",payUrl);
-        map.put("orderInfo",orderInfo.toJSONString());
+        map.put("orderInfo",payUrl);
 
         return XXPayUtil.makeRetData(map, resKey);
 

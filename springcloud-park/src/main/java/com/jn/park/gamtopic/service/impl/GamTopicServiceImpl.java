@@ -125,24 +125,26 @@ public class GamTopicServiceImpl implements GamTopicService {
         ) {
             ids.add(tppic.getTopicId());
         }
-        TbFileImgCriteria imgCriteria = new TbFileImgCriteria();
-        imgCriteria.createCriteria().andTopicIdIn(ids);
-        List<TbFileImg> tbFileImgs = tbFileImgMapper.selectByExample(imgCriteria);
-        for (GamTopicVO tppic: gamTopicVOS
-        ) {
-            for (TbFileImg img:tbFileImgs
+        if(ids != null && !ids.isEmpty()) {
+            TbFileImgCriteria imgCriteria = new TbFileImgCriteria();
+            imgCriteria.createCriteria().andTopicIdIn(ids);
+            List<TbFileImg> tbFileImgs = tbFileImgMapper.selectByExample(imgCriteria);
+            for (GamTopicVO tppic : gamTopicVOS
             ) {
-                if(StringUtils.equals(tppic.getTopicId(),img.getTopicId())){
-                    FileImg i = new FileImg();
-                    BeanUtils.copyProperties(img,i);
-                    List<FileImg> imgs = tppic.getImgs();
-                    if(imgs!=null){
-                        imgs.add(i);
-                        tppic.setImgs(imgs);
-                    }else{
-                        List<FileImg> fl = new ArrayList<>(4);
-                        fl.add(i);
-                        tppic.setImgs(fl);
+                for (TbFileImg img : tbFileImgs
+                ) {
+                    if (StringUtils.equals(tppic.getTopicId(), img.getTopicId())) {
+                        FileImg i = new FileImg();
+                        BeanUtils.copyProperties(img, i);
+                        List<FileImg> imgs = tppic.getImgs();
+                        if (imgs != null) {
+                            imgs.add(i);
+                            tppic.setImgs(imgs);
+                        } else {
+                            List<FileImg> fl = new ArrayList<>(4);
+                            fl.add(i);
+                            tppic.setImgs(fl);
+                        }
                     }
                 }
             }

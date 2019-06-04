@@ -1,4 +1,4 @@
-<template>
+ <template>
   <div class="actiDetail w">
     <div class="delnav">
       <!-- <el-breadcrumb separator="/">
@@ -10,8 +10,8 @@
           <a href="javascript:void(0)" style="color:#00a042;font-weight:bold">活动详情</a>
         </el-breadcrumb-item>
       </el-breadcrumb> -->
-      <span>企业服务/</span>
-      <span>活动中心/</span>
+      <span class="pointer" @click="$router.push({path:'enterpriseservice'})">企业服务/</span>
+      <span class="pointer" @click="$router.push({path:'actiCenter'})">活动中心/</span>
       <span class="mainColor">活动详情</span>
     </div>
     <div class="delinfo">
@@ -29,7 +29,10 @@
             <p>
               <i class="el-icon-time"></i>
               <span>{{activityDetail.actiStartTime}}-{{activityDetail.actiEndTime}}</span>
-              <i class="iconfont icon-recharge">&nbsp;<span v-if="activityDetail.actiCost=='0.00'">免费</span><span v-else>收费</span></i>
+              <i class="iconfont icon-recharge">&nbsp;
+                <span v-if="activityDetail.actiCost=='0.00'">免费</span>
+                <span v-else>收费</span>
+              </i>
             </p>
             <div class="delAddress">
               <i class="el-icon-location-outline"></i>
@@ -53,14 +56,15 @@
             <!-- <span class="resdeadline">报名截止还有&nbsp;{{this.sysTemTime-this.activityDetail.applyEndTime}}</span> -->
           </p>
           <div class="delshare">
-            <el-button type="success" v-if="activityDetail.actiStatus=='2'&&activityDetail.isApply=='1'" style="background:#00a040;height:38px;width:110px" round @click="quickApply(activityDetail.id)">立即报名</el-button>
-            <el-button type="success" v-if="activityDetail.actiStatus=='2'&&activityDetail.isApply=='0'" style="background:#00a040;height:38px;width:110px" round @click="stopApply(activityDetail.id)">停止报名</el-button>
+            <el-button type="success" v-if="activityApplyShow=='0'" style="background:#00a040;height:38px;width:110px" round>停止报名</el-button>
+            <el-button type="success" v-if="activityApplyShow=='1'" style="background:#00a040;height:38px;width:110px" round @click="quickApply(activityDetail.id)">立即报名</el-button>
+            <el-button type="success" v-if="activityApplyShow=='2'" style="background:#00a040;height:38px;width:110px" round @click="stopApply(activityDetail.id)">取消报名</el-button>
             <!-- <el-button type="success" class="atten" round icon="iconfont icon-xihuan">&nbsp;关注&nbsp;3</el-button> -->
-            <span class="shareto">
+            <!-- <span class="shareto">
               分享到
-              <i class="iconfont icon-weixin"></i>
+              <i class="iconfont icon-weixin" style="margin-right:10px"></i>
               <i class="iconfont icon-12sina"></i>
-            </span>
+            </span> -->
           </div>
         </div>
       </el-card>
@@ -79,9 +83,9 @@
       <div class="mesTil">留言</div>
       <el-card>
         <div class="mesContent">
-          <el-input type="textarea" :rows="3" placeholder="请输入留言" v-model="textarea">
+          <el-input type="textarea" :rows="3" placeholder="请输入留言" v-model="textData">
           </el-input>
-          <el-button type="success" style="background:#00a040;height:38px;width:90px" round>留言</el-button>
+          <el-button type="success" style="background:#00a040;height:38px;width:90px" round @click="leaveMessage(activityDetail.id)">留言</el-button>
         </div>
       </el-card>
     </div>
@@ -94,7 +98,7 @@
               <div class="clearfix">
                 <div class="liLeft">
                   <img :src="item.avatar" alt="">
-                  <div style="display:inline-block;margin-bottom: 20px">
+                  <div style="display:inline-block;margin-bottom: 20px;margin-left: 20px">
                     <span>{{item.creatorAccount}}</span><br>
                     <span>{{item.comContent}}</span>
                   </div>
@@ -102,17 +106,22 @@
                 <div class="liRight">
                   <p>{{item.createdTime}}</p>
                   <p>
-                    <i class="iconfont" :class="isCommentLike?'icon-dianzan1 mainColor':'icon-iconfontdianzan'" style="cursor:pointer" @click="comLike(item)">&nbsp;赞
+                    <i class="iconfont" :class="item.isCommentLike == 'true'?'icon-dianzan1 mainColor':'icon-iconfontdianzan'" style="cursor:pointer" @click="comLike(item)">&nbsp;赞
                       <span>{{item.likeNum}}</span>
                     </i>
                     <!-- <i class="iconfont icon-dianzan1 mainColor" style="cursor:pointer" v-if="isClick==1" @click="comCancleLike(item)">&nbsp;赞
                     </i>
                     <span>{{item.likeNum}}</span> -->
-                    <i class="iconfont icon-liuyan" style="cursor:pointer" @click="replyFlag()">&nbsp;回复</i>
+                    <i class="iconfont icon-liuyan" v-if="inFlag == item.id" style="cursor:pointer" @click="inFlag = '';">&nbsp;收起回复</i>
+                    <i class="iconfont icon-liuyan" v-else style="cursor:pointer" @click="replyFlag(item.id)">&nbsp;回复</i>
+
                   </p>
                 </div>
               </div>
-
+              <div v-if="inFlag == item.id">
+                <el-input type="textarea" :rows="3" placeholder="请输入留言" v-model.trim="textarea"></el-input>
+                <el-button type="success" @click="replycom(item)" style="background:#00a040;height:38px;width:90px;margin-left: 1014px;margin-top: 10px;" round>回复</el-button>
+              </div>
               <div class="reply" v-if="k<5" v-for="(i,k) in item.childList" :key="k">
                 <img :src="i.avatar" alt="">
                 <div class="replyinfo">
@@ -120,10 +129,6 @@
                   <p>回复@{{i.parentAccount}}：{{i.comContent}}</p>
                 </div>
                 <span>{{i.createdTime}}</span>
-              </div>
-              <div v-if="inFlag">
-                <el-input type="textarea" :rows="3" placeholder="请输入留言" v-model="textarea"></el-input>
-                <el-button type="success" @click="replycom(item)" style="background:#00a040;height:38px;width:90px;margin-left: 1014px;margin-top: 10px;" round>回复</el-button>
               </div>
             </li>
           </ul>
@@ -140,79 +145,100 @@
 export default {
   data() {
     return {
-      inFlag: false,
+      activityApplyShow: '1',
+      inFlag: "",
       textarea: "",
+      textData: "",
       activityDetail: {},
       currentPage1: 1,
       page: 1,
       row: 5,
       total: 0,
       commentList: [],
-      actiApplyList:[],
+      actiApplyList: [],
       accountIsLike: false,
       isCommentLike: false,
-      countDown:'',
+      countDown: "",
+      applyEndTime:0,
+      secondsTime:0,
     };
   },
-  created(){
+  created() {
     this.init();
     this.getCommentInfo();
   },
-  mounted() {    
+  mounted() {
     // this.countdown()
   },
-   destroyed () {
-    clearInterval(this._interval)
+  destroyed() {
+    clearInterval(this._interval);
   },
   methods: {
-    replyFlag() {
-      this.inFlag = true;
-    },
-    handleReply(comContent, comType, pId, rootId) {
-      //回复评论
+    //留言
+    leaveMessage(id) {
+      if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
       let _this = this;
       this.api.post({
         url: "commentActivity",
         data: {
-          comContent: comContent,
-          comType: comType,
-          pId: pId,
-          rootId: rootId
+          comContent: _this.textData,
+          comType: 0,
+          rootId: id,
+          pId: id
         },
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
+            _this.textData = "";
             _this.getCommentInfo();
-          }
-        }
-      });
-    },
-    replycom(item) {
-      //回复评论
-      this.inFlag = false;
-      let _this = this;
-      this.api.post({
-        url: "springcloud-park/comment/review/commentActivity",
-        data: {
-          comContent: item.comContent,
-          comType: item.comType,
-          pId: item.pId,
-          rootId: item.rootId
-        },
-        // urlFlag: true,
-        callback: function(res) {
-          if (res.code == "0000") {
-            console.log(res);
           } else {
             _this.$message.error(res.result);
           }
         }
       });
     },
+    replyFlag(i) {
+      if (this.inFlag == i) {
+        return;
+      }
+      this.textarea = "";
+      this.inFlag = i;
+    },
+    //回复评论
+    replycom(item) {
+      if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
+      this.inFlag = "";
+      let _this = this;
+      this.api.post({
+        url: "commentActivity",
+        data: {
+          comContent: _this.textarea,
+          comType: item.comType,
+          pId: item.id,
+          rootId: item.rootId
+        },
+        // urlFlag: true,
+        callback: function(res) {
+          if (res.code == "0000") {
+            _this.getCommentInfo();
+          }
+          _this.$message(res.result);
+        }
+      });
+    },
     comLike(item) {
+      if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
       //评论点赞
       let url = "";
-      if (this.isCommentLike) {
+      if (item.isCommentLike == "true") {
         //如果是已经点赞了就取消点赞
         url = `springcloud-park/comment/review/commentActivityCancelLike?id=${
           item.id
@@ -229,21 +255,12 @@ export default {
         data: {
           id: item.id
         },
-        dataFlag: true,
+        // dataFlag: true,
         urlFlag: true,
         callback: function(res) {
           if (res.code == "0000") {
-            if (_this.isCommentLike) {
-              //如果是已经点赞了就取消点赞
-              item.likeNum -= 1;
-              _this.$message.success("取消点赞成功");
-              _this.isCommentLike = false;
-            } else {
-              //如果是没点赞就点赞
-              item.likeNum = item.likeNum * 1 + 1;
-              _this.$message.success("点赞成功");
-              _this.isCommentLike = true;
-            }
+            _this.$message.success(res.result);
+            _this.getCommentInfo();
           } else {
             _this.$message.error(res.result);
           }
@@ -284,6 +301,10 @@ export default {
     },
     quickApply(id) {
       //立即报名
+        if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
       let _this = this;
       this.api.post({
         url: `springcloud-park/activity/activityApply/quickApply?activityId=${id}`,
@@ -294,8 +315,7 @@ export default {
         callback: function(res) {
           if (res.code == "0000") {
             _this.$message.success("报名成功");
-            console.log(res);
-            _this.init();
+            _this.activityApplyShow = '2';
           } else {
             _this.$message.error(res.result);
           }
@@ -304,17 +324,21 @@ export default {
     },
     stopApply(id) {
       //停止报名
+        if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
       let _this = this;
       this.api.post({
         url: `springcloud-park/activity/activityApply/cancelApply?activityId=${id}`,
         data: {
           activityId: id
         },
-        dataFlag: true,
+        urlFlag: true,
         callback: function(res) {
           if (res.code == "0000") {
             _this.$message.success("取消报名成功");
-            _this.init();
+            _this.activityApplyShow = '1';
           } else {
             _this.$message.error(res.result);
           }
@@ -322,6 +346,10 @@ export default {
       });
     },
     handleLike(id) {
+      if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
       //活动点赞
       let url = "";
       if (this.accountIsLike) {
@@ -359,25 +387,26 @@ export default {
         }
       });
     },
+    getTime(t){
+      return new Date(t).getTime();
+    },
     //报名倒计时
-   countTime (t) {
-      var secondsTime = new Date().getTime()
-      var applyTime = new Date(t).getTime()
-      var leftTime = applyTime - secondsTime
+    countTime(applyTime,secondsTime) {
+      let leftTime = applyTime - secondsTime;
       if (leftTime >= 0) {
-        var d = Math.floor(leftTime / 1000 / 60 / 60 / 24)
-        var h = Math.floor((leftTime / 1000 / 60 / 60) % 24)
-        var m = Math.floor((leftTime / 1000 / 60) % 60)
-        var s = Math.floor((leftTime / 1000) % 60)
-        d = d
-        h = h > 9 ? h : '0' + h
-        m = m > 9 ? m : '0' + m
-        s = s > 9 ? s : '0' + s
-        this.countDown=d+'天'+h+'小时'+m+'分'+s+'秒'
-        return false
+        let d = Math.floor(leftTime / 1000 / 60 / 60 / 24);
+        let h = Math.floor((leftTime / 1000 / 60 / 60) % 24);
+        let m = Math.floor((leftTime / 1000 / 60) % 60);
+        let s = Math.floor((leftTime / 1000) % 60);
+        d = d;
+        h = h > 9 ? h : "0" + h;
+        m = m > 9 ? m : "0" + m;
+        s = s > 9 ? s : "0" + s;
+        this.countDown = d + "天" + h + "小时" + m + "分" + s + "秒";
+        return false;
       } else {
-        this.countDown='0天0时0分0秒'
-        return true
+        this.countDown = "0天00时00分00秒";
+        return true;
       }
     },
     init() {
@@ -392,20 +421,24 @@ export default {
         callback: function(res) {
           if (res.code == "0000") {
             _this.activityDetail = res.data.activityDetail;
-             _this.actiApplyList=res.data.activityApplyList
+            _this.actiApplyList = res.data.activityApplyList;
             _this.accountIsLike = res.data.accountIsLike;
-             _this._interval = setInterval(() => {
-              let data = _this.countTime(res.data.activityDetail.applyEndTime)
+            _this.activityApplyShow = res.data.activityApplyShow;
+            _this.applyEndTime = _this.getTime(res.data.activityDetail.applyEndTime);
+            _this.secondsTime = _this.getTime(res.data.sysTemTime);
+            _this._interval = setInterval(() => {
+              let data = _this.countTime(_this.applyEndTime,_this.secondsTime);
+              _this.secondsTime = _this.secondsTime + 1000;
               if (data) {
-                clearInterval(_this._interval)
+                clearInterval(_this._interval);
               }
-            }, 1000)
+            }, 1000);
           }
         }
       });
     },
+    //获取评论信息
     getCommentInfo() {
-      //获取评论信息
       let _this = this;
       this.api.post({
         url: "getCommentInfo",
@@ -417,7 +450,6 @@ export default {
         // dataFlag: true,
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
             _this.total = res.data.total;
             for (let it in res.data.rows) {
               res.data.rows[it].inFlag = false;
@@ -472,7 +504,7 @@ export default {
         > p {
           margin-top: 30px;
           .icon-recharge {
-            margin-left: 70px;
+            margin-left: 50px;
           }
         }
         .delAddress {
@@ -485,8 +517,14 @@ export default {
               float: left;
               height: 20px;
               width: 20px;
-              border: 1px solid #eee;
+              // border: 1px solid #eee;
               border-radius: 50%;
+              img{
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+                vertical-align: top;
+              }
             }
           }
           > span {
@@ -512,7 +550,7 @@ export default {
           height: 38px;
           width: 110px;
           line-height: 10px;
-          .icon-xihuan{
+          .icon-xihuan {
             font-size: 20px;
           }
         }
@@ -585,6 +623,8 @@ export default {
               display: inline-block;
               width: 50px;
               height: 50px;
+              vertical-align: top;
+              border-radius: 50%;
             }
           }
           .liRight {
@@ -593,17 +633,29 @@ export default {
           .reply {
             padding: 30px;
             background: #f9f9f9;
-            width: 90%;
-            margin-left: 50px;
+            width: 88%;
+            margin-left: 70px;
+            margin-top: 10px;
+            img {
+              width: 50px;
+              height: 50px;
+              vertical-align: top;
+              border-radius: 50%;
+            }
             > span {
               float: right;
             }
             .replyinfo {
               display: inline-block;
+              margin-left: 20px;
             }
           }
         }
       }
+    }
+    .el-textarea {
+      width: 93.5%;
+      margin-left: 70px;
     }
   }
 }

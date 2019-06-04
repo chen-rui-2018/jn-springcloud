@@ -1,7 +1,7 @@
 <template>
-  <div class="editBusiness">
+  <div class="editBusiness" v-loading="loading">
     <div class="business_title">
-      <div class="myBusiness">编辑企业</div>
+      <div class="font16">编辑企业</div>
     </div>
     <div class="business_content">
       <div class="enterprise">
@@ -11,15 +11,15 @@
       <el-form class="tableEnterprise" :rules="rules" :model="businessForm" ref="businessForm">
         <div style="display:flex">
           <el-form-item label="企业名称:"  prop="comName">
-            <el-input v-model="businessForm.comName"></el-input>
+            <el-input v-model="businessForm.comName" clearable></el-input>
           </el-form-item>
           <el-form-item label="企业简称:"  prop="comNameShort">
-            <el-input v-model="businessForm.comNameShort"></el-input>
+            <el-input v-model="businessForm.comNameShort" clearable></el-input>
           </el-form-item>
         </div>
         <div style="display:flex">
           <el-form-item label="产业领域:" prop="induType">
-            <el-select v-model="businessForm.induType" placeholder="请选择产业领域">
+            <el-select v-model="businessForm.induType" placeholder="请选择产业领域" clearable>
               <el-option
                 v-for="item in induTypeOptions"
                 :key="item.id"
@@ -30,13 +30,13 @@
           </el-form-item>
           <el-form-item label="法人:"  prop="ownerLaw">
             <label slot="label">法&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;人:</label>
-            <el-input v-model="businessForm.ownerLaw"></el-input>
+            <el-input v-model="businessForm.ownerLaw" clearable></el-input>
             <!-- <span>{{ownerLaw}}</span> -->
           </el-form-item>
         </div>
         <div style="display:flex">
-          <el-form-item label="联系电话:"  prop="conPhone">
-            <el-input v-model="businessForm.conPhone"></el-input>
+          <el-form-item label="联系电话:"  prop="ownerPhone">
+            <el-input v-model="businessForm.ownerPhone" clearable></el-input>
             <!-- <span>{{conPhone}}</span> -->
           </el-form-item>
           <el-form-item label="注册时间:"  prop="foundingTime">
@@ -45,6 +45,7 @@
               v-model="businessForm.foundingTime"
               type="date"
               placeholder="选择日期"
+              clearable
             ></el-date-picker>
             <!-- {{foundingTime}} -->
           </el-form-item>
@@ -56,39 +57,39 @@
               v-model="businessForm.runTime"
               type="date"
               placeholder="选择日期"
+              clearable
             ></el-date-picker>
-            <!-- <span>{{runTime}}</span> -->
           </el-form-item>
           <el-form-item label="注册地址:"  prop="comAddress">
-            <el-input v-model="businessForm.comAddress"></el-input>
+            <el-input v-model="businessForm.comAddress" clearable></el-input>
             <!-- <span>{{comAddress}}</span> -->
           </el-form-item>
         </div>
         <div style="display:flex">
           <el-form-item class="br" label="实际经营地址:"  prop="addrPark">
-            <el-input v-model="businessForm.addrPark"></el-input>
+            <el-input v-model="businessForm.addrPark" clearable></el-input>
             <!-- <span>{{addrPark}}</span> -->
           </el-form-item>
           <el-form-item label="固定电话:"  prop="comTele">
-            <el-input v-model="businessForm.comTele"></el-input>
+            <el-input v-model="businessForm.comTele" clearable></el-input>
             <!-- <span>{{conPhone}}</span> -->
           </el-form-item>
         </div>
         <div style="display:flex">
           <el-form-item label="注册资金（万元）:" class="br" prop="regCapital">
-            <el-input v-model="businessForm.regCapital"></el-input>
+            <el-input v-model="businessForm.regCapital" clearable></el-input>
           </el-form-item>
-          <el-form-item label="企业规模:"  prop="comScale">
-            <el-input v-model="businessForm.comScale"></el-input>
+          <el-form-item label="企业规模（人）:" class="br" prop="comScale">
+            <el-input v-model="businessForm.comScale" clearable></el-input>
           </el-form-item>
         </div>
         <div style="display:flex">
           <el-form-item class="br" label="统一社会信用代码:"  prop="unifyCode">
-            <el-input v-model="businessForm.unifyCode" ></el-input>
+            <el-input v-model="businessForm.unifyCode" clearable></el-input>
             <!-- <span>{{unifyCode}}</span> -->
           </el-form-item>
-          <el-form-item label="企业性质:"  prop="comPropertys">
-            <el-select multiple v-model="businessForm.comPropertys" placeholder="请选择企业性质">
+          <el-form-item label="企业性质:"  prop="comProperty">
+            <el-select  v-model="businessForm.comProperty" clearable placeholder="请选择企业性质">
               <el-option
                 v-for="item in comPropertyOptions"
                 :key="item.id"
@@ -101,17 +102,17 @@
         </div>
         <div style="display:flex">
           <el-form-item label="所属园区:" prop="affiliatedPark">
-            <el-select v-model="businessForm.affiliatedPark" placeholder="请选择所属园区">
+            <el-select v-model="businessForm.affiliatedPark" clearable placeholder="请选择所属园区">
               <el-option
-                v-for="item in comSourceOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
+                v-for="item in parkList"
+                :key="item.id"
+                :label="item.parkName"
+                :value="item.id"
               ></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="企业来源:"  prop="comSource">
-            <el-select v-model="businessForm.comSource" placeholder="请选择企业来源">
+            <el-select v-model="businessForm.comSource" clearable placeholder="请选择企业来源">
               <el-option
                 v-for="item in comSourceOptions"
                 :key="item.value"
@@ -123,16 +124,16 @@
           </el-form-item>
         </div>
         <div style="display:flex">
-          <el-form-item label="我的服务:" prop="comServer">
-            <el-input v-model="businessForm.comServer"></el-input>
+          <el-form-item label="我的服务:" >
+            <el-input v-model="businessForm.comServer" clearable></el-input>
           </el-form-item>
-          <el-form-item label="我的需求:"  prop="comDemand">
-            <el-input v-model="businessForm.comDemand"></el-input>
+          <el-form-item label="我的需求:"  >
+            <el-input v-model="businessForm.comDemand" clearable></el-input>
           </el-form-item>
         </div>
         <div style="display:flex">
           <el-form-item label="企业官网地址:"  class="br" prop="comWeb">
-            <el-input v-model="businessForm.comWeb"></el-input>
+            <el-input v-model="businessForm.comWeb" clearable></el-input>
           </el-form-item>
         </div>
 
@@ -143,7 +144,7 @@
         >-->
         <el-form-item label="企业LOGO:" class="br enterprise_bottom" prop="avatar">
           <el-upload
-            action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
+              :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
             :headers="headers"
               :show-file-list="false"
             :on-success="handleAvatarSuccess"
@@ -155,7 +156,7 @@
         </el-form-item>
         <el-form-item label="三证一体或营业执照:" class="br" prop="businessLicense">
           <el-upload
-            action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
+             :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
             :headers="headers"
             :show-file-list="false"
             :on-success="handleBusinessLicenseSuccess"
@@ -165,9 +166,9 @@
             <i v-else class="el-icon-plus "></i>
           </el-upload>
         </el-form-item>
-        <el-form-item label="企业宣传图片:" class="br" prop="imgParams">
+        <el-form-item label="企业宣传图片:" prop="businessLicense" class="br">
           <el-upload
-            action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
+            :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
             :headers="headers"
             :on-exceed=" handleExceed"
             :limit="5"
@@ -183,7 +184,7 @@
             </div>
             <i class="el-icon-plus"/>
           </el-upload>
-          <el-dialog :visible.sync="imgParamsDialogVisible">
+          <el-dialog :visible.sync="imgParamsDialogVisible" :modal-append-to-body="false">
             <img style="width:100%;height:200px;" :src="dialogImageUrl" alt="企业宣传图片">
           </el-dialog>
         </el-form-item>
@@ -195,8 +196,16 @@
           <el-input v-model="businessForm.mainProducts" autosize  type='textarea' maxlength="500"
   show-word-limit></el-input>
         </el-form-item>
+         <el-form-item class="mrf">
+          <el-input v-model="businessForm.checkCode" class="input1" placeholder="请输入验证码" style="width:200px"></el-input>
+          <!-- <span class="getCode">获取验证码</span> -->
+          <span class="getCode" v-if="sendAuthCode" @click="getCode">获取验证码</span>
+          <span class="getCode" v-else style="padding: 0px 15px;">
+            <span>{{auth_time}}</span>秒后重新获取</span>
+          <!-- <div class="tipPsw">请输入收到短信中的验证码</div> -->
+        </el-form-item>
       </el-form>
-      <div class="business_footer">
+      <div class="bus_footer">
         <span @click="submit">保存修改</span>
         <span>取消</span>
       </div>
@@ -207,7 +216,34 @@
 <script>
 export default {
   data() {
+      var checkPhone = (rule, value, callback) => {
+      const reg = /^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\d{8}$/;
+      if (!reg.test(value)) {
+        callback("请输入正确的手机号码");
+      } else {
+        callback();
+      }
+    };
+     var checkTel = (rule, value, callback) => {
+      const reg = /^0\\d{2,3}-[1-9]\\d{6,7}$/;
+      if (!reg.test(value)) {
+        callback("请输入正确的电话格式");
+      } else {
+        callback();
+      }
+    };
+      var checkWeb = (rule, value, callback) => {
+      const reg = /^(http|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?$/;
+      if (!reg.test(value)) {
+        callback("请输入正确的网址");
+      } else {
+        callback();
+      }
+    };
     return {
+      loading:false,
+      baseUrl:this.api.host,
+      parkList:[],
       fileList: [],
       showImg: false,
       headers: {
@@ -215,11 +251,11 @@ export default {
       },
       comSourceOptions: [
         {
-          value: 1,
+          value: '1',
           label: "人才企业"
         },
         {
-          value: 2,
+          value: '2',
           label: "招商企业"
         }
       ],
@@ -232,8 +268,11 @@ export default {
       comPropertyOptions: [],
       induTypeOptions: [],
       userAccount: "",
+       sendAuthCode: true,
+      auth_time: 0,
       businessForm: {
-        comPropertys: [],
+        checkCode:undefined,
+        comProperty: '',
         affiliatedPark: "",
         comServer: "", //我的服务
         comDemand: "", //我的需求
@@ -248,7 +287,7 @@ export default {
         unifyCode: "", //统一社会信用代码
         comAddress: "", //注册地址
         addrPark: "", //公司园区地址-实际经营地址
-        conPhone: "", //联系电话
+        ownerPhone: "", //联系电话
         regCapital: "", //注册资本 万元
         comScale: "", //企业规模
         comType: "", //企业类型
@@ -256,7 +295,7 @@ export default {
         comWeb: "", //企业官网地址
         avatar: "", //企业logo
         businessLicense: "", //营业执照
-        proImgs: [], //企业宣传图片
+        propagandaPictureList:[], //企业宣传图片
         comSynopsis:'',//公司简介
         mainProducts:'',//主要产品
       },
@@ -271,8 +310,9 @@ export default {
           { required: true, message: "请选择产业领域", trigger: "change" }
         ],
         ownerLaw: [{ required: true, message: "请输入法人", trigger: "blur" }],
-        conPhone: [
-          { required: true, message: "请输入联系电话", trigger: "blur" }
+        ownerPhone: [
+          { required: true, message: "请输入联系电话", trigger: "blur" },
+          { validator: checkPhone, trigger: 'blur' }
         ],
         foundingTime: [
           { required: true, message: "请选择注册时间", trigger: "change" }
@@ -284,7 +324,8 @@ export default {
           { required: true, message: "请输入实际经营地址", trigger: "blur" }
         ],
         comTele: [
-          { required: true, message: "请输入固定电话", trigger: "blur" }
+          { required: true, message: "请输入固定电话", trigger: "blur" },
+          { validator: checkTel, trigger: 'blur' }
         ],
         regCapital: [
           { required: true, message: "请输入注册资金", trigger: "blur" }
@@ -301,19 +342,14 @@ export default {
         comSource: [
           { required: true, message: "请选择企业来源", trigger: "change" }
         ],
-        comServer: [
-          { required: true, message: "请输入我的服务", trigger: "blur" }
-        ],
-        comDemand: [
-          { required: true, message: "请输入我的需求", trigger: "blur" }
-        ],
         comWeb: [
-          { required: true, message: "请输入企业官网地址", trigger: "blur" }
+          { required: true, message: "请输入企业官网地址", trigger: "blur" },
+          { validator: checkWeb, trigger: 'blur' }
         ],
         comAddress: [
           { required: true, message: "请输入注册地址", trigger: "blur" }
         ],
-        comPropertys: [
+        comProperty: [
           { required: true, message: "请选择企业性质", trigger: "change" }
         ],
         avatar: [
@@ -322,9 +358,9 @@ export default {
         businessLicense: [
           { required: true, message: "请选择营业执照", trigger: "blur" }
         ],
-        imgParams: [
-          { required: true, message: "请选择宣传图片", trigger: "change" }
-        ],
+        // imgParams: [
+        //   { required: true, message: "请选择宣传图片", trigger: "change" }
+        // ],
         comDetails: [
           { required: true, message: "请输入公司简介", trigger: "blur" }
         ],
@@ -338,23 +374,52 @@ export default {
     this.selectIndustryList();
     this.getComPropertyOptions();
     this.init();
+    this.getParkList()
   },
   methods: {
+     //获取验证码
+    getCode() {
+      let _this = this;
+      this.api.get({
+        url: "getUserCode",
+        // data: {
+        //   phone: _this.businessForm.ownerPhone
+        // },
+        callback: function(res) {
+          if (res.code == "0000") {
+            _this.sendAuthCode = false;
+            _this.auth_time = 60;
+            var auth_timetimer = setInterval(() => {
+              _this.auth_time--;
+              if (_this.auth_time <= 0) {
+                _this.sendAuthCode = true;
+                clearInterval(auth_timetimer);
+              }
+            }, 1000);
+          } else {
+            _this.$message.error(res.result);
+          }
+        }
+      });},
     submit() {
       // this.businessForm.proImgs
       console.log(this.businessForm)
+
       this.$refs['businessForm'].validate(valid => {
         if (valid) {
+          this.loading=true
          this.api.post({
               url: "updateCompanyInfo",
               data: this.businessForm,
               callback: res => {
-                console.log(res);
+                 this.loading=false
                 if (res.code == "0000") {
+
                   this.$message({
-                    message: "编辑成功",
+                    message: "企业信息已提交，请等待后台审核",
                     type: "success"
                   });
+
                 this.$router.push({path:'/myBusiness/index'})
                 } else {
                   this.$message.error(res.result);
@@ -367,6 +432,20 @@ export default {
         }
       })
     },
+     //所属园区
+    getParkList() {
+      let _this = this;
+      this.api.get({
+        url: "getParkList",
+        data: {},
+        callback: function(res) {
+          if (res.code == "0000") {
+           _this.parkList=res.data
+          } else {
+            _this.$message.error(res.result);
+          }
+        }
+      });},
     init() {
       let _this = this;
       _this.api.get({
@@ -376,33 +455,42 @@ export default {
           if (res.code == "0000") {
             _this.businessForm.comName = res.data.comName;
             _this.businessForm.comNameShort = res.data.comNameShort;
-            _this.businessForm.induTypeName = res.data.induTypeName;
+            _this.businessForm.induType = res.data.induType;
             _this.businessForm.ownerLaw = res.data.ownerLaw;
             _this.businessForm.comTele = res.data.comTele;
+            _this.businessForm.comServer = res.data.comServer;
+            _this.businessForm.comDemand = res.data.comDemand;
             _this.businessForm.runTime = res.data.runTime
+            _this.businessForm.comSource = res.data.comSource
             _this.businessForm.unifyCode = res.data.unifyCode;
             _this.businessForm.comAddress = res.data.comAddress;
             _this.businessForm.addrPark = res.data.addrPark;
-            _this.businessForm.conPhone = res.data.conPhone;
+            _this.businessForm.ownerPhone = res.data.ownerPhone;
             _this.businessForm.regCapital = res.data.regCapital;
             _this.businessForm.comScale = res.data.comScale;
             _this.businessForm.comType = res.data.comType;
             _this.businessForm.parkBuildName = res.data.parkBuildName;
+            _this.businessForm.affiliatedPark = res.data.affiliatedPark;
             _this.businessForm.foundingTime=res.data.foundingTime
             _this.businessForm.comWeb = res.data.comWeb;
+            _this.businessForm.mainProducts = res.data.mainProducts;
+            _this.businessForm.comSynopsis = res.data.comSynopsis;
             _this.businessForm.avatar = res.data.avatar;
+            _this.businessForm.induCode = res.data.induCode;
             // _this.avatarUrl= res.data.avatar
             _this.businessForm.businessLicense = res.data.businessLicense;
-            _this.businessForm.proImgs = res.data.proImgs;
-            if (res.data.proImgs.length > 0 && res.data.proImgs !== null) {
+            // _this.businessForm.propagandaPictureList = res.data.propagandaPicture;
+            console.log(res.data.propagandaPicture)
+            if ( res.data.propagandaPicture) {
               let fileListArr = []
-              res.data.proImgs.forEach(val => {
+              res.data.propagandaPicture.forEach(val => {
+                console.log(val)
                 fileListArr.push({ name: '', url: val })
               })
               // 数组去重
-              this.fileList = Array.from(new Set(fileListArr))
+              _this.fileList = Array.from(new Set(fileListArr))
             }
-            _this.businessForm.comPropertys = res.data.comPropertys;
+            _this.businessForm.comProperty = res.data.comProperty;
           }
         }
       });
@@ -466,7 +554,7 @@ export default {
       // console.log(file)
       // console.log(fileList)
       console.log(res)
-      this.businessForm.proImgs.push(res.data)
+      this.businessForm.propagandaPictureList.push(res.data)
     },
     // 预览宣传图片
     handleimgParamsPictureCardPreview(file) {
@@ -478,8 +566,8 @@ export default {
     handleimgParamsRemove(file, fileList) {
       // 删除的
         let editDelFile = file.url
-        let editIndex = this.businessForm.proImgs.indexOf(editDelFile)
-        this.businessForm.proImgs.splice(editIndex, 1)
+        let editIndex = this.businessForm.propagandaPictureList.indexOf(editDelFile)
+        this.businessForm.propagandaPictureList.splice(editIndex, 1)
 
     },
     // beforeUpload(file) {
@@ -509,6 +597,9 @@ export default {
 
 <style lang="scss" >
 .editBusiness {
+  .el-input{
+    width:266px;
+  }
   .br {
     .el-form-item__label {
       height: 20px;
@@ -516,20 +607,37 @@ export default {
       line-height: 20px !important;
     }
   }
+  .mrf{
+    margin-left:75px;
+  }
+  .getCode {
+    display: inline-block;
+    background-color: #00a041;
+    color: #fff;
+    padding: 0 20px;
+    border-radius: 5px;
+    margin-left: 6px;
+    cursor: pointer;
+  }
   .el-form-item__error {
     margin-left: 13px;
+  }
+  .el-date-editor.el-input, .el-date-editor.el-input__inner{
+    width: 266px;
   }
   .el-upload{
      width: 85px;
     height: 85px;
     line-height: 85px;
-    border: 1px dashed #c0ccda;
+    // border:none;
+    // border: 1px dashed #c0ccda;
     border-radius: 6px;
     >i{
       font-size: 28px;
     color: #8c939d;
     }
     >img{
+          border-radius: 6px;
       width: 85px;
       height: 85px;
     }
@@ -549,6 +657,7 @@ export default {
   .el-upload-list--picture-card .el-upload-list__item {
     width: 85px;
     height: 85px;
+    border:none;
   }
   .el-upload--picture-card {
     width: 85px;
@@ -605,14 +714,6 @@ export default {
     padding: 24px 28px 24px;
     // font-size: 13px;
     border-radius: 5px;
-    // div:nth-child(2) {
-    //   background-color: #ecfcf2;
-    //   border-radius: 5px;
-    //   border: solid 2px #41d787;
-    //   padding: 8px 11px;
-    //   font-size: 12px;
-    //   cursor: pointer;
-    // }
   }
   .business_content {
     background: #fff;
@@ -644,7 +745,10 @@ export default {
       }
     }
   }
-  .business_footer {
+  .input1 .el-input__inner {
+      width: 200px;
+    }
+  .bus_footer {
     margin: 0 auto;
     margin-top: 58px;
     // border-radius: 4px;
@@ -667,6 +771,7 @@ export default {
       border: 1px solid rgba(65, 215, 135, 1);
       border-radius: 4px;
       margin-right: 85px;
+      cursor: pointer;
     }
     > span:nth-child(2) {
       display: inline-block;
@@ -676,6 +781,7 @@ export default {
       height: 29px;
       background: rgba(0, 160, 65, 1);
       border-radius: 4px;
+       cursor: pointer;
     }
   }
 }

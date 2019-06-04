@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -28,6 +29,7 @@ public class AdvisorBaseInfoParam implements Serializable {
     private String advisorAccount;
     @ApiModelProperty(value = "从业年限",example ="10")
     @Pattern(regexp = "^([0-9]*)|([0-9]*)(\\.[0-9]{0,2})$",message = "workingYears:只能输入的数字和小数点")
+    @Size(max=60,message = "从业年限最大不能超过60年")
     private String workingYears;
     @ApiModelProperty(value = "毕业学校",example = "中南大学")
     private String graduatedSchool;

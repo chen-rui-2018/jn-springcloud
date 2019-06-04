@@ -75,6 +75,12 @@ export default {
   float: left;
   margin-left: 20px;
 }
+.icon{
+  width: 27px;
+    height: 20px;
+    float: left;
+    margin-left: 28px;
+}
 .bot {
   background: rgb(203, 203, 203);
   color:#666;

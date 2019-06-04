@@ -3,6 +3,8 @@ package com.jn.park.asset.model;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
+import java.sql.Date;
+
 /**
 * 维保记录model
 * @author： zhuyz
@@ -20,7 +22,7 @@ public class AssetMaintainRecordModel implements Serializable {
     private String assetNumber;
 
     @ApiModelProperty(value = "维保时间",example = "2019-04-27")
-    private String maintenanceTime;
+    private Date maintenanceTime;
 
     @ApiModelProperty(value = "备注",example = "加了雪种")
     private String message;
@@ -41,11 +43,11 @@ public class AssetMaintainRecordModel implements Serializable {
         this.assetNumber = assetNumber;
     }
 
-    public String getMaintenanceTime() {
+    public Date getMaintenanceTime() {
         return maintenanceTime;
     }
 
-    public void setMaintenanceTime(String maintenanceTime) {
+    public void setMaintenanceTime(Date maintenanceTime) {
         this.maintenanceTime = maintenanceTime;
     }
 
@@ -55,5 +57,15 @@ public class AssetMaintainRecordModel implements Serializable {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    @Override
+    public String toString() {
+        return "AssetMaintainRecordModel{" +
+                "id='" + id + '\'' +
+                ", assetNumber='" + assetNumber + '\'' +
+                ", maintenanceTime=" + maintenanceTime +
+                ", message='" + message + '\'' +
+                '}';
     }
 }

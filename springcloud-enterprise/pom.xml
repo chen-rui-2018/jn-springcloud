@@ -51,14 +51,13 @@
             <artifactId>xxpay-web-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>1.2.44</version>
-            <scope>compile</scope>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-app-delay-stream-api</artifactId>
         </dependency>
         <dependency>
             <groupId>com.jn</groupId>
             <artifactId>springcloud-app-delay-stream-api</artifactId>
+            <version>1.0.0-RELEASE</version>
         </dependency>
     </dependencies>
     <build>
@@ -93,7 +92,7 @@
                         pay
                     </contexts>
                     <tableNames>
-
+                        tb_pay_account_book
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

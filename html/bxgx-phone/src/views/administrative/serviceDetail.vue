@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="adniministrativeHeader">
-      <x-header :left-options="{backText: ''}">{{this.$route.meta.title}} <span slot="right" @touchstart="goConsult">留言</span></x-header>
-    </div>
+    <!-- <div class="adniministrativeHeader">
+      <x-header :left-options="{backText: ''}">{{this.$route.meta.title}} <span slot="right" @click="goConsult">留言</span></x-header>
+    </div> -->
     <div class="serviceDeail">
       <div class="serviceDeail_main">
         <!-- 基本信息 -->
@@ -28,7 +28,7 @@
             <div>
               <span class="hidden">{{item.name}}</span>
               <span >
-                <a :href="'http://112.94.22.222:2381/ibps'+item.sample">下载</a>
+                <a :href="item.sample">下载</a>
                 <i class="iconfont icon-jiantou"></i>
               </span>
             </div>
@@ -43,18 +43,26 @@
         <!-- 办理指引 -->
         <div class="manage_guide">
           <div class="baseInfo_title">依据</div>
-          <div class="guide_base">
-            <p>{{serviceDetail.dealConditions}} </p>
+          <div class="guide_base" v-html="serviceDetail.dealConditions">
+            <!-- <p>{{}} </p> -->
           </div>
           <div class="baseInfo_title">办理流程</div>
-          <div v-html="serviceDetail.flowPic"></div>
+          <div v-html="serviceDetail.flowPic" class="handle"></div>
         </div>
+        <div v-if="serviceDetail.isContactOnline==='1'" class="btn" @click="$router.push({path: '/guest/portal/sp/power/consult'})"> 在线留言 </div>
+        <!-- v-if="serviceDetail.contactQqGroup!=''"  -->
+        <div v-if="serviceDetail.contactQqGroup!=''" class="btn" @click="showPlugin(serviceDetail.contactQqGroup)"> q群咨询 </div>
       </div>
     </div>
   </div>
 </template>
 <script>
+import { Alert, AlertModule } from 'vux'
 export default {
+  components: {
+    Alert,
+    AlertModule
+  },
   data () {
     return {
       id: '',
@@ -68,6 +76,17 @@ export default {
     this.getserviceDetail()
   },
   methods: {
+    showPlugin (qq) {
+      // console.log(11)
+      AlertModule.show({
+        title: 'qq群号',
+        content: qq,
+        onShow () {
+        },
+        onHide () {
+        }
+      })
+    },
     getserviceDetail () {
       this.api.get({
         url: 'getBusi',
@@ -87,6 +106,7 @@ export default {
       this.dealUrl = `http://192.168.10.31:1101/springcloud-park/guest/portal/sp/power/getDealUrl?id=${this.id}`
     },
     goConsult () {
+      // console.log(1)
       this.$router.push({path: '/guest/portal/sp/power/consult', query: {id: this.id}})
     }
   }
@@ -94,36 +114,16 @@ export default {
 </script>
 
 <style lang="scss">
- .adniministrativeHeader{
-    z-index: 10;
-    position: fixed;
-    top:0;
-    width: 100%;
-    background: #fff;
-    padding:30px 34px;
-    .vux-header{
-      background-color: #fff;
-      text-align: center;
-      .vux-header-title,.vux-header-left{
-        font-size: 32px;
-        color:#333333;
-      }
-      .vux-header-left .left-arrow:before{
-        content: "";
-        border-color:#333;
-        width:20px;
-        height: 20px;
-      }
-      .vux-header-right{
-        color:#333333;
-        font-size: 26px;
-      }
-    }
-}
   .serviceDeail{
     height: 100vh;
     background-color: #f5f5f5;
-     margin-top: 110px;
+    //  margin-top: 110px;
+    .handle{
+      text-align: center;
+      img{
+        width: 500px !important;
+      }
+    }
     .serviceDeail_main{
         padding-top:26px;
         .hidden{
@@ -148,13 +148,18 @@ export default {
             font-size: 26px;
             display: flex;
             align-items: center;
+            justify-content: space-between;
             &:last-child{
               border:none;
             }
-            justify-content: space-between;
             span:nth-child(1){
               padding-right: 44px;
               width:60%;
+              display: inline-block;
+            }
+            span:nth-child(2){
+              // display: inline-block;
+              // width: 60%;
             }
           }
           .online_addr{
@@ -186,6 +191,12 @@ export default {
         .service_detail{
           padding-bottom: 42px;
           border-bottom: 2px solid #efefef;
+          a{
+            color:#999;
+          }
+          a:visited{
+            color:#999999;
+          }
           div:nth-child(1){
             display: flex;
             justify-content: space-between;
@@ -211,6 +222,7 @@ export default {
        background-color: #fff;
         margin-top: 25px;
         padding: 0 31px;
+        margin-bottom: 120px;
       .guide_base{
          padding: 27px 0;
          letter-spacing:6px;
@@ -219,6 +231,18 @@ export default {
          }
       }
      }
+     .btn{
+        display: flex;
+        justify-content: center;
+        margin:30px ;
+        align-items: center;
+        background-color: #ecfcf2;
+        border-radius: 41px;
+        border: solid 1.5px #009966;
+        color:#07ab50;
+        font-size: 30px;
+        padding: 26px 30px;
+      }
     }
   }
 </style>

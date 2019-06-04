@@ -24,10 +24,6 @@
 			<artifactId>xxpay-dal</artifactId>
 			<version>1.0.0-RELEASE</version>
 		</dependency>
-		<dependency>
-			<groupId>com.jn</groupId>
-			<artifactId>xxpay-common</artifactId>
-		</dependency>
 	</dependencies>
 
 	<build>
@@ -35,9 +31,6 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<finalName>${project.name}</finalName>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>

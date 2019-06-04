@@ -16,7 +16,7 @@
         <x-textarea placeholder="1、问题描述 2、诉求目的" :show-counter="false" :rows="3" v-model="messageform.message"></x-textarea>
       </div>
       <div class="sumbmit">
-        <span @touchstart="sumbmit">提交</span>
+        <span @click="sumbmit">提交</span>
       </div>
       <div>
         <confirm v-model="isVisible"
@@ -25,19 +25,19 @@
         @on-cancel="onCancel"
         @on-confirm="this.$router.go(-1)"
        >
-          <p style="text-align:center;">{{ $t('I miss u sunyi') }}</p>
         </confirm>
       </div>
     </div>
   </div>
 </template>
 <script>
-import { XInput, XTextarea, Group } from 'vux'
+import { XInput, XTextarea, Group, Confirm } from 'vux'
 export default {
   components: {
     XInput,
     XTextarea,
-    Group
+    Group,
+    Confirm
   },
   data () {
     return {
@@ -54,25 +54,28 @@ export default {
   mounted () {
     this.messageform.id = this.$route.query.id
   },
-  sumbmit () {
-    this.api.get({
-      url: 'spMessage',
-      data: this.messageform,
-      callback: res => {
-        if (res.code === '0000') {
-          // console.log(res)
-          this.isVisible = true
+  methods: {
+    sumbmit () {
+      this.api.get({
+        url: 'spMessage',
+        data: this.messageform,
+        callback: res => {
+          if (res.code === '0000') {
+            // console.log(res)
+            this.isVisible = true
+          }
         }
-      }
-    })
-  },
-  onCancel () {
-    this.isVisible = false
-    this.messageform.companyName = ''
-    this.messageform.concatName = ''
-    this.messageform.concatPhone = ''
-    this.messageform.message = ''
+      })
+    },
+    onCancel () {
+      this.isVisible = false
+      this.messageform.companyName = ''
+      this.messageform.concatName = ''
+      this.messageform.concatPhone = ''
+      this.messageform.message = ''
+    }
   }
+
 }
 </script>
 
@@ -81,7 +84,7 @@ export default {
     height: 100vh;
     background-color: #f5f5f5;
     .consult_main{
-      padding-top:26px;
+      // padding-top:26px;
       .consult_cont{
         background-color: #fff;
         padding: 0 31px;
@@ -139,7 +142,7 @@ export default {
           display: inline-block;
           background-color: #ecfcf2;
           border-radius: 41px;
-          border: solid 1px #009966;
+          border: solid 1.5px #009966;
           padding:26px 312px;
           color:#07ab50;
           // margin: 38px 37px;

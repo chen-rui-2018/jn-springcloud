@@ -1,7 +1,7 @@
 <template>
-  <div id="app" :class="{'h-100': $store.state.isMobile}">
+  <div id="app" :class="{'h-100': $store.state.isMobile}" @click="closeM">
 <!--    <router-view></router-view>-->
-     <div class="right_nav" v-if="($route.name=='serMatHp'||$route.name=='portalIndex'||$route.name=='enterpriseservice') && $store.state.hiddenNav">
+     <div class="right_nav" v-if="($route.name=='serMatHp'||$route.name=='portalIndex'||$route.name=='enterpriseservice')||$route.name=='investment' && $store.state.hiddenNav">
       <ul>
         <li @click="isVisibility=true">
           <div class="right_nav_slide">
@@ -38,35 +38,35 @@
       </transition>
     </div>
      <!-- 网站导航侧边 -->
-      <div class="serve_slide" v-if="$route.name=='serMatHp'||$route.name=='portalIndex'||$route.name=='enterpriseservice'">
-        <el-dialog :visible.sync="isVisibility">
-          <div class="slide_nav">
-            <p @click="$router.push({path:'/'})">首页</p>
-            <p>招商引资</p>
-            <p>智慧党建</p>
-            <p @click="$router.push({path:'/enterpriseservice'})">企业服务</p>
-            <div class="slide_nav_fence">
-              <ul>
-                <li @click="$router.push({path:'/declarationCenter'})">申报中心</li>
-                <li>政策中心</li>
-                <li>行政中心</li>
-                <li @click="$router.push({path:'/actiCenter'})">活动中心</li>
-                <li @click="$router.push({path:'/tfindex'})">科技金融</li>
-                <li >人力资源</li>
-                <li @click="$router.push({path:'/serMatHp'})">服务超市</li>
-              </ul>
-            </div>
+    <div class="serve_slide" v-if="$route.name=='serMatHp'||$route.name=='portalIndex'||$route.name=='enterpriseservice'||$route.name=='investment'">
+      <el-dialog :visible.sync="isVisibility">
+        <div class="slide_nav">
+          <p @click="$router.push({path:'/'})">首页</p>
+          <p @click="$router.push({path:'/investment'})">招商引资</p>
+          <p >智慧党建</p>
+          <p @click="$router.push({path:'/enterpriseservice'})">企业服务</p>
+          <div class="slide_nav_fence">
+            <ul>
+              <li @click="$router.push({path:'/declarationCenter'})">申报中心</li>
+              <li @click="$router.push({path:'/policyCenter'})">政策中心</li>
+              <li @click="$router.push({path:'/compassView'})">行政中心</li>
+              <li @click="$router.push({path:'/actiCenter'})">活动中心</li>
+              <li @click="$router.push({path:'/tfindex'})">科技金融</li>
+              <li @click="$router.push({path:'/recruitmentList'})">人力资源</li>
+              <li @click="$router.push({path:'/serMatHp'})">服务超市</li>
+            </ul>
           </div>
+        </div>
 
-          <div class="personal_center ">
-            <p @click="$router.push({path:'/userinfo'})">用户中心</p>
-            <p>消息中心</p>
-          </div>
-        </el-dialog>
-      </div>
+        <div class="personal_center ">
+          <p @click="$router.push({path:'/home'})">用户中心</p>
+          <p @click="$router.push({path:'/parkNotice'})">消息中心</p>
+        </div>
+      </el-dialog>
+    </div>
     <!-- <app-header v-if="$route.name=='actiCenter'||$route.name=='actiDetail'||$route.name=='regData'||$route.name=='regStatus'||$route.name=='actiManagent'||$route.name=='peoDec'"></app-header> -->
     <!-- <ser-header v-if="$route.name=='actiTrain'||$route.name=='index'"></ser-header>z -->
-    <adminApprove-header v-if="$route.name=='compassView'||$route.name=='rightDetail'||$route.name=='serviceDetail'||$route.name=='declarationPlatform'||$route.name=='declarationNoticeDetail'||$route.name=='declarationCenter'||$route.name=='talentsService'||$route.name=='talentPlatform'||$route.name=='talentsServiceDetail'"></adminApprove-header>
+   <!--  <adminApprove-header v-if="$route.name=='compassView'||$route.name=='rightDetail'||$route.name=='serviceDetail'||$route.name=='declarationCenter'||$route.name=='declarationPlatform'||$route.name=='declarationNoticeDetail'||$route.name=='declarationCenter'||$route.name=='talentsService'||$route.name=='talentPlatform'||$route.name=='talentsServiceDetail'"></adminApprove-header> -->
     <app-header v-if="$route.name=='actiDetail'||$route.name=='regData'||$route.name=='regStatus'"></app-header>
 
     <ser-header v-if="$route.name=='actiTrain'||$route.name=='actiTrainDetail'||$route.name=='actiTrainStatus'||$route.name=='serverOrg'||$route.name=='actiTrainData'||$route.name=='serverOrgDetail'||$route.name=='serverPro'||$route.name=='serverProDetail'||$route.name=='serverCon'||$route.name=='serverConDetail'||$route.name=='quickSearch'||$route.name=='aboutUs'"></ser-header>
@@ -89,6 +89,7 @@ import TechnologyHeader from './components/technologyHeader'
 import './common/font/font.css'
 
 import { isMobile } from '@/util'
+import bus from '@/util/bus'
 
 let timer = null
 
@@ -167,6 +168,9 @@ export default {
           clearInterval(timer)
         }
       },30)
+    },
+    closeM(){
+      bus.$emit('closeKnow');
     }
   }
 }
@@ -196,9 +200,9 @@ export default {
     font-family: 'Microsoft YaHei','Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    .routView{
-      min-height: 500px;
-    }
+    // .routView{
+    //   min-height: 500px;
+    // }
       .fadeIn{
         animation-duration:  0.3s;
         animation-delay:0.4s;
@@ -266,18 +270,12 @@ export default {
               font-size: 19px;
             }
           }
-          .right_nav_tel{
-            /* span{
-              position: relative;
-              top: 0;
-            }
-            &:hover{
-              width: 160px;
-            } */
+          /* .right_nav_tel{
+           
           }
           .weixin:hover{
 
-          }
+          } */
         }
       }
     }

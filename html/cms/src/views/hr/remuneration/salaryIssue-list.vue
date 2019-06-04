@@ -14,26 +14,26 @@
       </el-form>
     </div>
     <!-- 表格 -->
-    <el-table :data="salaryPayrollList" border fit highlight-current-row style="width: 150%;height:100%;">
+    <el-table :data="salaryPayrollList" border fit highlight-current-row>
       <el-table-column type="index" width="50" label="序号" align="center" />
-      <el-table-column label="姓名" header-align="center" align="center"  width="60" prop="name"/>
-      <el-table-column  label="工资档次及金额" align="center" width="120px"  prop="basicWage"/>
-      <el-table-column  label="园区工龄工资" align="center" width="120px"  prop="seniorityWage"/>
-      <el-table-column  label="技术岗位津贴" align="center" width="120" prop="technicalAllowance"/>
-      <el-table-column label="职务津贴" align="center" width="100" prop="dutyAllowance"/>
-      <el-table-column label="工作性津贴" align="center" width="100" prop="workSubsidy" />
-      <el-table-column label="学历津贴" align="center" width="100" prop="educationAllowance" />
-      <el-table-column label="职称津贴" align="center" width="100" prop="professionalTitleAllowance" />
-      <el-table-column label="专项补贴" align="center" width="100" prop="specialSubsidy"/>
-      <el-table-column label="餐补" align="center" width="80" prop="mealSubsidy"/>
-      <el-table-column label="应发工资" align="center" width="100" prop="deserveWage" />
-      <el-table-column  label="代扣社会统筹保险" align="center" width="150" prop="pendingSocialpoolingInsurance"/>
-      <el-table-column  label="代扣公积金" align="center" width="100" prop="pendingProvidentfund" />
-      <el-table-column label="扣个税" align="center" width="80" prop="pendingPersonalTax"/>
-      <el-table-column label="食堂餐费" align="center" width="100" prop="canteenMealFee" />
-      <el-table-column label="工会会费" align="center" width="100" prop="unionFee" />
-      <el-table-column label="实发工资" align="center" width="100" prop="realWage" />
-      <el-table-column  label="存入个人帐户" align="center" width="120" prop="accountEntryTime" />
+      <el-table-column label="姓名" header-align="center" align="center" prop="name"/>
+      <el-table-column label="工资档次及金额" align="center" prop="basicWage"/>
+      <el-table-column label="园区工龄工资" align="center" prop="seniorityWage"/>
+      <el-table-column label="技术岗位津贴" align="center" prop="technicalAllowance"/>
+      <el-table-column label="职务津贴" align="center" prop="dutyAllowance"/>
+      <el-table-column label="工作性津贴" align="center" prop="workSubsidy" />
+      <el-table-column label="学历津贴" align="center" prop="educationAllowance" />
+      <el-table-column label="职称津贴" align="center" prop="professionalTitleAllowance" />
+      <el-table-column label="专项补贴" align="center" prop="specialSubsidy"/>
+      <el-table-column label="餐补" align="center" prop="mealSubsidy"/>
+      <el-table-column label="应发工资" align="center" prop="deserveWage" />
+      <el-table-column label="代扣社会统筹保险" align="center" prop="pendingSocialpoolingInsurance"/>
+      <el-table-column label="代扣公积金" align="center" prop="pendingProvidentfund" />
+      <el-table-column label="扣个税" align="center" prop="pendingPersonalTax"/>
+      <el-table-column label="食堂餐费" align="center" prop="canteenMealFee" />
+      <el-table-column label="工会会费" align="center" prop="unionFee" />
+      <el-table-column label="实发工资" align="center" prop="realWage" />
+      <el-table-column label="存入个人帐户" align="center" prop="accountEntryTime" />
     </el-table>
     <!-- 分页 -->
     <el-pagination
@@ -48,34 +48,39 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange" />
 
-    <el-dialog title="工资条导入" :visible.sync="dialogImportVisible" :modal-append-to-body="false"
-               :close-on-click-modal="false" class="dialog-import">
+    <el-dialog
+      :visible.sync="dialogImportVisible"
+      :modal-append-to-body="false"
+      :close-on-click-modal="false"
+      title="工资条导入"
+      class="dialog-import">
       <div :class="{'import-content': importFlag === 1, 'hide-dialog': importFlag !== 1}">
-        <el-upload class="upload-demo"
-                   :action="importUrl"
-                   :headers="importHeaders"
-                   :on-preview="handlePreview"
-                   :on-remove="handleRemove"
-                   :before-upload="beforeUpload"
-                   :on-error="uploadFail"
-                   :on-success="uploadSuccess"
-                   :file-list="fileList">
+        <el-upload
+          :action="importUrl"
+          :headers="importHeaders"
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          :before-upload="beforeUpload"
+          :on-error="uploadFail"
+          :on-success="uploadSuccess"
+          :file-list="fileList"
+          class="upload-demo">
           <!-- 是否支持发送cookie信息 -->
-          <el-button size="small" type="primary" :disabled="processing">{{uploadTip}}</el-button>
+          <el-button :disabled="processing" size="small" type="primary">{{ uploadTip }}</el-button>
           <div slot="tip" class="el-upload__tip">只能上传excel文件</div>
         </el-upload>
         <div class="download-template">
           <a class="btn-download" href="/static/file/工资条条目.xlsx">
-            <i class="el-icon-download"></i>下载模板</a>
+          <i class="el-icon-download"/>下载模板</a>
         </div>
       </div>
       <div :class="{'import-failure': importFlag === 2, 'hide-dialog': importFlag !== 2}">
         <div class="failure-tips">
-          <i class="el-icon-warning"></i>导入失败
+          <i class="el-icon-warning"/>导入失败
         </div>
         <div class="failure-reason">
           <h4>失败原因</h4>
-          <li v-for="(error,index) in errorResults" :key="index">{{error}}</li>
+          <li v-for="(error,index) in errorResults" :key="index">{{ error }}</li>
         </div>
       </div>
     </el-dialog>
@@ -84,9 +89,9 @@
 </template>
 <script>
 import {
-  api, paramApi,downloadTempExcel,exportExcel,exportExcelByObj
+  api, exportExcelByObj
 } from '@/api/hr/common'
-import {getToken} from '@/utils/auth'
+import { getToken } from '@/utils/auth'
 
 import UE from '@/components/ue.vue'
 export default {
@@ -113,7 +118,7 @@ export default {
       listLoading: false,
       listQuery: {
         page: 1,
-        rows: 10,
+        rows: 10
       },
       code: {
         groupCode: 'platform_type',
@@ -124,6 +129,7 @@ export default {
   },
   watch: {
     'listQuery.name': function() {
+      this.listQuery.page = 1
       this.initList()
     }
   },
@@ -131,7 +137,7 @@ export default {
     this.initList()
   },
   methods: {
-    //文件上传
+    // 文件上传
     handlePreview(file) {
 
     },
@@ -139,9 +145,9 @@ export default {
 
     },
     beforeUpload(file) {
-      //上传前配置
-      let excelfileExtend = ".xls,.xlsx"//设置文件格式
-      let fileExtend = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+      // 上传前配置
+      const excelfileExtend = '.xls,.xlsx'// 设置文件格式
+      const fileExtend = file.name.substring(file.name.lastIndexOf('.')).toLowerCase()
       if (excelfileExtend.indexOf(fileExtend) <= -1) {
         this.$message.error('文件格式错误')
         return false
@@ -157,8 +163,8 @@ export default {
     uploadSuccess(response, file, fileList) {
       this.uploadTip = '点击上传'
       this.processing = false
-      if (response.code = '0000') {
-        if (response.data == '导入成功') {
+      if (response.code === '0000') {
+        if (response.data === '导入成功') {
           this.importFlag = 3
           this.dialogImportVisible = false
           this.$message.info(response.data)
@@ -185,8 +191,6 @@ export default {
       this.processing = false
       this.dialogImportVisible = true
     },
-    handlePreview(row) {
-    },
     getEndtime() {},
 
     // 表格分页功能
@@ -212,17 +216,16 @@ export default {
           this.salaryPayrollList = res.data.data.rows
           this.total = res.data.data.total
         } else {
-          this.$message.error(res.data.result==null?"查询失败":res.data.result)
+          this.$message.error(res.data.result == null ? '查询失败' : res.data.result)
         }
         this.listLoading = false
       })
-
     },
     handleExport() {
-      let param = {
-        name:this.listQuery.name
+      const param = {
+        name: this.listQuery.name
       }
-      exportExcelByObj('hr/SalaryWelfareManagement/exportPayroll',param).then(res => {
+      exportExcelByObj('hr/SalaryWelfareManagement/exportPayroll', param).then(res => {
         window.location.href = res.request.responseURL
       })
     }

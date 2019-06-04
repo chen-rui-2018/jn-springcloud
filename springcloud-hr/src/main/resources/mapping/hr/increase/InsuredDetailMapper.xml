@@ -9,10 +9,25 @@
 		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
             and t1.name like concat('%',#{name},'%')
         </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(insuredMonth)">
+            and t1.insured_month like CONCAT('%', #{insuredMonth,jdbcType=VARCHAR},'%')
+        </if>
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
             and department_id=#{departmentId}
         </if>
         group by job_number
+	</select>
+	
+	<select id="selectByJobNumberAndMonth" parameterType="com.jn.hr.increase.model.InsuredDetaild"
+		resultType="com.jn.hr.increase.model.InsuredDetaild">
+		select * from tb_manpower_insured_detail t1
+		where t1.is_effective = 1
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(insuredMonth)">
+            and t1.insured_month like CONCAT('%', #{insuredMonth,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(jobNumber)">
+            and job_number=#{jobNumber}
+        </if>
 	</select>
 	
 	<select id="list" parameterType="com.jn.hr.increase.model.InsuredDetaildPage"
@@ -26,7 +41,7 @@
             and department_id=#{departmentId}
         </if>
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(insuredMonth)">
-            and t1.insured_month like CONCAT('%', #{insuredMonth,jdbcType=TIMESTAMP},'%')
+            and t1.insured_month like CONCAT('%', #{insuredMonth,jdbcType=VARCHAR},'%')
         </if>
 	</select>
 	

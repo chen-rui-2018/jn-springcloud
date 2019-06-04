@@ -4,7 +4,7 @@
       <el-col :span="16"/>
       <el-col :span="8">
         <div class="grid-content bg-purple-light">
-          <el-button class="filter-item" type="primary" round>审批报名人</el-button>
+          <el-button v-if="$route.query.applyCheck == '1'" class="filter-item" type="primary" round @click="ApproveApplicant">审批报名人</el-button>
           <el-button class="filter-item" type="primary" round @click="handleRegistration">下载签到二维码</el-button>
           <el-button class="filter-item" type="primary" round @click="handleExport">导出Excel</el-button>
           <el-button class="filter-item" type="primary" round @click="handleReturn">返回</el-button>
@@ -64,7 +64,7 @@
           <tr :key="ky">
             <td>{{ ky+1 }}</td>
             <td>{{ i.name }}</td>
-            <td>{{ i.sex }}</td>
+            <td><span v-if="i.sex=='0'">女</span><span v-if="i.sex=='1'">男</span></td>
             <td>{{ i.age }}</td>
             <td>{{ i.company }}</td>
             <td>{{ i.post }}</td>
@@ -81,12 +81,8 @@
                   v-if="i.signStatus==='0'"
                   type="text"
                   class="operation"
-                  @click="handleSign(i)">签到
+                  @click="handleSign(i.id)">签到
                 </el-button>
-                <!-- <el-button
-                  v-if="i.signStatus==='1'"
-                  type="text"
-                  class="operation"/> -->
               </template>
             </td>
           </tr>
@@ -183,8 +179,11 @@ export default {
     this.getApplyActivityList()
   },
   methods: {
+    ApproveApplicant() {
+      this.$router.push({ path: `registrationChecklist`, query: { applyStatus: this.$route.query.applyCheck }})
+    },
     getApplyActivityList() {
-      this.actiList.activityId = this.$route.params.id
+      this.actiList.activityId = this.$route.query.id
       api(`${this.GLOBAL.parkUrl}activity/applyActivityList`, this.actiList, 'post').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           this.actiListData = res.data.data.rows
@@ -228,11 +227,11 @@ export default {
     handleReturn() {
       this.$router.push({ name: 'activityManagement', params: { id: this.$route.params.id }})
     },
-    handleSign(i) {
+    handleSign(id) {
       const data = {
-        applyId: i.id
+        applyId: id
       }
-      api(`${this.GLOBAL.parkUrl}activity/activityApply/signInActivityBackend`, data, 'post').then(res => {
+      api(`${this.GLOBAL.parkUrl}activity/activityApply/signInActivityBackend?applyId=${id}`, data, 'post').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           this.getApplyActivityList()
           this.$message(res.data.result)

@@ -6,8 +6,14 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.jn.common.util.Assert;
+import com.jn.hr.model.AttendanceManageApiVo;
+import com.jn.hr.model.AttendanceManagement;
+import com.jn.hr.model.AttendanceManagementApiVo;
+import com.jn.hr.model.VacationManagement;
 import org.apache.commons.io.FileUtils;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +67,7 @@ public class AttendanceManagementController extends BaseController{
 	OaClient OaClient;
 	
 	@ControllerLog(doAction = "考勤管理分页查询")
-    //@RequiresPermissions("/hr/AttendanceManagement/attendanceManagementList")
+    @RequiresPermissions("/hr/AttendanceManagement/attendanceManagementList")
 	@ApiOperation(value = "考勤管理分页查询", notes = "考勤管理分页查询")
     @RequestMapping(value = "/attendanceManagementList", method = RequestMethod.POST)
 	public Result<PaginationData<List<AttendanceManagementVo>>> attendanceManagementList(@Validated @RequestBody AttendanceManagementPage attendanceManagementPage){
@@ -70,7 +76,7 @@ public class AttendanceManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "导出考勤列表")
-    //@RequiresPermissions("/hr/AttendanceManagement/exportAttendanceManagement")
+    @RequiresPermissions("/hr/AttendanceManagement/exportAttendanceManagement")
 	@ApiOperation(value = "导出考勤列表", notes = "导出考勤列表")
     @RequestMapping(value = "/exportAttendanceManagement", method = RequestMethod.GET)
 	public void exportAttendanceManagement(AttendanceManagementPage attendanceManagementPage , HttpServletResponse response){
@@ -86,7 +92,7 @@ public class AttendanceManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "旷工明细")
-    //@RequiresPermissions("/hr/AttendanceManagement/absenceDetailList")
+    @RequiresPermissions("/hr/AttendanceManagement/absenceDetailList")
 	@ApiOperation(value = "旷工明细", notes = "旷工明细")
     @RequestMapping(value = "/absenceDetailList", method = RequestMethod.POST)
 	public Result<List<AttendanceManagementVo>> absenceDetailList(@Validated @RequestBody AttendanceManagementPage attendanceManagementPage){
@@ -95,7 +101,7 @@ public class AttendanceManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "导出旷工明细")
-    //@RequiresPermissions("/hr/AttendanceManagement/exportAbsenceDetailList")
+    @RequiresPermissions("/hr/AttendanceManagement/exportAbsenceDetailList")
 	@ApiOperation(value = "导出旷工明细", notes = "导出旷工明细")
     @RequestMapping(value = "/exportAbsenceDetailList", method = RequestMethod.GET)
 	public void exportAbsenceDetailList( AttendanceManagementPage attendanceManagementPage, HttpServletResponse response){
@@ -108,7 +114,7 @@ public class AttendanceManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "迟到明细")
-    //@RequiresPermissions("/hr/AttendanceManagement/comeLateDetailList")
+    @RequiresPermissions("/hr/AttendanceManagement/comeLateDetailList")
 	@ApiOperation(value = "迟到明细", notes = "迟到明细")
     @RequestMapping(value = "/comeLateDetailList", method = RequestMethod.POST)
 	public Result<List<AttendanceManagementVo>> comeLateDetailList(@Validated @RequestBody AttendanceManagementPage attendanceManagementPage){
@@ -117,7 +123,7 @@ public class AttendanceManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "导出迟到明细")
-    //@RequiresPermissions("/hr/AttendanceManagement/exportComeLateDetailList")
+    @RequiresPermissions("/hr/AttendanceManagement/exportComeLateDetailList")
 	@ApiOperation(value = "导出迟到明细", notes = "导出迟到明细")
     @RequestMapping(value = "/exportComeLateDetailList", method = RequestMethod.GET)
 	public void exportComeLateDetailList(AttendanceManagementPage attendanceManagementPage, HttpServletResponse response){
@@ -130,7 +136,7 @@ public class AttendanceManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "早退明细")
-    //@RequiresPermissions("/hr/AttendanceManagement/leaveEarlyDetailList")
+    @RequiresPermissions("/hr/AttendanceManagement/leaveEarlyDetailList")
 	@ApiOperation(value = "早退明细", notes = "早退明细")
     @RequestMapping(value = "/leaveEarlyDetailList", method = RequestMethod.POST)
 	public Result<List<AttendanceManagementVo>> leaveEarlyDetailList(@Validated @RequestBody AttendanceManagementPage attendanceManagementPage){
@@ -139,7 +145,7 @@ public class AttendanceManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "导出早退明细")
-    //@RequiresPermissions("/hr/AttendanceManagement/exportLeaveEarlyDetailList")
+    @RequiresPermissions("/hr/AttendanceManagement/exportLeaveEarlyDetailList")
 	@ApiOperation(value = "导出早退明细", notes = "导出早退明细")
     @RequestMapping(value = "/exportLeaveEarlyDetailList", method = RequestMethod.GET)
 	public void exportLeaveEarlyDetailList(AttendanceManagementPage attendanceManagementPage, HttpServletResponse response){
@@ -152,7 +158,7 @@ public class AttendanceManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "缺卡明细")
-    //@RequiresPermissions("/hr/AttendanceManagement/notCardDetailList")
+    @RequiresPermissions("/hr/AttendanceManagement/notCardDetailList")
 	@ApiOperation(value = "缺卡明细", notes = "缺卡明细")
     @RequestMapping(value = "/notCardDetailList", method = RequestMethod.POST)
 	public Result<List<AttendanceManagementVo>> notCardDetailList(@Validated @RequestBody AttendanceManagementPage attendanceManagementPage){
@@ -161,7 +167,7 @@ public class AttendanceManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "导出缺卡明细")
-    //@RequiresPermissions("/hr/AttendanceManagement/exportNotCardDetailList")
+    @RequiresPermissions("/hr/AttendanceManagement/exportNotCardDetailList")
 	@ApiOperation(value = "导出缺卡明细", notes = "导出缺卡明细")
     @RequestMapping(value = "/exportNotCardDetailList", method = RequestMethod.GET)
 	public void exportNotCardDetailList(AttendanceManagementPage attendanceManagementPage, HttpServletResponse response){
@@ -174,7 +180,7 @@ public class AttendanceManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "请假明细")
-    //@RequiresPermissions("/hr/AttendanceManagement/leaveDetailist")
+    @RequiresPermissions("/hr/AttendanceManagement/leaveDetailist")
 	@ApiOperation(value = "请假明细", notes = "请假明细")
     @RequestMapping(value = "/leaveDetailist", method = RequestMethod.POST)
 	public Result<List<AttendanceManagementVo>> leaveDetailist(@Validated @RequestBody AttendanceManagementPage attendanceManagementPage){
@@ -183,7 +189,7 @@ public class AttendanceManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "导出请假明细")
-    //@RequiresPermissions("/hr/AttendanceManagement/exportLeaveDetailist")
+    @RequiresPermissions("/hr/AttendanceManagement/exportLeaveDetailist")
 	@ApiOperation(value = "导出请假明细", notes = "导出请假明细")
     @RequestMapping(value = "/exportLeaveDetailist", method = RequestMethod.GET)
 	public void exportLeaveDetailist(AttendanceManagementPage attendanceManagementPage, HttpServletResponse response){
@@ -196,7 +202,7 @@ public class AttendanceManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "添加班次")
-    //@RequiresPermissions("/hr/AttendanceManagement/addAttendanceTimeSet")
+    @RequiresPermissions("/hr/AttendanceManagement/addAttendanceTimeSet")
 	@ApiOperation(value = "添加班次", notes = "添加班次")
     @RequestMapping(value = "/addAttendanceTimeSet", method = RequestMethod.POST)
 	public Result addAttendanceTimeSet(@Validated @RequestBody AttendanceTimeSetAdd record){
@@ -206,7 +212,7 @@ public class AttendanceManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "修改班次")
-    //@RequiresPermissions("/hr/AttendanceManagement/updateAttendanceTimeSet")
+    @RequiresPermissions("/hr/AttendanceManagement/updateAttendanceTimeSet")
 	@ApiOperation(value = "修改班次", notes = "修改班次")
     @RequestMapping(value = "/updateAttendanceTimeSet", method = RequestMethod.POST)
 	public Result updateAttendanceTimeSet(@Validated @RequestBody AttendanceTimeSetAdd attendanceTimeSetAdd){
@@ -216,7 +222,7 @@ public class AttendanceManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "删除班次")
-    //@RequiresPermissions("/hr/AttendanceManagement/deleteAttendanceTimeSet")
+    @RequiresPermissions("/hr/AttendanceManagement/deleteAttendanceTimeSet")
 	@ApiOperation(value = "删除班次", notes = "删除班次")
     @RequestMapping(value = "/deleteAttendanceTimeSet", method = RequestMethod.POST)
 	public Result deleteAttendanceTimeSet(@Validated @RequestBody AttendanceTimeSetAdd attendanceTimeSetAdd){
@@ -225,7 +231,7 @@ public class AttendanceManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "查询班次")
-    //@RequiresPermissions("/hr/AttendanceManagement/attendanceTimeSetList")
+    @RequiresPermissions("/hr/AttendanceManagement/attendanceTimeSetList")
 	@ApiOperation(value = "查询班次", notes = "查询班次")
     @RequestMapping(value = "/attendanceTimeSetList", method = RequestMethod.POST)
 	public Result<List<AttendanceTimeSetVo>> attendanceTimeSetList(){
@@ -234,7 +240,7 @@ public class AttendanceManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "排班管理页面查询")
-    //@RequiresPermissions("/hr/AttendanceManagement/scheduDetailistPage")
+    @RequiresPermissions("/hr/AttendanceManagement/scheduDetailistPage")
 	@ApiOperation(value = "排班管理页面查询", notes = "排班管理页面查询")
     @RequestMapping(value = "/scheduDetailistPage", method = RequestMethod.POST)
 	public Result<PaginationData<List<AttendanceSchedulVo>>> scheduDetailistPage(@Validated @RequestBody AttendanceSchedulPage attendanceSchedulPage){
@@ -243,7 +249,7 @@ public class AttendanceManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "导入排班管理")
-    //@RequiresPermissions("/hr/AttendanceManagement/importScheduDetailist")
+    @RequiresPermissions("/hr/AttendanceManagement/importScheduDetailist")
 	@ApiOperation(value = "导入排班管理", notes = "导入排班管理")
     @RequestMapping(value = "/importScheduDetailist", method = RequestMethod.POST)
 	public Result<String> importScheduDetailist(@RequestParam("file") MultipartFile file){
@@ -253,7 +259,7 @@ public class AttendanceManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "排班明细页面查询")
-    //@RequiresPermissions("/hr/AttendanceManagement/scheduDetailist")
+    @RequiresPermissions("/hr/AttendanceManagement/scheduDetailist")
 	@ApiOperation(value = "排班明细页面查询", notes = "排班明细页面查询")
     @RequestMapping(value = "/scheduDetailist", method = RequestMethod.POST)
 	public Result<PaginationData<List<AttendanceSchedulVo>>> scheduDetailist(@Validated @RequestBody AttendanceSchedulPage attendanceSchedulPage){
@@ -262,7 +268,7 @@ public class AttendanceManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "排班明细导出")
-    //@RequiresPermissions("/hr/AttendanceManagement/exportScheduDetailist")
+    @RequiresPermissions("/hr/AttendanceManagement/exportScheduDetailist")
 	@ApiOperation(value = "排班明细导出", notes = "排班明细导出")
     @RequestMapping(value = "/exportScheduDetailist", method = RequestMethod.GET)
 	public void exportScheduDetailist(AttendanceSchedulPage attendanceSchedulPage,HttpServletResponse response){
@@ -276,7 +282,7 @@ public class AttendanceManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "修改排班明细")
-    //@RequiresPermissions("/hr/AttendanceManagement/updateScheduDetailist")
+    @RequiresPermissions("/hr/AttendanceManagement/updateScheduDetailist")
 	@ApiOperation(value = "修改排班明细", notes = "修改排班明细")
     @RequestMapping(value = "/updateScheduDetailist", method = RequestMethod.POST)
 	public Result updateScheduDetailist(@Validated @RequestBody  AttendanceSchedulAdd attendanceSchedulAdd){
@@ -287,7 +293,7 @@ public class AttendanceManagementController extends BaseController{
 	}
 	
 	@ControllerLog(doAction = "下载排班明细表excel模板")
-    //@RequiresPermissions("/hr/AttendanceManagement/downLoadAttendanceSchdulExcelTemplate")
+    @RequiresPermissions("/hr/AttendanceManagement/downLoadAttendanceSchdulExcelTemplate")
     @ApiOperation(value = "下载排班明细表excel模板", notes = "下载排班明细表excel模板")
     @RequestMapping(value = "/downLoadAttendanceSchdulExcelTemplate", method = RequestMethod.GET)
     public ResponseEntity<byte[]> downLoadAttendanceSchdulExcelTemplate() {
@@ -305,5 +311,49 @@ public class AttendanceManagementController extends BaseController{
             throw new JnSpringCloudException(SalaryManagementExceptionEnums.DOWNLOAD_EXCEL_TEMPLATE_FAIL);
         }
     }
-	
+
+    @ControllerLog(doAction = "根据用户id与考勤年月查询历史考勤列表")
+    @RequiresPermissions("/hr/AttendanceManagement/selectAttendanceManagementByUserId")
+	@ApiOperation(value = "根据用户id与考勤年月查询历史考勤列表", notes = "根据用户id与考勤年月查询历史考勤列表")
+    @RequestMapping(value = "/selectAttendanceManagementByUserId", method = RequestMethod.POST)
+	public Result<List<AttendanceManagementApiVo>> selectAttendanceManagementByUserId(@Validated @RequestBody AttendanceManagement attendanceManagement){
+    	Assert.notNull(attendanceManagement.getUserId(),"用户ID不能为空");
+		Assert.notNull(attendanceManagement.getAttendanceMonth(),"考勤月份不能为空");
+    	List<AttendanceManagementApiVo> list = attendanceManagementService.selectAttendanceManagementByUserId(attendanceManagement);
+		return new Result(list);
+	}
+    
+    @ControllerLog(doAction = "根据部门id与考勤年月查询历史考勤列表")
+    @RequiresPermissions("/hr/AttendanceManagement/selectAttendanceManagementByDepartmentId")
+	@ApiOperation(value = "根据部门id与考勤年月查询历史考勤列表", notes = "根据部门id与考勤年月查询历史考勤列表")
+    @RequestMapping(value = "/selectAttendanceManagementByDepartmentId", method = RequestMethod.POST)
+	public Result<List<AttendanceManageApiVo>> selectAttendanceManagementByDepartmentId(@Validated @RequestBody  AttendanceManagement attendanceManagement){
+    	Assert.notNull(attendanceManagement.getAttendanceMonth(),"考勤月份不能为空");
+    	AttendanceManageApiVo list = attendanceManagementService.selectAttendanceManagementByDepartmentId(attendanceManagement);
+		return new Result(list);
+	}
+
+    @ControllerLog(doAction = "加班小时")
+    @RequiresPermissions("/hr/AttendanceManagement/insertByOverTimeVacationmanage")
+	@ApiOperation(value = "加班小时", notes = "加班小时")
+    @RequestMapping(value = "/insertByOverTimeVacationmanage", method = RequestMethod.POST)
+	public Result<String> insertByOverTimeVacationmanage(@Validated @RequestBody VacationManagement vacationManage){
+    	Assert.notNull(vacationManage.getUserId(),"用户ID不能为空");
+		Assert.notNull(vacationManage.getVacationType(),"请假类型不能为空");
+		Assert.notNull(vacationManage.getVacationTime(),"请假时间不能为空");
+    	String str = attendanceManagementService.insertByOverTimeVacationmanage(vacationManage);
+		return new Result(str);
+	}
+    
+    @ControllerLog(doAction = "请假扣除请假小时")
+    @RequiresPermissions("/hr/AttendanceManagement/insertByLeaveVacationmanage")
+	@ApiOperation(value = "请假扣除请假小时", notes = "请假扣除请假小时")
+    @RequestMapping(value = "/insertByLeaveVacationmanage", method = RequestMethod.POST)
+	public Result<String> insertByLeaveVacationmanage(@Validated @RequestBody  VacationManagement vacationManage){
+    	Assert.notNull(vacationManage.getUserId(),"用户ID不能为空");
+		Assert.notNull(vacationManage.getVacationType(),"请假类型不能为空");
+		Assert.notNull(vacationManage.getVacationTime(),"请假时间不能为空");
+    	String str = attendanceManagementService.insertByLeaveVacationmanage(vacationManage);
+		return new Result(str);
+	}
 }

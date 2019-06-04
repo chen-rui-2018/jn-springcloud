@@ -12,7 +12,7 @@ import com.jn.system.dept.dao.SysUserDepartmentPostMapper;
 import com.jn.system.dept.dao.TbSysPostMapper;
 import com.jn.system.dept.entity.TbSysPost;
 import com.jn.system.dept.entity.TbSysPostCriteria;
-import com.jn.system.dept.model.SysPost;
+import com.jn.system.model.SysPost;
 import com.jn.system.dept.model.SysPostPage;
 import com.jn.system.dept.service.SysPostService;
 import com.jn.system.log.annotation.ServiceLog;
@@ -55,13 +55,8 @@ public class SysPostServiceImpl implements SysPostService {
      */
     @Override
     @ServiceLog(doAction = "查询所有岗位")
-    public List<TbSysPost> findSysPostAll() {
-        TbSysPostCriteria tbSysPostCriteria = new TbSysPostCriteria();
-        tbSysPostCriteria.setOrderByClause("created_time desc");
-        TbSysPostCriteria.Criteria criteria = tbSysPostCriteria.createCriteria();
-        Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
-        criteria.andRecordStatusEqualTo(recordStatus);
-        List<TbSysPost> sysPostList = tbSysPostMapper.selectByExample(tbSysPostCriteria);
+    public List<SysPost> findSysPostAll() {
+        List<SysPost> sysPostList = sysPostMapper.getPostAll();
         return sysPostList;
     }
 

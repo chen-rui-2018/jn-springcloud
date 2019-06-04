@@ -22,6 +22,11 @@
     <result column="group_id" jdbcType="VARCHAR" property="groupId" />
     <result column="switch_status" jdbcType="TINYINT" property="switchStatus" />
     <result column="building_id" jdbcType="VARCHAR" property="buildingId" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="is_low_energy_threshold" jdbcType="DECIMAL" property="isLowEnergyThreshold" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="isauto" jdbcType="VARCHAR" property="isauto" />
+    <result column="room_id" jdbcType="VARCHAR" property="roomId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -85,7 +90,7 @@
     id, meter_code, meter_name, type, position, company_id, use_status, record_status, 
     creator_account, created_time, modifier_account, modified_time, is_high_energy_threshold, 
     box_number, floor, meter_number, mutual_inductance_ratio, group_id, switch_status, 
-    building_id
+    building_id, company_name, is_low_energy_threshold, phone, isauto, room_id
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.electricmeter.entity.TbElectricMeterInfoCriteria" resultMap="BaseResultMap">
     select
@@ -124,14 +129,18 @@
       created_time, modifier_account, modified_time, 
       is_high_energy_threshold, box_number, floor, 
       meter_number, mutual_inductance_ratio, group_id, 
-      switch_status, building_id)
+      switch_status, building_id, company_name, 
+      is_low_energy_threshold, phone, isauto, 
+      room_id)
     values (#{id,jdbcType=VARCHAR}, #{meterCode,jdbcType=VARCHAR}, #{meterName,jdbcType=VARCHAR}, 
       #{type,jdbcType=TINYINT}, #{position,jdbcType=VARCHAR}, #{companyId,jdbcType=VARCHAR}, 
       #{useStatus,jdbcType=TINYINT}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
       #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
       #{isHighEnergyThreshold,jdbcType=DECIMAL}, #{boxNumber,jdbcType=VARCHAR}, #{floor,jdbcType=VARCHAR}, 
       #{meterNumber,jdbcType=VARCHAR}, #{mutualInductanceRatio,jdbcType=VARCHAR}, #{groupId,jdbcType=VARCHAR}, 
-      #{switchStatus,jdbcType=TINYINT}, #{buildingId,jdbcType=VARCHAR})
+      #{switchStatus,jdbcType=TINYINT}, #{buildingId,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, 
+      #{isLowEnergyThreshold,jdbcType=DECIMAL}, #{phone,jdbcType=VARCHAR}, #{isauto,jdbcType=VARCHAR}, 
+      #{roomId,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.electricmeter.entity.TbElectricMeterInfo">
     insert into tb_electric_meter_info
@@ -196,6 +205,21 @@
       <if test="buildingId != null">
         building_id,
       </if>
+      <if test="companyName != null">
+        company_name,
+      </if>
+      <if test="isLowEnergyThreshold != null">
+        is_low_energy_threshold,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="isauto != null">
+        isauto,
+      </if>
+      <if test="roomId != null">
+        room_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -257,6 +281,21 @@
       </if>
       <if test="buildingId != null">
         #{buildingId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="isLowEnergyThreshold != null">
+        #{isLowEnergyThreshold,jdbcType=DECIMAL},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="isauto != null">
+        #{isauto,jdbcType=VARCHAR},
+      </if>
+      <if test="roomId != null">
+        #{roomId,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -329,6 +368,21 @@
       <if test="record.buildingId != null">
         building_id = #{record.buildingId,jdbcType=VARCHAR},
       </if>
+      <if test="record.companyName != null">
+        company_name = #{record.companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isLowEnergyThreshold != null">
+        is_low_energy_threshold = #{record.isLowEnergyThreshold,jdbcType=DECIMAL},
+      </if>
+      <if test="record.phone != null">
+        phone = #{record.phone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isauto != null">
+        isauto = #{record.isauto,jdbcType=VARCHAR},
+      </if>
+      <if test="record.roomId != null">
+        room_id = #{record.roomId,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -355,7 +409,12 @@
       mutual_inductance_ratio = #{record.mutualInductanceRatio,jdbcType=VARCHAR},
       group_id = #{record.groupId,jdbcType=VARCHAR},
       switch_status = #{record.switchStatus,jdbcType=TINYINT},
-      building_id = #{record.buildingId,jdbcType=VARCHAR}
+      building_id = #{record.buildingId,jdbcType=VARCHAR},
+      company_name = #{record.companyName,jdbcType=VARCHAR},
+      is_low_energy_threshold = #{record.isLowEnergyThreshold,jdbcType=DECIMAL},
+      phone = #{record.phone,jdbcType=VARCHAR},
+      isauto = #{record.isauto,jdbcType=VARCHAR},
+      room_id = #{record.roomId,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -420,6 +479,21 @@
       <if test="buildingId != null">
         building_id = #{buildingId,jdbcType=VARCHAR},
       </if>
+      <if test="companyName != null">
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="isLowEnergyThreshold != null">
+        is_low_energy_threshold = #{isLowEnergyThreshold,jdbcType=DECIMAL},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="isauto != null">
+        isauto = #{isauto,jdbcType=VARCHAR},
+      </if>
+      <if test="roomId != null">
+        room_id = #{roomId,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -443,7 +517,12 @@
       mutual_inductance_ratio = #{mutualInductanceRatio,jdbcType=VARCHAR},
       group_id = #{groupId,jdbcType=VARCHAR},
       switch_status = #{switchStatus,jdbcType=TINYINT},
-      building_id = #{buildingId,jdbcType=VARCHAR}
+      building_id = #{buildingId,jdbcType=VARCHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      is_low_energy_threshold = #{isLowEnergyThreshold,jdbcType=DECIMAL},
+      phone = #{phone,jdbcType=VARCHAR},
+      isauto = #{isauto,jdbcType=VARCHAR},
+      room_id = #{roomId,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

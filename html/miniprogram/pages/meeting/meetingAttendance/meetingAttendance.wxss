@@ -1,0 +1,43 @@
+/* pages/meeting/makeMeeting/makeMeeting.wxss */
+.meetingAttendance{
+  margin-top: 28rpx;
+}
+.meeting_cont{
+  background-color: #fff;
+  padding: 30rpx;
+  font-size: 24rpx;
+  margin-bottom: 17rpx;
+}
+.meeting_cont view:nth-child(1){
+  font-size: 30rpx;
+}
+.meeting_cont view:nth-child(2){
+  padding:29rpx 0 14rpx 0
+}
+.meetingPerson{
+  margin-bottom: 17rpx;
+  background-color: #fff;
+  padding: 30rpx;
+  font-size: 30rpx;
+}
+.meetingPerson text{
+  font-size: 24rpx;
+}
+.btn{
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  padding:30rpx;
+  background-color: #fff;
+  width:100%;
+}
+.btn button{
+  background-color: #ecfcf2;
+	border-radius: 41px;
+  border: solid 1px #009966;
+  color: #07ab50;
+  font-size: 27rpx;
+  line-height: 1;
+  padding:27rpx 137rpx;
+
+}

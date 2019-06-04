@@ -2,8 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.enterprise.pay.dao.TbPayCheckReminderMapper">
   <resultMap id="BaseResultMap" type="com.jn.enterprise.pay.entity.TbPayCheckReminder">
-    <id column="PAYMENT_ID" jdbcType="VARCHAR" property="paymentId" />
-    <result column="BILL_ID" jdbcType="VARCHAR" property="billId" />
+    <id column="BILL_ID" jdbcType="VARCHAR" property="billId" />
     <result column="ENTERPRISE_NAME" jdbcType="VARCHAR" property="enterpriseName" />
     <result column="BANK_ACCOUNT" jdbcType="VARCHAR" property="bankAccount" />
     <result column="PAYMENT_MONEY" jdbcType="DECIMAL" property="paymentMoney" />
@@ -75,9 +74,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    PAYMENT_ID, BILL_ID, ENTERPRISE_NAME, BANK_ACCOUNT, PAYMENT_MONEY, PAYMENT_DESC, 
-    PICTURE_PATH, creator_account, created_time, modifier_account, modified_time, PAYMENT_AFFIRM, 
-    record_status
+    BILL_ID, ENTERPRISE_NAME, BANK_ACCOUNT, PAYMENT_MONEY, PAYMENT_DESC, PICTURE_PATH, 
+    creator_account, created_time, modifier_account, modified_time, PAYMENT_AFFIRM, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.pay.entity.TbPayCheckReminderCriteria" resultMap="BaseResultMap">
     select
@@ -97,11 +95,11 @@
     select 
     <include refid="Base_Column_List" />
     from tb_pay_check_reminder
-    where PAYMENT_ID = #{paymentId,jdbcType=VARCHAR}
+    where BILL_ID = #{billId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_pay_check_reminder
-    where PAYMENT_ID = #{paymentId,jdbcType=VARCHAR}
+    where BILL_ID = #{billId,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.enterprise.pay.entity.TbPayCheckReminderCriteria">
     delete from tb_pay_check_reminder
@@ -110,23 +108,20 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.pay.entity.TbPayCheckReminder">
-    insert into tb_pay_check_reminder (PAYMENT_ID, BILL_ID, ENTERPRISE_NAME, 
-      BANK_ACCOUNT, PAYMENT_MONEY, PAYMENT_DESC, 
-      PICTURE_PATH, creator_account, created_time, 
-      modifier_account, modified_time, PAYMENT_AFFIRM, 
-      record_status)
-    values (#{paymentId,jdbcType=VARCHAR}, #{billId,jdbcType=VARCHAR}, #{enterpriseName,jdbcType=VARCHAR}, 
-      #{bankAccount,jdbcType=VARCHAR}, #{paymentMoney,jdbcType=DECIMAL}, #{paymentDesc,jdbcType=VARCHAR}, 
-      #{picturePath,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{paymentAffirm,jdbcType=CHAR}, 
-      #{recordStatus,jdbcType=CHAR})
+    insert into tb_pay_check_reminder (BILL_ID, ENTERPRISE_NAME, BANK_ACCOUNT, 
+      PAYMENT_MONEY, PAYMENT_DESC, PICTURE_PATH, 
+      creator_account, created_time, modifier_account, 
+      modified_time, PAYMENT_AFFIRM, record_status
+      )
+    values (#{billId,jdbcType=VARCHAR}, #{enterpriseName,jdbcType=VARCHAR}, #{bankAccount,jdbcType=VARCHAR}, 
+      #{paymentMoney,jdbcType=DECIMAL}, #{paymentDesc,jdbcType=VARCHAR}, #{picturePath,jdbcType=VARCHAR}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{paymentAffirm,jdbcType=CHAR}, #{recordStatus,jdbcType=CHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.pay.entity.TbPayCheckReminder">
     insert into tb_pay_check_reminder
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="paymentId != null">
-        PAYMENT_ID,
-      </if>
       <if test="billId != null">
         BILL_ID,
       </if>
@@ -165,9 +160,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="paymentId != null">
-        #{paymentId,jdbcType=VARCHAR},
-      </if>
       <if test="billId != null">
         #{billId,jdbcType=VARCHAR},
       </if>
@@ -215,9 +207,6 @@
   <update id="updateByExampleSelective" parameterType="map">
     update tb_pay_check_reminder
     <set>
-      <if test="record.paymentId != null">
-        PAYMENT_ID = #{record.paymentId,jdbcType=VARCHAR},
-      </if>
       <if test="record.billId != null">
         BILL_ID = #{record.billId,jdbcType=VARCHAR},
       </if>
@@ -261,8 +250,7 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update tb_pay_check_reminder
-    set PAYMENT_ID = #{record.paymentId,jdbcType=VARCHAR},
-      BILL_ID = #{record.billId,jdbcType=VARCHAR},
+    set BILL_ID = #{record.billId,jdbcType=VARCHAR},
       ENTERPRISE_NAME = #{record.enterpriseName,jdbcType=VARCHAR},
       BANK_ACCOUNT = #{record.bankAccount,jdbcType=VARCHAR},
       PAYMENT_MONEY = #{record.paymentMoney,jdbcType=DECIMAL},
@@ -281,9 +269,6 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.pay.entity.TbPayCheckReminder">
     update tb_pay_check_reminder
     <set>
-      <if test="billId != null">
-        BILL_ID = #{billId,jdbcType=VARCHAR},
-      </if>
       <if test="enterpriseName != null">
         ENTERPRISE_NAME = #{enterpriseName,jdbcType=VARCHAR},
       </if>
@@ -318,12 +303,11 @@
         record_status = #{recordStatus,jdbcType=CHAR},
       </if>
     </set>
-    where PAYMENT_ID = #{paymentId,jdbcType=VARCHAR}
+    where BILL_ID = #{billId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.pay.entity.TbPayCheckReminder">
     update tb_pay_check_reminder
-    set BILL_ID = #{billId,jdbcType=VARCHAR},
-      ENTERPRISE_NAME = #{enterpriseName,jdbcType=VARCHAR},
+    set ENTERPRISE_NAME = #{enterpriseName,jdbcType=VARCHAR},
       BANK_ACCOUNT = #{bankAccount,jdbcType=VARCHAR},
       PAYMENT_MONEY = #{paymentMoney,jdbcType=DECIMAL},
       PAYMENT_DESC = #{paymentDesc,jdbcType=VARCHAR},
@@ -334,6 +318,6 @@
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       PAYMENT_AFFIRM = #{paymentAffirm,jdbcType=CHAR},
       record_status = #{recordStatus,jdbcType=CHAR}
-    where PAYMENT_ID = #{paymentId,jdbcType=VARCHAR}
+    where BILL_ID = #{billId,jdbcType=VARCHAR}
   </update>
 </mapper>

@@ -51,7 +51,7 @@ public interface ExaminaService {
 	 * @param examinabankAdd
 	 * @param user
 	 */
-	public void updateExaminabank(Examinabank examinabank, User user);
+	public ExaminabankAdd updateExaminabank(Examinabank examinabank, User user);
 
 	/**
 	 * 删除试题
@@ -123,6 +123,14 @@ public interface ExaminaService {
 	 * @param examinaManagement
 	 */
 	public void updateResult(ExaminaManagement examinaManagement);
+
+	/**
+	 *删除成绩
+	 * 
+	 * @param examinaManagement
+	 *            答案实体
+	 */
+	public void deleteResult(ExaminaManagement examinaManagement);
 
 	/**分页查看成绩
 	 * @param page 查看成绩请求实体

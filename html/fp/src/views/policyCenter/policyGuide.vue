@@ -1,6 +1,6 @@
 <template>
-  <div class="policyGuide">
-    <div class="apphead">
+  <div class="policyGuide0">
+    <!-- <div class="apphead">
       <div class="box-card">
         <div id="headerActi">
           <div class="headerContainer clearfix">
@@ -14,16 +14,12 @@
               <div class="search">
                 <i class="el-icon-search" @click="show4=true" style="font-size:20px"></i>
               </div>
-              <div class="navlogin" v-if="this.$route.name!=='actiManagent'">
-                <a>登录</a>
-                <span class="line">|</span>
-                <a>注册</a>
-              </div>
+              <user-info></user-info>
             </div>
             <div class="nav">
               <ul class="posA clearfix">
                 <li>
-                  <a href="javascript:void(0);">政策中心</a>
+                  <a href="javascript:void(0);" class="mainColor">政策中心</a>
                 </li>
               </ul>
             </div>
@@ -41,10 +37,10 @@
           </div>
         </el-collapse-transition>
       </div>
-    </div>
+    </div> -->
     <div class="graphicCon w">
       <div class="serverOrgMenu">
-        <span>首页/</span>
+        <span class="pointer" @click="$router.push({path:'/policyCenter'})">首页/</span>
         <span class="mainColor agent">政策指南详情</span>
       </div>
       <div class="agentInfo">
@@ -92,8 +88,7 @@
               </div>
             </div>
             <div class="agent2 color2" v-if="zankaiFlag">
-              <div class="agent2Con">
-                {{getGuideDetal.policyContent}}
+              <div class="agent2Con" v-html="getGuideDetal.policyContent">
               </div>
               <!-- <div class="agent2Con" v-else>
                             暂无内容！
@@ -106,7 +101,11 @@
   </div>
 </template>
 <script>
+import userInfo from '.././common/userInfoData'
 export default {
+  components: {
+      userInfo
+    },
   data() {
     return {
       zankaiFlag: true,
@@ -140,63 +139,62 @@ export default {
 };
 </script>
 <style lang="scss">
-.policyGuide {
+.policyGuide0 {
   padding-top: 65px;
-  .apphead {
-    z-index: 9;
-    width: 100%;
-    position: fixed;
-    top: 0;
-    .search_box {
-      // background: rgba(0, 0, 0, 0.3);
-      width: 100%;
-      background: #fff;
-      box-shadow: 0 10px 10px -10px #ccc;
-      .el-input-group {
-        border-radius: 28px;
-        width: 42%;
-        margin: 43px 0;
-        position: relative;
-        transform: translateX(-50%);
-        left: 50%;
-        .el-input {
-          width: 94px;
-        }
-        .el-input__inner:focus {
-          border-color: #00a041;
-        }
-        .el-input-group__append,
-        .el-input-group__prepend {
-          border-radius: 28px;
-        }
-        .el-input-group__append {
-          /* border-top-left-radius: 0;
-        border-bottom-left-radius: 0; */
-          background: #00a041;
-          color: #fff;
-          right: 58px;
-          .el-button {
-            margin: -10px -10px;
-          }
-        }
-        .el-input-group__prepend {
-          border-top-right-radius: 0;
-          border-bottom-right-radius: 0;
-          background-color: #fff;
-          padding: 0px 17px 0 9px;
-          input {
-            color: #666666;
-            text-align: right;
-          }
-        }
-      }
-      .input-with-select .el-input__inner {
-        border-top-left-radius: 19px;
-        border-bottom-left-radius: 19px;
-        border: 1px solid #00a041;
-      }
-    }
-  }
+  // .apphead {
+  //   z-index: 9;
+  //   width: 100%;
+  //   position: fixed;
+  //   top: 0;
+  //   .search_box {
+  //     width: 100%;
+  //     background: #fff;
+  //     box-shadow: 0 10px 10px -10px #ccc;
+  //     .el-input-group {
+  //       border-radius: 28px;
+  //       width: 42%;
+  //       margin: 43px 0;
+  //       position: relative;
+  //       transform: translateX(-50%);
+  //       left: 50%;
+  //       .el-input {
+  //         width: 94px;
+  //       }
+  //       .el-input__inner:focus {
+  //         border-color: #00a041;
+  //       }
+  //       .el-input-group__append,
+  //       .el-input-group__prepend {
+  //         border-radius: 28px;
+  //       }
+  //       .el-input-group__append {
+  //         /* border-top-left-radius: 0;
+  //       border-bottom-left-radius: 0; */
+  //         background: #00a041;
+  //         color: #fff;
+  //         right: 58px;
+  //         .el-button {
+  //           margin: -10px -10px;
+  //         }
+  //       }
+  //       .el-input-group__prepend {
+  //         border-top-right-radius: 0;
+  //         border-bottom-right-radius: 0;
+  //         background-color: #fff;
+  //         padding: 0px 17px 0 9px;
+  //         input {
+  //           color: #666666;
+  //           text-align: right;
+  //         }
+  //       }
+  //     }
+  //     .input-with-select .el-input__inner {
+  //       border-top-left-radius: 19px;
+  //       border-bottom-left-radius: 19px;
+  //       border: 1px solid #00a041;
+  //     }
+  //   }
+  // }
   #headerActi {
     // position: relative;
     background-color: #fff;
@@ -259,9 +257,9 @@ export default {
           transform: translateX(-50%);
           // padding: 20px 0;
           li {
-            > a {
-              color: #000;
-            }
+            // > a {
+            //   color: #000;
+            // }
           }
         }
         .sousuo {
@@ -396,9 +394,9 @@ export default {
         .agent2 {
           padding: 10px 0;
           .agent2Con {
-            height: 150px;
-            width: 80%;
-            overflow: hidden;
+            max-height: 400px;
+            // width: 80%;
+            overflow: auto;
             // white-space: nowrap;
             // text-overflow: ellipsis;
           }

@@ -1,7 +1,7 @@
 <template>
   <div class="investor w" id="investor">
     <div class="investorMenu">
-      <span class="pointer" @click="$routet.push({path:'/tfindex'})">首页</span>
+      <span class="pointer" @click="$router.push({path:'/tfindex'})">首页</span>
       <span>/</span>
       <span class="mainColor agent">投资人</span>
     </div>
@@ -117,7 +117,7 @@ export default {
         url: "getInvestorInfoList",
         data: {
           needPage: 1,
-          mainCode: ""
+          mainCode: _this.mainCode
         },
         callback: function(res) {
           if (res.code == "0000") {
@@ -242,7 +242,7 @@ padding-top: 65px;
 
     .filRight {
       width: 200px;
-      height: 35px;
+      height: 36px;
       line-height: 35px;
       text-align: center;
       padding-right: 40px;

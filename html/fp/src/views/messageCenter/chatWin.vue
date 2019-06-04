@@ -10,8 +10,8 @@
       <div class="tc">
         <div class="date-tips">04/04</div>
       </div>
-      <message-row></message-row>
-      <message-row type="right"></message-row>
+      <message-row/>
+      <message-row type="right"/>
     </div>
     <div class="chat-footer">
       <avatar class="flex-none"></avatar>

@@ -4,38 +4,55 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class TbPmVideo implements Serializable {
+    /*@ApiModelProperty("主键")*/
     private String id;
 
+    /*@ApiModelProperty("申请企业ID")*/
     private String enterpriseId;
 
+    /*@ApiModelProperty("申请企业名称")*/
     private String enterpriseName;
 
+    /*@ApiModelProperty("联系人")*/
     private String contactMan;
 
+    /*@ApiModelProperty("联系电话")*/
     private String contactPhone;
 
+    /*@ApiModelProperty("申请地址")*/
     private String address;
 
+    /*@ApiModelProperty("工作流-工单编号")*/
     private String flowNo;
 
+    /*@ApiModelProperty("工作流-工单名称")*/
     private String flowTitle;
 
+    /*@ApiModelProperty("工作流-工单状态（0未赋权，1已赋权，2审批不通过）")*/
     private Byte flowStatus;
 
-    private String flowNodeName;
+    /*@ApiModelProperty("录像播放")*/
+    private String videoPlay;
 
+    /*@ApiModelProperty("工作流-工单开始时间")*/
     private Date flowStartTime;
 
+    /*@ApiModelProperty("工作流-工单完成时间")*/
     private Date flowCompleteTime;
 
+    /*@ApiModelProperty("是否删除（0标记删除，1正常）")*/
     private Byte recordStatus;
 
+    /*@ApiModelProperty("创建者账号")*/
     private String creatorAccount;
 
+    /*@ApiModelProperty("创建时间")*/
     private Date createTime;
 
+    /*@ApiModelProperty("最新更新者账号")*/
     private String modifierAccount;
 
+    /*@ApiModelProperty("申请说明")*/
     private String remarks;
 
     private static final long serialVersionUID = 1L;
@@ -112,12 +129,12 @@ public class TbPmVideo implements Serializable {
         this.flowStatus = flowStatus;
     }
 
-    public String getFlowNodeName() {
-        return flowNodeName;
+    public String getVideoPlay() {
+        return videoPlay;
     }
 
-    public void setFlowNodeName(String flowNodeName) {
-        this.flowNodeName = flowNodeName == null ? null : flowNodeName.trim();
+    public void setVideoPlay(String videoPlay) {
+        this.videoPlay = videoPlay == null ? null : videoPlay.trim();
     }
 
     public Date getFlowStartTime() {
@@ -197,7 +214,7 @@ public class TbPmVideo implements Serializable {
             && (this.getFlowNo() == null ? other.getFlowNo() == null : this.getFlowNo().equals(other.getFlowNo()))
             && (this.getFlowTitle() == null ? other.getFlowTitle() == null : this.getFlowTitle().equals(other.getFlowTitle()))
             && (this.getFlowStatus() == null ? other.getFlowStatus() == null : this.getFlowStatus().equals(other.getFlowStatus()))
-            && (this.getFlowNodeName() == null ? other.getFlowNodeName() == null : this.getFlowNodeName().equals(other.getFlowNodeName()))
+            && (this.getVideoPlay() == null ? other.getVideoPlay() == null : this.getVideoPlay().equals(other.getVideoPlay()))
             && (this.getFlowStartTime() == null ? other.getFlowStartTime() == null : this.getFlowStartTime().equals(other.getFlowStartTime()))
             && (this.getFlowCompleteTime() == null ? other.getFlowCompleteTime() == null : this.getFlowCompleteTime().equals(other.getFlowCompleteTime()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
@@ -220,7 +237,7 @@ public class TbPmVideo implements Serializable {
         result = prime * result + ((getFlowNo() == null) ? 0 : getFlowNo().hashCode());
         result = prime * result + ((getFlowTitle() == null) ? 0 : getFlowTitle().hashCode());
         result = prime * result + ((getFlowStatus() == null) ? 0 : getFlowStatus().hashCode());
-        result = prime * result + ((getFlowNodeName() == null) ? 0 : getFlowNodeName().hashCode());
+        result = prime * result + ((getVideoPlay() == null) ? 0 : getVideoPlay().hashCode());
         result = prime * result + ((getFlowStartTime() == null) ? 0 : getFlowStartTime().hashCode());
         result = prime * result + ((getFlowCompleteTime() == null) ? 0 : getFlowCompleteTime().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
@@ -246,7 +263,7 @@ public class TbPmVideo implements Serializable {
         sb.append(", flowNo=").append(flowNo);
         sb.append(", flowTitle=").append(flowTitle);
         sb.append(", flowStatus=").append(flowStatus);
-        sb.append(", flowNodeName=").append(flowNodeName);
+        sb.append(", videoPlay=").append(videoPlay);
         sb.append(", flowStartTime=").append(flowStartTime);
         sb.append(", flowCompleteTime=").append(flowCompleteTime);
         sb.append(", recordStatus=").append(recordStatus);

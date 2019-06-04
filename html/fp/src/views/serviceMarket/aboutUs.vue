@@ -1,9 +1,9 @@
 <template>
     <div class="aboutUs w">
         <div class="serverOrgMenu">
-            <span class="pointer" @click="$routet.push({path:'/enterpriseservice'})">企业服务</span>
+            <span class="pointer" @click="$router.push({path:'/enterpriseservice'})">企业服务</span>
             <span>/</span>
-            <span class="pointer" @click="$routet.push({path:'/serMatHp'})">服务超市</span>
+            <span class="pointer" @click="$router.push({path:'/serMatHp'})">服务超市</span>
             <span>/</span>
             <span class="mainColor agent">关于我们</span>
         </div>
@@ -154,7 +154,7 @@
                             </div>
                         </div>
                     </div>
-                    <iframe src="/static/map.html" frameborder="0" height="300" width="700"></iframe>
+                    <iframe src="/static/map11.html" frameborder="0" height="300" width="700"></iframe>
                     <!-- <div id="allmap" style="height:300px"></div> -->
                 </el-main>
             </el-container>

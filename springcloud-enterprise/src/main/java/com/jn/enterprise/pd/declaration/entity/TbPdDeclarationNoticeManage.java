@@ -61,6 +61,9 @@ public class TbPdDeclarationNoticeManage implements Serializable {
     /*@ApiModelProperty("最新更新时间")*/
     private Date modifiedTime;
 
+    /*@ApiModelProperty("公告简介")*/
+    private String briefIntroduct;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -215,6 +218,14 @@ public class TbPdDeclarationNoticeManage implements Serializable {
         this.modifiedTime = modifiedTime;
     }
 
+    public String getBriefIntroduct() {
+        return briefIntroduct;
+    }
+
+    public void setBriefIntroduct(String briefIntroduct) {
+        this.briefIntroduct = briefIntroduct == null ? null : briefIntroduct.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -245,7 +256,8 @@ public class TbPdDeclarationNoticeManage implements Serializable {
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
-            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()));
+            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
+            && (this.getBriefIntroduct() == null ? other.getBriefIntroduct() == null : this.getBriefIntroduct().equals(other.getBriefIntroduct()));
     }
 
     @Override
@@ -271,6 +283,7 @@ public class TbPdDeclarationNoticeManage implements Serializable {
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
+        result = prime * result + ((getBriefIntroduct() == null) ? 0 : getBriefIntroduct().hashCode());
         return result;
     }
 
@@ -299,6 +312,7 @@ public class TbPdDeclarationNoticeManage implements Serializable {
         sb.append(", createdTime=").append(createdTime);
         sb.append(", modifierAccount=").append(modifierAccount);
         sb.append(", modifiedTime=").append(modifiedTime);
+        sb.append(", briefIntroduct=").append(briefIntroduct);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

@@ -26,6 +26,7 @@ import com.jn.enterprise.technologyfinancial.financial.product.model.*;
 import com.jn.enterprise.technologyfinancial.financial.product.service.FinancialProductService;
 import com.jn.enterprise.technologyfinancial.investors.dao.TbServiceInvestorMapper;
 import com.jn.enterprise.technologyfinancial.investors.entity.TbServiceInvestorCriteria;
+import com.jn.enterprise.utils.IBPSFileUtils;
 import com.jn.enterprise.utils.IBPSUtils;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.model.UserExtensionInfo;
@@ -111,6 +112,15 @@ public class FinancialProductServiceImpl implements FinancialProductService {
                     financialProductListParam.getRows() == 0 ? 15 : financialProductListParam.getRows(), true);
         }
         List<FinancialProductListInfo> financialProductList = financialProductMapper.getFinancialProductList(financialProductListParam,BUSINESS_AREA);
+
+        // 处理图片路径
+        if (financialProductList != null && !financialProductList.isEmpty()) {
+            for (FinancialProductListInfo product : financialProductList) {
+                if (StringUtils.isNotBlank(product.getPictureUrl())) {
+                    product.setPictureUrl(IBPSFileUtils.getFilePath(product.getPictureUrl()));
+                }
+            }
+        }
         return new PaginationData(financialProductList, objects == null ? 0 : objects.getTotal());
     }
 
@@ -128,6 +138,11 @@ public class FinancialProductServiceImpl implements FinancialProductService {
         }
         //更新浏览次数
         updateProductViewNum(productId);
+
+        // 处理图片格式
+        if (StringUtils.isNotBlank(financialProductDetails.getPictureUrl())) {
+            financialProductDetails.setPictureUrl(IBPSFileUtils.getFilePath(financialProductDetails.getPictureUrl()));
+        }
         return financialProductDetails;
     }
 
@@ -319,8 +334,8 @@ public class FinancialProductServiceImpl implements FinancialProductService {
         //产品类型(特色产品)
         String featureType = ProductConstantEnum.PRODUCT_FEATURE_TYPE.getCode();
 
-        //如果添加特色产品,常规产品则添加重名校验(上架常规产品则不校验)
-        if(featureType.equals(info.getProductType()) || info.getTemplateId() == null) {
+        //如果添加特色产品,编辑特色产品不校验
+        if(featureType.equals(info.getProductType()) && StringUtils.isBlank(info.getProductId())) {
             TbServiceProductCriteria criteria = new TbServiceProductCriteria();
             criteria.createCriteria().andProductNameEqualTo(info.getProductName()).andRecordStatusEqualTo(recordStatus)
                     .andStatusNotEqualTo(ProductConstantEnum.PRODUCT_STATUS_APPROVAL_NOT_PASS.getCode());
@@ -349,6 +364,9 @@ public class FinancialProductServiceImpl implements FinancialProductService {
         if (StringUtils.isBlank(product.getViewCount())) {
             product.setViewCount("0");
         }
+
+        // 处理图片格式
+        product.setPictureUrl(IBPSFileUtils.uploadFile2Json(account, product.getPictureUrl()));
 
         // 启动IBPS流程
         String bpmnDefId = ibpsDefIdConfig.getTechnologyProduct();

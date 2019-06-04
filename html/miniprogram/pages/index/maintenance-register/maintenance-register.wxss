@@ -1,0 +1,142 @@
+.maintenance-list-bg {
+  background-color: #f1f1f1;
+}
+.row-block {
+  margin-bottom: 46rpx;
+}
+.row-block:last-of-type {
+  margin-bottom: 0;
+}
+.row-block-title {
+  padding: 20rpx;
+  background-color: #fff;
+  font-size: 32rpx;
+}
+.btn-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items:center;
+  margin-bottom: 20rpx;
+}
+.card-list-text {
+  margin-top: 16rpx;
+}
+.card-list-tips {
+  display: flex;
+  justify-content: space-between;
+  align-items:center;
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color:rgba(153,153,153,1);
+}
+.card-list-warning {
+  margin-left: 8rpx;
+  color: #FF3333;
+}
+.cell-row {
+  margin-bottom: 6rpx;
+}
+.common-cell-avatar {
+    width: 80rpx;
+    height: 80rpx;
+    border-radius: 50%;
+    margin-right: 20rpx;
+    flex: none;
+}
+.common-cell-icon {
+  color: #fff;
+  font-size:52rpx;
+  width:60rpx;
+  height:60rpx;
+  text-align:center;
+  line-height:60rpx;
+}
+.pic-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.pic-row .cell-pic-bg {
+  width: 150rpx;
+  height: 150rpx;
+  padding: 10rpx;
+}
+.pic-row .cell-pic {
+  width: 100%;
+  height: 100%;
+  border-radius: 8rpx;
+}
+.pic-row .cell-pic:last-of-type {
+  margin-right: 0;
+}
+.block-info {
+  padding: 20rpx;
+  background-color: #fff;
+  color: #333;
+}
+.block-title {
+  color: #9A9A9A;
+  font-size: 26rpx;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+}
+.block-content {
+  word-break: break-all;
+}
+.sub-button-bg {
+  margin: 0 auto;
+  padding-top: 20rpx;
+  padding-bottom: 40rpx;
+  text-align: center;
+}
+.right-icon {
+  margin-left: 20rpx;
+}
+
+.cell-form-row {
+  padding: 20rpx;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  color: #333;
+  margin-bottom: 6rpx;
+}
+.cell-row-input {
+  width: 100%;
+}
+.row-block .cell-form-row:last-of-type {
+  margin-bottom: 0;
+}
+.form-label,
+.cell-form-row-l {
+  min-width: 100rpx;
+  max-width: 160rpx;
+  flex: none;
+}
+.cell-form-row-r {
+  display: flex;
+  flex-wrap: wrap;
+}
+.cell-form-row .cell-pic-bg,
+.upload-file-btn {
+  padding: 10rpx;
+}
+.cell-form-row .cell-pic {
+  width: 130rpx;
+  height: 130rpx;
+  border-radius: 8rpx;
+}
+.cell-pic-bg {
+  position: relative;
+}
+.pic-remove {
+  position: absolute;
+  right: 10rpx;
+  top: 10rpx;
+  padding: 10rpx;
+  background-color: rgba(0, 0, 0, .7);
+  color: #fff;
+  z-index: 1;
+}

@@ -17,9 +17,11 @@ import com.jn.system.model.User;
 import io.swagger.annotations.*;
 import org.apache.ibatis.annotations.Param;
 import org.apache.shiro.SecurityUtils;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
 
@@ -65,7 +67,9 @@ public class AssetArticleLeaseController {
     })
     public Result<AssetArticleLeaseModel> getArticleLease (String assetNumber){
         Assert.notNull(assetNumber,"资产编号不能为空");
-        AssetArticleLeaseModel assetArticleLeaseModel = assetArticleLeaseService.getArticleLease(assetNumber);
+        //获取登录信息
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        AssetArticleLeaseModel assetArticleLeaseModel = assetArticleLeaseService.getArticleLease(assetNumber,user.getAccount());
         return new Result<>(assetArticleLeaseModel);
     }
 
@@ -137,9 +141,9 @@ public class AssetArticleLeaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id",value = "订单编号",example = "2019050417220960019"),
     })
-    public Result giveBack(String id){
-        assetArticleLeaseOrdersService.giveBack(id);
-        return new Result();
+    public Result<AssetArticleLeaseOrdersModel> giveBack(String id){
+        AssetArticleLeaseOrdersModel assetArticleLeaseOrdersModel = assetArticleLeaseOrdersService.giveBack(id);
+        return new Result<>(assetArticleLeaseOrdersModel);
     }
 
     @ControllerLog(doAction = "确认归还")
@@ -164,17 +168,15 @@ public class AssetArticleLeaseController {
         return new Result();
     }
 
-    @ControllerLog(doAction = "创建支付订单")
-    @ApiOperation(value = "创建支付订单",notes = "创建支付订单")
-    @PostMapping(value = "/createPayOrder")
+    @ControllerLog(doAction = "取消订单")
+    @ApiOperation(value = "取消订单",notes = "取消订单")
+    @GetMapping(value = "/cancelOrder")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "orderId",value = "订单ID",example = "2019050417220960019"),
-            @ApiImplicitParam(name = "channelId",value = "支付渠道ID（WX_APP：微信APP支付，ALIPAY_MOBILE：支付宝移动支付）",example = "ALIPAY_MOBILE")
+            @ApiImplicitParam(name = "orderId",value = "订单编号",example = "2019050811515490657"),
     })
-    public Result<PayOrderRsp> createPayOrder (String orderId, String channelId){
-        User user=(User) SecurityUtils.getSubject().getPrincipal();
-        Assert.notNull(orderId,"订单编号不能为空");
-        return assetArticleLeaseOrdersService.createPayOrder(orderId,channelId,user.getAccount());
+    public Result cancelOrder(String orderId){
+        assetArticleLeaseOrdersService.cancelOrder(orderId);
+        return new Result();
     }
 
 }

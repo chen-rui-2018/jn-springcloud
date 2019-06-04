@@ -28,8 +28,12 @@
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(employeeType)">
             and employee_type=#{employeeType}
         </if>
-        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
-            and department_id=#{departmentId}
+        <if test="departmentIds!=null and departmentIds.size>0">
+            and department_id in
+            <foreach collection="departmentIds" item="depart" open="(" close=")" separator=",">
+                #{depart}
+            </foreach>
+
         </if>
         ORDER BY created_time DESC
     </select>
@@ -106,11 +110,16 @@
     </insert>
 
     <select id="statByEmployeeType" parameterType="map" resultType="com.jn.hr.employee.model.KeyValue">
-        select employee_type name,count(1) value  from tb_manpower_employee_basic_info
+        select case when employee_type='1' then '正式' else '实习生' end  name,count(1) value  from tb_manpower_employee_basic_info
         where record_status=1
-        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
-            and department_id=#{departmentId}
+        <if test="departmentIds!=null and departmentIds.size>0">
+            and department_id in
+            <foreach collection="departmentIds" item="depart" open="(" close=")" separator=",">
+                #{depart}
+            </foreach>
+
         </if>
+
          group by employee_type order by employee_type asc
     </select>
 
@@ -163,9 +172,13 @@
 					tb_manpower_employee_basic_info t1
 				LEFT JOIN tb_manpower_work_experience t2 ON t1.job_number = t2.job_number
 				where t1.record_status=1
-               <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
-                  and department_id=#{departmentId}
-              </if>
+        <if test="departmentIds!=null and departmentIds.size>0">
+            and department_id in
+            <foreach collection="departmentIds" item="depart" open="(" close=")" separator=",">
+                #{depart}
+            </foreach>
+
+        </if>
 				GROUP BY
 					t1.job_number
 			) t3
@@ -176,22 +189,30 @@
     </select>
 
     <select id="statByEmployeePostName" parameterType="map" resultType="com.jn.hr.employee.model.KeyValue">
-         select post_name name,count(1) value,
-         case when post_name='领导班子' then 1
-         when post_name='中层干部' then 2
+         select job_name name,count(1) value,
+         case when post_name='普通员工' then 1
+         when job_name='中层干部' then 2
          else 3 end seqno
     from tb_manpower_employee_basic_info where record_status=1
-        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
-            and department_id=#{departmentId}
+        <if test="departmentIds!=null and departmentIds.size>0">
+            and department_id in
+            <foreach collection="departmentIds" item="depart" open="(" close=")" separator=",">
+                #{depart}
+            </foreach>
+
         </if>
-         group by post_name order by seqno asc
+         group by job_name order by seqno asc
     </select>
 
     <select id="statByEmployeeSex" parameterType="map" resultType="com.jn.hr.employee.model.KeyValue">
            select  case  when sex=1 then '男' else '女' end name ,count(1) value  from tb_manpower_employee_basic_info
            where record_status=1
-        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
-            and department_id=#{departmentId}
+        <if test="departmentIds!=null and departmentIds.size>0">
+            and department_id in
+            <foreach collection="departmentIds" item="depart" open="(" close=")" separator=",">
+                #{depart}
+            </foreach>
+
         </if>
          group by sex order by name desc
     </select>
@@ -207,8 +228,12 @@
             when highest_academic='7' then '小学'
             else '未知' end name,highest_academic seq
         from tb_manpower_employee_basic_info where record_status=1
-        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
-            and department_id=#{departmentId}
+        <if test="departmentIds!=null and departmentIds.size>0">
+            and department_id in
+            <foreach collection="departmentIds" item="depart" open="(" close=")" separator=",">
+                #{depart}
+            </foreach>
+
         </if>
          group by highest_academic order by seq asc
     </select>
@@ -254,8 +279,12 @@
         tb_manpower_employee_basic_info t1
         WHERE
         record_status = 1
-         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
-            and department_id=#{departmentId}
+        <if test="departmentIds!=null and departmentIds.size>0">
+            and department_id in
+            <foreach collection="departmentIds" item="depart" open="(" close=")" separator=",">
+                #{depart}
+            </foreach>
+
         </if>
         ) t2
         ) t3
@@ -266,8 +295,12 @@
 
     <select id="statByEmployeeDepartment" parameterType="map" resultType="com.jn.hr.employee.model.KeyValue">
          select department_name name,count(1) value from tb_manpower_employee_basic_info where record_status=1
-        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
-            and department_id=#{departmentId}
+        <if test="departmentIds!=null and departmentIds.size>0">
+            and department_id in
+            <foreach collection="departmentIds" item="depart" open="(" close=")" separator=",">
+                #{depart}
+            </foreach>
+
         </if>
          group by department_name
     </select>
@@ -291,10 +324,102 @@
       t1.end_current, t1.work_mailbox, t1.work_phone,
       t1.expiration_date, t1.probation_period, t1.record_status,
       t1.creator_account, t1.created_time, t1.modifier_account,
-      t1.modified_time
+      t1.modified_time,t1.user_id,t1.user_account
         FROM
         `tb_manpower_employee_basic_info` t1
         WHERE t1.record_status != 0 and t1.job_number =#{jobNumber,jdbcType=VARCHAR}
+     </select>
+
+    <select id="selectByPhone" parameterType="map"
+            resultType="com.jn.hr.employee.entity.TbManpowerEmployeeBasicInfo">
+         SELECT
+        t1.id, t1.employee_portrait, t1.`name`,
+      t1.sex, t1.phone, t1.mailbox,
+      t1.department_id, t1.department_name, t1.job_id,
+      t1.job_name, t1.certificate_id, t1.certificate_type,
+      t1.certificate_number, t1.post_id, t1.post_name,
+      t1.job_number, t1.contract_id, t1.contract_name,
+      t1.employee_type, t1.entry_date, t1.birth_date,
+      t1.nationality_id, t1.nationality_name, t1.work_address,
+      t1.contact_address, t1.certificate_name, t1.nation,
+      t1.registered_type, t1.registered_residence, t1.native_place,
+      t1.residential_address, t1.highest_academic, t1.political_outlook,
+      t1.marital_status, t1.emergency_contact_name, t1.emergency_contact_phone,
+      t1.QQ, t1.wechat, t1.start_current,
+      t1.end_current, t1.work_mailbox, t1.work_phone,
+      t1.expiration_date, t1.probation_period, t1.record_status,
+      t1.creator_account, t1.created_time, t1.modifier_account,
+      t1.modified_time,t1.user_id,t1.user_account
+        FROM
+        `tb_manpower_employee_basic_info` t1
+        WHERE t1.record_status != 0 and t1.phone =#{phone,jdbcType=VARCHAR}
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(id)">
+            and t1.id!=#{id}
+        </if>
+     </select>
+
+    <select id="selectByMailbox" parameterType="map"
+            resultType="com.jn.hr.employee.entity.TbManpowerEmployeeBasicInfo">
+         SELECT
+        t1.id, t1.employee_portrait, t1.`name`,
+      t1.sex, t1.phone, t1.mailbox,
+      t1.department_id, t1.department_name, t1.job_id,
+      t1.job_name, t1.certificate_id, t1.certificate_type,
+      t1.certificate_number, t1.post_id, t1.post_name,
+      t1.job_number, t1.contract_id, t1.contract_name,
+      t1.employee_type, t1.entry_date, t1.birth_date,
+      t1.nationality_id, t1.nationality_name, t1.work_address,
+      t1.contact_address, t1.certificate_name, t1.nation,
+      t1.registered_type, t1.registered_residence, t1.native_place,
+      t1.residential_address, t1.highest_academic, t1.political_outlook,
+      t1.marital_status, t1.emergency_contact_name, t1.emergency_contact_phone,
+      t1.QQ, t1.wechat, t1.start_current,
+      t1.end_current, t1.work_mailbox, t1.work_phone,
+      t1.expiration_date, t1.probation_period, t1.record_status,
+      t1.creator_account, t1.created_time, t1.modifier_account,
+      t1.modified_time,t1.user_id,t1.user_account
+        FROM
+        `tb_manpower_employee_basic_info` t1
+        WHERE t1.record_status != 0 and t1.mailbox =#{mailbox,jdbcType=VARCHAR}
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(id)">
+            and t1.id!=#{id}
+        </if>
+     </select>
+
+    <select id="selectByCertificateNumber" parameterType="map"
+            resultType="com.jn.hr.employee.entity.TbManpowerEmployeeBasicInfo">
+         SELECT
+        t1.id, t1.employee_portrait, t1.`name`,
+      t1.sex, t1.phone, t1.mailbox,
+      t1.department_id, t1.department_name, t1.job_id,
+      t1.job_name, t1.certificate_id, t1.certificate_type,
+      t1.certificate_number, t1.post_id, t1.post_name,
+      t1.job_number, t1.contract_id, t1.contract_name,
+      t1.employee_type, t1.entry_date, t1.birth_date,
+      t1.nationality_id, t1.nationality_name, t1.work_address,
+      t1.contact_address, t1.certificate_name, t1.nation,
+      t1.registered_type, t1.registered_residence, t1.native_place,
+      t1.residential_address, t1.highest_academic, t1.political_outlook,
+      t1.marital_status, t1.emergency_contact_name, t1.emergency_contact_phone,
+      t1.QQ, t1.wechat, t1.start_current,
+      t1.end_current, t1.work_mailbox, t1.work_phone,
+      t1.expiration_date, t1.probation_period, t1.record_status,
+      t1.creator_account, t1.created_time, t1.modifier_account,
+      t1.modified_time,t1.user_id,t1.user_account
+        FROM
+        `tb_manpower_employee_basic_info` t1
+        WHERE t1.record_status != 0 and t1.certificate_number =#{certificateNumber,jdbcType=VARCHAR}
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(id)">
+            and t1.id!=#{id}
+        </if>
+     </select>
+
+     
+     <select id="selectByUserId" parameterType="java.lang.String"
+         resultType="com.jn.hr.employee.entity.TbManpowerEmployeeBasicInfo">
+         SELECT * FROM
+        `tb_manpower_employee_basic_info` t1
+        WHERE t1.record_status != 0 and t1.user_id =#{userId,jdbcType=VARCHAR}
      </select>
      
      <select id="selectByDepartment" parameterType="map" resultType="com.jn.hr.employee.entity.TbManpowerEmployeeBasicInfo">
@@ -323,7 +448,7 @@
       t1.end_current, t1.work_mailbox, t1.work_phone,
       t1.expiration_date, t1.probation_period, t1.record_status,
       t1.creator_account, t1.created_time, t1.modifier_account,
-      t1.modified_time,employ_status, user_id, user_account
+      t1.modified_time,employ_status, t1.user_id, t1.user_account
         FROM
         `tb_manpower_employee_basic_info` t1
         WHERE t1.record_status != 0
@@ -361,7 +486,7 @@
       t1.end_current, t1.work_mailbox, t1.work_phone,
       t1.expiration_date, t1.probation_period, t1.record_status,
       t1.creator_account, t1.created_time, t1.modifier_account,
-      t1.modified_time,employ_status, user_id, user_account
+      t1.modified_time,employ_status, t1.user_id, t1.user_account
         FROM
         `tb_manpower_employee_basic_info` t1
         WHERE t1.record_status != 0

@@ -17,12 +17,19 @@
     <!--员工申请-->
     <select id="findEmployeeRequisition" parameterType="java.lang.String" resultType="com.jn.enterprise.usercenterindex.model.EmployeeRequisitionModel">
         SELECT
-		SUM(CASE t.inviter_account WHEN '${account}' then 1 else 0 end) as "total",
-		CONCAT(ROUND(sum( CASE  WHEN (t.check_status = 0 || t.check_status is NULL)  THEN 1 ELSE 0  END))) as "unExamine"
+        IFNULL(SUM(CASE t.com_id WHEN '${companyCode}' then 1 else 0 end),'') as "total",
+        IFNULL(SUM( CASE  WHEN (t.check_status = 0 || t.check_status is NULL)  THEN 1 ELSE 0  END),'') as "unExamine"
         FROM
         tb_service_company_staff t
         WHERE t.record_status = 1
-        AND t.inviter_account=#{account}
+        AND t.com_id = #{companyCode}
+        <!--SELECT
+		IFNULL(SUM(CASE t.inviter_account WHEN '${account}' then 1 else 0 end),'') as "total",
+		IFNULL(CONCAT(ROUND(sum( CASE  WHEN (t.check_status = 0 || t.check_status is NULL)  THEN 1 ELSE 0  END))),'') as "unExamine"
+        FROM
+        tb_service_company_staff t
+        WHERE t.record_status = 1
+        AND t.inviter_account=#{account}-->
     </select>
 
     <!--员工申请-->

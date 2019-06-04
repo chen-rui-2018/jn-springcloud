@@ -86,30 +86,10 @@ public class MyPayBillController extends BaseController {
     public Result billCheckReminder(@RequestBody @Validated PayCheckReminder payCheckReminder){
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        myPayBillService.billCheckReminder(payCheckReminder,user);
-        return new Result();
+        Assert.notNull(payCheckReminder.getBillIds(),"账单ID或编号不能为空");
+        return new Result(myPayBillService.billCheckReminder(payCheckReminder,user));
     }
 
-    @ControllerLog(doAction = "我的账单-账单催缴次数更新")
-    @ApiOperation(value = "我的账单-账单催缴次数更新",notes = "我的账单-账单催缴次数更新")
-    @RequestMapping(value = "/updateBillNumber",method = RequestMethod.POST)
-    @RequiresPermissions("/payment/payBill/updateBillNumber")
-    public Result updateBillNumber(@RequestBody @Validated PayCheckReminderParam payCheckReminderParam){
-        Assert.notNull(payCheckReminderParam.getBillId(),"账单ID或编号不能为空");
-        Assert.notNull(payCheckReminderParam.getReminderNumber(),"催缴次数不能为空");
-        Assert.notNull(payCheckReminderParam.getModifiedReminderTime(),"最新催缴时间不能为空");
-        myPayBillService.updateBillNumber(payCheckReminderParam);
-        return new Result();
-    }
-
-    @ControllerLog(doAction = "统一缴费--发起支付")
-    @ApiOperation(value = "统一缴费-发起支付")
-    @RequestMapping(value = "/startPayment",method = RequestMethod.POST)
-    @RequiresPermissions("/payment/payBill/startPayment")
-    public Result<PayOrderRsp> startPayment(@RequestBody PayBIllInitiateParam payBIllInitiateParam){
-        User user=(User) SecurityUtils.getSubject().getPrincipal();
-        return myPayBillService.startPayment(payBIllInitiateParam,user);
-    }
 
 
 }

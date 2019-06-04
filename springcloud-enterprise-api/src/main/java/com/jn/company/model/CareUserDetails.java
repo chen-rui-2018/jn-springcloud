@@ -28,6 +28,17 @@ public class CareUserDetails implements Serializable {
     private String  likedNum;
     @ApiModelProperty(value="关注状态-(0:未关注--1:已关注)")
     private String  careStatus;
+    @ApiModelProperty(value="关注状态-(0:个人账号--1:企业账号)")
+    private String  identity;
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
     public String getAvatar() {
         return avatar;
     }
@@ -38,14 +49,6 @@ public class CareUserDetails implements Serializable {
 
     public String getNickName() {
         return nickName;
-    }
-
-    public String getAccount() {
-        return account;
-    }
-
-    public void setAccount(String account) {
-        this.account = account;
     }
 
     public void setNickName(String nickName) {
@@ -82,5 +85,27 @@ public class CareUserDetails implements Serializable {
 
     public void setCareStatus(String careStatus) {
         this.careStatus = careStatus;
+    }
+
+    public String getIdentity() {
+        return identity;
+    }
+
+    public void setIdentity(String identity) {
+        this.identity = identity;
+    }
+
+    @Override
+    public String toString() {
+        return "CareUserDetails{" +
+                "account='" + account + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", careNum='" + careNum + '\'' +
+                ", fansNum='" + fansNum + '\'' +
+                ", likedNum='" + likedNum + '\'' +
+                ", careStatus='" + careStatus + '\'' +
+                ", identity='" + identity + '\'' +
+                '}';
     }
 }

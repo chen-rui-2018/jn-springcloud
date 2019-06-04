@@ -1,7 +1,7 @@
 <template>
     <div class="serverCon w">
         <div class="serverOrgMenu">
-            <span class="pointer" @click="$routet.push({path:'/serMatHp'})">首页</span>
+            <span class="pointer" @click="$router.push({path:'/serMatHp'})">首页</span>
             <span>/</span>
             <span class="mainColor agent">服务顾问</span>
         </div>
@@ -59,7 +59,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="orgBtn fr mainColor">在线联系</div>
+                    <div class="orgBtn fr mainColor" @click="onlineContact(i.advisorAccount,i.advisorName)">在线联系</div>
                 </li>
             </ul>
         </div>
@@ -90,8 +90,19 @@ export default {
   mounted() {
     this.selectIndustryList();
     this.initList()
+     if(this.$route.query.searchData){
+      this.keyWords=this.$route.query.searchData
+      this.initList();
+    }
   },
   methods: {
+    onlineContact(advisorAccount,advisorName){
+      if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
+      this.$router.push({ path: "/chat",query:{fromUser:JSON.parse(sessionStorage.userInfo).account,toUser:advisorAccount,nickName:advisorName}});
+    },
     widFun(i) {
       let doc = document.getElementsByClassName(i);
       let num = 0;

@@ -18,7 +18,8 @@ public class MySeq {
 	private static String trans_seq_prefix = "T";
 	private static AtomicLong refund_seq = new AtomicLong(0L);
 	private static String refund_seq_prefix = "R";
-
+	private static AtomicLong reconciliation_seq = new AtomicLong(0L);
+	private static String reconciliation_seq_prefix = "DZ";
 	private static String node = "00";
 	static {
 		try {
@@ -41,6 +42,10 @@ public class MySeq {
 
 	public static String getRefund() {
 		return getSeq(refund_seq_prefix, refund_seq);
+	}
+
+	public static String getReconciliation() {
+		return getSeq(reconciliation_seq_prefix, reconciliation_seq);
 	}
 
 	private static String getSeq(String prefix, AtomicLong seq) {

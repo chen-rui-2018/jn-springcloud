@@ -50,6 +50,7 @@
             ta.id as "id"                                                                                 <!--活动id-->
             ,ta.acti_name as "actiName"                                                                   <!--活动名称-->
             ,ta.acti_address as "actiAddress"                                                             <!--活动地址-->
+            ,ta.acti_status as "actiStatus"                                                               <!--活动状态-->
             ,date_format(ta.acti_start_time,'%Y-%m-%d %H:%i:%s') as "actiStartTime"                       <!--活动开始时间-->
             ,date_format(ta.acti_end_time,'%Y-%m-%d %H:%i:%s') as "actiEndTime"                           <!--活动结束时间-->
             ,ta.apply_num as "applyNum"                                                                   <!--活动报名人数-->

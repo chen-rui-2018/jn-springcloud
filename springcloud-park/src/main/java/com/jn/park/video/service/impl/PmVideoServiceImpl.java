@@ -6,10 +6,8 @@ import com.jn.common.util.StringUtils;
 import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.hardware.api.SecurityVideoClient;
 import com.jn.hardware.model.security.*;
-import com.jn.park.video.dao.TbPmVideoItemMapper;
-import com.jn.park.video.dao.TbPmVideoMapper;
-import com.jn.park.video.dao.TbVideoInfoMapper;
-import com.jn.park.video.dao.VideoInfoMapper;
+import com.jn.park.video.dao.*;
+import com.jn.park.video.enmus.PmVideoInfoEnums;
 import com.jn.park.video.enmus.TowerEnums;
 import com.jn.park.video.entity.TbPmVideo;
 import com.jn.park.video.entity.TbPmVideoItem;
@@ -54,13 +52,13 @@ public class PmVideoServiceImpl implements PmVideoService {
     private TbVideoInfoMapper tbVideoInfoMapper;
 
     @Autowired
-    private VideoInfoMapper videoInfoMapper;
-
-    @Autowired
     private TbPmVideoItemMapper tbPmVideoItemMapper;
 
     @Autowired
     private TbPmVideoMapper tbPmVideoMapper;
+
+    @Autowired
+    private PmVideoMapper pmVideoMapper;
 
     /**
      * 添加安防录像设备信息
@@ -141,17 +139,19 @@ public class PmVideoServiceImpl implements PmVideoService {
     @Transactional(rollbackFor = Exception.class)
     public Integer pmVideoApplyHandler(PmVideoVo pmVideoVo, User user) {
         Integer result = 0;
-
+        TbPmVideo tbPmVideo = new TbPmVideo();
+        pmVideoVo.setFlowCompleteTime(new Date());
+        BeanUtils.copyProperties(pmVideoVo, tbPmVideo);
         //1.获取传入数据的子表数据
         if (pmVideoVo != null) {
 
             String id = pmVideoVo.getId();
             List<PmVideoItem> tb_pm_video_item = pmVideoVo.getTb_pm_video_item();
             if (tb_pm_video_item != null) {
+                //用于拼接监控点名及监控点播放地址
+                StringBuffer buffer = new StringBuffer();
                 //如果子表数据不为空，则分析子表中信息
                 for (PmVideoItem pmVideoItem : tb_pm_video_item) {
-                    //用于拼接监控点名及监控点播放地址
-                    StringBuffer buffer = new StringBuffer();
 
                     TbPmVideoItem tbPmVideoItem = new TbPmVideoItem();
                     String itemId = pmVideoItem.getId();
@@ -183,40 +183,53 @@ public class PmVideoServiceImpl implements PmVideoService {
                             String videoIndexCode = videoCode[i];
 
                             //录像地址
-                            String PlayBackUrl = "暂无录像";
+                            String PlayBackUrl = "noVideo";
                             Result<SecurityPlayBackUrlShow> securityPlayBackUrl = getSecurityPlayBackUrlShowResult(beginTime, endTime, videoIndexCode);
-
+                            logger.info("[安防录像] 调用安防录像接口成功,返回数据{}", securityPlayBackUrl.getData());
                             //获取返回的旅行播放地址
-                            if (StringUtils.isNotBlank(securityPlayBackUrl.getData().getUrl())) {
-                                PlayBackUrl = securityPlayBackUrl.getData().getUrl();
+                            if (securityPlayBackUrl.getData() != null && StringUtils.isNotBlank(securityPlayBackUrl.getData().getUrl())) {
+                                StringBuffer url = new StringBuffer();
+                                List<SecurityPlayBackUrl> list = securityPlayBackUrl.getData().getList();
+                                String beginTime1 = list.get(0).getBeginTime();
+                                String endTime1 = list.get(list.size()-1).getEndTime();
+                                String videoUrl = securityPlayBackUrl.getData().getUrl();
+                                url.append(videoUrl).append("?beginTime=").append(beginTime1)
+                                        .append("&endTime=").append(endTime1);
+                                PlayBackUrl = url.toString();
                             }
 
                             //由于页面是文本域,使用/n进行换行处理
-                            buffer.append(videoName[i]).append(":").append(PlayBackUrl).append("\n");
+                            buffer.append("<a id=\'").append(PlayBackUrl).append("' class='video' name='video' href='javascript:void(0)'>")
+                                    .append(videoName[i]).append("</a></br>");
                         }
 
-                        //将播放路径更新值数据库
-                        pmVideoItem.setVideoPlayUrl(buffer.substring(0, buffer.length() - 1));
-                        BeanUtils.copyProperties(pmVideoItem, tbPmVideoItem);
-                        tbPmVideoItemMapper.updateByPrimaryKeySelective(tbPmVideoItem);
                     } else {
                         logger.info("[安防录像] 当前申请明细中未赋权监控点,videoId:{},itemId:{}", id, itemId);
                         continue;
                     }
                 }
-
+                //设置播放路径
+                tbPmVideo.setVideoPlay(buffer.toString());
             }
             logger.info("[安防录像] 录像赋权成功,videoId:{}", id);
         }
 
         //更新赋权完成时间
-        pmVideoVo.setFlowCompleteTime(new Date());
-        TbPmVideo tbPmVideo = new TbPmVideo();
-        BeanUtils.copyProperties(pmVideoVo,tbPmVideo);
         tbPmVideo.setFlowStatus(new Byte(RecordStatusEnum.EFFECTIVE.getCode()));
         tbPmVideoMapper.updateByPrimaryKeySelective(tbPmVideo);
 
         return result += 1;
+    }
+
+    /**
+     * 清除录像赋权超过7的录像播放信息
+     */
+    @Override
+    @ServiceLog(doAction = "清除录像赋权超过7的录像播放信息")
+    @Transactional(rollbackFor = Exception.class)
+    public void updateVideoInfo() {
+        pmVideoMapper.updateVideoInfo(PmVideoInfoEnums.VIDEO_PLAY_INFO.getCode());
+        logger.info("[安防录像] 安防录像权限修改成功");
     }
 
     /**

@@ -2,7 +2,6 @@ package org.xxpay.service.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jn.pay.model.PayOrderNotify;
-import com.jn.pay.model.RefundOrderNotify;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +22,7 @@ import org.xxpay.service.service.MchNotifyService;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
@@ -202,4 +202,29 @@ public class Notify4BasePay {
 		return object;
 	}
 
+	/**
+	 * 计算手续费和实际收入
+	 * @param  payOrder  支付信息对象
+	 * @param  payRate   商户支付费率
+	* */
+	public PayOrder computationCost(PayOrder payOrder ,Double payRate){
+
+		_log.info("支付单号为: {},商户支付费率：{}%  ===开始===计算手续费和实际收入",payOrder.getPayOrderId(),payRate);
+		payOrder.setPayRate(payRate);
+
+		//订单金额
+		BigDecimal amount = new BigDecimal(payOrder.getAmount());
+
+		//计算手续费
+		BigDecimal platCost = amount.multiply(BigDecimal.valueOf(payRate)).divide(BigDecimal.valueOf(100), 0, BigDecimal.ROUND_HALF_UP);
+		payOrder.setPlatCost(platCost.longValue());
+		_log.info("订单总金额为：{},计算出手续费用:{}",payOrder.getAmount(),platCost.longValue());
+
+		//商户实际收入
+		Long realIncomeAmount = amount.subtract(platCost).longValue();
+		payOrder.setRealIncomeAmount(realIncomeAmount);
+		_log.info("计算出商户实际收入为：{}",realIncomeAmount);
+		_log.info("===结束====计算手续费和实际收入");
+		return payOrder;
+	}
 }

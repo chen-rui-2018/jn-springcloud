@@ -41,4 +41,115 @@
         ORDER BY a.created_time DESC
         LIMIT 1
     </select>
+
+
+    <!-- 查询企业列表New -->
+    <select id="getCompanyNewList" parameterType="com.jn.company.model.ServiceEnterpriseParam" resultType="com.jn.park.care.model.ServiceEnterpriseCompany">
+        SELECT
+        t.id as "id"
+        ,t.com_name as "comName"
+        ,t.com_name_short as "comNameShort"
+        ,t.avatar as "avatar"
+        ,t.com_admin as "comAdmin"
+        ,t.unify_code as "unifyCode"
+        ,t.owners as "owners"
+        ,t.owner_law as "ownerLaw"
+        ,t.owner_id as "ownerId"
+        ,t.owner_phone as "ownerPhone"
+        ,t.owner_wechat as "ownerWechat"
+        ,t.owner_qq as "ownerQq"
+        ,t.bank_name as "bankName"
+        ,t.bank_account as "bankAccount"
+        ,t.products as "products"
+        ,t.material as "material"
+        ,t.com_property as "comProperty"
+        ,t.reg_capital as "regCapital"
+        ,t.add_capital as "addCapital"
+        ,t.com_scale as "comScale"
+        ,t.founding_time as "foundingTime"
+        ,t.run_time as "runTime"
+        ,t.indu_type as "induType"
+        ,t.indu_code as "induCode"
+        ,t.business_license as "businessLicense"
+        ,t.propaganda_picture as "proImgs"
+        ,t.lic_starttime as "licStarttime"
+        ,t.lic_endtime as "licEndtime"
+        ,t.register_type as "registerType"
+        ,t.org_code as "orgCode"
+        ,t.main_products as "mainProducts"
+        ,t.business_scope as "businessScope"
+        ,t.contact as "contact"
+        ,t.con_phone as "conPhone"
+        ,t.con_wechat as "conWechat"
+        ,t.con_qq as "conQq"
+        ,t.con_address as "conAddress"
+        ,t.postcode as "postCode"
+        ,t.com_address as "comAddress"
+        ,t.com_tele as "comTele"
+        ,t.com_web as "comWeb"
+        ,t.com_server as "comServer"
+        ,t.com_demand as "comDemand"
+        ,t.addr_park as "addrPark"
+        ,t.com_synopsis as "comSynopsis"
+        ,t.park_build_id as "parkBuildId"
+        ,t.park_build_name as "parkBuildName"
+        ,t.credit_points as "creditPoints"
+        ,t.com_type as "comType"
+        ,t.is_join_activity as "isJoinActivity"
+        ,t.check_status as "checkStatus"
+        ,t.check_time as "checkTime"
+        ,t.com_source as "comSource"
+        ,t.affiliated_park as "affiliatedPark"
+        ,t.affiliated_name as "affiliatedName"
+        ,t.browse_number as "browseNumber"
+        ,t.creator_account as "creatorAccount"
+        ,t.created_time as "createdTime"
+        FROM
+        tb_service_company t
+        WHERE t.record_status = 1
+        AND t.check_status = 1
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(comName)">
+        AND t.com_name LIKE concat(concat('%',#{comName,jdbcType=VARCHAR}),'%')
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(comSource)">
+        AND t.com_source = #{comSource,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(affiliatedPark)">
+        AND t.affiliated_park = #{affiliatedPark,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(induType)">
+        AND t.indu_type = #{induType,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(orderByClause)">
+        ORDER BY ${orderByClause} desc
+        </if>
+    </select>
+      <select id="getCompanyDetails" resultType = "com.jn.enterprise.company.model.CompanyInfoShow">
+      select
+          t1.id as "companyId"
+          ,t1.com_name as "comName"
+          ,t1.avatar as "avatar"
+          ,t1.com_web as "comWeb"
+          ,t1.com_Admin as "comAdmin"
+          ,t1.affiliated_park as "affiliatedId"
+          ,t1.affiliated_name as "affiliatedName"
+          ,t1.com_server as "comServer"
+          ,t1.com_demand as "comDemand"
+          ,date_format(t1.founding_time,"%Y-%m-%d %H:%i:%s") as "foundingTime"
+          ,t1.com_type as "comType"
+          ,t2.pre_value as "comTypeName"
+          ,t1.com_address as "comAddress"
+          ,t1.browse_number as "browseNumber"
+          ,t1.com_synopsis as  "comSynopsis"
+          ,t1.addr_park as "addrPark"
+          ,t1.com_tele as "conTele"
+          ,t1.owner_law as "ownerLaw"
+          ,t1.owner_phone as "ownerPhone"
+          ,t1.products as "products"
+          ,t1.credit_points as "creditPoints"
+          ,t1.com_scale as "comScale"
+          ,date_format(t1.credit_update_time,"%Y-%m-%d %H:%i:%s") as "creditUpdateTime"
+        from tb_service_company t1 left join tb_service_prefer t2 on t1.com_type = t2.id
+         where t1.id=#{companyId};
+    </select>
 </mapper>

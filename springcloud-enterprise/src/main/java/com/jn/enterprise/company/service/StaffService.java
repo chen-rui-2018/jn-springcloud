@@ -8,8 +8,6 @@ import com.jn.enterprise.company.vo.ColleagueListVO;
 import com.jn.enterprise.company.vo.StaffAuditVO;
 import com.jn.enterprise.company.vo.UserExtensionInfoVO;
 
-import java.util.List;
-
 /**
  * 企业人员Service
  * @author： huxw
@@ -38,7 +36,7 @@ public interface StaffService {
      * @param phone 手机号
      * @return
      */
-    UserExtensionInfoVO getInviteStaffList(String phone, String curAccount);
+    UserExtensionInfoVO getInviteStaffList(String phone);
 
     /**
      * 邀请员工
@@ -54,6 +52,13 @@ public interface StaffService {
      * @return
      */
     Integer reviewStaff(ReviewStaffParam reviewStaffParam, String curAccount);
+
+    /**
+     * 离开企业
+     * @param curAccount 账号
+     * @return
+     */
+    Integer leaveCompany(String curAccount);
 
     /**
      * 接受邀请
@@ -74,7 +79,7 @@ public interface StaffService {
      * 获取审核信息
      * @return
      */
-    List<StaffAuditVO> getAuditStatus(String curAccount);
+    StaffAuditVO getAuditStatus(String curAccount);
 
     /**
      * 批量删除员工

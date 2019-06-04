@@ -153,8 +153,8 @@ public class ExaminaManagementAdd implements Serializable {
 	@ApiModelProperty(value = "答题总个数", required = true, example = "10")
 	private Integer examinabankSize;
 
-	@ApiModelProperty(value = "错题个数", required = true, example = "2")
-	private Integer yesExaminaBankSize;
+	@ApiModelProperty(value = "正确个数", required = true, example = "2")
+	private double yesExaminaBankSize;
 
 	@ApiModelProperty(value = "得分率", required = true, example = "20%")
 	private String scoreRate;
@@ -180,7 +180,7 @@ public class ExaminaManagementAdd implements Serializable {
 			Integer hasEndStatusCount, String resultCount, String resultId, String name, String jobNumber,
 			Integer achievement, Integer useTime, Date examinaStartTime, String examinaStartTimeStr,
 			Date examinaEndTime, String examinaEndTimeStr, Byte examinaMethod, Byte isAdopt, Integer examinabankSize,
-			Integer yesExaminaBankSize, String scoreRate, String accuracyRate, List<Examinabank> examinabanksList,
+			double yesExaminaBankSize, String scoreRate, String accuracyRate, List<Examinabank> examinabanksList,
 			List<Examinabank> deleteExaminabanksList) {
 		super();
 		this.id = id;
@@ -474,11 +474,11 @@ public class ExaminaManagementAdd implements Serializable {
 		this.examinabankSize = examinabankSize;
 	}
 
-	public Integer getYesExaminaBankSize() {
+	public double getYesExaminaBankSize() {
 		return yesExaminaBankSize;
 	}
 
-	public void setYesExaminaBankSize(Integer yesExaminaBankSize) {
+	public void setYesExaminaBankSize(double yesExaminaBankSize) {
 		this.yesExaminaBankSize = yesExaminaBankSize;
 	}
 

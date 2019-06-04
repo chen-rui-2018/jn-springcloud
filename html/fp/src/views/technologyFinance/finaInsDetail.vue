@@ -1,8 +1,8 @@
 <template>
   <div class="finaInsDetail w">
     <div class="serverOrgMenu color2">
-      <span class="pointer" @click="$routet.push({path:'/tfindex'})">首页/</span>
-      <span class="pointer" @click="$routet.push({path:'/finaInstitution'})">金融机构</span>
+      <span class="pointer" @click="$router.push({path:'/tfindex'})">首页/</span>
+      <span class="pointer" @click="$router.push({path:'/finaInstitution'})">金融机构</span>
       <span>/</span>
       <span class="mainColor agent">金融机构详情</span>
     </div>
@@ -10,7 +10,7 @@
       <el-card>
         <div class="agent1 clearfix">
           <div class="agentTil fl color1">{{serverOrgDetailList.orgName}}</div>
-          <div class="orgBtn fr mainColor">在线联系</div>
+          <div class="orgBtn fr mainColor pointer" @click="onlineContat(serverOrgDetailList.orgAccount,serverOrgDetailList.orgName)">在线联系</div>
         </div>
         <div class="agent2 clearfix color2">
           <div class="agentImg fl">
@@ -261,30 +261,33 @@
           <li>
             <a href="javascript:;">筛选：</a>
           </li>
-          <li class="list-item current" :class="{'active':flag1==''}" @click="screenPro('')" v-if="serverPro.length>0">
-            <a href="javascript:;" data="%">全部({{serverPro[0].serviceTotal}})</a>
+          <li class="list-item current" :class="{'active3':flag1==''}" @click="screenPro('')" >
+            <a href="javascript:;" data="%" v-if="serverPro.length>0">全部({{serverPro[0].serviceTotal}})</a>
+            <a href="javascript:;" data="%" v-else>全部(0)</a>
           </li>
-          <li class="list-item " :class="{'active':flag1=='0'}" @click="screenPro('0')" v-if="serverPro.length>0">
-            <a href="javascript:;" data="常规服务">常规服务({{serverPro[0].commonTotal}})</a>
+          <li class="list-item " :class="{'active3':flag1=='0'}" @click="screenPro('0')">
+            <a href="javascript:;" data="常规服务" v-if="serverPro.length>0">常规服务({{serverPro[0].commonTotal}})</a>
+            <a href="javascript:;" data="%" v-else>常规服务(0)</a>
           </li>
-          <li class="list-item " :class="{'active':flag1=='1'}" @click="screenPro('1')" v-if="serverPro.length>0">
-            <a href="javascript:;" data="特色服务">特色服务({{serverPro[0].featureTotal}})</a>
+          <li class="list-item " :class="{'active3':flag1=='1'}" @click="screenPro('1')">
+            <a href="javascript:;" data="特色服务" v-if="serverPro.length>0">特色服务({{serverPro[0].featureTotal}})</a>
+            <a href="javascript:;" data="%" v-else>特色服务(0)</a>
           </li>
         </ul>
         <ul class="select-list clearfix" v-if="showFlag2">
           <li>
             <a href="javascript:;">筛选：</a>
           </li>
-          <li class="list-item current" :class="{'active':flag3==''}" @click="screenEva('')">
+          <li class="list-item current" :class="{'active3':flag3==''}" @click="screenEva('')">
             <a href="javascript:;" data="%">全部({{evaCount.evaluationTotal}})</a>
           </li>
-          <li class="list-item " :class="{'active':flag3=='praise'}" @click="screenEva('praise')">
+          <li class="list-item " :class="{'active3':flag3=='praise'}" @click="screenEva('praise')">
             <a href="javascript:;">好评({{evaCount.praiseNum}})</a>
           </li>
-          <li class="list-item " :class="{'active':flag3=='average'}" @click="screenEva('average')">
+          <li class="list-item " :class="{'active3':flag3=='average'}" @click="screenEva('average')">
             <a href="javascript:;">中评({{evaCount.averageNum}})</a>
           </li>
-          <li class="list-item " :class="{'active':flag3=='badReview'}" @click="screenEva('badReview')">
+          <li class="list-item " :class="{'active3':flag3=='badReview'}" @click="screenEva('badReview')">
             <a href="javascript:;">差评({{evaCount.badReviewNum}})</a>
           </li>
         </ul>
@@ -292,20 +295,24 @@
           <li>
             <a href="javascript:;">筛选：</a>
           </li>
-          <li class="list-item current" :class="{'active':flag4=='0'}" @click="screenActi('0')">
-            <a href="javascript:;">全部({{serverActiList[0].actiNum}})</a>
+          <li class="list-item current" :class="{'active3':flag4=='0'}" @click="screenActi('0')">
+            <a href="javascript:;" v-if="serverActiList.length>0">全部({{serverActiList[0].actiNum}})</a>
+            <a href="javascript:;" v-else>全部(0)</a>
           </li>
-          <li class="list-item " :class="{'active':flag4=='1'}" @click="screenActi('1')">
-            <a href="javascript:;">最近一周({{serverActiList[0].weekNum}})</a>
+          <li class="list-item " :class="{'active3':flag4=='1'}" @click="screenActi('1')">
+            <a href="javascript:;" v-if="serverActiList.length>0">最近一周({{serverActiList[0].weekNum}})</a>
+             <a href="javascript:;" v-else>最近一周(0)</a>
           </li>
-          <li class="list-item " :class="{'active':flag4=='2'}" @click="screenActi('2')">
-            <a href="javascript:;">最近一月({{serverActiList[0].monthNum}})</a>
+          <li class="list-item " :class="{'active3':flag4=='2'}" @click="screenActi('2')">
+            <a href="javascript:;" v-if="serverActiList.length>0">最近一月({{serverActiList[0].monthNum}})</a>
+            <a href="javascript:;" v-else>最近一月(0)</a>
           </li>
         </ul>
       </div>
       <el-tabs v-model="activeName1" @tab-click="handleSerpro">
         <el-tab-pane name="serverPro">
-          <span slot="label" >服务产品({{serverPro[0].serviceTotal}})</span>
+          <span slot="label" v-if="serverPro.length>0">服务产品({{serverPro[0].serviceTotal}})</span>
+          <span slot="label" v-else>服务产品(0)</span>
           <div class="serverPro">
             <ul class="list-imgleft">
               <li class="list-item pr" v-for="(i,k) in serverPro" :key='k'>
@@ -357,7 +364,7 @@
                     <div class="detail-count">
                       <!-- <span>累计
                         <span class="c_default ml5 mr5">40</span>笔交易</span> -->
-                      <div class="orgBtn fr mainColor">提需求</div>
+                      <div class="orgBtn fr mainColor pointer" @click="demandRaise(i)">提需求</div>
                     </div>
                     <!-- 交易量 end -->
                   </div>
@@ -447,7 +454,8 @@
           </div>
         </el-tab-pane>
         <el-tab-pane name="actiConsultation">
-          <span slot="label">活动资讯({{serverActiList[0].actiNum}})</span>
+          <span slot="label" v-if="serverActiList.length>0">活动资讯({{serverActiList[0].actiNum}})</span>
+          <span slot="label" v-else>活动资讯(0)</span>
           <div class="actiConsultation">
             <ul class="allActiUl clearfix">
               <li v-for="(i,k) in serverActiList" :key='k'>
@@ -488,12 +496,26 @@
         </el-tab-pane>
       </el-tabs>
     </div>
+    <!-- 提需求弹框 -->
+    <template v-if="serverConVisible">
+      <el-dialog :visible.sync="serverConVisible" width="530px" top="30vh" :modal-append-to-body=false>
+        <el-form ref="financialProform" :model="serverProform" label-position="right" label-width="100px" style="max-width:436px;">
+          <el-form-item label="需求描述:" prop="requireDetail" style="font-size:13px">
+            <el-input v-model.trim="serverProform.requireDetail" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
+          </el-form-item>
+        </el-form>
+        <div class="demandLine"></div>
+        <div class="serverTip mainColor">市场提醒：请务必在线订购，线下交易无法享受市场交易安全保障</div>
+        <div class="demandDia11" @click="demandDia()">提交需求</div>
+      </el-dialog>
+    </template>
   </div>
 </template>
 <script>
 export default {
   data() {
     return {
+      serverConVisible: false,
       zankaiFlag: false,
       activeName1: "serverPro",
       activeName: "baseInfo",
@@ -524,7 +546,12 @@ export default {
       showFlag4: false,
       flag4: "0",
       flag1: "",
-      flag3: ""
+      flag3: "",
+      serverProform: {
+        requireDetail: "",
+        productId: "",
+        productName: ""
+      }
     };
   },
   created() {
@@ -535,6 +562,48 @@ export default {
     this.getEvaluationCountInfo();
   },
   methods: {
+      //在线联系
+    onlineContat(investorAccount,investorName){
+       if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
+      this.$router.push({path:'/chat',query:{fromUser: JSON.parse(sessionStorage.userInfo).account,fromUser:sessionStorage.userInfo.account,toUser:orgAccount,nickName:ogeName}})
+    },
+    //提需求
+    demandRaise(i) {
+      if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
+      this.serverConVisible = true;
+      this.serverProform.productId = i.productId;
+      this.serverProform.productName = i.productName;
+    },
+    demandDia() {
+      let _this = this;
+      this.api.post({
+        url: "userDemand",
+        data: {
+          productId: _this.serverProform.productId,
+          productName: _this.serverProform.productName,
+          requireDetail: _this.serverProform.requireDetail
+        },
+        callback: function(res) {
+          if (res.code == "0000") {
+            if (_this.serverProform.requireDetail == "") {
+              _this.serverConVisible = false;
+              return;
+            } else {
+              _this.$message.success("提交需求成功");
+              _this.serverConVisible = false;
+            }
+          } else {
+            _this.$message.error(res.result);
+          }
+        }
+      });
+    },
     screenPro(i) {
       //服务产品筛选
       (this.productType = i),
@@ -556,19 +625,19 @@ export default {
         (this.page3 = 1),
         this.selActiList();
     },
-     handleSerpro(tab, event) {
-        if(tab.name=='serEvaluation'){
-         this.showFlag1=false
-         this.showFlag2=true
-         this.showFlag4=false
-      } else if(tab.name=='actiConsultation'){
-        this.showFlag2=false
-         this.showFlag1=false
-         this.showFlag4=true
+    handleSerpro(tab, event) {
+      if (tab.name == "serEvaluation") {
+        this.showFlag1 = false;
+        this.showFlag2 = true;
+        this.showFlag4 = false;
+      } else if (tab.name == "actiConsultation") {
+        this.showFlag2 = false;
+        this.showFlag1 = false;
+        this.showFlag4 = true;
       } else {
-         this.showFlag2=false
-         this.showFlag1=true
-         this.showFlag4=false
+        this.showFlag2 = false;
+        this.showFlag1 = true;
+        this.showFlag4 = false;
       }
     },
     handleSizeChange1(val) {
@@ -722,6 +791,35 @@ export default {
     .pagination-container {
       margin-top: 30px;
     }
+  }
+}
+.finaInsDetail {
+  .serverTip {
+    display: inline-block;
+    font-size: 12px;
+  }
+  .demandDia11 {
+    display: inline-block;
+    background: #ecfcf2;
+    padding: 8px 10px;
+    width: 80px;
+    margin: 0 auto;
+    border: 1px solid #00a041;
+    border-radius: 4px;
+    text-align: center;
+    cursor: pointer;
+    color: #00a041;
+    margin-left: 20px;
+    font-size: 12px;
+  }
+  .demandLine {
+    height: 1px;
+    width: 530px;
+    position: relative;
+    left: -20px;
+    background: #eee;
+    margin-bottom: 20px;
+    margin-top: 10px;
   }
 }
 </style>

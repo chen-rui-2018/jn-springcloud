@@ -1,6 +1,6 @@
 <template>
   <div class="humanSource">
-    <div class="techHeah">
+    <!-- <div class="techHeah">
       <div id="header" class="header" :class="{'headerw':showFF}">
         <div class="headerContainer clearfix">
           <div class="titleImg fl">
@@ -37,7 +37,7 @@
           </div>
         </el-collapse-transition>
       </div>
-    </div>
+    </div> -->
     <div class="policyCon">
       <div class="banner pr">
         <div class="swiper-container">
@@ -92,7 +92,7 @@
       </div>
       <div class="serverOrgContent w">
         <ul>
-          <li class="clearfix" v-for="(i,k) in humanList" :key='k'>
+          <li class="clearfix pr" v-for="(i,k) in humanList" :key='k'>
             <div class="orgImg fl">
               <!-- <img src="@/../static/img/ins1.png" alt=""> -->
               <img :src="i.comAvatar" alt="">
@@ -113,11 +113,20 @@
               </div>
             </div>
 
-            <div class="orgBtn fr mainColor" @click="getRecruitDetails(i.id)">
+            <div class="orgBtn fr mainColor" @click.stop="getRecruitDetails(i.id),detailFlag=i.id">
               了解详情
             </div>
-            <div class="orgBtn orgBtn1 fr mainColor">
+            <div class="orgBtn orgBtn1 fr mainColor" @click="onlineContat(i.comId)">
               在线联系
+            </div>
+            <!-- 详情弹框 -->
+            <div class="detailRes" v-if="detailFlag==i.id">
+              <el-card>
+                <div class="detail">招聘详情</div>
+                <p class="p1">企业名称：{{humanDetail.comName}}</p>
+                <p class="p1">发布时间：{{humanDetail.createdTime}}</p>
+                <p class="p1">岗位详情：{{humanDetail.details}}</p>
+              </el-card>
             </div>
           </li>
         </ul>
@@ -128,21 +137,23 @@
       </div>
     </div>
     <!-- 招聘详情 -->
-    <template v-if="humanDelVisible">
+    <!-- <template v-if="humanDelVisible">
       <el-dialog :visible.sync="humanDelVisible" width="530px" top="30vh">
          <div class="detailTit color2">招聘详情</div>
          <p class="p1">{{humanDetail.comName}}</p>
          <p class="p1">{{humanDetail.createdTime}}</p>
          <p class="p1">{{humanDetail.details}}</p>
       </el-dialog>
-    </template>
+    </template> -->
   </div>
 </template>
 <script>
 import swiper from "swiper";
+import bus from "@/util/bus";
 export default {
   data() {
     return {
+      detailFlag: "",
       sousuo: false,
       searchData: "",
       showFF: false,
@@ -160,9 +171,14 @@ export default {
       type: "",
       whereTypes: "",
       sortTypes: "time",
-      humanDelVisible:false,
-      humanDetail:{},
+      humanDetail: {}
     };
+  },
+  created() {
+    let _this = this;
+    bus.$on("closeKnow", msg => {
+      _this.detailFlag = "";
+    });
   },
   mounted() {
     window.addEventListener("scroll", this.handleScroll);
@@ -173,6 +189,31 @@ export default {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
   },
   methods: {
+    //在线联系
+    onlineContat(id){
+       if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
+       this.api.get({
+        url: "getCompanyContactAccount",
+        data: {
+          comId: id
+        },
+        callback: res=> {
+          if (res.code == "0000") {
+            // this.typeList = res.data;
+            if(JSON.parse(sessionStorage.userInfo).account==res.data.account){
+              this.$message.error('当前登录的账号跟聊天对象一样');
+              return
+            }
+            this.$router.push({path:'/chat',query:{fromUser:JSON.parse(sessionStorage.userInfo).account,toUser:res.data.account,nickName:res.data.nickName}})
+          } else {
+            this.$message.error(res.result);
+          }
+        }
+      });
+    },
     handleFil(v) {
       this.type = v;
       this.actiFilflag = v;
@@ -231,13 +272,16 @@ export default {
     getWebRecruitList() {
       let _this = this;
       this.api.get({
-        url: "getWebRecruitList",
+        // url: "getWebRecruitList",
+        url: "getRecruitList",
         data: {
           page: _this.page,
           rows: _this.row,
           searchFiled: _this.searchFiled,
           type: _this.type,
-          sortTypes: _this.sortTypes
+          sortTypes: _this.sortTypes,
+          comId:_this.$route.query.comId,
+          whereTypes:_this.whereTypes
         },
         callback: function(res) {
           if (res.code == "0000") {
@@ -251,16 +295,15 @@ export default {
     },
     //企业招聘详情
     getRecruitDetails(id) {
-      this.humanDelVisible=true
       let _this = this;
       this.api.get({
         url: "getRecruitDetails",
         data: {
-          recruitId: id,
+          recruitId: id
         },
         callback: function(res) {
           if (res.code == "0000") {
-             _this.humanDetail=res.data
+            _this.humanDetail = res.data;
           } else {
             _this.$message.error(res.result);
           }
@@ -274,6 +317,23 @@ export default {
         url: "getInviteType",
         data: {
           groupId: "recruitType"
+        },
+        callback: function(res) {
+          if (res.code == "0000") {
+            _this.typeList = res.data;
+          } else {
+            _this.$message.error(res.result);
+          }
+        }
+      });
+    },
+    //获取招聘类型
+    getCompanyContactAccount() {
+      let _this = this;
+      this.api.get({
+        url: "getCompanyContactAccount",
+        data: {
+          comId: "recruitType"
         },
         callback: function(res) {
           if (res.code == "0000") {
@@ -650,7 +710,6 @@ export default {
         border-bottom: 1px solid #eee;
         .orgImg {
           width: 200px;
-
           height: 130px;
           > img {
             width: 100%;
@@ -706,15 +765,32 @@ export default {
       padding-top: 10px;
     }
   }
-  .detailTit{
+  .detailTit {
     font-size: 16px;
     margin-bottom: 10px;
   }
-  .p1{
-    line-height: 25px;;
+  .p1 {
+    line-height: 25px;
   }
-  .el-dialog__body{
-    padding:0 20px 20px;
+  .el-dialog__body {
+    padding: 0 20px 20px;
+  }
+  .detailRes {
+    width: 400px;
+    position: absolute;
+    right: 95px;
+    top: -80px;
+    text-align: left;
+    .detail {
+      margin-bottom: 10px;
+      color: #333;
+    }
+    p {
+      font-size: 13px;
+    }
+    .el-card__body {
+      padding: 20px 30px;
+    }
   }
 }
 </style>

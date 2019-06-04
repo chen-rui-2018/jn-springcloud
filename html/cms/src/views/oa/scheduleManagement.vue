@@ -211,7 +211,7 @@ export default {
           this.isdisabled = false
           this.scheduleForm.id = ''
           this.scheduleForm.title = ''
-          this.scheduleForm.startTime = info.dateStr
+          this.scheduleForm.startTime = ''
           this.scheduleForm.endTime = ''
           this.scheduleForm.content = ''
           this.scheduleForm.remark = ''
@@ -245,9 +245,6 @@ export default {
               } else {
                 this.scheduleForm.dateTime = res.data.data.date
               }
-              console.log(this.scheduleForm.dateTime)
-              console.log(this.scheduleForm.startTime)
-              console.log(this.scheduleForm.endTime)
               this.scheduleForm.allDay = res.data.data.allDay
               this.scheduleForm.isRemind = res.data.data.isRemind
               this.startData = res.data.data.start
@@ -258,7 +255,6 @@ export default {
                 this.scheduleForm.remindWay = res.data.data.remindWay.split(
                   ','
                 )
-                console.log(this.scheduleForm.remindWay)
               }
 
               if (res.data.data.remindTime) {
@@ -396,13 +392,6 @@ export default {
                 return false
               }
             } else {
-              // console.log((new Date((this.scheduleForm.dateTime + ' 00:00:00').replace((new RegExp('-', 'gm'), '/')))).getTime())
-              // console.log((new Date(this.scheduleForm.remindTime.replace(new RegExp('-', 'gm'), '/'))).getTime())
-              // console.log((new Date(this.scheduleForm.remindTime.replace(new RegExp('-', 'gm'), '/'))).getTime() >
-              //   (new Date((this.scheduleForm.dateTime + ' 00:00:00').replace(new RegExp('-', 'gm'), '/'))).getTime())
-
-              // this.isDisabled = false
-              // return
               if (
                 (new Date(this.scheduleForm.remindTime.replace(new RegExp('-', 'gm'), '/'))).getTime() >=
                 (new Date((this.scheduleForm.dateTime + ' 00:00:00').replace(new RegExp('-', 'gm'), '/'))).getTime()
@@ -412,7 +401,6 @@ export default {
                 return false
               }
             }
-            // this.scheduleForm.remindTime = this.scheduleForm.remindTime.substring(0, 16)
             this.scheduleForm.remindWay = this.scheduleForm.remindWay.toString()
           }
           if (this.scheduleForm.allDay === '1') {
@@ -441,8 +429,10 @@ export default {
               this.isDisabled = false
               this.addDialogVisible = false
             } else {
+              this.scheduleForm.remindWay = this.scheduleForm.remindWay.split(',')
               this.$message.error(res.data.result)
               this.isDisabled = false
+              return false
             }
           })
         } else {

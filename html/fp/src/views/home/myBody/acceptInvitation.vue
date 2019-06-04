@@ -1,7 +1,7 @@
 <template>
   <div class="acceptInvitation">
-    <div class="advisory_title">
-      <div>{{title}}</div>
+    <div class="advisory_title font16">
+      <div >{{title}}</div>
       <div @click="toCounselorManagement">返回</div>
     </div>
 
@@ -139,7 +139,7 @@
 
         <el-form-item label="附件:" prop="personalProfile" class="inline border-bottom">
           <label slot="label">附&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;件:</label>
-          <el-upload class="avatarImg" :show-file-list="false" action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
+          <el-upload class="avatarImg" :show-file-list="false" :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
             :headers="headers" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
             <img v-if="certificateForm.certificatePhoto" :src="certificateForm.certificatePhoto">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -232,8 +232,8 @@
       </div>
 
     </div>
-    <el-dialog :visible.sync="dialogVisible" width="50%">
-      <img :src="certificatePhoto" alt="图片" style="width:100%">
+    <el-dialog :visible.sync="dialogVisible" width="50%" :modal-append-to-body="false">
+      <img :src="certificatePhoto" alt="图片" style="width:100%;height:200px;">
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">返 回</el-button>
       </span>
@@ -245,6 +245,7 @@
 export default {
   data() {
     return {
+      baseUrl:this.api.host,
       showBtn: true,
       dialogImageUrl: "",
       dialogVisible: false,
@@ -409,8 +410,43 @@ export default {
     this.getCertificateTypeList();
   },
   methods: {
+       //修改消息状态（已读）
+    changeStatus(){
+ this.api.post({
+            url: "updateIsReadStatus",
+            data: {id:this.messageId},
+            callback: res => {
+              if (res.code == "0000") {
+                this.$message({
+                  message: "操作成功",
+                  type: "success"
+                });
+              } else {
+                this.$message.error(res.result);
+                return false;
+              }
+            }
+          });
+    },
     //拒绝邀请
-    refuseInvitation() {},
+    refuseInvitation() {
+       this.api.post({
+        url: "refuseInvitation",
+        data: { advisorAccount: this.basicForm.advisorAccount },
+        dataFlag: true,
+        callback: res => {
+          if (res.code === "0000") {
+            this.$message({
+              message: "操作成功",
+              type: "success"
+            });
+          } else {
+            this.$message.error(res.result);
+          }
+          this.changeStatus()
+        }
+      });
+    },
     // 接受邀请
     acceptInvitation() {
       this.disabled = true;
@@ -435,6 +471,7 @@ export default {
             this.$message.error(res.result);
             this.disabled = false;
           }
+          this.changeStatus()
         }
       });
     },
@@ -727,16 +764,18 @@ export default {
     },
     init() {
       let _this = this;
+      this.messageId=this.$route.query.messageId
       this.basicForm.orgId = this.$route.query.orgId;
       this.title = this.$route.query.title;
       // this.basicForm.advisorAccount = sessionStorage.getItem("account");
       // this.certificateForm.advisorAccount = sessionStorage.getItem("account");
       console.log(this.basicForm.advisorAccount);
       _this.api.get({
-        url: "advisorDetails",
-        data: { advisorAccount: this.basicForm.advisorAccount },
+        url: "getOrgInfoForManage",
+        data: { orgId : this.$route.query.orgId },
         callback: function(res) {
           if (res.code == "0000") {
+            console.log(res)
             _this.basicForm.personalProfile =
               res.data.advisorServiceInfo.personalProfile;
             _this.basicForm.graduatedSchool =
@@ -775,7 +814,7 @@ export default {
                   type: "success"
                 });
                 this.$router.push({
-                  path: "/servicemarket/product/userCenter"
+                  path: "/home"
                 });
                 this.disabled = false;
               } else {
@@ -792,7 +831,7 @@ export default {
       });
     },
     toCounselorManagement() {
-      this.$router.push({ path: "/servicemarket/product/userCenter" });
+      this.$router.push({ path: "/home" });
     }
     // toEditAdvisers() {
     //   this.$router.push({ name: "editAdvisers" });
@@ -954,7 +993,7 @@ export default {
     justify-content: space-between;
     align-items: center;
     padding: 17px;
-    font-size: 13px;
+    // font-size: 13px;
     border-radius: 5px;
     div:nth-child(2) {
       width: 88px;

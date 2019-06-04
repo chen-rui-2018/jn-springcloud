@@ -1,35 +1,31 @@
 <template>
   <div class="declarationPlatform">
-    <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom">
-      <div class="box2">
-        <div class="banner"><img src="@/assets/image/declarationCenter-baner.png" alt=""></div>
-        <div class="declarationPlatform_list">
-          <div class="declarationPlatform_tab">
-            <tab>
-              <tab-item v-for="(item,$index) in typeList" :key="$index" :selected="$index===typeId">
-                <span :class="{'active':item.id===sendData.subordinatePlatformName}" @click="toggle(item.id)">{{item.name}}</span>
-              </tab-item>
-            </tab>
-          </div>
-          <div class="declarationPlatform_cont">
-            <ul>
-              <li v-for="(item,index) in platFormList " :key="index" >
-                <p>{{item.platformTitle}}</p>
-                <p>
-                  <span>业务咨询：</span>
-                  <span v-html="item.businessConsult"></span>
-                </p>
-                <p>
-                  <span>系统支持：</span>
-                  <span v-html="item.systemSupport"></span></p>
-                <p>{{item.remark}} </p>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <load-more tip="loading" v-if="onFetching"></load-more>
+    <div class="banner"><img src="@/assets/image/declarationCenter-baner.png" alt=""></div>
+    <div class="declarationPlatform_list">
+      <div class="declarationPlatform_tab">
+        <tab>
+          <tab-item v-for="(item,$index) in typeList" :key="$index" :selected="$index===typeId">
+            <span :class="{'active':item.id===sendData.subordinatePlatformName}" @click="toggle(item.id)">{{item.name}}</span>
+          </tab-item>
+          <tab-item></tab-item>
+        </tab>
       </div>
-    </scroller>
+      <div class="declarationPlatform_cont">
+        <ul>
+          <li v-for="(item,index) in platFormList " :key="index" >
+            <p>{{item.platformTitle}}</p>
+            <p>
+              <span>业务咨询：</span>
+              <span v-html="item.businessConsult"></span>
+            </p>
+            <p>
+              <span>系统支持：</span>
+              <span v-html="item.systemSupport"></span></p>
+            <p>{{item.remark}} </p>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -115,13 +111,12 @@ export default {
 <style lang="scss">
   .declarationPlatform{
     .banner{
-      padding-top: 105px;
+      // padding-top: 105px;
       img{
         width:100%;
       }
     }
     .declarationPlatform_list{
-
        .declarationPlatform_tab{
         // padding-top: 110px;
         // position: relative;
@@ -148,7 +143,6 @@ export default {
             &:first-child{
               margin-left: 32px;
             }
-
             span{
             padding-bottom: 27px;
             font-size: 23px;

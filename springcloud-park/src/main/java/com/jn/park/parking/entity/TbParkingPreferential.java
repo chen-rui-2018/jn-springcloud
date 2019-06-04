@@ -1,14 +1,18 @@
 package com.jn.park.parking.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class TbParkingPreferential implements Serializable {
     /*@ApiModelProperty("优惠政策id")*/
     private String policyId;
 
-    /*@ApiModelProperty("优惠类型 1优惠固定金额2按比例优惠")*/
+    /*@ApiModelProperty("优惠类型 1优惠固定金额2按比例优惠3税收优惠")*/
     private String policyType;
+
+    /*@ApiModelProperty("优惠对象类型[company:企业;user:个人]")*/
+    private String policyUserType;
 
     /*@ApiModelProperty("政策编码")*/
     private String policyCode;
@@ -27,6 +31,15 @@ public class TbParkingPreferential implements Serializable {
 
     /*@ApiModelProperty("租满多少天可用[空/0则不设置天数。加上之前租赁天数]")*/
     private Integer dayConditions;
+
+    /*@ApiModelProperty("税收基数[单位:万元]")*/
+    private BigDecimal taxtBasis;
+
+    /*@ApiModelProperty("优惠车辆数")*/
+    private Integer policyCarNum;
+
+    /*@ApiModelProperty("最大优惠车辆数")*/
+    private Integer policyCarMax;
 
     /*@ApiModelProperty("创建者账号")*/
     private String creatorAccount;
@@ -59,6 +72,14 @@ public class TbParkingPreferential implements Serializable {
 
     public void setPolicyType(String policyType) {
         this.policyType = policyType == null ? null : policyType.trim();
+    }
+
+    public String getPolicyUserType() {
+        return policyUserType;
+    }
+
+    public void setPolicyUserType(String policyUserType) {
+        this.policyUserType = policyUserType == null ? null : policyUserType.trim();
     }
 
     public String getPolicyCode() {
@@ -107,6 +128,30 @@ public class TbParkingPreferential implements Serializable {
 
     public void setDayConditions(Integer dayConditions) {
         this.dayConditions = dayConditions;
+    }
+
+    public BigDecimal getTaxtBasis() {
+        return taxtBasis;
+    }
+
+    public void setTaxtBasis(BigDecimal taxtBasis) {
+        this.taxtBasis = taxtBasis;
+    }
+
+    public Integer getPolicyCarNum() {
+        return policyCarNum;
+    }
+
+    public void setPolicyCarNum(Integer policyCarNum) {
+        this.policyCarNum = policyCarNum;
+    }
+
+    public Integer getPolicyCarMax() {
+        return policyCarMax;
+    }
+
+    public void setPolicyCarMax(Integer policyCarMax) {
+        this.policyCarMax = policyCarMax;
     }
 
     public String getCreatorAccount() {
@@ -163,12 +208,16 @@ public class TbParkingPreferential implements Serializable {
         TbParkingPreferential other = (TbParkingPreferential) that;
         return (this.getPolicyId() == null ? other.getPolicyId() == null : this.getPolicyId().equals(other.getPolicyId()))
             && (this.getPolicyType() == null ? other.getPolicyType() == null : this.getPolicyType().equals(other.getPolicyType()))
+            && (this.getPolicyUserType() == null ? other.getPolicyUserType() == null : this.getPolicyUserType().equals(other.getPolicyUserType()))
             && (this.getPolicyCode() == null ? other.getPolicyCode() == null : this.getPolicyCode().equals(other.getPolicyCode()))
             && (this.getPolicyComments() == null ? other.getPolicyComments() == null : this.getPolicyComments().equals(other.getPolicyComments()))
             && (this.getOfferPrice() == null ? other.getOfferPrice() == null : this.getOfferPrice().equals(other.getOfferPrice()))
             && (this.getOfferRatio() == null ? other.getOfferRatio() == null : this.getOfferRatio().equals(other.getOfferRatio()))
             && (this.getPolicyStatus() == null ? other.getPolicyStatus() == null : this.getPolicyStatus().equals(other.getPolicyStatus()))
             && (this.getDayConditions() == null ? other.getDayConditions() == null : this.getDayConditions().equals(other.getDayConditions()))
+            && (this.getTaxtBasis() == null ? other.getTaxtBasis() == null : this.getTaxtBasis().equals(other.getTaxtBasis()))
+            && (this.getPolicyCarNum() == null ? other.getPolicyCarNum() == null : this.getPolicyCarNum().equals(other.getPolicyCarNum()))
+            && (this.getPolicyCarMax() == null ? other.getPolicyCarMax() == null : this.getPolicyCarMax().equals(other.getPolicyCarMax()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
@@ -182,12 +231,16 @@ public class TbParkingPreferential implements Serializable {
         int result = 1;
         result = prime * result + ((getPolicyId() == null) ? 0 : getPolicyId().hashCode());
         result = prime * result + ((getPolicyType() == null) ? 0 : getPolicyType().hashCode());
+        result = prime * result + ((getPolicyUserType() == null) ? 0 : getPolicyUserType().hashCode());
         result = prime * result + ((getPolicyCode() == null) ? 0 : getPolicyCode().hashCode());
         result = prime * result + ((getPolicyComments() == null) ? 0 : getPolicyComments().hashCode());
         result = prime * result + ((getOfferPrice() == null) ? 0 : getOfferPrice().hashCode());
         result = prime * result + ((getOfferRatio() == null) ? 0 : getOfferRatio().hashCode());
         result = prime * result + ((getPolicyStatus() == null) ? 0 : getPolicyStatus().hashCode());
         result = prime * result + ((getDayConditions() == null) ? 0 : getDayConditions().hashCode());
+        result = prime * result + ((getTaxtBasis() == null) ? 0 : getTaxtBasis().hashCode());
+        result = prime * result + ((getPolicyCarNum() == null) ? 0 : getPolicyCarNum().hashCode());
+        result = prime * result + ((getPolicyCarMax() == null) ? 0 : getPolicyCarMax().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
@@ -204,12 +257,16 @@ public class TbParkingPreferential implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", policyId=").append(policyId);
         sb.append(", policyType=").append(policyType);
+        sb.append(", policyUserType=").append(policyUserType);
         sb.append(", policyCode=").append(policyCode);
         sb.append(", policyComments=").append(policyComments);
         sb.append(", offerPrice=").append(offerPrice);
         sb.append(", offerRatio=").append(offerRatio);
         sb.append(", policyStatus=").append(policyStatus);
         sb.append(", dayConditions=").append(dayConditions);
+        sb.append(", taxtBasis=").append(taxtBasis);
+        sb.append(", policyCarNum=").append(policyCarNum);
+        sb.append(", policyCarMax=").append(policyCarMax);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", createdTime=").append(createdTime);
         sb.append(", modifierAccount=").append(modifierAccount);

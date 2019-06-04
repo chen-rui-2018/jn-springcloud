@@ -1,6 +1,7 @@
 package com.jn.park.hatch.service;
 
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.park.hatch.model.HatchHomeConfig;
 import com.jn.park.hatch.model.HatchIncubatorEnterpriseParamModel;
 import com.jn.park.hatch.model.HatchIncubatorTeamParamModel;
@@ -29,12 +30,12 @@ public interface HatchHomeConfigService {
      * @param hatchIncubatorEnterpriseParamModel
      * @return
      */
-    void insertEnterpriseInfo(HatchIncubatorEnterpriseParamModel hatchIncubatorEnterpriseParamModel);
+    Result insertEnterpriseInfo(HatchIncubatorEnterpriseParamModel hatchIncubatorEnterpriseParamModel);
 
     /**
      * 孵化企业-新增入孵团队信息
      * @param hatchIncubatorTeamParamModel
      * @return
      */
-    void insertTeamInfo(HatchIncubatorTeamParamModel hatchIncubatorTeamParamModel);
+    Result insertTeamInfo(HatchIncubatorTeamParamModel hatchIncubatorTeamParamModel);
 }

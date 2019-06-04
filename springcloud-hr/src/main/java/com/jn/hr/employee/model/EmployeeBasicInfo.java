@@ -40,10 +40,10 @@ public class EmployeeBasicInfo extends BaseRowModel implements Serializable {
     @ApiModelProperty(value = "部门名称")
     @ExcelProperty(value = "部门名称", index = 4)
     private String departmentName;
-    @ApiModelProperty(value = "职位ID")
+    @ApiModelProperty(value = "职级ID")
     private String jobId;
-    @ApiModelProperty(value = "职位名称")
-    @ExcelProperty(value = "职位名称", index = 5)
+    @ApiModelProperty(value = "职级名称")
+    @ExcelProperty(value = "职级名称", index = 5)
     private String jobName;
     @ApiModelProperty(value = "证件ID")
     private String certificateId;
@@ -53,10 +53,10 @@ public class EmployeeBasicInfo extends BaseRowModel implements Serializable {
     @ApiModelProperty(value = "证件号码")
     @ExcelProperty(value = "证件号码", index = 7)
     private String certificateNumber;
-    @ApiModelProperty(value = "职务ID")
+    @ApiModelProperty(value = "岗位ID")
     private String postId;
-    @ApiModelProperty(value = "职务名称")
-    @ExcelProperty(value = "职务名称", index = 8)
+    @ApiModelProperty(value = "岗位名称")
+    @ExcelProperty(value = "岗位名称", index = 8)
     private String postName;
     @ApiModelProperty(value = "工号")
     @ExcelProperty(value = "工号")

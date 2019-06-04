@@ -12,23 +12,18 @@
             <input type="text">
             <i class="el-icon-search"></i>
           </div>
-          <div class="headerRight fr">
-            <div class="search pointer">
+          <div class="headerRight fr pr">
+            <!-- <div class="search pointer">
               <i class="el-icon-search" @click="show4=true" style="font-size:20px"></i>
-            </div>
-            <div class="navlogin">
+            </div> -->
+            <!-- <div class="navlogin">
               <a @click="$router.push({path:'/login'})">登录</a>
               <span class="line">|</span>
               <a @click="$router.push({path:'/register'})">注册</a>
-            </div>
+            </div> -->
+            <user-info></user-info>
           </div>
           <div class="nav" id="nav">
-            <!-- <transition name="fade"> -->
-            <!-- <div class="sousuo posA" v-if="sousuo">
-                  <i class="el-icon-close" style="vertical-align: middle;" @click="sousuo=false"></i>
-                  <input type="text" v-focus @keyup.enter="handleSearch">
-                  <i class="el-icon-search" style="vertical-align: middle;" @click="sousuo=false"></i>
-                </div> -->
             <ul class="posA clearfix">
               <li class="posLi1">
                 <a href="javascript:void(0);">首页</a>
@@ -43,14 +38,12 @@
                 <a href="javascript:void(0);" @click="$router.push({path:'/finaInstitution'})">金融机构</a>
               </li>
             </ul>
-
-            <!-- </transition> -->
           </div>
         </div>
       </div>
       <div class="search_box" id="search_box" :class="{'searchbox':showFF}" @mouseleave="show4=!show4">
         <el-collapse-transition>
-          <div v-show="show4">
+          <div v-show="show4" style="width:100%">
             <div class="transition-box">
               <el-input placeholder="请输入内容" v-model="searchData" class="input-with-select">
                 <el-button slot="append" icon="el-icon-search">搜索 </el-button>
@@ -60,51 +53,6 @@
         </el-collapse-transition>
       </div>
     </div>
-
-    <!-- <div id="headerW" v-if="headFlag">
-      <div class="headerContainer clearfix">
-        <div class="titleImg fl"><img  class="pointer" src="@/../static/img/login-logo.png" @click="$router.push({path:'/'})" alt=""></div>
-        <div class="menu" style="display:none">
-          <i class="el-icon-close"></i>
-          <input type="text">
-          <i class="el-icon-search"></i>
-        </div>
-        <div class="headerRight fr">
-          <div class="search" v-if="!sousuo">
-            <i class="el-icon-search" @click="handleChange" style="font-size:20px"></i>
-          </div>
-          <div class="navlogin">
-            <a @click="$router.push({path:'/login'})">登录</a>
-            <span class="line">|</span>
-            <a @click="$router.push({path:'/register'})">注册</a>
-          </div>
-        </div>
-        <div class="nav">
-          <transition name="fade">
-            <div class="sousuo posA" v-if="sousuo">
-              <i class="el-icon-close" style="vertical-align: middle;" @click="sousuo=false"></i>
-              <input type="text" v-focus @keyup.enter="handleSearch">
-              <i class="el-icon-search" style="vertical-align: middle;" @click="sousuo=false"></i>
-            </div>
-            <ul class="posA clearfix" v-else>
-              <li>
-                <a href="javascript:void(0);">首页</a>
-              </li>
-              <li>
-                <a href="javascript:void(0);">投资人</a>
-              </li>
-              <li>
-                <a href="javascript:void(0);">金融产品</a>
-              </li>
-              <li>
-                <a href="javascript:void(0);">金融机构</a>
-              </li>
-            </ul>
-
-          </transition>
-        </div>
-      </div>
-    </div> -->
     <div class="techCon">
       <div class="banner pr">
         <div class="swiper-container">
@@ -130,30 +78,6 @@
                             <i class="iconfont icon-rightarrow pointer" v-show="showBtn"></i>
                         </div> -->
         </div>
-        <!-- <div class="quickEnter">
-                    <ul>
-                        <li>
-                            <span>人才申报</span>
-                            <p>PEOPLE&nbsp;DECLARE</p>
-                            <img src="@/../static/img/right-arrow.png" alt="">
-                        </li>
-                        <li>
-                            <span>高新企业</span>
-                            <p>HIGH-TECH&nbsp;ENTERPRISE</p>
-                            <img src="@/../static/img/right-arrow.png" alt="">
-                        </li>
-                        <li>
-                            <span>孵化企业</span>
-                            <p>INCUBATION&nbsp;ENTERPRISE</p>
-                            <img src="@/../static/img/right-arrow.png" alt="">
-                        </li>
-                        <li>
-                            <span>行政审批</span>
-                            <p>ADMINISTRATIVE&nbsp;EXAMINATIO</p>
-                            <img src="@/../static/img/right-arrow.png" alt="">
-                        </li>
-                    </ul>
-          </div> -->
       </div>
       <div class="techContent w">
         <div class="techNav">
@@ -171,7 +95,7 @@
           <el-card>
             <ul class="techUl">
               <li>
-                <img src="@/../static/img/tech1.png" alt="">
+                <img src="@/../static/img/tech1.png" alt="" style="width:126px;height:95px">
                 <div class="liInfo">
                   <span>投资人</span>
                   <p class="mainColor">{{investorsNum}}
@@ -180,7 +104,7 @@
                 </div>
               </li>
               <li>
-                <img src="@/../static/img/tech2.png" alt="">
+                <img src="@/../static/img/tech2.png" alt="" style="width:137px;height:101px">
                 <div class="liInfo">
                   <span>金融产品</span>
                   <p class="mainColor">
@@ -190,7 +114,7 @@
                 </div>
               </li>
               <li>
-                <img src="@/../static/img/tech3.png" alt="">
+                <img src="@/../static/img/tech3.png" alt="" style="width:130px;height:96px">
                 <div class="liInfo">
                   <span>金融机构</span>
                   <p class="mainColor">
@@ -278,7 +202,7 @@
                   <ul class="clearfix">
                     <li v-if="k<9&&k>5" v-for="(i,k) in InvestorInfoList" :key="k">
                       <div class="intorImgSma">
-                        <img  class="pointer" :src="i.avatar" alt="头像" @click="$router.push({path:'/investorDetail',query: { investorAccount: i.investorAccount }})">
+                        <img class="pointer" :src="i.avatar" alt="头像" @click="$router.push({path:'/investorDetail',query: { investorAccount: i.investorAccount }})">
                       </div>
                       <div class="rightInfo">
                         <span class="color1">{{i.investorName}}/{{i.position}}</span>
@@ -308,7 +232,7 @@
                     </li> -->
                     <li class="lastLi mainColor">
                       <img src="@/../static/img/xiao.png" alt="">
-                      <div class="rightInfo" @click="$router.push({name:'investorCertification'})">认证投资人></div>
+                      <div class="rightInfo" @click="handleInvertor">认证投资人></div>
                     </li>
                   </ul>
                 </div>
@@ -331,7 +255,7 @@
               <li class="mainBorder" v-if="k<8" v-for="(i,k) in FinancialProList" :key="k">
                 <!-- <img src="@/../static/img/midBan.png" alt=""> -->
                 <div class="finaProItem" @click="$router.push({ path: '/finaProDetail', query: { productId: i.productId }})">
-                  <img class="pointer" :src="i.pictureUrl" alt="" >
+                  <img class="pointer" :src="i.pictureUrl" alt="">
                 </div>
                 <div class="finaDiv1">
                   <div class="finaTit">{{i.productName}}</div>
@@ -393,7 +317,7 @@
             <ul class="finaInsUl finaUl clearfix" id="finaInsUl">
               <li class="finaInsLi pr" v-for="(i,k) in ServiceOrgList" :key='k'>
                 <div class="finaInsItem">
-                  <img class="pointer" :src="i.orgLogo" alt="" @click="$router.push({ path: '/finaInsDetail', query: { orgId: i.orgId } })">
+                  <img class="pointer" :src="i.orgLogo" alt="" @click="$router.push({ path: 'finaInsDetail', query: { orgId: i.orgId } })">
                 </div>
                 <div class="finaDiv1">
                   <!-- <div class="finaTit"></div> -->
@@ -442,7 +366,7 @@
 
     <!-- 提需求弹框 -->
     <template v-if="financialProVisible">
-      <el-dialog :visible.sync="financialProVisible" width="600px">
+      <el-dialog :visible.sync="financialProVisible" width="600px" :modal-append-to-body=false> 
         <el-form ref="financialProform" :rules="rules" :model="financialProform" label-position="right" label-width="150px" style="max-width:500px;">
           <el-form-item label="融资金额(万元):" prop="financingAmount">
             <el-input v-model.trim="financialProform.financingAmount" placeholder="请输入融资金额" maxlength="100" clearable/>
@@ -450,11 +374,6 @@
           <el-form-item label="融资期限(月):" prop="financingPeriod">
             <el-select v-model="financialProform.financingPeriod" placeholder="请选择" style="width:100%">
               <el-option v-for="(item,index) in options" :key="index" :label="item.label" :value="item.value" />
-              <!-- <el-option value="3个月及以下"/>
-              <el-option value="6个月及以下"/>
-              <el-option value="12个月及以下"/>
-              <el-option value="36个月及以下"/>
-              <el-option value="36个月以上"/> -->
             </el-select>
           </el-form-item>
 
@@ -473,7 +392,11 @@
 </template>
 <script>
 import swiper from "swiper";
+import userInfo from "../common/userInfoData";
 export default {
+  components: {
+    userInfo
+  },
   data() {
     return {
       sousuo: false,
@@ -576,6 +499,13 @@ export default {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
   },
   methods: {
+    handleInvertor() {
+      if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
+      this.$router.push({ name: "investorCertification" });
+    },
     techInit() {
       var mySwiper = new swiper(".swiper-container", {
         direction: "horizontal", // 垂直切换选项
@@ -606,24 +536,41 @@ export default {
       this.page--;
       this.getFinancialProList();
     },
-    handleScroll() {
-      const osTop =
-        document.documentElement.scrollTop ||
-        document.documentElement.scrollTop;
-      // console.dir(this.$refs)
-      for (const key in this.$refs) {
-        if (osTop >= this.$refs[key].scrollTop) {
-          // console.dir(node.scrollTop)
-          const name = this.$refs[key].dataset.class;
-          this.$refs[key].classList.add(name);
-        }
+    getScrollOffset() {
+      // 除IE8及更早版本
+      if (window.pageXOffset != null) {
+        return {
+          x: window.pageXOffset,
+          y: window.pageYOffset
+        };
       }
+      // 标准模式下的IE
+      if (document.compatMode == "css1Compat") {
+        return {
+          x: document.documentElement.scrollLeft,
+          y: document.documentElement.scrollTop
+        };
+      }
+      // 怪异模式下的浏览器
+      return {
+        x: document.body.scrollLeft,
+        y: document.body.scrollTop
+      };
+    },
+    handleScroll() {
+      const osTop = this.getScrollOffset().y;
+      // for (const key in this.$refs) {
+      //   if (osTop >= this.$refs[key].scrollTop) {
+      //     const name = this.$refs[key].dataset.class;
+      //     this.$refs[key].classList.add(name);
+      //   }
+      // }
       // console.log(this.getScrollTop())
       if (
         this.getScrollTop() > document.getElementById("header").clientHeight
       ) {
         this.showFF = true;
-        this.show4 = false;
+        // this.show4 = false;
       } else {
         this.showFF = false;
       }
@@ -640,11 +587,14 @@ export default {
     //金融产品右翻页
     rightPage() {
       if (this.page >= this.total1) {
-        this.$message.error("没有更多数据了");
-        return;
+        // this.$message.error("没有更多数据了");
+        this.page = 1;
+        this.getFinancialProList();
+        // return;
+      } else {
+        this.page++;
+        this.getFinancialProList();
       }
-      this.page++;
-      this.getFinancialProList();
     },
     //用户提需求
     demandDia() {
@@ -675,6 +625,10 @@ export default {
     },
     //提需求
     raiseDemand(i) {
+      if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
       this.financialProVisible = true;
       this.financialProform.expectedDate = "";
       this.financialProform.financingAmount = "";
@@ -754,8 +708,6 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-          } else {
-            _this.$message.error(res.result);
           }
         }
       });
@@ -916,18 +868,69 @@ export default {
         }
       }
     }
+    // .search_box {
+    //   background: rgba(0, 0, 0, 0.3);
+    //   // text-align: center;
+    //   .el-input-group {
+    //     border-radius: 28px;
+    //     width: 42%;
+    //     margin: 43px 0;
+    //     position: relative;
+    //     transform: translateX(-50%);
+    //     left: 50%;
+    //     .el-input {
+    //       width: 94px;
+    //     }
+    //     .el-input__inner:focus {
+    //       border-color: #00a041;
+    //     }
+    //     .el-input-group__append,
+    //     .el-input-group__prepend {
+    //       border-radius: 28px;
+    //     }
+    //     .el-input-group__append {
+    //       /* border-top-left-radius: 0;
+    //   border-bottom-left-radius: 0; */
+    //       background: #00a041;
+    //       color: #fff;
+    //       right: 58px;
+    //       .el-button {
+    //         margin: -10px -10px;
+    //       }
+    //     }
+    //     .el-input-group__prepend {
+    //       border-top-right-radius: 0;
+    //       border-bottom-right-radius: 0;
+    //       background-color: #fff;
+    //       padding: 0px 17px 0 9px;
+    //       input {
+    //         color: #666666;
+    //         text-align: right;
+    //       }
+    //     }
+    //   }
+    //   .input-with-select .el-input__inner {
+    //     border-top-left-radius: 19px;
+    //     border-bottom-left-radius: 19px;
+    //     border: 1px solid #00a041;
+    //   }
+    // }
     .search_box {
       background: rgba(0, 0, 0, 0.3);
-      // text-align: center;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      width: 100%;
       .el-input-group {
+        // position: relative;
+        // left: 50%;
+        // transform: translateX(-50%);
         border-radius: 28px;
-        width: 42%;
+        overflow: hidden;
+        width: 50%;
         margin: 43px 0;
-        position: relative;
-        transform: translateX(-50%);
-        left: 50%;
         .el-input {
-          width: 94px;
+          // width: 94px;
         }
         .el-input__inner:focus {
           border-color: #00a041;
@@ -937,8 +940,6 @@ export default {
           border-radius: 28px;
         }
         .el-input-group__append {
-          /* border-top-left-radius: 0;
-      border-bottom-left-radius: 0; */
           background: #00a041;
           color: #fff;
           right: 58px;

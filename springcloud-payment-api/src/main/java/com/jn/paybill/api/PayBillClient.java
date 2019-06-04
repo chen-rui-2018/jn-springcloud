@@ -2,7 +2,12 @@ package com.jn.paybill.api;
 
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.pay.model.CreateOrderAndPayReqModel;
+import com.jn.pay.model.CreatePayReqModel;
+import com.jn.pay.model.PayOrderNotify;
+import com.jn.pay.model.PayOrderRsp;
 import com.jn.paybill.model.*;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -63,11 +68,11 @@ public interface PayBillClient {
 
     /**
      * 支付回调接口
-     * @param callBackParam
+     * @param payOrderNotify
      * @return
      */
     @RequestMapping(value = "/api/pay/bill/payCallBack", method = RequestMethod.POST)
-    Result<PayCallBackVO> payCallBack(@RequestBody PayCallBackParam callBackParam);
+    Result payCallBack(@RequestBody PayOrderNotify payOrderNotify);
 
     /**
      * 根据账单IDs获取账单列表内容
@@ -93,4 +98,12 @@ public interface PayBillClient {
     @RequestMapping(value = "/api/pay/bill/cancelPayBillByBillId", method = RequestMethod.POST)
     Result<Boolean> cancelPayBillByBillId(@RequestBody String orderId);
 
+    /**
+     * 发起支付
+     * @param createPayReqModel
+     * @return
+     */
+    @ApiOperation(value = "发起支付")
+    @RequestMapping(value = "/api/pay/bill/createPayOrder",method = RequestMethod.POST)
+    Result<PayOrderRsp> createPayOrder(@RequestBody CreatePayReqModel createPayReqModel);
 }

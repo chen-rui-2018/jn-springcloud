@@ -1,10 +1,24 @@
 <template>
   <div class="declarationCenter">
+    <div class="banner" ref="banner">
+      <div class="swiper-container">
+          <div class="swiper-wrapper">
+              <div class="swiper-slide"> <img src="@/assets/image/declaration.png" alt=""> </div>
+          </div>
+          <!-- <div class="swiper-pagination"></div> -->
+         <!--  <div class="swiper-button-prev">
+            <i class="el-icon-arrow-left"></i>
+          </div>
+          <div class="swiper-button-next">
+            <i class="el-icon-arrow-right"></i>
+          </div> -->
+      </div>
+    </div>
     <div class="declarationCenter_content"><!-- 版心 -->
       <!-- 面包屑 -->
       <div class="approve_breadcrumb">
         <el-breadcrumb separator="/">
-          <el-breadcrumb-item :to="{ path: '/' }">企业服务</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/enterpriseservice' }">企业服务</el-breadcrumb-item>
           <el-breadcrumb-item>
             <a href="javascript:;">申报中心</a>
           </el-breadcrumb-item>
@@ -16,11 +30,11 @@
           <div>申报平台</div>
           <div @click="goplatform">MORE <span class="el-icon-arrow-right"></span></div>
         </div>
-        <div class="platform_cont">
+        <div class="platform_cont" @click="goplatform">
           <p>
             <span class="iconfont icon-deng"> </span>
               汇集常用申报平台，便于企业快速查阅和进入。包含了各类科技项目、企业资质、产品认定、人才计划申报、资金兑现、技术合同登记等业务申报系统。
-            <span @click="goplatform">查看详情<span class="el-icon-d-arrow-right"></span> </span> 
+            <span >查看详情<span class="el-icon-d-arrow-right"></span> </span> 
           </p>
           <div>
             <img src="@/assets/image/platform.png" alt="">
@@ -106,7 +120,7 @@ export default {
         sortType:'1',//排序
         page:1,
         rows:4,
-        perennialList:[]
+        perennialList:[],
       }
     },
     filters: {
@@ -217,7 +231,19 @@ export default {
         this.getdeclarationcenterList()
       },
       goplatform(){
-        this.$router.push({name:'declarationPlatform'})
+        if(sessionStorage.token){
+          this.$router.push({name:'declarationPlatform'})
+        }else{
+          this.$confirm('亲，您需要登录后才能访问以下界面哦！', '提示', {
+            confirmButtonText: '去登陆',
+            cancelButtonText: '留在当前页面',
+            type: 'warning',
+            center: true
+          }).then(() => {
+             this.$router.push({path:"/login"})
+          }).catch(() => {
+          })
+        }
       },
       gonoticedetail(id){
         this.$router.push({path:'/declarationNoticeDetail',query:{id:id}})
@@ -238,7 +264,88 @@ export default {
 
 <style lang="scss">
   .declarationCenter{
-    margin-top: 230px;
+    // margin-top: 230px;
+    .banner{
+      position: relative;
+      .swiper-button-prev, .swiper-button-next{
+        display: block;
+        width: 43px;
+        height: 43px;
+        border: 1px solid #fff;
+        border-radius: 50%;
+        background-size: 0 0;
+        text-align: center;
+        i{
+          font-size: 36px;
+          line-height: 44px;
+          color:#fff;
+        }
+      }
+      .swiper-button-next{
+        right: 95px;
+      }
+      .swiper-button-prev{
+        left:95px;
+      }
+    }
+  .swiper-container-horizontal > .swiper-pagination-bullets .swiper-pagination-bullet{
+    margin: 5px 4px;
+  }
+  .swiper-pagination-bullet{
+    background-color: #fff;
+    opacity: 0.5;
+  }
+   .swiper-pagination-fraction, .swiper-pagination-custom, .swiper-container-horizontal > .swiper-pagination-bullets{
+      position: absolute;
+      right: 152px;
+      top: 0;
+      left: auto;
+      width: 1%;
+      }
+    .swiper-container{
+      img{
+        width:100%;
+        vertical-align: middle;
+      }
+      .swiper-pagination{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .swiper-pagination-bullet-active{
+        border-radius: 5px;
+        height: 50px;
+        background: #fff;
+        opacity: 1;
+      }
+    }
+    @keyframes bounce-up {
+    25% {
+        transform: translateY(5px);
+    }
+    50%, 100% {
+        transform: translateY(0);
+    }
+    75% {
+        transform: translateY(-5px);
+        }
+    }
+    .animate-bounce-up{
+      animation: bounce-up 2s linear infinite;
+    }
+    .approve_content{
+      width: 1190px;
+      margin: 0 auto;
+    }
+    // 加载动画
+    .el-loading-mask{
+      .el-loading-spinner .path{
+        stroke:#00a041;
+      }
+      .el-loading-spinner{
+        top:30%;
+      }
+    }
     .declarationCenter_content{
       width: 1190px;
       margin: 0 auto;
@@ -273,6 +380,7 @@ export default {
           margin-top: 23px;
           display: flex;
           justify-content: space-between;
+          cursor: pointer;
           p{
             margin: 51px 0 51px 60px;
             line-height: 24px;
@@ -318,6 +426,7 @@ export default {
           ul{
             display: flex;
             li{
+              cursor: pointer;
               width:25%;
               margin-right: 35px;
               border: solid 1px #eeeeee;

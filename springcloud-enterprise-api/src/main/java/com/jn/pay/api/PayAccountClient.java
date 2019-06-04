@@ -3,10 +3,7 @@ package com.jn.pay.api;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
-import com.jn.pay.model.PayAccountBookMoneyRecord;
-import com.jn.pay.model.PayBIllInitiateParam;
-import com.jn.pay.model.PayCheckReminder;
-import com.jn.pay.model.PayOrderNotify;
+import com.jn.pay.model.*;
 import com.jn.pay.vo.PayAccountAndAccountBookVo;
 import com.jn.pay.vo.PayBillCreateParamVo;
 import io.swagger.annotations.ApiOperation;
@@ -39,5 +36,23 @@ public interface PayAccountClient {
     @ApiOperation(value = "预缴充值-支付回调接口")
     @RequestMapping(value = "/api/payment/payAccount/payAccountCallBack",method = RequestMethod.POST)
     Result payAccountCallBack(@RequestBody PayOrderNotify callBackParam);
+
+    /**
+     * 发起支付-我的账本-预缴充值(电费)
+     * @param createOrderAndPayReqModel
+     * @return
+     */
+    @RequestMapping(value = "/api/payment/payAccount/createOrderAndPay", method = RequestMethod.POST)
+    Result<PayOrderRsp> createOrderAndPay(@RequestBody CreateOrderAndPayReqModel createOrderAndPayReqModel);
+
+
+    @ApiOperation(value = "我的账户-通过企业ID和账本类型查询账号余额",notes = "我的账户-通过企业ID和账本类型查询账号余额")
+    @RequestMapping(value = "/api/payment/payAccount/queryPayAccountBookMoney",method = RequestMethod.POST)
+    Result<PayAccountBook> queryPayAccountBookMoney(@RequestBody @Validated PayAccountBookMoney payAccountBookMoney);
+
+    @ApiOperation(value = "我的账本-创建账户和账本【企业注册时调用】",notes = "我的账本-创建账户和账本【企业注册时调用】")
+    @RequestMapping(value = "/api/payment/payAccount/createPayAccountBook",method = RequestMethod.POST)
+    Result createPayAccountBook(@RequestBody @Validated PayAccountBookCreateParam payAccountBookCreateParam);
+
 
 }

@@ -51,6 +51,9 @@ public class RoomLeaseRecordModel implements Serializable {
     @ApiModelProperty(value = "楼宇地址",example = "南京市秦淮区白下智慧园区XX街1号")
     private String address;
 
+    @ApiModelProperty(value = "创建时间",example = "2019-05-23")
+    private Date createTime;
+
     public String getId() {
         return id;
     }
@@ -147,6 +150,14 @@ public class RoomLeaseRecordModel implements Serializable {
         this.payState = payState;
     }
 
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
     @Override
     public String toString() {
         return "RoomLeaseRecordModel{" +
@@ -162,6 +173,7 @@ public class RoomLeaseRecordModel implements Serializable {
                 ", roomStatus=" + roomStatus +
                 ", payState=" + payState +
                 ", address='" + address + '\'' +
+                ", createTime=" + createTime +
                 '}';
     }
 }

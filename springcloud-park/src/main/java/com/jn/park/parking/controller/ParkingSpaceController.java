@@ -71,6 +71,14 @@ public class ParkingSpaceController extends BaseController {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         return new Result<>(parkingSpaceService.getParKingSpaceRentalListByUser(user.getAccount(),page));
     }
+    @ControllerLog(doAction = "查询车位租赁详情")
+    @ApiOperation(value = "根据租赁id查询车位租赁详情[前端用户]", notes = "前端展示停车位信息用停车场名称‘areaName’和停车位编号‘spaceSerial’拼接。例如‘白下智慧园区5号停车场A0001’")
+    @RequestMapping(value = "/getParKingSpaceRentalDetails",method = RequestMethod.GET)
+    public Result<ParkingSpaceDetailVo> getParKingSpaceRentalDetails(  @ApiParam(name="rentId",value = "租赁信息id",required = true,example = "51we20***")
+                                                                           @RequestParam(value = "rentId") String rentId){
+        Assert.notNull(rentId, ParkingExceptionEnum.PARKING_SPACE_ID_IS_NOT_NULL.getMessage());
+        return new Result<>(parkingSpaceService.getParKingSpaceRentalDetails(rentId));
+    }
 
 
     @ControllerLog(doAction = "车位申请")
@@ -86,11 +94,11 @@ public class ParkingSpaceController extends BaseController {
     @RequestMapping(value = "/applyParkingSpaceAmount",method = RequestMethod.GET)
     public Result<ParkingSpaceAmountVo> applyParkingSpaceAmount(@Validated ParkingSpaceAmountModel parkingSpaceAmountModel){
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        return new Result<>(parkingSpaceService.applyParkingSpaceAmount(parkingSpaceAmountModel,user.getAccount()));
+        return new Result<>(parkingSpaceService.applyParkingSpaceAmount(parkingSpaceAmountModel,null==user?null:user.getAccount()));
     }
 
     @ControllerLog(doAction = "生成支付账单")
-    @ApiOperation(value = "生成支付账单", notes = "点击去支付，调用该接口生成账单号。前端接收到账单号后，携带账单号调用统一缴费服务‘/guest/pay/bill/startPayment统一缴费--发起支付’支付")
+    @ApiOperation(value = "生成支付账单", notes = "点击去支付，调用该接口生成账单号。前端接收到账单号后，携带账单号调用统一缴费服务‘/pay/createPay发起支付’支付[返回参数即发起支付的goodsIdArr]")
     @RequestMapping(value = "/createParkingSpaceBill",method = RequestMethod.POST)
     public Result<String> createParkingSpaceBill(String rentId){
         Assert.notNull(rentId, ParkingExceptionEnum.REND_ID_IS_NOT_NULL.getMessage());

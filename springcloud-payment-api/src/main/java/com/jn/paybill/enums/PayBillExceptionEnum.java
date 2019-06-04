@@ -34,6 +34,11 @@ public enum PayBillExceptionEnum implements CodeAndMsg {
     BILL_PAY_ORDER_POINT_IS_ERROR("6020522","支付积分处理失败，请稍后重试。"),
     PAY_ORDER_POINT_IS_NOT_PAYING("6020523","订单状态为非支付中，不能进行操作"),
     PAY_ORDER_POINT_IS_NOT_CHECK("6020524","账单状态为待审核，无需进行支付"),
+    PAY_ORDER_SIGN_CHECK_ERROR("6020525","支付签名校验失败，请核实数据"),
+    PAY_ORDER_AMOUNT_IS_ERROR("6020526","前端金额计算不匹配"),
+    PAY_ORDER_USER_IS_NOT_EXIST("6020527","当前登录用户不存在"),
+    PAY_ORDER_USER_IS_NOT("6020528","登录失效，请重新登录"),
+    PAY_ORDER_OPEN_ID_IS_NULL("6020529","请先绑定并登录用户"),
     ;
     /**
      * 编码

@@ -14,7 +14,7 @@ import java.io.Serializable;
  */
 @ApiModel(value = "ServiceCompanyParam", description = "企业查询入参")
 public class ServiceCompanyParam extends Page implements Serializable {
-    @ApiModelProperty(value = "企业名称[模糊搜索]",example = "君南")
+    @ApiModelProperty(value = "企业名称[模糊搜索]",example = "南京")
     private String comName;
     @ApiModelProperty(value = "楼宇ID[模糊搜索]",example = "e23i****22j")
     private String parkBuildId;

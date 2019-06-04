@@ -4,7 +4,9 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.common.util.Assert;
 import com.jn.common.util.StringUtils;
+import com.jn.enterprise.company.enums.CompanyExceptionEnum;
 import com.jn.enterprise.company.enums.RecruitDataTypeEnum;
 import com.jn.enterprise.company.enums.RecruitExceptionEnum;
 import com.jn.enterprise.company.model.ServiceRecruitParam;
@@ -59,11 +61,15 @@ public class RecruitGuestController extends BaseController {
     @ControllerLog(doAction = "招聘详情")
     @ApiOperation(value = "招聘详情（app/pc-招聘详情）", notes = "必传招聘ID")
     @RequestMapping(value = "/viewRecruitDetails",method = RequestMethod.GET)
-    public Result<RecruitVO> addRecruitClick(@RequestParam String recruitId){
-        if (StringUtils.isBlank(recruitId)) {
-            throw new JnSpringCloudException(RecruitExceptionEnum.RECRUIT_ID_IS_NULL);
+    public Result<RecruitVO> addRecruitClick(@RequestParam(required = false) String recruitId){
+        Assert.notNull(recruitId, CompanyExceptionEnum.PARAM_IS_NULL.getMessage());
+
+        String account = null;
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        if(user != null && StringUtils.isNotBlank(user.getAccount())){
+            account= user.getAccount();
         }
-        return new Result(recruitService.getRecruitDetailsById(recruitId));
+        return new Result(recruitService.getRecruitDetailsById(recruitId, account));
     }
 
 }

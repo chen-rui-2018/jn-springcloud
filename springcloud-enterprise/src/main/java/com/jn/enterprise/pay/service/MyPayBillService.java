@@ -59,29 +59,29 @@ public interface MyPayBillService {
      * @param payCheckReminderParam
      * @return
      */
-    void updateBillNumber(PayCheckReminderParam payCheckReminderParam);
+    Result updateBillNumber(PayCheckReminderParam payCheckReminderParam);
 
     /**
      * 核查提醒录入
      * @param payCheckReminder,user
      * @return
      */
-    void billCheckReminder(PayCheckReminder payCheckReminder, User user);
+    Result billCheckReminder(PayCheckReminder payCheckReminder, User user);
 
     /**
      * 创建账单
      * @param payBillCreateParamVo,user
      * @return
      */
-    Result billCreate(PayBillCreateParamVo payBillCreateParamVo, User user);
+    Result billCreate(PayBillCreateParamVo payBillCreateParamVo);
 
     /**
      * 缴费单支付发起
-     * @param payBIllInitiateParam,user
+     * @param createOrderAndPayReqModel,user
      * @param user
      * @return
      */
-    Result<PayOrderRsp> startPayment(PayBIllInitiateParam payBIllInitiateParam, User user);
+    Result<PayOrderRsp> startPayment(CreateOrderAndPayReqModel createOrderAndPayReqModel, User user);
 
     /**
      * 支付回调接口
@@ -92,11 +92,11 @@ public interface MyPayBillService {
 
     /**
      * 账本预缴充值
-     * @param payPrepaidRechargeParam,user
+     * @param createOrderAndPayReqModel,user
      * @param user
      * @return
      */
-    Result<PayOrderRsp> insertPrepaidRecharge(PayPrepaidRechargeParam payPrepaidRechargeParam, User user);
+    Result<PayOrderRsp> insertPrepaidRecharge(CreateOrderAndPayReqModel createOrderAndPayReqModel, User user);
 
     /**
      * 预缴充值回调接口

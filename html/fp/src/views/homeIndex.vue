@@ -12,9 +12,9 @@
               <i class="el-icon-bell" style="font-size:20px"></i>
             </router-link> -->
             <!-- <span v-if="isLogin" style="margin-right:10px">您好！{{accoutInfo}}</span> -->
-            <div class="search pointer">
+            <!-- <div class="search pointer" v-if="luyouString.indexOf($route.name) == -1">
               <i class="el-icon-search" @click="show4=true" style="font-size:20px"></i>
-            </div>
+            </div> -->
             <user-info></user-info>
             <!-- <div class="navlogin">
               <router-link to="/parkNotice" class="" v-if="isLogin">
@@ -54,12 +54,15 @@
         <div class="checkAll ct color1 pointer">查看全部</div>
         </el-card>
       </div> -->
-      <div class="search_box" id="search_box" :class="{'searchbox':showFF}" @mouseleave="show4=!show4">
+      <!-- @mouseleave="show4=!show4" -->
+      <div class="search_box" id="search_box" :class="{'searchbox':showFF}" @mouseleave="show4=!show4" >
         <el-collapse-transition>
-          <div v-show="show4">
+          <div v-show="show4" style="width:100%">
             <div class="transition-box">
-              <el-input placeholder="请输入内容" v-model="searchData" class="input-with-select">
-                <el-button slot="append" icon="el-icon-search">搜索 </el-button>
+              <el-input placeholder="请输入内容" v-model="searchData">
+                <template slot="append">
+                  <el-button icon="el-icon-search">搜索 </el-button>
+                </template>
               </el-input>
             </div>
           </div>
@@ -68,7 +71,10 @@
     </div>
 
     <!--    主体内容开始-->
-    <router-view></router-view>
+    <div style="position:relative;z-index: 0">
+      <router-view></router-view>
+    </div>
+
     <!--    主体内容结束-->
   </div>
 </template>
@@ -81,6 +87,7 @@
     },
     data() {
       return {
+        luyouString:'portalIndex,enterpriseservice,investment,home,messageCenter',
         showMes:false,
         // sousuo: false,
         show1: false,
@@ -101,7 +108,7 @@
     },
     computed: {
       isCenter() {
-        const list = 'portalIndex,enterpriseservice,investment,serMatHp,tfindex,actiCenter,incubatorEnterprises';
+        const list = 'portalIndex,enterpriseservice,investment,serMatHp,tfindex,actiCenter,incubatorEnterprises,compassView,declarationCenter,talentsService,academicExchange,policyCenter,recruitmentList,profileDetails';
         return this.$route.matched.some(item => {
           if(item.name){
             return list.indexOf(item.name) == -1
@@ -267,36 +274,6 @@
   };
 </script>
 <style lang="scss">
-//  .mesage11{
-//    position: relative;
-//    left:70%;
-//    width: 250px;
-//    color:#999;
-//    font-size: 12px;
-//    .el-card__body{
-//      padding:0;
-//    }
-//    .el-card{
-//      color:#999;
-//    }
-//    .firli{
-//      display: flex;
-//      align-items: center;
-//      justify-content: space-between;
-//      padding:15px 20px;
-//      border-bottom:1px solid #eee;
-//    }
-//    .checkAll{
-//      padding:15px 20px;
-//    }
-//    li{
-//      padding:15px 20px;
-//      border-bottom:1px solid #eee;
-//      overflow: hidden;
-//      text-overflow:ellipsis;
-//      white-space: nowrap;
-//    }
-//  }
   @keyframes qfyfadeInLeft {
     0% {
       opacity: 0;
@@ -313,49 +290,6 @@
     display: inline-block;
   }
   .portalIndex {
-
-    .portalCon{
-      .portalNotice,
-      .policyGuide,
-      .popularActi,
-      .districtGardens,
-      .enterpriseinfo,
-      .enterprisesPark {
-        opacity: 0;
-      }
-    }
-    .enterPark {
-      li {
-        opacity: 0;
-      }
-    }
-    .bottom {
-      animation: fadeInUp 2s ease forwards;
-    }
-    .bottom1 {
-      animation: fadeInUp 2s ease 0.5s forwards;
-    }
-    .bottom2 {
-      animation: fadeInUp 2s ease 1s forwards;
-    }
-    .bottom3 {
-      animation: fadeInUp 1s ease 1.5s forwards;
-    }
-    .bottom4 {
-      animation: fadeInUp 1s ease 2s forwards;
-    }
-    .bottom5 {
-      animation: fadeInUp 1s ease 2.5s forwards;
-    }
-    .bottom6 {
-      animation: fadeInUp 1s ease 3s forwards;
-    }
-    .bottom7 {
-      animation: fadeInUp 1s ease 3.5s forwards;
-    }
-    .bottom8 {
-      animation: fadeInUp 1s ease 4s forwards;
-    }
     .portalIndexImg {
       position: fixed;
       z-index: 99;
@@ -399,15 +333,20 @@
       }
       .search_box {
         background: rgba(0, 0, 0, 0.3);
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        width:100%;
         .el-input-group {
-          position: relative;
-          left: 50%;
-          transform: translateX(-50%);
+          // position: relative;
+          // left: 50%;
+          // transform: translateX(-50%);
           border-radius: 28px;
-          width: 42%;
+          overflow: hidden;
+          width: 50%;
           margin: 43px 0;
           .el-input {
-            width: 94px;
+            // width: 94px;
           }
           .el-input__inner:focus {
             border-color: #00a041;
@@ -417,8 +356,6 @@
             border-radius: 28px;
           }
           .el-input-group__append {
-            /* border-top-left-radius: 0;
-          border-bottom-left-radius: 0; */
             background: #00a041;
             color: #fff;
             right: 58px;
@@ -446,229 +383,6 @@
       .searchbox {
         background: #fff;
         box-shadow:0 10px 10px -10px #ccc;
-      }
-    }
-    .portalCon {
-      .banner {
-        .swiper-wrapper {
-          .swiper-slide {
-            width: 100%;
-          }
-          img {
-            width: 100%;
-            vertical-align: middle;
-          }
-        }
-        .swiper-button-prev,
-        .swiper-button-next {
-          background: none;
-          width: 34px;
-          height: 34px;
-          color: #fff;
-          font-size: 60px;
-          .icon-leftarrow,
-          .icon-rightarrow {
-            font-size: 45px;
-          }
-        }
-        .swiper-button-prev {
-          left: 60px;
-        }
-        .swiper-button-next {
-          right: 60px;
-        }
-        .swiper-pagination {
-          bottom: 40%;
-          left: 92%;
-          .swiper-pagination-bullet {
-            display: block;
-            margin-bottom: 10px;
-            opacity: 1;
-            background: #ccc;
-          }
-          .swiper-pagination-bullet-active {
-            background: #fff;
-            height: 50px;
-            border-radius: 4px;
-          }
-        }
-      }
-    }
-    #qiehuan1 {
-      margin: 20px 0;
-      > li {
-        display: inline-block;
-        width: 190px;
-        height: 210px;
-        padding: 30px 10px;
-        font-size: 12px;
-        text-align: left;
-        margin-right: 15px;
-        vertical-align: middle;
-        background-color: rgba(255, 255, 255, 0.2);
-        .liTit {
-          font-size: 14px;
-          text-align: center;
-        }
-        .liInfo {
-          margin: 40px 0 50px 0;
-        }
-        .liBom {
-          padding: 0 15px;
-          > i {
-            margin-right: 8px;
-          }
-        }
-      }
-      > li:hover {
-        transition: 0.3s all;
-        transform: scale(1.1);
-      }
-    }
-    .portalNotice {
-      .left {
-        text-align: left;
-        .leftLine {
-          position: absolute;
-          width: 2px;
-          height: 100%;
-          background: #000;
-        }
-        .el-collapse,
-        .el-collapse-item__header,
-        .el-collapse-item__wrap {
-          border: none;
-        }
-        .el-collapse-item__wrap {
-          // text-indent: 3.5em;
-        }
-        .el-collapse-item__arrow {
-          display: none;
-        }
-      }
-    }
-    .policyGuide {
-      .swiper-container {
-        padding-bottom: 60px;
-      }
-      // .swiper-pagination-bullet {
-      //   background: red;
-      // }
-      // .swiper-pagination-bullet-active {
-      //   background: #fff;
-      // }
-      .swiper-pagination-bullet {
-        //   display: block;
-        margin-bottom: 10px;
-        opacity: 1;
-        background: #97ecc8;
-      }
-      .swiper-pagination-bullet-active {
-        background: #fff;
-        //   height: 65px;
-        border-radius: 4px;
-      }
-      .el-carousel__button {
-        width: 9px;
-        height: 9px;
-        border-radius: 50%;
-      }
-      .el-carousel__arrow {
-        background: none;
-        font-size: 30px;
-        top: 40%;
-      }
-      .el-carousel__arrow--left {
-        left: 64px;
-      }
-      .el-carousel__arrow--right {
-        right: 64px;
-      }
-      .fenye1 {
-        .swiper-button-prev,
-        .swiper-button-next {
-          width: 17px;
-          height: 31px;
-          top: 48%;
-        }
-        .swiper-button-prev,
-        .swiper-container-rtl .swiper-button-next {
-          background: url("../../static/img/zuo1.png") 100% 100% / 100% 100%
-          no-repeat;
-          left: 90px;
-          right: auto;
-        }
-        .swiper-button-next,
-        .swiper-container-rtl .swiper-button-prev {
-          background: url("../../static/img/you1.png") 100% 100% / 100% 100%
-          no-repeat;
-          right: 100px;
-          left: auto;
-        }
-      }
-    }
-    .popularActi {
-      .swiper-button-prev,
-      .swiper-button-next {
-        width: 34px;
-        height: 34px;
-      }
-    }
-
-    .districtGardens {
-      .card {
-        .swiper-container {
-          padding: 30px 0;
-        }
-      }
-      .swiper-button-next,
-      .swiper-container-rtl .swiper-button-prev {
-        background: url("../../static/img/you2.png") 100% 100% / 100% 100% no-repeat;
-        right: 95px;
-        left: auto;
-        width: 17px;
-        height: 31px;
-      }
-      .swiper-button-prev,
-      .swiper-container-rtl .swiper-button-next {
-        background: url("../../static/img/zuo2.png") 100% 100% / 100% 100% no-repeat;
-        left: 95px;
-        right: auto;
-        width: 17px;
-        height: 31px;
-      }
-      .cardUl {
-        > li {
-          transition: all 0.6s;
-        }
-        > li:hover {
-          transform: scale(1.1);
-          box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.2);
-        }
-      }
-    }
-    .enterpriseinfo {
-      .enterPriseCon {
-        .con1 {
-          overflow: hidden;
-        }
-        .con1 img {
-          transition: all 0.6s;
-        }
-        .con1 img:hover {
-          transform: scale(1.1);
-        }
-        .con2 {
-          .conlef1 {
-            overflow: hidden;
-            img {
-              transition: all 0.6s;
-            }
-            img:hover {
-              transform: scale(1.1);
-            }
-          }
-        }
       }
     }
   }

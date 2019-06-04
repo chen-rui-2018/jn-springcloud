@@ -17,9 +17,15 @@
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(titleName)">
             and t1.title_name like concat('%',#{titleName,jdbcType=VARCHAR},'%')
         </if>
-        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(classId)">
-            and t1.class_id =#{classId,jdbcType=VARCHAR}
+
+        <if test="classIds!=null and classIds.size>0">
+            and t1.class_id in
+            <foreach collection="classIds" item="classId" open="(" close=")" separator=",">
+                #{classId}
+            </foreach>
+
         </if>
+
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(fileId)">
             and t1.file_id =#{fileId,jdbcType=VARCHAR}
         </if>

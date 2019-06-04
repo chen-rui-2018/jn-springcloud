@@ -1,6 +1,5 @@
 import request from '@/utils/request'
-let baseurl = 'springcloud-hr/'
-
+const baseurl = 'springcloud-hr/'
 
 // 新增员工档案分类
 export function addEmployeeFileClass(query) {
@@ -28,8 +27,6 @@ export function deleteEmployeeFileClass(id) {
   })
 }
 
-
-
 // 查询员工档案分类树
 export function getTreeList() {
   return request({
@@ -37,7 +34,6 @@ export function getTreeList() {
     method: 'get'
   })
 }
-
 
 // 新增员工档案
 export function addEmployeeFile(query) {
@@ -47,7 +43,6 @@ export function addEmployeeFile(query) {
     data: query
   })
 }
-
 
 // 编辑员工档案
 export function updateEmployeeFile(query) {
@@ -75,7 +70,6 @@ export function getEmployeeFile(id) {
   })
 }
 
-
 // 删除员工档案
 export function deleteEmployeeFile(id) {
   return request({
@@ -84,16 +78,16 @@ export function deleteEmployeeFile(id) {
   })
 }
 
-//附件上传
+// 附件上传
 export function uploadAttachment(query) {
   return request({
-    url: 'zuul/'+baseurl + `hr/employeeFile/uploadAttachment`,
+    url: 'zuul/' + baseurl + `hr/employeeFile/uploadAttachment`,
     method: 'post',
     data: query
   })
 }
 
-//附件删除
+// 附件删除
 export function deleteAttachment(id) {
   return request({
     url: baseurl + `hr/employeeFile/deleteAttachment?id=${id}`,
@@ -112,9 +106,9 @@ export function importEmployeeFile(formData) {
 
 // 导出员工档案
 export function exportEmployeeFile(query) {
-  let params='';
-  for(const i in query){
-    params+=`&${i}=${query[i]}`;
+  let params = ''
+  for (const i in query) {
+    params += `&${i}=${query[i]}`
   }
   return request({
     url: baseurl + `hr/employeeFile/exportEmployeeFile?q=a${params}`,
@@ -138,7 +132,6 @@ export function getEmployeeFileAttachmentById(query) {
     data: query
   })
 }
-
 
 // 员工档案附件名称修改
 export function updateEmployeeFileAttachment(query) {

@@ -22,7 +22,7 @@ public interface AssetArticleLeaseService {
      * @param assetNumber
      * @return
      */
-    AssetArticleLeaseModel getArticleLease(String assetNumber);
+    AssetArticleLeaseModel getArticleLease(String assetNumber,String account);
 
 
     /**

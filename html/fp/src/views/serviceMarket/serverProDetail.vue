@@ -1,8 +1,8 @@
 <template>
     <div class="serverProDetail w">
         <div class="serverOrgMenu">
-            <span class="pointer" @click="$routet.push({path:'/serMatHp'})">首页/</span>
-            <span class="pointer" @click="$routet.push({path:'/serverPro'})">服务产品</span>
+            <span class="pointer" @click="$router.push({path:'/serMatHp'})">首页/</span>
+            <span class="pointer" @click="$router.push({path:'/serverPro'})">服务产品</span>
             <span>/</span>
             <span class="mainColor agent">服务产品详情</span>
         </div>
@@ -10,7 +10,7 @@
             <el-card>
                 <div class="agent1 clearfix">
                     <div class="agentTil fl">{{proDelInfo.productName}}</div>
-                    <div class="orgBtn fr mainColor" @click="demandRaise('')">提需求</div>
+                    <div class="orgBtn fr mainColor" v-if="proDelInfo.orgName" @click="demandRaise('')">提需求</div>
                 </div>
                 <div class="agent2 clearfix color2">
                     <div class="agentImg fl">
@@ -53,8 +53,8 @@
                         </div>
                     </div>
                     <div class="agent2 color2" v-if="zankaiFlag">
-                        <div class="agent2Con" id="agent2Con" :class="{'showMore':showMoreFlag}">
-                            {{proDelInfo.productDetails}}
+                        <div class="agent2Con" id="agent2Con" :class="{'showMore':showMoreFlag}" v-html="proDelInfo.productDetails">
+                            <!-- {{proDelInfo.productDetails}} -->
                         </div>
                         <!-- <div class="agent2Con" v-if="proDelInfo.productDetails">
                             {{proDelInfo.productDetails}}
@@ -242,7 +242,7 @@
         </div>
         <!-- 提需求弹框 -->
         <template v-if="serverProVisible">
-            <el-dialog :visible.sync="serverProVisible" width="530px" top="30vh">
+            <el-dialog :visible.sync="serverProVisible" width="530px" top="30vh" :modal-append-to-body=false>
                 <el-form ref="financialProform" :model="serverProform" label-position="right" label-width="100px" style="max-width:436px;">
                     <el-form-item label="需求描述:" prop="requireDetail" style="font-size:13px">
                         <el-input v-model.trim="serverProform.requireDetail" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
@@ -259,7 +259,7 @@
 export default {
   data() {
     return {
-      showMoreFlag:false,
+      showMoreFlag: false,
       zankaiFlag: true,
       activeName1: "samePro",
       currentPage1: 1,
@@ -272,49 +272,52 @@ export default {
       proDelInfo: {},
       sameTypeProList: [],
       serviceRatingList: [],
-      serverProVisible:false,
+      serverProVisible: false,
       serverProform: {
         requireDetail: "",
         productId: "",
         productName: ""
       },
-      showFlag:true,
-      flag1:'',
-      flag2:'',
-      ratingType:'',
-      productType:'',
-      evaCount:{},
+      showFlag: true,
+      flag1: "",
+      flag2: "",
+      ratingType: "",
+      productType: "",
+      evaCount: {}
     };
   },
   mounted() {
     this.findProductDetails();
     this.sameTypeProductList();
     this.getServiceRatingInfo();
-    this.getEvaluationCountInfo()
+    this.getEvaluationCountInfo();
   },
   methods: {
-    screenPro(i){
-        this.productType=i,
-        this.flag1=i,
-        this.page1=1,
+    screenPro(i) {
+      (this.productType = i),
+        (this.flag1 = i),
+        (this.page1 = 1),
         this.sameTypeProductList();
     },
-    handleEvaluation(i){
-        this.ratingType=i,
-        this.flag4=i,
-        this.page4=1,
+    handleEvaluation(i) {
+      (this.ratingType = i),
+        (this.flag4 = i),
+        (this.page4 = 1),
         this.getServiceRatingInfo();
     },
     demandRaise(i) {
+      if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
       this.serverProVisible = true;
-      if(i==''){
-       this.serverProform.productId = proDelInfo.productId;
-       this.serverProform.productName = proDelInfo.productName;
-      } else{
-         this.serverProform.productId = i.productId;
+      if (i == "") {
+        this.serverProform.productId = proDelInfo.productId;
+        this.serverProform.productName = proDelInfo.productName;
+      } else {
+        this.serverProform.productId = i.productId;
         this.serverProform.productName = i.productName;
       }
-     
     },
     demandDia() {
       let _this = this;
@@ -327,15 +330,14 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-            if(_this.serverProform.requireDetail==''){
-                // _this.$message.error("您还没填写需求");
-                _this.serverProVisible = false;
-                return
-              } else{
-               _this.$message.success("提交需求成功");
-               _this.serverProVisible = false;
-              }
-            
+            if (_this.serverProform.requireDetail == "") {
+              // _this.$message.error("您还没填写需求");
+              _this.serverProVisible = false;
+              return;
+            } else {
+              _this.$message.success("提交需求成功");
+              _this.serverProVisible = false;
+            }
           } else {
             _this.$message.error(res.result);
           }
@@ -343,12 +345,12 @@ export default {
       });
     },
     handleClick(tab, event) {
-      if(tab.name=='relateEva'){
-        this.showFlag=false
+      if (tab.name == "relateEva") {
+        this.showFlag = false;
         this.getServiceRatingInfo();
-        this.getEvaluationCountInfo()
-      } else{
-        this.showFlag=true;
+        this.getEvaluationCountInfo();
+      } else {
+        this.showFlag = true;
         this.sameTypeProductList();
       }
     },
@@ -382,7 +384,7 @@ export default {
         data: {
           productId: _this.$route.query.productId,
           needPage: 1,
-          isPublicPage: 0,
+          isPublicPage: 0
         },
         callback: function(res) {
           if (res.code == "0000") {
@@ -415,7 +417,7 @@ export default {
         }
       });
     },
-       getEvaluationCountInfo() {
+    getEvaluationCountInfo() {
       //服务评价统计信息
       let _this = this;
       this.api.get({
@@ -424,7 +426,7 @@ export default {
           productId: _this.$route.query.productId,
           // orgId: "1001211",
           needPage: 1,
-          isPublicPage: 0,
+          isPublicPage: 0
         },
         callback: function(res) {
           if (res.code == "0000") {
@@ -442,8 +444,8 @@ export default {
         url: "sameTypeProductList",
         data: {
           signoryId: _this.$route.query.signoryId,
-          page:_this.page1,
-          rows:_this.row1,
+          page: _this.page1,
+          rows: _this.row1
         },
         callback: function(res) {
           if (res.code == "0000") {
@@ -457,23 +459,23 @@ export default {
     },
     findProductDetails() {
       //服务产品详情
-    //   let _this = this;
+      //   let _this = this;
       this.api.get({
         url: "findProductDetails",
         data: {
           productId: this.$route.query.productId
         },
-        callback: (res)=>{
+        callback: res => {
           if (res.code == "0000") {
             this.proDelInfo = res.data.info;
             // console.log(document.getElementById('agent2Con').clientHeight)
             // console.log(window.getComputedStyle(document.getElementById('agent2Con')).height)
-            setTimeout(()=>{
-             if(document.getElementById('agent2Con').clientHeight>=50){
-                 debugger
-                 this.showMoreFlag=true;
-             }
-            },0)
+            setTimeout(() => {
+              if (document.getElementById("agent2Con").clientHeight >= 50) {
+                debugger;
+                this.showMoreFlag = true;
+              }
+            }, 0);
           } else {
             this.$message.error(res.result);
           }
@@ -518,12 +520,12 @@ export default {
       .agent2 {
         padding: 10px 0;
         .agent2Con {
-          transition: .2s all;
+          transition: 0.2s all;
         }
         .agent2Con.showMore {
           height: 50px;
           overflow: hidden;
-        //   overflow: hidden;
+          //   overflow: hidden;
         }
         .orgBtn1 {
           font-size: 13px;
@@ -539,10 +541,10 @@ export default {
       }
     }
   }
-   .el-textarea__inner:focus {
+  .el-textarea__inner:focus {
     outline: 0;
     border-color: #00a041;
-   }
+  }
   .serverTip {
     display: inline-block;
     font-size: 12px;

@@ -1,9 +1,9 @@
 <template>
     <div class="investorDetail w">
         <div class="investorMenu">
-            <span class="pointer" @click="$routet.push({path:'/tfindex'})">首页</span>
+            <span class="pointer" @click="$router.push({path:'/tfindex'})">首页</span>
             <span>/</span>
-            <span class="pointer" @click="$routet.push({path:'/investor'})">投资人</span>
+            <span class="pointer" @click="$router.push({path:'/investor'})">投资人</span>
             <span>/</span>
             <span class="mainColor agent">投资人详情</span>
         </div>
@@ -11,7 +11,7 @@
             <el-card>
                 <div class="agent1 clearfix">
                     <div class="agentTil fl">{{investorInfoDetails.investorName}}</div>
-                    <div class="orgBtn fr mainColor">在线联系</div>
+                    <div class="orgBtn fr mainColor pointer" @click="onlineContat(investorInfoDetails.investorAccount,investorInfoDetails.investorName)">在线联系</div>
                 </div>
                 <div class="agent2 clearfix color2">
                     <div class="agentImg fl">
@@ -81,6 +81,14 @@ export default {
     this.getInvestorInfoDetails();
   },
   methods: {
+     //在线联系
+    onlineContat(investorAccount,investorName){
+       if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
+      this.$router.push({path:'/chat',query:{fromUser: JSON.parse(sessionStorage.userInfo).account,toUser:investorAccount,nickName:investorName}})
+    },
     getInvestorInfoDetails() {
       //投资人详情
       let _this = this;

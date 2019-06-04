@@ -985,6 +985,76 @@ public class TbPayAccountBookCriteria {
             addCriterion("record_status not between", value1, value2, "recordStatus");
             return (Criteria) this;
         }
+
+        public Criteria andEntIdIsNull() {
+            addCriterion("ent_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntIdIsNotNull() {
+            addCriterion("ent_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntIdEqualTo(String value) {
+            addCriterion("ent_id =", value, "entId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntIdNotEqualTo(String value) {
+            addCriterion("ent_id <>", value, "entId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntIdGreaterThan(String value) {
+            addCriterion("ent_id >", value, "entId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntIdGreaterThanOrEqualTo(String value) {
+            addCriterion("ent_id >=", value, "entId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntIdLessThan(String value) {
+            addCriterion("ent_id <", value, "entId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntIdLessThanOrEqualTo(String value) {
+            addCriterion("ent_id <=", value, "entId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntIdLike(String value) {
+            addCriterion("ent_id like", value, "entId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntIdNotLike(String value) {
+            addCriterion("ent_id not like", value, "entId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntIdIn(List<String> values) {
+            addCriterion("ent_id in", values, "entId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntIdNotIn(List<String> values) {
+            addCriterion("ent_id not in", values, "entId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntIdBetween(String value1, String value2) {
+            addCriterion("ent_id between", value1, value2, "entId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntIdNotBetween(String value1, String value2) {
+            addCriterion("ent_id not between", value1, value2, "entId");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

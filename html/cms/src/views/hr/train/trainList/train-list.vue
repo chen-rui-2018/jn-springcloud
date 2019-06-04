@@ -12,19 +12,43 @@
         />
       </el-form-item>
       <el-form-item label="培训时间:" style="margin:0px 30px;">
-        <el-date-picker v-model="listQuery.trainStartTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择开始时间" />
-        至
-        <el-date-picker v-model="listQuery.trainEndTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择结束时间" />
+        <el-date-picker
+          v-model="listQuery.trainStartTime"
+          type="datetime"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          placeholder="请选择开始时间"
+        />至
+        <el-date-picker
+          v-model="listQuery.trainEndTime"
+          type="datetime"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          placeholder="请选择结束时间"
+        />
       </el-form-item>
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
-      <el-button class="filter-item" type="primary" icon="el-icon-plus" @click="handleAddOrEdict()">制定课程</el-button>
+      <el-button
+        class="filter-item"
+        type="primary"
+        icon="el-icon-plus"
+        @click="handleAddOrEdict()"
+      >制定课程</el-button>
     </el-form>
     <!-- 表格 -->
     <el-table :data="investList" border fit highlight-current-row style="width: 100%;height:100%;">
-      <el-table-column type="index" width="60" label="序号" align="center" />
-      <el-table-column :show-overflow-tooltip="true" label="课程名称" min-width="180" align="center" prop="courseTitle">
+      <el-table-column type="index" width="60" label="序号" align="center"/>
+      <el-table-column
+        :show-overflow-tooltip="true"
+        label="课程名称"
+        min-width="180"
+        align="center"
+        prop="courseTitle"
+      >
         <template slot-scope="scope">
-          <el-button class="setCursor" type="text" @click="handleDetail(scope.row)">{{ scope.row.courseTitle }}</el-button>
+          <el-button
+            class="setCursor"
+            type="text"
+            @click="handleDetail(scope.row)"
+          >{{ scope.row.courseTitle }}</el-button>
         </template>
       </el-table-column>
       <el-table-column label="培训开始时间" min-width="180" align="center" prop="trainStartTimeStr"/>
@@ -33,11 +57,20 @@
       <el-table-column label="地址" align="center" prop="trainVenue"/>
       <el-table-column label="培训人数" align="center" prop="managementTrainRecord">
         <template slot-scope="scope">
-          <el-button class="setCursor" type="text" @click="handleRecord(scope.row)">{{ scope.row.managementTrainRecord===undefined?0:scope.row.managementTrainRecord }}</el-button>
+          <el-button
+            class="setCursor"
+            type="text"
+            @click="handleRecord(scope.row)"
+          >{{ scope.row.managementTrainRecord===undefined?0:scope.row.managementTrainRecord }}</el-button>
         </template>
       </el-table-column>
       <el-table-column label="状态" align="center" prop="statusStr"/>
-      <el-table-column label="操作" align="center" min-width="200" class-name="small-padding fixed-width">
+      <el-table-column
+        label="操作"
+        align="center"
+        min-width="200"
+        class-name="small-padding fixed-width"
+      >
         <template slot-scope="scope">
           <el-button type="text" @click="sendMessage(scope.row)">发送通知</el-button>
           <el-button type="text" @click="handleAddOrEdict(scope.row)">修改</el-button>
@@ -55,26 +88,28 @@
       class="tablePagination"
       background
       layout="total, sizes, prev, pager, next, jumper"
-      @current-change="handleCurrentChange" />
+      @current-change="handleCurrentChange"
+    />
     <!-- 弹窗 -->
     <template v-if="dialogFormVisible">
       <el-dialog :visible.sync="dialogFormVisible" class="dialog" title="发送通知" width="30%">
         <el-form :model="messageForm">
           <el-form-item label="课程名称" label-width="80px">
-            <el-input v-model="messageForm.courseTitle" disabled />
+            <el-input v-model="messageForm.courseTitle" disabled/>
           </el-form-item>
           <el-form-item label="通知人员" label-width="80px">
-            <el-button type="primary" @click="selectStaff">选择</el-button>
+            <!-- <el-button type="primary" @click="selectStaff">选择</el-button> -->
+            <multi-cascader-ext ref="cascader" v-model="checkList" :data="options" :only-last="true" :show-leaf-label="true" clearable @change="getEList"/>
           </el-form-item>
-          <el-form-item label-width="80px">
+          <!-- <el-form-item label-width="80px">
             <el-tree
               :data="treeData"
               :props="defaultProps"
               style="height:186px;overflow:auto;border:1px solid #dcdfe6;"
+              show-checkbox
               @check-change="handleNodeSelect"
-              show-checkbox>
-            </el-tree>
-          </el-form-item>
+            />
+          </el-form-item> -->
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -86,10 +121,10 @@
 </template>
 
 <script>
-import {
-  api, paramApi
-} from '@/api/hr/train'
+import { api, apiGet } from '@/api/hr/train'
+import multiCascaderExt from '@/components/MultiCascaderExt2/multi-cascader-ext.vue'
 export default {
+  components: { multiCascaderExt },
   data() {
     return {
       listLoading: false,
@@ -115,7 +150,10 @@ export default {
       defaultProps: {
         children: 'children',
         label: 'label'
-      }
+      },
+      // 层级树
+      options: [],
+      checkList: []
     }
   },
   created() {
@@ -151,16 +189,25 @@ export default {
     },
     // 新增/编辑--制定课程
     handleAddOrEdict(row) {
-      if (row&&row.id) {
-        this.$router.push({ name: 'train-addOrEdict', query: { id: row.id, title: '编辑课表' }})
+      if (row && row.id) {
+        this.$router.push({
+          name: 'train-addOrEdict',
+          query: { id: row.id, title: '编辑课表' }
+        })
       } else {
-        this.$router.push({ name: 'train-addOrEdict', query: { title: '新增课表' }})
+        this.$router.push({
+          name: 'train-addOrEdict',
+          query: { title: '新增课表' }
+        })
       }
     },
     // 详情--课程详情
     handleDetail(row) {
       if (row.id) {
-        this.$router.push({ name: 'train-detail', query: { id: row.id, title: '课程详情' }})
+        this.$router.push({
+          name: 'train-detail',
+          query: { id: row.id, title: '课程详情' }
+        })
       }
     },
     // 删除
@@ -171,7 +218,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          let data = { id: row.id }
+          const data = { id: row.id }
           api('hr/train/list/deleteManagement', data).then(res => {
             if (res.data.code === '0000') {
               this.$message({
@@ -187,26 +234,57 @@ export default {
             }
           })
         })
-        .catch(() => {
-        })
+        .catch(() => {})
     },
     // 培训记录
     handleRecord(row) {
-      this.$router.push({ name: 'train-record', query: { id: row.id, title: '培训记录' }})
+      this.$router.push({
+        name: 'train-record',
+        query: { id: row.id, title: '培训记录' }
+      })
     },
     // 发送通知--树结构
-    handleNodeSelect(data,checked) {    
-      if(!data.children&&checked) {
-        this.messageForm.employeeBasicInfoList = []
-        // delete data.label
-        this.messageForm.employeeBasicInfoList.push(data)
-      }    
+    // handleNodeSelect(data, checked) {
+    //   if (!data.children && checked) {
+    //     this.messageForm.employeeBasicInfoList = []
+    //     this.messageForm.employeeBasicInfoList.push(data)
+    //   }
+    // },
+    getEList(val) {
+      const vm = this
+      if (val.length === 0) {
+        return false
+      }
+      const selectedNodes = this.$refs.cascader.selectedNodes
+      for (let i = 0; i < selectedNodes.length; i++) {
+        if (!selectedNodes[i].flag) {
+          const obj = {
+            label: selectedNodes[i].label,
+            workMailbox: selectedNodes[i].workMailbox,
+            jobNumber: selectedNodes[i].jobNumber,
+            name: selectedNodes[i].label,
+            departmentName: selectedNodes[i].parent.label
+          }
+          vm.messageForm.employeeBasicInfoList.push(obj)
+        }
+      }
+      // reduce数组对象去重
+      const hash = {}
+      vm.messageForm.employeeBasicInfoList = vm.messageForm.employeeBasicInfoList.reduce((preVal, curVal) => {
+        hash[curVal.label] ? '' : hash[curVal.label] = true && preVal.push(curVal)
+        return preVal
+      }, [])
     },
     confirmSend() {
+      if (this.messageForm.employeeBasicInfoList.length === 0) {
+        this.$message.error('请选择通知人员!')
+        return false
+      }
       this.dialogFormVisible = false
       api('hr/train/list/emailList', this.messageForm).then(res => {
         if (res.data.code === '0000') {
-          this.$message.success('短信发送成功')
+          this.$message.success('邮件发送成功')
+          this.init()
         } else {
           this.$message.error(res.data.result)
         }
@@ -214,37 +292,49 @@ export default {
     },
     // 人员列表
     selectStaff() {
-      api('hr/train/list/selectUserList', this.messageForm).then(res => {
+      this.checkList = []
+      apiGet('hr/employeeBasicInfo/selectDepartEmployee', {}).then(res => {
         if (res.data.code === '0000') {
-          let list = res.data.data
-          let vm = this
-          // 遍历一级
-          list.forEach((item, index) => {
-            let labelData = {
-              label: item.departmentName,
-              children: []
-            }
-            vm.treeData.push(labelData)
-            // 遍历二级
-            item.employeeBasicInfoList.forEach((item2,index2) => {
-              let childrenData = {
-                label: item2.name+'-'+item2.jobNumber,
-                workMailbox: item2.workMailbox,
-                jobNumber: item2.jobNumber,
-                name: item2.name,
-                departmentName: item.departmentName
-              }
-              vm.treeData[index].children.push(childrenData)
-            })
-          })
+          this.options = JSON.parse(res.data.data)
+          this.messageForm.employeeBasicInfoList = []
         } else {
           this.$message.error(res.data.result)
         }
       })
     },
+    // selectStaff2() {
+    //   api('hr/train/list/selectUserList', this.messageForm).then(res => {
+    //     if (res.data.code === '0000') {
+    //       const list = res.data.data
+    //       const vm = this
+    //       // 遍历一级
+    //       list.forEach((item, index) => {
+    //         const labelData = {
+    //           label: item.departmentName,
+    //           children: []
+    //         }
+    //         vm.treeData.push(labelData)
+    //         // 遍历二级
+    //         item.employeeBasicInfoList.forEach((item2, index2) => {
+    //           const childrenData = {
+    //             label: item2.name + '-' + item2.jobNumber,
+    //             workMailbox: item2.workMailbox,
+    //             jobNumber: item2.jobNumber,
+    //             name: item2.name,
+    //             departmentName: item.departmentName
+    //           }
+    //           vm.treeData[index].children.push(childrenData)
+    //         })
+    //       })
+    //     } else {
+    //       this.$message.error(res.data.result)
+    //     }
+    //   })
+    // },
     sendMessage(row) {
       this.dialogFormVisible = true
       this.messageForm = row
+      this.selectStaff()
     }
   }
 }
@@ -256,10 +346,10 @@ export default {
   text-align: center;
 }
 .trainList .el-dialog__title {
-  color: #409EFF;
+  color: #409eff;
 }
 .trainList .el-dialog label {
-  font-weight: normal
+  font-weight: normal;
 }
 </style>
 <style lang="scss" scoped>

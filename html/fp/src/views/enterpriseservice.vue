@@ -5,7 +5,7 @@
         <div class="swiper-container">
           <div class="swiper-wrapper">
             <div class="swiper-slide" style="width:100%" v-for="(banner, index) in bannerList" :key="index">
-              <img :src="banner.posterUrl" alt="" @click="$router.push({path:'/serMatHp'})">
+              <img :src="banner.posterUrl" :data-path="'/serMatHp'" alt="">
             </div>
             <!-- <div class="swiper-slide" style="width:100%">
               <img src="@/../static/img/banner11.png" alt="" @click="$router.push({path:'/serMatHp'})">
@@ -27,17 +27,19 @@
           <div class="swiper-button-next" @mouseenter="showBtn=!showBtn" @mouseleave="showBtn=!showBtn">
             <i class="iconfont icon-rightarrow pointer" v-show="showBtn"></i>
           </div>
+          <!-- 如果需要滚动条 -->
+          <!-- <div class="swiper-scrollbar"></div> -->
         </div>
         <div class="quickEnter">
           <ul>
-            <li>
-              <span>人才申报</span>
-              <p>PEOPLE&nbsp;DECLARE</p>
+            <li @click="$router.push({path:'/talentsService'})">
+              <span>人才服务</span>
+              <p>THE&nbsp;TALENT&nbsp;SERVICE</p>
               <img src="@/../static/img/right-arrow.png" alt="">
             </li>
-            <li>
-              <span>高新企业</span>
-              <p>HIGH-TECH&nbsp;ENTERPRISE</p>
+            <li @click="$router.push({path:'/declarationCenter'})">
+              <span>申报中心</span>
+              <p>DECLARE&nbsp;CENTER</p>
               <img src="@/../static/img/right-arrow.png" alt="">
             </li>
             <li @click="$router.push({path:'/incubatorEnterprises'})">
@@ -45,7 +47,7 @@
               <p>INCUBATION&nbsp;ENTERPRISE</p>
               <img src="@/../static/img/right-arrow.png" alt="">
             </li>
-            <li>
+            <li @click="$router.push({path:'/compassView'})">
               <span>行政审批</span>
               <p>ADMINISTRATIVE&nbsp;EXAMINATIO</p>
               <img src="@/../static/img/right-arrow.png" alt="">
@@ -54,7 +56,7 @@
         </div>
       </div>
       <div class="declarationNotice w pr" ref="declarationNotice" data-class="bottom">
-        <div ref="deNotice1" data-class="bottom">
+        <div ref="deNotice1" data-class="bottom" class="pointer" @click="$router.push({path:'/declarationCenter'})">
           <div class="tit color2 pr">申报中心
           </div>
           <div class="eng mainColor">Declare&nbsp;center</div>
@@ -69,7 +71,7 @@
                     <div class="li1 aa" :class="{'active0':sw==index}">{{'0'+(index+1)}}</div>
                     <span class="color1">{{notice.titleName}}</span>
                   </template>
-                  <p>申报截止时间：{{notice.deadline}}</p>
+                  <p>申报截止时间：{{notice.deadline|time}}</p>
                 </el-collapse-item>
               </el-collapse>
               <!-- <el-collapse accordion v-model="activeNames" @change="handleChange11">
@@ -104,22 +106,22 @@
 
       </div>
       <div class="policyCenter w" ref="policyCenter" data-class="bottom1">
-        <div ref="poCenter1" data-class="bottom">
+        <div ref="poCenter1" data-class="bottom" class="pointer" @click="$router.push({path:'/policyCenter'})">
           <div class="tit color2 pr">政策中心
           </div>
           <div class="eng mainColor">Policy&nbsp;center</div>
           <div class="line"></div>
         </div>
         <div class="paging w pr" ref="poCenter2" data-class="bottom">
-          <div class="swiper-container">
+          <div class="swiper-container1">
             <div class="swiper-wrapper">
               <div class="swiper-slide" v-for="(list, listIndex) in policyCenterList" :key="listIndex">
                 <ul class="page1 clearfix" ref="poCenter3" data-class="bottom">
-                  <li ref="li11" data-class="left" v-for="(item, index) in list" :key="index">
+                  <li ref="li11" data-class="left" class="pointer" v-for="(item, index) in list" :key="index" @click="$router.push({path:'/policyGuide',query:{policyId:item.policyId}})">
                     <div class="left1">N</div>
                     <div class="right1">
                       <div class="rightTit color1">{{item.policyTitle}}</div>
-                      <p class="color2">{{item.briefContent}}中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
+                      <p class="color2">{{item.briefContent}}</p>
                       <div class="liBom clearfix">
                         <p class="fl color3">
                           <i class="el-icon-view"></i>&nbsp;{{item.readNum}}</p>
@@ -128,7 +130,7 @@
                       </div>
                     </div>
                   </li>
-               
+
                 </ul>
               </div>
               <!-- <div class="swiper-slide">
@@ -246,13 +248,13 @@
             </div>
 
             <div class="swiper-pagination"></div>
-            <div class="swiper-button-prev" v-if="policyCenterList.length > 1"></div>
-            <div class="swiper-button-next" v-if="policyCenterList.length > 1"></div>
+            <div class="swiper-button-prev" v-show="policyCenterList.length > 1"></div>
+            <div class="swiper-button-next" v-show="policyCenterList.length > 1"></div>
           </div>
         </div>
       </div>
       <div class="approval" ref="approval" data-class="bottom">
-        <div class="approvalInfo w" ref="approval1" data-class="bottom1">
+        <div class="approvalInfo w pointer" ref="approval1" data-class="bottom1" @click="$router.push({path:'/compassView'})">
           <div class="approTit">行政审批</div>
           <div class="approEng">Administrative&nbsp;approval</div>
           <div class="line"></div>
@@ -260,7 +262,7 @@
         </div>
       </div>
       <div class="popularActi w" ref="popularActi" data-class="bottom">
-        <div ref="acti11" data-class="bottom">
+        <div ref="acti11" data-class="bottom" class="pointer" @click="$router.push({path:'/actiCenter'})">
           <div class="tit color2">活动中心</div>
           <div class="eng mainColor">Activity&nbsp;center</div>
           <div class="line"></div>
@@ -270,7 +272,7 @@
           <i class="iconfont icon-rightarrow pointer" @click="rightPage"></i>
           <ul class="actiUl clearfix">
             <li v-for="(i,k) in actiListSlim" :key="k">
-              <div class="postImgItem" @mouseenter.stop="show1=i.id,show11=i.id" @mouseleave.stop="show1=i.id,show11=i.id">
+              <div class="postImgItem" @mouseenter.stop="show1=i.id,show11=i.id" @mouseleave.stop="show1='',show11=''">
                 <img :src="i.actiPosterUrl" :class="{'poIm':show1==i.id}" class="postImg pointer" alt="活动海报图片">
                 <img src="@/../static/img/组 40.png" :class="{'poIm':show11==i.id}" class="postImg1 pointer" alt="活动海报图片" @click="$router.push({ path: '/actiDetail', query: { activityId: i.id } })">
               </div>
@@ -345,7 +347,7 @@
           </ul>
           <!-- <i class="iconfont icon-leftarrow pointer"></i>
                 <i class="iconfont icon-rightarrow pointer"></i> -->
-          <div class="lejieDel">了解详情</div>
+          <div class="lejieDel pointer" @click="$router.push({path:'/actiCenter'})">了解详情</div>
         </div>
       </div>
       <!-- 科技金融 -->
@@ -368,102 +370,13 @@
               <button class="btn2" :class="{'btActive':flag44=='2'}" @click="flag44 = '2'">金融机构</button>
             </div>
             <div class="tecnInfo clearfix">
-              <!--  <div class="info1 clearfix">
-                        <div class="lef1 fl clearfix">
-                            <div class="imgItem fl"><img src="@/../static/img/largeImg.png" alt=""></div>
-                            <div class="itemInfo fr">
-                                <span class="color1">郭龙华/总经理</span>
-                                <p class="color3 if1">苏州万隆永鼎会计师事务所有限公司</p>
-                                <p class="color3">合伙人</p>
-                            </div>
-                        </div>
-                        <ul class="lef2 fr clearfix">
-                            <li class="clearfix">
-                                <div class="imgItem fl"><img src="@/../static/img/largeImg.png" alt=""></div>
-                                <div class="itemInfo fr">
-                                    <span class="color1">郭龙华/总经理</span>
-                                    <p class="color3 if1">苏州万隆永鼎会计师事务所有限公司</p>
-                                    <p class="color3">合伙人</p>
-                                </div>
-                            </li>
-                            <li class="clearfix">
-                                <div class="imgItem fl"><img src="@/../static/img/图层 46.png" alt=""></div>
-                                <div class="itemInfo fr">
-                                    <span class="color1">郭龙华/总经理</span>
-                                    <p class="color3 if1">苏州万隆永鼎会计师事务所有限公司</p>
-                                    <p class="color3">合伙人</p>
-                                </div>
-                            </li>
-                            <li class="clearfix">
-                                <div class="imgItem fl"><img src="@/../static/img/49.png" alt=""></div>
-                                <div class="itemInfo fr">
-                                    <span class="color1">郭龙华/总经理</span>
-                                    <p class="color3 if1">苏州万隆永鼎会计师事务所有限公司</p>
-                                    <p class="color3">合伙人</p>
-                                </div>
-                            </li>
-                            <li class="clearfix">
-                                <div class="imgItem fl"><img src="@/../static/img/图层 44.png" alt=""></div>
-                                <div class="itemInfo fr">
-                                    <span class="color1">郭龙华/总经理</span>
-                                    <p class="color3 if1">苏州万隆永鼎会计师事务所有限公司</p>
-                                    <p class="color3">合伙人</p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="info1 clearfix">
-                        <div class="lef1 fl clearfix">
-                            <div class="imgItem fl"><img src="@/../static/img/51.png" alt=""></div>
-                            <div class="itemInfo fr">
-                                <span class="color1">郭龙华/总经理</span>
-                                <p class="color3 if1">苏州万隆永鼎会计师事务所有限公司</p>
-                                <p class="color3">合伙人</p>
-                            </div>
-                        </div>
-                        <ul class="lef2 fr clearfix">
-                            <li class="clearfix">
-                                <div class="imgItem fl"><img src="@/../static/img/图层 47.png" alt=""></div>
-                                <div class="itemInfo fr">
-                                    <span class="color1">郭龙华/总经理</span>
-                                    <p class="color3 if1">苏州万隆永鼎会计师事务所有限公司</p>
-                                    <p class="color3">合伙人</p>
-                                </div>
-                            </li>
-                            <li class="clearfix">
-                                <div class="imgItem fl"><img src="@/../static/img/图层 46.png" alt=""></div>
-                                <div class="itemInfo fr">
-                                    <span class="color1">郭龙华/总经理</span>
-                                    <p class="color3 if1">苏州万隆永鼎会计师事务所有限公司</p>
-                                    <p class="color3">合伙人</p>
-                                </div>
-                            </li>
-                            <li class="clearfix">
-                                <div class="imgItem fl"><img src="@/../static/img/49.png" alt=""></div>
-                                <div class="itemInfo fr">
-                                    <span class="color1">郭龙华/总经理</span>
-                                    <p class="color3 if1">苏州万隆永鼎会计师事务所有限公司</p>
-                                    <p class="color3">合伙人</p>
-                                </div>
-                            </li>
-                            <li class="clearfix lastLi">
-                                <div class="liImg">
-                                    <img src="@/../static/img/xiao.png" alt="">
-                                </div>
-                                <div class="liBtn">
-                                    MORE
-                                    <img src="@/../static/img/xiala1.png" alt="">
-                                </div>
-                            </li>
-                        </ul>
-                    </div> -->
               <div id="conselor_info" v-if="flag44 == '0'">
                 <ul>
                   <li class="conselor_left">
                     <div v-for="(item,index) in investorInfoList" :key="index" v-if="index<2">
                       <a href="javascript:;">
                         <div class="info_img">
-                          <div><img :src="item.avatar" alt=""></div>
+                          <div @click="$router.push({path:'investorDetail',query:{investorAccount:item.investorAccount}})"><img :src="item.avatar" alt=""></div>
                         </div>
                         <div class="info_all">
                           <div class="info_name">
@@ -481,7 +394,7 @@
                   <li class="conselor_mid">
                     <div v-for="(item2,index2) in investorInfoList" :key="index2" v-if="index2>1&&index2<10" class="conselor_mid_list">
                       <a href="javascript:;">
-                        <div class="info_img"><img src="@/assets/image/test2.png" alt=""></div>
+                        <div class="info_img" @click="$router.push({path:'investorDetail',query:{investorAccount:item2.investorAccount}})"><img :src="item2.avatar" alt=""></div>
                         <div class="info_all">
                           <div class="info_name">
                             <span>{{item2.investorName}}</span>/
@@ -501,7 +414,7 @@
               <div class="finnaPro" v-if="flag44 == '1'">
                 <ul>
                   <li class="clearfix" v-for="(i,k) in finaProList" :key='k' v-if="k<3">
-                    <div class="orgImg fl">
+                    <div class="orgImg fl pointer" @click="$router.push({ path: 'finaProDetail', query: { productId: i.productId } })">
                       <img :src="i.pictureUrl" alt="">
                     </div>
                     <div class="orgCon fl">
@@ -541,11 +454,11 @@
               <div class="finnaOrg" v-if="flag44 == '2'">
                 <ul>
                   <li class="clearfix" v-for="(i,k) in finaOrgLost" :key='k' v-if="k<3">
-                    <div class="orgImg fl">
+                    <div class="orgImg fl pointer" @click="$router.push({ path: 'finaInsDetail', query: { orgId: i.orgId } })">
                       <img :src="i.orgLogo" alt="">
                     </div>
                     <div class="orgCon fl">
-                      <div class="conTil">{{i.orgName}}</div>
+                      <div class="conTil" style="margin-bottom:40px">{{i.orgName}}</div>
                       <div class="conContent clearfix color3">
                         <div class="left1 fl">
                           <p>电话：
@@ -567,7 +480,7 @@
                       </div>
                     </div>
                     <div class="orgBtn fr mainColor">
-                      <a href="">在线联系</a>
+                      <a href="javascript:;" @click="onlineContat(i.orgAccount,i.orgName)">在线联系</a>
                     </div>
                   </li>
                 </ul>
@@ -577,7 +490,7 @@
         </div>
       </div>
       <div class="humanResources" ref="humanResources" data-class="bottom">
-        <div ref="human1" data-class="bottom">
+        <div ref="human1" data-class="bottom" class="pointer" @click="$router.push({path:'/recruitmentList'})">
           <div class="tit pr">人力资源
           </div>
           <div class="eng">The&nbsp;humen&nbsp;resources</div>
@@ -587,37 +500,47 @@
           <el-card>
             <div class="infoTit clearfix">
               <div class="btn fl">
-                <button class="btn1 pointer" :class="{'btnActive':flag55}" @click="flag55=true">企业招聘</button>
+                <button class="btn0 pointer" :class="{'btnActive':flag55}" @click="flag55=true">企业招聘</button>
                 <button class="btn2 pointer" :class="{'btnActive':!flag55}" @click="flag55=false">服务</button>
               </div>
-              <div class="chage fr color3 pointer">
-                <img src="@/../static/img/huanyipi.png" alt="" @click="hanlepage"> 换一批
+              <div class="chage fr color3 pointer" @click="hanlepage">
+                <img src="@/../static/img/huanyipi.png" alt=""> 换一批
               </div>
             </div>
             <ul class="infoCon" ref="human3" data-class="bottom1" v-if='flag55'>
-              <li class="clearfix" v-for="(i,k) in humanResourcesList" :key="k">
+              <li class="clearfix pr" v-for="(i,k) in humanResourcesList" :key="k">
                 <div class="con1 fl">
                   <img :src="i.comAvatar" alt="">
                 </div>
                 <div class="con2 fl">
                   <p class="color4">招聘岗位：{{i.post}}</p>
                   <p>招聘企业： {{i.comName}}</p>
-                  <p>招聘人数: {{i.num}}人</p>
+                  <p>招聘人数：{{i.num}}人</p>
                   <p>薪资待遇：
                     <span class="mainColor">{{i.salaryName}}</span>
                   </p>
-                  <p>发布时间: {{i.createdTime}}</p>
+                  <p>发布时间：{{i.createdTime}}</p>
                 </div>
                 <div class="con3 fr">
-                  <button class="btn1">在线联系</button>
-                  <button class="btn2">了解详情</button>
+                  <button class="btn1 pointer" @click="onlineContact(i.comId)">在线联系</button>
+                  <button class="btn2 pointer" @click.stop="getRecruitDetails(i.id),detailFlag=i.id">了解详情</button>
+                </div>
+                <!-- 详情弹框 -->
+                <div class="detailRes" v-if="detailFlag==i.id">
+                  <el-card>
+                    <div class="detail">招聘详情</div>
+                    <p class="p1">企业名称：{{humanDetail.comName}}</p>
+                    <p class="p1">发布时间：{{humanDetail.createdTime}}</p>
+                    <p class="p1">岗位详情：</p>
+                    <span v-html="humanDetail.details"></span>
+                  </el-card>
                 </div>
               </li>
             </ul>
             <div class="serverOrgContent" v-else>
               <ul>
                 <li class="clearfix" v-for="(i,k) in serverProList" :key='k'>
-                  <div class="orgImg fl" @click="handleProDel(i.productId,i.signoryId)">
+                  <div class="orgImg fl pointer" @click="handleProDel(i.productId,i.signoryId)">
                     <img :src="i.pictureUrl" alt="">
                   </div>
                   <div class="orgCon fl">
@@ -649,15 +572,126 @@
       </div>
 
     </div>
+    <!-- 金融提需求弹框 -->
+    <template v-if="financialProVisible">
+      <el-dialog :visible.sync="financialProVisible" width="600px" :modal-append-to-body=false>
+        <el-form ref="financialProform" :rules="rules" :model="financialProform" label-position="right" label-width="150px" style="max-width:500px;">
+          <el-form-item label="融资金额(万元):" prop="financingAmount">
+            <el-input v-model.trim="financialProform.financingAmount" placeholder="请输入融资金额" maxlength="100" clearable/>
+          </el-form-item>
+          <el-form-item label="融资期限(月):" prop="financingPeriod">
+            <el-select v-model="financialProform.financingPeriod" placeholder="请选择" style="width:100%">
+              <el-option v-for="(item,index) in options" :key="index" :label="item.label" :value="item.value" />
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="资金需求日期:" prop="expectedDate">
+            <el-input v-model.trim="financialProform.expectedDate" placeholder="请输入需求日期，如2019-04-10" maxlength="100" clearable/>
+          </el-form-item>
+          <el-form-item label="资金需求说明:" prop="fundsReqDesc">
+            <el-input v-model.trim="financialProform.fundsReqDesc" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
+          </el-form-item>
+        </el-form>
+        <div class="demandLine"></div>
+        <div class="demandDia1" @click="demandDia()">提交需求</div>
+      </el-dialog>
+    </template>
+    <!-- 服务产品提需求弹框 -->
+    <template v-if="serverProVisible">
+      <el-dialog :visible.sync="serverProVisible" width="530px" top="30vh" :modal-append-to-body=false>
+        <el-form ref="financialProform" :model="serverProform" label-position="right" label-width="100px" style="max-width:436px;">
+          <el-form-item label="需求描述:" prop="requireDetail" style="font-size:13px">
+            <el-input v-model.trim="serverProform.requireDetail" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
+          </el-form-item>
+        </el-form>
+        <div class="demandLine"></div>
+        <div class="serverTip mainColor">市场提醒：请务必在线订购，线下交易无法享受市场交易安全保障</div>
+        <div class="demandDia" @click="demandDia1()">提交需求</div>
+      </el-dialog>
+    </template>
   </div>
 </template>
 <script>
 import swiper from "swiper";
+import bus from "@/util/bus";
 export default {
   data() {
     return {
+      serverProVisible: false,
+      serverProform: {
+        requireDetail: "",
+        productId: "",
+        productName: ""
+      },
+      financialProVisible: false,
+      financialProform: {
+        financingAmount: "",
+        financingPeriod: "",
+        financingPeriodMax: "",
+        financingPeriodMin: "",
+        expectedDate: "",
+        fundsReqDesc: "",
+        productId: "",
+        productName: ""
+      },
+      options: [
+        {
+          value: 0,
+          label: "3个月及以下"
+        },
+        {
+          value: 1,
+          label: "6个月及以下"
+        },
+        {
+          value: 2,
+          label: "12个月及以下"
+        },
+        {
+          value: 3,
+          label: "36个月及以下"
+        },
+        {
+          value: 4,
+          label: "36个月以上"
+        }
+      ],
+      arr: [
+        {
+          loanTermMax: 3,
+          loanTermMin: ""
+        },
+        {
+          loanTermMax: 6,
+          loanTermMin: ""
+        },
+        {
+          loanTermMax: 12,
+          loanTermMin: ""
+        },
+        {
+          loanTermMax: 36,
+          loanTermMin: ""
+        },
+        {
+          loanTermMax: "",
+          loanTermMin: 36
+        }
+      ],
+      rules: {
+        financingAmount: [
+          { required: true, message: "请输入融资金额", trigger: "blur" }
+        ],
+        financingPeriod: [
+          { required: true, message: "请选择融资期限", trigger: "change" }
+        ],
+        expectedDate: [
+          { required: true, message: "请输入需求日期", trigger: "blur" }
+        ]
+      },
+      detailFlag: "",
       flag55: true,
-      flag44:'0',
+      flag44: "0",
       showFF: false,
       show1: false,
       show11: false,
@@ -693,12 +727,27 @@ export default {
       finaOrgLost: [],
       page7: 1,
       rows7: 3,
+      total7: 0,
       humanResourcesList: [],
       bannerList: [],
-      page8:1,
-      rows8:3,
-      serverProList:[]
+      page8: 1,
+      rows8: 3,
+      total8: 0,
+      serverProList: [],
+      humanDetail: {}
     };
+  },
+  filters: {
+    time(time) {
+      if (time) {
+        // return time.split("T")[0]
+        let dateee = new Date(time).toJSON();
+        return new Date(+new Date(dateee) + 8 * 3600 * 1000)
+          .toISOString()
+          .replace(/T/g, " ")
+          .replace(/\.[\d]{3}Z/, "");
+      }
+    }
   },
   mounted() {
     this.$router.afterEach((to, from, next) => {
@@ -711,20 +760,173 @@ export default {
     this.getRecruitList(); //招聘
     this.getActiList(); //活动
     this.getInvestorInfoList(); //投资人
-    this.getProList()//服务产品列表
-    this.getFinaOrg()//金融机构
-    this.getFinaPro()//金融产品
-    Promise.all([this.getBanner(),this.getPolicyCenterList()]).then(() => {
-      this.init();
+    this.getProList(); //服务产品列表
+    this.getFinaOrg(); //金融机构
+    this.getFinaPro(); //金融产品
+    this.getBanner();
+    // Promise.all([this.getBanner()]).then(() => {
+    //   this.init();
+    // });
+  },
+  created() {
+    let _this = this;
+    bus.$on("closeKnow", msg => {
+      _this.detailFlag = "";
     });
   },
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
   },
   methods: {
+    //在线联系
+    onlineContat(orgAccount, orgName) {
+      if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
+      this.$router.push({
+        path: "/chat",
+        query: {
+          fromUser: JSON.parse(sessionStorage.userInfo).account,
+          toUser: orgAccount,
+          nickName: orgName
+        }
+      });
+    },
+    //企业招聘列表在线联系
+    onlineContact(id) {
+      if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
+      this.api.get({
+        url: "getCompanyContactAccount",
+        data: {
+          comId: id
+        },
+        callback: res => {
+          if (res.code == "0000") {
+            // this.typeList = res.data;
+            if (JSON.parse(sessionStorage.userInfo).account == res.data.account) {
+              this.$message.error("当前登录的账号跟聊天对象一样");
+              return;
+            }
+            this.$router.push({
+              path: "/chat",
+              query: {
+                fromUser: JSON.parse(sessionStorage.userInfo).account,
+                toUser: res.data.account,
+                nickName: res.data.nickName
+              }
+            });
+          } else {
+            this.$message.error(res.result);
+          }
+        }
+      });
+    },
+    //金融产品提需求
+    raiseDemand(i) {
+      if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
+      this.financialProVisible = true;
+      this.financialProform.expectedDate = "";
+      this.financialProform.financingAmount = "";
+      this.financialProform.financingPeriodMax = "";
+      this.financialProform.financingPeriodMin = "";
+      this.financialProform.financingPeriod = "";
+      this.financialProform.fundsReqDesc = "";
+      this.financialProform.productId = i.productId;
+      this.financialProform.productName = i.productName;
+    },
+    //用户提交需求
+    demandDia() {
+      let _this = this;
+      let max = this.arr[this.financialProform.financingPeriod].loanTermMax;
+      let min = this.arr[this.financialProform.financingPeriod].loanTermMin;
+      this.api.post({
+        url: "userDemandTechnology",
+        data: {
+          expectedDate: _this.financialProform.expectedDate,
+          financingAmount: _this.financialProform.financingAmount,
+          financingPeriodMax: max,
+          financingPeriodMin: min,
+          productId: _this.financialProform.productId,
+          productName: _this.financialProform.productName,
+          fundsReqDesc: _this.financialProform.fundsReqDesc
+        },
+        callback: function(res) {
+          if (res.code == "0000") {
+            _this.$message.success("提交需求成功");
+            _this.financialProVisible = false;
+          } else {
+            _this.$message.error(res.result);
+            _this.financialProVisible = false;
+          }
+        }
+      });
+    },
+    //服务产品提需求
+    demandRaise(i) {
+      if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
+      this.serverProVisible = true;
+      this.serverProform.requireDetail = "";
+      this.serverProform.productId = i.productId;
+      this.serverProform.productName = i.productName;
+    },
+    demandDia1() {
+      let _this = this;
+      this.api.post({
+        url: "userDemand",
+        data: {
+          productId: _this.serverProform.productId,
+          productName: _this.serverProform.productName,
+          requireDetail: _this.serverProform.requireDetail
+        },
+        callback: function(res) {
+          if (res.code == "0000") {
+            _this.$message.success("提交需求成功");
+            _this.serverProVisible = false;
+          } else {
+            _this.$message.error(res.result);
+          }
+        }
+      });
+    },
+    handleProDel(productId, signoryId) {
+      this.$router.push({
+        path: "serverProDetail",
+        query: { productId: productId, signoryId: signoryId }
+      });
+    },
     //招聘与服务切换翻页
-    hanlepage(){
-      // if 
+    hanlepage() {
+      if (this.flag55 == true) {
+        if (this.page7 >= Math.ceil(this.total7 / this.rows7)) {
+          // this.$message.error("没有更多数据了");
+          this.page7 = 1;
+          this.getRecruitList();
+          // return;
+        } else {
+          this.page7++;
+          this.getRecruitList();
+        }
+      } else {
+        if (this.page8 >= Math.ceil(this.total8 / this.rows8)) {
+          // this.$message.error("没有更多数据了");
+          this.page8 = 1;
+          this.getProList();
+          // return;
+        } else {
+          this.page8++;
+          this.getProList();
+        }
+      }
     },
     formatArr(arr, n) {
       const len = arr.length;
@@ -738,7 +940,6 @@ export default {
       return result;
     },
     handleChange11(val) {
-      console.log(val);
       if (val == "2") {
         this.sw = "1";
       } else if (val == "3") {
@@ -748,7 +949,13 @@ export default {
       }
     },
     getElementLeft(element) {
+      if (!element) {
+        return 0;
+      }
       var top = element.offsetTop;
+      if (!element.offsetParent) {
+        return top;
+      }
       var curEle = element.offsetParent;
 
       while (curEle !== null) {
@@ -799,32 +1006,38 @@ export default {
       return scroll_top;
     },
     //swiper初始化
-    init() {
-      var mySwiper = new swiper(".swiper-container", {
-        direction: "horizontal", // 垂直切换选项
-        loop: true, // 循环模式选项
+    // init() {
+    //   var mySwiper = new swiper(".swiper-container", {
+    //     direction: "horizontal", // 垂直切换选项
+    //     loop: true, // 循环模式选项
+    //     noSwiping: true,
+    //     on: {
+    //       click: e => {
+    //         // let url = e.target.dataset.jumpurl;
+    //         // this.bannerJump(url);
+    //         // console.log(e);
+    //       }
+    //     },
+    //     observer: true,
+    //     observeParents: true, //修改swiper的父元素时，自动初始化swiper
+    //     // 如果需要分页器
+    //     pagination: {
+    //       el: ".swiper-pagination"
+    //     },
+    //     // 如果需要前进后退按钮
+    //     navigation: {
+    //       nextEl: ".swiper-button-next",
+    //       prevEl: ".swiper-button-prev"
+    //     },
 
-        // 如果需要分页器
-        pagination: {
-          el: ".swiper-pagination"
-        },
-        // 如果需要前进后退按钮
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev"
-        },
-
-        // 如果需要滚动条
-        scrollbar: {
-          el: ".swiper-scrollbar"
-        }
-      });
-    },
-    onchange() {
-      console.log(0);
-    },
-    aa() {
-      console.log(111);
+    //     // 如果需要滚动条
+    //     scrollbar: {
+    //       el: ".swiper-scrollbar"
+    //     }
+    //   });
+    // },
+    swiperinit(name, obj) {
+      var mySwiper = new swiper(name, obj);
     },
     handleChange() {
       //   this.sousuo = true;
@@ -864,29 +1077,51 @@ export default {
     //政策中心首页
     getPolicyCenterList() {
       // return new Promise((resolve, reject) => {
-        this.api.get({
-          url: "getPolicyCenterList",
-          data: {
-            needPage: 1,
-            policyType: 0,
-            page: this.page2,
-            rows: this.rows2,
-            tableType: "allPolicy"
-          },
-          callback: res => {
-            if (res.code === "0000") {
-              this.policyCenterList = this.formatArr(res.data.rows, 4);
-              this.total2 = res.data.total;
-              setTimeout(()=>{
-                this.init();
-              },0)
-              // resolve();
-            } else {
-              this.$message.error(res.result);
-              // reject();
-            }
+      this.api.get({
+        url: "getPolicyCenterList",
+        data: {
+          needPage: 1,
+          policyType: 0,
+          page: this.page2,
+          rows: this.rows2,
+          tableType: "allPolicy"
+        },
+        callback: res => {
+          if (res.code === "0000") {
+            this.policyCenterList = this.formatArr(res.data.rows, 4);
+            this.total2 = res.data.total;
+            let obj = {
+              // direction: "horizontal", // 垂直切换选项
+              // loop: true, // 循环模式选项
+              // noSwiping: true,
+              // autoplay: true,
+              // autoplay: {
+              //   delay: 2000,
+              // },
+              // 如果需要分页器
+              pagination: {
+                el: ".swiper-pagination"
+              },
+              // 如果需要前进后退按钮
+              navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev"
+              },
+
+              // 如果需要滚动条
+              scrollbar: {
+                el: ".swiper-scrollbar"
+              }
+            };
+            setTimeout(() => {
+              this.swiperinit(".swiper-container1", obj);
+            }, 0);
+          } else {
+            this.$message.error(res.result);
+            // reject();
           }
-        });
+        }
+      });
       // });
     },
     //活动中心
@@ -917,12 +1152,13 @@ export default {
     },
     //活动中心右翻页
     rightPage() {
-      if (this.page3 >= this.total3) {
-        this.$message.error("没有更多数据了");
-        return;
+      if (this.page3 >= Math.ceil(this.total3 / this.rows3)) {
+        this.page3 = 1;
+        this.getActiList();
+      } else {
+        this.page3++;
+        this.getActiList();
       }
-      this.page3++;
-      this.getActiList();
     },
     //科技金融-投资人列表
     getInvestorInfoList() {
@@ -958,7 +1194,6 @@ export default {
         dataFlag: true,
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res.data)
             _this.finaProList = res.data.rows;
           } else {
             _this.$message.error(res.result);
@@ -989,25 +1224,71 @@ export default {
     },
     // 企业宣传列表查询
     getBanner() {
-      return new Promise((resolve, reject) => {
-        this.api.get({
-          url: "getPromotionList",
-          data: {
-            issuePlatform : 2,
-            // propagandaType: 'home_banner_pc',//没有图片，暂时先用招商的测试
-            propagandaType: "enterprise_banner",
-            needPage: 0
-          },
-          callback: res => {
-            if (res.code === "0000") {
-              this.bannerList = res.data.rows;
-              resolve();
-            } else {
-              reject();
-              this.$message.error(res.result);
-            }
+      // return new Promise((resolve, reject) => {
+        let _this = this;
+      this.api.get({
+        url: "getPromotionList",
+        data: {
+          issuePlatform: 2,
+          // propagandaType: 'home_banner_pc',//没有图片，暂时先用招商的测试
+          propagandaType: "enterprise_banner",
+          needPage: 0
+        },
+        callback: res => {
+          if (res.code === "0000") {
+            this.bannerList = res.data.rows
+            // resolve();
+            let obj = {
+              direction: "horizontal", // 垂直切换选项
+              loop: true, // 循环模式选项
+              noSwiping: true,
+              // autoplay: true,
+              observer:false,
+              // autoplay: {
+              //   delay: 2000
+              // },
+              on:{
+                click: function(e){
+                 let path = e.path[0].getAttribute("data-path");
+                 _this.$router.push(path)
+                }
+              },
+              // 如果需要分页器
+              pagination: {
+                el: ".swiper-pagination"
+              },
+              // 如果需要前进后退按钮
+              navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev"
+              },
+            };
+            setTimeout(() => {
+              this.swiperinit(".swiper-container", obj);
+            }, 0);
+          } else {
+            // reject();
+            this.$message.error(res.result);
           }
-        });
+        }
+      });
+      // });
+    },
+    //获取招聘详情
+    getRecruitDetails(id) {
+      let _this = this;
+      this.api.get({
+        url: "getRecruitDetails",
+        data: {
+          recruitId: id
+        },
+        callback: function(res) {
+          if (res.code == "0000") {
+            _this.humanDetail = res.data;
+          } else {
+            _this.$message.error(res.result);
+          }
+        }
       });
     },
     //获取招聘列表
@@ -1022,6 +1303,7 @@ export default {
         callback: function(res) {
           if (res.code == "0000") {
             _this.humanResourcesList = res.data.rows;
+            _this.total7 = res.data.total;
           } else {
             _this.$message.error(res.result);
           }
@@ -1036,7 +1318,7 @@ export default {
         data: {
           page: _this.page8,
           // signoryId: _this.signoryId,
-          rows: _this.rows8,
+          rows: _this.rows8
           // keyWords: _this.keyWords,
           // sortTypes: _this.sortTypes,
           // productType: _this.productType
@@ -1044,13 +1326,13 @@ export default {
         callback: function(res) {
           if (res.code == "0000") {
             _this.serverProList = res.data.rows;
-            // _this.total = res.data.total;
+            _this.total8 = res.data.total;
           } else {
             _this.$message.error(res.result);
           }
         }
       });
-    },
+    }
   }
 };
 </script>
@@ -1206,6 +1488,7 @@ export default {
   }
   .policyCenter {
     .paging {
+      overflow: hidden;
       .swiper-container {
         padding: 40px 0;
       }
@@ -1408,7 +1691,7 @@ export default {
               font-size: 15px;
               color: #222;
               font-weight: bold;
-              margin-bottom: 40px;
+              margin-bottom: 13px;
             }
 
             .conContent {
@@ -1450,9 +1733,9 @@ export default {
           }
         }
 
-        > li:first-child {
-          padding-top: 10px;
-        }
+        // > li:first-child {
+        //   padding-top: 10px;
+        // }
       }
     }
     // #btns {
@@ -1604,8 +1887,7 @@ export default {
             color: #fff;
             background: #00a041;
           }
-          .btn1 {
-            
+          .btn0 {
             border-top-left-radius: 3px;
             border-bottom-left-radius: 3px;
           }
@@ -1614,8 +1896,8 @@ export default {
             border-bottom-right-radius: 3px;
             border-left: none;
           }
-          >button.btnActive{
-           color: #fff;
+          > button.btnActive {
+            color: #fff;
             background: #00a041;
           }
         }
@@ -1635,10 +1917,14 @@ export default {
           padding: 30px 0;
           border-bottom: 1px solid #eee;
           .con1 {
-            padding: 20px 50px;
+            // padding: 20px 50px;
+            width: 183px;
+            height: 130px;
             > img {
-              width: 83px;
-              height: 90px;
+              // width: 83px;
+              // height: 90px;
+              width: 100%;
+              height: 100%;
             }
           }
           .con2 {
@@ -1679,6 +1965,24 @@ export default {
         > li:last-child {
           border: none;
         }
+        .detailRes {
+          width: 500px;
+          position: absolute;
+          right: 38px;
+          top: 66px;
+          text-align: left;
+          .detail {
+            margin-bottom: 10px;
+            color: #333;
+          }
+          p {
+            font-size: 13px;
+          }
+          .el-card__body {
+            padding: 20px 30px;
+            // width: 300px;
+          }
+        }
       }
       .serverOrgContent {
         margin-top: 20px;
@@ -1707,7 +2011,7 @@ export default {
                 font-size: 15px;
                 color: #222;
                 font-weight: bold;
-                margin-bottom: 40px;
+                margin-bottom: 30px;
               }
 
               .conContent {
@@ -1796,7 +2100,8 @@ export default {
           .info_img {
             width: 27%;
             img {
-              width: 79%;
+              width: 75px;
+              height: 75px;
               border-radius: 50%;
               display: block;
               margin: 6px auto;
@@ -1821,6 +2126,49 @@ export default {
         box-shadow: 0px 0px 12px 3px rgba(0, 0, 0, 0.1);
       }
     }
+  }
+  .demandDia1 {
+    background: #ecfcf2;
+    padding: 8px 10px;
+    width: 80px;
+    margin: 0 auto;
+    border: 1px solid #00a041;
+    border-radius: 4px;
+    text-align: center;
+    cursor: pointer;
+    color: #00a041;
+  }
+  .demandLine {
+    height: 1px;
+    width: 600px;
+    position: relative;
+    left: -20px;
+    background: #eee;
+    margin-bottom: 20px;
+    margin-top: 10px;
+  }
+  .demandTextArea {
+    .el-textarea__inner {
+      background: #fff;
+    }
+  }
+  .serverTip {
+    display: inline-block;
+    font-size: 12px;
+  }
+  .demandDia {
+    display: inline-block;
+    background: #ecfcf2;
+    padding: 8px 10px;
+    width: 80px;
+    margin: 0 auto;
+    border: 1px solid #00a041;
+    border-radius: 4px;
+    text-align: center;
+    cursor: pointer;
+    color: #00a041;
+    margin-left: 20px;
+    font-size: 12px;
   }
 }
 </style>

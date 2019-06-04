@@ -7,19 +7,20 @@ import com.jn.park.asset.dao.MaintainManageDao;
 import com.jn.park.asset.dao.TbAssetMaintainCompanyMapper;
 import com.jn.park.asset.dao.TbAssetMaintainManageMapper;
 import com.jn.park.asset.dao.TbAssetMaintainRecordMapper;
-import com.jn.park.asset.entity.*;
+import com.jn.park.asset.entity.TbAssetMaintainCompany;
+import com.jn.park.asset.entity.TbAssetMaintainRecord;
+import com.jn.park.asset.entity.TbAssetMaintainRecordCriteria;
 import com.jn.park.asset.enums.AssetStatusEnums;
 import com.jn.park.asset.model.AssetMaintainCompanyModel;
 import com.jn.park.asset.model.AssetMaintainRecordModel;
 import com.jn.park.asset.model.MaintainManageModel;
 import com.jn.park.asset.service.MaintainManageService;
 import com.jn.system.log.annotation.ServiceLog;
-import com.sun.org.apache.bcel.internal.generic.I2F;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,6 +75,8 @@ public class MaintainManageServiceImpl implements MaintainManageService {
                 //创建维保记录model
                 AssetMaintainRecordModel assetMaintainRecordModel = new AssetMaintainRecordModel();
                 BeanUtils.copyProperties(tbAssetMaintainRecord,assetMaintainRecordModel);
+                java.sql.Date maintenanceTime = new java.sql.Date(tbAssetMaintainRecord.getMaintenanceTime().getTime());
+                assetMaintainRecordModel.setMaintenanceTime(maintenanceTime);
                 assetMaintainRecordModelList.add(assetMaintainRecordModel);
             }
             //维保记录集合

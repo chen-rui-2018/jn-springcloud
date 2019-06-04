@@ -1,7 +1,7 @@
 <template>
   <div class="myBody">
     <div class="business_title">
-      <div class="myBusiness">我的机构 </div>
+      <div class=" myBusiness font16">我的机构 </div>
       <div class="business_nav">
         <div @click="toBasicInformation">编辑机构</div>
         <div @click="toCounselorManagement">顾问管理</div>
@@ -253,7 +253,7 @@ export default {
                    data:{account :this.userAccount},
         callback: function(res) {
           console.log(res);
-          if (res.code == "0000") {
+          if (res.data) {
             _this.orgName = res.data.orgDetailVo.orgName
             _this.orgCode = res.data.orgDetailVo.orgCode
             _this.orgRegisterTime = res.data.orgDetailVo.orgRegisterTime
@@ -297,7 +297,7 @@ export default {
         this.$router.push({ name: "counselorManagement" });
     },
     toUserCenter(){
-        this.$router.push({ name: "userCenter" });
+        this.$router.push({ path: "/home" });
     },
     toBasicInformation(){
         this.$router.push({ path: "/roleCertifications/basicInformation" });
@@ -453,7 +453,7 @@ margin-bottom: 59px;
     }
     .myBusiness {
       color: #333;
-      font-size: 13px;
+      // font-size: 13px;
       padding: 25px 0px;
       // > span {
       //   color: #00a041;

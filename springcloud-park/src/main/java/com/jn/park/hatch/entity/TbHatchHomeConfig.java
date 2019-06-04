@@ -6,8 +6,6 @@ import java.util.Date;
 public class TbHatchHomeConfig implements Serializable {
     private String id;
 
-    private String incubatorId;
-
     private String incubatorName;
 
     private String incubatorAbb;
@@ -40,14 +38,6 @@ public class TbHatchHomeConfig implements Serializable {
 
     public void setId(String id) {
         this.id = id == null ? null : id.trim();
-    }
-
-    public String getIncubatorId() {
-        return incubatorId;
-    }
-
-    public void setIncubatorId(String incubatorId) {
-        this.incubatorId = incubatorId == null ? null : incubatorId.trim();
     }
 
     public String getIncubatorName() {
@@ -159,7 +149,6 @@ public class TbHatchHomeConfig implements Serializable {
         }
         TbHatchHomeConfig other = (TbHatchHomeConfig) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getIncubatorId() == null ? other.getIncubatorId() == null : this.getIncubatorId().equals(other.getIncubatorId()))
             && (this.getIncubatorName() == null ? other.getIncubatorName() == null : this.getIncubatorName().equals(other.getIncubatorName()))
             && (this.getIncubatorAbb() == null ? other.getIncubatorAbb() == null : this.getIncubatorAbb().equals(other.getIncubatorAbb()))
             && (this.getAdvantageIntroduct() == null ? other.getAdvantageIntroduct() == null : this.getAdvantageIntroduct().equals(other.getAdvantageIntroduct()))
@@ -179,7 +168,6 @@ public class TbHatchHomeConfig implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getIncubatorId() == null) ? 0 : getIncubatorId().hashCode());
         result = prime * result + ((getIncubatorName() == null) ? 0 : getIncubatorName().hashCode());
         result = prime * result + ((getIncubatorAbb() == null) ? 0 : getIncubatorAbb().hashCode());
         result = prime * result + ((getAdvantageIntroduct() == null) ? 0 : getAdvantageIntroduct().hashCode());
@@ -202,7 +190,6 @@ public class TbHatchHomeConfig implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", incubatorId=").append(incubatorId);
         sb.append(", incubatorName=").append(incubatorName);
         sb.append(", incubatorAbb=").append(incubatorAbb);
         sb.append(", advantageIntroduct=").append(advantageIntroduct);

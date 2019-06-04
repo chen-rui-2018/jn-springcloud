@@ -18,6 +18,7 @@ public enum CustomerCenterExceptionEnum implements CodeAndMsg {
     PICTURE_URL_MORE_THAN_ALLOW("5020556","处理问题时，问题描述最多允许上传3张图片"),
     CURRENT_ROLE_NOT_HAVE_USER("5020556","当前角色没有所属用户"),
     PROCESS_TYPE_NOT_ALLOW("5020557","流程类型系统无法识别，请输入正确的类型"),
+    CALLED_PHONE_NOT_NULL("5020558","当前来电号码不能为空"),
     ;
     /**
      * 编码

@@ -179,7 +179,7 @@ export default {
       }
     };
     return {
-      baseUrl:this.api.host,
+      baseUrl: this.api.host,
       fileList: [],
       showImg: false,
       auth_time: 0,
@@ -350,6 +350,9 @@ export default {
               if (res.code == "0000") {
                 _this.$message.success("提交成功，等待审核");
                 _this.$refs["businessForm"].resetFields();
+              } else {
+                _this.$message.error(res.result);
+                return false;
               }
             }
           });
@@ -569,7 +572,7 @@ export default {
     .inline {
       display: inline-block;
     }
-    .el-input{
+    .el-input {
       width: 266px;
     }
     .el-input__inner {
@@ -597,8 +600,8 @@ export default {
       font-size: 13px;
       padding-right: unset;
     }
-    .brLine{
-      .el-form-item__label{
+    .brLine {
+      .el-form-item__label {
         line-height: 20px;
       }
     }

@@ -6,8 +6,8 @@
     <div class="ordinary_main">
       <div class="formData">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-          <el-form-item label="名号" prop="name">
-            <label slot="label">名&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号:</label>
+          <el-form-item label="昵称" prop="name">
+            <label slot="label">昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称</label>
             <el-input v-model.trim="ruleForm.name" clearable></el-input>
           </el-form-item>
           <el-form-item label="出生年月" prop="date1">
@@ -135,6 +135,9 @@ export default {
                 _this.$message.success('提交成功，等待审核');
                  _this.$refs['ruleForm'].resetFields();
                  _this.ruleForm.checkCode=''
+              } else {
+                _this.$message.error(res.result);
+                return false;
               }
             }
           });
@@ -160,7 +163,6 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
             _this.sendAuthCode = false;
             _this.auth_time = 60;
             var auth_timetimer = setInterval(() => {

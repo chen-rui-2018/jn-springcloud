@@ -1,5 +1,5 @@
 <template>
-  <div class="addScience">
+  <div class="addScience" v-loading="loading">
     <div class="putaway_title">
       <div>新增特色产品</div>
       <div @click="$router.go(-1)">返回列表</div>
@@ -160,7 +160,7 @@ export default {
         signoryId:"",
         signoryName:""
       },
-  
+      loading:false,
       counselorList:[],
       headers:{token: sessionStorage.token},
       fileList:[],
@@ -245,6 +245,8 @@ export default {
     this.addFinancialProduct.orgId=this.$route.query.orgid
     this.getType()
     this.getProductSerialNumber()
+  
+    
   },
   methods: {
     //判断机构类型
@@ -345,6 +347,7 @@ export default {
     //提交新增
     submit(){
       if(this.businessType==='technology_finance'){
+        this.loading=true
         let _this = this;                                  
         this.api.post({               
         url: "upShelfFeatureProduct",
@@ -352,14 +355,17 @@ export default {
         callback: function(res) {
           if (res.code == "0000") {
               _this.$message.success("新增成功")
+               _this.loading=false 
               _this.$router.go(-1)
             }else{
-             _this.$message.error(res.data.result)
+             _this.$message.error(res.result)
+             _this.loading=false 
             }
           }
         }) 
       }else {
         let _this = this; 
+        this.loading=true
         this.api.post({               
         url: "addFeatureService",
         data: this.addScienceData,
@@ -367,9 +373,11 @@ export default {
           if (res.code == "0000") {
               // console.log(res)
               _this.$message.success("新增成功")
+               _this.loading=false 
               _this.$router.go(-1)
             }else{
-              _this.$message.error('带*号为必填哦，亲')
+             _this.$message.error(res.result)
+             _this.loading=false 
             }
           }
         }) 

@@ -507,6 +507,7 @@
         tb_electric_reading t
         inner join tb_electric_meter_info t2
         on t.meter_code = t2.meter_code
+        and t2.record_status = 1
         where
         1=1
         <if test="dealDate == null">
@@ -531,7 +532,7 @@
         and t.val = t2.deal_hour
         where
         t.type = '时'
-
+        and t.electric_type = '全部'
         <if test="dealDate == null">
             and t.date = DATE(CURDATE())
         </if>
@@ -565,6 +566,7 @@
         from vw_electric_sum t
         inner join tb_electric_meter_info t2
         on t.meter_code = t2.meter_code
+        and t2.record_status = 1
         where t.type = '日'
         <if test="dealDate == null">
             and t.deal_date_value = CURDATE()
@@ -601,6 +603,7 @@
         from vw_electric_sum t
         LEFT join tb_electric_meter_info t2
         on t.meter_code = t2.meter_code
+        and t2.record_status = 1
         where  t.type = '日'
         and t.deal_date_value &gt;= DATE(CURDATE())
         group by t2.position,t.meter_code ) t
@@ -619,16 +622,20 @@
         tb_electric_reading t
         inner join tb_electric_meter_info t2
         on t.meter_code = t2.meter_code
+        and t2.record_status = 1
         where t.deal_date &gt;= DATE(CURDATE())
         group by deal_date,t.deal_hour ) t2
         on t.date = t2.deal_date
         and t.val = t2.deal_hour
         and t.electric_type = t2.type
-        where t.date &gt;= DATE(CURDATE())   # 开始时间  默认本月月初
+        where t.date &gt;= DATE(CURDATE())
         and t.date &lt; DATE(CURDATE()+1)
         and t.type = '时'
+        and t.electric_type != '全部'
         group by t.val,t.electric_type
         order by t.val+0,t.electric_type +0
     </select>
+
+
 
 </mapper>

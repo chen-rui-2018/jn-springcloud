@@ -164,6 +164,15 @@ public interface SystemClient {
     Result<List<User>> getUserInfoByAccount(@RequestBody List<String> accountList);
 
     /**
+     * 通过用户id获取用户信息,传多id,返回多个用户信息
+     *
+     * @param ids
+     * @return
+     */
+    @RequestMapping(value = "/api/system/getUserInfoByIds", method = RequestMethod.POST)
+    Result<List<User>> getUserInfoByIds(@RequestBody List<String> ids);
+
+    /**
      * 修改用户角色信息
      *
      * @param sysUserRoleVO

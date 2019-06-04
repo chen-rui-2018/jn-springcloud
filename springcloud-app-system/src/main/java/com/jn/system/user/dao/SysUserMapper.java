@@ -97,5 +97,5 @@ public interface SysUserMapper {
      * @param ids
      * @return
      */
-    List<SysTUser> selectUserByIds(@Param("ids") String[] ids);
+    List<User> selectUserByIds(@Param("ids") String[] ids);
 }

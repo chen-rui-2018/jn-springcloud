@@ -44,6 +44,7 @@ public enum AdvisorExceptionEnum implements CodeAndMsg {
     WORK_END_TIME_FORMAT_ERROR("5020530","服务经历工作结束时间格式错误"),
     WORK_TIME_MORE_THAN_END_TIME("5020531","服务经历工作开始时间晚于结束时间"),
     CURRENT_ACCOUNT_NOT_ORG_GROUP("5020532","当前登录用户不是机构用户"),
+    CURRENT_ACCOUNT_NOT_COMMENT_PERSON("5020533","当前用户非普通用户,不能被邀请"),
     ;
 
     /**

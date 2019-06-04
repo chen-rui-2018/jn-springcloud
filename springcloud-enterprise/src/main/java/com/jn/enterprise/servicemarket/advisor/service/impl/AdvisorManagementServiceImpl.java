@@ -83,6 +83,7 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
     @Autowired
     private InvestorService investorService;
 
+
     /**
      * 是否删除 0：删除  1：有效
      */
@@ -103,9 +104,16 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
     @ServiceLog(doAction = "邀请顾问")
     @Transactional(rollbackFor = Exception.class)
     public int inviteAdvisor(String registerAccount,String loginAccount) {
-        //判断当前登录用户是否为机构管理员
+        //1.判断当前登录用户是否为机构管理员
         judgeAccountIsOrgManage(loginAccount);
-        //1.判断顾问表中是否已存在当前机构和顾问关联的数据（审核状态为非解除状态，非审批不通过状态）
+        //2.判断被邀请顾问是否为普通用户，非普通用户不能被邀请
+        String roleName="普通用户";
+        List<UserRoleInfo> userRoleInfoList = orgColleagueService.getUserRoleInfoList(Arrays.asList(registerAccount), roleName);
+        if(userRoleInfoList==null || userRoleInfoList.isEmpty()|| !StringUtils.equals(userRoleInfoList.get(0).getRoleName(),roleName)){
+            logger.warn("当前用户非普通用户角色，不能被邀请");
+            throw new JnSpringCloudException(AdvisorExceptionEnum.CURRENT_ACCOUNT_NOT_COMMENT_PERSON);
+        }
+        //判断顾问表中是否已存在当前机构和顾问关联的数据（审核状态为非解除状态，非审批不通过状态）
         //通过机构账号从服务机构表获得机构编码和机构名称
         TbServiceOrg serviceOrgInfo = getServiceOrgInfo(loginAccount);
         if(serviceOrgInfo==null){
@@ -150,15 +158,17 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
         //消息标题
         String messageTitle="机构["+serviceOrgInfo.getOrgName()+"]邀请信息";
         //消息内容
-        String messageConnect="尊敬的"+registerAccount+"您好，"+serviceOrgInfo.getOrgName()+
-                "邀请您加入机构【机构编码：[orgId:"+serviceOrgInfo.getOrgId()+"],机构名称：[orgName:"+serviceOrgInfo.getOrgName()+
-                "],业务领域：[businessArea:"+serviceOrgInfo.getBusinessType()+"]】，成为机构顾问";
+        String messageContent="尊敬的"+registerAccount+"您好，"+serviceOrgInfo.getOrgName()+"邀请您加入机构，成为机构顾问";
+        String messageConnect="{\"orgId\":\""+serviceOrgInfo.getOrgId()+"\",\"orgName\":\""+serviceOrgInfo.getOrgName()
+                +"\",\"businessArea\":\""+serviceOrgInfo.getBusinessType()+"\"}";
+        String messageConnectName="机构邀请";
         //消息一级类别 （0：个人动态，1：企业空间）
         int oneSort=0;
-        //消息二级类别（0：私人订单，1：信用动态，2：园区通知，3：消费汇总，4：收入汇总，5，付款通知，6：企业订单，7：信息发布动态，8：交费提醒，9：访客留言，10：数据上报提醒  11.机构邀请）
-        int twoSort=11;
+        //消息二级类别（1：个人动态，2：企业订单，3：信息发布动态，4：交费提醒，5：访客留言，6：数据上报提醒，7：机构邀请，8：企业邀请，9：机构邀请，10：私人订单）
+        int twoSort=7;
         //3.调用消息接口，往消息接口添加一条邀请信息
-        AddMessageModel addMessageModel = getAddMessageModel(registerAccount, loginAccount, messageTitle, messageConnect, oneSort, twoSort);
+        AddMessageModel addMessageModel = getAddMessageModel(registerAccount, loginAccount, messageTitle,
+                messageContent, messageConnect,messageConnectName, oneSort, twoSort);
         return messageClient.addMessage(addMessageModel);
     }
 
@@ -172,12 +182,17 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
      * @param twoSort          消息二级类别
      */
     @ServiceLog(doAction = "")
-    private AddMessageModel getAddMessageModel(String acceptAccount, String sendAccount, String messageTitle, String messageConnect, int oneSort, int twoSort) {
+    private AddMessageModel getAddMessageModel(String acceptAccount, String sendAccount, String messageTitle,String messageContent,
+                                               String messageConnect,String messageConnectName, int oneSort, int twoSort) {
         AddMessageModel addMessageModel=new AddMessageModel();
         //消息标题
         addMessageModel.setMessageTitle(messageTitle);
         //消息内容
-        addMessageModel.setMessageContent(messageConnect);
+        addMessageModel.setMessageContent(messageContent);
+        //消息数据
+        addMessageModel.setMessageConnect(messageConnect);
+        //二级消息名称
+        addMessageModel.setMessageConnectName(messageConnectName);
         //消息接受人
         addMessageModel.setMessageRecipien(acceptAccount);
         //消息发送人

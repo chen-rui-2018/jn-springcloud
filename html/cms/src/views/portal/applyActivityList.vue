@@ -180,7 +180,7 @@ export default {
   },
   methods: {
     ApproveApplicant() {
-      this.$router.push({ path: `registrationChecklist` })
+      this.$router.push({ path: `registrationChecklist`, query: { applyStatus: this.$route.query.applyCheck }})
     },
     getApplyActivityList() {
       this.actiList.activityId = this.$route.query.id
@@ -231,7 +231,7 @@ export default {
       const data = {
         applyId: id
       }
-      api(`${this.GLOBAL.parkUrl}activity/activityApply/signInActivityBackend`, data, 'post').then(res => {
+      api(`${this.GLOBAL.parkUrl}activity/activityApply/signInActivityBackend?applyId=${id}`, data, 'post').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           this.getApplyActivityList()
           this.$message(res.data.result)

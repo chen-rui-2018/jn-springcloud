@@ -68,7 +68,7 @@
           <div v-if="item.messageConnect && item.messageConnect.orgName">
             {{ item.messageConnect.orgName }}邀请您加入机构，成为机构顾问，点击
             <router-link
-              :to="`/myBody/acceptInvitation?orgId=${item.messageConnect.orgId}&orgName=${item.messageConnect.orgName}&messageId=${item.id}`" style="color: #00a041;"
+              :to="`/myBody/acceptInvitation?orgId=${item.messageConnect.orgId}&orgName=${item.messageConnect.orgName}&businessArea=${item.messageConnect.businessArea}&messageId=${item.id}`" style="color: #00a041;"
             >查看详情</router-link>。
           </div>
         </div>

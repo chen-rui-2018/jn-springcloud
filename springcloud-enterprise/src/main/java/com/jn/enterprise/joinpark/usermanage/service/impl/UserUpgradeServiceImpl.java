@@ -26,6 +26,7 @@ import com.jn.enterprise.utils.IBPSUtils;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
+import com.jn.user.model.UserInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -163,6 +164,19 @@ public class UserUpgradeServiceImpl implements UserUpgradeService {
         // 判断企业是否存在
         companyService.getCompanyDetailByAccountOrId(staffCheckParam.getComId());
 
+        // 调用修改用户扩展信息服务接口
+        Integer responseNums = 0;
+
+        // 修改用户信息
+        UserInfo userInfo = new UserInfo();
+        userInfo.setAccount(account);
+        BeanUtils.copyProperties(staffCheckParam, userInfo);
+        Result result = userExtensionClient.saveOrUpdateUserInfo(userInfo);
+        if (result == null || result.getData() == null) {
+            logger.warn("[升级员工] 更新用户扩展信息错误");
+            return responseNums;
+        }
+
         // 封装数据
         TbServiceCompanyStaff tbServiceCompanyStaff = new TbServiceCompanyStaff();
         tbServiceCompanyStaff.setId(UUID.randomUUID().toString().replaceAll("-",""));
@@ -175,8 +189,8 @@ public class UserUpgradeServiceImpl implements UserUpgradeService {
         tbServiceCompanyStaff.setInviterAccount(account);
         tbServiceCompanyStaff.setInviteTime(new Date());
         tbServiceCompanyStaff.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
-        int insert = tbServiceCompanyStaffMapper.insert(tbServiceCompanyStaff);
-        return insert;
+        responseNums = tbServiceCompanyStaffMapper.insert(tbServiceCompanyStaff);
+        return responseNums;
     }
 
     @Override

@@ -65,11 +65,10 @@
           :key="index"
           class="notice-content">
           <div class="notice-dot"></div>
-          <div v-if="item.messageContent">
-            {{ item.messageContent }}邀请您加入他们机构的顾问，点击
+          <div v-if="item.messageConnect && item.messageConnect.orgName">
+            {{ item.messageConnect.orgName }}邀请您加入机构，成为机构顾问，点击
             <router-link
-              v-if="item.messageConnect && item.messageConnect.comId"
-              :to="`/myBody/acceptInvitation?comId=${item.messageConnect.comId}&comName=${item.messageConnect.comName}&messageId=${item.id}`" style="color: #00a041;"
+              :to="`/myBody/acceptInvitation?orgId=${item.messageConnect.orgId}&orgName=${item.messageConnect.orgName}&messageId=${item.id}`" style="color: #00a041;"
             >查看详情</router-link>。
           </div>
         </div>

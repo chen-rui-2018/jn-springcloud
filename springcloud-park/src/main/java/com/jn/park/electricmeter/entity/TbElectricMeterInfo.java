@@ -79,6 +79,9 @@ public class TbElectricMeterInfo implements Serializable {
     /*@ApiModelProperty("房间号")*/
     private String roomId;
 
+    /*@ApiModelProperty("厂家仪表编码")*/
+    private String factoryMeterCode;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -281,6 +284,14 @@ public class TbElectricMeterInfo implements Serializable {
         this.roomId = roomId == null ? null : roomId.trim();
     }
 
+    public String getFactoryMeterCode() {
+        return factoryMeterCode;
+    }
+
+    public void setFactoryMeterCode(String factoryMeterCode) {
+        this.factoryMeterCode = factoryMeterCode == null ? null : factoryMeterCode.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -317,7 +328,8 @@ public class TbElectricMeterInfo implements Serializable {
             && (this.getIsLowEnergyThreshold() == null ? other.getIsLowEnergyThreshold() == null : this.getIsLowEnergyThreshold().equals(other.getIsLowEnergyThreshold()))
             && (this.getPhone() == null ? other.getPhone() == null : this.getPhone().equals(other.getPhone()))
             && (this.getIsauto() == null ? other.getIsauto() == null : this.getIsauto().equals(other.getIsauto()))
-            && (this.getRoomId() == null ? other.getRoomId() == null : this.getRoomId().equals(other.getRoomId()));
+            && (this.getRoomId() == null ? other.getRoomId() == null : this.getRoomId().equals(other.getRoomId()))
+            && (this.getFactoryMeterCode() == null ? other.getFactoryMeterCode() == null : this.getFactoryMeterCode().equals(other.getFactoryMeterCode()));
     }
 
     @Override
@@ -349,6 +361,7 @@ public class TbElectricMeterInfo implements Serializable {
         result = prime * result + ((getPhone() == null) ? 0 : getPhone().hashCode());
         result = prime * result + ((getIsauto() == null) ? 0 : getIsauto().hashCode());
         result = prime * result + ((getRoomId() == null) ? 0 : getRoomId().hashCode());
+        result = prime * result + ((getFactoryMeterCode() == null) ? 0 : getFactoryMeterCode().hashCode());
         return result;
     }
 
@@ -383,6 +396,7 @@ public class TbElectricMeterInfo implements Serializable {
         sb.append(", phone=").append(phone);
         sb.append(", isauto=").append(isauto);
         sb.append(", roomId=").append(roomId);
+        sb.append(", factoryMeterCode=").append(factoryMeterCode);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

@@ -3,9 +3,9 @@
     <div class="business_title">
       <div class=" myBusiness font16">我的机构 </div>
       <div class="business_nav">
-        <div @click="toBasicInformation">编辑机构</div>
-        <div @click="toCounselorManagement">顾问管理</div>
-        <div @click="toEnterprisePropaganda">企业宣传</div>
+        <div @click="toBasicInformation" v-show="isEditBody">编辑机构</div>
+        <div @click="toCounselorManagement" v-show="isCounselor">顾问管理</div>
+        <div @click="toEnterprisePropaganda" v-show="isPublicity">企业宣传</div>
       </div>
 
     </div>
@@ -207,6 +207,9 @@
 export default {
   data() {
     return {
+      isEditBody:false,
+      isCounselor:false,
+      isPublicity:false,
       // businessArea:'',
       honorLicense:[],
            userAccount:'',
@@ -239,6 +242,20 @@ export default {
     }
   },
   mounted(){
+     let initArr = JSON.parse(sessionStorage.menuItems);
+    initArr.forEach(v => {
+      if (v.label === "我的机构") {
+        v.resourcesList.forEach(i => {
+          if (i.resourcesName === "发布宣传") {
+            this.isPublicity = true;
+          } else if (i.resourcesName === "修改机构") {
+            this.isEditBody = true;
+          } else if (i.resourcesName === "顾问管理") {
+            this.isCounselor = true;
+          }
+        });
+      }
+    });
         this.init()
   },
   methods: {

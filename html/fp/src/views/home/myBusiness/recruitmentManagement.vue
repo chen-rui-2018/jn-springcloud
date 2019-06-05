@@ -2,7 +2,7 @@
   <div class="recruitmentProduct">
     <div class="ordinary_title font16">
       <div>我的招聘</div>
-      <div @click="toPostJob">发布招聘</div>
+      <div @click="toPostJob" v-show="isInvite">发布招聘</div>
     </div>
     <div class="ordinary_main">
       <div class="search">
@@ -66,6 +66,7 @@
 export default {
   data () {
     return {
+      isInvite:false,
       total:0,
             page:1,
       rows:10,
@@ -75,6 +76,16 @@ export default {
     }
   },
   mounted(){
+    let initArr = JSON.parse(sessionStorage.menuItems);
+    initArr.forEach(v => {
+      if (v.label === "我的企业") {
+        v.resourcesList.forEach(i => {
+          if (i.resourcesName === "发布企业招聘信息") {
+            this.isInvite = true;
+          }
+        });
+      }
+    });
     this.initList()
   },
   methods: {

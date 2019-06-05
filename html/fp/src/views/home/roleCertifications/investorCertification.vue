@@ -99,7 +99,7 @@
         <div class="basicStyle">工作经历 <span class="cancel" @click="cancelWorkList" v-if="isShowWorkList">取&nbsp;消</span><span
             @click="addWorkList('workForm')"> <i class="el-icon-plus"></i>&nbsp;{{workText}}</span> </div>
         <div class="marBtn" v-if="!isShowWorkList">
-          <el-table :data="workList" style="width: 99%">
+          <el-table :data="workList" style="width: 98%">
             <el-table-column prop="startTime" align="center" label="开始时间">
             </el-table-column>
             <el-table-column prop="endTime" align="center" label="结束时间">
@@ -141,7 +141,7 @@
             @click="addEducationList('educationForm')"> <i class="el-icon-plus"></i>&nbsp;{{educationText}}</span>
         </div>
         <div class="marBtn" v-if="!isShowEducationList">
-          <el-table :data="educationList" style="width: 99%">
+          <el-table :data="educationList" style="width: 98%">
             <el-table-column prop="startTime" align="center" label="开始时间">
             </el-table-column>
             <el-table-column prop="endTime" align="center" label="结束时间">

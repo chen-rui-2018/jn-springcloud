@@ -5,6 +5,7 @@
     "pages/index/maintenance-detail/maintenance-detail",
     "pages/index/maintenance-register/maintenance-register",
     "pages/index/parkPay/parkPay",
+    "pages/index/payComplete/payComplete",
     "pages/index/declarationNotice/declarationNotice",
     "pages/home/home",
     "pages/home/payRecord/payRecord",

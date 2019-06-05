@@ -3,7 +3,7 @@
   <view class="cu-list menu-avatar ">
       <view class=" cu-item {{modalName=='move-box-'+ index?'move-cur':''}}" wx:for="{{carList}}" wx:key bindtouchstart="ListTouchStart" bindtouchmove="ListTouchMove" bindtouchend="ListTouchEnd" 
       data-target="move-box-{{index}}">
-        <view class="cu-avatar"><image class="" src="https://njbxq.mynatapp.cc/h5/imgs/my_love_car.png" > </image></view>
+        <view class="cu-avatar"><image class="" wx:if="{{imgBaseUrl}}" src="{{imgBaseUrl}}my_love_car.png" > </image></view>
           <view class="text-grey">{{item.carLicense}} </view>
           <text class="icon-right gray"></text>
         <view class="move" bindtap="delet" data-id="{{item.carId}}">

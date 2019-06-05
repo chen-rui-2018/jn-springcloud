@@ -126,7 +126,7 @@
                 </span>
               </el-form-item>
               <div class="marBtn" v-if="!isShowOtherList">
-                <el-table :data="otherList" style="width: 99%">
+                <el-table :data="otherList" style="width: 98%">
                   <el-table-column prop="certName" label="资质荣誉名称" align="center"></el-table-column>
                   <el-table-column label="特色标签" align="center">
                     <template>
@@ -234,7 +234,7 @@
             </el-form>
             <div>
               <div class="marBtn" v-if="!isShowKernelList">
-                <el-table :data="kernelList" style="width: 99%">
+                <el-table :data="kernelList" style="width: 98%">
                   <el-table-column prop="conName" label="姓名" align="center"></el-table-column>
                   <el-table-column label="职务" align="center" prop="conPosition">
                   </el-table-column>
@@ -298,7 +298,7 @@
                 <el-input v-model="contactForm.orgAddress" placeholder="请填写详细地址" clearable></el-input>
               </el-form-item>
               <el-form-item label="咨询电话:" prop="orgPhone">
-                <el-input v-model="contactForm.orgPhone" placeholder="请输入咨询电话" clearable></el-input>
+                <el-input v-model="contactForm.orgPhone" placeholder="请输入咨询电话" maxlength="12" clearable></el-input>
               </el-form-item>
               <el-form-item label="机构网址:" prop="orgWeb">
                 <el-input v-model="contactForm.orgWeb" placeholder="请输入机构网址" clearable></el-input>

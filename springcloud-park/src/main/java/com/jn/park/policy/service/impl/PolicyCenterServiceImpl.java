@@ -5,6 +5,7 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
+import com.jn.enterprise.utils.IBPSFileUtils;
 import com.jn.park.enums.PolicyInfoExceptionEnum;
 import com.jn.park.policy.dao.*;
 import com.jn.park.policy.entity.*;
@@ -162,6 +163,15 @@ public class PolicyCenterServiceImpl implements PolicyCenterService {
                     policyCenterHomeParam.getRows() == 0 ? 15 : policyCenterHomeParam.getRows(), true);
         }
         List<PolicyCenterHomeShow> investorInfoList = policyCenterMapper.getPolicyCenterList(policyCenterHomeParam,thematicType);
+
+        // 处理图片格式
+        if (investorInfoList != null && !investorInfoList.isEmpty()) {
+            for (PolicyCenterHomeShow policy : investorInfoList){
+                if (StringUtils.isNotBlank(policy.getPolicyDiagramUrl())) {
+                    policy.setPolicyDiagramUrl(IBPSFileUtils.getFilePath(policy.getPolicyDiagramUrl()));
+                }
+            }
+        }
         return new PaginationData(investorInfoList, objects == null ? 0 : objects.getTotal());
     }
 
@@ -252,6 +262,11 @@ public class PolicyCenterServiceImpl implements PolicyCenterService {
             if(existNum>0){
                 policyDiagramDetailsVo.setPolicyDetailsShow(getPolicyDetails(relationPolicyOriginalId));
             }
+        }
+
+        // 处理图片格式
+        if (StringUtils.isNotBlank(policyDiagramDetailsVo.getPolicyDiagramUrl())) {
+            policyDiagramDetailsVo.setPolicyDiagramUrl(IBPSFileUtils.getFilePath(policyDiagramDetailsVo.getPolicyDiagramUrl()));
         }
         return policyDiagramDetailsVo;
     }

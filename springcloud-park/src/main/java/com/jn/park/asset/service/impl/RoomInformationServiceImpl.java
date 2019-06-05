@@ -41,10 +41,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
 * 房间信息impl
@@ -155,19 +152,19 @@ public class RoomInformationServiceImpl implements RoomInformationService {
 
         //拿到要出租的所有房间
         List<TbRoomInformation> tbRoomInformationList=this.getRoomGroupId(tbRoomInformation.getGroupId());
-        if(tbRoomInformationList==null){
+        if(tbRoomInformationList.size()==0){
             tbRoomInformationList.add(tbRoomInformation);
         }
 
         //生成订单号
-        String orderId=UUID.randomUUID().toString();
+        String orderId=getOrderIdByTime();
         //订单总金额
         BigDecimal orderPaySum=new BigDecimal(0);
 
         //生成订单明细
         for(TbRoomInformation e:tbRoomInformationList){
             TbRoomOrdersItem item=new TbRoomOrdersItem();
-            item.setId(UUID.randomUUID().toString());
+            item.setId(getOrderIdByTime());
             item.setOrderId(orderId);
             item.setRoomId(e.getId());
             item.setRoomName(e.getName());
@@ -297,7 +294,7 @@ public class RoomInformationServiceImpl implements RoomInformationService {
      */
     private List<TbRoomInformation>getRoomGroupId(String groupId){
         if(StringUtils.isBlank(groupId)){
-            return null;
+            return new ArrayList<>();
         }
         TbRoomGroup tbRoomGroup=tbRoomGroupMapper.selectByPrimaryKey(groupId);
         if(null!=tbRoomGroup){
@@ -311,7 +308,7 @@ public class RoomInformationServiceImpl implements RoomInformationService {
             List<TbRoomInformation>  tbRoomInformationList=tbRoomInformationMapper.selectByExample(roomInformationCriteria);
             return tbRoomInformationList;
         }
-        return null;
+        return new ArrayList<>();
     }
 
      @Override
@@ -937,7 +934,7 @@ public class RoomInformationServiceImpl implements RoomInformationService {
             //回调ID
             payBillCreateParamVo.setCallbackId("springcloud-park");
             //回调URL
-            payBillCreateParamVo.setCallbackUrl("/api/order/updateBill");
+            payBillCreateParamVo.setCallbackUrl("/api/meter/updateBillInfo");
             //创建时间
             payBillCreateParamVo.setCreatedTime(new java.util.Date());
             //创建人
@@ -1067,6 +1064,21 @@ public class RoomInformationServiceImpl implements RoomInformationService {
             throw new JnSpringCloudException(new Result("-1","获取用户企业信息失败"));
         }
         return data;
+    }
+
+    /**
+     * 生成订单编号
+     * @return
+     */
+    public static String getOrderIdByTime(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        String newDate = sdf.format(new java.util.Date());
+        String result = "";
+        Random random = new Random();
+        for (int i = 0; i < 5; i++) {
+            result += random.nextInt(10);
+        }
+        return newDate + result;
     }
 
 }

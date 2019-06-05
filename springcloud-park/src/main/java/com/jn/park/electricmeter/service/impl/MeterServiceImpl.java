@@ -612,4 +612,15 @@ public class MeterServiceImpl implements MeterService {
         result.setData(list);
         return result;
     }
+
+    @Override
+    public TbElectricMeterInfo getByCode(String code) {
+        TbElectricMeterInfoCriteria criteria=new TbElectricMeterInfoCriteria();
+        criteria.createCriteria().andRecordStatusEqualTo(new Byte("1")).andMeterCodeEqualTo(code);
+        List<TbElectricMeterInfo> list=meterInfoMapper.selectByExample(criteria);
+        if(null!=list||list.size()>0){
+            return list.get(0);
+        }
+       return null;
+    }
 }

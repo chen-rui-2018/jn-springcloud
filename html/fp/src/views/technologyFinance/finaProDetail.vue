@@ -154,8 +154,9 @@
     </div>
      <!-- 提需求弹框 -->
     <template v-if="financialProVisible">
-      <el-dialog :visible.sync="financialProVisible" width="600px" :modal-append-to-body=false>
-        <el-form ref="financialProform" :rules="rules" :model="financialProform" label-position="right" label-width="150px" style="max-width:500px;">
+      <el-dialog :visible.sync="financialProVisible" width="600px" :modal-append-to-body=false :lock-scroll="false">
+      <div v-if="islogin">
+          <el-form ref="financialProform" :rules="rules" :model="financialProform" label-position="right" label-width="150px" style="max-width:500px;">
           <el-form-item label="融资金额(万元):" prop="financingAmount">
             <el-input v-model.trim="financialProform.financingAmount" placeholder="请输入融资金额" maxlength="100" clearable/>
           </el-form-item>
@@ -179,6 +180,14 @@
         </el-form>
         <div class="demandLine"></div>
         <div class="demandDia" @click="demandDia()">提交需求</div>
+      </div>
+      <div v-else class="loginTip">
+          你还未
+          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          /
+          <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+          企业账号
+        </div>
       </el-dialog>
     </template>
   </div>
@@ -187,6 +196,7 @@
 export default {
   data() {
     return {
+      islogin:true,
       zankaiFlag: true,
       activeName: "baseInfo",
       serverOrgDetailList: {},
@@ -271,6 +281,12 @@ export default {
     this.initList();
   },
   methods: {
+      //判断是否登录
+    isLogin() {
+      if (!sessionStorage.userInfo) {
+        this.islogin = false;
+      }
+    },
       //用户提需求
     demandDia() {
       let _this = this;
@@ -301,10 +317,11 @@ export default {
     },
     //提需求
     raiseDemand(productId,productName) {
-       if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
-        return;
-      }
+      //  if (!sessionStorage.userInfo) {
+      //   this.$message.error("请先登录");
+      //   return;
+      // }
+      this.isLogin()
       this.financialProVisible = true;
       this.financialProform.expectedDate = "";
       this.financialProform.financingAmount = "";

@@ -51,12 +51,12 @@
                   <tr>
                     <td class="table-orgspace-title">业务领域：</td>
                     <td class="table-orgspace-detail" width="300px" colspan="2">
-                      <div>{{serverOrgDetailList.businessType}}</div>
+                      <div>{{serverOrgDetailList.businessTypeName}}</div>
                     </td>
                     <td class="table-orgspace-title">公司网址：</td>
                     <td class="table-orgspace-detail" style="width:322px;word-break: break-all;">
                       <div>
-                        <a :href="serverOrgDetailList.orgWeb" target="_blank">{{serverOrgDetailList.orgWeb}}</a>
+                        <a :href="serverOrgDetailList.orgWeb" target="_blank" class="mainColor">{{serverOrgDetailList.orgWeb}}</a>
                       </div>
                     </td>
                   </tr>
@@ -86,7 +86,7 @@
                     <td class="table-orgspace-title">类型：</td>
                     <td class="table-orgspace-detail" style="width:322px;word-break: break-all;">
                       <div>
-                        <a href="http://www.szzhonghe.com/" target="_blank">http://www.szzhonghe.com/</a>
+                        <a href="http://www.szzhonghe.com/" target="_blank">{{serverOrgDetailList.orgBusinType}}</a>
                       </div>
                     </td>
                   </tr>
@@ -112,13 +112,13 @@
                   <tr>
                     <td class="table-orgspace-title">经营场所：</td>
                     <td class="table-orgspace-detail" colspan="4">
-                      <div class="table-orgspace-col">顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶呃呃呃呃呃呃呃呃呃呃</div>
+                      <div class="table-orgspace-col">{{serverOrgDetailList.orgBusinAddresse}}</div>
                     </td>
                   </tr>
                   <tr>
                     <td class="table-orgspace-title">经营范围：</td>
                     <td class="table-orgspace-detail" colspan="4">
-                      <div class="table-orgspace-col">顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶呃呃呃呃呃呃呃呃呃呃</div>
+                      <div class="table-orgspace-col">{{serverOrgDetailList.orgBusinScope}}</div>
                     </td>
                   </tr>
                 </table>
@@ -150,25 +150,29 @@
                         <td class="table-orgspace-title" width="120px;">员工人数：</td>
                         <td class="table-orgspace-detail" width="300px">{{serverOrgDetailList.staffCount}}</td>
                         <td class="table-orgspace-title" width="120px;">执业人员人数：</td>
-                        <td class="table-orgspace-detail" style="width:322px;">{{serverOrgDetailList.professionNum}}（占比{{Math.ceil(serverOrgDetailList.professionNum/serverOrgDetailList.staffCount)}}%）
+                        <td class="table-orgspace-detail" style="width:322px;">{{serverOrgDetailList.professionNum}}
+                          （占比{{(Number(serverOrgDetailList.professionNum/serverOrgDetailList.staffCount)*100).toFixed(0)}}%）
                         </td>
                       </tr>
                       <tr>
                         <td class="table-orgspace-title">本科：</td>
-                        <td class="table-orgspace-detail">{{serverOrgDetailList.bachelorNum}}（占比32%）
+                        <td class="table-orgspace-detail">{{serverOrgDetailList.bachelorNum}}（占比{{(Number(serverOrgDetailList.bachelorNum/serverOrgDetailList.staffCount)*100).toFixed(0)}}%）
                         </td>
                         <td class="table-orgspace-title">硕士：</td>
-                        <td class="table-orgspace-detail">{{serverOrgDetailList.masterNum}}（占比3%）
+                        <td class="table-orgspace-detail">{{serverOrgDetailList.masterNum}}
+                          （占比{{(Number(serverOrgDetailList.masterNum/serverOrgDetailList.staffCount)*100).toFixed(0)}}%）
                         </td>
                       </tr>
                       <tr>
                         <td class="table-orgspace-title">博士：</td>
                         <td class="table-orgspace-detail">
-                          <font style="color:#ccc;">{{serverOrgDetailList.doctorNum}}</font>
+                          <!-- <font style="color:#ccc;">{{serverOrgDetailList.doctorNum}}</font> -->
+                          {{serverOrgDetailList.doctorNum}}（占比{{(Number(serverOrgDetailList.doctorNum/serverOrgDetailList.staffCount)*100).toFixed(0)}}%）
                         </td>
                         <td class="table-orgspace-title">海归：</td>
                         <td class="table-orgspace-detail">
-                          <font style="color:#ccc;">{{serverOrgDetailList.returneeNum}}</font>
+                          {{serverOrgDetailList.returneeNum}}（占比{{(Number(serverOrgDetailList.returneeNum/serverOrgDetailList.staffCount)*100).toFixed(0)}}%）
+                          <!-- <font style="color:#ccc;">{{serverOrgDetailList.returneeNum}}</font> -->
                         </td>
                       </tr>
                     </tbody>
@@ -261,7 +265,7 @@
           <li>
             <a href="javascript:;">筛选：</a>
           </li>
-          <li class="list-item current" :class="{'active3':flag1==''}" @click="screenPro('')" >
+          <li class="list-item current" :class="{'active3':flag1==''}" @click="screenPro('')">
             <a href="javascript:;" data="%" v-if="serverPro.length>0">全部({{serverPro[0].serviceTotal}})</a>
             <a href="javascript:;" data="%" v-else>全部(0)</a>
           </li>
@@ -301,7 +305,7 @@
           </li>
           <li class="list-item " :class="{'active3':flag4=='1'}" @click="screenActi('1')">
             <a href="javascript:;" v-if="serverActiList.length>0">最近一周({{serverActiList[0].weekNum}})</a>
-             <a href="javascript:;" v-else>最近一周(0)</a>
+            <a href="javascript:;" v-else>最近一周(0)</a>
           </li>
           <li class="list-item " :class="{'active3':flag4=='2'}" @click="screenActi('2')">
             <a href="javascript:;" v-if="serverActiList.length>0">最近一月({{serverActiList[0].monthNum}})</a>
@@ -320,7 +324,7 @@
                 <div class="list-item-date"></div>
                 <!-- 上架时间 end -->
                 <!-- 左侧logo begin-->
-                <div class="list-imgleft-container product nopic">
+                <div class="list-imgleft-container product nopic pointer" @click="$router.push({ path: 'finaProDetail', query: { productId: i.productId } })">
                   <img v-if="i.pictureUrl" :src="i.pictureUrl" alt="">
                   <img v-else src="@/../static/img/product.png" alt="">
                 </div>
@@ -460,7 +464,7 @@
           <div class="actiConsultation">
             <ul class="allActiUl clearfix">
               <li v-for="(i,k) in serverActiList" :key='k'>
-                <div class="postImgItem">
+                <div class="postImgItem pointer" @click="$router.push({ path: 'actiDetail', query: { activityId: i.id } })">
                   <img :src="i.actiPosterUrl" class="postImg" alt="活动海报图片">
                 </div>
                 <div class="actiInfo">
@@ -500,14 +504,34 @@
     <!-- 提需求弹框 -->
     <template v-if="serverConVisible">
       <el-dialog :visible.sync="serverConVisible" width="530px" top="30vh" :modal-append-to-body=false>
-        <el-form ref="financialProform" :model="serverProform" label-position="right" label-width="100px" style="max-width:436px;">
-          <el-form-item label="需求描述:" prop="requireDetail" style="font-size:13px">
-            <el-input v-model.trim="serverProform.requireDetail" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
-          </el-form-item>
-        </el-form>
-        <div class="demandLine"></div>
-        <div class="serverTip mainColor">市场提醒：请务必在线订购，线下交易无法享受市场交易安全保障</div>
-        <div class="demandDia11" @click="demandDia()">提交需求</div>
+        <div v-if="islogin">
+          <el-form ref="financialProform" :model="serverProform" label-position="right" label-width="100px" style="max-width:436px;">
+            <el-form-item label="需求描述:" prop="requireDetail" style="font-size:13px">
+              <el-input v-model.trim="serverProform.requireDetail" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
+            </el-form-item>
+          </el-form>
+          <div class="demandLine"></div>
+          <div class="serverTip mainColor">市场提醒：请务必在线订购，线下交易无法享受市场交易安全保障</div>
+          <div class="demandDia11" @click="demandDia()">提交需求</div>
+        </div>
+        <div v-else class="loginTip">
+          你还未
+          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          /
+          <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+          企业账号
+        </div>
+      </el-dialog>
+    </template>
+    <template v-if="concatVisible">
+      <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :modal-append-to-body=false :lock-scroll="false">
+        <div class="loginTip">
+          你还未
+          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          /
+          <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+          账号
+        </div>
       </el-dialog>
     </template>
   </div>
@@ -516,6 +540,8 @@
 export default {
   data() {
     return {
+      islogin: true,
+      concatVisible: false,
       serverConVisible: false,
       zankaiFlag: false,
       activeName1: "serverPro",
@@ -563,20 +589,35 @@ export default {
     this.getEvaluationCountInfo();
   },
   methods: {
-      //在线联系
-    onlineContat(investorAccount,investorName){
-       if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
-        return;
+    //判断是否登录
+    isLogin() {
+      if (!sessionStorage.userInfo) {
+        this.islogin = false;
       }
-      this.$router.push({path:'/chat',query:{fromUser: JSON.parse(sessionStorage.userInfo).account,fromUser:sessionStorage.userInfo.account,toUser:orgAccount,nickName:ogeName}})
+    },
+    //在线联系
+    onlineContat(investorAccount, investorName) {
+      if (!sessionStorage.userInfo) {
+        this.concatVisible = true;
+        return
+      }
+      this.$router.push({
+        path: "/chat",
+        query: {
+          fromUser: JSON.parse(sessionStorage.userInfo).account,
+          fromUser: sessionStorage.userInfo.account,
+          toUser: orgAccount,
+          nickName: ogeName
+        }
+      });
     },
     //提需求
     demandRaise(i) {
-      if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
-        return;
-      }
+      // if (!sessionStorage.userInfo) {
+      //   this.$message.error("请先登录");
+      //   return;
+      // }
+      this.isLogin();
       this.serverConVisible = true;
       this.serverProform.productId = i.productId;
       this.serverProform.productName = i.productName;

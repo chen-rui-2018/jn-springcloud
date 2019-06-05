@@ -376,7 +376,7 @@
                     <div v-for="(item,index) in investorInfoList" :key="index" v-if="index<2">
                       <a href="javascript:;">
                         <div class="info_img">
-                          <div @click="$router.push({path:'investorDetail',query:{investorAccount:item.investorAccount}})"><img :src="item.avatar" alt=""></div>
+                          <div @click="$router.push({path:'investorDetail',query:{investorAccount:item.investorAccount}})"><img v-if="item.avatar" :src="item.avatar" alt=""> <img v-else src="@/../static/img/larImg.png" alt=""></div>
                         </div>
                         <div class="info_all">
                           <div class="info_name">
@@ -415,7 +415,8 @@
                 <ul>
                   <li class="clearfix" v-for="(i,k) in finaProList" :key='k' v-if="k<3">
                     <div class="orgImg fl pointer" @click="$router.push({ path: 'finaProDetail', query: { productId: i.productId } })">
-                      <img :src="i.pictureUrl" alt="">
+                      <img v-if="i.pictureUrl" :src="i.pictureUrl" alt="">
+                      <img v-else src="@/../static/img/product.png" alt="">
                     </div>
                     <div class="orgCon fl">
                       <div class="conTil">{{i.productName}}</div>
@@ -574,39 +575,87 @@
     </div>
     <!-- 金融提需求弹框 -->
     <template v-if="financialProVisible">
-      <el-dialog :visible.sync="financialProVisible" width="600px" :modal-append-to-body=false>
-        <el-form ref="financialProform" :rules="rules" :model="financialProform" label-position="right" label-width="150px" style="max-width:500px;">
-          <el-form-item label="融资金额(万元):" prop="financingAmount">
-            <el-input v-model.trim="financialProform.financingAmount" placeholder="请输入融资金额" maxlength="100" clearable/>
-          </el-form-item>
-          <el-form-item label="融资期限(月):" prop="financingPeriod">
-            <el-select v-model="financialProform.financingPeriod" placeholder="请选择" style="width:100%">
-              <el-option v-for="(item,index) in options" :key="index" :label="item.label" :value="item.value" />
-            </el-select>
-          </el-form-item>
+      <el-dialog :visible.sync="financialProVisible" width="600px" :append-to-body="true" :lock-scroll="false">
+        <div v-if="islogin">
+          <el-form ref="financialProform" :rules="rules" :model="financialProform" label-position="right" label-width="150px" style="max-width:500px;">
+            <el-form-item label="融资金额(万元):" prop="financingAmount">
+              <el-input v-model.trim="financialProform.financingAmount" placeholder="请输入融资金额" maxlength="100" clearable/>
+            </el-form-item>
+            <el-form-item label="融资期限(月):" prop="financingPeriod">
+              <el-select v-model="financialProform.financingPeriod" placeholder="请选择" style="width:100%">
+                <el-option v-for="(item,index) in options" :key="index" :label="item.label" :value="item.value" />
+              </el-select>
+            </el-form-item>
 
-          <el-form-item label="资金需求日期:" prop="expectedDate">
-            <el-input v-model.trim="financialProform.expectedDate" placeholder="请输入需求日期，如2019-04-10" maxlength="100" clearable/>
-          </el-form-item>
-          <el-form-item label="资金需求说明:" prop="fundsReqDesc">
-            <el-input v-model.trim="financialProform.fundsReqDesc" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
-          </el-form-item>
-        </el-form>
-        <div class="demandLine"></div>
-        <div class="demandDia1" @click="demandDia()">提交需求</div>
+            <el-form-item label="资金需求日期:" prop="expectedDate">
+              <el-input v-model.trim="financialProform.expectedDate" placeholder="请输入需求日期，如2019-04-10" maxlength="100" clearable/>
+            </el-form-item>
+            <el-form-item label="资金需求说明:" prop="fundsReqDesc">
+              <el-input v-model.trim="financialProform.fundsReqDesc" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
+            </el-form-item>
+          </el-form>
+          <div class="demandLine"></div>
+          <div class="demandDia1" @click="demandDia()" style="background: #ecfcf2;
+    padding: 8px 10px;
+    width: 80px;
+    margin: 0 auto;
+    border: 1px solid #00a041;
+    border-radius: 4px;
+    text-align: center;
+    cursor: pointer;
+    color: #00a041;">提交需求</div>
+        </div>
+        <div v-else class="loginTip" style="text-align:center;padding-bottom:20px">
+          你还未
+          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          /
+          <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+          企业账号
+        </div>
       </el-dialog>
     </template>
     <!-- 服务产品提需求弹框 -->
     <template v-if="serverProVisible">
-      <el-dialog :visible.sync="serverProVisible" width="530px" top="30vh" :modal-append-to-body=false>
-        <el-form ref="financialProform" :model="serverProform" label-position="right" label-width="100px" style="max-width:436px;">
-          <el-form-item label="需求描述:" prop="requireDetail" style="font-size:13px">
-            <el-input v-model.trim="serverProform.requireDetail" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
-          </el-form-item>
-        </el-form>
-        <div class="demandLine"></div>
-        <div class="serverTip mainColor">市场提醒：请务必在线订购，线下交易无法享受市场交易安全保障</div>
-        <div class="demandDia" @click="demandDia1()">提交需求</div>
+      <el-dialog :visible.sync="serverProVisible" width="530px" top="30vh" :append-to-body="true" :lock-scroll="false">
+        <div v-if="islogin">
+          <el-form ref="financialProform" :model="serverProform" label-position="right" label-width="100px" style="max-width:436px;">
+            <el-form-item label="需求描述:" prop="requireDetail" style="font-size:13px">
+              <el-input v-model.trim="serverProform.requireDetail" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
+            </el-form-item>
+          </el-form>
+          <div class="demandLine"></div>
+          <div class="serverTip mainColor">市场提醒：请务必在线订购，线下交易无法享受市场交易安全保障</div>
+          <div class="demandDia" @click="demandDia1()" style="   display: inline-block;
+    background: #ecfcf2;
+    padding: 8px 10px;
+    width: 80px;
+        margin-left: 200px;
+    margin-top: 20px;
+    border: 1px solid #00a041;
+    border-radius: 4px;
+    text-align: center;
+    cursor: pointer;
+    color: #00a041;
+    font-size: 12px;">提交需求</div>
+        </div>
+        <div v-else class="loginTip" style="text-align:center;padding-bottom:20px">
+          你还未
+          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          /
+          <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+          企业账号
+        </div>
+      </el-dialog>
+    </template>
+    <template v-if="concatVisible">
+      <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :append-to-body="true" :lock-scroll="false">
+        <div class="loginTip" style="text-align:center;padding-bottom:20px">
+          你还未
+          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          /
+          <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+          账号
+        </div>
       </el-dialog>
     </template>
   </div>
@@ -734,7 +783,9 @@ export default {
       rows8: 3,
       total8: 0,
       serverProList: [],
-      humanDetail: {}
+      humanDetail: {},
+      islogin: true,
+      concatVisible: false
     };
   },
   filters: {
@@ -778,10 +829,16 @@ export default {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
   },
   methods: {
+    //判断是否登录
+    isLogin() {
+      if (!sessionStorage.userInfo) {
+        this.islogin = false;
+      }
+    },
     //在线联系
     onlineContat(orgAccount, orgName) {
       if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
+        this.concatVisible = true;
         return;
       }
       this.$router.push({
@@ -796,7 +853,7 @@ export default {
     //企业招聘列表在线联系
     onlineContact(id) {
       if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
+        this.concatVisible = true;
         return;
       }
       this.api.get({
@@ -807,7 +864,9 @@ export default {
         callback: res => {
           if (res.code == "0000") {
             // this.typeList = res.data;
-            if (JSON.parse(sessionStorage.userInfo).account == res.data.account) {
+            if (
+              JSON.parse(sessionStorage.userInfo).account == res.data.account
+            ) {
               this.$message.error("当前登录的账号跟聊天对象一样");
               return;
             }
@@ -827,10 +886,11 @@ export default {
     },
     //金融产品提需求
     raiseDemand(i) {
-      if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
-        return;
-      }
+      // if (!sessionStorage.userInfo) {
+      //   this.$message.error("请先登录");
+      //   return;
+      // }
+      this.isLogin();
       this.financialProVisible = true;
       this.financialProform.expectedDate = "";
       this.financialProform.financingAmount = "";
@@ -870,10 +930,11 @@ export default {
     },
     //服务产品提需求
     demandRaise(i) {
-      if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
-        return;
-      }
+      // if (!sessionStorage.userInfo) {
+      //   this.$message.error("请先登录");
+      //   return;
+      // }
+      this.isLogin();
       this.serverProVisible = true;
       this.serverProform.requireDetail = "";
       this.serverProform.productId = i.productId;
@@ -1225,7 +1286,7 @@ export default {
     // 企业宣传列表查询
     getBanner() {
       // return new Promise((resolve, reject) => {
-        let _this = this;
+      let _this = this;
       this.api.get({
         url: "getPromotionList",
         data: {
@@ -1236,21 +1297,21 @@ export default {
         },
         callback: res => {
           if (res.code === "0000") {
-            this.bannerList = res.data.rows
+            this.bannerList = res.data.rows;
             // resolve();
             let obj = {
               direction: "horizontal", // 垂直切换选项
               loop: true, // 循环模式选项
               noSwiping: true,
               // autoplay: true,
-              observer:false,
+              observer: false,
               // autoplay: {
               //   delay: 2000
               // },
-              on:{
-                click: function(e){
-                 let path = e.path[0].getAttribute("data-path");
-                 _this.$router.push(path)
+              on: {
+                click: function(e) {
+                  let path = e.path[0].getAttribute("data-path");
+                  _this.$router.push(path);
                 }
               },
               // 如果需要分页器
@@ -1261,7 +1322,7 @@ export default {
               navigation: {
                 nextEl: ".swiper-button-next",
                 prevEl: ".swiper-button-prev"
-              },
+              }
             };
             setTimeout(() => {
               this.swiperinit(".swiper-container", obj);
@@ -1675,12 +1736,13 @@ export default {
           border-bottom: 1px solid #eee;
 
           .orgImg {
-            width: 200px;
-            height: 130px;
+            width: 198px;
+            height: 128px;
 
             > img {
               width: 100%;
               height: 100%;
+              border-radius: 7px;
             }
           }
 

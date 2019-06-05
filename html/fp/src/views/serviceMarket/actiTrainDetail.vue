@@ -73,9 +73,7 @@
       <div class="delTil">详情</div>
       <el-card>
         <div class="delContent">
-          <!-- <img src="@/../static/img/detail1.png" alt=""> -->
-          <p>{{this.activityDetail.actiDetail}}</p>
-          <!-- <img src="@/../static/img/detail2.png" alt=""> -->
+          <p v-html="activityDetail.actiDetail"></p>
         </div>
       </el-card>
     </div>
@@ -297,7 +295,11 @@ export default {
     },
     handCheck(id) {
       //跳转报名人列表
-      this.$router.push({ path: "regStatus", query: { activityId: id } });
+       if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
+      this.$router.push({ path: "actiTrainStatus", query: { activityId: id } });
     },
     quickApply(id) {
       //立即报名
@@ -470,6 +472,7 @@ export default {
   .delnav {
     padding: 20px 0;
     font-size: 13px;
+    font-weight: bold;
   }
   .delinfo {
     margin-top: 40px;

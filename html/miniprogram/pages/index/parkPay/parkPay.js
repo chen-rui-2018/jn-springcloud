@@ -29,6 +29,7 @@ Page({
       data: {},
       method: 'POST',
     }).then(res=>{
+      console.log(res)
       if(res.data.code==='0000'&&res.data.data.createStatus==="1"){
         this.setData({
           orderId:res.data.data.billId
@@ -43,7 +44,7 @@ Page({
           },
           method: 'POST',
         }).then(res=>{
-          console.log(res)
+          // console.log(res)
           if(res.data.code==='0000'){
             this.setData({
               paySend:JSON.parse(res.data.data.orderInfo)
@@ -55,9 +56,12 @@ Page({
               signType: this.data.paySend.signType,
               paySign: this.data.paySend.paySign,
               success(res) { 
-                console.log(res)
+                // 
               },
               fail(res) {
+                // console.log(res)
+               },
+               complete(res){
                 console.log(res)
                }
             })

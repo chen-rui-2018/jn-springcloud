@@ -14,8 +14,8 @@
         </div>
         <div class="agent2 clearfix color2">
           <div class="agentImg fl">
-            <!-- <img src="@/../static/img/ins1.png" alt=""> -->
-            <img :src="serverOrgDetailList.orgLogo" alt="">
+            <img v-if="serverOrgDetailList.pictureUrl" :src="serverOrgDetailList.pictureUrl" alt="">
+            <img v-else src="@/../static/img/product.png" alt="">
           </div>
           <div class="agent2Info fl color2 clearfix" id="agent2Info">
             <p>服务机构：{{serverOrgDetailList.orgName}}</p>

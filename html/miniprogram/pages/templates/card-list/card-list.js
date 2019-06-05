@@ -1,4 +1,6 @@
 // pages/templates/card-list.js
+const app = getApp()
+const imgBaseUrl = app.globalData.imgBaseUrl
 Component({
   /**
    * 组件的属性列表
@@ -19,7 +21,7 @@ Component({
    * 组件的初始数据
    */
   data: {
-
+    imgBaseUrl
   },
 
   /**

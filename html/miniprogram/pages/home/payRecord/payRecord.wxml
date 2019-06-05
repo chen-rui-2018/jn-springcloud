@@ -39,7 +39,7 @@
     </view>
   </view>
   <view class="payRecord_main" wx:if="{{parkDetail.length!=0}}">
-    <block wx:for="{{parkDetail}}">
+    <block wx:for="{{parkDetail}}" wx:key>
       <view class="li" >
         <view class="title">
           <view>苏A00001</view>

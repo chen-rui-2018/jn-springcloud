@@ -44,3 +44,7 @@
   text-align:center;
   line-height:60rpx;
 }
+.row-tc {
+  text-align: center;
+  padding: 20rpx;
+}

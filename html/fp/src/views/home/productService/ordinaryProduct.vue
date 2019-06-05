@@ -2,7 +2,7 @@
   <div class="ordinaryProduct"  v-loading="loading">
     <div class="ordinary_title">
       <div>常规服务产品</div>
-      <div @click="goputaway()">常规产品上架</div>
+      <div @click="goputaway()" >常规产品上架</div>
     </div>
     <div class="ordinary_main">
       <div class="search">
@@ -70,7 +70,8 @@ export default {
         rows:8
       },
       orgProductList:[],
-      businessType:""
+      businessType:"",
+        isAdd:true
     }
   },
   filters: {
@@ -94,6 +95,19 @@ export default {
   mounted () {
     this.getOrgId()
     // this.getOrgProductList()
+    // let menu=JSON.parse(sessionStorage.menuItems)
+    // let _this=this
+    // menu.forEach(v=>{
+    //   if(v.label==='产品管理'){
+    //     v.children[0].resourcesList.forEach(i=>{
+    //         console.log(i)
+
+    //       if(i.resourcesName==="科技金融上架常规服务产品"){
+    //         _this.isAdd=false
+    //       }
+    //     })
+    //   }
+    // })
   },
   methods: {
     // 获取当前登录id

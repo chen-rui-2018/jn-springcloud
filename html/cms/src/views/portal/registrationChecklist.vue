@@ -9,43 +9,6 @@
         </div>
       </el-col>
     </el-row>
-    <!-- <el-table :data="actiListData" border fit highlight-current-row style="width: 100%">
-      <el-table-column checkbox label="序列" type="index" align="center" width="60"/>
-      <el-table-column prop="account" label="姓名" align="center" width="120" />
-      <el-table-column prop="sex" label="性别" align="center" width="120" />
-      <el-table-column prop="age" label="年龄" align="center"/>
-      <el-table-column prop="company" label="公司名称" align="center"/>
-      <el-table-column prop="post" label="岗位" align="center"/>
-      <el-table-column prop="phone" label="手机号" align="center"/>
-      <el-table-column label="状态" prop="applyStatus" align="center" min-width="85">
-        <template slot-scope="scope">
-          <span v-if="scope.row.applyStatus==='1'">未签到</span>
-          <span v-if="scope.row.applyStatus==='2'">已签到</span>
-          <span v-if="scope.row.applyStatus==='3'">未审批</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" align="center">
-        <template slot-scope="scope">
-          <el-button
-            v-if="scope.row.applyStatus==='1'"
-            type="text"
-            class="operation"
-            @click="handleSign(scope.row)">签到
-          </el-button>
-          <el-button
-            v-if="scope.row.applyStatus==='2'"
-            type="text"
-            class="operation"
-            @click="handleSign(scope.row)"/>
-          <el-button
-            v-if="scope.row.applyStatus==='3'"
-            type="text"
-            class="operation"
-            @click="handleAllowSign(scope.row)">允许报名
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table> -->
     <table cellspacing="0" cellpadding="10" style="border-collapse: collapse;width:100%">
       <thead>
         <tr>
@@ -60,7 +23,6 @@
       <tbody class="write">
         <template v-for="(i,ky) in actiListData">
           <tr :key="ky">
-            <td>{{ ky+1 }}</td>
             <td>{{ i.name }}</td>
             <td>{{ i.sex }}</td>
             <td>{{ i.age }}</td>
@@ -78,7 +40,7 @@
                 <el-button
                   type="text"
                   class="operation"
-                  @click="handleSign(i)">允许报名
+                  @click="handleSign(i.id)">允许报名
                 </el-button>
               </template>
             </td>
@@ -118,10 +80,11 @@ export default {
       arrFlag: ['', 'name', 'sex', 'age', 'company', 'post', 'phone'],
       actiList: {
         activityId: '',
-        exportColName: [],
-        exportTitle: [],
+        // exportColName: [],
+        // exportTitle: [],
         page: 1,
-        rows: 10
+        rows: 10,
+        applyStatus: '2'
       },
       tableHeadArr: [
         {
@@ -168,24 +131,27 @@ export default {
   methods: {
     // 根据报名状态查询活动报名列表
     getApplyActivityList() {
-      this.actiList.activityId = this.$route.query.id
-      api(`${this.GLOBAL.parkUrl}activity/applyActivityListByApplyStatus`, this.actiList, 'get').then(res => {
+      const data = {
+        activityId: this.$route.query.activityId,
+        applyStatus: '2',
+        page: this.actiList.page,
+        rows: this.actiList.rows
+      }
+      api(`${this.GLOBAL.parkUrl}activity/applyActivityListByApplyStatus?activityId=${data.activityId}&applyStatus=${data.applyStatus}&page=${data.page}&rows=${data.rows}`, '', 'get').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           this.actiListData = res.data.data.rows
           this.total = res.data.data.total
         }
       })
     },
+    // 分页数更改
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`)
+      this.actiList.rows = val
+      this.getApplyActivityList()
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`)
-    },
-    handleRegistration() {
-      this.signincodeDialogVisible = true
-      // console.log(`${this.baseUrl}${this.GLOBAL.parkUrl}activity/downloadSignCodeImg?activityId=${this.$route.params.id}`)
-      this.src = `${this.baseUrl}${this.GLOBAL.parkUrl}activity/downloadSignCodeImg?activityId=${this.$route.params.id}`
+      this.actiList.page = val
+      this.getApplyActivityList()
     },
     handleExport() {
       const exportColName = []
@@ -203,29 +169,29 @@ export default {
         exportColName: [exportColName.join(',')],
         exportTitle: [exportTitle.join(',')],
         page: this.actiList.page,
-        rows: this.total
+        rows: this.actiList.rows
       }
       api(`${this.GLOBAL.parkUrl}activity/exportDataExcel?activityId=${data.activityId}&exportColName=${data.exportColName}&exportTitle=${data.exportTitle}&page=${data.page}&rows=${data.rows}`, '', 'get').then(res => {
         window.location.href = res.request.responseURL
       })
     },
     handleReturn() {
-      this.$router.push({ name: 'activityManagement', params: { id: this.$route.params.id }})
+      this.$router.push({ name: 'applyActivityList', params: { id: this.$route.params.activityId }})
     },
-    handleSign(i) {
+    // 报名审核接口
+    handleSign(id) {
       const data = {
-        applyId: i.id
+        applyId: id
       }
-      api(`${this.GLOBAL.parkUrl}activity/activityApply/signInActivityCheck`, data, 'post').then(res => {
+      api(`${this.GLOBAL.parkUrl}activity/activityApply/signInActivityCheck?applyId=${id}`, data, 'post').then(res => {
         if (res.data.code === this.GLOBAL.code) {
-          this.$message('审批完成')
+          this.$message.success('审批完成')
           this.getApplyActivityList()
         } else {
           this.$message(res.data.result)
         }
       })
-    },
-    handleAllowSign(i) {}
+    }
   }
 }
 </script>

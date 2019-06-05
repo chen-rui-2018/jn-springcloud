@@ -1,13 +1,12 @@
-
-@font-face {  
-    font-family: 'IMPACT';
-    src: url('IMPACT.TTF');
-    font-weight: normal;
-    font-style: normal;
+@font-face {
+  font-family: 'IMPACT';
+  src: url('IMPACT.TTF');
+  font-weight: normal;
+  font-style: normal;
 }
-@font-face {  
-    font-family: 'ARIALN';
-    src: url('ARIALN.TTF');
-    font-weight: normal;
-    font-style: normal;
+@font-face {
+  font-family: 'ARIALN';
+  src: url('ARIALN.TTF');
+  font-weight: normal;
+  font-style: normal;
 }

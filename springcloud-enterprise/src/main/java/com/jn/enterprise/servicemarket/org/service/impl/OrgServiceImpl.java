@@ -151,7 +151,14 @@ public class OrgServiceImpl implements OrgService {
             sList.addAll(Arrays.asList(orgParameter.getIndustrySector()));
         }
         orgParameter.setCompanyList(sList);
-        List<ServiceOrg> serviceOrg = orgMapper.selectServiceOrgList(orgParameter);
+        OrgListParam orgListParam=new OrgListParam();
+        BeanUtils.copyProperties(orgParameter, orgListParam);
+        //综合排序
+        String sortType="integrate";
+        if(StringUtils.isBlank(orgParameter.getSortTypes())|| StringUtils.equals(orgParameter.getSortTypes(),sortType)){
+            //设置排序权重值，目前使用默认排序权重
+        }
+        List<ServiceOrg> serviceOrg = orgMapper.selectServiceOrgList(orgListParam);
 
         // 处理图片格式
         List<ServiceOrg> serviceOrgResult = new ArrayList<>();

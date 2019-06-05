@@ -636,6 +636,86 @@
         order by t.val+0,t.electric_type +0
     </select>
 
+    <!--今日用电情况-->
+    <select id="todayelectro" resultType="com.jn.park.electricmeter.model.ConditionElectro">
+        select t.date as data,
+		  t.val as hours,
+		  ifnull(sum(t2.degree_diff),0) as sumelectro
+      from dcs.tb_electric_date t
+      left join
+      ( select deal_date,t.deal_hour,sum(t.degree_diff) degree_diff  from
+       dcs.tb_electric_reading t
+      inner join dcs.tb_electric_meter_info t2
+      on t.meter_code = t2.meter_code
+      and t2.record_status = 1
+      and t2.company_id = #{companyid}
+      where 1=1
+      and t.deal_date = CURDATE()
+      group by deal_date,t.deal_hour ) t2
+      on t.date = t2.deal_date
+      and t.val = t2.deal_hour
+      where t.date = CURDATE()
+      and t.type = '时'
+      and t.electric_type = '全部'
+      group by t.val
+      order by t.val+0
+  </select>
+
+
+    <!--当月用电情况-->
+    <select id="monthelectro" resultType="com.jn.park.electricmeter.model.ConditionElectro">
+
+        select t.date as data,
+        ifnull(sum(t2.degree_diff),0) as sumelectro
+        from dcs.tb_electric_date t
+        left join
+        ( select deal_date,sum(t.degree_diff) degree_diff  from
+        dcs.tb_electric_reading t
+        inner join dcs.tb_electric_meter_info t2
+        on t.meter_code = t2.meter_code
+        and t2.record_status = 1
+        and t2.company_id = #{companyid}
+        where 1=1
+        and t.deal_date >= date_sub(date_sub(date_format(now(), '%y-%m-%d'),interval extract(day from now()) - 1 day),interval 0 month) # 这里传时间,默认月初
+        group by deal_date ) t2
+        on t.date = t2.deal_date
+        where t.date >= date_sub(date_sub(date_format(now(), '%y-%m-%d'),interval extract(day from now()) - 1 day),interval 0 month)   # 这里传时间,默认月初
+        and t.date &lt;= curdate()
+        and t.type = '日类型'
+        and t.electric_type = '全部'
+        group by t.date
+        order by t.date
+
+    </select>
+
+
+    <!--今年用电情况-->
+    <select id="yearelectro" resultType="com.jn.park.electricmeter.model.YearElectro">
+
+        select year(t.date) as year,
+        concat(month(t.date),'月') as month,
+        ifnull(sum(t2.degree_diff),0) as sumelectro
+        from dcs.tb_electric_date t
+        left join
+        ( select date_sub(date_sub(date_format(deal_date, '%y-%m-%d'),interval extract(day from deal_date) - 1 day),interval 0 month) deal_date ,
+        sum(t.degree_diff) degree_diff  from
+        dcs.tb_electric_reading t
+        inner join dcs.tb_electric_meter_info t2
+        on t.meter_code = t2.meter_code
+        and t2.record_status = 1
+        and t2.company_id = #{companyid}
+        where 1=1
+        and t.deal_date >= DATE_SUB(CURDATE(),INTERVAL dayofyear(now())-1 DAY)
+        group by date_sub(date_sub(date_format(deal_date, '%y-%m-%d'),interval extract(day from deal_date) - 1 day),interval 0 month) ) t2
+        on t.date = t2.deal_date
+        where t.date >= DATE_SUB(CURDATE(),INTERVAL dayofyear(now())-1 DAY)
+        and t.date &lt;= curdate()
+        and t.type = '月份'
+        group by t.date
+        order by t.date
+
+    </select>
+
 
 
 </mapper>

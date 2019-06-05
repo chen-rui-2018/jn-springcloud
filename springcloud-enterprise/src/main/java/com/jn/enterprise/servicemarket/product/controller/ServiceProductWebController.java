@@ -170,6 +170,7 @@ public class ServiceProductWebController  extends BaseController {
         info.setSignoryId(sameTypeProductParam.getSignoryId());
         info.setPage(sameTypeProductParam.getPage());
         info.setRows(sameTypeProductParam.getRows());
+        info.setProductType(sameTypeProductParam.getProductType());
         PaginationData data = productService.findWebProductList(info,true);
         return new Result(data);
     }

@@ -14,7 +14,6 @@
           <div class="card-list-tips">
             <span>{{ item.startTime }}</span>
             <span class="flex-center">
-                  <i class="view-icon icon iconfont icon-view"></i>
                   <span class="card-list-warning">{{ item.viewCount }}</span>
                 </span>
           </div>

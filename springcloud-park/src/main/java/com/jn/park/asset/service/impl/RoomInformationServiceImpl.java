@@ -1,6 +1,7 @@
 package com.jn.park.asset.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.google.common.collect.Lists;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
@@ -210,6 +211,29 @@ public class RoomInformationServiceImpl implements RoomInformationService {
         tbRoomOrdersMapper.insert(orders);
 
         return new Result(orderId);
+    }
+
+    @ServiceLog(doAction = "根据订单生成缴费单")
+    @Override
+    public Result createRoomOrderBillByOrder(String orderId){
+        TbRoomOrders tbRoomOrders=tbRoomOrdersMapper.selectByPrimaryKey(orderId);
+        if (tbRoomOrders==null){
+            return new Result("-1","订单不存在");
+        }
+        if(!(new Byte("0")).equals(tbRoomOrders.getPayState())){
+            return new Result("-1","订单不是未支付状态，无法创建缴费单");
+        }
+        List<TbRoomOrders>tbRoomOrdersList=new ArrayList<>();
+        tbRoomOrdersList.add(tbRoomOrders);
+
+        List<TbRoomOrdersBill> tbRoomOrdersBillList=this.createOrderBillByOrder(tbRoomOrdersList);
+
+        if (tbRoomOrdersBillList!=null&&tbRoomOrdersBillList.size()==1){
+            return new Result(tbRoomOrdersBillList.get(0).getId());
+        }else{
+            return new Result("-1","根据房间订单生成缴费单失败");
+        }
+
     }
 
     @Override
@@ -793,7 +817,7 @@ public class RoomInformationServiceImpl implements RoomInformationService {
      * 生成房间缴费单
      */
     @Override
-    @ServiceLog(doAction = "生成房间缴费单")
+    @ServiceLog(doAction = "生成房间缴费单(定时生成)")
     public void createOrderBill() {
         TbRoomOrdersCriteria tbRoomOrdersCriteria = new TbRoomOrdersCriteria();
         java.util.Date date = new java.util.Date();
@@ -803,87 +827,98 @@ public class RoomInformationServiceImpl implements RoomInformationService {
         //获取订单集合
         List<TbRoomOrders> tbRoomOrdersList = tbRoomOrdersMapper.selectByExample(tbRoomOrdersCriteria);
         if (tbRoomOrdersList != null){
-            for (TbRoomOrders tbR : tbRoomOrdersList) {
-                TbRoomOrdersBill tbRoomOrdersBill = new TbRoomOrdersBill();
-                tbRoomOrdersBill.setId(UUID.randomUUID().toString());
-                //订单id
-                tbRoomOrdersBill.setOrderId(tbR.getId());
-                //缴费企业
-                tbRoomOrdersBill.setLeaseEnterprise(tbR.getLeaseEnterprise());
-                //企业联系人
-                tbRoomOrdersBill.setContactName(tbR.getContactName());
-                tbRoomOrdersBill.setContactPhone(tbR.getContactPhone());
-                //账单生成时间
-                tbRoomOrdersBill.setBillCreateTime(date);
-                //账单初始金额
-                tbRoomOrdersBill.setBillInitSum(tbR.getPaySum());
-                //缴费单生成状态(默认未生成)
-                tbRoomOrdersBill.setBillStatus(Byte.parseByte("0"));
-                //缴费单金额
-                BigDecimal billSum = new BigDecimal(0);
-                //开始时间
-                tbRoomOrdersBill.setStartTime(tbR.getLeaseStartTime());
-                //结束时间
-                tbRoomOrdersBill.setEndTime(tbR.getLeaseEndTime());
-
-                //计算相差月份
-                Calendar leaseStartTime = Calendar.getInstance();
-                leaseStartTime.setTime(tbR.getLeaseStartTime());
-                Calendar leaseEndTime = Calendar.getInstance();
-                leaseEndTime.setTime(tbR.getLeaseEndTime());
-               int year = (leaseEndTime.get(Calendar.YEAR)) - (leaseStartTime.get(Calendar.YEAR)) * 12 ;
-               int month = (leaseEndTime.get(Calendar.YEAR)) - (leaseStartTime.get(Calendar.YEAR)) + year;
-
-
-                //缴费状态(默认未缴费)
-                tbRoomOrdersBill.setPaySum(Byte.parseByte("0"));
-
-                //账单周期(待定)
-                // TODO
-
-                TbRoomOrdersItemCriteria tbRoomOrdersItemCriteria = new TbRoomOrdersItemCriteria();
-                //通过总订单id获取子订单,房间状态为租借中,并且租赁申请成功的
-                tbRoomOrdersItemCriteria.createCriteria().andOrderIdEqualTo(tbR.getId()).andLeaseApplyStatusEqualTo(Byte.parseByte(RoomApplyStatusEnums.SUCCEED.getCode())).andRoomStatusEqualTo(Byte.parseByte(RoomLeaseStatusEnums.DELIVERY.getValue()));
-                //获取子订单集合
-                List<TbRoomOrdersItem> tbRoomOrdersItemList = tbRoomOrdersItemMapper.selectByExample(tbRoomOrdersItemCriteria);
-                //账单详情实体类集合
-                List<PayBillDetails> payBillDetailsList = new ArrayList<>();
-                if (tbRoomOrdersItemList != null){
-                    String rooms = "";
-                    for (TbRoomOrdersItem roomOrdersItem : tbRoomOrdersItemList) {
-                        String roomName = roomOrdersItem.getRoomName();
-                        rooms += roomName + ",";
-                        //房间
-                        tbRoomOrdersBill.setRooms(rooms.substring(0,rooms.length()-1));
-                        //获取房间
-                        TbRoomInformation tbRoomInformation = tbRoomInformationMapper.selectByPrimaryKey(roomOrdersItem.getRoomId());
-                        Integer pay = tbRoomInformation.getPay();
-                        billSum.add(roomOrdersItem.getLeaseSum().multiply(new BigDecimal(pay)));
-                    }
-                    //缴费单金额
-                    tbRoomOrdersBill.setBillSum(billSum);
-                }
-                logger.info("创建房间缴费单:参数{}",tbRoomOrdersBill);
-                int insert = tbRoomOrdersBillMapper.insert(tbRoomOrdersBill);
-                if (insert != 1){
-                    throw new JnSpringCloudException(new Result("-1","房间缴费单创建失败,插入tb_room_orders_bill表失败"));
-                }
-
-            }
-
+            this.createOrderBillByOrder(tbRoomOrdersList);
         }
+    }
+
+    /**
+     * 根据房间订单生成缴费单
+     * @param tbRoomOrdersList
+     */
+    @ServiceLog(doAction = "根据房间订单生成缴费单")
+    private List<TbRoomOrdersBill> createOrderBillByOrder( List<TbRoomOrders> tbRoomOrdersList){
+        List<TbRoomOrdersBill>result=new ArrayList<>();
+        for (TbRoomOrders tbR : tbRoomOrdersList) {
+            TbRoomOrdersBill tbRoomOrdersBill = new TbRoomOrdersBill();
+            tbRoomOrdersBill.setId(UUID.randomUUID().toString());
+            //订单id
+            tbRoomOrdersBill.setOrderId(tbR.getId());
+            //缴费企业
+            tbRoomOrdersBill.setLeaseEnterprise(tbR.getLeaseEnterprise());
+            //企业联系人
+            tbRoomOrdersBill.setContactName(tbR.getContactName());
+            tbRoomOrdersBill.setContactPhone(tbR.getContactPhone());
+            //账单生成时间
+            tbRoomOrdersBill.setBillCreateTime(new java.util.Date());
+            //账单初始金额
+            tbRoomOrdersBill.setBillInitSum(tbR.getPaySum());
+            //缴费单生成状态(默认未生成)
+            tbRoomOrdersBill.setBillStatus(Byte.parseByte("0"));
+            //缴费单金额
+            BigDecimal billSum = new BigDecimal(0);
+            //开始时间
+            tbRoomOrdersBill.setStartTime(tbR.getLeaseStartTime());
+            //结束时间
+            tbRoomOrdersBill.setEndTime(tbR.getLeaseEndTime());
+
+            //计算相差月份
+            Calendar leaseStartTime = Calendar.getInstance();
+            leaseStartTime.setTime(tbR.getLeaseStartTime());
+            Calendar leaseEndTime = Calendar.getInstance();
+            leaseEndTime.setTime(tbR.getLeaseEndTime());
+            int year = (leaseEndTime.get(Calendar.YEAR)) - (leaseStartTime.get(Calendar.YEAR)) * 12 ;
+            int month = (leaseEndTime.get(Calendar.YEAR)) - (leaseStartTime.get(Calendar.YEAR)) + year;
+
+
+            //缴费状态(默认未缴费)
+            tbRoomOrdersBill.setPaySum(Byte.parseByte("0"));
+
+            //账单周期(待定)
+            // TODO
+
+            TbRoomOrdersItemCriteria tbRoomOrdersItemCriteria = new TbRoomOrdersItemCriteria();
+            //通过总订单id获取子订单,房间状态为租借中,并且租赁申请成功的
+            tbRoomOrdersItemCriteria.createCriteria().andOrderIdEqualTo(tbR.getId()).andLeaseApplyStatusEqualTo(Byte.parseByte(RoomApplyStatusEnums.SUCCEED.getCode())).andRoomStatusEqualTo(Byte.parseByte(RoomLeaseStatusEnums.DELIVERY.getValue()));
+            //获取子订单集合
+            List<TbRoomOrdersItem> tbRoomOrdersItemList = tbRoomOrdersItemMapper.selectByExample(tbRoomOrdersItemCriteria);
+            //账单详情实体类集合
+            List<PayBillDetails> payBillDetailsList = new ArrayList<>();
+            if (tbRoomOrdersItemList != null){
+                String rooms = "";
+                for (TbRoomOrdersItem roomOrdersItem : tbRoomOrdersItemList) {
+                    String roomName = roomOrdersItem.getRoomName();
+                    rooms += roomName + ",";
+
+                    //获取房间
+                    TbRoomInformation tbRoomInformation = tbRoomInformationMapper.selectByPrimaryKey(roomOrdersItem.getRoomId());
+                    Integer pay = tbRoomInformation.getPay();
+                    billSum.add(roomOrdersItem.getLeaseSum().multiply(new BigDecimal(pay)));
+                }
+                //房间
+                tbRoomOrdersBill.setRooms(rooms.substring(0,rooms.length()-1));
+                //缴费单金额
+                tbRoomOrdersBill.setBillSum(billSum);
+            }
+            logger.info("创建房间缴费单:参数{}",tbRoomOrdersBill);
+            int insert = tbRoomOrdersBillMapper.insert(tbRoomOrdersBill);
+            if (insert != 1){
+                throw new JnSpringCloudException(new Result("-1","房间缴费单创建失败,插入tb_room_orders_bill表失败"));
+            }
+            result.add(tbRoomOrdersBill);
+        }
+        return result;
     }
 
 
     /**
      *创建缴费单
-     * @param jsonParam
+     * @param ordersBillIds
      * @return
      */
     @Override
     @ServiceLog(doAction = "调用生成缴费单接口")
-    public Result createBill(String jsonParam){
-        String[] split = jsonParam.split(",");
+    public Result createBill(String ordersBillIds){
+        String[] split = ordersBillIds.split(",");
         for (String ordersBillId : split) {
             TbRoomOrdersBill tbRoomOrdersBill = tbRoomOrdersBillMapper.selectByPrimaryKey(ordersBillId);
             if (tbRoomOrdersBill == null){
@@ -925,8 +960,8 @@ public class RoomInformationServiceImpl implements RoomInformationService {
             payBillCreateParamVo.setBillExpense(tbRoomOrdersBill.getBillSum());
             //对象类型【1：企业，2：个人】
             payBillCreateParamVo.setObjType("1");
-            //对象Id（传企业ID或用户ID）
-            payBillCreateParamVo.setObjId("wangsong");
+            //对象Id（传企业ID或用户ID）//todo 这里未验证企业ID是否正常，朱永泽验证下
+            payBillCreateParamVo.setObjId(tbR.getEnterpriseId());
             //对象名称（传企业名称或用户名称）
             payBillCreateParamVo.setObjName(tbR.getLeaseEnterprise());
             //账本类型ID【1：电费，2：物业费】

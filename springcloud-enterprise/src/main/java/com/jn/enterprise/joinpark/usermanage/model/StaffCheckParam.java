@@ -26,7 +26,6 @@ public class StaffCheckParam implements Serializable {
     @ApiModelProperty(value = "验证码",required = true,example = "1234")
     private String checkCode;
 
-    @Pattern(regexp = "^[\\u4E00-\\u9FA5]{2,6}|\\s*$", message = "真实姓名校验失败")
     @ApiModelProperty(value = "真实姓名")
     private String name;
 

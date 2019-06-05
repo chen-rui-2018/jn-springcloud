@@ -28,7 +28,6 @@ public class AcceptInviteParam implements Serializable {
     @ApiModelProperty(value = "昵称", notes = "不能包含特殊字符‘%/-’")
     private String nickName;
 
-    @Pattern(regexp = "^[\\u4E00-\\u9FA5]{2,6}|\\s*$", message = "真实姓名校验失败")
     @ApiModelProperty(value = "真实姓名")
     private String name;
 

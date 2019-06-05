@@ -37,6 +37,8 @@ public class GamTopicVO {
     private String modifiedTime;
     @ApiModelProperty(value = "修改时间")
     private String modifierAccount;
+    @ApiModelProperty(value = "用户昵称")
+    private String nikeName;
 
     @Override
     public String toString() {
@@ -47,11 +49,29 @@ public class GamTopicVO {
                 ", imgs=" + imgs +
                 ", comNum='" + comNum + '\'' +
                 ", comLike='" + comLike + '\'' +
+                ", topicStatus='" + topicStatus + '\'' +
                 ", createdTime='" + createdTime + '\'' +
                 ", creatorAccount='" + creatorAccount + '\'' +
                 ", modifiedTime='" + modifiedTime + '\'' +
                 ", modifierAccount='" + modifierAccount + '\'' +
+                ", nikeName='" + nikeName + '\'' +
                 '}';
+    }
+
+    public String getTopicStatus() {
+        return topicStatus;
+    }
+
+    public void setTopicStatus(String topicStatus) {
+        this.topicStatus = topicStatus;
+    }
+
+    public String getNikeName() {
+        return nikeName;
+    }
+
+    public void setNikeName(String nikeName) {
+        this.nikeName = nikeName;
     }
 
     public String getTopicId() {

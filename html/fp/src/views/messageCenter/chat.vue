@@ -6,7 +6,7 @@
           <div class="chat-back">
             <i class="el-icon-arrow-left"></i>
           </div>
-          <div class="chat-title">{{ toUserNickName }}的对话</div>
+          <div class="chat-title">与 {{ toUserNickName }} 的对话</div>
         </div>
         <div ref="chatMain" class="chat-main">
           <div class="no-more" v-if="noMore">没有更多消息了</div>
@@ -25,7 +25,7 @@
               :on-delete="deleteMessage"
               :on-resend="() => { reSend(item) }"
               :type="item.msgType === '0000'|| item.sendId === param.fromUser ? 'right' : 'left'"
-              :url="item.content.url"
+              :url="item.sendId === param.fromUser ? url : toUrl"
               :status="item.status"
             />
           </div>
@@ -73,7 +73,7 @@
           :key="item.id"
           class="friend-chat"
           @click="tabChat(item)">
-          <avatar class="flex-none" size="small"></avatar>
+          <avatar :url="item.content.url" class="flex-none" size="small"></avatar>
           <div class="friend-row">
             <div class="friend-info">
               <div class="friend-name">{{ item.content.nickName }}</div>
@@ -125,6 +125,7 @@
           rows: 500
         },
         url: '',
+        toUrl: '',
         nickName: '',
         toUserNickName: '',
         loading: false,
@@ -173,22 +174,23 @@
         if (xc < -2) {
           if (xc < -7) {
             if (year === new Date().getFullYear()) {
-              tips = mon + '-' + day + ' ' + hour + ':' + min
+              return tips = mon + '-' + day + ' ' + hour + ':' + min
             } else {
-              tips = year + '-' + mon + '-' + day + ' ' + hour + ':' + min
+              return tips = year + '-' + mon + '-' + day + ' ' + hour + ':' + min
+
             }
           } else {
             tips = -xc + '天前'
           }
-        } else if (xc < -1) {
+        } else if (xc === -2) {
           tips = '前天'
-        } else if (xc < 0) {
+        } else if (xc === -1) {
           tips = '昨天'
         } else if (xc === 0) {
           tips = ''
-        } else if (xc < 2) {
+        } else if (xc === 1) {
           tips = '明天'
-        } else if (xc < 3) {
+        } else if (xc === 2) {
           tips = '后天'
         } else {
           tips = xc + '天后'
@@ -330,6 +332,15 @@
                 }
                 if (historyList && historyList.length > 0) {
                   this.param.id = historyList[0].id
+                  if (!this.toUrl) {
+                    for (let i = historyList.length - 1; i >= 0; i--) {
+                      const item = historyList[i]
+                      if (item.content.fromUser === this.param.toUser) {
+                        this.toUrl = item.content.url
+                        break
+                      }
+                    }
+                  }
                 }
                 resolve()
               } else {
@@ -398,6 +409,7 @@
                 // console.dir(isMine)
                 // 如果不是自己发的，那么就接收，并放到消息列表
                 if (!isMine) {
+                  this.toUrl = data.content.url
                   this.timeShowFilter(data)
                   vm.messageList.push(data)
                   this.setScrollTop()

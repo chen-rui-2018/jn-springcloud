@@ -138,7 +138,8 @@
               <li class="clearfix">
                 <div class="liLeft fl">
                   <div class="intorImgLar" v-if="InvestorInfoList.length > 0">
-                    <img class="pointer" :src="InvestorInfoList[0].avatar" alt="" @click="$router.push({path:'/investorDetail',query: { investorAccount: InvestorInfoList[0].investorAccount }})">
+                    <img class="pointer" v-if="InvestorInfoList[0].avatar" :src="InvestorInfoList[0].avatar" alt="" @click="$router.push({path:'/investorDetail',query: { investorAccount: InvestorInfoList[0].investorAccount }})">
+                    <img class="pointer" v-else src="@/../static/img/larImg.png" alt="" @click="$router.push({path:'/investorDetail',query: { investorAccount: InvestorInfoList[0].investorAccount }})">
                   </div>
                   <div class="leftInfo" v-if="InvestorInfoList.length > 0">
                     <span class="color1">{{InvestorInfoList[0].investorName}}/{{InvestorInfoList[0].position}}</span>
@@ -150,7 +151,8 @@
                   <ul class="clearfix">
                     <li v-if="k<5&&k>0" v-for="(i,k) in InvestorInfoList" :key="k">
                       <div class="intorImgSma">
-                        <img class="pointer" :src="i.avatar" alt="头像" @click="$router.push({path:'/investorDetail',query: { investorAccount: i.investorAccount }})">
+                        <img class="pointer" v-if="i.avatar" :src="i.avatar" alt="头像" @click="$router.push({path:'/investorDetail',query: { investorAccount: i.investorAccount }})">
+                        <img class="pointer" v-else src="@/../static/img/larImg.png" alt="头像" @click="$router.push({path:'/investorDetail',query: { investorAccount: i.investorAccount }})">
                       </div>
                       <div class="rightInfo">
                         <span class="color1">{{i.investorName}}/{{i.position}}</span>
@@ -255,7 +257,8 @@
               <li class="mainBorder" v-if="k<8" v-for="(i,k) in FinancialProList" :key="k">
                 <!-- <img src="@/../static/img/midBan.png" alt=""> -->
                 <div class="finaProItem" @click="$router.push({ path: '/finaProDetail', query: { productId: i.productId }})">
-                  <img class="pointer" :src="i.pictureUrl" alt="">
+                  <img v-if="i.pictureUrl" class="pointer" :src="i.pictureUrl" alt="">
+                  <img v-else class="pointer" src="@/../static/img/product.png" alt="">
                 </div>
                 <div class="finaDiv1">
                   <div class="finaTit">{{i.productName}}</div>
@@ -558,14 +561,10 @@ export default {
       };
     },
     handleScroll() {
+      if(!document.getElementById("header")){
+        return
+      }
       const osTop = this.getScrollOffset().y;
-      // for (const key in this.$refs) {
-      //   if (osTop >= this.$refs[key].scrollTop) {
-      //     const name = this.$refs[key].dataset.class;
-      //     this.$refs[key].classList.add(name);
-      //   }
-      // }
-      // console.log(this.getScrollTop())
       if (
         this.getScrollTop() > document.getElementById("header").clientHeight
       ) {
@@ -987,7 +986,8 @@ export default {
     // margin: 0 auto;
     .techNav {
       margin: 20px 0;
-      font-size: 16px;
+      font-size: 13px;
+      font-weight: bold;
     }
     .techList {
       width: 100%;

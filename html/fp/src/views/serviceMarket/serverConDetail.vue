@@ -14,7 +14,8 @@
                 </div>
                 <div class="agent2 clearfix color2">
                     <div class="agentImg fl">
-                        <img :src="serverConDetailList.advisorIntroduction.avatar" alt="">
+                        <img v-if="serverConDetailList.advisorIntroduction.avatar" :src="serverConDetailList.advisorIntroduction.avatar" alt="">
+                        <img v-else src="@/../static/img/product.png" alt="">
                     </div>
                     <div class="agent2Info fl color2">
                         <p>所属机构：{{serverConDetailList.advisorIntroduction.orgName}}</p>
@@ -168,7 +169,8 @@
                                 <!-- 上架时间 end -->
                                 <!-- 左侧logo begin-->
                                 <div class="list-imgleft-container product nopic" @click="$router.push({path: 'serverProDetail',query: { productId: i.productId, signoryId: i.signoryId }})">
-                                    <img :src="i.pictureUrl" alt="">
+                                    <img v-if="i.pictureUrl" :src="i.pictureUrl" alt="">
+                                    <img v-else src="@/../static/img/product.png" alt="">
                                 </div>
                                 <!-- 左侧logo end-->
                                 <!-- 中间信息 beign -->
@@ -358,7 +360,11 @@ export default {
       }
       this.$router.push({
         path: "/chat",
-        query: {fromUser:JSON.parse(sessionStorage.userInfo).account, toUser: advisorAccount, nickName: advisorName }
+        query: {
+          fromUser: JSON.parse(sessionStorage.userInfo).account,
+          toUser: advisorAccount,
+          nickName: advisorName
+        }
       });
     },
     demandRaise(i) {

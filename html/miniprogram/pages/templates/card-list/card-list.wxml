@@ -1,7 +1,7 @@
 <view class="card-list">
   <cover-image wx:if="{{ url }}" class="card-list-poster" src="{{ url }}"></cover-image>
   <view wx:else class="no-image-bg">
-    <cover-image class="no-image" src="https://njbxq.mynatapp.cc/h5/imgs/test.png"></cover-image>
+    <cover-image class="no-image" src="{{ imgBaseUrl + 'default.png' }}"></cover-image>
   </view>
   <view class="card-list-content">
     <view class="card-list-title">{{ title }}</view>

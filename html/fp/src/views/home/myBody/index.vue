@@ -3,9 +3,9 @@
     <div class="business_title">
       <div class=" myBusiness font16">我的机构 </div>
       <div class="business_nav">
-        <div @click="toBasicInformation">编辑机构</div>
-        <div @click="toCounselorManagement">顾问管理</div>
-        <div @click="toEnterprisePropaganda">企业宣传</div>
+        <div @click="toBasicInformation" v-show="isEditBody">编辑机构</div>
+        <div @click="toCounselorManagement" v-show="isCounselor">顾问管理</div>
+        <div @click="toEnterprisePropaganda" v-show="isPublicity">企业宣传</div>
       </div>
 
     </div>
@@ -197,9 +197,6 @@
           </el-form-item>
         </div>
       </el-form>
-      <div class="business_footer" @click="toUserCenter">
-        离开机构
-      </div>
      </div>
     </div>
 
@@ -210,6 +207,9 @@
 export default {
   data() {
     return {
+      isEditBody:false,
+      isCounselor:false,
+      isPublicity:false,
       // businessArea:'',
       honorLicense:[],
            userAccount:'',
@@ -242,6 +242,20 @@ export default {
     }
   },
   mounted(){
+     let initArr = JSON.parse(sessionStorage.menuItems);
+    initArr.forEach(v => {
+      if (v.label === "我的机构") {
+        v.resourcesList.forEach(i => {
+          if (i.resourcesName === "发布宣传") {
+            this.isPublicity = true;
+          } else if (i.resourcesName === "修改机构") {
+            this.isEditBody = true;
+          } else if (i.resourcesName === "顾问管理") {
+            this.isCounselor = true;
+          }
+        });
+      }
+    });
         this.init()
   },
   methods: {
@@ -295,9 +309,6 @@ export default {
     },
     toCounselorManagement(){
         this.$router.push({ name: "counselorManagement" });
-    },
-    toUserCenter(){
-        this.$router.push({ path: "/home" });
     },
     toBasicInformation(){
         this.$router.push({ path: "/roleCertifications/basicInformation" });
@@ -485,20 +496,6 @@ margin-bottom: 59px;
         // height: 69px;
       }
     }
-  }
-  .business_footer {
-    margin: 0 auto;
-    margin-top: 58px;
-    border-radius: 4px;
-    text-align: center;
-    cursor: pointer;
-    height: 29px;
-    line-height: 29px;
-    width: 90px;
-    color: #41d787;
-    background: rgba(236, 252, 242, 1);
-    border: 1px solid rgba(65, 215, 135, 1);
-    margin-bottom: 17px;
   }
 }
 </style>

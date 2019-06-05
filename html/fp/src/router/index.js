@@ -318,7 +318,7 @@ const router= new Router({
               path: '/servicemarket/product/productService/specialproduct',
               name: 'specialproduct',
               meta: {
-                title: '特色服务产品管理'
+                title: '特色服务产品'
               },
               component: resolve => require(['@/views/home/productService/specialproduct'], resolve)
 

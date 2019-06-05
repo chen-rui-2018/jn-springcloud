@@ -10,17 +10,17 @@
       <el-form class="tableEnterprise" :rules="rules" :model="businessForm" ref="businessForm">
         <div style="display:flex">
           <el-form-item label="企业名称:" class="inline" prop="comName">
-            <el-input v-model="businessForm.comName"></el-input>
+            <el-input v-model="businessForm.comName" clearable></el-input>
             <!-- <span>{{comName}}</span> -->
           </el-form-item>
           <el-form-item label="企业简称:" class="inline" prop="comNameShort">
-            <el-input v-model="businessForm.comNameShort"></el-input>
+            <el-input v-model="businessForm.comNameShort" clearable></el-input>
             <!-- <span>{{comNameShort}}</span> -->
           </el-form-item>
         </div>
         <div style="display:flex">
           <el-form-item label="产业领域:" class="inline" prop="induType">
-            <el-select v-model="businessForm.induType" placeholder="请选择产业领域">
+            <el-select v-model="businessForm.induType" placeholder="请选择产业领域" clearable>
               <el-option v-for="item in induTypeOptions" :key="item.id" :label="item.preValue" :value="item.id">
               </el-option>
             </el-select>
@@ -28,13 +28,13 @@
           </el-form-item>
           <el-form-item label="法人:" class="inline" prop="ownerLaw">
             <label slot="label">法&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;人:</label>
-            <el-input v-model="businessForm.ownerLaw"></el-input>
+            <el-input v-model="businessForm.ownerLaw" clearable></el-input>
             <!-- <span>{{ownerLaw}}</span> -->
           </el-form-item>
         </div>
         <div style="display:flex">
           <el-form-item label="联系电话:" class="inline" prop="ownerPhone">
-            <el-input v-model="businessForm.ownerPhone"></el-input>
+            <el-input v-model="businessForm.ownerPhone" clearable></el-input>
             <!-- <span>{{conPhone}}</span> -->
           </el-form-item>
           <el-form-item label="注册时间:" class="inline" prop="foundingTime">
@@ -50,37 +50,37 @@
             <!-- <span>{{runTime}}</span> -->
           </el-form-item>
           <el-form-item label="注册地址:" lass="inline" prop="comAddress">
-            <el-input v-model="businessForm.comAddress"></el-input>
+            <el-input v-model="businessForm.comAddress" clearable></el-input>
             <!-- <span>{{comAddress}}</span> -->
           </el-form-item>
         </div>
         <div style="display:flex">
           <el-form-item class="br" label="实际经营地址:" lass="inline" prop="addrPark">
-            <el-input v-model="businessForm.addrPark"></el-input>
+            <el-input v-model="businessForm.addrPark" clearable></el-input>
             <!-- <span>{{addrPark}}</span> -->
           </el-form-item>
           <el-form-item label="固定电话:" lass="inline" prop="comTele">
-            <el-input v-model="businessForm.comTele"></el-input>
+            <el-input v-model="businessForm.comTele" clearable></el-input>
             <!-- <span>{{conPhone}}</span> -->
           </el-form-item>
         </div>
         <div style="display:flex">
-          <el-form-item label="注册资金(万元):" lass="inline" prop="regCapital">
-            <el-input v-model="businessForm.regCapital"></el-input>
+          <el-form-item label="注册资金(万元):" lass="inline" prop="regCapital" class="brLine">
+            <el-input v-model="businessForm.regCapital" clearable></el-input>
             <!-- <span>{{regCapital}}</span> -->
           </el-form-item>
-          <el-form-item label="企业规模(人):" lass="inline" prop="comScale">
-            <el-input v-model="businessForm.comScale"></el-input>
+          <el-form-item label="企业规模(人):" lass="inline" prop="comScale" class="brLine">
+            <el-input v-model="businessForm.comScale" clearable></el-input>
             <!-- <span>{{comScale}}</span> -->
           </el-form-item>
         </div>
         <div style="display:flex">
           <el-form-item class="br" label="统一社会信用代码:" lass="inline" prop="unifyCode">
-            <el-input v-model="businessForm.unifyCode"></el-input>
+            <el-input v-model="businessForm.unifyCode" clearable></el-input>
             <!-- <span>{{unifyCode}}</span> -->
           </el-form-item>
           <el-form-item label="企业性质:" lass="inline" prop="comProperty">
-            <el-select v-model="businessForm.comProperty" placeholder="请选择企业性质">
+            <el-select v-model="businessForm.comProperty" placeholder="请选择企业性质" clearable>
               <el-option v-for="item in comPropertyOptions" :key="item.id" :label="item.preValue" :value="item.id">
               </el-option>
             </el-select>
@@ -89,13 +89,13 @@
         </div>
         <div style="display:flex">
           <el-form-item label="所属园区:" lass="inline" prop="affiliatedPark">
-            <el-select v-model="businessForm.affiliatedPark" placeholder="请选择所属园区">
+            <el-select v-model="businessForm.affiliatedPark" placeholder="请选择所属园区" clearable>
               <el-option v-for="item in parkList" :key="item.id" :label="item.parkName" :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="企业来源:" lass="inline" prop="comSource">
-            <el-select v-model="businessForm.comSource" placeholder="请选择企业来源">
+            <el-select v-model="businessForm.comSource" placeholder="请选择企业来源" clearable>
               <el-option v-for="item in comSourceOptions" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select>
@@ -106,17 +106,17 @@
         <div style="display:flex">
           <el-form-item label="我的服务:" lass="inline" prop="comServer">
             <label slot="label">&nbsp;&nbsp;&nbsp;&nbsp;我的服务:</label>
-            <el-input v-model="businessForm.comServer"></el-input>
+            <el-input v-model="businessForm.comServer" clearable></el-input>
           </el-form-item>
           <el-form-item label="我的需求:" lass="inline" prop="comDemand">
             <label slot="label">&nbsp;&nbsp;&nbsp;我的需求:</label>
-            <el-input v-model="businessForm.comDemand"></el-input>
+            <el-input v-model="businessForm.comDemand" clearable></el-input>
           </el-form-item>
 
         </div>
         <div style="display:flex">
           <el-form-item label="企业官网地址:" lass="inline" class="br" prop="comWeb">
-            <el-input v-model="businessForm.comWeb"></el-input>
+            <el-input v-model="businessForm.comWeb" clearable></el-input>
           </el-form-item>
         </div>
         <el-form-item label="企业LOGO:" class="br enterprise_bottom" prop="avatar">
@@ -126,9 +126,6 @@
           </el-upload>
         </el-form-item>
         <el-form-item label="三证一体或营业执照:" class="br" prop="businessLicense">
-          <el-upload :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'" :headers="headers" :on-exceed=" handleExceed" :limit="1" list-type="picture-card" :on-success="handleBusinessLicenseSuccess" :before-upload="beforeUpload" :on-preview="handleBusinessLicensePictureCardPreview" :on-remove="handleBusinessLicenseRemove">
-            <i class="el-icon-plus"></i>
-          </el-upload>
           <el-dialog :visible.sync="businessLicenseDialogVisible">
             <img width="100%" :src="businessLicenseUrl" alt="LOGO图片">
           </el-dialog>
@@ -138,7 +135,7 @@
           </el-upload>
         </el-form-item>
         <el-form-item prop="checkCode">
-          <el-input v-model="businessForm.checkCode" class="input1" placeholder="请输入验证码" style="width:200px"></el-input>
+          <el-input v-model="businessForm.checkCode" class="input1" placeholder="请输入验证码" style="width:200px" clearable></el-input>
           <!-- <span class="getCode">获取验证码</span> -->
           <span class="getCode" v-if="sendAuthCode" @click="getCode">获取验证码</span>
           <span class="getCode" v-else style="padding: 0px 15px;">
@@ -174,7 +171,7 @@ export default {
       }
     };
     var checkTel = (rule, value, callback) => {
-      const reg = /^0\\d{2,3}-[1-9]\\d{6,7}$/;
+      const reg = /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/;
       if (!reg.test(value)) {
         callback("请输入正确的电话格式");
       } else {
@@ -182,7 +179,7 @@ export default {
       }
     };
     return {
-      baseUrl:this.api.host,
+      baseUrl: this.api.host,
       fileList: [],
       showImg: false,
       auth_time: 0,
@@ -263,8 +260,7 @@ export default {
           { required: true, message: "请输入实际经营地址", trigger: "blur" }
         ],
         comTele: [
-          { required: false, message: "", trigger: "blur" },
-          { validator: checkTel, trigger: "blur" }
+          // { required: false, message: "", trigger: "blur" }
         ],
         regCapital: [
           { required: true, message: "请输入注册资金", trigger: "blur" }
@@ -288,8 +284,7 @@ export default {
         //   { required: true, message: "请输入我的需求", trigger: "blur" }
         // ],
         comWeb: [
-          { required: true, message: "请输入企业官网地址", trigger: "blur" },
-          { validator: checkWeb, trigger: "blur" }
+          { required: true, message: "请输入企业官网地址", trigger: "blur" }
         ],
         comAddress: [
           { required: true, message: "请输入注册地址", trigger: "blur" }
@@ -355,6 +350,9 @@ export default {
               if (res.code == "0000") {
                 _this.$message.success("提交成功，等待审核");
                 _this.$refs["businessForm"].resetFields();
+              } else {
+                _this.$message.error(res.result);
+                return false;
               }
             }
           });
@@ -574,6 +572,9 @@ export default {
     .inline {
       display: inline-block;
     }
+    .el-input {
+      width: 266px;
+    }
     .el-input__inner {
       line-height: 32px;
       height: 32px;
@@ -598,6 +599,11 @@ export default {
       // padding-left: 13px;
       font-size: 13px;
       padding-right: unset;
+    }
+    .brLine {
+      .el-form-item__label {
+        line-height: 20px;
+      }
     }
     .el-form-item {
       margin-bottom: 23px;

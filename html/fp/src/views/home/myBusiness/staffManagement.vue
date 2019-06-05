@@ -2,7 +2,7 @@
   <div class="staffProduct">
     <div class="ordinary_title font16">
       <div>员工管理</div>
-      <div @click="toInviteEmployees">邀请员工</div>
+      <div @click="toInviteEmployees" v-show="isShow">邀请员工</div>
     </div>
     <div class="ordinary_main">
       <div class="search">
@@ -67,6 +67,7 @@
 export default {
   data () {
     return {
+      isShow:false,
       page:1,
       rows:10,
       total:0,
@@ -76,6 +77,16 @@ export default {
     }
   },
   mounted(){
+     let initArr = JSON.parse(sessionStorage.menuItems);
+    initArr.forEach(v => {
+      if (v.label === "我的企业") {
+        v.resourcesList.forEach(i => {
+          if (i.resourcesName === "邀请员工") {
+            this.isShow = true;
+          }
+        });
+      }
+    });
     this.initList()
   },
   methods: {

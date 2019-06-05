@@ -1,7 +1,7 @@
 
 <view wx:if="{{canIUse}}">
     <view class='header'>
-        <image src='https://njbxq.mynatapp.cc/h5/imgs/logo.jpg'></image>
+        <image wx:if="{{imgBaseUrl}}" src='{{imgBaseUrl}}logo.jpg'></image>
     </view>
 
     <view class='content'>

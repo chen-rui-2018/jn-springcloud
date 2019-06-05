@@ -25,7 +25,9 @@ Page({
   onReady: function () { },
   onShow: function () { },
   onUnload: function () { },
-  onPullDownRefresh: function () { },
+  onPullDownRefresh: function () {
+    this.getMeetingApply()
+   },
   onReachBottom: function () { },
   getMeetingApply(){
     request.send({

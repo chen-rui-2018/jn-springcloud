@@ -32,8 +32,8 @@
       <ul>
         <li v-for="(i,k) in investorInfoList" :key='k'>
           <div class="liImg" @click="handleDel(i.investorAccount)">
-            <!-- <img src="@/../static/img/heng3.png" alt=""> -->
-            <img :src="i.avatar" alt="">
+            <img v-if="i.avatar" :src="i.avatar" alt="">
+            <img v-else src="@/../static/img/touxiang.png" alt="">
           </div>
           <div class="liCont">
             <div class="tit color4">{{i.investorName}}</div>

@@ -109,10 +109,15 @@
         </div>
         <div class="investment-block-content">
           <div class="tab-nav">
-            <tab v-model="activePark" bar-active-color="#00a041" :line-width="1">
+            <tab
+              v-model="activePark"
+              bar-active-color="#00a041"
+              :line-width="1"
+            >
               <tab-item
                 v-for="(park, parkIndex) in parkList"
                 :key="parkIndex"
+                @on-item-click="tabPark"
               >{{ park.parkName }}</tab-item>
             </tab>
           </div>
@@ -120,32 +125,37 @@
             v-show="activePark === parkIndex"
             v-for="(park, parkIndex) in parkList"
             :key="parkIndex">
-            <div
-              v-for="(item, index) in park.list"
-              :key="index"
-              class="card-list"
-              @click="$router.push({path:'/investmentInfoDetail',query:{id: item.id}})"
-            >
-              <div class="card-list-poster" :style="{backgroundImage: 'url('+ item.adCover +')'}">
-              </div>
-              <div class="card-list-content">
-                <div class="card-list-title">{{ item.title }}</div>
-                <div class="card-list-text">{{ item.subTitle }}</div>
-                <div class="card-list-tips">
-                  <div class="tag-row">
-                    <tag-btn
-                      v-if="index < 2"
-                      v-for="(tag, index) in item.adFlag.split(',')"
-                      :key="index"
-                      :title="tag"
-                      class="tag-list"
-                    ></tag-btn>
-                    <span v-if="item.adFlag.split(',').length > 1" class="main-color">...</span>
+            <div v-if="park.list && park.list.length > 0">
+              <div
+                v-for="(item, index) in park.list"
+                :key="index"
+                class="card-list"
+                @click="$router.push({path:'/investmentInfoDetail',query:{id: item.id}})"
+              >
+                <div class="card-list-poster" :style="{backgroundImage: 'url('+ item.adCover +')'}">
+                </div>
+                <div class="card-list-content">
+                  <div class="card-list-title">{{ item.title }}</div>
+                  <div class="card-list-text">{{ item.subTitle }}</div>
+                  <div class="card-list-tips">
+                    <div class="tag-row">
+                      <tag-btn
+                        v-if="index < 2"
+                        v-for="(tag, index) in item.adFlag.split(',')"
+                        :key="index"
+                        :title="tag"
+                        class="tag-list"
+                      ></tag-btn>
+                      <span v-if="item.adFlag.split(',').length > 1" class="main-color">...</span>
+                    </div>
+                    <div class="main-color">立即考察</div>
                   </div>
-                  <div class="main-color">立即考察</div>
                 </div>
               </div>
+              <div v-if="park.loadMore && park.loading" class="tc-row">正在加载...</div>
+              <div v-if="park.loadMore && park.noMore" class="tc-row">已加载完所有信息</div>
             </div>
+            <div class="no-more-row" v-else>暂无相关信息</div>
             <div
               v-if="!park.loadMore"
               class="read-more"
@@ -180,7 +190,8 @@ export default {
       bannerList: [],
       businessAdDynamic: [],
       businessAdPolicy: [],
-      parkList: []
+      parkList: [],
+      activeItem: {}
     }
   },
   mounted () {
@@ -194,26 +205,67 @@ export default {
     }
   },
   methods: {
+    tabPark (index) {
+      this.activeItem = this.parkList[index]
+    },
+    handleScroll () {
+      window.onscroll = () => {
+        // 文档内容实际高度（包括超出视窗的溢出部分）
+        const scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
+        // 滚动条滚动距离
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+        // 窗口可视范围高度
+        const clientHeight = window.innerHeight || Math.min(document.documentElement.clientHeight,document.body.clientHeight);
+        if (clientHeight + scrollTop >= scrollHeight - 10) {
+          // 到底部加载信息
+          this.getMore()
+        }
+      }
+    },
+    getMore () {
+      // tab的查看更多被点击且不是加载中状态且没有全部加载完再执行
+      if (this.activeItem.loadMore && !this.activeItem.loading && !this.activeItem.noMore) {
+        // 如果当前没有选中的tab，则取第一个
+        if (!this.activeItem.hasOwnProperty('query')) {
+          this.activeItem = this.parkList[this.activePark]
+        }
+        this.activeItem.query.page++
+        this.getPartDetail(this.activeItem)
+      }
+    },
     init () {
       this.getPartList()
         .then(() => {
           this.parkList.forEach((item, index) => {
-            this.getPartDetail(item.id)
-              .then((data) => {
-                const rows = data.rows
-                let list
-                let flag
-                if (rows.length > 2) {
-                  list = rows.slice(0, 2)
-                  flag = false
-                } else {
-                  list = rows
-                  flag = true
-                }
-                this.$set(item, 'list', list)
-                this.$set(item, 'allList', rows)
-                this.$set(item, 'loadMore', flag)
-              })
+            const query = {
+              parkId: item.id,
+              page: 1,
+              rows: 10
+            }
+            // 在tab对象上set属性
+            this.$set(item, 'noMore', false)
+            this.$set(item, 'loading', false)
+            this.$set(item, 'query', query)
+            this.$set(item, 'allList', [])
+            this.$set(item, 'list', [])
+            this.$set(item, 'loadMore', false)
+            this.$nextTick(() => {
+              this.getPartDetail(item)
+                .then((data) => {
+                  const rows = data.rows
+                  let list
+                  let flag
+                  if (rows.length > 2) {
+                    list = rows.slice(0, 2)
+                    flag = false
+                  } else {
+                    list = rows
+                    flag = true
+                  }
+                  item.list = list
+                  item.loadMore = flag
+                })
+            })
           })
         })
       Promise.all([
@@ -225,9 +277,11 @@ export default {
           new Swiper('.swiper-container', {
             autoplay: true
           })
+          this.handleScroll()
         })
     },
     loadMore (park) {
+      // 点击查看按钮
       park.loadMore = true
       park.list = park.allList
     },
@@ -257,7 +311,7 @@ export default {
         this.api.get({
           url: 'getBusinessAdDynamic',
           callback: (res) => {
-            if (res.code === "0000") {
+            if (res.code === '0000') {
               this.businessAdDynamic = res.data
               resolve()
             } else {
@@ -273,7 +327,7 @@ export default {
         this.api.get({
           url: 'getBusinessAdPolicy',
           callback: (res) => {
-            if (res.code === "0000") {
+            if (res.code === '0000') {
               this.businessAdPolicy = res.data
               resolve()
             } else {
@@ -289,7 +343,7 @@ export default {
         this.api.get({
           url: 'parkList',
           callback: (res) => {
-            if (res.code === "0000") {
+            if (res.code === '0000') {
               this.parkList = res.data
               resolve()
             } else {
@@ -299,15 +353,20 @@ export default {
         })
       })
     },
-    getPartDetail (parkId) {
+    getPartDetail (item) {
       return new Promise((resolve, reject) => {
+        item.loading = true
         this.api.get({
           url: 'getBusinessAdContent',
-          data: {
-            parkId: parkId
-          },
+          data: item.query,
           callback: (res) => {
-            if (res.code === "0000") {
+            if (res.code === '0000') {
+              const rows = res.data.rows
+              item.loading = false
+              if (res.data.rows.length < item.query.rows) {
+                item.noMore = true
+              }
+              item.allList = item.allList.concat(rows)
               resolve(res.data)
             } else {
               reject()
@@ -325,6 +384,17 @@ export default {
   .investment {
     padding-top: 150px;
     @include image($url:'~@/assets/image/investment-bg.png', $bg: #fff);
+    .tc-row {
+      padding: 20px;
+      text-align: center;
+      font-size: 12px;
+    }
+    .no-more-row {
+      padding: 20px;
+      @include flex;
+      height: 200px;
+      font-size: 12px;
+    }
     .read-more {
       height: 120px;
       @include flex-center;

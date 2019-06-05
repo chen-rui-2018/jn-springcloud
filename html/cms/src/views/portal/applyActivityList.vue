@@ -4,6 +4,7 @@
       <el-col :span="16"/>
       <el-col :span="8">
         <div class="grid-content bg-purple-light">
+          <!-- <el-button class="filter-item" type="primary" round @click="ApproveApplicant">审批报名人</el-button> -->
           <el-button v-if="$route.query.applyCheck == '1'" class="filter-item" type="primary" round @click="ApproveApplicant">审批报名人</el-button>
           <el-button class="filter-item" type="primary" round @click="handleRegistration">下载签到二维码</el-button>
           <el-button class="filter-item" type="primary" round @click="handleExport">导出Excel</el-button>
@@ -124,7 +125,8 @@ export default {
         exportColName: [],
         exportTitle: [],
         page: 1,
-        rows: 10
+        rows: 10,
+        applyStatus: '1'
       },
       tableHeadArr: [
         {
@@ -180,7 +182,7 @@ export default {
   },
   methods: {
     ApproveApplicant() {
-      this.$router.push({ path: `registrationChecklist`, query: { applyStatus: this.$route.query.applyCheck }})
+      this.$router.push({ path: `registrationChecklist`, query: { activityId: this.$route.query.id }})
     },
     getApplyActivityList() {
       this.actiList.activityId = this.$route.query.id
@@ -191,11 +193,14 @@ export default {
         }
       })
     },
+    // 分页数更改
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`)
+      this.actiList.rows = val
+      this.getApplyActivityList()
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`)
+      this.actiList.page = val
+      this.getApplyActivityList()
     },
     handleRegistration() {
       this.signincodeDialogVisible = true
@@ -218,7 +223,7 @@ export default {
         exportColName: [exportColName.join(',')],
         exportTitle: [exportTitle.join(',')],
         page: this.actiList.page,
-        rows: this.total
+        rows: this.actiList.rows
       }
       api(`${this.GLOBAL.parkUrl}activity/exportDataExcel?activityId=${data.activityId}&exportColName=${data.exportColName}&exportTitle=${data.exportTitle}&page=${data.page}&rows=${data.rows}`, '', 'get').then(res => {
         window.location.href = res.request.responseURL
@@ -234,7 +239,7 @@ export default {
       api(`${this.GLOBAL.parkUrl}activity/activityApply/signInActivityBackend?applyId=${id}`, data, 'post').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           this.getApplyActivityList()
-          this.$message(res.data.result)
+          this.$message.success('签到成功')
         } else {
           this.$message(res.data.result)
         }

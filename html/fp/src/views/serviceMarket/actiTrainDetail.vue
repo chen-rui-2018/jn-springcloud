@@ -73,9 +73,7 @@
       <div class="delTil">详情</div>
       <el-card>
         <div class="delContent">
-          <!-- <img src="@/../static/img/detail1.png" alt=""> -->
-          <p>{{this.activityDetail.actiDetail}}</p>
-          <!-- <img src="@/../static/img/detail2.png" alt=""> -->
+          <p v-html="activityDetail.actiDetail"></p>
         </div>
       </el-card>
     </div>
@@ -139,12 +137,24 @@
         </div>
       </el-card>
     </div>
+    <template v-if="concatVisible">
+      <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :modal-append-to-body=false>
+        <div class="loginTip">
+          你还未
+          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          /
+          <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+          账号
+        </div>
+      </el-dialog>
+    </template>
   </div>
 </template>
 <script>
 export default {
   data() {
     return {
+      concatVisible:false,
       inFlag: "",
       textarea: "",
       textData: "",
@@ -158,9 +168,9 @@ export default {
       accountIsLike: false,
       isCommentLike: false,
       countDown: "",
-      activityApplyShow:'1',
-      applyEndTime:0,
-      secondsTime:0,
+      activityApplyShow: "1",
+      applyEndTime: 0,
+      secondsTime: 0
     };
   },
   created() {
@@ -177,7 +187,7 @@ export default {
     //留言
     leaveMessage(id) {
       if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
+        this.concatVisible=true;
         return;
       }
       let _this = this;
@@ -209,7 +219,7 @@ export default {
     //回复评论
     replycom(item) {
       if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
+        this.concatVisible=true;
         return;
       }
       this.inFlag = "";
@@ -233,7 +243,7 @@ export default {
     },
     comLike(item) {
       if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
+        this.concatVisible=true;
         return;
       }
       //评论点赞
@@ -297,12 +307,16 @@ export default {
     },
     handCheck(id) {
       //跳转报名人列表
-      this.$router.push({ path: "regStatus", query: { activityId: id } });
+      if (!sessionStorage.userInfo) {
+        this.concatVisible=true;
+        return;
+      }
+      this.$router.push({ path: "actiTrainStatus", query: { activityId: id } });
     },
     quickApply(id) {
       //立即报名
-        if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
+      if (!sessionStorage.userInfo) {
+        this.concatVisible=true;
         return;
       }
       let _this = this;
@@ -315,7 +329,7 @@ export default {
         callback: function(res) {
           if (res.code == "0000") {
             _this.$message.success("报名成功");
-            _this.activityApplyShow = '2';
+            _this.activityApplyShow = "2";
           } else {
             _this.$message.error(res.result);
           }
@@ -324,8 +338,8 @@ export default {
     },
     stopApply(id) {
       //停止报名
-        if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
+      if (!sessionStorage.userInfo) {
+        this.concatVisible=true;
         return;
       }
       let _this = this;
@@ -338,7 +352,7 @@ export default {
         callback: function(res) {
           if (res.code == "0000") {
             _this.$message.success("取消报名成功");
-            _this.activityApplyShow = '1';
+            _this.activityApplyShow = "1";
           } else {
             _this.$message.error(res.result);
           }
@@ -347,7 +361,7 @@ export default {
     },
     handleLike(id) {
       if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
+        this.concatVisible=true;
         return;
       }
       //活动点赞
@@ -387,11 +401,11 @@ export default {
         }
       });
     },
-    getTime(t){
+    getTime(t) {
       return new Date(t).getTime();
     },
     //报名倒计时
-    countTime(applyTime,secondsTime) {
+    countTime(applyTime, secondsTime) {
       let leftTime = applyTime - secondsTime;
       if (leftTime >= 0) {
         var d = Math.floor(leftTime / 1000 / 60 / 60 / 24);
@@ -424,10 +438,12 @@ export default {
             _this.actiApplyList = res.data.activityApplyList;
             _this.accountIsLike = res.data.accountIsLike;
             _this.activityApplyShow = res.data.activityApplyShow;
-             _this.applyEndTime = _this.getTime(res.data.activityDetail.applyEndTime);
+            _this.applyEndTime = _this.getTime(
+              res.data.activityDetail.applyEndTime
+            );
             _this.secondsTime = _this.getTime(res.data.sysTemTime);
             _this._interval = setInterval(() => {
-              let data = _this.countTime(_this.applyEndTime,_this.secondsTime);
+              let data = _this.countTime(_this.applyEndTime, _this.secondsTime);
               _this.secondsTime = _this.secondsTime + 1000;
               if (data) {
                 clearInterval(_this._interval);
@@ -467,9 +483,15 @@ export default {
   width: 1190px;
   margin: 0 auto;
   padding-top: 65px;
+  .loginTip{
+    text-align: center;
+    margin-bottom:20px;
+    font-size: 15px;
+  }
   .delnav {
     padding: 20px 0;
     font-size: 13px;
+    font-weight: bold;
   }
   .delinfo {
     margin-top: 40px;
@@ -519,7 +541,7 @@ export default {
               width: 20px;
               // border: 1px solid #eee;
               border-radius: 50%;
-              img{
+              img {
                 width: 100%;
                 height: 100%;
                 border-radius: 50%;

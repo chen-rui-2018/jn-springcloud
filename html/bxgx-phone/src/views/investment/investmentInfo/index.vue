@@ -14,8 +14,8 @@
           <div class="card-list-tips">
             <div class="tag-row">
               <tag-btn
-                v-if="index < 2"
                 v-for="(tag, index) in item.adFlag.split(',')"
+                v-if="index < 2"
                 :key="index"
                 :title="tag"
                 class="tag-list"
@@ -62,7 +62,7 @@ export default {
             this.list = res.data.rows
             this.total = res.data.total
           } else {
-            this.$message.error(res.result);
+            this.$message.error(res.result)
           }
         }
       })

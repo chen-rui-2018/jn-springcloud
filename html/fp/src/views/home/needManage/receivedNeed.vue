@@ -83,7 +83,7 @@ export default {
       data: this.sendData,
       callback: function(res) {
         if (res.code == "0000") {
-            console.log(res)
+            // console.log(res)
             _this.receivedtList=res.data.rows
             _this.total=res.data.total
           }
@@ -112,11 +112,14 @@ export default {
       }
     },
     handleSizeChange(val) {
-      // this.sendData.rows=val
+      this.sendData.rows=val
+      this.getreceivedtList()
     },
     //翻页
     handleCurrentChange(val) {
-      // this.sendData.page=val
+      this.sendData.page=val
+      this.getreceivedtList()
+
     },
   }
 }
@@ -210,9 +213,6 @@ export default {
         .el-pagination.is-background .el-pager li{
           background-color: #fff;
           border: 1px solid #eee;
-        }
-        .el-pagination.is-background .el-pager li:not(.disabled):hover{
-          color:#fff;
         }
         .el-pagination.is-background .el-pager li:not(.disabled).active{
           background-color: #00a041;

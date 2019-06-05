@@ -36,9 +36,9 @@
             <ul>
                 <!-- <li class="clearfix" v-for="(i,k) in serverAgent" :key='k'> -->
                 <li class="clearfix" v-for="(i,k) in serverConList" :key='k'>
-                    <div class="orgImg fl" @click="handleConDel(i.orgId,i.advisorAccount)">
-                        <!-- <img src="@/../static/img/ins1.png" alt=""> -->
-                        <img :src="i.avatar" alt="">
+                    <div class="conImg pointer fl" @click="handleConDel(i.orgId,i.advisorAccount)">
+                        <img v-if="i.avatar" :src="i.avatar" alt="">
+                        <img v-else src="@/../static/img/touxiang.png" alt="">
                     </div>
                     <div class="orgCon fl">
                         <div class="conTil">{{i.advisorName}}</div>
@@ -67,14 +67,26 @@
             <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
             </el-pagination>
         </div>
+        <template v-if="concatVisible">
+      <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :modal-append-to-body=false :lock-scroll="false">
+        <div class="loginTip">
+          你还未
+          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          /
+          <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+          账号
+        </div>
+      </el-dialog>
+    </template>
     </div>
 </template>
 <script>
 export default {
   data() {
     return {
+      concatVisible:false,
       filterFlag: "",
-      colorFlag: "",
+      colorFlag: "integrate",
       flag1: true,
       businessArea: [],
       keyWords: "",
@@ -83,23 +95,24 @@ export default {
       row:3,
       currentPage1:1,
       page:1,
-      sortTypes:"",
+      sortTypes:"integrate",
       domain:"",
     };
   },
   mounted() {
     this.selectIndustryList();
-    this.initList()
      if(this.$route.query.searchData){
       this.keyWords=this.$route.query.searchData
       this.initList();
+    } else {
+      this.initList()
     }
   },
   methods: {
     onlineContact(advisorAccount,advisorName){
       if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
-        return;
+        this.concatVisible=true
+        return
       }
       this.$router.push({ path: "/chat",query:{fromUser:JSON.parse(sessionStorage.userInfo).account,toUser:advisorAccount,nickName:advisorName}});
     },
@@ -201,5 +214,23 @@ export default {
 <style lang="scss" scoped>
 .serverCon{
     padding-top:65px;
+    .serverOrgFilter{
+      #filLeft{
+        .active1{
+          color:#00a041;
+        }
+      }
+    }
+    .serverOrgContent{
+      .conImg{
+        width: 120px;
+        height: 128px;
+        img{
+          width: 100%;
+          height: 100%;
+          border-radius: 4px;
+        }
+      }
+    }
 }
 </style>

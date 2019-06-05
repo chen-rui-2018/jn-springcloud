@@ -176,7 +176,7 @@ export default {
         getInvestorMainRound:"springcloud-enterprise//guest/technologyFinancial/investorController/getInvestorMainRound",//获取主投领域
         getAffiliationUnit:"springcloud-enterprise/guest/technologyFinancial/investorController/getAffiliationUnit",//获取所属单位
         addInvestorInfo:"springcloud-enterprise/technologyFinancial/investorController/addInvestorInfo",//提交投资人认证资料
-        saveOrUpdateOrgDetail:"springcloud-enterprise/guest/orgJoinPark/saveOrUpdateOrgDetail",//服务机构认证
+        saveOrUpdateOrgDetail:"springcloud-enterprise/orgJoinPark/saveOrUpdateOrgDetail",//服务机构认证
         selectOrgInfo:"springcloud-enterprise/serviceMarket/advisorApproveController/selectOrgInfo",//获取服务机构列表
         serviceAdvisorInfo:"springcloud-enterprise/serviceMarket/advisorEditController/getServiceAdvisorInfo",//服务顾问详情回显
         sendApproval:"springcloud-enterprise/serviceMarket/advisorEditController/sendApproval", // 发送申请/提交审批(将顾问信息审批状态由未反馈改为待审批)

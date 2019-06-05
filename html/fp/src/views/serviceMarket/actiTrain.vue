@@ -31,8 +31,8 @@
                         </ul>
                     </div>
                 </div>
-                <!-- <div class="allActi clearfix">
-                    <ul class="actiFilterUl fl clearfix">
+                <div class="allActi clearfix">
+                    <!-- <ul class="actiFilterUl fl clearfix">
                         <li :class="{'active0':actiFilflag == ''}" @click="handleFil('')">全部活动</li>
                         <li v-if="i<5" v-for="(v,i) in actiTypeList" :key="i" :class="{'active0':actiFilflag == v.typeId}" @click="handleFil(v.typeId)">{{v.typeName}}</li>
                         <li v-if="this.actiTypeList.length>4" class="bottomLi pr">
@@ -44,12 +44,12 @@
                                 </ul>
                             </el-card>
                         </li>
-                    </ul>
+                    </ul> -->
                     <div class="actiSearch fr">
                         <input type="text" placeholder="搜索活动" v-model="keyWord">
                         <i class="iconfont icon-sousuo" @click="handleSearchList"></i>
                     </div>
-                </div> -->
+                </div>
                 <div class="actiTab">
                     <ul class="allActiUl clearfix" v-if="flag">
                         <li v-for="(item,index) in actiListSlim" :key='index'>
@@ -154,8 +154,12 @@ export default {
     };
   },
   mounted() {
-    this.initList();
-    this.getActiType();
+     if(this.$route.query.searchData){
+      this.keyWord=this.$route.query.searchData
+      this.initList();
+    } else {
+      this.initList()
+    }
   },
   methods: {
     //立即报名
@@ -281,6 +285,9 @@ export default {
 <style lang="scss">
 .actiTrain {
   padding-top: 65px;
+  .allActi{
+      padding-bottom: 10px;
+  }
 }
 </style>
 

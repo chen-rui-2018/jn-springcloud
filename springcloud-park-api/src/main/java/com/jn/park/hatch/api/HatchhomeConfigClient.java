@@ -35,11 +35,19 @@ public interface HatchhomeConfigClient {
     Result updateRevenue(@RequestBody @Validated HatchUpdateRevenueParamModel hatchUpdateRevenueParamModel);
 
     @ApiOperation(value = "孵化企业-更新在孵企业（团队）毕业条件【满足 企业注册时间超过6年】",notes = "孵化企业-更新在孵企业（团队）毕业条件【满足 企业注册时间超过6年】")
-    @RequestMapping(value = "/api/hatch/incubator/updateGraduateegister",method = RequestMethod.POST)
+    @RequestMapping(value = "/api/hatch/incubator/updateGraduateRegister",method = RequestMethod.POST)
     Result updateGraduateRegister();
 
     @ApiOperation(value = "孵化企业-更新在孵企业（团队）毕业条件【满足 连续两年营收额达到500万】",notes = "孵化企业-更新在孵企业（团队）毕业条件【满足 连续两年营收额达到500万】")
     @RequestMapping(value = "/api/hatch/incubator/updateGraduateRevenue",method = RequestMethod.POST)
     Result updateGraduateRevenue();
+
+    @ApiOperation(value = "孵化企业-更新在孵企业（团队）报名活动项",notes = "孵化企业-更新在孵企业（团队）报名活动项")
+    @RequestMapping(value = "/api/hatch/incubator/updateEnrolmentActivit",method = RequestMethod.POST)
+    Result updateEnrolmentActivit();
+
+    @ApiOperation(value = "孵化企业-更新在孵企业（团队）政策申报项",notes = "孵化企业-更新在孵企业（团队）政策申报项")
+    @RequestMapping(value = "/api/hatch/incubator/updatePolicyDeclarate",method = RequestMethod.POST)
+    Result updatePolicyDeclarate();
 
 }

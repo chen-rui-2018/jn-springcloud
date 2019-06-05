@@ -22,7 +22,7 @@
           <div class="setdistance">
             <span class="textRight mg">头&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;像：</span>
             <img v-if="userData.avatar" :src="userData.avatar" class="imageItem" alt="">
-            <img v-else src="@/../static/img/头像.png" class="imageItem" alt="">
+            <img v-else src="@/../static/img/touxiang.png" class="imageItem" alt="">
           </div>
           <div class="setdistance">
             <span class="textRight mg">昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称：</span>

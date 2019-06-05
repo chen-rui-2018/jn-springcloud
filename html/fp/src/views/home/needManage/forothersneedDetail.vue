@@ -10,7 +10,7 @@
         <el-form label-position="right" label-width="120px" >
           <div :model="othersDetail" class="">
             <el-form-item label="企业名称：">
-              <span></span>
+              <span>{{othersDetail.companyName}}</span>
             </el-form-item>
           </div>
           <div>
@@ -20,7 +20,7 @@
           </div>
           <div>
             <el-form-item label="发布时间：">
-              <span>{{othersDetail.issueTime}}</span>
+              <span>{{othersDetail.issueTime|time}}</span>
             </el-form-item>
           </div>
           <div class="">
@@ -134,6 +134,14 @@ export default {
       othersDetail:{},
       reqNum:"",
       businessId:'',
+    }
+  },
+  filters: {
+    time(time){
+      if(time){
+        let dateee = new Date(time).toJSON();
+        return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+      }
     }
   },
   mounted () {

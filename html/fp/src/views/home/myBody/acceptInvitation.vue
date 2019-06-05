@@ -1,12 +1,13 @@
 <template>
   <div class="acceptInvitation">
     <div class="advisory_title font16">
-      <div >{{title}}</div>
+      <div>{{title}}</div>
       <div @click="toCounselorManagement">返回</div>
     </div>
 
     <div class="advisory_content">
-      <div class="enterprise">基本信息 <span class="cancel" @click="cancelBasic" v-if="!isShow">取&nbsp;消</span><span @click="editBasic('basicForm')">
+      <div class="enterprise">基本信息 <span class="cancel" @click="cancelBasic" v-if="!isShow">取&nbsp;消</span><span v-show="!isConceal"
+          @click="editBasic('basicForm')">
           <i class="el-icon-edit-outline"></i>&nbsp;{{basicText}}</span></div>
       <el-form class="tableEnterprise marBtn" v-if="isShow">
         <div style="display:flex">
@@ -29,7 +30,7 @@
           <el-form-item label="联系邮箱:" class="inline">
             <span>{{basicForm.contactEmail}}</span>
           </el-form-item>
-          <el-form-item label="执业资源:" class="inline">
+          <el-form-item label="执业资质:" class="inline bodyName">
             <span>{{basicForm.practiceQualification}}</span>
           </el-form-item>
         </div>
@@ -47,42 +48,32 @@
       <el-form class="editForm" v-if="!isShow" :rules="rules" :model="basicForm" label-width="100px" ref="basicForm">
         <el-form-item label="从业年限:" class="inline " prop="workingYears">
           <el-input v-model="basicForm.workingYears" placeholder="请输入从业年限" clearable></el-input>
-          <!-- <span>{{workingYears}}年</span> -->
         </el-form-item>
         <el-form-item label="毕业学校:" class="inline bodyName" prop="graduatedSchool">
           <el-input v-model="basicForm.graduatedSchool" placeholder="请输入毕业学校" clearable></el-input>
-          <!-- <span>{{graduatedSchool}}</span> -->
         </el-form-item>
 
         <el-form-item label="学历:" class="inline" prop="education">
           <label slot="label">学&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;历:</label>
           <el-input v-model="basicForm.education" placeholder="请输入学历" clearable></el-input>
-          <!-- <span>{{education}}</span> -->
+
         </el-form-item>
         <el-form-item label="联系手机:" class="inline bodyName" prop="phone">
-          <el-input v-model="basicForm.phone" placeholder="请输入联系手机" clearable></el-input>
-          <!-- <span>{{phone}}</span> -->
+          <el-input v-model.trim="basicForm.phone" placeholder="请输入联系手机" clearable maxlength="11"></el-input>
+
         </el-form-item>
 
         <el-form-item label="联系邮箱:" class="inline" prop="contactEmail">
           <el-input v-model="basicForm.contactEmail" placeholder="请输入联系邮箱" clearable></el-input>
-          <!-- <span>{{contactEmail}}</span> -->
+
         </el-form-item>
-        <el-form-item label="执业资源:" prop="practiceQualification">
-          <el-input v-model="basicForm.practiceQualification" placeholder="请输入执业资源" clearable></el-input>
-          <!-- <span>{{practiceQualification}}</span> -->
+        <el-form-item label="执业资质:" prop="practiceQualification">
+          <el-input v-model="basicForm.practiceQualification" placeholder="请输入执业资质" clearable></el-input>
+
         </el-form-item>
-        <el-form-item label="业务领域:" prop="business">
-          <el-select v-model="basicForm.business" placeholder="请选择业务领域" clearable>
-            <el-option v-for="item in businessAreasOptions" :key="item.id" :label="item.preValue" :value="item.id">
-            </el-option>
-          </el-select>
-          <!-- <el-input v-model="basicForm.goodAtBusiness" placeholder="请输入业务擅长" clearable></el-input> -->
-          <!-- <span>{{goodAtBusiness}}</span> -->
-        </el-form-item>
+
         <el-form-item label="业务擅长:" class="inline" prop="goodAtBusiness">
           <el-input v-model="basicForm.goodAtBusiness" placeholder="请输入业务擅长" clearable></el-input>
-          <!-- <span>{{goodAtBusiness}}</span> -->
         </el-form-item>
 
         <el-form-item label="个人简介:" prop="personalProfile" class="inline border-bottom">
@@ -92,9 +83,10 @@
 
       </el-form>
       <div class="enterprise">荣誉资质 <span class="cancel" @click="cancelHonorData" v-if="isShowEdit">取&nbsp;消</span><span
-          @click="addCertificate('certificateForm')"> <i class="el-icon-plus"></i>&nbsp;{{editText}}</span> </div>
+          v-show="!isConceal" @click="addCertificate('certificateForm')"> <i class="el-icon-plus"></i>&nbsp;{{editText}}</span>
+      </div>
       <div class="marBtn" v-if="!isShowEdit">
-        <el-table :data="honorData" style="width: 100%">
+        <el-table :data="honorData" style="width: 98%">
           <el-table-column prop="certificateName" align="center" label="证书名称">
           </el-table-column>
           <el-table-column prop="certificateTypeName" label="证书类型" align="center">
@@ -109,7 +101,7 @@
               <span v-if="!scope.row.certificatePhoto">暂无附件</span>
             </template>
           </el-table-column>
-          <el-table-column prop="certificatePhoto" align="center" label="操作">
+          <el-table-column prop="certificatePhoto" align="center" label="操作" v-if="!isConceal">
             <template slot-scope="scope">
               <span class="redColor smallSize cur" @click="editCertificate(scope.row)">编辑</span>
             </template>
@@ -157,17 +149,17 @@
 
       </el-form>
       <div class="enterprise">服务经历 <span class="cancel" @click="cancelExperienceList" v-if="isShowExperienceList">取&nbsp;消</span><span
-          @click="addExperienceList('experienceListForm')"> <i class="el-icon-plus"></i>&nbsp;{{editExperienceList}}</span>
+          v-show="!isConceal" @click="addExperienceList('experienceListForm')"> <i class="el-icon-plus"></i>&nbsp;{{editExperienceList}}</span>
       </div>
       <div class="marBtn" v-if="!isShowExperienceList">
-        <el-table :data="serviceExperienceList" style="width: 100%">
+        <el-table :data="serviceExperienceList" style="width: 98%">
           <el-table-column prop="companyName" label="公司名称" align="center">
           </el-table-column>
           <el-table-column prop="position" align="center" label="职务">
           </el-table-column>
           <el-table-column prop="workTime" align="center" label="入职时间">
           </el-table-column>
-          <el-table-column align="center" label="操作">
+          <el-table-column align="center" label="操作" v-if="!isConceal">
             <template slot-scope="scope">
               <span class="redColor smallSize cur" @click="updataExperienceList(scope.row)">编辑</span>
             </template>
@@ -190,9 +182,9 @@
 
       </el-form>
       <div class="enterprise">项目经验<span class="cancel" @click="cancelProjectExperienceList" v-if="isShowProjectExperienceList">取&nbsp;消</span><span
-          @click="addProjectExperienceList('projectExperienceListForm')"> <i class="el-icon-plus"></i>&nbsp;{{editProjectExperienceList}}</span></div>
+          v-show="!isConceal" @click="addProjectExperienceList('projectExperienceListForm')"> <i class="el-icon-plus"></i>&nbsp;{{editProjectExperienceList}}</span></div>
       <div class="marBtn" v-if="!isShowProjectExperienceList">
-        <el-table :data="serviceProjectExperienceList" style="width: 100%">
+        <el-table :data="serviceProjectExperienceList" style="width: 98%">
           <el-table-column prop="projectName" align="center" label="项目名称">
           </el-table-column>
           <el-table-column align="center" prop="companyName" label="公司名称">
@@ -201,7 +193,7 @@
           </el-table-column>
           <el-table-column prop="projectTime" align="center" label="项目时间">
           </el-table-column>
-          <el-table-column align="center" label="操作">
+          <el-table-column align="center" label="操作" v-if="!isConceal">
             <template slot-scope="scope">
               <span class="redColor smallSize cur" @click="updataProjectExperienceList(scope.row)">编辑</span>
             </template>
@@ -227,8 +219,8 @@
 
       </el-form>
       <div v-show="showBtn" class="footer ct">
-        <el-button size="mini" @click="acceptInvitation" :disabled="disabled" class="mainColor accept">接受邀请</el-button>
-        <el-button size="mini" type="success" @click="refuseInvitation">拒绝邀请</el-button>
+        <el-button v-show="!isConceal" size="mini" @click="acceptInvitation" :disabled="disabled" class="mainColor accept">接受邀请</el-button>
+        <el-button v-show="!isConceal" size="mini" type="success" @click="refuseInvitation">拒绝邀请</el-button>
       </div>
 
     </div>
@@ -244,8 +236,25 @@
 <script>
 export default {
   data() {
+    var checkPhone = (rule, value, callback) => {
+      const reg = /^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\d{8}$/;
+      if (!reg.test(value)) {
+        callback("请输入正确的手机号码");
+      } else {
+        callback();
+      }
+    };
+    var checkWorkingYears = (rule, value, callback) => {
+      const reg = /^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/;
+      if (!reg.test(value)) {
+        callback("请输入正数");
+      } else {
+        callback();
+      }
+    };
     return {
-      baseUrl:this.api.host,
+      isConceal: false,
+      baseUrl: this.api.host,
       showBtn: true,
       dialogImageUrl: "",
       dialogVisible: false,
@@ -260,7 +269,7 @@ export default {
       isShowProjectExperienceList: false,
       isShowEdit: false,
       title: "",
-      businessAreasOptions: [],
+      // businessAreasOptions: [],
       basicText: "编 辑",
       isShow: true,
       disabled: false,
@@ -277,7 +286,7 @@ export default {
       basicForm: {
         business: "",
         advisorAccount: sessionStorage.getItem("account"),
-        businessAreas: [], //业务领域
+        businessAreas: null, //业务领域
         personalProfile: "", //个人简介
         practiceQualification: "", //执业资质
         workingYears: "", //从业年限
@@ -339,98 +348,71 @@ export default {
         ]
       },
       rules: {
-        //     workingYears: [
-        //       { required: true, message: '请输入从业年限', trigger: 'blur' }
-        //     ],
-        //     graduatedSchool: [
-        //       { required: true, message: '请输入毕业学校', trigger: 'blur' }
-        //     ],
-        //     education: [
-        //       { required: true, message: '请输入学历', trigger: 'blur' }
-        //     ],
-        //     phone: [
-        //       { required: true, message: '请输入联系电话', trigger: 'blur' }
-        //     ],
-        //      contactEmail: [
-        //        { required: true, message: '请输入邮箱地址', trigger: 'blur' },
-        // { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
-        //     ],
-        //     practiceQualification: [
-        //       { required: true, message: '请输入执业资源', trigger: 'blur' }
-        //     ],
-        business: [
-          { required: true, message: "请选择业务领域", trigger: "change" }
+        workingYears: [
+          { required: true, message: "请输入从业年限", trigger: "blur" },
+          { validator: checkWorkingYears, trigger: "blur" }
         ],
-        //     personalProfile: [
-        //       { required: true, message: '请输入个人简介', trigger: 'blur' }
-        //     ],
-        unifyCode: [
-          { required: true, message: "请输入统一社会信用代码", trigger: "blur" }
+        graduatedSchool: [
+          { required: true, message: "请输入毕业学校", trigger: "blur" }
         ],
-        affiliatedPark: [
-          { required: true, message: "请选择所属园区", trigger: "change" }
+        education: [{ required: true, message: "请输入学历", trigger: "blur" }],
+        phone: [
+          { required: true, message: "请输入手机号码", trigger: "blur" },
+          { validator: checkPhone, trigger: "blur" }
         ],
-        comSource: [
-          { required: true, message: "请选择企业来源", trigger: "change" }
+        contactEmail: [
+          { required: true, message: "请输入邮箱地址", trigger: "blur" },
+          { type: "email", message: "请输入正确的邮箱地址", trigger: "blur" }
+        ],
+        practiceQualification: [
+          { required: true, message: "请输入执业资质", trigger: "blur" }
         ],
 
-        comDemand: [
-          { required: true, message: "请输入我的需求", trigger: "blur" }
+        personalProfile: [
+          { required: true, message: "请输入个人简介", trigger: "blur" }
         ],
-        comWeb: [
-          { required: true, message: "请输入企业官网地址", trigger: "blur" }
-        ],
-        comAddress: [
-          { required: true, message: "请输入注册地址", trigger: "blur" }
-        ],
-        comPropertys: [
-          { required: true, message: "请选择企业性质", trigger: "change" }
-        ],
-        avatar: [
-          { required: true, message: "请选择LOGO图片", trigger: "blur" }
-        ],
-        businessLicense: [
-          { required: true, message: "请选择营业执照", trigger: "blur" }
-        ],
-        imgParams: [
-          { required: true, message: "请选择宣传图片", trigger: "change" }
-        ],
-        comDetails: [
-          { required: true, message: "请输入公司简介", trigger: "blur" }
-        ],
-        mainProducts: [
-          { required: true, message: "请输入产品", trigger: "blur" }
+        goodAtBusiness: [
+          { required: true, message: "请输入业务擅长", trigger: "blur" }
         ]
-      } //联系手机
+      }
     };
+  },
+  created() {
+    this.api.get({
+      url: "getUserApprovalStatus",
+      // data: { orgName: "" },
+      callback: res => {
+        console.log(res);
+        if (res.code == "0000") {
+          if (res.data.approvalDesc === "认证中") {
+            this.isConceal = true;
+            this.changeStatus();
+          } else {
+            this.isConceal = false;
+          }
+        } else {
+          this.$message.error(res.result);
+        }
+      }
+    });
   },
   mounted() {
     this.init();
-    this.getBusinessAreas();
     this.getCertificateTypeList();
   },
   methods: {
-       //修改消息状态（已读）
-    changeStatus(){
- this.api.post({
-            url: "updateIsReadStatus",
-            data: {id:this.messageId},
-            callback: res => {
-              if (res.code == "0000") {
-                this.$message({
-                  message: "操作成功",
-                  type: "success"
-                });
-              } else {
-                this.$message.error(res.result);
-                return false;
-              }
-            }
-          });
+    //修改消息状态（已读）
+    changeStatus() {
+      this.api.post({
+        url: "updateIsReadStatus",
+        data: { id: this.messageId },
+        dataFlag: true,
+        callback: res => {}
+      });
     },
     //拒绝邀请
     refuseInvitation() {
-       this.api.post({
+      this.api.post({
         url: "refuseInvitation",
         data: { advisorAccount: this.basicForm.advisorAccount },
         dataFlag: true,
@@ -440,10 +422,10 @@ export default {
               message: "操作成功",
               type: "success"
             });
+            this.changeStatus();
           } else {
             this.$message.error(res.result);
           }
-          this.changeStatus()
         }
       });
     },
@@ -462,21 +444,24 @@ export default {
         callback: res => {
           if (res.code === "0000") {
             this.$message({
-              message: "操作成功",
+              message: "操作成功,请等待后台审核",
               type: "success"
             });
+            this.changeStatus();
             this.disabled = false;
-            // this.businessAreasOptions = res.data;
           } else {
             this.$message.error(res.result);
             this.disabled = false;
           }
-          this.changeStatus()
         }
       });
     },
     // 新增项目经验
     addProjectExperienceList(projectExperienceListForm) {
+      if (!this.basicForm.phone) {
+        this.$message.error("请先填写基本信息");
+        return false;
+      }
       if (this.editProjectExperienceList === "添加项目经验") {
         this.projectExperienceListForm.personalDuties = "";
         this.projectExperienceListForm.companyName = "";
@@ -544,6 +529,10 @@ export default {
     },
     // 新增服务经历
     addExperienceList(experienceListForm) {
+      if (!this.basicForm.phone) {
+        this.$message.error("请先填写基本信息");
+        return false;
+      }
       if (this.editExperienceList === "添加服务经历") {
         // this.resetForm('certificateForm')
         // this.$refs['certificateForm'].resetFields();
@@ -588,6 +577,7 @@ export default {
       this.isShow = true;
       this.basicText = "编 辑";
       this.showBtn = true;
+      this.init();
     },
     // 取消服务经历的更改
     cancelExperienceList() {
@@ -619,6 +609,10 @@ export default {
     },
     // 新增荣誉资质
     addCertificate(certificateForm) {
+      if (!this.basicForm.phone) {
+        this.$message.error("请先填写基本信息");
+        return false;
+      }
       if (this.editText === "添加荣誉资质") {
         // this.resetForm('certificateForm')
         // this.$refs['certificateForm'].resetFields();
@@ -663,20 +657,20 @@ export default {
       }
     },
     // 获取业务领域
-    getBusinessAreas() {
-      this.api.get({
-        url: "selectTeamList",
-        data: { preType: "0" },
-        callback: res => {
-          if (res.code === "0000") {
-            console.log(res);
-            this.businessAreasOptions = res.data;
-          } else {
-            this.$message.error(res.result);
-          }
-        }
-      });
-    },
+    // getBusinessAreas() {
+    //   this.api.get({
+    //     url: "selectTeamList",
+    //     data: { preType: "0" },
+    //     callback: res => {
+    //       if (res.code === "0000") {
+    //         console.log(res);
+    //         this.businessAreasOptions = res.data;
+    //       } else {
+    //         this.$message.error(res.result);
+    //       }
+    //     }
+    //   });
+    // },
     // 获取证书类型
     getCertificateTypeList() {
       this.api.get({
@@ -706,10 +700,10 @@ export default {
       this.certificateForm.certificatePhoto = res.data;
     },
     beforeAvatarUpload(file) {
-      const isLt2M = file.size / 1024 / 1024 < 5;
+      const isLt2M = file.size / 1024 / 1024 < 1;
       const isJPG = file.type === "image/jpeg" || file.type === "image/png";
       if (!isLt2M) {
-        this.$message.error("上传图片大小不能超过 5MB!");
+        this.$message.error("上传图片大小不能超过 1MB!");
       }
       if (!isJPG) {
         this.$message.error("上传图片只能是 JPG、png 格式!");
@@ -719,9 +713,9 @@ export default {
     // 保存基本信息
     editBasic(basicForm) {
       if (this.basicText === "保 存") {
+        console.log(12);
         this.$refs[basicForm].validate(valid => {
           if (valid) {
-            this.basicForm.businessAreas = this.basicForm.business.split();
             console.log(this.basicForm);
             this.api.post({
               url: "saveOrUpdateAdvisorBaseInfo",
@@ -763,38 +757,42 @@ export default {
       //  }
     },
     init() {
+      console.log(this.$route.query);
+      if (this.$route.query.businessArea) {
+        this.basicForm.businessAreas = this.$route.query.businessArea.split();
+      }
       let _this = this;
-      this.messageId=this.$route.query.messageId
+      this.messageId = this.$route.query.messageId;
       this.basicForm.orgId = this.$route.query.orgId;
-      this.title = this.$route.query.title;
-      // this.basicForm.advisorAccount = sessionStorage.getItem("account");
-      // this.certificateForm.advisorAccount = sessionStorage.getItem("account");
-      console.log(this.basicForm.advisorAccount);
+      this.title = this.$route.query.orgName;
       _this.api.get({
-        url: "getOrgInfoForManage",
-        data: { orgId : this.$route.query.orgId },
+        url: "serviceAdvisorInfo",
+        data: { advisorAccount: this.basicForm.advisorAccount },
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res)
-            _this.basicForm.personalProfile =
-              res.data.advisorServiceInfo.personalProfile;
-            _this.basicForm.graduatedSchool =
-              res.data.advisorServiceInfo.graduatedSchool;
-            _this.basicForm.education = res.data.advisorServiceInfo.education;
-            _this.basicForm.business = res.data.advisorServiceInfo.businessArea;
-            _this.basicForm.phone = res.data.advisorServiceInfo.phone;
-            _this.basicForm.contactEmail =
-              res.data.advisorServiceInfo.contactEmail;
-            _this.basicForm.practiceQualification =
-              res.data.advisorServiceInfo.practiceQualification;
-            _this.basicForm.workingYears =
-              res.data.advisorServiceInfo.workingYears;
-            _this.basicForm.goodAtBusiness =
-              res.data.advisorServiceInfo.goodAtBusiness;
-            _this.honorData = res.data.serviceHonorList;
-            _this.serviceExperienceList = res.data.serviceExperienceList;
-            _this.serviceProjectExperienceList =
-              res.data.serviceProjectExperienceList;
+            console.log(res);
+            if (res.data) {
+              _this.basicForm.personalProfile =
+                res.data.advisorServiceInfo.personalProfile;
+              _this.basicForm.graduatedSchool =
+                res.data.advisorServiceInfo.graduatedSchool;
+              _this.basicForm.education = res.data.advisorServiceInfo.education;
+              _this.basicForm.business =
+                res.data.advisorServiceInfo.businessArea;
+              _this.basicForm.phone = res.data.advisorServiceInfo.phone;
+              _this.basicForm.contactEmail =
+                res.data.advisorServiceInfo.contactEmail;
+              _this.basicForm.practiceQualification =
+                res.data.advisorServiceInfo.practiceQualification;
+              _this.basicForm.workingYears =
+                res.data.advisorServiceInfo.workingYears;
+              _this.basicForm.goodAtBusiness =
+                res.data.advisorServiceInfo.goodAtBusiness;
+              _this.honorData = res.data.serviceHonorList;
+              _this.serviceExperienceList = res.data.serviceExperienceList;
+              _this.serviceProjectExperienceList =
+                res.data.serviceProjectExperienceList;
+            }
           }
         }
       });
@@ -858,6 +856,7 @@ export default {
   .el-table__header {
     border-right: 1px solid rgba(65, 215, 135, 1);
     border-left: 1px solid rgba(65, 215, 135, 1);
+    table-layout: auto;
   }
   .cancel {
     margin-left: 15px;

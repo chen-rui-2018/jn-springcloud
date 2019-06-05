@@ -145,6 +145,17 @@
          <p class="p1">{{humanDetail.details}}</p>
       </el-dialog>
     </template> -->
+     <template v-if="concatVisible">
+      <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :append-to-body="true" :lock-scroll="false">
+        <div class="loginTip" style="text-align:center;padding-bottom:20px">
+          你还未
+          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          /
+          <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+          账号
+        </div>
+      </el-dialog>
+    </template>
   </div>
 </template>
 <script>
@@ -153,6 +164,7 @@ import bus from "@/util/bus";
 export default {
   data() {
     return {
+      concatVisible:false,
       detailFlag: "",
       sousuo: false,
       searchData: "",
@@ -190,24 +202,33 @@ export default {
   },
   methods: {
     //在线联系
-    onlineContat(id){
-       if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
+    onlineContat(id) {
+      if (!sessionStorage.userInfo) {
+        this.concatVisible=true;
         return;
       }
-       this.api.get({
+      this.api.get({
         url: "getCompanyContactAccount",
         data: {
           comId: id
         },
-        callback: res=> {
+        callback: res => {
           if (res.code == "0000") {
             // this.typeList = res.data;
-            if(JSON.parse(sessionStorage.userInfo).account==res.data.account){
-              this.$message.error('当前登录的账号跟聊天对象一样');
-              return
+            if (
+              JSON.parse(sessionStorage.userInfo).account == res.data.account
+            ) {
+              this.$message.error("当前登录的账号跟聊天对象一样");
+              return;
             }
-            this.$router.push({path:'/chat',query:{fromUser:JSON.parse(sessionStorage.userInfo).account,toUser:res.data.account,nickName:res.data.nickName}})
+            this.$router.push({
+              path: "/chat",
+              query: {
+                fromUser: JSON.parse(sessionStorage.userInfo).account,
+                toUser: res.data.account,
+                nickName: res.data.nickName
+              }
+            });
           } else {
             this.$message.error(res.result);
           }
@@ -280,8 +301,8 @@ export default {
           searchFiled: _this.searchFiled,
           type: _this.type,
           sortTypes: _this.sortTypes,
-          comId:_this.$route.query.comId,
-          whereTypes:_this.whereTypes
+          comId: _this.$route.query.comId,
+          whereTypes: _this.whereTypes
         },
         callback: function(res) {
           if (res.code == "0000") {
@@ -349,6 +370,34 @@ export default {
 </script>
 <style lang="scss">
 .humanSource {
+  .loginTip {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 15px;
+  }
+  input::-webkit-input-placeholder {
+    /* WebKit browsers*/
+    color: #999;
+    font-size: 13px;
+  }
+
+  input:-moz-placeholder {
+    /* Mozilla Firefox 4 to 18*/
+    color: #999;
+    font-size: 13px;
+  }
+
+  input::-moz-placeholder {
+    /* Mozilla Firefox 19+*/
+    color: #999;
+    font-size: 13px;
+  }
+
+  input:-ms-input-placeholder {
+    /* Internet Explorer 10+*/
+    color: #999;
+    font-size: 13px;
+  }
   #lastLi {
     float: right;
     margin-top: -26px;

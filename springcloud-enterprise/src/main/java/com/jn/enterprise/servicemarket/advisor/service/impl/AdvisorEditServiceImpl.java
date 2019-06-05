@@ -190,6 +190,10 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
      */
     @ServiceLog(doAction = "校验业务领域")
     private void checkBusinessArea(String[] businessAreaArray) {
+        if(businessAreaArray.length<1){
+            logger.warn("业务领域不能传空");
+            throw new JnSpringCloudException(AdvisorExceptionEnum.BUSINESS_AREA_NOT_EXIT);
+        }
         //获取系统所有业务领域
         IndustryDictParameter industryDictParameter=new IndustryDictParameter();
         //领域类型[0业务领域1行业领域2发展阶段3企业性质]

@@ -1,22 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.enterprise.servicemarket.org.dao.OrgMapper">
-    <select id="selectServiceOrgList" parameterType="com.jn.enterprise.servicemarket.org.model.OrgParameter"
+    <select id="selectServiceOrgList" parameterType="com.jn.enterprise.servicemarket.org.model.OrgListParam"
             resultType="com.jn.enterprise.model.ServiceOrg">
-        select tt.orgId,tt.orgAccount,tt.orgName,tt.orgLogo,tt.pageviews,tt.orgRegisterTime,tt.isApprove,tt.orgType,orgPhone,tt.orgSpeciality,
-        tt.orgAddress,tt.transactionNum,tt.attitudeScore,tt.evaluationNum from
+        select
+        tt.orgId
+        ,tt.orgAccount
+        ,tt.orgName
+        ,tt.orgLogo
+        ,tt.orgRegisterTime
+        ,tt.isApprove
+        ,tt.orgType
+        ,orgPhone
+        ,tt.orgSpeciality
+        ,tt.orgAddress
+        ,tt.pageviews
+        ,tt.transactionNum
+        ,tt.attitudeScore
+        ,tt.evaluationNum
+        ,tt.attitudeScore*#{praiseWeight}+tt.transactionNum*#{serviceWeight}+tt.pageviews*#{popularityWeight}+#{otherFactorScore} as "compreSort"
+        from
         (select
-        a.org_id_ as "orgId",a.org_account as "orgAccount",a.org_name as "orgName",a.org_speciality as "orgSpeciality",
-        a.org_logo as "orgLogo",a.org_show as "pageviews",
-        date_format(a.org_register_time,'%Y-%m-%d') as "orgRegisterTime",
-        a.is_approve as "isApprove",a.org_type as "orgType", i.org_phone as "orgPhone",
-        CONCAT(i.org_province,i.org_city,i.org_area,i.org_address) as "orgAddress",
-        (select count(1) from tb_service_require t where t.org_id_ = a.org_id_ and t.record_status = '1' and t.handle_result = '1' ) as "transactionNum" <!-- 累计交易笔数 -->
-        ,(SELECT IFNULL(AVG(t.`attitude_score`), 0) FROM tb_service_rating t
-        WHERE t.org_id_ = a.org_id_)  AS "attitudeScore" <!-- 评价得分 -->
-        ,(SELECT COUNT(1) FROM tb_service_rating t WHERE t.org_id_ = a.org_id_)  AS "evaluationNum"  <!-- 评价次数 -->
-        from tb_service_org a left join tb_service_org_info i on a.org_id_ = i.org_id_ LEFT JOIN tb_service_org_trait tr ON a.org_id_ = tr.org_id_
-        where 1=1 and a.record_status != '0' and  a.org_status = '1'
+            a.org_id_ as "orgId"
+            ,a.org_account as "orgAccount"
+            ,a.org_name as "orgName"
+            ,a.org_speciality as "orgSpeciality"
+            ,a.org_logo as "orgLogo"
+            ,date_format(a.org_register_time,'%Y-%m-%d') as "orgRegisterTime"
+            ,a.is_approve as "isApprove"
+            ,a.org_type as "orgType"
+            , i.org_phone as "orgPhone"
+            ,CONCAT(i.org_province,i.org_city,i.org_area,i.org_address) as "orgAddress"
+            ,ifnull(a.org_show,0) as "pageviews" <!-- 浏览量 -->
+            ,(select count(1)
+               from tb_service_require t
+               where t.org_id_ = a.org_id_
+               and t.record_status = '1'
+               and t.handle_result = '1' ) as "transactionNum" <!-- 累计交易笔数 -->
+            ,(SELECT IFNULL(AVG(t.`attitude_score`), 0)
+                FROM tb_service_rating t
+                WHERE t.org_id_ = a.org_id_)  AS "attitudeScore" <!-- 评价得分 -->
+            ,(SELECT COUNT(1)
+                FROM tb_service_rating t
+                WHERE t.org_id_ = a.org_id_)  AS "evaluationNum"  <!-- 评价次数 -->
+                from tb_service_org a
+                left join tb_service_org_info i
+                on a.org_id_ = i.org_id_
+                LEFT JOIN tb_service_org_trait tr
+                ON a.org_id_ = tr.org_id_
+                where 1=1
+                and a.record_status != '0'
+                and  a.org_status = '1'
 
         <if test="businessType != null and businessType.length>0">
             AND a.business_type IN
@@ -34,7 +68,6 @@
             from tb_service_product ssp
             where ssp.record_status='1' and ssp.template_id = #{templateId}
             )
-
         </if>
         <if test="orgName != null and orgName != ''">
             and a.org_name like CONCAT('%', #{orgName}, '%')
@@ -49,21 +82,22 @@
           </foreach>
         </if>
         GROUP BY a.org_id_
+        )tt
         <if test="sortTypes =='popularity'">
             ORDER BY <!-- 人气排序-->
-            a.org_show DESC   <!-- 浏览量-->
+            tt.pageviews DESC,tt.transactionNum DESC,tt.attitudeScore DESC
         </if>
-        )tt
         <if test="sortTypes =='integrate' or sortTypes ==null or sortTypes == ''">
-            ORDER BY tt.attitudeScore DESC <!--综合排序结果值-->
+            ORDER BY
+            tt.attitudeScore*#{praiseWeight}+tt.transactionNum*#{serviceWeight}+tt.pageviews*#{popularityWeight}+#{otherFactorScore} DESC <!--综合排序结果值-->
         </if>
         <if test="sortTypes =='serviceNum'">
             ORDER BY <!-- 服务量排序-->
-            tt.transactionNum DESC <!-- 累计交易数-->
+            tt.transactionNum DESC ,tt.pageviews DESC,tt.attitudeScore DESC
         </if>
         <if test="sortTypes =='attitudeScore'">
             ORDER BY <!-- 好评排序-->
-            tt.attitudeScore DESC
+            tt.attitudeScore DESC,tt.pageviews DESC,tt.transactionNum DESC
         </if>
     </select>
 

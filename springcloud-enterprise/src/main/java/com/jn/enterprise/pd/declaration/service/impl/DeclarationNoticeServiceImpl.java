@@ -67,7 +67,9 @@ public class DeclarationNoticeServiceImpl implements DeclarationNoticeService {
         criteria.andStatusEqualTo(status);
         if(StringUtils.isNotEmpty(rangeId)) {  criteria.andRangeIdEqualTo(rangeId);}
         if(StringUtils.isNotEmpty(titleName)) {  criteria.andTitleNameLike('%'+titleName+'%');}
-        return new PaginationData(tbPdDeclarationNoticeManageMapper.selectByExample(noticeCriteria), objects.getTotal());
+        List<TbPdDeclarationNoticeManage> list = tbPdDeclarationNoticeManageMapper.selectByExample(noticeCriteria);
+        for (TbPdDeclarationNoticeManage tb: list) {tb.setAnnouncementContent("");}
+        return new PaginationData(list, objects.getTotal());
     }
 
     @Override

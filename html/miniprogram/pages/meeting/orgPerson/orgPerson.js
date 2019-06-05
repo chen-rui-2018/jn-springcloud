@@ -97,7 +97,9 @@ Page({
   onReady: function () { },
   onShow: function () { },
   onHide: function () { },
-  onPullDownRefresh: function () { },
+  onPullDownRefresh: function () {
+    this.getUser()
+   },
   onReachBottom: function () {
     if(this.data.sendData.page<Math.ceil(this.data.total/this.data.sendData.rows)){
       this.data.sendData.page++

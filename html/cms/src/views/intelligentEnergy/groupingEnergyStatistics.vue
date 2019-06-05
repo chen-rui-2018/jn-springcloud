@@ -200,22 +200,22 @@ export default {
                 }
               },
               // stack: '总量',
-              // data: publicArr
-              data: [120, 132, 101, 134, 90, 230, 210]
+              data: publicArr
+              // data: [120, 132, 101, 134, 90, 230, 210]
             },
             {
               name: '空调用电',
               type: 'line',
               // stack: '总量',
-              // data: airArr
-              data: [220, 182, 191, 234, 290, 330, 310]
+              data: airArr
+              // data: [220, 182, 191, 234, 290, 330, 310]
             },
             {
               name: '楼层用电',
               type: 'line',
               // stack: '总量',
-              // data: floorArr
-              data: [320, 332, 301, 334, 390, 330, 320]
+              data: floorArr
+              // data: [320, 332, 301, 334, 390, 330, 320]
             }
           ]
         }

@@ -29,7 +29,7 @@ Page({
       data: {},
       method: 'POST',
     }).then(res=>{
-      console.log(res)
+      // console.log(res)
       if(res.data.code==='0000'&&res.data.data.createStatus==="1"){
         this.setData({
           orderId:res.data.data.billId
@@ -44,7 +44,7 @@ Page({
           },
           method: 'POST',
         }).then(res=>{
-          // console.log(res)
+          console.log(res)
           if(res.data.code==='0000'){
             this.setData({
               paySend:JSON.parse(res.data.data.orderInfo)
@@ -56,10 +56,14 @@ Page({
               signType: this.data.paySend.signType,
               paySign: this.data.paySend.paySign,
               success(res) { 
-                // 
+                wx.navigateTo({
+                  url: '../payComplete/payComplete?isSuccess=1'
+                })
               },
               fail(res) {
-                // console.log(res)
+                wx.navigateTo({
+                  url: '../payComplete/payComplete?isSuccess=0'
+                })
                },
                complete(res){
                 console.log(res)

@@ -63,7 +63,9 @@ public class TalentNoticeServiceImpl implements TalentNoticeService {
         criteria.andStatusEqualTo(status);
         if(StringUtils.isNotEmpty(rangeId)) {  criteria.andRangeIdEqualTo(rangeId);}
         if(StringUtils.isNotEmpty(noticeTitle)) {  criteria.andNoticeTitleLike('%'+noticeTitle+'%');}
-        return new PaginationData(tbPdTalentServiceNoticeMapper.selectByExample(noticeCriteria), objects.getTotal());
+        List<TbPdTalentServiceNotice> list = tbPdTalentServiceNoticeMapper.selectByExample(noticeCriteria);
+        for (TbPdTalentServiceNotice tb:list) {tb.setAnnouncementContent("");}
+        return new PaginationData(list, objects.getTotal());
     }
 
     /**

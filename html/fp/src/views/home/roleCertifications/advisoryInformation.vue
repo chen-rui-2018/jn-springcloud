@@ -47,7 +47,7 @@
       </el-form>
       <el-form class="editForm" v-if="!isShow" :rules="rules" :model="basicForm" label-width="100px" ref="basicForm">
         <el-form-item label="从业年限:" class="inline " prop="workingYears">
-          <el-input v-model="basicForm.workingYears" placeholder="请输入从业年限(数字)" clearable step="1"  min="0" onkeyup="this.value= this.value.match(/\d+(\.\d{0,2})?/) ? this.value.match(/\d+(\.\d{0,2})?/)[0] : ''"></el-input>
+          <el-input v-model="basicForm.workingYears" placeholder="请输入从业年限(数字)" clearable ></el-input>
         </el-form-item>
         <el-form-item label="毕业学校:" class="inline bodyName" prop="graduatedSchool">
           <el-input v-model="basicForm.graduatedSchool" placeholder="请输入毕业学校" clearable></el-input>
@@ -65,12 +65,6 @@
         <el-form-item label="执业资质:" prop="practiceQualification">
           <el-input v-model="basicForm.practiceQualification" placeholder="请输入执业资源" clearable></el-input>
         </el-form-item>
-        <!-- <el-form-item label="业务领域:" prop="businessArea">
-          <el-select v-model="basicForm.businessArea" placeholder="请选择业务领域" clearable>
-            <el-option v-for="item in businessAreasOptions" :key="item.id" :label="item.preValue" :value="item.id">
-            </el-option>
-          </el-select>
-        </el-form-item> -->
         <el-form-item label="业务擅长:" class="inline" prop="goodAtBusiness">
           <el-input v-model="basicForm.goodAtBusiness" placeholder="请输入业务擅长" clearable></el-input>
         </el-form-item>
@@ -82,7 +76,7 @@
           @click="addCertificate('certificateForm')" v-show="isConceal!=='1'"> <i class="el-icon-plus"></i>&nbsp;{{editText}}</span>
       </div>
       <div class="marBtn" v-if="!isShowEdit">
-        <el-table :data="honorData" style="width: 99%">
+        <el-table :data="honorData" style="width: 98%">
           <el-table-column prop="certificateName" align="center" label="证书名称">
           </el-table-column>
           <el-table-column prop="certificateTypeName" label="证书类型" align="center">
@@ -139,7 +133,7 @@
           @click="addExperienceList('experienceListForm')" v-show="isConceal!=='1'"> <i class="el-icon-plus"></i>&nbsp;{{editExperienceList}}</span>
       </div>
       <div class="marBtn" v-if="!isShowExperienceList">
-        <el-table :data="serviceExperienceList" style="width: 99%">
+        <el-table :data="serviceExperienceList" style="width: 98%">
           <el-table-column prop="companyName" label="公司名称" align="center">
           </el-table-column>
           <el-table-column prop="position" align="center" label="职务">
@@ -161,7 +155,6 @@
         <el-form-item label="职务:" prop="position">
           <label slot="label">职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;务:</label>
           <el-input v-model="experienceListForm.position" placeholder="请输入职务" clearable></el-input>
-          <!-- <span>{{goodAtBusiness}}</span> -->
         </el-form-item>
         <el-form-item label="入职日期:" class="inline maxWidth">
           <el-date-picker v-model="experienceListForm.workTime" type="month" value-format="yyyyMM" placeholder="请选择时间">
@@ -172,7 +165,7 @@
       <div class="enterprise">项目经验<span class="cancel" @click="cancelProjectExperienceList" v-if="isShowProjectExperienceList">取&nbsp;消</span><span
           @click="addProjectExperienceList('projectExperienceListForm')" v-show="isConceal!=='1'"> <i class="el-icon-plus"></i>&nbsp;{{editProjectExperienceList}}</span></div>
       <div class="marBtn" v-if="!isShowProjectExperienceList">
-        <el-table :data="serviceProjectExperienceList" style="width: 99%">
+        <el-table :data="serviceProjectExperienceList" style="width: 98%">
           <el-table-column prop="projectName" align="center" label="项目名称">
           </el-table-column>
           <el-table-column align="center" prop="companyName" label="公司名称">
@@ -236,6 +229,14 @@ export default {
           return callback(new Error("请输入正确的手机号"));
         }
       }
+    };
+     var checkWorkingYears = (rule, value, callback) => {
+      const reg = /^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/;
+        if (!reg.test(value)) {
+          callback("请输入正数");
+        } else {
+          callback();
+        }
     };
     return {
       baseUrl: this.api.host,
@@ -327,49 +328,34 @@ export default {
         ]
       },
       rules: {
-        // businessArea: [
-        //   { required: true, message: "请选择业务领域", trigger: "change" }
-        // ],
-        phone: [{ required: false, validator: checkPhone, trigger: "blur" }],
-        // affiliatedPark: [
-        //   { required: true, message: "请选择所属园区", trigger: "change" }
-        // ],
-        contactEmail: [
-          { required: false, message: "请选择邮箱", trigger: "change" },
-          {
-            type: "email",
-            message: "请输入正确的邮箱地址",
-            trigger: ["blur", "change"]
-          }
-        ]
+          workingYears: [
+              { required: true, message: '请输入从业年限', trigger: 'blur' },
+              { validator: checkWorkingYears,trigger: 'blur'}
+            ],
+            graduatedSchool: [
+              { required: true, message: '请输入毕业学校', trigger: 'blur' }
+            ],
+            education: [
+              { required: true, message: '请输入学历', trigger: 'blur' }
+            ],
+            phone: [
+              { required: true, message: '请输入手机号码', trigger: 'blur' },
+              { validator: checkPhone,trigger: 'blur'}
+            ],
+             contactEmail: [
+               { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+        { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }
+            ],
+            practiceQualification: [
+              { required: true, message: '请输入执业资质', trigger: 'blur' }
+            ],
 
-        // comDemand: [
-        //   { required: true, message: "请输入我的需求", trigger: "blur" }
-        // ],
-        // comWeb: [
-        //   { required: true, message: "请输入企业官网地址", trigger: "blur" }
-        // ],
-        // comAddress: [
-        //   { required: true, message: "请输入注册地址", trigger: "blur" }
-        // ],
-        // comPropertys: [
-        //   { required: true, message: "请选择企业性质", trigger: "change" }
-        // ],
-        // avatar: [
-        //   { required: true, message: "请选择LOGO图片", trigger: "blur" }
-        // ],
-        // businessLicense: [
-        //   { required: true, message: "请选择营业执照", trigger: "blur" }
-        // ],
-        // imgParams: [
-        //   { required: true, message: "请选择宣传图片", trigger: "change" }
-        // ],
-        // comDetails: [
-        //   { required: true, message: "请输入公司简介", trigger: "blur" }
-        // ],
-        // mainProducts: [
-        //   { required: true, message: "请输入产品", trigger: "blur" }
-        // ]
+            personalProfile: [
+              { required: true, message: '请输入个人简介', trigger: 'blur' }
+            ],
+  goodAtBusiness: [
+              { required: true, message: '请输入业务擅长', trigger: 'blur' }
+            ],
       }
     };
   },

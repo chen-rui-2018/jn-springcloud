@@ -17,7 +17,9 @@ Page({
   onReady: function () { },
   onShow: function () { },
   onHide: function () { },
-  onPullDownRefresh: function () { },
+  onPullDownRefresh: function () {
+    this.onLoad()
+   },
   onReachBottom: function () { },
   getDepartment(){
     // wx.request({

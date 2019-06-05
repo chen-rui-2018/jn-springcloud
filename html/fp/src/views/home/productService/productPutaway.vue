@@ -28,7 +28,7 @@
             </el-form-item>
           </div>
           <div class="">
-            <el-form-item label="产品编号">
+            <el-form-item label="产品编号：">
               <span>{{productDetail.serialNumber}}</span>
             </el-form-item>
           </div>
@@ -49,7 +49,7 @@
           </div>
           <div class="">
             <el-form-item label="产品描述：">
-              <div>{{productDetail.productDetails}}</div>
+              <div v-html="productDetail.productDetails"></div>
             </el-form-item>
           </div>
         </el-form>

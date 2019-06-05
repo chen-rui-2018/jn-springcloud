@@ -62,5 +62,17 @@ public class HatchServerController extends BaseController implements HatchhomeCo
         return hatchEntAndTeamService.updateGraduateRevenue();
     }
 
+    @Override
+    @ControllerLog(doAction = "孵化企业-更新在孵企业（团队）报名活动项")
+    public Result updateEnrolmentActivit() {
+        return hatchEntAndTeamService.updateEnrolmentActivit();
+    }
+
+    @Override
+    @ControllerLog(doAction = "孵化企业-更新在孵企业（团队）政策申报项")
+    public Result updatePolicyDeclarate() {
+        return hatchEntAndTeamService.updatePolicyDeclarate();
+    }
+
 
 }

@@ -93,9 +93,9 @@
           </div>
         </el-form-item>
       </el-form>
-      <div v-if="isFooter" class="business_footer" @click="toUserCenter">
+      <!-- <div v-if="isFooter" class="business_footer" @click="toUserCenter">
         离开企业
-      </div>
+      </div> -->
     </div>
 
   </div>

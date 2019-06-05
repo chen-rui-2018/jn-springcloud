@@ -39,7 +39,7 @@
 </template>
 <script>
 import $ from 'jquery'
-import projectGrid from '../components/ProjectGrid'
+import projectGrid from '../components/projectGrid'
 // import axios from 'axios'
 export default {
   name: 'ProjectPage',

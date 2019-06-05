@@ -25,7 +25,7 @@ export default {
         this.api.get({
           url: 'basic',
           callback: (res) => {
-            if (res.code === "0000") {
+            if (res.code === '0000') {
               this.basicInfo = res.data
               resolve()
             } else {

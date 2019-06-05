@@ -575,6 +575,19 @@ img {
 
 /* 活动详情 */
 /* 服务超市-服务机构，服务产品 */
+.serverOrg .loginTip,
+.serverPro .loginTip,
+.serverCon .loginTip,
+.quickSearch .loginTip,
+.aboutUs .loginTip,
+.finaInstitution .loginTip,
+.finaPro .loginTip,
+.companyProfile .loginTip {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 15px;
+}
+
 .serverOrg .serverOrgMenu,
 .serverPro .serverOrgMenu,
 .serverCon .serverOrgMenu,
@@ -972,8 +985,8 @@ img {
 .finaInstitution .serverOrgContent > ul > li .orgImg,
 .finaPro .serverOrgContent > ul > li .orgImg,
 .companyProfile .serverOrgContent > ul > li .orgImg {
-  width: 200px;
-  height: 130px;
+  width: 198px;
+  height: 128px;
 }
 
 .serverOrg .serverOrgContent > ul > li .orgImg > img,
@@ -986,6 +999,7 @@ img {
 .companyProfile .serverOrgContent > ul > li .orgImg > img {
   width: 100%;
   height: 100%;
+  border-radius: 7px;
 }
 
 .serverOrg .serverOrgContent > ul > li .orgCon,
@@ -1118,6 +1132,17 @@ img {
   padding-top: 65px;
 }
 
+.serverOrgDetail .loginTip,
+.serverProDetail .loginTip,
+.serverConDetail .loginTip,
+.quickSearch .loginTip,
+.finaInsDetail .loginTip,
+.finaProDetail .loginTip {
+  text-align: center;
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+
 .serverOrgDetail table,
 .serverProDetail table,
 .serverConDetail table,
@@ -1235,8 +1260,8 @@ img {
 .quickSearch .agentInfo .agent2 .agentImg,
 .finaInsDetail .agentInfo .agent2 .agentImg,
 .finaProDetail .agentInfo .agent2 .agentImg {
-  width: 150px;
-  height: 120px;
+  width: 198px;
+  height: 128px;
 }
 
 .serverOrgDetail .agentInfo .agent2 .agentImg > img,
@@ -1247,6 +1272,7 @@ img {
 .finaProDetail .agentInfo .agent2 .agentImg > img {
   width: 100%;
   height: 100%;
+  border-radius: 7px;
 }
 
 .serverOrgDetail .agentInfo .agent2 .agent2Info,
@@ -1941,6 +1967,7 @@ img {
 .finaProDetail .agentCon .serEvaluation .list-imgleft .list-item .list-imgleft-container.product > img {
   width: 100%;
   height: 100%;
+  border-radius: 7px;
 }
 
 .serverOrgDetail .agentCon .serverPro .list-imgleft .list-item .list-info-middle.inner-product,
@@ -2177,8 +2204,8 @@ img {
 .quickSearch .agentCon .serConsultant .list-imgleft-container,
 .finaInsDetail .agentCon .serConsultant .list-imgleft-container,
 .finaProDetail .agentCon .serConsultant .list-imgleft-container {
-  width: 130px;
-  height: 130px;
+  width: 120px;
+  height: 128px;
   display: inline-block;
   vertical-align: middle;
 }
@@ -2191,6 +2218,7 @@ img {
 .finaProDetail .agentCon .serConsultant .list-imgleft-container > img {
   width: 100%;
   height: 100%;
+  border-radius: 4px;
 }
 
 .serverOrgDetail .agentCon .serConsultant .detail-contact .text-of,
@@ -2200,6 +2228,7 @@ img {
 .finaInsDetail .agentCon .serConsultant .detail-contact .text-of,
 .finaProDetail .agentCon .serConsultant .detail-contact .text-of {
   width: 270px;
+  color: #999;
 }
 
 .serverOrgDetail .agentCon .serConsultant .text-of,
@@ -2228,9 +2257,9 @@ img {
 .quickSearch .agentCon .serConsultant .top-title.inner-consultant,
 .finaInsDetail .agentCon .serConsultant .top-title.inner-consultant,
 .finaProDetail .agentCon .serConsultant .top-title.inner-consultant {
-  font-size: 18px;
+  font-size: 15px;
   cursor: pointer;
-  color: #333;
+  color: #222;
 }
 
 .serverOrgDetail .agentCon .serConsultant .top-title,
@@ -2450,6 +2479,13 @@ img {
 
 /* 服务机构详情 */
 /* 门户首页、企业服务 */
+.portalIndex .loginTip,
+.enterpriseservice .loginTip {
+  text-align: center;
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+
 .portalIndex .avaP,
 .enterpriseservice .avaP {
   float: right;

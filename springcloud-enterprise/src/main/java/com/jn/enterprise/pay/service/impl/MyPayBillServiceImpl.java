@@ -3,6 +3,7 @@ package com.jn.enterprise.pay.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
+import com.jn.common.channel.MessageSource;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
@@ -14,6 +15,7 @@ import com.jn.enterprise.pay.dao.*;
 import com.jn.enterprise.pay.entity.*;
 import com.jn.enterprise.pay.enums.*;
 import com.jn.enterprise.pay.util.MoneyUtils;
+import com.jn.news.vo.SmsTemplateVo;
 import com.jn.pay.api.PayOrderClient;
 import com.jn.pay.model.*;
 import com.jn.pay.vo.*;
@@ -28,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import com.jn.enterprise.pay.service.MyPayBillService;
 import org.springframework.transaction.annotation.Transactional;
@@ -105,6 +108,9 @@ public class MyPayBillServiceImpl implements MyPayBillService {
 
     @Autowired
     private PayOrderClient payOrderClient;
+
+    @Autowired
+    private MessageSource messageSource;
 
 
     @ServiceLog(doAction = "我的账单-查询账单信息列表(APP端)")
@@ -398,6 +404,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
             throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_IS_NOT_EXIT);
         }
         /**判断是否是电费账单，如果是电费账单，则直接扣除费用*/
+        TbPayAccountBookMoneyRecord tpbmr = new TbPayAccountBookMoneyRecord();
         if (tbs.getAcBookType().equals(BILL_AC_BOOK_TYPE_1.getCode())) {
             /**比较金额大小即左边比右边数大，返回1，相等返回0，比右边小返回-1*/
             int i = tbPayAccountBook.get(0).getBalance().compareTo(tbs.getBillExpense());
@@ -412,7 +419,6 @@ public class MyPayBillServiceImpl implements MyPayBillService {
                     tbPayAccountBookMapper.updateByPrimaryKeySelective(tbPayAccountBook.get(0));
                     logger.info("结束执行统一缴费扣除账本金额操作");
                     logger.info("开始执行统一缴费插入流水记录操作");
-                    TbPayAccountBookMoneyRecord tpbmr = new TbPayAccountBookMoneyRecord();
                     tpbmr.setDeductionId(UUID.randomUUID().toString().replaceAll("-", ""));
                     tpbmr.setBillId(tbs.getBillId());
                     tpbmr.setAcBookId(tbs.getAcBookId());
@@ -452,7 +458,20 @@ public class MyPayBillServiceImpl implements MyPayBillService {
                 throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_DEDUCTION_FEE_ERROR);
             }
         }
-        /**TODO 是否需要推送自动扣费的消息给企业或个人*/
+        /*logger.info("【创建账单】开始发送通知");
+        TbPayBill tb3 = tbPayBillMapper.selectByPrimaryKey(tbs.getBillId());
+        if (null == tb3) {
+            throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_IS_NOT_EXIT);
+        }
+        if(tb3.getPaymentState().equals(PaymentBillEnum.BILL_ORDER_IS_NOT_PAY.getCode())){
+            //待支付状态，发送待缴短信通知
+            sendPaymentNotice("1020","13265603090","");
+        }else if(tb3.getPaymentState().equals(PaymentBillEnum.BILL_ORDER_IS_PAY.getCode())){
+            //已支付状态，发送缴费成功短信通知
+            StringBuffer str = new StringBuffer();
+            str.append(tpbmr.getBillId()).append(PaymentBillEnum.BILL_AC_BOOK_TYPE_1.getMessage()).append(tpbmr.getMoney()).append(tpbmr.getCreatedTime());
+            sendPaymentNotice("1021","13265603090",str.toString());
+        }*/
         return result;
     }
 
@@ -769,6 +788,17 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         }
     }
 
+    @Override
+    @ServiceLog(doAction = "插入流水记录")
+    public Result insertRecord(PayAccountBookMoneyRecord payAccountBookMoneyRecord) {
+        logger.info("插入流水表记录操作，入參【{}】", JsonUtil.object2Json(payAccountBookMoneyRecord));
+        TbPayAccountBookMoneyRecord tb = new TbPayAccountBookMoneyRecord();
+        BeanUtils.copyProperties(payAccountBookMoneyRecord,tb);
+        tbPayAccountBookMoneyRecordMapper.insertSelective(tb);
+        logger.info("插入流水表记录操作结束");
+        return new Result("插入流水记录成功！");
+    }
+
     /**
      * 新增账本金额&插入流水记录
      *
@@ -864,6 +894,25 @@ public class MyPayBillServiceImpl implements MyPayBillService {
             logger.info("结束扣除账本金额&插入流水记录方法");
         } catch (Exception e) {
             throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_BOOK_REMOVE_ERROR);
+        }
+    }
+
+    /**待缴通知提醒（短信，微信，APP，邮箱）*/
+    @ServiceLog(doAction = "短信通知提醒")
+    public void sendPaymentNotice(String templateId ,String phone,String message){
+        logger.info("进入发送待缴通知提醒方法");
+        SmsTemplateVo smsTemplateVo = new SmsTemplateVo();
+        smsTemplateVo.setTemplateId(templateId);
+        String[] m = {phone};
+        smsTemplateVo.setMobiles(m);
+        String[] t = {message};
+        smsTemplateVo.setContents(t);
+        logger.info("短信发送成功：接收号码：{},短信内容：{}", phone, message);
+        boolean sendStatus = messageSource.outputSms().send(MessageBuilder.withPayload(smsTemplateVo).build());
+        if (sendStatus) {
+            logger.info("[白下智慧园区]发送短信成功");
+        } else {
+            logger.error("[白下智慧园区]发送短信失败");
         }
     }
 }

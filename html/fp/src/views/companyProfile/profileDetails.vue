@@ -176,6 +176,17 @@
             </el-pagination>
           </div>
         </div>
+        <template v-if="concatVisible">
+          <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :append-to-body="true" :lock-scroll="false">
+            <div class="loginTip" style="text-align:center;padding-bottom:20px">
+              你还未
+              <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+              /
+              <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+              账号
+            </div>
+          </el-dialog>
+        </template>
       </el-card>
     </div>
   </div>
@@ -185,6 +196,7 @@ import swiper from "swiper";
 export default {
   data() {
     return {
+      concatVisible: false,
       zankaiFlag: false,
       inFlag: "",
       activeName: "baseInfo",
@@ -219,14 +231,14 @@ export default {
             if (res.code == "0000") {
               // _this.parkList = res.data;
               // this.isCare = "1";
-              this.getCompanyDetail()
+              this.getCompanyDetail();
             } else {
               this.$message.error(res.result);
             }
           }
         });
       } else {
-        this.$message.error("你还未登录");
+        this.concatVisible = true;
         return;
       }
     },
@@ -236,28 +248,28 @@ export default {
         this.api.post({
           url: "cancelCareOperate",
           data: {
-            account: id,
+            account: id
           },
-          dataFlag:true,
+          dataFlag: true,
           callback: res => {
             if (res.code == "0000") {
               // _this.parkList = res.data;
               // this.isCare = "0";
-              this.getCompanyDetail()
+              this.getCompanyDetail();
             } else {
               this.$message.error(res.result);
             }
           }
         });
       } else {
-        this.$message.error("你还未登录");
+        this.concatVisible = true;
         return;
       }
     },
     //评论点赞
     comLike(item) {
       if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
+        this.concatVisible = true;
         return;
       }
       //评论点赞
@@ -294,7 +306,7 @@ export default {
     //留言
     leaveMessage(id) {
       if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
+        this.concatVisible = true;
         return;
       }
       let _this = this;
@@ -327,7 +339,7 @@ export default {
     //回复评论
     replycom(item) {
       if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
+        this.concatVisible = true;
         return;
       }
       this.inFlag = "";
@@ -349,26 +361,35 @@ export default {
         }
       });
     },
-     //在线联系
-    onlineContact(id){
-       if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
+    //在线联系
+    onlineContact(id) {
+      if (!sessionStorage.userInfo) {
+        this.concatVisible = true;
         return;
       }
-       this.api.get({
+      this.api.get({
         url: "getCompanyContactAccount",
         data: {
           comId: id
         },
-        callback: res=> {
+        callback: res => {
           if (res.code == "0000") {
             // this.typeList = res.data;
-            if(JSON.parse(sessionStorage.userInfo).account==res.data.account){
-              this.$message.error('当前登录的账号跟聊天对象一样');
-              return
+            if (
+              JSON.parse(sessionStorage.userInfo).account == res.data.account
+            ) {
+              this.$message.error("当前登录的账号跟聊天对象一样");
+              return;
             }
             // this.$router.push({path:'/chat',query:{fromUser:sessionStorage.userInfo.account,toUser:res.data.account,nickName:res.data.nickName}})
-            this.$router.push({path:'/chat',query:{fromUser:JSON.parse(sessionStorage.userInfo).account,toUser:res.data.account,nickName:res.data.nickName}})
+            this.$router.push({
+              path: "/chat",
+              query: {
+                fromUser: JSON.parse(sessionStorage.userInfo).account,
+                toUser: res.data.account,
+                nickName: res.data.nickName
+              }
+            });
           } else {
             this.$message.error(res.result);
           }
@@ -467,6 +488,11 @@ export default {
 </script>
 <style lang="scss">
 .profileDetails {
+  .loginTip{
+    text-align: center;
+    margin-bottom:20px;
+    font-size: 15px;
+  }
   .banner {
     .swiper-pagination {
       //   bottom: 40%;

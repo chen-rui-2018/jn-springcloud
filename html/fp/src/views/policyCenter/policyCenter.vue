@@ -702,6 +702,7 @@ export default {
         position: absolute;
         right: 265px;
         top: 5px;
+        font-size: 15px;
         // z-index:4;
       }
       .filRight {
@@ -720,6 +721,31 @@ export default {
           border: 0;
           height: 100%;
           width: 95%;
+        }
+           input::-webkit-input-placeholder {
+          /* WebKit browsers*/
+          color: #999;
+          font-size: 13px;
+        }
+    
+        input:-moz-placeholder {
+          /* Mozilla Firefox 4 to 18*/
+          color: #999;
+          font-size: 13px;
+        }
+    
+    
+        input::-moz-placeholder {
+          /* Mozilla Firefox 19+*/
+          color: #999;
+          font-size: 13px;
+        }
+    
+    
+        input:-ms-input-placeholder {
+          /* Internet Explorer 10+*/
+          color: #999;
+          font-size: 13px;
         }
 
         input,

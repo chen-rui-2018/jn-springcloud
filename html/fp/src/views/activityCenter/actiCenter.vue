@@ -58,8 +58,8 @@
       <div class="actiTab">
         <ul class="allActiUl clearfix" v-if="flag">
           <li v-for="(item,index) in actiListSlim" :key='index'>
-            <div class="postImgItem pointer">
-              <img :src="item.actiPosterUrl" class="postImg" alt="活动海报图片" @click="handleRout(item.id)">
+            <div class="postImgItem pointer" @click="handleRout(item.id)">
+              <img :src="item.actiPosterUrl" class="postImg" alt="活动海报图片" >
             </div>
             <div class="actiInfo">
               <p class="actiNameItem">{{item.actiName}}</p>

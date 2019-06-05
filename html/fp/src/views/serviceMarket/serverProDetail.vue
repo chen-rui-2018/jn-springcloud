@@ -243,15 +243,24 @@
     </div>
     <!-- 提需求弹框 -->
     <template v-if="serverProVisible">
-      <el-dialog :visible.sync="serverProVisible" width="530px" top="30vh" :modal-append-to-body=false>
+      <el-dialog :visible.sync="serverProVisible" width="530px" top="30vh" :modal-append-to-body=false :lock-scroll="false">
+          <div v-if="islogin">
         <el-form ref="financialProform" :model="serverProform" label-position="right" label-width="100px" style="max-width:436px;">
-          <el-form-item label="需求描述:" prop="requireDetail" style="font-size:13px">
-            <el-input v-model.trim="serverProform.requireDetail" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
-          </el-form-item>
+            <el-form-item label="需求描述:" prop="requireDetail" style="font-size:13px">
+              <el-input v-model.trim="serverProform.requireDetail" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
+            </el-form-item>
         </el-form>
         <div class="demandLine"></div>
         <div class="serverTip mainColor">市场提醒：请务必在线订购，线下交易无法享受市场交易安全保障</div>
         <div class="demandDia" @click="demandDia()">提交需求</div>
+        </div>
+        <div v-else class="loginTip">
+          你还未
+          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          /
+          <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+          企业账号
+        </div>
       </el-dialog>
     </template>
   </div>
@@ -260,6 +269,7 @@
 export default {
   data() {
     return {
+      islogin:true,
       showMoreFlag: false,
       zankaiFlag: true,
       activeName1: "samePro",
@@ -294,10 +304,16 @@ export default {
     this.getEvaluationCountInfo();
   },
   methods: {
+    //判断是否登录
+    isLogin() {
+      if (!sessionStorage.userInfo) {
+        this.islogin = false;
+      }
+    },
     screenPro(i) {
-      (this.productType = i),
-        (this.flag1 = i),
-        (this.page1 = 1),
+      this.productType = i,
+        this.flag1 = i,
+        this.page1 = 1,
         this.sameTypeProductList();
     },
     handleEvaluation(i) {
@@ -307,10 +323,7 @@ export default {
         this.getServiceRatingInfo();
     },
     demandRaise(i) {
-      if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
-        return;
-      }
+      this.isLogin()
       this.serverProVisible = true;
       if (i == "") {
         this.serverProform.productId = proDelInfo.productId;
@@ -348,11 +361,11 @@ export default {
     handleClick(tab, event) {
       if (tab.name == "relateEva") {
         this.showFlag = false;
-        this.getServiceRatingInfo();
-        this.getEvaluationCountInfo();
+        // this.getServiceRatingInfo();
+        // this.getEvaluationCountInfo();
       } else {
         this.showFlag = true;
-        this.sameTypeProductList();
+        // this.sameTypeProductList();
       }
     },
     handleSizeChange1(val) {
@@ -446,7 +459,8 @@ export default {
         data: {
           signoryId: _this.$route.query.signoryId,
           page: _this.page1,
-          rows: _this.row1
+          rows: _this.row1,
+          productType:_this.productType,
         },
         callback: function(res) {
           if (res.code == "0000") {
@@ -497,7 +511,7 @@ export default {
     }
     .agent2Info {
       > p {
-        margin-bottom: 5px !important;
+        margin-bottom: 6px !important;
       }
       .proNum {
         margin-top: 20px;
@@ -525,7 +539,6 @@ export default {
         .agent2Con.showMore {
           height: 50px;
           overflow: hidden;
-          //   overflow: hidden;
         }
         .orgBtn1 {
           font-size: 13px;

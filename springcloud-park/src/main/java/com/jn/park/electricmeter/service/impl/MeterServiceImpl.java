@@ -35,8 +35,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.xxpay.common.util.DateUtil;
 
+import javax.xml.crypto.Data;
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -611,4 +614,30 @@ public class MeterServiceImpl implements MeterService {
         result.setData(list);
         return result;
     }
+
+    @Override
+    public Result todayelectro(String companyid) {
+        Result result = new Result();
+        List<ConditionElectro> list = meterDao.todayelectro(companyid);
+        result.setData(list);
+        return result;
+    }
+
+    @Override
+    public Result monthelectro(String companyid) {
+        Result result = new Result();
+        List<ConditionElectro> list = meterDao.monthelectro(companyid);
+        result.setData(list);
+        return result;
+    }
+
+    @Override
+    public Result yearelectro(String companyid) {
+        Result result = new Result();
+        List<YearElectro> list = meterDao.yearelectro(companyid);
+        result.setData(list);
+        return result;
+    }
+
+
 }

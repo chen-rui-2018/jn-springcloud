@@ -34,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -300,7 +301,11 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
         //Result<ServiceCompany> ressult =  companyClient.getCompanyDetailByAccountOrCompanyId(companyId);
         //companyId = ressult.getData().getComAdmin();
         PayBillCreateParamVo payBillCreateParamVo = new PayBillCreateParamVo();
-        payBillCreateParamVo.setBillId(UUID.randomUUID().toString().replaceAll("-",""));
+        Date date =new Date();
+        SimpleDateFormat sdf =new SimpleDateFormat("yyyyMMddHHmmss");
+        String time =sdf.format(date);
+        String billId =time+new Random().nextInt(1000000);
+        payBillCreateParamVo.setBillId(billId);
         //账单名称
         payBillCreateParamVo.setBillName("电费账单");
         //账单来源

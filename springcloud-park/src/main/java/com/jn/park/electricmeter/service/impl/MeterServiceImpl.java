@@ -78,7 +78,7 @@ public class MeterServiceImpl implements MeterService {
                 hour=String.valueOf(Integer.valueOf(hour) -1);
             }
         }
-        String taskBatch =UUID.randomUUID().toString().replaceAll("-","");
+
         //所有的电表
         //访问参数处理
         ElectricMeterDataCollectionParam parameter = getParameter();
@@ -90,7 +90,8 @@ public class MeterServiceImpl implements MeterService {
         if(meters !=null && meters.size()>0){
             for(TbElectricMeterInfo meterBean : meters){
                 //设置每块电表的
-                parameter.setCode(meterBean.getMeterCode());
+                String taskBatch =UUID.randomUUID().toString().replaceAll("-","");
+                parameter.setCode(meterBean.getFactoryMeterCode());
                 Result cResult = collectionData(parameter, dealDate, hour);
                 if(cResult !=null  && cResult.getCode().equals(GlobalConstants.SUCCESS_CODE)){
                     //采集成功后，保存数据
@@ -311,7 +312,7 @@ public class MeterServiceImpl implements MeterService {
      */
     private ElectricMeterDataCollectionParam getParameter(){
         ElectricMeterDataCollectionParam parameter = new ElectricMeterDataCollectionParam();
-        //parameter.setDeviceType(ElectricMeterEnum.ELECTRIC_METER_TYPE_ELECTRIC.getCode());
+        parameter.setDeviceType(ElectricMeterEnum.ELECTRIC_METER_TYPE_ELECTRIC.getCode());
         parameter.setRows(MeterConstants.ROWS);
         parameter.setPage(MeterConstants.FIRST_PAGE);
         return parameter;
@@ -337,7 +338,7 @@ public class MeterServiceImpl implements MeterService {
             startTime =dealDateStr+" "+dealHour+":00:00";
         }
 
-        String taskBatch =UUID.randomUUID().toString().replaceAll("-","");
+
         ElectricMeterDataCollectionParam parameter = getParameter();
         parameter.setStartTime(startTime);
         TbElectricMeterInfoCriteria meterInfoCriteria = new TbElectricMeterInfoCriteria();
@@ -346,7 +347,8 @@ public class MeterServiceImpl implements MeterService {
         if(meters !=null && meters.size()>0) {
             for (TbElectricMeterInfo meterBean : meters) {
                 //设置每块电表的
-                parameter.setCode(meterBean.getMeterCode());
+                parameter.setCode(meterBean.getFactoryMeterCode());
+                String taskBatch =UUID.randomUUID().toString().replaceAll("-","");
                 Result cResult = collectionData(parameter, dealDate, dealHour);
                 if (cResult != null && cResult.getCode().equals(GlobalConstants.SUCCESS_CODE)) {
                     //采集成功后，保存数据
@@ -383,7 +385,7 @@ public class MeterServiceImpl implements MeterService {
         if(failLogs !=null && failLogs.size()>0){
             for(TbElectricReadingFailLog failBean : failLogs){
                 //初始化参数
-                String taskBatch =UUID.randomUUID().toString().replaceAll("-","");
+
                 ElectricMeterDataCollectionParam parameter = getParameter();
                 String dateStr = DateUtils.formatDate(failBean.getDealDate(),"yyyy-MM-dd");
                 String startTime = "";
@@ -403,7 +405,8 @@ public class MeterServiceImpl implements MeterService {
                 if(meters !=null && meters.size()>0) {
                     for (TbElectricMeterInfo meterBean : meters) {
                         //设置每块电表的
-                        parameter.setCode(meterBean.getMeterCode());
+                        parameter.setCode(meterBean.getFactoryMeterCode());
+                        String taskBatch =UUID.randomUUID().toString().replaceAll("-","");
                         Result cResult = collectionData(parameter, dealDate, dealHour);
                         if (cResult != null && cResult.getCode().equals(GlobalConstants.SUCCESS_CODE)) {
                             //采集成功后，保存数据

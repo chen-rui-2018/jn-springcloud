@@ -13,9 +13,9 @@
                     <div class="orgBtn fr mainColor" @click="onlineContact(serverConDetailList.advisorServiceInfo.advisorAccount,serverConDetailList.advisorServiceInfo.advisorName)">在线联系</div>
                 </div>
                 <div class="agent2 clearfix color2">
-                    <div class="agentImg fl">
+                    <div class="conImg fl">
                         <img v-if="serverConDetailList.advisorIntroduction.avatar" :src="serverConDetailList.advisorIntroduction.avatar" alt="">
-                        <img v-else src="@/../static/img/product.png" alt="">
+                        <img v-else src="@/../static/img/touxiang.png" alt="">
                     </div>
                     <div class="agent2Info fl color2">
                         <p>所属机构：{{serverConDetailList.advisorIntroduction.orgName}}</p>
@@ -32,7 +32,7 @@
             </el-card>
         </div>
         <div class="agentDel">
-            <div class="agentDelTit">机构详情</div>
+            <div class="agentDelTit">顾问详情</div>
             <div class="agentDelCon pr color1">
                 <div class="mainColor shouqi pointer" v-if="zankaiFlag" @click='handleZd'>
                     收起
@@ -49,7 +49,7 @@
                                     <tr>
                                         <td class="table-orgspace-title">业务领域：</td>
                                         <td class="table-orgspace-detail" width="300px" colspan="2">
-                                            <div>{{serverConDetailList.advisorServiceInfo.businessArea}}</div>
+                                            <div>{{serverConDetailList.advisorServiceInfo.businessAreaName}}</div>
                                         </td>
                                         <td class="table-orgspace-title">从业年限：</td>
                                         <td class="table-orgspace-detail" style="width:322px;word-break: break-all;">
@@ -72,7 +72,6 @@
                                             <div class="table-orgspace-col table-orgspace-detail-container">{{serverConDetailList.advisorServiceInfo.personalProfile}}</div>
                                         </td>
                                     </tr>
-                                    <!-- <tr><td class="table-orgspace-title">个人简介：</td><td class="table-orgspace-detail" colspan="4"><div class="table-orgspace-detail-container">&lt;p&gt;曾在中瑞岳华会计师事务所任职多年，从事企业IPO审计、内控审计、尽职调查审计、专项资金审计、税务鉴定审计。&lt;/p&gt;&lt;p&gt;近年来，致立于园区企业服务，累计服务企业千余家，熟悉园区内科技型企业、软件企业等税收政策，协助企业完成税收争议抗辩、新三版企业财务规范、内控优化，能够为企业提供全方面的财税咨询服务。&lt;/p&gt;</div></td></tr> -->
                                 </table>
                             </div>
                         </el-tab-pane>
@@ -302,15 +301,35 @@
         </div>
         <!-- 提需求弹框 -->
         <template v-if="serverConVisible">
-            <el-dialog :visible.sync="serverConVisible" width="530px" top="30vh" :modal-append-to-body=false>
-                <el-form ref="financialProform" :model="serverProform" label-position="right" label-width="100px" style="max-width:436px;">
-                    <el-form-item label="需求描述:" prop="requireDetail" style="font-size:13px">
-                        <el-input v-model.trim="serverProform.requireDetail" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
-                    </el-form-item>
-                </el-form>
-                <div class="demandLine"></div>
-                <div class="serverTip mainColor">市场提醒：请务必在线订购，线下交易无法享受市场交易安全保障</div>
-                <div class="demandDia" @click="demandDia()">提交需求</div>
+            <el-dialog :visible.sync="serverConVisible" width="530px" top="30vh" :modal-append-to-body=false :lock-scroll="false">
+                <div v-if="islogin">
+                    <el-form ref="financialProform" :model="serverProform" label-position="right" label-width="100px" style="max-width:436px;">
+                        <el-form-item label="需求描述:" prop="requireDetail" style="font-size:13px">
+                            <el-input v-model.trim="serverProform.requireDetail" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
+                        </el-form-item>
+                    </el-form>
+                    <div class="demandLine"></div>
+                    <div class="serverTip mainColor">市场提醒：请务必在线订购，线下交易无法享受市场交易安全保障</div>
+                    <div class="demandDia" @click="demandDia()">提交需求</div>
+                </div>
+                <div v-else class="loginTip">
+                    你还未
+                    <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+                    /
+                    <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+                    企业账号
+                </div>
+            </el-dialog>
+        </template>
+        <template v-if="concatVisible">
+            <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :modal-append-to-body=false :lock-scroll="false">
+                <div class="loginTip">
+                    你还未
+                    <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+                    /
+                    <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+                    账号
+                </div>
             </el-dialog>
         </template>
     </div>
@@ -319,6 +338,8 @@
 export default {
   data() {
     return {
+      islogin: true,
+      concatVisible: false,
       zankaiFlag: false,
       activeName: "baseInfo",
       activeName1: "serverPro",
@@ -353,10 +374,16 @@ export default {
     this.getEvaluationCountInfo();
   },
   methods: {
+    //判断是否登录
+    isLogin() {
+      if (!sessionStorage.userInfo) {
+        this.islogin = false;
+      }
+    },
     onlineContact(advisorAccount, advisorName) {
       if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
-        return;
+        this.concatVisible = true;
+        return
       }
       this.$router.push({
         path: "/chat",
@@ -368,10 +395,7 @@ export default {
       });
     },
     demandRaise(i) {
-      if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
-        return;
-      }
+      this.isLogin();
       this.serverConVisible = true;
       this.serverProform.productId = i.productId;
       this.serverProform.productName = i.productName;
@@ -537,6 +561,15 @@ export default {
 </script>
 <style lang="scss">
 .serverConDetail {
+  .conImg {
+    width: 120px;
+    height: 128px;
+    img {
+      width: 100%;
+      height: 100%;
+      border-radius: 4px;
+    }
+  }
   .agentCon {
     .pagination-container {
       margin-top: 50px;

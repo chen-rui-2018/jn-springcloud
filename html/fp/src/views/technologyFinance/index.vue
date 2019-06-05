@@ -340,27 +340,6 @@
                   <span class="mainColor" style="margin-left:60px" @click="$router.push({path:'/finaInsDetail',query: { orgId: i.orgId }})">了解详情</span>
                 </p>
               </li>
-              <!-- <li class="finaInsLi">
-                <div class="finaInsItem">
-                  <img src="@/../static/img/ins1.png" alt="">
-                </div>
-                <div class="finaDiv1">
-                  <div class="finaTit">苏州中合会计事务所</div>
-                  <div class="finaContent">
-                    <p class="finaPhone">电话：
-                      <span class="mainColor">0510-87654321</span>
-                    </p>
-                    <p class="finaAddress">地址：江苏省南京市白下高新园区A座1306</p>
-                  </div>
-                </div>
-                <p class="clearfix finaPP">
-                  <span class="fl">累计
-                    <i class="mainColor">35</i>
-                    笔交易
-                  </span>
-                  <span class="mainColor fr">了解详情</span>
-                </p>
-              </li> -->
             </ul>
           </div>
         </div>
@@ -369,8 +348,9 @@
 
     <!-- 提需求弹框 -->
     <template v-if="financialProVisible">
-      <el-dialog :visible.sync="financialProVisible" width="600px" :modal-append-to-body=false> 
-        <el-form ref="financialProform" :rules="rules" :model="financialProform" label-position="right" label-width="150px" style="max-width:500px;">
+      <el-dialog :visible.sync="financialProVisible" width="600px" :modal-append-to-body=false :lock-scroll="false"> 
+        <div v-if="islogin">
+          <el-form ref="financialProform" :rules="rules" :model="financialProform" label-position="right" label-width="150px" style="max-width:500px;">
           <el-form-item label="融资金额(万元):" prop="financingAmount">
             <el-input v-model.trim="financialProform.financingAmount" placeholder="请输入融资金额" maxlength="100" clearable/>
           </el-form-item>
@@ -389,6 +369,25 @@
         </el-form>
         <div class="demandLine"></div>
         <div class="demandDia" @click="demandDia()">提交需求</div>
+        </div>
+        <div v-else class="loginTip">
+          你还未
+          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          /
+          <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+          企业账号
+        </div>
+      </el-dialog>
+    </template>
+      <template v-if="concatVisible">
+      <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :modal-append-to-body=false>
+        <div class="loginTip">
+          你还未
+          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          /
+          <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+          账号
+        </div>
       </el-dialog>
     </template>
   </div>
@@ -402,6 +401,8 @@ export default {
   },
   data() {
     return {
+      islogin: true,
+      concatVisible:false,
       sousuo: false,
       searchData: "",
       showFF: false,
@@ -502,10 +503,16 @@ export default {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
   },
   methods: {
+      //判断是否登录
+    isLogin() {
+      if (!sessionStorage.userInfo) {
+        this.islogin = false;
+      }
+    },
     handleInvertor() {
       if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
-        return;
+        this.concatVisible=true
+        return
       }
       this.$router.push({ name: "investorCertification" });
     },
@@ -586,10 +593,10 @@ export default {
     //金融产品右翻页
     rightPage() {
       if (this.page >= this.total1) {
-        // this.$message.error("没有更多数据了");
-        this.page = 1;
-        this.getFinancialProList();
-        // return;
+        this.$message.error("没有更多数据了");
+        // this.page = 1;
+        // this.getFinancialProList();
+        return;
       } else {
         this.page++;
         this.getFinancialProList();
@@ -624,10 +631,11 @@ export default {
     },
     //提需求
     raiseDemand(i) {
-      if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
-        return;
-      }
+      // if (!sessionStorage.userInfo) {
+      //   this.$message.error("请先登录");
+      //   return;
+      // }
+      this.isLogin()
       this.financialProVisible = true;
       this.financialProform.expectedDate = "";
       this.financialProform.financingAmount = "";
@@ -732,6 +740,11 @@ export default {
 </script>
 <style lang="scss">
 .TechnologyFinance {
+    .loginTip{
+    text-align: center;
+    font-size: 15px;
+    margin-bottom:20px;
+  }
   #finaPP {
     padding: 20px 10px;
   }

@@ -562,6 +562,11 @@ img {
 .finaInstitution,
 .finaPro,
 .companyProfile {
+  .loginTip{
+    text-align: center;
+    margin-bottom:20px;
+    font-size: 15px;
+  }
 
   // .el-rate__icon.el-icon-star-on{
   //   color:#00a041 !important;
@@ -744,8 +749,8 @@ img {
         border-bottom: 1px solid #eee;
 
         .orgImg {
-          width: 200px;
-          height: 130px;
+          width: 198px;
+          height: 128px;
 
           >img {
             width: 100%;
@@ -824,7 +829,11 @@ img {
 .finaInsDetail,
 .finaProDetail {
   padding-top: 65px;
-
+ .loginTip{
+   text-align: center;
+   font-size: 15px;
+   margin-bottom:20px;
+ }
   table {
     border-collapse: collapse;
     border-spacing: 0;
@@ -882,8 +891,8 @@ img {
       font-size: 13px;
 
       .agentImg {
-        width: 150px;
-        height: 120px;
+        width: 198px;
+        height: 128px;
 
         >img {
           width: 100%;
@@ -1249,19 +1258,21 @@ img {
 
     .serConsultant {
       .list-imgleft-container {
-        width: 130px;
-        height: 130px;
+        width: 120px;
+        height: 128px;
         display: inline-block;
         vertical-align: middle;
 
         >img {
           width: 100%;
           height: 100%;
+          border-radius: 4px;
         }
       }
 
       .detail-contact .text-of {
         width: 270px;
+        color:#999;
       }
 
       .text-of {
@@ -1275,9 +1286,9 @@ img {
       }
 
       .top-title.inner-consultant {
-        font-size: 18px;
+        font-size: 15px;
         cursor: pointer;
-        color: #333;
+        color: #222;
       }
 
       .top-title {
@@ -1413,6 +1424,11 @@ img {
 /* 门户首页、企业服务 */
 .portalIndex,
 .enterpriseservice {
+  .loginTip{
+    text-align: center;
+    font-size: 15px;
+    margin-bottom:20px;
+  }
   .avaP {
     float: right;
     color: #00a041;

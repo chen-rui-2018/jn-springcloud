@@ -77,9 +77,7 @@
     <div class="banner" ref="banner">
       <div class="swiper-container">
           <div class="swiper-wrapper">
-              <div class="swiper-slide"> <img src="@/../static/img/serMatHp.png" alt=""> </div>
-              <div class="swiper-slide"> <img src="@/../static/img/serMatHp.png" alt=""> </div>
-              <div class="swiper-slide"> <img src="@/../static/img/serMatHp.png" alt=""> </div>
+              <div class="swiper-slide" v-for="(item,index) in bannerList" :key="index"> <img :src="item.posterUrl" alt=""> </div>
           </div>
           <!-- 如果需要分页器 -->
           <div class="swiper-pagination"></div>
@@ -375,7 +373,8 @@ export default {
        menuShow:true,
        sliderData:[],
        sekectShow:false,
-       partnerLogo:[]
+       partnerLogo:[],
+       bannerList:[]
     };
   },
   filters: {
@@ -404,13 +403,29 @@ export default {
     this.getRatingList()
     this.selectIndustryProductList()
     window.addEventListener('scroll', this.handleScroll)
+    this.getBannarList()
     this.scrollpartner()
     this.getPartner()
+    // 轮播图
   },
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
   },
   methods: {
+    getBannarList(){
+      this.api.get({
+        url: "getPromotionList",
+        data: {
+          issuePlatform:'1',
+          needPage:'1',
+          propagandaArea:'top',
+          propagandaType:'market_banner'
+        },
+        callback: res=>{
+          this.bannerList=res.data.rows
+        }
+      });
+    },
     goSearch(){
       if(this.select==='1'){
         this.$router.push({path:'/serverOrg',query:{searchData:this.searchData}})

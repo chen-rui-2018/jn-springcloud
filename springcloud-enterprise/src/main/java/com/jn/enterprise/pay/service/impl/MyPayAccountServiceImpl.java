@@ -239,9 +239,7 @@ public class MyPayAccountServiceImpl implements MyPayAccountService {
         map.put(PaymentBillEnum.BILL_AC_BOOK_TYPE_10.getCode(),PaymentBillEnum.BILL_AC_BOOK_TYPE_10.getMessage().substring(0,PaymentBillEnum.BILL_AC_BOOK_TYPE_10.getMessage().length()-2));
         TbPayAccountBook tbPayAccountBook = new TbPayAccountBook();
         tbPayAccountBook.setAccountId(tbPayAccount.getAccountId());
-        tbPayAccountBook.setAutomaticDeductions(PayAccountBookEnum.ACCOUNT_BOOK_NOT_AUTO.getCode());
-        tbPayAccountBook.setCanRecharge(PayAccountBookEnum.ACCOUNT_BOOK_NOT_RECHARGE.getCode());
-        tbPayAccountBook.setIsShow(PayAccountBookEnum.ACCOUNT_BOOK_IS_NOT_SHOW.getCode());
+        tbPayAccountBook.setEntId(payAccountBookCreateParam.getEnterId());
         tbPayAccountBook.setCreatedTime(new Date());
         tbPayAccountBook.setCreatorAccount(user.getAccount());
         tbPayAccountBook.setRecordStatus(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
@@ -253,6 +251,10 @@ public class MyPayAccountServiceImpl implements MyPayAccountService {
                 tbPayAccountBook.setAutomaticDeductions(PayAccountBookEnum.ACCOUNT_BOOK_AUTO.getCode());
                 tbPayAccountBook.setCanRecharge(PayAccountBookEnum.ACCOUNT_BOOK_RECHARGE.getCode());
                 tbPayAccountBook.setIsShow(PayAccountBookEnum.ACCOUNT_BOOK_IS_SHOW.getCode());
+            }else{
+                tbPayAccountBook.setAutomaticDeductions(PayAccountBookEnum.ACCOUNT_BOOK_NOT_AUTO.getCode());
+                tbPayAccountBook.setCanRecharge(PayAccountBookEnum.ACCOUNT_BOOK_NOT_RECHARGE.getCode());
+                tbPayAccountBook.setIsShow(PayAccountBookEnum.ACCOUNT_BOOK_IS_NOT_SHOW.getCode());
             }
             logger.info("【统一缴费-创建账户和账本】，创建账本开始");
             logger.info("【统一缴费-创建账户和账本】，创建账本入參【{}】",JsonUtil.object2Json(tbPayAccountBook));

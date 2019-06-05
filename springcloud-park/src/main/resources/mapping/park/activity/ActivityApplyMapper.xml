@@ -13,7 +13,6 @@
         from tb_activity_apply ta
         where
         1=1
-        and ta.apply_status = '1'
         and ta.record_status = '1'
         <if test="activityId !=null and activityId !='' ">
             and ta.activity_id=#{activityId}

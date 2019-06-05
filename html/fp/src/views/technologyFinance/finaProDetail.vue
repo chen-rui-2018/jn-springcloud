@@ -10,12 +10,12 @@
       <el-card>
         <div class="agent1 clearfix">
           <div class="agentTil fl color1">{{serverOrgDetailList.productName}}</div>
-          <div class="orgBtn fr mainColor" @click="raiseDemand(serverOrgDetailList.productId,serverOrgDetailList.productName)">提需求</div>
+          <div class="orgBtn fr mainColor" v-if="serverOrgDetailList.orgName" @click="raiseDemand(serverOrgDetailList.productId,serverOrgDetailList.productName)">提需求</div>
         </div>
         <div class="agent2 clearfix color2">
           <div class="agentImg fl">
-            <!-- <img src="@/../static/img/ins1.png" alt=""> -->
-            <img :src="serverOrgDetailList.orgLogo" alt="">
+            <img v-if="serverOrgDetailList.pictureUrl" :src="serverOrgDetailList.pictureUrl" alt="">
+            <img v-else src="@/../static/img/product.png" alt="">
           </div>
           <div class="agent2Info fl color2 clearfix" id="agent2Info">
             <p>服务机构：{{serverOrgDetailList.orgName}}</p>
@@ -154,7 +154,7 @@
     </div>
      <!-- 提需求弹框 -->
     <template v-if="financialProVisible">
-      <el-dialog :visible.sync="financialProVisible" width="600px">
+      <el-dialog :visible.sync="financialProVisible" width="600px" :modal-append-to-body=false>
         <el-form ref="financialProform" :rules="rules" :model="financialProform" label-position="right" label-width="150px" style="max-width:500px;">
           <el-form-item label="融资金额(万元):" prop="financingAmount">
             <el-input v-model.trim="financialProform.financingAmount" placeholder="请输入融资金额" maxlength="100" clearable/>
@@ -301,6 +301,10 @@ export default {
     },
     //提需求
     raiseDemand(productId,productName) {
+       if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
       this.financialProVisible = true;
       this.financialProform.expectedDate = "";
       this.financialProform.financingAmount = "";

@@ -25,13 +25,13 @@
                                 <span>热度排序</span>
                             </li>
                             <li class="showListLi">
-                                <i class="iconfont icon-menu1" @click="handleCrosswise('icon-menu1')" :class="{'active0':showListFlag == 'icon-menu1'}"></i>
-                                <i class="iconfont icon-menu" @click="handleVertical('icon-menu')" :class="{'active0':showListFlag == 'icon-menu'}"></i>
+                                <i class="iconfont icon-menu" @click="handleCrosswise('icon-menu')" :class="{'active0':showListFlag == 'icon-menu'}"></i>
+                                <i class="iconfont icon-menu1" @click="handleVertical('icon-menu1')" :class="{'active0':showListFlag == 'icon-menu1'}"></i>
                             </li>
                         </ul>
                     </div>
                 </div>
-                <div class="allActi clearfix">
+                <!-- <div class="allActi clearfix">
                     <ul class="actiFilterUl fl clearfix">
                         <li :class="{'active0':actiFilflag == ''}" @click="handleFil('')">全部活动</li>
                         <li v-if="i<5" v-for="(v,i) in actiTypeList" :key="i" :class="{'active0':actiFilflag == v.typeId}" @click="handleFil(v.typeId)">{{v.typeName}}</li>
@@ -49,7 +49,7 @@
                         <input type="text" placeholder="搜索活动" v-model="keyWord">
                         <i class="iconfont icon-sousuo" @click="handleSearchList"></i>
                     </div>
-                </div>
+                </div> -->
                 <div class="actiTab">
                     <ul class="allActiUl clearfix" v-if="flag">
                         <li v-for="(item,index) in actiListSlim" :key='index'>
@@ -113,7 +113,9 @@
                                 </div>
                             </div>
                             <div class="verticalRight fr">
-                                <el-button type="success" plain @click="immediateSign(item.id)">立即报名</el-button>
+                                <el-button type="success" v-if="item.actiStatus=='3'" style="background:#00a041;height:38px;width:110px">活动已结束</el-button>
+                                <el-button type="success" v-if="item.actiStatus=='4'" style="background:#00a041;height:38px;width:110px">活动已取消</el-button>
+                                <el-button type="success" v-if="item.actiStatus=='2'" style="background:#ecfcf2;height:38px;width:110px;border:1px solid #00a041;color:#00a041;">报名中</el-button>
                             </div>
                         </li>
                     </ul>
@@ -133,12 +135,12 @@ export default {
       currentPage4: 1,
       checkActi: "",
       flag: true,
-      showListFlag: "",
+      showListFlag: "icon-menu",
       currentPage4: 1,
       actiFilflag: "",
       colorFlag: "",
       actiListSlim: [],
-      actiTypeList: [],
+    //   actiTypeList: [],
       page: 1, //页码
       row: 12, //每页显示多少条
       total: 0,
@@ -153,7 +155,7 @@ export default {
   },
   mounted() {
     this.initList();
-    this.getActiType();
+    // this.getActiType();
   },
   methods: {
     //立即报名
@@ -162,21 +164,20 @@ export default {
         this.$message.error("请先登录");
         return;
       }
-       this.api.post({
+      this.api.post({
         url: `springcloud-park/activity/activityApply/quickApply?activityId=${id}`,
         data: {
-            activityId:id,
+          activityId: id
         },
         // dataFlag: false,
-        urlFlag:true,
-        callback: (res)=>{
+        urlFlag: true,
+        callback: res => {
           if (res.code == "0000") {
             // _this.actiTypeList = res.data.rows;
-            this.$message(res.result)
+            this.$message(res.result);
           }
         }
       });
-      
     },
     handleTypeList() {
       this.showList = !this.showList;
@@ -190,12 +191,12 @@ export default {
     handleCrosswise(v) {
       //横向显示
       this.flag = true;
-      this.showListFlag = "icon-menu1";
+      this.showListFlag = "icon-menu";
     },
     handleVertical() {
       //竖向显示
       this.flag = false;
-      this.showListFlag = "icon-menu";
+      this.showListFlag = "icon-menu1";
     },
     handleSizeChange(val) {
       //改变每页显示多少条的回调函数
@@ -250,7 +251,7 @@ export default {
           page: this.page,
           rows: this.row,
           startTime: this.startTime,
-          typeId: this.typeId
+          typeId: 'org_activity'
         },
         dataFlag: false,
         callback: function(res) {
@@ -261,19 +262,19 @@ export default {
         }
       });
     },
-    getActiType() {
-      let _this = this;
-      this.api.post({
-        url: "findActivityTypeList",
-        data: {},
-        // dataFlag: false,
-        callback: function(res) {
-          if (res.code == "0000") {
-            _this.actiTypeList = res.data.rows;
-          }
-        }
-      });
-    }
+    // getActiType() {
+    //   let _this = this;
+    //   this.api.post({
+    //     url: "findActivityTypeList",
+    //     data: {},
+    //     // dataFlag: false,
+    //     callback: function(res) {
+    //       if (res.code == "0000") {
+    //         _this.actiTypeList = res.data.rows;
+    //       }
+    //     }
+    //   });
+    // }
   }
 };
 </script>

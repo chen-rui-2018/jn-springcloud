@@ -94,9 +94,9 @@
     <div class="serverOrgContent" id="serverOrgContent">
       <ul>
         <li class="clearfix" v-for="(i,k) in serverAgent" :key='k'>
-          <div class="orgImg fl" @click="handleOrgDel(i.productId)">
-            <!-- <img src="@/../static/img/ins1.png" alt=""> -->
-            <img :src="i.pictureUrl" alt="">
+          <div class="orgImg fl pointer" @click="handleOrgDel(i.productId)">
+            <img v-if="i.pictureUrl" :src="i.pictureUrl" alt="">
+            <img v-else src="@/../static/img/product.png" alt="">
           </div>
           <div class="orgCon fl">
             <div class="conTil">{{i.productName}}</div>
@@ -134,7 +134,7 @@
     </div>
     <!-- 提需求 -->
     <template v-if="finaProVisible">
-      <el-dialog :visible.sync="finaProVisible" width="600px">
+      <el-dialog :visible.sync="finaProVisible" width="600px" :modal-append-to-body=false>
         <el-form ref="financialProform" :rules="rules" :model="financialProform" label-position="right" label-width="150px" style="max-width:500px;">
           <el-form-item label="融资金额(万元):" prop="financingAmount">
             <el-input v-model.trim="financialProform.financingAmount" placeholder="请输入融资金额" maxlength="100" clearable/>
@@ -382,6 +382,10 @@ export default {
     },
     //提需求
     raiseDemand(i) {
+      if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
       this.finaProVisible = true;
       this.financialProform.expectedDate = "";
       this.financialProform.financingAmount = "";

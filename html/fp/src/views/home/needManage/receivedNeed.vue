@@ -6,13 +6,13 @@
     </div>
     <div class="receivedNeed_main">
       <div class="searh_tab">
-        <span>需求人</span>
+        <span>需求人：</span>
         <el-input placeholder="请输入需求人" v-model="sendData.requirePerson" class="input-with-select" clearable>
         </el-input>
-        <span>意向产品</span>
+        <span>意向产品：</span>
         <el-input placeholder="请输入意向产品" v-model="sendData.intentProduct" class="input-with-select" clearable>
         </el-input>
-        <span>对接结果</span>
+        <span>对接结果：</span>
         <el-select v-model="sendData.handleResult" placeholder="请选择对接结果" clearable >
           <el-option label="对接成功" value="1"></el-option>
           <el-option label="对接失败" value="2"></el-option>
@@ -83,7 +83,7 @@ export default {
       data: this.sendData,
       callback: function(res) {
         if (res.code == "0000") {
-            console.log(res)
+            // console.log(res)
             _this.receivedtList=res.data.rows
             _this.total=res.data.total
           }
@@ -112,11 +112,14 @@ export default {
       }
     },
     handleSizeChange(val) {
-      // this.sendData.rows=val
+      this.sendData.rows=val
+      this.getreceivedtList()
     },
     //翻页
     handleCurrentChange(val) {
-      // this.sendData.page=val
+      this.sendData.page=val
+      this.getreceivedtList()
+
     },
   }
 }
@@ -210,9 +213,6 @@ export default {
         .el-pagination.is-background .el-pager li{
           background-color: #fff;
           border: 1px solid #eee;
-        }
-        .el-pagination.is-background .el-pager li:not(.disabled):hover{
-          color:#fff;
         }
         .el-pagination.is-background .el-pager li:not(.disabled).active{
           background-color: #00a041;

@@ -28,7 +28,17 @@ Page({
   onReachBottom: function () {
     if(this.data.detailSend.page<Math.ceil(this.data.total/this.data.detailSend.rows)){
       this.data.detailSend.page++
-      this.getparkDetail()
+      request.send({
+        url: '/springcloud-park/user/parking/carInfo/getCarParkingRecordList',
+        data: this.data.detailSend,
+        method: 'GET',
+      }).then(res=>{
+        if(res.data.code==='0000'){
+          this.setData({
+            parkDetail:this.data.parkDetail.concat(res.data.data.rows), total:res.data.data.total
+          })
+        }
+      })
     }else{
       wx.showToast({
         title: '已到最后一页',
@@ -66,7 +76,7 @@ Page({
     }).then(res=>{
       if(res.data.code==='0000'){
         this.setData({
-          parkDetail:this.data.parkDetail.concat(res.data.data.rows), total:res.data.data.total
+          parkDetail:res.data.data.rows, total:res.data.data.total
         })
       }
     })
@@ -90,12 +100,14 @@ Page({
     this.setData({
       "detailSend.startTime": e.detail.value
     })
+    this.getparkDetail()
   }, 
   /*时间选择器 */
   bindDateAfterChange: function (e) {
     this.setData({
       "detailSend.endTime": e.detail.value
     })
+    this.getparkDetail()
   },
   getDateStr(AddDayCount) {   
    var dd = new Date();  
@@ -108,7 +120,7 @@ Page({
   changeTime(e){
     const date = new Date()
     this.setData({
-      "detailSend.endTime":date.getFullYear()+'-'+(date.getMonth()+1)+"-"+date.getDate()
+      "detailSend.endTime":date.getFullYear()+'-'+(date.getMonth()+1)+"-"+(date.getDate()<20?"0"+date.getDate():date.getDate())
     })
     if(e.currentTarget.dataset.id==='1'){
       this.setData({

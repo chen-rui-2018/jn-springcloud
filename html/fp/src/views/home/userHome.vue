@@ -15,14 +15,14 @@
                     </div>
                 </div>
             </div> -->
-      
+
       <div v-if="editFlag">
         <div class="mainColor setTit">个人资料</div>
         <div class="setphone">
           <div class="setdistance">
             <span class="textRight mg">头&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;像：</span>
             <img v-if="userData.avatar" :src="userData.avatar" class="imageItem" alt="">
-            <img v-else src="@/../static/img/头像.png" class="imageItem" alt="">
+            <img v-else src="@/../static/img/touxiang.png" class="imageItem" alt="">
           </div>
           <div class="setdistance">
             <span class="textRight mg">昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称：</span>
@@ -66,7 +66,7 @@
         <div class="setphone pr">
           <div class="setdistance uploadImgItem">
             <span class="textRight mg">选择文件：</span>
-            <el-upload class="avatar-uploader avatarImg" :show-file-list="false" action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload" :on-success="handleAvaSuccess" :headers="headers" :before-upload="beforeAvaUpload" style="display:inline-block">
+            <el-upload class="avatar-uploader avatarImg" :show-file-list="false" :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'" :on-success="handleAvaSuccess" :headers="headers" :before-upload="beforeAvaUpload" style="display:inline-block">
               <img v-if="avarUrl" :src="avarUrl" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
@@ -154,6 +154,7 @@ export default {
   props:['userData'],
   data() {
     return {
+      baseUrl: this.api.host,
       signature: "",
       oldPassword: "",
       newPassword: "",
@@ -182,6 +183,7 @@ export default {
     },
     init(){
       this.nickName = this.userData.nickName;
+      this.avarUrl = this.userData.avatar;
       this.name = this.userData.name;
       // this.name = this.userData.name;
       this.sexFlag = this.userData.sex;
@@ -203,7 +205,7 @@ export default {
           }
         }
       }
-      
+
     },
     cancelEd() {
       for(let it of this.options){
@@ -247,6 +249,7 @@ export default {
             _this.editFlag = true;
             // _this.cancelEd();
             bus.$emit('getUserinfoF')
+            bus.$emit('upUserData')
           } else {
             _this.$message.error(res.result);
           }
@@ -310,7 +313,8 @@ export default {
       this.api.post({
         url: "modifyUserPassword",
         data: {
-          account: _this.$route.query.account,
+          // account: _this.$route.query.account,
+          account:JSON.parse(sessionStorage.userInfo).account,
           newPassword: _this.newPassword,
           // newPasswordB: _this.newPasswordB,
           oldPassword: _this.oldPassword
@@ -487,4 +491,3 @@ export default {
   }
 }
 </style>
-

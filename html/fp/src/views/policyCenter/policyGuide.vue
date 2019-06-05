@@ -88,8 +88,7 @@
               </div>
             </div>
             <div class="agent2 color2" v-if="zankaiFlag">
-              <div class="agent2Con">
-                {{getGuideDetal.policyContent}}
+              <div class="agent2Con" v-html="getGuideDetal.policyContent">
               </div>
               <!-- <div class="agent2Con" v-else>
                             暂无内容！
@@ -395,9 +394,9 @@ export default {
         .agent2 {
           padding: 10px 0;
           .agent2Con {
-            height: 150px;
-            width: 80%;
-            overflow: hidden;
+            max-height: 400px;
+            // width: 80%;
+            overflow: auto;
             // white-space: nowrap;
             // text-overflow: ellipsis;
           }

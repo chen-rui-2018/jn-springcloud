@@ -1,6 +1,7 @@
 package com.jn.enterprise.servicemarket.org.dao;
 
 import com.jn.enterprise.servicemarket.org.model.OrgCount;
+import com.jn.enterprise.servicemarket.org.model.OrgListParam;
 import com.jn.enterprise.servicemarket.org.vo.BusinessStatisticalNumVO;
 import com.jn.enterprise.servicemarket.org.vo.BusinessStatisticalParam;
 import com.jn.enterprise.servicemarket.org.vo.OrgDetailVo;
@@ -21,10 +22,10 @@ public interface OrgMapper {
 
     /**
      * 查询服务机构列表
-     * @param parameter
+     * @param orgListParam
      * @return
      */
-    List<ServiceOrg> selectServiceOrgList(OrgParameter parameter);
+    List<ServiceOrg> selectServiceOrgList(OrgListParam orgListParam);
 
     /**
      * 根据机构ID查询机构详情

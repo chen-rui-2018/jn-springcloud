@@ -1,7 +1,7 @@
 package com.jn.wechat.base.service;
 
 import com.jn.wechat.base.model.template.WxTemplateIndustrySet;
-import com.jn.wechat.base.model.template.WxTemplateMessage;
+import com.jn.wechat.model.WxTemplateMessage;
 
 /**
  * 模板消息接口

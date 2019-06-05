@@ -26,4 +26,9 @@ public interface PmVideoService {
      * @return
      */
     Integer pmVideoApplyHandler(PmVideoVo pmVideoVo, User user);
+
+    /**
+     * 对录像赋权超过7天的录像,清除查看权限
+     */
+    void updateVideoInfo();
 }

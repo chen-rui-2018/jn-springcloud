@@ -2,9 +2,13 @@ const app = getApp()
 
 Page({
   data: {
-    userInfo: {}
+    userInfo: {},
+    imgBaseUrl:''
   },
   onLoad() {
+    this.setData({
+      imgBaseUrl:app.globalData.imgBaseUrl
+    })
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,

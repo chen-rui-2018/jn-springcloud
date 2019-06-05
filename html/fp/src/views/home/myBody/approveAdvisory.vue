@@ -44,7 +44,7 @@
             <span>{{contactEmail}}</span>
           </el-form-item>
           <el-form-item
-            label="执业资源:"
+            label="执业资质:"
             class="inline"
           >
             <span>{{practiceQualification}}</span>
@@ -165,6 +165,7 @@
     </div>
        <el-dialog
   :visible.sync="dialogVisible"
+  :modal-append-to-body="false"
   width="50%">
   <img :src="certificatePhoto" alt="图片" style="width:100%">
   <span slot="footer" class="dialog-footer">

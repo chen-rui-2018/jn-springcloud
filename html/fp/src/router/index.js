@@ -151,11 +151,12 @@ const router= new Router({
             title: '消息中心'
           },
           children: [{
-              path: 'chat',
+              path: '/chat',
               component: resolve => require(['@/views/messageCenter/chat'], resolve),
               meta: {
                 title: '社区交流'
-              }
+              },
+              name: 'chat'
             },
             {
               path: '/parkNotice',
@@ -317,7 +318,7 @@ const router= new Router({
               path: '/servicemarket/product/productService/specialproduct',
               name: 'specialproduct',
               meta: {
-                title: '特色服务产品管理'
+                title: '特色服务产品'
               },
               component: resolve => require(['@/views/home/productService/specialproduct'], resolve)
 

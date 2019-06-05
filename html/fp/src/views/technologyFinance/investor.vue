@@ -32,8 +32,8 @@
       <ul>
         <li v-for="(i,k) in investorInfoList" :key='k'>
           <div class="liImg" @click="handleDel(i.investorAccount)">
-            <!-- <img src="@/../static/img/heng3.png" alt=""> -->
-            <img :src="i.avatar" alt="">
+            <img v-if="i.avatar" :src="i.avatar" alt="">
+            <img v-else src="@/../static/img/touxiang.png" alt="">
           </div>
           <div class="liCont">
             <div class="tit color4">{{i.investorName}}</div>
@@ -117,7 +117,7 @@ export default {
         url: "getInvestorInfoList",
         data: {
           needPage: 1,
-          mainCode: ""
+          mainCode: _this.mainCode
         },
         callback: function(res) {
           if (res.code == "0000") {
@@ -242,7 +242,7 @@ padding-top: 65px;
 
     .filRight {
       width: 200px;
-      height: 35px;
+      height: 36px;
       line-height: 35px;
       text-align: center;
       padding-right: 40px;

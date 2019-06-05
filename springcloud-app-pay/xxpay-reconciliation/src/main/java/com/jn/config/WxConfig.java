@@ -5,9 +5,8 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
 
 /**
- * TODO：未添加类描述
  *
- * @Author： cm
+ * @Author： hey
  * @Date： Created on 2019/1/7 11:08
  * @Version： v1.0
  * @Modified By:

@@ -37,4 +37,10 @@ public interface ElectricMeterClient {
 
     @RequestMapping(value = "/api/meter/switchMeterTimer", method = RequestMethod.GET)
     void setSwitchMeterTimer();
+
+    /**
+     * 能耗监控程序
+     */
+    @RequestMapping(value = "/api/meter/monitor", method = RequestMethod.GET)
+    void monitor();
 }

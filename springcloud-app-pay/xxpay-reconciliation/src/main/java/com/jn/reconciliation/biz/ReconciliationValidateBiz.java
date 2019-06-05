@@ -34,11 +34,12 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * 对账验证biz，(检查是否已经对过账).
- *
- * 龙果学院：www.roncoo.com
- * 
- * @author：shenjialong
+ * @ClassName：对账验证biz，(检查是否已经对过账)..
+ * @Descript：
+ * @Author： hey
+ * @Date： Created on 2019/5/20 15:54
+ * @Version： v1.0
+ * @Modified By:
  */
 @Component("reconciliationValidateBiz")
 public class ReconciliationValidateBiz {
@@ -67,11 +68,12 @@ public class ReconciliationValidateBiz {
 		LOG.info("检查,支付方式[" + interfaceCode + "],订单日期[" + billDateStr + "]");
 
 		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("billDate", billDateStr);
-		paramMap.put("interfaceCode", interfaceCode);
-		// 除非对账错误或者对账异常才可以发起第二次对账
-		paramMap.put("status", BatchStatusEnum.ERROR.name() + "," + BatchStatusEnum.FAIL.name());
 
+		// 除非对账错误或者对账异常才可以发起第二次对账
+		String notInStatus = BatchStatusEnum.ERROR.getCode() + "," + BatchStatusEnum.FAIL.getCode();
+		paramMap.put("billDate",billDateStr);
+		paramMap.put("interfaceCode",interfaceCode);
+		paramMap.put("inStatus",BatchStatusEnum.SUCCESS.getCode());
 		List<TbPayReconciliationCheckBatch> list = payReconciliationCheckBatchService.listByCondition(paramMap);
 		if (list.isEmpty()) {
 			return false;
@@ -96,8 +98,8 @@ public class ReconciliationValidateBiz {
 				TbPayReconciliationMistake mistake = new TbPayReconciliationMistake();
 				mistake.setAccountCheckBatchNo(scratchRecord.getBatchNo());
 				mistake.setBillDate(scratchRecord.getBillDate());
-				mistake.setErrType(ReconciliationMistakeTypeEnum.BANK_MISS.name());
-				mistake.setHandleStatus(MistakeHandleStatusEnum.NOHANDLE.name());
+				mistake.setErrType(ReconciliationMistakeTypeEnum.BANK_MISS.getCode());
+				mistake.setHandleStatus(MistakeHandleStatusEnum.NOHANDLE.getCode());
 				mistake.setBankType(scratchRecord.getPayWayCode());
 
 				mistake.setOrderNo(scratchRecord.getMerchantOrderNo());

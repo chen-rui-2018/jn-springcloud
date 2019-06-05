@@ -11,12 +11,12 @@
             <el-card>
                 <div class="agent1 clearfix">
                     <div class="agentTil fl">{{investorInfoDetails.investorName}}</div>
-                    <div class="orgBtn fr mainColor">在线联系</div>
+                    <div class="orgBtn fr mainColor pointer" @click="onlineContat(investorInfoDetails.investorAccount,investorInfoDetails.investorName)">在线联系</div>
                 </div>
                 <div class="agent2 clearfix color2">
                     <div class="agentImg fl">
-                        <!-- <img src="@/../static/img/ins1.png" alt=""> -->
-                        <img :src="investorInfoDetails.avatar" alt="">
+                        <img v-if="investorInfoDetails.avatar" :src="investorInfoDetails.avatar" alt="">
+                        <img v-else src="@/../static/img/touxiang.png" alt="">
                     </div>
                     <div class="agent2Info fl">
                         <p>所属单位：{{investorInfoDetails.orgName}}</p>
@@ -81,6 +81,14 @@ export default {
     this.getInvestorInfoDetails();
   },
   methods: {
+     //在线联系
+    onlineContat(investorAccount,investorName){
+       if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
+      this.$router.push({path:'/chat',query:{fromUser: JSON.parse(sessionStorage.userInfo).account,toUser:investorAccount,nickName:investorName}})
+    },
     getInvestorInfoDetails() {
       //投资人详情
       let _this = this;

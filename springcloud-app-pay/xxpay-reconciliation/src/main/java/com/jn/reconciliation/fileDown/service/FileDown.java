@@ -19,12 +19,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 
+
 /**
- * 对账文件下载
- * 
- * 龙果学院：www.roncoo.com
- * 
- * @author：shenjialong
+ * @ClassName：对账文件下载
+ * @Descript：
+ * @Author： hey
+ * @Date： Created on 2019/5/20 15:54
+ * @Version： v1.0
+ * @Modified By:
  */
 public interface FileDown {
 

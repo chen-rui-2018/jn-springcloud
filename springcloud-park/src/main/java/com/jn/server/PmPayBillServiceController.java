@@ -43,18 +43,6 @@ public class PmPayBillServiceController implements PmPayBillServiceClient {
     }
 
     /**
-     * 每半小时执行一次,为企业发送物业费账单
-     *
-     * @return
-     */
-    @Override
-    @ControllerLog(doAction = "每半小时执行一次,为企业发送物业费账单")
-    public Result<Boolean> generatePmBill() {
-        pmPayBillService.generatePmBill();
-        return new Result<>(true);
-    }
-
-    /**
      * 缴费单物业费支付成功回调接口
      * @param payCallBackNotify
      * @return

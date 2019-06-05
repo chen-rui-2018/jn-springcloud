@@ -56,14 +56,15 @@
             <!-- <span class="resdeadline">报名截止还有&nbsp;{{this.sysTemTime-this.activityDetail.applyEndTime}}</span> -->
           </p>
           <div class="delshare">
-            <el-button type="success" v-if="activityDetail.actiStatus=='2'&&activityDetail.isApply=='1'" style="background:#00a040;height:38px;width:110px" round @click="quickApply(activityDetail.id)">立即报名</el-button>
-            <el-button type="success" v-if="activityDetail.actiStatus=='2'&&activityDetail.isApply=='0'" style="background:#00a040;height:38px;width:110px" round @click="stopApply(activityDetail.id)">停止报名</el-button>
+            <el-button type="success" v-if="activityApplyShow=='0'" style="background:#00a040;height:38px;width:110px" round>停止报名</el-button>
+            <el-button type="success" v-if="activityApplyShow=='1'" style="background:#00a040;height:38px;width:110px" round @click="quickApply(activityDetail.id)">立即报名</el-button>
+            <el-button type="success" v-if="activityApplyShow=='2'" style="background:#00a040;height:38px;width:110px" round @click="stopApply(activityDetail.id)">取消报名</el-button>
             <!-- <el-button type="success" class="atten" round icon="iconfont icon-xihuan">&nbsp;关注&nbsp;3</el-button> -->
-            <span class="shareto">
+            <!-- <span class="shareto">
               分享到
-              <i class="iconfont icon-weixin"></i>
+              <i class="iconfont icon-weixin" style="margin-right:10px"></i>
               <i class="iconfont icon-12sina"></i>
-            </span>
+            </span> -->
           </div>
         </div>
       </el-card>
@@ -73,7 +74,7 @@
       <el-card>
         <div class="delContent">
           <!-- <img src="@/../static/img/detail1.png" alt=""> -->
-          <p>{{this.activityDetail.actiDetail}}</p>
+          <p v-html="activityDetail.actiDetail"></p>
           <!-- <img src="@/../static/img/detail2.png" alt=""> -->
         </div>
       </el-card>
@@ -113,7 +114,7 @@
                     <span>{{item.likeNum}}</span> -->
                     <i class="iconfont icon-liuyan" v-if="inFlag == item.id" style="cursor:pointer" @click="inFlag = '';">&nbsp;收起回复</i>
                     <i class="iconfont icon-liuyan" v-else style="cursor:pointer" @click="replyFlag(item.id)">&nbsp;回复</i>
-                    
+
                   </p>
                 </div>
               </div>
@@ -144,6 +145,7 @@
 export default {
   data() {
     return {
+      activityApplyShow: '1',
       inFlag: "",
       textarea: "",
       textData: "",
@@ -156,7 +158,9 @@ export default {
       actiApplyList: [],
       accountIsLike: false,
       isCommentLike: false,
-      countDown: ""
+      countDown: "",
+      applyEndTime:0,
+      secondsTime:0,
     };
   },
   created() {
@@ -187,7 +191,7 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-            _this.textData=''
+            _this.textData = "";
             _this.getCommentInfo();
           } else {
             _this.$message.error(res.result);
@@ -204,7 +208,7 @@ export default {
     },
     //回复评论
     replycom(item) {
-       if (!sessionStorage.userInfo) {
+      if (!sessionStorage.userInfo) {
         this.$message.error("请先登录");
         return;
       }
@@ -228,7 +232,7 @@ export default {
       });
     },
     comLike(item) {
-       if (!sessionStorage.userInfo) {
+      if (!sessionStorage.userInfo) {
         this.$message.error("请先登录");
         return;
       }
@@ -293,10 +297,18 @@ export default {
     },
     handCheck(id) {
       //跳转报名人列表
+       if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
       this.$router.push({ path: "regStatus", query: { activityId: id } });
     },
     quickApply(id) {
       //立即报名
+        if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
       let _this = this;
       this.api.post({
         url: `springcloud-park/activity/activityApply/quickApply?activityId=${id}`,
@@ -307,7 +319,7 @@ export default {
         callback: function(res) {
           if (res.code == "0000") {
             _this.$message.success("报名成功");
-            _this.init();
+            _this.activityApplyShow = '2';
           } else {
             _this.$message.error(res.result);
           }
@@ -316,17 +328,21 @@ export default {
     },
     stopApply(id) {
       //停止报名
+        if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
       let _this = this;
       this.api.post({
         url: `springcloud-park/activity/activityApply/cancelApply?activityId=${id}`,
         data: {
           activityId: id
         },
-        dataFlag: true,
+        urlFlag: true,
         callback: function(res) {
           if (res.code == "0000") {
             _this.$message.success("取消报名成功");
-            _this.init();
+            _this.activityApplyShow = '1';
           } else {
             _this.$message.error(res.result);
           }
@@ -334,7 +350,7 @@ export default {
       });
     },
     handleLike(id) {
-       if (!sessionStorage.userInfo) {
+      if (!sessionStorage.userInfo) {
         this.$message.error("请先登录");
         return;
       }
@@ -375,16 +391,17 @@ export default {
         }
       });
     },
+    getTime(t){
+      return new Date(t).getTime();
+    },
     //报名倒计时
-    countTime(t) {
-      var secondsTime = new Date().getTime();
-      var applyTime = new Date(t).getTime();
-      var leftTime = applyTime - secondsTime;
+    countTime(applyTime,secondsTime) {
+      let leftTime = applyTime - secondsTime;
       if (leftTime >= 0) {
-        var d = Math.floor(leftTime / 1000 / 60 / 60 / 24);
-        var h = Math.floor((leftTime / 1000 / 60 / 60) % 24);
-        var m = Math.floor((leftTime / 1000 / 60) % 60);
-        var s = Math.floor((leftTime / 1000) % 60);
+        let d = Math.floor(leftTime / 1000 / 60 / 60 / 24);
+        let h = Math.floor((leftTime / 1000 / 60 / 60) % 24);
+        let m = Math.floor((leftTime / 1000 / 60) % 60);
+        let s = Math.floor((leftTime / 1000) % 60);
         d = d;
         h = h > 9 ? h : "0" + h;
         m = m > 9 ? m : "0" + m;
@@ -392,7 +409,7 @@ export default {
         this.countDown = d + "天" + h + "小时" + m + "分" + s + "秒";
         return false;
       } else {
-        this.countDown = "0天0时0分0秒";
+        this.countDown = "0天00时00分00秒";
         return true;
       }
     },
@@ -410,8 +427,12 @@ export default {
             _this.activityDetail = res.data.activityDetail;
             _this.actiApplyList = res.data.activityApplyList;
             _this.accountIsLike = res.data.accountIsLike;
+            _this.activityApplyShow = res.data.activityApplyShow;
+            _this.applyEndTime = _this.getTime(res.data.activityDetail.applyEndTime);
+            _this.secondsTime = _this.getTime(res.data.sysTemTime);
             _this._interval = setInterval(() => {
-              let data = _this.countTime(res.data.activityDetail.applyEndTime);
+              let data = _this.countTime(_this.applyEndTime,_this.secondsTime);
+              _this.secondsTime = _this.secondsTime + 1000;
               if (data) {
                 clearInterval(_this._interval);
               }
@@ -453,6 +474,7 @@ export default {
   .delnav {
     padding: 20px 0;
     font-size: 13px;
+    font-weight: bold;
   }
   .delinfo {
     margin-top: 40px;
@@ -500,8 +522,14 @@ export default {
               float: left;
               height: 20px;
               width: 20px;
-              border: 1px solid #eee;
+              // border: 1px solid #eee;
               border-radius: 50%;
+              img{
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+                vertical-align: top;
+              }
             }
           }
           > span {
@@ -600,6 +628,8 @@ export default {
               display: inline-block;
               width: 50px;
               height: 50px;
+              vertical-align: top;
+              border-radius: 50%;
             }
           }
           .liRight {
@@ -610,21 +640,27 @@ export default {
             background: #f9f9f9;
             width: 88%;
             margin-left: 70px;
-            margin-top:10px;
+            margin-top: 10px;
+            img {
+              width: 50px;
+              height: 50px;
+              vertical-align: top;
+              border-radius: 50%;
+            }
             > span {
               float: right;
             }
             .replyinfo {
               display: inline-block;
-              margin-left:20px;
+              margin-left: 20px;
             }
           }
         }
       }
     }
-    .el-textarea{
-      width:93.5%;
-      margin-left:70px;
+    .el-textarea {
+      width: 93.5%;
+      margin-left: 70px;
     }
   }
 }

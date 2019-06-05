@@ -14,7 +14,7 @@
               <span>{{receiveDetail.reqNum}}</span>
             </el-form-item>
             <el-form-item label="发布时间：">
-              <span>{{receiveDetail.issueTime}}</span>
+              <span>{{receiveDetail.issueTime|time}}</span>
             </el-form-item>
             <el-form-item label="融资金额：">
               <span >{{receiveDetail.financingAmount}}</span>
@@ -65,7 +65,7 @@
             </el-form-item>
           <el-form-item label="合同首页：" >
             <el-upload
-              action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
+              :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
               list-type="picture-card"
               :on-success="homePageuploadsuccess"
               :headers="headers"
@@ -76,11 +76,11 @@
           </el-form-item>
             <el-form-item label="合同尾页：">
               <el-upload
-              action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
-              list-type="picture-card"
-              :on-success="endPageuploadsuccess"
-              :headers="headers"
-              :file-list="fileList2"
+                :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
+                list-type="picture-card"
+                :on-success="endPageuploadsuccess"
+                :headers="headers"
+                :file-list="fileList2"
               >
               <i class="el-icon-plus"></i>
             </el-upload>
@@ -95,6 +95,7 @@
 export default {
   data () {
     return {
+      baseUrl:this.api.host,
       receiveDetail:{},
       headers:{token: sessionStorage.token},
       fileList:[],
@@ -108,6 +109,14 @@ export default {
         isTechnology: 1,
         reqNum: '',
         resultDetail: '',
+      }
+    }
+  },
+  filters: {
+    time(time){
+      if(time){
+        let dateee = new Date(time).toJSON();
+        return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
       }
     }
   },

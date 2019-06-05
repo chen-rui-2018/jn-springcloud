@@ -37,8 +37,8 @@
                 <!-- <li class="clearfix" v-for="(i,k) in serverAgent" :key='k'> -->
                 <li class="clearfix" v-for="(i,k) in serverConList" :key='k'>
                     <div class="orgImg fl" @click="handleConDel(i.orgId,i.advisorAccount)">
-                        <!-- <img src="@/../static/img/ins1.png" alt=""> -->
-                        <img :src="i.avatar" alt="">
+                        <img v-if="i.avatar" :src="i.avatar" alt="">
+                        <img v-else src="@/../static/img/product.png" alt="">
                     </div>
                     <div class="orgCon fl">
                         <div class="conTil">{{i.advisorName}}</div>
@@ -59,7 +59,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="orgBtn fr mainColor" @click="onlineContact(i.advisorAccount)">在线联系</div>
+                    <div class="orgBtn fr mainColor" @click="onlineContact(i.advisorAccount,i.advisorName)">在线联系</div>
                 </li>
             </ul>
         </div>
@@ -96,12 +96,12 @@ export default {
     }
   },
   methods: {
-    onlineContact(advisorAccount){
+    onlineContact(advisorAccount,advisorName){
       if (!sessionStorage.userInfo) {
         this.$message.error("请先登录");
         return;
       }
-      this.$router.push({ path: "chat",query:{fromUser:advisorAccount}});
+      this.$router.push({ path: "/chat",query:{fromUser:JSON.parse(sessionStorage.userInfo).account,toUser:advisorAccount,nickName:advisorName}});
     },
     widFun(i) {
       let doc = document.getElementsByClassName(i);

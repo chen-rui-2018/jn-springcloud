@@ -101,4 +101,12 @@ public interface UserExtensionClient {
     @RequestMapping(value = "/api/user/getUserExtensionBySearchFiled", method = RequestMethod.POST)
     Result getUserExtensionBySearchFiled(@RequestBody @Validated SearchFiledParam searchFiledParam);
 
+    /**
+     * 删除redis用户信息缓存
+     * @param account
+     * @return
+     */
+    @RequestMapping(value = "/api/user/removeUserExtensionRedis", method = RequestMethod.POST)
+    void removeUserExtensionRedis(@RequestBody String account);
+
 }

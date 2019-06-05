@@ -29,36 +29,43 @@ Page({
       data: {},
       method: 'POST',
     }).then(res=>{
+      // console.log(res)
       if(res.data.code==='0000'&&res.data.data.createStatus==="1"){
-        console.log(res.data.data.billId)
         this.setData({
-          goodId:res.data.data.billId.split(",")
+          orderId:res.data.data.billId
         })
         request.send({
-          url: '/springcloud-payment/pay/createOrderAndPay',
+          url: '/springcloud-payment/pay/createPay',
           data: {
             channelId:"WX_PROGRAM",
-            goodsIdArr:this.data.goodId,
+            orderId:this.data.orderId,
             paySum:this.data.parkDetail.parkingAmount,
             payType:'PARKING_LEASE'
           },
           method: 'POST',
         }).then(res=>{
-          // console.log(res)
+          console.log(res)
           if(res.data.code==='0000'){
             this.setData({
-              paySend:JSON.parse(res.data.data.data.orderInfo)
+              paySend:JSON.parse(res.data.data.orderInfo)
             })
             wx.requestPayment({
               timeStamp: this.data.paySend.timeStamp,
               nonceStr: this.data.paySend.nonceStr,
-              package: "prepay_id="+this.data.paySend.prepayId,
-              signType: 'MD5',
+              package: this.data.paySend.packageValue,
+              signType: this.data.paySend.signType,
               paySign: this.data.paySend.paySign,
               success(res) { 
-                console.log(res)
+                wx.navigateTo({
+                  url: '../payComplete/payComplete?isSuccess=1'
+                })
               },
               fail(res) {
+                wx.navigateTo({
+                  url: '../payComplete/payComplete?isSuccess=0'
+                })
+               },
+               complete(res){
                 console.log(res)
                }
             })

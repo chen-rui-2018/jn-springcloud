@@ -31,7 +31,7 @@ Page({
   onShow: function () { },
   onHide: function () { },
   onPullDownRefresh: function () {
-    this.hotList()
+    this.onLoad()
   },
   onReachBottom: function () { },
   // 轮播图

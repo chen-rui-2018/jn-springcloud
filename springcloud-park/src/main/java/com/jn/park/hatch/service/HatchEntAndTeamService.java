@@ -24,4 +24,8 @@ public interface HatchEntAndTeamService {
      Result updateGraduateegister();
 
      Result updateGraduateRevenue();
+
+     Result updateEnrolmentActivit();
+
+     Result updatePolicyDeclarate();
 }

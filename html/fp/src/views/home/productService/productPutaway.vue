@@ -49,7 +49,7 @@
           </div>
           <div class="">
             <el-form-item label="产品描述：">
-              <div>{{productDetail.productDetails}}</div>
+              <div v-html="productDetail.productDetails"></div>
             </el-form-item>
           </div>
         </el-form>

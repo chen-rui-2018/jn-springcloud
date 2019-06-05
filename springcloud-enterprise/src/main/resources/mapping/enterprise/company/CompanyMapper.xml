@@ -282,8 +282,8 @@
           ,t1.com_server as "comServer"
           ,t1.com_demand as "comDemand"
           ,date_format(t1.founding_time,"%Y-%m-%d %H:%i:%s") as "foundingTime"
-          ,t1.com_type as "comType"
-          ,t2.pre_value as "comTypeName"
+          ,t1.com_property as "comproperty"
+          ,t2.pre_value as "compropertyName"
           ,t1.com_address as "comAddress"
           ,t1.browse_number as "browseNumber"
           ,t1.com_synopsis as  "comSynopsis"
@@ -295,7 +295,7 @@
           ,t1.credit_points as "creditPoints"
           ,t1.com_scale as "comScale"
           ,date_format(t1.credit_update_time,"%Y-%m-%d %H:%i:%s") as "creditUpdateTime"
-        from tb_service_company t1 left join tb_service_prefer t2 on t1.com_type = t2.id
+        from tb_service_company t1 left join tb_service_prefer t2 on t1.com_property = t2.id
          where t1.id=#{companyId};
     </select>
 </mapper>

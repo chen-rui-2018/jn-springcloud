@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 /**
@@ -23,16 +24,20 @@ public class AcceptInviteParam implements Serializable {
     @NotNull(message = "企业ID不能为空")
     private String comId;
 
-    @ApiModelProperty(value = "昵称")
+    @Pattern(regexp = "^(?:(?!([\\-\\/\\%])).)*$", message = "昵称校验失败，不能包含‘%/-’")
+    @ApiModelProperty(value = "昵称", notes = "不能包含特殊字符‘%/-’")
     private String nickName;
 
+    @Pattern(regexp = "^[\\u4E00-\\u9FA5]{2,6}|\\s*$", message = "真实姓名校验失败")
     @ApiModelProperty(value = "真实姓名")
     private String name;
 
+    @Pattern(regexp = "^1\\d{10}|\\s*$", message = "手机号校验失败")
     @ApiModelProperty(value = "手机号")
     private String phone;
 
-    @ApiModelProperty(value = "出生年月yyyy-mm-dd", example = "2019-01-01")
+    @Pattern(regexp = "^([12]\\d{3}\\-(0[1-9]|1[0-2])\\-(0[1-9]|[1-2]\\d|3[01]))|\\s*$", message = "出生年月校验失败")
+    @ApiModelProperty(value = "出生年月", example = "2019-01-01")
     private String birthday;
 
     public String getComId() {

@@ -17,6 +17,7 @@ public enum PaymentBillExceptionEnum implements CodeAndMsg {
     BILL_ID_IS_NOT_NULL("6020505","账单标识不能为空"),
     BILL_STATUS_IS_NOT_NULL("60205014","账单状态不能为空"),
     BILL_IS_NOT_EXIT("6020506","账单不存在"),
+    BILL_IS_EXIT("6020541","账单已存在"),
     BILL_ACCOUNT_EXIT("6020507","账户已存在"),
     BILL_ORDER_IS_NOT_EXIT("6020508","支付账单创建异常，请稍后重试"),
     COMMIT_AMOUNT_NOT_EQUAL_BILL_AMOUNT("6020509","提交金额不等于账单金额"),

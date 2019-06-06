@@ -476,7 +476,7 @@
     <!--获取企业当前的电表，进行停电或开启操作-->
     <select id="getHostsMeter" parameterType="java.lang.String" resultType="java.lang.String">
         select
-        meter_code as meterCode
+        factory_meter_code as meterCode
         from
         tb_electric_meter_info
         where record_status=1

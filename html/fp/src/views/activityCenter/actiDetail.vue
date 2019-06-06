@@ -140,8 +140,8 @@
       </el-card>
     </div>
     <template v-if="concatVisible">
-      <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :modal-append-to-body=false>
-        <div class="loginTip">
+      <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :append-to-body="true" :lock-scroll="false">
+        <div class="loginTip" style="padding-bottom:20px;text-align:center;font-size:15px">
           你还未
           <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
           /
@@ -215,15 +215,19 @@ export default {
       if (this.inFlag == i) {
         return;
       }
+       if (!sessionStorage.userInfo) {
+        this.concatVisible=true;
+        return;
+      }
       this.textarea = "";
       this.inFlag = i;
     },
     //回复评论
     replycom(item) {
-      if (!sessionStorage.userInfo) {
-        this.concatVisible=true;
-        return;
-      }
+      // if (!sessionStorage.userInfo) {
+      //   this.concatVisible=true;
+      //   return;
+      // }
       this.inFlag = "";
       let _this = this;
       this.api.post({

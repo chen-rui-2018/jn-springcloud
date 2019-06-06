@@ -348,7 +348,7 @@
 
     <!-- 提需求弹框 -->
     <template v-if="financialProVisible">
-      <el-dialog :visible.sync="financialProVisible" width="600px" :modal-append-to-body=false :lock-scroll="false"> 
+      <el-dialog :visible.sync="financialProVisible" width="600px" :modal-append-to-body="false" :lock-scroll="false"> 
         <div v-if="islogin">
           <el-form ref="financialProform" :rules="rules" :model="financialProform" label-position="right" label-width="150px" style="max-width:500px;">
           <el-form-item label="融资金额(万元):" prop="financingAmount">
@@ -380,7 +380,7 @@
       </el-dialog>
     </template>
       <template v-if="concatVisible">
-      <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :modal-append-to-body=false>
+      <el-dialog :visible.sync="concatVisible" width="530px" :modal-append-to-body="false" :lock-scroll="false">
         <div class="loginTip">
           你还未
           <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>

@@ -18,6 +18,7 @@
                     <li @click='$router.push({path:"/serverCon"})' :class="{'active11':this.$route.name==='serverCon'||this.$route.name==='serverConDetail'}">服务顾问</li>
                     <li @click='$router.push({path:"/actiTrain"})' :class="{'active11':this.$route.name==='actiTrain'||this.$route.name==='actiTrainDetail'}">活动培训</li>
                     <li @click='$router.push({path:"/aboutUs"})' :class="{'active11':this.$route.name==='aboutUs'}">关于我们</li>
+                    <li @click='$router.push({path:"/register"})' :class="{'active11':this.$route.name==='register'}">加入我们</li>
                 </div>
                 <div class="headerRight pr">
                   <div class="search" >

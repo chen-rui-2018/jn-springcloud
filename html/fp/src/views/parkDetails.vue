@@ -68,6 +68,7 @@ export default {
   .delnav {
     padding: 20px 0;
     font-size: 13px;
+    font-weight: bold;
   }
   .delinfo {
     margin-top: 40px;

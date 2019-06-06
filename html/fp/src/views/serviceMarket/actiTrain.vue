@@ -53,7 +53,9 @@
                 <div class="actiTab">
                     <ul class="allActiUl clearfix" v-if="flag">
                         <li v-for="(item,index) in actiListSlim" :key='index'>
-                            <div style="width:100%;height:200px"><img style="width:100%;height:100%" :src="item.actiPosterUrl" alt="活动海报图片" class="posterImg" @click="handleRout(item.id)"></div>
+                            <div style="width:100%;height:200px" class="pointer"  @click="handleRout(item.id)">
+                                <img style="width:100%;height:100%" :src="item.actiPosterUrl" alt="活动海报图片" class="posterImg">
+                            </div>
                             <div class="actiInfo">
                                 <p class="actiNameItem">{{item.actiName}}</p>
                                 <p class="actiTimer">
@@ -85,7 +87,7 @@
                     </ul>
                     <ul class="verticalUl" v-else>
                         <li class="clearfix" v-for="(item,index) in actiListSlim" :key='index'>
-                            <div class="verticalLeft fl" @click="handleRout(item.id)">
+                            <div class="verticalLeft fl pointer" @click="handleRout(item.id)">
                                 <img :src="item.actiPosterUrl" alt="活动海报图片">
                             </div>
                             <div class="verticalMiddle fl">
@@ -140,7 +142,7 @@ export default {
       actiFilflag: "",
       colorFlag: "",
       actiListSlim: [],
-    //   actiTypeList: [],
+      //   actiTypeList: [],
       page: 1, //页码
       row: 12, //每页显示多少条
       total: 0,
@@ -154,11 +156,11 @@ export default {
     };
   },
   mounted() {
-     if(this.$route.query.searchData){
-      this.keyWord=this.$route.query.searchData
+    if (this.$route.query.searchData) {
+      this.keyWord = this.$route.query.searchData;
       this.initList();
     } else {
-      this.initList()
+      this.initList();
     }
   },
   methods: {
@@ -255,7 +257,7 @@ export default {
           page: this.page,
           rows: this.row,
           startTime: this.startTime,
-          typeId: 'org_activity'
+          typeId: "org_activity"
         },
         dataFlag: false,
         callback: function(res) {
@@ -265,7 +267,7 @@ export default {
           }
         }
       });
-    },
+    }
     // getActiType() {
     //   let _this = this;
     //   this.api.post({
@@ -285,8 +287,8 @@ export default {
 <style lang="scss">
 .actiTrain {
   padding-top: 65px;
-  .allActi{
-      padding-bottom: 10px;
+  .allActi {
+    padding-bottom: 10px;
   }
 }
 </style>

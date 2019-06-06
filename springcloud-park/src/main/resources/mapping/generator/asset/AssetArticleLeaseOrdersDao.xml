@@ -27,7 +27,6 @@
         SELECT
             tb.id,
             tb.asset_number AS assetNumber,
-            tb.asset_number AS barCode,
             tb.article_id AS articleId,
             tb.type_id AS typeId,
             tb.asset_type AS assetType,

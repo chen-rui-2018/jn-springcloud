@@ -153,8 +153,9 @@ public interface RoomInformationService {
 
     /**
      * 调用生成缴费单接口
-     * @param billIds
+     * @param billId
+     * @param billSum
      * @return
      */
-    Result createBill(String billIds);
+    Result createBill(String billId,String billSum);
 }

@@ -840,7 +840,7 @@ public class RoomInformationServiceImpl implements RoomInformationService {
         List<TbRoomOrdersBill>result=new ArrayList<>();
         for (TbRoomOrders tbR : tbRoomOrdersList) {
             TbRoomOrdersBill tbRoomOrdersBill = new TbRoomOrdersBill();
-            tbRoomOrdersBill.setId(UUID.randomUUID().toString());
+            tbRoomOrdersBill.setId(getOrderIdByTime());
             //订单id
             tbRoomOrdersBill.setOrderId(tbR.getId());
             //缴费企业
@@ -911,16 +911,15 @@ public class RoomInformationServiceImpl implements RoomInformationService {
 
 
     /**
-     *创建缴费单
-     * @param ordersBillIds
+     * 创建缴费单
+     * @param billId
+     * @param billSum
      * @return
      */
     @Override
     @ServiceLog(doAction = "调用生成缴费单接口")
-    public Result createBill(String ordersBillIds){
-        String[] split = ordersBillIds.split(",");
-        for (String ordersBillId : split) {
-            TbRoomOrdersBill tbRoomOrdersBill = tbRoomOrdersBillMapper.selectByPrimaryKey(ordersBillId);
+    public Result createBill(String billId,String billSum){
+            TbRoomOrdersBill tbRoomOrdersBill = tbRoomOrdersBillMapper.selectByPrimaryKey(billId);
             if (tbRoomOrdersBill == null){
                 throw new JnSpringCloudException(new Result("-1","缴费单不存在"));
             }
@@ -957,10 +956,10 @@ public class RoomInformationServiceImpl implements RoomInformationService {
             //账单来源
             payBillCreateParamVo.setBillSource("房间缴费");
             //账单费用
-            payBillCreateParamVo.setBillExpense(tbRoomOrdersBill.getBillSum());
+            payBillCreateParamVo.setBillExpense(new BigDecimal(billSum));
             //对象类型【1：企业，2：个人】
             payBillCreateParamVo.setObjType("1");
-            //对象Id（传企业ID或用户ID）//todo 这里未验证企业ID是否正常，朱永泽验证下
+            //对象Id（传企业ID或用户ID）
             payBillCreateParamVo.setObjId(tbR.getEnterpriseId());
             //对象名称（传企业名称或用户名称）
             payBillCreateParamVo.setObjName(tbR.getLeaseEnterprise());
@@ -969,7 +968,7 @@ public class RoomInformationServiceImpl implements RoomInformationService {
             //回调ID
             payBillCreateParamVo.setCallbackId("springcloud-park");
             //回调URL
-            payBillCreateParamVo.setCallbackUrl("/api/meter/updateBillInfo");
+            payBillCreateParamVo.setCallbackUrl("/api/order/updateBill");
             //创建时间
             payBillCreateParamVo.setCreatedTime(new java.util.Date());
             //创建人
@@ -996,7 +995,6 @@ public class RoomInformationServiceImpl implements RoomInformationService {
             }else {
                 throw new JnSpringCloudException(new Result("-1","创建缴费单失败"));
             }
-        }
         logger.info("生成缴费单成功");
         return new Result("0000","生成缴费单成功");
     }

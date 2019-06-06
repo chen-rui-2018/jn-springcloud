@@ -8,6 +8,8 @@ import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.GlobalConstants;
 import com.jn.common.util.StringUtils;
+import com.jn.company.api.CompanyClient;
+import com.jn.company.model.ServiceCompany;
 import com.jn.hardware.api.ElectricMeterClient;
 import com.jn.hardware.enums.ElectricMeterEnum;
 import com.jn.hardware.model.electricmeter.ElectricMeterDataCollectionParam;
@@ -63,6 +65,8 @@ public class MeterServiceImpl implements MeterService {
     Logger logger = LoggerFactory.getLogger(MeterServiceImpl.class);
     @Autowired
     private TbElectricMeterCompanyDayMapper companyDayMapper;
+    @Autowired
+    private CompanyClient companyClient;
 
     @Override
     @ServiceLog(doAction = "电表读数定时入库")
@@ -659,27 +663,58 @@ public class MeterServiceImpl implements MeterService {
        return null;
     }
 
-    public Result todayelectro(String companyid) {
-        Result result = new Result();
-        List<ConditionElectro> list = meterDao.todayelectro(companyid);
-        result.setData(list);
-        return result;
+    @Override
+    public Result todayElectric(User user){
+        String account = user.getAccount();
+        Result newResult = new Result();
+        Result<ServiceCompany> result = companyClient.getCompanyDetailByAccountOrCompanyId(account);
+        if(!StringUtils.equals(newResult.getCode(),"0000")){
+            return new Result("-1","企业不存在");
+        }
+        if(result!=null && result.getData()!=null && StringUtils.isNoneBlank(result.getData().getId())){
+            String companyId=result.getData().getId();
+            List<ConditionElectro> list = meterDao.todayElectric(companyId);
+            newResult.setData(list);
+        }else{
+            throw new JnSpringCloudException(new Result("-1","企业数据不存在"));
+        }
+        return newResult;
     }
 
     @Override
-    public Result monthelectro(String companyid) {
-        Result result = new Result();
-        List<ConditionElectro> list = meterDao.monthelectro(companyid);
-        result.setData(list);
-        return result;
+    public Result monthElectric(User user) {
+        String account = user.getAccount();
+        Result newResult = new Result();
+        Result<ServiceCompany> result = companyClient.getCompanyDetailByAccountOrCompanyId(account);
+        if(!StringUtils.equals(newResult.getCode(),"0000")){
+            return new Result("-1","企业不存在");
+        }
+        if(result!=null && result.getData()!=null && StringUtils.isNoneBlank(result.getData().getId())){
+            String companyId=result.getData().getId();
+            List<ConditionElectro> list = meterDao.monthElectric(companyId);
+            newResult.setData(list);
+        }else{
+            throw new JnSpringCloudException(new Result("-1","企业数据不存在"));
+        }
+        return newResult;
     }
 
     @Override
-    public Result yearelectro(String companyid) {
-        Result result = new Result();
-        List<YearElectro> list = meterDao.yearelectro(companyid);
-        result.setData(list);
-        return result;
+    public Result yearElectric(User user) {
+        String account = user.getAccount();
+        Result newResult = new Result();
+        Result<ServiceCompany> result = companyClient.getCompanyDetailByAccountOrCompanyId(account);
+        if(!StringUtils.equals(newResult.getCode(),"0000")){
+            return new Result("-1","企业不存在");
+        }
+        if(result!=null && result.getData()!=null && StringUtils.isNoneBlank(result.getData().getId())){
+            String companyId=result.getData().getId();
+            List<YearElectro> list = meterDao.yearElectric(companyId);
+            newResult.setData(list);
+        }else{
+            throw new JnSpringCloudException(new Result("-1","企业数据不存在"));
+        }
+        return newResult;
     }
 
 

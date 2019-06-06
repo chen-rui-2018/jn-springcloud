@@ -12,7 +12,7 @@
                     <div class="agentTil fl color1">{{serverConDetailList.advisorIntroduction.advisorName}}</div>
                     <div class="orgBtn fr mainColor" @click="onlineContact(serverConDetailList.advisorServiceInfo.advisorAccount,serverConDetailList.advisorServiceInfo.advisorName)">在线联系</div>
                 </div>
-                <div class="agent2 clearfix color2">
+                <div class="agent2 clearfix pr color2">
                     <div class="conImg fl">
                         <img v-if="serverConDetailList.advisorIntroduction.avatar" :src="serverConDetailList.advisorIntroduction.avatar" alt="">
                         <img v-else src="@/../static/img/touxiang.png" alt="">
@@ -157,23 +157,23 @@
                     </li>
                 </ul>
             </div>
-            <el-tabs v-model="activeName1" @tab-click="handleClick">
+            <el-tabs v-model="activeName1" @tab-click="handleClick" ref="tabP">
                 <el-tab-pane name="serverPro">
                     <span slot="label">服务产品({{total1}})</span>
                     <div class="serverPro">
                         <ul class="list-imgleft">
-                            <li class="list-item pr" v-for="(i,k) in serverPro" :key='k'>
+                            <li class="list-item pr clearfix" v-for="(i,k) in serverPro" :key='k'>
                                 <!-- 上架时间 begin -->
-                                <div class="list-item-date"></div>
+                                <!-- <div class="list-item-date"></div> -->
                                 <!-- 上架时间 end -->
                                 <!-- 左侧logo begin-->
-                                <div class="list-imgleft-container product nopic" @click="$router.push({path: 'serverProDetail',query: { productId: i.productId, signoryId: i.signoryId }})">
+                                <div class="list-imgleft-container product nopic fl" @click="$router.push({path: 'serverProDetail',query: { productId: i.productId, signoryId: i.signoryId }})">
                                     <img v-if="i.pictureUrl" :src="i.pictureUrl" alt="">
                                     <img v-else src="@/../static/img/product.png" alt="">
                                 </div>
                                 <!-- 左侧logo end-->
                                 <!-- 中间信息 beign -->
-                                <div class="list-info-middle inner-product">
+                                <div class="list-info-middle inner-product fl">
                                     <!-- 中间上半部分--标题和标签 begin -->
                                     <div class="list-info-top-title">
                                         <!-- 头部 begin -->
@@ -209,15 +209,18 @@
                                         </div>
                                         <!-- 评价 end -->
                                         <!-- 交易量 begin -->
-                                        <div class="detail-count">
+                                        <!-- <div class="detail-count">
                                             <div class="orgBtn fr mainColor" @click="demandRaise(i)">提需求</div>
-                                        </div>
+                                        </div> -->
                                         <!-- 交易量 end -->
                                     </div>
                                     <!-- 中间上半部分--参考信息、交易均价和交易 end -->
                                 </div>
+                                <div class="detail-count fr">
+                                    <div class="orgBtn fr mainColor" @click="demandRaise(i)">提需求</div>
+                                </div>
                                 <!-- 中间信息 end -->
-                                <div class="clear"></div>
+                                <!-- <div class="clear"></div> -->
                             </li>
                         </ul>
                         <div class="pagination-container">
@@ -344,7 +347,7 @@ export default {
       activeName: "baseInfo",
       activeName1: "serverPro",
       serverConDetailList: "",
-      serverPro: "",
+      serverPro: [],
       currentPage1: 1,
       row1: 5,
       page1: 1,
@@ -383,7 +386,7 @@ export default {
     onlineContact(advisorAccount, advisorName) {
       if (!sessionStorage.userInfo) {
         this.concatVisible = true;
-        return
+        return;
       }
       this.$router.push({
         path: "/chat",
@@ -533,6 +536,9 @@ export default {
           if (res.code == "0000") {
             _this.serverPro = res.data.rows;
             _this.total1 = res.data.total;
+            setTimeout(()=>{
+              _this.$refs['tabP'].$children[0].$forceUpdate() 
+            },0)
           } else {
             _this.$message.error(res.result);
           }
@@ -561,6 +567,10 @@ export default {
 </script>
 <style lang="scss">
 .serverConDetail {
+  .el-tabs__item {
+    height: 50px;
+    line-height: 50px;
+  }
   .conImg {
     width: 120px;
     height: 128px;

@@ -14,7 +14,7 @@
   </view>
   <view class="searchBox">
     <text class='icon-search'></text>
-    <input type="text" placeholder="搜索会议室" bindinput="changesearch" name="meetingroom" placeholder-class="center" />
+    <input type="text" placeholder="搜索会议室" bindinput="changesearch" name="meetingroom"/>
   </view>
 </view> 
 <view class="meeting_list" >

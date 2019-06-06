@@ -80,4 +80,12 @@ public class PayAccountServerController extends BaseController implements PayAcc
         return myPayAccountService.createPayAccountBook(payAccountBookCreateParam,user);
     }
 
+    @Override
+    public Result automaticDeduction(PayAutoDeduParam payAutoDeduParam) {
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        Assert.notNull(payAutoDeduParam.getAcBookId(),"账本ID不能为空");
+        return myPayAccountService.automaticDeduction(payAutoDeduParam,user);
+    }
+
 }

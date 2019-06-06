@@ -50,7 +50,7 @@
             <i class="el-icon-arrow-up" v-else @click="flag3 = !flag3"></i>
           </div>
         </div>
-        <div class="nav1 clearfix">
+        <!-- <div class="nav1 clearfix">
           <div class="nav1Tit fl">企业性质：</div>
           <ul class="nav1Ul fl clearfix" style="width:auto">
             <li :class="{'active1':filterFlag3 == ''}" @click="handleFilter3('')">不限</li>
@@ -62,7 +62,7 @@
             <i class="el-icon-arrow-down" v-if="flag4" @click="flag4 = !flag4"></i>
             <i class="el-icon-arrow-up" v-else @click="flag4 = !flag4"></i>
           </div>
-        </div>
+        </div> -->
         <div class="nav1 nav2 mainColor pointer" style="color:#00a041" @click="showFlag=!showFlag">
           收起
           <i class="el-icon-arrow-up" style="color:#00a041"></i>
@@ -144,7 +144,7 @@
 export default {
   data() {
     return {
-      concatVisible:false,
+      concatVisible: false,
       total: 0,
       currentPage1: 1,
       row: 3,
@@ -185,8 +185,8 @@ export default {
     //在线联系
     onlineContat(orgAccount, orgName) {
       if (!sessionStorage.userInfo) {
-        this.concatVisible=true
-        return
+        this.concatVisible = true;
+        return;
       }
       this.$router.push({
         path: "/chat",

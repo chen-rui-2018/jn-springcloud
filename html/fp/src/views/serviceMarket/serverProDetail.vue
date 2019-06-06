@@ -12,7 +12,7 @@
           <div class="agentTil fl">{{proDelInfo.productName}}</div>
           <div class="orgBtn fr mainColor" v-if="proDelInfo.orgName" @click="demandRaise('')">提需求</div>
         </div>
-        <div class="agent2 clearfix color2">
+        <div class="agent2 pr clearfix color2">
           <div class="agentImg fl">
             <img v-if="proDelInfo.pictureUrl" :src="proDelInfo.pictureUrl" alt="">
             <img v-else src="@/../static/img/product.png" alt="">
@@ -103,21 +103,21 @@
       </div>
       <el-tabs v-model="activeName1" @tab-click="handleClick">
         <el-tab-pane name="samePro">
-          <span slot="label">同类产品({{total1}})</span>
+          <span slot="label">同类产品({{proDelInfo.sameTypeNum}})</span>
           <div class="serverPro">
             <ul class="list-imgleft">
-              <li class="list-item pr" v-for="(i,k) in sameTypeProList" :key='k'>
+              <li class="list-item pr clearfix" v-for="(i,k) in sameTypeProList" :key='k'>
                 <!-- 上架时间 begin -->
-                <div class="list-item-date"></div>
+                <!-- <div class="list-item-date"></div> -->
                 <!-- 上架时间 end -->
                 <!-- 左侧logo begin-->
-                <div class="list-imgleft-container product nopic pointer" @click="$router.push({path: 'serverProDetail',query: { productId: i.productId, signoryId: i.signoryId }})">
+                <div class="list-imgleft-container product nopic pointer fl" @click="$router.push({path: 'serverProDetail',query: { productId: i.productId, signoryId: i.signoryId }})">
                   <img v-if="i.pictureUrl" :src="i.pictureUrl" alt="">
                   <img v-else src="@/../static/img/product.png" alt="">
                 </div>
                 <!-- 左侧logo end-->
                 <!-- 中间信息 beign -->
-                <div class="list-info-middle inner-product">
+                <div class="list-info-middle inner-product fl">
                   <!-- 中间上半部分--标题和标签 begin -->
                   <div class="list-info-top-title">
                     <!-- 头部 begin -->
@@ -151,15 +151,18 @@
                     </div>
                     <!-- 评价 end -->
                     <!-- 交易量 begin -->
-                    <div class="detail-count">
+                    <!-- <div class="detail-count">
                       <div class="orgBtn fr mainColor" @click="demandRaise(i)">提需求</div>
-                    </div>
+                    </div> -->
                     <!-- 交易量 end -->
                   </div>
                   <!-- 中间上半部分--参考信息、交易均价和交易 end -->
                 </div>
+                <div class="detail-count fr">
+                  <div class="orgBtn fr mainColor" @click="demandRaise(i)">提需求</div>
+                </div>
                 <!-- 中间信息 end -->
-                <div class="clear"></div>
+                <!-- <div class="clear"></div> -->
               </li>
             </ul>
             <div class="pagination-container">
@@ -244,15 +247,15 @@
     <!-- 提需求弹框 -->
     <template v-if="serverProVisible">
       <el-dialog :visible.sync="serverProVisible" width="530px" top="30vh" :modal-append-to-body=false :lock-scroll="false">
-          <div v-if="islogin">
-        <el-form ref="financialProform" :model="serverProform" label-position="right" label-width="100px" style="max-width:436px;">
+        <div v-if="islogin">
+          <el-form ref="financialProform" :model="serverProform" label-position="right" label-width="100px" style="max-width:436px;">
             <el-form-item label="需求描述:" prop="requireDetail" style="font-size:13px">
               <el-input v-model.trim="serverProform.requireDetail" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
             </el-form-item>
-        </el-form>
-        <div class="demandLine"></div>
-        <div class="serverTip mainColor">市场提醒：请务必在线订购，线下交易无法享受市场交易安全保障</div>
-        <div class="demandDia" @click="demandDia()">提交需求</div>
+          </el-form>
+          <div class="demandLine"></div>
+          <div class="serverTip mainColor">市场提醒：请务必在线订购，线下交易无法享受市场交易安全保障</div>
+          <div class="demandDia" @click="demandDia()">提交需求</div>
         </div>
         <div v-else class="loginTip">
           你还未
@@ -269,7 +272,7 @@
 export default {
   data() {
     return {
-      islogin:true,
+      islogin: true,
       showMoreFlag: false,
       zankaiFlag: true,
       activeName1: "samePro",
@@ -311,9 +314,9 @@ export default {
       }
     },
     screenPro(i) {
-      this.productType = i,
-        this.flag1 = i,
-        this.page1 = 1,
+      (this.productType = i),
+        (this.flag1 = i),
+        (this.page1 = 1),
         this.sameTypeProductList();
     },
     handleEvaluation(i) {
@@ -323,7 +326,7 @@ export default {
         this.getServiceRatingInfo();
     },
     demandRaise(i) {
-      this.isLogin()
+      this.isLogin();
       this.serverProVisible = true;
       if (i == "") {
         this.serverProform.productId = proDelInfo.productId;
@@ -460,7 +463,7 @@ export default {
           signoryId: _this.$route.query.signoryId,
           page: _this.page1,
           rows: _this.row1,
-          productType:_this.productType,
+          productType: _this.productType
         },
         callback: function(res) {
           if (res.code == "0000") {
@@ -483,9 +486,12 @@ export default {
         callback: res => {
           if (res.code == "0000") {
             this.proDelInfo = res.data.info;
+            
             // console.log(document.getElementById('agent2Con').clientHeight)
             // console.log(window.getComputedStyle(document.getElementById('agent2Con')).height)
             setTimeout(() => {
+              //由于组件嵌套太多，vue有可能会无法执行到数据更新视图也更新，所以就要在得到数据的时候渲染了  把对应组件执行$forceUpdate这个方法就好 你可以准确定位到这个不刷新的组件  用this.$refs也行
+              this.$children[2].$children[0].$forceUpdate() 
               if (document.getElementById("agent2Con").clientHeight >= 50) {
                 this.showMoreFlag = true;
               }
@@ -501,6 +507,10 @@ export default {
 </script>
 <style lang="scss">
 .serverProDetail {
+  .el-tabs__item {
+    height: 50px;
+    line-height: 50px;
+  }
   .pagination-container {
     margin-top: 50px;
     margin-bottom: 0;

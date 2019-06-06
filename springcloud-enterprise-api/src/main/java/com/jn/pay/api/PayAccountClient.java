@@ -55,4 +55,9 @@ public interface PayAccountClient {
     Result createPayAccountBook(@RequestBody @Validated PayAccountBookCreateParam payAccountBookCreateParam);
 
 
+    @ApiOperation(value = "我的账本-用户充值后自动扣费",notes = "我的账本-用户充值后自动扣费")
+    @RequestMapping(value = "/api/payment/payAccount/automaticDeduction",method = RequestMethod.POST)
+    Result automaticDeduction(@RequestBody @Validated PayAutoDeduParam payAutoDeduParam);
+
+
 }

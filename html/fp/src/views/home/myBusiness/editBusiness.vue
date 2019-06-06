@@ -18,8 +18,8 @@
           </el-form-item>
         </div>
         <div style="display:flex">
-          <el-form-item label="产业领域:" prop="induType">
-            <el-select v-model="businessForm.induType" placeholder="请选择产业领域" clearable>
+          <el-form-item label="主营行业:" prop="induType">
+            <el-select v-model="businessForm.induType" placeholder="请选择主营行业" clearable>
               <el-option
                 v-for="item in induTypeOptions"
                 :key="item.id"
@@ -224,22 +224,23 @@ export default {
         callback();
       }
     };
-     var checkTel = (rule, value, callback) => {
-      const reg = /^0\\d{2,3}-[1-9]\\d{6,7}$/;
-      if (!reg.test(value)) {
-        callback("请输入正确的电话格式");
-      } else {
-        callback();
-      }
-    };
-      var checkWeb = (rule, value, callback) => {
-      const reg = /^(http|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?$/;
-      if (!reg.test(value)) {
-        callback("请输入正确的网址");
-      } else {
-        callback();
-      }
-    };
+    //  var checkTel = (rule, value, callback) => {
+    //   // const reg = /^0\\d{2,3}-[1-9]\\d{6,7}$/;
+    //   const reg = /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/;
+    //   if (!reg.test(value)) {
+    //     callback("请输入正确的电话格式");
+    //   } else {
+    //     callback();
+    //   }
+    // };
+    //   var checkWeb = (rule, value, callback) => {
+    //   const reg = /^(http|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?$/;
+    //   if (!reg.test(value)) {
+    //     callback("请输入正确的网址");
+    //   } else {
+    //     callback();
+    //   }
+    // };
     return {
       loading:false,
       baseUrl:this.api.host,
@@ -325,7 +326,7 @@ export default {
         ],
         comTele: [
           { required: true, message: "请输入固定电话", trigger: "blur" },
-          { validator: checkTel, trigger: 'blur' }
+          // { validator: checkTel, trigger: 'blur' }
         ],
         regCapital: [
           { required: true, message: "请输入注册资金", trigger: "blur" }
@@ -344,7 +345,7 @@ export default {
         ],
         comWeb: [
           { required: true, message: "请输入企业官网地址", trigger: "blur" },
-          { validator: checkWeb, trigger: 'blur' }
+          // { validator: checkWeb, trigger: 'blur' }
         ],
         comAddress: [
           { required: true, message: "请输入注册地址", trigger: "blur" }
@@ -402,8 +403,6 @@ export default {
         }
       });},
     submit() {
-      // this.businessForm.proImgs
-      console.log(this.businessForm)
 
       this.$refs['businessForm'].validate(valid => {
         if (valid) {
@@ -630,7 +629,7 @@ export default {
     height: 85px;
     line-height: 85px;
     // border:none;
-    // border: 1px dashed #c0ccda;
+    border: 1px dashed #c0ccda;
     border-radius: 6px;
     >i{
       font-size: 28px;
@@ -640,6 +639,7 @@ export default {
           border-radius: 6px;
       width: 85px;
       height: 85px;
+      vertical-align: unset;
     }
   }
   .minHeight {

@@ -1,5 +1,5 @@
 <template>
-  <div class="businessInvitation">
+  <div class="businessInvitation" v-loading="loading">
     <div class="business_title font16">
       <div class="font16">企业邀请</div>
     </div>
@@ -96,7 +96,7 @@
         </div>
         <div style="display:flex">
           <el-form-item label="联系手机:" prop="phone">
-            <el-input v-model="supplementForm.phone" maxlength='11' clearable></el-input>
+            <el-input v-model="supplementForm.phone" maxlength='11' clearable disabled></el-input>
           </el-form-item>
           <el-form-item label="真实姓名:" prop="name">
 
@@ -130,6 +130,7 @@ export default {
       }
     };
     return {
+      loading:false,
       messageId:'',
       birthdayOptions: [],
       disabled: false,
@@ -173,23 +174,42 @@ export default {
   },
   mounted() {
     this.init();
+    this.getUserInfo()
   },
   methods: {
+  // 获取用户信息
+   getUserInfo () {
+      this.api.get({
+        url: 'getUserExtension',
+        callback: res => {
+          if (res.code === '0000') {
+            console.log(res)
+            if (res.data) {
+              this.supplementForm.birthday=res.data.birthday
+              this.supplementForm.name=res.data.name
+              this.supplementForm.nickName=res.data.nickName
+              this.supplementForm.phone=res.data.phone
+            }
+          }
+        }
+      })
+    },
     //修改消息状态（已读）
     changeStatus(){
  this.api.post({
             url: "updateIsReadStatus",
             data: {id:this.messageId},
+            dataFlag:true,
             callback: res => {
-              if (res.code == "0000") {
-                this.$message({
-                  message: "操作成功",
-                  type: "success"
-                });
-              } else {
-                this.$message.error(res.result);
-                return false;
-              }
+              // if (res.code == "0000") {
+                // this.$message({
+                //   message: "操作成功",
+                //   type: "success"
+                // });
+              // } else {
+              //   this.$message.error(res.result);
+              //   return false;
+              // }
             }
           });
     },
@@ -198,16 +218,18 @@ export default {
       this.disabled = true;
       this.$refs["supplementForm"].validate(valid => {
         if (valid) {
+          this.loading=true
           this.api.post({
             url: "acceptInvite",
             data: this.supplementForm,
             callback: res => {
-
+               this.loading=false
               if (res.code == "0000") {
                 this.$message({
-                  message: "操作成功",
+                  message: "操作成功,请等待后台审核",
                   type: "success"
                 });
+                 this.changeStatus()
                 this.$router.push({
                   path: "/home"
                 });
@@ -215,7 +237,6 @@ export default {
                 this.$message.error(res.result);
                 return false;
               }
-              this.changeStatus()
               this.disabled = true;
             }
           });
@@ -232,7 +253,6 @@ export default {
         url: "getCompanyDetailByAccountOrCompanyId",
         data: { accountOrCompanyId: this.$route.query.comId },
         callback: function(res) {
-          console.log(res);
           if (res.code == "0000") {
             _this.comName = res.data.comName;
             _this.comNameShort = res.data.comNameShort;
@@ -268,12 +288,12 @@ export default {
               message: "操作成功",
               type: "success"
             });
+             this.changeStatus()
             this.$router.push({ path: "/home" });
           } else {
             this.$message.error(res.result);
             return false;
           }
-          this.changeStatus()
         }
       });
     }

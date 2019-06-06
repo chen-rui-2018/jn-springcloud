@@ -17,6 +17,7 @@ import com.jn.enterprise.servicemarket.industryarea.service.IndustryService;
 import com.jn.enterprise.servicemarket.org.dao.TbServiceOrgMapper;
 import com.jn.enterprise.servicemarket.org.entity.TbServiceOrg;
 import com.jn.enterprise.servicemarket.org.entity.TbServiceOrgCriteria;
+import com.jn.enterprise.usercenterindex.enums.UserCenterExceptionEnum;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
@@ -139,7 +140,12 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
         //根据账号获取数据库现有顾问信息
         List<TbServiceAdvisor> tbServiceAdvisorList = tbServiceAdvisorMapper.selectByExample(example);
         if(tbServiceAdvisorList.isEmpty()){
-            return insertServiceAdvisorInfo(advisorBaseInfoParam,tbServiceOrg.getOrgName());
+            //通过账号获取到用户头像
+            Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(advisorBaseInfoParam.getAdvisorAccount());
+            if(userExtension==null || userExtension.getData()==null){
+                throw new JnSpringCloudException(ApprovalStatusEnum.NETWORK_ANOMALY);
+            }
+            return insertServiceAdvisorInfo(advisorBaseInfoParam,tbServiceOrg.getOrgName(),userExtension.getData().getAvatar());
         }else{
             TbServiceAdvisor tbServiceAdvisor = tbServiceAdvisorList.get(0);
             //把id备份,防止copy时被覆盖
@@ -184,6 +190,10 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
      */
     @ServiceLog(doAction = "校验业务领域")
     private void checkBusinessArea(String[] businessAreaArray) {
+        if(businessAreaArray.length<1){
+            logger.warn("业务领域不能传空");
+            throw new JnSpringCloudException(AdvisorExceptionEnum.BUSINESS_AREA_NOT_EXIT);
+        }
         //获取系统所有业务领域
         IndustryDictParameter industryDictParameter=new IndustryDictParameter();
         //领域类型[0业务领域1行业领域2发展阶段3企业性质]
@@ -206,7 +216,7 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
      * @param advisorBaseInfoParam
      */
     @ServiceLog(doAction = "新增顾问信息")
-    private int insertServiceAdvisorInfo(AdvisorBaseInfoParam advisorBaseInfoParam,String orgName) {
+    private int insertServiceAdvisorInfo(AdvisorBaseInfoParam advisorBaseInfoParam,String orgName,String avatar) {
         if(StringUtils.isBlank(advisorBaseInfoParam.getOrgId()) || StringUtils.isBlank(orgName)){
             logger.warn("基本信息保存并更新，机构id或机构名称不能为空");
             throw new JnSpringCloudException(AdvisorExceptionEnum.ORG_INFO_NOT_NULL);
@@ -247,6 +257,8 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
         tbServiceAdvisor.setCreatorAccount(advisorBaseInfoParam.getAdvisorAccount());
         //记录状态 0标记删除，1正常
         tbServiceAdvisor.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
+        //设置头像
+        tbServiceAdvisor.setAvatar(avatar);
         return tbServiceAdvisorMapper.insertSelective(tbServiceAdvisor);
     }
 

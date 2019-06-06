@@ -1,6 +1,7 @@
 // http.js
 const baseUrl = 'https://njbxq.mynatapp.cc'
 const wechatPath = 'https://njbxq.mynatapp.cc/springcloud-wechat-miniprogram/'
+const imgBaseUrl = 'https://njbxq.mynatapp.cc/h5/imgs/'
 class WxHttp {
   constructor() {
     // 设置 post、put 默认 Content-Type
@@ -115,5 +116,9 @@ class WxHttp {
   }
 }
 
-export { baseUrl, wechatPath }
+export {
+  baseUrl,
+  wechatPath,
+  imgBaseUrl
+}
 export default new WxHttp()

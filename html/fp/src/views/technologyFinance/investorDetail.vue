@@ -1,93 +1,113 @@
 <template>
-    <div class="investorDetail w">
-        <div class="investorMenu">
-            <span class="pointer" @click="$router.push({path:'/tfindex'})">首页</span>
-            <span>/</span>
-            <span class="pointer" @click="$router.push({path:'/investor'})">投资人</span>
-            <span>/</span>
-            <span class="mainColor agent">投资人详情</span>
+  <div class="investorDetail w">
+    <div class="investorMenu">
+      <span class="pointer" @click="$router.push({path:'/tfindex'})">首页</span>
+      <span>/</span>
+      <span class="pointer" @click="$router.push({path:'/investor'})">投资人</span>
+      <span>/</span>
+      <span class="mainColor agent">投资人详情</span>
+    </div>
+    <div class="investorInfo">
+      <el-card>
+        <div class="agent1 clearfix">
+          <div class="agentTil fl">{{investorInfoDetails.investorName}}</div>
+          <div class="orgBtn fr mainColor pointer" @click="onlineContat(investorInfoDetails.investorAccount,investorInfoDetails.investorName)">在线联系</div>
         </div>
-        <div class="investorInfo">
-            <el-card>
-                <div class="agent1 clearfix">
-                    <div class="agentTil fl">{{investorInfoDetails.investorName}}</div>
-                    <div class="orgBtn fr mainColor pointer" @click="onlineContat(investorInfoDetails.investorAccount,investorInfoDetails.investorName)">在线联系</div>
-                </div>
-                <div class="agent2 clearfix color2">
-                    <div class="agentImg fl">
-                        <!-- <img src="@/../static/img/ins1.png" alt=""> -->
-                        <img :src="investorInfoDetails.avatar" alt="">
-                    </div>
-                    <div class="agent2Info fl">
-                        <p>所属单位：{{investorInfoDetails.orgName}}</p>
-                        <p>职务：{{investorInfoDetails.position}}</p>
-                        <p class="proNum">主投领域：
-                            <span class="mainColor" v-for="(i,k) in mainAreaList" :key="k">{{i.mainName}}</span>
-                        </p>
-                        <!-- <p class="lastP color3">
+        <div class="agent2 clearfix color2">
+          <div class="agentImg fl">
+            <img v-if="investorInfoDetails.avatar" :src="investorInfoDetails.avatar" alt="">
+            <img v-else src="@/../static/img/touxiang.png" alt="">
+          </div>
+          <div class="agent2Info fl">
+            <p>所属单位：{{investorInfoDetails.orgName}}</p>
+            <p>职务：{{investorInfoDetails.position}}</p>
+            <p class="proNum">主投领域：
+              <span class="mainColor" v-for="(i,k) in mainAreaList" :key="k">{{i.mainName}}</span>
+            </p>
+            <!-- <p class="lastP color3">
                             <span>交易量：{{investorInfoDetails.investorBaseInfoShow.orgName}}</span>
                             <span>浏览：{{investorInfoDetails.investorBaseInfoShow.orgName}}</span>
                             <span>服务评分：1</span>
                         </p> -->
-                    </div>
-                </div>
-            </el-card>
+          </div>
         </div>
-        <div class="investorDel">
-            <div class="agentDelTit">投资人详情</div>
-            <div class="agentDelCon pr">
-                <el-card>
-                    <div class="agent1 clearfix">
-                        <div class="agentTil mainColor fl">个人简介</div>
-                        <div class="orgBtn fr mainColor">
-                            <div class="mainColor shouqi pointer" v-if="zankaiFlag" @click='zankaiFlag=!zankaiFlag'>
-                                收起
-                                <i class="el-icon-arrow-up"></i>
-                            </div>
-                            <div class="mainColor shouqi zhankai pointer" v-else @click='zankaiFlag=!zankaiFlag'>
-                                <i class="el-icon-arrow-down"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="agent2 color2" v-if="zankaiFlag">
-                        <div class="agent2Con" v-if="flag1" :class="{showall:true,active:showall}">
-                            {{investorInfoDetails.personalProfile}}
-                        </div>
-                        <div class="agent2Con" v-else>
-                            暂无内容！
-                        </div>
-                        <div class="orgBtn1 mainColor tx" v-if="flag2" :class="{'active':showall}" @click="showall=!showall;flag2=!flag2">
-                            <i class="el-icon-arrow-down"></i>
-                        </div>
-                    </div>
-                </el-card>
-            </div>
-        </div>
+      </el-card>
     </div>
+    <div class="investorDel">
+      <div class="agentDelTit">投资人详情</div>
+      <div class="agentDelCon pr">
+        <el-card>
+          <div class="agent1 clearfix">
+            <div class="agentTil mainColor fl">个人简介</div>
+            <div class="orgBtn fr mainColor">
+              <div class="mainColor shouqi pointer" v-if="zankaiFlag" @click='zankaiFlag=!zankaiFlag'>
+                收起
+                <i class="el-icon-arrow-up"></i>
+              </div>
+              <div class="mainColor shouqi zhankai pointer" v-else @click='zankaiFlag=!zankaiFlag'>
+                <i class="el-icon-arrow-down"></i>
+              </div>
+            </div>
+          </div>
+          <div class="agent2 color1" v-if="zankaiFlag">
+            <div class="agent2Con" id="agent2Con" v-if="flag1" :class="{'showMore':showMoreFlag}">
+              {{investorInfoDetails.personalProfile}}
+            </div>
+            <div class="agent2Con" v-else>
+              暂无内容！
+            </div>
+            <div class="orgBtn1 mainColor tx" v-if="showMoreFlag" @click="showMoreFlag=false">
+              <i class="el-icon-arrow-down"></i>
+            </div>
+          </div>
+        </el-card>
+      </div>
+    </div>
+    <template v-if="concatVisible">
+      <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :modal-append-to-body=false :lock-scroll="false">
+        <div class="loginTip">
+          你还未
+          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          /
+          <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+          账号
+        </div>
+      </el-dialog>
+    </template>
+  </div>
 </template>
 <script>
 export default {
   data() {
     return {
+      concatVisible: false,
       zankaiFlag: true,
       flag1: true,
       flag2: true,
       showall: false,
-      investorInfoDetails:{},
-      mainAreaList:'',
+      investorInfoDetails: {},
+      mainAreaList: "",
+      showMoreFlag: false
     };
   },
   mounted() {
     this.getInvestorInfoDetails();
   },
   methods: {
-     //在线联系
-    onlineContat(investorAccount,investorName){
-       if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
+    //在线联系
+    onlineContat(investorAccount, investorName) {
+      if (!sessionStorage.userInfo) {
+        this.concatVisible = true;
         return;
       }
-      this.$router.push({path:'/chat',query:{fromUser: JSON.parse(sessionStorage.userInfo).account,toUser:investorAccount,nickName:investorName}})
+      this.$router.push({
+        path: "/chat",
+        query: {
+          fromUser: JSON.parse(sessionStorage.userInfo).account,
+          toUser: investorAccount,
+          nickName: investorName
+        }
+      });
     },
     getInvestorInfoDetails() {
       //投资人详情
@@ -95,12 +115,17 @@ export default {
       this.api.get({
         url: "getInvestorInfoDetails",
         data: {
-          investorAccount : _this.$route.query.investorAccount,
+          investorAccount: _this.$route.query.investorAccount
         },
         callback: function(res) {
           if (res.code == "0000") {
             _this.investorInfoDetails = res.data.investorBaseInfoShow;
-            _this.mainAreaList=res.data.mainAreaList
+            _this.mainAreaList = res.data.mainAreaList;
+            setTimeout(() => {
+              if (document.getElementById("agent2Con").clientHeight >= 160) {
+                _this.showMoreFlag = true;
+              }
+            }, 0);
           } else {
             _this.$message.error(res.result);
           }
@@ -112,7 +137,16 @@ export default {
 </script>
 <style lang="scss">
 .investorDetail {
-  padding-top:65px;
+  padding-top: 65px;
+  .el-icon-arrow-down{
+    font-size: 20px;
+    color:#00a041;
+  }
+  .loginTip {
+    text-align: center;
+    font-size: 15px;
+    margin-bottom: 20px;
+  }
   .investorMenu {
     padding: 20px 0;
     font-size: 13px;
@@ -152,12 +186,13 @@ export default {
       font-size: 13px;
 
       .agentImg {
-        width: 150px;
-        height: 120px;
+        width: 120px;
+        height: 128px;
 
         > img {
           width: 100%;
           height: 100%;
+          border-radius: 4px;
         }
       }
 
@@ -177,7 +212,7 @@ export default {
           }
         }
         .proNum {
-            margin-top: 20px;
+          margin-top: 20px;
           > span {
             display: inline-block;
             font-size: 13px;
@@ -186,7 +221,7 @@ export default {
             border: 1px solid #00a041;
             border-radius: 4px;
             // margin-top: 20px;
-            margin-right:30px;
+            margin-right: 30px;
           }
         }
       }
@@ -231,9 +266,15 @@ export default {
       .agent2 {
         padding-top: 10px;
         .agent2Con {
-          height: 150px;
           overflow: hidden;
           font-size: 13px;
+          line-height: 20px;
+          // width: 50%;
+          transition: 0.2s all;
+        }
+        .agent2Con.showMore {
+          height: 160px;
+          overflow: hidden;
         }
       }
       .orgBtn1 {

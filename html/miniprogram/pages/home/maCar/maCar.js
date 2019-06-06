@@ -1,9 +1,6 @@
 import request from './../../../utils/http'
+var app = getApp()
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
     nvabarData: {
       title: '我的爱车',
@@ -14,11 +11,15 @@ Page({
       rows:10
     },
     total:0,
-    carId:''
+    carId:'',
+    imgBaseUrl:''
   },
 
   onLoad: function (options) {
     this.getCarList()
+    this.setData({
+      imgBaseUrl:app.globalData.imgBaseUrl
+    })
    },
   onReady: function () { },
   onShow: function () { },

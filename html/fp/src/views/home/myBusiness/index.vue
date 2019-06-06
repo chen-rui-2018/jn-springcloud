@@ -22,7 +22,7 @@
           </el-form-item>
         </div>
         <div style="display:flex">
-          <el-form-item label="产业领域:" class="">
+          <el-form-item label="主营行业:" class="">
             <span>{{induTypeName}}</span>
           </el-form-item>
           <el-form-item label="法人:" class="borr">
@@ -93,9 +93,9 @@
           </div>
         </el-form-item>
       </el-form>
-      <div v-if="isFooter" class="business_footer" @click="toUserCenter">
+      <!-- <div v-if="isFooter" class="business_footer" @click="toUserCenter">
         离开企业
-      </div>
+      </div> -->
     </div>
 
   </div>

@@ -14,7 +14,7 @@
               <span>{{receiveDetail.reqNum}}</span>
             </el-form-item>
             <el-form-item label="发布时间：">
-              <span>{{receiveDetail.issueTime}}</span>
+              <span>{{receiveDetail.issueTime|time}}</span>
             </el-form-item>
             <el-form-item label="融资金额：">
               <span >{{receiveDetail.financingAmount}}</span>
@@ -109,6 +109,14 @@ export default {
         isTechnology: 1,
         reqNum: '',
         resultDetail: '',
+      }
+    }
+  },
+  filters: {
+    time(time){
+      if(time){
+        let dateee = new Date(time).toJSON();
+        return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
       }
     }
   },

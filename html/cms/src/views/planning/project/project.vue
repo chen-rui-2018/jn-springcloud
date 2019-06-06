@@ -116,7 +116,7 @@
 </template>
 <script>
 import { api } from '@/api/axios'
-import projectGrid from '../components/ProjectGrid'
+import projectGrid from '../components/projectGrid'
 export default {
   name: 'ProjectPage',
   components: { projectGrid },

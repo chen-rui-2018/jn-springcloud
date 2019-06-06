@@ -72,7 +72,6 @@ export default {
       return false
     },
     // resolvePath(routePath) {
-    //   debugger
     //   if (this.isExternalLink(routePath)) {
     //     return routePath
     //   }

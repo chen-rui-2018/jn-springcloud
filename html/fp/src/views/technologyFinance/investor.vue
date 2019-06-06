@@ -31,9 +31,9 @@
     <div class="investorContent">
       <ul>
         <li v-for="(i,k) in investorInfoList" :key='k'>
-          <div class="liImg" @click="handleDel(i.investorAccount)">
-            <!-- <img src="@/../static/img/heng3.png" alt=""> -->
-            <img :src="i.avatar" alt="">
+          <div class="liImg pointer" @click="handleDel(i.investorAccount)">
+            <img v-if="i.avatar" :src="i.avatar" alt="">
+            <img v-else src="@/../static/img/touxiang.png" alt="">
           </div>
           <div class="liCont">
             <div class="tit color4">{{i.investorName}}</div>
@@ -50,7 +50,7 @@
       </ul>
     </div>
     <div class="pagination-container">
-      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
+      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
       </el-pagination>
     </div>
   </div>
@@ -60,7 +60,8 @@ export default {
   data() {
     return {
       total: 0,
-      row: 5,
+      page: 1,
+      row: 3,
       currentPage1: 1,
       keyWords: "",
       flag1: true,
@@ -92,7 +93,10 @@ export default {
       this.filterFlag = i;
       this.getInvestorInfoList();
     },
-    handleSearchList() {},
+    handleSearchList() {
+      this.page = 1;
+      this.getInvestorInfoList();
+    },
     handleSizeChange(val) {
       //改变每页显示多少条的回调函数
       this.row = val;
@@ -117,7 +121,10 @@ export default {
         url: "getInvestorInfoList",
         data: {
           needPage: 1,
-          mainCode: _this.mainCode
+          mainCode: _this.mainCode,
+          page: _this.page,
+          rows: _this.row,
+          keyWords:_this.keyWords
         },
         callback: function(res) {
           if (res.code == "0000") {
@@ -148,8 +155,8 @@ export default {
 };
 </script>
 <style lang="scss">
-#investor{
-padding-top: 65px;
+#investor {
+  padding-top: 65px;
 }
 .investor {
   .investorMenu {
@@ -228,6 +235,7 @@ padding-top: 65px;
     .filLeft {
       margin-top: 10px;
       color: #797979;
+      margin-left: 10px;
 
       > span {
         // margin-right: 20px;
@@ -253,6 +261,29 @@ padding-top: 65px;
         border: 0;
         height: 100%;
         width: 80%;
+      }
+      input::-webkit-input-placeholder {
+        /* WebKit browsers*/
+        color: #999;
+        font-size: 13px;
+      }
+
+      input:-moz-placeholder {
+        /* Mozilla Firefox 4 to 18*/
+        color: #999;
+        font-size: 13px;
+      }
+
+      input::-moz-placeholder {
+        /* Mozilla Firefox 19+*/
+        color: #999;
+        font-size: 13px;
+      }
+
+      input:-ms-input-placeholder {
+        /* Internet Explorer 10+*/
+        color: #999;
+        font-size: 13px;
       }
 
       input,
@@ -283,6 +314,10 @@ padding-top: 65px;
         line-height: 37px;
         text-align: center;
         border-left: 1px solid #eee;
+        background: #00a041;
+        color: #fff;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px
       }
     }
   }
@@ -300,16 +335,17 @@ padding-top: 65px;
           vertical-align: middle;
         }
         .liImg {
-          width: 108px;
+          width: 120px;
           height: 128px;
           > img {
             width: 100%;
             height: 100%;
+            border-radius: 4px;
           }
         }
         .liCont {
           vertical-align: top;
-          margin-left: 10px;
+          margin-left: 20px;
           // margin-right: 50px;
           width: 250px;
           .tit {
@@ -331,7 +367,7 @@ padding-top: 65px;
           .spanArea {
             display: inline-block;
             vertical-align: middle;
-            width: 85%;
+            width: 89%;
             > span {
               display: inline-block;
               padding: 5px 20px;

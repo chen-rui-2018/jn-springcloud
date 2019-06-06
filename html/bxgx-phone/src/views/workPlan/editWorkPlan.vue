@@ -268,7 +268,7 @@ export default {
       margin: 20px 0px;
       > span {
         width: 2.4rem;
-        font-size: 32px;
+        font-size: 28px;
         color: #333;
         font-weight: 800;
       }
@@ -308,7 +308,7 @@ export default {
       }
     }
     .weui-label {
-      font-size: 32px;
+      font-size: 28px;
       width: 2.4rem !important;
       color: #333;
       font-weight: 800;
@@ -316,7 +316,7 @@ export default {
     }
     .vux-datetime {
       p {
-        font-size: 32px;
+        font-size: 28px;
         width: 2.4rem !important;
         color: #333;
         font-weight: 800;
@@ -334,7 +334,7 @@ export default {
       width: 91%;
     }
     .download {
-      font-size: 32px;
+      font-size: 28px;
       color: #333;
       font-weight: 800;
       margin-bottom: 20px;

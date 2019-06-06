@@ -40,7 +40,7 @@
       <view class="li_right" >
         <view class="right_title">
           <text>{{item.title}} </text>
-          <text>1小时</text>
+          <text>{{item.meetingTime}}小时</text>
         </view>
         <view class="gray">
           预约人：{{item.organizationalUser}}

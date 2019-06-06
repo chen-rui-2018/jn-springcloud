@@ -7,6 +7,7 @@ import com.jn.park.asset.model.*;
 import com.jn.park.property.model.PayCallBackNotify;
 import com.jn.pay.model.PayOrderNotify;
 import com.jn.pay.model.PayOrderRsp;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -39,6 +40,13 @@ public interface RoomInformationService {
      * @return
      */
     Result addRoomOrders(String roomId, String contactName, String contactPhone, Date leaseStartTime,  String month, String userAccount);
+
+    /**
+     * 根据订单生成缴费单
+     * @param orderId 房间订单ID
+     * @return
+     */
+    Result createRoomOrderBillByOrder(String orderId);
 
     /**
      * 获取房间基本信息
@@ -145,8 +153,9 @@ public interface RoomInformationService {
 
     /**
      * 调用生成缴费单接口
-     * @param billIds
+     * @param billId
+     * @param billSum
      * @return
      */
-    Result createBill(String billIds);
+    Result createBill(String billId,String billSum);
 }

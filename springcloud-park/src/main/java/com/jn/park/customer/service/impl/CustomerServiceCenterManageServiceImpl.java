@@ -531,13 +531,7 @@ public class CustomerServiceCenterManageServiceImpl implements CustomerServiceCe
         //是否删除
         ibpsParam.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
         //当前来电
-        if(StringUtils.isNotBlank(param.getCalledPhone())){
-            ibpsParam.setCurrentCaller(param.getCalledPhone());
-        }else{
-            //没有当前来电，表示是客服重新录入，默认来电就是联系方式
-            ibpsParam.setCurrentCaller(param.getContactWay());
-        }
-
+        ibpsParam.setCurrentCaller(param.getContactWay());
         //获取用户信息
         Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(param.getContactWay());
         if(userExtension!=null && userExtension.getData()!=null){

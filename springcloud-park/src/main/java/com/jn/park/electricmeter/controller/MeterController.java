@@ -2,6 +2,7 @@ package com.jn.park.electricmeter.controller;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
+import com.jn.company.model.ServiceCompany;
 import com.jn.park.electricmeter.model.*;
 import com.jn.park.electricmeter.service.MeterCalcCostService;
 import com.jn.park.electricmeter.service.MeterRulesService;
@@ -41,6 +42,7 @@ public class MeterController extends BaseController {
     private MeterRulesService meterRulesService;
     @Autowired
     private MeterCalcCostService meterCalcCostService;
+
 
 
     private static Logger logger = LoggerFactory.getLogger(MeterTimerController.class);
@@ -269,32 +271,26 @@ public class MeterController extends BaseController {
 
     @ControllerLog(doAction = "今日用电情况")
     @ApiOperation(value = "今日用电情况", notes = "今日用电情况")
-    @GetMapping(path = "/todayelectro")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "companyid", value = "企业ID", dataType = "String", paramType = "query", example = "583060576549208064"),
-    })
-    public Result todayelectro(String companyid){
-        return meterService.todayelectro(companyid);
+    @GetMapping(path = "/todayElectric")
+    public Result todayElectric(){
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        return meterService.todayElectric(user);
     }
 
     @ControllerLog(doAction = "本月用电情况")
     @ApiOperation(value = "本月用电情况", notes = "本月用电情况")
-    @GetMapping(path = "/monthelectro")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "companyid", value = "企业ID", dataType = "String", paramType = "query", example = "583060576549208064"),
-    })
-    public Result monthelectro(String companyid){
-        return meterService.monthelectro(companyid);
+    @GetMapping(path = "/monthElectric")
+    public Result monthElectric(){
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        return meterService.monthElectric(user);
     }
 
     @ControllerLog(doAction = "今年用电情况")
     @ApiOperation(value = "今年用电情况", notes = "今年用电情况")
-    @GetMapping(path = "/yearelectro")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "companyid", value = "企业ID", dataType = "String", paramType = "query", example = "583060576549208064"),
-    })
-    public Result yearelectro(String companyid){
-        return meterService.yearelectro(companyid);
+    @GetMapping(path = "/yearElectric")
+    public Result yearElectric(){
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        return meterService.yearElectric(user);
     }
 
 

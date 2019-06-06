@@ -126,24 +126,24 @@ public interface MeterService {
 
     /**
      * 今日用电情况
-     * @param companyid
+     * @param user
      * @return
      */
-    Result todayelectro(String companyid);
+    Result todayElectric(User user);
 
     /**
      * 本月用电情况
-     * @param companyid
+     * @param user
      * @return
      */
-    Result monthelectro(String companyid);
+    Result monthElectric(User user);
 
     /**
      * 今年用电情况
-     * @param companyid
+     * @param user
      * @return
      */
-    Result yearelectro(String companyid);
+    Result yearElectric(User user);
 
 
 

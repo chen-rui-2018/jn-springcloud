@@ -1,5 +1,5 @@
 <template>
-  <div class="upgradeEnterprise">
+  <div class="upgradeEnterprise" v-loading="loading">
     <div class="business_title">
       <div class="myBusiness">升级企业</div>
     </div>
@@ -19,8 +19,8 @@
           </el-form-item>
         </div>
         <div style="display:flex">
-          <el-form-item label="产业领域:" class="inline" prop="induType">
-            <el-select v-model="businessForm.induType" placeholder="请选择产业领域" clearable>
+          <el-form-item label="主营行业:" class="inline" prop="induType">
+            <el-select v-model="businessForm.induType" placeholder="请选择主营行业" clearable>
               <el-option v-for="item in induTypeOptions" :key="item.id" :label="item.preValue" :value="item.id">
               </el-option>
             </el-select>
@@ -179,6 +179,7 @@ export default {
       }
     };
     return {
+      loading:false,
       baseUrl: this.api.host,
       fileList: [],
       showImg: false,
@@ -243,7 +244,7 @@ export default {
           { required: true, message: "请输入企业简称", trigger: "blur" }
         ],
         induType: [
-          { required: true, message: "请选择产业领域", trigger: "change" }
+          { required: true, message: "请选择主营行业", trigger: "change" }
         ],
         ownerLaw: [{ required: true, message: "请输入法人", trigger: "blur" }],
         ownerPhone: [
@@ -317,6 +318,7 @@ export default {
   },
   methods: {
     submitCompany(formName) {
+      this.loading=true
       this.$refs[formName].validate(valid => {
         if (valid) {
           let _this = this;
@@ -348,6 +350,7 @@ export default {
             },
             callback: function(res) {
               if (res.code == "0000") {
+                _this.loading=false
                 _this.$message.success("提交成功，等待审核");
                 _this.$refs["businessForm"].resetFields();
               } else {
@@ -356,9 +359,6 @@ export default {
               }
             }
           });
-        } else {
-          _this.$message.error(res.result);
-          return false;
         }
       });
     },

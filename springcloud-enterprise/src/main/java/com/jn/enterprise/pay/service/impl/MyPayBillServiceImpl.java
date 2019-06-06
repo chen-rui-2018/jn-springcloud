@@ -458,7 +458,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
                 throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_DEDUCTION_FEE_ERROR);
             }
         }
-        /*logger.info("【创建账单】开始发送通知");
+        logger.info("【创建账单】开始发送通知");
         TbPayBill tb3 = tbPayBillMapper.selectByPrimaryKey(tbs.getBillId());
         if (null == tb3) {
             throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_IS_NOT_EXIT);
@@ -471,7 +471,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
             StringBuffer str = new StringBuffer();
             str.append(tpbmr.getBillId()).append(PaymentBillEnum.BILL_AC_BOOK_TYPE_1.getMessage()).append(tpbmr.getMoney()).append(tpbmr.getCreatedTime());
             sendPaymentNotice("1021","13265603090",str.toString());
-        }*/
+        }
         return result;
     }
 
@@ -774,6 +774,19 @@ public class MyPayBillServiceImpl implements MyPayBillService {
                 tbPayBillMiddleMapper.updateByPrimaryKeySelective(tbPayBillMiddles.get(0));
                 logger.info("调用统一支付下单接口回调，更新账单状态到账单中间表操作结束");
                 logger.info("回调成功，支付状态更新为：已支付");
+                /**用户充值后，去查询是否有代缴的自动扣费账单，并进行扣费*/
+                PayAutoDeduParam payAutoDeduParam = new PayAutoDeduParam();
+                payAutoDeduParam.setAcBookId(tbPayAccountBook.getAcBookId());
+                Delay delay = new Delay();
+                delay.setServiceId("springcloud-enterprise");
+                delay.setServiceUrl("/api/payment/payAccount/automaticDeduction");
+                delay.setTtl("30");
+                delay.setDataString(JSONObject.toJSONString(payAutoDeduParam));
+                logger.info("接收到延迟消息内容：【{}】", JSONObject.toJSONString(payAutoDeduParam));
+                logger.info("开始回调");
+                Result<Boolean> result = delaySendMessageClient.delaySend(delay);
+                logger.info("结束回调,返回结果，【{}】", result.toString());
+
                 return new Result("回调成功，支付状态更新为：已支付");
             } catch (Exception e) {
                 throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_QUERY_ERROR);

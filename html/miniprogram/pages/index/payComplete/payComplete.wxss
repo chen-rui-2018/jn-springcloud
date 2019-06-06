@@ -1,1 +1,15 @@
 /* pages/index/payComplete/payComplete.wxss */
+.payComplete{
+  background:#fff;
+  height:100vh;
+  text-align:center;
+}
+image{
+  margin-top:300rpx;
+  height:340rpx;
+  margin-bottom: 100rpx;
+  padding:0 30rpx;
+}
+text{
+  font-size: 55rpx;
+}

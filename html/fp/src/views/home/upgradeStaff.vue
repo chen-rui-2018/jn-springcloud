@@ -15,7 +15,7 @@
             </el-date-picker>
           </el-form-item>
           <el-form-item label="联系手机" prop="phone">
-            <el-input v-model="ruleForm.phone" maxlength="11" minlenght="11" clearable></el-input>
+            <el-input v-model="ruleForm.phone" maxlength="11" minlenght="11" clearable :disabled="disabled"></el-input>
           </el-form-item>
           <el-form-item label="真实姓名" prop="name">
             <el-input v-model.trim="ruleForm.name" clearable></el-input>
@@ -60,6 +60,7 @@ export default {
       }
     };
     return {
+      disabled:false,
       loading: false,
       sendAuthCode: true,
       auth_time: 0,
@@ -103,7 +104,8 @@ export default {
         comName: [
           { required: true, message: "请选择公司名字", trigger: "change" }
         ]
-      }
+      },
+      getUserInfo:{}
     };
   },
   mounted() {
@@ -140,7 +142,7 @@ export default {
               birthday: _this.ruleForm.birthday,
               name: _this.ruleForm.name,
               nickName: _this.ruleForm.nickName,
-              phone: _this.ruleForm.phone,
+              phone: _this.ruleForm.phone
             },
             callback: function(res) {
               if (res.code == "0000") {
@@ -198,6 +200,13 @@ export default {
         data: {},
         callback: function(res) {
           if (res.code == "0000") {
+            _this.ruleForm.nickName=res.data.nickName
+            _this.ruleForm.birthday=res.data.birthday
+            _this.ruleForm.phone=res.data.phone
+            _this.ruleForm.name=res.data.name
+            if(_this.ruleForm.phone){
+              _this.disabled=true
+            }
             // _this.sendData.orgId = res.data.id;
             _this.$nextTick(() => {
               _this.selectCompany();
@@ -220,7 +229,22 @@ export default {
           }
         }
       });
-    }
+    },
+    //获取当前用户资料
+    // getUserExtension() {
+    //   this.api.get({
+    //     url: "getUserExtension",
+    //     data: {},
+    //     callback: (res)=> {
+    //       if (res.code == "0000") {
+    //         this.getUserInfo = res.data;
+    //         this.ruleForm. = res.data;
+    //       } else {
+    //         _this.$message.error(res.result);
+    //       }
+    //     }
+    //   });
+    // }
   }
 };
 </script>

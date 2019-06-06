@@ -69,7 +69,14 @@ Page({
                 console.log(res)
                }
             })
-          } 
+          } else{
+            wx.showToast({
+              title: res.data.result,
+              icon:'none',
+              duration: 1000,
+              mask:true
+            })
+          }
         })
       }
     })

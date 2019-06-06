@@ -12,7 +12,7 @@
           <div class="agentTil fl color1">{{serverOrgDetailList.orgName}}</div>
           <div class="orgBtn fr mainColor pointer" @click="onlineContat(serverOrgDetailList.orgAccount,serverOrgDetailList.orgName)">在线联系</div>
         </div>
-        <div class="agent2 clearfix color2">
+        <div class="agent2 clearfix pr color2">
           <div class="agentImg fl">
             <img :src="serverOrgDetailList.orgLogo" alt="">
             <!-- <img v-else src="@/../static/img/product.png" alt=""> -->
@@ -313,24 +313,24 @@
           </li>
         </ul>
       </div>
-      <el-tabs v-model="activeName1" @tab-click="handleSerpro">
+      <el-tabs v-model="activeName1" @tab-click="handleSerpro" ref="tabP">
         <el-tab-pane name="serverPro">
           <span slot="label" v-if="serverPro.length>0">服务产品({{serverPro[0].serviceTotal}})</span>
           <span slot="label" v-else>服务产品(0)</span>
           <div class="serverPro">
             <ul class="list-imgleft">
-              <li class="list-item pr" v-for="(i,k) in serverPro" :key='k'>
+              <li class="list-item pr clearfix" v-for="(i,k) in serverPro" :key='k'>
                 <!-- 上架时间 begin -->
                 <div class="list-item-date"></div>
                 <!-- 上架时间 end -->
                 <!-- 左侧logo begin-->
-                <div class="list-imgleft-container product nopic pointer" @click="$router.push({ path: 'finaProDetail', query: { productId: i.productId } })">
+                <div class="list-imgleft-container product nopic pointer fl" @click="$router.push({ path: 'finaProDetail', query: { productId: i.productId } })">
                   <img v-if="i.pictureUrl" :src="i.pictureUrl" alt="">
                   <img v-else src="@/../static/img/product.png" alt="">
                 </div>
                 <!-- 左侧logo end-->
                 <!-- 中间信息 beign -->
-                <div class="list-info-middle inner-product">
+                <div class="list-info-middle inner-product fl">
                   <!-- 中间上半部分--标题和标签 begin -->
                   <div class="list-info-top-title">
                     <!-- 头部 begin -->
@@ -366,15 +366,14 @@
                     </div>
                     <!-- 评价 end -->
                     <!-- 交易量 begin -->
-                    <div class="detail-count">
-                      <!-- <span>累计
-                        <span class="c_default ml5 mr5">40</span>笔交易</span> -->
-                      <div class="orgBtn fr mainColor pointer" @click="demandRaise(i)">提需求</div>
-                    </div>
+                    
                     <!-- 交易量 end -->
                   </div>
                   <!-- 中间上半部分--参考信息、交易均价和交易 end -->
                 </div>
+                <div class="detail-count fr">
+                      <div class="orgBtn fr mainColor pointer" @click="demandRaise(i)">提需求</div>
+                    </div>
                 <!-- 中间信息 end -->
                 <div class="clear"></div>
               </li>
@@ -799,6 +798,9 @@ export default {
           if (res.code == "0000") {
             _this.serverPro = res.data.rows;
             _this.total1 = res.data.total;
+             setTimeout(()=>{
+              _this.$refs['tabP'].$children[0].$forceUpdate() 
+            },0)
           } else {
             _this.$message.error(res.result);
           }
@@ -839,6 +841,10 @@ export default {
   .serverTip {
     display: inline-block;
     font-size: 12px;
+  }
+   .el-tabs__item {
+    height: 50px;
+    line-height: 50px;
   }
   .demandDia11 {
     display: inline-block;

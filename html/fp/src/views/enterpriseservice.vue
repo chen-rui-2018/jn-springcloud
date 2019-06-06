@@ -616,7 +616,7 @@
     </template>
     <!-- 服务产品提需求弹框 -->
     <template v-if="serverProVisible">
-      <el-dialog :visible.sync="serverProVisible" width="530px" top="30vh" :append-to-body="true" :lock-scroll="false">
+      <el-dialog :visible.sync="serverProVisible" width="530px" :append-to-body="true" :lock-scroll="false">
         <div v-if="islogin">
           <el-form ref="financialProform" :model="serverProform" label-position="right" label-width="100px" style="max-width:436px;">
             <el-form-item label="需求描述:" prop="requireDetail" style="font-size:13px">
@@ -648,7 +648,7 @@
       </el-dialog>
     </template>
     <template v-if="concatVisible">
-      <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :append-to-body="true" :lock-scroll="false">
+      <el-dialog :visible.sync="concatVisible" width="530px" :append-to-body="true" :lock-scroll="false">
         <div class="loginTip" style="text-align:center;padding-bottom:20px">
           你还未
           <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>

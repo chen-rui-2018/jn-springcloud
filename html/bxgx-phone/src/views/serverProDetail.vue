@@ -143,8 +143,8 @@ export default {
       this.api.get({
         url: 'findProductDetails',
         data: {
-          productId: this.$route.query.productId
-          // productId: '19d19552832f47198b193d1913275866'
+          // productId: this.$route.query.productId
+          productId: '19d19552832f47198b193d1913275866'
         },
         callback: function (res) {
           if (res.code === '0000') {
@@ -159,8 +159,8 @@ export default {
       this.api.get({
         url: 'sameTypeProductList',
         data: {
-          signoryId: this.$route.query.signoryId,
-          // signoryId: 'iegal_server',
+          // signoryId: this.$route.query.signoryId,
+          signoryId: 'iegal_server',
           page: _this.page,
           rows: _this.row
         },

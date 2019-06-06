@@ -26,6 +26,9 @@ Page({
     wx.scanCode({
       success(res) {
         console.log(res.result)
+        wx.navigateTo({
+          url: res.result
+        })
       }
     })
   },

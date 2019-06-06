@@ -1,5 +1,6 @@
 package com.jn.enterprise.pay.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
@@ -13,6 +14,8 @@ import com.jn.enterprise.pay.enums.*;
 import com.jn.enterprise.pay.service.MyPayAccountService;
 import com.jn.pay.model.*;
 import com.jn.pay.vo.*;
+import com.jn.send.api.DelaySendMessageClient;
+import com.jn.send.model.Delay;
 import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.SysDictInvoke;
@@ -63,6 +66,12 @@ public class MyPayAccountServiceImpl implements MyPayAccountService {
 
     @Autowired
     private SystemClient systemClient;
+
+    @Autowired
+    private TbPayBillMapper tbPayBillMapper;
+
+    @Autowired
+    private DelaySendMessageClient delaySendMessageClient;
 
     @ServiceLog(doAction = "我的账户-查询当前账户下所有账本信息")
     @Override
@@ -186,7 +195,7 @@ public class MyPayAccountServiceImpl implements MyPayAccountService {
         /**插入流水表记录*/
         logger.info("【线下预缴充值】插入流水表记录操作开始");
         TbPayAccountBookMoneyRecord tpbmr = new TbPayAccountBookMoneyRecord();
-        tpbmr.setDeductionId(UUID.randomUUID().toString().replaceAll("-", ""));
+        tpbmr.setDeductionId(AutoOrderUtil.autoOrderId());
         tpbmr.setAcBookId(tbPayAccountBook.getAcBookId());
         tpbmr.setPaymentMethod(PaymentBillMethodEnum.BILL_STATE_UNDER.getCode());
         tpbmr.setPaymentAction(PaymentBillActionEnum.BILL_STATE_MANUAL.getCode());
@@ -199,6 +208,18 @@ public class MyPayAccountServiceImpl implements MyPayAccountService {
         logger.info("【线下预缴充值】插入流水表记录操作，入參【{}】", JsonUtil.object2Json(tpbmr));
         tbPayAccountBookMoneyRecordMapper.insertSelective(tpbmr);
         logger.info("【线下预缴充值】插入流水表记录操作结束");
+        /**用户充值后，去查询是否有代缴的自动扣费账单，并进行扣费*/
+        PayAutoDeduParam payAutoDeduParam = new PayAutoDeduParam();
+        payAutoDeduParam.setAcBookId(tbPayAccountBook.getAcBookId());
+        Delay delay = new Delay();
+        delay.setServiceId("springcloud-enterprise");
+        delay.setServiceUrl("/api/payment/payAccount/automaticDeduction");
+        delay.setTtl("30");
+        delay.setDataString(JSONObject.toJSONString(payAutoDeduParam));
+        logger.info("接收到延迟消息内容：【{}】", JSONObject.toJSONString(payAutoDeduParam));
+        logger.info("开始回调");
+        Result<Boolean> result = delaySendMessageClient.delaySend(delay);
+        logger.info("结束回调,返回结果，【{}】", result.toString());
         return new Result("线下充值成功！");
     }
 
@@ -262,5 +283,64 @@ public class MyPayAccountServiceImpl implements MyPayAccountService {
             logger.info("【统一缴费-创建账户和账本】，创建账本结束");
         }
         return new Result("创建账户和账本成功");
+    }
+
+    @Override
+    @ServiceLog(doAction = "自动扣费")
+    @Transactional(rollbackFor = RuntimeException.class)
+    public Result automaticDeduction(PayAutoDeduParam payAutoDeduParam, User user) {
+        //查询该账本ID下的所有待缴且自动扣费的账单
+        TbPayBillCriteria billCriteria = new TbPayBillCriteria();
+        billCriteria.createCriteria().andAcBookIdEqualTo(payAutoDeduParam.getAcBookId())
+                .andPaymentStateEqualTo(PaymentBillEnum.BILL_ORDER_IS_NOT_PAY.getCode())
+                .andRecordStatusEqualTo(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
+        List<TbPayBill> tbPayBills = tbPayBillMapper.selectByExample(billCriteria);
+        for (TbPayBill tb: tbPayBills) {
+            TbPayAccountBook tbPayAccountBook = tbPayAccountBookMapper.selectByPrimaryKey(payAutoDeduParam.getAcBookId());
+            /**查询传的账本编号是否存在*/
+            if (null == tbPayAccountBook) {
+                throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_BOOK_IS_NOT_EXIT);
+            }
+            /**比较金额大小即左边比右边数大，返回1，相等返回0，比右边小返回-1*/
+            if(tbPayAccountBook.getBalance().compareTo(tb.getBillExpense()) == 1){
+                /**扣除账本金额，并更新账单状态和插入流水记录*/
+                BigDecimal totalAmount = new BigDecimal(tbPayAccountBook.getBalance().toString());
+                totalAmount = totalAmount.subtract(tb.getBillExpense());
+                tbPayAccountBook.setBalance(totalAmount);
+                logger.info("开始执行统一缴费扣除账本金额操作,入參【{}】", tbPayAccountBook.toString());
+                tbPayAccountBookMapper.updateByPrimaryKeySelective(tbPayAccountBook);
+                logger.info("结束执行统一缴费扣除账本金额操作");
+                logger.info("开始执行统一缴费插入流水记录操作");
+                TbPayAccountBookMoneyRecord tpbmr = new TbPayAccountBookMoneyRecord();
+                tpbmr.setDeductionId(AutoOrderUtil.autoOrderId());
+                tpbmr.setBillId(tb.getBillId());
+                tpbmr.setAcBookId(tb.getAcBookId());
+                tpbmr.setRemark(tb.getBillSource());
+                tpbmr.setPaymentMethod(PaymentBillMethodEnum.BILL_STATE_QIAN_BAO.getMessage());
+                tpbmr.setPaymentAction(PaymentBillActionEnum.BILL_STATE_AUYTO.getCode());
+                tpbmr.setNatureCode(PaymentBillEnum.BILL_ACCOUNT_BOOK_FEE.getCode());
+                tpbmr.setMoney(tb.getBillExpense());
+                tpbmr.setBalance(totalAmount);
+                if(user != null){
+                    if(StringUtils.isNotBlank(user.getAccount())){
+                        tpbmr.setCreatorAccount(user.getAccount());
+                    }else {
+                        tpbmr.setCreatorAccount(tb.getCreatorAccount());
+                    }
+                }
+                tpbmr.setCreatedTime(new Date());
+                tpbmr.setRecordStatus(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
+                logger.info("统一缴费插入流水记录入參【{}】", tpbmr.toString());
+                tbPayAccountBookMoneyRecordMapper.insertSelective(tpbmr);
+                logger.info("结束执行统一缴费插入流水记录操作");
+                /**更新账单状态*/
+                logger.info("开始执行统一缴费更新账单状态操作");
+                tb.setPaymentState(PaymentBillEnum.BILL_ORDER_IS_PAY.getCode());
+                logger.info("执行统一缴费更新账单状态操作,入參【{}】", tb.toString());
+                tbPayBillMapper.updateByPrimaryKeySelective(tb);
+                logger.info("结束执行统一缴费更新账单状态操作");
+            }
+        }
+        return new Result("执行自动扣费成功！");
     }
 }

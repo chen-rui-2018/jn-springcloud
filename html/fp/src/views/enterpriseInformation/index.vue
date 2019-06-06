@@ -7,8 +7,8 @@
       </div>
       <div class="changeIcon clearfix">
         <div class="fr">
-          <i class="iconfont icon-menu1 pointer" @click="handleCrosswise('icon-menu1')" :class="{'active0':showListFlag == 'icon-menu1'}"></i>
-          <i class="iconfont icon-menu pointer" @click="handleVertical('icon-menu')" :class="{'active0':showListFlag == 'icon-menu'}"></i>
+          <i class="iconfont icon-menu pointer" @click="handleCrosswise('icon-menu')" :class="{'active0':showListFlag == 'icon-menu'}"></i>
+          <i class="iconfont icon-menu1 pointer" @click="handleVertical('icon-menu1')" :class="{'active0':showListFlag == 'icon-menu1'}"></i>
         </div>
       </div>
       <div class="actiTab">
@@ -75,7 +75,7 @@ export default {
   data() {
     return {
       flag: true,
-      showListFlag: "icon-menu1",
+      showListFlag: "icon-menu",
       currentPage4: 1,
       actiFilflag: "",
       colorFlag: "",
@@ -94,12 +94,12 @@ export default {
     handleCrosswise(v) {
       //横向显示
       this.flag = true;
-      this.showListFlag = "icon-menu1";
+      this.showListFlag = "icon-menu";
     },
     handleVertical() {
       //竖向显示
       this.flag = false;
-      this.showListFlag = "icon-menu";
+      this.showListFlag = "icon-menu1";
     },
     handleSizeChange(val) {
       //改变每页显示多少条的回调函数
@@ -148,6 +148,9 @@ export default {
 .enterpriseInformation {
   margin-bottom: 100px;
   padding-top: 65px;
+  .icon-menu,.icon-menu1{
+    font-size: 18px;
+  }
   .actiNav {
     margin: 20px 0;
     font-size: 13px;

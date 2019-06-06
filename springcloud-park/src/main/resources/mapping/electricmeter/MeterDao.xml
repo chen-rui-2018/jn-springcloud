@@ -485,7 +485,7 @@
 
     <!--保存电表转换的日志-->
     <insert id="saveMeterSwitchLog" parameterType="java.util.List">
-        insert into tb_electric_energy_bill_detail
+        insert into Tb_Electric_Meter_Switch_Log
         (<include refid="com.jn.park.electricmeter.dao.TbElectricMeterSwitchLogMapper.Base_Column_List"/>)
         <foreach collection="saveData"  index="index" item="item" separator="UNION ALL">
             select

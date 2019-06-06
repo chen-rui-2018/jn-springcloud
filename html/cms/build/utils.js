@@ -32,37 +32,23 @@ exports.cssLoaders = function(options) {
   }
 
   // generate loader string to be used with extract text plugin
-  // function generateLoaders(loader, loaderOptions) {
-  //   const loaders = []
-  //
-  //   // Extract CSS when that option is specified
-  //   // (which is the case during production build)
-  //   if (options.extract) {
-  //     loaders.push(MiniCssExtractPlugin.loader)
-  //   } else {
-  //     loaders.push('vue-style-loader')
-  //   }
-  //
-  //   loaders.push(cssLoader)
-  //
-  //   if (options.usePostCSS) {
-  //     loaders.push(postcssLoader)
-  //   }
-  //
-  //   if (loader) {
-  //     loaders.push({
-  //       loader: loader + '-loader',
-  //       options: Object.assign({}, loaderOptions, {
-  //         sourceMap: options.sourceMap
-  //       })
-  //     })
-  //   }
-  //
-  //   return loaders
-  // }
+  function generateLoaders(loader, loaderOptions) {
+    const loaders = []
 
-  function generateLoaders (loader, loaderOptions) {
-    const loaders = [cssLoader]
+    // Extract CSS when that option is specified
+    // (which is the case during production build)
+    if (options.extract) {
+      loaders.push(MiniCssExtractPlugin.loader)
+    } else {
+      loaders.push('vue-style-loader')
+    }
+
+    loaders.push(cssLoader)
+
+    if (options.usePostCSS) {
+      loaders.push(postcssLoader)
+    }
+
     if (loader) {
       loaders.push({
         loader: loader + '-loader',
@@ -72,18 +58,9 @@ exports.cssLoaders = function(options) {
       })
     }
 
-    // Extract CSS when that option is specified
-    // (which is the case during production build)
-    if (options.extract) {
-      return ExtractTextPlugin.extract({
-        use: loaders,
-        fallback: 'vue-style-loader',
-        publicPath: '../../'  //加我叫我加我加我加我
-      })
-    } else {
-      return ['vue-style-loader'].concat(loaders)
-    }
+    return loaders
   }
+
   // https://vue-loader.vuejs.org/en/configurations/extract-css.html
   return {
     css: generateLoaders(),

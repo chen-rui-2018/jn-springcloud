@@ -21,7 +21,7 @@
 }
 .search .icon-search{
   position: absolute;
-  left:40%;
+  left:16%;
   top:50rpx;
 }
 .search input{

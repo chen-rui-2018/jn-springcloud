@@ -411,21 +411,13 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
         userAffiliateInfo.setAffiliateCode("");
         userAffiliateInfo.setAffiliateName("");
         userExtensionClient.updateAffiliateInfo(userAffiliateInfo);
-        //删除用户机构相关角色信息
+        //删除用户角色信息
         List<String> accounts = Arrays.asList(accountList);
         String roleName="机构";
         List<UserRoleInfo> userRoleInfoList = getUserRoleInfoList(accounts, roleName);
-        //把普通用户角色赋给用户
-        roleName="普通用户";
-        Result<SysRole> roleByName = systemClient.getRoleByName(roleName);
-        if(roleByName==null || roleByName.getData()==null){
-            logger.warn("删除联系人或顾问异常，获取“普通用户”角色信息失败");
-            throw new JnSpringCloudException(OrgExceptionEnum.NETWORK_ANOMALY);
-        }
-        String addRoleId=roleByName.getData().getId();
         int responseNum=0;
         for(UserRoleInfo userRoleInfo:userRoleInfoList){
-            Boolean isSuccess = updateOrgUserRole(userRoleInfo.getAccount(), userRoleInfo.getRoleId(), addRoleId);
+            Boolean isSuccess = updateOrgUserRole(userRoleInfo.getAccount(), userRoleInfo.getRoleId(), "");
             if(isSuccess){
                 logger.info("删除[{}]角色信息成功",userRoleInfo.getAccount());
                 responseNum++;

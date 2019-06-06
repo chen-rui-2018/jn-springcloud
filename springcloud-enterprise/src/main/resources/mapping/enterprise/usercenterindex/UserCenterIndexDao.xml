@@ -17,9 +17,10 @@
     <!--员工申请-->
     <select id="findEmployeeRequisition" parameterType="java.lang.String" resultType="com.jn.enterprise.usercenterindex.model.EmployeeRequisitionModel">
         SELECT
-        IFNULL(SUM(CASE t.com_id WHEN #{companyCode} then 1 else 0 end),'') as "total",
-        IFNULL(SUM( CASE  WHEN t.check_status = 0 THEN 1 ELSE 0  END),'') as "unExamine"
-        FROM tb_service_company_staff t
+        IFNULL(SUM(CASE t.com_id WHEN '${companyCode}' then 1 else 0 end),'') as "total",
+        IFNULL(SUM( CASE  WHEN (t.check_status = 0 || t.check_status is NULL)  THEN 1 ELSE 0  END),'') as "unExamine"
+        FROM
+        tb_service_company_staff t
         WHERE t.record_status = 1
         AND t.com_id = #{companyCode}
         <!--SELECT

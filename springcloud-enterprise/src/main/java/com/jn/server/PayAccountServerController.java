@@ -14,13 +14,11 @@ import com.jn.pay.vo.PayBillCreateParamVo;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.ApiOperation;
+import org.apache.ibatis.annotations.Param;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -43,7 +41,7 @@ public class PayAccountServerController extends BaseController implements PayAcc
 
     @ControllerLog(doAction = "我的账户-查询当前账户下所有账本信息")
     @Override
-    public Result<PayAccountAndAccountBookVo> queryPayAccountBook(String userId) {
+    public Result<PayAccountAndAccountBookVo> queryPayAccountBook(@RequestParam(value = "userId") String userId) {
         PayAccountAndAccountBookVo data = myPayAccountService.queryPayAccountBook(userId);
         return new Result(data);
     }
@@ -81,7 +79,7 @@ public class PayAccountServerController extends BaseController implements PayAcc
     }
 
     @Override
-    public Result automaticDeduction(PayAutoDeduParam payAutoDeduParam) {
+    public Result automaticDeduction(@RequestBody @Validated PayAutoDeduParam payAutoDeduParam) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         Assert.notNull(payAutoDeduParam.getAcBookId(),"账本ID不能为空");

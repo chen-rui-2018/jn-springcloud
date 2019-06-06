@@ -486,7 +486,7 @@
 
     <!--保存电表转换的日志-->
     <insert id="saveMeterSwitchLog" parameterType="java.util.List">
-        insert into tb_electric_energy_bill_detail
+        insert into Tb_Electric_Meter_Switch_Log
         (<include refid="com.jn.park.electricmeter.dao.TbElectricMeterSwitchLogMapper.Base_Column_List"/>)
         <foreach collection="saveData"  index="index" item="item" separator="UNION ALL">
             select
@@ -638,7 +638,7 @@
     </select>
 
     <!--今日用电情况-->
-    <select id="todayelectro" resultType="com.jn.park.electricmeter.model.ConditionElectro">
+    <select id="todayElectric" resultType="com.jn.park.electricmeter.model.ConditionElectro">
         select t.date as data,
 		  t.val as hours,
 		  ifnull(sum(t2.degree_diff),0) as sumelectro
@@ -664,7 +664,7 @@
 
 
     <!--当月用电情况-->
-    <select id="monthelectro" resultType="com.jn.park.electricmeter.model.ConditionElectro">
+    <select id="monthElectric" resultType="com.jn.park.electricmeter.model.ConditionElectro">
 
         select t.date as data,
         ifnull(sum(t2.degree_diff),0) as sumelectro
@@ -677,10 +677,10 @@
         and t2.record_status = 1
         and t2.company_id = #{companyid}
         where 1=1
-        and t.deal_date >= date_sub(date_sub(date_format(now(), '%y-%m-%d'),interval extract(day from now()) - 1 day),interval 0 month) # 这里传时间,默认月初
+        and t.deal_date >= date_sub(date_sub(date_format(now(), '%y-%m-%d'),interval extract(day from now()) - 1 day),interval 0 month)
         group by deal_date ) t2
         on t.date = t2.deal_date
-        where t.date >= date_sub(date_sub(date_format(now(), '%y-%m-%d'),interval extract(day from now()) - 1 day),interval 0 month)   # 这里传时间,默认月初
+        where t.date >= date_sub(date_sub(date_format(now(), '%y-%m-%d'),interval extract(day from now()) - 1 day),interval 0 month)
         and t.date &lt;= curdate()
         and t.type = '日类型'
         and t.electric_type = '全部'
@@ -691,7 +691,7 @@
 
 
     <!--今年用电情况-->
-    <select id="yearelectro" resultType="com.jn.park.electricmeter.model.YearElectro">
+    <select id="yearElectric" resultType="com.jn.park.electricmeter.model.YearElectro">
 
         select year(t.date) as year,
         concat(month(t.date),'月') as month,

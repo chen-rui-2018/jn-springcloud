@@ -45,9 +45,9 @@
   show-word-limit autosize placeholder="请填写机构简介,限500字"
                   clearable></el-input>
               </el-form-item>
-              <el-form-item label="主营业务:" prop="orgBusiness" class="myPersonalProfile">
+              <el-form-item label="核心服务:" prop="orgBusiness" class="myPersonalProfile">
                 <el-input v-model="OrgBasicForm.orgBusiness" type="textarea"  maxlength="500"
-  show-word-limit autosize placeholder="请填写主营业务,限500字"
+  show-word-limit autosize placeholder="请填写核心服务,限500字"
                   clearable></el-input>
               </el-form-item>
               <el-form-item label="业务擅长:" prop="orgSpeciality" class="investorMainAreaList">
@@ -69,22 +69,22 @@
                   <el-option v-for="item in developmentStageOptions" :key="item.id" :label="item.preValue" :value="item.id"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="企业性质:" prop="companyNature" class="investorMainAreaList">
+              <!-- <el-form-item label="企业性质:" prop="companyNature" class="investorMainAreaList">
                 <el-select v-model="OrgBasicForm.companyNature" :multiple-limit='num' multiple placeholder="请选择企业性质">
                   <el-option v-for="item in companyNatureOptions" :key="item.id" :label="item.preValue" :value="item.id"></el-option>
                 </el-select>
-              </el-form-item>
+              </el-form-item> -->
             </el-form>
           </div>
         </div>
         <div v-show="status==1">
           <div class="licensesInfo pr">
-            <el-form :rules="licensesRules" :model="licensesForm" label-width="110px" ref="licensesForm">
-              <el-form-item label="业务领域:" prop="businessType" class="businessType">
+            <el-form :model="licensesForm" label-width="110px" ref="licensesForm">
+              <!-- <el-form-item label="业务领域:" prop="businessType" class="businessType">
                 <el-select v-model="licensesForm.businessType" placeholder="请选择业务领域">
                   <el-option v-for="(val,index) in orgSpecialityOptions" :key="index" :label="val.preValue" :value="val.id"></el-option>
                 </el-select>
-              </el-form-item>
+              </el-form-item> -->
               <el-form-item label="营业执照:">
                 <span class="curtomer">请填写营业执照信息。附件请上传证书照片，单个文件不超过1M</span>
               </el-form-item>
@@ -212,13 +212,13 @@
                 </el-form-item>
                 <span>占总人数比&nbsp;<i class="mainColor">{{teamForm.doctorNum?((teamForm.doctorNum/teamForm.staffCount)*100).toFixed(2):''}}</i>&nbsp;</span>%
               </div>
-              <div>
+              <!-- <div>
                 <el-form-item label="海归人员人数：" class="orientation dis" prop="returneeNum">
                   <el-input v-model="teamForm.returneeNum" @blur="BlurText($event)" placeholder="请填写人数"></el-input><span
                     class="person">人</span>
                 </el-form-item>
                 <span>占总人数比&nbsp;<i class="mainColor">{{teamForm.returneeNum?((teamForm.returneeNum/teamForm.staffCount)*100).toFixed(2):''}}</i>&nbsp;</span>%
-              </div>
+              </div> -->
             </el-form>
           </div>
           <div class="kernelInfo">
@@ -374,7 +374,7 @@ export default {
       isShowOtherList: false,
       // fileUrl: "",
       licensesForm: {
-        businessType: ""
+        // businessType: ""
       },
       kernelText: "添加核心服务团队人员",
       otherText: "添加其它资质/荣誉",
@@ -384,7 +384,7 @@ export default {
       orgSpecialityOptions: [],
       industrySectorOptions: [],
       developmentStageOptions: [],
-      companyNatureOptions: [],
+      // companyNatureOptions: [],
       disabled: false,
       orgOptions: [],
       licenseList: [
@@ -413,7 +413,7 @@ export default {
       },
       teamForm: {
         staffCount: "", //员工总人数
-        returneeNum: "", //海归员工人数
+        // returneeNum: "", //海归员工人数
         professionNum: "", //执业人员人数
         masterNum: "", //硕士学历人数
         doctorNum: "", //博士学历人数
@@ -431,9 +431,9 @@ export default {
         conEmail: ""
       },
       OrgBasicForm: {
-        businessType: "",
+        // businessType: "",
         licenses: [], //机构资质集合
-        companyNature: [], //客户偏好-企业性质
+        // companyNature: [], //客户偏好-企业性质
         developmentStage: [], //客户偏好-发展阶段
         industrySector: [], //客户偏好-行业领域
         orgBusiness: "", //主营业务
@@ -444,7 +444,7 @@ export default {
         orgSpeciality: [], //业务擅长
         orgSynopsis: "", //机构简介
         staffCount: "", //员工总人数
-        returneeNum: "", //海归员工人数
+        // returneeNum: "", //海归员工人数
         professionNum: "", //执业人员人数
         masterNum: "", //硕士学历人数
         doctorNum: "", //博士学历人数
@@ -498,18 +498,18 @@ export default {
         developmentStage: [
           { required: true, message: "请选择发展阶段", trigger: "change" }
         ],
-        companyNature: [
-          { required: true, message: "请选择企业性质", trigger: "change" }
-        ],
+        // companyNature: [
+        //   { required: true, message: "请选择企业性质", trigger: "change" }
+        // ],
         orgName: [
           { required: true, message: "请填写机构名称", trigger: "blur" }
         ]
       },
-      licensesRules: {
-        businessType: [
-          { required: true, message: "请选择业务领域", trigger: "change" }
-        ]
-      },
+      // licensesRules: {
+      //   businessType: [
+      //     { required: true, message: "请选择业务领域", trigger: "change" }
+      //   ]
+      // },
       otherFormRules: {
         certName: [
           { required: true, message: "请填写资质荣誉名称", trigger: "blur" }
@@ -544,9 +544,9 @@ export default {
         professionNum: [
           { required: true, message: "请填写执业人员人数", trigger: "blur" }
         ],
-        returneeNum: [
-          { required: true, message: "请填写海归人员人数", trigger: "blur" }
-        ],
+        // returneeNum: [
+        //   { required: true, message: "请填写海归人员人数", trigger: "blur" }
+        // ],
         staffCount: [
           { required: true, message: "请填写员工总人数", trigger: "blur" }
         ]
@@ -649,7 +649,7 @@ export default {
             }
             this.status = 2;
             this.investorCertificationTitle = "团队信息";
-            this.OrgBasicForm.businessType = this.licensesForm.businessType;
+            // this.OrgBasicForm.businessType = this.licensesForm.businessType;
             // this.licenseList = this.licenseList.map(item =>
             //   item.fileUrl
             //     ? item
@@ -682,7 +682,7 @@ export default {
               return;
             }
             this.OrgBasicForm.staffCount = this.teamForm.staffCount;
-            this.OrgBasicForm.returneeNum = this.teamForm.returneeNum;
+            // this.OrgBasicForm.returneeNum = this.teamForm.returneeNum;
             this.OrgBasicForm.professionNum = this.teamForm.professionNum;
             this.OrgBasicForm.masterNum = this.teamForm.masterNum;
             this.OrgBasicForm.doctorNum = this.teamForm.doctorNum;
@@ -746,8 +746,6 @@ export default {
                 this.industrySectorOptions.push(res.data[it]);
               } else if (res.data[it].preType == "2") {
                 this.developmentStageOptions.push(res.data[it]);
-              } else {
-                this.companyNatureOptions.push(res.data[it]);
               }
             }
           } else {

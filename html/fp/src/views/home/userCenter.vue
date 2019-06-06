@@ -2,7 +2,7 @@
   <div class="user-center">
     <div class="user-header">
       <div class="user-header-l">
-        <img v-if="userInfo" :src="userInfo.avatar || '@/../static/img/头像.png'" alt="">
+        <img v-if="userInfo" :src="userInfo.avatar || '@/../static/img/touxiang.png'" alt="">
         <span v-if="userInfo" class="welcome">您好，{{ userInfo.nickName }}</span>
       </div>
       <div class="user-header-r">

@@ -303,7 +303,6 @@ export default {
       }
     },
     initCheckZjhm() {
-      debugger
       const reg = /^\w{5,18}$/i
       if (this.addForm.certificateType === '身份证') {
         this.checkZjhm = (rule, value, callback) => {

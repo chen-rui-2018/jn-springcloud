@@ -3,8 +3,8 @@ package com.jn.park.electricmeter.service;
 import com.jn.common.model.Result;
 import com.jn.hardware.model.electricmeter.ElectricMeterDataCollectionParam;
 import com.jn.hardware.model.electricmeter.ElectricMeterWaterOrElectricShow;
+import com.jn.park.electricmeter.entity.TbElectricMeterInfo;
 import com.jn.park.electricmeter.model.MeterInfoModel;
-import com.jn.park.electricmeter.model.TodayElectro;
 import com.jn.park.electricmeter.model.TrendChartPageParam;
 import com.jn.park.electricmeter.model.TrendChartParam;
 import com.jn.system.log.annotation.ControllerLog;
@@ -115,6 +115,13 @@ public interface MeterService {
      * @return
      */
     Result trendChart(TrendChartParam param);
+
+    /**
+     * 根据设备编码找到唯一设备
+     * @param code
+     * @return
+     */
+    TbElectricMeterInfo getByCode(String code);
 
 
     /**

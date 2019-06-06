@@ -94,9 +94,9 @@
     <div class="serverOrgContent" id="serverOrgContent">
       <ul>
         <li class="clearfix" v-for="(i,k) in serverAgent" :key='k'>
-          <div class="orgImg fl" @click="handleOrgDel(i.productId)">
-            <!-- <img src="@/../static/img/ins1.png" alt=""> -->
-            <img :src="i.pictureUrl" alt="">
+          <div class="orgImg fl pointer" @click="handleOrgDel(i.productId)">
+            <img v-if="i.pictureUrl" :src="i.pictureUrl" alt="">
+            <img v-else src="@/../static/img/product.png" alt="">
           </div>
           <div class="orgCon fl">
             <div class="conTil">{{i.productName}}</div>
@@ -134,8 +134,9 @@
     </div>
     <!-- 提需求 -->
     <template v-if="finaProVisible">
-      <el-dialog :visible.sync="finaProVisible" width="600px">
-        <el-form ref="financialProform" :rules="rules" :model="financialProform" label-position="right" label-width="150px" style="max-width:500px;">
+      <el-dialog :visible.sync="finaProVisible" width="600px" :modal-append-to-body=false :lock-scroll="false">
+        <div v-if="islogin">
+          <el-form ref="financialProform" :rules="rules" :model="financialProform" label-position="right" label-width="150px" style="max-width:500px;">
           <el-form-item label="融资金额(万元):" prop="financingAmount">
             <el-input v-model.trim="financialProform.financingAmount" placeholder="请输入融资金额" maxlength="100" clearable/>
           </el-form-item>
@@ -159,6 +160,14 @@
         </el-form>
         <div class="demandLine"></div>
         <div class="demandDia" @click="demandDia()">提交需求</div>
+        </div>
+         <div v-else class="loginTip">
+          你还未
+          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          /
+          <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+          企业账号
+        </div>
       </el-dialog>
     </template>
   </div>
@@ -167,7 +176,8 @@
 export default {
   data() {
     return {
-      guaranteeMode:'',
+      islogin:true,
+      guaranteeMode:[],
       assureMethodCode:'',
       onlineLoan:'',
       policyProduct:'',
@@ -340,6 +350,12 @@ export default {
     this.getAssureType()
   },
   methods: {
+      //判断是否登录
+    isLogin() {
+      if (!sessionStorage.userInfo) {
+        this.islogin = false;
+      }
+    },
     widFun(i) {
       let doc = document.getElementsByClassName(i);
       let num = 0;
@@ -382,6 +398,11 @@ export default {
     },
     //提需求
     raiseDemand(i) {
+      // if (!sessionStorage.userInfo) {
+      //   this.$message.error("请先登录");
+      //   return;
+      // }
+      this.isLogin()
       this.finaProVisible = true;
       this.financialProform.expectedDate = "";
       this.financialProform.financingAmount = "";
@@ -500,6 +521,12 @@ export default {
 <style lang="scss">
 .finaInstitution{
   padding-top:65px;
+   .icon-sousuo {
+        background: #00a041;
+        color: #fff;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px
+      }
   #serverOrgContent{
    .conTil{
      margin-bottom:15px;

@@ -30,8 +30,8 @@
               <span>热度排序</span>
             </li>
             <li class="showListLi">
-              <i class="iconfont icon-menu1" @click="handleCrosswise('icon-menu1')" :class="{'active0':showListFlag == 'icon-menu1'}"></i>
-              <i class="iconfont icon-menu" @click="handleVertical('icon-menu')" :class="{'active0':showListFlag == 'icon-menu'}"></i>
+              <i class="iconfont icon-menu" @click="handleCrosswise('icon-menu')" :class="{'active0':showListFlag == 'icon-menu'}"></i>
+              <i class="iconfont icon-menu1" @click="handleVertical('icon-menu1')" :class="{'active0':showListFlag == 'icon-menu1'}"></i>
             </li>
           </ul>
         </div>
@@ -58,8 +58,8 @@
       <div class="actiTab">
         <ul class="allActiUl clearfix" v-if="flag">
           <li v-for="(item,index) in actiListSlim" :key='index'>
-            <div class="postImgItem pointer">
-              <img :src="item.actiPosterUrl" class="postImg" alt="活动海报图片" @click="handleRout(item.id)">
+            <div class="postImgItem pointer" @click="handleRout(item.id)">
+              <img :src="item.actiPosterUrl" class="postImg" alt="活动海报图片" >
             </div>
             <div class="actiInfo">
               <p class="actiNameItem">{{item.actiName}}</p>
@@ -117,10 +117,12 @@
               </div>
             </div>
             <div class="verticalRight fr">
-              <el-button type="success" v-if="item.showApplyNum==1" plain @click="nowApply(item.id)" style="width:112px;border:1px solid #00a042;background:#ebfdf1;color:#00a042">立即报名</el-button>
+              <!-- <el-button type="success" v-if="item.showApplyNum==1" plain @click="nowApply(item.id)" style="width:112px;border:1px solid #00a041;background:#ebfdf1;color:#00a041">立即报名</el-button>
               <el-button type="success" v-else-if="item.showApplyNum==0" style="background:#00a042;color:#fff" plain>活动已结束</el-button>
-              <el-button type="success" v-else style="width:112px;background:#00a042;color:#fff">报名成功</el-button>
-
+              <el-button type="success" v-else style="width:112px;background:#00a042;color:#fff">报名成功</el-button> -->
+              <el-button type="success" v-if="item.actiStatus=='3'" style="background:#00a041;height:38px;width:110px" >活动已结束</el-button>
+              <el-button type="success" v-if="item.actiStatus=='4'" style="background:#00a041;height:38px;width:110px" >活动已取消</el-button>
+              <el-button type="success" v-if="item.actiStatus=='2'" style="background:#ecfcf2;height:38px;width:110px;border:1px solid #00a041;color:#00a041;" >报名中</el-button>
             </div>
           </li>
         </ul>
@@ -140,7 +142,7 @@ export default {
       headFlag: true,
       sousuo: false,
       flag: true,
-      showListFlag: "",
+      showListFlag: "icon-menu",
       currentPage4: 1,
       actiFilflag: "",
       colorFlag: "",
@@ -196,12 +198,12 @@ export default {
     handleCrosswise(v) {
       //横向显示
       this.flag = true;
-      this.showListFlag = "icon-menu1";
+      this.showListFlag = "icon-menu";
     },
     handleVertical() {
       //竖向显示
       this.flag = false;
-      this.showListFlag = "icon-menu";
+      this.showListFlag = "icon-menu1";
     },
     handleSizeChange(val) {
       //改变每页显示多少条的回调函数

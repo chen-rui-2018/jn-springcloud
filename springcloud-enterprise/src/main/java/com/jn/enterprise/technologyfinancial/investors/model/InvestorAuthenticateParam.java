@@ -48,6 +48,7 @@ public class InvestorAuthenticateParam implements Serializable {
     private String phone;
     @ApiModelProperty(value = "邮箱",required = true,example = "123@qq.com")
     @NotNull(message = "邮箱不能为空")
+    @Pattern(regexp="^(\\w)+(\\.\\w+)*@(\\w)+((\\.\\w+)+)$",message="请正确联邮箱")
     private String email;
     @ApiModelProperty(value = "个人简介",required = true,example = "个人简介....")
     @NotNull(message = "个人简介不能为空")

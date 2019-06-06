@@ -16,12 +16,12 @@ import org.xxpay.dal.dao.entity.reconciliation.TbPayReconciliationMistakeScratch
 
 import java.util.List;
 
+
 /**
  * @ClassName：对账数据事务一致性service
- * 
  * @Descript：
  * @Author： hey
- * @Date： Created on 2019/5/21 11:34
+ * @Date： Created on 2019/5/20 15:54
  * @Version： v1.0
  * @Modified By:
  */
@@ -55,7 +55,7 @@ public class ReconciliationTransactionServiceImpl implements ReconciliationTrans
 
         logger.info("===> step1:保存批次记录====");
         if (batch.getStatus() == null) {
-            batch.setStatus(BatchStatusEnum.SUCCESS.name());
+            batch.setStatus(BatchStatusEnum.SUCCESS.getCode());
         }
         payReconciliationCheckBatchService.saveData(batch);
 

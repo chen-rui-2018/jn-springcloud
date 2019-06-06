@@ -43,6 +43,26 @@ public class ActivitySlim implements Serializable {
     private String showApplyNum;
     @ApiModelProperty(value = "是否已报名此活动 0 否 : 1 是")
     private String applyStatus;
+    @ApiModelProperty(value = "活动浏览人数")
+    private String actiViews;
+    @ApiModelProperty(value = "活动发布时间")
+    private String issueTime;
+
+    public String getActiViews() {
+        return actiViews;
+    }
+
+    public void setActiViews(String actiViews) {
+        this.actiViews = actiViews;
+    }
+
+    public String getIssueTime() {
+        return issueTime;
+    }
+
+    public void setIssueTime(String issueTime) {
+        this.issueTime = issueTime;
+    }
 
     public String getActiStatus() {
         return actiStatus;

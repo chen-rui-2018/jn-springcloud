@@ -49,7 +49,7 @@
                   <el-option label="顾问" value="3"></el-option>
                   <el-option label="活动" value="3"></el-option>
                 </el-select>
-                <el-button slot="append" icon="el-icon-search">搜索 </el-button>
+                <el-button slot="append" icon="el-icon-search" @click="goSearch">搜索</el-button>
               </el-input>
             </div>
           </div>
@@ -110,6 +110,17 @@ export default {
    this.getIndustryList()
   },
   methods: {
+     goSearch(){
+      if(this.select==='1'){
+        this.$router.push({path:'/serverOrg',query:{searchData:this.searchData}})
+      }else if(this.select==='2'){
+        this.$router.push({path:'/serverPro',query:{searchData:this.searchData}})
+      }else if(this.select==='3'){
+        this.$router.push({path:'/serverCon',query:{searchData:this.searchData}})
+      }else if(this.select==='4'){
+        this.$router.push({path:'/actiTrain',query:{searchData:this.searchData}})
+      }
+    },
      searchLeave() {
       if (this.sekectShow) {
         this.show3 = true

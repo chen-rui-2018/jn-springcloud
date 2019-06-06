@@ -64,9 +64,9 @@
         <span class="att1">关注{{actiForm.actiLike}}</span>
       </div>
       <div class="attend ">
-        <span v-if="applySuccess==true" @click="quickSign(actiForm.id)">我要参加</span>
-        <span v-if="applySuccess==false" @click="stopApply(actiForm.id)">取消报名</span>
-        <span v-if="actiForm.actiStatus=='2'&&actiForm.isApply=='0'">停止报名</span>
+        <span v-if="activityApplyShow=='0'">停止报名</span>
+        <span v-if="activityApplyShow=='1'" @click="quickSign(actiForm.id)">我要参加</span>
+        <span v-if="activityApplyShow=='2'" @click="stopApply(actiForm.id)">取消报名</span>
       </div>
     </div>
   </div>
@@ -86,7 +86,7 @@ export default {
       s: 0,
       CountDown: '',
       apply: {},
-      applySuccess: undefined
+      activityApplyShow: '0'
     }
   },
   created () {
@@ -110,12 +110,13 @@ export default {
           if (res.code === '0000') {
             _this.actiForm = res.data.activityDetail
             _this.apply = res.data
-            _this.applySuccess = res.data.applySuccess
+            _this.activityApplyShow = res.data.activityApplyShow
             _this.activityApplyList = res.data.activityApplyList
-            _this.sysTemTime = res.data.sysTemTime
-            _this.applyEndTime = res.data.activityDetail.applyEndTime
+            _this.sysTemTime = _this.getTime(res.data.sysTemTime)
+            _this.applyEndTime = _this.getTime(res.data.activityDetail.applyEndTime)
             _this._interval = setInterval(() => {
-              let data = _this.countTime(_this.applyEndTime)
+              let data = _this.countTime(_this.applyEndTime, _this.sysTemTime)
+              _this.sysTemTime = _this.sysTemTime + 1000
               if (data) {
                 clearInterval(_this._interval)
               }
@@ -158,6 +159,7 @@ export default {
       })
     },
     quickSign (id) {
+      let _this = this
       this.api.post({
         url: `springcloud-park/activity/activityApply/quickApply?activityId=${id}`,
         data: {
@@ -167,7 +169,7 @@ export default {
         callback: res => {
           if (res.code === '0000') {
             // alert(res.result)
-            this.applySuccess = false
+            _this.activityApplyShow = '2'
             // this.actiDel()
           } else {
             alert(res.result)
@@ -177,24 +179,26 @@ export default {
     },
     // 取消报名
     stopApply (id) {
+      let _this = this
       this.api.post({
         url: `springcloud-park/activity/activityApply/cancelApply?activityId=${id}`,
         data: {
           activityId: id
         },
-        dataFlag: true,
+        urlFlag: true,
         callback: function (res) {
           if (res.code === '0000') {
-            this.applySuccess = true
+            _this.activityApplyShow = '1'
             // _this.actiDel()
           }
         }
       })
     },
-    countTime (t) {
+    getTime (t) {
+      return new Date(t).getTime()
+    },
+    countTime (applyTime, secondsTime) {
       // var secondsTime = new Date(this.sysTemTime).getTime()
-      var secondsTime = new Date().getTime()
-      var applyTime = new Date(t).getTime()
       var leftTime = applyTime - secondsTime
       if (leftTime >= 0) {
         let d = Math.floor(leftTime / 1000 / 60 / 60 / 24)
@@ -211,10 +215,10 @@ export default {
         // }, 1000)
         return false
       } else {
-        this.d = 0
-        this.h = 0
-        this.m = 0
-        this.s = 0
+        this.d = '0'
+        this.h = '00'
+        this.m = '00'
+        this.s = '00'
         return true
       }
     }

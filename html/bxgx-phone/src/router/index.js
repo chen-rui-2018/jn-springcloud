@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import { urlSearch } from '../utils'
+import { urlSearch } from '../utils/index'
 
 Vue.use(Router)
 
@@ -11,6 +11,54 @@ const router = new Router({
       name: 'investment',
       component: () => import('@/views/investment'),
       meta: {title: '招商引资'}
+    },
+    {
+      path: '/parkProfile',
+      name: 'parkProfile',
+      component: () => import('@/views/investment/parkProfile'),
+      meta: {title: '园区概况'}
+    },
+    {
+      path: '/investmentPolicy',
+      name: 'investmentPolicy',
+      component: () => import('@/views/investment/investmentPolicy/index'),
+      meta: {title: '招商政策'}
+    },
+    {
+      path: '/investmentPolicyDetail',
+      name: 'investmentPolicyDetail',
+      component: () => import('@/views/investment/investmentPolicy/detail'),
+      meta: {title: '招商政策详情'}
+    },
+    {
+      path: '/investmentDynamic',
+      name: 'investmentDynamic',
+      component: () => import('@/views/investment/investmentDynamic/index'),
+      meta: {title: '招商动态'}
+    },
+    {
+      path: '/investmentDynamicDetail',
+      name: 'investmentDynamicDetail',
+      component: () => import('@/views/investment/investmentDynamic/detail'),
+      meta: {title: '招商动态详情'}
+    },
+    {
+      path: '/investmentInfo',
+      name: 'investmentInfo',
+      component: () => import('@/views/investment/investmentInfo/index'),
+      meta: {title: '招商信息'}
+    },
+    {
+      path: '/investmentInfoDetail',
+      name: 'investmentInfoDetail',
+      component: () => import('@/views/investment/investmentInfo/detail'),
+      meta: {title: '招商信息详情'}
+    },
+    {
+      path: '/parkDetails',
+      name: 'parkDetails',
+      component: () => import('@/views/investment/parkDetails'),
+      meta: {title: '园区信息详情'}
     },
     {
       path: '/actiDetail',
@@ -137,6 +185,12 @@ const router = new Router({
       name: 'attendanceDetails',
       component: () => import('@/views/attendanceManagement/attendanceDetails'),
       meta: {title: '考勤明细'}
+    },
+    {
+      path: '/electricInfo',
+      name: 'electricInfo',
+      component: () => import('@/views/electricInfo'),
+      meta: {title: '我的用电情况'}
     },
     {
       path: '/parkDetais',

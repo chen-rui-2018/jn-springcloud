@@ -50,7 +50,8 @@ public class DeclarationPlatformController extends BaseController {
                                                                        @ApiParam(value = "平台标题",example = "人才") @RequestParam(name = "platformTitle", required = false) String platformTitle,
                                                                        @ApiParam(value = "当前页",required = true,example = "1") @RequestParam int page,
                                                                        @ApiParam(value = "每页总数",required = true,example = "5") @RequestParam int rows) {
-        PaginationData<List<DeclarationPlatformModel>> data = declarationPlatformService.selectByDeclarationPlatformList(subordinatePlatformName,platformTitle,page,rows);
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        PaginationData<List<DeclarationPlatformModel>> data = declarationPlatformService.selectByDeclarationPlatformList(subordinatePlatformName,platformTitle,page,rows,user);
         return new Result(data);
     }
 

@@ -120,7 +120,7 @@ export default {
     }
   },
   mounted () {
-    if (this.$route.query.isShow === '0') {
+    if (this.$route.query.isShow) {
       this.isShow = this.$route.query.isShow
     }
     this.getperennialList()// 常年申报

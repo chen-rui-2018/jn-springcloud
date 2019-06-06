@@ -507,6 +507,7 @@ public class RoomInformationServiceImpl implements RoomInformationService {
                         roomPayOrdersModel.setLeaseEndTime(leaseEndTime);
                         roomPayOrdersModel.setPaySum(tbRoomOrders.getPaySum());
                         BeanUtils.copyProperties(tbRoomOrdersItem, roomPayOrdersModel);
+                        roomPayOrdersModel.setName(roomPayOrdersModel.getRoomName());
                         result.getRoomPayOrdersModelList().add(roomPayOrdersModel);
                     }
                 }
@@ -877,7 +878,7 @@ public class RoomInformationServiceImpl implements RoomInformationService {
 
     /**
      *创建缴费单
-     * @param billIds
+     * @param jsonParam
      * @return
      */
     @Override

@@ -7,7 +7,7 @@
         SELECT
             a.id AS "staffId",
             a.account AS "account",
-            a.check_time AS "checkTime",
+            a.invite_time AS "checkTime",
             a.join_pattern AS "joinPattern",
             CASE
                 WHEN a.invite_status = '6' THEN
@@ -34,7 +34,7 @@
               #{account}
           </foreach>
         </if>
-        ORDER BY a.check_time DESC, a.created_time DESC
+        ORDER BY a.invite_time DESC, a.check_time DESC
     </select>
 
     <!-- 获取待审核列表 -->

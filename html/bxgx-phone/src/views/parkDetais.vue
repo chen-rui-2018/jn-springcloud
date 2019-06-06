@@ -39,7 +39,8 @@ export default {
 <style lang="scss">
 .announcementDetails {
   // padding-top:120px;
-  padding:120px 20px 20px;
+  // padding:120px 20px 20px;
+  padding:0 20px;
   .announcementTitle{
     display: flex;
     align-items: center;

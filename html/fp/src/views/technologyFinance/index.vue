@@ -78,30 +78,6 @@
                             <i class="iconfont icon-rightarrow pointer" v-show="showBtn"></i>
                         </div> -->
         </div>
-        <!-- <div class="quickEnter">
-                    <ul>
-                        <li>
-                            <span>人才申报</span>
-                            <p>PEOPLE&nbsp;DECLARE</p>
-                            <img src="@/../static/img/right-arrow.png" alt="">
-                        </li>
-                        <li>
-                            <span>高新企业</span>
-                            <p>HIGH-TECH&nbsp;ENTERPRISE</p>
-                            <img src="@/../static/img/right-arrow.png" alt="">
-                        </li>
-                        <li>
-                            <span>孵化企业</span>
-                            <p>INCUBATION&nbsp;ENTERPRISE</p>
-                            <img src="@/../static/img/right-arrow.png" alt="">
-                        </li>
-                        <li>
-                            <span>行政审批</span>
-                            <p>ADMINISTRATIVE&nbsp;EXAMINATIO</p>
-                            <img src="@/../static/img/right-arrow.png" alt="">
-                        </li>
-                    </ul>
-          </div> -->
       </div>
       <div class="techContent w">
         <div class="techNav">
@@ -162,7 +138,8 @@
               <li class="clearfix">
                 <div class="liLeft fl">
                   <div class="intorImgLar" v-if="InvestorInfoList.length > 0">
-                    <img class="pointer" :src="InvestorInfoList[0].avatar" alt="" @click="$router.push({path:'/investorDetail',query: { investorAccount: InvestorInfoList[0].investorAccount }})">
+                    <img class="pointer" v-if="InvestorInfoList[0].avatar" :src="InvestorInfoList[0].avatar" alt="" @click="$router.push({path:'/investorDetail',query: { investorAccount: InvestorInfoList[0].investorAccount }})">
+                    <img class="pointer" v-else src="@/../static/img/larImg.png" alt="" @click="$router.push({path:'/investorDetail',query: { investorAccount: InvestorInfoList[0].investorAccount }})">
                   </div>
                   <div class="leftInfo" v-if="InvestorInfoList.length > 0">
                     <span class="color1">{{InvestorInfoList[0].investorName}}/{{InvestorInfoList[0].position}}</span>
@@ -174,7 +151,8 @@
                   <ul class="clearfix">
                     <li v-if="k<5&&k>0" v-for="(i,k) in InvestorInfoList" :key="k">
                       <div class="intorImgSma">
-                        <img class="pointer" :src="i.avatar" alt="头像" @click="$router.push({path:'/investorDetail',query: { investorAccount: i.investorAccount }})">
+                        <img class="pointer" v-if="i.avatar" :src="i.avatar" alt="头像" @click="$router.push({path:'/investorDetail',query: { investorAccount: i.investorAccount }})">
+                        <img class="pointer" v-else src="@/../static/img/larImg.png" alt="头像" @click="$router.push({path:'/investorDetail',query: { investorAccount: i.investorAccount }})">
                       </div>
                       <div class="rightInfo">
                         <span class="color1">{{i.investorName}}/{{i.position}}</span>
@@ -226,7 +204,7 @@
                   <ul class="clearfix">
                     <li v-if="k<9&&k>5" v-for="(i,k) in InvestorInfoList" :key="k">
                       <div class="intorImgSma">
-                        <img  class="pointer" :src="i.avatar" alt="头像" @click="$router.push({path:'/investorDetail',query: { investorAccount: i.investorAccount }})">
+                        <img class="pointer" :src="i.avatar" alt="头像" @click="$router.push({path:'/investorDetail',query: { investorAccount: i.investorAccount }})">
                       </div>
                       <div class="rightInfo">
                         <span class="color1">{{i.investorName}}/{{i.position}}</span>
@@ -279,7 +257,8 @@
               <li class="mainBorder" v-if="k<8" v-for="(i,k) in FinancialProList" :key="k">
                 <!-- <img src="@/../static/img/midBan.png" alt=""> -->
                 <div class="finaProItem" @click="$router.push({ path: '/finaProDetail', query: { productId: i.productId }})">
-                  <img class="pointer" :src="i.pictureUrl" alt="" >
+                  <img v-if="i.pictureUrl" class="pointer" :src="i.pictureUrl" alt="">
+                  <img v-else class="pointer" src="@/../static/img/product.png" alt="">
                 </div>
                 <div class="finaDiv1">
                   <div class="finaTit">{{i.productName}}</div>
@@ -361,27 +340,6 @@
                   <span class="mainColor" style="margin-left:60px" @click="$router.push({path:'/finaInsDetail',query: { orgId: i.orgId }})">了解详情</span>
                 </p>
               </li>
-              <!-- <li class="finaInsLi">
-                <div class="finaInsItem">
-                  <img src="@/../static/img/ins1.png" alt="">
-                </div>
-                <div class="finaDiv1">
-                  <div class="finaTit">苏州中合会计事务所</div>
-                  <div class="finaContent">
-                    <p class="finaPhone">电话：
-                      <span class="mainColor">0510-87654321</span>
-                    </p>
-                    <p class="finaAddress">地址：江苏省南京市白下高新园区A座1306</p>
-                  </div>
-                </div>
-                <p class="clearfix finaPP">
-                  <span class="fl">累计
-                    <i class="mainColor">35</i>
-                    笔交易
-                  </span>
-                  <span class="mainColor fr">了解详情</span>
-                </p>
-              </li> -->
             </ul>
           </div>
         </div>
@@ -390,8 +348,9 @@
 
     <!-- 提需求弹框 -->
     <template v-if="financialProVisible">
-      <el-dialog :visible.sync="financialProVisible" width="600px">
-        <el-form ref="financialProform" :rules="rules" :model="financialProform" label-position="right" label-width="150px" style="max-width:500px;">
+      <el-dialog :visible.sync="financialProVisible" width="600px" :modal-append-to-body=false :lock-scroll="false"> 
+        <div v-if="islogin">
+          <el-form ref="financialProform" :rules="rules" :model="financialProform" label-position="right" label-width="150px" style="max-width:500px;">
           <el-form-item label="融资金额(万元):" prop="financingAmount">
             <el-input v-model.trim="financialProform.financingAmount" placeholder="请输入融资金额" maxlength="100" clearable/>
           </el-form-item>
@@ -410,19 +369,40 @@
         </el-form>
         <div class="demandLine"></div>
         <div class="demandDia" @click="demandDia()">提交需求</div>
+        </div>
+        <div v-else class="loginTip">
+          你还未
+          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          /
+          <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+          企业账号
+        </div>
+      </el-dialog>
+    </template>
+      <template v-if="concatVisible">
+      <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :modal-append-to-body=false>
+        <div class="loginTip">
+          你还未
+          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          /
+          <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+          账号
+        </div>
       </el-dialog>
     </template>
   </div>
 </template>
 <script>
 import swiper from "swiper";
-import userInfo from '../common/userInfoData'
+import userInfo from "../common/userInfoData";
 export default {
   components: {
-      userInfo
-    },
+    userInfo
+  },
   data() {
     return {
+      islogin: true,
+      concatVisible:false,
       sousuo: false,
       searchData: "",
       showFF: false,
@@ -523,12 +503,18 @@ export default {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
   },
   methods: {
+      //判断是否登录
+    isLogin() {
+      if (!sessionStorage.userInfo) {
+        this.islogin = false;
+      }
+    },
     handleInvertor() {
-      if(!sessionStorage.userInfo){
-        this.$message.error('请先登录');
+      if (!sessionStorage.userInfo) {
+        this.concatVisible=true
         return
       }
-     this.$router.push({name:'investorCertification'})
+      this.$router.push({ name: "investorCertification" });
     },
     techInit() {
       var mySwiper = new swiper(".swiper-container", {
@@ -560,7 +546,7 @@ export default {
       this.page--;
       this.getFinancialProList();
     },
-       getScrollOffset() {
+    getScrollOffset() {
       // 除IE8及更早版本
       if (window.pageXOffset != null) {
         return {
@@ -582,14 +568,10 @@ export default {
       };
     },
     handleScroll() {
-      const osTop =this.getScrollOffset().y;
-      // for (const key in this.$refs) {
-      //   if (osTop >= this.$refs[key].scrollTop) {
-      //     const name = this.$refs[key].dataset.class;
-      //     this.$refs[key].classList.add(name);
-      //   }
-      // }
-      // console.log(this.getScrollTop())
+      if(!document.getElementById("header")){
+        return
+      }
+      const osTop = this.getScrollOffset().y;
       if (
         this.getScrollTop() > document.getElementById("header").clientHeight
       ) {
@@ -612,10 +594,13 @@ export default {
     rightPage() {
       if (this.page >= this.total1) {
         this.$message.error("没有更多数据了");
+        // this.page = 1;
+        // this.getFinancialProList();
         return;
+      } else {
+        this.page++;
+        this.getFinancialProList();
       }
-      this.page++;
-      this.getFinancialProList();
     },
     //用户提需求
     demandDia() {
@@ -646,10 +631,11 @@ export default {
     },
     //提需求
     raiseDemand(i) {
-       if(!sessionStorage.userInfo){
-        this.$message.error('请先登录');
-        return
-      }
+      // if (!sessionStorage.userInfo) {
+      //   this.$message.error("请先登录");
+      //   return;
+      // }
+      this.isLogin()
       this.financialProVisible = true;
       this.financialProform.expectedDate = "";
       this.financialProform.financingAmount = "";
@@ -729,7 +715,7 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-          } 
+          }
         }
       });
     },
@@ -754,6 +740,11 @@ export default {
 </script>
 <style lang="scss">
 .TechnologyFinance {
+    .loginTip{
+    text-align: center;
+    font-size: 15px;
+    margin-bottom:20px;
+  }
   #finaPP {
     padding: 20px 10px;
   }
@@ -937,53 +928,53 @@ export default {
     //   }
     // }
     .search_box {
-        background: rgba(0, 0, 0, 0.3);
-        text-align: center;
-        display: flex;
-        justify-content: center;
-        width:100%;
-        .el-input-group {
-          // position: relative;
-          // left: 50%;
-          // transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.3);
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      .el-input-group {
+        // position: relative;
+        // left: 50%;
+        // transform: translateX(-50%);
+        border-radius: 28px;
+        overflow: hidden;
+        width: 50%;
+        margin: 43px 0;
+        .el-input {
+          // width: 94px;
+        }
+        .el-input__inner:focus {
+          border-color: #00a041;
+        }
+        .el-input-group__append,
+        .el-input-group__prepend {
           border-radius: 28px;
-          overflow: hidden;
-          width: 50%;
-          margin: 43px 0;
-          .el-input {
-            // width: 94px;
-          }
-          .el-input__inner:focus {
-            border-color: #00a041;
-          }
-          .el-input-group__append,
-          .el-input-group__prepend {
-            border-radius: 28px;
-          }
-          .el-input-group__append {
-            background: #00a041;
-            color: #fff;
-            right: 58px;
-            .el-button {
-              margin: -10px -10px;
-            }
-          }
-          .el-input-group__prepend {
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
-            background-color: #fff;
-            padding: 0px 17px 0 9px;
-            input {
-              color: #666666;
-              text-align: right;
-            }
+        }
+        .el-input-group__append {
+          background: #00a041;
+          color: #fff;
+          right: 58px;
+          .el-button {
+            margin: -10px -10px;
           }
         }
-        .input-with-select .el-input__inner {
-          border-top-left-radius: 19px;
-          border-bottom-left-radius: 19px;
-          border: 1px solid #00a041;
+        .el-input-group__prepend {
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+          background-color: #fff;
+          padding: 0px 17px 0 9px;
+          input {
+            color: #666666;
+            text-align: right;
+          }
         }
+      }
+      .input-with-select .el-input__inner {
+        border-top-left-radius: 19px;
+        border-bottom-left-radius: 19px;
+        border: 1px solid #00a041;
+      }
     }
     .searchbox {
       background: #fff;
@@ -1008,7 +999,8 @@ export default {
     // margin: 0 auto;
     .techNav {
       margin: 20px 0;
-      font-size: 16px;
+      font-size: 13px;
+      font-weight: bold;
     }
     .techList {
       width: 100%;

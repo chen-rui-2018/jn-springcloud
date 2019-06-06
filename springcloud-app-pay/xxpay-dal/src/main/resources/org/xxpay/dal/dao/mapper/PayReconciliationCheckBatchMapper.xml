@@ -44,9 +44,13 @@
     <if test="interfaceCode != null and interfaceCode != ''">
       and bank_type = #{interfaceCode}
     </if>
-    <!-- 状态不为error的情况 -->
-    <if test="status != null and status != ''">
-      and status not in ( #{status})
+    <!-- 不存在的状态 -->
+    <if test="notInStatus != null and notInStatus != ''">
+      and status not in ( #{notInStatus})
+    </if>
+    <!-- 存在的状态 -->
+    <if test="inStatus != null and inStatus != ''">
+      and status in ( #{inStatus})
     </if>
 
   </sql>
@@ -60,5 +64,6 @@
       <include refid="reconciliation_sql" />
     </where>
   </select>
+
 
 </mapper>

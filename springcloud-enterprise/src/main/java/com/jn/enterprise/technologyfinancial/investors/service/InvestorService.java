@@ -69,8 +69,9 @@ public interface InvestorService {
     /**
      * 更新用户角色
      * @param user
-     * @param sysRoleResult
+     * @param addSysRoleResult
+     * @param delSysRoleResult
      * @return
      */
-    Result<Boolean> updateUserRoleInfo(User user, Result<SysRole> sysRoleResult);
+    Result<Boolean> updateUserRoleInfo(User user, Result<SysRole> addSysRoleResult,Result<SysRole> delSysRoleResult);
 }

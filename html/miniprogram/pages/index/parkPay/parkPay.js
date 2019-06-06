@@ -66,9 +66,7 @@ Page({
                 })
                },
                complete(res){
-                wx.navigateTo({
-                  url: '../payComplete/payComplete?isSuccess=1'
-                })
+                console.log(res)
                }
             })
           } 

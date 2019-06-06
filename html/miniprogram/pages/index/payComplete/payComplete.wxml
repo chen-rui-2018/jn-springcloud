@@ -1,9 +1,5 @@
-<!--pages/index/payComplete/payComplete.wxml   "-->
+<!--pages/index/payComplete/payComplete.wxml-->
 <view class="payComplete">
-  <view class="" hover-class="none" hover-stop-propagation="false">
-    <image class="" wx:if="{{imgBaseUrl&&isSuccess!=1}}" src="{{imgBaseUrl}}error.png"> </image>
-    <image class="" wx:if="{{imgBaseUrl&&isSuccess===1}}" src="{{imgBaseUrl}}success.png"> </image>
-  </view>
-  <text wx:if="{{isSuccess===1}}">支付成功</text>
-  <text wx:if="{{isSuccess!=1}}">支付失败</text>
+  <image wx:if="{{imgBaseUrl&&isSuccess!=1}}" class="" src="./../../../../h5/imgs/pay_error.png"> </image>
+  <image class="" wx:if="{{imgBaseUrl&&isSuccess===1}}" src="./../../../../h5/imgs/pay_success.png"> </image>
 </view>

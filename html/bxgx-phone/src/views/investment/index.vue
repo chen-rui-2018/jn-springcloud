@@ -211,11 +211,11 @@ export default {
     handleScroll () {
       window.onscroll = () => {
         // 文档内容实际高度（包括超出视窗的溢出部分）
-        const scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight)
+        const scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
         // 滚动条滚动距离
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
         // 窗口可视范围高度
-        const clientHeight = window.innerHeight || Math.min(document.documentElement.clientHeight, document.body.clientHeight)
+        const clientHeight = window.innerHeight || Math.min(document.documentElement.clientHeight,document.body.clientHeight);
         if (clientHeight + scrollTop >= scrollHeight - 10) {
           // 到底部加载信息
           this.getMore()
@@ -274,10 +274,9 @@ export default {
         this.getBusinessAdPolicy()
       ])
         .then(() => {
-          const swiper = new Swiper('.swiper-container', {
+          new Swiper('.swiper-container', {
             autoplay: true
           })
-          console.dir(swiper)
           this.handleScroll()
         })
     },
@@ -301,7 +300,7 @@ export default {
               this.bannerList = res.data.rows
               resolve()
             } else {
-              reject(res.data)
+              reject()
             }
           }
         })
@@ -316,7 +315,8 @@ export default {
               this.businessAdDynamic = res.data
               resolve()
             } else {
-              reject(res.data)
+              this.$message.error(res.result)
+              reject()
             }
           }
         })
@@ -331,7 +331,8 @@ export default {
               this.businessAdPolicy = res.data
               resolve()
             } else {
-              reject(res.data)
+              this.$message.error(res.result)
+              reject()
             }
           }
         })
@@ -346,7 +347,7 @@ export default {
               this.parkList = res.data
               resolve()
             } else {
-              reject(res)
+              reject()
             }
           }
         })
@@ -368,7 +369,7 @@ export default {
               item.allList = item.allList.concat(rows)
               resolve(res.data)
             } else {
-              reject(res.data)
+              reject()
             }
           }
         })

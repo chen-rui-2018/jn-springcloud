@@ -151,6 +151,7 @@ export default {
     },
     // 点击审批 跳转到审批顾问页面
     handleConsent(row) {
+      console.log(row);
       this.$router.push({
         name: "approveAdvisory",
         query: { advisorAccount: row.advisorAccount }

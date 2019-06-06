@@ -87,18 +87,6 @@ public class MeterInfoModel implements Serializable {
     @ApiModelProperty("是否支持自动拉闸、关闸1:是，2否")
     private String isauto;
 
-
-    @ApiModelProperty("厂家仪表编码")
-    private String factoryMeterCode;
-
-    public String getFactoryMeterCode() {
-        return factoryMeterCode;
-    }
-
-    public void setFactoryMeterCode(String factoryMeterCode) {
-        this.factoryMeterCode = factoryMeterCode;
-    }
-
     public String getIsauto() {
         return isauto;
     }

@@ -5,6 +5,7 @@ import com.jn.hardware.model.electricmeter.ElectricMeterDataCollectionParam;
 import com.jn.hardware.model.electricmeter.ElectricMeterWaterOrElectricShow;
 import com.jn.park.electricmeter.entity.TbElectricMeterInfo;
 import com.jn.park.electricmeter.model.MeterInfoModel;
+import com.jn.park.electricmeter.model.TodayElectro;
 import com.jn.park.electricmeter.model.TrendChartPageParam;
 import com.jn.park.electricmeter.model.TrendChartParam;
 import com.jn.system.log.annotation.ControllerLog;

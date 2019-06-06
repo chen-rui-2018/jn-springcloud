@@ -5,8 +5,9 @@ Page({
   data: {
     error:'',
     imgBaseUrl:'',
-    isSuccess:0
+    isSuccess:1
   },
+
   onLoad: function (options) {
     this.setData({
       imgBaseUrl:app.globalData.imgBaseUrl

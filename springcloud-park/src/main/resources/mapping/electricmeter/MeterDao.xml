@@ -105,7 +105,6 @@
                      t5_val qn_reading_end ,
                      replace(CONCAT(round(  (case when ((max(t.reading_end) - min(t.reading_end)) - t4_val) = 0 then null else ((max(t.reading_end) - min(t.reading_end)) - t4_val)  end )
                         / (case when t4_val = 0 then null else t4_val end) * 100,2),'%'),'.00','') zr_hb
-                        ,now()
           from tb_electric_reading t
           left join tb_electric_meter_info t2
             on t.meter_code = t2.meter_code
@@ -476,7 +475,7 @@
     <!--获取企业当前的电表，进行停电或开启操作-->
     <select id="getHostsMeter" parameterType="java.lang.String" resultType="java.lang.String">
         select
-        factory_meter_code as meterCode
+        meter_code as meterCode
         from
         tb_electric_meter_info
         where record_status=1

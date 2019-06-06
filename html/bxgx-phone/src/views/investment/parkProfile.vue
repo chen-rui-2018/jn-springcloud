@@ -29,7 +29,7 @@ export default {
               this.basicInfo = res.data
               resolve()
             } else {
-              reject(res)
+              reject()
             }
           }
         })

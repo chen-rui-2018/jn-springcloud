@@ -23,14 +23,12 @@
   background-color: #fff;
   position: fixed;
   bottom: 0;
-  width:100%;
 }
 .sumbmit view{
   background-color: #ecfcf2;
 	border-radius: 41px;
   border: solid 1px #009966;
-  padding:28rpx 0;
-  text-align:center;
+  padding:28rpx 314rpx;
   font-size: 30rpx;
   color:#07ab50;
 }
@@ -69,6 +67,6 @@
   border: solid 1px #009966;
   font-size: 30rpx;
   color:#07ab50;
-  padding:28rpx 0;
+  padding:28rpx 314rpx;
   text-align: center;
  }

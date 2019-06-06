@@ -15,24 +15,13 @@ import java.io.Serializable;
 public class BillParam implements Serializable {
 
     @ApiModelProperty("缴费单id")
-    private String billId;
+    private String billIds;
 
-    @ApiModelProperty("缴费单金额")
-    private String billSum;
-
-    public String getBillId() {
-        return billId;
+    public String getBillIds() {
+        return billIds;
     }
 
-    public void setBillId(String billId) {
-        this.billId = billId;
-    }
-
-    public String getBillSum() {
-        return billSum;
-    }
-
-    public void setBillSum(String billSum) {
-        this.billSum = billSum;
+    public void setBillIds(String billIds) {
+        this.billIds = billIds;
     }
 }

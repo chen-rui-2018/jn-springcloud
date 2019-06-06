@@ -142,12 +142,16 @@ public class MeterController extends BaseController {
         return result;
     }
 
-    @ControllerLog(doAction = "电表的启动和关闭定时器接口")
-    @ApiOperation(value = "电表的启动和关闭定时器接口",notes = "电表的启动和关闭定时器接口", httpMethod = "GET")
+    @ControllerLog(doAction = "电表拉闸与恢复")
+    @ApiOperation(value = "电表拉闸与恢复",notes = "电表拉闸与恢复", httpMethod = "GET")
     @GetMapping(value = "/setSwitchMeter")
     @RequiresPermissions("/meter/setSwitchMeter")
-    public void setSwitchMeterTimer(){
-        meterRulesService.setSwitchMeterTimer();
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "meterCode" ,value = "设备编码",type = "String" ,example = "1",required = true),
+            @ApiImplicitParam(name = "status",value = "开关状态（4，5）",type = "String" ,example = "4",required = true)
+    })
+    public Result setSwitchMeter(@RequestBody MeterInfoParam model ) {
+        return meterRulesService.SwitchMeter(model.getMeterCode(),model.getStatus());
     }
 
     @ControllerLog(doAction = "余额不足告警")
@@ -292,6 +296,9 @@ public class MeterController extends BaseController {
     public Result yearelectro(String companyid){
         return meterService.yearelectro(companyid);
     }
+
+
+
 
 
 }

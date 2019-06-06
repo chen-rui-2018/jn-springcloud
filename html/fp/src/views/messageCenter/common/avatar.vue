@@ -1,5 +1,5 @@
 <template>
-  <img :src="url || '@/../static/img/touxiang.png'" alt="" class="chat-avatar" :class="size">
+  <img :src="url || '@/../static/img/头像.png'" alt="" class="chat-avatar" :class="size">
 </template>
 
 <script>

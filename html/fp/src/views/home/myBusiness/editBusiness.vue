@@ -18,8 +18,8 @@
           </el-form-item>
         </div>
         <div style="display:flex">
-          <el-form-item label="产业领域:" prop="induType">
-            <el-select v-model="businessForm.induType" placeholder="请选择产业领域" clearable>
+          <el-form-item label="主营行业:" prop="induType">
+            <el-select v-model="businessForm.induType" placeholder="请选择主营行业" clearable>
               <el-option
                 v-for="item in induTypeOptions"
                 :key="item.id"

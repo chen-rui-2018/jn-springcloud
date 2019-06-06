@@ -14,6 +14,7 @@ import com.jn.enterprise.company.service.CompanyService;
 import com.jn.enterprise.pay.dao.*;
 import com.jn.enterprise.pay.entity.*;
 import com.jn.enterprise.pay.enums.*;
+import com.jn.enterprise.pay.util.AutoOrderUtil;
 import com.jn.enterprise.pay.util.MoneyUtils;
 import com.jn.news.vo.SmsTemplateVo;
 import com.jn.pay.api.PayOrderClient;
@@ -380,8 +381,22 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         tb.setPaymentAffirm(PaymentBillEnum.BILL_AC_BOOK_CHECK_2.getCode());
         tb.setBillReceiver(tbPayAccount.get(0).getUserId());
         logger.info("执行统一缴费插入账单信息操作,入參【{}】", tb.toString());
-        tbPayBillMapper.insertSelective(tb);
-        logger.info("结束执行统一缴费插入账单信息操作");
+        /**判断是否有相同的账单*/
+        TbPayBill tbPayBill3 = tbPayBillMapper.selectByPrimaryKey(tb.getBillId());
+        logger.info("判断是否有相同的账单返回结果【{}】",JsonUtil.object2Json(tbPayBill3));
+        if(tbPayBill3 == null){
+            tbPayBillMapper.insertSelective(tb);
+            logger.info("结束执行统一缴费插入账单信息操作");
+        }
+        if(tbPayBill3 != null){
+            if(tbPayBill3.getRecordStatus().equals(PaymentBillEnum.BILL_STATE_DELETE.getCode())){
+                tbPayBillMapper.updateByPrimaryKeySelective(tb);
+                logger.info("结束执行统一缴费更新账单信息操作");
+            }else if(tbPayBill3.getRecordStatus().equals(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode())){
+                throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_IS_EXIT);
+            }
+        }
+
         /** 插入账单详情信息*/
         logger.info("开始执行统一缴费插入账单详情信息操作");
         List<TbPayBillDetails> list = new ArrayList<>();
@@ -392,7 +407,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
                 tb2.setCreatedTime(payBillCreateParamVo.getCreatedTime());
                 tb2.setCreatorAccount(payBillCreateParamVo.getCreatorAccount());
                 tb2.setRecordStatus(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
-                tb2.setDetailsId(UUID.randomUUID().toString().replaceAll("-", ""));
+                tb2.setDetailsId(AutoOrderUtil.autoOrderId());
                 BeanUtils.copyProperties(tp, tb2);
                 list.add(tb2);
             }
@@ -419,7 +434,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
                     tbPayAccountBookMapper.updateByPrimaryKeySelective(tbPayAccountBook.get(0));
                     logger.info("结束执行统一缴费扣除账本金额操作");
                     logger.info("开始执行统一缴费插入流水记录操作");
-                    tpbmr.setDeductionId(UUID.randomUUID().toString().replaceAll("-", ""));
+                    tpbmr.setDeductionId(AutoOrderUtil.autoOrderId());
                     tpbmr.setBillId(tbs.getBillId());
                     tpbmr.setAcBookId(tbs.getAcBookId());
                     tpbmr.setRemark(tbs.getBillSource());
@@ -835,7 +850,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
             /**插入流水表记录*/
             logger.info("调用统一支付下单接口回调，插入流水表记录操作开始");
             TbPayAccountBookMoneyRecord tpbmr = new TbPayAccountBookMoneyRecord();
-            tpbmr.setDeductionId(UUID.randomUUID().toString().replaceAll("-", ""));
+            tpbmr.setDeductionId(AutoOrderUtil.autoOrderId());
             tpbmr.setBillId(tbPayBill.getBillId());
             tpbmr.setAcBookId(tbPayBill.getAcBookId());
             String[] tmp = callBackParam.getChannelId().split("_");
@@ -884,7 +899,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
             /**插入流水表记录*/
             logger.info("调用统一支付下单接口回调，插入流水表记录操作开始");
             TbPayAccountBookMoneyRecord tpbmr = new TbPayAccountBookMoneyRecord();
-            tpbmr.setDeductionId(UUID.randomUUID().toString().replaceAll("-", ""));
+            tpbmr.setDeductionId(AutoOrderUtil.autoOrderId());
             tpbmr.setBillId(tbPayBill.getBillId());
             tpbmr.setAcBookId(tbPayBill.getAcBookId());
             String[] tmp = callBackParam.getChannelId().split("_");

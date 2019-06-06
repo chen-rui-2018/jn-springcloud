@@ -3,6 +3,7 @@ const path = require('path')
 const config = require('../config')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const packageConfig = require('../package.json')
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 exports.assetsPath = function(_path) {
   const assetsSubDirectory =

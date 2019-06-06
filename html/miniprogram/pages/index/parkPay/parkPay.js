@@ -66,7 +66,9 @@ Page({
                 })
                },
                complete(res){
-                console.log(res)
+                wx.navigateTo({
+                  url: '../payComplete/payComplete?isSuccess=1'
+                })
                }
             })
           } else{

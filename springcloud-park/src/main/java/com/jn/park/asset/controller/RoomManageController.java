@@ -190,12 +190,9 @@ public class RoomManageController {
     @ControllerLog(doAction = "调用生成缴费单接口")
     @ApiOperation(value = "调用生成缴费单接口",notes = "调用生成缴费单接口")
     @PostMapping(value = "/createBill")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "billIds",value = "缴费单id,逗号隔开",example = "2019051600011",required = true)
-    })
     public Result createBill(@RequestBody BillParam billParam){
         Assert.notNull(billParam,"缴费单参数不能为空");
-        return roomInformationService.createBill(billParam.getBillIds());
+        return roomInformationService.createBill(billParam.getBillId(),billParam.getBillSum());
     }
 
 }

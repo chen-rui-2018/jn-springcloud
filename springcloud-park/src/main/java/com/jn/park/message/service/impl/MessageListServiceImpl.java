@@ -6,13 +6,11 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.util.StringUtils;
 import com.jn.park.finance.enums.FinanceBudgetExceptionEnums;
-import com.jn.park.finance.vo.FinanceExpendHistoryVo;
 import com.jn.park.message.dao.MessageListDao;
 import com.jn.park.message.model.*;
 import com.jn.park.message.service.MessageListService;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
-import jdk.nashorn.internal.runtime.ECMAException;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -147,7 +144,7 @@ public class MessageListServiceImpl implements MessageListService {
         try {
             messageListDao.updateIsReadStatus(id);
             return "0";
-        }catch (ECMAException e){
+        }catch (Exception e){
             logger.info("标记已读失败:{}",e);
         }
         return "1";

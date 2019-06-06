@@ -39,28 +39,22 @@ $(function () {
 	//设置服务器连接ip和端口号
 	$("#serverIp").val(serviceIp);
 	$("#serverPort").val(servicePort);
-
 	initLoginAccountInfo();
+	//获取登录用户信息
+	getUserInfo();
 	//获取服务模块信息
 	getServiceModule();
 });
 
 //初始化登录用户信息
 function initLoginAccountInfo(){
-	//分机号码
-	$("#extension").val(initExtension);
-	//登陆工号
-	$("#agentId").val(initAgentId);
-	//坐席名称
-	$("#agentName").val(initAgentName)
 	//登陆组号
 	$("#groupId").val(initGroupId);
 	//坐席级别
 	$("#levelId").val(initLevelId);
 }
 
-
-
+//获取cookie
 function getCookie(cookieName) {
     var strCookie = document.cookie;
     var arrCookie = strCookie.split("; ");
@@ -73,6 +67,7 @@ function getCookie(cookieName) {
     return "";
 }
 
+//获取token
 function getServiceToken(){
 	$.ajax({
 		url: token_Url+'/authLogin',
@@ -99,8 +94,6 @@ function getServiceToken(){
 	})
 }
 
-
-
 //获取服务模块信息
 function getServiceModule(){
 	$.ajax({
@@ -113,7 +106,7 @@ function getServiceModule(){
 		},
 		success: function (data) {
 			if(data==undefined ||data==null ||data.data==null){
-				alert("网络异常，请稍后重试...");
+				console.log("获取服务模块信息失败，网络异常");
 			}else if(data.code='0000'){
 				var modules=data.data;
 				var options="";
@@ -121,13 +114,65 @@ function getServiceModule(){
 					options=options+"<option value="+modules[i].serviceModule+">"+modules[i].serviceModuleName+"</option>";
 				}
 				if(options.length>0)
-				$("#serviceModule").html("");
+					$("#serviceModule").html("");
 				$("#serviceModule").html(options);
 			}
 		}
 	});
 }
 
+//获取登录用户账号信息和姓名
+function getUserInfo(){
+	$.ajax({
+		type: 'get',
+		url: service_url + '/customer/customerCalledInfoEnterController/getBaseUserInfo',
+		dataType: "json",
+		data: {},
+		headers: {
+			"token":token
+		},
+		success: function (data) {
+			if(data==undefined ||data==null ||data.data==null){
+				console.log("获取登录用户账号信息和姓名失败，网络异常");
+				alert("网络异常，请稍后重试...");
+			}else if(data.code='0000'){
+				var user=data.data;
+				$("#agentId").val(user.account);
+				$("#agentName").val(user.name);
+			}
+		}
+	});
+}
+
+//设置分机号码
+function setExtension(){
+	var extension=$("#extension").val();
+	if(extension!=null && extension.replace(/\s/g,"")!=''){
+		//ignore
+	}else{
+		//展示下拉框
+		$("#extensionSelect").show();
+	}
+}
+//设置分机号码，选中下拉框中的值
+function selectExtension(obj){
+	var extensionValue=$(obj).attr("value");
+	$("#extension").val(extensionValue);
+	//下拉框隐藏
+	$("#extensionSelect").hide();
+}
+
+//手动输入分机号码
+function inputExtension(){
+	//下拉框隐藏
+	$("#extensionSelect").hide();
+}
+
+//失去焦点隐藏下拉框
+function hideExtension(){
+	//下拉框隐藏
+	$("#extensionSelect").hide();
+}
 //连接ACD服务器
 function connectACD(){
 	var ip = document.getElementById("serverIp").value;
@@ -163,6 +208,9 @@ function login(){
 	var agentId = document.getElementById("agentId").value;
 	var agentName = document.getElementById("agentName").value;
 	var ext = document.getElementById("extension").value;
+	if(ext==null || ext==''){
+		alert("请输入分机号码");
+	}
 	var groupId = document.getElementById("groupId").value;
 	var levelId = document.getElementById("levelId").value;
 	var rightId = 0;
@@ -178,297 +226,7 @@ function logout(){
 	addLog( "调用Logout方法, 返回值=" + r );
 }
 
-function dial(){
-	var r = toolbar.Dial( document.getElementById("dialphone").value );
-	addLog( "调用Dial方法, 返回值=" + r );
-}
-
-function getIVR(){
-	var v = toolbar.DoGetAssociatedData("IvrPath");
-	addLog( v );
-}
-
-function drop(){
-	var r = toolbar.Onhook();
-	addLog( "调用Onhook方法, 返回值=" + r );
-}
-
-function answer(){
-	var r = toolbar.Offhook();
-	addLog( "调用Offhook方法, 返回值=" + r );
-}
-
-function hold(){
-	var r = toolbar.Hold();
-	addLog( "调用Hold方法, 返回值=" + r );
-}
-
-function unhold(){
-	var r = toolbar.UnHold();
-	addLog( "调用UnHold方法, 返回值=" + r );
-}
-
-function blindtransfer(){
-	var r = toolbar.BlindTransfer( document.getElementById("transferphone").value );
-	addLog( "调用BlindTransfer方法, 返回值=" + r );
-}
-
-function consult(){
-	var r = toolbar.Consult( document.getElementById("consultphone").value );
-	addLog( "调用Consult方法, 返回值=" + r );
-}
-
-function cancelconsult(){
-	var r = toolbar.CancelConsult();
-	addLog( "调用CancelConsult方法, 返回值=" + r );
-}
-
-function transferconsult(){
-	var r = toolbar.Onhook();
-	addLog( "调用Onhook方法, 返回值=" + r );
-}
-
-function conferenceconsult(){
-	var r = toolbar.ThirdParty();
-	addLog( "调用ThirdParty方法, 返回值=" + r );
-}
-//班长坐席  强拆、强插、拦截坐席
-function ForceRelease(){
-	var r = toolbar.ForceRelease(document.getElementById("ForceReleaseNumber").value);	//
-	addLog("调用ForceRelease方法,返回值=" + r );
-}
-function ForceJoin(){
-	var r = toolbar.ForceJoin(document.getElementById("ForceJoinNumber").value);
-	addLog("调用ForceJoin方法,返回值=" + r );
-}
-function HiJack(){
-	var r = toolbar.HiJack(document.getElementById("HiJackNumber").value);
-	addLog("调用HiJack方法,返回值=" + r );
-}
-function SetAgentState(nstate){
-	var r = toolbar.SetAgentState(nstate);
-	if(nstate == 2)
-		addLog("置闲" + r );
-	else if(nstate ==4 )
-		addLog("置忙" + r );
-}
-//开始监听
-function StartListenChannel(){
-	var r = toolbar.GetAgentState();
-	switch(r){
-		case 2:
-		case 8:
-			alert("请先置忙再监听")
-			return;
-		case -1:
-		case 1:
-		case 3:
-		case 6:
-			alert("此状态下不能监听")
-			return;
-		default:
-			break;
-	}
-	var id =document.getElementById("listenChannelId").value;
-	r = toolbar.StartListenChannel(id);
-	addLog("调用StartListenChannel()" + r);
-}
-
-function StopListenChannel(){
-	var r = toolbar.StopListenChannel();
-	addLog("停止监听");
-}
-
-function GetLineState(){
-	var r = toolbar.GetLineState();
-	switch(r)
-	{
-		case -1  : document.getElementById("spanLineState").innerText = "未知状态(-1)";
-			break;
-		case 0  : document.getElementById("spanLineState").innerText = "空闲(0)";
-			break;
-		case 1  : document.getElementById("spanLineState").innerText = "振铃(1)";
-			break;
-		case 2  : document.getElementById("spanLineState").innerText = "拨号(2)";
-			break;
-		case 3  : document.getElementById("spanLineState").innerText = "通话(3)";
-			break;
-		case 4  : document.getElementById("spanLineState").innerText = "保持(4)";
-			break;
-		case 5  : document.getElementById("spanLineState").innerText = "保持下拨号(5)";
-			break;
-		case 6  : document.getElementById("spanLineState").innerText = "保持下通话(6)";
-			break;
-		case 7  : document.getElementById("spanLineState").innerText = "挂机(7)";
-			break;
-		case 8  : document.getElementById("spanLineState").innerText = "摘机(8)";
-			break;
-		case 9  : document.getElementById("spanLineState").innerText = "咨询(9)";
-			break;
-		case 10 : document.getElementById("spanLineState").innerText = "转移(10)";
-			break;
-		case 11 : document.getElementById("spanLineState").innerText = "取保持(11)";
-			break;
-		case 12 : document.getElementById("spanLineState").innerText = "三方(12)";
-			break;
-		case 13 : document.getElementById("spanLineState").innerText = "会议(13)";
-			break;
-		case 14 : document.getElementById("spanLineState").innerText = "监听(14)";
-			break;
-		case 15 : document.getElementById("spanLineState").innerText = "强插(15)";
-			break;
-		case 16 : document.getElementById("spanLineState").innerText = "拦截(16)";
-			break;
-		default:
-			addLog("LineStateChanged", "no normal linestate ="+r);
-			break;
-	}
-}
-
-function getAllGroup(){
-	var r = toolbar.GetGroupList();
-	addLog( "调用GetGroupList方法, 返回值=" + r );
-}
-
-function getIdleAgentList(){
-	var group = document.getElementById("idleAgentGroupId").value;
-	var r = toolbar.GetIdleAgentList( group );
-	addLog( "调用GetIdleAgentList方法, 返回值=" + r );
-}
-
-function getTalkAgentList(){
-	var group = document.getElementById("idleAgentGroupId").value;
-	var r = toolbar.GetTalkAgentList( group );
-	addLog( "调用GetTalkAgentList方法, 返回值=" + r );
-}
-
-function getAllAgentList(){
-	var group = document.getElementById("idleAgentGroupId").value;
-	var r = toolbar.GetAgentListFromGroup( group );
-	addLog( "调用GetAgentListFromGroup方法, 返回值=" + r );
-}
-
-function getCaller(){
-	var r = toolbar.GetCaller();
-	addLog( "调用GetCaller方法, 返回值=" + r );
-}
-
-function getCalled(){
-	var r = toolbar.GetCalled();
-	addLog( "调用GetCalled方法, 返回值=" + r );
-	return r;
-}
-
-function getAppId(){
-	var r = toolbar.GetRecordAppID();
-	addLog( "调用GetRecordAppID方法, 返回值=" + r );
-}
-
-function getReturnIVR(){
-	var r = toolbar.GetReturnToIVRInfo();
-	addLog( "调用GetReturnToIVRInfo方法, 返回值=" + r );
-}
-
-function AgentRequestIVR(){
-	var id = document.getElementById("ivrID").value;
-	var AssociateDataToIvr = document.getElementById("AssociateDataToIvr").value;
-
-	var r = toolbar.AgentRequestToIVR(id,AssociateDataToIvr);
-	addLog( "调用AgentRequestToIVR方法，返回值" + r );
-}
-
-function addLog( msg ){
-	var org_msg = document.getElementById("logArea").value;
-	document.getElementById("logArea").value = org_msg + "\r\n" + msg;
-}
-
-function clearLog(){
-	document.getElementById("logArea").value = "";
-}
-
-function SetRecServerAddr(){
-	var RECIP = document.getElementById("szRECSerevrIP").value;
-	var RECport = document.getElementById("iRECServerPort").value;
-	var r = toolbar.SetRecServerAddr(RECIP,RECport);
-	addLog("设置RECIP：" + RECIP + "RECport:" + RECport + "返回值" + r );
-}
-
-//连接服务器回调方法
-toolbar.OnAgentConnectToACD(function( bResult ) {
-	addLog( "连接服务器返回事件，bResult=" + bResult );
-	if(bResult==1){
-		$("#optionOKDesc").show();
-		$("#optionOKDesc").html("连接服务器成功，开始登陆...");
-		$("#optionNGDesc").html("");
-		setTimeout(function(){document.getElementById("optionOKDesc").style.display="none";},1000);
-		login();
-	}else if(bResult==2) {
-		//ignore
-	}else{
-		$("#optionNGDesc").show();
-		$("#optionNGDesc").html("服务器连接失败，登陆失败");
-		$("#optionOKDesc").html("");
-		setTimeout(function(){document.getElementById("optionNGDesc").style.display="none";},3000);
-	}
-});
-toolbar.OnAgentDisConnectToACD(function( bResult, iReason ) {
-	addLog( "断开服务器返回事件，bResult=" + bResult + ",iReason=" + iReason );
-	if(bResult){
-		$("#optionOKDesc").show();
-		$("#optionOKDesc").html("断开服务器成功，开始登出...");
-		$("#optionNGDesc").html("");
-		setTimeout(function(){document.getElementById("optionOKDesc").style.display="none";},1000);
-		logout();
-	}
-});
-
-toolbar.OnAgentLogin(function( bResult, iReason ) {
-	addLog( "坐席登陆返回事件，bResult=" + bResult + ",iReason=" + iReason );
-	if(bResult){
-		$("#login").hide();
-		$("#logout").show();
-		$("#optionOKDesc").show();
-		$("#optionOKDesc").html("登陆成功");
-		$("#optionNGDesc").html("");
-		setTimeout(function(){document.getElementById("optionOKDesc").style.display="none";},3000);
-	}else{
-		$("#optionNGDesc").show();
-		$("#optionNGDesc").html("登录失败");
-		$("#optionOKDesc").html("");
-		setTimeout(function(){document.getElementById("optionNGDesc").style.display="none";},3000);
-	}
-});
-
-toolbar.OnAgentLogout(function( bResult, iReason ) {
-	addLog( "坐席登出返回事件，bResult=" + bResult );
-	if(bResult){
-		$("#logout").hide();
-		$("#login").show();
-		$("#optionNGDesc").html("......请登录.....");
-	}else{
-		$("#optionNGDesc").show();
-		$("#optionNGDesc").html("网络异常，登出失败");
-		$("#optionOKDesc").html("");
-		setTimeout(function(){document.getElementById("optionNGDesc").style.display="none";},1000);
-	}
-});
-
-toolbar.OnAgentStateChanged(function( iAgentState ) {
-	addLog( "坐席状态改变事件，iAgentState=" + iAgentState );
-});
-
-toolbar.OnLineStateChanged(function( iLineState ) {
-	addLog( "线路状态改变事件，iLineState=" + iLineState );
-});
-
-toolbar.OnAgentDial(function( bResult ) {
-	addLog( "坐席外呼结果事件，bResult=" + bResult );
-});
-
-toolbar.OnDialConnected(function() {
-	addLog( "坐席外呼接通事件" );
-});
-
+//来电振铃事件
 toolbar.OnTelephoneRing(function( szCaller, szCallid ) {
 	addLog( "坐席来电振铃事件，szCaller=" + szCaller + ",szCallid=" + szCallid );
 	//弹出对话框
@@ -488,6 +246,68 @@ toolbar.OnTelephoneRing(function( szCaller, szCallid ) {
 	//获取来电用户历史信息
 	getCalledHistory(szCaller);
 
+});
+
+
+//连接服务器回调方法
+toolbar.OnAgentConnectToACD(function( bResult ) {
+	addLog( "连接服务器返回事件，bResult=" + bResult );
+	if(bResult==1){
+		$("#optionOKDesc").show();
+		$("#optionOKDesc").html("连接服务器成功，开始登陆...");
+		$("#optionNGDesc").html("");
+		setTimeout(function(){document.getElementById("optionOKDesc").style.display="none";},1000);
+		login();
+	}else if(bResult==2) {
+		//ignore
+	}else{
+		$("#optionNGDesc").show();
+		$("#optionNGDesc").html("服务器连接失败，登陆失败");
+		$("#optionOKDesc").html("");
+		setTimeout(function(){document.getElementById("optionNGDesc").style.display="none";},3000);
+	}
+});
+//断开服务器回调方法
+toolbar.OnAgentDisConnectToACD(function( bResult, iReason ) {
+	addLog( "断开服务器返回事件，bResult=" + bResult + ",iReason=" + iReason );
+	if(bResult){
+		$("#optionOKDesc").show();
+		$("#optionOKDesc").html("断开服务器成功，开始登出...");
+		$("#optionNGDesc").html("");
+		setTimeout(function(){document.getElementById("optionOKDesc").style.display="none";},1000);
+		logout();
+	}
+});
+//登录回调事件
+toolbar.OnAgentLogin(function( bResult, iReason ) {
+	addLog( "坐席登陆返回事件，bResult=" + bResult + ",iReason=" + iReason );
+	if(bResult){
+		$("#login").hide();
+		$("#logout").show();
+		$("#optionOKDesc").show();
+		$("#optionOKDesc").html("登陆成功");
+		$("#optionNGDesc").html("");
+		setTimeout(function(){document.getElementById("optionOKDesc").style.display="none";},3000);
+	}else{
+		$("#optionNGDesc").show();
+		$("#optionNGDesc").html("登录失败");
+		$("#optionOKDesc").html("");
+		setTimeout(function(){document.getElementById("optionNGDesc").style.display="none";},3000);
+	}
+});
+//登出回调事件
+toolbar.OnAgentLogout(function( bResult, iReason ) {
+	addLog( "坐席登出返回事件，bResult=" + bResult );
+	if(bResult){
+		$("#logout").hide();
+		$("#login").show();
+		$("#optionNGDesc").html("......请登录.....");
+	}else{
+		$("#optionNGDesc").show();
+		$("#optionNGDesc").html("网络异常，登出失败");
+		$("#optionOKDesc").html("");
+		setTimeout(function(){document.getElementById("optionNGDesc").style.display="none";},1000);
+	}
 });
 
 //获取来电归属
@@ -766,15 +586,15 @@ function submit(){
 	//校验联系方式
 
 	//把数据转为json
-	 var json={
-		 "quesTitle":quesTitle,
-		 "serviceModule":serviceModule,
-		 "quesDetails":quesDetails,
-		 "clientType":clientType,
-		 "custName":custName,
-		 "contactWay":contactWay,
-		 "calledPhone":calledPhone
-	 }
+	var json={
+		"quesTitle":quesTitle,
+		"serviceModule":serviceModule,
+		"quesDetails":quesDetails,
+		"clientType":clientType,
+		"custName":custName,
+		"contactWay":contactWay,
+		"calledPhone":calledPhone
+	}
 	//显示加载中...
 	$("#submitDesc").show();
 	//提交按钮禁用
@@ -807,7 +627,7 @@ function submit(){
 		}
 	});
 }
-//清楚用户信息
+//清除用户信息
 function clearCustomerInfo(){
 	//清空来电录入信息
 	$("#quesTitle").val("");
@@ -828,6 +648,236 @@ function clearCustomerInfo(){
 	$("#history").html("");
 	$("#history").hide("");
 }
+
+function dial(){
+	var r = toolbar.Dial( document.getElementById("dialphone").value );
+	addLog( "调用Dial方法, 返回值=" + r );
+}
+
+function getIVR(){
+	var v = toolbar.DoGetAssociatedData("IvrPath");
+	addLog( v );
+}
+
+function drop(){
+	var r = toolbar.Onhook();
+	addLog( "调用Onhook方法, 返回值=" + r );
+}
+
+function answer(){
+	var r = toolbar.Offhook();
+	addLog( "调用Offhook方法, 返回值=" + r );
+}
+
+function hold(){
+	var r = toolbar.Hold();
+	addLog( "调用Hold方法, 返回值=" + r );
+}
+
+function unhold(){
+	var r = toolbar.UnHold();
+	addLog( "调用UnHold方法, 返回值=" + r );
+}
+
+function blindtransfer(){
+	var r = toolbar.BlindTransfer( document.getElementById("transferphone").value );
+	addLog( "调用BlindTransfer方法, 返回值=" + r );
+}
+
+function consult(){
+	var r = toolbar.Consult( document.getElementById("consultphone").value );
+	addLog( "调用Consult方法, 返回值=" + r );
+}
+
+function cancelconsult(){
+	var r = toolbar.CancelConsult();
+	addLog( "调用CancelConsult方法, 返回值=" + r );
+}
+
+function transferconsult(){
+	var r = toolbar.Onhook();
+	addLog( "调用Onhook方法, 返回值=" + r );
+}
+
+function conferenceconsult(){
+	var r = toolbar.ThirdParty();
+	addLog( "调用ThirdParty方法, 返回值=" + r );
+}
+//班长坐席  强拆、强插、拦截坐席
+function ForceRelease(){
+	var r = toolbar.ForceRelease(document.getElementById("ForceReleaseNumber").value);	//
+	addLog("调用ForceRelease方法,返回值=" + r );
+}
+function ForceJoin(){
+	var r = toolbar.ForceJoin(document.getElementById("ForceJoinNumber").value);
+	addLog("调用ForceJoin方法,返回值=" + r );
+}
+function HiJack(){
+	var r = toolbar.HiJack(document.getElementById("HiJackNumber").value);
+	addLog("调用HiJack方法,返回值=" + r );
+}
+function SetAgentState(nstate){
+	var r = toolbar.SetAgentState(nstate);
+	if(nstate == 2)
+		addLog("置闲" + r );
+	else if(nstate ==4 )
+		addLog("置忙" + r );
+}
+//开始监听
+function StartListenChannel(){
+	var r = toolbar.GetAgentState();
+	switch(r){
+		case 2:
+		case 8:
+			alert("请先置忙再监听")
+			return;
+		case -1:
+		case 1:
+		case 3:
+		case 6:
+			alert("此状态下不能监听")
+			return;
+		default:
+			break;
+	}
+	var id =document.getElementById("listenChannelId").value;
+	r = toolbar.StartListenChannel(id);
+	addLog("调用StartListenChannel()" + r);
+}
+
+function StopListenChannel(){
+	var r = toolbar.StopListenChannel();
+	addLog("停止监听");
+}
+
+function GetLineState(){
+	var r = toolbar.GetLineState();
+	switch(r)
+	{
+		case -1  : document.getElementById("spanLineState").innerText = "未知状态(-1)";
+			break;
+		case 0  : document.getElementById("spanLineState").innerText = "空闲(0)";
+			break;
+		case 1  : document.getElementById("spanLineState").innerText = "振铃(1)";
+			break;
+		case 2  : document.getElementById("spanLineState").innerText = "拨号(2)";
+			break;
+		case 3  : document.getElementById("spanLineState").innerText = "通话(3)";
+			break;
+		case 4  : document.getElementById("spanLineState").innerText = "保持(4)";
+			break;
+		case 5  : document.getElementById("spanLineState").innerText = "保持下拨号(5)";
+			break;
+		case 6  : document.getElementById("spanLineState").innerText = "保持下通话(6)";
+			break;
+		case 7  : document.getElementById("spanLineState").innerText = "挂机(7)";
+			break;
+		case 8  : document.getElementById("spanLineState").innerText = "摘机(8)";
+			break;
+		case 9  : document.getElementById("spanLineState").innerText = "咨询(9)";
+			break;
+		case 10 : document.getElementById("spanLineState").innerText = "转移(10)";
+			break;
+		case 11 : document.getElementById("spanLineState").innerText = "取保持(11)";
+			break;
+		case 12 : document.getElementById("spanLineState").innerText = "三方(12)";
+			break;
+		case 13 : document.getElementById("spanLineState").innerText = "会议(13)";
+			break;
+		case 14 : document.getElementById("spanLineState").innerText = "监听(14)";
+			break;
+		case 15 : document.getElementById("spanLineState").innerText = "强插(15)";
+			break;
+		case 16 : document.getElementById("spanLineState").innerText = "拦截(16)";
+			break;
+		default:
+			addLog("LineStateChanged", "no normal linestate ="+r);
+			break;
+	}
+}
+
+function getAllGroup(){
+	var r = toolbar.GetGroupList();
+	addLog( "调用GetGroupList方法, 返回值=" + r );
+}
+
+function getIdleAgentList(){
+	var group = document.getElementById("idleAgentGroupId").value;
+	var r = toolbar.GetIdleAgentList( group );
+	addLog( "调用GetIdleAgentList方法, 返回值=" + r );
+}
+
+function getTalkAgentList(){
+	var group = document.getElementById("idleAgentGroupId").value;
+	var r = toolbar.GetTalkAgentList( group );
+	addLog( "调用GetTalkAgentList方法, 返回值=" + r );
+}
+
+function getAllAgentList(){
+	var group = document.getElementById("idleAgentGroupId").value;
+	var r = toolbar.GetAgentListFromGroup( group );
+	addLog( "调用GetAgentListFromGroup方法, 返回值=" + r );
+}
+
+function getCaller(){
+	var r = toolbar.GetCaller();
+	addLog( "调用GetCaller方法, 返回值=" + r );
+}
+
+function getCalled(){
+	var r = toolbar.GetCalled();
+	addLog( "调用GetCalled方法, 返回值=" + r );
+	return r;
+}
+
+function getAppId(){
+	var r = toolbar.GetRecordAppID();
+	addLog( "调用GetRecordAppID方法, 返回值=" + r );
+}
+
+function getReturnIVR(){
+	var r = toolbar.GetReturnToIVRInfo();
+	addLog( "调用GetReturnToIVRInfo方法, 返回值=" + r );
+}
+
+function AgentRequestIVR(){
+	var id = document.getElementById("ivrID").value;
+	var AssociateDataToIvr = document.getElementById("AssociateDataToIvr").value;
+
+	var r = toolbar.AgentRequestToIVR(id,AssociateDataToIvr);
+	addLog( "调用AgentRequestToIVR方法，返回值" + r );
+}
+
+function addLog( msg ){
+	var org_msg = document.getElementById("logArea").value;
+	document.getElementById("logArea").value = org_msg + "\r\n" + msg;
+}
+
+function clearLog(){
+	document.getElementById("logArea").value = "";
+}
+
+function SetRecServerAddr(){
+	var RECIP = document.getElementById("szRECSerevrIP").value;
+	var RECport = document.getElementById("iRECServerPort").value;
+	var r = toolbar.SetRecServerAddr(RECIP,RECport);
+	addLog("设置RECIP：" + RECIP + "RECport:" + RECport + "返回值" + r );
+}
+toolbar.OnAgentStateChanged(function( iAgentState ) {
+	addLog( "坐席状态改变事件，iAgentState=" + iAgentState );
+});
+
+toolbar.OnLineStateChanged(function( iLineState ) {
+	addLog( "线路状态改变事件，iLineState=" + iLineState );
+});
+
+toolbar.OnAgentDial(function( bResult ) {
+	addLog( "坐席外呼结果事件，bResult=" + bResult );
+});
+
+toolbar.OnDialConnected(function() {
+	addLog( "坐席外呼接通事件" );
+});
 
 toolbar.OnAnswerConnected(function() {
 	addLog( "坐席来电接通事件" );

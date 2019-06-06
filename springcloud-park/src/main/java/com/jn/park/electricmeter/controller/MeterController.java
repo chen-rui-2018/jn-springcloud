@@ -142,16 +142,12 @@ public class MeterController extends BaseController {
         return result;
     }
 
-    @ControllerLog(doAction = "电表拉闸与恢复")
-    @ApiOperation(value = "电表拉闸与恢复",notes = "电表拉闸与恢复", httpMethod = "GET")
+    @ControllerLog(doAction = "电表的启动和关闭定时器接口")
+    @ApiOperation(value = "电表的启动和关闭定时器接口",notes = "电表的启动和关闭定时器接口", httpMethod = "GET")
     @GetMapping(value = "/setSwitchMeter")
     @RequiresPermissions("/meter/setSwitchMeter")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "meterCode" ,value = "设备编码",type = "String" ,example = "1",required = true),
-            @ApiImplicitParam(name = "status",value = "开关状态（4，5）",type = "String" ,example = "4",required = true)
-    })
-    public Result setSwitchMeter(@RequestBody MeterInfoParam model ) {
-        return meterRulesService.SwitchMeter(model.getMeterCode(),model.getStatus());
+    public void setSwitchMeterTimer(){
+        meterRulesService.setSwitchMeterTimer();
     }
 
     @ControllerLog(doAction = "余额不足告警")
@@ -266,4 +262,36 @@ public class MeterController extends BaseController {
     public void calcCostEverday(){
         meterCalcCostService.calcCostEverday();
     }
+
+    @ControllerLog(doAction = "今日用电情况")
+    @ApiOperation(value = "今日用电情况", notes = "今日用电情况")
+    @GetMapping(path = "/todayelectro")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "companyid", value = "企业ID", dataType = "String", paramType = "query", example = "583060576549208064"),
+    })
+    public Result todayelectro(String companyid){
+        return meterService.todayelectro(companyid);
+    }
+
+    @ControllerLog(doAction = "本月用电情况")
+    @ApiOperation(value = "本月用电情况", notes = "本月用电情况")
+    @GetMapping(path = "/monthelectro")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "companyid", value = "企业ID", dataType = "String", paramType = "query", example = "583060576549208064"),
+    })
+    public Result monthelectro(String companyid){
+        return meterService.monthelectro(companyid);
+    }
+
+    @ControllerLog(doAction = "今年用电情况")
+    @ApiOperation(value = "今年用电情况", notes = "今年用电情况")
+    @GetMapping(path = "/yearelectro")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "companyid", value = "企业ID", dataType = "String", paramType = "query", example = "583060576549208064"),
+    })
+    public Result yearelectro(String companyid){
+        return meterService.yearelectro(companyid);
+    }
+
+
 }

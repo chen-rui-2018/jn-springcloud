@@ -165,7 +165,7 @@
           left join tb_service_and_advisor t2 on t1.product_id_ = t2.product_id_
           left join tb_service_rating t3 on  t1.product_id_ = t3.product_id_
           where t1.org_id_  is not null
-          group by t1.template_id order by 'orgCount','advisorCount','ratingCount'
+          group by t1.template_id order by 'orgCount','advisorCount','ratingCount' desc
     </select>
 
     <!--web前台服务产品详情-->
@@ -181,9 +181,9 @@
            tt.serviceCycle,     <!--服务周期-->
            tt.pictureUrl,       <!--产品图片-->
            tt.serviceDetails,   <!--服务详情-->
-           (select count(1)  from tb_service_product tp1 where tp1.signory_id = tt.signory_id  and tp1.template_id is not null and tp1.template_id !=""  and tp1.status = '1' and tp1.record_status = 1 ) as "sameTypeNum",  <!--同类型产品数-->
-           (select count(1)  from tb_service_product tp2 where tp2.signory_id = tt.signory_id  and tp2.product_type = '0' and tp2.template_id is not null  and tp2.template_id !="" and tp2.status = '1' and tp2.record_status = 1) as "commentNum", <!--同类型常规产品数-->
-           (select count(1)  from tb_service_product tp3 where tp3.signory_id = tt.signory_id  and tp3.template_id is not null and   tp3.template_id !="" and tp3.product_type = '1' and tp3.status = '1' and tp3.record_status = 1) as "featureNum",         <!--同类型特色产品数-->
+           ifnull((select count(1)  from tb_service_product tp1 where tp1.signory_id = tt.signory_id  and tp1.org_id_ is not null and tp1.org_id_ !=""  and tp1.status = '1' and tp1.record_status = 1 ),0) as "sameTypeNum",  <!--同类型产品数-->
+           ifnull((select count(1)  from tb_service_product tp2 where tp2.signory_id = tt.signory_id  and tp2.product_type = '0' and tp2.org_id_ is not null  and tp2.org_id_ !="" and tp2.status = '1' and tp2.record_status = 1),0) as "commentNum", <!--同类型常规产品数-->
+           ifnull((select count(1)  from tb_service_product tp3 where tp3.signory_id = tt.signory_id  and tp3.product_type = '1' and  tp3.org_id_ !="" and tp3.org_id_ is  not null and tp3.status = '1' and tp3.record_status = 1),0) as "featureNum",         <!--同类型特色产品数-->
            tt.viewCount,          <!--浏览次数-->
            tt.transactionsNumber, <!--交易次数-->
            round(tt.attitudeScore,1 )AS "evaluationScore" <!--综合评分-->
@@ -307,11 +307,11 @@ select
          select advisor_account from tb_service_and_advisor tsa where  tsa.product_id_ = t1.product_id_
            )) as "advisorName",            <!--顾问名称-->
        t1.status as "status",              <!--状态-->
-       t1.release_time as "releaseTime",   <!--发布时间-->
+       date_format(t1.release_time,'%Y-%m-%d %H:%i:%s') as "releaseTime",   <!--发布时间-->
        t1.refer_price as "referPrice"     <!--参考价格-->
 from tb_service_product t1
        left join  tb_service_org t2 on  t2.org_id_= t1.org_id_
-       where  1=1
+       where  t1.record_status = 1
        and t1.org_id_ = #{orgId}
         <if test = "productType != null and productType != ''">
           and  t1.product_type = #{productType}
@@ -333,11 +333,13 @@ from tb_service_product t1
        where
        t1.product_id_ not  in(
            select t2.template_id from tb_service_product t2 where  t2.signory_id =
-              ( select t3.business_type from tb_service_org t3 where t3.org_id_=#{orgId}) and t2.template_id is not null
+              ( select t3.business_type from tb_service_org t3 where t3.org_id_=#{orgId}) and t2.template_id is not null and t2.template_id !="" AND t2.record_status = 1 AND t2.status != 2
            )
-         and t1.template_id is null
+         and (t1.template_id is null or t1.template_id = "")
          and t1.status='1' and t1.record_status='1'and t1.signory_id =
               ( select t3.business_type from tb_service_org t3 where t3.org_id_=#{orgId})
+        and t1.product_type = 0
+        and t1.record_status = 1
     </select>
     <!--服务产品列表,只包含服务Id和服务名称,用于评价的筛选条件-->
     <select  id="productQueryList" resultType = "com.jn.enterprise.servicemarket.product.model.CommonServiceShelf">

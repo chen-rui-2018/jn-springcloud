@@ -41,6 +41,7 @@
     from tb_pd_declaration_platform_manage A
     LEFT JOIN tb_pd_declaration_platform_memorandum B
     ON A.id = B.platform_id
+    and B.creator_account = #{creatorAccount}
     where 1=1 and A.record_status = 1 and A.status = 2
     <if test="subordinatePlatformName != null and subordinatePlatformName != ''">
       and A.subordinate_platform_name = #{subordinatePlatformName}
@@ -48,7 +49,8 @@
     <if test="platformTitle != null and platformTitle != ''">
       and A.platform_title like CONCAT('%', #{platformTitle}, '%')
     </if>
-      order by A.created_time desc
+    GROUP BY A.id
+    order by A.created_time desc
   </select>
 
 </mapper>

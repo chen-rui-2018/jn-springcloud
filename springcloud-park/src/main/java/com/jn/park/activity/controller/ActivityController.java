@@ -2,6 +2,7 @@ package com.jn.park.activity.controller;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.exception.JnSpringCloudException;
+import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
@@ -169,6 +170,17 @@ public class ActivityController extends BaseController {
         PaginationData<List<ActivityApplyDetail>> paginationData = activityApplyService.applyActivityList(activityApplyParam,true);
         return new Result<>(paginationData);
     }
+
+    @ControllerLog(doAction = "根据报名状态查询活动报名列表")
+    @ApiOperation(value = "根据报名状态查询活动报名列表")
+    @RequestMapping(value = "/applyActivityListByApplyStatus",method = RequestMethod.GET)
+    @RequiresPermissions("/activity/applyActivityListByApplyStatus")
+    public Result<PaginationData<List<ActivityApplyDetail>>> applyActivityListByApplyStatus(ActivityApplyListEasyParam  activityApplyParam) {
+        PaginationData<List<ActivityApplyDetail>> paginationData = activityApplyService.applyActivityListByApplyStatus(activityApplyParam);
+        return new Result<>(paginationData);
+    }
+
+
 
     @ControllerLog(doAction = "下载签到二维码")
     @ApiOperation(value = "下载签到二维码", httpMethod = "GET")

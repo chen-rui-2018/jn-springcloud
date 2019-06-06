@@ -57,7 +57,9 @@
             ,ta.acti_like as "actiLike"                                                                   <!--活动点赞人数-->
             ,ta.acti_number as "actiNumber"                                                               <!--活动人数-->
             ,ta.acti_poster_url as "actiPosterUrl"                                                        <!--活动海报路径-->
-            ,ta.show_apply_num as "showApplyNum"
+            ,ta.show_apply_num as "showApplyNum"                                                          <!--活动报名人数-->
+            ,ifnull(ta.acti_views,0) as "actiViews"                                                       <!--活动浏览人数-->
+            ,date_format(ta.issue_time,'%Y-%m-%d %H:%i:%s') as "issueTime"                                <!--活动发布时间-->
             from tb_activity ta
             left join tb_activity_detail td on td.activity_id = ta.id
             where 1=1

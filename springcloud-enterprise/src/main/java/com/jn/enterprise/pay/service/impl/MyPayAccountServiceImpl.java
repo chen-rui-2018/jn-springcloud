@@ -11,13 +11,13 @@ import com.jn.enterprise.pay.dao.*;
 import com.jn.enterprise.pay.entity.*;
 import com.jn.enterprise.pay.enums.*;
 import com.jn.enterprise.pay.service.MyPayAccountService;
+import com.jn.enterprise.pay.util.AutoOrderUtil;
 import com.jn.pay.model.*;
 import com.jn.pay.vo.*;
 import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.SysDictInvoke;
 import com.jn.system.model.User;
-import com.lorne.core.framework.utils.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -217,7 +217,7 @@ public class MyPayAccountServiceImpl implements MyPayAccountService {
         TbPayAccount tbPayAccount = new TbPayAccount();
         tbPayAccount.setUserId(payAccountBookCreateParam.getComAdmin());
         tbPayAccount.setEntId(payAccountBookCreateParam.getEnterId());
-        tbPayAccount.setAccountId(UUID.randomUUID().toString().replaceAll("-", ""));
+        tbPayAccount.setAccountId(AutoOrderUtil.autoOrderId());
         tbPayAccount.setCreatedTime(new Date());
         tbPayAccount.setCreatorAccount(user.getAccount());
         tbPayAccount.setRecordStatus(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
@@ -244,7 +244,7 @@ public class MyPayAccountServiceImpl implements MyPayAccountService {
         tbPayAccountBook.setCreatorAccount(user.getAccount());
         tbPayAccountBook.setRecordStatus(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
         for (Map.Entry<String, String> entry : map.entrySet()) {
-            tbPayAccountBook.setAcBookId(UUID.randomUUID().toString().replaceAll("-", ""));
+            tbPayAccountBook.setAcBookId(AutoOrderUtil.autoOrderId());
             tbPayAccountBook.setAcBookType(entry.getKey());
             tbPayAccountBook.setAcBookName(entry.getValue());
             if(entry.getKey().equals(PaymentBillEnum.BILL_AC_BOOK_TYPE_1.getCode())){

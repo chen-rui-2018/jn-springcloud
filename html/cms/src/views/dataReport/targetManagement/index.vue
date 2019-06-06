@@ -456,12 +456,12 @@ export default {
     },
     nodeClick(node, treeNode) {
       //  隐藏菜单栏
-      this.menuVisible = false
-      this.loadingTarget = true
       const id = node.id
       if (this.formData.targetId === id) {
         return
       }
+      this.menuVisible = false
+      this.loadingTarget = true
       this.currentTarget = ''
       this.parentName = treeNode.parent.data.text
       this.formData.parentId = id

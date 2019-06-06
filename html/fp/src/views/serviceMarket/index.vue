@@ -20,6 +20,7 @@
                     <li @click='$router.push({path:"/serverCon"})'>服务顾问</li>
                     <li @click='$router.push({path:"/actiTrain"})'>活动培训</li>
                     <li @click='$router.push({path:"/aboutUs"})'>关于我们</li>
+                    <li @click='$router.push({path:"/register"})'>加入我们</li>
                 </div>
                 <div class="headerRight pr">
                   <div class="search" >
@@ -108,12 +109,12 @@
       <div class="market_navicon" ref="market_navicon2" data-class="allFade">
         <a href="javascript:;">
           <div class="nav_icon"><i class="iconfont icon-jigou2"></i></div>
-          <div class="nav_discribe"> <span>已注册买家<span class="">8929</span>个</span> </div>
+          <div class="nav_discribe"> <span>入住企业数<span class="">8929</span>个</span> </div>
           <div class="nav_todo"><span @click="$router.push({path:'/upgradeEnterprise'})">申请注册</span></div>
         </a>
         <a href="javascript:;">
           <div class="nav_icon"><i class="iconfont icon-jigou1"></i></div>
-          <div class="nav_discribe"> <span>已入驻机构 <span>1057</span>家</span> </div>
+          <div class="nav_discribe"> <span>已入住服务机构 <span>1057</span>家</span> </div>
           <div class="nav_todo"><span>机构入驻</span></div>
         </a>
         <a href="javascript:;">
@@ -123,7 +124,7 @@
         </a>
         <a href="javascript:;">
           <div class="nav_icon"><i class="iconfont icon-jigou11"></i></div>
-          <div class="nav_discribe"> <span>已入驻顾问<span>3786</span>人</span> </div>
+          <div class="nav_discribe"> <span>已入住服务专员<span>3786</span>人</span> </div>
           <div class="nav_todo" @click="isVisibility=true"><span>申请顾问</span></div>
         </a>
       </div>
@@ -612,7 +613,6 @@ export default {
         url: "selectIndustryList",
         data: { },
         callback: function(res) {
-          // console.log(res);
           if (res.code == "0000") {
             _this.IndustryList = res.data.rows;
           }
@@ -1509,10 +1509,9 @@ export default {
           }
           .comment_box{
             width: 100%;
-                  border: 1px solid #dedede;
+            border: 1px solid #dedede;
+            margin-top: 24px;
             .comment_list{
-              // margin-top: 33px;
-              // border: 1px solid #dedede;
               height: 572px;
               width:95%;
               overflow: hidden;

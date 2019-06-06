@@ -40,7 +40,8 @@
         </div> -->
         <div class="graphicCon w">
             <div class="serverOrgMenu">
-                <span class="pointer" @click="$router.push({path:'/policyCenter'})">首页/</span>
+                <span class="pointer" @click="$router.push({path:'/enterpriseservice'})">企业服务/</span>
+                <span class="pointer" @click="$router.push({path:'/policyCenter'})">政策中心/</span>
                 <span class="mainColor agent">图解政策详情</span>
             </div>
             <div class="agentInfo">

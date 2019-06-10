@@ -39,7 +39,7 @@
                     <i class="el-icon-arrow-up"></i>
                 </div>
                 <div class="mainColor shouqi zhankai pointer" v-else @click='handleZk'>
-                    <i class="el-icon-arrow-down"></i>
+                    展开<i class="el-icon-arrow-down"></i>
                 </div>
                 <el-card>
                     <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -258,7 +258,7 @@
                                     <!-- 中间下半部分--参考信息、交易均价和交易 begin -->
                                     <div class="list-info-bottom-detail clearfix">
                                         <!-- 参考信息、交易均价 begin -->
-                                        <div class="detail-contact inner-product">
+                                        <div class="detail-contact inner-product fl">
                                             <div class="search_area text-of" title="王振英 , 包美芬 , 高凤清">服务顾问：{{i.advisorName}}</div>
                                             <!-- <div class="text-of mt5">参考价格：1000-10000元</div> -->
                                             <span class="evaluate-container">
@@ -267,7 +267,7 @@
                                         </div>
                                         <!-- 参考信息、交易均价 end -->
                                         <!-- 评价 begin -->
-                                        <div class="detail-evaluate inner-product">
+                                        <div class="detail-evaluate inner-product fl">
                                             <div class="score">
                                                 <el-rate v-model="i.evaluationScore*1" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" style="display:inline-block" score-template="{value}">
                                                 </el-rate>
@@ -280,9 +280,9 @@
                                         </div>
                                         <!-- 评价 end -->
                                         <!-- 交易量 begin -->
-                                        <div class="detail-count" clearfix>
+                                        <div class="detail-count fr conAccou">
                                             <div class="list-item-info fr">
-                                                <p>{{i.evaluationAccount}}</p>
+                                                <p class="mainColor">{{i.evaluationAccount}}</p>
                                                 <p>{{i.evaluationTime}}</p>
                                             </div>
                                         </div>
@@ -343,7 +343,7 @@ export default {
     return {
       islogin: true,
       concatVisible: false,
-      zankaiFlag: false,
+      zankaiFlag: true,
       activeName: "baseInfo",
       activeName1: "serverPro",
       serverConDetailList: "",
@@ -583,6 +583,9 @@ export default {
   .agentCon {
     .pagination-container {
       margin-top: 50px;
+    }
+    .conAccou{
+        margin-top:0 !important;
     }
   }
   .agentDel {

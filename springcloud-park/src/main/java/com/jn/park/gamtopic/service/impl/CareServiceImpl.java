@@ -5,6 +5,8 @@ import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
+import com.jn.enterprise.api.CompanyClient;
+import com.jn.enterprise.model.CompanyInfoModel;
 import com.jn.park.care.model.ServiceEnterpriseCompany;
 import com.jn.park.gamtopic.dao.CareDao;
 import com.jn.park.gamtopic.dao.DynamicDao;
@@ -15,6 +17,7 @@ import com.jn.park.gamtopic.model.*;
 import com.jn.park.gamtopic.service.CareService;
 import com.jn.park.gamtopic.service.DynamicService;
 import com.jn.park.gamtopic.vo.CareDetailsVo;
+import com.jn.system.config.ShiroConfig;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
@@ -51,6 +54,9 @@ public class CareServiceImpl implements CareService {
     private UserExtensionClient userExtensionClient;
      @Autowired
     private DynamicService dynamicService;
+     @Autowired
+     private CompanyClient companyClient;
+
 
 
 
@@ -179,8 +185,16 @@ public class CareServiceImpl implements CareService {
         }
         return getCompanyNewList;
     }
-
-
+    @ServiceLog(doAction = "获取用户关注的企业信息列表")
+    @Override
+    public PaginationData<List<CareUserShow>> findCompanyCareList(Page page, String account) {
+        int pageNum = page.getPage();
+        int pageSize = page.getRows()==0?15:page.getRows();
+        com.github.pagehelper.Page<Object> objects = PageHelper.startPage(pageNum,pageSize,true);
+        List<CareUserShow> showList =  careDao.findCompanyCareList(account);
+        showList =perfectCompanyInfo(showList);
+        return  new PaginationData<>(showList,objects==null?0:objects.getTotal());
+    }
 
 
     /**
@@ -209,5 +223,23 @@ public class CareServiceImpl implements CareService {
         return showList;
     }
 
+    /**
+     * 完善企业信息
+     * @param showList
+     * @return
+     */
+    private  List<CareUserShow> perfectCompanyInfo( List<CareUserShow> showList){
+        if(showList != null && !showList.isEmpty()){
+          for(CareUserShow show : showList){
+             CompanyInfoModel infoModel =  companyClient.getCompanyInfo(show.getAccount());
+             if(infoModel != null){
+                 show.setCompanyName(infoModel.getCompanyName());
+                 show.setAvatar(infoModel.getCompanyAvatar());
+             }
+          }
+        }
+        return showList;
+
+    }
 
 }

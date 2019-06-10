@@ -52,4 +52,9 @@ public class ActivityServerController extends BaseController implements Activity
         logger.info("进入获取企业报报名活动信息API,入参：{}",param.toString());
         return new Result(activityService.getCompanyActivityApplyInfo(param));
     }
+
+    @ControllerLog(doAction = "获取举办活动总数")
+    public Result<Integer> getActivityHistoryNum(){
+        return new Result(activityService.getActivityHistoryNum());
+    }
 }

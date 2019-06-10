@@ -542,7 +542,8 @@
               <ul>
                 <li class="clearfix" v-for="(i,k) in serverProList" :key='k'>
                   <div class="orgImg fl pointer" @click="handleProDel(i.productId,i.signoryId)">
-                    <img :src="i.pictureUrl" alt="">
+                    <img v-if="i.pictureUrl" :src="i.pictureUrl" alt="">
+                    <img v-else src="@/../static/img/product.png" alt="">
                   </div>
                   <div class="orgCon fl">
                     <div class="conTil">{{i.productName}}</div>

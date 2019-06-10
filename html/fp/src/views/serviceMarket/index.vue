@@ -212,10 +212,9 @@
         <div class="partner_box">
           <div class="partner_list">
             <ul class="partner_list_ul">
-              <!-- <li  v-for="(item,index) in 18" :key="index"> <img src="../../assets/image/testsn.png" alt=""></li> -->
               <li  v-for="(item,index) in partnerLogo" :key="index" > <img :src="item.orgLogo" alt=""></li>
             </ul>
-            <ul class="partner_list_ul2" v-if="partnerLogo.length>18"></ul>
+            <ul class="partner_list_ul2" ></ul>
           </div>
         </div>
       </div>
@@ -228,7 +227,7 @@
         <div class="conselor_introduce">
           <ul class="conselor_tab clearfix">
             <li :class="{'conseloractive':domain === ''}" @click="changedomain('')">全部</li>
-            <li v-for="(counseloitem,counseloindex) in IndustryList" :key="counseloindex" :class="{'conseloractive':domain === counseloitem.id}" @click="changedomain(counseloitem.id)">{{counseloitem.preValue}}</li>
+            <li v-for="(counseloitem,counseloindex) in sliderData" :key="counseloindex" :class="{'conseloractive':domain === counseloitem.id}" @click="changedomain(counseloitem.id)">{{counseloitem.preValue}}</li>
           </ul>
           <div class="conselor_info">
             <ul>
@@ -405,7 +404,6 @@ export default {
     this.selectIndustryProductList()
     window.addEventListener('scroll', this.handleScroll)
     this.getBannarList()
-    this.scrollpartner()
     this.getPartner()
     // 轮播图
   },
@@ -613,6 +611,7 @@ export default {
         url: "selectIndustryList",
         data: { },
         callback: function(res) {
+          // console.log(res)
           if (res.code == "0000") {
             _this.IndustryList = res.data.rows;
           }
@@ -698,8 +697,12 @@ export default {
           sortTypes:''
          },
         callback: function(res) {
-          // console.log(res);
+          if(res.code==='0000'){
             _this.partnerLogo = res.data.rows;
+            _this.$nextTick(()=>{
+              _this.scrollpartner()              
+            })
+          }
         }
       });
     },
@@ -716,7 +719,6 @@ export default {
           rows:10
          },
         callback: function(res) {
-          // console.log(res);
           _this.RatingList = res.data.rows;
            _this.$nextTick(()=>{
               _this.scrollList()
@@ -733,7 +735,6 @@ export default {
       
          },
         callback: function(res) {
-          // console.log(res);
           _this.sliderData = res.data;
         }
       });

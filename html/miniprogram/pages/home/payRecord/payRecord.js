@@ -58,7 +58,7 @@ Page({
       },
       method: 'GET',
     }).then(res=>{
-      if(res.data.code==='0000'){
+      if(res.data.code==='0000'&&res.data.data.rows){
         this.setData({
           carLicenseList:res.data.data.rows,
           "detailSend.carLicense":res.data.data.rows[0].carLicense

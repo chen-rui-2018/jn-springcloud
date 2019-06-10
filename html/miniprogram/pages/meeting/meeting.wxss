@@ -22,7 +22,7 @@
 .search .icon-search{
   position: absolute;
   left:16%;
-  top:50rpx;
+  top:49rpx;
 }
 .search input{
   background-color: #fff;

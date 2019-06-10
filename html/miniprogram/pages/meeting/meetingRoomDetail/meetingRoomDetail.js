@@ -60,7 +60,7 @@ Page({
         let starMinute=ele.startTime.split(":")
         let endMinute=ele.endTime.split(":")
         let meetingTime=((endMinute[0]*60+endMinute[1]*1)-(starMinute[0]*60+starMinute[1]*1))/60
-        ele.meetingTime=meetingTime
+        ele.meetingTime=meetingTime.toFixed(2)
       })
       this.setData({
         meetingList:this.data.meetingList

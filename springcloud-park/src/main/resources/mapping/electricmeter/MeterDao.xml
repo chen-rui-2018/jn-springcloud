@@ -163,40 +163,28 @@
 
     <!--保存计价规则和企业之间的关系-->
     <insert id="saveCompanyLinks" parameterType="java.util.List">
-        insert into tb_electric_pricerule_company_in_day
-        (<include refid="com.jn.park.electricmeter.dao.TbElectricPriceruleCompanyInDayMapper.Base_Column_List"/>)
+        insert into tb_electric_pricerule_company
+        (<include refid="com.jn.park.electricmeter.dao.TbElectricPriceruleCompanyMapper.Base_Column_List"/>)
         <foreach collection="saveData"  index="index" item="item" separator="UNION ALL">
             select
-            #{ item.id,jdbcType=VARCHAR},
-            #{ item.ruleId,jdbcType=VARCHAR},
-            #{ item.ruleName,jdbcType=VARCHAR},
-            #{ item.companyId,jdbcType=VARCHAR},
-            #{ item.day,jdbcType=DATE},
-            #{ item.recordStatus,jdbcType=TINYINT},
-            #{ item.creatorAccount,jdbcType=VARCHAR},
-            #{ item.createdTime,jdbcType=TIMESTAMP},
-            #{ item.modifierAccount,jdbcType=VARCHAR},
-            #{ item.modifiedTime,jdbcType=TIMESTAMP}
+            #{ item.id,jdbcType=VARCHAR}, #{ item.ruleId,jdbcType=VARCHAR}, #{ item.companyId,jdbcType=VARCHAR},
+            #{ item.recordStatus,jdbcType=TINYINT}, #{ item.creatorAccount,jdbcType=VARCHAR}, #{ item.createdTime,jdbcType=TIMESTAMP},
+            #{ item.modifierAccount,jdbcType=VARCHAR}, #{ item.modifiedTime,jdbcType=TIMESTAMP}, #{ item.companyName,jdbcType=VARCHAR},
+            #{ item.ruleName,jdbcType=VARCHAR}
             from  dual
         </foreach>
     </insert>
 
     <!--保存计价规则和企业之间每日的关系-->
     <insert id="saveCompanyLinksInDay" parameterType="java.util.List">
-        insert into tb_electric_pricerule_company
-        (<include refid="com.jn.park.electricmeter.dao.TbElectricPriceruleCompanyMapper.Base_Column_List"/>)
+        insert into tb_electric_pricerule_company_in_day
+        (<include refid="com.jn.park.electricmeter.dao.TbElectricPriceruleCompanyInDayMapper.Base_Column_List"/>)
         <foreach collection="saveData"  index="index" item="item" separator="UNION ALL">
             select
-            #{ item.id,jdbcType=VARCHAR},
-            #{ item.ruleId,jdbcType=VARCHAR},
-            #{ item.companyId,jdbcType=VARCHAR},
-            #{ item.recordStatus,jdbcType=TINYINT},
-            #{ item.creatorAccount,jdbcType=VARCHAR},
-            #{ item.createdTime,jdbcType=TIMESTAMP},
-            #{ item.modifierAccount,jdbcType=VARCHAR},
-            #{ item.modifiedTime,jdbcType=TIMESTAMP},
-            #{ item.companyName,jdbcType=VARCHAR},
-            #{ item.ruleName,jdbcType=VARCHAR}
+            #{ item.id,jdbcType=VARCHAR}, #{ item.ruleId,jdbcType=VARCHAR}, #{ item.ruleName,jdbcType=VARCHAR},
+            #{ item.companyId,jdbcType=VARCHAR}, #{ item.day,jdbcType=DATE}, #{ item.recordStatus,jdbcType=TINYINT},
+            #{ item.creatorAccount,jdbcType=VARCHAR}, #{ item.createdTime,jdbcType=TIMESTAMP}, #{ item.modifierAccount,jdbcType=VARCHAR},
+            #{ item.modifiedTime,jdbcType=TIMESTAMP}, #{ item.companyName,jdbcType=VARCHAR}
             from  dual
         </foreach>
     </insert>
@@ -481,6 +469,7 @@
         tb_electric_meter_info
         where record_status=1
         and company_id=#{companyId}
+        and isauto='1'
         group by meterCode
     </select>
 

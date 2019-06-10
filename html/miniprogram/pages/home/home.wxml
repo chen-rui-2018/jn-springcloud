@@ -7,7 +7,7 @@
 </view>
 <view class="cu-list menu  shadow-lg">
   <view class="cu-item arrow">
-    <navigator class='content' url='./payRecord/payRecord' hover-class='none'>
+    <navigator class='content' url='/pages/home/payRecord/payRecord' hover-class='none'>
       <image class="" wx:if="{{imgBaseUrl}}" src="{{imgBaseUrl}}1@2x.png"> </image>
       <text class='text-grey'>缴费记录</text>
     </navigator>
@@ -19,7 +19,7 @@
     </button>
   </view> -->
   <view class="cu-item arrow">
-    <navigator class='content' url='./maCar/maCar' hover-class='none'>
+    <navigator class='content' url='/pages/home/maCar/maCar' hover-class='none'>
       <image class="" wx:if="{{imgBaseUrl}}" src="{{imgBaseUrl}}my_car.png"></image>
       <text class='text-grey'>我的爱车</text>
     </navigator>

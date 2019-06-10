@@ -5,7 +5,7 @@
         SELECT
             id,
             asset_number AS assetNumber,
-            name,
+            asset_name AS name,
             type_id AS typeId,
             asset_type AS assetType,
             tower_id AS towerId,
@@ -14,13 +14,13 @@
             specification,
             production_time AS productionTime,
             position,
-            asset_url AS assetUrl,
+            img_url AS assetUrl,
             maintenance_time AS maintenanceTime,
             maintenance_period AS maintenancePeriod,
             company_id AS companyId,
             company_name AS companyName
         FROM
-            tb_asset_maintain_manage
+            tb_asset_information
         WHERE  asset_number = #{assetNumber}
     </select>
 
@@ -28,7 +28,7 @@
         SELECT
             id,
             asset_number AS assetNumber,
-            name,
+            asset_name AS name,
             type_id AS typeId,
             asset_type AS assetType,
             tower_id AS towerId,
@@ -37,13 +37,14 @@
             specification,
             production_time AS productionTime,
             position,
-            asset_url AS assetUrl,
+            img_url AS assetUrl,
             maintenance_time AS maintenanceTime,
             maintenance_period AS maintenancePeriod,
             company_id AS companyId,
             company_name AS companyName
         FROM
-            tb_asset_maintain_manage
-        WHERE  record_status = '1' and is_maintaion = '1'
+            tb_asset_information
+        WHERE
+            is_maintain = '1'
     </select>
 </mapper>

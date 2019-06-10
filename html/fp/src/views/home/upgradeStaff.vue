@@ -130,6 +130,7 @@ export default {
       //   this.$message.error("请输入6位数字验证码");
       //   return;
       // }
+      this.loading=true
       this.$refs[formName].validate(valid => {
         if (valid) {
           let _this = this;
@@ -146,6 +147,7 @@ export default {
             },
             callback: function(res) {
               if (res.code == "0000") {
+                _this.loading=false
                 _this.$message.success("提交成功，等待审核");
                 _this.$refs["ruleForm"].resetFields();
                 _this.ruleForm.checkCode = "";

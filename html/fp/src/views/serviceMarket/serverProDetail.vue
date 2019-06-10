@@ -48,7 +48,7 @@
                 <i class="el-icon-arrow-up"></i>
               </div>
               <div class="mainColor shouqi zhankai pointer" v-else @click='zankaiFlag=!zankaiFlag'>
-                <i class="el-icon-arrow-down"></i>
+                展开<i class="el-icon-arrow-down"></i>
               </div>
             </div>
           </div>

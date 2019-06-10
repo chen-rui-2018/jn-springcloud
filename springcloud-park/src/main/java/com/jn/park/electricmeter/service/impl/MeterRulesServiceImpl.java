@@ -158,10 +158,19 @@ public class MeterRulesServiceImpl implements MeterRulesService {
             priceruleCompanyMapper.updateByExampleSelective(priceruleCompany, priceruleCompanyCriteria);
 
             //获取之前的所有关系[企业日关系]
+            Date nowDate = null;
+            try{
+                nowDate = DateUtils.parseDate(DateUtils.getDate("yyyy-MM-dd"),"yyyy-MM-dd");
+            }catch(ParseException e){
+                e.printStackTrace();
+                throw new JnSpringCloudException(MeterExceptionEnums.DAY_FORMATE_WRONG);
+            }
+
             TbElectricPriceruleCompanyInDayCriteria companyInDayCriteria = new TbElectricPriceruleCompanyInDayCriteria();
-            companyInDayCriteria.or().andRuleIdEqualTo(ruleIdBefore).andRecordStatusEqualTo(new Byte(MeterConstants.VALID));
+            companyInDayCriteria.or().andRuleIdEqualTo(ruleIdBefore).andRecordStatusEqualTo(new Byte(MeterConstants.VALID))
+                    .andDayEqualTo(nowDate);
             List<TbElectricPriceruleCompanyInDay> companyInDaysList = companyInDayMapper.selectByExample(companyInDayCriteria);
-            //作废
+            //作废今日的关系
             TbElectricPriceruleCompanyInDay companyInDay = new TbElectricPriceruleCompanyInDay();
             companyInDay.setRecordStatus(new Byte(MeterConstants.INVALID));
             companyInDay.setModifiedTime(new Date());
@@ -528,6 +537,7 @@ public class MeterRulesServiceImpl implements MeterRulesService {
                     warningRecord.setWarningContent(msg);
                     warningRecord.setWarningName(warningRuleBean.getWarningName());
                     warningRecord.setRecordStatus(new Byte(MeterConstants.VALID));
+                    warningRecord.setCreatedTime(new Date());
                     warningRecords.add(warningRecord);
                     sendSMS(phone, msg);
                 }

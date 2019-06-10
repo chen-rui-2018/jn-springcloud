@@ -18,14 +18,14 @@ Page({
   },
   changesearch(e){
     this.setData({
-      'sendData.name':e.detail.value
+      'sendData.name':e.detail.value,
+      'sendData.page':1
     })
     this.getMeetinRoom()
   },
   scan(){
     wx.scanCode({
       success(res) {
-        console.log(res.result)
         wx.navigateTo({
           url: res.result
         })
@@ -35,8 +35,6 @@ Page({
   onLoad:function(){
   },
   onPullDownRefresh(){
-    // wx.showNavigationBarLoading()
-
     this.getMeetinRoom()
   },
   // 生命周期函数--监听页面显示
@@ -47,7 +45,19 @@ Page({
   onReachBottom: function () { 
     if(this.data.sendData.page<Math.ceil(this.data.total/this.data.sendData.rows)){
       this.data.sendData.page++
-      this.getMeetinRoom()
+      request.send({
+        url: '/springcloud-oa/oa/oaMeetingRoom/list',
+        data: this.data.sendData,
+        method: 'POST',
+      }).then(res=>{
+        if(res.data.code==='0000'){
+          this.setData({
+            roomList:this.data.roomList.concat(res.data.data.rows),
+            total:res.data.data.total
+          })
+          wx.stopPullDownRefresh()
+        }
+      })
     }else{
       wx.showToast({
         title: '已到最后一页',
@@ -59,6 +69,9 @@ Page({
   },
   // 请求数据
   getMeetinRoom(){
+    this.setData({
+      'sendData.page':1
+    })
     request.send({
       url: '/springcloud-oa/oa/oaMeetingRoom/list',
       data: this.data.sendData,
@@ -66,10 +79,17 @@ Page({
     }).then(res=>{
       if(res.data.code==='0000'){
         this.setData({
-          roomList:this.data.roomList.concat(res.data.data.rows),
+          roomList:res.data.data.rows,
           total:res.data.data.total
         })
         wx.stopPullDownRefresh()
+      }else{
+        wx.showToast({
+          title: res.data.result,
+          icon:'none',
+          duration: 1500,
+          mask:true
+        })
       }
     })
   },

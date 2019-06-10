@@ -45,4 +45,11 @@ public interface ActivityClient {
      */
     @RequestMapping(value = "/api/activity/getCompanyActivityApplyInfo", method = RequestMethod.POST)
     Result<List<CompanyActivityApplyShow>> getCompanyActivityApplyInfo(@RequestBody CompanyActivityApplyParam param);
+
+    /**
+     * 获取举办活动总数
+     * @return
+     */
+    @RequestMapping(value = "/api/activity/getActivityHistoryNum", method = RequestMethod.POST)
+    Result<Integer> getActivityHistoryNum();
 }

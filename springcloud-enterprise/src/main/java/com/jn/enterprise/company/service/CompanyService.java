@@ -9,6 +9,7 @@ import com.jn.company.model.ServiceEnterpriseParam;
 import com.jn.enterprise.company.model.CompanyUpdateParam;
 import com.jn.enterprise.company.vo.CompanyContactVO;
 import com.jn.enterprise.company.vo.CompanyDetailsVo;
+import com.jn.enterprise.model.CompanyInfoModel;
 import com.jn.park.activity.model.ActivityPagingParam;
 import com.jn.park.activity.model.Comment;
 import com.jn.park.activity.model.CommentAddParam;
@@ -99,5 +100,13 @@ public interface CompanyService {
      * @return
      */
     CompanyContactVO getCompanyContactAccount(String comId);
+
+    /**
+     * 获取企业信息(关注企业列表展示)
+     * @param companyId
+     * @param account
+     * @return
+     */
+    CompanyInfoModel getCompanyInfo(String companyId,String account);
 
 }

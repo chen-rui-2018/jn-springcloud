@@ -9,6 +9,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
+import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.park.activity.dao.*;
 import com.jn.park.activity.entity.TbActivity;
 import com.jn.park.activity.entity.TbActivityCriteria;
@@ -600,6 +601,16 @@ public class ActivityServiceImpl implements ActivityService {
             //返回指定企业id的数据
             return getPartCompanyActivityApplyShows(param);
         }
+    }
+
+    @Override
+    @ServiceLog(doAction = "获取累计举办活动总数")
+    public Integer getActivityHistoryNum() {
+        TbActivityCriteria example = new TbActivityCriteria();
+        example.createCriteria().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue())
+                .andActiStatusEqualTo(ActivityEnum.ACTIVITY_STATUS_END.getCode());
+        Integer activityHistoryNum = (int) tbActivityMapper.countByExample(example);
+        return activityHistoryNum;
     }
 
     /**

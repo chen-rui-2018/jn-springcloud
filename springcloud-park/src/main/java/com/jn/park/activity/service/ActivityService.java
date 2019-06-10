@@ -124,4 +124,10 @@ public interface ActivityService {
      */
     List<CompanyActivityApplyShow> getCompanyActivityApplyInfo(CompanyActivityApplyParam param);
 
+    /**
+     * 获取累计举办活动总数
+     * @return
+     */
+    Integer getActivityHistoryNum();
+
 }

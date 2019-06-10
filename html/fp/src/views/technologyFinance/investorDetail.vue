@@ -45,7 +45,7 @@
                 <i class="el-icon-arrow-up"></i>
               </div>
               <div class="mainColor shouqi zhankai pointer" v-else @click='zankaiFlag=!zankaiFlag'>
-                <i class="el-icon-arrow-down"></i>
+               展开 <i class="el-icon-arrow-down"></i>
               </div>
             </div>
           </div>
@@ -139,7 +139,7 @@ export default {
 .investorDetail {
   padding-top: 65px;
   .el-icon-arrow-down{
-    font-size: 20px;
+    // font-size: 18px;
     color:#00a041;
   }
   .loginTip {

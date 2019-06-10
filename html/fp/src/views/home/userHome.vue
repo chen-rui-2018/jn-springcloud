@@ -37,7 +37,8 @@
           <div class="setdistance">
             <span class="textRight mg">性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别：</span>
             <span v-if="userData.sex==1">男</span>
-            <span v-else>女</span>
+            <span v-else-if="userData.sex==0">女</span>
+            <span v-else>无</span>
           </div>
           <div class="setdistance">
             <span class="textRight mg">个性签名：</span>

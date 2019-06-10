@@ -55,7 +55,7 @@ public class MaintainManageController {
     @ApiOperation(value = "获取维保信息",notes = "获取维保信息")
     @GetMapping(value = "/getMaintain")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "assetNumber",value = "资产编号",example = "572058527984517120")
+            @ApiImplicitParam(name = "assetNumber",value = "资产编号",example = "575253610410016768")
     })
     public Result<MaintainManageModel> getMaintain(String assetNumber){
        MaintainManageModel maintainManageModel =  maintainManageService.getMaintain(assetNumber);

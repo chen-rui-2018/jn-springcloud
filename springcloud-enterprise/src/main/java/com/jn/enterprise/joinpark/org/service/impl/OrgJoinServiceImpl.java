@@ -41,6 +41,7 @@ public class OrgJoinServiceImpl implements OrgJoinService {
         if(StringUtils.isNotBlank(orgDetailParameter.getOrgLogo())){
             IBPSFileUtils.uploadFile2Json(account,orgDetailParameter.getOrgLogo());
         }
+        //基本信息处理
         BeanUtils.copyProperties(orgDetailParameter,orgBasicData);
         String orgId = orgService.saveOrUpdateOrgBasicData(orgBasicData, account);
         logger.info("保存服务机构基本信息，响应机构ID ===>{}",orgId);

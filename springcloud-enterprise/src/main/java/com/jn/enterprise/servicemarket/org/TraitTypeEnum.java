@@ -1,23 +1,20 @@
-package com.jn.enterprise.servicemarket.advisor.enums;
+package com.jn.enterprise.servicemarket.org;
 
 import com.jn.common.api.CodeAndMsg;
 
 /**
- * 审批状态
+ * 机构特性枚举
  * @Author: yangph
- * @Date: 2019/2/22 14:59
+ * @Date: 2019/6/10 16:55
  * @Version v1.0
  * @modified By:
  */
-public enum ApprovalTypeEnum implements CodeAndMsg {
-    PENDING("pending","1","待审批"),
-    APPROVAL_NOT_PASSED("approvalNotPassed","3","审批不通过"),
-    NO_FEEDBACK("noFeedBack","0","未反馈"),
-    REJECTED("rejected","-1","已拒绝"),
-    APPROVED("approved","2","审批通过"),
-    HAS_BEEN_LIFTED("hasBeenLifted","4","已解除"),
+public enum  TraitTypeEnum implements CodeAndMsg {
+    BUSINESS_EXPERTISE("businessExpertise","1","业务擅长"),
+    INDUSTRY_FIELDS("industryFields","2","行业领域"),
+    STAGE_OF_DEVELOP("stageOfDevelop","3","发展阶段"),
+    NATURE_OF_ENTERPRISE("natureOfEnterprise","4","企业性质"),
     ;
-
     /**
      * 编码
      */
@@ -32,7 +29,7 @@ public enum ApprovalTypeEnum implements CodeAndMsg {
     private String message;
 
 
-    ApprovalTypeEnum(String code, String value, String message) {
+    TraitTypeEnum(String code, String value, String message) {
         this.code = code;
         this.value = value;
         this.message = message;
@@ -45,6 +42,14 @@ public enum ApprovalTypeEnum implements CodeAndMsg {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 
     @Override

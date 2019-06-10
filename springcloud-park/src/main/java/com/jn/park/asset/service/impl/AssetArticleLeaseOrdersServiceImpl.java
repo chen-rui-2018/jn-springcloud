@@ -21,6 +21,7 @@ import com.jn.pay.enums.ChannelIdEnum;
 import com.jn.pay.enums.MchIdEnum;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.pay.model.*;
+import org.apache.poi.ss.formula.functions.T;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +58,8 @@ public class AssetArticleLeaseOrdersServiceImpl implements AssetArticleLeaseOrde
     private TbAssetArticleLeaseOrdersPayMapper tbAssetArticleLeaseOrdersPayMapper;
     @Autowired
     private TbAssetArticleLeaseMapper tbAssetArticleLeaseMapper;
+    @Autowired
+    private TbAssetInformationMapper tbAssetInformationMapper;
 
     /**
      *根据订单编号查询租借详情
@@ -127,11 +130,11 @@ public class AssetArticleLeaseOrdersServiceImpl implements AssetArticleLeaseOrde
         if (updateCount != 1){
             throw new JnSpringCloudException(new Result("-1","订单状态更新失败"));
         }
-        //更新物品租借状态
-        TbAssetArticleLease tbAssetArticleLease = tbAssetArticleLeaseMapper.selectByPrimaryKey(assetArticleLeaseOrders.getArticleId());
-        tbAssetArticleLease.setArticleStatus(Byte.parseByte(LeaseStatusEnums.RETURN_ING.getValue()));
-        updateCount = tbAssetArticleLeaseMapper.updateByPrimaryKeySelective(tbAssetArticleLease);
-        logger.info("租借的资产状态更新为：归还中，参数：{}",tbAssetArticleLease);
+        //更新资产信息表物品租借状态
+        TbAssetInformation tbAssetInformation = tbAssetInformationMapper.selectByPrimaryKey(assetArticleLeaseOrders.getArticleId());
+        tbAssetInformation.setLeaseStatus(Byte.parseByte(LeaseStatusEnums.RETURN_ING.getValue()));
+        updateCount = tbAssetInformationMapper.updateByPrimaryKeySelective(tbAssetInformation);
+        logger.info("资产信息表租借的资产状态更新为：归还中，参数：{}",tbAssetInformation);
         if (updateCount != 1){
             throw new JnSpringCloudException(new Result("-1","订单状态更新失败"));
         }
@@ -279,13 +282,13 @@ public class AssetArticleLeaseOrdersServiceImpl implements AssetArticleLeaseOrde
             if(updateCount!=1){
                 throw new JnSpringCloudException(new Result("-1","业务表tb_asset_article_lease_orders_pay更新失败"));
             }
-            //(新)更改物品租借信息表物品状态
-            TbAssetArticleLease articleLease = tbAssetArticleLeaseMapper.selectByPrimaryKey(tbAssetArticleLeaseOrders.getArticleId());
-            articleLease.setArticleStatus(Byte.parseByte(LeaseStatusEnums.DELIVERY.getValue()));
-            updateCount = tbAssetArticleLeaseMapper.updateByPrimaryKeySelective(articleLease);
-            logger.info("物品租借信息表的物品状态更新为：交付中，参数：{}",articleLease);
+            //(新)更改资产信息表物品租借状态
+            TbAssetInformation tbAssetInformation = tbAssetInformationMapper.selectByPrimaryKey(tbAssetArticleLeaseOrders.getArticleId());
+            tbAssetInformation.setLeaseStatus(Byte.parseByte(LeaseStatusEnums.DELIVERY.getValue()));
+            updateCount = tbAssetInformationMapper.updateByPrimaryKeySelective(tbAssetInformation);
+            logger.info("资产信息表的物品状态更新为：交付中，参数：{}",tbAssetInformation);
             if(updateCount!=1){
-                throw new JnSpringCloudException(new Result("-1","物品信息表tb_asset_article_lease更新失败"));
+                throw new JnSpringCloudException(new Result("-1","资产信息表tb_asset_information更新失败"));
             }
             logger.info("回调成功，支付状态更新为：已支付");
             return new Result("回调成功，支付状态更新为：已支付");

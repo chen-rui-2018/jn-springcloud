@@ -23,7 +23,7 @@
         </div>
       </div>
     </div>
-    <div class="serverOrgMenu w color2">
+    <div class="serverOrgMenu w">
       <span class="pointer" @click="$router.push({path:'/'})">首页/</span>
       <span class="pointer" @click="$router.push({path:'/companyProfile'})">企业简介</span>
       <span>/</span>
@@ -333,15 +333,19 @@ export default {
       if (this.inFlag == i) {
         return;
       }
+       if (!sessionStorage.userInfo) {
+        this.concatVisible = true;
+        return;
+      }
       this.textMessage = "";
       this.inFlag = i;
     },
     //回复评论
     replycom(item) {
-      if (!sessionStorage.userInfo) {
-        this.concatVisible = true;
-        return;
-      }
+      // if (!sessionStorage.userInfo) {
+      //   this.concatVisible = true;
+      //   return;
+      // }
       this.inFlag = "";
       let _this = this;
       this.api.post({

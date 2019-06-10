@@ -135,7 +135,7 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
                     meterDayLogs.add(meterDayLog);
                 }else{
                     logger.info("开始记录错误日志-原因：当前企业的电表的读数数据不完整,{}",companyId);
-                    throw new ErrorLogException(getErr(account, "没有找到计价规则的内容", meterCode, companyId, companyName,dealDate));
+                    throw new ErrorLogException(getErr(account, "当前企业的电表的读数数据不完整", meterCode, companyId, companyName,dealDate));
                 }
             }
 

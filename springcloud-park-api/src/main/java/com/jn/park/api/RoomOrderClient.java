@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
+import java.sql.Date;
 
 /**
  * 房间租赁相关接口
@@ -60,4 +61,26 @@ public interface RoomOrderClient {
      */
     @RequestMapping(value = "/api/order/updateBill", method = RequestMethod.POST)
     Result updateBill(@RequestBody PayCallBackNotify payCallBackNotify);
+
+    /**
+     * 新增房间订单
+     * @param roomIds   房间ID集合，多个用逗号隔开
+     * @param contactName
+     * @param contactPhone
+     * @param leaseStartTime 起租时间
+     * @param month 租多少个月
+     * @param userAccount
+     * @return 订单ID
+     */
+    @RequestMapping(value = "/api/order/addRoomOrders",method = RequestMethod.POST)
+    Result addRoomOrders(@RequestParam("roomIds")String roomIds, @RequestParam("contactName") String contactName,@RequestParam("contactPhone") String contactPhone, @RequestParam("leaseStartTime") Date leaseStartTime, @RequestParam("month") String month, @RequestParam("userAccount") String userAccount);
+
+
+    /**
+     * 根据订单生成缴费单
+     * @param orderId 房间订单ID
+     * @return 缴费单ID
+     */
+    @RequestMapping(value = "/api/order/createRoomOrderBillByOrder",method = RequestMethod.POST)
+    Result createRoomOrderBillByOrder(@RequestParam("orderId") String orderId);
 }

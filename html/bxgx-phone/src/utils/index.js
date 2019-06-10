@@ -30,7 +30,7 @@ function initJsBridge (readyCallback) {
         document.addEventListener(
           'WebViewJavascriptBridgeReady'
           , function () {
-            callback(WebViewJavascriptBridge)
+            callback(window.WebViewJavascriptBridge)
           },
           false
         )

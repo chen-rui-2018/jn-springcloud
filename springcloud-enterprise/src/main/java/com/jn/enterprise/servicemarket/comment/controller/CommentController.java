@@ -31,7 +31,7 @@ import java.util.List;
  */
 @Api(tags = "服务超市-服务点评")
 @RestController
-@RequestMapping(value = "/guest/serviceMarket/comment")
+@RequestMapping(value = "/serviceMarket/comment")
 public class CommentController extends BaseController {
 
     @Autowired
@@ -45,7 +45,7 @@ public class CommentController extends BaseController {
     @ControllerLog(doAction = "获取对他人的评价列表（客户对机构的评价）")
     @ApiOperation(value = "获取对他人的评价列表",notes = "客户对机构的评价")
     @RequestMapping(value = "/getGiveOthersCommentList",method = RequestMethod.GET)
-    @RequiresPermissions("/guest/serviceMarket/comment/getGiveOthersCommentList")
+    @RequiresPermissions("/serviceMarket/comment/getGiveOthersCommentList")
     public Result<PaginationData<List<Rating>>> getGiveOthersCommentList(@Validated RatingParameter ratingParameter){
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         PaginationData data = commentService.getGiveOthersCommentList(ratingParameter,user.getAccount());
@@ -55,7 +55,7 @@ public class CommentController extends BaseController {
     @ControllerLog(doAction = "获取我收到的评价列表(机构/顾问收到的评价)")
     @ApiOperation(value = "获取我收到的评价列表",notes = "机构/顾问收到的评价")
     @RequestMapping(value = "/getGiveMeCommentList",method = RequestMethod.GET)
-    @RequiresPermissions("/guest/serviceMarket/comment/getGiveMeCommentList")
+    @RequiresPermissions("/serviceMarket/comment/getGiveMeCommentList")
     public Result<PaginationData<List<Rating>>> getGiveMeCommentList(@Validated ReceiveRatingParameter receiveRatingParameter){
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         PaginationData data = commentService.getGiveMeCommentList(receiveRatingParameter,user.getAccount());
@@ -65,7 +65,7 @@ public class CommentController extends BaseController {
     @ControllerLog(doAction = "获取评价页详情")
     @ApiOperation(value = "获取评价页详情",notes = "已评价和未评价都从这接口获取")
     @RequestMapping(value = "/getRatingCommentDetail",method = RequestMethod.GET)
-    @RequiresPermissions("/guest/serviceMarket/comment/getRatingCommentDetail")
+    @RequiresPermissions("/serviceMarket/comment/getRatingCommentDetail")
     public Result<RatingDetail> getRatingCommentDetail(@ApiParam(name="id",value = "需求/评价id",required = true,example = "2cc20cc10c4b4d608f5a05728b86d888")@RequestParam(value = "id") String id){
         Assert.notNull(id, OrgExceptionEnum.COMMENT_ID_IS_NOT_NULL.getMessage());
         RatingDetail ratingCommentDetail = commentService.getRatingCommentDetail(id);
@@ -75,7 +75,7 @@ public class CommentController extends BaseController {
     @ControllerLog(doAction = "提交评价信息")
     @ApiOperation(value = "提交评价信息")
     @RequestMapping(value = "/saveRatingComment",method = RequestMethod.POST)
-    @RequiresPermissions("/guest/serviceMarket/comment/saveRatingComment")
+    @RequiresPermissions("/serviceMarket/comment/saveRatingComment")
     public Result<Boolean> saveRatingComment(@RequestBody @Validated CommentParameter commentParameter){
         Assert.notNull(commentParameter.getId(), OrgExceptionEnum.COMMENT_ID_IS_NOT_NULL.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();

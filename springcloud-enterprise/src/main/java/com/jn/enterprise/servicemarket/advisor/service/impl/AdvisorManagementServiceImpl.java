@@ -343,16 +343,16 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
         for(TbServiceAdvisor advisor:tbServiceAdvisorList){
             if(ApprovalTypeEnum.PENDING.getCode().equals(advisor.getApprovalStatus())){
                 //审批状态为"待审核"
-                advisor.setApprovalStatus(ApprovalTypeEnum.PENDING.getMessage());
+                advisor.setApprovalStatus(ApprovalTypeEnum.PENDING.getCode());
             }else if(ApprovalTypeEnum.APPROVAL_NOT_PASSED.getCode().equals(advisor.getApprovalStatus())){
                 //审批状态为"审批不通过"
-                advisor.setApprovalStatus(ApprovalTypeEnum.APPROVAL_NOT_PASSED.getMessage());
+                advisor.setApprovalStatus(ApprovalTypeEnum.APPROVAL_NOT_PASSED.getCode());
             }else if(ApprovalTypeEnum.NO_FEEDBACK.getCode().equals(advisorManagementParam.getApprovalStatus())){
                 //审批状态为"未反馈"
-                advisor.setApprovalStatus(ApprovalTypeEnum.NO_FEEDBACK.getMessage());
+                advisor.setApprovalStatus(ApprovalTypeEnum.NO_FEEDBACK.getCode());
             }else if(ApprovalTypeEnum.REJECTED.getCode().equals(advisorManagementParam.getApprovalStatus())){
                 //审批状态为"已拒绝"
-                advisor.setApprovalStatus(ApprovalTypeEnum.REJECTED.getMessage());
+                advisor.setApprovalStatus(ApprovalTypeEnum.REJECTED.getCode());
             }
             AdvisorManagementShow advisorManagementShow=new AdvisorManagementShow();
             BeanUtils.copyProperties(advisor, advisorManagementShow);

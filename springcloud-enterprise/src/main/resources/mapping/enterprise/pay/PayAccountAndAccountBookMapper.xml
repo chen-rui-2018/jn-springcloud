@@ -58,6 +58,8 @@
             '支付宝'
         WHEN '4' THEN
             '银联'
+        WHEN '5' THEN
+            '线下支付'
         ELSE
             '支付方式异常'
         END paymentMethod,
@@ -67,13 +69,15 @@
         WHEN '2' THEN
             '自动付款'
         ELSE
-            '支付类型异常'
+            '支付动作异常'
         END paymentAction,
          CASE b.nature_code
         WHEN '1' THEN
             '充值'
         WHEN '2' THEN
             '扣费'
+        WHEN '3' THEN
+            '冲正'
         ELSE
             '支付类型异常'
         END natureCode,
@@ -117,6 +121,8 @@
             '支付宝'
         WHEN '4' THEN
             '银联'
+        WHEN '5' THEN
+            '线下支付'
         ELSE
             '支付方式异常'
         END paymentMethod,
@@ -126,13 +132,15 @@
         WHEN '2' THEN
             '自动付款'
         ELSE
-            '支付类型异常'
+            '支付动作异常'
         END paymentAction,
          CASE b.nature_code
         WHEN '1' THEN
             '充值'
         WHEN '2' THEN
             '扣费'
+         WHEN '3' THEN
+            '冲正'
         ELSE
             '支付类型异常'
         END natureCode,

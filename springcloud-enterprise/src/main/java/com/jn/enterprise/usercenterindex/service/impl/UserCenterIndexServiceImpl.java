@@ -71,19 +71,21 @@ public class UserCenterIndexServiceImpl implements UserCenterIndexService {
         if(userExtension==null || userExtension.getData()==null){
             throw new JnSpringCloudException(UserCenterExceptionEnum.NETWORK_ANOMALY);
         }
-        //获取机构code 和 企业code 判断是否是企业用户或者是机构用户
+        /*//获取机构code 和 企业code 判断是否是企业用户或者是机构用户
         String affiliateCode= userExtension.getData().getAffiliateCode();
         String companyCode= userExtension.getData().getCompanyCode();
 
-        if(StringUtils.isBlank(affiliateCode) || StringUtils.isBlank(companyCode)){
+        if(StringUtils.isBlank(affiliateCode) && StringUtils.isBlank(companyCode)){
             throw new JnSpringCloudException(UserCenterExceptionEnum.IS_ENTERPRISE_OR_ORGANIZATION_USER_NOT_LOOK);
-        }
+        }*/
+
         //查询
-        EmployeeRequisitionModel emodel=userCenterIndexDao.findEmployeeRequisition(user.getAccount());
+        EmployeeRequisitionModel emodel=userCenterIndexDao.findEmployeeRequisition(userExtension.getData().getCompanyCode());
 
         String content="已收到"+emodel.getTotal()+"条企业员工申请,"+emodel.getUnExamine()+"条仍未审批.";
         //都为空 则返回空
-        if(StringUtils.isBlank(emodel.getTotal()) && StringUtils.isBlank(emodel.getUnExamine())){
+        /*StringUtils.isBlank(emodel.getTotal()) && StringUtils.isBlank(emodel.getUnExamine())*/
+        if(StringUtils.isBlank(emodel.getUnExamine()) || ("0").equals(emodel.getUnExamine()) ){
             content="";
         }
 
@@ -103,9 +105,9 @@ public class UserCenterIndexServiceImpl implements UserCenterIndexService {
         }
         //机构编码
         String affiliateCode= userExtension.getData().getAffiliateCode();
-        if(StringUtils.isBlank(affiliateCode)){
+        /*if(StringUtils.isBlank(affiliateCode)){
             throw new JnSpringCloudException(UserCenterExceptionEnum.IS_ENTERPRISE_OR_ORGANIZATION_USER_NOT_LOOK_2);
-        }
+        }*/
 
         //获取机构下的所有信息
         String s=userCenterIndexDao.findAdviserInvitation("",affiliateCode);
@@ -113,7 +115,11 @@ public class UserCenterIndexServiceImpl implements UserCenterIndexService {
         String s1=userCenterIndexDao.findAdviserInvitation("1",affiliateCode);
 
         String str="已收到"+s+"条顾问邀请的回馈,"+s1+"条仍未审批。";
+
         if(StringUtils.isBlank(s) && StringUtils.isBlank(s1)){
+            str="";
+        }
+        if(("0").equals(s) && ("0").equals(s1)){
             str="";
         }
 
@@ -134,9 +140,9 @@ public class UserCenterIndexServiceImpl implements UserCenterIndexService {
         //企业
         String companyCode= userExtension.getData().getCompanyCode();
         //都为空时不能查看
-        if(StringUtils.isBlank(affiliateCode) && StringUtils.isBlank(companyCode)){
+        /*if(StringUtils.isBlank(affiliateCode) && StringUtils.isBlank(companyCode)){
             throw new JnSpringCloudException(UserCenterExceptionEnum.IS_ENTERPRISE_OR_ORGANIZATION_USER_NOT_LOOK_1);
-        }
+        }*/
 
         String str="";
 
@@ -156,6 +162,9 @@ public class UserCenterIndexServiceImpl implements UserCenterIndexService {
             if(StringUtils.isBlank(Long.toString(s)) && StringUtils.isBlank(Long.toString(s1))){
                 str="";
             }
+            if(("0").equals(Long.toString(s)) && ("0").equals(Long.toString(s1))){
+                str="";
+            }
         }
         //如果企业编码不为空则查询提交的需求
         if(StringUtils.isNotBlank(companyCode)){
@@ -169,6 +178,9 @@ public class UserCenterIndexServiceImpl implements UserCenterIndexService {
             long s1=requireOtherList1.getTotal();
             str="已提交"+s+"条服务需求,"+s1+"条仍在处理中";
             if(StringUtils.isBlank(Long.toString(s)) && StringUtils.isBlank(Long.toString(s1))){
+                str="";
+            }
+            if(("0").equals(Long.toString(s)) && ("0").equals(Long.toString(s1))){
                 str="";
             }
         }
@@ -207,17 +219,17 @@ public class UserCenterIndexServiceImpl implements UserCenterIndexService {
     public String findEvaluateManage(User user) {
         // 企业用户是提交   机构用户是接到
         //判断当前账号是否是企业用户或者是机构用户
-        Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(user.getAccount());
+        /*Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(user.getAccount());
         if(userExtension==null || userExtension.getData()==null){
             throw new JnSpringCloudException(UserCenterExceptionEnum.NETWORK_ANOMALY);
-        }
+        }*/
         //企业
-        String companyCode= userExtension.getData().getCompanyCode();
+        //String companyCode= userExtension.getData().getCompanyCode();
 
         //为空时不能查看
-        if(StringUtils.isBlank(companyCode)){
+        /*if(StringUtils.isBlank(companyCode)){
             throw new JnSpringCloudException(UserCenterExceptionEnum.IS_ENTERPRISE_USER_NOT_LOOK);
-        }
+        }*/
 
         RequireOtherParam requireOtherParam=new RequireOtherParam();
         requireOtherParam.setNeedPage("1");
@@ -232,6 +244,11 @@ public class UserCenterIndexServiceImpl implements UserCenterIndexService {
         if(StringUtils.isBlank(Long.toString(s)) && StringUtils.isBlank(Long.toString(s1))){
             str="";
         }
+
+        if(("0").equals(Long.toString(s)) && ("0").equals(Long.toString(s1))){
+            str="";
+        }
+
         return str;
     }
 
@@ -265,6 +282,11 @@ public class UserCenterIndexServiceImpl implements UserCenterIndexService {
         if(StringUtils.isBlank(Long.toString(s)) && StringUtils.isBlank(String.valueOf(j))){
             str="";
         }
+
+        if(("0").equals(Long.toString(s)) && ("0").equals(Long.toString(j))){
+            str="";
+        }
+
         return str;
     }
 

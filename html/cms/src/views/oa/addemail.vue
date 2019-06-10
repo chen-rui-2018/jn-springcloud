@@ -453,8 +453,10 @@ export default {
             this.emailForm.delaySendTime = res.data.data.delaySendTime
             this.emailForm.isDelay = res.data.data.isDelay
             this.emailForm.sendStatus = res.data.data.sendStatus
-            this.userNames = res.data.data.receiverList
-            this.userData = this.userNames
+            if (res.data.data.receiverList) {
+              this.userNames = res.data.data.receiverList
+              this.userData = this.userNames
+            }
             this.sendTime = res.data.data.sendTime
             this.emailForm.attachment = res.data.data.attachment
             if (res.data.data.attachment) {

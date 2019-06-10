@@ -126,8 +126,6 @@ public class AdvisorEditController extends BaseController {
             logger.warn("用户提需求获取当前登录用户信息失败");
             return new Result(RequireExceptionEnum.NETWORK_ANOMALY.getCode(),RequireExceptionEnum.NETWORK_ANOMALY.getMessage());
         }
-        //判断当前登录用户是否为顾问
-        advisorEditService.currentUserIsAdvisor(user.getAccount());
         AdvisorDetailsVo advisorDetailsVo = advisorService.getServiceAdvisorInfo(advisorAccount, "");
         return  new Result(advisorDetailsVo);
     }

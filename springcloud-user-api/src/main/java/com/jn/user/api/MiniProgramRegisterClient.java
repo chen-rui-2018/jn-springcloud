@@ -1,8 +1,10 @@
 package com.jn.user.api;
 
 import com.jn.common.model.Result;
+import com.jn.system.log.annotation.ControllerLog;
 import com.jn.user.model.RegisterInfoParam;
 import com.jn.user.model.WeChatRequestParam;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,4 +35,12 @@ public interface MiniProgramRegisterClient {
      */
     @RequestMapping(value = "/api/miniProgramRegister/registerAndBinding")
     Result registerAndBinding(@RequestBody @Validated RegisterInfoParam registerInfoParam);
+
+    /**
+     * 根据账号获取openId
+     * @param account
+     * @return
+     */
+    @RequestMapping(value = "/api/miniProgramRegister/getOpenIdByAccount")
+    Result getOpenIdByAccount(@RequestBody String account);
 }

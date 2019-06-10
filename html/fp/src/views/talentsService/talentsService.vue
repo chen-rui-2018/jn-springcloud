@@ -115,8 +115,9 @@ export default {
         rangeId:'',//所属类型
         sortType:'1',//排序
         page:1,
-        rows:5,
-        perennialList:[]
+        rows:6,
+        perennialList:[],
+        // centerDialogVisible:false
       }
     },
     filters: {
@@ -230,7 +231,19 @@ export default {
       },
       //跳转页面
       gotalentplatform(){
-        this.$router.push({name:'talentPlatform'})
+        if(sessionStorage.token){
+          this.$router.push({name:'talentPlatform'})
+        }else{
+          this.$confirm('亲，您需要登录后才能访问以下界面哦！', '提示', {
+            confirmButtonText: '去登陆',
+            cancelButtonText: '留在当前页面',
+            type: 'warning',
+            center: true
+          }).then(() => {
+             this.$router.push({path:"/login"})
+          }).catch(() => {
+          })
+        }
       },
       //跳转页面
       gotalentdetail(id){

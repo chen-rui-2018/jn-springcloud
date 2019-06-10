@@ -38,7 +38,7 @@ public interface PayAccountClient {
     Result payAccountCallBack(@RequestBody PayOrderNotify callBackParam);
 
     /**
-     * 发起支付-我的账本-预缴充值(水费)
+     * 发起支付-我的账本-预缴充值(电费)
      * @param createOrderAndPayReqModel
      * @return
      */
@@ -49,5 +49,15 @@ public interface PayAccountClient {
     @ApiOperation(value = "我的账户-通过企业ID和账本类型查询账号余额",notes = "我的账户-通过企业ID和账本类型查询账号余额")
     @RequestMapping(value = "/api/payment/payAccount/queryPayAccountBookMoney",method = RequestMethod.POST)
     Result<PayAccountBook> queryPayAccountBookMoney(@RequestBody @Validated PayAccountBookMoney payAccountBookMoney);
+
+    @ApiOperation(value = "我的账本-创建账户和账本【企业注册时调用】",notes = "我的账本-创建账户和账本【企业注册时调用】")
+    @RequestMapping(value = "/api/payment/payAccount/createPayAccountBook",method = RequestMethod.POST)
+    Result createPayAccountBook(@RequestBody @Validated PayAccountBookCreateParam payAccountBookCreateParam);
+
+
+    @ApiOperation(value = "我的账本-用户充值后自动扣费",notes = "我的账本-用户充值后自动扣费")
+    @RequestMapping(value = "/api/payment/payAccount/automaticDeduction",method = RequestMethod.POST)
+    Result automaticDeduction(@RequestBody @Validated PayAutoDeduParam payAutoDeduParam);
+
 
 }

@@ -14,7 +14,7 @@
       </el-form-item>
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
     </el-form>
-    <el-row :gutter="32">
+    <el-row :gutter="20">
       <el-col :xs="24" :sm="24" :lg="8">
         <div class="chart-wrapper">
           <pie-chart :list-data="employeeTypeList" title="在职员工类型分布"/>
@@ -32,7 +32,7 @@
       </el-col>
 
     </el-row>
-    <el-row :gutter="32">
+    <el-row :gutter="20">
       <el-col :xs="24" :sm="24" :lg="8">
         <div class="chart-wrapper">
           <pie-chart :list-data="employeeSexList" title="在职员工性别分布"/>

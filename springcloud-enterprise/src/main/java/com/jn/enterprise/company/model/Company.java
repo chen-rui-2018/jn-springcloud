@@ -18,7 +18,7 @@ public class Company implements Serializable {
     @ApiModelProperty(value = "企业ID")
     private String id;
 
-    @ApiModelProperty(value = "企业ID")
+    @ApiModelProperty(value = "企业名称")
     private String comName;
 
     @ApiModelProperty(value = "企业logo")

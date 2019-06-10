@@ -9,6 +9,7 @@ import com.jn.common.util.StringUtils;
 import com.jn.company.api.CompanyClient;
 import com.jn.company.model.ServiceCompany;
 import com.jn.hardware.api.ElectricMeterClient;
+import com.jn.hardware.model.electricmeter.ElectricMeterStatusShow;
 import com.jn.hardware.model.electricmeter.ElectricMeterSwitchParam;
 import com.jn.news.vo.SmsTemplateVo;
 import com.jn.park.electricmeter.dao.*;
@@ -157,10 +158,19 @@ public class MeterRulesServiceImpl implements MeterRulesService {
             priceruleCompanyMapper.updateByExampleSelective(priceruleCompany, priceruleCompanyCriteria);
 
             //获取之前的所有关系[企业日关系]
+            Date nowDate = null;
+            try{
+                nowDate = DateUtils.parseDate(DateUtils.getDate("yyyy-MM-dd"),"yyyy-MM-dd");
+            }catch(ParseException e){
+                e.printStackTrace();
+                throw new JnSpringCloudException(MeterExceptionEnums.DAY_FORMATE_WRONG);
+            }
+
             TbElectricPriceruleCompanyInDayCriteria companyInDayCriteria = new TbElectricPriceruleCompanyInDayCriteria();
-            companyInDayCriteria.or().andRuleIdEqualTo(ruleIdBefore).andRecordStatusEqualTo(new Byte(MeterConstants.VALID));
+            companyInDayCriteria.or().andRuleIdEqualTo(ruleIdBefore).andRecordStatusEqualTo(new Byte(MeterConstants.VALID))
+                    .andDayEqualTo(nowDate);
             List<TbElectricPriceruleCompanyInDay> companyInDaysList = companyInDayMapper.selectByExample(companyInDayCriteria);
-            //作废
+            //作废今日的关系
             TbElectricPriceruleCompanyInDay companyInDay = new TbElectricPriceruleCompanyInDay();
             companyInDay.setRecordStatus(new Byte(MeterConstants.INVALID));
             companyInDay.setModifiedTime(new Date());
@@ -512,26 +522,27 @@ public class MeterRulesServiceImpl implements MeterRulesService {
             //查询触发的规则
             TbElectricWarningRulesCriteria warningRulesCriteria = new TbElectricWarningRulesCriteria();
             warningRulesCriteria.or().andRecordStatusEqualTo(new Byte(MeterConstants.VALID))
-                    .andThresholdsGreaterThan(new BigDecimal("12"));
+                   .andThresholdsGreaterThan(size.get(0).getBalance());
             List<TbElectricWarningRules> warningRules = warningRulesMapper.selectByExample(warningRulesCriteria);
-            String message = "白下高薪物业管理提醒你：";
+            //String message = "白下高薪物业管理提醒你：";
             if (warningRules != null && warningRules.size() > 0) {
                 TbElectricWarningRecord warningRecord = null;
                 for (TbElectricWarningRules warningRuleBean : warningRules) {
+                    String msg = warningRuleBean.getWarningContent().replace("{}",warningRuleBean.getThresholds().toString());
                     warningRecord = new TbElectricWarningRecord();
                     warningRecord.setCompanyId(companyId);
                     warningRecord.setId(UUID.randomUUID().toString().replaceAll("-", ""));
                     warningRecord.setRuleId(warningRuleBean.getId());
                     warningRecord.setThresholds(warningRuleBean.getThresholds());
-                    warningRecord.setWarningContent(warningRuleBean.getWarningContent());
+                    warningRecord.setWarningContent(msg);
                     warningRecord.setWarningName(warningRuleBean.getWarningName());
                     warningRecord.setRecordStatus(new Byte(MeterConstants.VALID));
-                    message += warningRuleBean.getWarningContent().replace("{}",warningRuleBean.getThresholds().toString()) + ";";
+                    warningRecord.setCreatedTime(new Date());
                     warningRecords.add(warningRecord);
+                    sendSMS(phone, msg);
                 }
                 if (warningRecords != null && warningRecords.size() > 0) {
                     meterDao.saveWarningRecord(warningRecords);
-                    sendSMS(phone, message);
                     result.setData("预警成功");
                 }
             }
@@ -575,12 +586,11 @@ public class MeterRulesServiceImpl implements MeterRulesService {
     public void setSwitchMeterTimer() {
         //查询出所有需要停电的企业
         List<SwitchModel> stop= meterDao.stopElectric();
-        //获取出该企业所有的电表,停电【阀门开启 4】
+        //获取出该企业所有的电表,没电的状态5
         concretSwitch(stop,MeterConstants.SWITCH_NOT_ELEC);
-        //查询出所有需要有电的企业，有电停电【阀门关闭 5】
+        //查询出所有需要有电的企业，有电的状态 4
         List<SwitchModel> start= meterDao.getElectric();
         concretSwitch(start,MeterConstants.SWITCH_GET_ELEC);
-
     }
 
     private void concretSwitch(List<SwitchModel> companys,String status){
@@ -592,36 +602,51 @@ public class MeterRulesServiceImpl implements MeterRulesService {
                 if(meterCodes !=null && meterCodes.size()>0){
 
                     TbElectricMeterSwitchLog switchLog =null;
-                    for(String meterCode : meterCodes){
-                        try{
+                    for(String meterCode : meterCodes) {
+                        try {
                             //本身就处于这种状态的不用调用接口修改
-                            if(meterCode.equals(status)){
-                                continue;
-                            }
-                            SwitchMeter(meterCode,status);
-                            //记录日志
-                            switchLog = new TbElectricMeterSwitchLog();
-                            switchLog.setCompanyId(company.getCompanyId());
-                            switchLog.setId(UUID.randomUUID().toString().replaceAll("-",""));
-                            switchLog.setTurnId(company.getId());
-                            switchLog.setTurnName(company.getTurnName());
-                            switchLog.setCreatedTime(new Date());
-                            switchLog.setCreatorAccount(MeterConstants.SYSTEM_USER);
-                            switchLog.setMeterCode(meterCode);
-                            switchLog.setSwitchStatus(new Byte(status));
-                            switchLog.setRecordStatus(new Byte(MeterConstants.VALID));
-                            switchLog.setCompanyName(company.getCompanyName());
-                            list.add(switchLog);
-                            if(list !=null && list.size()==40){
-                                meterDao.saveMeterSwitchLog(list);
-                                list = new ArrayList<>();
+                            //获取这块电表的状态
+                            Result<ElectricMeterStatusShow> state = electricMeterClient.getElectricMeterStatus(meterCode);
+                            if (state.getData() != null) {
+                                ElectricMeterStatusShow show = state.getData();
+
+                                if (status.equals(show.getStatus())) {
+                                    continue;
+                                }
+                                //SwitchMeter(meterCode, status);
+                                //记录日志
+                                switchLog = new TbElectricMeterSwitchLog();
+                                switchLog.setCompanyId(company.getCompanyId());
+                                switchLog.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+                                switchLog.setTurnId(company.getId());
+                                switchLog.setTurnName(company.getTurnName());
+                                switchLog.setCreatedTime(new Date());
+                                switchLog.setCreatorAccount(MeterConstants.SYSTEM_USER);
+                                switchLog.setMeterCode(meterCode);
+                                switchLog.setSwitchStatus(new Byte(status));
+                                switchLog.setRecordStatus(new Byte(MeterConstants.VALID));
+                                switchLog.setCompanyName(company.getCompanyName());
+                                list.add(switchLog);
+                                if (list != null && list.size() == 40) {
+                                    meterDao.saveMeterSwitchLog(list);
+                                    list = new ArrayList<>();
+                                }
+
+                                //更新信息表中的状态
+                                TbElectricMeterInfoCriteria criteria = new TbElectricMeterInfoCriteria();
+                                criteria.or().andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andFactoryMeterCodeEqualTo(meterCode);
+                                TbElectricMeterInfo meterInfo = new TbElectricMeterInfo();
+                                meterInfo.setUseStatus(new Byte(status));
+                                tbElectricMeterInfoMapper.updateByExampleSelective(meterInfo,criteria);
+                            }else{
+                                throw new RuntimeException();
                             }
                         }catch(Exception e){
                             e.printStackTrace();
-                            logger.info("电表编码为{}，的状态{}转换失败！！！",meterCode,status);
+                            logger.info("电表编码为{}，的状态{}转换失败！！！", meterCode, status);
                             continue;
                         }
-
+                        
                     }
                 }
             }

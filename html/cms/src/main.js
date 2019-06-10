@@ -4,8 +4,8 @@ import Cookies from 'js-cookie'
 import ECharts from 'vue-echarts'
 Vue.component('chart', ECharts)
 // 级联多选
-import elCascaderMulti from 'el-cascader-multi'
-Vue.use(elCascaderMulti)
+// import elCascaderMulti from 'el-cascader-multi'
+// Vue.use(elCascaderMulti)
 
 import echarts from 'echarts'
 Vue.prototype.$echarts = echarts

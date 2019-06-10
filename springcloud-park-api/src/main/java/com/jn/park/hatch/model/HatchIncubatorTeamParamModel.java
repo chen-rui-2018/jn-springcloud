@@ -3,6 +3,7 @@ package com.jn.park.hatch.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -13,8 +14,13 @@ import java.util.Date;
 public class HatchIncubatorTeamParamModel implements Serializable {
 
     private static final long serialVersionUID = -7611722139369429534L;
-    @ApiModelProperty(value = "唯一id【uuid生成】",example = "21984134749242")
+    @ApiModelProperty(value = "唯一id【团队ID】",example = "219842749242")
+    @NotNull(message = "唯一id【团队ID】不能为空")
     private String id;
+
+    @ApiModelProperty(value = "类型【1：企业，2：团队】",example = "2")
+    @NotNull(message = "类型不能为空")
+    private String type;
 
     @ApiModelProperty(value = "团队名称",example = "XX敏捷团队")
     private String name;
@@ -48,6 +54,30 @@ public class HatchIncubatorTeamParamModel implements Serializable {
 
     @ApiModelProperty(value = "申请时间", example = "2019-04-20 10:10:00")
     private Date applicationTime;
+
+    @ApiModelProperty(value = "团队管理员账号",example = "wangsong")
+    @NotNull(message = "团队管理员账号不能为空")
+    private String comAdmin;
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getComAdmin() {
+        return comAdmin;
+    }
+
+    public void setComAdmin(String comAdmin) {
+        this.comAdmin = comAdmin;
+    }
 
     public String getId() {
         return id;

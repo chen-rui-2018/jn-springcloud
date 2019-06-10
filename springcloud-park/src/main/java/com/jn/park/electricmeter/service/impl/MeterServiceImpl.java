@@ -1,10 +1,15 @@
 package com.jn.park.electricmeter.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
+import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.GlobalConstants;
 import com.jn.common.util.StringUtils;
+import com.jn.company.api.CompanyClient;
+import com.jn.company.model.ServiceCompany;
 import com.jn.hardware.api.ElectricMeterClient;
 import com.jn.hardware.enums.ElectricMeterEnum;
 import com.jn.hardware.model.electricmeter.ElectricMeterDataCollectionParam;
@@ -17,13 +22,14 @@ import com.jn.park.electricmeter.dao.TbElectricReadingFailLogMapper;
 import com.jn.park.electricmeter.entity.*;
 import com.jn.park.electricmeter.enums.MeterConstants;
 import com.jn.park.electricmeter.enums.MeterExceptionEnums;
-import com.jn.park.electricmeter.model.MeterInfoModel;
+import com.jn.park.electricmeter.model.*;
 import com.jn.park.electricmeter.service.MeterService;
 import com.jn.park.enums.NoticeExceptionEnum;
 import com.jn.park.notice.service.impl.NoticeManageServiceImpl;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.ApiModelProperty;
+import javafx.beans.binding.IntegerBinding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -32,8 +38,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.xxpay.common.util.DateUtil;
 
+import javax.xml.crypto.Data;
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -56,6 +65,8 @@ public class MeterServiceImpl implements MeterService {
     Logger logger = LoggerFactory.getLogger(MeterServiceImpl.class);
     @Autowired
     private TbElectricMeterCompanyDayMapper companyDayMapper;
+    @Autowired
+    private CompanyClient companyClient;
 
     @Override
     @ServiceLog(doAction = "电表读数定时入库")
@@ -74,21 +85,39 @@ public class MeterServiceImpl implements MeterService {
                 hour=String.valueOf(Integer.valueOf(hour) -1);
             }
         }
-        String taskBatch =UUID.randomUUID().toString().replaceAll("-","");
-        Result cResult = collectionData(null, dealDate, hour);
-        if(cResult !=null  && cResult.getCode().equals(GlobalConstants.SUCCESS_CODE)){
-            //采集成功后，保存数据
-            ElectricOrWaterConditionShow showBeans= (ElectricOrWaterConditionShow)cResult.getData();
-            List<ElectricMeterWaterOrElectricShow> dataList =showBeans.getData();
-            Result saveResult =  saveData(dataList,dealDate,  hour , taskBatch);
-            if(saveResult !=null  && saveResult.getCode().equals(GlobalConstants.SUCCESS_CODE)){
-                updateData(taskBatch);
-            }else{
-                saveFailLog(cResult,hour,dealDate);
+
+        //所有的电表
+        //访问参数处理
+        ElectricMeterDataCollectionParam parameter = getParameter();
+        String startTime=DateUtils.formatDate(dealDate,"yyyy-MM-dd")+" "+hour+":00:00";
+        parameter.setStartTime(startTime);
+        TbElectricMeterInfoCriteria meterInfoCriteria = new TbElectricMeterInfoCriteria();
+        meterInfoCriteria.or().andRecordStatusEqualTo(new Byte(MeterConstants.VALID));
+        List<TbElectricMeterInfo>  meters = meterInfoMapper.selectByExample(meterInfoCriteria);
+        if(meters !=null && meters.size()>0){
+            for(TbElectricMeterInfo meterBean : meters){
+                //设置每块电表的
+                String taskBatch =UUID.randomUUID().toString().replaceAll("-","");
+                parameter.setCode(meterBean.getFactoryMeterCode());
+                Result cResult = collectionData(parameter, dealDate, hour);
+                if(cResult !=null  && cResult.getCode().equals(GlobalConstants.SUCCESS_CODE)){
+                    //采集成功后，保存数据
+                    ElectricOrWaterConditionShow showBeans= (ElectricOrWaterConditionShow)cResult.getData();
+                    List<ElectricMeterWaterOrElectricShow> dataList =showBeans.getData();
+                    Result saveResult =  saveData(dataList,dealDate,  hour , taskBatch);
+                    if(saveResult !=null  && saveResult.getCode().equals(GlobalConstants.SUCCESS_CODE)){
+                        updateData(taskBatch);
+                    }else{
+                        saveFailLog(cResult,hour,dealDate);
+                    }
+                }else{
+                    saveFailLog(cResult,hour,dealDate);
+                }
             }
-        }else{
-            saveFailLog(cResult,hour,dealDate);
         }
+
+
+
     }
 
     /**
@@ -118,13 +147,7 @@ public class MeterServiceImpl implements MeterService {
      */
     private Result collectionData(ElectricMeterDataCollectionParam parameter,Date dealDate,String hour){
         boolean isNotOver =true;
-        int loopGetData=0;
-        //初始化参数
-        if(parameter == null){
-            parameter = getParameter();
-            String startTime=DateUtils.formatDate(dealDate,"yyyy-MM-dd")+" "+hour+":00:00";
-            parameter.setStartTime(startTime);
-        }
+        Integer loopGetData=0;
         Result collectionData = null;
         List<ElectricMeterWaterOrElectricShow> dataList =new ArrayList<>();
         int pageIndex=MeterConstants.FIRST_PAGE;
@@ -147,7 +170,7 @@ public class MeterServiceImpl implements MeterService {
                     result.setResult("数据采集失败！！！");
                     break;
                 }
-                loopGetData++;
+                loopGetData+=1;
                 try{
                     //失败后睡眠
                     Thread.sleep(MeterConstants.SLEEP_TIME*loopGetData);
@@ -162,7 +185,7 @@ public class MeterServiceImpl implements MeterService {
                 //取出数据
                 ElectricOrWaterConditionShow page= (ElectricOrWaterConditionShow) collectionData.getData();
                 dataList.addAll(page.getData());
-                pageIndex++;
+                pageIndex +=1;
                 if(pageIndex>Integer.parseInt(page.getPages())){
                     //数据采集完成，没有下一页了
                     result.setCode(GlobalConstants.SUCCESS_CODE);
@@ -187,7 +210,7 @@ public class MeterServiceImpl implements MeterService {
     public Result saveData(List<ElectricMeterWaterOrElectricShow> dataList,Date dealDate, String hour,String taskBatch){
         Result result = new Result();
         boolean isNotOver =true;
-        int loopNum=0;
+        int loopNum= 0;
         if(dataList !=null && dataList.size()>0){
             //保存数据
             while(isNotOver){
@@ -202,7 +225,7 @@ public class MeterServiceImpl implements MeterService {
                             saveData = new ArrayList<>();
                         }
                     }
-                    if(saveData !=null || saveData.size() >0){
+                    if(saveData !=null && saveData.size() >0){
                         meterDao.insertReadingData(saveData);
                     }
                     result.setCode(GlobalConstants.SUCCESS_CODE);
@@ -219,7 +242,7 @@ public class MeterServiceImpl implements MeterService {
                         result.setResult("保存数据失败！！！");
                         break;
                     }
-                    loopNum++;
+                    loopNum = loopNum+1;
                     try{
                         //失败后睡眠
                         Thread.sleep(MeterConstants.SLEEP_TIME*loopNum);
@@ -322,28 +345,38 @@ public class MeterServiceImpl implements MeterService {
             startTime =dealDateStr+" "+dealHour+":00:00";
         }
 
-        String taskBatch =UUID.randomUUID().toString().replaceAll("-","");
+
         ElectricMeterDataCollectionParam parameter = getParameter();
         parameter.setStartTime(startTime);
-        Result cResult = collectionData(parameter, dealDate, dealHour);
-        if(cResult !=null  && cResult.getCode().equals(GlobalConstants.SUCCESS_CODE)){
-            //采集成功后，保存数据
-            ElectricOrWaterConditionShow showBeans= (ElectricOrWaterConditionShow)cResult.getData();
-            List<ElectricMeterWaterOrElectricShow> dataList =showBeans.getData();
-            Result saveResult =  saveData(dataList,dealDate,dealHour,taskBatch);
-            if(saveResult !=null  && saveResult.getCode().equals(GlobalConstants.SUCCESS_CODE)){
-                //成功了，作废掉失败的日志记录
-                TbElectricReadingFailLog readingFailLog = new TbElectricReadingFailLog();
-                readingFailLog.setRecordStatus(new Byte(MeterConstants.INVALID));
-                readingFailLog.setStatus(new Byte(MeterConstants.SUCCESS));
-                failLogMapper.updateByExampleSelective(readingFailLog,failLogCriteria);
-                updateData(taskBatch);
-            }else{
-                throw new JnSpringCloudException(MeterExceptionEnums.COLLECTION_DATA_DEAL_FAIL);
+        TbElectricMeterInfoCriteria meterInfoCriteria = new TbElectricMeterInfoCriteria();
+        meterInfoCriteria.or().andRecordStatusEqualTo(new Byte(MeterConstants.VALID));
+        List<TbElectricMeterInfo>  meters = meterInfoMapper.selectByExample(meterInfoCriteria);
+        if(meters !=null && meters.size()>0) {
+            for (TbElectricMeterInfo meterBean : meters) {
+                //设置每块电表的
+                parameter.setCode(meterBean.getFactoryMeterCode());
+                String taskBatch =UUID.randomUUID().toString().replaceAll("-","");
+                Result cResult = collectionData(parameter, dealDate, dealHour);
+                if (cResult != null && cResult.getCode().equals(GlobalConstants.SUCCESS_CODE)) {
+                    //采集成功后，保存数据
+                    ElectricOrWaterConditionShow showBeans = (ElectricOrWaterConditionShow) cResult.getData();
+                    List<ElectricMeterWaterOrElectricShow> dataList = showBeans.getData();
+                    Result saveResult = saveData(dataList, dealDate, dealHour, taskBatch);
+                    if (saveResult != null && saveResult.getCode().equals(GlobalConstants.SUCCESS_CODE)) {
+                        //成功了，作废掉失败的日志记录
+                        TbElectricReadingFailLog readingFailLog = new TbElectricReadingFailLog();
+                        readingFailLog.setRecordStatus(new Byte(MeterConstants.INVALID));
+                        readingFailLog.setStatus(new Byte(MeterConstants.SUCCESS));
+                        failLogMapper.updateByExampleSelective(readingFailLog, failLogCriteria);
+                        updateData(taskBatch);
+                    } else {
+                        throw new JnSpringCloudException(MeterExceptionEnums.COLLECTION_DATA_DEAL_FAIL);
+                    }
+                } else {
+                    //不在记录日志
+                    throw new JnSpringCloudException(MeterExceptionEnums.COLLECTION_DATA_ISNOT_SUCCESS);
+                }
             }
-        }else{
-            //不在记录日志
-            throw new JnSpringCloudException(MeterExceptionEnums.COLLECTION_DATA_ISNOT_SUCCESS);
         }
     }
 
@@ -359,7 +392,7 @@ public class MeterServiceImpl implements MeterService {
         if(failLogs !=null && failLogs.size()>0){
             for(TbElectricReadingFailLog failBean : failLogs){
                 //初始化参数
-                String taskBatch =UUID.randomUUID().toString().replaceAll("-","");
+
                 ElectricMeterDataCollectionParam parameter = getParameter();
                 String dateStr = DateUtils.formatDate(failBean.getDealDate(),"yyyy-MM-dd");
                 String startTime = "";
@@ -373,26 +406,35 @@ public class MeterServiceImpl implements MeterService {
                 }
                 parameter.setStartTime(startTime);
                 Date dealDate = failBean.getDealDate();
-
-                Result cResult = collectionData(parameter, dealDate, dealHour);
-                if(cResult !=null  && cResult.getCode().equals(GlobalConstants.SUCCESS_CODE)){
-                    //采集成功后，保存数据
-                    ElectricOrWaterConditionShow showBeans= (ElectricOrWaterConditionShow)cResult.getData();
-                    List<ElectricMeterWaterOrElectricShow> dataList =showBeans.getData();
-                    Result saveResult =  saveData(dataList,dealDate,dealHour,taskBatch);
-                    if(saveResult !=null  && saveResult.getCode().equals(GlobalConstants.SUCCESS_CODE)){
-                        //成功了，作废掉失败的日志记录
-                        TbElectricReadingFailLog readingFailLog = new TbElectricReadingFailLog();
-                        readingFailLog.setRecordStatus(new Byte(MeterConstants.INVALID));
-                        readingFailLog.setStatus(new Byte(MeterConstants.SUCCESS));
-                        failLogMapper.updateByExampleSelective(readingFailLog,failLogCriteria);
-                        updateData(taskBatch);
-                    }else{
-                        resultList.add(startTime);
+                TbElectricMeterInfoCriteria meterInfoCriteria = new TbElectricMeterInfoCriteria();
+                meterInfoCriteria.or().andRecordStatusEqualTo(new Byte(MeterConstants.VALID));
+                List<TbElectricMeterInfo>  meters = meterInfoMapper.selectByExample(meterInfoCriteria);
+                if(meters !=null && meters.size()>0) {
+                    for (TbElectricMeterInfo meterBean : meters) {
+                        //设置每块电表的
+                        parameter.setCode(meterBean.getFactoryMeterCode());
+                        String taskBatch =UUID.randomUUID().toString().replaceAll("-","");
+                        Result cResult = collectionData(parameter, dealDate, dealHour);
+                        if (cResult != null && cResult.getCode().equals(GlobalConstants.SUCCESS_CODE)) {
+                            //采集成功后，保存数据
+                            ElectricOrWaterConditionShow showBeans = (ElectricOrWaterConditionShow) cResult.getData();
+                            List<ElectricMeterWaterOrElectricShow> dataList = showBeans.getData();
+                            Result saveResult = saveData(dataList, dealDate, dealHour, taskBatch);
+                            if (saveResult != null && saveResult.getCode().equals(GlobalConstants.SUCCESS_CODE)) {
+                                //成功了，作废掉失败的日志记录
+                                TbElectricReadingFailLog readingFailLog = new TbElectricReadingFailLog();
+                                readingFailLog.setRecordStatus(new Byte(MeterConstants.INVALID));
+                                readingFailLog.setStatus(new Byte(MeterConstants.SUCCESS));
+                                failLogMapper.updateByExampleSelective(readingFailLog, failLogCriteria);
+                                updateData(taskBatch);
+                            } else {
+                                resultList.add(startTime);
+                            }
+                        } else {
+                            //不在记录日志
+                            resultList.add(startTime);
+                        }
                     }
-                }else{
-                    //不在记录日志
-                    resultList.add(startTime);
                 }
             }
         }
@@ -572,4 +614,109 @@ public class MeterServiceImpl implements MeterService {
             }
         }
     }
+
+    //能耗统计
+
+    @Override
+    public Result groupChart() {
+        Result result = new Result();
+        List<GroupChartStatisticsModel> list = meterDao.groupChart();
+        result.setData(list);
+        return result;
+    }
+
+    @Override
+    public Result categaryChart() {
+        Result result = new Result();
+        List<GategaryEnergyStatisticsModel> list = meterDao.categaryChart();
+        result.setData(list);
+        return result;
+    }
+
+    @Override
+    public Result<PaginationData<List<TrendChartDetailStatisticsModel>>> trendChartDetail(TrendChartPageParam param) {
+        Result result = new Result();
+        Page<Object> objects = PageHelper.startPage(param.getPage(), param.getRows() == 0 ? 15 : param.getRows());
+        List<TrendChartDetailStatisticsModel> list = meterDao.trendChartDetail(param);
+        PaginationData<List<TrendChartDetailStatisticsModel>> data = new PaginationData(list, objects.getTotal());
+        result.setData(data);
+        return result;
+    }
+
+    @Override
+    public Result trendChart(TrendChartParam param) {
+        Result result = new Result();
+        List<TrendChartStatisticsModel> list = meterDao.trendChart(param);
+        result.setData(list);
+        return result;
+    }
+
+    @Override
+
+    public TbElectricMeterInfo getByCode(String code) {
+        TbElectricMeterInfoCriteria criteria=new TbElectricMeterInfoCriteria();
+        criteria.createCriteria().andRecordStatusEqualTo(new Byte("1")).andMeterCodeEqualTo(code);
+        List<TbElectricMeterInfo> list=meterInfoMapper.selectByExample(criteria);
+        if(null!=list||list.size()>0){
+            return list.get(0);
+        }
+       return null;
+    }
+
+    @Override
+    public Result todayElectric(User user){
+        String account = user.getAccount();
+        Result newResult = new Result();
+        Result<ServiceCompany> result = companyClient.getCompanyDetailByAccountOrCompanyId(account);
+        if(!StringUtils.equals(newResult.getCode(),"0000")){
+            return new Result("-1","企业不存在");
+        }
+        if(result!=null && result.getData()!=null && StringUtils.isNoneBlank(result.getData().getId())){
+            String companyId=result.getData().getId();
+            List<ConditionElectro> list = meterDao.todayElectric(companyId);
+            newResult.setData(list);
+        }else{
+            throw new JnSpringCloudException(new Result("-1","企业数据不存在"));
+        }
+        return newResult;
+    }
+
+    @Override
+    public Result monthElectric(User user) {
+        String account = user.getAccount();
+        Result newResult = new Result();
+        Result<ServiceCompany> result = companyClient.getCompanyDetailByAccountOrCompanyId(account);
+        if(!StringUtils.equals(newResult.getCode(),"0000")){
+            return new Result("-1","企业不存在");
+        }
+        if(result!=null && result.getData()!=null && StringUtils.isNoneBlank(result.getData().getId())){
+            String companyId=result.getData().getId();
+            List<ConditionElectro> list = meterDao.monthElectric(companyId);
+            newResult.setData(list);
+        }else{
+            throw new JnSpringCloudException(new Result("-1","企业数据不存在"));
+        }
+        return newResult;
+    }
+
+    @Override
+    public Result yearElectric(User user) {
+        String account = user.getAccount();
+        Result newResult = new Result();
+        Result<ServiceCompany> result = companyClient.getCompanyDetailByAccountOrCompanyId(account);
+        if(!StringUtils.equals(newResult.getCode(),"0000")){
+            return new Result("-1","企业不存在");
+        }
+        if(result!=null && result.getData()!=null && StringUtils.isNoneBlank(result.getData().getId())){
+            String companyId=result.getData().getId();
+            List<YearElectro> list = meterDao.yearElectric(companyId);
+            newResult.setData(list);
+        }else{
+            throw new JnSpringCloudException(new Result("-1","企业数据不存在"));
+        }
+        return newResult;
+    }
+
+
+
 }

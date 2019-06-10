@@ -204,7 +204,7 @@
                   </div>
                 </div>
                 <div class="orgBtn fr mainColor">
-                  <a href="">在线联系</a>
+                  <a href="javascript:;" @click="onlineContact(i.orgAccount,i.orgName)">在线联系</a>
                 </div>
               </li>
             </ul>
@@ -241,7 +241,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="orgBtn fr mainColor">在线联系</div>
+                <div class="orgBtn fr mainColor pointer" @click="onlineContact(i.advisorAccount,i.advisorName)">在线联系</div>
               </li>
             </ul>
             <div class="pagination-container">
@@ -255,15 +255,35 @@
     </div>
     <!-- 提需求弹框 -->
     <template v-if="proVisible">
-      <el-dialog :visible.sync="proVisible" width="530px" top="30vh">
-        <el-form ref="financialProform" :model="serverProform" label-position="right" label-width="100px" style="max-width:436px;">
-          <el-form-item label="需求描述:" prop="requireDetail" style="font-size:13px">
-            <el-input v-model.trim="serverProform.requireDetail" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
-          </el-form-item>
-        </el-form>
-        <div class="demandLine"></div>
-        <div class="serverTip mainColor">市场提醒：请务必在线订购，线下交易无法享受市场交易安全保障</div>
-        <div class="demandDia" @click="demandDia()">提交需求</div>
+      <el-dialog :visible.sync="proVisible" width="530px" top="30vh" :modal-append-to-body="false" :lock-scroll="false">
+        <div v-if="islogin">
+          <el-form ref="financialProform" :model="serverProform" label-position="right" label-width="100px" style="max-width:436px;">
+            <el-form-item label="需求描述:" prop="requireDetail" style="font-size:13px">
+              <el-input v-model.trim="serverProform.requireDetail" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
+            </el-form-item>
+          </el-form>
+          <div class="demandLine"></div>
+          <div class="serverTip mainColor">市场提醒：请务必在线订购，线下交易无法享受市场交易安全保障</div>
+          <div class="demandDia" @click="demandDia()">提交需求</div>
+        </div>
+        <div v-else class="loginTip">
+          你还未
+          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          /
+          <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+          企业账号
+        </div>
+      </el-dialog>
+    </template>
+    <template v-if="concatVisible">
+      <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :modal-append-to-body="false" :lock-scroll="false">
+        <div class="loginTip">
+          你还未
+          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          /
+          <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+          账号
+        </div>
       </el-dialog>
     </template>
   </div>
@@ -272,6 +292,8 @@
 export default {
   data() {
     return {
+      islogin: true,
+      concatVisible: false,
       proVisible: false,
       serverProform: {
         requireDetail: "",
@@ -323,7 +345,28 @@ export default {
     this.commentProductList();
   },
   methods: {
+    //判断是否登录
+    isLogin() {
+      if (!sessionStorage.userInfo) {
+        this.islogin = false;
+      }
+    },
+    onlineContact(advisorAccount, advisorName) {
+      if (!sessionStorage.userInfo) {
+        this.concatVisible = true;
+        return
+      }
+      this.$router.push({
+        path: "/chat",
+        query: {
+          fromUser: JSON.parse(sessionStorage.userInfo).account,
+          toUser: advisorAccount,
+          nickName: advisorName
+        }
+      });
+    },
     demandRaise(i) {
+      this.isLogin();
       this.proVisible = true;
       this.serverProform.requireDetail = "";
       this.serverProform.productId = i.productId;
@@ -582,7 +625,7 @@ export default {
         > ul {
           > li {
             float: left;
-            padding: 0 60px;
+            // padding: 0 60px;
             // border-right:1px solid #eee;
             > .itemImg {
               display: inline-block;
@@ -612,6 +655,7 @@ export default {
             width: 1px;
             padding: 0;
             background: #eee;
+            margin: 0 80px;
             margin-top: 8px;
           }
         }

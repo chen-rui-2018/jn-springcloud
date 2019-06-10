@@ -1,6 +1,6 @@
 <template>
   <div class="message-row" :class="type">
-    <avatar :url="url" class="flex-none"></avatar>
+    <avatar :url="url || '@/../static/img/touxiang.png'" class="flex-none"></avatar>
     <div class="message-blank-20"></div>
     <div class="message-row-right">
       <div>

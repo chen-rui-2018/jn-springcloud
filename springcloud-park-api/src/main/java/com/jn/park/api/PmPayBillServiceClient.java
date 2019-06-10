@@ -36,14 +36,6 @@ public interface PmPayBillServiceClient {
     Result<Boolean> updatePmPayBillItemExpireStatus();
 
     /**
-     * 每半小时执行一次,为企业发送物业费账单
-     *
-     * @return
-     */
-    @RequestMapping(value = "/api/pm/generatePmBill", method = RequestMethod.POST)
-    Result<Boolean> generatePmBill();
-
-    /**
      * 缴费单物业费支付成功回调接口
      * @param payCallBackNotify
      * @return

@@ -49,9 +49,9 @@ import com.jn.hr.attendance.model.AttendanceTimeSetPage;
 import com.jn.hr.attendance.model.AttendanceTimeSetVo;
 import com.jn.hr.attendance.model.VacationManageVo;
 import com.jn.hr.attendance.service.AttendanceManagementService;
+import com.jn.hr.common.enums.HrExceptionEnums;
 import com.jn.hr.common.util.ComparatorAttendance;
 import com.jn.hr.common.util.HrDataUtil;
-import com.jn.hr.employee.dao.DepartmentMapper;
 import com.jn.hr.employee.dao.EmployeeBasicInfoMapper;
 import com.jn.hr.employee.dao.TbManpowerDepartmentMapper;
 import com.jn.hr.employee.entity.TbManpowerDepartment;
@@ -73,6 +73,7 @@ import com.jn.oa.model.Attendance;
 import com.jn.oa.model.Leave;
 import com.jn.oa.vo.AttendanceApiVo;
 import com.jn.oa.vo.LeaveApiVo;
+import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 
@@ -93,8 +94,6 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
 	@Autowired
 	TbManpowerAttendanceSchedulMapper tbManpowerAttendanceSchedulMapper;
 	@Autowired
-	DepartmentMapper departmentMapper;
-	@Autowired
 	TbManpowerDepartmentMapper tbManpowerDepartmentMapper;
 	@Autowired
 	EmployeeBasicInfoMapper employeeBasicInfoMapper;
@@ -102,6 +101,8 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
 	VacationManageAttanceMapper vacationManageAttanceMapper;
 	@Autowired
 	TbManpowerVacationManageMapper tbManpowerVacationManageMapper;
+	@Autowired
+	private SystemClient systemClient;
 
 	@Override
 	@ServiceLog(doAction = "考勤管理分页查询")
@@ -109,9 +110,32 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
 			AttendanceManagementPage attendanceManagementPage) {
 		Page<Object> objects = PageHelper.startPage(attendanceManagementPage.getPage(),
 				attendanceManagementPage.getRows());
+		if (!StringUtils.isEmpty(attendanceManagementPage.getDepartmentId())) {
+			List<String> rootList = new ArrayList<String>();
+			Result result = systemClient.selectDeptByParentId(attendanceManagementPage.getDepartmentId(), true);
+			if (result == null || !"0000".equals(result.getCode()) || result.getData() == null) {
+				throw new JnSpringCloudException(HrExceptionEnums.DEPARTMENT_QUERY_ERRPR);
+			}
+			HashMap<String, Object> childMap = (HashMap<String, Object>) result.getData();
+			rootList.add((String) childMap.get("id"));
+			if (childMap.get("children") != null) {
+				List<HashMap<String, Object>> childrenSub = (List<HashMap<String, Object>>) childMap.get("children");
+				getChildrenDepartment(rootList, childrenSub);
+			}
+			attendanceManagementPage.setDepartmentIds(rootList);
+		}
 		List<AttendanceManagementVo> attendanceList = attendanceManagementMapper.list(attendanceManagementPage);
 		PaginationData<List<AttendanceManagementVo>> pageList = new PaginationData(attendanceList, objects.getTotal());
 		return pageList;
+	}
+	private void getChildrenDepartment(List<String> rootList, List<HashMap<String, Object>> children) {
+		for (HashMap<String, Object> childMap : children) {
+			rootList.add((String) childMap.get("id"));
+			if (childMap.get("children") != null) {
+				List<HashMap<String, Object>> childrenSub = (List<HashMap<String, Object>>) childMap.get("children");
+				getChildrenDepartment(rootList, childrenSub);
+			}
+		}
 	}
 
 	@Override
@@ -216,8 +240,8 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
 				if (attendanceVo.getSignInAttendanceTime() == null) {
 					continue;
 				}
-				String str = new String();
-				str = DateUtils.formatDate(attendanceVo.getSignInAttendanceTime(), "HH:mm");
+
+				String str = DateUtils.formatDate(attendanceVo.getSignInAttendanceTime(), "HH:mm");
 				// 上班打卡时间大于下班考勤时间
 				if (str.compareTo(timeSet.getDutyAttendanceTime()) > 0) {
 					continue;
@@ -461,24 +485,37 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
 		int i = 0;
 		StringBuffer sb = new StringBuffer();
 		List<AttendanceSchedulAdd> list = new ArrayList<AttendanceSchedulAdd>();
-		TbManpowerDepartment tbManpowerDepartment = new TbManpowerDepartment();
-		Map<String, TbManpowerDepartment> departmengtMap = departmentMapper
-				.selectByDepartmentName(tbManpowerDepartment);
+		TbManpowerEmployeeBasicInfo tbManpowerEmployeeBasicInfo = new TbManpowerEmployeeBasicInfo();
+		Map<String,TbManpowerEmployeeBasicInfo> basicMap = employeeBasicInfoMapper.map(tbManpowerEmployeeBasicInfo);
+		AttendanceSchedulPage attendanceSchedulPage = new AttendanceSchedulPage();
 		for (Object result : resultList) {
+			i++;
 			AttendanceSchedulAdd schedul = (AttendanceSchedulAdd) result;
 			String str = checkField(schedul);
 			if (StringUtils.isBlank(str)) {
-				sb.append("第i行:" + str + ";");
-				i++;
+				sb.append("第"+i+"行:" + str + ";");
 				continue;
 			}
-			AttendanceSchedulVo record = attendanceSchedulMapper.selectByJobNumberAndMonth(schedul);
+			
+			TbManpowerEmployeeBasicInfo basic = basicMap.get(schedul.getJobNumber());
+			if(basic == null){
+				sb.append("第" +i + "行"+"|用户信息不存在,工号：" + schedul.getJobNumber() + ";");
+				continue;
+			}
+			
+			if(!basic.getName().equals(schedul.getName()) || !basic.getDepartmentName().equals(schedul.getDepartmentName())){
+				sb.append("第" +i + "行"+ "|用户基本信息不一致,姓名：" + schedul.getName() + "|部门：" + schedul.getDepartmentName() + ";");
+				continue;
+			}
+			
+			AttendanceSchedulVo record  = attendanceSchedulMapper.selectByJobNumberAndMonth(schedul);
 			if (record != null) {
 				logger.info("[排班管理]该员工本月已经存在排班记录！");
+				sb.append("第" +i + "行"+ "|员工本月的排班信息已存在,工号：" + schedul.getJobNumber() + ",姓名：" + schedul.getName() + ";");
 				continue;
 			}
-			TbManpowerDepartment department = departmengtMap.get(schedul.getDepartmentName());
-			schedul.setDepartmentId(department.getDepartmentId());
+			
+			schedul.setDepartmentId(basic.getDepartmentId());
 			schedul.setId(UUID.randomUUID().toString());
 			schedul.setRecordStatus(Byte.parseByte(AttendanceManageStatusEnums.EFFECTIVE.getCode()));
 			schedul.setCreatedTime(new Date());
@@ -489,14 +526,14 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
 			i++;
 		}
 
-		if (!CollectionUtils.isEmpty(list)) {
-			attendanceSchedulMapper.insertBatch(list);
-			logger.info("[排班管理] 成功导入{}条数据", list.size());
-		}
 		if (sb.length() > 0) {
 			logger.warn("[排班管理] 导入失败:{}", sb.toString());
 			return sb.toString();
 		} else {
+			if (!CollectionUtils.isEmpty(list)) {
+				attendanceSchedulMapper.insertBatch(list);
+				logger.info("[排班管理] 成功导入{}条数据", list.size());
+			}
 			return "导入成功";
 		}
 	}
@@ -506,6 +543,20 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
 	public PaginationData<List<AttendanceSchedulVo>> scheduDetailist(AttendanceSchedulPage attendanceSchedulPage) {
 		// TODO Auto-generated method stub
 		Page<Object> objects = PageHelper.startPage(attendanceSchedulPage.getPage(), attendanceSchedulPage.getRows());
+		if (!StringUtils.isEmpty(attendanceSchedulPage.getDepartmentId())) {
+			List<String> rootList = new ArrayList<String>();
+			Result result = systemClient.selectDeptByParentId(attendanceSchedulPage.getDepartmentId(), true);
+			if (result == null || !"0000".equals(result.getCode()) || result.getData() == null) {
+				throw new JnSpringCloudException(HrExceptionEnums.DEPARTMENT_QUERY_ERRPR);
+			}
+			HashMap<String, Object> childMap = (HashMap<String, Object>) result.getData();
+			rootList.add((String) childMap.get("id"));
+			if (childMap.get("children") != null) {
+				List<HashMap<String, Object>> childrenSub = (List<HashMap<String, Object>>) childMap.get("children");
+				getChildrenDepartment(rootList, childrenSub);
+			}
+			attendanceSchedulPage.setDepartmentIds(rootList);
+		}
 		List<AttendanceSchedulVo> attendanceList = attendanceSchedulMapper.list(attendanceSchedulPage);
 		PaginationData<List<AttendanceSchedulVo>> pageList = new PaginationData(attendanceList, objects.getTotal());
 		return pageList;
@@ -933,8 +984,7 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
 		for (String keyNumber : monthMap.keySet()) {
 			if (monthMap.get(keyNumber) != null && monthMap.get(keyNumber) == 0 && map.get(keyNumber) != null) {
 				AttendanceKeyValue value = new AttendanceKeyValue();
-				AttendanceApiVo attendanceVo = new AttendanceApiVo();
-				attendanceVo = map.get(keyNumber);
+				AttendanceApiVo attendanceVo = map.get(keyNumber);
 				// 格式 加班日期 13:00-14:00
 				Date date = conversionDate(keyNumber);
 				value.setTimeKey(DateUtils.formatDate(date, "MM-dd") + "(" + HrDataUtil.getWeek(date) + ")" + DateUtils.formatDate(attendanceVo.getSignInAttendanceTime(), "HH:mm")
@@ -960,13 +1010,13 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
 	private AttendanceManagementApiVo obtainleaveObjectList(List<LeaveApiVo> list) {
 		// 请假
 		List<AttendanceKeyValue> leaveObject = new ArrayList<AttendanceKeyValue>();
-		Integer leaveTotalTime = 0;
+		Double leaveTotalTime = 0.0;
 		for (LeaveApiVo leaveVo : list) {
 			AttendanceKeyValue attendanceKeyValue = new AttendanceKeyValue();
 			attendanceKeyValue.setTimeKey(
 					DateUtils.formatDate(leaveVo.getStartTime(), "yyyy-MM-dd") + "--"+ DateUtils.formatDate(leaveVo.getEndTime(), "yyyy-MM-dd")+ " " + getLeaveType(leaveVo.getType()));
 			attendanceKeyValue.setValue(leaveVo.getTotalHour() + "小时");
-			leaveTotalTime += Integer.valueOf(leaveVo.getTotalHour());
+			leaveTotalTime += Double.valueOf(leaveVo.getTotalHour());
 			leaveObject.add(attendanceKeyValue);
 		}
 
@@ -1046,7 +1096,6 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
 			Map<String, VacationManageVo> map = vacationManageAttanceMapper.selectByUserId(vacationManage.getUserId());
 			/* 将该类型的假期置零 */
 			if (time != 0) {
-				tbManpowerVacationManage = new TbManpowerVacationManage();
 				tbManpowerVacationManage.setId(vacationManageVo.getId());
 				tbManpowerVacationManage.setVacationTime("0");
 				tbManpowerVacationManageMapper.updateByPrimaryKeySelective(tbManpowerVacationManage);
@@ -1081,7 +1130,6 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
 						.setVacationTime(String.valueOf(Double.valueOf(vacation.getVacationTime()) + newTime));
 				tbManpowerVacationManageMapper.updateByPrimaryKeySelective(tbManpowerVacationManage);
 			} else {
-				tbManpowerVacationManage = new TbManpowerVacationManage();
 				TbManpowerEmployeeBasicInfo basic = employeeBasicInfoMapper.selectByUserId(vacationManage.getUserId());
 				if (basic == null) {
 					logger.info("用户信息不存在");

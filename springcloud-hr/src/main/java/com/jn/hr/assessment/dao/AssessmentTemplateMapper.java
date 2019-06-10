@@ -9,5 +9,7 @@ public interface AssessmentTemplateMapper {
 
 	List<AssessmentTemplateVo> list(AssessmentTemplatePage assessmentTemplatePage);
 	
+	AssessmentTemplateVo selectByTemplateName(AssessmentTemplatePage assessmentTemplatePage);
+	
 	void updateByTemplateId(AssessmentTemplatePage assessmentTemplatePage);
 }

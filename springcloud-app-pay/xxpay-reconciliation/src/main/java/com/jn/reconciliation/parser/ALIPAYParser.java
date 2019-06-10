@@ -16,7 +16,6 @@
 package com.jn.reconciliation.parser;
 
 import com.jn.reconciliation.enums.BatchStatusEnum;
-import com.jn.reconciliation.enums.PayWayEnum;
 import com.jn.reconciliation.vo.AlipayAccountLogVO;
 import com.jn.reconciliation.vo.ReconciliationEntityVo;
 import org.apache.commons.logging.Log;
@@ -26,6 +25,7 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.springframework.stereotype.Component;
+import org.xxpay.common.enumm.PayWayEnum;
 import org.xxpay.dal.dao.entity.reconciliation.TbPayReconciliationCheckBatch;
 
 import java.io.File;
@@ -39,11 +39,12 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * 支付宝对账单解析器 .
- *
- * 龙果学院：www.roncoo.com
- * 
- * @author：shenjialong
+ * @ClassName：支付宝对账单解析器
+ * @Descript：
+ * @Author： hey
+ * @Date： Created on 2019/5/20 15:54
+ * @Version： v1.0
+ * @Modified By:
  */
 @Component("ALIPAYParser")
 public class ALIPAYParser implements ParserInterface {
@@ -176,7 +177,7 @@ public class ALIPAYParser implements ParserInterface {
 				vo.setBankTradeStatus("SUCCESS");
 				vo.setBankTradeTime(trade.getTransDate());
 				vo.setBankTrxNo(trade.getTradeNo());
-				vo.setBankType(PayWayEnum.ALIPAY.name());
+				vo.setBankType(PayWayEnum.ALIPAY.getCode());
 				vo.setOrderTime(trade.getTransDate());
 				list.add(vo);
 			}
@@ -189,8 +190,8 @@ public class ALIPAYParser implements ParserInterface {
 
 		} catch (DocumentException e) {
 			LOG.warn("解析对账文件异常", e);
-			batch.setStatus(BatchStatusEnum.FAIL.name());
-			batch.setCheckFailMsg("解析对账文件异常, payway[" + PayWayEnum.ALIPAY.name() + "], billdata[" + sdf.format(billDate) + "]");
+			batch.setStatus(BatchStatusEnum.FAIL.getCode());
+			batch.setCheckFailMsg("解析对账文件异常, payway[" + PayWayEnum.ALIPAY.getCode() + "], billdata[" + sdf.format(billDate) + "]");
 			return null;
 		}
 

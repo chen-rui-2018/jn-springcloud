@@ -9,6 +9,20 @@
   border-radius: 8rpx;
   flex: none;
 }
+.no-image-bg {
+  width: 210rpx;
+  height: 145rpx;
+  border-radius: 8rpx;
+  flex: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #EFEFEF;
+}
+.no-image-bg .no-image {
+  width: 105rpx;
+  height: 105rpx;
+}
 .card-list-content {
   margin-left: 19rpx;
   font-size: 28rpx;

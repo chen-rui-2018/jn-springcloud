@@ -2,6 +2,7 @@ package com.jn.park.electricmeter.controller;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
+import com.jn.company.model.ServiceCompany;
 import com.jn.park.electricmeter.model.*;
 import com.jn.park.electricmeter.service.MeterCalcCostService;
 import com.jn.park.electricmeter.service.MeterRulesService;
@@ -18,6 +19,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -40,6 +42,8 @@ public class MeterController extends BaseController {
     private MeterRulesService meterRulesService;
     @Autowired
     private MeterCalcCostService meterCalcCostService;
+
+
 
     private static Logger logger = LoggerFactory.getLogger(MeterTimerController.class);
 
@@ -123,8 +127,6 @@ public class MeterController extends BaseController {
     }
 
 
-
-
     @ControllerLog(doAction = "企业计价规则维护-企业更新计价规则")
     @ApiOperation(value = "企业更新计价规则",notes = "企业更新计价规则", httpMethod = "POST")
     @PostMapping(value = "/updateCompanysRule")
@@ -142,16 +144,12 @@ public class MeterController extends BaseController {
         return result;
     }
 
-    @ControllerLog(doAction = "电表拉闸与恢复")
-    @ApiOperation(value = "电表拉闸与恢复",notes = "电表拉闸与恢复", httpMethod = "GET")
+    @ControllerLog(doAction = "电表的启动和关闭定时器接口")
+    @ApiOperation(value = "电表的启动和关闭定时器接口",notes = "电表的启动和关闭定时器接口", httpMethod = "GET")
     @GetMapping(value = "/setSwitchMeter")
     @RequiresPermissions("/meter/setSwitchMeter")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "meterCode" ,value = "设备编码",type = "String" ,example = "1",required = true),
-            @ApiImplicitParam(name = "status",value = "开关状态（4，5）",type = "String" ,example = "4",required = true)
-    })
-    public Result setSwitchMeter(@RequestBody MeterInfoParam model ) {
-        return meterRulesService.SwitchMeter(model.getMeterCode(),model.getStatus());
+    public void setSwitchMeterTimer(){
+        meterRulesService.setSwitchMeterTimer();
     }
 
     @ControllerLog(doAction = "余额不足告警")
@@ -226,5 +224,69 @@ public class MeterController extends BaseController {
         return meterService.updateMeterInfo( user,model);
     }
 
-    
+    //能耗统计
+    @ControllerLog(doAction = "分组统计图表")
+    @ApiOperation(value = "分组统计图表",notes = "分组统计图表", httpMethod = "GET")
+    @GetMapping(value = "/groupChart")
+    @RequiresPermissions("/meter/groupChart")
+    public Result groupChart(){
+        return meterService.groupChart();
+    }
+
+    @ControllerLog(doAction = "分类统计图表")
+    @ApiOperation(value = "分类统计图表",notes = "分类统计图表", httpMethod = "GET")
+    @GetMapping(value = "/categaryChart")
+    @RequiresPermissions("/meter/categaryChart")
+    public Result categaryChart(){
+        return meterService.categaryChart();
+    }
+
+    @ControllerLog(doAction = "趋势明细图表")
+    @ApiOperation(value = "趋势明细图表",notes = "趋势明细图表", httpMethod = "POST")
+    @PostMapping(value = "/trendChartDetail")
+    @RequiresPermissions("/meter/trendChartDetail")
+    public Result trendChartDetail(@RequestBody @Validated TrendChartPageParam param){
+        return meterService.trendChartDetail(param);
+    }
+
+    @ControllerLog(doAction = "趋势图表")
+    @ApiOperation(value = "趋势图表",notes = "趋势图表", httpMethod = "POST")
+    @PostMapping(value = "/trendChart")
+    @RequiresPermissions("/meter/trendChart")
+    public Result trendChart(@RequestBody @Validated TrendChartParam param){
+        return meterService.trendChart(param);
+    }
+
+    @ControllerLog(doAction = "手动调用电表定时计价无参数")
+    @ApiOperation(value = "手动调用电表定时计价无参数",notes = "手动调用电表定时计价无参数", httpMethod = "GET")
+    @GetMapping(value = "/calcCostEverday")
+    @RequiresPermissions("/meter/calcCostEverday")
+    public void calcCostEverday(){
+        meterCalcCostService.calcCostEverday();
+    }
+
+    @ControllerLog(doAction = "今日用电情况")
+    @ApiOperation(value = "今日用电情况", notes = "今日用电情况")
+    @GetMapping(path = "/todayElectric")
+    public Result todayElectric(){
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        return meterService.todayElectric(user);
+    }
+
+    @ControllerLog(doAction = "本月用电情况")
+    @ApiOperation(value = "本月用电情况", notes = "本月用电情况")
+    @GetMapping(path = "/monthElectric")
+    public Result monthElectric(){
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        return meterService.monthElectric(user);
+    }
+
+    @ControllerLog(doAction = "今年用电情况")
+    @ApiOperation(value = "今年用电情况", notes = "今年用电情况")
+    @GetMapping(path = "/yearElectric")
+    public Result yearElectric(){
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        return meterService.yearElectric(user);
+    }
+
 }

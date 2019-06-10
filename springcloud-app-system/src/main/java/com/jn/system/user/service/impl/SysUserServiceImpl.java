@@ -29,7 +29,6 @@ import com.jn.system.user.vo.SysUserGroupVO;
 import com.jn.system.user.vo.SysUserRoleVO;
 import com.jn.system.user.vo.SysUserVO;
 import com.jn.system.vo.SysDepartmentPostVO;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -41,7 +40,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * 用户dao
@@ -104,7 +102,7 @@ public class SysUserServiceImpl implements SysUserService {
         tbSysUser.setCreatedTime(new Date());
         tbSysUser.setCreatorAccount(user.getAccount());
         if (StringUtils.isBlank(tbSysUser.getPassword())) {
-            tbSysUser.setPassword( EncryptUtil.encryptSha256(RandomStringUtils.random(6, true, true)));
+            tbSysUser.setPassword(EncryptUtil.encryptSha256(RandomStringUtils.random(6, true, true)));
         }
         //添加用户信息
         tbSysUserMapper.insert(tbSysUser);
@@ -167,10 +165,16 @@ public class SysUserServiceImpl implements SysUserService {
      */
     private List<TbSysUser> checkAccount(String account) {
         TbSysUserCriteria tbSysUserCriteria = new TbSysUserCriteria();
-        TbSysUserCriteria.Criteria criteria = tbSysUserCriteria.createCriteria();
-        criteria.andAccountEqualTo(account);
+        //查询账号
+        TbSysUserCriteria.Criteria criteria1 = tbSysUserCriteria.createCriteria();
+        criteria1.andAccountEqualTo(account);
         Byte recordStatus = Byte.parseByte(SysStatusEnums.DELETED.getCode());
-        criteria.andRecordStatusNotEqualTo(recordStatus);
+        criteria1.andRecordStatusNotEqualTo(recordStatus);
+        //查询手机号
+        TbSysUserCriteria.Criteria criteria2 = tbSysUserCriteria.createCriteria();
+        criteria2.andPhoneEqualTo(account);
+        criteria2.andRecordStatusNotEqualTo(recordStatus);
+        tbSysUserCriteria.or(criteria2);
         return tbSysUserMapper.selectByExample(tbSysUserCriteria);
     }
 
@@ -515,8 +519,12 @@ public class SysUserServiceImpl implements SysUserService {
         if (com.jn.common.util.StringUtils.isNotBlank(user.getAccount())) {
             criteria.andAccountEqualTo(user.getAccount());
         }
-        if(StringUtils.isNotBlank(user.getId())){
+        if (StringUtils.isNotBlank(user.getId())) {
             criteria.andIdEqualTo(user.getId());
+        }
+        //如果手机号不为空
+        if (StringUtils.isNotBlank(user.getPhone())) {
+            criteria.andPhoneEqualTo(user.getPhone());
         }
         Byte recordStatus = Byte.parseByte(SysStatusEnums.DELETED.getCode());
         criteria.andRecordStatusNotEqualTo(recordStatus);
@@ -601,7 +609,7 @@ public class SysUserServiceImpl implements SysUserService {
                 addRoleIds.removeAll(roleIdSet);
             }
             //对添加集合去重
-            if (addRoleIds != null && addRoleIds.size() > 0){
+            if (addRoleIds != null && addRoleIds.size() > 0) {
                 List<SysUserRole> sysUserRoleList = new ArrayList<SysUserRole>(16);
                 for (String roleId : addRoleIds) {
                     SysUserRole sysUserRole = new SysUserRole();
@@ -626,7 +634,7 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     @ServiceLog(doAction = "根据用户id，查询用户信息")
-    public List<SysTUser> selectUserByIds(String[] ids) {
+    public List<User> selectUserByIds(String[] ids) {
         return sysUserMapper.selectUserByIds(ids);
     }
 }

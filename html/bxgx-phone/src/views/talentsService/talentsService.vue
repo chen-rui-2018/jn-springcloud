@@ -301,7 +301,7 @@ export default {
     }
     // 大图
     .banner{
-      padding-top: 105px;
+      // padding-top: 105px;
       img{
         width:100%;
       }

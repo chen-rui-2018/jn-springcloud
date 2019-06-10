@@ -1,226 +1,405 @@
 <template>
-    <div class="profileDetails">
-        <div class="banner">
-            <div class="swiper-container">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide" style="width:100%">
-                        <img src="@/../static/img/company1.png" alt="">
-                    </div>
-                    <div class="swiper-slide" style="width:100%">
-                        <img src="@/../static/img/company2.png" alt="">
-                    </div>
-                    <div class="swiper-slide" style="width:100%">
-                        <img src="@/../static/img/company3.png" alt="">
-                    </div>
-                </div>
-                <!-- 如果需要分页器 -->
-                <div class="swiper-pagination"></div>
+  <div class="profileDetails">
+    <div class="banner">
+      <div class="swiper-container">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide" style="width:100%">
+            <img src="@/../static/img/company1.png" alt="">
+          </div>
+          <div class="swiper-slide" style="width:100%">
+            <img src="@/../static/img/company2.png" alt="">
+          </div>
+          <div class="swiper-slide" style="width:100%">
+            <img src="@/../static/img/company3.png" alt="">
+          </div>
+        </div>
+        <!-- 如果需要分页器 -->
+        <div class="swiper-pagination"></div>
 
-                <!-- 如果需要导航按钮 -->
-                <div class="swiper-button-prev" style="display:none">
-                </div>
-                <div class="swiper-button-next" style="display:none">
-                </div>
-            </div>
+        <!-- 如果需要导航按钮 -->
+        <div class="swiper-button-prev" style="display:none">
         </div>
-        <div class="serverOrgMenu w color2">
-            <span class="pointer" @click="$router.push({path:'/'})">首页/</span>
-            <span class="pointer" @click="$router.push({path:'/companyProfile'})">企业简介</span>
-            <span>/</span>
-            <span class="mainColor agent">企业简介详情</span>
+        <div class="swiper-button-next" style="display:none">
         </div>
-        <div class="agentInfo w">
-            <el-card>
-                <div class="agent1 clearfix">
-                    <div class="agentTil fl color1">{{companyDetail.comName}}</div>
-                    <div class="orgBtn fr mainColor">
-                        <span class="span1">在线联系</span>
-                        <span class="span1">热招职位</span>
-                        <span class="span1">+关注</span>
-                    </div>
-                </div>
-                <div class="agent2 clearfix color2">
-                    <div class="agentImg fl">
-                        <img src="@/../static/img/ins1.png" alt="">
-                    </div>
-                    <div class="agent2Info fl color2">
-                        <p>官网地址：
-                            <span class="mainColor">{{companyDetail.comWeb}}</span>
-                        </p>
-                        <p>所属园区：{{companyDetail.parkBuildName}}</p>
-                        <p>我的服务：{{companyDetail.comServer}}</p>
-                        <p>我的需求：{{companyDetail.comDemand}}</p>
-                        <p>
-                            <span class="mainColor">民营</span>| 50-100人 | 2017年01月成立 | 南京市</p>
-                        <p class="lastP color3">
-                            <span>关注数：</span>
-                            <span>浏览：</span>
-                            <span>合作留言：</span>
-                        </p>
-                    </div>
-                </div>
-            </el-card>
-        </div>
-        <div class="agentDel w">
-            <div class="agentDelTit">企业资料</div>
-            <div class="agentDelCon pr color1">
-                <div class="mainColor shouqi pointer" v-if="zankaiFlag" @click='handleZd'>
-                    收起
-                    <i class="el-icon-arrow-up"></i>
-                </div>
-                <div class="mainColor shouqi zhankai pointer" v-else @click='handleZk'>
-                    <i class="el-icon-arrow-down"></i>
-                </div>
-                <el-card>
-                    <el-tabs v-model="activeName" @tab-click="handleClick">
-                        <el-tab-pane label="公司概况" name="baseInfo">
-                            <div class="basicInfo" v-if="zankaiFlag">
-                                <p>公司简介</p>
-                                <p>奇虎360科技有限公司，是中国领先的互联网和手机安全产品及服务供应商。据第三方统计，按照用户数量计算，360是中国领先的互联网安全公司，用户6亿， 市场渗透率96.6%；中国领先的移动互联网安全公司，用户数近8亿，市场渗透率近70%；中国领先的浏览器公司之一，活跃用户达到4亿，渗透率超过70%。 360致力于通过提供高品质的免费安全服务，为中国互联网用户解决上网时遇到的各种安全问题。面对互联网时代木马、病毒、流氓软件。
-                                </p>
-                                <p>工作地址：南京市鼓楼区中山路75号</p>
-                                <p>企业网址：
-                                    <span class="mainColor"></span>
-                                </p>
-                                <p>联系电话：
-                                    <span class="mainColor"></span>
-                                </p>
-                            </div>
-                        </el-tab-pane>
-                        <el-tab-pane label="法人资料" name="businessinfo">
-                            <div class="businessinfo" v-if="zankaiFlag">
-                                <table class="table-orgspace mainBorder">
-                                    <tr>
-                                        <td class="table-orgspace-title">姓名:</td>
-                                        <td class="table-orgspace-detail" width="300px" colspan="2">
-                                            <div>搜索时</div>
-                                        </td>
-                                        <td class="table-orgspace-title">从业年限：</td>
-                                        <td class="table-orgspace-detail" style="width:322px;word-break: break-all;">
-                                            <div>333</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="table-orgspace-title">毕业学校：</td>
-                                        <td class="table-orgspace-detail" width="300px" colspan="2">
-                                            <div>冻结</div>
-                                        </td>
-                                        <td class="table-orgspace-title">学历：</td>
-                                        <td class="table-orgspace-detail" style="width:322px;word-break: break-all;">
-                                            <div>
-                                                <div>呃呃呃</div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="table-orgspace-title">个人简介：</td>
-                                        <td class="table-orgspace-detail" colspan="4">
-                                            <div class="table-orgspace-col">说的对吼吼吼吼吼吼吼吼吼吼吼吼吼吼吼吼</div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </el-tab-pane>
-                        <el-tab-pane label="产品" name="honor">
-                            <div class="honor clearfix" v-if="zankaiFlag">
-                                <ul class="clearfix">
-                                    <li class="">
-                                        <span class="contact-detail-img mr5"></span>联系人信息
-                                    </li>
-                                    <li class="">
-                                        <span class="contact-detail-img mr5"></span>联系人信息
-                                    </li>
-                                    <li class="">
-                                        <span class="contact-detail-img mr5"></span>联系人信息
-                                    </li>
-                                </ul>
-                            </div>
-                        </el-tab-pane>
-                    </el-tabs>
-                </el-card>
-            </div>
-        </div>
-        <div class="delmessage w">
-            <div class="mesTil">留言</div>
-            <el-card>
-                <div class="mesContent">
-                    <el-input type="textarea" :rows="3" placeholder="请输入留言" v-model="textData">
-                    </el-input>
-                    <el-button type="success" style="background:#00a040;height:38px;width:90px" round @click="leaveMessage(activityDetail.id)">留言</el-button>
-                </div>
-            </el-card>
-        </div>
-        <div class="delcomment w">
-            <div class="comTil">全部评论</div>
-            <el-card>
-                <div class="comContent">
-                    <ul>
-                        <li v-for="(item,key) in commentInfo" :key="key">
-                            <div class="clearfix">
-                                <div class="liLeft">
-                                    <img :src="item.avatar" alt="">
-                                    <div style="display:inline-block;margin-bottom: 20px">
-                                        <span>{{item.creatorAccount}}</span><br>
-                                        <span>{{item.comContent}}</span>
-                                    </div>
-                                </div>
-                                <div class="liRight">
-                                    <p>{{item.createdTime}}</p>
-                                    <p>
-                                        <i class="iconfont" :class="isCommentLike?'icon-dianzan1 mainColor':'icon-iconfontdianzan'" style="cursor:pointer" @click="comLike(item)">&nbsp;赞
-                                            <span>{{item.likeNum}}</span>
-                                        </i>
-                                        <i class="iconfont icon-liuyan" style="cursor:pointer" @click="inFlag=true">&nbsp;回复</i>
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div class="reply" v-if="k<5" v-for="(i,k) in item.childList" :key="k">
-                                <img :src="i.avatar" alt="">
-                                <div class="replyinfo">
-                                    {{i.creatorAccount}}
-                                    <p>回复@{{i.parentAccount}}：{{i.comContent}}</p>
-                                </div>
-                                <span>{{i.createdTime}}</span>
-                            </div>
-                            <div v-if="inFlag">
-                                <el-input type="textarea" :rows="3" placeholder="请输入留言" v-model="textData1"></el-input>
-                                <el-button type="success" @click="replycom(item)" style="background:#00a040;height:38px;width:90px;margin-left: 1014px;margin-top: 10px;" round>回复</el-button>
-                            </div>
-                        </li>
-                    </ul>
-                    <div class="pagination-container" style="margin-top:50px">
-                        <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[5, 10, 15, 20]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
-                        </el-pagination>
-                    </div>
-                </div>
-            </el-card>
-        </div>
+      </div>
     </div>
+    <div class="serverOrgMenu w">
+      <span class="pointer" @click="$router.push({path:'/'})">首页/</span>
+      <span class="pointer" @click="$router.push({path:'/companyProfile'})">企业简介</span>
+      <span>/</span>
+      <span class="mainColor agent">企业简介详情</span>
+    </div>
+    <div class="agentInfo w">
+      <el-card>
+        <div class="agent1 clearfix">
+          <div class="agentTil fl color1">{{companyDetail.comName}}</div>
+          <div class="orgBtn fr mainColor">
+            <span class="span1 span2" @click="onlineContact(companyDetail.companyId)">在线联系</span>
+            <span class="span1" @click="$router.push({path:'/recruitmentList',query:{comId:companyDetail.id}})">热招职位</span>
+            <span class="span1 span3" v-if="isCare=='0'" @click="handleAttention(companyDetail.companyId)">+关注</span>
+            <span class="span1 span3" v-if="isCare=='1'" @click="cancelAttention(companyDetail.companyId)">取消关注</span>
+          </div>
+        </div>
+        <div class="agent2 clearfix color2 pr">
+          <div class="agentImg fl">
+            <img :src="companyDetail.avatar" alt="">
+            <!-- <img src="@/../static/img/ins1.png" alt=""> -->
+          </div>
+          <div class="agent2Info fl color2">
+            <p>官网地址：
+              <span class="mainColor">{{companyDetail.comWeb}}</span>
+            </p>
+            <p>所属园区：{{companyDetail.affiliatedName}}</p>
+            <p>我的服务：{{companyDetail.comServer}}</p>
+            <p>我的需求：{{companyDetail.comDemand}}</p>
+            <p class="comInfo">
+              <span class="mainColor">{{companyDetail.comTypeName}}</span>| {{companyDetail.comPerSonNumber}}人 |{{companyDetail.foundingTime}} | {{companyDetail.city}}</p>
+            <p class="lastP color3 fr">
+              <span>关注数：{{companyDetail.careNumber}}</span>
+              <span>浏览：{{companyDetail.browseNumber}}</span>
+              <span>合作留言：{{companyDetail.commentNumber}}</span>
+            </p>
+          </div>
+        </div>
+      </el-card>
+    </div>
+    <div class="agentDel w">
+      <div class="agentDelTit">企业资料</div>
+      <div class="agentDelCon pr color1">
+        <div class="mainColor shouqi pointer" v-if="zankaiFlag" @click='handleZd'>
+          收起
+          <i class="el-icon-arrow-up"></i>
+        </div>
+        <div class="mainColor shouqi zhankai pointer" v-else @click='handleZk'>
+          <i class="el-icon-arrow-down"></i>
+        </div>
+        <el-card>
+          <el-tabs v-model="activeName" @tab-click="handleClick">
+            <el-tab-pane label="公司概况" name="baseInfo">
+              <div class="basicInfo" v-if="zankaiFlag">
+                <p>公司简介</p>
+                <p class="short">{{companyDetail.comSynopsis}}
+                </p>
+                <p class="p1">工作地址：{{companyDetail.addrPark}}</p>
+                <p class="p1">企业网址：
+                  <span class="mainColor">{{companyDetail.comWeb}}</span>
+                </p>
+                <p class="p1">联系电话：
+                  <span class="mainColor">{{companyDetail.conTele}}</span>
+                </p>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="法人资料" name="businessinfo">
+              <div class="businessinfo" v-if="zankaiFlag">
+                <table class="table-orgspace mainBorder">
+                  <tr>
+                    <td class="table-orgspace-title">姓名:</td>
+                    <td class="table-orgspace-detail" width="300px" colspan="2">
+                      <div>{{companyDetail.ownerLaw}}</div>
+                    </td>
+                    <td class="table-orgspace-title">联系电话：</td>
+                    <td class="table-orgspace-detail" style="width:322px;word-break: break-all;">
+                      <div>{{companyDetail.ownerPhone}}</div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="产品" name="honor">
+              <div class="honor clearfix" v-if="zankaiFlag">
+                <ul class="clearfix">
+                  <li class="">
+                    <span class="contact-detail-img mr5"></span>{{companyDetail.products}}
+                  </li>
+                </ul>
+              </div>
+            </el-tab-pane>
+          </el-tabs>
+        </el-card>
+      </div>
+    </div>
+    <div class="delmessage w">
+      <div class="mesTil">留言</div>
+      <el-card>
+        <div class="mesContent">
+          <el-input type="textarea" :rows="3" placeholder="请输入留言" v-model="textData">
+          </el-input>
+          <el-button type="success" style="background:#00a040;height:38px;width:90px" round @click="leaveMessage(companyDetail.companyId)">留言</el-button>
+        </div>
+      </el-card>
+    </div>
+    <div class="delcomment w">
+      <div class="comTil">全部评论</div>
+      <el-card>
+        <div class="comContent">
+          <ul>
+            <li v-for="(item,key) in commentInfo" :key="key">
+              <div class="clearfix">
+                <div class="liLeft">
+                  <img :src="item.avatar" alt="">
+                  <div style="display:inline-block;margin-bottom: 20px;margin-left: 20px">
+                    <span>{{item.creatorAccount}}</span><br>
+                    <span>{{item.comContent}}</span>
+                  </div>
+                </div>
+                <div class="liRight">
+                  <p>{{item.createdTime}}</p>
+                  <p>
+                    <i class="iconfont" :class="item.isCommentLike == 'true'?'icon-dianzan1 mainColor':'icon-iconfontdianzan'" style="cursor:pointer" @click="comLike(item)">&nbsp;赞
+                      <span>{{item.likeNum}}</span>
+                    </i>
+                    <!-- <i class="iconfont icon-dianzan1 mainColor" style="cursor:pointer" v-if="isClick==1" @click="comCancleLike(item)">&nbsp;赞
+                    </i>
+                    <span>{{item.likeNum}}</span> -->
+                    <i class="iconfont icon-liuyan" v-if="inFlag == item.id" style="cursor:pointer" @click="inFlag = '';">&nbsp;收起回复</i>
+                    <i class="iconfont icon-liuyan" v-else style="cursor:pointer" @click="replyFlag(item.id)">&nbsp;回复</i>
+
+                  </p>
+                </div>
+              </div>
+              <div v-if="inFlag == item.id">
+                <el-input type="textarea" :rows="3" placeholder="请输入留言" v-model.trim="textMessage"></el-input>
+                <el-button type="success" @click="replycom(item)" style="background:#00a040;height:38px;width:90px;margin-left: 1014px;margin-top: 10px;" round>回复</el-button>
+              </div>
+              <div class="reply" v-if="k<5" v-for="(i,k) in item.childList" :key="k">
+                <img :src="i.avatar" alt="">
+                <div class="replyinfo">
+                  {{i.creatorAccount}}
+                  <p>回复@{{i.parentAccount}}：{{i.comContent}}</p>
+                </div>
+                <span>{{i.createdTime}}</span>
+              </div>
+            </li>
+          </ul>
+          <div class="pagination-container" style="margin-top:50px">
+            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[5, 10, 15, 20]" :page-size="row" layout="total, sizes, prev, pager, next, jumper" :total="total">
+            </el-pagination>
+          </div>
+        </div>
+        <template v-if="concatVisible">
+          <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :append-to-body="true" :lock-scroll="false">
+            <div class="loginTip" style="text-align:center;padding-bottom:20px">
+              你还未
+              <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+              /
+              <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+              账号
+            </div>
+          </el-dialog>
+        </template>
+      </el-card>
+    </div>
+  </div>
 </template>
 <script>
 import swiper from "swiper";
 export default {
   data() {
     return {
+      concatVisible: false,
       zankaiFlag: false,
-      inFlag: false,
+      inFlag: "",
       activeName: "baseInfo",
       companyDetail: {},
       commentInfo: [],
       textData: "",
-      textData1: "",
+      textMessage: "",
       page: 1,
       row: 5,
-      total: 0
+      total: 0,
+      isCare: "0",
+      isCommentLike: false
     };
   },
   created() {
     this.swiperinit();
     this.getCompanyDetail();
-    // this.getComCommentInfo()
+    this.getComCommentInfo();
   },
   methods: {
+    //关注
+    handleAttention(id) {
+      if (sessionStorage.token) {
+        this.api.post({
+          url: "addCareOperate",
+          data: {
+            account: id,
+            receiveType: -2
+          },
+          // dataFlag:true,
+          callback: res => {
+            if (res.code == "0000") {
+              // _this.parkList = res.data;
+              // this.isCare = "1";
+              this.getCompanyDetail();
+            } else {
+              this.$message.error(res.result);
+            }
+          }
+        });
+      } else {
+        this.concatVisible = true;
+        return;
+      }
+    },
+    //取消关注
+    cancelAttention(id) {
+      if (sessionStorage.token) {
+        this.api.post({
+          url: "cancelCareOperate",
+          data: {
+            account: id
+          },
+          dataFlag: true,
+          callback: res => {
+            if (res.code == "0000") {
+              // _this.parkList = res.data;
+              // this.isCare = "0";
+              this.getCompanyDetail();
+            } else {
+              this.$message.error(res.result);
+            }
+          }
+        });
+      } else {
+        this.concatVisible = true;
+        return;
+      }
+    },
+    //评论点赞
+    comLike(item) {
+      if (!sessionStorage.userInfo) {
+        this.concatVisible = true;
+        return;
+      }
+      //评论点赞
+      let url = "";
+      if (item.isCommentLike == "true") {
+        //如果是已经点赞了就取消点赞
+        url = `springcloud-park/comment/review/commentActivityCancelLike?id=${
+          item.id
+        }`;
+      } else {
+        //如果是没点赞就点赞
+        url = `springcloud-park/comment/review/commentActivityLike?id=${
+          item.id
+        }`;
+      }
+      let _this = this;
+      this.api.post({
+        url: url,
+        data: {
+          id: item.id
+        },
+        // dataFlag: true,
+        urlFlag: true,
+        callback: function(res) {
+          if (res.code == "0000") {
+            _this.$message.success(res.result);
+            _this.getComCommentInfo();
+          } else {
+            _this.$message.error(res.result);
+          }
+        }
+      });
+    },
+    //留言
+    leaveMessage(id) {
+      if (!sessionStorage.userInfo) {
+        this.concatVisible = true;
+        return;
+      }
+      let _this = this;
+      this.api.post({
+        url: "getcommentActivity",
+        data: {
+          comContent: _this.textData,
+          comType: 3,
+          rootId: id,
+          pId: id
+        },
+        callback: function(res) {
+          if (res.code == "0000") {
+            _this.textData = "";
+            _this.getComCommentInfo();
+          } else {
+            _this.$message.error(res.result);
+          }
+        }
+      });
+    },
+    //点击评论回复
+    replyFlag(i) {
+      if (this.inFlag == i) {
+        return;
+      }
+       if (!sessionStorage.userInfo) {
+        this.concatVisible = true;
+        return;
+      }
+      this.textMessage = "";
+      this.inFlag = i;
+    },
+    //回复评论
+    replycom(item) {
+      // if (!sessionStorage.userInfo) {
+      //   this.concatVisible = true;
+      //   return;
+      // }
+      this.inFlag = "";
+      let _this = this;
+      this.api.post({
+        url: "getcommentActivity",
+        data: {
+          comContent: _this.textMessage,
+          comType: item.comType,
+          pId: item.id,
+          rootId: item.rootId
+        },
+        // urlFlag: true,
+        callback: function(res) {
+          if (res.code == "0000") {
+            _this.getComCommentInfo();
+          }
+          _this.$message(res.result);
+        }
+      });
+    },
+    //在线联系
+    onlineContact(id) {
+      if (!sessionStorage.userInfo) {
+        this.concatVisible = true;
+        return;
+      }
+      this.api.get({
+        url: "getCompanyContactAccount",
+        data: {
+          comId: id
+        },
+        callback: res => {
+          if (res.code == "0000") {
+            // this.typeList = res.data;
+            if (
+              JSON.parse(sessionStorage.userInfo).account == res.data.account
+            ) {
+              this.$message.error("当前登录的账号跟聊天对象一样");
+              return;
+            }
+            // this.$router.push({path:'/chat',query:{fromUser:sessionStorage.userInfo.account,toUser:res.data.account,nickName:res.data.nickName}})
+            this.$router.push({
+              path: "/chat",
+              query: {
+                fromUser: JSON.parse(sessionStorage.userInfo).account,
+                toUser: res.data.account,
+                nickName: res.data.nickName
+              }
+            });
+          } else {
+            this.$message.error(res.result);
+          }
+        }
+      });
+    },
     swiperinit() {
       // if (this.policyCenterList.length <= 1 ) {
       //   return
@@ -231,7 +410,7 @@ export default {
         noSwiping: true,
         autoplay: true,
         autoplay: {
-          delay: 2000,
+          delay: 2000
         },
 
         // 如果需要分页器
@@ -274,13 +453,14 @@ export default {
     getCompanyDetail() {
       let _this = this;
       this.api.get({
-        url: "getCompanyDetail",
+        url: "getCompanyDetails",
         data: {
-          accountOrCompanyId: this.$route.query.id
+          companyId: this.$route.query.id
         },
         callback: function(res) {
           if (res.code == "0000") {
-            _this.companyDetail = res.data;
+            _this.companyDetail = res.data.companyInfoShow;
+            _this.isCare = res.data.companyInfoShow.isCare;
           } else {
             _this.$message.error(res.result);
           }
@@ -293,13 +473,16 @@ export default {
       this.api.get({
         url: "getComCommentInfo",
         data: {
-          activityId: this.$route.query.id
+          activityId: this.$route.query.id,
+          page: this.page,
+          rows: this.row
         },
-        callback: function(res) {
+        callback: res => {
           if (res.code == "0000") {
-            _this.commentInfo = res.data.rows;
+            this.commentInfo = res.data.rows;
+            this.total = res.data.total;
           } else {
-            _this.$message.error(res.result);
+            this.$message.error(res.result);
           }
         }
       });
@@ -309,10 +492,15 @@ export default {
 </script>
 <style lang="scss">
 .profileDetails {
+  .loginTip{
+    text-align: center;
+    margin-bottom:20px;
+    font-size: 15px;
+  }
   .banner {
     .swiper-pagination {
-    //   bottom: 40%;
-    //   left: 92%;
+      //   bottom: 40%;
+      //   left: 92%;
       .swiper-pagination-bullet {
         margin-bottom: 10px;
         opacity: 1;
@@ -370,11 +558,24 @@ export default {
         .span1 {
           display: inline-block;
           font-size: 13px;
+          width: 52px;
           background: #ecfcf2;
           padding: 6px 20px;
           border: 1px solid #00a041;
           border-radius: 4px;
           cursor: pointer;
+          margin-left: 20px;
+          text-align: center;
+        }
+        .span2 {
+          color: #55a6ff;
+          border: 1px solid #55a6ff;
+          background: rgba(228, 240, 255, 1);
+        }
+        .span3 {
+          color: #ffbd5c;
+          border: 1px solid #ffbd5c;
+          background: rgba(254, 245, 229, 1);
         }
       }
     }
@@ -399,10 +600,14 @@ export default {
         > p {
           margin-bottom: 7px;
         }
-
+        .comInfo {
+          margin-bottom: 0;
+          margin-top: 15px;
+        }
         .lastP {
           position: absolute;
-          margin-left: 630px;
+          bottom: -14px;
+          right: 0;
 
           > span {
             margin-right: 20px;
@@ -658,6 +863,8 @@ export default {
               display: inline-block;
               width: 50px;
               height: 50px;
+              vertical-align: top;
+              border-radius: 50%;
             }
           }
           .liRight {
@@ -666,18 +873,36 @@ export default {
           .reply {
             padding: 30px;
             background: #f9f9f9;
-            width: 90%;
-            margin-left: 50px;
+            width: 88%;
+            margin-left: 70px;
+            margin-top: 10px;
+            img {
+              width: 50px;
+              height: 50px;
+              vertical-align: top;
+              border-radius: 50%;
+            }
             > span {
               float: right;
             }
             .replyinfo {
               display: inline-block;
+              margin-left: 20px;
             }
           }
         }
       }
     }
+    .el-textarea {
+      width: 93.5%;
+      margin-left: 70px;
+    }
+  }
+  .short {
+    margin: 20px 0;
+  }
+  .p1 {
+    margin-bottom: 10px;
   }
 }
 </style>

@@ -29,7 +29,7 @@ public interface ElectricMeterClient {
     @RequestMapping(value = "/api/meter/setHostForMeter", method = RequestMethod.GET)
     void setHostForMeter();
 
-    @RequestMapping(value = "/api/meter/updateBillInfo", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/meter/updateBillInfo", method = RequestMethod.POST)
     Result updateBillInfo(PayCallBackNotify payCallBackNotify);
 
     @RequestMapping(value = "/api/meter/setWarning", method = RequestMethod.GET)
@@ -37,4 +37,10 @@ public interface ElectricMeterClient {
 
     @RequestMapping(value = "/api/meter/switchMeterTimer", method = RequestMethod.GET)
     void setSwitchMeterTimer();
+
+    /**
+     * 能耗监控程序
+     */
+    @RequestMapping(value = "/api/meter/monitor", method = RequestMethod.GET)
+    void monitor();
 }

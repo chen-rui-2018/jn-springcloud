@@ -180,10 +180,14 @@ public class MiniProgramRegistersServiceImpl implements MiniProgramRegistersServ
             throw new JnSpringCloudException(MiniProgramRegisterExceptionEnum.CODE_IS_ERROR);
         }
         //判断手机号在基础用户表是否已经存在
-        User user=new User();
-        user.setAccount(registerInfoParam.getPhone());
-        Result<User> systemClientUser = systemClient.getUser(user);
-        if(systemClientUser==null || systemClientUser.getData()==null){
+        Result<String> stringResult = systemClient.checkUserAccount(registerInfoParam.getPhone());
+        if(stringResult==null || stringResult.getData()==null){
+            logger.warn("注册并绑定异常，跨服务查询账号在系统中是否存在失败");
+            throw new JnSpringCloudException(MiniProgramRegisterExceptionEnum.NETWORK_ANOMALY);
+        }
+        //是否存在 success:账号不存在; fail:账号存在
+        String isExist="success";
+        if(StringUtils.equals(isExist,stringResult.getData())){
             //若不存在，则先注册，然后再绑定账号
             UserRegister userRegister=new UserRegister();
             userRegister.setPhone(registerInfoParam.getPhone());
@@ -193,8 +197,22 @@ public class MiniProgramRegistersServiceImpl implements MiniProgramRegistersServ
             logger.info("注册并绑定Api注册账号[{}]成功",registerInfoParam.getPhone());
         }
         //若存在，进入下一步绑定账号
+        User user=new User();
+        //系统中一定存在用户信息，根据账号获取用户信息
+        user.setAccount(registerInfoParam.getPhone());
+        Result<User> systemClientUser = systemClient.getUser(user);
+        if(systemClientUser==null || systemClientUser.getData()==null){
+            //根据账号获取无法用户信息，改用手机号获取用户信息
+            user.setAccount("");
+            user.setPhone(registerInfoParam.getPhone());
+            systemClientUser = systemClient.getUser(user);
+            if(systemClientUser==null || systemClientUser.getData()==null){
+                logger.warn("注册并绑定异常，跨服务获取用户信息失败");
+                throw new JnSpringCloudException(MiniProgramRegisterExceptionEnum.NETWORK_ANOMALY);
+            }
+        }
         TbWechatUserInfo tbWechatUserInfo=new TbWechatUserInfo();
-        tbWechatUserInfo.setPhone(registerInfoParam.getPhone());
+        tbWechatUserInfo.setPhone(systemClientUser.getData().getAccount());
         TbWechatUserInfoCriteria example=new TbWechatUserInfoCriteria();
         example.createCriteria().andOpenIdEqualTo(registerInfoParam.getOpenId())
         .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
@@ -204,6 +222,25 @@ public class MiniProgramRegistersServiceImpl implements MiniProgramRegistersServ
             throw new JnSpringCloudException(MiniProgramRegisterExceptionEnum.NETWORK_ANOMALY);
         }
         logger.info("注册并绑定Api绑定成功，数据响应条数：{}",resNum);
-        return registerInfoParam.getPhone();
+        return systemClientUser.getData().getAccount();
+    }
+
+    /**
+     * 根据账号获取openId
+     * @param account
+     * @return
+     */
+    @ServiceLog(doAction = "根据账号获取openId")
+    @Override
+    public String getOpenIdByAccount(String account) {
+        TbWechatUserInfoCriteria example=new TbWechatUserInfoCriteria();
+        example.createCriteria().andPhoneEqualTo(account)
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        List<TbWechatUserInfo> userInfoList = tbWechatUserInfoMapper.selectByExample(example);
+        if(userInfoList.isEmpty()|| StringUtils.isBlank(userInfoList.get(0).getOpenId())){
+            return "";
+        }else{
+            return userInfoList.get(0).getOpenId();
+        }
     }
 }

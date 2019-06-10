@@ -12,9 +12,9 @@
               <i class="el-icon-bell" style="font-size:20px"></i>
             </router-link> -->
             <!-- <span v-if="isLogin" style="margin-right:10px">您好！{{accoutInfo}}</span> -->
-            <div class="search pointer" v-if="luyouString.indexOf($route.name) == -1">
+            <!-- <div class="search pointer" v-if="luyouString.indexOf($route.name) == -1">
               <i class="el-icon-search" @click="show4=true" style="font-size:20px"></i>
-            </div>
+            </div> -->
             <user-info></user-info>
             <!-- <div class="navlogin">
               <router-link to="/parkNotice" class="" v-if="isLogin">
@@ -33,9 +33,6 @@
               </li>
               <li>
                 <router-link to="/investment" class="router-link" :class="{'ru-active':$route.path == '/investment'}">招商引资</router-link>
-              </li>
-              <li>
-                <router-link to="" class="router-link" :class="{'ru-active':$route.path == ''}">智慧党建</router-link>
               </li>
               <li>
                 <router-link to="/enterpriseservice" class="router-link" :class="{'ru-active':$route.path == '/enterpriseservice'}">企业服务</router-link>
@@ -87,7 +84,7 @@
     },
     data() {
       return {
-        luyouString:'portalIndex,enterpriseservice,investment',
+        luyouString:'portalIndex,enterpriseservice,investment,home,messageCenter',
         showMes:false,
         // sousuo: false,
         show1: false,

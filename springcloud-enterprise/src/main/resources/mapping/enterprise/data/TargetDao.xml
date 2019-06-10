@@ -1072,4 +1072,55 @@
          from view_data_model_data_sum
         where task_batch=#{taskbatch} and model_id=#{modelid}
     </select>
+
+    <select id="loadCompanyDataTarget" parameterType="com.jn.enterprise.model.LoadCompanyDataTargetReq" resultType="com.jn.enterprise.model.DataTargetModel">
+
+        <!--,p.form_id,p.form_name-->
+        select p.target_id as targetId ,p.target_name targetName,sum(p.data) as targetData, p.unit as targetUnit
+        from view_data_model_data_sum p
+        where target_id in
+        <foreach collection="targetIds" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        <if test="dealTimeStart != null">
+            and form_time &gt;= #{dealTimeStart}
+        </if>
+        <if test="dealTimeEnd != null">
+            and form_time &lt;= #{dealTimeEnd}
+        </if>
+        <if test="enterpriseId != null">
+            and fill_in_form_id = #{enterpriseId}
+        </if>
+        group by p.target_id ,p.target_name,p.unit
+    </select>
+
+    <!--通过指标名称查询指标集合-->
+    <select id="getTargetIdByName" parameterType="java.lang.String" resultType="java.lang.String">
+        select target_id  from tb_data_reporting_snapshot_target where target_name = #{targetName}
+        <!--其他条件-->
+        group by target_id
+    </select>
+
+    <!--通过id集合查询填报格式-->
+    <select id="getFormIdByTargetIds" parameterType="java.util.List" resultType="com.jn.enterprise.data.model.TargetAndFormModel">
+        select target_id as targetId, form_id as formId from tb_data_reporting_snapshot_target_group where target_id in
+        <foreach collection="targetIds" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        group by target_id,form_id
+    </select>
+
+    <!--年，营业值-->
+    <select id="getValueAndYear" parameterType="com.jn.enterprise.data.model.TargetAndFormModel" resultType="com.jn.enterprise.data.model.InMoneyModel">
+        select left(t.form_time,4) as year,sum(p.data) as value from tb_data_reporting_task t
+        left join tb_data_reporting_task_data p  on t.fill_id =p.fill_id
+        and
+        <foreach collection="targetIds" index="index" item="item" open="(" separator="or" close=")">
+            (
+            target_id=#{item.targetId} and form_id=#{item.formId}
+            )
+        </foreach>
+        group by year order by year asc
+
+    </select>
 </mapper>

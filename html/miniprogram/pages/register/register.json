@@ -1,3 +1,9 @@
 {
-  "navigationBarTitleText": "注册并绑定账号"
+  "navigationBarTitleText": "注册并绑定账号",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black",
+  "navigationBarTitleText": "绑定手机",
+  "backgroundColor": "#eeeeee",
+  "backgroundTextStyle": "light",
+  "enablePullDownRefresh": true
 }

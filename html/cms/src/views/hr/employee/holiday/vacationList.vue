@@ -156,6 +156,9 @@ export default {
     initList() {
       console.log('查询。。。')
       this.listLoading = true
+      if (!this.listQuery.departmentId) {
+        this.listQuery.departmentId = ''
+      }
       postapi('hr/holidayRule/inquireVacationManage', this.listQuery).then(res => {
         if (res.data.code === '0000') {
           this.vacationList = res.data.data.rows

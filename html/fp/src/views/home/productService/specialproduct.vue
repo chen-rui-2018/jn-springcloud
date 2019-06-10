@@ -3,12 +3,12 @@
     <!-- 大标题 -->
     <div class="special_title">
       <div >特色服务产品</div>
-      <div @click="addscience">新增特色产品</div>
+      <div @click="addscience" v-if="isAdd">新增特色产品</div>
     </div>
     <div class="special_main">
       <!-- input框 -->
       <div class="special_search">
-        <input type="text" placeholder="搜公告" v-model="sendData.keyWords">
+        <input type="text" placeholder="请输入服务产品名称" v-model="sendData.keyWords">
         <i class="iconfont icon-sousuo" @click="handleSearch"></i>
       </div>
       <!-- tab栏表格 -->
@@ -36,11 +36,11 @@
                 <el-table-column label="操作" align="center" width="140" >
                   <template slot-scope="scope">
                     <div class="specialbth" >
-                      <span  @click="gospecialdetail(scope.row.productId)">详情</span>
+                      <span  @click="gospecialdetail(scope.row)">详情</span>
                       <span v-show="scope.row.status!='1'&&scope.row.status!='0'&&scope.row.status!='2'" @click="gospecialedit(scope.row.productId)">编辑</span>
                       <span v-show="scope.row.status!='2'&&scope.row.status!='0'&&scope.row.status!='1'" @click="gospecialshelf('1',scope.row.productId)">上架</span>
                       <span v-show="scope.row.status!='2'&&scope.row.status!='0'&&scope.row.status==='1'" @click="gospecialshelf('-1',scope.row.productId)">下架</span>
-                      <span v-show="scope.row.status==='2'" @click="applyagain(scope.row.productId)">重新申请</span>
+                      <!-- <span v-show="scope.row.status==='2'" @click="applyagain(scope.row.productId)">重新申请</span> -->
                     </div>
                   </template>
                 </el-table-column>
@@ -70,6 +70,7 @@ export default {
     return {
       orgName:'',
       total:0,
+      isAdd:true,
       statusList:[ 
         { lable:'已发布', id:'1' }, 
         { lable:'待审批', id:'0' }, 
@@ -108,6 +109,17 @@ export default {
   mounted () {
     // this.getspecialList()
     this. getOrgId()
+    //   let menu=JSON.parse(sessionStorage.menuItems)
+    // let _this=this
+    // menu.forEach(v=>{
+    //   if(v.label==='产品管理'){
+    //     v.children[0].resourcesList.forEach(i=>{
+    //       if(i.resourcesName==="科技金融上架常规服务产品"){
+    //         _this.isAdd=false
+    //       }
+    //     })
+    //   }
+    // })
   },
   methods: {
     // 获取当前登录id
@@ -143,8 +155,8 @@ export default {
       })
     },
     //详情
-    gospecialdetail(productId){
-      this.$router.push({path:'/servicemarket/product/productService/ordinaryproductDetail',query:{orgid:this.sendData.orgId,productId:productId}})
+    gospecialdetail(row){
+      this.$router.push({path:'/servicemarket/product/productService/ordinaryproductDetail',query:{orgid:this.sendData.orgId,productId:row.productId,signoryName:row.signoryName}})
     },
     //新增
     addscience(){

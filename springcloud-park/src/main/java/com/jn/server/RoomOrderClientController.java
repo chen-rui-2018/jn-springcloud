@@ -8,15 +8,18 @@ package com.jn.server;/**
 import com.jn.common.model.Result;
 import com.jn.park.api.RoomOrderClient;
 import com.jn.park.asset.service.RoomInformationService;
+import com.jn.park.property.model.PayCallBackNotify;
 import com.jn.pay.model.CreatePayReqModel;
 import com.jn.pay.model.PayOrderNotify;
 import com.jn.pay.model.PayOrderRsp;
 import com.jn.system.log.annotation.ControllerLog;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.sql.Date;
 
 /**
  *房间租赁controller
@@ -52,10 +55,28 @@ public class RoomOrderClientController implements RoomOrderClient {
     }
 
     @Override
-    @ControllerLog(doAction = "生成缴费单")
+    @ControllerLog(doAction = "定时生成缴费单")
     public Result createOrderBill() {
         roomInformationService.createOrderBill();
         return null;
+    }
+
+    @Override
+    @ControllerLog(doAction ="缴费单回调")
+    public Result updateBill(@RequestBody PayCallBackNotify payCallBackNotify) {
+        return roomInformationService.updateBill(payCallBackNotify);
+    }
+
+    @ControllerLog(doAction = "新增房间订单")
+    @Override
+    public Result addRoomOrders(@RequestParam("roomIds")String roomIds, @RequestParam("contactName") String contactName, @RequestParam("contactPhone") String contactPhone, @RequestParam("leaseStartTime") Date leaseStartTime, @RequestParam("month") String month, @RequestParam("userAccount") String userAccount) {
+        return roomInformationService.addRoomOrders(roomIds,contactName,contactPhone,leaseStartTime,month,userAccount);
+    }
+
+    @ControllerLog(doAction = "根据订单生成缴费单")
+    @Override
+    public Result createRoomOrderBillByOrder(@RequestParam("orderId") String orderId) {
+        return roomInformationService.createRoomOrderBillByOrder(orderId);
     }
 
 }

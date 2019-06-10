@@ -7,7 +7,9 @@ import com.jn.enterprise.enums.OrgExceptionEnum;
 import com.jn.enterprise.joinpark.org.service.OrgJoinService;
 import com.jn.enterprise.servicemarket.org.model.*;
 import com.jn.enterprise.servicemarket.org.service.OrgService;
+import com.jn.enterprise.utils.IBPSFileUtils;
 import com.jn.system.log.annotation.ServiceLog;
+import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 加入园区-机构认证
@@ -34,6 +37,10 @@ public class OrgJoinServiceImpl implements OrgJoinService {
     @Override
     public int saveOrUpdateOrgDetail(OrgDetailParameter orgDetailParameter,String account){
         OrgBasicData orgBasicData = new OrgBasicData();
+        //机构logo处理
+        if(StringUtils.isNotBlank(orgDetailParameter.getOrgLogo())){
+            IBPSFileUtils.uploadFile2Json(account,orgDetailParameter.getOrgLogo());
+        }
         BeanUtils.copyProperties(orgDetailParameter,orgBasicData);
         String orgId = orgService.saveOrUpdateOrgBasicData(orgBasicData, account);
         logger.info("保存服务机构基本信息，响应机构ID ===>{}",orgId);
@@ -45,6 +52,15 @@ public class OrgJoinServiceImpl implements OrgJoinService {
         OrgLicenseData orgLicenseData = new OrgLicenseData();
         orgLicenseData.setBusinessType(orgDetailParameter.getBusinessType());
         orgLicenseData.setOrgId(orgDetailParameter.getOrgId());
+        //处理资质图片信息
+        if(orgDetailParameter.getLicenses()!=null){
+            List<OrgLicense> licenses = orgDetailParameter.getLicenses();
+            for(OrgLicense orgLicense:licenses){
+                if(StringUtils.isNotBlank(orgLicense.getFileUrl())){
+                    orgLicense.setFileUrl(IBPSFileUtils.uploadFile2Json(account,orgLicense.getFileUrl()));
+                }
+            }
+        }
         orgLicenseData.setLicenses(orgDetailParameter.getLicenses());
         int i1 = orgService.saveOrgLicenseData(orgLicenseData, account);
         logger.info("保存服务机构资质信息，响应条数{}",i1);
@@ -59,6 +75,7 @@ public class OrgJoinServiceImpl implements OrgJoinService {
         orgContactData.setOrgId(orgId);
         int i3 = orgService.saveOrUpdateOrgContactData(orgContactData, account);
         logger.info("保存服务机构联系信息，响应条数{}",i3);
+
         return 1;
     }
 

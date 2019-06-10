@@ -62,6 +62,152 @@
         ,t.bank_account as "bankAccount"
         ,t.products as "products"
         ,t.material as "material"
+        ,t1.comProperty as "comproperty"
+        ,t.reg_capital as "regCapital"
+        ,t.add_capital as "addCapital"
+        ,t.com_scale as "comScale"
+        ,t.founding_time as "foundingTime"
+        ,t.run_time as "runTime"
+        ,t2.induType as "indutype"
+        ,t.indu_code as "induCode"
+        ,t.business_license as "businessLicense"
+        ,t.propaganda_picture as "proImgs"
+        ,t.lic_starttime as "licStarttime"
+        ,t.lic_endtime as "licEndtime"
+        ,t.register_type as "registerType"
+        ,t.org_code as "orgCode"
+        ,t.main_products as "mainProducts"
+        ,t.business_scope as "businessScope"
+        ,t.contact as "contact"
+        ,t.con_phone as "conPhone"
+        ,t.con_wechat as "conWechat"
+        ,t.con_qq as "conQq"
+        ,t.con_address as "conAddress"
+        ,t.postcode as "postCode"
+        ,t.com_address as "comAddress"
+        ,t.com_tele as "comTele"
+        ,t.com_web as "comWeb"
+        ,t.com_server as "comServer"
+        ,t.com_demand as "comDemand"
+        ,t.addr_park as "addrPark"
+        ,t.com_synopsis as "comSynopsis"
+        ,t.park_build_id as "parkBuildId"
+        ,t.park_build_name as "parkBuildName"
+        ,t.credit_points as "creditPoints"
+        ,t.com_type as "comType"
+        ,t.is_join_activity as "isJoinActivity"
+        ,t.check_status as "checkStatus"
+        ,t.check_time as "checkTime"
+        ,t.com_source as "comSource"
+        ,t.affiliated_park as "affiliatedPark"
+        ,t.affiliated_name as "affiliatedName"
+        ,t.browse_number as "browseNumber"
+        ,t.creator_account as "creatorAccount"
+        ,t.created_time as "createdTime"
+        FROM
+        (SELECT
+        t.id as "id"
+        ,t.com_name as "com_name"
+        ,t.com_name_short as "com_name_short"
+        ,t.avatar as "avatar"
+        ,t.com_admin as "com_admin"
+        ,t.unify_code as "unify_code"
+        ,t.owners as "owners"
+        ,t.owner_law as "owner_law"
+        ,t.owner_id as "owner_id"
+        ,t.owner_phone as "owner_phone"
+        ,t.owner_wechat as "owner_wechat"
+        ,t.owner_qq as "owner_qq"
+        ,t.bank_name as "bank_name"
+        ,t.bank_account as "bank_account"
+        ,t.products as "products"
+        ,t.material as "material"
+        ,t.com_property as "com_property"
+        ,t.reg_capital as "reg_capital"
+        ,t.add_capital as "add_capital"
+        ,t.com_scale as "com_scale"
+        ,t.founding_time as "founding_time"
+        ,t.run_time as "run_time"
+        ,t.indu_type as "indu_type"
+        ,t.indu_code as "indu_code"
+        ,t.business_license as "business_license"
+        ,t.propaganda_picture as "propaganda_picture"
+        ,t.lic_starttime as "lic_starttime"
+        ,t.lic_endtime as "lic_endtime"
+        ,t.register_type as "register_type"
+        ,t.org_code as "org_code"
+        ,t.main_products as "main_products"
+        ,t.business_scope as "business_scope"
+        ,t.contact as "contact"
+        ,t.con_phone as "con_phone"
+        ,t.con_wechat as "con_wechat"
+        ,t.con_qq as "con_qq"
+        ,t.con_address as "con_address"
+        ,t.postcode as "postCode"
+        ,t.com_address as "com_address"
+        ,t.com_tele as "com_tele"
+        ,t.com_web as "com_web"
+        ,t.com_server as "com_server"
+        ,t.com_demand as "com_demand"
+        ,t.addr_park as "addr_park"
+        ,t.com_synopsis as "com_synopsis"
+        ,t.park_build_id as "park_build_id"
+        ,t.park_build_name as "park_build_name"
+        ,t.credit_points as "credit_points"
+        ,t.com_type as "com_type"
+        ,t.is_join_activity as "is_join_activity"
+        ,t.check_status as "check_status"
+        ,t.check_time as "check_time"
+        ,t.com_source as "com_source"
+        ,t.affiliated_park as "affiliated_park"
+        ,t.affiliated_name as "affiliated_name"
+        ,t.browse_number as "browse_number"
+        ,t.creator_account as "creator_account"
+        ,t.created_time as "created_time"
+        FROM
+        tb_service_company t
+        WHERE t.record_status = 1
+        AND t.check_status = 1
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(comName)">
+            AND t.com_name LIKE concat(concat('%',#{comName,jdbcType=VARCHAR}),'%')
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(comSource)">
+            AND t.com_source = #{comSource,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(affiliatedPark)">
+            AND t.affiliated_park = #{affiliatedPark,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(induType)">
+            AND t.indu_type = #{induType,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(orderByClause)">
+            ORDER BY ${orderByClause} desc
+        </if>
+        ) t
+        INNER JOIN
+        -- 企业性质
+        (SELECT t.pre_value as "comProperty",t.id as "id" from tb_service_prefer t WHERE t.record_status = 1 ) t1
+        INNER JOIN
+        -- 产业领域
+        (SELECT t.pre_value as "induType",t.id as "id" from tb_service_prefer t WHERE t.record_status = 1 ) t2
+        ON t1.id=t.com_property  AND t2.id=t.indu_type
+        <!--SELECT
+        t.id as "id"
+        ,t.com_name as "comName"
+        ,t.com_name_short as "comNameShort"
+        ,t.avatar as "avatar"
+        ,t.com_admin as "comAdmin"
+        ,t.unify_code as "unifyCode"
+        ,t.owners as "owners"
+        ,t.owner_law as "ownerLaw"
+        ,t.owner_id as "ownerId"
+        ,t.owner_phone as "ownerPhone"
+        ,t.owner_wechat as "ownerWechat"
+        ,t.owner_qq as "ownerQq"
+        ,t.bank_name as "bankName"
+        ,t.bank_account as "bankAccount"
+        ,t.products as "products"
+        ,t.material as "material"
         ,t.com_property as "comProperty"
         ,t.reg_capital as "regCapital"
         ,t.add_capital as "addCapital"
@@ -91,7 +237,7 @@
         ,t.com_demand as "comDemand"
         ,t.addr_park as "addrPark"
         ,t.com_synopsis as "comSynopsis"
-        ,t.park_build_id as "parkBuildDd"
+        ,t.park_build_id as "parkBuildId"
         ,t.park_build_name as "parkBuildName"
         ,t.credit_points as "creditPoints"
         ,t.com_type as "comType"
@@ -122,7 +268,7 @@
         </if>
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(orderByClause)">
         ORDER BY ${orderByClause} desc
-        </if>
+        </if>-->
     </select>
       <select id="getCompanyDetails" resultType = "com.jn.enterprise.company.model.CompanyInfoShow">
       select
@@ -130,15 +276,15 @@
           ,t1.com_name as "comName"
           ,t1.avatar as "avatar"
           ,t1.com_web as "comWeb"
+          ,t1.com_Admin as "comAdmin"
           ,t1.affiliated_park as "affiliatedId"
           ,t1.affiliated_name as "affiliatedName"
           ,t1.com_server as "comServer"
           ,t1.com_demand as "comDemand"
           ,date_format(t1.founding_time,"%Y-%m-%d %H:%i:%s") as "foundingTime"
-          ,t1.com_type as "comType"
-          ,t2.pre_value as "comTypeName"
+          ,t1.com_property as "comproperty"
+          ,t2.pre_value as "compropertyName"
           ,t1.com_address as "comAddress"
-          ,t1.browse_number as "browseNumber"
           ,t1.browse_number as "browseNumber"
           ,t1.com_synopsis as  "comSynopsis"
           ,t1.addr_park as "addrPark"
@@ -147,8 +293,9 @@
           ,t1.owner_phone as "ownerPhone"
           ,t1.products as "products"
           ,t1.credit_points as "creditPoints"
-          ,date_format(t1.credit_update_time,"%Y-%m=%d %H:%i:%s") as "creditUpdateTime"
-        from tb_service_company t1 left join tb_service_prefer t2 on t1.com_type = t2.id
+          ,t1.com_scale as "comScale"
+          ,date_format(t1.credit_update_time,"%Y-%m-%d %H:%i:%s") as "creditUpdateTime"
+        from tb_service_company t1 left join tb_service_prefer t2 on t1.com_property = t2.id
          where t1.id=#{companyId};
     </select>
 </mapper>

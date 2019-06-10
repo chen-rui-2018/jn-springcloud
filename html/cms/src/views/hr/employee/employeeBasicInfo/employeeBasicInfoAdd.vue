@@ -31,7 +31,7 @@
 
     <div class="form-content">
 
-      <el-form ref="addForm" :model="addForm" :rules="rules" label-width="140px" style="margin-top:20px;">
+      <el-form ref="addForm" :model="addForm" :rules="rules" label-width="140px" style="margin-top:20px;" validate-on-rule-change>
 
         <div class="basic-info">
           <div>基础信息</div>
@@ -88,7 +88,8 @@
                 placeholder="请选择"
                 clearable
                 style="width: 200px"
-                class="filter-item">
+                class="filter-item"
+                @change="setCertificateType">
                 <el-option label="请选择" value=""/>
                 <el-option v-for="item in certificateList" :key="item.key" :label="item.lable" :value="item.key"/>
               </el-select>
@@ -321,11 +322,7 @@
 
           <el-col :span="12">
             <el-form-item label="试用期：" prop="probationPeriod">
-              <el-input
-                v-model.trim="addForm.probationPeriod"
-                style="width: 200px"
-                placeholder=""
-                clearable/>
+              <el-input-number v-model.trim="addForm.probationPeriod" :min="0" :max="12" label="" style="width: 200px"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -961,7 +958,7 @@ import {
   addEmployeeBasicInfo, updateEmployeeBasicInfo, getEmployeeBasicInfo
 } from '@/api/hr/employeeBasicInfo'
 import {
-  getCode, isvalidName, isvalidMobile, isvalidPhone, setChild, findNodeById, findP
+  getCode, isvalidName, isvalidMobile, isvalidPhone, setChild, findNodeById, findP, isvalidZjhm, getApi
 } from '@/api/hr/util'
 import { getToken } from '@/utils/auth'
 
@@ -1006,22 +1003,55 @@ export default {
         callback()
       }
     }
-    /* var checkUserAccount=(rule, value, callback) => {
-        if (!value) {
-          callback(new Error('请输入用户账号'))
-        } else {
 
-          postUserApi('system/sysUser/checkUserName',{account:value}).then(res=>{
-            if (res.data && res.data.code == '0000') {
-              callback(new Error('用户账号已经存在'))
-            }else{
-              callback()
-            }
-          }).catch(error=>{
-            callback(new Error('用户账号校验失败'))
-          })
-        }
-      }*/
+    var checkPhoneExist = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('请输入号码'))
+      } else {
+        getApi('hr/employeeBasicInfo/checkPhoneExist', { phone: value, id: this.addForm.id }).then(res => {
+          if (res.data && res.data.code === '0000' && !res.data.data) {
+            callback(new Error('号码在员工花名册中已经存在'))
+          } else {
+            callback()
+          }
+        }).catch(error => {
+          console.log(error)
+          callback(new Error('校验号码是否存在员工花名册失败'))
+        })
+      }
+    }
+    var checkMailboxExist = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('请输入邮箱'))
+      } else {
+        getApi('hr/employeeBasicInfo/checkMailboxExist', { mailbox: value, id: this.addForm.id }).then(res => {
+          if (res.data && res.data.code === '0000' && !res.data.data) {
+            callback(new Error('邮箱在员工花名册中已经存在'))
+          } else {
+            callback()
+          }
+        }).catch(error => {
+          console.log(error)
+          callback(new Error('校验邮箱是否存在员工花名册失败'))
+        })
+      }
+    }
+    var checkCertificateNumberExist = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('请输入证件号码'))
+      } else {
+        getApi('hr/employeeBasicInfo/checkCertificateNumberExist', { certificateNumber: value, id: this.addForm.id }).then(res => {
+          if (res.data && res.data.code === '0000' && !res.data.data) {
+            callback(new Error('证件号码在员工花名册中已经存在'))
+          } else {
+            callback()
+          }
+        }).catch(error => {
+          console.log(error)
+          callback(new Error('校验证件号码是否存在员工花名册失败'))
+        })
+      }
+    }
 
     return {
       nodes: [],
@@ -1074,8 +1104,9 @@ export default {
         certificateNumber: [{ required: true, message: '请输入证件号码', trigger: 'blur' }, {
           validator: checkZjhm,
           trigger: 'blur'
-        }],
-        phone: [{ required: true, message: '请输入手机号码', trigger: 'blur' }, { validator: validMobile, trigger: 'blur' }],
+        }, { validator: checkCertificateNumberExist, trigger: 'blur' }],
+        phone: [{ required: true, message: '请输入手机号码', trigger: 'blur' }, { validator: validMobile, trigger: 'blur' },
+          { validator: checkPhoneExist, trigger: 'blur' }],
         contractId: [{ required: true, message: '请选择合同类型', trigger: 'change' }],
         employeeType: [{ required: true, message: '请选择员工类型', trigger: 'change' }],
         entryDate: [{ required: true, message: '请输入入职日期', trigger: 'blur' }],
@@ -1091,11 +1122,13 @@ export default {
         workMailbox: [{ type: 'email', message: '请正确输入工作邮箱', trigger: 'blur' }],
         workPhone: [{ validator: validPhone, trigger: 'blur' }],
         expirationDate: [{ required: true, message: '请输入试用到期日', trigger: 'blur' }],
-        mailbox: [{ type: 'email', message: '请正确输入个人邮箱', trigger: 'blur' }],
+        mailbox: [{ type: 'email', message: '请正确输入个人邮箱', trigger: 'blur' },
+          { validator: checkMailboxExist, trigger: 'blur' }],
         salaryNumber: [{ type: 'number', message: '请输入正确的工资卡号', trigger: 'blur' }],
         providentFundAccount: [{ type: 'number', message: '请输入正确的公积金账号', trigger: 'blur' }],
         socialSecurityAccount: [{ type: 'number', message: '请输入正确的社保账号', trigger: 'blur' }],
-        wechat: [{ validator: validWechat, trigger: 'blur' }]
+        wechat: [{ validator: validWechat, trigger: 'blur' }],
+        emergencyContactPhone: [{ validator: validPhone, trigger: 'blur' }]
       },
       addForm: {
         id: '',
@@ -1227,6 +1260,12 @@ export default {
         }
       },
       deep: true
+    },
+    'addForm.certificateType': {
+      handler(newValue, oldValue) {
+        this.initCheckZjhm()
+      },
+      deep: true
     }
   },
   created() {
@@ -1243,6 +1282,36 @@ export default {
     this.initDetail()
   },
   methods: {
+    setCertificateType() {
+      const certificate = this.certificateList.find(item => item.key === this.addForm.certificateId)
+      if (certificate) {
+        this.addForm.certificateType = certificate['lable']
+      }
+    },
+    initCheckZjhm() {
+      const reg = /^\w{5,18}$/i
+      if (this.addForm.certificateType === '身份证') {
+        this.checkZjhm = (rule, value, callback) => {
+          if (!isvalidZjhm(value)) {
+            callback(new Error('请输入正确的证件号码'))
+          } else {
+            callback()
+          }
+        }
+      } else {
+        this.checkZjhm = (rule, value, callback) => {
+          if (!reg.test(value)) {
+            callback(new Error('请输入正确的证件号码'))
+          } else {
+            callback()
+          }
+        }
+      }
+      this.rules.certificateNumber.splice(1, 1, {
+        validator: this.checkZjhm,
+        trigger: 'blur'
+      })
+    },
     getAllDepartment() {
       this.departmentListLoading = true
       api(`${this.GLOBAL.systemUrl}system/sysDepartment/findDepartmentAllByLevel`, '', 'post').then(res => {
@@ -1325,7 +1394,6 @@ export default {
       document.body.removeChild(link)
     },
     handleAvatarSuccess(response, file, fileList) {
-      console.log('success:' + response)
       let flag = false
       if (response.code === '0000' && response.data && response.data !== '[]') {
         const url = JSON.parse(response.data)[0].url
@@ -1339,7 +1407,6 @@ export default {
       }
     },
     handleEducaSuccess(response, file, fileList, index, prop) {
-      console.log('success:' + response)
       let flag = false
       if (response.code === '0000' && response.data && response.data !== '[]') {
         const url = JSON.parse(response.data)[0].url
@@ -1362,7 +1429,6 @@ export default {
       }
     },
     beforeEducaUpload(file, index, prop) {
-      console.log('before:' + file)
       const isJPG = file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png'
       const isLt6M = file.size / 1024 / 1024 < 6
 
@@ -1375,7 +1441,6 @@ export default {
       return isJPG && isLt6M
     },
     handleHonorarySuccess(response, file, fileList, index, prop) {
-      console.log('success:' + response)
       let flag = false
       if (response.code === '0000') {
         if (response.data && response.data !== '[]') {
@@ -1400,7 +1465,6 @@ export default {
       }
     },
     beforeHonoraryUpload(file, index, prop) {
-      console.log('before:' + file)
       const isJPG = file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png'
       const isLt6M = file.size / 1024 / 1024 < 6
 
@@ -1413,7 +1477,6 @@ export default {
       return isLt6M
     },
     beforeImageUpload(file) {
-      console.log('before:' + file)
       const isJPG = file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png'
       const isLt6M = file.size / 1024 / 1024 < 6
 
@@ -1533,7 +1596,6 @@ export default {
     initPostList() {
       api(`${this.GLOBAL.systemUrl}system/sysPost/findSysPostAll`, '', 'post').then(res => {
         if (res.data.code === this.GLOBAL.code) {
-          console.log(res.data.data)
           this.postList = res.data.data
         } else {
           this.$message.error(res.data.result)
@@ -1677,6 +1739,8 @@ export default {
               arr.push(item.id)
             })
             this.currentDepartmentIds = arr
+
+            this.initCheckZjhm()
           } else {
             this.$message.error(res.data.result)
           }

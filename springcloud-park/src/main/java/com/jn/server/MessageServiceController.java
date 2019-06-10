@@ -4,6 +4,7 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.park.api.MessageClient;
 
+import com.jn.park.message.model.MessageListModel;
 import com.jn.park.message.service.MessageListService;
 
 import com.jn.park.message.model.AddMessageModel;
@@ -39,5 +40,9 @@ public class MessageServiceController extends BaseController implements MessageC
         return new Result();
     }
 
-
+    @Override
+    public Result<MessageListModel> findByMessage(String id) {
+        MessageListModel byMessage = messageListService.findByMessage(id);
+        return new Result(byMessage);
+    }
 }

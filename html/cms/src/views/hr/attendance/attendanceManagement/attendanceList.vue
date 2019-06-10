@@ -218,6 +218,12 @@ export default {
         this.$message.error('结束时间不能为空')
         return
       }
+      if (!this.listQuery.departmentId) {
+        this.listQuery.departmentId = ''
+      }
+      if (!this.listQuery.department) {
+        this.listQuery.department = ''
+      }
 
       this.listLoading = true
 
@@ -240,6 +246,12 @@ export default {
       this.initList()
     },
     exportExcel() {
+      if (!this.listQuery.departmentId) {
+        this.listQuery.departmentId = ''
+      }
+      if (!this.listQuery.department) {
+        this.listQuery.department = ''
+      }
       exportAttendanceList(this.listQuery).then(res => {
         console.log('导出。。。')
         window.location.href = res.request.responseURL

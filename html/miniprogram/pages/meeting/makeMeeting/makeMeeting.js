@@ -1,6 +1,5 @@
 // pages/meeting/makeMeeting/makeMeeting.js
-import {CreateHeader} from "./../../../utils/require"
-
+import request from "./../../../utils/http"
 const date = new Date()
 const years = []
 const months = []
@@ -66,7 +65,6 @@ Page({
     nvabarData: {
       title: '会议室预约', 
     },
-    token:'',
     years: years,
     year: date.getFullYear(),
     months: months,
@@ -95,24 +93,25 @@ Page({
   // 预约
   makeMeeting(){
     if(this.data.endTime!=''&&this.data.meetingRoomId!=''&&this.data.oaMeetingContent!=''&&this.data.organizationalUser!=''&&this.data.participantsStr!=''&&this.data.startTime!=''&&this.data.title!=''){
-      wx.request({
-        url: 'http://192.168.10.31:1101/springcloud-oa/oa/oaMeeting/add',
-        data: {
-          createdTime: this.data.createdTime,
-          endTime: this.data.endTime,
-          meetingRoomId: this.data.meetingRoomId,//会议室id
-          oaMeetingContent: this.data.oaMeetingContent,
-          organizationalUser: this.data.organizationalUser,//组织人id
-          participantsStr: this.data.participantsStr,//参会人员
-          startTime: this.data.startTime,
-          title:this.data.title,
-        },
-        header: {'content-type':'application/json','token':this.data.token},
-        method: 'POST',
-        dataType: 'json',
-        responseType: 'text',
-        success: (res)=>{
-          // console.log(res)
+      let endMinute=this.data.endTime.split(' ')[1].split(":")
+      let starMinute=this.data.startTime.split(' ')[1].split(":")
+      let endDay=this.data.endTime.split('/')[2]
+      let starDay=this.data.startTime.split('/')[2]
+      if(endMinute[0]*60+endMinute[1]>starMinute[0]*60+starMinute[1]&&endDay===starDay){
+        request.send({
+          url: '/springcloud-oa/oa/oaMeeting/add',
+          data:  {
+            createdTime: this.data.createdTime,
+            endTime: this.data.endTime,
+            meetingRoomId: this.data.meetingRoomId,//会议室id
+            oaMeetingContent: this.data.oaMeetingContent,
+            organizationalUser: this.data.organizationalUser,//组织人id
+            participantsStr: this.data.participantsStr,//参会人员
+            startTime: this.data.startTime,
+            title:this.data.title,
+          },
+          method: 'POST',
+        }).then(res=>{
           if(res.data.code==='0000'){
             wx.showToast({
               title: "预约成功",
@@ -120,12 +119,11 @@ Page({
               duration: 1000,
               mask:true
             })
-            this.setTimeout(
+            setTimeout(function(){
               wx.navigateBack({
                 delta: 1
-              }),
-              1500
-            )
+              })
+            },1000 )
           }else{
             wx.showToast({
               title: res.data.result,
@@ -134,10 +132,15 @@ Page({
               mask:true
             })
           }
-        },
-        fail: ()=>{},
-        complete: ()=>{}
-      });
+        })
+      }else{
+        wx.showToast({
+          title: '请重新选择会议时间！！！',
+          icon:'none',
+          duration: 1500,
+          mask:true
+        })
+      }
     }else{
       wx.showToast({
         title: '亲，表格不能留空哦！！！',
@@ -303,11 +306,6 @@ Page({
     this.setData({
       meetingRoomId:options.meetingRoomId,
       roomName:options.name
-    })
-    CreateHeader()
-    .then(header=>{
-      this.data.token=header.token
-      // this.getUserList()
     })
    },
   onReady: function () { },

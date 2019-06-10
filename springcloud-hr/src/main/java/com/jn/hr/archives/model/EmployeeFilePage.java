@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author dt
@@ -20,6 +21,8 @@ public class EmployeeFilePage extends Page implements Serializable {
     private String classId;
     @ApiModelProperty(value = "档案表ID")
     private String fileId;
+    @ApiModelProperty(value = "分类ID列表")
+    private List<String> classIds;
 
     public String getSymbol() {
         return symbol;
@@ -51,6 +54,14 @@ public class EmployeeFilePage extends Page implements Serializable {
 
     public void setFileId(String fileId) {
         this.fileId = fileId;
+    }
+
+    public List<String> getClassIds() {
+        return classIds;
+    }
+
+    public void setClassIds(List<String> classIds) {
+        this.classIds = classIds;
     }
 
     @Override

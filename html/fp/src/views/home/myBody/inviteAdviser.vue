@@ -1,6 +1,6 @@
 <template>
   <div class="inviteAdviser">
-    <div class="ordinary_title">
+    <div class="ordinary_title font16">
       <div>邀请顾问</div>
     </div>
     <div class="ordinary_content">
@@ -118,10 +118,16 @@ export default {
         height: 33px;
         line-height: 33px;
       }
+       .el-form-item__content,.el-select{
+                width: 266px;
+            }
     }
     .hobbys{
     padding: 5px 15px;
     background: #f7f7f7;
+    display: inline-block;
+    line-height: 20px;
+    margin-bottom: 15px;
     border: 1px solid #eee;
     border-radius: 3px;
     margin-right: 20px;
@@ -131,7 +137,7 @@ export default {
       background-color: #fff;
 
       padding:24px 28px;
-      font-size: 13px;
+      // font-size: 13px;
       border-radius: 5px;
     }
     .ordinary_content{
@@ -148,16 +154,14 @@ export default {
         .postJobInfo{
             // width: 50%;
             // margin: 0 auto;
-            margin-left:300px;
+            margin-left:140px;
 
-            .el-form-item__content,.el-select{
-                width: 266px;
-            }
-            .hobbies{
-               .el-form-item__content,.el-select{
-                width:100%;
-            }
-            }
+
+            // .hobbies{
+            //    .el-form-item__content,.el-select{
+            //     width:100%;
+            // }
+            // }
              .el-textarea__inner{
                  width: 348px;
                 min-height: 100px !important;

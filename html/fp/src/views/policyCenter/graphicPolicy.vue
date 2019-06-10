@@ -40,7 +40,8 @@
         </div> -->
         <div class="graphicCon w">
             <div class="serverOrgMenu">
-                <span class="pointer" @click="$router.push({path:'/policyCenter'})">首页/</span>
+                <span class="pointer" @click="$router.push({path:'/enterpriseservice'})">企业服务/</span>
+                <span class="pointer" @click="$router.push({path:'/policyCenter'})">政策中心/</span>
                 <span class="mainColor agent">图解政策详情</span>
             </div>
             <div class="agentInfo">
@@ -382,9 +383,9 @@ export default {
         .agent2 {
           padding: 10px 0;
           .agent2Con {
-            height: 150px;
-            width: 80%;
-            overflow: hidden;
+            // height: 150px;
+            // width: 80%;
+            // overflow: hidden;
             // white-space: nowrap;
             // text-overflow: ellipsis;
           }

@@ -11,6 +11,18 @@
     <if test="@org.apache.commons.lang.StringUtils@isNotBlank(department)">
             and department=#{department}
     </if>
+    order by account_entry_time desc
+  </select>
+  
+  <select id="selectByJobNumberAndMonth" parameterType="com.jn.hr.increase.model.SalaryPayrollAdd" resultType="com.jn.hr.increase.model.SalaryPayrollVo">
+    select * from tb_manpower_salary_payroll t1
+    where 1=1
+    <if test="@org.apache.commons.lang.StringUtils@isNotBlank(jobNumber)">
+             and job_number=#{jobNumber}
+    </if>
+    <if test="@org.apache.commons.lang.StringUtils@isNotBlank(accountEntryTime)">
+            and account_entry_time=#{accountEntryTime}
+    </if>
   </select>
   
   <select id="selectByWage" parameterType="map" resultType="com.jn.hr.increase.model.SalaryPayrollVo">
@@ -63,7 +75,7 @@
     <if test="@org.apache.commons.lang.StringUtils@isNotBlank(accountEntryTime)">
             and t1.account_entry_time like CONCAT('%',#{accountEntryTime},'%') 
     </if>
-    group by department
+    group by department desc
   </select>
   
   <select id="selectByPeople" parameterType="map" resultType="com.jn.hr.increase.model.SalaryKeyValue">
@@ -72,7 +84,7 @@
     <if test="@org.apache.commons.lang.StringUtils@isNotBlank(accountEntryTime)">
             and t1.account_entry_time like CONCAT('%',#{accountEntryTime},'%') 
     </if>
-    group by department
+    group by department desc
   </select>
   
   <select id="selectByDepartmentCost" parameterType="map" resultType="com.jn.hr.increase.model.SalaryKeyValue">
@@ -81,7 +93,7 @@
     <if test="@org.apache.commons.lang.StringUtils@isNotBlank(accountEntryTime)">
             and t1.account_entry_time like CONCAT('%',#{accountEntryTime},'%') 
     </if>
-    group by department
+    group by department desc
   </select>
   
   <select id="selectByDepartment" parameterType="com.jn.hr.increase.model.SalaryPayrollPage" resultType="map">

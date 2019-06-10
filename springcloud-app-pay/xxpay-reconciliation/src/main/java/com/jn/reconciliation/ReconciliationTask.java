@@ -15,10 +15,7 @@
  */
 package com.jn.reconciliation;
 
-import com.jn.reconciliation.biz.ReconciliationCheckBiz;
-import com.jn.reconciliation.biz.ReconciliationFileDownBiz;
-import com.jn.reconciliation.biz.ReconciliationFileParserBiz;
-import com.jn.reconciliation.biz.ReconciliationValidateBiz;
+import com.jn.reconciliation.biz.*;
 import com.jn.reconciliation.enums.BatchStatusEnum;
 import com.jn.reconciliation.service.PayReconciliationCheckBatchService;
 import com.jn.reconciliation.service.impl.ReconciliationInterface;
@@ -60,12 +57,17 @@ public class ReconciliationTask {
 	private ReconciliationValidateBiz validateBiz;
 	@Autowired
 	private PayReconciliationCheckBatchService batchService;
+	@Autowired
+	private ReconciliationNoticeBiz reconciliationNoticeBiz;
 
 	@Scheduled(cron = "0 15 10 * * ?")
 	public void taskRun() {
-
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-
+		//日期格式
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		// 获取需要对账的对账单时间(前一天时间)
+		Date billDate = DateUtil.addDay(new Date(), -1);
+		//是否发送对账通知
+		boolean sendMsg = false;
 		try {
 
 
@@ -81,8 +83,7 @@ public class ReconciliationTask {
 					logger.info("对账接口信息" + reconciliationInter + "为空");
 					continue;
 				}
-				// 获取需要对账的对账单时间
-				Date billDate = DateUtil.addDay(new Date(), -reconciliationInter.getBillDay());
+
 				// 获取对账渠道
 				String interfaceCode = reconciliationInter.getInterfaceCode();
 
@@ -111,7 +112,7 @@ public class ReconciliationTask {
 					logger.info("对账文件下载结束");
 				} catch (Exception e) {
 					logger.error("对账文件下载异常:", e);
-					batch.setStatus(BatchStatusEnum.FAIL.name());
+					batch.setStatus(BatchStatusEnum.FAIL.getCode());
 					batch.setRemark("对账文件下载异常");
 					batchService.saveData(batch);
 					continue;
@@ -125,13 +126,13 @@ public class ReconciliationTask {
 					// 解析文件
 					bankList = parserBiz.parser(batch, file, billDate, interfaceCode);
 					// 如果下载文件异常，退出
-					if (BatchStatusEnum.ERROR.name().equals(batch.getStatus())) {
+					if (BatchStatusEnum.ERROR.getCode().equals(batch.getStatus())) {
 						continue;
 					}
 					logger.info("对账文件解析结束");
 				} catch (Exception e) {
 					logger.error("对账文件解析异常:", e);
-					batch.setStatus(BatchStatusEnum.FAIL.name());
+					batch.setStatus(BatchStatusEnum.FAIL.getCode());
 					batch.setRemark("对账文件解析异常");
 					batchService.saveData(batch);
 					continue;
@@ -142,19 +143,28 @@ public class ReconciliationTask {
 					checkBiz.check(bankList, interfaceCode, batch);
 				} catch (Exception e) {
 					logger.error("对账异常:", e);
-					batch.setStatus(BatchStatusEnum.FAIL.name());
+					batch.setStatus(BatchStatusEnum.FAIL.getCode());
 					batch.setRemark("对账异常");
 					batchService.saveData(batch);
 					continue;
 				}
 
+				//只要有一次 对账渠道流程没异常则发送短信,邮箱通知
+				sendMsg = true;
 			}
 
 			/** step5:清理缓冲池 **/
 			// 如果缓冲池中有三天前的数据就清理掉并记录差错
 			validateBiz.validateScratchPool();
+
+			/** step6:发送短信通知 **/
+			if(sendMsg){
+				reconciliationNoticeBiz.messageNotice(sdf.format(billDate));
+			}
+
+
 		} catch (Exception e) {
-			logger.error("xxpay-reconciliation error:", e);
+			logger.error("对账流程异常  error:", e);
 		}
 
 	}

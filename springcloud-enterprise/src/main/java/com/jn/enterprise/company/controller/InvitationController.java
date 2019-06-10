@@ -4,6 +4,7 @@ import com.codingapi.tx.annotation.TxTransaction;
 import com.jn.common.controller.BaseController;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
+import com.jn.common.util.Assert;
 import com.jn.enterprise.company.enums.CompanyExceptionEnum;
 import com.jn.enterprise.company.model.AcceptInviteParam;
 import com.jn.enterprise.company.service.StaffService;
@@ -37,7 +38,8 @@ public class InvitationController extends BaseController {
     @ApiOperation(value = "根据手机号或账号查询用户信息（pc/app）", notes = "根据手机号或账号查询用户信息")
     @RequestMapping(value = "/getInviteStaffList",method = RequestMethod.GET)
     @RequiresPermissions("/enterprise/StaffController/getInviteStaffList")
-    public Result<UserExtensionInfoVO> getInviteStaffList(@RequestParam String phone){
+    public Result<UserExtensionInfoVO> getInviteStaffList(@RequestParam(required = false) String phone){
+        Assert.notNull(phone, CompanyExceptionEnum.PARAM_IS_NULL.getMessage());
         return new Result(staffService.getInviteStaffList(phone));
     }
 

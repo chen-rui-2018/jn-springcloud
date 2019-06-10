@@ -11,6 +11,7 @@ import com.jn.pay.vo.PayRecordVo;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
@@ -73,7 +74,7 @@ public interface MyPayBillService {
      * @param payBillCreateParamVo,user
      * @return
      */
-    Result billCreate(PayBillCreateParamVo payBillCreateParamVo, User user);
+    Result billCreate(PayBillCreateParamVo payBillCreateParamVo);
 
     /**
      * 缴费单支付发起
@@ -104,4 +105,11 @@ public interface MyPayBillService {
      * @return
      */
     Result payAccountCallBack(PayOrderNotify callBackParam,User user);
+
+    /**
+     * 插入流水记录
+     * @param payAccountBookMoneyRecord
+     * @return
+     */
+    Result insertRecord(PayAccountBookMoneyRecord payAccountBookMoneyRecord);
 }

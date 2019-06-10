@@ -1,5 +1,5 @@
 <template>
-  <img :src="url" alt="" class="chat-avatar" :class="size">
+  <img :src="url || '@/../static/img/touxiang.png'" alt="" class="chat-avatar" :class="size">
 </template>
 
 <script>
@@ -14,7 +14,7 @@ export default {
     url: {
       type: String,
       required: false,
-      default: 'http://img.52z.com/upload/news/image/20180801/20180801112618_87503.jpg'
+      default: ''
     }
   }
 }

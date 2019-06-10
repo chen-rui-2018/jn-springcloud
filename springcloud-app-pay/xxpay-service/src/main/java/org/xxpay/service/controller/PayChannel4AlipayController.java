@@ -108,7 +108,9 @@ public class PayChannel4AlipayController {
         try {
             payUrl = client.pageExecute(alipay_request).getBody();
         } catch (AlipayApiException e) {
-            e.printStackTrace();
+            _log.error("订单号：{} 支付下单报错 ",payOrderId,e);
+            Map<String, Object> map = XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_SUCCESS, "", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0019);
+            return XXPayUtil.makeRetData(map, resKey);
         }
         _log.info("{}生成跳转路径：payUrl={}", logPrefix, payUrl);
         payOrderService.updateStatus4Ing(payOrderId, null);
@@ -184,7 +186,9 @@ public class PayChannel4AlipayController {
         try {
             payUrl = client.pageExecute(alipay_request).getBody();
         } catch (AlipayApiException e) {
-            e.printStackTrace();
+            _log.error("订单号：{} 支付下单报错 ",payOrderId,e);
+            Map<String, Object> map = XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_SUCCESS, "", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0019);
+            return XXPayUtil.makeRetData(map, resKey);
         }
         _log.info("{}生成跳转路径：payUrl={}", logPrefix, payUrl);
         payOrderService.updateStatus4Ing(payOrderId, null);
@@ -245,7 +249,9 @@ public class PayChannel4AlipayController {
         try {
             payParams = client.sdkExecute(alipay_request).getBody();
         } catch (AlipayApiException e) {
-            e.printStackTrace();
+            _log.error("订单号：{} 支付下单报错 ",payOrderId,e);
+            Map<String, Object> map = XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_SUCCESS, "", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0019);
+            return XXPayUtil.makeRetData(map, resKey);
         }
         payOrderService.updateStatus4Ing(payOrderId, null);
         _log.info("{}生成请求支付宝数据,payParams={}", logPrefix, payParams);
@@ -323,7 +329,9 @@ public class PayChannel4AlipayController {
         try {
             payUrl = client.execute(alipay_request).getBody();
         } catch (AlipayApiException e) {
-            e.printStackTrace();
+            _log.error("订单号：{} 支付下单报错 ",payOrderId,e);
+            Map<String, Object> map = XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_SUCCESS, "", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0019);
+            return XXPayUtil.makeRetData(map, resKey);
         }
         _log.info("{}生成跳转路径：payUrl={}", logPrefix, payUrl);
         payOrderService.updateStatus4Ing(payOrderId, null);

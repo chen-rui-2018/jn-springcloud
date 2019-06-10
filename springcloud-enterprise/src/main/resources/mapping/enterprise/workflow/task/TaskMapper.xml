@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.workflow.task.dao.TaskMapper">
+    <resultMap id="TypeBaseResultMap" type="com.jn.enterprise.workflow.task.vo.TaskTypeVo">
+        <result column="type" jdbcType="VARCHAR" property="type" />
+        <result column="total" jdbcType="VARCHAR" property="total" />
+        <result column="warn_num" jdbcType="VARCHAR" property="warnNum" />
+        <result column="status" jdbcType="VARCHAR" property="status" />
+    </resultMap>
+    <resultMap id="BaseResultMap" type="com.jn.enterprise.workflow.task.vo.TaskVo">
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="record_status" jdbcType="VARCHAR" property="recordStatus" />
+        <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+        <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+        <result column="user_id" jdbcType="VARCHAR" property="userId" />
+        <result column="status" jdbcType="VARCHAR" property="status" />
+        <result column="type" jdbcType="VARCHAR" property="type" />
+        <result column="title" jdbcType="VARCHAR" property="title" />
+        <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+        <result column="link_type" jdbcType="VARCHAR" property="linkType" />
+        <result column="link_url" jdbcType="VARCHAR" property="linkUrl" />
+        <result column="describes" jdbcType="VARCHAR" property="describes" />
+        <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+     id, record_status, creator_account, created_time, modifier_account, modified_time,
+    user_id, status, type, title, end_time, link_type, link_url, describes, user_name
+  </sql>
+
+   <select id="selectTaskTypeByCondition" parameterType="com.jn.enterprise.workflow.task.model.TaskType" resultMap="TypeBaseResultMap">
+       select t.type,t.total,case when tt.warn_num is null then 0 else tt.warn_num end  warn_num from
+       (
+          SELECT type,count( * ) AS total FROM tb_workflow_task WHERE record_status = 1
+           <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
+               AND STATUS = #{status,jdbcType=VARCHAR}
+           </if>
+           <if test="@org.apache.commons.lang.StringUtils@isNotBlank(userId)">
+               AND user_id = #{userId,jdbcType=VARCHAR}
+           </if>
+           GROUP BY type
+        ) t
+       left join
+       (
+       select type , count(*) as warn_num  from tb_workflow_task
+          where round(( UNIX_TIMESTAMP( end_time ) - UNIX_TIMESTAMP( NOW( ) )  ) / 3600) &lt; #{warnHour,jdbcType=INTEGER}
+          and record_status =1
+       <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
+           AND STATUS = #{status,jdbcType=VARCHAR}
+       </if>
+       <if test="@org.apache.commons.lang.StringUtils@isNotBlank(userId)">
+           AND user_id = #{userId,jdbcType=VARCHAR}
+       </if>
+          GROUP BY type
+
+       ) tt on t.type=tt.type
+
+   </select>
+    <select id="selectTaskListByCondition" parameterType="com.jn.enterprise.workflow.task.model.TaskPage" resultMap="BaseResultMap">
+
+        SELECT
+          <include refid="Base_Column_List"/>
+        FROM
+        tb_workflow_task
+        where   record_status =1
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(type)">
+            and type= #{type,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
+            and STATUS= #{status,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(userId)">
+            AND user_id = #{userId,jdbcType=VARCHAR}
+        </if>
+        order by created_time desc
+        <if test="rowCount!= null">
+                LIMIT 0,#{rowCount,jdbcType=INTEGER}
+        </if>
+
+    </select>
+
+    <!-- 时效性待办事项预警数据统计 -->
+    <select id="getWorkflowTaskStatistics" resultType="com.jn.enterprise.workflow.task.vo.WarnStatisticsVO">
+        SELECT
+            d.taskWarnStatus AS "warnType",
+            COUNT(d.id) AS "warnNum"
+        FROM (
+            SELECT
+                x.id,
+                CASE
+                <![CDATA[
+                  WHEN x.percent <= #{warnPercent} THEN 'WARNING'
+                  WHEN #{warnPercent} < x.percent and x.percent <= #{earlyWarnPercent} THEN 'EARLY_WARNING'
+                ]]>
+                ELSE 'NORMAL' END AS "taskWarnStatus"
+            FROM (
+                SELECT
+                    b.id,
+                    ROUND(b.subDay / b.totalDay , 2) * 100 AS "percent"
+                FROM (
+                    SELECT
+                        a.id AS "id",
+                        DATEDIFF(a.end_time,a.created_time) AS "totalDay",
+                        DATEDIFF(a.end_time,CURDATE()) AS "subDay"
+                    FROM tb_workflow_task a
+                    WHERE a.status = 1
+                    AND a.record_status = 1
+                    AND a.user_id = #{userId}
+                ) b
+            ) x
+        ) d
+        GROUP BY d.warnType
+        ORDER BY d.warnType DESC
+    </select>
+
+    <!-- 获取时效性待办列表 -->
+    <select id="getWorkflowTaskList" resultType="com.jn.enterprise.workflow.task.vo.TaskListVO">
+        SELECT
+            x.id,
+            x.userId,
+            x.userName,
+            x.title,
+            x.type,
+            x.createdTime,
+            x.endTime,
+            x.linkType,
+            x.linkUrl,
+            x.describes,
+            x.status,
+            x.totalDay,
+            x.subDay,
+            x.percent,
+            x.taskStatus,
+            x.taskWarnStatus
+        FROM (
+            SELECT
+                d.id,
+                d.userId,
+                d.userName,
+                d.title,
+                d.type,
+                d.createdTime,
+                d.endTime,
+                d.linkType,
+                d.linkUrl,
+                d.describes,
+                d.status,
+                d.totalDay,
+                d.subDay,
+                d.percent,
+                <![CDATA[
+                CASE WHEN d.subDay >= 0 THEN '0' ELSE '1' END AS "taskStatus",
+                CASE
+                    WHEN d.percent <= #{warnPercent} THEN '2'
+                    WHEN #{warnPercent} < d.percent and d.percent <= #{earlyWarnPercent} THEN '1'
+                ELSE '0' END AS "taskWarnStatus"
+                ]]>
+            FROM (
+                SELECT
+                    b.id,
+                    b.userId,
+                    b.userName,
+                    b.title,
+                    b.type,
+                    b.createdTime,
+                    b.endTime,
+                    b.linkType,
+                    b.linkUrl,
+                    b.describes,
+                    b.status,
+                    b.totalDay,
+                    b.subDay,
+                    ROUND(b.subDay / b.totalDay , 2) * 100 AS "percent"
+                FROM (
+                    SELECT
+                        a.id AS "id",
+                        a.user_id AS "userId",
+                        a.user_name AS "userName",
+                        a.title AS "title",
+                        a.type AS "type",
+                        a.created_time AS "createdTime",
+                        a.end_time AS "endTime",
+                        a.link_type AS "linkType",
+                        a.link_url AS "linkUrl",
+                        a.describes AS "describes",
+                        a.status AS "status",
+                        DATEDIFF(a.end_time,a.created_time) AS "totalDay",
+                        DATEDIFF(a.end_time,CURDATE()) AS "subDay"
+                    FROM tb_workflow_task a
+                    WHERE a.record_status = 1
+                    AND a.user_id = #{userId}
+                    <if test="type != null and type != ''">
+                        AND a.type = #{type}
+                    </if>
+                    <if test="status != null and status != ''">
+                        AND a.status = #{status}
+                    </if>
+                ) b
+            ) d
+        ) x
+        ORDER BY x.taskStatus DESC, x.taskWarnStatus DESC, x.endTime
+    </select>
+
+    <update id="deleteBranchByIds" parameterType="java.util.Map">
+        update tb_workflow_task
+        set
+        record_status = 0,
+        modifier_account=#{account},
+        modified_time = now()
+        where id in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+
+</mapper>

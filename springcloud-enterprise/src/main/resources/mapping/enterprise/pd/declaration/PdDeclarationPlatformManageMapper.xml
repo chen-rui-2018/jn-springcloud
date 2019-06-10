@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.pd.declaration.dao.TbPdDeclarationPlatformManageDao">
+  <resultMap id="BaseResultMap" type="com.jn.enterprise.pd.declaration.model.DeclarationPlatformModel">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="platform_title" jdbcType="VARCHAR" property="platformTitle" />
+    <result column="link_address" jdbcType="VARCHAR" property="linkAddress" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="business_consult" jdbcType="VARCHAR" property="businessConsult" />
+    <result column="system_support" jdbcType="VARCHAR" property="systemSupport" />
+    <result column="subordinate_platform_name" jdbcType="VARCHAR" property="subordinatePlatformName" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="account_and_password" jdbcType="VARCHAR" property="accountAndPassword" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, platform_title, link_address, remark, business_consult, system_support, subordinate_platform_name, 
+    status, record_status, creator_account, created_time, modifier_account, modified_time,account_and_password
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.enterprise.pd.declaration.model.DeclarationPlatformModel" resultMap="BaseResultMap">
+    select
+    A.id as id,
+    A.platform_title as platformTitle,
+    A.link_address as linkAddress,
+    A.remark as remark,
+    A.business_consult as businessConsult,
+    A.system_support as systemSupport,
+    A.subordinate_platform_name as subordinatePlatformName,
+    A.status as status,
+    A.record_status as recordStatus,
+    A.creator_account as creatorAccount,
+    A.created_time as createdTime,
+    A.modifier_account as modifierAccount,
+    A.modified_time as modifiedTime,
+    B.account_and_password as accountAndPassword
+    from tb_pd_declaration_platform_manage A
+    LEFT JOIN tb_pd_declaration_platform_memorandum B
+    ON A.id = B.platform_id
+    and B.creator_account = #{creatorAccount}
+    where 1=1 and A.record_status = 1 and A.status = 2
+    <if test="subordinatePlatformName != null and subordinatePlatformName != ''">
+      and A.subordinate_platform_name = #{subordinatePlatformName}
+    </if>
+    <if test="platformTitle != null and platformTitle != ''">
+      and A.platform_title like CONCAT('%', #{platformTitle}, '%')
+    </if>
+    GROUP BY A.id
+    order by A.created_time desc
+  </select>
+
+</mapper>

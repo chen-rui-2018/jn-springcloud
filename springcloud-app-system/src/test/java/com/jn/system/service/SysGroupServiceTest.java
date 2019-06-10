@@ -138,6 +138,10 @@ public class SysGroupServiceTest {
         PaginationData data = sysGroupService.findOtherUserByPage(page);
         int total = Long.valueOf(data.getTotal()).intValue();
         Assert.assertThat(total, Matchers.greaterThanOrEqualTo(0));
+
+        //清除用户组添加的用户
+        sysGroupUserAdd.setUserIds(null);
+        sysGroupService.userGroupAuthorization(sysGroupUserAdd, user);
     }
 
     @Test
@@ -149,7 +153,7 @@ public class SysGroupServiceTest {
 
     @Test
     public void zDeleSysGroupTest() {
-        String[] groupIdS = {groupId};
+        String[] groupIdS = {"3fb72ea7-d29f-490a-97de-9a778a36277e"};
         sysGroupService.deleSysGroup(groupIdS,user);
     }
 }

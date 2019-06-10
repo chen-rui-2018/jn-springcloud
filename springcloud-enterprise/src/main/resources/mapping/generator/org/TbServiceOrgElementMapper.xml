@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.servicemarket.org.dao.TbServiceOrgElementMapper">
+  <resultMap id="BaseResultMap" type="com.jn.enterprise.servicemarket.org.entity.TbServiceOrgElement">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="org_id_" jdbcType="VARCHAR" property="orgId" />
+    <result column="staff_count" jdbcType="INTEGER" property="staffCount" />
+    <result column="profession_num" jdbcType="INTEGER" property="professionNum" />
+    <result column="bachelor_num" jdbcType="INTEGER" property="bachelorNum" />
+    <result column="master_num" jdbcType="INTEGER" property="masterNum" />
+    <result column="doctor_num" jdbcType="INTEGER" property="doctorNum" />
+    <result column="returnee_num" jdbcType="INTEGER" property="returneeNum" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, org_id_, staff_count, profession_num, bachelor_num, master_num, doctor_num, returnee_num, 
+    created_time, creator_account, modified_time, modifier_account, record_status
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.enterprise.servicemarket.org.entity.TbServiceOrgElementCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_service_org_element
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_service_org_element
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_service_org_element
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.enterprise.servicemarket.org.entity.TbServiceOrgElementCriteria">
+    delete from tb_service_org_element
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.enterprise.servicemarket.org.entity.TbServiceOrgElement">
+    insert into tb_service_org_element (id, org_id_, staff_count, 
+      profession_num, bachelor_num, master_num, 
+      doctor_num, returnee_num, created_time, 
+      creator_account, modified_time, modifier_account, 
+      record_status)
+    values (#{id,jdbcType=VARCHAR}, #{orgId,jdbcType=VARCHAR}, #{staffCount,jdbcType=INTEGER}, 
+      #{professionNum,jdbcType=INTEGER}, #{bachelorNum,jdbcType=INTEGER}, #{masterNum,jdbcType=INTEGER}, 
+      #{doctorNum,jdbcType=INTEGER}, #{returneeNum,jdbcType=INTEGER}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{recordStatus,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.enterprise.servicemarket.org.entity.TbServiceOrgElement">
+    insert into tb_service_org_element
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="orgId != null">
+        org_id_,
+      </if>
+      <if test="staffCount != null">
+        staff_count,
+      </if>
+      <if test="professionNum != null">
+        profession_num,
+      </if>
+      <if test="bachelorNum != null">
+        bachelor_num,
+      </if>
+      <if test="masterNum != null">
+        master_num,
+      </if>
+      <if test="doctorNum != null">
+        doctor_num,
+      </if>
+      <if test="returneeNum != null">
+        returnee_num,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="orgId != null">
+        #{orgId,jdbcType=VARCHAR},
+      </if>
+      <if test="staffCount != null">
+        #{staffCount,jdbcType=INTEGER},
+      </if>
+      <if test="professionNum != null">
+        #{professionNum,jdbcType=INTEGER},
+      </if>
+      <if test="bachelorNum != null">
+        #{bachelorNum,jdbcType=INTEGER},
+      </if>
+      <if test="masterNum != null">
+        #{masterNum,jdbcType=INTEGER},
+      </if>
+      <if test="doctorNum != null">
+        #{doctorNum,jdbcType=INTEGER},
+      </if>
+      <if test="returneeNum != null">
+        #{returneeNum,jdbcType=INTEGER},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.enterprise.servicemarket.org.entity.TbServiceOrgElementCriteria" resultType="java.lang.Long">
+    select count(*) from tb_service_org_element
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_service_org_element
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orgId != null">
+        org_id_ = #{record.orgId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.staffCount != null">
+        staff_count = #{record.staffCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.professionNum != null">
+        profession_num = #{record.professionNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.bachelorNum != null">
+        bachelor_num = #{record.bachelorNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.masterNum != null">
+        master_num = #{record.masterNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.doctorNum != null">
+        doctor_num = #{record.doctorNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.returneeNum != null">
+        returnee_num = #{record.returneeNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_service_org_element
+    set id = #{record.id,jdbcType=VARCHAR},
+      org_id_ = #{record.orgId,jdbcType=VARCHAR},
+      staff_count = #{record.staffCount,jdbcType=INTEGER},
+      profession_num = #{record.professionNum,jdbcType=INTEGER},
+      bachelor_num = #{record.bachelorNum,jdbcType=INTEGER},
+      master_num = #{record.masterNum,jdbcType=INTEGER},
+      doctor_num = #{record.doctorNum,jdbcType=INTEGER},
+      returnee_num = #{record.returneeNum,jdbcType=INTEGER},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=TINYINT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.servicemarket.org.entity.TbServiceOrgElement">
+    update tb_service_org_element
+    <set>
+      <if test="orgId != null">
+        org_id_ = #{orgId,jdbcType=VARCHAR},
+      </if>
+      <if test="staffCount != null">
+        staff_count = #{staffCount,jdbcType=INTEGER},
+      </if>
+      <if test="professionNum != null">
+        profession_num = #{professionNum,jdbcType=INTEGER},
+      </if>
+      <if test="bachelorNum != null">
+        bachelor_num = #{bachelorNum,jdbcType=INTEGER},
+      </if>
+      <if test="masterNum != null">
+        master_num = #{masterNum,jdbcType=INTEGER},
+      </if>
+      <if test="doctorNum != null">
+        doctor_num = #{doctorNum,jdbcType=INTEGER},
+      </if>
+      <if test="returneeNum != null">
+        returnee_num = #{returneeNum,jdbcType=INTEGER},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.servicemarket.org.entity.TbServiceOrgElement">
+    update tb_service_org_element
+    set org_id_ = #{orgId,jdbcType=VARCHAR},
+      staff_count = #{staffCount,jdbcType=INTEGER},
+      profession_num = #{professionNum,jdbcType=INTEGER},
+      bachelor_num = #{bachelorNum,jdbcType=INTEGER},
+      master_num = #{masterNum,jdbcType=INTEGER},
+      doctor_num = #{doctorNum,jdbcType=INTEGER},
+      returnee_num = #{returneeNum,jdbcType=INTEGER},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=TINYINT}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

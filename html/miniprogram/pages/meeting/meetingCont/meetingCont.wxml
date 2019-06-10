@@ -1,0 +1,13 @@
+<!--pages/meeting/meetingPerson/meetingPerson.wxml-->
+<!-- <nav-bar navbar-data='{{nvabarData}}'></nav-bar> -->
+<view class="meetingCont" hover-class="none" hover-stop-propagation="false">
+  <view class="title" hover-class="none" hover-stop-propagation="false">
+    会议内容    
+  </view>
+  <view class="" hover-class="none" hover-stop-propagation="false">
+    <form bindsubmit="bindFormSubmit" >
+      <textarea bindinput="changeCont" placeholder="请输入会议内容" name="textarea" />
+      <button form-type="submit" class="submit" bindtap="goback">完成</button>
+    </form>
+  </view>
+</view>

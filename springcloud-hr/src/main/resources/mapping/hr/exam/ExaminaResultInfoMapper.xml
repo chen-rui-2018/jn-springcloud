@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.exam.dao.ExaminaResultInfoMapper">
+
+	<select id="listAchievement" resultType="java.lang.Integer"
+		parameterType="java.lang.String">
+		SELECT t1.achievement
+		FROM
+		tb_manpower_examina_result_info t1
+		WHERE t1.examina_id=
+		#{examinaId,jdbcType=VARCHAR}
+		and t1.record_status != 0
+		order by
+		t1.achievement desc
+	</select>
+
+	<select id="selectUserResult" resultType="com.jn.hr.exam.entity.TbManpowerExaminaResultInfo"
+		parameterType="com.jn.hr.exam.entity.TbManpowerExaminaResultInfo">
+		SELECT * FROM tb_manpower_examina_result_info
+		WHERE
+		examina_id = #{examinaId,jdbcType=VARCHAR}
+		AND job_number =
+		#{jobNumber,jdbcType=VARCHAR}
+		and record_status != 0
+
+	</select>
+
+
+	<update id="updateBatch" parameterType="com.jn.hr.exam.entity.TbManpowerExaminaResultInfo">
+		update
+		tb_manpower_examina_result_info
+		set rank= #{rank,jdbcType=INTEGER}
+		WHERE
+		examina_id=
+		#{examinaId,jdbcType=VARCHAR}
+		AND achievement=
+		#{achievement,jdbcType=INTEGER}
+	</update>
+
+
+	<select id="resultCount" resultType="java.lang.Integer"
+		parameterType="java.lang.String">
+		SELECT COUNT(*) FROM
+		tb_manpower_examina_result_info
+		WHERE
+		examina_id =
+		#{examinaId,jdbcType=VARCHAR}
+		and record_status != 0
+	</select>
+
+	<select id="listResultInfo" resultType="com.jn.hr.exam.model.ExaminaManagement"
+		parameterType="com.jn.hr.exam.model.ExaminaResultPage">
+		SELECT
+		t1.id resultId,t2.id,t2.examina_name,t1.job_number,t1.`name`,
+		t1.use_time,t1.achievement,t1.is_adopt,
+		CASE t1.is_adopt
+		WHEN 1 THEN '是'
+		ELSE '否' END isAdoptStr,
+		t1.examina_method,
+		CASE t1.examina_method
+		WHEN 1
+		THEN '电脑'
+		ELSE '手机' END examinaMethodStr,
+		t1.examina_start_time,t1.examina_end_time,
+		t1.rank,t2.total_score,t2.pass_score
+		FROM
+		tb_manpower_examina_result_info t1,tb_manpower_examina_management t2
+		WHERE t1.examina_id=t2.id
+		and t1.record_status != 0
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(examinaId)">
+			and t1.examina_id = #{examinaId,jdbcType=VARCHAR}
+		</if>
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
+			and t1.name like
+			CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+		</if>
+
+	</select>
+
+	<select id="getResultCount" resultType="com.jn.hr.exam.model.ExaminaManagement"
+		parameterType="com.jn.hr.exam.model.ExaminaResultPage">
+
+		SELECT COUNT(*) countStr,
+		AVG(achievement) avgStr,
+		MAX(achievement)
+		maxStr,
+		MIN(achievement) minStr
+		from tb_manpower_examina_result_info
+		WHERE record_status != 0
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(examinaId)">
+			and examina_id = #{examinaId,jdbcType=VARCHAR}
+		</if>
+	</select>
+
+	<select id="getAdoptCount" resultType="java.lang.Integer"
+		parameterType="com.jn.hr.exam.model.ExaminaResultPage">
+
+		SELECT COUNT(*) yesAdoptCountStr
+		from tb_manpower_examina_result_info
+		WHERE is_adopt=1
+		And record_status != 0
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(examinaId)">
+			and examina_id = #{examinaId,jdbcType=VARCHAR}
+		</if>
+	</select>
+
+</mapper>

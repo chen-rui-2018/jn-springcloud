@@ -1,25 +1,50 @@
 import axios from 'axios'
-// import { Message } from 'element-ui'
-import store from '@/store'
-import { getToken } from '@/utils/auth'
+import $ from 'jquery'
+import { getToken, setToken, removeToken } from '@/utils/auth'
 
 // create an axios instance
+const BASE_API = process.env.BASE_API
 const service = axios.create({
-  baseURL: process.env.BASE_API, // api 的 base_url
+  baseURL: BASE_API, // api 的 base_url
   timeout: 1000 // request timeout
 })
-const deleteCookie = function(key) { // 删除cookie方法
-  var date = new Date()
-  date.setTime(date.getTime() - 10000)
-  document.cookie = key + '=v; expires =' + date.toGMTString()
-}
 // request interceptor
 service.interceptors.request.use(
   config => {
     // Do something before request is sent
-    if (store.getters.token) {
+    // console.log('================>getToken：' + getToken() + '<1>' + !getToken())
+    if (!getToken()) {
+      $.ajax({
+        url: BASE_API + 'springcloud-app-system/authLogin',
+        type: 'POST',
+        async: false,
+        data: {
+        },
+        dataType: 'json',
+        beforeSend: function(xhr) {
+        },
+        success: function(data, textStatus, jqXHR) {
+          // console.log('================>authLogin请求返回data：' + data)
+          if (data.code === '0000') {
+            if (data.data !== null) {
+              // console.log('================>authLogin请求返回：' + data.data)
+              setToken(data.data)
+            }
+          }
+        },
+        error: function(xhr, textStatus) {
+        },
+        complete: function() {
+        }
+      })
+    }
+    // console.log('================>getToken：' + getToken() + '<2>' + !getToken())
+    if (getToken() != null) {
       // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
       config.headers['token'] = getToken()
+      // console.log('================>请求带token：' + getToken())
+    } else {
+      // console.log('================>请求不带token：' + getToken())
     }
     return config
   },
@@ -29,12 +54,20 @@ service.interceptors.request.use(
     Promise.reject(error)
   }
 )
+
 service.interceptors.response.use(response => {
-  return response
+  const res = response.data
+  // console.log('================>请求返回code：' + res.code)
+  if (res.code === 'index') {
+    removeToken()
+    location.href = 'http://112.94.22.222:2384/ibps/logout.htm'
+  } else {
+    return response
+  }
 }, error => {
-  deleteCookie('Admin-Token')
-  alert('请重新登录')
-  location.href = '/'
+  removeToken()
+  console.log('请重新登录：' + error)
+  location.href = 'http://112.94.22.222:2384/ibps/logout.htm'
   return Promise.reject(error)
 })
 

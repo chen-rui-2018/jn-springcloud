@@ -172,7 +172,7 @@ public class SysDictModuleServiceImpl implements SysDictModuleService {
      */
     @Override
     @ServiceLog(doAction = "条件分页查询模块列表")
-    public PaginationData getModuleByPage(SysDictModulePage sysDictModulePage) {
+    public PaginationData<List<SysDictModule>> getModuleByPage(SysDictModulePage sysDictModulePage) {
         Page<Object> objects = PageHelper.startPage(sysDictModulePage.getPage(), sysDictModulePage.getRows());
         List<SysDictModule> sysDictModuleList = sysDictModuleMapper.getModuleByPage(sysDictModulePage);
         PaginationData data = new PaginationData(sysDictModuleList, objects.getTotal());

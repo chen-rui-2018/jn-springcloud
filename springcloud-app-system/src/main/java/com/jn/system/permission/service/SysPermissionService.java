@@ -5,6 +5,10 @@ import com.jn.system.model.User;
 import com.jn.system.permission.entity.TbSysPermission;
 import com.jn.system.permission.model.*;
 import com.jn.system.permission.vo.SysMenuResourcesVO;
+import com.jn.system.permission.vo.SysPermissionFileGroupVO;
+import com.jn.system.permission.vo.SysPermissionRoleVO;
+
+import java.util.List;
 
 /**
  * @author： shaobao
@@ -42,7 +46,7 @@ public interface SysPermissionService {
      * @param sysPermissionPage
      * @return
      */
-    PaginationData findByPage(SysPermissionPage sysPermissionPage);
+    PaginationData<List<SysPermission>> findByPage(SysPermissionPage sysPermissionPage);
 
     /**
      * 逻辑删除权限信息
@@ -65,7 +69,7 @@ public interface SysPermissionService {
      * @param sysPermissionRolePage
      * @return
      */
-    PaginationData findRoleOfPermission(SysPermissionRolePage sysPermissionRolePage);
+    PaginationData<SysPermissionRoleVO> findRoleOfPermission(SysPermissionRolePage sysPermissionRolePage);
 
     /**
      * 获取除权限已经具有的文件组信息,且条件分页获取权限未拥有的文件组信息
@@ -73,7 +77,7 @@ public interface SysPermissionService {
      * @param sysPermissionFileGroupPage
      * @return
      */
-    PaginationData findFileGroupOfPermission(SysPermissionFileGroupPage sysPermissionFileGroupPage);
+    PaginationData<SysPermissionFileGroupVO> findFileGroupOfPermission(SysPermissionFileGroupPage sysPermissionFileGroupPage);
 
     /**
      * 为权限添加文件组

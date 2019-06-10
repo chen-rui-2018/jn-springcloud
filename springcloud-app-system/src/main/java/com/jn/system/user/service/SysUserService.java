@@ -2,10 +2,15 @@ package com.jn.system.user.service;
 
 import com.jn.common.model.PaginationData;
 import com.jn.system.model.User;
+import com.jn.system.model.UserPage;
 import com.jn.system.user.model.*;
+import com.jn.system.user.vo.SysUserGroupVO;
+import com.jn.system.user.vo.SysUserRoleVO;
+import com.jn.system.user.vo.SysUserVO;
 import com.jn.system.vo.SysDepartmentPostVO;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 用户dao
@@ -30,7 +35,7 @@ public interface SysUserService {
      * @param userPage
      * @return
      */
-    PaginationData findSysUserByPage(SysUserPage userPage);
+    PaginationData<List<SysUserVO>> findSysUserByPage(UserPage userPage);
 
     /**
      * 逻辑删除用户
@@ -54,7 +59,7 @@ public interface SysUserService {
      * @param sysUserGroupPage
      * @return
      */
-    PaginationData findSysGroupByUserId(SysUserGroupPage sysUserGroupPage);
+    PaginationData<SysUserGroupVO> findSysGroupByUserId(SysUserGroupPage sysUserGroupPage);
 
     /**
      * 往用户中添加用户组
@@ -70,7 +75,7 @@ public interface SysUserService {
      * @param sysUserRolePage
      * @return
      */
-    PaginationData findSysRoleByUserId(SysUserRolePage sysUserRolePage);
+    PaginationData<SysUserRoleVO> findSysRoleByUserId(SysUserRolePage sysUserRolePage);
 
     /**
      * 为用户添加角色权限
@@ -97,14 +102,6 @@ public interface SysUserService {
     void saveDepartmentAndPostOfUser(SysUserDepartmentPostAdd sysUserDepartmentPostAdd, User user);
 
     /**
-     * 根据用户id返回用户信息
-     *
-     * @param id
-     * @return
-     */
-    SysUser findSysUserById(String id);
-
-    /**
      * 校验用户账号是否存在
      *
      * @param account
@@ -120,4 +117,30 @@ public interface SysUserService {
      * @return
      */
     List<User> getUserAll();
+
+    /**
+     * 通过用户账号,获取用户信息,多个账号,返回多个用户信息
+     *
+     * @param accountList 账号集合
+     * @return
+     */
+    List<User> getUserInfoByAccount(List<String> accountList);
+
+    /**
+     * 修改用户角色信息
+     *
+     * @param user        用户对象,传账号id都可以,都传,优先使用id操作
+     * @param deleRoleIds 删除的角色id集合,不删除集合传空集合
+     * @param addRoleIds  新增的角色id集合,不新增集合传空集合
+     * @return
+     */
+    Boolean updateUserRole(User user, Set<String> deleRoleIds, Set<String> addRoleIds);
+
+    /**
+     * 根据用户id，查询用户信息
+     *
+     * @param ids 用户数组
+     * @return
+     */
+    List<User> selectUserByIds(String[] ids);
 }

@@ -1,0 +1,27 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://springcloud:springcloud@localhost:1025/eureka/
+  instance:
+    prefer-ip-address: true
+
+spring:
+  application:
+    name: xxpay-service
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        serviceId: springcloud-app-config
+      label: master
+      profile: master
+  sleuth:
+    sampler:
+      percentage: 1.0
+
+management:
+  security:
+    enabled: false
+
+server:
+  port: 3000

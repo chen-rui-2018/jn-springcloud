@@ -38,8 +38,8 @@
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <div class="pagination-container  tablePagination">
-      <el-pagination v-show="total>0" :current-page="listQuery.page" :page-sizes="[5,10,20,30, 50]" :page-size="listQuery.rows" :total="total" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+    <div>
+      <el-pagination v-show="total>0" :current-page="listQuery.page" :page-sizes="[5,10,20,30, 50]" :page-size="listQuery.rows" :total="total" background layout="total, sizes, prev, pager, next, jumper" style="margin-top:15px;" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <!-- 弹出的新增岗位对话框 -->
     <el-dialog :visible.sync="postTypeDialogFormVisible" :title="dialogStatus" width="400px">
@@ -62,8 +62,7 @@
 </template>
 
 <script>
-import { api, paramApi } from '@/api/Permission-model/userManagement'
-// import { getPostTypeList, addPostTypeList, editPostTypeList, deletePostTypeById, checkPostTypeName } from '@/api/Permission-model/postTypeManagement'
+import { api, paramApi } from '@/api/axios'
 export default {
   data() {
     var checkAccount = (rule, value, callback) => {
@@ -72,8 +71,8 @@ export default {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
         if (this.dialogStatus === '新增岗位类型') {
-          paramApi(this.postTypeForm.postTypeName).then(res => {
-            if (res.data.code === '0000') {
+          paramApi(`${this.GLOBAL.systemUrl}system/sysPostType/checkPostTypeName`, this.postTypeForm.postTypeName, 'postTypeName').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               if (res.data.data === 'success') {
                 callback()
               } else {
@@ -83,8 +82,8 @@ export default {
           })
         } else {
           if (this.oldPostTypeName !== this.postTypeForm.postTypeName) {
-            paramApi('system/sysPostType/checkPostTypeName', this.postTypeForm.postTypeName, 'postTypeName').then(res => {
-              if (res.data.code === '0000') {
+            paramApi(`${this.GLOBAL.systemUrl}system/sysPostType/checkPostTypeName`, this.postTypeForm.postTypeName, 'postTypeName').then(res => {
+              if (res.data.code === this.GLOBAL.code) {
                 if (res.data.data === 'success') {
                   callback()
                 } else {
@@ -144,8 +143,8 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          paramApi('system/sysPostType/delete', id, 'postTypeId').then(res => {
-            if (res.data.code === '0000') {
+          paramApi(`${this.GLOBAL.systemUrl}system/sysPostType/delete`, id, 'postTypeId').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '删除成功',
                 type: 'success'
@@ -182,8 +181,8 @@ export default {
         if (valid) {
           this.isDisabled = true
           // // 调用接口发送请求
-          api('system/sysPostType/update', this.postTypeForm).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.systemUrl}system/sysPostType/update`, this.postTypeForm, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '编辑成功',
                 type: 'success'
@@ -206,8 +205,8 @@ export default {
       this.$refs['postTypeForm'].validate(valid => {
         if (valid) {
           // 调用接口发送请求
-          api('system/sysPostType/add', this.postTypeForm).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.systemUrl}system/sysPostType/add`, this.postTypeForm, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '添加成功',
                 type: 'success'
@@ -260,8 +259,8 @@ export default {
     },
     initList() {
       this.listLoading = true
-      api('system/sysPostType/list', this.listQuery).then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.systemUrl}system/sysPostType/list`, this.listQuery, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.postTypeList = res.data.data.rows
           this.total = res.data.data.total
           if (this.postTypeList.length === 0 && this.total > 0) {

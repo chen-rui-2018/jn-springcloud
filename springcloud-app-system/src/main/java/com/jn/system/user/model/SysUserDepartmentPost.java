@@ -14,7 +14,7 @@ import java.io.Serializable;
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysUserPage",description = "根据用户id查询用户部门岗位")
+@ApiModel(value = "SysUserDepartmentPost",description = "根据用户id查询用户部门岗位")
 public class SysUserDepartmentPost extends Page implements Serializable {
 
     @ApiModelProperty("userId")

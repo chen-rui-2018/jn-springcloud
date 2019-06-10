@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.increase.dao.TbManpowerInsuredSchemeDetailedMapper">
+  <resultMap id="BaseResultMap" type="com.jn.hr.increase.entity.TbManpowerInsuredSchemeDetailed">
+    <id column="project_id" jdbcType="VARCHAR" property="projectId" />
+    <result column="project_name" jdbcType="VARCHAR" property="projectName" />
+    <result column="default_cardinal_number" jdbcType="INTEGER" property="defaultCardinalNumber" />
+    <result column="optional_base_start" jdbcType="INTEGER" property="optionalBaseStart" />
+    <result column="optional_base_end" jdbcType="INTEGER" property="optionalBaseEnd" />
+    <result column="corporate_contribution_ratio" jdbcType="INTEGER" property="corporateContributionRatio" />
+    <result column="individual_contribution_ratio" jdbcType="INTEGER" property="individualContributionRatio" />
+    <result column="scheme_id" jdbcType="VARCHAR" property="schemeId" />
+    <result column="social_security_id" jdbcType="VARCHAR" property="socialSecurityId" />
+    <result column="provident_fund_id" jdbcType="VARCHAR" property="providentFundId" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="project_type" jdbcType="TINYINT" property="projectType" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    project_id, project_name, default_cardinal_number, optional_base_start, optional_base_end, 
+    corporate_contribution_ratio, individual_contribution_ratio, scheme_id, social_security_id, 
+    provident_fund_id, record_status, creator_account, created_time, modifier_account, 
+    modified_time, project_type
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.hr.increase.entity.TbManpowerInsuredSchemeDetailedCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_manpower_insured_scheme_detailed
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_manpower_insured_scheme_detailed
+    where project_id = #{projectId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_manpower_insured_scheme_detailed
+    where project_id = #{projectId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.hr.increase.entity.TbManpowerInsuredSchemeDetailedCriteria">
+    delete from tb_manpower_insured_scheme_detailed
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.hr.increase.entity.TbManpowerInsuredSchemeDetailed">
+    insert into tb_manpower_insured_scheme_detailed (project_id, project_name, default_cardinal_number, 
+      optional_base_start, optional_base_end, corporate_contribution_ratio, 
+      individual_contribution_ratio, scheme_id, 
+      social_security_id, provident_fund_id, record_status, 
+      creator_account, created_time, modifier_account, 
+      modified_time, project_type)
+    values (#{projectId,jdbcType=VARCHAR}, #{projectName,jdbcType=VARCHAR}, #{defaultCardinalNumber,jdbcType=INTEGER}, 
+      #{optionalBaseStart,jdbcType=INTEGER}, #{optionalBaseEnd,jdbcType=INTEGER}, #{corporateContributionRatio,jdbcType=INTEGER}, 
+      #{individualContributionRatio,jdbcType=INTEGER}, #{schemeId,jdbcType=VARCHAR}, 
+      #{socialSecurityId,jdbcType=VARCHAR}, #{providentFundId,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{projectType,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.hr.increase.entity.TbManpowerInsuredSchemeDetailed">
+    insert into tb_manpower_insured_scheme_detailed
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="projectId != null">
+        project_id,
+      </if>
+      <if test="projectName != null">
+        project_name,
+      </if>
+      <if test="defaultCardinalNumber != null">
+        default_cardinal_number,
+      </if>
+      <if test="optionalBaseStart != null">
+        optional_base_start,
+      </if>
+      <if test="optionalBaseEnd != null">
+        optional_base_end,
+      </if>
+      <if test="corporateContributionRatio != null">
+        corporate_contribution_ratio,
+      </if>
+      <if test="individualContributionRatio != null">
+        individual_contribution_ratio,
+      </if>
+      <if test="schemeId != null">
+        scheme_id,
+      </if>
+      <if test="socialSecurityId != null">
+        social_security_id,
+      </if>
+      <if test="providentFundId != null">
+        provident_fund_id,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="projectType != null">
+        project_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="projectId != null">
+        #{projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null">
+        #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="defaultCardinalNumber != null">
+        #{defaultCardinalNumber,jdbcType=INTEGER},
+      </if>
+      <if test="optionalBaseStart != null">
+        #{optionalBaseStart,jdbcType=INTEGER},
+      </if>
+      <if test="optionalBaseEnd != null">
+        #{optionalBaseEnd,jdbcType=INTEGER},
+      </if>
+      <if test="corporateContributionRatio != null">
+        #{corporateContributionRatio,jdbcType=INTEGER},
+      </if>
+      <if test="individualContributionRatio != null">
+        #{individualContributionRatio,jdbcType=INTEGER},
+      </if>
+      <if test="schemeId != null">
+        #{schemeId,jdbcType=VARCHAR},
+      </if>
+      <if test="socialSecurityId != null">
+        #{socialSecurityId,jdbcType=VARCHAR},
+      </if>
+      <if test="providentFundId != null">
+        #{providentFundId,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="projectType != null">
+        #{projectType,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.hr.increase.entity.TbManpowerInsuredSchemeDetailedCriteria" resultType="java.lang.Long">
+    select count(*) from tb_manpower_insured_scheme_detailed
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_manpower_insured_scheme_detailed
+    <set>
+      <if test="record.projectId != null">
+        project_id = #{record.projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.projectName != null">
+        project_name = #{record.projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.defaultCardinalNumber != null">
+        default_cardinal_number = #{record.defaultCardinalNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.optionalBaseStart != null">
+        optional_base_start = #{record.optionalBaseStart,jdbcType=INTEGER},
+      </if>
+      <if test="record.optionalBaseEnd != null">
+        optional_base_end = #{record.optionalBaseEnd,jdbcType=INTEGER},
+      </if>
+      <if test="record.corporateContributionRatio != null">
+        corporate_contribution_ratio = #{record.corporateContributionRatio,jdbcType=INTEGER},
+      </if>
+      <if test="record.individualContributionRatio != null">
+        individual_contribution_ratio = #{record.individualContributionRatio,jdbcType=INTEGER},
+      </if>
+      <if test="record.schemeId != null">
+        scheme_id = #{record.schemeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.socialSecurityId != null">
+        social_security_id = #{record.socialSecurityId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.providentFundId != null">
+        provident_fund_id = #{record.providentFundId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.projectType != null">
+        project_type = #{record.projectType,jdbcType=TINYINT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_manpower_insured_scheme_detailed
+    set project_id = #{record.projectId,jdbcType=VARCHAR},
+      project_name = #{record.projectName,jdbcType=VARCHAR},
+      default_cardinal_number = #{record.defaultCardinalNumber,jdbcType=INTEGER},
+      optional_base_start = #{record.optionalBaseStart,jdbcType=INTEGER},
+      optional_base_end = #{record.optionalBaseEnd,jdbcType=INTEGER},
+      corporate_contribution_ratio = #{record.corporateContributionRatio,jdbcType=INTEGER},
+      individual_contribution_ratio = #{record.individualContributionRatio,jdbcType=INTEGER},
+      scheme_id = #{record.schemeId,jdbcType=VARCHAR},
+      social_security_id = #{record.socialSecurityId,jdbcType=VARCHAR},
+      provident_fund_id = #{record.providentFundId,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      project_type = #{record.projectType,jdbcType=TINYINT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.hr.increase.entity.TbManpowerInsuredSchemeDetailed">
+    update tb_manpower_insured_scheme_detailed
+    <set>
+      <if test="projectName != null">
+        project_name = #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="defaultCardinalNumber != null">
+        default_cardinal_number = #{defaultCardinalNumber,jdbcType=INTEGER},
+      </if>
+      <if test="optionalBaseStart != null">
+        optional_base_start = #{optionalBaseStart,jdbcType=INTEGER},
+      </if>
+      <if test="optionalBaseEnd != null">
+        optional_base_end = #{optionalBaseEnd,jdbcType=INTEGER},
+      </if>
+      <if test="corporateContributionRatio != null">
+        corporate_contribution_ratio = #{corporateContributionRatio,jdbcType=INTEGER},
+      </if>
+      <if test="individualContributionRatio != null">
+        individual_contribution_ratio = #{individualContributionRatio,jdbcType=INTEGER},
+      </if>
+      <if test="schemeId != null">
+        scheme_id = #{schemeId,jdbcType=VARCHAR},
+      </if>
+      <if test="socialSecurityId != null">
+        social_security_id = #{socialSecurityId,jdbcType=VARCHAR},
+      </if>
+      <if test="providentFundId != null">
+        provident_fund_id = #{providentFundId,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="projectType != null">
+        project_type = #{projectType,jdbcType=TINYINT},
+      </if>
+    </set>
+    where project_id = #{projectId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.hr.increase.entity.TbManpowerInsuredSchemeDetailed">
+    update tb_manpower_insured_scheme_detailed
+    set project_name = #{projectName,jdbcType=VARCHAR},
+      default_cardinal_number = #{defaultCardinalNumber,jdbcType=INTEGER},
+      optional_base_start = #{optionalBaseStart,jdbcType=INTEGER},
+      optional_base_end = #{optionalBaseEnd,jdbcType=INTEGER},
+      corporate_contribution_ratio = #{corporateContributionRatio,jdbcType=INTEGER},
+      individual_contribution_ratio = #{individualContributionRatio,jdbcType=INTEGER},
+      scheme_id = #{schemeId,jdbcType=VARCHAR},
+      social_security_id = #{socialSecurityId,jdbcType=VARCHAR},
+      provident_fund_id = #{providentFundId,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      project_type = #{projectType,jdbcType=TINYINT}
+    where project_id = #{projectId,jdbcType=VARCHAR}
+  </update>
+</mapper>

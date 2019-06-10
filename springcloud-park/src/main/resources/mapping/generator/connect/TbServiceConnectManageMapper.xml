@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.connect.dao.TbServiceConnectManageMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.connect.entity.TbServiceConnectManage">
+    <id column="connect_id" jdbcType="VARCHAR" property="id" />
+    <result column="connect_entrance_name" jdbcType="VARCHAR" property="entranceName" />
+    <result column="connect_entrance_name_code" jdbcType="VARCHAR" property="entranceNameCode" />
+    <result column="connect_service_connect" jdbcType="VARCHAR" property="serviceConnect" />
+    <result column="connect_connect_address" jdbcType="VARCHAR" property="connectAddress" />
+    <result column="connect_show_img" jdbcType="VARCHAR" property="showImg" />
+    <result column="connect_sort" jdbcType="VARCHAR" property="sort" />
+    <result column="connect_is_valid" jdbcType="TINYINT" property="isValid" />
+    <result column="connect_creator_account_id" jdbcType="VARCHAR" property="creatorAccountId" />
+    <result column="connect_creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="connect_record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="connect_created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="connect_modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="connect_modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    connect.id as connect_id, connect.entrance_name as connect_entrance_name, connect.entrance_name_code as connect_entrance_name_code, 
+    connect.service_connect as connect_service_connect, connect.connect_address as connect_connect_address, 
+    connect.show_img as connect_show_img, connect.sort as connect_sort, connect.is_valid as connect_is_valid, 
+    connect.creator_account_id as connect_creator_account_id, connect.creator_account as connect_creator_account, 
+    connect.record_status as connect_record_status, connect.created_time as connect_created_time, 
+    connect.modifier_account as connect_modifier_account, connect.modified_time as connect_modified_time
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.park.connect.entity.TbServiceConnectManageCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_service_connect_manage connect
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_service_connect_manage connect
+    where connect.id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_service_connect_manage
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.park.connect.entity.TbServiceConnectManageCriteria">
+    delete from tb_service_connect_manage connect
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.park.connect.entity.TbServiceConnectManage">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_service_connect_manage (entrance_name, entrance_name_code, service_connect, 
+      connect_address, show_img, sort, 
+      is_valid, creator_account_id, creator_account, 
+      record_status, created_time, modifier_account, 
+      modified_time)
+    values (#{entranceName,jdbcType=VARCHAR}, #{entranceNameCode,jdbcType=VARCHAR}, #{serviceConnect,jdbcType=VARCHAR}, 
+      #{connectAddress,jdbcType=VARCHAR}, #{showImg,jdbcType=VARCHAR}, #{sort,jdbcType=VARCHAR}, 
+      #{isValid,jdbcType=TINYINT}, #{creatorAccountId,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{recordStatus,jdbcType=TINYINT}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.park.connect.entity.TbServiceConnectManage">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_service_connect_manage
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="entranceName != null">
+        entrance_name,
+      </if>
+      <if test="entranceNameCode != null">
+        entrance_name_code,
+      </if>
+      <if test="serviceConnect != null">
+        service_connect,
+      </if>
+      <if test="connectAddress != null">
+        connect_address,
+      </if>
+      <if test="showImg != null">
+        show_img,
+      </if>
+      <if test="sort != null">
+        sort,
+      </if>
+      <if test="isValid != null">
+        is_valid,
+      </if>
+      <if test="creatorAccountId != null">
+        creator_account_id,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="entranceName != null">
+        #{entranceName,jdbcType=VARCHAR},
+      </if>
+      <if test="entranceNameCode != null">
+        #{entranceNameCode,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceConnect != null">
+        #{serviceConnect,jdbcType=VARCHAR},
+      </if>
+      <if test="connectAddress != null">
+        #{connectAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="showImg != null">
+        #{showImg,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=VARCHAR},
+      </if>
+      <if test="isValid != null">
+        #{isValid,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccountId != null">
+        #{creatorAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.park.connect.entity.TbServiceConnectManageCriteria" resultType="java.lang.Long">
+    select count(*) from tb_service_connect_manage connect
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_service_connect_manage connect
+    <set>
+      <if test="record.id != null">
+        connect.id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.entranceName != null">
+        connect.entrance_name = #{record.entranceName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.entranceNameCode != null">
+        connect.entrance_name_code = #{record.entranceNameCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serviceConnect != null">
+        connect.service_connect = #{record.serviceConnect,jdbcType=VARCHAR},
+      </if>
+      <if test="record.connectAddress != null">
+        connect.connect_address = #{record.connectAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.showImg != null">
+        connect.show_img = #{record.showImg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sort != null">
+        connect.sort = #{record.sort,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isValid != null">
+        connect.is_valid = #{record.isValid,jdbcType=TINYINT},
+      </if>
+      <if test="record.creatorAccountId != null">
+        connect.creator_account_id = #{record.creatorAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creatorAccount != null">
+        connect.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recordStatus != null">
+        connect.record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.createdTime != null">
+        connect.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        connect.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        connect.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_service_connect_manage connect
+    set connect.id = #{record.id,jdbcType=VARCHAR},
+      connect.entrance_name = #{record.entranceName,jdbcType=VARCHAR},
+      connect.entrance_name_code = #{record.entranceNameCode,jdbcType=VARCHAR},
+      connect.service_connect = #{record.serviceConnect,jdbcType=VARCHAR},
+      connect.connect_address = #{record.connectAddress,jdbcType=VARCHAR},
+      connect.show_img = #{record.showImg,jdbcType=VARCHAR},
+      connect.sort = #{record.sort,jdbcType=VARCHAR},
+      connect.is_valid = #{record.isValid,jdbcType=TINYINT},
+      connect.creator_account_id = #{record.creatorAccountId,jdbcType=VARCHAR},
+      connect.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      connect.record_status = #{record.recordStatus,jdbcType=TINYINT},
+      connect.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      connect.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      connect.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.connect.entity.TbServiceConnectManage">
+    update tb_service_connect_manage
+    <set>
+      <if test="entranceName != null">
+        entrance_name = #{entranceName,jdbcType=VARCHAR},
+      </if>
+      <if test="entranceNameCode != null">
+        entrance_name_code = #{entranceNameCode,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceConnect != null">
+        service_connect = #{serviceConnect,jdbcType=VARCHAR},
+      </if>
+      <if test="connectAddress != null">
+        connect_address = #{connectAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="showImg != null">
+        show_img = #{showImg,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null">
+        sort = #{sort,jdbcType=VARCHAR},
+      </if>
+      <if test="isValid != null">
+        is_valid = #{isValid,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccountId != null">
+        creator_account_id = #{creatorAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.connect.entity.TbServiceConnectManage">
+    update tb_service_connect_manage
+    set entrance_name = #{entranceName,jdbcType=VARCHAR},
+      entrance_name_code = #{entranceNameCode,jdbcType=VARCHAR},
+      service_connect = #{serviceConnect,jdbcType=VARCHAR},
+      connect_address = #{connectAddress,jdbcType=VARCHAR},
+      show_img = #{showImg,jdbcType=VARCHAR},
+      sort = #{sort,jdbcType=VARCHAR},
+      is_valid = #{isValid,jdbcType=TINYINT},
+      creator_account_id = #{creatorAccountId,jdbcType=VARCHAR},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

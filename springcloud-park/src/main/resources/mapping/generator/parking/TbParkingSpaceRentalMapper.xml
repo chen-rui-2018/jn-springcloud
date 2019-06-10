@@ -1,0 +1,591 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.parking.dao.TbParkingSpaceRentalMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.parking.entity.TbParkingSpaceRental">
+    <id column="rent_id_" jdbcType="VARCHAR" property="rentId" />
+    <result column="area_id_" jdbcType="VARCHAR" property="areaId" />
+    <result column="area_name" jdbcType="VARCHAR" property="areaName" />
+    <result column="space_id_" jdbcType="VARCHAR" property="spaceId" />
+    <result column="space_serial" jdbcType="VARCHAR" property="spaceSerial" />
+    <result column="parking_info" jdbcType="VARCHAR" property="parkingInfo" />
+    <result column="car_license" jdbcType="VARCHAR" property="carLicense" />
+    <result column="account" jdbcType="VARCHAR" property="account" />
+    <result column="company_id" jdbcType="VARCHAR" property="companyId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="rent_price" jdbcType="VARCHAR" property="rentPrice" />
+    <result column="policy_id_" jdbcType="VARCHAR" property="policyId" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="due_money" jdbcType="DOUBLE" property="dueMoney" />
+    <result column="deduction_money" jdbcType="DOUBLE" property="deductionMoney" />
+    <result column="actual_money" jdbcType="DOUBLE" property="actualMoney" />
+    <result column="order_bill_num" jdbcType="VARCHAR" property="orderBillNum" />
+    <result column="approval_account" jdbcType="VARCHAR" property="approvalAccount" />
+    <result column="approval_name" jdbcType="VARCHAR" property="approvalName" />
+    <result column="approval_comments" jdbcType="VARCHAR" property="approvalComments" />
+    <result column="approval_status" jdbcType="VARCHAR" property="approvalStatus" />
+    <result column="contract_attachment" jdbcType="VARCHAR" property="contractAttachment" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    rent_id_, area_id_, area_name, space_id_, space_serial, parking_info, car_license, 
+    account, company_id, name, phone, rent_price, policy_id_, start_time, end_time, due_money, 
+    deduction_money, actual_money, order_bill_num, approval_account, approval_name, approval_comments, 
+    approval_status, contract_attachment, created_time, creator_account, modified_time, 
+    modifier_account, record_status
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.park.parking.entity.TbParkingSpaceRentalCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_parking_space_rental
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_parking_space_rental
+    where rent_id_ = #{rentId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_parking_space_rental
+    where rent_id_ = #{rentId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.park.parking.entity.TbParkingSpaceRentalCriteria">
+    delete from tb_parking_space_rental
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.park.parking.entity.TbParkingSpaceRental">
+    insert into tb_parking_space_rental (rent_id_, area_id_, area_name, 
+      space_id_, space_serial, parking_info, 
+      car_license, account, company_id, 
+      name, phone, rent_price, 
+      policy_id_, start_time, end_time, 
+      due_money, deduction_money, actual_money, 
+      order_bill_num, approval_account, approval_name, 
+      approval_comments, approval_status, contract_attachment, 
+      created_time, creator_account, modified_time, 
+      modifier_account, record_status)
+    values (#{rentId,jdbcType=VARCHAR}, #{areaId,jdbcType=VARCHAR}, #{areaName,jdbcType=VARCHAR}, 
+      #{spaceId,jdbcType=VARCHAR}, #{spaceSerial,jdbcType=VARCHAR}, #{parkingInfo,jdbcType=VARCHAR}, 
+      #{carLicense,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{companyId,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{rentPrice,jdbcType=VARCHAR}, 
+      #{policyId,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
+      #{dueMoney,jdbcType=DOUBLE}, #{deductionMoney,jdbcType=DOUBLE}, #{actualMoney,jdbcType=DOUBLE}, 
+      #{orderBillNum,jdbcType=VARCHAR}, #{approvalAccount,jdbcType=VARCHAR}, #{approvalName,jdbcType=VARCHAR}, 
+      #{approvalComments,jdbcType=VARCHAR}, #{approvalStatus,jdbcType=VARCHAR}, #{contractAttachment,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.park.parking.entity.TbParkingSpaceRental">
+    insert into tb_parking_space_rental
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="rentId != null">
+        rent_id_,
+      </if>
+      <if test="areaId != null">
+        area_id_,
+      </if>
+      <if test="areaName != null">
+        area_name,
+      </if>
+      <if test="spaceId != null">
+        space_id_,
+      </if>
+      <if test="spaceSerial != null">
+        space_serial,
+      </if>
+      <if test="parkingInfo != null">
+        parking_info,
+      </if>
+      <if test="carLicense != null">
+        car_license,
+      </if>
+      <if test="account != null">
+        account,
+      </if>
+      <if test="companyId != null">
+        company_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="rentPrice != null">
+        rent_price,
+      </if>
+      <if test="policyId != null">
+        policy_id_,
+      </if>
+      <if test="startTime != null">
+        start_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="dueMoney != null">
+        due_money,
+      </if>
+      <if test="deductionMoney != null">
+        deduction_money,
+      </if>
+      <if test="actualMoney != null">
+        actual_money,
+      </if>
+      <if test="orderBillNum != null">
+        order_bill_num,
+      </if>
+      <if test="approvalAccount != null">
+        approval_account,
+      </if>
+      <if test="approvalName != null">
+        approval_name,
+      </if>
+      <if test="approvalComments != null">
+        approval_comments,
+      </if>
+      <if test="approvalStatus != null">
+        approval_status,
+      </if>
+      <if test="contractAttachment != null">
+        contract_attachment,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="rentId != null">
+        #{rentId,jdbcType=VARCHAR},
+      </if>
+      <if test="areaId != null">
+        #{areaId,jdbcType=VARCHAR},
+      </if>
+      <if test="areaName != null">
+        #{areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="spaceId != null">
+        #{spaceId,jdbcType=VARCHAR},
+      </if>
+      <if test="spaceSerial != null">
+        #{spaceSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="parkingInfo != null">
+        #{parkingInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="carLicense != null">
+        #{carLicense,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null">
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="rentPrice != null">
+        #{rentPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="policyId != null">
+        #{policyId,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dueMoney != null">
+        #{dueMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="deductionMoney != null">
+        #{deductionMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="actualMoney != null">
+        #{actualMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="orderBillNum != null">
+        #{orderBillNum,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalAccount != null">
+        #{approvalAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalName != null">
+        #{approvalName,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalComments != null">
+        #{approvalComments,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalStatus != null">
+        #{approvalStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="contractAttachment != null">
+        #{contractAttachment,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.park.parking.entity.TbParkingSpaceRentalCriteria" resultType="java.lang.Long">
+    select count(*) from tb_parking_space_rental
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_parking_space_rental
+    <set>
+      <if test="record.rentId != null">
+        rent_id_ = #{record.rentId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.areaId != null">
+        area_id_ = #{record.areaId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.areaName != null">
+        area_name = #{record.areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.spaceId != null">
+        space_id_ = #{record.spaceId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.spaceSerial != null">
+        space_serial = #{record.spaceSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parkingInfo != null">
+        parking_info = #{record.parkingInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.carLicense != null">
+        car_license = #{record.carLicense,jdbcType=VARCHAR},
+      </if>
+      <if test="record.account != null">
+        account = #{record.account,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyId != null">
+        company_id = #{record.companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.phone != null">
+        phone = #{record.phone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rentPrice != null">
+        rent_price = #{record.rentPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="record.policyId != null">
+        policy_id_ = #{record.policyId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.startTime != null">
+        start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endTime != null">
+        end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.dueMoney != null">
+        due_money = #{record.dueMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="record.deductionMoney != null">
+        deduction_money = #{record.deductionMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="record.actualMoney != null">
+        actual_money = #{record.actualMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="record.orderBillNum != null">
+        order_bill_num = #{record.orderBillNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.approvalAccount != null">
+        approval_account = #{record.approvalAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.approvalName != null">
+        approval_name = #{record.approvalName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.approvalComments != null">
+        approval_comments = #{record.approvalComments,jdbcType=VARCHAR},
+      </if>
+      <if test="record.approvalStatus != null">
+        approval_status = #{record.approvalStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contractAttachment != null">
+        contract_attachment = #{record.contractAttachment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_parking_space_rental
+    set rent_id_ = #{record.rentId,jdbcType=VARCHAR},
+      area_id_ = #{record.areaId,jdbcType=VARCHAR},
+      area_name = #{record.areaName,jdbcType=VARCHAR},
+      space_id_ = #{record.spaceId,jdbcType=VARCHAR},
+      space_serial = #{record.spaceSerial,jdbcType=VARCHAR},
+      parking_info = #{record.parkingInfo,jdbcType=VARCHAR},
+      car_license = #{record.carLicense,jdbcType=VARCHAR},
+      account = #{record.account,jdbcType=VARCHAR},
+      company_id = #{record.companyId,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      phone = #{record.phone,jdbcType=VARCHAR},
+      rent_price = #{record.rentPrice,jdbcType=VARCHAR},
+      policy_id_ = #{record.policyId,jdbcType=VARCHAR},
+      start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      due_money = #{record.dueMoney,jdbcType=DOUBLE},
+      deduction_money = #{record.deductionMoney,jdbcType=DOUBLE},
+      actual_money = #{record.actualMoney,jdbcType=DOUBLE},
+      order_bill_num = #{record.orderBillNum,jdbcType=VARCHAR},
+      approval_account = #{record.approvalAccount,jdbcType=VARCHAR},
+      approval_name = #{record.approvalName,jdbcType=VARCHAR},
+      approval_comments = #{record.approvalComments,jdbcType=VARCHAR},
+      approval_status = #{record.approvalStatus,jdbcType=VARCHAR},
+      contract_attachment = #{record.contractAttachment,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=TINYINT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.parking.entity.TbParkingSpaceRental">
+    update tb_parking_space_rental
+    <set>
+      <if test="areaId != null">
+        area_id_ = #{areaId,jdbcType=VARCHAR},
+      </if>
+      <if test="areaName != null">
+        area_name = #{areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="spaceId != null">
+        space_id_ = #{spaceId,jdbcType=VARCHAR},
+      </if>
+      <if test="spaceSerial != null">
+        space_serial = #{spaceSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="parkingInfo != null">
+        parking_info = #{parkingInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="carLicense != null">
+        car_license = #{carLicense,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null">
+        account = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        company_id = #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="rentPrice != null">
+        rent_price = #{rentPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="policyId != null">
+        policy_id_ = #{policyId,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dueMoney != null">
+        due_money = #{dueMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="deductionMoney != null">
+        deduction_money = #{deductionMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="actualMoney != null">
+        actual_money = #{actualMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="orderBillNum != null">
+        order_bill_num = #{orderBillNum,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalAccount != null">
+        approval_account = #{approvalAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalName != null">
+        approval_name = #{approvalName,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalComments != null">
+        approval_comments = #{approvalComments,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalStatus != null">
+        approval_status = #{approvalStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="contractAttachment != null">
+        contract_attachment = #{contractAttachment,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+    </set>
+    where rent_id_ = #{rentId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.parking.entity.TbParkingSpaceRental">
+    update tb_parking_space_rental
+    set area_id_ = #{areaId,jdbcType=VARCHAR},
+      area_name = #{areaName,jdbcType=VARCHAR},
+      space_id_ = #{spaceId,jdbcType=VARCHAR},
+      space_serial = #{spaceSerial,jdbcType=VARCHAR},
+      parking_info = #{parkingInfo,jdbcType=VARCHAR},
+      car_license = #{carLicense,jdbcType=VARCHAR},
+      account = #{account,jdbcType=VARCHAR},
+      company_id = #{companyId,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      rent_price = #{rentPrice,jdbcType=VARCHAR},
+      policy_id_ = #{policyId,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      due_money = #{dueMoney,jdbcType=DOUBLE},
+      deduction_money = #{deductionMoney,jdbcType=DOUBLE},
+      actual_money = #{actualMoney,jdbcType=DOUBLE},
+      order_bill_num = #{orderBillNum,jdbcType=VARCHAR},
+      approval_account = #{approvalAccount,jdbcType=VARCHAR},
+      approval_name = #{approvalName,jdbcType=VARCHAR},
+      approval_comments = #{approvalComments,jdbcType=VARCHAR},
+      approval_status = #{approvalStatus,jdbcType=VARCHAR},
+      contract_attachment = #{contractAttachment,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=TINYINT}
+    where rent_id_ = #{rentId,jdbcType=VARCHAR}
+  </update>
+</mapper>

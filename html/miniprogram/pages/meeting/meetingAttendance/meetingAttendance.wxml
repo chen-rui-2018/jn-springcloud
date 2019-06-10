@@ -1,0 +1,21 @@
+<!--pages/meeting/meetingPerson/meetingPerson.wxml-->
+<!-- <nav-bar navbar-data='{{nvabarData}}'></nav-bar> -->
+<view class="meetingAttendance">
+  <view class="meeting_cont">
+    <view>会议名称：{{meetingApplyDetail.title}}</view>
+    <view class="gray">会议时间：{{meetingApplyDetail.startTime}}-{{meetingApplyDetail.endTime}} </view>
+    <view class="gray">会议室：{{meetingApplyDetail.tbOaMeetingRoom.name}}</view>
+  </view>
+  <view class="meeting_cont">
+    <view>会议内容：{{meetingApplyDetail.oaMeetingContent===null?'暂无':meetingApplyDetail.oaMeetingContent}}</view>
+    <view class="gray">发起人：{{meetingApplyDetail.userName}}</view>
+    <view class="gray">部门：{{meetingApplyDetail.departmentName}}</view>
+  </view>
+  <view class="meetingPerson">
+    参会人员：<text class="gray">{{meetinguser}} </text>
+  </view>
+  <view class="btn">
+    <button form-type="submit" class="signIn" bindtap="sinIn" data-type="1">签到</button>
+    <button form-type="submit" class="signOut" bindtap="signOut" data-type="2">签退</button>
+  </view>
+</view>

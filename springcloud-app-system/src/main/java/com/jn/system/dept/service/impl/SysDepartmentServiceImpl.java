@@ -1,6 +1,8 @@
 package com.jn.system.dept.service.impl;
 
 import com.jn.common.exception.JnSpringCloudException;
+import com.jn.common.model.Result;
+import com.jn.common.util.StringUtils;
 import com.jn.system.common.enums.SysExceptionEnums;
 import com.jn.system.common.enums.SysLevelEnums;
 import com.jn.system.common.enums.SysReturnMessageEnum;
@@ -17,6 +19,7 @@ import com.jn.system.dept.service.SysDepartmentService;
 import com.jn.system.dept.vo.SysDepartmentVO;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
+import com.jn.system.vo.SysDepartmentPostVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -47,20 +50,36 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
     private SysDepartmentMapper sysDepartmentMapper;
 
     /**
-     * 根据部门id获取部门信息
+     * 根据部门id获取部门信息及所有子部门信息
      *
      * @param id
      * @return
      */
     @Override
     @ServiceLog(doAction = "根据部门id获取部门信息")
-    public SysDepartment selectByPrimaryKey(String id) {
-        TbSysDepartment tbSysDepartment = tbSysDepartmentMapper.selectByPrimaryKey(id);
-        SysDepartment sysDepartment = new SysDepartment();
-        if (tbSysDepartment != null) {
-            BeanUtils.copyProperties(tbSysDepartment, sysDepartment);
+    public Result selectDeptByKey(String id, Boolean isGetChild) {
+        //判断id是否为空
+        if (StringUtils.isNotBlank(id)) {
+            SysDepartmentVO sysDepartmentVO = sysDepartmentMapper.selectByPrimaryKey(id);
+            if (isGetChild) {
+                if (sysDepartmentVO != null) {
+                    List<SysDepartmentVO> children = sysDepartmentMapper.getChildDept(id);
+                    sysDepartmentVO.setChildren(children);
+                }
+            }
+            return new Result(sysDepartmentVO);
+        } else {
+            List<SysDepartmentVO> departmentList = null;
+            //如果id为空
+            if (isGetChild) {
+                //获取部门树信息
+                departmentList = findDepartmentAllByLevel();
+            } else {
+                //获取所有一级部门
+                departmentList = sysDepartmentMapper.getDepartmentAll(SysLevelEnums.FIRST_LEVEL.getCode());
+            }
+            return new Result(departmentList);
         }
-        return sysDepartment;
     }
 
     /**
@@ -197,7 +216,7 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
     public List<SysDepartmentVO> findDepartmentAllByLevel() {
         //查询所有部门信息
         List<SysDepartmentVO> list = new ArrayList<SysDepartmentVO>(16);
-        List<SysDepartmentVO> departmentVOList = sysDepartmentMapper.getDepartmentAll();
+        List<SysDepartmentVO> departmentVOList = sysDepartmentMapper.getDepartmentAll(null);
         //遍历集合,根据部门层级关系,生成菜单树
         for (SysDepartmentVO sysDepartmentVO : departmentVOList) {
             if (SysLevelEnums.FIRST_LEVEL.getCode().equals(sysDepartmentVO.getLevel())) {
@@ -259,5 +278,55 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
     public List<SysDepartmentVO> getChildDepartmentByParentId(String parentId) {
         List<SysDepartmentVO> departmentVOList = sysDepartmentMapper.getChildDepartmentByParentId(parentId);
         return departmentVOList;
+    }
+
+    /**
+     * 要查询的部门ID是否属于用户所属的部门或子部门
+     *
+     * @param userId 用户id
+     * @param deptId 部门id
+     * @return
+     */
+    @Override
+    @ServiceLog(doAction = "要查询的部门ID是否属于用户所属的部门或子部门")
+    public Boolean checkUserDept(String userId, String deptId) {
+        //根据用户id获取用户具有的部门
+        List<SysDepartmentPostVO> departmentPostVOs = sysUserDepartmentPostMapper.findDepartmentAndPostByUserId(userId);
+
+        //根据查询的部门向上递归获取所有父部门id;
+        List<TbSysDepartment> tbsysDepts = sysUserDepartmentPostMapper.findDepartmentId(deptId);
+
+        //遍历用户具有的部门id是否和递归到的存在相等的情况
+        for (TbSysDepartment tbsysDept : tbsysDepts) {
+            String tbsysDeptId = tbsysDept.getId();
+            for (SysDepartmentPostVO departmentPostVO : departmentPostVOs) {
+
+                //如果相等,说明查询部门属于用户所属部门或子部门
+                if (StringUtils.equals(tbsysDeptId, departmentPostVO.getDepartmentId())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 根据部门名称获取部门信息
+     *
+     * @param deptName
+     * @return
+     */
+    @Override
+    public TbSysDepartment getDept(String deptName) {
+        TbSysDepartmentCriteria tbSysDepartmentCriteria = new TbSysDepartmentCriteria();
+        tbSysDepartmentCriteria.setOrderByClause("level asc");
+        TbSysDepartmentCriteria.Criteria criteria = tbSysDepartmentCriteria.createCriteria();
+        criteria.andRecordStatusEqualTo(new Byte(SysStatusEnums.EFFECTIVE.getCode()));
+        criteria.andDepartmentNameEqualTo(deptName);
+        List<TbSysDepartment> tbSysDepartments = tbSysDepartmentMapper.selectByExample(tbSysDepartmentCriteria);
+        if (tbSysDepartments != null && tbSysDepartments.size() > 0){
+            return tbSysDepartments.get(0);
+        }
+        return null;
     }
 }

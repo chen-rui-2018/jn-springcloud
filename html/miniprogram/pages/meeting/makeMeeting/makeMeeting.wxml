@@ -1,0 +1,120 @@
+<!--pages/meeting/makeMeeting/makeMeeting.wxml-->
+<!-- <nav-bar navbar-data='{{nvabarData}}'></nav-bar> -->
+<view class="roomForm" >
+  <form bindsubmit="formSubmit" bindreset="formReset" class="form">
+    <view class="section" bindtap="goTitle">
+      <view class="section__title">会议主题</view>
+      <input  value="{{title}} " disabled name="theme" placeholder="请输入一个主题" />
+      <text class="icon-right" >
+      </text>
+    </view>
+    <view class="section" bindtap="goCont">
+      <view class="section__title">会议内容</view>
+      <input value="{{oaMeetingContent}} " disabled name="theme" />
+      <text class="icon-right" >
+      </text>
+    </view>
+    <view class="section">
+      <view class="section__title">会议室</view>
+      <input value="{{roomName}} " disabled name="theme"/>
+      <text class="icon-right" >
+      </text>
+    </view>
+    <view class="section" bindtap="goDepartment">
+      <view class="section__title">组织人部门</view>
+      <input value="{{orgDepartment}}" disabled name="theme"/>
+      <text class="icon-right" >
+      </text>
+    </view>
+    <view class="section" bindtap="goOrgUser">
+      <view class="section__title">组织人</view>
+      <input value="{{orgName}}" disabled name="theme" placeholder="组织人" />
+      <text class="icon-right" >
+      </text>
+    </view>
+    <view class="section">
+      <view class="section__title">开始时间</view>
+      <input value="{{startTime}}" disabled name="theme" bindtap="showDate" />
+      <text class="icon-right" >
+      </text>
+    </view>
+    <view class="section">
+      <view class="section__title">结束时间</view>
+      <input value="{{endTime}}" disabled name="theme" placeholder="请选择结束时间" bindtap="showEnd" />
+      <text class="icon-right" >
+      </text>
+    </view>
+    <view class="section" bindtap="selectMeetingPerson">
+      <view  class="section__title">参会人员</view>
+      <input value="{{meetingPerson}} " disabled name="theme"/>
+      <text class="icon-right" >
+      </text>
+    </view> <view class="sumbmit" bindtap="makeMeeting"><view> 预约 </view> </view>
+    <!-- 开始时间日期弹窗 -->
+    <view >
+      <view class="commodity_screen" bindtap="hideDate" wx:if="{{showStar}}"></view>
+      <view animation="{{animationData}}" class="commodity_attr_box" wx:if="{{showStar}}">
+          <picker-view
+              indicator-style="height: 50px;"
+              style="width: 100%; height: 300px;"
+              value="{{value}}"
+              bindchange="bindChange"
+              >
+              <picker-view-column>
+                <view wx:for="{{years}}" style="line-height: 50px" wx:key>{{item}}年</view>
+              </picker-view-column>
+              <picker-view-column>
+                <view wx:for="{{months}}" wx:key style="line-height: 50px">{{item}}月</view>
+              </picker-view-column>
+              <picker-view-column>
+                <view wx:for="{{days}}" wx:key style="line-height: 50px">{{item}}日</view>
+              </picker-view-column>
+               <picker-view-column class="picker-text">
+                <view wx:for="{{hours}}" wx:key style="line-height: 50px">{{item}}时</view>
+              </picker-view-column>
+              <picker-view-column class="picker-text">
+                <view wx:for="{{minutes}}" wx:key style="line-height: 50px">{{item}}分</view>
+              </picker-view-column>
+            </picker-view>
+            <view class="sure" bindtap="changeTime">
+              <view>
+                确定
+              </view>
+            </view>
+        </view>
+    </view>
+    <!-- 结束时间 -->
+    <view >
+      <view class="commodity_screen" bindtap="hideEnd" wx:if="{{showEnd}}"></view>
+      <view animation="{{animationData}}" class="commodity_attr_box" wx:if="{{showEnd}}">
+          <picker-view
+              indicator-style="height: 50px;"
+              style="width: 100%; height: 300px;"
+              value="{{value}}"
+              bindchange="bindChange"
+              >
+              <picker-view-column>
+                <view wx:for="{{years}}" wx:key style="line-height: 50px">{{item}}年</view>
+              </picker-view-column>
+              <picker-view-column>
+                <view wx:for="{{months}}" wx:key style="line-height: 50px">{{item}}月</view>
+              </picker-view-column>
+              <picker-view-column>
+                <view wx:for="{{days}}" wx:key style="line-height: 50px">{{item}}日</view>
+              </picker-view-column>
+               <picker-view-column class="picker-text">
+                <view wx:for="{{hours}}" wx:key style="line-height: 50px">{{item}}时</view>
+              </picker-view-column>
+              <picker-view-column class="picker-text">
+                <view wx:for="{{minutes}}" wx:key style="line-height: 50px">{{item}}分</view>
+              </picker-view-column>
+            </picker-view>
+            <view class="sure" bindtap="changeendTime">
+              <view>
+                确定
+              </view>
+            </view>
+        </view>
+    </view>
+  </form>
+</view>

@@ -1,6 +1,7 @@
 package com.jn.system.service;
 
 import com.jn.common.exception.JnSpringCloudException;
+import com.jn.common.model.Result;
 import com.jn.system.common.enums.SysLevelEnums;
 import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
@@ -76,7 +77,7 @@ public class SysDepartmentServiceTest {
 
     @Test
     public void selectByPrimaryKeyTest() {
-        SysDepartment data = sysDepartmentService.selectByPrimaryKey(departmenId);
+        Result data = sysDepartmentService.selectDeptByKey(departmenId, false);
         Assert.assertThat(data, Matchers.anything());
     }
 
@@ -89,7 +90,7 @@ public class SysDepartmentServiceTest {
         SysDepartment.setDepartmentName(departmentName);
         SysDepartment.setParentId(SysLevelEnums.FIRST_LEVEL.getCode());
         try {
-            sysDepartmentService.update(SysDepartment,user);
+            sysDepartmentService.update(SysDepartment, user);
         } catch (JnSpringCloudException e) {
             Assert.assertThat(e, Matchers.anything());
         }
@@ -121,7 +122,7 @@ public class SysDepartmentServiceTest {
         department.setParentId(SysLevelEnums.FIRST_LEVEL.getCode());
         list.add(department);
         try {
-            sysDepartmentService.addDepartmentBatch(list,user);
+            sysDepartmentService.addDepartmentBatch(list, user);
         } catch (JnSpringCloudException e) {
             Assert.assertThat(e, Matchers.anything());
         }
@@ -135,7 +136,21 @@ public class SysDepartmentServiceTest {
     }
 
     @Test
+    public void getDept(){
+        TbSysDepartment dept = sysDepartmentService.getDept(departmentName);
+        Assert.assertThat(dept, Matchers.anything());
+    }
+
+    @Test
+    public void checkUserDept(){
+        //1.判断用户id不为空情况,部门id不为空情况
+        String userId = "10000";
+        Boolean result2 = sysDepartmentService.checkUserDept(userId, departmenId);
+        Assert.assertThat(result2, Matchers.anything());
+    }
+
+    @Test
     public void zDeleteTest() {
-        sysDepartmentService.delete(departmenId,user);
+        sysDepartmentService.delete(departmenId, user);
     }
 }

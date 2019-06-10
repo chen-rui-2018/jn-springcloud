@@ -17,6 +17,10 @@
             <groupId>com.jn</groupId>
             <artifactId>springcloud-app-common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-payment-api</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

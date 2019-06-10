@@ -31,7 +31,7 @@ public class SysUserVO implements Serializable {
     private String email;
     @ApiModelProperty("创建时间")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createdTime;
+    private String createdTime;
     @ApiModelProperty("状态")
     private Byte recordStatus;
     @ApiModelProperty("微信账号")
@@ -48,9 +48,9 @@ public class SysUserVO implements Serializable {
     public SysUserVO() {
     }
 
-    public SysUserVO(String id, String account, String name, String phone, String email, Date createdTime,
-                     Byte recordStatus, String wechatAccount, String remark, String departmentName,
-                     String postName, String postTypeName) {
+    public SysUserVO(String id, String account, String name, String phone, String email, String createdTime,
+                     Byte recordStatus, String wechatAccount, String remark, String departmentName, String postName,
+                     String postTypeName) {
         this.id = id;
         this.account = account;
         this.name = name;
@@ -105,11 +105,11 @@ public class SysUserVO implements Serializable {
         this.email = email;
     }
 
-    public Date getCreatedTime() {
+    public String getCreatedTime() {
         return createdTime;
     }
 
-    public void setCreatedTime(Date createdTime) {
+    public void setCreatedTime(String createdTime) {
         this.createdTime = createdTime;
     }
 
@@ -169,7 +169,7 @@ public class SysUserVO implements Serializable {
                 ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
-                ", createdTime=" + createdTime +
+                ", createdTime='" + createdTime + '\'' +
                 ", recordStatus=" + recordStatus +
                 ", wechatAccount='" + wechatAccount + '\'' +
                 ", remark='" + remark + '\'' +

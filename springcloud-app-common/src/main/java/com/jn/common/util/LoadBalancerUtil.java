@@ -37,7 +37,7 @@ public class LoadBalancerUtil {
     public Result getClientPostForEntity(String sysId, String url, String jsonObject) {
         ServiceInstance si = this.loadBalancerClient.choose(sysId);
         StringBuffer sb = new StringBuffer();
-        sb.append("http://").append(si.getHost()).append(":").append(si.getPort()).append(url);
+        sb.append(GlobalConstants.HTTP_PRODOCOL).append(si.getHost()).append(":").append(si.getPort()).append(url);
         HttpEntity<String> formEntity = new HttpEntity<>(jsonObject, RestTemplateUtil.setHeaders());
         ResponseEntity<Result> response = restTemplate.postForEntity(sb.toString(), formEntity, Result.class);
         return response.getBody();

@@ -8,16 +8,16 @@ import com.jn.system.common.enums.SysExceptionEnums;
 import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
 import com.jn.system.log.annotation.ServiceLog;
-import com.jn.system.model.User;
 import com.jn.system.model.SysRole;
+import com.jn.system.model.User;
 import com.jn.system.permission.model.SysRoleGroupAdd;
 import com.jn.system.permission.service.impl.SysRoleServiceImpl;
-import com.jn.system.user.dao.SysGroupMapper;
-import com.jn.system.user.dao.SysGroupRoleMapper;
-import com.jn.system.user.dao.SysGroupUserMapper;
-import com.jn.system.user.dao.TbSysGroupMapper;
+import com.jn.system.user.dao.*;
+import com.jn.system.user.enmus.SysUserExceptionEnums;
 import com.jn.system.user.entity.TbSysGroup;
 import com.jn.system.user.entity.TbSysGroupCriteria;
+import com.jn.system.user.entity.TbSysUserGroup;
+import com.jn.system.user.entity.TbSysUserGroupCriteria;
 import com.jn.system.user.model.*;
 import com.jn.system.user.service.SysGroupService;
 import com.jn.system.user.vo.SysGroupRoleVO;
@@ -53,6 +53,8 @@ public class SysGroupServiceImpl implements SysGroupService {
     private SysGroupRoleMapper sysGroupRoleMapper;
     @Autowired
     private TbSysGroupMapper tbSysGroupMapper;
+    @Autowired
+    private TbSysUserGroupMapper tbSysUserGroupMapper;
 
 
     /**
@@ -62,7 +64,7 @@ public class SysGroupServiceImpl implements SysGroupService {
      */
     @Override
     @ServiceLog(doAction = "查询所用用户组信息")
-    public PaginationData findSysGroupAll(SysGroupPage groupPage) {
+    public PaginationData<List<SysGroupUserRoleVO>> findSysGroupAll(SysGroupPage groupPage) {
         Page<Object> objects = PageHelper.startPage(groupPage.getPage(), groupPage.getRows());
         List<SysGroupUserRoleVO> sysGroupAll = sysGroupMapper.findSysGroupAll(groupPage);
         if (sysGroupAll != null && sysGroupAll.size() > 0) {
@@ -116,16 +118,31 @@ public class SysGroupServiceImpl implements SysGroupService {
 
     /**
      * 逻辑删除用户组
+     *
      * @param groupIds
      * @param user
      */
     @Override
     @ServiceLog(doAction = "逻辑删除用户组")
     @Transactional(rollbackFor = Exception.class)
-    public void deleSysGroup(String[] groupIds,User user) {
-        if (groupIds.length == 0){
+    public void deleSysGroup(String[] groupIds, User user) {
+        if (groupIds.length == 0) {
             return;
         }
+
+        //删除之前,判断用户组下面是否具有用户,有不允许删除
+        for (String groupId : groupIds) {
+            TbSysUserGroupCriteria tbSysUserGroupCriteria = new TbSysUserGroupCriteria();
+            TbSysUserGroupCriteria.Criteria criteria = tbSysUserGroupCriteria.createCriteria();
+            criteria.andGroupIdEqualTo(groupId);
+            criteria.andRecordStatusEqualTo(new Byte(SysStatusEnums.EFFECTIVE.getCode()));
+            List<TbSysUserGroup> tbSysUserGroups = tbSysUserGroupMapper.selectByExample(tbSysUserGroupCriteria);
+            if (tbSysUserGroups != null && tbSysUserGroups.size() > 0) {
+                logger.warn("[用户组] 删除失败,用户组正在被使用,不允许删除！,groupId: {}", groupId);
+                throw new JnSpringCloudException(SysUserExceptionEnums.NOT_ALLOWED_DELETE_GROUP);
+            }
+        }
+
         //封装用户组id及最近更新人信息
         Map<String, Object> map = getDeleteMap(user, groupIds);
         sysGroupMapper.deleteGroupBranch(map);
@@ -138,13 +155,14 @@ public class SysGroupServiceImpl implements SysGroupService {
 
     /**
      * 修改用户组信息
+     *
      * @param sysGroup
-     * @param user 当时用户信息
+     * @param user     当时用户信息
      */
     @Override
     @ServiceLog(doAction = "修改用户组信息")
     @Transactional(rollbackFor = Exception.class)
-    public void updateSysGroup(SysGroupUpdate sysGroup,User user) {
+    public void updateSysGroup(SysGroupUpdate sysGroup, User user) {
         String groupName = sysGroup.getGroupName();
         String groupId = sysGroup.getId();
 
@@ -195,7 +213,7 @@ public class SysGroupServiceImpl implements SysGroupService {
      */
     @Override
     @ServiceLog(doAction = "查询用户组已经具有的角色信息,且条件分页获取用户组未拥有的角色信息")
-    public PaginationData selectGroupRoleAndOtherRole(SysGroupRolePage sysGroupRolePage) {
+    public PaginationData<SysGroupRoleVO> selectGroupRoleAndOtherRole(SysGroupRolePage sysGroupRolePage) {
         //获取用户组具有的角色
         List<SysRole> roleOfGroupList = sysGroupRoleMapper.findRoleByGroupId(sysGroupRolePage.getGroupId());
         //条件分页查询用户组为拥有的角色信息
@@ -234,7 +252,8 @@ public class SysGroupServiceImpl implements SysGroupService {
             SysGroupRole sysGroupRole = new SysGroupRole();
             sysGroupRole.setId(UUID.randomUUID().toString());
             Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
-            sysGroupRole.setRecordStatus(recordStatus);;
+            sysGroupRole.setRecordStatus(recordStatus);
+            ;
             sysGroupRole.setCreatorAccount(user.getAccount());
             sysGroupRole.setRoleId(roleId);
             sysGroupRole.setUserGroupId(sysRoleGroupAdd.getGroupId());
@@ -247,8 +266,9 @@ public class SysGroupServiceImpl implements SysGroupService {
 
     /**
      * 封装删除信息
+     *
      * @param user 当前用户
-     * @param ids 用户组id数组
+     * @param ids  用户组id数组
      * @return
      */
     private Map<String, Object> getDeleteMap(User user, String[] ids) {
@@ -266,7 +286,7 @@ public class SysGroupServiceImpl implements SysGroupService {
      */
     @Override
     @ServiceLog(doAction = "查询用户组已经具有的用户信息,且条件分页获取用户组未拥有的用户信息")
-    public PaginationData findOtherUserByPage(SysGroupUserPage sysGroupUserPage) {
+    public PaginationData<SysGroupUserVO> findOtherUserByPage(SysGroupUserPage sysGroupUserPage) {
         //获取用户组已拥有用户
         List<SysTUser> userAllOfGroup = sysGroupUserMapper.findUserByGroupId(sysGroupUserPage.getGroupId());
         Page<Object> objects = PageHelper.startPage(sysGroupUserPage.getPage(), sysGroupUserPage.getRows());

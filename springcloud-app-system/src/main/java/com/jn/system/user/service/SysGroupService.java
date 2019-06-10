@@ -5,6 +5,11 @@ import com.jn.system.model.User;
 import com.jn.system.permission.model.SysRoleGroupAdd;
 import com.jn.system.user.entity.TbSysGroup;
 import com.jn.system.user.model.*;
+import com.jn.system.user.vo.SysGroupRoleVO;
+import com.jn.system.user.vo.SysGroupUserRoleVO;
+import com.jn.system.user.vo.SysGroupUserVO;
+
+import java.util.List;
 
 /**
  * 用户组
@@ -21,7 +26,7 @@ public interface SysGroupService {
      *
      * @return
      */
-    PaginationData findSysGroupAll(SysGroupPage groupPage);
+    PaginationData<List<SysGroupUserRoleVO>> findSysGroupAll(SysGroupPage groupPage);
 
     /**
      * 增加用户组
@@ -58,7 +63,7 @@ public interface SysGroupService {
      * @param sysGroupRolePage
      * @return
      */
-    PaginationData selectGroupRoleAndOtherRole(SysGroupRolePage sysGroupRolePage);
+    PaginationData<SysGroupRoleVO> selectGroupRoleAndOtherRole(SysGroupRolePage sysGroupRolePage);
 
     /**
      * 为用户组授权角色信息
@@ -73,7 +78,7 @@ public interface SysGroupService {
      * @param sysGroupUserPage
      * @return
      */
-    PaginationData findOtherUserByPage(SysGroupUserPage sysGroupUserPage);
+    PaginationData<SysGroupUserVO> findOtherUserByPage(SysGroupUserPage sysGroupUserPage);
 
     /**
      * 用户组授权用户

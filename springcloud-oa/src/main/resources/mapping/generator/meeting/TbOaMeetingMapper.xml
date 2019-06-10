@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.oa.meeting.dao.TbOaMeetingMapper">
+  <resultMap id="BaseResultMap" type="com.jn.oa.meeting.entity.TbOaMeeting">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="meeting_room_id" jdbcType="VARCHAR" property="meetingRoomId" />
+    <result column="meeting_status" jdbcType="VARCHAR" property="meetingStatus" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="participants_str" jdbcType="VARCHAR" property="participantsStr" />
+    <result column="applicant" jdbcType="VARCHAR" property="applicant" />
+    <result column="application_time" jdbcType="TIMESTAMP" property="applicationTime" />
+    <result column="sign_in_QR" jdbcType="VARCHAR" property="signInQr" />
+    <result column="wechat_remind" jdbcType="VARCHAR" property="wechatRemind" />
+    <result column="message_remind" jdbcType="VARCHAR" property="messageRemind" />
+    <result column="pc_remind" jdbcType="VARCHAR" property="pcRemind" />
+    <result column="app_remind" jdbcType="VARCHAR" property="appRemind" />
+    <result column="is_remind" jdbcType="VARCHAR" property="isRemind" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="organizational_user" jdbcType="VARCHAR" property="organizationalUser" />
+    <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, start_time, end_time, meeting_room_id, meeting_status, record_status, creator_account, 
+    created_time, modifier_account, modified_time, participants_str, applicant, application_time, 
+    sign_in_QR, wechat_remind, message_remind, pc_remind, app_remind, is_remind, title, 
+    organizational_user, file_url
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.oa.meeting.entity.TbOaMeetingCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_oa_meeting
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_oa_meeting
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_oa_meeting
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.oa.meeting.entity.TbOaMeetingCriteria">
+    delete from tb_oa_meeting
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.oa.meeting.entity.TbOaMeeting">
+    insert into tb_oa_meeting (id, start_time, end_time, 
+      meeting_room_id, meeting_status, record_status, 
+      creator_account, created_time, modifier_account, 
+      modified_time, participants_str, applicant, 
+      application_time, sign_in_QR, wechat_remind, 
+      message_remind, pc_remind, app_remind, 
+      is_remind, title, organizational_user, 
+      file_url)
+    values (#{id,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
+      #{meetingRoomId,jdbcType=VARCHAR}, #{meetingStatus,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{participantsStr,jdbcType=VARCHAR}, #{applicant,jdbcType=VARCHAR}, 
+      #{applicationTime,jdbcType=TIMESTAMP}, #{signInQr,jdbcType=VARCHAR}, #{wechatRemind,jdbcType=VARCHAR}, 
+      #{messageRemind,jdbcType=VARCHAR}, #{pcRemind,jdbcType=VARCHAR}, #{appRemind,jdbcType=VARCHAR}, 
+      #{isRemind,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{organizationalUser,jdbcType=VARCHAR}, 
+      #{fileUrl,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.oa.meeting.entity.TbOaMeeting">
+    insert into tb_oa_meeting
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="startTime != null">
+        start_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="meetingRoomId != null">
+        meeting_room_id,
+      </if>
+      <if test="meetingStatus != null">
+        meeting_status,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="participantsStr != null">
+        participants_str,
+      </if>
+      <if test="applicant != null">
+        applicant,
+      </if>
+      <if test="applicationTime != null">
+        application_time,
+      </if>
+      <if test="signInQr != null">
+        sign_in_QR,
+      </if>
+      <if test="wechatRemind != null">
+        wechat_remind,
+      </if>
+      <if test="messageRemind != null">
+        message_remind,
+      </if>
+      <if test="pcRemind != null">
+        pc_remind,
+      </if>
+      <if test="appRemind != null">
+        app_remind,
+      </if>
+      <if test="isRemind != null">
+        is_remind,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="organizationalUser != null">
+        organizational_user,
+      </if>
+      <if test="fileUrl != null">
+        file_url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="meetingRoomId != null">
+        #{meetingRoomId,jdbcType=VARCHAR},
+      </if>
+      <if test="meetingStatus != null">
+        #{meetingStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="participantsStr != null">
+        #{participantsStr,jdbcType=VARCHAR},
+      </if>
+      <if test="applicant != null">
+        #{applicant,jdbcType=VARCHAR},
+      </if>
+      <if test="applicationTime != null">
+        #{applicationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="signInQr != null">
+        #{signInQr,jdbcType=VARCHAR},
+      </if>
+      <if test="wechatRemind != null">
+        #{wechatRemind,jdbcType=VARCHAR},
+      </if>
+      <if test="messageRemind != null">
+        #{messageRemind,jdbcType=VARCHAR},
+      </if>
+      <if test="pcRemind != null">
+        #{pcRemind,jdbcType=VARCHAR},
+      </if>
+      <if test="appRemind != null">
+        #{appRemind,jdbcType=VARCHAR},
+      </if>
+      <if test="isRemind != null">
+        #{isRemind,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="organizationalUser != null">
+        #{organizationalUser,jdbcType=VARCHAR},
+      </if>
+      <if test="fileUrl != null">
+        #{fileUrl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.oa.meeting.entity.TbOaMeetingCriteria" resultType="java.lang.Long">
+    select count(*) from tb_oa_meeting
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_oa_meeting
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.startTime != null">
+        start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endTime != null">
+        end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.meetingRoomId != null">
+        meeting_room_id = #{record.meetingRoomId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.meetingStatus != null">
+        meeting_status = #{record.meetingStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.participantsStr != null">
+        participants_str = #{record.participantsStr,jdbcType=VARCHAR},
+      </if>
+      <if test="record.applicant != null">
+        applicant = #{record.applicant,jdbcType=VARCHAR},
+      </if>
+      <if test="record.applicationTime != null">
+        application_time = #{record.applicationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.signInQr != null">
+        sign_in_QR = #{record.signInQr,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wechatRemind != null">
+        wechat_remind = #{record.wechatRemind,jdbcType=VARCHAR},
+      </if>
+      <if test="record.messageRemind != null">
+        message_remind = #{record.messageRemind,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pcRemind != null">
+        pc_remind = #{record.pcRemind,jdbcType=VARCHAR},
+      </if>
+      <if test="record.appRemind != null">
+        app_remind = #{record.appRemind,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isRemind != null">
+        is_remind = #{record.isRemind,jdbcType=VARCHAR},
+      </if>
+      <if test="record.title != null">
+        title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.organizationalUser != null">
+        organizational_user = #{record.organizationalUser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fileUrl != null">
+        file_url = #{record.fileUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_oa_meeting
+    set id = #{record.id,jdbcType=VARCHAR},
+      start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      meeting_room_id = #{record.meetingRoomId,jdbcType=VARCHAR},
+      meeting_status = #{record.meetingStatus,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      participants_str = #{record.participantsStr,jdbcType=VARCHAR},
+      applicant = #{record.applicant,jdbcType=VARCHAR},
+      application_time = #{record.applicationTime,jdbcType=TIMESTAMP},
+      sign_in_QR = #{record.signInQr,jdbcType=VARCHAR},
+      wechat_remind = #{record.wechatRemind,jdbcType=VARCHAR},
+      message_remind = #{record.messageRemind,jdbcType=VARCHAR},
+      pc_remind = #{record.pcRemind,jdbcType=VARCHAR},
+      app_remind = #{record.appRemind,jdbcType=VARCHAR},
+      is_remind = #{record.isRemind,jdbcType=VARCHAR},
+      title = #{record.title,jdbcType=VARCHAR},
+      organizational_user = #{record.organizationalUser,jdbcType=VARCHAR},
+      file_url = #{record.fileUrl,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.oa.meeting.entity.TbOaMeeting">
+    update tb_oa_meeting
+    <set>
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="meetingRoomId != null">
+        meeting_room_id = #{meetingRoomId,jdbcType=VARCHAR},
+      </if>
+      <if test="meetingStatus != null">
+        meeting_status = #{meetingStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="participantsStr != null">
+        participants_str = #{participantsStr,jdbcType=VARCHAR},
+      </if>
+      <if test="applicant != null">
+        applicant = #{applicant,jdbcType=VARCHAR},
+      </if>
+      <if test="applicationTime != null">
+        application_time = #{applicationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="signInQr != null">
+        sign_in_QR = #{signInQr,jdbcType=VARCHAR},
+      </if>
+      <if test="wechatRemind != null">
+        wechat_remind = #{wechatRemind,jdbcType=VARCHAR},
+      </if>
+      <if test="messageRemind != null">
+        message_remind = #{messageRemind,jdbcType=VARCHAR},
+      </if>
+      <if test="pcRemind != null">
+        pc_remind = #{pcRemind,jdbcType=VARCHAR},
+      </if>
+      <if test="appRemind != null">
+        app_remind = #{appRemind,jdbcType=VARCHAR},
+      </if>
+      <if test="isRemind != null">
+        is_remind = #{isRemind,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="organizationalUser != null">
+        organizational_user = #{organizationalUser,jdbcType=VARCHAR},
+      </if>
+      <if test="fileUrl != null">
+        file_url = #{fileUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.oa.meeting.entity.TbOaMeeting">
+    update tb_oa_meeting
+    set start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      meeting_room_id = #{meetingRoomId,jdbcType=VARCHAR},
+      meeting_status = #{meetingStatus,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      participants_str = #{participantsStr,jdbcType=VARCHAR},
+      applicant = #{applicant,jdbcType=VARCHAR},
+      application_time = #{applicationTime,jdbcType=TIMESTAMP},
+      sign_in_QR = #{signInQr,jdbcType=VARCHAR},
+      wechat_remind = #{wechatRemind,jdbcType=VARCHAR},
+      message_remind = #{messageRemind,jdbcType=VARCHAR},
+      pc_remind = #{pcRemind,jdbcType=VARCHAR},
+      app_remind = #{appRemind,jdbcType=VARCHAR},
+      is_remind = #{isRemind,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      organizational_user = #{organizationalUser,jdbcType=VARCHAR},
+      file_url = #{fileUrl,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

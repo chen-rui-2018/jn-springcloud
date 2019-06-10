@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.technologyfinancial.investors.dao.InvestorMapper">
+    <!--投资人列表查询-->
+    <select id="getInvestorInfoList" resultType="com.jn.enterprise.technologyfinancial.investors.model.InvestorInfoListShow">
+        select
+          si.investor_account as "investorAccount"        <!--投资人账号-->
+          ,si.investor_name as "investorName"             <!--投资人姓名-->
+          ,si.avatar as "avatar"                          <!--投资人头像-->
+          ,si.org_name as "orgName"                       <!--所属单位-->
+          ,si.position as "position"                      <!--职务-->
+          ,GROUP_CONCAT(sma.main_name) as "mainAreaList"  <!--主投领域-->
+        from tb_service_investor si
+        left join tb_service_investor_main_area sma
+        on si.investor_account=sma.investor_account
+        where 1=1
+        and si.status='1'  <!--有效-->
+        and si.approval_status='2'  <!--审批通过-->
+        <if test="mainCode!=null and mainCode!=''">       <!--主投领域精确搜索-->
+            and sma.main_code=#{mainCode}
+        </if>
+        <if test="keyWords!=null and keyWords!=''">       <!--关键字模糊搜索-->
+            and
+            (
+                si.investor_name like  CONCAT('%', #{keyWords}, '%')
+                or si.org_name like CONCAT('%', #{keyWords}, '%')
+                or si.position like CONCAT('%', #{keyWords}, '%')
+                or sma.main_name like CONCAT('%', #{keyWords}, '%')
+            )
+        </if>
+        group by
+        si.investor_account
+        ,si.investor_name
+        ,si.avatar
+        ,si.org_name
+        ,si.position
+        order by si.created_time desc
+    </select>
+
+    <!--批量新增投资人主投领域信息-->
+    <insert id="insertInvestorMainAreaBatch">
+        insert into tb_service_investor_main_area (id, investor_account, main_code,main_name, created_time, creator_account,
+          modified_time, modifier_account, record_status)
+        select A.* from(
+        <foreach collection="list" item="item" index="index" open="" close="" separator="union all">
+            ( select #{item.id,jdbcType=VARCHAR}  AS "id"
+            ,#{item.investorAccount,jdbcType=VARCHAR} as "investorAccount"
+            ,#{item.mainCode,jdbcType=VARCHAR} as "mainCode"
+            ,#{item.mainName,jdbcType=VARCHAR} as "mainName"
+            ,#{item.createdTime,jdbcType=TIMESTAMP} as "createdTime"
+            ,#{item.creatorAccount,jdbcType=VARCHAR} as "creatorAccount"
+            ,#{item.modifiedTime,jdbcType=TIMESTAMP} as "modifiedTime"
+            ,#{item.modifierAccount,jdbcType=VARCHAR} as "modifierAccount"
+            ,#{item.recordStatus,jdbcType=TINYINT} as "recordStatus"
+            from dual )
+        </foreach>
+        )A
+    </insert>
+
+    <!--批量新增投资人主投轮次信息-->
+    <insert id="insertInvestorMainRoundBatch">
+        insert into tb_service_investor_main_round (id, investor_account, main_round_code, main_round_name, created_time, creator_account,
+          modified_time, modifier_account, record_status)
+        select A.* from(
+        <foreach collection="list" item="item" index="index" open="" close="" separator="union all">
+            ( select #{item.id,jdbcType=VARCHAR}    as "id"
+            ,#{item.investorAccount,jdbcType=VARCHAR} as "investorAccount"
+            ,#{item.mainRoundCode,jdbcType=VARCHAR} as "mainRoundCode"
+            ,#{item.mainRoundName,jdbcType=VARCHAR} as "mainRoundName"
+            ,#{item.createdTime,jdbcType=TIMESTAMP} as "createdTime"
+            ,#{item.creatorAccount,jdbcType=VARCHAR} as "creatorAccount"
+            ,#{item.modifiedTime,jdbcType=TIMESTAMP} as "modifiedTime"
+            ,#{item.modifierAccount,jdbcType=VARCHAR} as "modifierAccount"
+            ,#{item.recordStatus,jdbcType=TINYINT} as "recordStatus"
+            from dual )
+        </foreach>
+        )A
+    </insert>
+
+    <!--批量新增投资人工作经历信息-->
+    <insert id="insertInvestorWorkExperienceBatch">
+        insert into tb_service_investor_work_exp (id, investor_account, start_time, end_time,company_name, position,
+      created_time, creator_account, modified_time, modifier_account, record_status)
+        select A.* from(
+        <foreach collection="list" item="item" index="index" open="" close="" separator="union all">
+            ( select #{item.id,jdbcType=VARCHAR} as "id"
+            ,#{item.investorAccount,jdbcType=VARCHAR} as "investorAccount"
+            ,#{item.startTime,jdbcType=VARCHAR} as "startTime"
+            ,#{item.endTime,jdbcType=VARCHAR} as "endTime"
+            ,#{item.companyName,jdbcType=VARCHAR} as "companyName"
+            ,#{item.position,jdbcType=VARCHAR} as "position"
+            ,#{item.createdTime,jdbcType=TIMESTAMP} as "createdTime"
+            ,#{item.creatorAccount,jdbcType=VARCHAR} as "creatorAccount"
+            ,#{item.modifiedTime,jdbcType=TIMESTAMP} as "modifiedTime"
+            ,#{item.modifierAccount,jdbcType=VARCHAR} as "modifierAccount"
+            ,#{item.recordStatus,jdbcType=TINYINT} as "recordStatus"
+            from dual )
+        </foreach>
+        )A
+    </insert>
+
+    <!--批量新增投资人教育经历信息-->
+    <insert id="insertInvestorEduExperienceBatch">
+        insert into tb_service_investor_edu_exp (id, investor_account, start_time,end_time, school_name, profession_title,
+          created_time, creator_account, modified_time, modifier_account, record_status)
+        select A.* from(
+        <foreach collection="list" item="item" index="index" open="" close="" separator="union all">
+            ( select #{item.id,jdbcType=VARCHAR} as "id"
+            ,#{item.investorAccount,jdbcType=VARCHAR} as "investorAccount"
+            ,#{item.startTime,jdbcType=VARCHAR} as "startTime"
+            ,#{item.endTime,jdbcType=VARCHAR} as "endTime"
+            ,#{item.schoolName,jdbcType=VARCHAR} as "schoolName"
+            ,#{item.professionTitle,jdbcType=VARCHAR} as "professionTitle"
+            ,#{item.createdTime,jdbcType=TIMESTAMP} as "createdTime"
+            ,#{item.creatorAccount,jdbcType=VARCHAR} as "creatorAccount"
+            ,#{item.modifiedTime,jdbcType=TIMESTAMP} as "modifiedTime"
+            ,#{item.modifierAccount,jdbcType=VARCHAR} as "modifierAccount"
+            ,#{item.recordStatus,jdbcType=TINYINT} as "recordStatus"
+            from dual )
+        </foreach>
+        )A
+    </insert>
+</mapper>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.parking.dao.ParkingAreaMapper">
+
+    <resultMap id="parkingAreaDetailMap" type="com.jn.park.parking.vo.ParkingAreaDetailVo">
+        <id column="a_areaId" jdbcType="VARCHAR" property="areaId" javaType="java.lang.String"/>
+        <result column="a_areaName" jdbcType="VARCHAR" property="areaName" javaType="java.lang.String"/>
+        <result column="a_areaAddress" jdbcType="VARCHAR" property="areaAddress" javaType="java.lang.String"/>
+        <result column="a_longitude" jdbcType="VARCHAR" property="longitude" javaType="java.lang.String"/>
+        <result column="a_latitude" jdbcType="VARCHAR" property="latitude" javaType="java.lang.String"/>
+        <result column="a_leisureNumber" jdbcType="INTEGER" property="leisureNumber" javaType="java.lang.Integer"/>
+        <result column="a_rentNumber" jdbcType="INTEGER" property="rentNumber" javaType="java.lang.Integer"/>
+        <result column="a_parkingTotal" jdbcType="INTEGER" property="parkingTotal" javaType="java.lang.Integer"/>
+        <result column="a_tempNumber" jdbcType="INTEGER" property="tempNumber" javaType="java.lang.Integer"/>
+        <result column="a_tempFreeTime" jdbcType="INTEGER" property="tempFreeTime" javaType="java.lang.Integer"/>
+        <result column="a_tempPriceDepict" jdbcType="VARCHAR" property="tempPriceDepict" javaType="java.lang.String"/>
+        <result column="a_tempPrice" jdbcType="DOUBLE" property="tempPrice" javaType="java.lang.Double"/>
+        <result column="a_tempPriceUnit" jdbcType="DOUBLE" property="tempPriceUnit" javaType="java.lang.String"/>
+        <result column="a_tempPriceTotal" jdbcType="DOUBLE" property="tempPriceTotal" javaType="java.lang.Double"/>
+        <result column="a_rentPrice" jdbcType="DOUBLE" property="rentPrice" javaType="java.lang.Double"/>
+        <result column="a_areaPicture" jdbcType="VARCHAR" property="areaPicture" javaType="java.lang.String"/>
+        <result column="a_spacePicture" jdbcType="VARCHAR" property="spacePicture" javaType="java.lang.String"/>
+        <result column="a_gateFactory" jdbcType="VARCHAR" property="gateFactory" javaType="java.lang.String"/>
+        <result column="a_gateId" jdbcType="VARCHAR" property="gateId" javaType="java.lang.String"/>
+            <collection property="serviceType" javaType="java.util.List"
+                        ofType="com.jn.park.parking.vo.ParkingServiceTypeVo">
+                <id column="t_id" property="id" jdbcType="VARCHAR"/>
+                <result column="t_serviceName" property="serviceName" jdbcType="VARCHAR"/>
+                <result column="t_serviceCode" property="serviceCode" jdbcType="VARCHAR"/>
+            </collection>
+    </resultMap>
+    <!-- 停车场详情 -->
+    <select id="getParkingAreaDetailById" resultMap="parkingAreaDetailMap">
+         SELECT
+        a.area_id_ AS "a_areaId"
+        ,a.area_name AS "a_areaName"
+        ,a.area_address AS "a_areaAddress"
+        ,a.longitude AS "a_longitude"
+        ,a.latitude AS "a_latitude"
+        ,a.leisure_number AS "a_leisureNumber"
+        ,a.rent_number AS "a_rentNumber"
+        ,a.parking_total AS "a_parkingTotal"
+        ,a.temp_number AS "a_tempNumber"
+        ,a.temp_free_time AS "a_tempFreeTime"
+        ,a.temp_price_depict AS "a_tempPriceDepict"
+        ,a.temp_price AS "a_tempPrice"
+        ,a.temp_price_unit AS "a_tempPriceUnit"
+        ,a.temp_price_total AS "a_tempPriceTotal"
+        ,a.rent_price AS "a_rentPrice"
+        ,a.area_picture AS "a_areaPicture"
+        ,a.space_picture AS "a_spacePicture"
+        ,a.gate_factory AS "a_gateFactory"
+        ,a.gate_id AS "a_gateId"
+        ,ty.id_ AS "t_id"
+        ,ty.service_name AS "t_serviceName"
+        ,ty.service_code AS "t_serviceCode"
+        FROM tb_parking_area a
+        LEFT JOIN tb_parking_service ps
+        ON a.area_id_ = ps.parking_id LEFT JOIN tb_parking_service_type ty ON ps.server_type_id = ty.id_  AND ty.record_status = '1'
+        WHERE a.record_status='1'
+        and a.area_id_ = #{areaId}
+    </select>
+
+
+    <!-- 停车场列表 -->
+    <select id="getParkingAreaList" resultType="com.jn.park.parking.vo.ParkingAreaVo" parameterType="com.jn.park.parking.model.ParkingAreaParam">
+       select t.* from (
+        select
+        a.area_id_ as "areaId"
+        ,a.area_name as "areaName"
+        ,a.area_address as "areaAddress"
+        ,a.longitude as "longitude"
+        ,a.latitude as "latitude"
+        ,a.leisure_number as "leisureNumber"
+        ,a.rent_number as "rentNumber"
+        ,a.temp_number as "tempNumber"
+
+        ,ROUND(
+        6378.138 * 2 * ASIN(
+        SQRT(
+        POW(
+        SIN(
+        (
+        CONVERT(#{latitude,jdbcType=VARCHAR},DECIMAL) * PI() / 180 - a.latitude * PI() / 180
+        ) / 2
+        ),
+        2
+        ) + COS(CONVERT(#{latitude,jdbcType=VARCHAR},DECIMAL) * PI() / 180) * COS(a.latitude * PI() / 180) * POW(
+        SIN(
+        (
+        CONVERT(#{longitude,jdbcType=VARCHAR},DECIMAL) * PI() / 180 - a.longitude * PI() / 180
+        ) / 2
+        ),
+        2
+        )
+        )
+        ) * 1000
+        ) AS "distance"
+        ,a.parking_total as "parkingTotal"
+        ,a.temp_price_depict as "tempPriceDepict"
+        ,a.temp_price as "tempPrice"
+        ,a.temp_price_unit as "tempPriceUnit"
+        ,a.temp_price_total as "tempPriceTotal"
+        ,a.temp_free_time as "tempFreeTime"
+        ,a.rent_price as "rentPrice"
+        ,a.area_picture as "areaPicture"
+        ,a.space_picture as "spacePicture"
+        ,a.gate_factory as "gateFactory"
+        ,a.gate_id as "gateId"
+        from tb_parking_area a
+        where a.record_status = '1' and area_status = '1'
+
+        <if test="areaName !=null and areaName !='' ">
+            and a.area_name = #{areaName,jdbcType=VARCHAR}
+        </if>
+        <if test="areaAddress !=null and areaAddress !='' ">
+            and a.area_address = #{areaAddress,jdbcType=VARCHAR}
+        </if>
+       )t order by  t.distance
+    </select>
+
+
+    <!-- 统计数据 -->
+    <select id="countParking" resultType="com.jn.park.parking.model.ParkingCount">
+        SELECT SUM(actual_money) AS "chargeAmount",COUNT(1) AS "parkingSum" FROM tb_parking_record WHERE
+        ( admission_time &gt; #{beginTime,jdbcType=TIMESTAMP}  AND admission_time &lt; #{endTime,jdbcType=TIMESTAMP}) or parking_status = '1'
+    </select>
+
+    <!-- 停车场明细统计数据 -->
+    <select id="countParkingDetail" resultType="com.jn.park.parking.model.ParkingAreaUseRate">
+        SELECT a.area_id_ AS "areaId",a.area_name AS "areaName", (SELECT COUNT(1) FROM  tb_parking_record r WHERE (r.parking_status = '1'  AND r.area_id_ = a.area_id_ AND r.admission_time &gt; #{beginTime,jdbcType=TIMESTAMP}  AND r.admission_time &lt; #{endTime,jdbcType=TIMESTAMP})  OR (r.parking_status = '1'  and r.area_id_ = a.area_id_) ) AS 'parkingCar',
+        (SELECT COUNT(1)/a.parking_total FROM  tb_parking_record r WHERE (r.parking_status = '1'  AND r.area_id_ = a.area_id_ AND r.admission_time &gt; #{beginTime,jdbcType=TIMESTAMP}  AND r.admission_time &lt; #{endTime,jdbcType=TIMESTAMP})  OR (r.parking_status = '1'  and r.area_id_ = a.area_id_)) AS 'useRate'
+         FROM tb_parking_area a
+    </select>
+
+
+
+</mapper>

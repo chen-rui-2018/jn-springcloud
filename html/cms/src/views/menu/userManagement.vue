@@ -25,7 +25,7 @@
     <!-- 主体部分 -->
     <div class="userManagement-content">
       <div v-if="isShow" class="userManagement-content-left">
-        <el-tree v-loading="departmentListLoading" :data="departmentList" :expand-on-click-node="false" :props="defaultProps" @node-click="handleNodeClick"/>
+        <el-tree v-loading="departmentListLoading" :data="departmentList" :expand-on-click-node="false" :props="defaultProps" default-expand-all @node-click="handleNodeClick"/>
       </div>
       <div class="userManagement-content-right">
         <el-table :key="tableKey" :data="userList" border fit highlight-current-row style="width: 100%;">
@@ -39,11 +39,7 @@
           <el-table-column label="手机" prop="phone" align="center" width="120" />
           <el-table-column label="微信" prop="wechatAccount" align="center" width="120" />
           <el-table-column :show-overflow-tooltip="true" label="备注" prop="remark" align="center" width="120"/>
-          <el-table-column label="创建时间" prop="createdTime" align="center" width="200">
-            <!-- <template slot-scope="scope">
-              {{ scope.row.createdTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}
-            </template> -->
-          </el-table-column>
+          <el-table-column label="创建时间" prop="createdTime" align="center" width="200"/>
           <el-table-column label="状态" prop="recordStatus" align="center" width="70">
             <template slot-scope="scope">
               <span :class="scope.row.recordStatus==1 ? 'text-green' : 'text-red'">{{ scope.row.recordStatus | statusFilter }}</span>
@@ -165,7 +161,7 @@
     <el-dialog :visible.sync="dialogResetPasswordVisible" title="重置密码" width="400px">
       <el-form ref="resetPassword" :model="resetPassword" :rules="passwordRule" label-width="60px">
         <el-form-item label="密码" prop="password">
-          <el-input v-model="resetPassword.password" :type="passwordType" maxlength="16" />
+          <el-input v-model="resetPassword.password" :type="passwordType" maxlength="18" />
           <span class="show-pwd" @click="showPwd">
             <svg-icon icon-class="eye" />
           </span>
@@ -195,23 +191,8 @@
 <script>
 import {
   api,
-  paramApi,
-  // userCreate,
-  // getDepartment,
-  // deleteSysUser,
-  // checkUserName,
-  // findSysPostAll,
-  // findDepartmentandPostByUserId,
-  // saveDepartmentandPostOfUser,
-  // updateSysUser,
-  // editUser,
-  // getRoleInfo,
-  // updataRole,
-  // getUserGroupInfo,
-  // updataUserGroup,
-  exportExcel
-} from '@/api/Permission-model/userManagement'
-// import initList from './components/components'
+  paramApi
+} from '@/api/axios'
 export default {
   name: 'UserManagement',
   filters: {
@@ -225,12 +206,12 @@ export default {
   },
   data() {
     var checkAccount = (rule, value, callback) => {
-      const reg = /[A-Za-z0-9]{6,16}$/
+      const reg = /[A-Za-z0-9]{1,16}$/
       if (!reg.test(value)) {
-        callback(new Error('请输入6到16位长度字符的数字及字母'))
+        callback(new Error('请输入1到16位长度字符的数字及字母'))
       } else {
         if (this.dialogStatus === 'create') {
-          paramApi('system/sysUser/checkUserName', this.temp.account, 'account').then(response => {
+          paramApi(`${this.GLOBAL.systemUrl}system/sysUser/checkUserName`, this.temp.account, 'account').then(response => {
             const result = response.data.data
             if (result === 'success') {
               callback()
@@ -260,9 +241,9 @@ export default {
       }
     }
     var checkPassword = (rule, value, callback) => {
-      const reg = /^[a-zA-Z0-9_!~&@]{6,16}$/
+      const reg = /^(?!^\d+$)(?!^[A-Za-z]+$)(?!^[^A-Za-z0-9]+$)(?!^.*[\u4E00-\u9FA5].*$)^\S{8,16}$/
       if (!reg.test(value)) {
-        callback(new Error('请输入6到16位由字母或数字组成的密码'))
+        callback(new Error('密码至少为字母、数字两种组成8-16位字符，不包含空格,中文'))
       } else {
         callback()
       }
@@ -334,15 +315,15 @@ export default {
       }],
       positionOptions: [],
       temp: {
-        name: undefined,
-        account: undefined,
+        name: '',
+        account: '',
         recordStatus: '',
-        email: undefined,
-        phone: undefined,
-        id: undefined,
-        departmentId: undefined,
-        postId: undefined,
-        wechatAccount: undefined
+        email: '',
+        phone: '',
+        id: '',
+        departmentId: '',
+        postId: '',
+        wechatAccount: ''
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -447,48 +428,9 @@ export default {
   methods: {
     // 导出功能
     handleExcel() {
-      exportExcel(this.listQuery).then(res => {
-        // console.log(res.request.responseURL)
-        // window.location.href = res.request.responseURL
-        const blob = new Blob([res.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8' })
-        const downloadElement = document.createElement('a')
-        const href = window.URL.createObjectURL(blob)
-        downloadElement.href = href
-        downloadElement.download = 'rate.xlsx'
-        document.body.appendChild(downloadElement)
-        downloadElement.click()
-        document.body.removeChild(downloadElement) // 下载完成移除元素
-        window.URL.revokeObjectURL(href) // 释放掉blob对象
+      api(`${this.GLOBAL.systemUrl}system/sysUser/exportExcelUserInfo?name=${this.listQuery.name}&postOrTypeName=${this.listQuery.postOrTypeName}&recordStatus=${this.listQuery.recordStatus}`, '', 'get').then(res => {
+        window.location.href = res.request.responseURL
       })
-      // exportExcel(this.listQuery).then((res) => {
-      //   console.log(res)
-      //   const link = document.createElement('a')
-      //   const blob = new Blob([res.data])
-      //   link.style.display = 'none'
-      //   link.href = URL.createObjectURL(blob)
-      //   const objectUrl = URL.createObjectURL(blob)
-      //   window.location.herf = objectUrl
-      //   let num = ''
-      //   for (let i = 0; i < 10; i++) {
-      //     num += Math.ceil(Math.random() * 10)
-      //   }
-      //   link.setAttribute('download', '用户_' + num + '.xlsx')
-      //   document.body.appendChild(link)
-      //   link.click()
-      //   document.body.removeChild(link)
-      // }).catch(error => {
-      //   this.$Notice.error({
-      //     title: '错误',
-      //     desc: '网络连接错误'
-      //   })
-      //   console.log(error)
-      // })
-      // exportExcel().then(res => {
-      // window.location.href = 'http://localhost/springcloud-app-system/system/sysUser/exportExcelUserInfo'
-      // })
-      // window.location.href = 'http://localhost/springcloud-app-system/system/sysUser/exportExcelUserInfo'
-      // window.location.href = 'http://localhost/springcloud-app-system/system/sysUser/exportExcelUserInfo?name=' + this.listQuery.name
-      //  + '&departmentId=' + this.listQuery.departmentId + '&postOrTypeName=' + this.listQuery.postOrTypeName + '&recordStatus=1'
     },
     // 选择部门（新增用户对话框）
     handleChangeDepartment(value) {
@@ -519,8 +461,14 @@ export default {
       } else if (direction === 'right') {
         this.moveArr = movedKeys.length
       }
-      api('system/sysUser/saveSysGroupToSysUser', { userId: this.userId, groupIds: value }).then(res => {
-        if (res.data.code === '0000') {
+      this.userTotal = this.userTotal - this.moveArr
+      if (this.userTotal > (this.userPage - 1) * this.userRows) {
+        this.userPage = this.userPage
+      } else {
+        this.userPage = this.userPage - 1
+      }
+      api(`${this.GLOBAL.systemUrl}system/sysUser/saveSysGroupToSysUser`, { userId: this.userId, groupIds: value }, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.$message({
             message: '授权成功',
             type: 'success'
@@ -528,11 +476,13 @@ export default {
         } else {
           this.$message.error(res.data.result)
         }
+        this.initList()
+        this.getUserGroup()
       })
     },
     // 授权用户组分页功能
     handleUserGroupCurrentChange(val) {
-      if (this.userTotal - this.moveArr > (val - 1) * this.userRows) {
+      if (this.userTotal > (val - 1) * this.userRows) {
         this.userPage = val
       } else {
         this.userPage = val - 1
@@ -550,12 +500,12 @@ export default {
       this.getUserGroup()
     },
     getUserGroup() {
-      api('system/sysUser/findSysGroupByUserId', {
+      api(`${this.GLOBAL.systemUrl}system/sysUser/findSysGroupByUserId`, {
         userId: this.userId,
         page: this.userPage,
         rows: this.userRows,
         userGroupName: this.userGroupName
-      }).then(res => {
+      }, 'post').then(res => {
         const userGroupData = []
         const checkUserGroup = []
         this.userTotal = res.data.data.total
@@ -575,7 +525,7 @@ export default {
     },
     // 授权角色分页功能
     handleRoleCurrentChange(val) {
-      if (this.numberTotal - this.moveArr > (val - 1) * this.numberRows) {
+      if (this.numberTotal > (val - 1) * this.numberRows) {
         this.numberPage = val
       } else {
         this.numberPage = val - 1
@@ -591,8 +541,14 @@ export default {
       } else if (direction === 'right') {
         this.moveArr = movedKeys.length
       }
-      api('system/sysUser/saveSysRoleToSysUser', { userId: this.userId, roleIds: value }).then(res => {
-        if (res.data.code === '0000') {
+      this.numberTotal = this.numberTotal - this.moveArr
+      if (this.numberTotal > (this.numberPage - 1) * this.numberRows) {
+        this.numberPage = this.numberPage
+      } else {
+        this.numberPage = this.numberPage - 1
+      }
+      api(`${this.GLOBAL.systemUrl}system/sysUser/saveSysRoleToSysUser`, { userId: this.userId, roleIds: value }, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.$message({
             message: '授权成功',
             type: 'success'
@@ -600,6 +556,8 @@ export default {
         } else {
           this.$message.error(res.data.result)
         }
+        this.initList()
+        this.getRole()
       })
     },
     // 显示授权角色对话框
@@ -612,13 +570,13 @@ export default {
       this.getRole()
     },
     getRole() {
-      api('system/sysUser/findSysRoleByUserId', {
+      api(`${this.GLOBAL.systemUrl}system/sysUser/findSysRoleByUserId`, {
         userId: this.userId,
         page: this.numberPage,
         rows: this.numberRows,
         roleName: this.roleName
-      }).then(res => {
-        if (res.data.code === '0000') {
+      }, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           const roleData = []
           const checkRole = []
           this.numberTotal = res.data.data.total
@@ -649,14 +607,13 @@ export default {
     },
     // 改变状态
     selecteUserStatus(value) {
-      console.log(value)
       this.listQuery.recordStatus = value
     },
     // 获取所有部门列表
     getAllDepartment() {
       this.departmentListLoading = true
-      api('system/sysDepartment/findDepartmentAllByLevel').then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.systemUrl}system/sysDepartment/findDepartmentAllByLevel`, '', 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.departmentList = res.data.data
         } else {
           this.$message.error(res.data.result)
@@ -666,8 +623,8 @@ export default {
     },
     // 获取所有岗位
     findSysPostAll() {
-      api('system/sysPost/findSysPostAll').then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.systemUrl}system/sysPost/findSysPostAll`, '', 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           const data = res.data.data
           this.positionOptions = data.map(function(item) {
             return {
@@ -683,9 +640,8 @@ export default {
     // 获取用户列表
     initList() {
       this.listLoading = true
-      api('system/sysUser/findSysUserByPage', this.listQuery).then(res => {
-        if (res.data.code === '0000') {
-          console.log(res)
+      api(`${this.GLOBAL.systemUrl}system/sysUser/findSysUserByPage`, this.listQuery, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.userList = res.data.data.rows
           this.total = res.data.data.total
           if (this.userList.length === 0 && this.total > 0) {
@@ -705,8 +661,8 @@ export default {
       this.sectorLoading = true
       this.userId = row.id
       // 发请求获取用户具有的部门和岗位
-      paramApi('system/sysUser/findDepartmentandPostByUserId', row.id, 'userId').then(response => {
-        if (response.data.code === '0000') {
+      paramApi(`${this.GLOBAL.systemUrl}system/sysUser/findDepartmentandPostByUserId`, row.id, 'userId').then(response => {
+        if (response.data.code === this.GLOBAL.code) {
           this.sectorLoading = false
           const data = response.data.data
           const sectorArr = []
@@ -764,8 +720,8 @@ export default {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
           // this.isDisabled = true
-          api('system/sysUser/addSysUser', this.temp).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.systemUrl}system/sysUser/addSysUser`, this.temp, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '新增用户成功',
                 type: 'success'
@@ -812,8 +768,8 @@ export default {
         if (valid) {
           this.isDisabled = true
           // // 调用接口发送请求
-          api('system/sysUser/updateSysUser', this.temp).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.systemUrl}system/sysUser/updateSysUser`, this.temp, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '编辑成功',
                 type: 'success'
@@ -837,8 +793,8 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          api('system/sysUser/deleteSysUser', { userIds: [row.id] }).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.systemUrl}system/sysUser/deleteSysUser`, { userIds: [row.id] }, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '删除成功',
                 type: 'success'
@@ -898,8 +854,8 @@ export default {
           userDepartmentPostList.sysDepartmentPostList[0].isDefault = '1'
         }
       }
-      api('system/sysUser/saveDepartmentandPostOfUser', userDepartmentPostList).then(response => {
-        if (response.data.code === '0000') {
+      api(`${this.GLOBAL.systemUrl}system/sysUser/saveDepartmentandPostOfUser`, userDepartmentPostList, 'post').then(response => {
+        if (response.data.code === this.GLOBAL.code) {
           this.$message({
             message: '修改部门和岗位成功',
             type: 'success'
@@ -933,8 +889,8 @@ export default {
     handlerResetPassword() {
       this.$refs['resetPassword'].validate(valid => {
         if (valid) {
-          api('system/sysUser/updateSysUser', this.resetPassword).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.systemUrl}system/sysUser/updateSysUser`, this.resetPassword, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.dialogResetPasswordVisible = false
               this.$message({
                 message: '重置密码成功',
@@ -959,8 +915,9 @@ export default {
 .userManagement-content{
   display: flex;
   .userManagement-content-left{
-    margin-top:15px;
+  background: #fff;
     margin-right:30px;
+    padding:10px 20px;
     .el-button{
       margin-bottom: 10px;
     }
@@ -1037,4 +994,3 @@ export default {
     user-select: none;
   }
 </style>
-

@@ -6,6 +6,8 @@
     <property name="LOG_HOME" value="./logs" />
 
 
+    <!--kafka的url -->
+    <springProperty name = "KAFKA_URL" scope="context" source="jn.kafka.url"  />
 
     <!-- 控制台输出 -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
@@ -36,16 +38,24 @@
         </encoder>
     </appender>
 
+    <appender name="KAFKA" class="com.jn.logback.UnblockedKafkaAppender">
+        <systemName>${PROJECT_NAME}</systemName>
+        <url>${KAFKA_URL}</url>
+    </appender>
 
     <!--<appender level="debug" class="org.springframework.retry">
         <appender-ref ref="CONSOLE" />
 
     </appender>-->
+    <logger name="com.jn" additivity="true" level="INFO">
+        <appender-ref ref="KAFKA"/>
+    </logger>
 
 
     <root level="info">
         <appender-ref ref="CONSOLE" />
         <appender-ref ref="MY_INFO_FILE"/>
+
     </root>
 
 </configuration>

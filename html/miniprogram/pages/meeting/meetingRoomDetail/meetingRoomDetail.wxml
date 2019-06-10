@@ -1,0 +1,53 @@
+<!--pages/meeting/meetingRoomDetail/meetingRoomDetail.wxml-->
+<!-- <nav-bar navbar-data='{{nvabarData}}'></nav-bar> -->
+<!-- 会议室详情 -->
+<view class="room_detail">
+  <swiper class="screen-swiper round-dot" indicator-dots="true" circular="true" autoplay="true" interval="5000" duration="500">
+    <swiper-item wx:for="{{meetingDetail.attachmentPaths}}" wx:key>
+      <image src="{{item}} " mode='aspectFill'></image>
+    </swiper-item>
+  </swiper>
+  <view class="detail_title">
+    <text>会议室名称：{{meetingDetail.name}}</text>
+    <text class="green">{{meetingDetail.recordStatus===1?'可用':'不可用'}}</text>
+  </view>
+  <view class="detail_address">
+    <view class="">
+      容量：{{meetingDetail.capacity}}人
+    </view>
+    <view class="">
+      位置：<text class="gray"> {{meetingDetail.position}}</text>
+    </view>
+  </view>
+</view>
+<!-- 说明 -->
+<view class="explain" >
+  <view class="">
+    说明
+  </view>
+  <text class="gray">
+    {{meetingDetail.remark===null?'暂无':meetingDetail.remark}}
+  </text>
+</view>
+<!-- 会议列表 -->
+<view class="meetingList">
+  <block wx:for="{{meetingList}}" wx:key="index">
+    <view class="meeting_li" bindtap="goAttendence" data-id="{{item.id}}">
+      <view class="li_left" >
+        <view class="begin_time">{{item.startTime}}</view>
+        <view class="gray">{{item.endTime}}</view>
+      </view>
+      <view class="li_right" >
+        <view class="right_title">
+          <text>{{item.title}} </text>
+          <text>{{item.meetingTime}}小时</text>
+        </view>
+        <view class="gray">
+          预约人：{{item.organizationalUser}}
+        </view>
+      </view>
+    </view>
+  </block>
+</view>
+<view class='makeMeeting' bindtap="makeMeeting">会议预约</view>
+

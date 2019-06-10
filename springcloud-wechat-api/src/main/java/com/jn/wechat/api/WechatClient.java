@@ -1,8 +1,9 @@
 package com.jn.wechat.api;
 
 import com.jn.common.model.Result;
-import com.jn.wechat.model.TemplateMessage;
+import com.jn.wechat.model.WxTemplateMessage;
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -26,10 +27,10 @@ public interface WechatClient {
 
     /**
      * 推送模板消息
-     * @param templateMessage
+     * @param wxTemplateMessage
      * @return
      */
     @RequestMapping(value = "/api/wechat/pushTemplateInfo")
-    Result<String> pushTemplateInfo(@RequestBody TemplateMessage templateMessage);
+    Result<String> pushTemplateInfo(@Validated @RequestBody WxTemplateMessage wxTemplateMessage);
 
 }

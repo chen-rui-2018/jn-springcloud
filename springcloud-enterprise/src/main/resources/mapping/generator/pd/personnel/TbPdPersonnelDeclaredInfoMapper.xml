@@ -1,0 +1,497 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.pd.personnel.dao.TbPdPersonnelDeclaredInfoMapper">
+  <resultMap id="BaseResultMap" type="com.jn.enterprise.pd.personnel.entity.TbPdPersonnelDeclaredInfo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="declarer_name" jdbcType="VARCHAR" property="declarerName" />
+    <result column="project_name" jdbcType="VARCHAR" property="projectName" />
+    <result column="industrial_field_id" jdbcType="VARCHAR" property="industrialFieldId" />
+    <result column="industrial_field_name" jdbcType="VARCHAR" property="industrialFieldName" />
+    <result column="id_number" jdbcType="VARCHAR" property="idNumber" />
+    <result column="graduate_institutions" jdbcType="VARCHAR" property="graduateInstitutions" />
+    <result column="educa_id" jdbcType="VARCHAR" property="educaId" />
+    <result column="educa_name" jdbcType="VARCHAR" property="educaName" />
+    <result column="work_unit" jdbcType="VARCHAR" property="workUnit" />
+    <result column="business" jdbcType="VARCHAR" property="business" />
+    <result column="is_overseas_study" jdbcType="TINYINT" property="isOverseasStudy" />
+    <result column="is_entrepreneurial_experience" jdbcType="TINYINT" property="isEntrepreneurialExperience" />
+    <result column="is_registration_land" jdbcType="TINYINT" property="isRegistrationLand" />
+    <result column="contact_name" jdbcType="VARCHAR" property="contactName" />
+    <result column="contact_telephone" jdbcType="VARCHAR" property="contactTelephone" />
+    <result column="project_synopsis" jdbcType="VARCHAR" property="projectSynopsis" />
+    <result column="project_id" jdbcType="INTEGER" property="projectId" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, declarer_name, project_name, industrial_field_id, industrial_field_name, id_number, 
+    graduate_institutions, educa_id, educa_name, work_unit, business, is_overseas_study, 
+    is_entrepreneurial_experience, is_registration_land, contact_name, contact_telephone, 
+    project_synopsis, project_id, record_status, creator_account, created_time, modifier_account, 
+    modified_time
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.enterprise.pd.personnel.entity.TbPdPersonnelDeclaredInfoCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_pd_personnel_declared_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_pd_personnel_declared_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_pd_personnel_declared_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.enterprise.pd.personnel.entity.TbPdPersonnelDeclaredInfoCriteria">
+    delete from tb_pd_personnel_declared_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.enterprise.pd.personnel.entity.TbPdPersonnelDeclaredInfo">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_pd_personnel_declared_info (declarer_name, project_name, industrial_field_id, 
+      industrial_field_name, id_number, graduate_institutions, 
+      educa_id, educa_name, work_unit, 
+      business, is_overseas_study, is_entrepreneurial_experience, 
+      is_registration_land, contact_name, contact_telephone, 
+      project_synopsis, project_id, record_status, 
+      creator_account, created_time, modifier_account, 
+      modified_time)
+    values (#{declarerName,jdbcType=VARCHAR}, #{projectName,jdbcType=VARCHAR}, #{industrialFieldId,jdbcType=VARCHAR}, 
+      #{industrialFieldName,jdbcType=VARCHAR}, #{idNumber,jdbcType=VARCHAR}, #{graduateInstitutions,jdbcType=VARCHAR}, 
+      #{educaId,jdbcType=VARCHAR}, #{educaName,jdbcType=VARCHAR}, #{workUnit,jdbcType=VARCHAR}, 
+      #{business,jdbcType=VARCHAR}, #{isOverseasStudy,jdbcType=TINYINT}, #{isEntrepreneurialExperience,jdbcType=TINYINT}, 
+      #{isRegistrationLand,jdbcType=TINYINT}, #{contactName,jdbcType=VARCHAR}, #{contactTelephone,jdbcType=VARCHAR}, 
+      #{projectSynopsis,jdbcType=VARCHAR}, #{projectId,jdbcType=INTEGER}, #{recordStatus,jdbcType=TINYINT}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.enterprise.pd.personnel.entity.TbPdPersonnelDeclaredInfo">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_pd_personnel_declared_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="declarerName != null">
+        declarer_name,
+      </if>
+      <if test="projectName != null">
+        project_name,
+      </if>
+      <if test="industrialFieldId != null">
+        industrial_field_id,
+      </if>
+      <if test="industrialFieldName != null">
+        industrial_field_name,
+      </if>
+      <if test="idNumber != null">
+        id_number,
+      </if>
+      <if test="graduateInstitutions != null">
+        graduate_institutions,
+      </if>
+      <if test="educaId != null">
+        educa_id,
+      </if>
+      <if test="educaName != null">
+        educa_name,
+      </if>
+      <if test="workUnit != null">
+        work_unit,
+      </if>
+      <if test="business != null">
+        business,
+      </if>
+      <if test="isOverseasStudy != null">
+        is_overseas_study,
+      </if>
+      <if test="isEntrepreneurialExperience != null">
+        is_entrepreneurial_experience,
+      </if>
+      <if test="isRegistrationLand != null">
+        is_registration_land,
+      </if>
+      <if test="contactName != null">
+        contact_name,
+      </if>
+      <if test="contactTelephone != null">
+        contact_telephone,
+      </if>
+      <if test="projectSynopsis != null">
+        project_synopsis,
+      </if>
+      <if test="projectId != null">
+        project_id,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="declarerName != null">
+        #{declarerName,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null">
+        #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="industrialFieldId != null">
+        #{industrialFieldId,jdbcType=VARCHAR},
+      </if>
+      <if test="industrialFieldName != null">
+        #{industrialFieldName,jdbcType=VARCHAR},
+      </if>
+      <if test="idNumber != null">
+        #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="graduateInstitutions != null">
+        #{graduateInstitutions,jdbcType=VARCHAR},
+      </if>
+      <if test="educaId != null">
+        #{educaId,jdbcType=VARCHAR},
+      </if>
+      <if test="educaName != null">
+        #{educaName,jdbcType=VARCHAR},
+      </if>
+      <if test="workUnit != null">
+        #{workUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="business != null">
+        #{business,jdbcType=VARCHAR},
+      </if>
+      <if test="isOverseasStudy != null">
+        #{isOverseasStudy,jdbcType=TINYINT},
+      </if>
+      <if test="isEntrepreneurialExperience != null">
+        #{isEntrepreneurialExperience,jdbcType=TINYINT},
+      </if>
+      <if test="isRegistrationLand != null">
+        #{isRegistrationLand,jdbcType=TINYINT},
+      </if>
+      <if test="contactName != null">
+        #{contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactTelephone != null">
+        #{contactTelephone,jdbcType=VARCHAR},
+      </if>
+      <if test="projectSynopsis != null">
+        #{projectSynopsis,jdbcType=VARCHAR},
+      </if>
+      <if test="projectId != null">
+        #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.enterprise.pd.personnel.entity.TbPdPersonnelDeclaredInfoCriteria" resultType="java.lang.Long">
+    select count(*) from tb_pd_personnel_declared_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_pd_personnel_declared_info
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.declarerName != null">
+        declarer_name = #{record.declarerName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.projectName != null">
+        project_name = #{record.projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.industrialFieldId != null">
+        industrial_field_id = #{record.industrialFieldId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.industrialFieldName != null">
+        industrial_field_name = #{record.industrialFieldName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.idNumber != null">
+        id_number = #{record.idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.graduateInstitutions != null">
+        graduate_institutions = #{record.graduateInstitutions,jdbcType=VARCHAR},
+      </if>
+      <if test="record.educaId != null">
+        educa_id = #{record.educaId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.educaName != null">
+        educa_name = #{record.educaName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workUnit != null">
+        work_unit = #{record.workUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.business != null">
+        business = #{record.business,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isOverseasStudy != null">
+        is_overseas_study = #{record.isOverseasStudy,jdbcType=TINYINT},
+      </if>
+      <if test="record.isEntrepreneurialExperience != null">
+        is_entrepreneurial_experience = #{record.isEntrepreneurialExperience,jdbcType=TINYINT},
+      </if>
+      <if test="record.isRegistrationLand != null">
+        is_registration_land = #{record.isRegistrationLand,jdbcType=TINYINT},
+      </if>
+      <if test="record.contactName != null">
+        contact_name = #{record.contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactTelephone != null">
+        contact_telephone = #{record.contactTelephone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.projectSynopsis != null">
+        project_synopsis = #{record.projectSynopsis,jdbcType=VARCHAR},
+      </if>
+      <if test="record.projectId != null">
+        project_id = #{record.projectId,jdbcType=INTEGER},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_pd_personnel_declared_info
+    set id = #{record.id,jdbcType=INTEGER},
+      declarer_name = #{record.declarerName,jdbcType=VARCHAR},
+      project_name = #{record.projectName,jdbcType=VARCHAR},
+      industrial_field_id = #{record.industrialFieldId,jdbcType=VARCHAR},
+      industrial_field_name = #{record.industrialFieldName,jdbcType=VARCHAR},
+      id_number = #{record.idNumber,jdbcType=VARCHAR},
+      graduate_institutions = #{record.graduateInstitutions,jdbcType=VARCHAR},
+      educa_id = #{record.educaId,jdbcType=VARCHAR},
+      educa_name = #{record.educaName,jdbcType=VARCHAR},
+      work_unit = #{record.workUnit,jdbcType=VARCHAR},
+      business = #{record.business,jdbcType=VARCHAR},
+      is_overseas_study = #{record.isOverseasStudy,jdbcType=TINYINT},
+      is_entrepreneurial_experience = #{record.isEntrepreneurialExperience,jdbcType=TINYINT},
+      is_registration_land = #{record.isRegistrationLand,jdbcType=TINYINT},
+      contact_name = #{record.contactName,jdbcType=VARCHAR},
+      contact_telephone = #{record.contactTelephone,jdbcType=VARCHAR},
+      project_synopsis = #{record.projectSynopsis,jdbcType=VARCHAR},
+      project_id = #{record.projectId,jdbcType=INTEGER},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.pd.personnel.entity.TbPdPersonnelDeclaredInfo">
+    update tb_pd_personnel_declared_info
+    <set>
+      <if test="declarerName != null">
+        declarer_name = #{declarerName,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null">
+        project_name = #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="industrialFieldId != null">
+        industrial_field_id = #{industrialFieldId,jdbcType=VARCHAR},
+      </if>
+      <if test="industrialFieldName != null">
+        industrial_field_name = #{industrialFieldName,jdbcType=VARCHAR},
+      </if>
+      <if test="idNumber != null">
+        id_number = #{idNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="graduateInstitutions != null">
+        graduate_institutions = #{graduateInstitutions,jdbcType=VARCHAR},
+      </if>
+      <if test="educaId != null">
+        educa_id = #{educaId,jdbcType=VARCHAR},
+      </if>
+      <if test="educaName != null">
+        educa_name = #{educaName,jdbcType=VARCHAR},
+      </if>
+      <if test="workUnit != null">
+        work_unit = #{workUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="business != null">
+        business = #{business,jdbcType=VARCHAR},
+      </if>
+      <if test="isOverseasStudy != null">
+        is_overseas_study = #{isOverseasStudy,jdbcType=TINYINT},
+      </if>
+      <if test="isEntrepreneurialExperience != null">
+        is_entrepreneurial_experience = #{isEntrepreneurialExperience,jdbcType=TINYINT},
+      </if>
+      <if test="isRegistrationLand != null">
+        is_registration_land = #{isRegistrationLand,jdbcType=TINYINT},
+      </if>
+      <if test="contactName != null">
+        contact_name = #{contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactTelephone != null">
+        contact_telephone = #{contactTelephone,jdbcType=VARCHAR},
+      </if>
+      <if test="projectSynopsis != null">
+        project_synopsis = #{projectSynopsis,jdbcType=VARCHAR},
+      </if>
+      <if test="projectId != null">
+        project_id = #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.pd.personnel.entity.TbPdPersonnelDeclaredInfo">
+    update tb_pd_personnel_declared_info
+    set declarer_name = #{declarerName,jdbcType=VARCHAR},
+      project_name = #{projectName,jdbcType=VARCHAR},
+      industrial_field_id = #{industrialFieldId,jdbcType=VARCHAR},
+      industrial_field_name = #{industrialFieldName,jdbcType=VARCHAR},
+      id_number = #{idNumber,jdbcType=VARCHAR},
+      graduate_institutions = #{graduateInstitutions,jdbcType=VARCHAR},
+      educa_id = #{educaId,jdbcType=VARCHAR},
+      educa_name = #{educaName,jdbcType=VARCHAR},
+      work_unit = #{workUnit,jdbcType=VARCHAR},
+      business = #{business,jdbcType=VARCHAR},
+      is_overseas_study = #{isOverseasStudy,jdbcType=TINYINT},
+      is_entrepreneurial_experience = #{isEntrepreneurialExperience,jdbcType=TINYINT},
+      is_registration_land = #{isRegistrationLand,jdbcType=TINYINT},
+      contact_name = #{contactName,jdbcType=VARCHAR},
+      contact_telephone = #{contactTelephone,jdbcType=VARCHAR},
+      project_synopsis = #{projectSynopsis,jdbcType=VARCHAR},
+      project_id = #{projectId,jdbcType=INTEGER},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -103,8 +103,8 @@
                 <i class="mainColor">{{i.careUser}}</i>人关注</span>
             </p>
             <p>
-              <a class="attention" v-if="attentionStatus=='0'" @click="handleAttention(i.id)">+关注</a>
-              <a class="attention" v-if="attentionStatus=='1'" @click="cancelAttention(i.id)">已关注</a>
+              <a class="attention" v-if="i.attentionStatus=='0'" @click="handleAttention(i.id)">+关注</a>
+              <a class="attention" v-if="i.attentionStatus=='1'" @click="cancelAttention(i.id)">取消关注</a>
               <a @click="$router.push({path:'/recruitmentList',query:{comId:i.id}})">热招职位</a>
             </p>
           </div>
@@ -115,12 +115,24 @@
       <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
       </el-pagination>
     </div>
+      <template v-if="concatVisible">
+      <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :append-to-body="true" :lock-scroll="false">
+        <div class="loginTip" style="text-align:center;padding-bottom:20px">
+          你还未
+          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          /
+          <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+          账号
+        </div>
+      </el-dialog>
+    </template>
   </div>
 </template>
 <script>
 export default {
   data() {
     return {
+      concatVisible:false,
       attentionStatus: "0",
       total: 0,
       currentPage1: 1,
@@ -183,14 +195,14 @@ export default {
           callback: res => {
             if (res.code == "0000") {
               // _this.parkList = res.data;
-              this.attentionStatus = "1";
+              this.getCompanyList()
             } else {
               this.$message.error(res.result);
             }
           }
         });
       } else {
-        this.$message.error("你还未登录");
+        this.concatVisible=true;
         return;
       }
     },
@@ -206,7 +218,7 @@ export default {
           callback: res => {
             if (res.code == "0000") {
               // _this.parkList = res.data;
-              this.attentionStatus = "0";
+              this.getCompanyList()
             } else {
               this.$message.error(res.result);
             }
@@ -290,7 +302,7 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-            _this.CompanyList = res.data.rows.data;
+            _this.CompanyList = res.data.rows;
             _this.total = res.data.total;
           } else {
             _this.$message.error(res.result);
@@ -366,6 +378,11 @@ export default {
 <style lang="scss" scoped>
 .companyProfile {
   padding-top: 65px;
+  .loginTip{
+    text-align: center;
+    margin-bottom:20px;
+    font-size: 15px;
+  }
   .serverOrgContent {
     .orgBtn1 {
       p {

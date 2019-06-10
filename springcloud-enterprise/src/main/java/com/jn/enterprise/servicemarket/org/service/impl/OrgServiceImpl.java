@@ -10,10 +10,12 @@ import com.jn.common.util.StringUtils;
 import com.jn.company.model.IBPSResult;
 import com.jn.enterprise.company.dao.TbServiceCompanyMapper;
 import com.jn.enterprise.company.entity.TbServiceCompanyCriteria;
+import com.jn.enterprise.enums.InvestorExceptionEnum;
 import com.jn.enterprise.enums.OrgExceptionEnum;
 import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.model.ServiceOrg;
 import com.jn.enterprise.servicemarket.advisor.dao.TbServiceAdvisorMapper;
+import com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor;
 import com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisorCriteria;
 import com.jn.enterprise.servicemarket.industryarea.dao.TbServicePreferMapper;
 import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePrefer;
@@ -40,6 +42,7 @@ import com.jn.system.model.User;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.enums.HomeRoleEnum;
 import com.jn.user.enums.UserExtensionExceptionEnum;
+import com.jn.user.model.UserAffiliateInfo;
 import com.jn.user.model.UserExtensionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -106,6 +109,9 @@ public class OrgServiceImpl implements OrgService {
     @Autowired
     private InvestorService investorService;
 
+    @Autowired
+    private UserExtensionClient userExtensionClient;
+
     /**
      * 机构认证流程id
      */
@@ -145,7 +151,14 @@ public class OrgServiceImpl implements OrgService {
             sList.addAll(Arrays.asList(orgParameter.getIndustrySector()));
         }
         orgParameter.setCompanyList(sList);
-        List<ServiceOrg> serviceOrg = orgMapper.selectServiceOrgList(orgParameter);
+        OrgListParam orgListParam=new OrgListParam();
+        BeanUtils.copyProperties(orgParameter, orgListParam);
+        //综合排序
+        String sortType="integrate";
+        if(StringUtils.isBlank(orgParameter.getSortTypes())|| StringUtils.equals(orgParameter.getSortTypes(),sortType)){
+            //设置排序权重值，目前使用默认排序权重
+        }
+        List<ServiceOrg> serviceOrg = orgMapper.selectServiceOrgList(orgListParam);
 
         // 处理图片格式
         List<ServiceOrg> serviceOrgResult = new ArrayList<>();
@@ -169,6 +182,10 @@ public class OrgServiceImpl implements OrgService {
         }
 
         // 处理图片格式
+        List<OrgLicense> honorLicense = serviceOrgDetailVo.getHonorLicense();
+        for(OrgLicense orgLicense:honorLicense){
+            orgLicense.setFileUrl(IBPSFileUtils.getFilePath(orgLicense.getFileUrl()));
+        }
         serviceOrgDetailVo.setOrgLogo(IBPSFileUtils.getFilePath(serviceOrgDetailVo.getOrgLogo()));
         return serviceOrgDetailVo;
     }
@@ -186,25 +203,24 @@ public class OrgServiceImpl implements OrgService {
             List<String> hobby = new ArrayList<>(16);
             hobby.addAll(Arrays.asList(orgBasicData.getIndustrySector()));
             TbServicePreferCriteria preferCriteria = new TbServicePreferCriteria();
-            preferCriteria.createCriteria().andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
+            preferCriteria.createCriteria().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
             List<TbServicePrefer> tbServicePrefers = tbServicePreferMapper.selectByExample(preferCriteria);
-            StringBuffer sbSpeciality = new StringBuffer();
-            StringBuffer sbHobby = new StringBuffer();
-            String businessTypeStr = "";
+            List<String>sbSpeciality=new ArrayList<>(16);
+            List<String>sbHobby=new ArrayList<>(16);
             for (TbServicePrefer prefer:tbServicePrefers) {
                 for (String sp:orgBasicData.getOrgSpeciality()) {
                     if(StringUtils.equals(sp,prefer.getId())){
-                        sbSpeciality.append(prefer.getPreValue()+",");
+                        sbSpeciality.add(prefer.getPreValue());
                     }
                 }
                 for (String shobby :hobby) {
                     if(StringUtils.equals(shobby,prefer.getId())){
-                        sbHobby.append(prefer.getPreValue()+",");
+                        sbHobby.add(prefer.getPreValue());
                     }
                 }
             }
-            tbServiceOrg.setOrgSpeciality(sbSpeciality.toString().substring(0, sbSpeciality.toString().length() - 1));
-            tbServiceOrg.setOrgHobby(sbHobby.toString().substring(0, sbHobby.toString().length() - 1));
+            tbServiceOrg.setOrgSpeciality(StringUtils.join(sbSpeciality,","));
+            tbServiceOrg.setOrgHobby(StringUtils.join(sbHobby,","));
         }
 
         try {
@@ -381,9 +397,7 @@ public class OrgServiceImpl implements OrgService {
             tbServiceOrgInfo.setCreatorAccount(account);
             code = tbServiceOrgInfoMapper.insertSelective(tbServiceOrgInfo);
         }
-
         // 开始 启动IBPS审核流 --- 封装数据开始  ------------------------
-
         String orgId = orgContactData.getOrgId();
         TbServiceOrgCriteria orgCriteria = new TbServiceOrgCriteria();
         orgCriteria.createCriteria().andOrgIdEqualTo(orgId);
@@ -723,6 +737,8 @@ public class OrgServiceImpl implements OrgService {
             logger.warn("添加机构管理员角色失败，失败原因：机构账号在系统中不存在");
             throw new JnSpringCloudException(OrgExceptionEnum.NETWORK_ANOMALY);
         }
+        //更新机构用户的所属机构id和机构名称
+        updateOrgAccountAffiliateInfo(orgAccount);
         //给用户添加"机构管理员"角色
         Result<SysRole> addSysRoleResult = systemClient.getRoleByName(HomeRoleEnum.ORG_ADMIN.getCode());
         Result<SysRole> delSysRoleResult = systemClient.getRoleByName(HomeRoleEnum.NORMAL_USER.getCode());
@@ -733,10 +749,37 @@ public class OrgServiceImpl implements OrgService {
         //更新用户角色
         Result<Boolean> booleanResult = investorService.updateUserRoleInfo(user, addSysRoleResult,delSysRoleResult);
         if(booleanResult.getData()==true){
+            //把机构id和机构名称更新到用户信息表
             return 1;
         }else{
             logger.warn("添加机构管理员角色失败，失败原因：更新用户角色为“机构管理员”失败");
-            throw new JnSpringCloudException(UserExtensionExceptionEnum.NETWORK_ANOMALY);
+            throw new JnSpringCloudException(OrgExceptionEnum.NETWORK_ANOMALY);
+        }
+    }
+
+    /**
+     * 更新机构用户所属机构信息
+     * @param orgAccount
+     */
+    @ServiceLog(doAction = "")
+    private void updateOrgAccountAffiliateInfo(String orgAccount) {
+        TbServiceOrgCriteria example=new TbServiceOrgCriteria();
+        example.createCriteria().andOrgAccountEqualTo(orgAccount)
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        List<TbServiceOrg> tbServiceOrgList = tbServiceOrgMapper.selectByExample(example);
+        if(tbServiceOrgList.isEmpty()){
+            logger.warn("添加机构管理员角色失败，失败原因：机构用户在系统中不存在或机构用户已失效");
+            throw new JnSpringCloudException(OrgExceptionEnum.NETWORK_ANOMALY);
+        }
+        UserAffiliateInfo userAffiliateInfo=new UserAffiliateInfo();
+        List accountList= Arrays.asList(orgAccount);
+        userAffiliateInfo.setAccountList(accountList);
+        userAffiliateInfo.setAffiliateCode(tbServiceOrgList.get(0).getOrgId());
+        userAffiliateInfo.setAffiliateName(tbServiceOrgList.get(0).getOrgName());
+        Result resultData = userExtensionClient.updateAffiliateInfo(userAffiliateInfo);
+        if(resultData==null ||resultData.getData()==null || !(Boolean)resultData.getData()){
+            logger.warn("添加机构管理员角色失败，失败原因：更新用户所属机构信息失败");
+            throw new JnSpringCloudException(OrgExceptionEnum.NETWORK_ANOMALY);
         }
     }
 }

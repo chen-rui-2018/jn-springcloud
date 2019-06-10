@@ -63,7 +63,7 @@
         </el-tabs>
       </div>
       <div class="pagination-container">
-        <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[query.rows, 20, 30, 40]" :page-size="query.rows" layout="total,prev, pager, next,sizes" :total="total">
+        <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[query.rows, 50, 100, 200]" :page-size="query.rows" layout="total,prev, pager, next,sizes" :total="total">
         </el-pagination>
       </div>
     </div>
@@ -105,7 +105,7 @@
         yearBefore: "",
         query: {
           page: 1,
-          rows: 500,
+          rows: 10,
           parkId: '',
           keyWords: ''
         },
@@ -208,6 +208,7 @@
         margin-top: 6px;
       }
       .list-row-l {
+        width: 90%;
         @include flex($h: flex-start, $v: flex-start);
       }
     }

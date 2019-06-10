@@ -185,5 +185,27 @@ public interface MeterDao {
      */
     List<TrendChartStatisticsModel> trendChart(TrendChartParam param);
 
+    /**
+     * 今日用电情况
+     * @param companyid
+     * @return
+     */
+    List<ConditionElectro> todayElectric(@Param("companyid") String companyid);
+
+    /**
+     * 当月用电情况
+     * @param companyid
+     * @return
+     */
+    List<ConditionElectro> monthElectric(@Param("companyid") String companyid);
+
+    /**
+     * 今年用电情况
+     * @param companyid
+     * @return
+     */
+    List<YearElectro> yearElectric(@Param("companyid") String companyid);
+
+
 
 }

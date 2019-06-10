@@ -35,9 +35,6 @@
                 <router-link to="/investment" class="router-link" :class="{'ru-active':$route.path == '/investment'}">招商引资</router-link>
               </li>
               <li>
-                <router-link to="" class="router-link" :class="{'ru-active':$route.path == ''}">智慧党建</router-link>
-              </li>
-              <li>
                 <router-link to="/enterpriseservice" class="router-link" :class="{'ru-active':$route.path == '/enterpriseservice'}">企业服务</router-link>
               </li>
             </ul>

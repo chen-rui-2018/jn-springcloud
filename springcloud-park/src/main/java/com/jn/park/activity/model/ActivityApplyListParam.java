@@ -17,7 +17,6 @@ import java.io.Serializable;
  */
 @ApiModel(value = "ActivityApplyListParam",description = "用户中心-报名活动列表 查询条件")
 public class ActivityApplyListParam extends Page implements Serializable {
-
     @ApiModelProperty(value = "活动名称",example = "重阳登高")
     private String actiName;
     @ApiModelProperty(value = "用户账号",required = true ,example = "wangsong")

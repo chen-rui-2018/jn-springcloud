@@ -187,6 +187,12 @@ const router = new Router({
       meta: {title: '考勤明细'}
     },
     {
+      path: '/electricInfo',
+      name: 'electricInfo',
+      component: () => import('@/views/electricInfo'),
+      meta: {title: '我的用电情况'}
+    },
+    {
       path: '/parkDetais',
       name: 'parkDetais',
       component: () => import('@/views/parkDetais'),

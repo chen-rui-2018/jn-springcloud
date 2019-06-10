@@ -74,7 +74,7 @@
       <el-card>
         <div class="delContent">
           <!-- <img src="@/../static/img/detail1.png" alt=""> -->
-          <p>{{this.activityDetail.actiDetail}}</p>
+          <p v-html="activityDetail.actiDetail"></p>
           <!-- <img src="@/../static/img/detail2.png" alt=""> -->
         </div>
       </el-card>
@@ -139,13 +139,25 @@
         </div>
       </el-card>
     </div>
+    <template v-if="concatVisible">
+      <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :append-to-body="true" :lock-scroll="false">
+        <div class="loginTip" style="padding-bottom:20px;text-align:center;font-size:15px">
+          你还未
+          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          /
+          <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+          账号
+        </div>
+      </el-dialog>
+    </template>
   </div>
 </template>
 <script>
 export default {
   data() {
     return {
-      activityApplyShow: '1',
+      concatVisible: false,
+      activityApplyShow: "1",
       inFlag: "",
       textarea: "",
       textData: "",
@@ -158,7 +170,9 @@ export default {
       actiApplyList: [],
       accountIsLike: false,
       isCommentLike: false,
-      countDown: ""
+      countDown: "",
+      applyEndTime: 0,
+      secondsTime: 0
     };
   },
   created() {
@@ -175,7 +189,7 @@ export default {
     //留言
     leaveMessage(id) {
       if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
+        this.concatVisible=true;
         return;
       }
       let _this = this;
@@ -201,15 +215,19 @@ export default {
       if (this.inFlag == i) {
         return;
       }
+       if (!sessionStorage.userInfo) {
+        this.concatVisible=true;
+        return;
+      }
       this.textarea = "";
       this.inFlag = i;
     },
     //回复评论
     replycom(item) {
-      if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
-        return;
-      }
+      // if (!sessionStorage.userInfo) {
+      //   this.concatVisible=true;
+      //   return;
+      // }
       this.inFlag = "";
       let _this = this;
       this.api.post({
@@ -231,7 +249,7 @@ export default {
     },
     comLike(item) {
       if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
+        this.concatVisible=true;
         return;
       }
       //评论点赞
@@ -295,12 +313,16 @@ export default {
     },
     handCheck(id) {
       //跳转报名人列表
+      if (!sessionStorage.userInfo) {
+        this.concatVisible=true;
+        return;
+      }
       this.$router.push({ path: "regStatus", query: { activityId: id } });
     },
     quickApply(id) {
       //立即报名
-        if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
+      if (!sessionStorage.userInfo) {
+        this.concatVisible=true;
         return;
       }
       let _this = this;
@@ -313,7 +335,7 @@ export default {
         callback: function(res) {
           if (res.code == "0000") {
             _this.$message.success("报名成功");
-            _this.activityApplyShow = '2';
+            _this.activityApplyShow = "2";
           } else {
             _this.$message.error(res.result);
           }
@@ -322,8 +344,8 @@ export default {
     },
     stopApply(id) {
       //停止报名
-        if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
+      if (!sessionStorage.userInfo) {
+        this.concatVisible=true;
         return;
       }
       let _this = this;
@@ -336,7 +358,7 @@ export default {
         callback: function(res) {
           if (res.code == "0000") {
             _this.$message.success("取消报名成功");
-            _this.activityApplyShow = '1';
+            _this.activityApplyShow = "1";
           } else {
             _this.$message.error(res.result);
           }
@@ -345,7 +367,7 @@ export default {
     },
     handleLike(id) {
       if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
+        this.concatVisible=true;
         return;
       }
       //活动点赞
@@ -385,16 +407,17 @@ export default {
         }
       });
     },
+    getTime(t) {
+      return new Date(t).getTime();
+    },
     //报名倒计时
-    countTime(t) {
-      var secondsTime = new Date().getTime();
-      var applyTime = new Date(t).getTime();
-      var leftTime = applyTime - secondsTime;
+    countTime(applyTime, secondsTime) {
+      let leftTime = applyTime - secondsTime;
       if (leftTime >= 0) {
-        var d = Math.floor(leftTime / 1000 / 60 / 60 / 24);
-        var h = Math.floor((leftTime / 1000 / 60 / 60) % 24);
-        var m = Math.floor((leftTime / 1000 / 60) % 60);
-        var s = Math.floor((leftTime / 1000) % 60);
+        let d = Math.floor(leftTime / 1000 / 60 / 60 / 24);
+        let h = Math.floor((leftTime / 1000 / 60 / 60) % 24);
+        let m = Math.floor((leftTime / 1000 / 60) % 60);
+        let s = Math.floor((leftTime / 1000) % 60);
         d = d;
         h = h > 9 ? h : "0" + h;
         m = m > 9 ? m : "0" + m;
@@ -402,7 +425,7 @@ export default {
         this.countDown = d + "天" + h + "小时" + m + "分" + s + "秒";
         return false;
       } else {
-        this.countDown = "0天0时0分0秒";
+        this.countDown = "0天00时00分00秒";
         return true;
       }
     },
@@ -421,8 +444,13 @@ export default {
             _this.actiApplyList = res.data.activityApplyList;
             _this.accountIsLike = res.data.accountIsLike;
             _this.activityApplyShow = res.data.activityApplyShow;
+            _this.applyEndTime = _this.getTime(
+              res.data.activityDetail.applyEndTime
+            );
+            _this.secondsTime = _this.getTime(res.data.sysTemTime);
             _this._interval = setInterval(() => {
-              let data = _this.countTime(res.data.activityDetail.applyEndTime);
+              let data = _this.countTime(_this.applyEndTime, _this.secondsTime);
+              _this.secondsTime = _this.secondsTime + 1000;
               if (data) {
                 clearInterval(_this._interval);
               }
@@ -461,9 +489,15 @@ export default {
   width: 1190px;
   margin: 0 auto;
   padding-top: 65px;
+  .loginTip{
+    text-align: center;
+    margin-bottom:20px;
+    font-size: 15px;
+  }
   .delnav {
     padding: 20px 0;
     font-size: 13px;
+    font-weight: bold;
   }
   .delinfo {
     margin-top: 40px;
@@ -513,7 +547,7 @@ export default {
               width: 20px;
               // border: 1px solid #eee;
               border-radius: 50%;
-              img{
+              img {
                 width: 100%;
                 height: 100%;
                 border-radius: 50%;

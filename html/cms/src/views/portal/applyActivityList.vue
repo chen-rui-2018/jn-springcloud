@@ -4,6 +4,7 @@
       <el-col :span="16"/>
       <el-col :span="8">
         <div class="grid-content bg-purple-light">
+          <!-- <el-button class="filter-item" type="primary" round @click="ApproveApplicant">审批报名人</el-button> -->
           <el-button v-if="$route.query.applyCheck == '1'" class="filter-item" type="primary" round @click="ApproveApplicant">审批报名人</el-button>
           <el-button class="filter-item" type="primary" round @click="handleRegistration">下载签到二维码</el-button>
           <el-button class="filter-item" type="primary" round @click="handleExport">导出Excel</el-button>
@@ -64,7 +65,7 @@
           <tr :key="ky">
             <td>{{ ky+1 }}</td>
             <td>{{ i.name }}</td>
-            <td>{{ i.sex }}</td>
+            <td><span v-if="i.sex=='0'">女</span><span v-if="i.sex=='1'">男</span></td>
             <td>{{ i.age }}</td>
             <td>{{ i.company }}</td>
             <td>{{ i.post }}</td>
@@ -81,7 +82,7 @@
                   v-if="i.signStatus==='0'"
                   type="text"
                   class="operation"
-                  @click="handleSign(i)">签到
+                  @click="handleSign(i.id)">签到
                 </el-button>
               </template>
             </td>
@@ -124,7 +125,8 @@ export default {
         exportColName: [],
         exportTitle: [],
         page: 1,
-        rows: 10
+        rows: 10,
+        applyStatus: '1'
       },
       tableHeadArr: [
         {
@@ -180,7 +182,7 @@ export default {
   },
   methods: {
     ApproveApplicant() {
-      this.$router.push({ path: `registrationChecklist` })
+      this.$router.push({ path: `registrationChecklist`, query: { activityId: this.$route.query.id }})
     },
     getApplyActivityList() {
       this.actiList.activityId = this.$route.query.id
@@ -191,11 +193,14 @@ export default {
         }
       })
     },
+    // 分页数更改
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`)
+      this.actiList.rows = val
+      this.getApplyActivityList()
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`)
+      this.actiList.page = val
+      this.getApplyActivityList()
     },
     handleRegistration() {
       this.signincodeDialogVisible = true
@@ -218,7 +223,7 @@ export default {
         exportColName: [exportColName.join(',')],
         exportTitle: [exportTitle.join(',')],
         page: this.actiList.page,
-        rows: this.total
+        rows: this.actiList.rows
       }
       api(`${this.GLOBAL.parkUrl}activity/exportDataExcel?activityId=${data.activityId}&exportColName=${data.exportColName}&exportTitle=${data.exportTitle}&page=${data.page}&rows=${data.rows}`, '', 'get').then(res => {
         window.location.href = res.request.responseURL
@@ -227,14 +232,14 @@ export default {
     handleReturn() {
       this.$router.push({ name: 'activityManagement', params: { id: this.$route.params.id }})
     },
-    handleSign(i) {
+    handleSign(id) {
       const data = {
-        applyId: i.id
+        applyId: id
       }
-      api(`${this.GLOBAL.parkUrl}activity/activityApply/signInActivityBackend`, data, 'post').then(res => {
+      api(`${this.GLOBAL.parkUrl}activity/activityApply/signInActivityBackend?applyId=${id}`, data, 'post').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           this.getApplyActivityList()
-          this.$message(res.data.result)
+          this.$message.success('签到成功')
         } else {
           this.$message(res.data.result)
         }

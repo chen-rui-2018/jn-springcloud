@@ -114,16 +114,14 @@ public class FinancialProductServiceImpl implements FinancialProductService {
         List<FinancialProductListInfo> financialProductList = financialProductMapper.getFinancialProductList(financialProductListParam,BUSINESS_AREA);
 
         // 处理图片路径
-        List<FinancialProductListInfo> productList = new ArrayList<>();
         if (financialProductList != null && !financialProductList.isEmpty()) {
             for (FinancialProductListInfo product : financialProductList) {
                 if (StringUtils.isNotBlank(product.getPictureUrl())) {
                     product.setPictureUrl(IBPSFileUtils.getFilePath(product.getPictureUrl()));
                 }
-                productList.add(product);
             }
         }
-        return new PaginationData(productList, objects == null ? 0 : objects.getTotal());
+        return new PaginationData(financialProductList, objects == null ? 0 : objects.getTotal());
     }
 
     /**
@@ -336,8 +334,8 @@ public class FinancialProductServiceImpl implements FinancialProductService {
         //产品类型(特色产品)
         String featureType = ProductConstantEnum.PRODUCT_FEATURE_TYPE.getCode();
 
-        //如果添加特色产品,常规产品则添加重名校验(上架常规产品则不校验)
-        if(featureType.equals(info.getProductType()) || info.getTemplateId() == null) {
+        //如果添加特色产品,编辑特色产品不校验
+        if(featureType.equals(info.getProductType()) && StringUtils.isBlank(info.getProductId())) {
             TbServiceProductCriteria criteria = new TbServiceProductCriteria();
             criteria.createCriteria().andProductNameEqualTo(info.getProductName()).andRecordStatusEqualTo(recordStatus)
                     .andStatusNotEqualTo(ProductConstantEnum.PRODUCT_STATUS_APPROVAL_NOT_PASS.getCode());

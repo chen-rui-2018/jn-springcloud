@@ -71,8 +71,11 @@ export default {
     }
   },
   mounted() {
-    const userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
-    this.avartImg = userInfo.avatar;
+    let userInfo = sessionStorage.getItem("userInfo");
+    if (userInfo) {
+      userInfo = JSON.parse(userInfo);
+      this.avartImg = userInfo.avatar;
+    }
   }
 };
 </script>

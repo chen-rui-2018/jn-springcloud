@@ -4,6 +4,11 @@
   padding: 0;
 }
 
+body {
+  /* 解决侧边滑动引起界面抖动 */
+  overflow-y: scroll;
+}
+
 ul {
   list-style: none;
 }
@@ -575,6 +580,42 @@ img {
 
 /* 活动详情 */
 /* 服务超市-服务机构，服务产品 */
+.serverOrg .el-tabs__nav-wrap::after,
+.serverPro .el-tabs__nav-wrap::after,
+.serverCon .el-tabs__nav-wrap::after,
+.quickSearch .el-tabs__nav-wrap::after,
+.aboutUs .el-tabs__nav-wrap::after,
+.finaInstitution .el-tabs__nav-wrap::after,
+.finaPro .el-tabs__nav-wrap::after,
+.companyProfile .el-tabs__nav-wrap::after {
+  height: 1px;
+}
+
+.serverOrg .el-tabs__item,
+.serverPro .el-tabs__item,
+.serverCon .el-tabs__item,
+.quickSearch .el-tabs__item,
+.aboutUs .el-tabs__item,
+.finaInstitution .el-tabs__item,
+.finaPro .el-tabs__item,
+.companyProfile .el-tabs__item {
+  height: 50px !important;
+  line-height: 50px !important;
+}
+
+.serverOrg .loginTip,
+.serverPro .loginTip,
+.serverCon .loginTip,
+.quickSearch .loginTip,
+.aboutUs .loginTip,
+.finaInstitution .loginTip,
+.finaPro .loginTip,
+.companyProfile .loginTip {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 15px;
+}
+
 .serverOrg .serverOrgMenu,
 .serverPro .serverOrgMenu,
 .serverCon .serverOrgMenu,
@@ -972,8 +1013,8 @@ img {
 .finaInstitution .serverOrgContent > ul > li .orgImg,
 .finaPro .serverOrgContent > ul > li .orgImg,
 .companyProfile .serverOrgContent > ul > li .orgImg {
-  width: 200px;
-  height: 130px;
+  width: 198px;
+  height: 128px;
 }
 
 .serverOrg .serverOrgContent > ul > li .orgImg > img,
@@ -986,6 +1027,7 @@ img {
 .companyProfile .serverOrgContent > ul > li .orgImg > img {
   width: 100%;
   height: 100%;
+  border-radius: 7px;
 }
 
 .serverOrg .serverOrgContent > ul > li .orgCon,
@@ -1118,6 +1160,33 @@ img {
   padding-top: 65px;
 }
 
+.serverOrgDetail .el-tabs__nav-wrap::after,
+.serverProDetail .el-tabs__nav-wrap::after,
+.serverConDetail .el-tabs__nav-wrap::after,
+.quickSearch .el-tabs__nav-wrap::after,
+.finaInsDetail .el-tabs__nav-wrap::after,
+.finaProDetail .el-tabs__nav-wrap::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background-color: #e4e7ed;
+  z-index: 1;
+}
+
+.serverOrgDetail .loginTip,
+.serverProDetail .loginTip,
+.serverConDetail .loginTip,
+.quickSearch .loginTip,
+.finaInsDetail .loginTip,
+.finaProDetail .loginTip {
+  text-align: center;
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+
 .serverOrgDetail table,
 .serverProDetail table,
 .serverConDetail table,
@@ -1235,8 +1304,8 @@ img {
 .quickSearch .agentInfo .agent2 .agentImg,
 .finaInsDetail .agentInfo .agent2 .agentImg,
 .finaProDetail .agentInfo .agent2 .agentImg {
-  width: 150px;
-  height: 120px;
+  width: 198px;
+  height: 128px;
 }
 
 .serverOrgDetail .agentInfo .agent2 .agentImg > img,
@@ -1247,6 +1316,7 @@ img {
 .finaProDetail .agentInfo .agent2 .agentImg > img {
   width: 100%;
   height: 100%;
+  border-radius: 7px;
 }
 
 .serverOrgDetail .agentInfo .agent2 .agent2Info,
@@ -1274,8 +1344,9 @@ img {
 .finaInsDetail .agentInfo .agent2 .agent2Info .lastP,
 .finaProDetail .agentInfo .agent2 .agent2Info .lastP {
   position: absolute;
-  margin-top: 20px;
-  margin-left: 630px;
+  right: 0;
+  bottom: 20px;
+  bottom: -8px;
 }
 
 .serverOrgDetail .agentInfo .agent2 .agent2Info .lastP > span,
@@ -1284,7 +1355,7 @@ img {
 .quickSearch .agentInfo .agent2 .agent2Info .lastP > span,
 .finaInsDetail .agentInfo .agent2 .agent2Info .lastP > span,
 .finaProDetail .agentInfo .agent2 .agent2Info .lastP > span {
-  margin-right: 20px;
+  margin-left: 20px;
 }
 
 .serverOrgDetail .agentDel,
@@ -1941,6 +2012,7 @@ img {
 .finaProDetail .agentCon .serEvaluation .list-imgleft .list-item .list-imgleft-container.product > img {
   width: 100%;
   height: 100%;
+  border-radius: 7px;
 }
 
 .serverOrgDetail .agentCon .serverPro .list-imgleft .list-item .list-info-middle.inner-product,
@@ -2140,9 +2212,7 @@ img {
 .finaProDetail .agentCon .serverPro .list-imgleft .list-item .detail-count,
 .finaProDetail .agentCon .serConsultant .list-imgleft .list-item .detail-count,
 .finaProDetail .agentCon .serEvaluation .list-imgleft .list-item .detail-count {
-  width: 150px;
-  display: inline-block;
-  vertical-align: top;
+  margin-top: 40px;
 }
 
 .serverOrgDetail .agentCon .serverPro .list-imgleft .list-item .orgBtn,
@@ -2177,8 +2247,8 @@ img {
 .quickSearch .agentCon .serConsultant .list-imgleft-container,
 .finaInsDetail .agentCon .serConsultant .list-imgleft-container,
 .finaProDetail .agentCon .serConsultant .list-imgleft-container {
-  width: 130px;
-  height: 130px;
+  width: 120px;
+  height: 128px;
   display: inline-block;
   vertical-align: middle;
 }
@@ -2191,6 +2261,7 @@ img {
 .finaProDetail .agentCon .serConsultant .list-imgleft-container > img {
   width: 100%;
   height: 100%;
+  border-radius: 4px;
 }
 
 .serverOrgDetail .agentCon .serConsultant .detail-contact .text-of,
@@ -2200,6 +2271,7 @@ img {
 .finaInsDetail .agentCon .serConsultant .detail-contact .text-of,
 .finaProDetail .agentCon .serConsultant .detail-contact .text-of {
   width: 270px;
+  color: #999;
 }
 
 .serverOrgDetail .agentCon .serConsultant .text-of,
@@ -2228,9 +2300,9 @@ img {
 .quickSearch .agentCon .serConsultant .top-title.inner-consultant,
 .finaInsDetail .agentCon .serConsultant .top-title.inner-consultant,
 .finaProDetail .agentCon .serConsultant .top-title.inner-consultant {
-  font-size: 18px;
+  font-size: 15px;
   cursor: pointer;
-  color: #333;
+  color: #222;
 }
 
 .serverOrgDetail .agentCon .serConsultant .top-title,
@@ -2450,6 +2522,13 @@ img {
 
 /* 服务机构详情 */
 /* 门户首页、企业服务 */
+.portalIndex .loginTip,
+.enterpriseservice .loginTip {
+  text-align: center;
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+
 .portalIndex .avaP,
 .enterpriseservice .avaP {
   float: right;
@@ -3551,7 +3630,7 @@ img {
 
 .portalIndex .districtGardens .card,
 .enterpriseservice .districtGardens .card {
-  margin-top: 40px;
+  padding: 40px 0;
 }
 
 .portalIndex .districtGardens .card .cardUl > li,
@@ -3683,6 +3762,7 @@ img {
   text-align: left;
   font-size: 13px;
   color: #b6b6b6;
+  margin: 10px 0;
 }
 
 .portalIndex .enterpriseinfo .enterPriseCon .con1 .conInfo > img,

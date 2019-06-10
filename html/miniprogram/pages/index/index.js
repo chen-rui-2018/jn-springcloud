@@ -1,4 +1,5 @@
 import request from './../../utils/http'
+var app = getApp()
 Page({
   data: {
     nvabarData: {
@@ -20,18 +21,24 @@ Page({
       propagandaArea:'top',
       propagandaType:"home_banner"
     },
-    bannarList:[]
+    bannarList:[],
+    imgBaseUrl:''
   },
   onLoad: function (options) {
+    this.setData({
+      imgBaseUrl:app.globalData.imgBaseUrl
+    })
+  
+   },
+  onReady: function () { },
+  onShow: function () { 
     this.getNotice()
     this.hotList()
     this.getBannar()
-   },
-  onReady: function () { },
-  onShow: function () { },
+  },
   onHide: function () { },
   onPullDownRefresh: function () {
-    this.hotList()
+    this.onShow()
   },
   onReachBottom: function () { },
   // 轮播图

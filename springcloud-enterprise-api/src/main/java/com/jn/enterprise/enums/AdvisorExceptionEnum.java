@@ -37,6 +37,14 @@ public enum AdvisorExceptionEnum implements CodeAndMsg {
     ACCOUNT_NOT_ORG_MANAGE("5020523","当前登录用户账号不是机构管理员"),
     ACCOUNT_STATUS_NOT_REJECTED("5020524","再次邀请顾问审批状态不是“已拒绝”，不能再次邀请"),
     ADVISOR_HAS_EXIST("5020525","当前用户审批中或审批通过的机构顾问，不允许编辑顾问信息"),
+    ADVISOR_HAS_INVITE("5020526","当请顾问已被其他机构邀请"),
+    ISSUING_AGENCY_LENGTH_TOO_LONG("5020527","荣誉资质颁发机构长度过长"),
+    GET_TIME_FORMAT_ERROR("5020528","荣誉资质颁发时间格式不正确"),
+    WORK_TIME_FORMAT_ERROR("5020529","服务经历工作开始时间格式错误"),
+    WORK_END_TIME_FORMAT_ERROR("5020530","服务经历工作结束时间格式错误"),
+    WORK_TIME_MORE_THAN_END_TIME("5020531","服务经历工作开始时间晚于结束时间"),
+    CURRENT_ACCOUNT_NOT_ORG_GROUP("5020532","当前登录用户不是机构用户"),
+    CURRENT_ACCOUNT_NOT_COMMENT_PERSON("5020533","当前用户非普通用户,不能被邀请"),
     ;
 
     /**

@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: "TagBtn",
+  name: 'TagBtn',
   props: {
     title: {
       type: [String, Number],

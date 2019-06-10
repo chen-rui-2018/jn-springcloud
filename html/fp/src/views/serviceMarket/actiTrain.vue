@@ -25,14 +25,14 @@
                                 <span>热度排序</span>
                             </li>
                             <li class="showListLi">
-                                <i class="iconfont icon-menu1" @click="handleCrosswise('icon-menu1')" :class="{'active0':showListFlag == 'icon-menu1'}"></i>
-                                <i class="iconfont icon-menu" @click="handleVertical('icon-menu')" :class="{'active0':showListFlag == 'icon-menu'}"></i>
+                                <i class="iconfont icon-menu" @click="handleCrosswise('icon-menu')" :class="{'active0':showListFlag == 'icon-menu'}"></i>
+                                <i class="iconfont icon-menu1" @click="handleVertical('icon-menu1')" :class="{'active0':showListFlag == 'icon-menu1'}"></i>
                             </li>
                         </ul>
                     </div>
                 </div>
-                <!-- <div class="allActi clearfix">
-                    <ul class="actiFilterUl fl clearfix">
+                <div class="allActi clearfix">
+                    <!-- <ul class="actiFilterUl fl clearfix">
                         <li :class="{'active0':actiFilflag == ''}" @click="handleFil('')">全部活动</li>
                         <li v-if="i<5" v-for="(v,i) in actiTypeList" :key="i" :class="{'active0':actiFilflag == v.typeId}" @click="handleFil(v.typeId)">{{v.typeName}}</li>
                         <li v-if="this.actiTypeList.length>4" class="bottomLi pr">
@@ -44,16 +44,18 @@
                                 </ul>
                             </el-card>
                         </li>
-                    </ul>
+                    </ul> -->
                     <div class="actiSearch fr">
                         <input type="text" placeholder="搜索活动" v-model="keyWord">
                         <i class="iconfont icon-sousuo" @click="handleSearchList"></i>
                     </div>
-                </div> -->
+                </div>
                 <div class="actiTab">
                     <ul class="allActiUl clearfix" v-if="flag">
                         <li v-for="(item,index) in actiListSlim" :key='index'>
-                            <div style="width:100%;height:200px"><img style="width:100%;height:100%" :src="item.actiPosterUrl" alt="活动海报图片" class="posterImg" @click="handleRout(item.id)"></div>
+                            <div style="width:100%;height:200px" class="pointer"  @click="handleRout(item.id)">
+                                <img style="width:100%;height:100%" :src="item.actiPosterUrl" alt="活动海报图片" class="posterImg">
+                            </div>
                             <div class="actiInfo">
                                 <p class="actiNameItem">{{item.actiName}}</p>
                                 <p class="actiTimer">
@@ -85,7 +87,7 @@
                     </ul>
                     <ul class="verticalUl" v-else>
                         <li class="clearfix" v-for="(item,index) in actiListSlim" :key='index'>
-                            <div class="verticalLeft fl" @click="handleRout(item.id)">
+                            <div class="verticalLeft fl pointer" @click="handleRout(item.id)">
                                 <img :src="item.actiPosterUrl" alt="活动海报图片">
                             </div>
                             <div class="verticalMiddle fl">
@@ -135,12 +137,12 @@ export default {
       currentPage4: 1,
       checkActi: "",
       flag: true,
-      showListFlag: "",
+      showListFlag: "icon-menu",
       currentPage4: 1,
       actiFilflag: "",
       colorFlag: "",
       actiListSlim: [],
-    //   actiTypeList: [],
+      //   actiTypeList: [],
       page: 1, //页码
       row: 12, //每页显示多少条
       total: 0,
@@ -154,8 +156,12 @@ export default {
     };
   },
   mounted() {
-    this.initList();
-    this.getActiType();
+    if (this.$route.query.searchData) {
+      this.keyWord = this.$route.query.searchData;
+      this.initList();
+    } else {
+      this.initList();
+    }
   },
   methods: {
     //立即报名
@@ -191,12 +197,12 @@ export default {
     handleCrosswise(v) {
       //横向显示
       this.flag = true;
-      this.showListFlag = "icon-menu1";
+      this.showListFlag = "icon-menu";
     },
     handleVertical() {
       //竖向显示
       this.flag = false;
-      this.showListFlag = "icon-menu";
+      this.showListFlag = "icon-menu1";
     },
     handleSizeChange(val) {
       //改变每页显示多少条的回调函数
@@ -251,7 +257,7 @@ export default {
           page: this.page,
           rows: this.row,
           startTime: this.startTime,
-          typeId: 'org_activity'
+          typeId: "org_activity"
         },
         dataFlag: false,
         callback: function(res) {
@@ -261,7 +267,7 @@ export default {
           }
         }
       });
-    },
+    }
     // getActiType() {
     //   let _this = this;
     //   this.api.post({
@@ -281,6 +287,9 @@ export default {
 <style lang="scss">
 .actiTrain {
   padding-top: 65px;
+  .allActi {
+    padding-bottom: 10px;
+  }
 }
 </style>
 

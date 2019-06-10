@@ -76,6 +76,8 @@
             '充值'
         WHEN '2' THEN
             '扣费'
+        WHEN '3' THEN
+            '冲正'
         ELSE
             '支付类型异常'
         END natureCode,
@@ -137,6 +139,8 @@
             '充值'
         WHEN '2' THEN
             '扣费'
+         WHEN '3' THEN
+            '冲正'
         ELSE
             '支付类型异常'
         END natureCode,

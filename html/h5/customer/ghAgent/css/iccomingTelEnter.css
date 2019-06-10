@@ -73,7 +73,11 @@ textarea{
 }
 .top-bar{
     list-style: none;
-    overflow: hidden;
+}
+.top-bar:after{
+    content: "";
+    clear: both;
+    display: table;
 }
 .input,.btn, textarea, select{
     outline: 0;
@@ -264,4 +268,31 @@ textarea{
 }
 .popLayer .form-box li input{
     width: calc(100% - 85px);
+}
+
+.select-box{
+    display: inline-block;
+    position: relative;
+}
+.select-box .select-item{
+    position: absolute;
+    top: 33px;
+    left: 0;
+    right: 0;
+    background: #fff;
+    display: none;
+}
+.select-box .select-item li{
+    width: 100%;
+    margin-left: 0;
+    padding: 0 8px;
+    line-height: 30px;
+    border-bottom: 1px solid #d1d1d1;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+.select-box .select-item li:hover{
+    cursor: pointer;
+    background: #ebebeb;
 }

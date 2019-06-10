@@ -1107,7 +1107,7 @@
 
         <table tableName="tb_pay_check_reminder">
         </table>
-        <table tableName="tb_pay_account">
+        <table tableName="tb_pay_account_book">
         </table>
     </context>
 </generatorConfiguration>

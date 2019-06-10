@@ -1634,6 +1634,216 @@ public class TbElectricMeterInfoCriteria {
             addCriterion("phone not between", value1, value2, "phone");
             return (Criteria) this;
         }
+
+        public Criteria andIsautoIsNull() {
+            addCriterion("isauto is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsautoIsNotNull() {
+            addCriterion("isauto is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsautoEqualTo(String value) {
+            addCriterion("isauto =", value, "isauto");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsautoNotEqualTo(String value) {
+            addCriterion("isauto <>", value, "isauto");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsautoGreaterThan(String value) {
+            addCriterion("isauto >", value, "isauto");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsautoGreaterThanOrEqualTo(String value) {
+            addCriterion("isauto >=", value, "isauto");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsautoLessThan(String value) {
+            addCriterion("isauto <", value, "isauto");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsautoLessThanOrEqualTo(String value) {
+            addCriterion("isauto <=", value, "isauto");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsautoLike(String value) {
+            addCriterion("isauto like", value, "isauto");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsautoNotLike(String value) {
+            addCriterion("isauto not like", value, "isauto");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsautoIn(List<String> values) {
+            addCriterion("isauto in", values, "isauto");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsautoNotIn(List<String> values) {
+            addCriterion("isauto not in", values, "isauto");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsautoBetween(String value1, String value2) {
+            addCriterion("isauto between", value1, value2, "isauto");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsautoNotBetween(String value1, String value2) {
+            addCriterion("isauto not between", value1, value2, "isauto");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoomIdIsNull() {
+            addCriterion("room_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoomIdIsNotNull() {
+            addCriterion("room_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoomIdEqualTo(String value) {
+            addCriterion("room_id =", value, "roomId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoomIdNotEqualTo(String value) {
+            addCriterion("room_id <>", value, "roomId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoomIdGreaterThan(String value) {
+            addCriterion("room_id >", value, "roomId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoomIdGreaterThanOrEqualTo(String value) {
+            addCriterion("room_id >=", value, "roomId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoomIdLessThan(String value) {
+            addCriterion("room_id <", value, "roomId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoomIdLessThanOrEqualTo(String value) {
+            addCriterion("room_id <=", value, "roomId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoomIdLike(String value) {
+            addCriterion("room_id like", value, "roomId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoomIdNotLike(String value) {
+            addCriterion("room_id not like", value, "roomId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoomIdIn(List<String> values) {
+            addCriterion("room_id in", values, "roomId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoomIdNotIn(List<String> values) {
+            addCriterion("room_id not in", values, "roomId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoomIdBetween(String value1, String value2) {
+            addCriterion("room_id between", value1, value2, "roomId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoomIdNotBetween(String value1, String value2) {
+            addCriterion("room_id not between", value1, value2, "roomId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFactoryMeterCodeIsNull() {
+            addCriterion("factory_meter_code is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFactoryMeterCodeIsNotNull() {
+            addCriterion("factory_meter_code is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFactoryMeterCodeEqualTo(String value) {
+            addCriterion("factory_meter_code =", value, "factoryMeterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andFactoryMeterCodeNotEqualTo(String value) {
+            addCriterion("factory_meter_code <>", value, "factoryMeterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andFactoryMeterCodeGreaterThan(String value) {
+            addCriterion("factory_meter_code >", value, "factoryMeterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andFactoryMeterCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("factory_meter_code >=", value, "factoryMeterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andFactoryMeterCodeLessThan(String value) {
+            addCriterion("factory_meter_code <", value, "factoryMeterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andFactoryMeterCodeLessThanOrEqualTo(String value) {
+            addCriterion("factory_meter_code <=", value, "factoryMeterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andFactoryMeterCodeLike(String value) {
+            addCriterion("factory_meter_code like", value, "factoryMeterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andFactoryMeterCodeNotLike(String value) {
+            addCriterion("factory_meter_code not like", value, "factoryMeterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andFactoryMeterCodeIn(List<String> values) {
+            addCriterion("factory_meter_code in", values, "factoryMeterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andFactoryMeterCodeNotIn(List<String> values) {
+            addCriterion("factory_meter_code not in", values, "factoryMeterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andFactoryMeterCodeBetween(String value1, String value2) {
+            addCriterion("factory_meter_code between", value1, value2, "factoryMeterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andFactoryMeterCodeNotBetween(String value1, String value2) {
+            addCriterion("factory_meter_code not between", value1, value2, "factoryMeterCode");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

@@ -1,6 +1,7 @@
 
 import axios from 'axios'
 export default {
+  // host: 'http://172.16.160.19:6063/',
   host: 'http://112.94.22.222:8000/',
   apiURL: {
     departList: 'springcloud-park/guest/portal/sp/power/departList', // 实施部门列表
@@ -70,6 +71,12 @@ export default {
     parkList: 'springcloud-park/guest/portal/park/list', // 一区多园
     getBusinessAdContent: 'springcloud-park/guest/portal/businessAd/getBusinessAdContent', // 获取招商信息
     getParkDetails: 'springcloud-park/guest/portal/park/get', // 根据ID获取对应园区详情
+    // 能耗统计App
+    todayelectro: 'springcloud-park/meter/todayelectro', // 今日用电情况
+    monthelectro: 'springcloud-park/meter/monthelectro', // 本月用电情况
+    yearelectro: 'springcloud-park/meter/yearelectro', // 今年用电情况
+    getCompanyDetailByNowAccount: 'springcloud-enterprise/guest/company/getCompanyDetailByNowAccount' // 获取用户企业信息
+
   },
   setToken: function (obj) {
     axios.interceptors.request.use(function (config) {

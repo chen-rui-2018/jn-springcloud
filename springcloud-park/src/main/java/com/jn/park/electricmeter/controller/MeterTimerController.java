@@ -3,6 +3,7 @@ package com.jn.park.electricmeter.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.park.api.ElectricMeterClient;
+import com.jn.park.electricmeter.service.ElectricRulesInfoService;
 import com.jn.park.electricmeter.service.MeterRulesService;
 import com.jn.park.electricmeter.service.MeterService;
 import com.jn.park.electricmeter.service.MeterCalcCostService;
@@ -35,6 +36,8 @@ public class MeterTimerController extends BaseController implements ElectricMete
 
     @Autowired
     private MeterCalcCostService meterTimerService;
+    @Autowired
+    private ElectricRulesInfoService electricRulesInfoService;
 
     @ControllerLog(doAction = "电表数据定时采集接口")
     @Override
@@ -72,6 +75,12 @@ public class MeterTimerController extends BaseController implements ElectricMete
     @ControllerLog(doAction = "电表的启动和关闭定时器接口")
     public void setSwitchMeterTimer(){
         meterRulesService.setSwitchMeterTimer();
+    }
+
+    @ControllerLog(doAction = "能耗监控程序")
+    @Override
+    public void monitor() {
+        electricRulesInfoService.monitor();
     }
 
 }

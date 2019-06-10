@@ -37,7 +37,7 @@ public class PayBillCreateParamVo implements Serializable {
     @ApiModelProperty(value="对象类型【1：企业，2：个人】",example = "1")
     private String objType;
 
-    @ApiModelProperty(value="对象Id（传企业ID或用户ID）",example = "wangsong")
+    @ApiModelProperty(value="对象Id（传企业ID或用户账号）",example = "wangsong")
     private String objId;
 
     @ApiModelProperty(value="对象名称（传企业名称或用户名称）",example = "XXX科技企业")

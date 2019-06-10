@@ -250,7 +250,7 @@ public class StaffServiceImpl implements StaffService {
         UserExtensionInfoVO userExtensionInfoVO = new UserExtensionInfoVO();
         if (result == null || result.getData() == null) {
             logger.warn("[根据手机号或账号查询用户信息] 用户不存在，phone:{}", phone);
-            return null;
+            throw new JnSpringCloudException(CompanyExceptionEnum.USER_IS_NOT_EXIST);
         }
         UserExtensionInfo userExtensionInfo = (UserExtensionInfo) result.getData();
         BeanUtils.copyProperties(userExtensionInfo, userExtensionInfoVO);

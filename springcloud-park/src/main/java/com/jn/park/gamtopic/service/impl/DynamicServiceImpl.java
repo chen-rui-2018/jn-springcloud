@@ -314,7 +314,7 @@ public class DynamicServiceImpl implements DynamicService {
             currentAccount = null;
         }
         List<DynamicWebShow> dynamicList = dynamicDao.findDynamicByAccount(param.getParamAccount(),currentAccount);
-        if(!dynamicList.isEmpty()){
+        if(dynamicList !=null && !dynamicList.isEmpty()){
             dynamicList = improveWebUserInfo(dynamicList);
         }
         return new PaginationData<>(dynamicList,objects==null?0:objects.getTotal());

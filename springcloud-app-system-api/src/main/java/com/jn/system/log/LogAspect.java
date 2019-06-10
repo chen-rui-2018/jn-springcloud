@@ -35,11 +35,13 @@ public class LogAspect {
         String accountName = this.getUserName();
         logger.info("begin.用户【{}】，进入【{}】的业务，对应的应用地址：【{}】", accountName, log.doAction(), joinPoint.toString());
         Object[] args = joinPoint.getArgs();
+        StringBuffer argsBuffer = new StringBuffer();
         if (args != null) {
             for (int i = 0; i < args.length; i++) {
-                logger.info("入参{}：【{}】", i, args[i] + "");
+                argsBuffer.append("入参").append(i).append("：【").append(args[i]+"").append("】;");
             }
         }
+        logger.info(argsBuffer.toString());
         long start = System.currentTimeMillis();
         Object result = null;
         try {

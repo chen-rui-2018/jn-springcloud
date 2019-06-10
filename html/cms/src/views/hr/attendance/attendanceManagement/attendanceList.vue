@@ -32,20 +32,16 @@
           clearable/>
       </el-form-item>
 
-      <el-form-item label="部门:" lable-position="right" label-width="80px">
-        <el-select
-          v-model="listQuery.departmentId"
+      <el-form-item label="部门：" prop="departmentId">
+        <el-cascader
+          ref="departRef"
+          :options="departmentList"
+          v-model="currentDepartmentIds"
+          change-on-select
           placeholder="请选择"
           clearable
-          style="width: 200px"
-          class="filter-item">
-          <el-option label="请选择" value=""/>
-          <el-option
-            v-for="item in departmentList"
-            :key="item.departmentId"
-            :label="item.departmentName"
-            :value="item.departmentId"/>
-        </el-select>
+          @change="handleChangeDepartment"
+        />
       </el-form-item>
       <el-row>
         <el-form-item class="form-btn">
@@ -120,15 +116,16 @@ import {
   list, exportAttendanceList
 } from '@/api/hr/attendance'
 
-import {
-  getTreeList
-} from '@/api/hr/employeeBasicInfo'
-
 import moment from 'moment'
+
+import {
+  api
+} from '@/api/axios'
 
 export default {
   data() {
     return {
+      currentDepartmentIds: [],
       currJobNumber: '',
       currUserId: '',
       currDepartment: '',
@@ -173,14 +170,15 @@ export default {
     }
   },
   mounted() {
-    this.initDepartMentList()
+    this.getAllDepartment()
     this.currJobNumber = this.$route.query.jobNumber
     this.currUserId = this.$route.query.userId
     this.currDepartment = this.$route.query.department
     this.currName = this.$route.query.name
     this.listQuery.startTime = this.$route.query.startTime
     this.listQuery.endTime = this.$route.query.endTime
-    this.listQuery.departmentId = this.$route.query.departmentId
+    // this.listQuery.departmentId = this.$route.query.departmentId
+    // this.listQuery.department = this.$route.query.department
     // 初始化开始时间为上月1号,结束时间为昨天
     // let currDate=new Date()
     if (!this.listQuery.startTime || this.listQuery.startTime === '') {
@@ -193,6 +191,22 @@ export default {
     this.initList()
   },
   methods: {
+    getAllDepartment() {
+      this.departmentListLoading = true
+      api(`${this.GLOBAL.systemUrl}system/sysDepartment/findDepartmentAllByLevel`, '', 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
+          this.departmentList = res.data.data
+        } else {
+          this.$message.error(res.data.result)
+        }
+        this.departmentListLoading = false
+      })
+    },
+    handleChangeDepartment(value) {
+      this.listQuery.departmentId = this.currentDepartmentIds[this.currentDepartmentIds.length - 1]
+      const arr = this.$refs['departRef'].currentLabels
+      this.listQuery.department = arr[arr.length - 1]
+    },
     initList() {
       console.log('查询考勤。。。')
 
@@ -204,14 +218,14 @@ export default {
         this.$message.error('结束时间不能为空')
         return
       }
-
-      this.listLoading = true
-      const depart = this.departmentList.find(item => item.departmentId === this.listQuery.departmentId)
-      if (depart) {
-        this.listQuery.department = depart['departmentName']
-      } else {
+      if (!this.listQuery.departmentId) {
+        this.listQuery.departmentId = ''
+      }
+      if (!this.listQuery.department) {
         this.listQuery.department = ''
       }
+
+      this.listLoading = true
 
       list(this.listQuery).then(res => {
         if (res.data.code === '0000') {
@@ -227,20 +241,17 @@ export default {
         this.listLoading = false
       })
     },
-    initDepartMentList() {
-      getTreeList().then(res => {
-        if (res.data.code === '0000') {
-          this.departmentList = res.data.data
-        } else {
-          this.$message.error(res.data.result)
-        }
-      })
-    },
     handleFilter() {
       this.listQuery.page = 1
       this.initList()
     },
     exportExcel() {
+      if (!this.listQuery.departmentId) {
+        this.listQuery.departmentId = ''
+      }
+      if (!this.listQuery.department) {
+        this.listQuery.department = ''
+      }
       exportAttendanceList(this.listQuery).then(res => {
         console.log('导出。。。')
         window.location.href = res.request.responseURL
@@ -281,9 +292,9 @@ export default {
         name: name, query: {
           jobNumber: this.currJobNumber, userId: this.currUserId,
           startTime: this.listQuery.startTime, endTime: this.listQuery.endTime,
+          name: this.currName,
           departmentId: this.listQuery.departmentId,
-          department: this.currDepartment,
-          name: this.currName
+          department: this.currDepartment
         }
       })
     }

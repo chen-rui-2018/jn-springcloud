@@ -42,6 +42,13 @@ public class AlipayConfig {
     private Short isSandbox = 0;
 
     /**
+     * 手续费率(单位：%百分比)
+    * */
+    @Value("${ali.pay_rate}")
+    private Double pay_rate;
+
+
+    /**
      * 初始化支付宝配置
      * @param configParam
      * @return
@@ -56,6 +63,7 @@ public class AlipayConfig {
         if(this.getIsSandbox() == 1) this.setUrl("https://openapi.alipaydev.com/gateway.do");
         return this;
     }
+
 
     public String getApp_id() {
         return app_id;
@@ -111,6 +119,14 @@ public class AlipayConfig {
 
     public void setAlipay_public_key(String alipay_public_key) {
         this.alipay_public_key = alipay_public_key;
+    }
+
+    public Double getPay_rate() {
+        return pay_rate;
+    }
+
+    public void setPay_rate(Double pay_rate) {
+        this.pay_rate = pay_rate;
     }
 }
 

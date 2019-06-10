@@ -6,22 +6,29 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
-import com.jn.park.activity.dao.ActivityDetailsMapper;
-import com.jn.park.activity.dao.ActivityMapper;
-import com.jn.park.activity.dao.TbActivityDetailMapper;
-import com.jn.park.activity.dao.TbActivityMapper;
+import com.jn.enterprise.enums.RecordStatusEnum;
+import com.jn.park.activity.dao.*;
 import com.jn.park.activity.entity.TbActivity;
 import com.jn.park.activity.entity.TbActivityCriteria;
 import com.jn.park.activity.entity.TbActivityDetail;
 import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.activity.model.*;
 import com.jn.park.activity.service.ActivityService;
+import com.jn.park.enums.ActivityEnum;
+import com.jn.park.api.MessageClient;
 import com.jn.park.enums.ActivityExceptionEnum;
+import com.jn.park.message.model.AddMessageModel;
 import com.jn.send.api.DelaySendMessageClient;
 import com.jn.send.model.Delay;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.user.api.UserExtensionClient;
+import com.jn.user.model.CompanyParam;
+import com.jn.user.model.UserExtensionInfo;
+import io.swagger.models.auth.In;
+import org.checkerframework.checker.units.qual.C;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -55,6 +62,14 @@ public class ActivityServiceImpl implements ActivityService {
     private DelaySendMessageClient delaySendMessageClient;
     @Autowired
     private ActivityApplyService activityApplyService;
+    @Autowired
+    private MessageClient messageClient;
+
+    @Autowired
+    private ActivityApplyMapper activityApplyMapper;
+
+    @Autowired
+    private UserExtensionClient userExtensionClient;
 
     /**
      * 活动可报名
@@ -346,7 +361,7 @@ public class ActivityServiceImpl implements ActivityService {
 
     @ServiceLog(doAction = "获取前台活动列表")
     @Override
-    public PaginationData<List<ActivitySlim>> activityListSlim(ActivitySlimQuery activitySlimQuery) {
+    public PaginationData<List<ActivitySlim>> activityListSlim(ActivitySlimQuery activitySlimQuery ,String account) {
 
         String typeId = activitySlimQuery.getTypeId();
         String keyWord = activitySlimQuery.getKeyWord();
@@ -365,7 +380,13 @@ public class ActivityServiceImpl implements ActivityService {
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_TIME_PARSE_ERROR2);
         }
         if(StringUtils.isNotEmpty(orderBy)){
-            String [] orders = {"acti_views","acti_like","apply_num","partic_num","acti_start_time"};
+            String [] orders = {
+                    ActivityEnum.ACTIVITY_ORDER_VIEWS.getCode(),
+                    ActivityEnum.ACTIVITY_ORDER_LIKE.getCode(),
+                    ActivityEnum.ACTIVITY_ORDER_APPLY.getCode(),
+                    ActivityEnum.ACTIVITY_ORDER_PARTIC.getCode(),
+                    ActivityEnum.ACTIVITY_ORDER_START_TIME.getCode(),
+                    };
             Boolean flag = false;
             for(String order : orders){
                 if(orderBy.equals(order)){
@@ -394,16 +415,23 @@ public class ActivityServiceImpl implements ActivityService {
         List<ActivityApplyDetail> activityApplyList = activityApplyService.findApplyAccountList(activityIdList);
         if (activitySlimList != null && activitySlimList.size() > 0) {
             for (ActivitySlim slim : activitySlimList) {
+                //当前登录用户是否已报名此活动 0 否 1 是
+                slim.setApplyStatus(ActivityEnum.ACTIVITY_NOT_APPLY.getCode());
                 List<String> avatars = new ArrayList<>();
                 if (activityApplyList != null && activityApplyList.size() > 0) {
                     for (ActivityApplyDetail detail : activityApplyList) {
                         if (detail.getActivityId().equals(slim.getId())) {
+                            //当前活动已报名人的头像列表
                             avatars.add(detail.getAvatar());
+                            if(account.equals(detail.getAccount())){
+                                slim.setApplyStatus(ActivityEnum.ACTIVITY_IS_APPLY.getCode());
+                            }
                         }
                     }
                 }
                 slim.setAvatarList(avatars);
             }
+
             //设置是否显示报名人信息
             for (ActivitySlim slim : activitySlimList) {
                 if (invalid.equals(slim.getShowApplyNum())) {
@@ -487,9 +515,21 @@ public class ActivityServiceImpl implements ActivityService {
         }
         String actiStartTime = DateUtils.formatDate(activity.getActiStartTime(), "yyyy-MM-dd HH:mm:ss");
         if (StringUtils.isEmpty(activityTime) || StringUtils.equals(actiStartTime, activityTime)) {
-            //TODO jiangyl 调用消息发送接口
+            AddMessageModel addMessageModel = new AddMessageModel();
+            addMessageModel.setMessageTitle("园区活动提醒");
+            addMessageModel.setMessageConnect(activity.getActiName()+"将于"+actiStartTime+"开始，请准时参加");
+            addMessageModel.setMessageSender("admin");
+            addMessageModel.setMessageOneSort(0);
+            addMessageModel.setMessageOneSortName("个人动态");
+            addMessageModel.setMessageTowSort(2);
+            addMessageModel.setMessageTowSortName("园区活动");
+            addMessageModel.setCreatorAccount("admin");
+            Result<String> stringResult = messageClient.addMessage(addMessageModel);
+            logger.info("活动提醒：调用消息发送接口,接口返回状态：{}",stringResult.getCode());
             return 1;
         }
+        //查询该活动已报名人员，批量推送。
+        //TODO 需调用短信、消息接口主动推送消息。
         return 0;
     }
 
@@ -537,4 +577,123 @@ public class ActivityServiceImpl implements ActivityService {
         return activityNum+"";
     }
 
+    /**
+     * 获取企业报报名活动信息
+     * @param param
+     * @return
+     */
+    @ServiceLog(doAction = "获取企业报报名活动信息")
+    @Override
+    public List<CompanyActivityApplyShow> getCompanyActivityApplyInfo(CompanyActivityApplyParam param) {
+        //校验开始时间和结束时间
+        if(StringUtils.isNotBlank(param.getStartTime()) && StringUtils.isNotBlank(param.getEndTime())){
+            int startTime=Integer.parseInt(param.getStartTime().replaceAll("-", ""));
+            int endTime= Integer.parseInt(param.getEndTime().replaceAll("-", ""));
+            if(startTime>endTime){
+                logger.warn("获取企业报报名活动信息异常，开始时间[{}]晚于结束时间[{}]",param.getStartTime(),param.getEndTime());
+                throw new JnSpringCloudException(ActivityExceptionEnum.START_TIME_MORE_THAN_END_TIME);
+            }
+        }
+        //查询全部数据
+        if(StringUtils.isBlank(param.getCompanyId())){
+            return getCompanyActivityApplyShows(param);
+        }else{
+            //返回指定企业id的数据
+            return getPartCompanyActivityApplyShows(param);
+        }
+    }
+
+    @Override
+    @ServiceLog(doAction = "获取累计举办活动总数")
+    public Integer getActivityHistoryNum() {
+        TbActivityCriteria example = new TbActivityCriteria();
+        example.createCriteria().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue())
+                .andActiStatusEqualTo(ActivityEnum.ACTIVITY_STATUS_END.getCode());
+        Integer activityHistoryNum = (int) tbActivityMapper.countByExample(example);
+        return activityHistoryNum;
+    }
+
+    /**
+     * 查询指定企业编码的数据
+     * @param param
+     * @return
+     */
+    @ServiceLog(doAction = "")
+    private List<CompanyActivityApplyShow> getPartCompanyActivityApplyShows(CompanyActivityApplyParam param) {
+        CompanyParam companyParam=new CompanyParam();
+        companyParam.setCompanyCode(param.getCompanyId());
+        //不分页
+        companyParam.setNeedPage("0");
+        Result userInfoList = userExtensionClient.getUserExtensionByCompanyCode(companyParam);
+        logger.info("---根据所属企业编码批量获取用户信息成功---");
+        if(userInfoList==null || userInfoList.getData()==null){
+           return  Collections.emptyList();
+        }
+        //得到查询出的用户信息
+        Map<String,Object> pageData = (Map<String,Object>)userInfoList.getData();
+        List<UserExtensionInfo> userExtensionInfoList=new ArrayList<>(16);
+        List userList=(List)pageData.get("rows");
+        ObjectMapper objectMapper = new ObjectMapper();
+        for(int i=0;i<userList.size();i++){
+            UserExtensionInfo userExtensionInfo = objectMapper.convertValue(userList.get(i), UserExtensionInfo.class);
+            userExtensionInfoList.add(userExtensionInfo);
+        }
+        //取出查询出的所有账号
+        List<String>accountList=new ArrayList<>(16);
+        for(UserExtensionInfo userExtensionInfo:userExtensionInfoList){
+            accountList.add(userExtensionInfo.getAccount());
+        }
+        //查询指定企业id的报名信息数据
+        List<CompanyActivityApplyShow> applyShowList = activityApplyMapper.getCompanyActivityApplyInfo(param,accountList);
+        if(applyShowList.isEmpty()){
+            return Collections.emptyList();
+        }
+        for(UserExtensionInfo userInfo:userExtensionInfoList){
+            for(CompanyActivityApplyShow applyShow:applyShowList){
+                if(StringUtils.equals(userInfo.getAccount(),applyShow.getApplyAccount())){
+                    applyShow.setCompanyId(userInfo.getCompanyCode());
+                    applyShow.setCompanyName(userInfo.getCompanyName());
+                    applyShow.setApplyName(userInfo.getName());
+                }
+            }
+        }
+        return applyShowList;
+    }
+
+    /**
+     * 查询全部企业报名信息
+     * @param param
+     * @return
+     */
+    @ServiceLog(doAction = "查询全部企业报名信息")
+    private List<CompanyActivityApplyShow> getCompanyActivityApplyShows(CompanyActivityApplyParam param) {
+        List<CompanyActivityApplyShow> applyShowList = activityApplyMapper.getCompanyActivityApplyInfo(param,null);
+        if(applyShowList.isEmpty()){
+            return Collections.emptyList();
+        }
+        List<String>accountList=new ArrayList<>(16);
+        for(CompanyActivityApplyShow applyShow:applyShowList){
+            if(!accountList.contains(applyShow.getApplyAccount())){
+                accountList.add(applyShow.getApplyAccount());
+            }
+        }
+        Result<List<UserExtensionInfo>> moreUserExtension = userExtensionClient.getMoreUserExtension(accountList);
+        if(moreUserExtension==null || moreUserExtension.getData()==null){
+            return Collections.emptyList();
+        }
+        List<UserExtensionInfo> userExtensionInfoList = moreUserExtension.getData();
+        //返回查询出的全部数据
+        for(UserExtensionInfo userInfo:userExtensionInfoList){
+            if(StringUtils.isNotBlank(userInfo.getCompanyCode())){
+                for(CompanyActivityApplyShow applyShow:applyShowList){
+                    if(StringUtils.equals(userInfo.getAccount(),applyShow.getApplyAccount())){
+                        applyShow.setCompanyId(userInfo.getCompanyCode());
+                        applyShow.setCompanyName(userInfo.getCompanyName());
+                        applyShow.setApplyName(userInfo.getName());
+                    }
+                }
+            }
+        }
+        return applyShowList;
+    }
 }

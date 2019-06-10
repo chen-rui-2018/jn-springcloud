@@ -11,7 +11,12 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "better-scroll": "^1.15.2",
+    "echarts": "^4.2.1",
+    "mint-ui": "^2.2.13",
+    "swiper": "^4.5.0",
     "vue": "^2.5.2",
+    "vue-baidu-map": "^0.21.20",
     "vue-router": "^3.0.1",
     "vux": "^2.9.4"
   },

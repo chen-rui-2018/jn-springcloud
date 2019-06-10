@@ -17,11 +17,8 @@ import java.util.Date;
 @ApiModel(value = "HatchHomeConfig", description = "众创空间后台配置表实体类")
 public class HatchHomeConfig implements Serializable {
 
-    @ApiModelProperty(value = "唯一id")
+    @ApiModelProperty(value = "唯一id【孵化器ID】")
     private String id;
-
-    @ApiModelProperty(value = "孵化器ID")
-    private String incubatorId;
 
     @ApiModelProperty(value = "孵化器名称")
     private String incubatorName;
@@ -69,14 +66,6 @@ public class HatchHomeConfig implements Serializable {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getIncubatorId() {
-        return incubatorId;
-    }
-
-    public void setIncubatorId(String incubatorId) {
-        this.incubatorId = incubatorId;
     }
 
     public String getIncubatorName() {

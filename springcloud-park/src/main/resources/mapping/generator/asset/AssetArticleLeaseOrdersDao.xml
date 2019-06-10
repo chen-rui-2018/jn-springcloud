@@ -27,7 +27,6 @@
         SELECT
             tb.id,
             tb.asset_number AS assetNumber,
-            tb.asset_number AS barCode,
             tb.article_id AS articleId,
             tb.type_id AS typeId,
             tb.asset_type AS assetType,
@@ -43,7 +42,8 @@
             tb.start_time AS startTime,
             tb.end_time AS endTime,
             tb.article_status AS articleStatus,
-            ta.lease_time AS leaseTime
+            ta.lease_time AS leaseTime,
+            ta.qr_code AS qrCode
         FROM
             tb_asset_article_lease_orders tb
                 LEFT JOIN tb_asset_article_lease ta ON ta.id = tb.article_id

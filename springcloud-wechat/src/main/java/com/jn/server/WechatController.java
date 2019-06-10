@@ -8,13 +8,10 @@ import com.jn.wechat.api.WechatClient;
 import com.jn.wechat.base.enums.WxErrorMsgEnum;
 import com.jn.wechat.base.enums.WxExceptionEnums;
 import com.jn.wechat.base.model.result.WxError;
-import com.jn.wechat.base.model.template.WxTemplateData;
-import com.jn.wechat.base.model.template.WxTemplateMessage;
 import com.jn.wechat.base.service.WxService;
 import com.jn.wechat.base.service.WxTemplateMsgService;
 import com.jn.wechat.base.utils.json.JsonStringToObjectUtil;
-import com.jn.wechat.model.TemplateData;
-import com.jn.wechat.model.TemplateMessage;
+import com.jn.wechat.model.WxTemplateMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -55,29 +52,14 @@ public class WechatController extends BaseController implements WechatClient {
 
     /**
      * 推送模板消息
-     * @param templateMessage
+     * @param wxTemplateMessage
      * @return
      */
 
     @Override
-    @ControllerLog(doAction = "发送模板消息")
-    public Result<String> pushTemplateInfo(@RequestBody TemplateMessage templateMessage) {
+    @ControllerLog(doAction = "发送微信模板消息")
+    public Result<String> pushTemplateInfo(@RequestBody WxTemplateMessage wxTemplateMessage) {
         Result<String> result = new Result<>();
-        WxTemplateMessage wxTemplateMessage = new WxTemplateMessage();
-        wxTemplateMessage.setTouser(templateMessage.getToUser());
-        wxTemplateMessage.setTemplate_id(templateMessage.getTemplateId());
-        WxTemplateData wxTemplateData;
-        List<TemplateData> data = templateMessage.getTemplateDataList();
-        for(int i=0;i<data.size();i++) {
-            wxTemplateData = new WxTemplateData();
-            wxTemplateData.setName("keyword"+i);
-            wxTemplateData.setValue(data.get(i).getValue());
-            wxTemplateData.setColor(data.get(i).getColor());
-            if(0==i) {
-                wxTemplateData.setName("first");
-            }
-            wxTemplateMessage.addData(wxTemplateData);
-        }
         String json = wxTemplateMsgService.sendTemplateMsg(wxTemplateMessage);
         WxError wxError = JsonStringToObjectUtil.jsonToObject(json,new TypeReference<WxError>(){});
         if(null == wxError) {

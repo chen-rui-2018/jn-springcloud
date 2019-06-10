@@ -1,5 +1,6 @@
 package com.jn.park.asset.service;
 
+import com.jn.park.asset.model.MaintainRecordModel;
 import com.jn.system.model.User;
 
 /**
@@ -13,10 +14,9 @@ public interface MaintainRecordService {
 
     /**
      * 新增维保记录
-     * @param maintainId
-     * @param message
-     * @param imgUrl
+     * @param user
+     * @param maintainRecordModel
      * @return
      */
-    Integer addRecord(User user, String maintainId, String message, String imgUrl);
+    Integer addRecord(User user, MaintainRecordModel maintainRecordModel);
 }

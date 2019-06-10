@@ -1,9 +1,11 @@
 package com.jn.enterprise.propaganda.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @Author: yangph
@@ -39,6 +41,27 @@ public class BusinessPromotionDetailsShow implements Serializable {
     private String posterUrl;
     @ApiModelProperty(value = "宣传费用")
     private String propagandaFee;
+    @ApiModelProperty(value = "浏览量")
+    private String viewCount;
+    @ApiModelProperty(value = "创建时间")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
+    private Date createdTime;
+
+    public String getViewCount() {
+        return viewCount;
+    }
+
+    public void setViewCount(String viewCount) {
+        this.viewCount = viewCount;
+    }
+
+    public Date getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
+    }
 
     public String getId() {
         return id;
@@ -162,6 +185,8 @@ public class BusinessPromotionDetailsShow implements Serializable {
                 ", propagandaAreaUrl='" + propagandaAreaUrl + '\'' +
                 ", posterUrl='" + posterUrl + '\'' +
                 ", propagandaFee='" + propagandaFee + '\'' +
+                ", viewCount='" + viewCount + '\'' +
+                ", createdTime=" + createdTime +
                 '}';
     }
 }

@@ -2,10 +2,14 @@ package com.jn.enterprise.company.service;
 
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.company.model.CreditUpdateParam;
 import com.jn.company.model.ServiceCompany;
 import com.jn.company.model.ServiceCompanyParam;
 import com.jn.company.model.ServiceEnterpriseParam;
 import com.jn.enterprise.company.model.CompanyUpdateParam;
+import com.jn.enterprise.company.vo.CompanyContactVO;
+import com.jn.enterprise.company.vo.CompanyDetailsVo;
+import com.jn.enterprise.model.CompanyInfoModel;
 import com.jn.park.activity.model.ActivityPagingParam;
 import com.jn.park.activity.model.Comment;
 import com.jn.park.activity.model.CommentAddParam;
@@ -34,11 +38,11 @@ public interface CompanyService {
      * @param serviceEnterpriseParam
      * @return
      */
-    PaginationData<List<ServiceEnterpriseCompany>> getCompanyNewList(ServiceEnterpriseParam serviceEnterpriseParam);
+    PaginationData<List<ServiceEnterpriseCompany>> getCompanyNewList(ServiceEnterpriseParam serviceEnterpriseParam,String account);
 
 
     /**
-     * 根据用户账号查询企业信息（用户为企业管理员）
+     * 根据用户账号或企业ID查询企业信息（用户为企业管理员）
      * @param account
      * @return
      */
@@ -74,4 +78,35 @@ public interface CompanyService {
      * @return
      */
     Result<Boolean> saveComment(CommentAddParam commentAddParam);
+
+    /**
+     * 获取企业详情
+     * @param companyId
+     * @param account
+     * @return
+     */
+    CompanyDetailsVo  getCompanyDetails(String companyId,String account);
+
+    /**
+     * 修改企业信用分
+     * @param creditUpdateParam
+     * @return
+     */
+    Result<Boolean> updateCreditPoints(CreditUpdateParam creditUpdateParam);
+
+    /**
+     * 获取企业联系人账号
+     * @param comId 企业ID
+     * @return
+     */
+    CompanyContactVO getCompanyContactAccount(String comId);
+
+    /**
+     * 获取企业信息(关注企业列表展示)
+     * @param companyId
+     * @param account
+     * @return
+     */
+    CompanyInfoModel getCompanyInfo(String companyId,String account);
+
 }

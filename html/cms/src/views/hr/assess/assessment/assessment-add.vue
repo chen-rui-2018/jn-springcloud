@@ -6,11 +6,11 @@
       </el-form-item>
       <el-form-item label="考核开始时间" prop="assessmentTime">
         <el-col :span="11" style="width:auto;">
-          <el-date-picker v-model="assessment.assessmentStartTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择开始日期" style="width: 100%;" @change="getStarttime" />
+          <el-date-picker v-model="assessment.assessmentStartTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择开始日期" style="width: 210px;" @change="getStarttime" />
         </el-col>
         <el-col :span="2" class="line" align="center">至</el-col>
         <el-col :span="11" style="width:auto;">
-          <el-date-picker v-model="assessment.assessmentEndTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择结束时间" style="width: 100%;" @change="getEndtime" />
+          <el-date-picker v-model="assessment.assessmentEndTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择结束时间" style="width: 210px;" @change="getEndtime" />
         </el-col>
       </el-form-item>
       <el-form-item label="考核模板" prop="templateId" class="inline">
@@ -19,53 +19,50 @@
         </el-select>
       </el-form-item>
       <el-form-item label="考核对象" prop="assessmentObject" class="inline">
-        <el-input v-model="assessmentObjectData" type="textarea" style="width: 500px;" readonly="readonly"/>
-        <el-button type="text" @click="openAssessmentObjPage">选择</el-button>
+        <!--最后子节点支持多选  only-last="true" -->
+
+        <multi-cascader-ext ref="assessmentObjectRef" v-model="assessment.assessmentObjectList" :data="deptEmployeeList" :only-last="true" :show-leaf-label="true" style="width: 620px" @change="assessmentObjectSel"/>
+
       </el-form-item>
       <el-form-item label="考核人" prop="assessmentPeople" class="inline">
-        <!--<el-input v-model="assessment.assessmentPeople" style="width: 205px;"/>-->
-        <el-input v-model="assessmentPeopleData" type="textarea" style="width: 500px;" readonly="readonly"/>
-        <el-button type="text" @click="openAssessmentPeoplePage">选择</el-button>
+        <!--<el-cascader-multi ref="assessmentPeopleRef" v-model="assessment.assessmentPeopleList" :data="deptEmployeeList" :show-leaf-label="true" only-last="true" style="width: 620px" @change="assessmentPeopleSel"/>-->
+        <el-cascader
+          ref="assessmentPeopleRef"
+          :options="deptEmployeeList"
+          v-model="assessmentPeopleArr"
+          change-on-select
+          placeholder="请选择"
+          clearable
+          @change="assessmentPeopleSel"
+        />
       </el-form-item>
       <el-form-item>
         <el-button :disabled="isDisabled" type="primary" @click="submitForm()">发送</el-button>
         <el-button @click="goBack($route)" >取消</el-button>
       </el-form-item>
     </el-form>
-    <!--获取考核对象/考核人树形信息模板-->
-    <!--<template v-if="assessmentObjPageVisible">-->
-    <el-dialog :title="titleMap[dialogStatus]" :visible.sync="assessmentObjPageVisible" style="width: 950px;" >
-      <div style="width: 100%;height: 320px;overflow: auto">
-        <el-input
-          v-model="filterText"
-          placeholder="输入员工名字"/>
-        <el-tree
-          ref="rootTree"
-          :data="rootData"
-          :filter-node-method="filterNode"
-          show-checkbox
-          node-key="value"
-        />
-        <el-button type="primary" @click="getKeys(dialogStatus)">确定</el-button>
-        <el-button @click="closeDialog" >取消</el-button>
-      </div>
-    </el-dialog>
-    <!-- </template>-->
   </div>
 </template>
 
 <script>
 import {
-  api
+  api, apiGet
 } from '@/api/hr/common'
+import {
+  findNodeById
+} from '@/api/hr/util'
+import multiCascaderExt from '@/components/MultiCascaderExt2/multi-cascader-ext.vue'
 import UE from '@/components/ue.vue'
 export default {
-  components: { UE },
+  components: { UE, multiCascaderExt },
   data() {
     return {
+      // 新部门员工树
+      deptEmployeeList: [],
+      // checkList: [],
+      // 新部门员工树 end
       defaultMsg: '',
       filterText: '',
-      rootData: [],
       assessmentObjectData: '',
       assessmentPeopleData: '',
       config: {
@@ -85,11 +82,13 @@ export default {
       assessment: {
         templateId: '',
         assessmentName: '',
+        assessmentTime: '',
         assessmentStartTime: '',
         assessmentEndTime: '',
-        // assessmentObjectList: [],
+        assessmentObjectList: [],
         assessmentJobNumber: '',
         assessmentObjectJobNumber: '',
+        assessmentPeopleList: [],
         assessmentObject: '',
         templateName: '',
         assessmentPeople: ''
@@ -107,13 +106,15 @@ export default {
         moduleCode: 'springcloud-hr',
         parentGroupCode: 'assess'
       },
+      assessmentPeopleArr: [],
       rules: {
         assessmentName: [{ required: true, message: '请输考核名称', trigger: 'blur' }],
         templateId: [{ required: true, message: '请选择考核模板', trigger: 'change' }],
-        // assessmentTime: [{ required: true, message: '请选择考核时间', trigger: 'change' }],
+        assessmentTime: [{ required: true, message: '请选择考核时间', trigger: 'change' }],
         assessmentObject: [{ required: true, message: '请选择考核对象', trigger: 'change' }],
         assessmentPeople: [{ required: true, message: '请选择考核人', trigger: 'change' }]
-      }
+      },
+      nodes: []
     }
   },
   watch: {
@@ -123,13 +124,50 @@ export default {
   },
   created() {
     this.getTemplates()
-    this.getDepartmentTree()
+    this.getDeptEmployeeList()
   },
   methods: {
-    getDepartmentTree() {
-      api('hr/AssessmentManagement/ObtainDepartmentTree', {}).then(res => {
+    assessmentObjectSel() {
+      const selectedNodes = this.$refs['assessmentObjectRef'].selectedNodes
+      this.assessment.assessmentObject = ''
+      for (let i = 0; i < selectedNodes.length; i++) {
+        if (!selectedNodes[i].flag) {
+          this.assessment.assessmentObject = this.assessment.assessmentObject + selectedNodes[i].jobNumber + ','
+        }
+      }
+      if (this.assessment.assessmentObject.length > 0) {
+        this.assessment.assessmentObject = this.assessment.assessmentObject.substring(0, this.assessment.assessmentObject.length - 1)
+      }
+      console.log(this.assessment.assessmentObject)
+    },
+    setChild(nodes, children) {
+      children.forEach(item => {
+        nodes.push({
+          'id': item.id,
+          'label': item.label,
+          'parentId': item.parentId,
+          'jobNumber': item.jobNumber,
+          'flag': item.flag
+        })
+        if (item.children && item.children.length > 0) {
+          this.setChild(nodes, item.children)
+        }
+      })
+    },
+    assessmentPeopleSel() {
+      const assessmentPeopleId = this.assessmentPeopleArr[this.assessmentPeopleArr.length - 1]
+      const currNode = findNodeById(this.nodes, assessmentPeopleId)
+      if (!currNode.flag) {
+        this.assessment.assessmentPeople = currNode.jobNumber
+        console.log('考核人')
+        console.log(this.assessment.assessmentPeople)
+      }
+    },
+    getDeptEmployeeList() {
+      apiGet('hr/employeeBasicInfo/selectDepartEmployee', {}).then(res => {
         if (res.data.code === '0000') {
-          this.rootData = res.data.data
+          this.deptEmployeeList = JSON.parse(res.data.data)
+          this.setChild(this.nodes, this.deptEmployeeList)
         } else {
           this.$message.error(res.data.result)
         }
@@ -147,8 +185,13 @@ export default {
     // 新增提交表单
     submitForm() {
       this.isDisabled = true
-      if (this.assessment.templateId === '') {
-        alert('请选择考核模板')
+      if (this.assessment.assessmentEndTime === '' || this.assessment.assessmentStartTime === '') {
+        alert('请填写考核起止时间')
+        this.isDisabled = false
+        return false
+      }
+      if (new Date(this.assessment.assessmentEndTime.replace(/-/g, '\/')) < new Date()) {
+        alert('失效时间必须大于当前时间,请重新选择')
         this.isDisabled = false
         return false
       }
@@ -188,8 +231,12 @@ export default {
     isActive(route) {
       return route.path === this.$route.path
     },
-    getEndtime() {},
-    getStarttime() {},
+    getEndtime() {
+      this.assessment.assessmentTime = this.assessment.assessmentStartTime + '-' + this.assessment.assessmentEndTime
+    },
+    getStarttime() {
+      this.assessment.assessmentTime = this.assessment.assessmentStartTime + '-' + this.assessment.assessmentEndTime
+    },
     goBack(view) {
       this.$store.dispatch('delView', view).then(({ visitedViews }) => {
         if (this.isActive(view)) {
@@ -230,7 +277,7 @@ export default {
       let assessmentObjectArrStr = ''
       const assessmentPeopleArr = []
       for (let j = 0; j < nodes.length; j++) {
-        if (nodes[j].parent !== -1) {
+        if (nodes[j].parent !== '-1') {
           arr.push(nodes[j].value)
           if (key === 'obj') {
             assessmentObjectArrStr = assessmentObjectArrStr + nodes[j].label + ','

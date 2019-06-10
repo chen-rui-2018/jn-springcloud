@@ -10,6 +10,7 @@
     <result column="parking_info" jdbcType="VARCHAR" property="parkingInfo" />
     <result column="car_license" jdbcType="VARCHAR" property="carLicense" />
     <result column="account" jdbcType="VARCHAR" property="account" />
+    <result column="company_id" jdbcType="VARCHAR" property="companyId" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
     <result column="rent_price" jdbcType="VARCHAR" property="rentPrice" />
@@ -91,8 +92,8 @@
   </sql>
   <sql id="Base_Column_List">
     rent_id_, area_id_, area_name, space_id_, space_serial, parking_info, car_license, 
-    account, name, phone, rent_price, policy_id_, start_time, end_time, due_money, deduction_money, 
-    actual_money, order_bill_num, approval_account, approval_name, approval_comments, 
+    account, company_id, name, phone, rent_price, policy_id_, start_time, end_time, due_money, 
+    deduction_money, actual_money, order_bill_num, approval_account, approval_name, approval_comments, 
     approval_status, contract_attachment, created_time, creator_account, modified_time, 
     modifier_account, record_status
   </sql>
@@ -129,24 +130,24 @@
   <insert id="insert" parameterType="com.jn.park.parking.entity.TbParkingSpaceRental">
     insert into tb_parking_space_rental (rent_id_, area_id_, area_name, 
       space_id_, space_serial, parking_info, 
-      car_license, account, name, 
-      phone, rent_price, policy_id_, 
-      start_time, end_time, due_money, 
-      deduction_money, actual_money, order_bill_num, 
-      approval_account, approval_name, approval_comments, 
-      approval_status, contract_attachment, created_time, 
-      creator_account, modified_time, modifier_account, 
-      record_status)
+      car_license, account, company_id, 
+      name, phone, rent_price, 
+      policy_id_, start_time, end_time, 
+      due_money, deduction_money, actual_money, 
+      order_bill_num, approval_account, approval_name, 
+      approval_comments, approval_status, contract_attachment, 
+      created_time, creator_account, modified_time, 
+      modifier_account, record_status)
     values (#{rentId,jdbcType=VARCHAR}, #{areaId,jdbcType=VARCHAR}, #{areaName,jdbcType=VARCHAR}, 
       #{spaceId,jdbcType=VARCHAR}, #{spaceSerial,jdbcType=VARCHAR}, #{parkingInfo,jdbcType=VARCHAR}, 
-      #{carLicense,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
-      #{phone,jdbcType=VARCHAR}, #{rentPrice,jdbcType=VARCHAR}, #{policyId,jdbcType=VARCHAR}, 
-      #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{dueMoney,jdbcType=DOUBLE}, 
-      #{deductionMoney,jdbcType=DOUBLE}, #{actualMoney,jdbcType=DOUBLE}, #{orderBillNum,jdbcType=VARCHAR}, 
-      #{approvalAccount,jdbcType=VARCHAR}, #{approvalName,jdbcType=VARCHAR}, #{approvalComments,jdbcType=VARCHAR}, 
-      #{approvalStatus,jdbcType=VARCHAR}, #{contractAttachment,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{recordStatus,jdbcType=TINYINT})
+      #{carLicense,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{companyId,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{rentPrice,jdbcType=VARCHAR}, 
+      #{policyId,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
+      #{dueMoney,jdbcType=DOUBLE}, #{deductionMoney,jdbcType=DOUBLE}, #{actualMoney,jdbcType=DOUBLE}, 
+      #{orderBillNum,jdbcType=VARCHAR}, #{approvalAccount,jdbcType=VARCHAR}, #{approvalName,jdbcType=VARCHAR}, 
+      #{approvalComments,jdbcType=VARCHAR}, #{approvalStatus,jdbcType=VARCHAR}, #{contractAttachment,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.parking.entity.TbParkingSpaceRental">
     insert into tb_parking_space_rental
@@ -174,6 +175,9 @@
       </if>
       <if test="account != null">
         account,
+      </if>
+      <if test="companyId != null">
+        company_id,
       </if>
       <if test="name != null">
         name,
@@ -260,6 +264,9 @@
       </if>
       <if test="account != null">
         #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=VARCHAR},
       </if>
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
@@ -356,6 +363,9 @@
       <if test="record.account != null">
         account = #{record.account,jdbcType=VARCHAR},
       </if>
+      <if test="record.companyId != null">
+        company_id = #{record.companyId,jdbcType=VARCHAR},
+      </if>
       <if test="record.name != null">
         name = #{record.name,jdbcType=VARCHAR},
       </if>
@@ -431,6 +441,7 @@
       parking_info = #{record.parkingInfo,jdbcType=VARCHAR},
       car_license = #{record.carLicense,jdbcType=VARCHAR},
       account = #{record.account,jdbcType=VARCHAR},
+      company_id = #{record.companyId,jdbcType=VARCHAR},
       name = #{record.name,jdbcType=VARCHAR},
       phone = #{record.phone,jdbcType=VARCHAR},
       rent_price = #{record.rentPrice,jdbcType=VARCHAR},
@@ -478,6 +489,9 @@
       </if>
       <if test="account != null">
         account = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        company_id = #{companyId,jdbcType=VARCHAR},
       </if>
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
@@ -551,6 +565,7 @@
       parking_info = #{parkingInfo,jdbcType=VARCHAR},
       car_license = #{carLicense,jdbcType=VARCHAR},
       account = #{account,jdbcType=VARCHAR},
+      company_id = #{companyId,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
       phone = #{phone,jdbcType=VARCHAR},
       rent_price = #{rentPrice,jdbcType=VARCHAR},

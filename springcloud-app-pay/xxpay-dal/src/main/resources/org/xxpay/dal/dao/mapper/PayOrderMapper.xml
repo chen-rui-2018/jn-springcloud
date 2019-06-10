@@ -30,6 +30,9 @@
     <result column="ServiceId" property="serviceId" jdbcType="VARCHAR" />
     <result column="ServiceUrl" property="serviceUrl" jdbcType="VARCHAR" />
     <result column="Duration" property="duration" jdbcType="INTEGER" />
+    <result column="PayRate" property="payRate" jdbcType="DOUBLE" />
+    <result column="PlatCost" property="platCost" jdbcType="BIGINT" />
+    <result column="RealIncomeAmount" property="realIncomeAmount" jdbcType="BIGINT" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -93,7 +96,7 @@
     PayOrderId, MchId, MchOrderNo, ChannelId, Amount, Currency, Status, ClientIp, Device, 
     Subject, Body, Extra, ChannelMchId, ChannelOrderNo, ErrCode, ErrMsg, Param1, Param2, 
     NotifyUrl, NotifyCount, LastNotifyTime, ExpireTime, PaySuccTime, CreateTime, UpdateTime,
-    ServiceId,ServiceUrl,Duration
+    ServiceId,ServiceUrl,Duration,PayRate,PlatCost,RealIncomeAmount
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="org.xxpay.dal.dao.model.PayOrderExample" >
     select
@@ -142,7 +145,7 @@
       ErrMsg, Param1, Param2, 
       NotifyUrl, NotifyCount, LastNotifyTime, 
       ExpireTime, PaySuccTime, CreateTime, 
-      UpdateTime,ServiceId,ServiceUrl,Duration)
+      UpdateTime,ServiceId,ServiceUrl,Duration,PayRate,PlatCost,RealIncomeAmount)
     values (#{payOrderId,jdbcType=VARCHAR}, #{mchId,jdbcType=VARCHAR}, #{mchOrderNo,jdbcType=VARCHAR}, 
       #{channelId,jdbcType=VARCHAR}, #{amount,jdbcType=BIGINT}, #{currency,jdbcType=VARCHAR}, 
       #{status,jdbcType=TINYINT}, #{clientIp,jdbcType=VARCHAR}, #{device,jdbcType=VARCHAR}, 
@@ -152,7 +155,8 @@
       #{notifyUrl,jdbcType=VARCHAR}, #{notifyCount,jdbcType=TINYINT}, #{lastNotifyTime,jdbcType=BIGINT}, 
       #{expireTime,jdbcType=BIGINT}, #{paySuccTime,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP},#{serviceId,jdbcType=VARCHAR},#{serviceUrl,jdbcType=VARCHAR},
-      #{duration,jdbcType=INTEGER})
+      #{duration,jdbcType=INTEGER},#{payRate,jdbcType=DOUBLE},#{platCost,jdbcType=BIGINT},
+      #{realIncomeAmount,jdbcType=BIGINT})
   </insert>
   <insert id="insertSelective" parameterType="org.xxpay.dal.dao.model.PayOrder" >
     insert into t_pay_order
@@ -241,7 +245,15 @@
       <if test="duration != null" >
         Duration,
       </if>
-
+      <if test="payRate != null" >
+        PayRate,
+      </if>
+      <if test="platCost != null" >
+        PlatCost,
+      </if>
+      <if test="realIncomeAmount != null" >
+        RealIncomeAmount,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="payOrderId != null" >
@@ -327,6 +339,15 @@
       </if>
       <if test="duration != null" >
         #{duration,jdbcType=INTEGER},
+      </if>
+      <if test="payRate != null" >
+        #{payRate,jdbcType=DOUBLE},
+      </if>
+      <if test="platCost != null" >
+        #{platCost,jdbcType=BIGINT},
+      </if>
+      <if test="realIncomeAmount != null" >
+        #{realIncomeAmount,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
@@ -423,6 +444,15 @@
       <if test="record.duration != null" >
         Duration = #{record.duration,jdbcType=INTEGER},
       </if>
+      <if test="record.payRate != null" >
+        PayRate = #{record.payRate,jdbcType=DOUBLE},
+      </if>
+      <if test="record.platCost != null" >
+        PlatCost = #{record.platCost,jdbcType=BIGINT},
+      </if>
+      <if test="record.realIncomeAmount != null" >
+        RealIncomeAmount = #{record.realIncomeAmount,jdbcType=BIGINT},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -457,7 +487,10 @@
       UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP},
       ServiceId = #{record.serviceId,jdbcType=VARCHAR},
       ServiceUrl = #{record.serviceUrl,jdbcType=VARCHAR},
-      Duration = #{record.duration,jdbcType=INTEGER}
+      Duration = #{record.duration,jdbcType=INTEGER},
+      PayRate = #{record.payRate,jdbcType=DOUBLE},
+      PlatCost = #{record.platCost,jdbcType=BIGINT},
+      RealIncomeAmount = #{record.realIncomeAmount,jdbcType=BIGINT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -546,6 +579,15 @@
       <if test="duration != null" >
         Duration = #{duration,jdbcType=INTEGER},
       </if>
+      <if test="payRate != null" >
+        PayRate = #{payRate,jdbcType=DOUBLE},
+      </if>
+      <if test="platCost != null" >
+        PlatCost = #{platCost,jdbcType=BIGINT},
+      </if>
+      <if test="realIncomeAmount != null" >
+        RealIncomeAmount = #{realIncomeAmount,jdbcType=BIGINT},
+      </if>
     </set>
     where PayOrderId = #{payOrderId,jdbcType=VARCHAR}
   </update>
@@ -577,7 +619,30 @@
       UpdateTime = #{updateTime,jdbcType=TIMESTAMP},
       ServiceId = #{serviceId,jdbcType=VARCHAR},
       ServiceUrl = #{serviceUrl,jdbcType=VARCHAR},
-      Duration = #{duration,jdbcType=INTEGER}
+      Duration = #{duration,jdbcType=INTEGER},
+      PayRate = #{payRate,jdbcType=DOUBLE},
+      PlatCost = #{platCost,jdbcType=BIGINT},
+      RealIncomeAmount = #{realIncomeAmount,jdbcType=BIGINT}
     where PayOrderId = #{payOrderId,jdbcType=VARCHAR}
   </update>
+
+  <!--根据日期查询支付成功的订单-->
+  <select id="getPaySuccessOrderByDate" parameterType="java.util.Map" resultMap="BaseResultMap" >
+      select t1.* from t_pay_order t1
+      left join t_pay_channel t2
+      on t1.ChannelId = t2.ChannelId
+      where t2.ChannelName = #{channelName}
+      and t1.CreateTime between CONCAT(#{date},' 00:00:00') AND CONCAT(#{date},' 23:59:59')
+      and t1.`Status` in (2,3)
+  </select>
+
+  <!--根据日期和支付方式查询所有订单-->
+  <select id="getAllPayOrderByDate" parameterType="java.util.Map" resultMap="BaseResultMap" >
+      select t1.* from t_pay_order t1
+      left join t_pay_channel t2
+      on t1.ChannelId = t2.ChannelId
+      where t2.ChannelName = #{channelName}
+      and t1.CreateTime between CONCAT(#{date},' 00:00:00') AND CONCAT(#{date},' 23:59:59')
+  </select>
+
 </mapper>

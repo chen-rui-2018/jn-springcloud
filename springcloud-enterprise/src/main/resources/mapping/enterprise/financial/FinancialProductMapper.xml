@@ -31,6 +31,7 @@
         AND sp.`record_status`='1'
         AND sp.`status`='1'						                <!--有效-->
         AND sp.`org_id_` IS NOT NULL
+        AND sp.`org_id_` != ''
         AND sp.`signory_id`=#{businessAreaId}			        <!--科技金融-->
         <if test="financialParam.loanTermMin !=null and financialParam.loanTermMin !=''">     <!--贷款期限大于等于最小值-->
             and sp.loan_term_min &gt;=#{financialParam.loanTermMin}

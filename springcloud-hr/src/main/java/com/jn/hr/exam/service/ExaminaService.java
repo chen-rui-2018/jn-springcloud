@@ -51,7 +51,7 @@ public interface ExaminaService {
 	 * @param examinabankAdd
 	 * @param user
 	 */
-	public void updateExaminabank(Examinabank examinabank, User user);
+	public ExaminabankAdd updateExaminabank(Examinabank examinabank, User user);
 
 	/**
 	 * 删除试题

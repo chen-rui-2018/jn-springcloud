@@ -1,6 +1,7 @@
 package com.jn.park.electricmeter.dao;
 
 import com.jn.park.electricmeter.entity.*;
+import com.jn.park.electricmeter.model.*;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -109,11 +110,11 @@ public interface MeterDao {
 
     /**
      * 获取企业的电表用电量
-     * @param companyId
+     * @param meterCode
      * @param dealDate
      * @return
      */
-    List<TbElectricReading> getDegreeByMeterCode(@Param("companyId") String companyId,@Param("dealDate") Date dealDate);
+    List<TbElectricReading> getDegreeByMeterCode(@Param("meterCode") String meterCode,@Param("dealDate") Date dealDate);
 
     /**
      * 获取一块电表当天按计价规则分组的费用
@@ -121,5 +122,90 @@ public interface MeterDao {
      * @return
      */
     void saveGroupLogs(@Param("saveData") List<TbElectricEnergyGroupLog> saveData);
+
+    /**
+     * 保存账单明细
+     * @param saveData
+     */
+    void saveBillDetail(@Param("saveData") List<TbElectricEnergyBillDetail> saveData);
+
+    /**
+     * 保存表的每日业主关系
+     * @param saveData
+     */
+    void saveMeterLinkInDay(@Param("saveData") List<TbElectricMeterCompanyDay> saveData);
+
+    /**
+     * 停电的企业
+     */
+    List<SwitchModel> stopElectric();
+
+    /**
+     * 有电的企业
+     */
+    List<SwitchModel> getElectric();
+
+    /**
+     * 查询所有企业的电表
+     * @param companyId
+     * @return
+     */
+    List<String> getHostsMeter(@Param("companyId") String companyId);
+
+    /**
+     * 保存电表转换的日志
+     * @param saveData
+     */
+    void saveMeterSwitchLog(@Param("saveData") List<TbElectricMeterSwitchLog> saveData);
+
+    //能耗统计
+    /**
+     * 分组统计
+     * @return
+     */
+    List<GroupChartStatisticsModel> groupChart();
+
+    /**
+     * 分类统计
+     * @return
+     */
+    List<GategaryEnergyStatisticsModel> categaryChart() ;
+
+    /**
+     * 趋势明细图
+     * @param param
+     * @return
+     */
+    List<TrendChartDetailStatisticsModel> trendChartDetail(TrendChartPageParam param) ;
+
+    /**
+     * 趋势图
+     * @param param
+     * @return
+     */
+    List<TrendChartStatisticsModel> trendChart(TrendChartParam param);
+
+    /**
+     * 今日用电情况
+     * @param companyid
+     * @return
+     */
+    List<ConditionElectro> todayElectric(@Param("companyid") String companyid);
+
+    /**
+     * 当月用电情况
+     * @param companyid
+     * @return
+     */
+    List<ConditionElectro> monthElectric(@Param("companyid") String companyid);
+
+    /**
+     * 今年用电情况
+     * @param companyid
+     * @return
+     */
+    List<YearElectro> yearElectric(@Param("companyid") String companyid);
+
+
 
 }

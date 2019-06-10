@@ -15,6 +15,17 @@ public enum CompanyDataEnum implements CodeAndMsg {
     RECORD_STATUS_VALID("1","有效"),
     RECORD_STATUS_NOT_VALID("0","无效"),
 
+    // 企业-审核状态
+    COMPANY_CHECK_STATUS_NOT_PASS("-1","审核未通过"),
+    COMPANY_CHECK_STATUS_PASS("1","审核通过"),
+    COMPANY_CHECK_STATUS_WAIT("0","审核中"),
+
+    // 机构-审核状态
+    ORG_APPROVAL_STATUS("1","审核通过"),
+
+    // 服务专员-审核状态
+    ADVISOR_APPROVAL_STATUS("2","审核通过"),
+
     // 企业人员-邀请状态
     STAFF_INVITE_STATUS_SEND("5","已邀请"),
     STAFF_INVITE_STATUS_AGREE("6","已同意"),
@@ -29,6 +40,10 @@ public enum CompanyDataEnum implements CodeAndMsg {
     COMPANY_ADMIN("企业管理员","企业管理员"),
     COMPANY_CONTACTS("企业联系人","企业联系人"),
     COMPANY_STAFF("企业员工","企业员工"),
+
+    // 企业员工加入方式
+    COMPANY_STAFF_JOIN_PATTERN_INVITE("1","企业邀请"),
+    COMPANY_STAFF_JOIN_PATTERN_UPGRADE("0","升级员工"),
     ;
 
     /**

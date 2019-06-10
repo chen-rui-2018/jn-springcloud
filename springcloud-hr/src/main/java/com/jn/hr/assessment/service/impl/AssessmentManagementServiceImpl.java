@@ -12,11 +12,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
-import com.jn.common.util.Assert;
+import com.jn.common.model.Result;
 import com.jn.hr.assessment.dao.AssessManageMapper;
 import com.jn.hr.assessment.dao.AssessmentInfoFillMapper;
 import com.jn.hr.assessment.dao.AssessmentSubsidiaryMapper;
@@ -26,9 +28,9 @@ import com.jn.hr.assessment.dao.TbManpowerAssessmentInfoFillMapper;
 import com.jn.hr.assessment.dao.TbManpowerAssessmentManageMapper;
 import com.jn.hr.assessment.dao.TbManpowerAssessmentTemplateMapper;
 import com.jn.hr.assessment.entity.TbManpowerAssessmentInfoFill;
-import com.jn.hr.assessment.entity.TbManpowerAssessmentManage;
 import com.jn.hr.assessment.entity.TbManpowerAssessmentSubsidiary;
 import com.jn.hr.assessment.entity.TbManpowerAssessmentTemplate;
+import com.jn.hr.assessment.enums.AssessmentManageExceptionEnums;
 import com.jn.hr.assessment.enums.AssessmentManageStatusEnums;
 import com.jn.hr.assessment.model.AssessmentManageAdd;
 import com.jn.hr.assessment.model.AssessmentManagePage;
@@ -41,14 +43,17 @@ import com.jn.hr.assessment.model.AssessmentTemplatePage;
 import com.jn.hr.assessment.model.AssessmentTemplateVo;
 import com.jn.hr.assessment.model.DepartmentTree;
 import com.jn.hr.assessment.service.AssessmentManagementService;
-import com.jn.hr.attendance.enums.attendanceManageStatusEnums;
+import com.jn.hr.attendance.enums.AttendanceManageStatusEnums;
+import com.jn.hr.common.enums.HrExceptionEnums;
 import com.jn.hr.common.enums.HrStatusEnums;
+import com.jn.hr.common.util.DepartMentUtil;
 import com.jn.hr.employee.dao.EmployeeBasicInfoMapper;
 import com.jn.hr.employee.dao.TbManpowerDepartmentMapper;
 import com.jn.hr.employee.entity.TbManpowerDepartment;
 import com.jn.hr.employee.entity.TbManpowerDepartmentCriteria;
 import com.jn.hr.employee.entity.TbManpowerEmployeeBasicInfo;
 import com.jn.hr.employee.model.EmployeeBasicInfoPage;
+import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 
@@ -56,6 +61,8 @@ import com.jn.system.model.User;
 public class AssessmentManagementServiceImpl implements AssessmentManagementService {
 
 	private static final Logger logger = LoggerFactory.getLogger(AssessmentManagementServiceImpl.class);
+	@Autowired
+	SystemClient systemClient;
 	@Autowired
 	AssessManageMapper assessManageMapper;
 	@Autowired
@@ -103,6 +110,7 @@ public class AssessmentManagementServiceImpl implements AssessmentManagementServ
 
 	@Override
 	@ServiceLog(doAction = "发起考核")
+	@Transactional(rollbackFor = Exception.class)
 	public void initiateAssess(AssessmentManageAdd assessmentManageAdd, User user) {
 		List<AssessmentManageAdd> assessList = new ArrayList<AssessmentManageAdd>();
 		List<AssessmentSubsidiaryAdd> subsidiaryList = new ArrayList<AssessmentSubsidiaryAdd>();
@@ -149,26 +157,24 @@ public class AssessmentManagementServiceImpl implements AssessmentManagementServ
 
 	@Override
 	@ServiceLog(doAction = "考核延期")
+	@Transactional(rollbackFor = Exception.class)
 	public String assessmentExtension(AssessmentManageAdd assessmentManageAdd, User user) {
-		// TODO Auto-generated method stub
-		Assert.notNull(assessmentManageAdd.getAssessmentId(),"AssessmentId不能为空");
 		List<AssessmentManageVo> assessList =  assessManageMapper.selectByAssessmentName(assessmentManageAdd.getAssessmentId());
-		//List<AssessmentManageVo> assessList = new ArrayList<>();
 		if(assessList == null || assessList.size() == 0){
 			logger.info("[考核管理]该考核项目不存在，不能延期,考核名称：",assessmentManageAdd.getAssessmentName());
-			return "考核项目不存在";
+			throw new JnSpringCloudException(AssessmentManageExceptionEnums.ASSESSMENT_PROJECT);
 		}
 			
 		assessmentManageAdd.setModifiedTime(new Date());
 		assessmentManageAdd.setModifierAccount(user.getAccount());
 		assessManageMapper.updateBatch(assessmentManageAdd);
-		//assessManageMapper.updateBatch(assessList);
 		logger.info("[考核管理]该考核项目延期成功!");
 		return "延期成功";
 	}
 
 	@Override
 	@ServiceLog(doAction = "删除考核记录")
+	@Transactional(rollbackFor = Exception.class)
 	public String deleteAssessmentRecord(AssessmentManagePage assessmentManagePage) {
 		// TODO Auto-generated method stub
 		assessManageMapper.updateByAssessmentName(assessmentManagePage.getAssessmentId());
@@ -225,6 +231,7 @@ public class AssessmentManagementServiceImpl implements AssessmentManagementServ
 
 	@Override
 	@ServiceLog(doAction = "开始考核-保存")
+	@Transactional(rollbackFor = Exception.class)
 	public String saveStartAssessmentPage(AssessmentManageAdd assessmentManageAdd) {
 		List<AssessmentTemplateDetailVo> templateDetailList = assessmentManageAdd.getTemplateDetailList();
 		for(AssessmentTemplateDetailVo templateDetail : templateDetailList){
@@ -254,6 +261,7 @@ public class AssessmentManagementServiceImpl implements AssessmentManagementServ
 
 	@Override
 	@ServiceLog(doAction = "归档生效")
+	@Transactional(rollbackFor = Exception.class)
 	public String updateAssessment(AssessmentManageAdd assessmentManageAdd) {
 		// TODO Auto-generated method stub
 		//根据模板Id  查询模板明细表
@@ -261,7 +269,8 @@ public class AssessmentManagementServiceImpl implements AssessmentManagementServ
 		for(AssessmentTemplateDetailVo templateDetail : templateDetailList){
 			TbManpowerAssessmentInfoFill assessmentInfoFill = assessmentInfoFillMapper.selectByJobNumber(assessmentManageAdd.getAssessmentObjectJobNumber(),templateDetail.getId(),templateDetail.getTemplateId());
 			if(assessmentInfoFill == null){
-				return "还有考核项未结束";
+				logger.info("还有考核项未结束");
+				throw new JnSpringCloudException(AssessmentManageExceptionEnums.ASSESSMENT_NOT_FINISHED);
 			}
 		}
 
@@ -272,13 +281,15 @@ public class AssessmentManagementServiceImpl implements AssessmentManagementServ
 
 	@Override
 	@ServiceLog(doAction = "结束并归档")
+	@Transactional(rollbackFor = Exception.class)
 	public String finishAndArchive(AssessmentManageAdd assessmentManageAdd) {
 		
 		List<AssessmentTemplateDetailVo> templateDetailList = assessmentTemplateDetailMapper.selectByTemplateId(assessmentManageAdd.getTemplateId());
 		for(AssessmentTemplateDetailVo templateDetail : templateDetailList){
 			TbManpowerAssessmentInfoFill assessmentInfoFill = assessmentInfoFillMapper.selectByJobNumber(assessmentManageAdd.getAssessmentObjectJobNumber(),templateDetail.getId(),templateDetail.getTemplateId());
 			if(assessmentInfoFill == null){
-				return "还有考核项未结束";
+				logger.info("还有考核项未结束");
+				throw new JnSpringCloudException(AssessmentManageExceptionEnums.ASSESSMENT_NOT_FINISHED);
 			}
 		}
 		assessmentSubsidiaryMapper.updateByAssessmentStatus(assessmentManageAdd.getAssessmentObjectJobNumber(),assessmentManageAdd.getAssessmentId());
@@ -288,21 +299,18 @@ public class AssessmentManagementServiceImpl implements AssessmentManagementServ
 	
 	@Override
 	@ServiceLog(doAction = "考核结束")
+	@Transactional(rollbackFor = Exception.class)
 	public String assessmentEnd(AssessmentManageAdd assessmentManageAdd) {
-		int number = assessmentSubsidiaryMapper.selectByAssessmentId(assessmentManageAdd.getAssessmentId());
-		if(number == 0){
-			AssessmentManagePage assessmentManagePage = new AssessmentManagePage();
-			assessmentManagePage.setAssessmentObjectJobNumber(assessmentManageAdd.getAssessmentObjectJobNumber());
-			assessmentManagePage.setAssessmentId(assessmentManageAdd.getAssessmentId());
-			assessManageMapper.updateByStatus(assessmentManagePage);
-			return "考核结束";
-		}else{
-			return "还有人未考核";
-		}
+		assessmentSubsidiaryMapper.updateByAssessmentStatus(null,assessmentManageAdd.getAssessmentId());
+		AssessmentManagePage assessmentManagePage = new AssessmentManagePage();
+		assessmentManagePage.setAssessmentId(assessmentManageAdd.getAssessmentId());
+		assessManageMapper.updateByStatus(assessmentManagePage);
+		return "考核结束";
 	}
 	
 	@Override
 	@ServiceLog(doAction = "删除被考核人记录")
+	@Transactional(rollbackFor = Exception.class)
 	public String deleteAppraisedPersonRecord(AssessmentManagePage assessmentManagePage) {
 		assessManageMapper.updateByRecordStatus(assessmentManagePage);
 		//查询记录是否存在
@@ -317,10 +325,21 @@ public class AssessmentManagementServiceImpl implements AssessmentManagementServ
 	public List<AssessmentTemplateDetailVo> viewAssessmentDetails(AssessmentManageAdd assessmentManageAdd) {
 		List<AssessmentTemplateDetailVo> templateDetailList = assessmentTemplateDetailMapper.selectByTemplateId(assessmentManageAdd.getTemplateId());
 		Map<String,TbManpowerAssessmentInfoFill> fillMap = assessmentInfoFillMapper.selectByTemplateDetailId(assessmentManageAdd.getAssessmentObjectJobNumber(),assessmentManageAdd.getTemplateId());
+		if(fillMap == null){
+			fillMap = new HashMap<String,TbManpowerAssessmentInfoFill>();
+		}
 		for(AssessmentTemplateDetailVo detailVo : templateDetailList){
 			TbManpowerAssessmentInfoFill fill = fillMap.get(detailVo.getId());
-			detailVo.setAssessmentScore(fill.getAssessmentScore());
-			detailVo.setCauseDeduction(fill.getCauseDeduction());
+			if(fill != null){
+				detailVo.setAssessmentScore(fill.getAssessmentScore());
+				detailVo.setCauseDeduction(fill.getCauseDeduction());
+			}
+			Result result = systemClient.selectDeptByParentId(detailVo.getLeadAssessmentDepartment(), false);
+			if(result==null || !"0000".equals(result.getCode()) || result.getData()==null){
+	            throw new JnSpringCloudException(HrExceptionEnums.DEPARTMENT_QUERY_ERRPR);
+	        }
+	        Map<String,String>  departMap= (HashMap<String, String>)result.getData();
+	        detailVo.setLeadAssessmentDepartment(departMap.get("departmentName"));
 		}
 		logger.info("[考核详情]详情页面查询成功！");
 		return templateDetailList;
@@ -330,6 +349,14 @@ public class AssessmentManagementServiceImpl implements AssessmentManagementServ
 	@ServiceLog(doAction = "开始考核页面明细")
 	public List<AssessmentTemplateDetailVo> startAssessmentPageDetails(AssessmentManageAdd assessmentManageAdd) {
 		List<AssessmentTemplateDetailVo> templateDetailList = assessmentTemplateDetailMapper.selectByTemplateId(assessmentManageAdd.getTemplateId());
+		for(AssessmentTemplateDetailVo detail : templateDetailList){
+			Result result = systemClient.selectDeptByParentId(detail.getLeadAssessmentDepartment(), false);
+			if(result==null || !"0000".equals(result.getCode()) || result.getData()==null){
+	            throw new JnSpringCloudException(HrExceptionEnums.DEPARTMENT_QUERY_ERRPR);
+	        }
+	        Map<String,String>  departMap= (HashMap<String, String>)result.getData();
+			detail.setLeadAssessmentDepartment(departMap.get("departmentName"));
+		}
 		logger.info("[开始考核]考核明细查询成功！");
 		return templateDetailList;
 	}
@@ -345,12 +372,19 @@ public class AssessmentManagementServiceImpl implements AssessmentManagementServ
 
 	@Override
 	@ServiceLog(doAction = "添加模板页面")
+	@Transactional(rollbackFor = Exception.class)
 	public String addAssessmentTemplate(AssessmentTemplatePage assessmentTemplatePage) {
 		// TODO Auto-generated method stub
+		AssessmentTemplateVo assessmentTemplateVo = assessmentTemplateMapper.selectByTemplateName(assessmentTemplatePage);
+		if(assessmentTemplateVo != null){
+			logger.info("[考核模板]考勤名称已存在");
+			throw new JnSpringCloudException(AssessmentManageExceptionEnums.ASSESSMENT_TEMPLATE_EXIST);
+		}
+		
 		TbManpowerAssessmentTemplate tbManpowerAssessmentTemplate = new TbManpowerAssessmentTemplate();
 		tbManpowerAssessmentTemplate.setTemplateId(UUID.randomUUID().toString());
 		tbManpowerAssessmentTemplate.setTemplateName(assessmentTemplatePage.getTemplateName());
-		tbManpowerAssessmentTemplate.setRecordStatus(Byte.parseByte(attendanceManageStatusEnums.SIGN_NORMAL.getCode()));
+		tbManpowerAssessmentTemplate.setRecordStatus(Byte.parseByte(AttendanceManageStatusEnums.SIGN_NORMAL.getCode()));
 		tbManpowerAssessmentTemplateMapper.insert(tbManpowerAssessmentTemplate);
 		logger.info("[考核模板]新增模板成功！");
 		List<AssessmentTemplateDetailAdd> recordList = assessmentTemplatePage.getRecordList();
@@ -394,6 +428,7 @@ public class AssessmentManagementServiceImpl implements AssessmentManagementServ
 
 	@Override
 	@ServiceLog(doAction = "删除考核模板")
+	@Transactional(rollbackFor = Exception.class)
 	public String deleteAssessmentTemplate(AssessmentTemplatePage assessmentTemplatePage) {
 		// TODO Auto-generated method stub
 		assessmentTemplateMapper.updateByTemplateId(assessmentTemplatePage);
@@ -411,6 +446,14 @@ public class AssessmentManagementServiceImpl implements AssessmentManagementServ
 		assessmentTemplateVo.setTemplateId(tbManpowerAssessmentTemplate.getTemplateId());
 		assessmentTemplateVo.setTemplateName(tbManpowerAssessmentTemplate.getTemplateName());
 		List<AssessmentTemplateDetailVo> templateDetailList = assessmentTemplateDetailMapper.selectByTemplateId(assessmentTemplatePage.getTemplateId());
+		for(AssessmentTemplateDetailVo detail : templateDetailList){
+			Result result = systemClient.selectDeptByParentId(detail.getLeadAssessmentDepartment(), false);
+			if(result==null || !"0000".equals(result.getCode()) || result.getData()==null){
+	            throw new JnSpringCloudException(HrExceptionEnums.DEPARTMENT_QUERY_ERRPR);
+	        }
+	        Map<String,String>  departMap= (HashMap<String, String>)result.getData();
+			detail.setLeadAssessmentDepartment(departMap.get("departmentName"));
+		}
 		assessmentTemplateVo.setRecordList(templateDetailList);
 		return assessmentTemplateVo;
 	}

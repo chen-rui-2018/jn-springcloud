@@ -1,5 +1,5 @@
 <!--pages/meeting/meetingRoomDetail/meetingRoomDetail.wxml-->
-<nav-bar navbar-data='{{nvabarData}}'></nav-bar>
+<!-- <nav-bar navbar-data='{{nvabarData}}'></nav-bar> -->
 <!-- 会议室详情 -->
 <view class="room_detail">
   <swiper class="screen-swiper round-dot" indicator-dots="true" circular="true" autoplay="true" interval="5000" duration="500">
@@ -31,7 +31,7 @@
 </view>
 <!-- 会议列表 -->
 <view class="meetingList">
-  <block wx:for="{{meetingList}}">
+  <block wx:for="{{meetingList}}" wx:key="index">
     <view class="meeting_li" bindtap="goAttendence" data-id="{{item.id}}">
       <view class="li_left" >
         <view class="begin_time">{{item.startTime}}</view>
@@ -40,7 +40,7 @@
       <view class="li_right" >
         <view class="right_title">
           <text>{{item.title}} </text>
-          <text>1小时</text>
+          <text>{{item.meetingTime}}小时</text>
         </view>
         <view class="gray">
           预约人：{{item.organizationalUser}}

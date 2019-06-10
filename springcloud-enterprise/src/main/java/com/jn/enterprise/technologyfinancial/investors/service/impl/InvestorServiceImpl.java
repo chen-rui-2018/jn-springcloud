@@ -3,6 +3,7 @@ package com.jn.enterprise.technologyfinancial.investors.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
@@ -18,8 +19,14 @@ import com.jn.enterprise.technologyfinancial.investors.entity.*;
 import com.jn.enterprise.technologyfinancial.investors.model.*;
 import com.jn.enterprise.technologyfinancial.investors.service.InvestorService;
 import com.jn.enterprise.technologyfinancial.investors.vo.InvestorInfoDetailsVo;
+import com.jn.enterprise.utils.IBPSFileUtils;
 import com.jn.enterprise.utils.IBPSUtils;
+import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.SysRole;
+import com.jn.system.model.User;
+import com.jn.system.vo.SysUserRoleVO;
+import com.jn.user.enums.HomeRoleEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -28,10 +35,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * 科技金融投资人
@@ -73,6 +77,10 @@ public class InvestorServiceImpl implements InvestorService {
 
     @Autowired
     private TbServiceMainRoundMapper tbServiceMainRoundMapper;
+
+    @Autowired
+    private SystemClient systemClient;
+
     /**
      * 投资人认证流程id
      */
@@ -112,6 +120,13 @@ public class InvestorServiceImpl implements InvestorService {
                     investorInfoListParam.getRows() == 0 ? 15 : investorInfoListParam.getRows(), true);
         }
         List<InvestorInfoListShow> investorInfoList = investorMapper.getInvestorInfoList(investorInfoListParam.getMainCode(), investorInfoListParam.getKeyWords());
+
+        // 处理图片格式
+        if (investorInfoList != null && !investorInfoList.isEmpty()) {
+            for (InvestorInfoListShow infoListShow : investorInfoList) {
+                infoListShow.setAvatar(IBPSFileUtils.getFilePath(infoListShow.getAvatar()));
+            }
+        }
         return new PaginationData(investorInfoList, objects == null ? 0 : objects.getTotal());
     }
 
@@ -131,7 +146,12 @@ public class InvestorServiceImpl implements InvestorService {
             throw new JnSpringCloudException(InvestorExceptionEnum.INVESTOR_INFO_NOT_EXIST);
         }
         InvestorBaseInfoShow investorBaseInfoShow=new InvestorBaseInfoShow();
-        BeanUtils.copyProperties(tbServiceInvestorList.get(0), investorBaseInfoShow);
+
+        // 处理图片格式
+        TbServiceInvestor tbServiceInvestor = tbServiceInvestorList.get(0);
+        tbServiceInvestor.setAvatar(IBPSFileUtils.getFilePath(tbServiceInvestor.getAvatar()));
+        BeanUtils.copyProperties(tbServiceInvestor, investorBaseInfoShow);
+
         //设置投资人基本信息
         investorInfoDetailsVo.setInvestorBaseInfoShow(investorBaseInfoShow);
         //投资人主投领域
@@ -367,6 +387,10 @@ public class InvestorServiceImpl implements InvestorService {
             investorInfoWorkFlow.setTb_service_investor_edu_exp(eduExpList);
         }
         logger.info("投资人认证信息：{}",investorInfoWorkFlow.toString());
+
+        // 处理图片格式
+        investorInfoWorkFlow.setAvatar(IBPSFileUtils.uploadFile2Json(investorAccount, investorInfoWorkFlow.getAvatar()));
+
         //启动工作流
         IBPSResult ibpsResult = IBPSUtils.startWorkFlow(investorProcessId, investorAccount, investorInfoWorkFlow);
         String okStatus="200";
@@ -528,13 +552,17 @@ public class InvestorServiceImpl implements InvestorService {
 
     /**
      * 设置投资人基本信息
-     * @param investorAuthenticateParam
+     * @param investorParam
      * @param investorAccount
      * @param investorInfoWorkFlow
      */
     @ServiceLog(doAction = "设置投资人基本信息")
-    private void setAdvisorBaseInfo(InvestorAuthenticateParam investorAuthenticateParam, String investorAccount, InvestorInfoWorkFlow investorInfoWorkFlow) {
-        BeanUtils.copyProperties(investorAuthenticateParam, investorInfoWorkFlow);
+    private void setAdvisorBaseInfo(InvestorAuthenticateParam investorParam, String investorAccount, InvestorInfoWorkFlow investorInfoWorkFlow) {
+        BeanUtils.copyProperties(investorParam, investorInfoWorkFlow);
+        //设置投资人头像
+        if(StringUtils.isNotBlank(investorParam.getAvatar())){
+            IBPSFileUtils.uploadFile2Json(investorAccount,investorParam.getAvatar());
+        }
         //投资人编号
         investorInfoWorkFlow.setInvestorCode(getInvestorCode());
         //投资人账号
@@ -763,5 +791,69 @@ public class InvestorServiceImpl implements InvestorService {
             resultList.add(investorMainRound);
         }
         return resultList;
+    }
+
+    /**
+     * 添加投资人角色
+     * @param investorAccount
+     * @return
+     */
+    @ServiceLog(doAction = "添加投资人角色")
+    @Override
+    public int addInvestorRole(String investorAccount) {
+        if(StringUtils.isBlank(investorAccount)){
+            logger.warn("添加投资人角色失败，失败原因：投资人账号不能为空");
+            throw new JnSpringCloudException(InvestorExceptionEnum.NETWORK_ANOMALY);
+        }
+        //判断当前账号在系统中是否存在
+        User user=new User();
+        user.setAccount(investorAccount);
+        Result<User> userResult = systemClient.getUser(user);
+        if(userResult==null || userResult.getData()==null){
+            logger.warn("添加投资人角色失败，失败原因：投资人账号在系统中不存在");
+            throw new JnSpringCloudException(InvestorExceptionEnum.NETWORK_ANOMALY);
+        }
+        Result<SysRole> addSysRoleResult = systemClient.getRoleByName(HomeRoleEnum.INVESTOR_USER.getCode());
+        Result<SysRole> delSysRoleResult = systemClient.getRoleByName(HomeRoleEnum.NORMAL_USER.getCode());
+        if(addSysRoleResult==null ||addSysRoleResult.getData()==null
+                ||delSysRoleResult==null || delSysRoleResult.getData()==null){
+            logger.warn("添加投资人角色失败，失败原因：无法获取“投资人”、“普通用户”角色信息，请确认系统服务是否正常，且“投资人”、“普通用户”角色在系统中存在");
+            throw new JnSpringCloudException(InvestorExceptionEnum.NETWORK_ANOMALY);
+        }
+        //更新用户角色
+        Result<Boolean> booleanResult = updateUserRoleInfo(user, addSysRoleResult,delSysRoleResult);
+        if(booleanResult.getData()==true){
+            return 1;
+        }else{
+            logger.warn("添加投资人角色失败，失败原因：更新用户角色为“投资人”失败");
+            throw new JnSpringCloudException(InvestorExceptionEnum.NETWORK_ANOMALY);
+        }
+    }
+
+    /**
+     * 更新用户角色
+     * @param user
+     * @param addSysRoleResult
+     * @param delSysRoleResult
+     * @return
+     */
+    @ServiceLog(doAction = "更新用户角色")
+    @Override
+    public Result<Boolean> updateUserRoleInfo(User user, Result<SysRole> addSysRoleResult,Result<SysRole> delSysRoleResult) {
+        SysUserRoleVO sysUserRoleVO=new SysUserRoleVO();
+        //新增角色
+        Set<String> addRoleId=new HashSet<>();
+        if(addSysRoleResult!=null){
+            addRoleId.add(addSysRoleResult.getData().getId());
+        }
+        //修改角色
+        Set<String>delRoleId=new HashSet<>();
+        if(delSysRoleResult!=null){
+            delRoleId.add(delSysRoleResult.getData().getId());
+        }
+        sysUserRoleVO.setAddRoleId(addRoleId);
+        sysUserRoleVO.setDeleRoleIds(delRoleId);
+        sysUserRoleVO.setUser(user);
+        return systemClient.updateUserRole(sysUserRoleVO);
     }
 }

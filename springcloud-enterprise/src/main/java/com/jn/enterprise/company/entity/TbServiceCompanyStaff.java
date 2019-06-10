@@ -24,6 +24,8 @@ public class TbServiceCompanyStaff implements Serializable {
 
     private Date inviteTime;
 
+    private String joinPattern;
+
     private Date createdTime;
 
     private String creatorAccount;
@@ -116,6 +118,14 @@ public class TbServiceCompanyStaff implements Serializable {
         this.inviteTime = inviteTime;
     }
 
+    public String getJoinPattern() {
+        return joinPattern;
+    }
+
+    public void setJoinPattern(String joinPattern) {
+        this.joinPattern = joinPattern == null ? null : joinPattern.trim();
+    }
+
     public Date getCreatedTime() {
         return createdTime;
     }
@@ -178,6 +188,7 @@ public class TbServiceCompanyStaff implements Serializable {
             && (this.getInviteStatus() == null ? other.getInviteStatus() == null : this.getInviteStatus().equals(other.getInviteStatus()))
             && (this.getInviterAccount() == null ? other.getInviterAccount() == null : this.getInviterAccount().equals(other.getInviterAccount()))
             && (this.getInviteTime() == null ? other.getInviteTime() == null : this.getInviteTime().equals(other.getInviteTime()))
+            && (this.getJoinPattern() == null ? other.getJoinPattern() == null : this.getJoinPattern().equals(other.getJoinPattern()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
@@ -199,6 +210,7 @@ public class TbServiceCompanyStaff implements Serializable {
         result = prime * result + ((getInviteStatus() == null) ? 0 : getInviteStatus().hashCode());
         result = prime * result + ((getInviterAccount() == null) ? 0 : getInviterAccount().hashCode());
         result = prime * result + ((getInviteTime() == null) ? 0 : getInviteTime().hashCode());
+        result = prime * result + ((getJoinPattern() == null) ? 0 : getJoinPattern().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
@@ -223,6 +235,7 @@ public class TbServiceCompanyStaff implements Serializable {
         sb.append(", inviteStatus=").append(inviteStatus);
         sb.append(", inviterAccount=").append(inviterAccount);
         sb.append(", inviteTime=").append(inviteTime);
+        sb.append(", joinPattern=").append(joinPattern);
         sb.append(", createdTime=").append(createdTime);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", modifiedTime=").append(modifiedTime);

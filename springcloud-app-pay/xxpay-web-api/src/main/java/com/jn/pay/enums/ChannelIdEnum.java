@@ -19,8 +19,8 @@ public enum ChannelIdEnum implements CodeAndMsg {
     ALIPAY_MOBILE("ALIPAY_MOBILE", "支付宝移动支付"),
     ALIPAY_PC("ALIPAY_PC", "支付宝PC支付"),
     ALIPAY_WAP("ALIPAY_WAP", "支付宝H5支付"),
-    ALIPAY_QR("ALIPAY_QR", "支付宝当面付之扫码支付");
-
+    ALIPAY_QR("ALIPAY_QR", "支付宝当面付之扫码支付"),
+    WX_PROGRAM("WX_PROGRAM","微信小程序支付");
     private String code;
     private String message;
 

@@ -1,5 +1,6 @@
 package com.jn.server;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
@@ -15,6 +16,8 @@ import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,6 +33,7 @@ import java.util.List;
  */
 @RestController
 public class PayServerController extends BaseController implements PayClient {
+    private static final Logger logger = LoggerFactory.getLogger(PayServerController.class);
 
     @Autowired
     private MyPayBillService myPayBillService;
@@ -54,8 +58,7 @@ public class PayServerController extends BaseController implements PayClient {
         Assert.notNull(payCheckReminderParam.getBillId(),"账单ID或编号不能为空");
         Assert.notNull(payCheckReminderParam.getReminderNumber(),"催缴次数不能为空");
         Assert.notNull(payCheckReminderParam.getModifiedReminderTime(),"最新催缴时间不能为空");
-        myPayBillService.updateBillNumber(payCheckReminderParam);
-        return new Result();
+        return new Result(myPayBillService.updateBillNumber(payCheckReminderParam));
     }
 
     @ControllerLog(doAction = "我的账单-核查提醒录入")
@@ -63,8 +66,7 @@ public class PayServerController extends BaseController implements PayClient {
     public Result billCheckReminder(@RequestBody PayCheckReminder payCheckReminder) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        myPayBillService.billCheckReminder(payCheckReminder,user);
-        return new Result();
+        return new Result( myPayBillService.billCheckReminder(payCheckReminder,user));
     }
 
     @ControllerLog(doAction = "我的账单-创建账单")
@@ -77,7 +79,7 @@ public class PayServerController extends BaseController implements PayClient {
         Assert.notNull(payBillCreateParamVo.getBillId(),"账本编号不能为空");
         Assert.notNull(payBillCreateParamVo.getLatePayment(),"最迟缴费时间不能为空");
         Assert.notNull(payBillCreateParamVo.getObjType(),"对象类型不能为空");
-        Result result=myPayBillService.billCreate(payBillCreateParamVo,user);
+        Result result=myPayBillService.billCreate(payBillCreateParamVo);
         return result;
     }
 
@@ -85,12 +87,13 @@ public class PayServerController extends BaseController implements PayClient {
     @Override
     public Result<PayOrderRsp> createOrderAndPay(@RequestBody CreateOrderAndPayReqModel createOrderAndPayReqModel) {
         User user=(User) SecurityUtils.getSubject().getPrincipal();
-        return new Result(myPayBillService.startPayment(createOrderAndPayReqModel,user));
+        return myPayBillService.startPayment(createOrderAndPayReqModel,user);
     }
 
     @ControllerLog(doAction = "支付回调接口")
     @Override
     public Result payCallBack(@RequestBody PayOrderNotify callBackParam) {
+        logger.info("进入-支付回调接口，param:{}", JSONObject.toJSONString(callBackParam));
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         return new Result(myPayBillService.payCallBack(callBackParam,user));
     }

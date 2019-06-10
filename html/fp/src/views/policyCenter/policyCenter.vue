@@ -57,6 +57,7 @@
         <span class="mainColor">政策中心</span>
       </div>
       <div class="serverOrgNav w mainBorder" v-if="tableType=='allPolicy'">
+        <div class="policynav">
         <div class="nav1 clearfix">
           <div class="nav1Tit fl">政策级别：</div>
           <ul class="nav1Ul fl clearfix" style="width:auto;">
@@ -112,6 +113,7 @@
             <i class="el-icon-arrow-up" v-else @click="flag4 = !flag4"></i>
           </div>
         </div>
+        </div>
       </div>
       <div class="policyTab  w">
         <div class="pr">
@@ -130,7 +132,7 @@
           <el-tab-pane label="政策一览" name="first">
             <ul class="fir">
               <li class="clearfix" v-for="(i,k) in policyCenterList" :key="k">
-                <div class="fir1 fl" @click="$router.push({path:'/policyGuide',query:{policyId:i.policyId}})">
+                <div class="fir1 fl pointer" @click="$router.push({path:'/policyGuide',query:{policyId:i.policyId}})">
                   <h3 class="color4">{{i.policyTitle}}</h3>
                   <p class="p1">
                     <span>阅读次数：
@@ -632,11 +634,12 @@ export default {
       }
     }
     .serverOrgNav {
-      padding: 0 20px;
       font-size: 13px;
       margin-bottom: 20px;
       text-align: center;
-
+     .policynav{
+       padding:0 20px;
+     }
       .nav1 {
         padding: 15px 0;
         border-bottom: 1px solid #eee;
@@ -699,6 +702,7 @@ export default {
         position: absolute;
         right: 265px;
         top: 5px;
+        font-size: 15px;
         // z-index:4;
       }
       .filRight {
@@ -717,6 +721,31 @@ export default {
           border: 0;
           height: 100%;
           width: 95%;
+        }
+           input::-webkit-input-placeholder {
+          /* WebKit browsers*/
+          color: #999;
+          font-size: 13px;
+        }
+    
+        input:-moz-placeholder {
+          /* Mozilla Firefox 4 to 18*/
+          color: #999;
+          font-size: 13px;
+        }
+    
+    
+        input::-moz-placeholder {
+          /* Mozilla Firefox 19+*/
+          color: #999;
+          font-size: 13px;
+        }
+    
+    
+        input:-ms-input-placeholder {
+          /* Internet Explorer 10+*/
+          color: #999;
+          font-size: 13px;
         }
 
         input,

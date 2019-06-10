@@ -113,6 +113,7 @@ export default {
     this.getperennialList()// 常年申报
     this.getTypeList()
     this.gettalentsList()
+
     this.scrollBottom()
   },
   methods: {
@@ -137,6 +138,7 @@ export default {
         }
       }
     },
+
     getperennialList () {
       this.api.get({
         url: 'perennialList',
@@ -264,11 +266,13 @@ export default {
                   font-size: 16px;
                   padding-top: 18px;
                   line-height: 29px;
+                  margin-top: 18px;
+                  line-height: 26px;
                   display: -webkit-box;
                   -webkit-box-orient: vertical;
                   -webkit-line-clamp: 2;
                   overflow: hidden;
-                  height: 46px;
+                  height: 48px;
 
                 }
                 p:nth-child(4){
@@ -297,7 +301,7 @@ export default {
     }
     // 大图
     .banner{
-      padding-top: 105px;
+      // padding-top: 105px;
       img{
         width:100%;
       }

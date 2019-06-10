@@ -83,11 +83,12 @@ public interface BusinessPromotionService {
 
     /**
      * 创建账单
-     * @param orderNum      订单号
+     * @param createBillParam      订单号,宣传id
      * @param loginAccount  登录用户账号
+     * @param userName   用户名
      * @return
      */
-    String createBill(String orderNum,String loginAccount);
+    String createBill(CreateBillParam createBillParam,String loginAccount,String userName);
 
     /**
      * 提交审核
@@ -109,4 +110,11 @@ public interface BusinessPromotionService {
      * @return
      */
     PaginationData getBusinessPromotionList(BusinessHomePageParam businessHomePageParam,String loginAccount);
+
+    /**
+     * 根据账单号修改支付状态
+     * @param orderCode    账单号
+     * @return
+     */
+    int updatePayStatus(String orderCode);
 }

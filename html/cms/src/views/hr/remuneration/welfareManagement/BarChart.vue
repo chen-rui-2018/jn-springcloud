@@ -156,7 +156,7 @@ export default {
                   // 组装表头
                   tdHeads += `<td style="padding: 0 10px">${item.name}</td>`
                 })
-                let table = `<table border="1" style="margin-left:20px;border-collapse:collapse;font-size:14px;text-align:center;border-color: #00a0e9"><tbody><tr style="background-color: #1e6abc">${tdHeads} </tr>`
+                let table = `<table border="1" style="margin-left:20px;border-collapse:collapse;font-size:14px;text-align:center;border-color: #00a0e9"><tbody><tr>${tdHeads} </tr>`
                 for (let i = 0, l = axisData.length; i < l; i++) {
                   for (let j = 0; j < series.length; j++) {
                     // 组装表数据
@@ -204,19 +204,23 @@ export default {
         series: [{
           name: '总费用',
           data: this.totalCostValues,
-          type: 'bar'
+          type: 'bar'/*,
+          barWidth: 50*/
         }, {
           name: '公司费用',
           data: this.companyExpenseValues,
-          type: 'bar'
+          type: 'bar'/*,
+          barWidth: 50*/
         }, {
           name: '个人费用',
           data: this.personalExpenseValues,
-          type: 'bar'
+          type: 'bar'/*,
+          barWidth: 50*/
         }, {
           name: '参保人数',
           data: this.insuredPeopleNoValues,
-          type: 'line'
+          type: 'line'/*,
+          barWidth: 50*/
         }]
       })
     }

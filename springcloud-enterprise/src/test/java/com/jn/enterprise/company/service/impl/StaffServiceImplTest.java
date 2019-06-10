@@ -93,7 +93,7 @@ public class StaffServiceImplTest {
     public void setUp() throws Exception {
         // 企业对象封装
         company.setId("2220112212");
-        company.setComName("深圳君南信息系统");
+        company.setComName("南京设计院");
 
         // 用户对象封装
         user.setAccount("wangsong");

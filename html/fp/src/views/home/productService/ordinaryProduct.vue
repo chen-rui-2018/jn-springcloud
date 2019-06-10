@@ -2,12 +2,12 @@
   <div class="ordinaryProduct"  v-loading="loading">
     <div class="ordinary_title">
       <div>常规服务产品</div>
-      <div @click="goputaway()">常规产品上架</div>
+      <div @click="goputaway()" >常规产品上架</div>
     </div>
     <div class="ordinary_main">
       <div class="search">
         <div></div>
-        <el-input placeholder="请输入内容" v-model="sendData.keyWords">
+        <el-input placeholder="服务产品名称" v-model="sendData.keyWords">
           <el-button slot="append" icon="el-icon-search" @click="handlesearch"></el-button>
         </el-input>
       </div>
@@ -70,7 +70,8 @@ export default {
         rows:8
       },
       orgProductList:[],
-      businessType:""
+      businessType:"",
+        isAdd:true
     }
   },
   filters: {
@@ -94,6 +95,19 @@ export default {
   mounted () {
     this.getOrgId()
     // this.getOrgProductList()
+    // let menu=JSON.parse(sessionStorage.menuItems)
+    // let _this=this
+    // menu.forEach(v=>{
+    //   if(v.label==='产品管理'){
+    //     v.children[0].resourcesList.forEach(i=>{
+    //         console.log(i)
+
+    //       if(i.resourcesName==="科技金融上架常规服务产品"){
+    //         _this.isAdd=false
+    //       }
+    //     })
+    //   }
+    // })
   },
   methods: {
     // 获取当前登录id
@@ -146,9 +160,6 @@ export default {
     goputaway(){
       //territory为0是科技金融，为1是非科技金融
         this.$router.push({path:'/servicemarket/product/productService/productPutaway',query:{orgid:this.sendData.orgId}})
-     /*  else if(this.territory===1){
-        this.$router.push({path:'/servicemarket/product/productService/productPutaway',query:{orgid:this.sendData.orgId,territory:1}})
-      } */
     },
     // 去编辑
     goEdit(productId){
@@ -203,14 +214,14 @@ export default {
       justify-content: space-between;
       align-items: center;
       padding:17px;
-      font-size: 13px;
+      font-size: 16px;
       border-radius: 5px;
       div:nth-child(2){
         background-color: #ecfcf2;
         border-radius: 5px;
         border: solid 2px #41d787;
         padding:8px 11px;
-        font-size: 12px;
+        font-size: 14px;
         color:#00a041;
         cursor: pointer;
       }
@@ -232,6 +243,7 @@ export default {
           height: 27px;
           line-height: 27px;
           border: 1px solid #eee;
+          font-size: 12px;
         }
         .el-input-group__append{
           background-color:#00a041;

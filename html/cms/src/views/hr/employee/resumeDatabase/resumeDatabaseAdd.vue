@@ -1,11 +1,11 @@
 <template>
   <div class="addForm">
     <el-card>
-      <el-form ref="addForm" :model="addForm" :rules="rules" label-width="120px">
+      <el-form ref="addForm" :model="addForm" :rules="rules" label-width="120px" validate-on-rule-change>
         <el-row>
           <el-col :span="12">
             <el-form-item label="姓名：" prop="name">
-              <el-input v-model="addForm.name" style="width: 200px" placeholder="请输入姓名" clearable/>
+              <el-input v-model.trim="addForm.name" style="width: 200px" placeholder="请输入姓名" clearable/>
             </el-form-item>
           </el-col>
 
@@ -22,20 +22,16 @@
 
         <el-row>
           <el-col :span="12">
-            <el-form-item label="应聘部门：" prop="departmentId">
-              <el-select
-                v-model="addForm.departmentId"
+            <el-form-item label="部门：" prop="departmentId">
+              <el-cascader
+                ref="departRef"
+                :options="departmentList"
+                v-model="currentDepartmentIds"
+                change-on-select
                 placeholder="请选择"
                 clearable
-                style="width: 200px"
-                class="filter-item">
-                <el-option label="请选择" value=""/>
-                <el-option
-                  v-for="item in departmentList"
-                  :key="item.departmentId"
-                  :label="item.departmentName"
-                  :value="item.departmentId"/>
-              </el-select>
+                @change="handleChangeDepartment"
+              />
             </el-form-item>
           </el-col>
 
@@ -43,7 +39,7 @@
             <el-form-item label="应聘职位：" prop="jobId">
               <el-select v-model="addForm.jobId" placeholder="请选择" clearable style="width: 200px" class="filter-item">
                 <el-option label="请选择" value=""/>
-                <el-option v-for="item in jobList" :key="item.key" :label="item.lable" :value="item.key"/>
+                <el-option v-for="item in jobList" :key="item.id" :label="item.postName" :value="item.id"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -52,13 +48,13 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="个人邮箱：" prop="mailbox">
-              <el-input v-model="addForm.mailbox" style="width: 200px" placeholder="请输入邮箱" clearable/>
+              <el-input v-model.trim="addForm.mailbox" style="width: 200px" placeholder="请输入邮箱" clearable/>
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
             <el-form-item label="手机号码：" prop="phone">
-              <el-input v-model="addForm.phone" style="width: 200px" placeholder="请输入联系电话" clearable/>
+              <el-input v-model.trim="addForm.phone" style="width: 200px" placeholder="请输入联系电话" clearable/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -80,7 +76,7 @@
 
           <el-col :span="12">
             <el-form-item label="毕业院校：" prop="graduaAcademy">
-              <el-input v-model="addForm.graduaAcademy" style="width: 200px" placeholder="请输入毕业院校" clearable/>
+              <el-input v-model.trim="addForm.graduaAcademy" style="width: 200px" placeholder="请输入毕业院校" clearable/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -93,7 +89,8 @@
                 placeholder="请选择"
                 clearable
                 style="width: 200px"
-                class="filter-item">
+                class="filter-item"
+                @change="setCertificateType">
                 <el-option label="请选择" value=""/>
                 <el-option v-for="item in certificateList" :key="item.key" :label="item.lable" :value="item.key"/>
               </el-select>
@@ -102,7 +99,7 @@
 
           <el-col :span="12">
             <el-form-item label="证件号：" prop="certificateNumber">
-              <el-input v-model="addForm.certificateNumber" style="width: 200px" placeholder="请输入证件号"/>
+              <el-input v-model.trim="addForm.certificateNumber" style="width: 200px" placeholder="请输入证件号"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -149,14 +146,18 @@ import {
   addResumeDatabase, updateResumeDatabase, getResumeDatabaseById
 } from '@/api/hr/resumeDatabase'
 import {
-  getDepartMents, getCode, isvalidName, isvalidMobile, isvalidZjhm, uploadUrl
+  getCode, isvalidName, isvalidMobile, uploadUrl, setChild, findNodeById, findP, isvalidZjhm, getApi
 } from '@/api/hr/util'
+
+import {
+  api
+} from '@/api/axios'
 
 export default {
   data() {
     var checkName = (rule, value, callback) => {
       if (!isvalidName(value)) {
-        callback(new Error('姓名只允许数字、中文、字母及下划线'))
+        callback(new Error('只允许数字、中文、字母及下划线'))
       } else {
         callback()
       }
@@ -170,15 +171,61 @@ export default {
         callback()
       }
     }
-    var checkZjhm = (rule, value, callback) => {
-      if (!isvalidZjhm(value)) {
-        callback(new Error('请输入正确的证件号码'))
+    var checkPhoneExist = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('请输入号码'))
       } else {
-        callback()
+        getApi('hr/resumeData/checkPhoneExist', { phone: value, id: this.addForm.id }).then(res => {
+          if (res.data && res.data.code === '0000' && !res.data.data) {
+            callback(new Error('号码在简历库中已经存在'))
+          } else {
+            callback()
+          }
+        }).catch(error => {
+          console.log(error)
+          callback(new Error('校验号码是否存在简历库失败'))
+        })
+      }
+    }
+    var checkMailboxExist = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('请输入邮箱'))
+      } else {
+        getApi('hr/resumeData/checkMailboxExist', { mailbox: value, id: this.addForm.id }).then(res => {
+          if (res.data && res.data.code === '0000' && !res.data.data) {
+            callback(new Error('邮箱在简历库中已经存在'))
+          } else {
+            callback()
+          }
+        }).catch(error => {
+          console.log(error)
+          callback(new Error('校验邮箱是否存在简历库失败'))
+        })
+      }
+    }
+    var checkCertificateNumberExist = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('请输入证件号码'))
+      } else {
+        getApi('hr/resumeData/checkCertificateNumberExist', { certificateNumber: value, id: this.addForm.id }).then(res => {
+          if (res.data && res.data.code === '0000' && !res.data.data) {
+            callback(new Error('证件号码在简历库中已经存在'))
+          } else {
+            callback()
+          }
+        }).catch(error => {
+          console.log(error)
+          callback(new Error('校验证件号码是否存在简历库失败'))
+        })
       }
     }
 
     return {
+      nodes: [],
+      pNodes: [],
+      currentDepartmentIds: [],
+      departmentOptions: [],
+      departmentListLoading: false,
       importHeaders: {
         enctype: 'multipart/form-data',
         token: getToken()
@@ -198,8 +245,10 @@ export default {
         departmentId: [{ required: true, message: '请选择应聘部门', trigger: 'change' }],
         jobId: [{ required: true, message: '请选择应聘职位', trigger: 'change' }],
         mailbox: [{ required: true, message: '请输入个人邮箱', trigger: 'blur' },
-          { type: 'email', message: '请正确输入个人邮箱', trigger: 'blur' }],
-        phone: [{ required: true, message: '请输入手机号码', trigger: 'blur' }, { validator: validMobile, trigger: 'blur' }],
+          { type: 'email', message: '请正确输入个人邮箱', trigger: 'blur' },
+          { validator: checkMailboxExist, trigger: 'blur' }],
+        phone: [{ required: true, message: '请输入手机号码', trigger: 'blur' }, { validator: validMobile, trigger: 'blur' },
+          { validator: checkPhoneExist, trigger: 'blur' }],
         educationId: [{ required: true, message: '请选择学历', trigger: 'change' }],
         graduaAcademy: [{ required: true, message: '请输入毕业院校', trigger: 'blur' }, {
           validator: checkName,
@@ -207,9 +256,10 @@ export default {
         }],
         certificateId: [{ required: true, message: '请选择证件类型', trigger: 'change' }],
         certificateNumber: [{ required: true, message: '请选择证件号', trigger: 'blur' }, {
-          validator: checkZjhm,
+          validator: this.checkZjhm,
           trigger: 'blur'
-        }]
+        },
+        { validator: checkCertificateNumberExist, trigger: 'blur' }]
       },
       addForm: {
         name: '',
@@ -229,7 +279,16 @@ export default {
         resumeInfo: '',
         id: ''
 
-      }
+      },
+      checkZjhm: undefined
+    }
+  },
+  watch: {
+    'addForm.certificateType': {
+      handler(newValue, oldValue) {
+        this.initCheckZjhm()
+      },
+      deep: true
     }
   },
   created() {
@@ -237,6 +296,36 @@ export default {
     this.initList()
   },
   methods: {
+    setCertificateType() {
+      const certificate = this.certificateList.find(item => item.key === this.addForm.certificateId)
+      if (certificate) {
+        this.addForm.certificateType = certificate['lable']
+      }
+    },
+    initCheckZjhm() {
+      const reg = /^\w{5,18}$/i
+      if (this.addForm.certificateType === '身份证') {
+        this.checkZjhm = (rule, value, callback) => {
+          if (!isvalidZjhm(value)) {
+            callback(new Error('请输入正确的证件号码'))
+          } else {
+            callback()
+          }
+        }
+      } else {
+        this.checkZjhm = (rule, value, callback) => {
+          if (!reg.test(value)) {
+            callback(new Error('请输入正确的证件号码'))
+          } else {
+            callback()
+          }
+        }
+      }
+      this.rules.certificateNumber.splice(1, 1, {
+        validator: this.checkZjhm,
+        trigger: 'blur'
+      })
+    },
     handlePreview(file) {
       const link = document.createElement('a')
       link.setAttribute('href', file.url)
@@ -263,7 +352,6 @@ export default {
       this.fileList = fileList
     },
     beforeUpload(file) {
-      console.log('before:' + file)
       const isLt6M = file.size / 1024 / 1024 < 6
 
       if (!isLt6M) {
@@ -272,7 +360,6 @@ export default {
       return isLt6M
     },
     handleSuccess(response, file, fileList) {
-      console.log('success:' + response)
       let flag = false
       if (response.code === '0000') {
         if (response.data && response.data !== '[]') {
@@ -304,23 +391,17 @@ export default {
       const that = this
       this.$refs['addForm'].validate(valid => {
         if (valid) {
-          console.log('*****====' + this)
-          const depart = that.departmentList.find(item => item.departmentId === that.addForm.departmentId)
-          if (depart) {
-            that.addForm.departmentName = depart['departmentName']
-          }
-
-          const job = that.jobList.find(item => item.key === that.addForm.jobId)
+          const job = that.jobList.find(item => item.id === that.addForm.jobId)
           if (job) {
-            that.addForm.jobName = job['lable']
+            that.addForm.jobName = job['postName']
           }
 
-          const education = that.jobList.find(item => item.key === that.addForm.educationId)
+          const education = that.educationList.find(item => item.key === that.addForm.educationId)
           if (education) {
             that.addForm.educationName = education['lable']
           }
 
-          const certificate = that.jobList.find(item => item.key === that.addForm.certificateId)
+          const certificate = that.certificateList.find(item => item.key === that.addForm.certificateId)
           if (certificate) {
             that.addForm.certificateType = certificate['lable']
           }
@@ -345,22 +426,17 @@ export default {
       this.isDisabled = true
       this.$refs['addForm'].validate(valid => {
         if (valid) {
-          const depart = this.departmentList.find(item => item.departmentId === this.addForm.departmentId)
-          if (depart) {
-            this.addForm.departmentName = depart['departmentName']
-          }
-
-          const job = this.jobList.find(item => item.key === this.addForm.jobId)
+          const job = this.jobList.find(item => item.id === this.addForm.jobId)
           if (job) {
-            this.addForm.jobName = job['lable']
+            this.addForm.jobName = job['postName']
           }
 
-          const education = this.jobList.find(item => item.key === this.addForm.educationId)
+          const education = this.educationList.find(item => item.key === this.addForm.educationId)
           if (education) {
             this.addForm.educationName = education['lable']
           }
 
-          const certificate = this.jobList.find(item => item.key === this.addForm.certificateId)
+          const certificate = this.certificateList.find(item => item.key === this.addForm.certificateId)
           if (certificate) {
             this.addForm.certificateType = certificate['lable']
           }
@@ -390,6 +466,18 @@ export default {
         getResumeDatabaseById(query.id).then(res => {
           if (res.data.code === '0000') {
             this.addForm = res.data.data
+
+            setChild(this.nodes, this.departmentList)
+            const currNode = findNodeById(this.nodes, this.addForm.departmentId)
+            this.pNodes.push(currNode)
+            findP(this.nodes, currNode, this.pNodes)
+            this.pNodes.reverse()
+            const arr = []
+            this.pNodes.forEach(item => {
+              arr.push(item.id)
+            })
+            this.currentDepartmentIds = arr
+
             if (this.addForm.resumeInfo && this.addForm.resumeInfo !== '') {
               var obj = {}
               const index = this.addForm.resumeInfo.lastIndexOf('\/')
@@ -398,27 +486,40 @@ export default {
               this.$set(obj, 'url', this.addForm.resumeInfo)
               this.fileList.push(obj)
             }
+
+            this.initCheckZjhm()
           } else {
             this.$message.error(res.data.result)
           }
         })
       }
     },
-    initSelect() {
-      getDepartMents().then(res => {
-        if (res.data.code === '0000') {
+    handleChangeDepartment(value) {
+      this.addForm.departmentId = this.currentDepartmentIds[this.currentDepartmentIds.length - 1]
+      const arr = this.$refs['departRef'].currentLabels
+      this.addForm.departmentName = arr[arr.length - 1]
+    },
+    getAllDepartment() {
+      this.departmentListLoading = true
+      api(`${this.GLOBAL.systemUrl}system/sysDepartment/findDepartmentAllByLevel`, '', 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.departmentList = res.data.data
         } else {
           this.$message.error(res.data.result)
         }
+        this.departmentListLoading = false
       })
-      getCode({ 'groupCode': 'job', 'parentGroupCode': 'employee', 'moduleCode': 'springcloud_hr' }).then(res => {
-        if (res.data.code === '0000') {
+    },
+    initSelect() {
+      this.getAllDepartment()
+      api(`${this.GLOBAL.systemUrl}system/sysPost/findSysPostAll`, '', 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.jobList = res.data.data
         } else {
           this.$message.error(res.data.result)
         }
       })
+
       getCode({ 'groupCode': 'education', 'parentGroupCode': 'employee', 'moduleCode': 'springcloud_hr' }).then(res => {
         if (res.data.code === '0000') {
           this.educationList = res.data.data

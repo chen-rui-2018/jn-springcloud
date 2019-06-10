@@ -94,7 +94,7 @@ public class ElectricClientController implements ElectricMeterClient {
      * @return
      */
     @Override
-    public Result<ElectricMeterStatusShow> getElectricMeterStatus(@ApiParam(name = "code",value = "仪表编号",example = "10086",required = true) String code) {
+    public Result<ElectricMeterStatusShow> getElectricMeterStatus(@RequestBody String code) {
         return electricMeterService.getElectricMeterStatus(code);
     }
 

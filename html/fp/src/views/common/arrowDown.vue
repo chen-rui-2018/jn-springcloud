@@ -26,7 +26,7 @@ export default {
   .arrow-down-bg {
     height: $ize;
     &.line {
-      border-top: 1px solid #eee;
+      /*border-top: 1px solid #eee;*/
       width: 100%;
       @include flex-center;
     }

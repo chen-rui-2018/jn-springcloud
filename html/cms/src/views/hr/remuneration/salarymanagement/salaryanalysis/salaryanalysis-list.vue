@@ -24,7 +24,7 @@
         <div style="height:66px; width: 230px;">
           <span style="height: 100%;width: 100px;line-height: 15px;display:  inline-block;">
             <p style="color: #666666">应发工资总计</p>
-            <p>{{ salaryAnalysis.deserveWage }}人</p>
+            <p>{{ salaryAnalysis.deserveWage }}元</p>
           </span>
           <span style="width: 120px;float: right;line-height: 66px;display:inline-block;color: #666666">
             环比{{ salaryAnalysis.lastDeserveWage }}
@@ -37,7 +37,7 @@
         <div style="height:66px; width: 250px;">
           <span style="height: 100%;width: 120px;line-height: 15px;display:  inline-block;">
             <p style="color: #666666">实际工资总计</p>
-            <p>{{ salaryAnalysis.realWage }}人</p>
+            <p>{{ salaryAnalysis.realWage }}元</p>
           </span>
           <span style="width: 120px;float: right;line-height: 66px;display:inline-block;color: #666666">
             环比{{ salaryAnalysis.lastRealWage }}
@@ -46,19 +46,19 @@
           </span>
         </div>
       </el-col>
-      <!--<el-col :span="6">
+      <el-col :span="6">
         <div style="height:66px; width: 250px;">
           <span style="height: 100%;line-height: 15px;width: 120px;display:  inline-block;">
             <p style="color: #666666">月度人力成本</p>
-            <p>33人</p>
+            <p>{{ salaryAnalysis.realWage }}元</p>
           </span>
           <span style="width: 120px;float: right;line-height: 66px;display:inline-block; color: #666666">
-            环比+9%
-            <img src="@/assets/images/up.png" v-if="imgs.monthlyLaborCostUpPng" style="height: 20px;width: 10px;" alt="图片">
-            <img src="@/assets/images/down.png" v-if="imgs.monthlyLaborCostDownPng" style="height: 20px;width: 10px;" alt="图片">
+            环比{{ salaryAnalysis.lastRealWage }}
+            <img v-if="imgs.realWageNumberUpPng" src="@/assets/images/up.png" style="height: 20px;width: 10px;" alt="图片">
+            <img v-if="imgs.realWageNumberDownPng" src="@/assets/images/down.png" style="height: 20px;width: 10px;" alt="图片">
           </span>
         </div>
-      </el-col>-->
+      </el-col>
     </el-row>
     <el-row :gutter="32" style="margin-top: 20px;">
       <el-col :xs="40" :sm="40" :lg="11">
@@ -127,6 +127,7 @@ export default {
   },
   watch: {
     'listQuery.accountEntryTime': function() {
+      this.listQuery.page = 1
       this.initList()
     }
   },
@@ -158,25 +159,34 @@ export default {
           if (res.data.data.lastNumber.indexOf('+') !== -1) {
             this.imgs.wageNumberUpPng = true
             this.imgs.wageNumberDownPng = false
-          } else {
+          } else if (res.data.data.lastNumber.indexOf('-') !== -1) {
             this.imgs.wageNumberUpPng = false
             this.imgs.wageNumberDownPng = true
+          } else {
+            this.imgs.wageNumberUpPng = false
+            this.imgs.wageNumberDownPng = false
           }
           this.salaryAnalysis.lastDeserveWage = res.data.data.lastDeserveWage
           if (res.data.data.lastDeserveWage.indexOf('+') !== -1) {
             this.imgs.deserveWageNumberUpPng = true
             this.imgs.deserveWageNumberDownPng = false
-          } else {
+          } else if (res.data.data.lastDeserveWage.indexOf('-') !== -1) {
             this.imgs.deserveWageNumberUpPng = false
             this.imgs.deserveWageNumberDownPng = true
+          } else {
+            this.imgs.deserveWageNumberUpPng = false
+            this.imgs.deserveWageNumberDownPng = false
           }
           this.salaryAnalysis.lastRealWage = res.data.data.lastRealWage
           if (res.data.data.lastRealWage.indexOf('+') !== -1) {
             this.imgs.realWageNumberUpPng = true
             this.imgs.realWageNumberDownPng = false
-          } else {
+          } else if (res.data.data.lastRealWage.indexOf('-') !== -1) {
             this.imgs.realWageNumberUpPng = false
             this.imgs.realWageNumberDownPng = true
+          } else {
+            this.imgs.realWageNumberUpPng = false
+            this.imgs.realWageNumberDownPng = false
           }
         } else {
           this.$message.error(res.data.result)

@@ -28,6 +28,9 @@ public class TbParkingSpaceRental implements Serializable {
     /*@ApiModelProperty("车主账号")*/
     private String account;
 
+    /*@ApiModelProperty("用户对应企业Id(通过该字段校验某个企业税收免费对应数)")*/
+    private String companyId;
+
     /*@ApiModelProperty("车主姓名")*/
     private String name;
 
@@ -152,6 +155,14 @@ public class TbParkingSpaceRental implements Serializable {
 
     public void setAccount(String account) {
         this.account = account == null ? null : account.trim();
+    }
+
+    public String getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId == null ? null : companyId.trim();
     }
 
     public String getName() {
@@ -334,6 +345,7 @@ public class TbParkingSpaceRental implements Serializable {
             && (this.getParkingInfo() == null ? other.getParkingInfo() == null : this.getParkingInfo().equals(other.getParkingInfo()))
             && (this.getCarLicense() == null ? other.getCarLicense() == null : this.getCarLicense().equals(other.getCarLicense()))
             && (this.getAccount() == null ? other.getAccount() == null : this.getAccount().equals(other.getAccount()))
+            && (this.getCompanyId() == null ? other.getCompanyId() == null : this.getCompanyId().equals(other.getCompanyId()))
             && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
             && (this.getPhone() == null ? other.getPhone() == null : this.getPhone().equals(other.getPhone()))
             && (this.getRentPrice() == null ? other.getRentPrice() == null : this.getRentPrice().equals(other.getRentPrice()))
@@ -368,6 +380,7 @@ public class TbParkingSpaceRental implements Serializable {
         result = prime * result + ((getParkingInfo() == null) ? 0 : getParkingInfo().hashCode());
         result = prime * result + ((getCarLicense() == null) ? 0 : getCarLicense().hashCode());
         result = prime * result + ((getAccount() == null) ? 0 : getAccount().hashCode());
+        result = prime * result + ((getCompanyId() == null) ? 0 : getCompanyId().hashCode());
         result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
         result = prime * result + ((getPhone() == null) ? 0 : getPhone().hashCode());
         result = prime * result + ((getRentPrice() == null) ? 0 : getRentPrice().hashCode());
@@ -405,6 +418,7 @@ public class TbParkingSpaceRental implements Serializable {
         sb.append(", parkingInfo=").append(parkingInfo);
         sb.append(", carLicense=").append(carLicense);
         sb.append(", account=").append(account);
+        sb.append(", companyId=").append(companyId);
         sb.append(", name=").append(name);
         sb.append(", phone=").append(phone);
         sb.append(", rentPrice=").append(rentPrice);

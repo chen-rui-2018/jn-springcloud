@@ -3,7 +3,7 @@
     <div class="declarationDetail_main">
       <div class="declarationDetail_top">
         <div class="declarationDetail_title">
-          <p>{{detailData.rangeName}} </p>
+          <p>{{detailData.noticeTitle}} </p>
           <p><span>{{detailData.browseTimes}}次阅读 </span><span>{{detailData.createdTime|time}}</span></p>
         </div>
       </div>
@@ -13,9 +13,16 @@
       <div class="declarationDetail_downLoad">
         <div class="downLoad_title">附件下载</div>
         <!-- fileUrl字段可能是多个 -->
-        <div class="accessory" >
-          <span>附件</span>
-          <span>下载<i class="iconfont icon-jiantou"></i></span>
+        <div class="accessory" v-if="fileList.length===0">
+          <a href="javascript:;">
+            <span>附件: 暂无</span>
+          </a>
+        </div>
+        <div v-else  class="accessory" v-for="(item,index) in fileList" :key="index">
+          <a :href="item.filePath">
+            <span>附件{{item.fileName}}</span>
+            <span>下载<i class="iconfont icon-jiantou"></i></span>
+          </a>
         </div>
       </div>
     </div>
@@ -26,7 +33,8 @@ export default {
   data () {
     return {
       id: '',
-      detailData: {}
+      detailData: {},
+      fileList: []
     }
   },
   filters: {
@@ -51,6 +59,9 @@ export default {
         callback: res => {
           if (res.code === '0000') {
             this.detailData = res.data
+            if (res.data.fileUrl !== '') {
+              this.fileList = JSON.parse(res.data.fileUrl)
+            }
           }
         }
       })
@@ -74,7 +85,7 @@ export default {
   .declarationDetail{
     height: 100vh;
     background-color: #f5f5f5;
-    margin-top: 110px;
+    // margin-top: 110px;
     .declarationDetail_main{
       padding-top:26px;
       .declarationDetail_top{
@@ -133,10 +144,16 @@ export default {
           padding-bottom: 10px;
         }
         .accessory{
-          display: flex;
-          justify-content: space-between;
-          font-size: 26px;
-          border-bottom: 2px solid #efefef;
+          a{
+            display: flex;
+            justify-content: space-between;
+            font-size: 26px;
+            border-bottom: 2px solid #efefef;
+          }
+          a:visited{
+            text-decoration: none;
+            color:#333333;
+          }
           &:last-child{
             border-bottom: none;
           }

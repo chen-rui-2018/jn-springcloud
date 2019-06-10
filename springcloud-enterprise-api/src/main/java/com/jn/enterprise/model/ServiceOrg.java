@@ -18,6 +18,8 @@ public class ServiceOrg implements Serializable {
     @ApiModelProperty(value = "机构ID")
     private String orgId;
 
+    @ApiModelProperty(value = "机构管理员账号")
+    private String orgAccount;
     @ApiModelProperty(value = "机构名称")
     private String orgName;
 
@@ -50,6 +52,14 @@ public class ServiceOrg implements Serializable {
     private Integer evaluationNum;
     @ApiModelProperty (value = "业务擅长")
     private String orgSpeciality;
+
+    public String getOrgAccount() {
+        return orgAccount;
+    }
+
+    public void setOrgAccount(String orgAccount) {
+        this.orgAccount = orgAccount;
+    }
 
     public String getOrgSpeciality() {
         return orgSpeciality;

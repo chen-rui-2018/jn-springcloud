@@ -5,7 +5,6 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
-import com.jn.enterprise.company.enums.CompanyDataEnum;
 import com.jn.enterprise.company.enums.CompanyExceptionEnum;
 import com.jn.enterprise.company.model.ColleagueListParam;
 import com.jn.enterprise.company.model.ColleagueUpdateParam;
@@ -53,14 +52,12 @@ public class ColleagueController extends BaseController {
         User user = checkUserValid();
         StaffListParam staffListParam = new StaffListParam();
         BeanUtils.copyProperties(colleagueListParam, staffListParam);
-        // 查询通过审核的员工
-        staffListParam.setStatus(CompanyDataEnum.STAFF_CHECK_STATUS_PASS.getCode());
         return new Result(staffService.getColleagueList(staffListParam, user.getAccount()));
     }
 
     @TxTransaction(isStart = true)
     @ControllerLog(doAction = "批量删除同事")
-    @ApiOperation(value = "批量删除同事（pc/app-删除同事）", notes = "返回数据响应条数")
+    @ApiOperation(value = "批量删除同事（pc/app-删除同事）", notes = "企业管理员，返回数据响应条数")
     @RequestMapping(value = "/delColleague",method = RequestMethod.POST)
     @RequiresPermissions("/enterprise/ColleagueController/delColleague")
     public Result<Integer> delColleague(String[] accounts){
@@ -71,7 +68,7 @@ public class ColleagueController extends BaseController {
 
     @TxTransaction(isStart = true)
     @ControllerLog(doAction = "设置联系人")
-    @ApiOperation(value = "设置联系人（pc-设为联系人）", notes = "返回数据响应条数，正常情况为1")
+    @ApiOperation(value = "设置联系人（pc-设为联系人）", notes = "企业管理员，返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/setContact",method = RequestMethod.POST)
     @RequiresPermissions("/enterprise/ColleagueController/setContact")
     public Result<Integer> setContact(String account){
@@ -82,7 +79,7 @@ public class ColleagueController extends BaseController {
 
     @TxTransaction(isStart = true)
     @ControllerLog(doAction = "取消联系人")
-    @ApiOperation(value = "取消联系人（pc-取消联系人）", notes = "返回数据响应条数，正常情况为1")
+    @ApiOperation(value = "取消联系人（pc-取消联系人）", notes = "企业管理员，返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/cancelContact",method = RequestMethod.POST)
     @RequiresPermissions("/enterprise/ColleagueController/cancelContact")
     public Result<Integer> cancelContact(String account){
@@ -93,7 +90,7 @@ public class ColleagueController extends BaseController {
 
     @TxTransaction(isStart = true)
     @ControllerLog(doAction = "编辑同事信息")
-    @ApiOperation(value = "编辑同事信息", notes = "编辑自己的信息")
+    @ApiOperation(value = "编辑同事信息", notes = "编辑自己的信息", hidden = true)
     @RequestMapping(value = "/updateUserInfo",method = RequestMethod.POST)
     public Result updateUserInfo(@Validated @RequestBody ColleagueUpdateParam colleagueUpdateParam){
         User user = checkUserValid();
@@ -101,6 +98,16 @@ public class ColleagueController extends BaseController {
         userInfo.setAccount(user.getAccount());
         BeanUtils.copyProperties(colleagueUpdateParam, userInfo);
         return userExtensionClient.saveOrUpdateUserInfo(userInfo);
+    }
+
+    @TxTransaction(isStart = true)
+    @ControllerLog(doAction = "离开企业")
+    @ApiOperation(value = "离开企业", notes = "企业管理员不能离开企业，返回数据响应条数")
+    @RequestMapping(value = "/leaveCompany",method = RequestMethod.POST)
+    @RequiresPermissions("/enterprise/ColleagueController/leaveCompany")
+    public Result<Integer> leaveCompany(){
+        User user = checkUserValid();
+        return new Result(staffService.leaveCompany(user.getAccount()));
     }
 
     /**

@@ -1,9 +1,8 @@
 package com.jn.enterprise.joinpark.usermanage.service;
 
 import com.jn.enterprise.company.model.Company;
-import com.jn.enterprise.company.model.CompanyCheckCallBackParam;
 import com.jn.enterprise.company.model.CompanyCheckParam;
-import com.jn.enterprise.joinpark.usermanage.model.*;
+import com.jn.enterprise.joinpark.usermanage.model.StaffCheckParam;
 
 import java.util.List;
 
@@ -32,20 +31,6 @@ public interface UserUpgradeService {
      * @return
      */
     int changeToStaff(StaffCheckParam staffCheckParam, String phone, String account);
-
-    /**
-     * 升级企业 审核流回调
-     * @param companyCheckCallBackParam
-     * @return
-     */
-    Boolean changeToCompanyCallBack(CompanyCheckCallBackParam companyCheckCallBackParam);
-
-    /**
-     * 升级员工 审核流回调
-     * @param staffCheckCallBackParam
-     * @return
-     */
-    Boolean changeToStaffCallBack(StaffCheckCallBackParam staffCheckCallBackParam);
 
     /**
      * 查询公司列表

@@ -3,9 +3,9 @@
         <div class="trainContent">
             <div class="actiContent">
                 <div class="actiNav">
-                   <span class="pointer" @click="$router.push({ path: '/enterpriseservice'})">企业服务/</span>
-                   <span class="pointer" @click="$router.push({ path: '/serMatHp'})">服务超市/</span>
-                   <span class="mainColor">活动培训</span>
+                    <span class="pointer" @click="$router.push({ path: '/enterpriseservice'})">企业服务/</span>
+                    <span class="pointer" @click="$router.push({ path: '/serMatHp'})">服务超市/</span>
+                    <span class="mainColor">活动培训</span>
                 </div>
                 <div class="actiFilter clearfix">
                     <div class="timeFilter">
@@ -25,26 +25,26 @@
                                 <span>热度排序</span>
                             </li>
                             <li class="showListLi">
-                                <i class="iconfont icon-menu1" @click="handleCrosswise('icon-menu1')" :class="{'active0':showListFlag == 'icon-menu1'}"></i>
-                                <i class="iconfont icon-menu" @click="handleVertical('icon-menu')" :class="{'active0':showListFlag == 'icon-menu'}"></i>
+                                <i class="iconfont icon-menu" @click="handleCrosswise('icon-menu')" :class="{'active0':showListFlag == 'icon-menu'}"></i>
+                                <i class="iconfont icon-menu1" @click="handleVertical('icon-menu1')" :class="{'active0':showListFlag == 'icon-menu1'}"></i>
                             </li>
                         </ul>
                     </div>
                 </div>
                 <div class="allActi clearfix">
-                    <ul class="actiFilterUl fl clearfix">
+                    <!-- <ul class="actiFilterUl fl clearfix">
                         <li :class="{'active0':actiFilflag == ''}" @click="handleFil('')">全部活动</li>
-                        <li v-if="i<5" v-for="(v,i) in actiTypeList" :key="i" :class="{'active0':actiFilflag == v.typeName}" @click="handleFil(v.typeName)">{{v.typeName}}</li>
+                        <li v-if="i<5" v-for="(v,i) in actiTypeList" :key="i" :class="{'active0':actiFilflag == v.typeId}" @click="handleFil(v.typeId)">{{v.typeName}}</li>
                         <li v-if="this.actiTypeList.length>4" class="bottomLi pr">
                             <i class="iconfont icon-bottom" @click.stop="handleTypeList"></i>
                             <el-card class="box-card" v-if="showList" style="overflow:auto">
                                 <ul class="listUl clearfix">
-                                    <li v-if="k>4" v-for="(i,k) in actiTypeList" :key='k' :class="{'active0':actiFilflag == i.typeName}" @click.stop="handleFil(i.typeName)">
+                                    <li v-if="k>4" v-for="(i,k) in actiTypeList" :key='k' :class="{'active0':actiFilflag == i.typeId}" @click.stop="handleFil(i.typeId)">
                                         <i class="iconfont icon-yuandian"></i>{{i.typeName}}</li>
                                 </ul>
                             </el-card>
                         </li>
-                    </ul>
+                    </ul> -->
                     <div class="actiSearch fr">
                         <input type="text" placeholder="搜索活动" v-model="keyWord">
                         <i class="iconfont icon-sousuo" @click="handleSearchList"></i>
@@ -53,7 +53,9 @@
                 <div class="actiTab">
                     <ul class="allActiUl clearfix" v-if="flag">
                         <li v-for="(item,index) in actiListSlim" :key='index'>
-                            <div style="width:100%;height:200px"><img  style="width:100%;height:100%" :src="item.actiPosterUrl" alt="活动海报图片" class="posterImg" @click="handleRout(item.id)"></div>
+                            <div style="width:100%;height:200px" class="pointer"  @click="handleRout(item.id)">
+                                <img style="width:100%;height:100%" :src="item.actiPosterUrl" alt="活动海报图片" class="posterImg">
+                            </div>
                             <div class="actiInfo">
                                 <p class="actiNameItem">{{item.actiName}}</p>
                                 <p class="actiTimer">
@@ -85,7 +87,7 @@
                     </ul>
                     <ul class="verticalUl" v-else>
                         <li class="clearfix" v-for="(item,index) in actiListSlim" :key='index'>
-                            <div class="verticalLeft fl" @click="handleRout(item.id)">
+                            <div class="verticalLeft fl pointer" @click="handleRout(item.id)">
                                 <img :src="item.actiPosterUrl" alt="活动海报图片">
                             </div>
                             <div class="verticalMiddle fl">
@@ -113,7 +115,9 @@
                                 </div>
                             </div>
                             <div class="verticalRight fr">
-                                <el-button type="success" plain>立即报名</el-button>
+                                <el-button type="success" v-if="item.actiStatus=='3'" style="background:#00a041;height:38px;width:110px">活动已结束</el-button>
+                                <el-button type="success" v-if="item.actiStatus=='4'" style="background:#00a041;height:38px;width:110px">活动已取消</el-button>
+                                <el-button type="success" v-if="item.actiStatus=='2'" style="background:#ecfcf2;height:38px;width:110px;border:1px solid #00a041;color:#00a041;">报名中</el-button>
                             </div>
                         </li>
                     </ul>
@@ -133,12 +137,12 @@ export default {
       currentPage4: 1,
       checkActi: "",
       flag: true,
-      showListFlag: "",
+      showListFlag: "icon-menu",
       currentPage4: 1,
       actiFilflag: "",
       colorFlag: "",
       actiListSlim: [],
-      actiTypeList: [],
+      //   actiTypeList: [],
       page: 1, //页码
       row: 12, //每页显示多少条
       total: 0,
@@ -147,32 +151,58 @@ export default {
       timeIndexFlag: "",
       startTime: "",
       endTime: "",
-      showList: false
+      showList: false,
+      typeId: ""
     };
   },
-  mounted(){
-      this.initList()
-      this.getActiType()
+  mounted() {
+    if (this.$route.query.searchData) {
+      this.keyWord = this.$route.query.searchData;
+      this.initList();
+    } else {
+      this.initList();
+    }
   },
   methods: {
+    //立即报名
+    immediateSign(id) {
+      if (!sessionStorage.userInfo) {
+        this.$message.error("请先登录");
+        return;
+      }
+      this.api.post({
+        url: `springcloud-park/activity/activityApply/quickApply?activityId=${id}`,
+        data: {
+          activityId: id
+        },
+        // dataFlag: false,
+        urlFlag: true,
+        callback: res => {
+          if (res.code == "0000") {
+            // _this.actiTypeList = res.data.rows;
+            this.$message(res.result);
+          }
+        }
+      });
+    },
     handleTypeList() {
       this.showList = !this.showList;
     },
     handleFil(v) {
       //筛选
-      this.keyWord = v;
+      this.typeId = v;
       this.actiFilflag = v;
       this.initList();
     },
     handleCrosswise(v) {
       //横向显示
       this.flag = true;
-      this.showListFlag = "icon-menu1";
+      this.showListFlag = "icon-menu";
     },
     handleVertical() {
       //竖向显示
       this.flag = false;
-      this.showListFlag = "icon-menu";
+      this.showListFlag = "icon-menu1";
     },
     handleSizeChange(val) {
       //改变每页显示多少条的回调函数
@@ -186,7 +216,7 @@ export default {
       this.initList();
     },
     handleRout(id) {
-        this.$router.push({ path: "actiTrainDetail",query: { activityId: id }});
+      this.$router.push({ path: "actiTrainDetail", query: { activityId: id } });
     },
     handleSearchList() {
       //搜索
@@ -227,7 +257,7 @@ export default {
           page: this.page,
           rows: this.row,
           startTime: this.startTime,
-          typeId: ""
+          typeId: "org_activity"
         },
         dataFlag: false,
         callback: function(res) {
@@ -237,142 +267,28 @@ export default {
           }
         }
       });
-    },
-    getActiType() {
-      let _this = this;
-      this.api.post({
-        url: "findActivityTypeList",
-        data: {},
-        // dataFlag: false,
-        callback: function(res) {
-          if (res.code == "0000") {
-            _this.actiTypeList = res.data.rows;
-          }
-        }
-      });
     }
+    // getActiType() {
+    //   let _this = this;
+    //   this.api.post({
+    //     url: "findActivityTypeList",
+    //     data: {},
+    //     // dataFlag: false,
+    //     callback: function(res) {
+    //       if (res.code == "0000") {
+    //         _this.actiTypeList = res.data.rows;
+    //       }
+    //     }
+    //   });
+    // }
   }
 };
 </script>
 <style lang="scss">
 .actiTrain {
   padding-top: 65px;
-  .fullNav {
-    // width: 1286px;
-    // margin:0 auto;
-    padding: 10px 40px;
-    background: #eeeeee;
-    color: #9a9a9a;
-    .navLeft {
-    }
-    .navRight {
-      > li {
-        float: left;
-      }
-      > .line {
-        display: inline-block;
-        height: 12px;
-        width: 1px;
-        margin: 0 20px;
-        background-color: #9a9a9a;
-        padding: 0;
-        margin-top: 6px;
-      }
-    }
-  }
-  .trainContent {
-    .searchNav {
-      width: 1190px;
-      margin: 0 auto;
-      .trainLogo {
-        display: inline-block;
-        padding: 40px 0 20px 0;
-        width: 218px;
-        height: 54px;
-        background-color: #ccc;
-        > img {
-          // width: 218px;
-          // height: 54px;
-        }
-      }
-      .trainSearch {
-        display: inline-block;
-        margin-left: 250px;
-        > input {
-          height: 40px;
-          border: 2px solid #00a042;
-          border-radius: 5px;
-          width: 500px;
-          padding-right: 90px;
-          // text-indent: 15px;
-        }
-        input,
-        textarea,
-        select,
-        button {
-          text-rendering: auto;
-          color: #d4d4d4;
-          letter-spacing: normal;
-          word-spacing: normal;
-          text-transform: none;
-          text-indent: 15px;
-          text-shadow: none;
-          display: inline-block;
-          text-align: start;
-          margin: 0em;
-          font: 400 16px Arial;
-        }
-        .iconSearch {
-          color: #fff;
-          font-size: 18px;
-          position: absolute;
-          right: 0;
-          top: 3px;
-          height: 40px;
-          width: 90px;
-          line-height: 40px;
-          text-align: center;
-          background: #00a042;
-          border-radius: 0 5px 5px 0;
-        }
-      }
-    }
-
-    .bannerNav {
-      width: 100%;
-      color: #fff;
-      padding: 20px 0;
-      background-color: #00a042;
-      font-size: 16px;
-      .bannerSer {
-        padding: 0 40px 0 20px;
-        .icon-menu1 {
-          font-size: 18px;
-          margin-right: 20px;
-        }
-      }
-      .bannerUl {
-        list-style: none;
-        > li {
-          float: left;
-          padding: 0 40px;
-        }
-        > li:last-child {
-          padding-right: 0;
-        }
-      }
-    }
-  }
-//   .pagination-container {
-//     width: 500px;
-//   }
-  .allActiUl{
-      >li{
-          img{
-              width: 280px;
-              height: 200px;
-          }
-      }
+  .allActi {
+    padding-bottom: 10px;
   }
 }
 </style>

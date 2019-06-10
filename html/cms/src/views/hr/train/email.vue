@@ -41,7 +41,7 @@ export default {
         autoFloatEnabled: false
       },
       appSrc:
-        'http://localhost:9527/#/hr/train/investigation/invest-page?projectId=' +
+        window.location.host + '/#/hr/train/investigation/invest-page?projectId=' +
         this.$route.query.projectId,
       formData: {
         emailSubject: '',
@@ -105,7 +105,8 @@ export default {
           if (latestView) {
             this.$router.push('investigation/invest-analysis')
           } else {
-            this.$router.push('/')
+            // this.$router.push('/')
+            this.$router.push('investigation/invest-analysis')
           }
         }
       })

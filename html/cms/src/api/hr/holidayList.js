@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 var baseurl = 'springcloud-hr/'
-export function api(url, query) {
+export function postapi(url, query) {
   return request({
     url: baseurl + url,
     method: 'post',

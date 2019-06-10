@@ -4,28 +4,40 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class TbVideoInfo implements Serializable {
+    /*@ApiModelProperty("主键")*/
     private String id;
 
+    /*@ApiModelProperty("上级ID")*/
     private String parentId;
 
+    /*@ApiModelProperty("设备编码")*/
     private String code;
 
+    /*@ApiModelProperty("设备名称")*/
     private String name;
 
+    /*@ApiModelProperty("所属楼宇ID")*/
     private String towerId;
 
+    /*@ApiModelProperty("所属楼宇名称")*/
     private String towerName;
 
+    /*@ApiModelProperty("设备地址")*/
     private String address;
 
+    /*@ApiModelProperty("设备说明")*/
     private String remarks;
 
+    /*@ApiModelProperty("是否删除（0标记删除，1正常，2失效）")*/
     private Byte recordStatus;
 
+    /*@ApiModelProperty("创建者账号")*/
     private String creatorAccount;
 
+    /*@ApiModelProperty("创建时间")*/
     private Date createTime;
 
+    /*@ApiModelProperty("最新更新者账号")*/
     private String modifierAccount;
 
     private static final long serialVersionUID = 1L;

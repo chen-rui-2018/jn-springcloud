@@ -12,9 +12,9 @@
                     <div class="span1">
                         <img src="@/../static/img/shijian00.png" alt="">&nbsp;{{noticeDetails.createdTime}}
                     </div>
-                    <div class="span2">
+                    <!-- <div class="span2">
                         <img src="@/../static/img/zuozhe.png" alt=""> 本站
-                    </div>
+                    </div> -->
                 </div>
             </el-card>
         </div>
@@ -62,6 +62,8 @@ export default {
   padding-top: 65px;
   .incubatorNav {
     padding: 15px 0;
+    font-size: 13px;
+    font-weight: bold;
   }
   .announcement1 {
     text-align: center;

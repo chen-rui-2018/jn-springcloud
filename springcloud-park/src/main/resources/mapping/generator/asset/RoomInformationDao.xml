@@ -55,10 +55,11 @@
             tr.pay_state as payState,
             tm.state as roomStatus,
             tt.address as address,
-            ti.create_time
+            ti.create_time as createTime
         from tb_room_orders_item ti LEFT JOIN tb_room_orders tr on ti.order_id = tr.id
                                     LEFT JOIN tb_room_information tm on ti.room_id = tm.id
-                                    LEFT JOIN tb_tower_information tt on ti.tower_id = tt.id where ti.creator_account = #{account}
+                                    LEFT JOIN tb_tower_information tt on ti.tower_id = tt.id
+        where ti.creator_account = #{account} and tr.pay_state in (0,1)
         ORDER BY ti.create_time DESC
     </select>
 
@@ -67,7 +68,7 @@
             ti.id,
             ti.order_id as orderId,
             ti.room_id as roomId,
-            ti.room_name AS roomName,
+            ti.room_name AS name,
             ti.floor as floor,
             ti.tower_id as towerId,
             ti.tower_name as towerName,
@@ -88,7 +89,9 @@
             tr.pay_state as payState,
             tb.create_time as createTime,
             tb.house_Type as houseType,
-            tb.state as roomStatus
+            tb.state as roomStatus,
+            tb.floor_plan as floorPlan,
+            tb.room_plan as roomPlan
         from tb_room_orders_item ti
                  LEFT JOIN tb_room_orders tr on ti.order_id = tr.id
                  LEFT JOIN tb_room_information tb on ti.room_id = tb.id

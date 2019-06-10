@@ -11,6 +11,7 @@
     <result column="deadline" jdbcType="TIMESTAMP" property="deadline" />
     <result column="time_node" jdbcType="VARCHAR" property="timeNode" />
     <result column="is_roof_placement" jdbcType="TINYINT" property="isRoofPlacement" />
+    <result column="brief_introduct" jdbcType="VARCHAR" property="briefIntroduct" />
     <result column="announcement_content" jdbcType="VARCHAR" property="announcementContent" />
     <result column="browse_times" jdbcType="INTEGER" property="browseTimes" />
     <result column="status" jdbcType="TINYINT" property="status" />
@@ -81,8 +82,9 @@
   </sql>
   <sql id="Base_Column_List">
     id, notice_title, range_id, range_name, subordinate_platform_id, subordinate_platform_name, 
-    deadline, time_node, is_roof_placement, announcement_content, browse_times, status, 
-    file_url, record_status, creator_account, created_time, modifier_account, modified_time
+    deadline, time_node, is_roof_placement, brief_introduct, announcement_content, browse_times, 
+    status, file_url, record_status, creator_account, created_time, modifier_account, 
+    modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.pd.talent.entity.TbPdTalentServiceNoticeCriteria" resultMap="BaseResultMap">
     select
@@ -118,17 +120,17 @@
     insert into tb_pd_talent_service_notice (id, notice_title, range_id, 
       range_name, subordinate_platform_id, subordinate_platform_name, 
       deadline, time_node, is_roof_placement, 
-      announcement_content, browse_times, status, 
-      file_url, record_status, creator_account, 
-      created_time, modifier_account, modified_time
-      )
+      brief_introduct, announcement_content, browse_times, 
+      status, file_url, record_status, 
+      creator_account, created_time, modifier_account, 
+      modified_time)
     values (#{id,jdbcType=VARCHAR}, #{noticeTitle,jdbcType=VARCHAR}, #{rangeId,jdbcType=VARCHAR}, 
       #{rangeName,jdbcType=VARCHAR}, #{subordinatePlatformId,jdbcType=VARCHAR}, #{subordinatePlatformName,jdbcType=VARCHAR}, 
       #{deadline,jdbcType=TIMESTAMP}, #{timeNode,jdbcType=VARCHAR}, #{isRoofPlacement,jdbcType=TINYINT}, 
-      #{announcementContent,jdbcType=VARCHAR}, #{browseTimes,jdbcType=INTEGER}, #{status,jdbcType=TINYINT}, 
-      #{fileUrl,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
-      )
+      #{briefIntroduct,jdbcType=VARCHAR}, #{announcementContent,jdbcType=VARCHAR}, #{browseTimes,jdbcType=INTEGER}, 
+      #{status,jdbcType=TINYINT}, #{fileUrl,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.pd.talent.entity.TbPdTalentServiceNotice">
     insert into tb_pd_talent_service_notice
@@ -159,6 +161,9 @@
       </if>
       <if test="isRoofPlacement != null">
         is_roof_placement,
+      </if>
+      <if test="briefIntroduct != null">
+        brief_introduct,
       </if>
       <if test="announcementContent != null">
         announcement_content,
@@ -215,6 +220,9 @@
       </if>
       <if test="isRoofPlacement != null">
         #{isRoofPlacement,jdbcType=TINYINT},
+      </if>
+      <if test="briefIntroduct != null">
+        #{briefIntroduct,jdbcType=VARCHAR},
       </if>
       <if test="announcementContent != null">
         #{announcementContent,jdbcType=VARCHAR},
@@ -281,6 +289,9 @@
       <if test="record.isRoofPlacement != null">
         is_roof_placement = #{record.isRoofPlacement,jdbcType=TINYINT},
       </if>
+      <if test="record.briefIntroduct != null">
+        brief_introduct = #{record.briefIntroduct,jdbcType=VARCHAR},
+      </if>
       <if test="record.announcementContent != null">
         announcement_content = #{record.announcementContent,jdbcType=VARCHAR},
       </if>
@@ -324,6 +335,7 @@
       deadline = #{record.deadline,jdbcType=TIMESTAMP},
       time_node = #{record.timeNode,jdbcType=VARCHAR},
       is_roof_placement = #{record.isRoofPlacement,jdbcType=TINYINT},
+      brief_introduct = #{record.briefIntroduct,jdbcType=VARCHAR},
       announcement_content = #{record.announcementContent,jdbcType=VARCHAR},
       browse_times = #{record.browseTimes,jdbcType=INTEGER},
       status = #{record.status,jdbcType=TINYINT},
@@ -363,6 +375,9 @@
       </if>
       <if test="isRoofPlacement != null">
         is_roof_placement = #{isRoofPlacement,jdbcType=TINYINT},
+      </if>
+      <if test="briefIntroduct != null">
+        brief_introduct = #{briefIntroduct,jdbcType=VARCHAR},
       </if>
       <if test="announcementContent != null">
         announcement_content = #{announcementContent,jdbcType=VARCHAR},
@@ -404,6 +419,7 @@
       deadline = #{deadline,jdbcType=TIMESTAMP},
       time_node = #{timeNode,jdbcType=VARCHAR},
       is_roof_placement = #{isRoofPlacement,jdbcType=TINYINT},
+      brief_introduct = #{briefIntroduct,jdbcType=VARCHAR},
       announcement_content = #{announcementContent,jdbcType=VARCHAR},
       browse_times = #{browseTimes,jdbcType=INTEGER},
       status = #{status,jdbcType=TINYINT},

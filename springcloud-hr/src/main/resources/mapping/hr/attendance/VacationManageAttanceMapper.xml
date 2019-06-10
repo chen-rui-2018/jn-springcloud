@@ -8,9 +8,12 @@
 		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
             and t2.`name` like concat('%',#{name},'%')
         </if>
-		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
-            and t2.department_id=#{departmentId}
-        </if>
+    <if test="departmentIds!=null and departmentIds.size>0">
+        and t2.department_id in
+        <foreach collection="departmentIds" item="depart" open="(" close=")" separator=",">
+            #{depart}
+        </foreach>
+    </if>
      order by job_number desc
   </select>
   
@@ -28,18 +31,19 @@
     where t1.vacation_type = #{vacationType,jdbcType=VARCHAR} and t1.user_id = #{userId,jdbcType=VARCHAR}
   </select>
   
+  <select id="selectByUserId" parameterType="map" resultType="com.jn.hr.attendance.model.VacationManageVo">
+    select * from tb_manpower_vacation_manage t1
+    where t1.user_id = #{userId,jdbcType=VARCHAR}
+  </select>
+  
   <insert id="insert" parameterType="com.jn.hr.attendance.model.VacationManageVo">
         insert into tb_manpower_vacation_manage
-        (
-        id, job_number,user_id, vacation_type,vacation_time
-        ) values
-            (
-            #{item.id},
+        ( id, job_number,user_id, vacation_type,vacation_time) values
+            (#{item.id},
             #{item.jobNumber},
             #{item.userId}
             #{item.vacationType},
-            #{item.vacationTime}
-            )
+            #{item.vacationTime})
     </insert>
   
 </mapper>

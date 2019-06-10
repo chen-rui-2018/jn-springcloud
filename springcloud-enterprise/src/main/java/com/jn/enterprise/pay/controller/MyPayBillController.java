@@ -87,10 +87,33 @@ public class MyPayBillController extends BaseController {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         Assert.notNull(payCheckReminder.getBillIds(),"账单ID或编号不能为空");
-        myPayBillService.billCheckReminder(payCheckReminder,user);
-        return new Result();
+        return new Result(myPayBillService.billCheckReminder(payCheckReminder,user));
     }
 
+    @ControllerLog(doAction = "我的账单-创建账单")
+    @ApiOperation(value = "我的账单-创建账单",notes = "我的账单-创建账单")
+    @RequestMapping(value = "/billCreate",method = RequestMethod.POST)
+    @RequiresPermissions("/payment/payBill/billCreate")
+    public Result billCreate(@RequestBody PayBillCreateParamVo payBillCreateParamVo) {
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        Assert.notNull(payBillCreateParamVo.getAcBookType(),"账本类型ID不能为空");
+        Assert.notNull(payBillCreateParamVo.getObjName(),"对象名称不能为空");
+        Assert.notNull(payBillCreateParamVo.getBillExpense(),"账本费用不能为空");
+        Assert.notNull(payBillCreateParamVo.getBillId(),"账本编号不能为空");
+        Assert.notNull(payBillCreateParamVo.getLatePayment(),"最迟缴费时间不能为空");
+        Assert.notNull(payBillCreateParamVo.getObjType(),"对象类型不能为空");
+        Result result=myPayBillService.billCreate(payBillCreateParamVo);
+        return result;
+    }
 
+    @ControllerLog(doAction = "我的账单-插入流水记录")
+    @ApiOperation(value = "我的账单-插入流水记录",notes = "我的账单-插入流水记录")
+    @RequestMapping(value = "/insertRecord",method = RequestMethod.POST)
+    @RequiresPermissions("/payment/payBill/insertRecord")
+    public Result insertRecord(@RequestBody PayAccountBookMoneyRecord payAccountBookMoneyRecord) {
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        Result result=myPayBillService.insertRecord(payAccountBookMoneyRecord);
+        return result;
+    }
 
 }

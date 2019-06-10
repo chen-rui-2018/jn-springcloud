@@ -38,20 +38,14 @@
 
           <el-col :span="12">
             <el-form-item label="部门：" prop="departmentId">
-              <el-select
-                v-model="addForm.departmentId"
+              <el-cascader
+                ref="departRef"
+                :options="departmentList"
+                v-model="currentDepartmentIds"
+                change-on-select
                 placeholder="请选择"
-                clearable
-                style="width: 200px"
-                class="filter-item"
-                disabled>
-                <el-option label="请选择" value=""/>
-                <el-option
-                  v-for="item in departmentList"
-                  :key="item.departmentId"
-                  :label="item.departmentName"
-                  :value="item.departmentId"/>
-              </el-select>
+                disabled
+              />
             </el-form-item>
           </el-col>
         </el-row>
@@ -73,17 +67,8 @@
           </el-col>
 
           <el-col :span="12">
-            <el-form-item label="职务：" prop="postId">
-              <el-select
-                v-model="addForm.postId"
-                placeholder="请选择"
-                clearable
-                style="width: 200px"
-                class="filter-item"
-                disabled>
-                <el-option label="请选择" value=""/>
-                <el-option v-for="item in postList" :key="item.key" :label="item.lable" :value="item.key"/>
-              </el-select>
+            <el-form-item label="岗位：" prop="postId">
+              {{ addForm.postName }}
             </el-form-item>
           </el-col>
         </el-row>
@@ -884,17 +869,8 @@
           </el-col>
 
           <el-col :span="12">
-            <el-form-item label="职务：" prop="directLeadership">
-              <el-select
-                v-model="addForm.directlyLeader.directLeadership"
-                placeholder="请选择"
-                clearable
-                style="width: 200px"
-                class="filter-item"
-                disabled>
-                <el-option label="请选择" value=""/>
-                <el-option v-for="item in postList" :key="item.key" :label="item.lable" :value="item.key"/>
-              </el-select>
+            <el-form-item label="岗位：" prop="directLeadership">
+              {{ addForm.directlyLeader.directLeadershipName }}
             </el-form-item>
           </el-col>
         </el-row>
@@ -927,15 +903,24 @@
 <script>
 
 import {
-  getTreeList, getEmployeeBasicInfo
+  getEmployeeBasicInfo
 } from '@/api/hr/employeeBasicInfo'
 import {
-  getCode
+  getCode, setChild, findNodeById, findP
 } from '@/api/hr/util'
+
+import {
+  api
+} from '@/api/axios'
 
 export default {
   data() {
     return {
+      nodes: [],
+      pNodes: [],
+      currentDepartmentIds: [],
+      departmentOptions: [],
+      departmentListLoading: false,
       departmentList: [],
       jobList: [],
       postList: [],
@@ -1095,12 +1080,10 @@ export default {
   },
   mounted() {
     this.initJobList()
-    this.initPostList()
     this.initCertificateList()
     this.initContractList()
     this.initNationalityList()
     this.initAcademicList()
-    this.initDepartMentList()
     this.initDetail()
   },
   methods: {
@@ -1111,15 +1094,6 @@ export default {
       getCode({ 'groupCode': 'job', 'parentGroupCode': 'employee', 'moduleCode': 'springcloud_hr' }).then(res => {
         if (res.data.code === '0000') {
           this.jobList = res.data.data
-        } else {
-          this.$message.error(res.data.result)
-        }
-      })
-    },
-    initPostList() {
-      getCode({ 'groupCode': 'post', 'parentGroupCode': 'employee', 'moduleCode': 'springcloud_hr' }).then(res => {
-        if (res.data.code === '0000') {
-          this.postList = res.data.data
         } else {
           this.$message.error(res.data.result)
         }
@@ -1177,15 +1151,6 @@ export default {
         }
       })
     },
-    initDepartMentList() {
-      getTreeList().then(res => {
-        if (res.data.code === '0000') {
-          this.departmentList = res.data.data
-        } else {
-          this.$message.error(res.data.result)
-        }
-      })
-    },
     initDetail() {
       var query = this.$route.query
       this.title = query.title
@@ -1194,6 +1159,7 @@ export default {
         getEmployeeBasicInfo(query.id).then(res => {
           if (res.data.code === '0000') {
             this.addForm = Object.assign({}, res.data.data)
+            this.getAllDepartment()
             if (!this.addForm.socialSecurity) {
               this.addForm.socialSecurity = {
                 id: '',
@@ -1223,6 +1189,27 @@ export default {
           }
         })
       }
+    },
+    getAllDepartment() {
+      this.departmentListLoading = true
+      api(`${this.GLOBAL.systemUrl}system/sysDepartment/findDepartmentAllByLevel`, '', 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
+          this.departmentList = res.data.data
+          setChild(this.nodes, this.departmentList)
+          const currNode = findNodeById(this.nodes, this.addForm.departmentId)
+          this.pNodes.push(currNode)
+          findP(this.nodes, currNode, this.pNodes)
+          this.pNodes.reverse()
+          const arr = []
+          this.pNodes.forEach(item => {
+            arr.push(item.id)
+          })
+          this.currentDepartmentIds = arr
+        } else {
+          this.$message.error(res.data.result)
+        }
+        this.departmentListLoading = false
+      })
     }
   }
 }
@@ -1315,10 +1302,6 @@ export default {
   .form-content {
     background-color: white;
     border-radius: 10px;
-    position: absolute;
-    top: 280px;
-    left: 36px;
-    right: 36px;
     .con-hr {
       color: #e4e4e4;
       margin-left: 20px;
@@ -1426,6 +1409,9 @@ export default {
   }
   .file-download a:hover{
     color:red;
+  }
+  .addForm{
+    height:100%;
   }
 
 </style>

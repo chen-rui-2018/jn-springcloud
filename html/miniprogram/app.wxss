@@ -139,4 +139,10 @@
 .red{
   color:#f73431
 }
-
+.bg_white{
+  background-color: #fff;
+}
+.paddihng_side{
+  padding-left: 31rpx;
+  padding-right: 31rpx;
+}

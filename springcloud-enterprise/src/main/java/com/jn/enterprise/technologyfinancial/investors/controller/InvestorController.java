@@ -1,9 +1,11 @@
 package com.jn.enterprise.technologyfinancial.investors.controller;
 
+import com.codingapi.tx.annotation.TxTransaction;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
+import com.jn.enterprise.company.model.ServiceCompany;
 import com.jn.enterprise.enums.InvestorExceptionEnum;
 import com.jn.enterprise.technologyfinancial.investors.model.*;
 import com.jn.enterprise.technologyfinancial.investors.service.InvestorService;
@@ -48,19 +50,6 @@ public class InvestorController extends BaseController {
         return  new Result(investorInfoList);
     }
 
-    @ControllerLog(doAction = "投资人认证")
-    @ApiOperation(value = "投资人认证",notes = "返回数据状态为200，表示投资人认证提交成功，启动审批流程成功")
-    @RequiresPermissions("/technologyFinancial/investorController/addInvestorInfo")
-    @RequestMapping(value = "/technologyFinancial/investorController/addInvestorInfo",method = RequestMethod.POST)
-    public Result<Integer> addInvestorInfo(@RequestBody @Validated InvestorAuthenticateParam investorAuthenticateParam){
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        if(user==null || user.getAccount()==null){
-            logger.warn("投资人认证获取当前登录用户失败");
-            return new Result(InvestorExceptionEnum.NETWORK_ANOMALY.getCode(),InvestorExceptionEnum.NETWORK_ANOMALY.getMessage());
-        }
-        return  new Result(investorService.addInvestorInfo(investorAuthenticateParam, user.getAccount()));
-    }
-
     @ControllerLog(doAction = "投资人详情")
     @ApiOperation(value = "投资人详情/投资人查看")
     @RequestMapping(value = "/guest/technologyFinancial/investorController/getInvestorInfoDetails",method = RequestMethod.GET)
@@ -93,4 +82,44 @@ public class InvestorController extends BaseController {
         List<InvestorMainRound> investorMainRound = investorService.getInvestorMainRound();
         return  new Result(investorMainRound);
     }
+
+    @ControllerLog(doAction = "投资人认证")
+    @ApiOperation(value = "投资人认证",notes = "返回数据状态为200，表示投资人认证提交成功，启动审批流程成功")
+    @RequiresPermissions("/technologyFinancial/investorController/addInvestorInfo")
+    @RequestMapping(value = "/technologyFinancial/investorController/addInvestorInfo",method = RequestMethod.POST)
+    public Result<Integer> addInvestorInfo(@RequestBody @Validated InvestorAuthenticateParam investorAuthenticateParam){
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        if(user==null || user.getAccount()==null){
+            logger.warn("投资人认证获取当前登录用户失败");
+            return new Result(InvestorExceptionEnum.NETWORK_ANOMALY.getCode(),InvestorExceptionEnum.NETWORK_ANOMALY.getMessage());
+        }
+        return  new Result(investorService.addInvestorInfo(investorAuthenticateParam, user.getAccount()));
+    }
+
+
+    @ControllerLog(doAction = "添加投资人角色")
+    @ApiOperation(value = "添加投资人角色",notes = "投资人认证审批通过后，ibps后置处理器调用此接口添加投资人角色,返回数据响应条数")
+    @RequiresPermissions("/technologyFinancial/investorController/addInvestorRole")
+    @RequestMapping(value = "/technologyFinancial/investorController/addInvestorRole",method = RequestMethod.POST)
+    public Result<Integer> addInvestorRole(String investorAccount){
+        Assert.notNull(investorAccount,InvestorExceptionEnum.INVESTOR_ACCOUNT_NOT_NULL.getMessage());
+        int resNum = investorService.addInvestorRole(investorAccount);
+        logger.info("-----------添加投资人角色成功，数据响应条数：{}----------",resNum);
+        return  new Result(resNum);
+    }
+
+    @ControllerLog(doAction = "投资人认证流程后置处理")
+    @ApiOperation(value = "投资人认证流程后置处理", notes = "设置投资人认证申请人角色为投资人")
+    @RequestMapping(value = "/technologyFinancial/investorController/setAccountRoleToInvestor", method = RequestMethod.POST)
+    @RequiresPermissions("/technologyFinancial/investorController/setAccountRoleToInvestor")
+    @TxTransaction(isStart = true)
+    public Result<Integer> setAccountRoleToInvestor(@Validated @RequestBody InvestorInfoWorkFlow  investorInfoWorkFlow) {
+        logger.info("进入投资人认证流程后置处理API,入参：{}",investorInfoWorkFlow.toString());
+        Assert.notNull(investorInfoWorkFlow,InvestorExceptionEnum.INVESTOR_PARAM_NOT_NULL.getMessage());
+        Assert.notNull(investorInfoWorkFlow.getInvestorAccount(),InvestorExceptionEnum.INVESTOR_ACCOUNT_NOT_NULL.getMessage());
+        int resNum = investorService.addInvestorRole(investorInfoWorkFlow.getInvestorAccount());
+        logger.info("-----------添加投资人角色成功，数据响应条数：{}----------",resNum);
+        return  new Result(resNum);
+    }
+
 }

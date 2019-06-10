@@ -38,6 +38,9 @@ public class ParkingSpaceAmountVo implements Serializable {
     @ApiModelProperty(value = "实缴金额[优惠后金额]",example = "2200")
     private Double actualMoney;
 
+    @ApiModelProperty(value = "公司Id",example = "9823711290122")
+    private String companyId;
+
     public String getAreaId() {
         return areaId;
     }
@@ -100,5 +103,28 @@ public class ParkingSpaceAmountVo implements Serializable {
 
     public void setActualMoney(Double actualMoney) {
         this.actualMoney = actualMoney;
+    }
+
+    public String getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId;
+    }
+
+    @Override
+    public String toString() {
+        return "ParkingSpaceAmountVo{" +
+                "areaId='" + areaId + '\'' +
+                ", policyId='" + policyId + '\'' +
+                ", startTime='" + startTime + '\'' +
+                ", endTime='" + endTime + '\'' +
+                ", rentPrice='" + rentPrice + '\'' +
+                ", dueMoney=" + dueMoney +
+                ", deductionMoney=" + deductionMoney +
+                ", actualMoney=" + actualMoney +
+                ", companyId='" + companyId + '\'' +
+                '}';
     }
 }

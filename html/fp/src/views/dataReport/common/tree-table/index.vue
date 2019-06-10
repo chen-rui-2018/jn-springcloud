@@ -33,23 +33,29 @@
             <span v-if="iconShow(index,scope.row)" class="tree-ctrl" @click="toggleExpanded(scope.$index)">
               <i v-if="!scope.row._expanded" class="el-icon-caret-right"/>
               <i v-else class="el-icon-caret-bottom"/>
-              <svg v-if="!isMobile" class="icon svg-icon" aria-hidden="true">
+              <svg class="icon svg-icon" aria-hidden="true">
                  <use xlink:href="#icon-folder"></use>
               </svg>
             </span>
-            <span v-else-if="index === 0 && !isMobile">
+            <span v-else-if="index === 0">
               <i class="icon iconfont icon-document folder-yellow"></i>
             </span>
           </div>
           <div class="td-cell-r">
             <!--          类型（0：文本框1：多行文本框2：数字3：单选框4：多选框5：图片上传）-->
-            <div v-if="typeof scope.row['inputFormatModel'] === 'object' && column.value === 'inputFormatModel'" class="target-row">
+            <div
+              v-if="typeof scope.row['inputFormatModel'] === 'object' && column.value === 'inputFormatModel'"
+              class="target-row">
               <el-row v-for="(ruleRow, index) in scope.row['inputFormatModel']" :key="index" class="target-bg">
                 <el-col v-for="(item, itemIndex) in ruleRow" :key="itemIndex" :span="18" class="target-bg-cell">
                   <el-row v-if="item.formType === '0'" :gutter="10" type="flex" align="middle">
                     <el-col :span="leftCol">{{ item.formName }}</el-col>
                     <el-col :span="24 - leftCol">
-                      <el-input :disabled="isReported === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])" v-model="item.value" class="target-input"/>
+                      <el-input
+                        :disabled="isReported === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])"
+                        v-model="item.value"
+                        :class="{'isMobile': isMobile}"
+                        class="target-input"/>
                     </el-col>
                   </el-row>
                   <el-row v-if="item.formType === '1'" :gutter="10" type="flex" align="middle">
@@ -61,7 +67,12 @@
                   <el-row v-else-if="item.formType === '2'" :gutter="10" type="flex" align="middle">
                     <el-col :span="leftCol">{{ item.formName }}</el-col>
                     <el-col :span="24 - leftCol">
-                      <el-input-number :disabled="isReported === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])" :min="0" v-model="item.value" class="target-input"/>
+                      <el-input-number
+                        :disabled="isReported === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])"
+                        :min="0"
+                        v-model="item.value"
+                        :class="{'isMobile': isMobile}"
+                        class="target-input"/>
                     </el-col>
                   </el-row>
                   <el-row v-else-if="item.formType === '3'" :gutter="10" type="flex" align="middle">
@@ -376,7 +387,10 @@ export default {
       }
   }
     .target-input {
-      width: 160px;
+      width: 220px;
+      &.isMobile {
+        width:130px;
+      }
     }
     .other-column {
       padding: 10px;

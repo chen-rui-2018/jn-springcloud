@@ -1,6 +1,6 @@
 <template>
   <div class="publishingProduct">
-    <div class="ordinary_title">
+    <div class="ordinary_title font16">
       <div>发布宣传</div>
       <div @click="toEnterprisePropaganda">返回</div>
     </div>
@@ -87,7 +87,7 @@
         </el-form-item>
         <el-form-item label="宣传海报:">
           <el-upload
-            action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
+          :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
             :headers="headers"
  :show-file-list="false"
             :on-success="handleAvatarSuccess"
@@ -153,6 +153,7 @@
 export default {
   data() {
     return {
+       baseUrl:this.api.host,
       priceIndex: undefined,
       index: undefined,
       headers: {
@@ -463,7 +464,7 @@ export default {
 }
 .price {
   display: inline-block;
-  margin-right: 46px;
+  margin-right:40px;
   width: 85px;
   height: 85px;
   cursor: pointer;
@@ -511,17 +512,34 @@ border:1px solid rgba(65,215,135,1);
     color: #8c939d;
     }
     >img{
+          border-radius: 6px;
       width: 85px;
       height: 85px;
+          vertical-align: initial;
     }
   }
+  //  .el-upload{
+  //    width: 85px;
+  //   height: 85px;
+  //   line-height: 85px;
+  //   border: 1px dashed #c0ccda;
+  //   border-radius: 6px;
+  //   >i{
+  //     font-size: 28px;
+  //   color: #8c939d;
+  //   }
+  //   >img{
+  //     width: 86px;
+  //     height: 86px;
+  //   }
+  // }
   .ordinary_title {
        background-color: #fff;
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding:17px;
-      font-size: 13px;
+      // font-size: 13px;
       border-radius: 5px;
       div:nth-child(2){
         width:50px;

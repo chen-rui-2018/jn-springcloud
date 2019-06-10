@@ -5,7 +5,7 @@
     </div>
     <div class="registerBox">
       <h3>注册新用户</h3>
-      <input class="input" type="text" placeholder="请输入手机号码" v-model.trim="phone">
+      <input class="input" type="text" placeholder="请输入手机号码" v-model.trim="phone" @blur="inputBlur">
       <div class="tipPsw">请输入正确手机号码，可用于登录或找回密码</div>
       <div class="yanzheng">
         <input class="input" type="text" placeholder="请输入验证码" style="width:140px" v-model="messageCode">
@@ -51,11 +51,28 @@ export default {
       messageCode: "",
       password: "",
       password1: "",
-      loading:false
+      loading: false
     };
   },
   created() {},
   methods: {
+    inputBlur() {
+      let _this=this
+      this.api.get({
+        url: "accountIsExist",
+        data: {
+          registerAccount: this.phone
+        },
+        callback: res => {
+          if (res.code == "0000") {
+            if(res.data=='fail'){
+              _this.$message.error("当前账号已注册");
+              return
+            } 
+          } 
+        }
+      });
+    },
     handleLogin() {
       this.$router.push({ path: "/login" });
     },
@@ -99,12 +116,14 @@ export default {
           _this.loading = false;
           if (res.code == "0000") {
             _this.$message.success("注册成功");
-            _this.$confirm('注册成功, 是否登录?', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'success '
-            }).then(() => {
-              _this.loading = true;
+            _this
+              .$confirm("注册成功, 是否登录?", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "success "
+              })
+              .then(() => {
+                _this.loading = true;
                 _this.api.post({
                   url: "loginURL",
                   data: {
@@ -117,17 +136,16 @@ export default {
                     if (res.code == "0000") {
                       sessionStorage.token = res.data;
                       _this.$router.push({
-                        path: "/user",
-                        query: { account: _this.phone }
+                        path: "/"
+                        // query: { account: _this.phone }
                       });
                     } else {
                       _this.$message.error(res.result);
                     }
                   }
                 });
-            }).catch(() => {
-
-            });
+              })
+              .catch(() => {});
           } else {
             _this.$message.error(res.result);
           }
@@ -149,7 +167,6 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
             _this.sendAuthCode = false;
             _this.auth_time = 60;
             var auth_timetimer = setInterval(() => {
@@ -192,6 +209,9 @@ export default {
       width: 100%;
       height: 100%;
     }
+  }
+  input:focus {
+    border-color: #00a041 !important;
   }
   .registerBox,
   .resiter2 {

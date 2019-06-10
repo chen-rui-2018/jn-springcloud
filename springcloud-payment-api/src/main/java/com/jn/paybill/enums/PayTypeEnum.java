@@ -12,6 +12,7 @@ import com.jn.common.api.CodeAndMsg;
 public enum PayTypeEnum implements CodeAndMsg {
     PAYMENT_ORDER_TYPE_PARKING_FEE("parking_fee","临时停车费用"),
     PAYMENT_ORDER_TYPE_PARKING_MONTH("parking_month","车位月卡费用"),
+    PAYMENT_ORDER_TYPE_AD_FREE("ad_free","宣传费"),
 
     ;
 

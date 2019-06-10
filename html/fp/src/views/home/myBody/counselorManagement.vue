@@ -1,8 +1,8 @@
 <template>
   <div class="counselorManagement">
-    <div class="ordinary_title">
+    <div class="ordinary_title font16">
       <div>顾问管理</div>
-      <div @click="toInviteAdviser">邀请顾问</div>
+      <div @click="toInviteAdviser" v-show="isShow">邀请顾问</div>
     </div>
     <div class="ordinary_main">
       <div class="search">
@@ -64,6 +64,7 @@
 export default {
   data() {
     return {
+      isShow:false,
       page: 1,
       rows: 10,
       total: 0,
@@ -73,12 +74,21 @@ export default {
     };
   },
   mounted() {
+     let initArr = JSON.parse(sessionStorage.menuItems);
+    initArr.forEach(v => {
+      if (v.label === "我的机构") {
+        v.resourcesList.forEach(i => {
+          if (i.resourcesName === "邀请顾问") {
+            this.isShow = true;
+          }
+        });
+      }
+    });
     this.initList();
   },
   methods: {
     //   跳转到详情页
     handleDetails(row) {
-      console.log(row);
       this.$router.push({
         name: "advisoryDetails",
         query: { account: row.advisorAccount }
@@ -141,7 +151,6 @@ export default {
     },
     // 点击审批 跳转到审批顾问页面
     handleConsent(row) {
-      console.log(row);
       this.$router.push({
         name: "approveAdvisory",
         query: { advisorAccount: row.advisorAccount }
@@ -222,7 +231,7 @@ export default {
     justify-content: space-between;
     align-items: center;
     padding: 17px;
-    font-size: 13px;
+    // font-size: 13px;
     border-radius: 5px;
     div:nth-child(2) {
       width: 88px;

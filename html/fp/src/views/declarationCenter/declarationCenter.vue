@@ -5,7 +5,7 @@
           <div class="swiper-wrapper">
               <div class="swiper-slide"> <img src="@/assets/image/declaration.png" alt=""> </div>
           </div>
-          <div class="swiper-pagination"></div>
+          <!-- <div class="swiper-pagination"></div> -->
          <!--  <div class="swiper-button-prev">
             <i class="el-icon-arrow-left"></i>
           </div>
@@ -119,8 +119,8 @@ export default {
         rangeId:'',//所属类型
         sortType:'1',//排序
         page:1,
-        rows:4,
-        perennialList:[]
+        rows:6,
+        perennialList:[],
       }
     },
     filters: {
@@ -231,7 +231,19 @@ export default {
         this.getdeclarationcenterList()
       },
       goplatform(){
-        this.$router.push({name:'declarationPlatform'})
+        if(sessionStorage.token){
+          this.$router.push({name:'declarationPlatform'})
+        }else{
+          this.$confirm('亲，您需要登录后才能访问以下界面哦！', '提示', {
+            confirmButtonText: '去登陆',
+            cancelButtonText: '留在当前页面',
+            type: 'warning',
+            center: true
+          }).then(() => {
+             this.$router.push({path:"/login"})
+          }).catch(() => {
+          })
+        }
       },
       gonoticedetail(id){
         this.$router.push({path:'/declarationNoticeDetail',query:{id:id}})

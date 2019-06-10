@@ -3,6 +3,7 @@ package com.jn.paybill.api;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.pay.model.CreateOrderAndPayReqModel;
+import com.jn.pay.model.CreatePayReqModel;
 import com.jn.pay.model.PayOrderNotify;
 import com.jn.pay.model.PayOrderRsp;
 import com.jn.paybill.model.*;
@@ -97,7 +98,12 @@ public interface PayBillClient {
     @RequestMapping(value = "/api/pay/bill/cancelPayBillByBillId", method = RequestMethod.POST)
     Result<Boolean> cancelPayBillByBillId(@RequestBody String orderId);
 
-    @ApiOperation(value = "创建订单并发起支付")
-    @RequestMapping(value = "/api/pay/bill/createOrderAndPay",method = RequestMethod.POST)
-    Result<PayOrderRsp> createOrderAndPay(@RequestBody CreateOrderAndPayReqModel createOrderAndPayReqModel);
+    /**
+     * 发起支付
+     * @param createPayReqModel
+     * @return
+     */
+    @ApiOperation(value = "发起支付")
+    @RequestMapping(value = "/api/pay/bill/createPayOrder",method = RequestMethod.POST)
+    Result<PayOrderRsp> createPayOrder(@RequestBody CreatePayReqModel createPayReqModel);
 }

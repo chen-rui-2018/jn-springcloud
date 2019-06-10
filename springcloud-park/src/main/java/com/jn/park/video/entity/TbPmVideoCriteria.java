@@ -725,73 +725,73 @@ public class TbPmVideoCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andFlowNodeNameIsNull() {
-            addCriterion("flow_node_name is null");
+        public Criteria andVideoPlayIsNull() {
+            addCriterion("video_play is null");
             return (Criteria) this;
         }
 
-        public Criteria andFlowNodeNameIsNotNull() {
-            addCriterion("flow_node_name is not null");
+        public Criteria andVideoPlayIsNotNull() {
+            addCriterion("video_play is not null");
             return (Criteria) this;
         }
 
-        public Criteria andFlowNodeNameEqualTo(String value) {
-            addCriterion("flow_node_name =", value, "flowNodeName");
+        public Criteria andVideoPlayEqualTo(String value) {
+            addCriterion("video_play =", value, "videoPlay");
             return (Criteria) this;
         }
 
-        public Criteria andFlowNodeNameNotEqualTo(String value) {
-            addCriterion("flow_node_name <>", value, "flowNodeName");
+        public Criteria andVideoPlayNotEqualTo(String value) {
+            addCriterion("video_play <>", value, "videoPlay");
             return (Criteria) this;
         }
 
-        public Criteria andFlowNodeNameGreaterThan(String value) {
-            addCriterion("flow_node_name >", value, "flowNodeName");
+        public Criteria andVideoPlayGreaterThan(String value) {
+            addCriterion("video_play >", value, "videoPlay");
             return (Criteria) this;
         }
 
-        public Criteria andFlowNodeNameGreaterThanOrEqualTo(String value) {
-            addCriterion("flow_node_name >=", value, "flowNodeName");
+        public Criteria andVideoPlayGreaterThanOrEqualTo(String value) {
+            addCriterion("video_play >=", value, "videoPlay");
             return (Criteria) this;
         }
 
-        public Criteria andFlowNodeNameLessThan(String value) {
-            addCriterion("flow_node_name <", value, "flowNodeName");
+        public Criteria andVideoPlayLessThan(String value) {
+            addCriterion("video_play <", value, "videoPlay");
             return (Criteria) this;
         }
 
-        public Criteria andFlowNodeNameLessThanOrEqualTo(String value) {
-            addCriterion("flow_node_name <=", value, "flowNodeName");
+        public Criteria andVideoPlayLessThanOrEqualTo(String value) {
+            addCriterion("video_play <=", value, "videoPlay");
             return (Criteria) this;
         }
 
-        public Criteria andFlowNodeNameLike(String value) {
-            addCriterion("flow_node_name like", value, "flowNodeName");
+        public Criteria andVideoPlayLike(String value) {
+            addCriterion("video_play like", value, "videoPlay");
             return (Criteria) this;
         }
 
-        public Criteria andFlowNodeNameNotLike(String value) {
-            addCriterion("flow_node_name not like", value, "flowNodeName");
+        public Criteria andVideoPlayNotLike(String value) {
+            addCriterion("video_play not like", value, "videoPlay");
             return (Criteria) this;
         }
 
-        public Criteria andFlowNodeNameIn(List<String> values) {
-            addCriterion("flow_node_name in", values, "flowNodeName");
+        public Criteria andVideoPlayIn(List<String> values) {
+            addCriterion("video_play in", values, "videoPlay");
             return (Criteria) this;
         }
 
-        public Criteria andFlowNodeNameNotIn(List<String> values) {
-            addCriterion("flow_node_name not in", values, "flowNodeName");
+        public Criteria andVideoPlayNotIn(List<String> values) {
+            addCriterion("video_play not in", values, "videoPlay");
             return (Criteria) this;
         }
 
-        public Criteria andFlowNodeNameBetween(String value1, String value2) {
-            addCriterion("flow_node_name between", value1, value2, "flowNodeName");
+        public Criteria andVideoPlayBetween(String value1, String value2) {
+            addCriterion("video_play between", value1, value2, "videoPlay");
             return (Criteria) this;
         }
 
-        public Criteria andFlowNodeNameNotBetween(String value1, String value2) {
-            addCriterion("flow_node_name not between", value1, value2, "flowNodeName");
+        public Criteria andVideoPlayNotBetween(String value1, String value2) {
+            addCriterion("video_play not between", value1, value2, "videoPlay");
             return (Criteria) this;
         }
 

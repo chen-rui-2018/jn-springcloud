@@ -1,8 +1,8 @@
 package com.jn.enterprise.company.dao;
 
-import com.jn.company.model.ServiceCompany;
 import com.jn.company.model.ServiceEnterpriseParam;
 import com.jn.enterprise.company.entity.TbServiceCompanyModify;
+import com.jn.enterprise.company.model.CompanyInfoShow;
 import com.jn.park.care.model.ServiceEnterpriseCompany;
 import org.apache.ibatis.annotations.Param;
 
@@ -29,4 +29,11 @@ public interface CompanyMapper {
      * @return
      */
     List<ServiceEnterpriseCompany> getCompanyNewList(ServiceEnterpriseParam serviceEnterpriseParam);
+
+    /**
+     * 获取企业详情
+     * @param companyId
+     * @return
+     */
+    CompanyInfoShow getCompanyDetails(@Param("companyId") String companyId);
 }

@@ -37,7 +37,7 @@ public class PropertyServerController extends BaseController implements Property
     @Override
     public Result<String> automaticApprovalTaskByTaskId(@RequestBody PayCallBackNotify  payCallBackNotify) {
         logger.info("物业服务-自动执行ibps处理节点任务");
-        repairService.automaticApprovalTaskByTaskId(payCallBackNotify);
-        return new Result();
+        Result result= repairService.automaticApprovalTaskByTaskId(payCallBackNotify);
+        return result;
     }
 }

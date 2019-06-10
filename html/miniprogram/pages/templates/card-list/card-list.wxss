@@ -1,0 +1,49 @@
+.card-list {
+  display: flex;
+  padding: 31rpx 27rpx;
+  background-color: #fff;
+}
+.card-list-poster {
+  width: 210rpx;
+  height: 145rpx;
+  border-radius: 8rpx;
+  flex: none;
+}
+.no-image-bg {
+  width: 210rpx;
+  height: 145rpx;
+  border-radius: 8rpx;
+  flex: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #EFEFEF;
+}
+.no-image-bg .no-image {
+  width: 105rpx;
+  height: 105rpx;
+}
+.card-list-content {
+  margin-left: 19rpx;
+  font-size: 28rpx;
+  color:rgba(51,51,51,1);
+  flex: 1;
+}
+.card-list-title {
+  font-size: 32rpx;
+}
+.card-list-text {
+  margin-top: 16rpx;
+}
+.card-list-tips {
+  display: flex;
+  justify-content: space-between;
+  align-items:center;
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color:rgba(153,153,153,1);
+}
+.card-list-warning {
+  margin-left: 8rpx;
+  color: #FF3333;
+}

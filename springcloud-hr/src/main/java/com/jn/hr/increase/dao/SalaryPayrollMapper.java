@@ -17,6 +17,8 @@ public interface SalaryPayrollMapper {
 	//根据部门和时间查询获取sum值
 	Double selectByDepartment(SalaryPayrollPage salaryPayrollPage);
 	
+	SalaryPayrollVo selectByJobNumberAndMonth(SalaryPayrollAdd salaryPayrollAdd);
+	
 	//各项补贴统计
 	SalaryPayrollVo selectByWage(@Param("accountEntryTime") String accountEntryTime);
 	//部门工资统计

@@ -69,6 +69,7 @@ import com.jn.hr.exam.service.ExaminaService;
 import com.jn.news.vo.EmailVo;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
+import com.jn.upload.api.UploadClient;
 
 /**
  * 
@@ -116,6 +117,8 @@ public class ExaminaServiceImpl implements ExaminaService {
 	ExaminaExamQuestionMapper examinaExamQuestionMapper;
 	@Autowired
 	MessageSource messageSource;
+	@Autowired
+	UploadClient uploadClient;
 
 	/**
 	 * 新增试题
@@ -140,6 +143,9 @@ public class ExaminaServiceImpl implements ExaminaService {
 		if (null == tbBank.getRecordStatus()) {
 			Byte recordStatus = Byte.parseByte(HrStatusEnums.EFFECTIVE.getCode());// 正常调研1
 			tbBank.setRecordStatus(recordStatus);
+		}
+		if (!StringUtils.isBlank(tbBank.getStandardAnswer())) {
+			tbBank.setStandardAnswer(null);
 		}
 		String userAccount = user.getAccount();
 		tbBank.setCreatorAccount(userAccount);
@@ -203,15 +209,21 @@ public class ExaminaServiceImpl implements ExaminaService {
 	 * @return
 	 */
 	private String getQuestType(String questType) {
-		String questTypeStr = "单选题";
+		String questTypeStr = "";
 		if (!StringUtils.isBlank(questType)) {
-			if (questType.equals("2")) {
-				questTypeStr = "多选题";
-			} else if (questType.equals("3")) {
-				questTypeStr = "问答题";
-			} else if (questType.equals("4")) {
-				questTypeStr = "判断题";
+			if (questType.equals(ExaminaStatusEnmus.TYPE_ONE.getCode())) {
+				questTypeStr = ExaminaStatusEnmus.TYPE_ONE.getMessage();
+			} else if (questType.equals(ExaminaStatusEnmus.TYPE_TWO.getCode())) {
+				questTypeStr = ExaminaStatusEnmus.TYPE_TWO.getMessage();
+			} else if (questType.equals(ExaminaStatusEnmus.TYPE_THREE.getCode())) {
+				questTypeStr = ExaminaStatusEnmus.TYPE_THREE.getMessage();
+			} else if (questType.equals(ExaminaStatusEnmus.TYPE_FOUR.getCode())) {
+				questTypeStr = ExaminaStatusEnmus.TYPE_FOUR.getMessage();
+			} else {
+				throw new JnSpringCloudException(ExaminaExceptionEnums.NOT_NULL_ERROR, "参数异常，当前题目类型错误");
 			}
+		} else {
+			throw new JnSpringCloudException(ExaminaExceptionEnums.NOT_NULL_ERROR, "参数异常，题目类型不能为空");
 		}
 		return questTypeStr;
 	}
@@ -270,7 +282,8 @@ public class ExaminaServiceImpl implements ExaminaService {
 	@Override
 	@ServiceLog(doAction = "修改试题功能")
 	@Transactional(rollbackFor = Exception.class)
-	public void updateExaminabank(Examinabank examinabank, User user) {
+	public ExaminabankAdd updateExaminabank(Examinabank examinabank, User user) {
+		ExaminabankAdd examinabankAdd = new ExaminabankAdd();
 		String testQuestionId = examinabank.getTestQuestionId();
 
 		// 编辑题目信息
@@ -284,7 +297,9 @@ public class ExaminaServiceImpl implements ExaminaService {
 			tbBank.setStandardAnswer(null);
 		}
 		tbManpowerExaminaBankMapper.updateByPrimaryKeySelective(tbBank);
-
+		BeanUtils.copyProperties(tbBank, examinabankAdd);
+		// 返回题目类型
+		examinabankAdd.setTestQuestionTypeStr(getQuestType(examinabankAdd.getTestQuestionType()));
 		// 编辑题目选项
 		// 新增/编辑选项
 		List<ExaminaOption> optionList = examinabank.getOptionList();
@@ -323,7 +338,25 @@ public class ExaminaServiceImpl implements ExaminaService {
 		BeanUtils.copyProperties(examinabank, tbQuestionAnswer);
 		tbQuestionAnswer.setId(answerId);
 		tbManpowerExaminaQuestionAnswerMapper.updateByPrimaryKeySelective(tbQuestionAnswer);
+
+		if (!StringUtils.isBlank(tbQuestionAnswer.getId())) {
+			examinabankAdd.setAnswerId(tbQuestionAnswer.getId());
+		}
+		if (!StringUtils.isBlank(tbQuestionAnswer.getAnswerNumber())) {
+			if (tbQuestionAnswer.getAnswerNumber().equals("N")) {
+				tbQuestionAnswer.setAnswerNumber("×");
+			} else if (tbQuestionAnswer.getAnswerNumber().equals("Y")) {
+				tbQuestionAnswer.setAnswerNumber("√");
+			}
+			examinabankAdd.setAnswerNumber(tbQuestionAnswer.getAnswerNumber());
+			examinabankAdd.setStandardAnswer(examinabankAdd.getAnswerNumber());
+		}
+		if (!StringUtils.isBlank(tbQuestionAnswer.getAnswerHtml())) {
+			examinabankAdd.setAnswerHtml(tbQuestionAnswer.getAnswerHtml());
+			examinabankAdd.setStandardAnswer(examinabankAdd.getAnswerHtml());
+		}
 		logger.info("编辑题目信息成功,testQuestionId:{}", examinabank.getTestQuestionId());
+		return examinabankAdd;
 	}
 
 	/**
@@ -907,9 +940,9 @@ public class ExaminaServiceImpl implements ExaminaService {
 			Integer examinabankSize = 0;// 试题个数
 			double notErrorexaminBankSize = 0;// 正确个数
 			if (null != examinabanksList && examinabanksList.size() > 0) {
+				List<TbManpowerExaminaAnswerCard> cardList = new ArrayList<TbManpowerExaminaAnswerCard>();
 				for (Examinabank examinabank : examinabanksList) {
 					examinabankSize++;
-
 					// 查询试题信息
 					Examinabank examinabankAdd = new Examinabank();
 					examinabank.setExaminaId(id);
@@ -918,7 +951,7 @@ public class ExaminaServiceImpl implements ExaminaService {
 
 					// 计算成绩
 					Float achievementStr = 0f;
-					String answerType = "1";// 题目类型--正确
+					String answerType = ExaminaStatusEnmus.TYPE_TRUE.getCode();// 题目类型--正确
 					if (!StringUtils.isBlank(tbExaminaBank.getStandardAnswer())) {
 						String answer = examinabank.getAnswer();// 答案信息
 						if (StringUtils.isBlank(answer)) {
@@ -937,14 +970,14 @@ public class ExaminaServiceImpl implements ExaminaService {
 							if (achievementStr.equals(fraction)) {
 								notErrorexaminBankSize++;
 							} else {
-								answerType = "2";
+								answerType = ExaminaStatusEnmus.TYPE_FALSE.getCode();
 								notErrorexaminBankSize = notErrorexaminBankSize + 0.5;
 							}
 							int achievementInt = (int) Math.ceil(achievementStr);
 							achievementStr = (float) achievementInt;
 							achievement += achievementStr;
 						} else {
-							answerType = "2";
+							answerType = ExaminaStatusEnmus.TYPE_FALSE.getCode();
 						}
 
 						TbManpowerExaminaAnswerCard tbManpowerExaminaAnswerCard = new TbManpowerExaminaAnswerCard();
@@ -958,9 +991,13 @@ public class ExaminaServiceImpl implements ExaminaService {
 						}
 						tbManpowerExaminaAnswerCard.setTitleScore(achievementStr.intValue() + "");
 						tbManpowerExaminaAnswerCard.setAnswerType(answerType);
-						tbManpowerExaminaAnswerCardMapper.insertSelective(tbManpowerExaminaAnswerCard);
+						cardList.add(tbManpowerExaminaAnswerCard);
+						// tbManpowerExaminaAnswerCardMapper.insertSelective(tbManpowerExaminaAnswerCard);
 						examinabankAddList.add(examinabankAdd);
 					}
+				}
+				if (null != cardList && cardList.size() > 0) {
+					examinaAnswerCardMapper.insertBatch(cardList);
 				}
 			}
 			examinaManagementAdd.setExaminabanksList(examinabankAddList);
@@ -991,9 +1028,10 @@ public class ExaminaServiceImpl implements ExaminaService {
 				int useTime = (int) ((endTime - startTime) / 1000 / 60);
 				examinaResultInfo.setUseTime(useTime);
 			}
+
 			if (null == examinaResultInfo.getRank()) {
-				List<Integer> achievementList = examinaResultInfoMapper.listAchievement();
-				examinaResultInfo.setRank(achievementRank(achievementList, (int) achievement));
+				Integer rank = getRank(id, examinaResultInfo.getAchievement());
+				examinaResultInfo.setRank(rank);
 			}
 			examinaResultInfo.setRecordStatus(Byte.parseByte(HrStatusEnums.EFFECTIVE.getCode()));
 			tbManpowerExaminaResultInfoMapper.insertSelective(examinaResultInfo);
@@ -1035,7 +1073,7 @@ public class ExaminaServiceImpl implements ExaminaService {
 		Integer examinabankSize = 0;
 
 		for (TbManpowerExaminaAnswerCard tbAnswerCard : tbAnswerCardList) {
-			if (tbAnswerCard.getAnswerType().equals("1")) {
+			if (tbAnswerCard.getAnswerType().equals(ExaminaStatusEnmus.TYPE_TRUE.getCode())) {
 				notErrorexaminBankSize++;
 			}
 			examinabankSize++;
@@ -1090,9 +1128,9 @@ public class ExaminaServiceImpl implements ExaminaService {
 					card.setTestQuestId(tbExaminabank.getTestQuestionId());
 					card.setTitleScore((int) Math.ceil(Float.parseFloat(examinabank.getTitleScore())) + "");
 					if (examinabank.isErrorFlag()) {
-						card.setAnswerType("2");
+						card.setAnswerType(ExaminaStatusEnmus.TYPE_FALSE.getCode());
 					} else {
-						card.setAnswerType("1");
+						card.setAnswerType(ExaminaStatusEnmus.TYPE_TRUE.getCode());
 					}
 					TbManpowerExaminaAnswerCard tbCard = examinaAnswerCardMapper.selectAnswer(card);
 					titleScore = titleScore + Float.parseFloat(tbCard.getTitleScore());
@@ -1113,8 +1151,8 @@ public class ExaminaServiceImpl implements ExaminaService {
 			} else {
 				tbResultInfo.setIsAdopt(Byte.parseByte(ExaminaStatusEnmus.UN_ADOPT.getCode()));
 			}
-			List<Integer> achievementList = examinaResultInfoMapper.listAchievement();
-			tbResultInfo.setRank(achievementRank(achievementList, achievement));
+			Integer rank = getRank(examinaManagement.getId(), achievement);
+			tbResultInfo.setRank(rank);
 			tbManpowerExaminaResultInfoMapper.updateByPrimaryKeySelective(tbResultInfo);
 		}
 	}
@@ -1191,7 +1229,7 @@ public class ExaminaServiceImpl implements ExaminaService {
 			examinabank.setAnswer(tbAnswerCard.getAnswer());
 			examinabank.setTitleScore(tbAnswerCard.getTitleScore());
 			String answerType = tbAnswerCard.getAnswerType();
-			if (answerType.equals("2")) {
+			if (answerType.equals(ExaminaStatusEnmus.TYPE_FALSE.getCode())) {
 				examinabank.setErrorFlag(true);
 			}
 			String titleScore = tbAnswerCard.getTitleScore();// 题目得分
@@ -1227,7 +1265,7 @@ public class ExaminaServiceImpl implements ExaminaService {
 		}
 		examinaAnswerAdd.setScoreRate(
 				HrDataUtil.getPercentStr(tbResultInfo.getAchievement(), examinaAnswerAdd.getTotalScore()) + "%");
-		logger.info("查看试卷信息成功成功.id{}", examinaManagement.getId());
+		logger.info("查看试卷信息及答题详情成功.id{}", examinaManagement.getId());
 		return examinaAnswerAdd;
 	}
 
@@ -1293,7 +1331,8 @@ public class ExaminaServiceImpl implements ExaminaService {
 	 * @param achievement
 	 * @return
 	 */
-	private static Integer achievementRank(List<Integer> achievementList, Integer achievement) {
+	private static Map<Integer, Integer> achievementRank(List<Integer> achievementList, Integer achievement) {
+		Map<Integer, Integer> mapList = new HashMap<Integer, Integer>();
 		Integer rank = 0;
 		achievementList.add(achievement);
 		Set<Integer> set = new HashSet<>(achievementList);
@@ -1307,11 +1346,28 @@ public class ExaminaServiceImpl implements ExaminaService {
 			}
 		});
 		for (int i = 0; i < achievementList.size(); i++) {
-			if (achievementList.get(i) == achievement) {
-				rank = i + 1;
-			}
+			rank = i + 1;
+			mapList.put(achievementList.get(i), rank);
 		}
-		return rank;
+		return mapList;
+	}
+
+	/**获取当前分数等级
+	 * @param id
+	 * @param achievement
+	 * @return
+	 */
+	private Integer getRank(String id, Integer achievement) {
+		List<Integer> achievementList = examinaResultInfoMapper.listAchievement(id);
+		Map<Integer, Integer> rankMap = achievementRank(achievementList, achievement);
+		for (Integer tbAch : rankMap.keySet()) {
+			TbManpowerExaminaResultInfo tbinfo = new TbManpowerExaminaResultInfo();
+			tbinfo.setExaminaId(id);
+			tbinfo.setAchievement(tbAch);
+			tbinfo.setRank(rankMap.get(tbAch));
+			examinaResultInfoMapper.updateBatch(tbinfo);
+		}
+		return rankMap.get(achievement);
 	}
 
 	/**
@@ -1374,4 +1430,49 @@ public class ExaminaServiceImpl implements ExaminaService {
 		// }
 		return tbExaminaBank;
 	}
+
+	/**
+	 * 附件批量上传
+	 *
+	 * @param files
+	 */
+	// @Override
+	// @ServiceLog(doAction = "员工档案附件批量上传")
+	// public List<FileAttachment> uploadAttachment(List<MultipartFile> files,
+	// String fileId, User user) {
+	// List<FileAttachment> fileAttachmentList = new
+	// ArrayList<FileAttachment>();
+	// for (MultipartFile file : files) {
+	// if (file.isEmpty()) {
+	// logger.warn("[员工档案管理] 附件上传失败");
+	// throw new JnSpringCloudException(HrExceptionEnums.FILE_IS_NULL);
+	// } else {
+	// try {
+	// FileAttachment fileObj = new FileAttachment();
+	// TbManpowerFileAttachment fileAttachment = new TbManpowerFileAttachment();
+	// String title = file.getOriginalFilename();
+	// String[] split = title.split("\\.");
+	// String str = DateUtils.formatDate(new Date(), "yyyyMMdd");
+	// String fileName = split[0] + str + RandomStringUtils.randomNumeric(4) +
+	// "." + split[1];
+	// Result<String> result = uploadClient.uploadFile(file, true, "hr");
+	// fileAttachment.setFileId(fileId);
+	// fileAttachment.setCreateTime(new Date());
+	// fileAttachment.setFileName(split[0]);
+	// fileAttachment.setFilePath(result.getData());
+	// fileAttachment.setFileSize(String.valueOf(file.getSize()));
+	// fileAttachment.setFileType(split[1]);
+	// fileAttachment.setFounder(user.getAccount());
+	// fileAttachment.setId(UUID.randomUUID().toString());
+	// tbManpowerFileAttachmentMapper.insert(fileAttachment);
+	// BeanUtils.copyProperties(fileAttachment, fileObj);
+	// fileAttachmentList.add(fileObj);
+	// } catch (Exception e) {
+	// logger.error("员工档案附件上传失败:" + e.getMessage(), e);
+	// throw new JnSpringCloudException(HrExceptionEnums.UPLOAD_FILE_ERRPR);
+	// }
+	// }
+	// }
+	// return fileAttachmentList;
+	// }
 }

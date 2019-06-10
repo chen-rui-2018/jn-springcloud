@@ -392,10 +392,10 @@
       <div class="link w clearfix">
         <h5 class="tit fl">链接:</h5>
         <ul class="linkUl fl clearfix">
-          <li>
+          <!-- <li>
             <a href="http://49.65.0.116/12345cas/login?service=http%3A%2F%2F49.65.0.116%2Fnjzwfwrx&nsukey=AQQco%2FbD85TPQaQNmfSSOPDaBrhZLXABGuGPn7Lwy0TvAoJHmW58tc8YB2ZyQjAWeTnP0Kxw1pc8yzu3qB1vCsDXLfOnavjwy%2Bx9AercmpzFykXcLIWEEcNXCL0y42GcdlxRk4XYUv0dYKNhybhClDVCP5x%2Fe7t4F%2B5MmUzb65JMOEMr9b7fnQZqLhwizwAgdmMtm3cJLXtHU5bRESEfPw%3D%3D" target="_blank">12345平台</a>
           </li>
-          <li class="line"></li>
+          <li class="line"></li> -->
           <li>
             <a href="http://ids.nanjing.gov.cn:8081/12345/regedit/regedit.html" target="_blank">12345注册</a>
           </li>

@@ -23,7 +23,7 @@
             <p>咨询电话：
               <span class="mainColor">{{serverOrgDetailList.orgPhone}}</span>
             </p>
-            <p>公司地址：{{serverOrgDetailList.orgAddress}}</p>
+            <p>公司地址：{{serverOrgDetailList.orgAddressDetail}}</p>
             <p class="lastP color3">
               <span>交易量：{{serverOrgDetailList.transactionCount}}</span>
               <span>浏览：{{serverOrgDetailList.orgShow}}</span>
@@ -41,7 +41,7 @@
           <i class="el-icon-arrow-up"></i>
         </div>
         <div class="mainColor shouqi zhankai pointer" v-else @click='handleZk'>
-          <i class="el-icon-arrow-down"></i>
+          展开<i class="el-icon-arrow-down"></i>
         </div>
         <el-card>
           <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -566,7 +566,7 @@
                     <!-- <span>{{item.actiStartTime}}-{{item.actiEndTime.split(' ')[1]}}</span> -->
                     <!-- <span>周日14：00-17：00</span> -->
                   </p>
-                  <p>
+                  <p class="actiAddress">
                     <i class="el-icon-location-outline"></i>
                     <span>{{i.actiAddress}}</span>
                   </p>
@@ -633,7 +633,7 @@ export default {
     return {
       islogin: true,
       concatVisible:false,
-      zankaiFlag: false,
+      zankaiFlag: true,
       activeName: "baseInfo",
       activeName1: "serverPro",
       serverOrgDetailList: {},

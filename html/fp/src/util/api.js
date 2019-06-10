@@ -12,7 +12,7 @@ export default {
         activityApplyList:"springcloud-park/activity/activityApply/activityApplyList",//报名人列表查看
         quickApply:'springcloud-park/activity/activityApply/quickApply',//快速报名
         cancelApply:"springcloud-park/activity/activityApply/cancelApply",//取消报名
-        getUserExtension:"springcloud-user/guest/userInfo/getUserExtension",//获取当前用户资料
+        getUserExtension:"springcloud-user/user/userInfo/getUserExtension",//获取当前用户资料
         activityLike:"springcloud-park/activity/activityLike/activityLike",//活动点赞
         CancelLike:"springcloud-park/activity/activityLike/cancelLike",//取消点赞
         commentActivity:"springcloud-park/comment/review/commentActivity",//活动评论/回复
@@ -36,7 +36,7 @@ export default {
         updatePassword:"springcloud-user/guest/userJoin/updatePassword",//修改密码
         getUserPersonInfo:"springcloud-user/user/center/getUserPersonInfo",//根据用户账号获取用户资料信息
         modifyUserPassword:"springcloud-user/user/center/modifyUserPassword",//修改用户密码
-        saveUserInfo:"springcloud-user/guest/userInfo/saveUserInfo",//保存用户资料
+        saveUserInfo:"springcloud-user/user/userInfo/saveUserInfo",//保存用户资料
         getTagCodeList:"springcloud-user/guest/userTag/getTagCodeList",//获取用户字典列表
         findHotProducts:"springcloud-enterprise/guest/servicemarket/product/web/findHotProducts",//热门产品
         selectIndustryList:"springcloud-enterprise/serviceMarket/industryManage/selectIndustryList",//顾问领域列表
@@ -284,7 +284,7 @@ export default {
                         window.sessionStorage.removeItem('account')
                         window.sessionStorage.removeItem('userInfo')
                         alert(response.data.result);
-                        location.href="#login";
+                        location.href="#/";
                         return
                     }
                     callback(response.data);

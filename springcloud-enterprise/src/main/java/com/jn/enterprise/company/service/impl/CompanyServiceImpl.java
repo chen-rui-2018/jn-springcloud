@@ -27,6 +27,7 @@ import com.jn.enterprise.company.vo.CompanyDetailsVo;
 import com.jn.enterprise.company.vo.StaffListVO;
 import com.jn.enterprise.enums.JoinParkExceptionEnum;
 import com.jn.enterprise.enums.RecordStatusEnum;
+import com.jn.enterprise.model.CompanyInfoModel;
 import com.jn.enterprise.servicemarket.industryarea.dao.TbServicePreferMapper;
 import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePrefer;
 import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePreferCriteria;
@@ -54,6 +55,7 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.Inflater;
 
 /**
  * 企业信息Service
@@ -474,6 +476,21 @@ public class CompanyServiceImpl implements CompanyService {
         UserExtensionInfo data = userExtension.getData();
         BeanUtils.copyProperties(data, companyContact);
         return companyContact;
+    }
+    @ServiceLog(doAction = "获取企业信息(关注企业列表展示)")
+    @Override
+    public CompanyInfoModel getCompanyInfo(String companyId,String account) {
+        logger.info("获取企业信息(关注企业列表展示)企业id:"+companyId+"当前账号:"+account);
+        CompanyInfoModel companyInfoModel = new CompanyInfoModel();
+        CompanyDetailsVo vo = companyService.getCompanyDetails(companyId,account);
+        if(vo != null && vo.getCompanyInfoShow()!=null){
+            companyInfoModel.setCompanyId(companyId);
+            companyInfoModel.setCompanyName(vo.getCompanyInfoShow().getComName());
+            companyInfoModel.setCompanyAvatar( IBPSFileUtils.getFilePath(vo.getCompanyInfoShow().getAvatar()));
+        }else{
+            throw new JnSpringCloudException(CompanyExceptionEnum.COMPANY_INFO_NOT_EXIST);
+        }
+        return companyInfoModel;
     }
 
 

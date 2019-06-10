@@ -141,9 +141,6 @@ public class OrgServiceImpl implements OrgService {
     public PaginationData<List<ServiceOrg>> selectServiceOrgList(OrgParameter orgParameter){
         Page<Object> objects = PageHelper.startPage(orgParameter.getPage(), orgParameter.getRows() == 0 ? 15 : orgParameter.getRows());
         List<String> sList = new ArrayList<>(16);
-        if(null!=orgParameter.getCompanyNature()&&orgParameter.getCompanyNature().length>0){
-            sList.addAll(Arrays.asList(orgParameter.getCompanyNature()));
-        }
         if(null!=orgParameter.getDevelopmentStage()&&orgParameter.getDevelopmentStage().length>0){
             sList.addAll(Arrays.asList(orgParameter.getDevelopmentStage()));
         }
@@ -205,21 +202,14 @@ public class OrgServiceImpl implements OrgService {
             TbServicePreferCriteria preferCriteria = new TbServicePreferCriteria();
             preferCriteria.createCriteria().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
             List<TbServicePrefer> tbServicePrefers = tbServicePreferMapper.selectByExample(preferCriteria);
-            List<String>sbSpeciality=new ArrayList<>(16);
             List<String>sbHobby=new ArrayList<>(16);
             for (TbServicePrefer prefer:tbServicePrefers) {
-                for (String sp:orgBasicData.getOrgSpeciality()) {
-                    if(StringUtils.equals(sp,prefer.getId())){
-                        sbSpeciality.add(prefer.getPreValue());
-                    }
-                }
                 for (String shobby :hobby) {
                     if(StringUtils.equals(shobby,prefer.getId())){
                         sbHobby.add(prefer.getPreValue());
                     }
                 }
             }
-            tbServiceOrg.setOrgSpeciality(StringUtils.join(sbSpeciality,","));
             tbServiceOrg.setOrgHobby(StringUtils.join(sbHobby,","));
         }
 
@@ -249,11 +239,6 @@ public class OrgServiceImpl implements OrgService {
         TbServiceOrgTraitCriteria traitCriteria = new TbServiceOrgTraitCriteria();
         TbServiceOrgTraitCriteria.Criteria criteria = traitCriteria.createCriteria().andOrgIdEqualTo(tbServiceOrg.getOrgId());
         //trait_type : 特性类型(1业务擅长2行业领域3发展阶段4企业性质)
-        if(null != orgBasicData.getOrgSpeciality() && orgBasicData.getOrgSpeciality().length>0){
-            criteria.andTraitTypeEqualTo("1");
-            tbServiceOrgTraitMapper.deleteByExample(traitCriteria);
-            traits.addAll(setTraitBean(orgBasicData.getOrgSpeciality(),"1",tbServiceOrg.getOrgId(),account));
-        }
         if(null != orgBasicData.getIndustrySector() && orgBasicData.getIndustrySector().length>0){
             criteria.andTraitTypeEqualTo("2");
             tbServiceOrgTraitMapper.deleteByExample(traitCriteria);
@@ -263,11 +248,6 @@ public class OrgServiceImpl implements OrgService {
             criteria.andTraitTypeEqualTo("3");
             tbServiceOrgTraitMapper.deleteByExample(traitCriteria);
             traits.addAll(setTraitBean(orgBasicData.getDevelopmentStage(),"3",tbServiceOrg.getOrgId(),account));
-        }
-        if(null != orgBasicData.getCompanyNature() && orgBasicData.getCompanyNature().length>0){
-            criteria.andTraitTypeEqualTo("4");
-            tbServiceOrgTraitMapper.deleteByExample(traitCriteria);
-            traits.addAll(setTraitBean(orgBasicData.getCompanyNature(),"4",tbServiceOrg.getOrgId(),account));
         }
         if(traits.size()>0){
             Map<String,Object> map = new HashMap<>(4);

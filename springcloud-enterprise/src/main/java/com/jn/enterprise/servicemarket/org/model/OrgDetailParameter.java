@@ -31,13 +31,17 @@ public class OrgDetailParameter implements Serializable {
 
     @ApiModelProperty(value = "机构简介",required = true,example = "机构成立于****")
     @NotNull(message = "机构简介不能为空")
-    @Size(max=500,message = "机构简介不能超过500字")
+    @Size(max=1000,message = "机构简介不能超过1000字")
     private String orgSynopsis;
 
     @ApiModelProperty(value = "机构LOGO",required = true,example = "**/**/**.png")
     @NotNull(message = "机构LOGO不能为空")
     private String orgLogo;
     @ApiModelProperty(value = "机构注册时间yyyy-MM-dd",required = true,example = "2019-03-01")
+    @Pattern(regexp = "(([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})-(((0[13578]|1[02])-" +
+            "(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)-(0[1-9]|[12][0-9]|30))|(02-(0[1-9]|[1][0-9]|2[0-8]))))|((([0-9]{2})" +
+            "(0[48]|[2468][048]|[13579][26])|((0[48]|[2468][048]|[3579][26])00))-02-29)",
+            message = "{orgRegisterTime:'资机构注册时间格式错误'}")
     @NotNull(message = "机构注册时间不能为空")
     private String orgRegisterTime;
     @ApiModelProperty(value = "组织机构代码(统一社会信用代码)",required = true,example = "65151****")

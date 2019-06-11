@@ -491,6 +491,14 @@ const router= new Router({
               },
               component: resolve => require(['@/views/home/myBody/advisoryDetails'], resolve)
             },
+            // {
+            //   path: '/myBody/editAdvisers',
+            //   name: 'editAdvisers',
+            //   meta: {
+            //     title: '编辑顾问'
+            //   },
+            //   component: resolve => require(['@/views/home/myBody/editAdvisers'], resolve)
+            // },
             {
               path: '/myBody/approveAdvisory',
               name: 'approveAdvisory',

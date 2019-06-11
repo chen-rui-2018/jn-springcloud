@@ -5,12 +5,15 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.enterprise.api.PersonnelClient;
 import com.jn.enterprise.model.PersonnelProject;
+import com.jn.enterprise.pd.personnel.entity.TbPersonnelProject;
 import com.jn.enterprise.pd.personnel.service.PersonnelService;
 import com.jn.enterprise.pd.talent.entity.TbPdPerennialDeclaration;
 import com.jn.system.log.annotation.ControllerLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -33,8 +36,8 @@ public class PersonnelServerController extends BaseController implements Personn
 
     @ControllerLog(doAction = "查询人才申报列表")
     @Override
-    public Result<List<PersonnelProject>> selectByPersonnelProjectList(PersonnelProject personnelProject) {
-        PaginationData<List<PersonnelProject>> data = personnelService.selectByPersonnelProjectList(personnelProject);
-        return new Result(data);
+    public Result<List<PersonnelProject>> selectByPersonnelProjectList(@Validated @RequestBody PersonnelProject personnelProject) {
+        List<PersonnelProject> data = personnelService.selectByPersonnelProjectList(personnelProject);
+        return new Result<>(data);
     }
 }

@@ -365,13 +365,15 @@ public class OrgServiceImpl implements OrgService {
         List<TbServiceOrgLicense> orgLicenses = new ArrayList<>();
         for (OrgLicense orgLicense :licenses) {
             TbServiceOrgLicense tbServiceOrgLicense = new TbServiceOrgLicense();
-            BeanUtils.copyProperties(orgLicense,tbServiceOrgLicense);
-            try {
-                tbServiceOrgLicense.setAwardTime(DateUtils.parseDate(orgLicense.getAwardTime(),"yyyy-MM-dd"));
-            } catch (ParseException e) {
-                logger.info("保存服务机构资质信息时间转换失败。失败原因{}", e.getMessage(), e);
-                throw new JnSpringCloudException(OrgExceptionEnum.ORG_TIME_PARSE_ERROR);
-            }
+            BeanUtils.copyProperties(orgLicense, tbServiceOrgLicense);
+            if (orgLicense.getAwardTime() != null) {
+                try {
+                    tbServiceOrgLicense.setAwardTime(DateUtils.parseDate(orgLicense.getAwardTime(), "yyyy-MM-dd"));
+                } catch(ParseException e){
+                    logger.info("保存服务机构资质信息时间转换失败。失败原因{}", e.getMessage(), e);
+                    throw new JnSpringCloudException(OrgExceptionEnum.ORG_TIME_PARSE_ERROR);
+                }
+             }
             tbServiceOrgLicense.setCreatedTime(new Date());
             tbServiceOrgLicense.setCreatorAccount(account);
             tbServiceOrgLicense.setRecordStatus(new Byte(RECORD_STATUS_VALID));

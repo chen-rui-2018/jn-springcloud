@@ -28,7 +28,7 @@
     <h3>日均能耗</h3>
     <div id="myCharts" style="width:100%;height:400px;" />
     <!-- 表格 -->
-    <el-table ref="multipleTable" :data="energyList" border fit highlight-current-row style="width: 100%;height:100%;">
+    <el-table ref="multipleTable" :data="energyList" border fit highlight-current-row style="width: 98%;">
       <!-- <el-table-column
         type="selection"
         width="55"/> -->

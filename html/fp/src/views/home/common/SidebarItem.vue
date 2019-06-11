@@ -103,14 +103,12 @@ export default {
           callback: res => {
             if (res.code == "0000") {
               console.log(res);
-              if (res.data.approvalDesc === "未认证") {
+              if (res.data.approvalDesc === "未认证"||res.data.approvalDesc==='认证不通过') {
                 this.orgArr = [];
                 this.organizationForm.orgName = "";
                 this.organizationForm.orgId = "";
                 this.centerDialogVisible = true;
                 this.query();
-              } else if(res.data.approvalDesc === "认证不通过"){
-                 this.$router.push({ path: item.path });
               }else{
                  this.$router.push({ path: item.path,query:{ isConceal:'1'} });//是否隐藏发送按钮
                 // this.$router.push({ path: item.path ,query});

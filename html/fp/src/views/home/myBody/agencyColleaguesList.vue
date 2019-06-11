@@ -2,7 +2,7 @@
   <div class="agencyColleaguesList">
     <div class="ordinary_title font16">
       <div>机构同事</div>
-      <!-- <div @click="toInviteEmployees">邀请员工</div> -->
+      <div @click="$router.push({path:'/myBody/index'})">返回</div>
     </div>
 
     <div class="ordinary_main">
@@ -219,13 +219,25 @@ handleSetContact(row){
     }
     width: 100%;
     .ordinary_title{
-      background-color: #fff;
+        background-color: #fff;
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding:17px;
       // font-size: 13px;
       border-radius: 5px;
+      div:nth-child(2){
+                width:88px;
+height:26px;
+background:rgba(236,252,242,1);
+border:1px solid rgba(65,215,135,1);
+border-radius:4px;
+text-align: center;
+line-height: 26px;
+        font-size: 12px;
+        color:#00A041;
+        cursor: pointer;
+      }
     }
     .ordinary_main{
       margin-top: 14px;

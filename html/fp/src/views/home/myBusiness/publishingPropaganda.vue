@@ -67,7 +67,7 @@
         <el-form-item label="宣传费用（元）:" class="propaganda">
           <div class="price ct smallSize" :class="{'propagandaTimeActive':inx==priceIndex}" @click="getPropagandaTime(item,inx)"
             v-for="(item ,inx) in propagandaFeeArr" :key="inx">
-            <div :class="{'redColor':inx==priceIndex}">￥{{item.propagandaFee}} </div>
+            <div :class="{'redColor':inx==priceIndex}">￥{{Number(item.propagandaFee).toFixed(2)}} </div>
             <div>{{item.date}}</div>
           </div>
           <!-- <span class="propagandaFeeStyle">{{publicityForm.propagandaFee}}</span> -->

@@ -431,7 +431,8 @@ const router= new Router({
               path: '/myBusiness/publishingPropaganda',
               name: 'publishingPropaganda',
               meta: {
-                title: '发布宣传'
+                title: '发布宣传',
+                keepAlive: true
               },
               component: resolve => require(['@/views/home/myBusiness/publishingPropaganda'], resolve)
             },
@@ -440,6 +441,8 @@ const router= new Router({
               name: 'propagandaDetails',
               meta: {
                 title: '宣传详情'
+
+
               },
               component: resolve => require(['@/views/home/myBusiness/propagandaDetails'], resolve)
             },

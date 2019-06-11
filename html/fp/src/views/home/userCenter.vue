@@ -141,7 +141,7 @@
           path: '/roleCertifications/investorCertification'
         }, {
           type: 'orange',
-          title: '专员认证',
+          title: '服务专员认证',
           path: '/roleCertifications/advisoryInformation'
         }, {
           type: 'purple',

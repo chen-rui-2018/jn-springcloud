@@ -47,7 +47,7 @@
       </el-form>
       <el-form class="editForm" v-if="!isShow" :rules="rules" :model="basicForm" label-width="100px" ref="basicForm">
         <el-form-item label="从业年限:" class="inline " prop="workingYears">
-          <el-input v-model="basicForm.workingYears" placeholder="请输入从业年限(数字)" clearable ></el-input>
+          <el-input v-model="basicForm.workingYears" placeholder="请输入从业年限(数字)" clearable></el-input>
         </el-form-item>
         <el-form-item label="毕业学校:" class="inline bodyName" prop="graduatedSchool">
           <el-input v-model="basicForm.graduatedSchool" placeholder="请输入毕业学校" clearable></el-input>
@@ -63,7 +63,7 @@
           <el-input v-model="basicForm.contactEmail" placeholder="请输入联系邮箱" clearable></el-input>
         </el-form-item>
         <el-form-item label="执业资质:" prop="practiceQualification">
-          <el-input v-model="basicForm.practiceQualification" placeholder="请输入执业资源" clearable></el-input>
+          <el-input v-model="basicForm.practiceQualification" placeholder="请输入执业资质" clearable></el-input>
         </el-form-item>
         <el-form-item label="业务擅长:" class="inline" prop="goodAtBusiness">
           <el-input v-model="basicForm.goodAtBusiness" placeholder="请输入业务擅长" clearable></el-input>
@@ -94,7 +94,7 @@
           <el-table-column prop="certificatePhoto" align="center" label="操作" v-if="isConceal!=='1'">
             <template slot-scope="scope">
               <!-- <span v-if="!scope.row.certificateName" class="themeColor smallSize cur" @click="lookPoster(scope.row)">保存并更新</span> -->
-              <span class="redColor smallSize cur"  @click="editCertificate(scope.row)">编辑</span>
+              <span class="redColor smallSize cur" @click="editCertificate(scope.row)">编辑</span>
             </template>
           </el-table-column>
         </el-table>
@@ -222,7 +222,6 @@ export default {
         return callback(new Error("手机号不能为空"));
       } else {
         const reg = /^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\d{8}$/;
-        console.log(reg.test(value));
         if (reg.test(value)) {
           callback();
         } else {
@@ -230,13 +229,13 @@ export default {
         }
       }
     };
-     var checkWorkingYears = (rule, value, callback) => {
+    var checkWorkingYears = (rule, value, callback) => {
       const reg = /^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/;
-        if (!reg.test(value)) {
-          callback("请输入正数");
-        } else {
-          callback();
-        }
+      if (!reg.test(value)) {
+        callback("请输入正数");
+      } else {
+        callback();
+      }
     };
     return {
       baseUrl: this.api.host,
@@ -328,34 +327,32 @@ export default {
         ]
       },
       rules: {
-          workingYears: [
-              { required: true, message: '请输入从业年限', trigger: 'blur' },
-              { validator: checkWorkingYears,trigger: 'blur'}
-            ],
-            graduatedSchool: [
-              { required: true, message: '请输入毕业学校', trigger: 'blur' }
-            ],
-            education: [
-              { required: true, message: '请输入学历', trigger: 'blur' }
-            ],
-            phone: [
-              { required: true, message: '请输入手机号码', trigger: 'blur' },
-              { validator: checkPhone,trigger: 'blur'}
-            ],
-             contactEmail: [
-               { required: true, message: '请输入邮箱地址', trigger: 'blur' },
-        { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }
-            ],
-            practiceQualification: [
-              { required: true, message: '请输入执业资质', trigger: 'blur' }
-            ],
+        workingYears: [
+          { required: true, message: "请输入从业年限", trigger: "blur" },
+          { validator: checkWorkingYears, trigger: "blur" }
+        ],
+        graduatedSchool: [
+          { required: true, message: "请输入毕业学校", trigger: "blur" }
+        ],
+        education: [{ required: true, message: "请输入学历", trigger: "blur" }],
+        phone: [
+          { required: true, message: "请输入手机号码", trigger: "blur" },
+          { validator: checkPhone, trigger: "blur" }
+        ],
+        contactEmail: [
+          { required: true, message: "请输入邮箱地址", trigger: "blur" },
+          { type: "email", message: "请输入正确的邮箱地址", trigger: "blur" }
+        ],
+        practiceQualification: [
+          { required: true, message: "请输入执业资质", trigger: "blur" }
+        ],
 
-            personalProfile: [
-              { required: true, message: '请输入个人简介', trigger: 'blur' }
-            ],
-  goodAtBusiness: [
-              { required: true, message: '请输入业务擅长', trigger: 'blur' }
-            ],
+        personalProfile: [
+          { required: true, message: "请输入个人简介", trigger: "blur" }
+        ],
+        goodAtBusiness: [
+          { required: true, message: "请输入业务擅长", trigger: "blur" }
+        ]
       }
     };
   },
@@ -626,55 +623,24 @@ export default {
       if (this.basicText === "保 存") {
         this.$refs[basicForm].validate(valid => {
           if (valid) {
-            if (this.orgId !== this.basicForm.orgId) {
-              this.$confirm(`此操作将改变机构信息, 是否继续?`, "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
-                type: "warning"
-              })
-                .then(() => {
-                  this.api.post({
-                    url: "saveOrUpdateAdvisorBaseInfo",
-                    data: this.basicForm,
-                    callback: res => {
-                      if (res.code == "0000") {
-                        this.$message({
-                          message: "操作成功",
-                          type: "success"
-                        });
-                        this.isShow = true;
-                        this.showBtn = true;
-                        this.basicText = "编 辑";
-                        this.getInit();
-                      } else {
-                        this.$message.error(res.result);
-                        return false;
-                      }
-                    }
-                  });
+            if (this.orgId) {
+              if (this.orgId !== this.basicForm.orgId) {
+                this.$confirm(`此操作将改变机构 是否继续?`, "提示", {
+                  confirmButtonText: "确定",
+                  cancelButtonText: "取消",
+                  type: "warning"
                 })
-                .catch(() => {});
-            }else{
-               this.api.post({
-                    url: "saveOrUpdateAdvisorBaseInfo",
-                    data: this.basicForm,
-                    callback: res => {
-                      if (res.code == "0000") {
-                        this.$message({
-                          message: "操作成功",
-                          type: "success"
-                        });
-                        this.isShow = true;
-                        this.showBtn = true;
-                        this.basicText = "编 辑";
-                        this.getInit();
-                      } else {
-                        this.$message.error(res.result);
-                        return false;
-                      }
-                    }
-                  });
-            }
+                  .then(() => {
+                    this.basicForm.orgId = this.orgId;
+                    this.submitBasicForm()
+                  })
+                  .catch(() => {});
+              }else{
+                this.submitBasicForm()
+              }
+            } else {
+              this.submitBasicForm()
+              }
           } else {
             return false;
           }
@@ -684,6 +650,28 @@ export default {
         this.showBtn = false;
         this.basicText = "保 存";
       }
+    },
+    //保存基本信息
+    submitBasicForm(){
+         this.api.post({
+                  url: "saveOrUpdateAdvisorBaseInfo",
+                  data: this.basicForm,
+                  callback: res => {
+                    if (res.code == "0000") {
+                      this.$message({
+                        message: "操作成功",
+                        type: "success"
+                      });
+                      this.isShow = true;
+                      this.showBtn = true;
+                      this.basicText = "编 辑";
+                      this.getInit();
+                    } else {
+                      this.$message.error(res.result);
+                      return false;
+                    }
+                  }
+                });
     },
     //   查看附件图片
     lookPoster(row) {
@@ -697,28 +685,33 @@ export default {
         data: { advisorAccount: this.basicForm.advisorAccount },
         callback: res => {
           if (res.code == "0000") {
-            this.basicForm.personalProfile =
-              res.data.advisorServiceInfo.personalProfile;
-            this.basicForm.graduatedSchool =
-              res.data.advisorServiceInfo.graduatedSchool;
-            this.basicForm.education = res.data.advisorServiceInfo.education;
-            // if(res.data.advisorServiceInfo.businessArea){
-            //   this.basicForm.businessArea = res.data.advisorServiceInfo.businessArea;
-            // }
-            this.basicForm.phone = res.data.advisorServiceInfo.phone;
-            this.basicForm.contactEmail =
-              res.data.advisorServiceInfo.contactEmail;
-            this.basicForm.practiceQualification =
-              res.data.advisorServiceInfo.practiceQualification;
-            this.basicForm.workingYears =
-              res.data.advisorServiceInfo.workingYears;
-            this.basicForm.goodAtBusiness =
-              res.data.advisorServiceInfo.goodAtBusiness;
-            this.honorData = res.data.serviceHonorList;
-            this.serviceExperienceList = res.data.serviceExperienceList;
-            this.serviceProjectExperienceList =
-              res.data.serviceProjectExperienceList;
-            this.orgId = res.data.advisorServiceInfo.orgId;
+            if (res.data) {
+              this.basicForm.personalProfile =
+                res.data.advisorServiceInfo.personalProfile;
+              this.basicForm.graduatedSchool =
+                res.data.advisorServiceInfo.graduatedSchool;
+              this.basicForm.education = res.data.advisorServiceInfo.education;
+              // if(res.data.advisorServiceInfo.businessArea){
+              //   this.basicForm.businessArea = res.data.advisorServiceInfo.businessArea;
+              // }
+              this.basicForm.phone = res.data.advisorServiceInfo.phone;
+              this.basicForm.contactEmail =
+                res.data.advisorServiceInfo.contactEmail;
+              this.basicForm.practiceQualification =
+                res.data.advisorServiceInfo.practiceQualification;
+              this.basicForm.workingYears =
+                res.data.advisorServiceInfo.workingYears;
+              this.basicForm.goodAtBusiness =
+                res.data.advisorServiceInfo.goodAtBusiness;
+              this.honorData = res.data.serviceHonorList;
+              this.serviceExperienceList = res.data.serviceExperienceList;
+              this.serviceProjectExperienceList =
+                res.data.serviceProjectExperienceList;
+              this.basicForm.orgId = res.data.advisorServiceInfo.orgId;
+              if (res.data.advisorServiceInfo.businessArea) {
+                this.basicForm.businessAreas = res.data.advisorServiceInfo.businessArea.split();
+              }
+            }
           } else {
             this.$message.error(res.result);
             return false;
@@ -727,16 +720,16 @@ export default {
       });
     },
     init() {
-      let query = this.$route.query;
-      this.isConceal = query.isConceal;
-      console.log(query)
-      if(query.businessArea){
-        this.basicForm.businessAreas = query.businessArea.split();
+      if (this.$route.query) {
+        let query = this.$route.query;
+        this.isConceal = query.isConceal;
+        if (query.businessArea) {
+          this.basicForm.businessAreas = query.businessArea.split();
+        }
+        this.orgId = query.orgId;
+        this.basicForm.advisorAccount = sessionStorage.getItem("account");
+        this.certificateForm.advisorAccount = sessionStorage.getItem("account");
       }
-      this.basicForm.orgId = query.orgId;
-      this.basicForm.advisorAccount = sessionStorage.getItem("account");
-      this.certificateForm.advisorAccount = sessionStorage.getItem("account");
-
       this.getInit();
     }
   }

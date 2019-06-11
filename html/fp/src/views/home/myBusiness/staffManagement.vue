@@ -1,5 +1,5 @@
 <template>
-  <div class="staffProduct">
+  <div class="staffProduct" v-loading="loading">
     <div class="ordinary_title font16">
       <div>员工管理</div>
       <div @click="toInviteEmployees" v-show="isShow">邀请员工</div>
@@ -32,7 +32,7 @@
                  <span v-if="scope.row.statusShow==='3'">已拒绝</span> -->
             <!-- </template> -->
             </el-table-column>
-          <el-table-column label="操作" align="center" >
+          <el-table-column label="操作" align="center" v-if="status===''||status==='0'">
             <template slot-scope="scope" >
               <el-button
               v-if="scope.row.statusShow==='待审批'"
@@ -67,6 +67,7 @@
 export default {
   data () {
     return {
+      loading:false,
       isShow:false,
       page:1,
       rows:10,
@@ -215,18 +216,15 @@ _this.$message({
     },
     initList(){
       let _this = this;
+      this.loading=true
       this.api.get({
         url: "getStaffList",
         data: {page:this.page,rows:this.rows,status:this.status,searchFiled:this.searchFiled,needPage:'1'},
         // dataFlag:true,
         callback: function(res) {
+          _this.loading=false
           if (res.code == "0000") {
-            console.log(res)
             _this.recruitmentTable = res.data.rows;
-            // for (let it in _this.serverAgent) {
-            //   _this.serverAgent[it].attitudeScore =
-            //     _this.serverAgent[it].attitudeScore * 1;
-            // }
             _this.total = res.data.total;
           } else {
             _this.$message.error(res.result);

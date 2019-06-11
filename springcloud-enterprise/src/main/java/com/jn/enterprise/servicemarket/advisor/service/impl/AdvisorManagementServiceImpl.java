@@ -164,11 +164,15 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
         String messageConnectName="机构邀请";
         //消息一级类别 （0：个人动态，1：企业空间）
         int oneSort=0;
+        //消息一级分类名称 （0：个人动态，1：企业空间）
+        String messageOneSortName="个人动态";
         //消息二级类别（1：个人动态，2：企业订单，3：信息发布动态，4：交费提醒，5：访客留言，6：数据上报提醒，7：机构邀请，8：企业邀请，9：机构邀请，10：私人订单）
         int twoSort=7;
+        //个人动态，2：企业订单，3：信息发布动态，4：交费提醒，5：访客留言，6：数据上报提醒，7：机构邀请，8：企业邀请，9：机构邀请，10：私人订单
+        String messageTowSortName="机构邀请";
         //3.调用消息接口，往消息接口添加一条邀请信息
         AddMessageModel addMessageModel = getAddMessageModel(registerAccount, loginAccount, messageTitle,
-                messageContent, messageConnect,messageConnectName, oneSort, twoSort);
+                messageContent, messageConnect,messageConnectName, oneSort,messageOneSortName, twoSort,messageTowSortName);
         return messageClient.addMessage(addMessageModel);
     }
 
@@ -183,7 +187,7 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
      */
     @ServiceLog(doAction = "")
     private AddMessageModel getAddMessageModel(String acceptAccount, String sendAccount, String messageTitle,String messageContent,
-                                               String messageConnect,String messageConnectName, int oneSort, int twoSort) {
+                                               String messageConnect,String messageConnectName, int oneSort,String messageOneSortName,int twoSort,String messageTowSortName) {
         AddMessageModel addMessageModel=new AddMessageModel();
         //消息标题
         addMessageModel.setMessageTitle(messageTitle);
@@ -199,8 +203,12 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
         addMessageModel.setMessageSender(sendAccount);
         //消息一级类别（0：个人动态，1：企业空间）
         addMessageModel.setMessageOneSort(oneSort);
+        //消息一级类别名称（0：个人动态，1：企业空间）
+        addMessageModel.setMessageOneSortName(messageOneSortName);
         //消息二级类别（0：私人订单，1：信用动态，2：园区通知，3：消费汇总，4：收入汇总，5，付款通知，6：企业订单，7：信息发布动态，8：交费提醒，9：访客留言，10：数据上报提醒  11.机构邀请）
         addMessageModel.setMessageTowSort(twoSort);
+        //消息二级类别名称（0：私人订单，1：信用动态，2：园区通知，3：消费汇总，4：收入汇总，5，付款通知，6：企业订单，7：信息发布动态，8：交费提醒，9：访客留言，10：数据上报提醒  11.机构邀请）
+        addMessageModel.setMessageTowSortName(messageTowSortName);
         //创建人账号
         addMessageModel.setCreatorAccount(sendAccount);
         return addMessageModel;

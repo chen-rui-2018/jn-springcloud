@@ -660,15 +660,6 @@
   }
 </style>
 <style>
-  html,
-  body,
-  #app {
-    width: 100%;
-    height: 100%;
-  }
-  #app {
-    overflow: auto;
-  }
   .app-input.el-textarea__inner {
     border-radius: 50px !important;
   }

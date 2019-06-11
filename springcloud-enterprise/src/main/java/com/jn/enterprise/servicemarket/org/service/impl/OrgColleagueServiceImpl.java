@@ -26,6 +26,7 @@ import com.jn.system.model.User;
 import com.jn.system.vo.SysGroupVO;
 import com.jn.system.vo.SysUserRoleVO;
 import com.jn.user.api.UserExtensionClient;
+import com.jn.user.enums.HomeRoleEnum;
 import com.jn.user.model.AffiliateParam;
 import com.jn.user.model.UserAffiliateInfo;
 import com.jn.user.model.UserExtensionInfo;
@@ -291,7 +292,7 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
         judgeRoleIsOrgManage(loginAccount);
         List<String> accountList =new ArrayList<>(16);
         accountList.add(account);
-        String roleName="机构顾问";
+        String roleName= HomeRoleEnum.ORG_ADVISER.getCode();
         List<UserRoleInfo> userRoleInfoList = getUserRoleInfoList(accountList, roleName);
         if(userRoleInfoList.isEmpty() || !roleName.equals(userRoleInfoList.get(0).getRoleName())){
             logger.warn("设置为联系人的账号：[{}]，不是机构顾问",account);
@@ -329,7 +330,7 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
             throw new JnSpringCloudException(OrgExceptionEnum.ACCOUNT_NOT_ORG_CONTACT);
         }
         //获取机构顾问角色id
-        roleName="机构顾问";
+        roleName=HomeRoleEnum.ORG_ADVISER.getCode();
         Result<SysRole> sysRoleData = systemClient.getRoleByName(roleName);
         if(sysRoleData==null || sysRoleData.getData()==null){
             logger.warn("取消联系人,获取机构顾问角色id失败");

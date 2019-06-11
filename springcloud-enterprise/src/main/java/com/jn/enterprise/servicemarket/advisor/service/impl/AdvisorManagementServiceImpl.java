@@ -409,7 +409,8 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
                     Result<SysRole> addSysRoleResult = systemClient.getRoleByName(HomeRoleEnum.ORG_ADVISER.getCode());
                     Result<SysRole> delSysRoleResult = systemClient.getRoleByName(HomeRoleEnum.NORMAL_USER.getCode());
                     if(addSysRoleResult==null ||addSysRoleResult.getData()==null || delSysRoleResult==null || delSysRoleResult.getData()==null){
-                        logger.warn("添加机构顾问角色失败，失败原因：无法获取“机构顾问”、“普通用户”角色信息，请确认系统服务是否正常，且“机构顾问”、“普通用户”角色在系统中存在");
+                        logger.warn("添加机构顾问角色失败，失败原因：无法获取“{}”、“普通用户”角色信息，请确认系统服务是否正常，且“{}”、“普通用户”角色在系统中存在"
+                                ,HomeRoleEnum.ORG_ADVISER.getCode(),HomeRoleEnum.ORG_ADVISER.getCode());
                         throw new JnSpringCloudException(AdvisorExceptionEnum.NETWORK_ANOMALY);
                     }
                     User user=new User();
@@ -418,11 +419,11 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
                     if(booleanResult.getData()==true){
                         return responseNum;
                     }else{
-                        logger.warn("审批顾问填写信息失败，失败原因：更新用户角色为“机构顾问”失败");
+                        logger.warn("审批顾问填写信息失败，失败原因：更新用户角色为“{}”失败",HomeRoleEnum.ORG_ADVISER.getCode());
                         throw new JnSpringCloudException(AdvisorExceptionEnum.NETWORK_ANOMALY);
                     }
                 }else{
-                    logger.warn("审批顾问填写信息成功,更新用户角色为机构顾问失败");
+                    logger.warn("审批顾问填写信息成功,更新用户角色为{}失败",HomeRoleEnum.ORG_ADVISER.getCode());
                     throw new JnSpringCloudException(OrgExceptionEnum.NETWORK_ANOMALY);
                 }
             }else{
@@ -451,7 +452,7 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
     @ServiceLog(doAction = "把顾问账号的角色设置为机构账号")
     private Boolean setAdvisorRole(String advisorAccount) {
         //获取机构顾问角色id
-        String roleName="机构顾问";
+        String roleName=HomeRoleEnum.ORG_ADVISER.getCode();
         Result<SysRole> sysRoleData = systemClient.getRoleByName(roleName);
         if(sysRoleData==null || sysRoleData.getData()==null){
             logger.warn("审批顾问填写信息,获取机构顾问角色id失败");

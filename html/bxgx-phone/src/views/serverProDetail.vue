@@ -115,10 +115,10 @@
   </div>
 </template>
 <script>
-import Vue from 'vue'
+// import Vue from 'vue'
 import { Sticky, Tab, TabItem, XTable, Scroller, LoadMore } from 'vux'
-import { Loadmore } from 'mint-ui'
-Vue.component(Loadmore.name, Loadmore)
+// import { Loadmore } from 'mint-ui'
+// Vue.component(Loadmore.name, Loadmore)
 export default {
   components: {
     Sticky,

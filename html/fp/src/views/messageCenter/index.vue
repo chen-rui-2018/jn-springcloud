@@ -100,7 +100,7 @@ $bg-gray: #f3f3f3;
           width: 100%;
           height: 100%;
           overflow: auto;
-          position: absolute;
+          position: fixed;
           -webkit-overflow-scrolling: touch;
           padding: 50px 10px 50px;
           box-sizing: border-box;

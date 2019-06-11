@@ -474,6 +474,7 @@ export default {
     this.getCompanyList();
 
     this.showNoticeList(); //园区公告滚动
+
   },
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件

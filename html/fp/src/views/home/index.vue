@@ -40,9 +40,10 @@
 import $ from "jquery";
 import api from '@/util/api'
 import SidebarItem from './common/SidebarItem'
-import { isMobile } from "@/util";
-import bus from "@/util/bus";
-import UserHome from "@/components/userHome";
+import { isMobile } from "@/util"
+import bus from "@/util/bus"
+import UserHome from "@/components/userHome"
+import ElementUI from 'element-ui'
 export default {
   components: { UserHome ,SidebarItem},
   //  components: { SidebarItem },
@@ -101,16 +102,19 @@ export default {
             if(val.label==='门户'){
               let menuItems = val.children[0].children
               sessionStorage.menuItems= JSON.stringify(menuItems)
-              console.log(menuItems)
               next(vm => {
                 vm.menuItems = menuItems
                 }
-
               )
             }
           })
 
-        } 
+        } else {
+          ElementUI.Message.error('请登录后再访问个人中心');
+          setTimeout(() => {
+            next('/login')
+          }, 1000)
+        }
       }
     });
   },

@@ -69,7 +69,7 @@
                 <!-- <span>{{item.actiStartTime}}-{{item.actiEndTime.split(' ')[1]}}</span> -->
                 <!-- <span>周日14：00-17：00</span> -->
               </p>
-              <p>
+              <p class="actiAddress">
                 <i class="el-icon-location-outline"></i>
                 <span>{{item.actiAddress}}</span>
               </p>

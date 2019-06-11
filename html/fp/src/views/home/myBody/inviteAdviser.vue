@@ -1,13 +1,13 @@
 <template>
-  <div class="inviteAdviser">
+  <div class="inviteAdviser" v-loading="loading">
     <div class="ordinary_title font16">
       <div>邀请顾问</div>
     </div>
     <div class="ordinary_content">
        <el-form label-width="120px" class="postJobInfo">
   <el-form-item label="员工账号:" prop="post" class="staffAccount">
-    <el-input placeholder="请输入员工账号" v-model="searchFiled" clearable>
-          <el-button slot="append" icon="el-icon-search" @click="getStaffInfo"></el-button>
+    <el-input placeholder="请输入员工账号" v-model="searchFiled" clearable @keyup.enter.native="getStaffInfo">
+          <el-button slot="append" icon="el-icon-search" @click="getStaffInfo" ></el-button>
         </el-input>
   </el-form-item>
   <el-form-item label="昵称:">
@@ -43,6 +43,7 @@
 export default {
   data () {
     return {
+      loading:false,
       hobbys:[],
         searchFiled:'',
         nickName:'',
@@ -63,14 +64,16 @@ export default {
      url:'echoUserInfo',
      data:{registerAccount  :this.searchFiled },
      callback:(res=>{
-         console.log(res)
-         this.nickName=res.data.nickName
-         this.name=res.data.name
-         this.sex=res.data.sex
-         this.account=res.data.account
-         this.jobs=res.data.jobs
-         this.signature=res.data.signature
-         this.hobbys=res.data.hobbys
+         if(res.data){
+
+           this.nickName=res.data.nickName
+           this.name=res.data.name
+           this.sex=res.data.sex
+           this.account=res.data.account
+           this.jobs=res.data.jobs
+           this.signature=res.data.signature
+           this.hobbys=res.data.hobbys
+         }
      })
  })
       },
@@ -79,15 +82,16 @@ export default {
          this.$message.error('请输入员工账号');
          return
        }
+       this.loading=true
       this.api.post({
      url:'inviteAdvisor',
      data:{registerAccount:this.searchFiled},
      dataFlag:true,
      callback:(res=>{
-         console.log(res)
+       this.loading=false
           if (res.code == "0000") {
              this.$message({
-                message: '发送邀请成功',
+                message: '操作成功',
                 type: 'success'
               })
                 this.$router.push({name:'counselorManagement'})

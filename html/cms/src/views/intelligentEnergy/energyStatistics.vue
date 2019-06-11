@@ -15,7 +15,7 @@
           @keyup.enter.native="handleFilter" />
       </el-form-item>
 
-      <el-form-item label="设备位置:">
+      <el-form-item label="楼宇位置:">
         <el-input v-model="listQuery.position" maxlength="20" placeholder="请输入设备位置" clearable @keyup.enter.native="handleFilter" />
       </el-form-item>
       <el-form-item label="采集时间:" >
@@ -25,7 +25,7 @@
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="init()">查询</el-button>
       <!-- </div> -->
     </el-form>
-    <h3>日均能耗:1000千瓦/天</h3>
+    <h3>日均能耗</h3>
     <div id="myCharts" style="width:100%;height:400px;" />
     <!-- 表格 -->
     <el-table ref="multipleTable" :data="energyList" border fit highlight-current-row style="width: 100%;height:100%;">

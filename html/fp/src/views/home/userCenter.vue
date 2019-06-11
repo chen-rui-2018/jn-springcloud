@@ -82,13 +82,15 @@
           :content="cardData.findAdviserInvitation | wrapNumber"
         ></notice>
       </router-link>
-      <router-link to="/serviceMarket/requireManagementController/forothersneed">
+      <router-link
+        v-if="cardData.findRequirementManage || cardData.findRequirementManage === ''"
+        :to="needManagementPath">
         <notice
-          v-if="cardData.findRequirementManage || cardData.findRequirementManage === ''"
           title="需求管理"
           type="primary"
           :content="cardData.findRequirementManage | wrapNumber"
-        ></notice>
+        >
+        </notice>
       </router-link>
       <router-link to="/serviceMarket/comment/forOthersevaluate">
         <notice
@@ -150,7 +152,8 @@
           // findReportedData: '', // 数据上报
         },
         messageData: {},
-        requestList: []
+        requestList: [],
+        needManagementPath: ''
       }
     },
     filters: {
@@ -229,6 +232,9 @@
             // 需求管理
             if (item.label === '需求管理') {
               this.$set(this.cardData, 'findRequirementManage', '')
+              if ( item.children && item.children.length > 0) {
+                this.needManagementPath = item.children[0].path
+              }
             }
           })
           resolve()

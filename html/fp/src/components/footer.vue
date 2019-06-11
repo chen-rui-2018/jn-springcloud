@@ -111,12 +111,16 @@
         </div> -->
         <div class="footRight">
           <div class="erweima1">
-            <div><img src="@/../static/img/erweima1.jpg" alt=""></div>
-            <p>App下载二维码</p>
+            <div><img src="@/../static/img/apple.png" alt=""></div>
+            <p>ios</p>
           </div>
           <div class="erweima2">
-            <div><img src="@/../static/img/erweima2.png" alt=""></div>
-            <p>微信公众号二维码</p>
+            <div><img src="@/../static/img/andriod.png" alt=""></div>
+            <p>android</p>
+          </div>
+          <div class="erweima2">
+            <div><img src="@/../static/img/xiaocehngxu.png" alt=""></div>
+            <p>小程序</p>
           </div>
         </div>
       </div>
@@ -153,7 +157,7 @@ export default {
         margin-top: 30px;
         float: left;
         .help {
-          margin-right: 50px;
+          margin-right: 20px;
           // display: inline-block;
           float: left;
           h5 {
@@ -243,7 +247,7 @@ export default {
           }
         }
         .erweima2 {
-          margin-left: 30px;
+          margin-left: 20px;
         }
         .right1 {
           color: #707070;

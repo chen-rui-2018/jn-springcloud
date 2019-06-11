@@ -95,9 +95,9 @@ Page({
   },
   // 去会议详情
   goDetail(e){
-      wx.navigateTo({
-        url: './meetingRoomDetail/meetingRoomDetail?id='+e.currentTarget.dataset.id
-      })
+    wx.navigateTo({
+      url: './meetingRoomDetail/meetingRoomDetail?id='+e.currentTarget.dataset.id
+    })
   },
 
 

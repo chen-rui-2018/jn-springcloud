@@ -89,7 +89,11 @@
         </div>
       </div>
 
-      <div class="policyCenter pd-b-n w" ref="policyCenter" data-class="bottom1">
+      <div
+        v-if="businessAdPolicy.length > 0"
+        class="policyCenter pd-b-n w"
+        ref="policyCenter"
+        data-class="bottom1">
         <router-link to="/investmentPolicy">
           <div ref="poCenter1" data-class="bottom">
             <div class="tit color2 pr">招商政策</div>
@@ -135,7 +139,11 @@
             <div class="swiper-button-next"></div>
           </div>
         </div>
-        <div class="districtGardens w" ref="districtGardens" data-class="bottom1">
+        <div
+          v-if="businessAdDynamic.length > 0"
+          class="districtGardens w"
+          ref="districtGardens"
+          data-class="bottom1">
           <router-link to="/investmentDynamic">
             <div ref="disGardens" data-class="bottom">
               <div class="tit color2">招商动态</div>

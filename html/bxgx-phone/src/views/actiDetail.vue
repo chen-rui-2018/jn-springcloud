@@ -56,7 +56,8 @@
     <div class="fenge"></div>
     <div class="actiDel">
       <div class="del1">详情</div>
-      <p>{{actiForm.actiDetail}}</p>
+      <p v-html="actiForm.actiDetail" v-if="actiForm.actiDetail"></p>
+      <p v-else>暂无内容!</p>
     </div>
     <div class="actiFooter">
       <div class="attention">
@@ -122,6 +123,8 @@ export default {
                 clearInterval(_this._interval)
               }
             }, 1000)
+          } else {
+            _this.$vux.toast.text(res.result)
           }
         }
       })
@@ -142,6 +145,8 @@ export default {
             _this.actiForm.actiLike = _this.actiForm.actiLike * 1 + 1
             // _this.$message.success('点赞成功')
             _this.accountIsLike = true
+          } else {
+            _this.$vux.toast.text(res.result)
           }
         }
       })
@@ -161,6 +166,8 @@ export default {
           if (res.code === '0000') {
             _this.actiForm.actiLike -= 1
             _this.accountIsLike = false
+          } else {
+            _this.$vux.toast.text(res.result)
           }
         }
       })
@@ -182,7 +189,7 @@ export default {
             _this.activityApplyShow = '2'
             // this.actiDel()
           } else {
-            alert(res.result)
+            _this.$vux.toast.text(res.result)
           }
         }
       })
@@ -204,6 +211,8 @@ export default {
           if (res.code === '0000') {
             _this.activityApplyShow = '1'
             // _this.actiDel()
+          } else {
+            _this.$vux.toast.text(res.result)
           }
         }
       })

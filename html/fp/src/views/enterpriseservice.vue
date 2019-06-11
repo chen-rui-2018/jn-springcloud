@@ -4,7 +4,7 @@
       <div class="banner pr">
         <div class="swiper-container">
           <div class="swiper-wrapper">
-            <div class="swiper-slide" style="width:100%" v-for="(banner, index) in bannerList" :key="index">
+            <div class="swiper-slide pointer" style="width:100%" v-for="(banner, index) in bannerList" :key="index">
               <img :src="banner.posterUrl" :data-path="'/serMatHp'" alt="">
             </div>
             <!-- <div class="swiper-slide" style="width:100%">

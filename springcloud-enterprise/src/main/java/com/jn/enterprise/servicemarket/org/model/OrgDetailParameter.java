@@ -46,7 +46,6 @@ public class OrgDetailParameter implements Serializable {
     @ApiModelProperty(value = "业务擅长",  required = true,example = "金融投资")
     @NotNull(message = "业务擅长不能为空")
     private String  orgSpeciality;
-
     @NotNull(message = "行业领域不能为空")
     @ApiModelProperty(value = "客户偏好-行业领域[数组][企业字典表type=1的，即行业领域类型。数据从【服务超市-机构字典】接口获取(id)]"
             ,notes = "企业字典表type=1的，即行业领域类型。数据从【服务超市-机构字典】接口获取(id)"

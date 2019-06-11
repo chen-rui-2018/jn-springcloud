@@ -3,6 +3,7 @@
 <mapper namespace="com.jn.park.asset.dao.TbAssetInformationMapper">
   <resultMap id="BaseResultMap" type="com.jn.park.asset.entity.TbAssetInformation">
     <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
     <result column="asset_number" jdbcType="VARCHAR" property="assetNumber" />
     <result column="asset_name" jdbcType="VARCHAR" property="assetName" />
     <result column="type_id" jdbcType="VARCHAR" property="typeId" />
@@ -11,18 +12,38 @@
     <result column="tower_name" jdbcType="VARCHAR" property="towerName" />
     <result column="tower_address" jdbcType="VARCHAR" property="towerAddress" />
     <result column="qr_code" jdbcType="VARCHAR" property="qrCode" />
-    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="status_" jdbcType="TINYINT" property="status" />
     <result column="input_type" jdbcType="TINYINT" property="inputType" />
     <result column="img_url" jdbcType="VARCHAR" property="imgUrl" />
     <result column="is_lease" jdbcType="TINYINT" property="isLease" />
     <result column="is_maintain" jdbcType="TINYINT" property="isMaintain" />
+    <result column="maintenance_time" jdbcType="DATE" property="maintenanceTime" />
     <result column="maintenance_period" jdbcType="VARCHAR" property="maintenancePeriod" />
     <result column="position" jdbcType="VARCHAR" property="position" />
     <result column="asset_explain" jdbcType="VARCHAR" property="assetExplain" />
+    <result column="specification" jdbcType="VARCHAR" property="specification" />
+    <result column="production_time" jdbcType="DATE" property="productionTime" />
+    <result column="manufacturer" jdbcType="VARCHAR" property="manufacturer" />
+    <result column="company_id" jdbcType="VARCHAR" property="companyId" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="contact_phone" jdbcType="VARCHAR" property="contactPhone" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="lease_enterprise_id" jdbcType="VARCHAR" property="leaseEnterpriseId" />
+    <result column="lease_enterprise_name" jdbcType="VARCHAR" property="leaseEnterpriseName" />
+    <result column="lease_contact_name" jdbcType="VARCHAR" property="leaseContactName" />
+    <result column="lease_contact_phone" jdbcType="VARCHAR" property="leaseContactPhone" />
+    <result column="lease_cash" jdbcType="DECIMAL" property="leaseCash" />
+    <result column="lease_price" jdbcType="DECIMAL" property="leasePrice" />
+    <result column="lease_time" jdbcType="VARCHAR" property="leaseTime" />
+    <result column="lease_status" jdbcType="TINYINT" property="leaseStatus" />
+    <result column="lease_is_overdue" jdbcType="INTEGER" property="leaseIsOverdue" />
+    <result column="lease_apply_time" jdbcType="DATE" property="leaseApplyTime" />
+    <result column="lease_start_time" jdbcType="DATE" property="leaseStartTime" />
+    <result column="lease_end_time" jdbcType="DATE" property="leaseEndTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -83,9 +104,13 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, asset_number, asset_name, type_id, asset_type, tower_id, tower_name, tower_address, 
-    qr_code, status, input_type, img_url, is_lease, is_maintain, maintenance_period, 
-    position, asset_explain, creator_account, create_time, modifier_account, modified_time
+    id, parent_id, asset_number, asset_name, type_id, asset_type, tower_id, tower_name, 
+    tower_address, qr_code, status_, input_type, img_url, is_lease, is_maintain, maintenance_time, 
+    maintenance_period, position, asset_explain, specification, production_time, manufacturer, 
+    company_id, company_name, contact_phone, record_status, creator_account, create_time, 
+    modifier_account, modified_time, lease_enterprise_id, lease_enterprise_name, lease_contact_name, 
+    lease_contact_phone, lease_cash, lease_price, lease_time, lease_status, lease_is_overdue, 
+    lease_apply_time, lease_start_time, lease_end_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.asset.entity.TbAssetInformationCriteria" resultMap="BaseResultMap">
     select
@@ -118,28 +143,45 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.park.asset.entity.TbAssetInformation">
-    insert into tb_asset_information (id, asset_number, asset_name, 
-      type_id, asset_type, tower_id, 
-      tower_name, tower_address, qr_code, 
-      status, input_type, img_url, 
-      is_lease, is_maintain, maintenance_period, 
-      position, asset_explain, creator_account, 
-      create_time, modifier_account, modified_time
-      )
-    values (#{id,jdbcType=VARCHAR}, #{assetNumber,jdbcType=VARCHAR}, #{assetName,jdbcType=VARCHAR}, 
-      #{typeId,jdbcType=VARCHAR}, #{assetType,jdbcType=VARCHAR}, #{towerId,jdbcType=VARCHAR}, 
-      #{towerName,jdbcType=VARCHAR}, #{towerAddress,jdbcType=VARCHAR}, #{qrCode,jdbcType=VARCHAR}, 
-      #{status,jdbcType=TINYINT}, #{inputType,jdbcType=TINYINT}, #{imgUrl,jdbcType=VARCHAR}, 
-      #{isLease,jdbcType=TINYINT}, #{isMaintain,jdbcType=TINYINT}, #{maintenancePeriod,jdbcType=VARCHAR}, 
-      #{position,jdbcType=VARCHAR}, #{assetExplain,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
-      )
+    insert into tb_asset_information (id, parent_id, asset_number, 
+      asset_name, type_id, asset_type, 
+      tower_id, tower_name, tower_address, 
+      qr_code, status_, input_type, 
+      img_url, is_lease, is_maintain, 
+      maintenance_time, maintenance_period, position, 
+      asset_explain, specification, production_time, 
+      manufacturer, company_id, company_name, 
+      contact_phone, record_status, creator_account, 
+      create_time, modifier_account, modified_time, 
+      lease_enterprise_id, lease_enterprise_name, 
+      lease_contact_name, lease_contact_phone, lease_cash, 
+      lease_price, lease_time, lease_status, 
+      lease_is_overdue, lease_apply_time, lease_start_time, 
+      lease_end_time)
+    values (#{id,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, #{assetNumber,jdbcType=VARCHAR}, 
+      #{assetName,jdbcType=VARCHAR}, #{typeId,jdbcType=VARCHAR}, #{assetType,jdbcType=VARCHAR}, 
+      #{towerId,jdbcType=VARCHAR}, #{towerName,jdbcType=VARCHAR}, #{towerAddress,jdbcType=VARCHAR}, 
+      #{qrCode,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{inputType,jdbcType=TINYINT}, 
+      #{imgUrl,jdbcType=VARCHAR}, #{isLease,jdbcType=TINYINT}, #{isMaintain,jdbcType=TINYINT}, 
+      #{maintenanceTime,jdbcType=DATE}, #{maintenancePeriod,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, 
+      #{assetExplain,jdbcType=VARCHAR}, #{specification,jdbcType=VARCHAR}, #{productionTime,jdbcType=DATE}, 
+      #{manufacturer,jdbcType=VARCHAR}, #{companyId,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, 
+      #{contactPhone,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{leaseEnterpriseId,jdbcType=VARCHAR}, #{leaseEnterpriseName,jdbcType=VARCHAR}, 
+      #{leaseContactName,jdbcType=VARCHAR}, #{leaseContactPhone,jdbcType=VARCHAR}, #{leaseCash,jdbcType=DECIMAL}, 
+      #{leasePrice,jdbcType=DECIMAL}, #{leaseTime,jdbcType=VARCHAR}, #{leaseStatus,jdbcType=TINYINT}, 
+      #{leaseIsOverdue,jdbcType=INTEGER}, #{leaseApplyTime,jdbcType=DATE}, #{leaseStartTime,jdbcType=DATE}, 
+      #{leaseEndTime,jdbcType=DATE})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.asset.entity.TbAssetInformation">
     insert into tb_asset_information
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
+      </if>
+      <if test="parentId != null">
+        parent_id,
       </if>
       <if test="assetNumber != null">
         asset_number,
@@ -166,7 +208,7 @@
         qr_code,
       </if>
       <if test="status != null">
-        status,
+        status_,
       </if>
       <if test="inputType != null">
         input_type,
@@ -180,6 +222,9 @@
       <if test="isMaintain != null">
         is_maintain,
       </if>
+      <if test="maintenanceTime != null">
+        maintenance_time,
+      </if>
       <if test="maintenancePeriod != null">
         maintenance_period,
       </if>
@@ -188,6 +233,27 @@
       </if>
       <if test="assetExplain != null">
         asset_explain,
+      </if>
+      <if test="specification != null">
+        specification,
+      </if>
+      <if test="productionTime != null">
+        production_time,
+      </if>
+      <if test="manufacturer != null">
+        manufacturer,
+      </if>
+      <if test="companyId != null">
+        company_id,
+      </if>
+      <if test="companyName != null">
+        company_name,
+      </if>
+      <if test="contactPhone != null">
+        contact_phone,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
       </if>
       <if test="creatorAccount != null">
         creator_account,
@@ -201,10 +267,49 @@
       <if test="modifiedTime != null">
         modified_time,
       </if>
+      <if test="leaseEnterpriseId != null">
+        lease_enterprise_id,
+      </if>
+      <if test="leaseEnterpriseName != null">
+        lease_enterprise_name,
+      </if>
+      <if test="leaseContactName != null">
+        lease_contact_name,
+      </if>
+      <if test="leaseContactPhone != null">
+        lease_contact_phone,
+      </if>
+      <if test="leaseCash != null">
+        lease_cash,
+      </if>
+      <if test="leasePrice != null">
+        lease_price,
+      </if>
+      <if test="leaseTime != null">
+        lease_time,
+      </if>
+      <if test="leaseStatus != null">
+        lease_status,
+      </if>
+      <if test="leaseIsOverdue != null">
+        lease_is_overdue,
+      </if>
+      <if test="leaseApplyTime != null">
+        lease_apply_time,
+      </if>
+      <if test="leaseStartTime != null">
+        lease_start_time,
+      </if>
+      <if test="leaseEndTime != null">
+        lease_end_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=VARCHAR},
       </if>
       <if test="assetNumber != null">
         #{assetNumber,jdbcType=VARCHAR},
@@ -245,6 +350,9 @@
       <if test="isMaintain != null">
         #{isMaintain,jdbcType=TINYINT},
       </if>
+      <if test="maintenanceTime != null">
+        #{maintenanceTime,jdbcType=DATE},
+      </if>
       <if test="maintenancePeriod != null">
         #{maintenancePeriod,jdbcType=VARCHAR},
       </if>
@@ -253,6 +361,27 @@
       </if>
       <if test="assetExplain != null">
         #{assetExplain,jdbcType=VARCHAR},
+      </if>
+      <if test="specification != null">
+        #{specification,jdbcType=VARCHAR},
+      </if>
+      <if test="productionTime != null">
+        #{productionTime,jdbcType=DATE},
+      </if>
+      <if test="manufacturer != null">
+        #{manufacturer,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactPhone != null">
+        #{contactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
       </if>
       <if test="creatorAccount != null">
         #{creatorAccount,jdbcType=VARCHAR},
@@ -265,6 +394,42 @@
       </if>
       <if test="modifiedTime != null">
         #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="leaseEnterpriseId != null">
+        #{leaseEnterpriseId,jdbcType=VARCHAR},
+      </if>
+      <if test="leaseEnterpriseName != null">
+        #{leaseEnterpriseName,jdbcType=VARCHAR},
+      </if>
+      <if test="leaseContactName != null">
+        #{leaseContactName,jdbcType=VARCHAR},
+      </if>
+      <if test="leaseContactPhone != null">
+        #{leaseContactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="leaseCash != null">
+        #{leaseCash,jdbcType=DECIMAL},
+      </if>
+      <if test="leasePrice != null">
+        #{leasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="leaseTime != null">
+        #{leaseTime,jdbcType=VARCHAR},
+      </if>
+      <if test="leaseStatus != null">
+        #{leaseStatus,jdbcType=TINYINT},
+      </if>
+      <if test="leaseIsOverdue != null">
+        #{leaseIsOverdue,jdbcType=INTEGER},
+      </if>
+      <if test="leaseApplyTime != null">
+        #{leaseApplyTime,jdbcType=DATE},
+      </if>
+      <if test="leaseStartTime != null">
+        #{leaseStartTime,jdbcType=DATE},
+      </if>
+      <if test="leaseEndTime != null">
+        #{leaseEndTime,jdbcType=DATE},
       </if>
     </trim>
   </insert>
@@ -279,6 +444,9 @@
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parentId != null">
+        parent_id = #{record.parentId,jdbcType=VARCHAR},
       </if>
       <if test="record.assetNumber != null">
         asset_number = #{record.assetNumber,jdbcType=VARCHAR},
@@ -305,7 +473,7 @@
         qr_code = #{record.qrCode,jdbcType=VARCHAR},
       </if>
       <if test="record.status != null">
-        status = #{record.status,jdbcType=TINYINT},
+        status_ = #{record.status,jdbcType=TINYINT},
       </if>
       <if test="record.inputType != null">
         input_type = #{record.inputType,jdbcType=TINYINT},
@@ -319,6 +487,9 @@
       <if test="record.isMaintain != null">
         is_maintain = #{record.isMaintain,jdbcType=TINYINT},
       </if>
+      <if test="record.maintenanceTime != null">
+        maintenance_time = #{record.maintenanceTime,jdbcType=DATE},
+      </if>
       <if test="record.maintenancePeriod != null">
         maintenance_period = #{record.maintenancePeriod,jdbcType=VARCHAR},
       </if>
@@ -327,6 +498,27 @@
       </if>
       <if test="record.assetExplain != null">
         asset_explain = #{record.assetExplain,jdbcType=VARCHAR},
+      </if>
+      <if test="record.specification != null">
+        specification = #{record.specification,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productionTime != null">
+        production_time = #{record.productionTime,jdbcType=DATE},
+      </if>
+      <if test="record.manufacturer != null">
+        manufacturer = #{record.manufacturer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyId != null">
+        company_id = #{record.companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyName != null">
+        company_name = #{record.companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactPhone != null">
+        contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
       </if>
       <if test="record.creatorAccount != null">
         creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
@@ -340,6 +532,42 @@
       <if test="record.modifiedTime != null">
         modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.leaseEnterpriseId != null">
+        lease_enterprise_id = #{record.leaseEnterpriseId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.leaseEnterpriseName != null">
+        lease_enterprise_name = #{record.leaseEnterpriseName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.leaseContactName != null">
+        lease_contact_name = #{record.leaseContactName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.leaseContactPhone != null">
+        lease_contact_phone = #{record.leaseContactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.leaseCash != null">
+        lease_cash = #{record.leaseCash,jdbcType=DECIMAL},
+      </if>
+      <if test="record.leasePrice != null">
+        lease_price = #{record.leasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.leaseTime != null">
+        lease_time = #{record.leaseTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.leaseStatus != null">
+        lease_status = #{record.leaseStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.leaseIsOverdue != null">
+        lease_is_overdue = #{record.leaseIsOverdue,jdbcType=INTEGER},
+      </if>
+      <if test="record.leaseApplyTime != null">
+        lease_apply_time = #{record.leaseApplyTime,jdbcType=DATE},
+      </if>
+      <if test="record.leaseStartTime != null">
+        lease_start_time = #{record.leaseStartTime,jdbcType=DATE},
+      </if>
+      <if test="record.leaseEndTime != null">
+        lease_end_time = #{record.leaseEndTime,jdbcType=DATE},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -348,6 +576,7 @@
   <update id="updateByExample" parameterType="map">
     update tb_asset_information
     set id = #{record.id,jdbcType=VARCHAR},
+      parent_id = #{record.parentId,jdbcType=VARCHAR},
       asset_number = #{record.assetNumber,jdbcType=VARCHAR},
       asset_name = #{record.assetName,jdbcType=VARCHAR},
       type_id = #{record.typeId,jdbcType=VARCHAR},
@@ -356,18 +585,38 @@
       tower_name = #{record.towerName,jdbcType=VARCHAR},
       tower_address = #{record.towerAddress,jdbcType=VARCHAR},
       qr_code = #{record.qrCode,jdbcType=VARCHAR},
-      status = #{record.status,jdbcType=TINYINT},
+      status_ = #{record.status,jdbcType=TINYINT},
       input_type = #{record.inputType,jdbcType=TINYINT},
       img_url = #{record.imgUrl,jdbcType=VARCHAR},
       is_lease = #{record.isLease,jdbcType=TINYINT},
       is_maintain = #{record.isMaintain,jdbcType=TINYINT},
+      maintenance_time = #{record.maintenanceTime,jdbcType=DATE},
       maintenance_period = #{record.maintenancePeriod,jdbcType=VARCHAR},
       position = #{record.position,jdbcType=VARCHAR},
       asset_explain = #{record.assetExplain,jdbcType=VARCHAR},
+      specification = #{record.specification,jdbcType=VARCHAR},
+      production_time = #{record.productionTime,jdbcType=DATE},
+      manufacturer = #{record.manufacturer,jdbcType=VARCHAR},
+      company_id = #{record.companyId,jdbcType=VARCHAR},
+      company_name = #{record.companyName,jdbcType=VARCHAR},
+      contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      lease_enterprise_id = #{record.leaseEnterpriseId,jdbcType=VARCHAR},
+      lease_enterprise_name = #{record.leaseEnterpriseName,jdbcType=VARCHAR},
+      lease_contact_name = #{record.leaseContactName,jdbcType=VARCHAR},
+      lease_contact_phone = #{record.leaseContactPhone,jdbcType=VARCHAR},
+      lease_cash = #{record.leaseCash,jdbcType=DECIMAL},
+      lease_price = #{record.leasePrice,jdbcType=DECIMAL},
+      lease_time = #{record.leaseTime,jdbcType=VARCHAR},
+      lease_status = #{record.leaseStatus,jdbcType=TINYINT},
+      lease_is_overdue = #{record.leaseIsOverdue,jdbcType=INTEGER},
+      lease_apply_time = #{record.leaseApplyTime,jdbcType=DATE},
+      lease_start_time = #{record.leaseStartTime,jdbcType=DATE},
+      lease_end_time = #{record.leaseEndTime,jdbcType=DATE}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -375,6 +624,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.asset.entity.TbAssetInformation">
     update tb_asset_information
     <set>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=VARCHAR},
+      </if>
       <if test="assetNumber != null">
         asset_number = #{assetNumber,jdbcType=VARCHAR},
       </if>
@@ -400,7 +652,7 @@
         qr_code = #{qrCode,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
-        status = #{status,jdbcType=TINYINT},
+        status_ = #{status,jdbcType=TINYINT},
       </if>
       <if test="inputType != null">
         input_type = #{inputType,jdbcType=TINYINT},
@@ -414,6 +666,9 @@
       <if test="isMaintain != null">
         is_maintain = #{isMaintain,jdbcType=TINYINT},
       </if>
+      <if test="maintenanceTime != null">
+        maintenance_time = #{maintenanceTime,jdbcType=DATE},
+      </if>
       <if test="maintenancePeriod != null">
         maintenance_period = #{maintenancePeriod,jdbcType=VARCHAR},
       </if>
@@ -422,6 +677,27 @@
       </if>
       <if test="assetExplain != null">
         asset_explain = #{assetExplain,jdbcType=VARCHAR},
+      </if>
+      <if test="specification != null">
+        specification = #{specification,jdbcType=VARCHAR},
+      </if>
+      <if test="productionTime != null">
+        production_time = #{productionTime,jdbcType=DATE},
+      </if>
+      <if test="manufacturer != null">
+        manufacturer = #{manufacturer,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        company_id = #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactPhone != null">
+        contact_phone = #{contactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
       </if>
       <if test="creatorAccount != null">
         creator_account = #{creatorAccount,jdbcType=VARCHAR},
@@ -435,12 +711,49 @@
       <if test="modifiedTime != null">
         modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="leaseEnterpriseId != null">
+        lease_enterprise_id = #{leaseEnterpriseId,jdbcType=VARCHAR},
+      </if>
+      <if test="leaseEnterpriseName != null">
+        lease_enterprise_name = #{leaseEnterpriseName,jdbcType=VARCHAR},
+      </if>
+      <if test="leaseContactName != null">
+        lease_contact_name = #{leaseContactName,jdbcType=VARCHAR},
+      </if>
+      <if test="leaseContactPhone != null">
+        lease_contact_phone = #{leaseContactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="leaseCash != null">
+        lease_cash = #{leaseCash,jdbcType=DECIMAL},
+      </if>
+      <if test="leasePrice != null">
+        lease_price = #{leasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="leaseTime != null">
+        lease_time = #{leaseTime,jdbcType=VARCHAR},
+      </if>
+      <if test="leaseStatus != null">
+        lease_status = #{leaseStatus,jdbcType=TINYINT},
+      </if>
+      <if test="leaseIsOverdue != null">
+        lease_is_overdue = #{leaseIsOverdue,jdbcType=INTEGER},
+      </if>
+      <if test="leaseApplyTime != null">
+        lease_apply_time = #{leaseApplyTime,jdbcType=DATE},
+      </if>
+      <if test="leaseStartTime != null">
+        lease_start_time = #{leaseStartTime,jdbcType=DATE},
+      </if>
+      <if test="leaseEndTime != null">
+        lease_end_time = #{leaseEndTime,jdbcType=DATE},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.park.asset.entity.TbAssetInformation">
     update tb_asset_information
-    set asset_number = #{assetNumber,jdbcType=VARCHAR},
+    set parent_id = #{parentId,jdbcType=VARCHAR},
+      asset_number = #{assetNumber,jdbcType=VARCHAR},
       asset_name = #{assetName,jdbcType=VARCHAR},
       type_id = #{typeId,jdbcType=VARCHAR},
       asset_type = #{assetType,jdbcType=VARCHAR},
@@ -448,18 +761,38 @@
       tower_name = #{towerName,jdbcType=VARCHAR},
       tower_address = #{towerAddress,jdbcType=VARCHAR},
       qr_code = #{qrCode,jdbcType=VARCHAR},
-      status = #{status,jdbcType=TINYINT},
+      status_ = #{status,jdbcType=TINYINT},
       input_type = #{inputType,jdbcType=TINYINT},
       img_url = #{imgUrl,jdbcType=VARCHAR},
       is_lease = #{isLease,jdbcType=TINYINT},
       is_maintain = #{isMaintain,jdbcType=TINYINT},
+      maintenance_time = #{maintenanceTime,jdbcType=DATE},
       maintenance_period = #{maintenancePeriod,jdbcType=VARCHAR},
       position = #{position,jdbcType=VARCHAR},
       asset_explain = #{assetExplain,jdbcType=VARCHAR},
+      specification = #{specification,jdbcType=VARCHAR},
+      production_time = #{productionTime,jdbcType=DATE},
+      manufacturer = #{manufacturer,jdbcType=VARCHAR},
+      company_id = #{companyId,jdbcType=VARCHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      contact_phone = #{contactPhone,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=TINYINT},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
-      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      lease_enterprise_id = #{leaseEnterpriseId,jdbcType=VARCHAR},
+      lease_enterprise_name = #{leaseEnterpriseName,jdbcType=VARCHAR},
+      lease_contact_name = #{leaseContactName,jdbcType=VARCHAR},
+      lease_contact_phone = #{leaseContactPhone,jdbcType=VARCHAR},
+      lease_cash = #{leaseCash,jdbcType=DECIMAL},
+      lease_price = #{leasePrice,jdbcType=DECIMAL},
+      lease_time = #{leaseTime,jdbcType=VARCHAR},
+      lease_status = #{leaseStatus,jdbcType=TINYINT},
+      lease_is_overdue = #{leaseIsOverdue,jdbcType=INTEGER},
+      lease_apply_time = #{leaseApplyTime,jdbcType=DATE},
+      lease_start_time = #{leaseStartTime,jdbcType=DATE},
+      lease_end_time = #{leaseEndTime,jdbcType=DATE}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

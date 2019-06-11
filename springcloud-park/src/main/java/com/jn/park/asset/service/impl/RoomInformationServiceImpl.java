@@ -876,6 +876,9 @@ public class RoomInformationServiceImpl implements RoomInformationService {
             //账单周期(待定)
             // TODO
 
+            //创建时间
+            tbRoomOrdersBill.setCreateTime(new java.util.Date());
+
             TbRoomOrdersItemCriteria tbRoomOrdersItemCriteria = new TbRoomOrdersItemCriteria();
             //通过总订单id获取子订单,房间状态为租借中,并且租赁申请成功的
             tbRoomOrdersItemCriteria.createCriteria().andOrderIdEqualTo(tbR.getId()).andLeaseApplyStatusEqualTo(Byte.parseByte(RoomApplyStatusEnums.SUCCEED.getCode())).andRoomStatusEqualTo(Byte.parseByte(RoomLeaseStatusEnums.DELIVERY.getValue()));
@@ -987,6 +990,7 @@ public class RoomInformationServiceImpl implements RoomInformationService {
             logger.info("结束调用接口创建账单");
             if(StringUtils.equals(billCreateResult.getCode(),GlobalConstants.SUCCESS_CODE)){
                 tbRoomOrdersBill.setBillStatus(Byte.parseByte("1"));
+                tbRoomOrdersBill.setBillConfirmTime(new java.util.Date());
                 logger.info("更新账单生成状态为:已生成,参数{}",tbRoomOrdersBill);
                 int updateCount = tbRoomOrdersBillMapper.updateByPrimaryKeySelective(tbRoomOrdersBill);
                 if (updateCount != 1){

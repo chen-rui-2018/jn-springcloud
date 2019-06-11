@@ -3,6 +3,7 @@ package com.jn.news.sms.service.impl;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.util.RestTemplateUtil;
 import com.jn.common.util.StringUtils;
+import com.jn.news.config.NewsSwitchProperties;
 import com.jn.news.sms.dao.TbNewsSmsTemplateMapper;
 import com.jn.news.sms.entity.TbNewsSmsTemplate;
 import com.jn.news.sms.enums.SmsExceptionEnum;
@@ -40,10 +41,14 @@ public class SmsServiceImpl implements SmsService {
 
     @Autowired
     private TbNewsSmsTemplateMapper tbNewsSmsTemplateMapper;
+    @Autowired
+    private NewsSwitchProperties newsSwitchProperties;
 
     @Override
     public SmsBaseResult sendMsgByTemplate(SmsTemplateVo smsTemplateVo) {
         logger.info("短信下发接收的参数内容：{}",smsTemplateVo.toString());
+        //判断短信发送状态，如果是关闭状态则发送至配置的测试邮箱地址
+        this.smsSwitchJudge(smsTemplateVo);
         TbNewsSmsTemplate tbNewsSmsTemplate = getSmsTemplateById(smsTemplateVo.getTemplateId());
         if(null == tbNewsSmsTemplate) {
             logger.error("根据短信模板ID:{},找不到对应的模板信息.",smsTemplateVo.getTemplateId());
@@ -107,6 +112,25 @@ public class SmsServiceImpl implements SmsService {
         }
         logger.info("根据模板ID:{},查询模板信息.",templateId);
         return tbNewsSmsTemplateMapper.selectByPrimaryKey(templateId);
+    }
+
+    /**
+     * 判断短信发送状态，如果是关闭状态则发送至配置的测试邮箱地址
+     * @param smsTemplateVo
+     * @return
+     */
+    public SmsTemplateVo smsSwitchJudge(SmsTemplateVo smsTemplateVo) {
+        //防止发送短息不走mq，故在此判断是否开启邮件发送
+        logger.info(newsSwitchProperties.toString());
+        if(!newsSwitchProperties.getSms()) {
+            logger.info("\n短息发送开关未开启,如有需要请向组长申请开启.");
+            //关闭状态，设置短息接收人
+            if(null == newsSwitchProperties.getMobiles() || newsSwitchProperties.getMobiles().length==0) {
+                throw new JnSpringCloudException(SmsExceptionEnum.SMS_SWITCH_NOTNULL_MOBILES);
+            }
+            smsTemplateVo.setMobiles(newsSwitchProperties.getMobiles());
+        }
+        return smsTemplateVo;
     }
 
 }

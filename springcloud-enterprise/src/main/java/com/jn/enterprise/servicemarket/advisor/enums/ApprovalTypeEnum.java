@@ -15,7 +15,7 @@ public enum ApprovalTypeEnum implements CodeAndMsg {
     NO_FEEDBACK("noFeedBack","0","未反馈"),
     REJECTED("rejected","-1","已拒绝"),
     APPROVED("approved","2","审批通过"),
-    HAS_BEEN_LIFTED("hasBeenLifted","4","已解除");
+    HAS_BEEN_LIFTED("hasBeenLifted","4","已解除"),
     ;
 
     /**

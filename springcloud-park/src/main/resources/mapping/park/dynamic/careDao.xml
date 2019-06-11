@@ -24,7 +24,7 @@
     <select id="findFansList" resultType="com.jn.park.gamtopic.model.CareUserShow">
        select
         t1.care_account as "account",
-        ifnull((select count(1) from tb_person_care tc where tc.receive_account = t1.care_account),0) as "fansNum",
+        ifnull((select count(1) from tb_person_care tc where tc.receive_account = t1.care_account and tc.record_status=1),0) as "fansNum",
         ifnull((SELECT SUM(1) FROM tb_person_care tc  WHERE  tc.care_account= #{account} and tc.receive_account = t1.creator_account and tc.record_status = 1 ),0) AS "careStatus"
         from tb_person_care t1 where t1.receive_account = #{account}  and t1.record_status = 1
     </select>
@@ -33,11 +33,11 @@
       select
          distinct (t1.care_account) as "account",<!--目标账号-->
          ifnull((select tg.identity from tb_gam_topic tg where creator_account = #{account} limit 1),0) as "identity",
-         (select count(1) from tb_person_care tp1 where tp1.care_account = t1.care_account) as "careNum", <!--关注数-->
-         (select count(1) from tb_person_care tp2 where tp2.receive_account = t1.care_account) as "fansNum", <!--粉丝数-->
-         (select count(tp3.like_parent_id) from tb_park_like tp3 where tp3.record_status = 1 and tp3.like_status = 1 and  tp3.like_parent_id in (
+         ifnull((select count(1) from tb_person_care tp1 where tp1.care_account = t1.care_account and tp1.record_status = 1 and tp1.receive_type !='2'),0) as "careNum", <!--关注数-->
+         ifnull((select count(1) from tb_person_care tp2 where tp2.receive_account = t1.care_account and tp2.record_status = 1),0) as "fansNum", <!--粉丝数-->
+         ifnull((select count(tp3.like_parent_id) from tb_park_like tp3 where tp3.record_status = 1 and tp3.like_status = 1 and  tp3.like_parent_id in (
              select tt.topic_id from tb_gam_topic tt where tt.creator_account =t1.care_account
-                  )) as "likedNum" <!--获赞数-->
+                  )),0) as "likedNum" <!--获赞数-->
         <if test="currentAccount != null and currentAccount != '' ">
             ,ifnull((select count(1) from tb_person_care tp3 where tp3.receive_account =t1.care_account and tp3.care_account=#{currentAccount}and tp3.record_status =1 ),0)  as "careStatus" <!--是否已关注-->
         </if>
@@ -72,8 +72,6 @@
         AND t.com_status = 1
         AND t.com_type = 3
         AND t.root_id=#{id}) t2
-
-
     </select>
 
 </mapper>

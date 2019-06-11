@@ -382,7 +382,6 @@ export default {
     this.$nextTick(() => {
       this.swiperInit()  
     })
-     
     this.getActiType()
     this.getNewActive()
     this.getHotActive()
@@ -463,16 +462,14 @@ export default {
       let demo=document.querySelector('.partner_list');
       let demo2=document.querySelector('.partner_list_ul2');
       let demo1=document.querySelector('.partner_list_ul');
-      if(demo2){
-        demo2.innerHTML = demo1.innerHTML;
-      }
+          demo2.innerHTML = demo1.innerHTML;
       function Marquee(){
         if(demo.scrollTop>=demo1.offsetHeight){
           demo.scrollTop=0;
-          }
-          else{
-              demo.scrollTop=demo.scrollTop+1;
-          }
+        }
+        else{
+          demo.scrollTop=demo.scrollTop+1;
+        }
       }
       let MyMar=setInterval(Marquee,speed);
       demo.onmouseover=function(){clearInterval(MyMar)};

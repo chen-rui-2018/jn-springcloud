@@ -163,20 +163,19 @@ export default {
       }
     });
 
-    this.init();
   },
   methods: {
        //获取我的所属企业编码
   getUserExtension(){
-     let _this = this;
       this.api.get({
         url: "getUserExtension",
         data: {},
-        callback: function(res) {
+        callback: (res)=> {
           if (res.code == "0000") {
-            sessionStorage.companyCode=res.data.companyCode
+           this.companyCode=res.data.companyCode
+            this.init();
           } else {
-            _this.$message.error(res.result);
+            this.$message.error(res.result);
           }
         }
       });
@@ -200,7 +199,7 @@ export default {
       let _this = this;
       _this.api.get({
         url: "getCompanyDetailByAccountOrCompanyId",
-        data: { accountOrCompanyId: sessionStorage.companyCode },
+        data: { accountOrCompanyId: this.companyCode },
         callback: function(res) {
           _this.loading = false;
           if (res.code == "0000") {
@@ -272,7 +271,7 @@ export default {
       // this.$router.push({ path: "/home" });
     },
     toEditBusiness() {
-      this.$router.push({ name: "editBusiness" });
+      this.$router.push({ name: "editBusiness",query:{accountOrCompanyId: this.companyCode } });
     }
   }
 };

@@ -48,7 +48,7 @@
         <el-table :data="honorData" style="width: 98%">
           <el-table-column prop="certificateName" align="center" label="证书名称">
           </el-table-column>
-          <el-table-column prop="certificateType" label="证书类型" align="center">
+          <el-table-column prop="certificateTypeName" label="证书类型" align="center">
           </el-table-column>
           <el-table-column prop="getTime" align="center" label="颁发时间">
           </el-table-column>

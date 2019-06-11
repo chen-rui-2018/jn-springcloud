@@ -329,7 +329,7 @@
       </div>
       <el-tabs v-model="activeName1" @tab-click="handleSerpro" ref="tabL">
         <el-tab-pane name="serverPro">
-          <span slot="label" v-if="serverPro.length>0">服务产品({{serverPro[0].serviceTotal}})</span>
+          <span slot="label" v-if="serverPro.length>0">服务产品({{total1}})</span>
           <span slot="label" v-else>服务产品(0)</span>
           <div class="serverPro">
             <ul class="list-imgleft">
@@ -361,9 +361,11 @@
                     <!-- 参考信息、交易均价 begin -->
                     <div class="detail-contact inner-product">
                       <div class="search_area text-of" title="王振英 , 包美芬 , 高凤清">顾&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;问：{{i.advisorName}}</div>
-                      <div class="text-of mt5">参考价格：{{i.referPrice}}</div>
+                      <div class="text-of mt5">参考价格：
+                        <span class="mainColor">{{i.referPrice}}</span>&nbsp;元
+                      </div>
                       <div>累计
-                        <span class="mainColor">{{i.transactionsNumber}}</span>笔交易</div>
+                        <span class="mainColor">{{i.transactionsNumber}}</span>&nbsp;笔交易</div>
                     </div>
                     <!-- 参考信息、交易均价 end -->
                     <!-- 评价 begin -->
@@ -438,7 +440,7 @@
                       </div>
                       <div class="search_area pt5 text-of" title="">业务擅长：{{i.goodAtBusiness}}</div>
                       <div class="color3">累计
-                        <span class="mainColor">{{i.transactionNum}}</span>笔交易</div>
+                        <span class="mainColor">{{i.transactionNum}}</span>&nbsp;笔交易</div>
                     </div>
                     <!-- 地址、电话 end -->
                     <!-- 评价 begin -->

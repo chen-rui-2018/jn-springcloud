@@ -28,7 +28,6 @@ Page({
     this.setData({
       imgBaseUrl:app.globalData.imgBaseUrl
     })
-  
    },
   onReady: function () { },
   onShow: function () { 
@@ -89,6 +88,11 @@ Page({
   goDetail(e){
     wx.navigateTo({
       url: './actiDetail/actiDetail?id='+e.currentTarget.dataset.id
+    })
+  },
+  goparkDetais(e){
+    wx.navigateTo({
+      url: './parkDetais/parkDetais?noticeid='+e.currentTarget.dataset.noticeid
     })
   }
 })

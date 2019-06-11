@@ -161,19 +161,33 @@ public class EmailServiceImpl implements EmailService {
     }
 
     /**
-     * 判断邮件发送状态，如果是关闭状态则发送至配置的测试邮箱地址
+     * 判断邮件发送状态，如果是关闭状态,则判断邮箱地址是否在配置的测试地址中，没有配置则默认取配置的测试地址的第一个邮箱
      * @param emailVo
      * @return
      */
     public EmailVo emailSwitchJudge(EmailVo emailVo) {
         //防止发送邮件不走mq，故在此判断是否开启邮件发送
         if(!newsSwitchProperties.getEmail()) {
-            logger.info("\n邮件发送开关未开启,如有需要请向组长申请开启.");
+            logger.info("\n邮件发送开关未开启,如有需要请向组长申请开启,测试环境测试可在配置中心springcloud-news文件中配置白名单.");
             //关闭状态，设置邮件接收人
             if(StringUtils.isBlank(newsSwitchProperties.getEmailAddress())) {
                 throw new JnSpringCloudException(EmailExceptionEnum.EMAIL_SWITCH_NOTNULL_EMAILADDRESS);
             }
-            emailVo.setEmail(newsSwitchProperties.getEmailAddress());
+            String[] emails = emailVo.getEmail().split(",");
+            StringBuffer newEmailBuffer = new StringBuffer();
+            String newEmail;
+            for(String email : emails){
+                if(newsSwitchProperties.getEmailAddress().indexOf(email)>=0) {
+                    newEmailBuffer.append(email);
+                    newEmailBuffer.append(",");
+                }
+            }
+            if(newEmailBuffer.length() == 0) {
+                newEmail = emails[0];
+            }else {
+                newEmail = newEmailBuffer.substring(0,newEmailBuffer.length()-1);
+            }
+            emailVo.setEmail(newEmail);
         }
         return emailVo;
     }

@@ -93,4 +93,18 @@ public class InvestorMainRoundWorkFlow implements Serializable {
     public void setRecordStatus(Byte recordStatus) {
         this.recordStatus = recordStatus;
     }
+
+    @Override
+    public String toString() {
+        return "InvestorMainRoundWorkFlow{" +
+                "investorAccount='" + investorAccount + '\'' +
+                ", mainRoundCode='" + mainRoundCode + '\'' +
+                ", mainRoundName='" + mainRoundName + '\'' +
+                ", createdTime='" + createdTime + '\'' +
+                ", creatorAccount='" + creatorAccount + '\'' +
+                ", modifiedTime='" + modifiedTime + '\'' +
+                ", modifierAccount='" + modifierAccount + '\'' +
+                ", recordStatus=" + recordStatus +
+                '}';
+    }
 }

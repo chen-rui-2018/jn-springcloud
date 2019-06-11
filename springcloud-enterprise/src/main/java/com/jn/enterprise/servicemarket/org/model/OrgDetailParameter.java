@@ -27,6 +27,7 @@ public class OrgDetailParameter implements Serializable {
 
     @ApiModelProperty(value = "主营业务",required = true,example = "商业纠纷，劳动纠纷")
     @NotNull(message = "主营业务不能为空")
+    @Size(max=500,message = "主营业务不能超过500字")
     private String orgBusiness;
 
     @ApiModelProperty(value = "机构简介",required = true,example = "机构成立于****")

@@ -397,6 +397,8 @@ public class InvestorServiceImpl implements InvestorService {
         //启动工作流成功
         if(okStatus.equals(ibpsResult.getState())){
             logger.info("投资人认证信提交成功，审批流程启动成功,流程实例id为：[{}]",ibpsResult.getData());
+        }else{
+            logger.info("投资人认证信提交成功，审批流程启动失败");
         }
         return ibpsResult;
     }

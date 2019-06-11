@@ -38,6 +38,8 @@ export default {
         callback: function (res) {
           if (res.code === '0000') {
             _this.getGuideDetal = res.data
+          } else {
+            _this.$vux.toast.text(res.result)
           }
         }
       })

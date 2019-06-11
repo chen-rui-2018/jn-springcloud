@@ -132,6 +132,7 @@ export default {
     },
     // 政策中心首页
     getPolicyCenterList () {
+      this.page = 1
       let _this = this
       this.api.get({
         url: 'getPolicyCenterList',
@@ -148,6 +149,8 @@ export default {
           if (res.code === '0000') {
             _this.policyCenterList = res.data.rows
             _this.total = res.data.total
+          } else {
+            _this.$vux.toast.text(res.result)
           }
         }
       })
@@ -161,6 +164,8 @@ export default {
         callback: function (res) {
           if (res.code === '0000') {
             _this.policyClass = res.data
+          } else {
+            _this.$vux.toast.text(res.result)
           }
         }
       })

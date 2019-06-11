@@ -42,8 +42,9 @@
           <text>{{item.title}} </text>
           <text>{{item.meetingTime}}小时</text>
         </view>
-        <view class="gray">
-          预约人：{{item.organizationalUser}}
+        <view class="gray right_detail"> 
+          <text>预约人：{{item.organizationalUser}}</text> 
+          <text>{{item.isMeetingStatus}}</text>
         </view>
       </view>
     </view>

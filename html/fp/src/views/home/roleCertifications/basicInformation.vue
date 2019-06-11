@@ -97,7 +97,7 @@
                     <span>企业营业执照</span>
                   </template>
                 </el-table-column>
-                <el-table-column align="center" label="颁发时间">
+                <!-- <el-table-column align="center" label="颁发时间">
                   <template slot-scope="scope">
                     <el-date-picker v-model="licenseList[scope.$index].awardTime" type="date" value-format="yyyy-MM-dd"
                       placeholder="请选择颁发时间"></el-date-picker>
@@ -108,7 +108,7 @@
                     <el-input v-model="licenseList[scope.$index].awardDepart" placeholder="请输入主管部门" maxlength='20'
                       clearable></el-input>
                   </template>
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column align="center" label="上传附件">
                   <template slot-scope="scope">
                     <el-upload class="avatar-uploader avatarImg" :show-file-list="false" :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
@@ -377,9 +377,9 @@ export default {
       dialogVisible: false,
       isShowOtherList: false,
       // fileUrl: "",
-      // licensesForm: {
-      //   businessType: ""
-      // },
+      licensesForm: {
+        // businessType: ""
+      },
       kernelText: "添加核心服务团队人员",
       otherText: "添加其它资质/荣誉",
       status: 0,
@@ -393,8 +393,8 @@ export default {
       orgOptions: [],
       licenseList: [
         {
-          awardTime: "",
-          awardDepart: "",
+          // awardTime: "",
+          // awardDepart: "",
           fileUrl: ""
         }
       ],
@@ -617,10 +617,8 @@ export default {
     init() {
       if (this.$route.query.title) {
         this.title = this.$route.query.title;
-      }
 
-      let _this = this;
-      _this.api.get({
+      this.api.get({
         url: "getMyOrgInfo",
         data: { account: sessionStorage.getItem("account") },
         callback: (res)=> {
@@ -642,6 +640,9 @@ export default {
           }
         }
       });
+      }
+
+
     },
     // 禁止输入小数和负数
     BlurText(e) {

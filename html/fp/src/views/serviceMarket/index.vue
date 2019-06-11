@@ -96,12 +96,6 @@
     </div>
     <div class="market_content"><!-- 版心 -->
       <div class="market_breadcrumb">
-          <!-- <el-breadcrumb separator="/">
-            <el-breadcrumb-item :to="{ path: '/' }">企业服务</el-breadcrumb-item>
-            <el-breadcrumb-item>
-              <a href="/">服务超市</a>
-            </el-breadcrumb-item>
-          </el-breadcrumb> -->
           <span class="pointer" @click="$router.push({path:'/enterpriseservice'})">企业服务</span>
           <span>/</span>
           <span class="mainColor">服务超市</span>
@@ -109,22 +103,22 @@
       <div class="market_navicon" ref="market_navicon2" data-class="allFade">
         <a href="javascript:;">
           <div class="nav_icon"><i class="iconfont icon-jigou2"></i></div>
-          <div class="nav_discribe"> <span>入住企业数<span class="">8929</span>个</span> </div>
+          <div class="nav_discribe"> <span>入住企业数<span class="">{{navData.comNum}}</span>个</span> </div>
           <div class="nav_todo"><span @click="$router.push({path:'/upgradeEnterprise'})">申请注册</span></div>
         </a>
         <a href="javascript:;">
           <div class="nav_icon"><i class="iconfont icon-jigou1"></i></div>
-          <div class="nav_discribe"> <span>已入住服务机构 <span>1057</span>家</span> </div>
+          <div class="nav_discribe"> <span>已入住服务机构 <span>{{navData.orgNum}}</span>家</span> </div>
           <div class="nav_todo"><span>机构入驻</span></div>
         </a>
         <a href="javascript:;">
           <div class="nav_icon"><i class="iconfont icon-huodong"></i></div>
-          <div class="nav_discribe"> <span>累计举办活动<span>378</span>场</span> </div>
+          <div class="nav_discribe"> <span>累计举办活动<span>{{navData.activityNum}}</span>场</span> </div>
           <div class="nav_todo"><span @click='$router.push({path:"/actiTrain"})'>近期活动</span></div>
         </a>
         <a href="javascript:;">
           <div class="nav_icon"><i class="iconfont icon-jigou11"></i></div>
-          <div class="nav_discribe"> <span>已入住服务专员<span>3786</span>人</span> </div>
+          <div class="nav_discribe"> <span>已入住服务专员<span>{{navData.advisorNum}}</span>人</span> </div>
           <div class="nav_todo" @click="isVisibility=true"><span>申请顾问</span></div>
         </a>
       </div>
@@ -222,7 +216,7 @@
       <div class="counselor" ref="counselor2" data-class="allFade">
         <div class="counselor_title">
           <span>优质顾问</span>
-          <span class="pointer">MORE<i class="iconfont icon-you"></i></span>
+          <span class="pointer" @click="$router.push({path:'/serverCon'})">MORE<i class="iconfont icon-you"></i></span>
         </div>
         <div class="conselor_introduce">
           <ul class="conselor_tab clearfix">
@@ -374,7 +368,8 @@ export default {
        sliderData:[],
        sekectShow:false,
        partnerLogo:[],
-       bannerList:[]
+       bannerList:[],
+       navData:{}
     };
   },
   filters: {
@@ -405,12 +400,27 @@ export default {
     window.addEventListener('scroll', this.handleScroll)
     this.getBannarList()
     this.getPartner()
-    // 轮播图
+    // 图标数据
+    this.getNavData()
   },
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
   },
   methods: {
+    // 图标数据
+    getNavData(){
+      this.api.get({
+        url: "getDataStatistics",
+        data: { },
+        dataFlag: false,
+        callback: res=> {
+          if (res.code == "0000") {
+            this.navData=res.data
+          }
+        }
+      });
+    },
+    // 轮播图列表
     getBannarList(){
       this.api.get({
         url: "getPromotionList",
@@ -425,6 +435,7 @@ export default {
         }
       });
     },
+    // 搜索
     goSearch(){
       if(this.select==='1'){
         this.$router.push({path:'/serverOrg',query:{searchData:this.searchData}})
@@ -600,7 +611,9 @@ export default {
         },
         callback: function(res) {
           // console.log(res);
-          _this.hotActiveList = res.data.rows;
+          if(res.code==="0000"){
+            _this.hotActiveList = res.data.rows;
+          }
         }
       });
     },

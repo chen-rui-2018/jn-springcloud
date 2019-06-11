@@ -31,10 +31,11 @@
       </ul>
       <!--  -->
       <transition enter-active-class='animated fadeIn' leave-active-class='animated fadeOut' name='fade'>
-        <span class="weixin_img" v-if="show"><img src="@/../static/img/erweima1.jpg" alt=""> </span>
-      </transition>
-      <transition enter-active-class='animated fadeIn' leave-active-class='animated fadeOut' name='fade'>
-        <span class="tel_img" v-if="telShow"><img src="@/../static/img/erweima1.jpg" alt=""> </span>
+        <span class="weixin_img" v-if="show"><img src="@/../static/img/xiaocehngxu.png" alt=""> </span>
+        <span class="tel_img" v-if="telShow">
+          <span> <img src="@/../static/img/andriod.png" alt=""><span>android</span> </span>
+          <span> <img src="@/../static/img/apple.png" alt=""><span>ios</span> </span>
+        </span>
       </transition>
     </div>
      <!-- 网站导航侧边 -->
@@ -226,18 +227,39 @@ export default {
         }
     }
     .tel_img{
-        width: 171px;
-        height: 170px;
+        width: 342px;
+        height: 180px;
         background: rgba(225,225,225,0.8);
         border-radius: 11px;
         text-align: center;
         position: relative;
         right: 20px;
-        display: inline-block;
-        img{
-          width:80%;
-          padding:10%;
+        display: flex;
+        >span{
+          flex: 1;
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          align-items: center;
+          img{
+            height: 75%;
+            margin: 8% auto;
+            margin-bottom: 0;
+            width: 82%;
+          }
+          // &:nth-child(2){
+          //   img{
+          //     margin-left: 0;
+          //   }
+          // }
+          >span{
+            width:100%;
+            line-height: 1;
+            padding-bottom: 5px;
+          }
         }
+        
+        
     }
     .right_nav{
       position: fixed;

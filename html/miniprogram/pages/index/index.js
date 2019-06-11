@@ -85,5 +85,10 @@ Page({
         wx.stopPullDownRefresh
       }
     })
+  },
+  goDetail(e){
+    wx.navigateTo({
+      url: './actiDetail/actiDetail?id='+e.currentTarget.dataset.id
+    })
   }
 })

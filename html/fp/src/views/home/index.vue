@@ -108,13 +108,13 @@ export default {
               )
             }
           })
-
-        } else {
-          ElementUI.Message.error('请登录后再访问个人中心');
-          setTimeout(() => {
-            next('/login')
-          }, 1000)
         }
+        // else {
+        //   ElementUI.Message.error('请登录后再访问个人中心');
+        //   setTimeout(() => {
+        //     next('/login')
+        //   }, 1000)
+        // }
       }
     });
   },

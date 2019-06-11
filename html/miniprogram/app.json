@@ -10,6 +10,7 @@
     "pages/index/policyGuide/policyGuide",
     "pages/index/hotAct/hotAct",
     "pages/index/actiDetail/actiDetail",
+    "pages/index/parkDetais/parkDetais",
     "pages/home/home",
     "pages/home/payRecord/payRecord",
     "pages/home/maCar/maCar",

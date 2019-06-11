@@ -1,5 +1,5 @@
 <template>
-  <div class="postJobProduct">
+  <div class="postJobProduct" v-loading="loading">
     <div class="ordinary_title font16">
       <div>发布招聘</div>
     </div>
@@ -89,6 +89,7 @@ export default {
    components: { UE },
   data() {
     return {
+      loading:false,
        defaultMsg: '',
       config: {
         initialFrameWidth: '100%',
@@ -160,12 +161,14 @@ export default {
             return
           }
                this.jobForm.num = Number(this.jobForm.num);
-
+     this.loading=true
           this.api.post({
             url: "postJob",
             data: this.jobForm,
             callback: res => {
+              this.loading=false
               if (res.code === "0000") {
+
                 this.$message({
                   message: "操作成功",
                   type: "success"

@@ -317,10 +317,14 @@ export default {
     this.getParkList();
   },
   methods: {
-    submitCompany(formName) {
-      this.loading=true
+    submitCompany(formName) {     
       this.$refs[formName].validate(valid => {
         if (valid) {
+          if(new Date(this.businessForm.runTime)<new Date(this.businessForm.foundingTime)){
+             this.$message.error('落地时间须大于注册时间');
+             return false
+          }
+          this.loading=true
           let _this = this;
           this.api.post({
             url: "changeToCompany",
@@ -349,8 +353,8 @@ export default {
               checkCode: _this.businessForm.checkCode
             },
             callback: function(res) {
+              _this.loading=false
               if (res.code == "0000") {
-                _this.loading=false
                 _this.$message.success("提交成功，等待审核");
                 _this.$refs["businessForm"].resetFields();
               } else {

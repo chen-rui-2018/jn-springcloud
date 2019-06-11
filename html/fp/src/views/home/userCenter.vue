@@ -182,10 +182,9 @@
         return new Promise(resolve => {
           // 上方4个导航
           const menuItems = JSON.parse(sessionStorage.menuItems)
-          console.log(menuItems)
           menuItems.forEach(item => {
             // 角色认证
-            if (item.label === '角色认证') {
+            if (item.label === '加入机构') {
               this.jurisdictionTagList = this.tagList
               this.roleJurisdiction = true
               // 机构邀请

@@ -207,7 +207,7 @@
       </el-form>
       <div class="bus_footer">
         <span @click="submit">保存修改</span>
-        <span>取消</span>
+        <span @click="goIndex">返回</span>
       </div>
     </div>
   </div>
@@ -378,6 +378,9 @@ export default {
     this.getParkList()
   },
   methods: {
+    goIndex(){
+           this.$router.push({path:'/myBusiness/index'})
+    },
      //获取验证码
     getCode() {
       let _this = this;
@@ -406,6 +409,10 @@ export default {
 
       this.$refs['businessForm'].validate(valid => {
         if (valid) {
+          if(new Date(this.businessForm.runTime)<new Date(this.businessForm.foundingTime)){
+             this.$message.error('落地时间须大于注册时间');
+             return false
+          }
           this.loading=true
          this.api.post({
               url: "updateCompanyInfo",
@@ -413,12 +420,10 @@ export default {
               callback: res => {
                  this.loading=false
                 if (res.code == "0000") {
-
                   this.$message({
                     message: "企业信息已提交，请等待后台审核",
                     type: "success"
                   });
-
                 this.$router.push({path:'/myBusiness/index'})
                 } else {
                   this.$message.error(res.result);
@@ -448,9 +453,9 @@ export default {
     init() {
       let _this = this;
       _this.api.get({
-        url: "getMyBusiness",
+        url: "getCompanyDetailByAccountOrCompanyId",
+       data: { accountOrCompanyId: this.$route.query.accountOrCompanyId },
         callback: function(res) {
-          console.log(res);
           if (res.code == "0000") {
             _this.businessForm.comName = res.data.comName;
             _this.businessForm.comNameShort = res.data.comNameShort;
@@ -479,7 +484,6 @@ export default {
             // _this.avatarUrl= res.data.avatar
             _this.businessForm.businessLicense = res.data.businessLicense;
             // _this.businessForm.propagandaPictureList = res.data.propagandaPicture;
-            console.log(res.data.propagandaPicture)
             if ( res.data.propagandaPicture) {
               _this.businessForm.propagandaPictureList=res.data.propagandaPicture
               let fileListArr = []
@@ -500,7 +504,6 @@ export default {
         url: "selectTeamList",
         data: { preType: 1 },
         callback: res => {
-          console.log(res);
           this.induTypeOptions = res.data;
         }
       });
@@ -510,7 +513,6 @@ export default {
         url: "selectTeamList",
         data: { preType: 3 },
         callback: res => {
-          console.log(res);
           this.comPropertyOptions = res.data;
         }
       });

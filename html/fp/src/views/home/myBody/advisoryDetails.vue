@@ -54,7 +54,8 @@
           </el-table-column>
           <el-table-column align="center" prop="certificatePhoto" label="附件">
             <template slot-scope="scope">
-                      <img :src="scope.row.certificatePhoto" alt="" style="width:40px;height:40px;">
+                     <span v-if="scope.row.certificatePhoto" class="themeColor smallSize cur" @click="lookPoster(scope.row)">点击查看</span>
+              <span v-if="!scope.row.certificatePhoto">暂无附件</span>
                     </template>
           </el-table-column>
         </el-table>
@@ -84,7 +85,12 @@
         </el-table>
       </div>
     </div>
-
+ <el-dialog :visible.sync="dialogVisible" :modal-append-to-body="false" width="50%">
+      <img :src="certificatePhoto" alt="图片" style="width:100%;height:200px">
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">返 回</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -92,6 +98,7 @@
 export default {
   data() {
     return {
+      dialogVisible:false,
       loading:false,
       serviceProjectExperienceList: [],
       serviceExperienceData: [],
@@ -111,6 +118,15 @@ export default {
     this.init();
   },
   methods: {
+    //   查看附件图片
+    lookPoster(row) {
+      //  if(!row.posterUrl){
+      //      this.$message.error('此宣传没有宣传海报')
+      //  }else{
+      this.certificatePhoto = row.certificatePhoto;
+      this.dialogVisible = true;
+      //  }
+    },
     init() {
       let _this = this;
       // this.account = this.$route.query.account;

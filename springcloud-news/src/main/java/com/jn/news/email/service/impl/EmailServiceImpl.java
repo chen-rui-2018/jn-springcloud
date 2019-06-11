@@ -89,6 +89,7 @@ public class EmailServiceImpl implements EmailService {
         }
         try {
             mailSender.send(mimeMessage);
+            logger.info("\n邮件发送成功,标题:【{}】,收件箱:【{}】",emailVo.getEmailSubject(),emailVo.getEmail());
         } catch (MailException e) {
             logger.error("邮件发送异常：",e);
             throw new JnSpringCloudException(CommonExceptionEnum.EMAIL_ERROR);
@@ -138,6 +139,7 @@ public class EmailServiceImpl implements EmailService {
         //发送邮件
         try {
             mailSender.send(mimeMessage);
+            logger.info("\n模板邮件发送成功,标题:【{}】,收件箱:【{}】",emailVo.getEmailSubject(),emailVo.getEmail());
         } catch (MailException e) {
             logger.error("模板邮件发送异常：",e);
             throw new JnSpringCloudException(CommonExceptionEnum.EMAIL_ERROR);
@@ -167,6 +169,7 @@ public class EmailServiceImpl implements EmailService {
      */
     public EmailVo emailSwitchJudge(EmailVo emailVo) {
         //防止发送邮件不走mq，故在此判断是否开启邮件发送
+        logger.info("\n判断邮件发送开关状态,状态是:【{}】",newsSwitchProperties.getEmail());
         if(!newsSwitchProperties.getEmail()) {
             logger.info("\n邮件发送开关未开启,如有需要请向组长申请开启,测试环境测试可在配置中心springcloud-news文件中配置白名单.");
             //关闭状态，设置邮件接收人

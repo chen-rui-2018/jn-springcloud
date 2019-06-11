@@ -155,6 +155,7 @@ export default {
       this.api.get({
         url: "findAllApp",
         data: {
+          isRead:0
         },
         callback: (res) =>{
           if (res.code == "0000") {

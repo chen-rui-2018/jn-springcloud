@@ -481,6 +481,7 @@ export default {
             // _this.businessForm.propagandaPictureList = res.data.propagandaPicture;
             console.log(res.data.propagandaPicture)
             if ( res.data.propagandaPicture) {
+              _this.businessForm.propagandaPictureList=res.data.propagandaPicture
               let fileListArr = []
               res.data.propagandaPicture.forEach(val => {
                 console.log(val)

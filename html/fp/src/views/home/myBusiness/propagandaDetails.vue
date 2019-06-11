@@ -98,7 +98,7 @@ export default {
          }
       },
     toEnterprisePropaganda(){
-      this.$router.push({name:'enterprisePropaganda'})
+      this.$router.push({name:'enterprisePropaganda',query:{status:this.$route.query.status}})
     }
   }
 }

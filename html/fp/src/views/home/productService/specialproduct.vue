@@ -37,7 +37,7 @@
                   <template slot-scope="scope">
                     <div class="specialbth" >
                       <span  @click="gospecialdetail(scope.row)">详情</span>
-                      <span v-show="scope.row.status!='1'&&scope.row.status!='0'&&scope.row.status!='2'" @click="gospecialedit(scope.row.productId)">编辑</span>
+                      <!-- <span v-show="scope.row.status!='1'&&scope.row.status!='0'&&scope.row.status!='2'" @click="gospecialedit(scope.row.productId)">编辑</!--> 
                       <span v-show="scope.row.status!='2'&&scope.row.status!='0'&&scope.row.status!='1'" @click="gospecialshelf('1',scope.row.productId)">上架</span>
                       <span v-show="scope.row.status!='2'&&scope.row.status!='0'&&scope.row.status==='1'" @click="gospecialshelf('-1',scope.row.productId)">下架</span>
                       <!-- <span v-show="scope.row.status==='2'" @click="applyagain(scope.row.productId)">重新申请</span> -->

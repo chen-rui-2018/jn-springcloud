@@ -441,12 +441,22 @@ img {
 .actiTrain .actiContent .actiTab .allActiUl > li .actiInfo > .actiNameItem {
   color: #222;
   font-size: 16px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .actiCenter .actiContent .actiTab .allActiUl > li .actiInfo .actiTimer,
 .actiTrain .actiContent .actiTab .allActiUl > li .actiInfo .actiTimer {
   text-indent: -10px;
   margin: 10px 0 5px 18px;
+}
+
+.actiCenter .actiContent .actiTab .allActiUl > li .actiInfo .actiAddress,
+.actiTrain .actiContent .actiTab .allActiUl > li .actiInfo .actiAddress {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .actiCenter .actiContent .actiTab .allActiUl li:nth-child(4n),
@@ -2524,6 +2534,9 @@ img {
 .finaProDetail .agentCon .actiConsultation .allActiUl > li .actiInfo > .actiNameItem {
   color: #222;
   font-size: 16px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .serverOrgDetail .agentCon .actiConsultation .allActiUl > li .actiInfo .actiTimer,
@@ -3589,6 +3602,9 @@ img {
 .enterpriseservice .popularActi .acti .actiUl > li .actiInfo > .actiNameItem {
   color: #222;
   font-size: 16px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .portalIndex .popularActi .acti .actiUl > li .actiInfo .actiTimer,

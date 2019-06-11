@@ -284,7 +284,7 @@
                   <i class="el-icon-time"></i>
                   <span>{{i.actiStartTime}}-{{i.actiEndTime}}</span>
                 </p>
-                <p>
+                <p class="actiAddress">
                   <i class="el-icon-location-outline"></i>
                   <span>{{i.actiAddress}}</span>
                 </p>
@@ -1546,6 +1546,11 @@ export default {
       color: #d0d0d0;
       top: 440px;
       top: 42%;
+    }
+    .actiAddress {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
   }
   .policyCenter {

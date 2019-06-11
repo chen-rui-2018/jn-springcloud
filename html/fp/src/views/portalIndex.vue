@@ -212,7 +212,7 @@
                   <!-- <span>{{item.actiStartTime}}-{{item.actiEndTime.split(' ')[1]}}</span> -->
                   <!-- <span>周日14：00-17：00</span> -->
                 </p>
-                <p>
+                <p class="actiAddress">
                   <i class="el-icon-location-outline"></i>
                   <span>{{i.actiAddress}}</span>
                 </p>
@@ -1394,6 +1394,11 @@ export default {
       color: #d0d0d0;
       top: 440px;
       top: 42%;
+    }
+    .actiAddress {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
   }
 

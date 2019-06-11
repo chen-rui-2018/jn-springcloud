@@ -422,11 +422,19 @@ img {
             >.actiNameItem {
               color: #222;
               font-size: 16px;
+              overflow:hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
             }
 
             .actiTimer {
               text-indent: -10px;
               margin: 10px 0 5px 18px;
+            }
+            .actiAddress{
+              overflow:hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
             }
           }
         }
@@ -1442,6 +1450,9 @@ img {
             >.actiNameItem {
               color: #222;
               font-size: 16px;
+              overflow:hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
             }
 
             .actiTimer {
@@ -2275,6 +2286,9 @@ img {
             >.actiNameItem {
               color: #222;
               font-size: 16px;
+              overflow:hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
             }
 
             .actiTimer {

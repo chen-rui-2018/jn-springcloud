@@ -16,7 +16,7 @@
           <el-table-column prop="productName" label="产品名称" align="center" width="120"> </el-table-column>
           <el-table-column prop="orgName" label="服务机构" align="center"> </el-table-column>
           <el-table-column prop="signoryName" label="业务领域" align="center"> </el-table-column>
-          <el-table-column prop="advisorName" label="服务顾问" align="center"> </el-table-column>
+          <el-table-column prop="advisorName" label="服务专员" align="center"> </el-table-column>
           <el-table-column prop="releaseTime" label="发布日期" align="center" width="180"> </el-table-column>
           <el-table-column label="发布状态" align="center"> 
             <template slot-scope="scope">

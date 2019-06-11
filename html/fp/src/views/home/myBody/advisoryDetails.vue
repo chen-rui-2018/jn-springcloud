@@ -1,7 +1,7 @@
 <template>
   <div class="advisoryDetails" v-loading="loading">
     <div class="advisory_title font16">
-      <div>顾问详情</div>
+      <div>专员详情</div>
       <div @click="toCounselorManagement">返回</div>
     </div>
 

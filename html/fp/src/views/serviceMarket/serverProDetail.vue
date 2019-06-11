@@ -19,7 +19,7 @@
           </div>
           <div class="agent2Info fl">
             <p>服务机构：{{proDelInfo.orgName}}</p>
-            <p>服务顾问：{{proDelInfo.advisorName}}</p>
+            <p>服务专员：{{proDelInfo.advisorName}}</p>
             <p>参考价格：
               <span class="mainColor">{{proDelInfo.referPrice}}</span>元
             </p>
@@ -134,7 +134,7 @@
                     <!-- 参考信息、交易均价 begin -->
                     <div class="detail-contact inner-product">
                       <div class="search_area text-of">服务机构：{{i.orgName}}</div>
-                      <div class="text-of mt5">服务顾问：{{i.advisorName }}</div>
+                      <div class="text-of mt5">服务专员：{{i.advisorName }}</div>
                       <div class="text-of mt5">参考价格：{{i.referPrice}}元</div>
                       <div>累计
                         <span class="mainColor">{{i.transactionsNumber}}</span>笔交易</div>
@@ -201,7 +201,7 @@
                   <div class="list-info-bottom-detail clearfix">
                     <!-- 参考信息、交易均价 begin -->
                     <div class="detail-contact inner-product">
-                      <div class="search_area text-of" title="王振英 , 包美芬 , 高凤清">服务顾问：{{i.advisorName}}</div>
+                      <div class="search_area text-of" title="王振英 , 包美芬 , 高凤清">服务专员：{{i.advisorName}}</div>
                       <!-- <div class="text-of mt5">参考价格：1000-10000元</div> -->
                       <span class="evaluate-container">
                         <span class="arrow-container">{{i.evaluationDesc}}</span>

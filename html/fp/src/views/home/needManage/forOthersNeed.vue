@@ -28,7 +28,7 @@
           <el-table-column prop="orgName" label="意向机构" align="center" width="120"> </el-table-column>
           <el-table-column prop="businessArea" label="业务领域" align="center"> </el-table-column>
           <el-table-column prop="productName" label="意向产品" align="center"> </el-table-column>
-          <el-table-column prop="advisorName" label="意向顾问" align="center" width="100"> </el-table-column>
+          <el-table-column prop="advisorName" label="意向专员" align="center" width="100"> </el-table-column>
           <el-table-column prop="requireTime" label="提需求日期" align="center" width="120"> </el-table-column>
           <el-table-column prop="status" label="需求状态" align="center"> </el-table-column>
           <el-table-column prop="handleResult" label="对接结果" align="center" width="110"> </el-table-column>

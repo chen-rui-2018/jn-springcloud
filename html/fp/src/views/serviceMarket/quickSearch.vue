@@ -38,7 +38,7 @@
               <li>
                 <div class="itemImg"><img src="@/../static/img/k3.png" alt=""></div>
                 <div class="itemInfo">
-                  <p>顾问</p>
+                  <p>专员</p>
                   <p class="mainColor">{{businessAreaNum.advisorNum}}家</p>
                 </div>
               </li>
@@ -214,7 +214,7 @@
             </div>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="服务顾问" name="serConsultant">
+        <el-tab-pane label="服务专员" name="serConsultant">
           <div class="serverOrgContent">
             <ul class="list-imgleft adviser">
               <li class="clearfix" v-for="(i,k) in serviceConsultant" :key='k'>
@@ -498,7 +498,7 @@ export default {
       });
     },
     getServiceConList() {
-      //服务顾问
+      //服务专员
       let _this = this;
       this.api.get({
         url: "getServiceConList",

@@ -51,7 +51,7 @@
               <div class="left1 fl" id="left1">
                 <p>服务机构：{{i.orgName}}
                 </p>
-                <p>服务顾问：{{i.advisorName}}</p>
+                <p>服务专员：{{i.advisorName}}</p>
                 <p>参考价格
                   <span class="mainColor">{{i.referPrice}}</span>元</p>
                 <p>累计

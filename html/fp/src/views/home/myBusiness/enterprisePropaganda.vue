@@ -10,7 +10,7 @@
           <span :class="approvalStatus==='4'?'active':''" @click="approvalPending">未付款</span>
           <span :class="approvalStatus==='6'?'active':''" @click="disapprove ">已发布</span>
           <span :class="approvalStatus==='0'?'active':''" @click="noFeedback ">未审批</span>
-          <span :class="approvalStatus==='2'?'active':''" @click="approvalIn ">审批中</span>
+          <span :class="approvalStatus==='1'?'active':''" @click="approvalIn ">审批中</span>
           <span :class="approvalStatus==='3'?'active':''" @click="denied ">审批不通过</span>
         </div>
         <el-input placeholder="请输入产品名称" v-model="searchContent" clearable>
@@ -185,7 +185,7 @@ export default {
       this.initList();
     },
     approvalIn(){
-this.approvalStatus = "2";
+this.approvalStatus = "1";
       this.initList();
     },
     handleSizeChange(val) {

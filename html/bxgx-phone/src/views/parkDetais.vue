@@ -29,6 +29,8 @@ export default {
         callback: res => {
           if (res.code === '0000') {
             this.noticeDetail = res.data
+          } else {
+            _this.$vux.toast.text(res.result)
           }
         }
       })

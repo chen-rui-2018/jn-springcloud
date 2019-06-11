@@ -17,11 +17,8 @@ Page({
   },
   onLoad: function (options) {
     this.setData({
-      sendData:{
-        meetingRoomId:options.id
-      }
+      "sendData.meetingRoomId":options.id
     })
-    
    },
   onReady: function () { },
   onShow: function () {
@@ -60,7 +57,18 @@ Page({
         let starMinute=ele.startTime.split(":")
         let endMinute=ele.endTime.split(":")
         let meetingTime=((endMinute[0]*60+endMinute[1]*1)-(starMinute[0]*60+starMinute[1]*1))/60
-        ele.meetingTime=meetingTime
+        ele.meetingTime=meetingTime.toFixed(2)
+        if(ele.meetingStatus==="0"){
+          ele.isMeetingStatus="待开始"
+        }else if(ele.meetingStatus==="1"){
+          ele.isMeetingStatus="进行中" 
+        }else if(ele.meetingStatus==="2"){
+          ele.isMeetingStatus="已完成" 
+        }else if(ele.meetingStatus==="3"){
+          ele.isMeetingStatus="已取消" 
+        }else{
+          ele.isMeetingStatus="暂无" 
+        }
       })
       this.setData({
         meetingList:this.data.meetingList

@@ -422,11 +422,19 @@ img {
             >.actiNameItem {
               color: #222;
               font-size: 16px;
+              overflow:hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
             }
 
             .actiTimer {
               text-indent: -10px;
               margin: 10px 0 5px 18px;
+            }
+            .actiAddress{
+              overflow:hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
             }
           }
         }
@@ -797,7 +805,7 @@ img {
 
               // margin-left: 40px;
               >p {
-                margin-bottom: 5px;
+                margin-top: 4px;
               }
 
               .el-rate {
@@ -977,7 +985,13 @@ img {
       }
 
       >.zhankai {
-        width: 30px;
+        // width: 30px;
+        position: absolute;
+        right: 25px;
+        top: 30px;
+        font-size: 14px;
+        z-index: 2;
+        text-align: center;
       }
 
       .basicInfo,
@@ -1207,7 +1221,7 @@ img {
 
         .list-item {
           padding: 20px 0;
-          padding-top: 10px;
+          // padding-top: 10px;
           border-bottom: 1px solid #eee;
 
           .list-imgleft-container.product {
@@ -1282,6 +1296,9 @@ img {
             // margin-top: 50px;
             cursor: pointer;
           }
+        }
+        .list-item:nth-child(1){
+          padding-top:10px;
         }
       }
     }
@@ -1433,11 +1450,19 @@ img {
             >.actiNameItem {
               color: #222;
               font-size: 16px;
+              overflow:hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
             }
 
             .actiTimer {
               text-indent: -10px;
               margin: 10px 0 5px 18px;
+            }
+            .actiAddress{
+              overflow:hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
             }
           }
         }
@@ -2261,6 +2286,9 @@ img {
             >.actiNameItem {
               color: #222;
               font-size: 16px;
+              overflow:hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
             }
 
             .actiTimer {
@@ -2597,11 +2625,12 @@ img {
           // border: 1px solid #fff;
           // margin-right: 30px;
           p {
-            margin-top: 20px;
+            margin-top: 30px;
           }
 
           img {
             width: 50px;
+            height: 50px;
           }
         }
 

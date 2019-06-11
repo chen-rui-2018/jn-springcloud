@@ -132,6 +132,7 @@ export default {
       // }
       this.$refs[formName].validate(valid => {
         if (valid) {
+           this.loading=true
           let _this = this;
           this.api.post({
             url: "changeToStaff",
@@ -145,6 +146,7 @@ export default {
               phone: _this.ruleForm.phone
             },
             callback: function(res) {
+              _this.loading=false
               if (res.code == "0000") {
                 _this.$message.success("提交成功，等待审核");
                 _this.$refs["ruleForm"].resetFields();

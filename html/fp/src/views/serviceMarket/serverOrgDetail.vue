@@ -23,7 +23,7 @@
             <p>咨询电话：
               <span class="mainColor">{{serverOrgDetailList.orgPhone}}</span>
             </p>
-            <p>公司地址：{{serverOrgDetailList.orgAddress}}</p>
+            <p>公司地址：{{serverOrgDetailList.orgAddressDetail}}</p>
             <p class="lastP color3">
               <span>交易量：{{serverOrgDetailList.transactionCount}}</span>
               <span>浏览：{{serverOrgDetailList.orgShow}}</span>
@@ -41,7 +41,7 @@
           <i class="el-icon-arrow-up"></i>
         </div>
         <div class="mainColor shouqi zhankai pointer" v-else @click='handleZk'>
-          <i class="el-icon-arrow-down"></i>
+          展开<i class="el-icon-arrow-down"></i>
         </div>
         <el-card>
           <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -79,11 +79,11 @@
               <div class="businessinfo" v-if="zankaiFlag">
                 <table class="table-orgspace mainBorder">
                   <tr>
-                    <td class="table-orgspace-title">组织代码机构:{{serverOrgDetailList.orgCode}}</td>
+                    <td class="table-orgspace-title">组织代码机构:</td>
                     <td class="table-orgspace-detail" width="300px" colspan="2">
                       <div>{{serverOrgDetailList.orgCode}}</div>
                     </td>
-                    <td class="table-orgspace-title">类型：{{serverOrgDetailList.orgBusinType}}</td>
+                    <td class="table-orgspace-title">类型：</td>
                     <td class="table-orgspace-detail" style="width:322px;word-break: break-all;">
                       <div>
                         <!-- <a href="http://www.szzhonghe.com/" target="_blank">http://www.szzhonghe.com/</a> -->
@@ -329,7 +329,7 @@
       </div>
       <el-tabs v-model="activeName1" @tab-click="handleSerpro" ref="tabL">
         <el-tab-pane name="serverPro">
-          <span slot="label" v-if="serverPro.length>0">服务产品({{serverPro[0].serviceTotal}})</span>
+          <span slot="label" v-if="serverPro.length>0">服务产品({{total1}})</span>
           <span slot="label" v-else>服务产品(0)</span>
           <div class="serverPro">
             <ul class="list-imgleft">
@@ -361,9 +361,11 @@
                     <!-- 参考信息、交易均价 begin -->
                     <div class="detail-contact inner-product">
                       <div class="search_area text-of" title="王振英 , 包美芬 , 高凤清">顾&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;问：{{i.advisorName}}</div>
-                      <div class="text-of mt5">参考价格：{{i.referPrice}}</div>
+                      <div class="text-of mt5">参考价格：
+                        <span class="mainColor">{{i.referPrice}}</span>&nbsp;元
+                      </div>
                       <div>累计
-                        <span class="mainColor">{{i.transactionsNumber}}</span>笔交易</div>
+                        <span class="mainColor">{{i.transactionsNumber}}</span>&nbsp;笔交易</div>
                     </div>
                     <!-- 参考信息、交易均价 end -->
                     <!-- 评价 begin -->
@@ -403,7 +405,7 @@
           </div>
         </el-tab-pane>
         <el-tab-pane name="serConsultant">
-          <span slot="label">服务顾问({{total2}})</span>
+          <span slot="label">服务专员({{total2}})</span>
           <div class="serConsultant">
             <ul class="list-imgleft adviser">
               <li class="list-item" v-for="(i,k) in serviceConsultant" :key='k'>
@@ -438,7 +440,7 @@
                       </div>
                       <div class="search_area pt5 text-of" title="">业务擅长：{{i.goodAtBusiness}}</div>
                       <div class="color3">累计
-                        <span class="mainColor">{{i.transactionNum}}</span>笔交易</div>
+                        <span class="mainColor">{{i.transactionNum}}</span>&nbsp;笔交易</div>
                     </div>
                     <!-- 地址、电话 end -->
                     <!-- 评价 begin -->
@@ -505,7 +507,7 @@
                   <div class="list-info-bottom-detail clearfix">
                     <!-- 参考信息、交易均价 begin -->
                     <div class="detail-contact inner-product">
-                      <div class="search_area text-of" title="王振英 , 包美芬 , 高凤清">服务顾问：{{i.advisorName}}</div>
+                      <div class="search_area text-of" title="王振英 , 包美芬 , 高凤清">服务专员：{{i.advisorName}}</div>
                       <!-- <div class="text-of mt5">参考价格：1000-10000元</div> -->
                       <span class="evaluate-container">
                         <span class="arrow-container">{{i.evaluationDesc}}</span>
@@ -566,7 +568,7 @@
                     <!-- <span>{{item.actiStartTime}}-{{item.actiEndTime.split(' ')[1]}}</span> -->
                     <!-- <span>周日14：00-17：00</span> -->
                   </p>
-                  <p>
+                  <p class="actiAddress">
                     <i class="el-icon-location-outline"></i>
                     <span>{{i.actiAddress}}</span>
                   </p>
@@ -633,7 +635,7 @@ export default {
     return {
       islogin: true,
       concatVisible:false,
-      zankaiFlag: false,
+      zankaiFlag: true,
       activeName: "baseInfo",
       activeName1: "serverPro",
       serverOrgDetailList: {},
@@ -749,7 +751,7 @@ export default {
         this.findOrgCountProductList();
     },
     screenSerCon(i) {
-      //筛选服务顾问
+      //筛选服务专员
       (this.sortTypes = i),
         (this.flag2 = i),
         (this.page2 = 1),
@@ -918,7 +920,7 @@ export default {
       });
     },
     getServiceConList() {
-      //服务顾问
+      //服务专员
       let _this = this;
       this.api.get({
         url: "getServiceConList",

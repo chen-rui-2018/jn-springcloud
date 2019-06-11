@@ -27,6 +27,7 @@ import com.jn.enterprise.company.vo.CompanyDetailsVo;
 import com.jn.enterprise.company.vo.StaffListVO;
 import com.jn.enterprise.enums.JoinParkExceptionEnum;
 import com.jn.enterprise.enums.RecordStatusEnum;
+import com.jn.enterprise.model.CompanyInfoModel;
 import com.jn.enterprise.servicemarket.industryarea.dao.TbServicePreferMapper;
 import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePrefer;
 import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePreferCriteria;
@@ -381,6 +382,15 @@ public class CompanyServiceImpl implements CompanyService {
            }
         }
         vo.setCompanyInfoShow(show);
+        //产看详情时 浏览数加1
+        String browseNumber = vo.getCompanyInfoShow().getBrowseNumber();
+        if(StringUtils.isBlank(browseNumber)){
+            browseNumber="0";
+        }
+        TbServiceCompany tbServiceCompany = new TbServiceCompany();
+        tbServiceCompany.setId(companyId);
+        tbServiceCompany.setBrowseNumber(String.valueOf((Integer.valueOf(browseNumber)+1)));
+        tbServiceCompanyMapper.updateByPrimaryKeySelective(tbServiceCompany);
         return vo;
     }
 
@@ -474,6 +484,34 @@ public class CompanyServiceImpl implements CompanyService {
         UserExtensionInfo data = userExtension.getData();
         BeanUtils.copyProperties(data, companyContact);
         return companyContact;
+    }
+    @ServiceLog(doAction = "获取企业信息(关注企业列表展示)")
+    @Override
+    public CompanyInfoModel getCompanyInfo(String companyId,String account) {
+        logger.info("获取企业信息(关注企业列表展示)企业id:"+companyId+"当前账号:"+account);
+        CompanyInfoModel companyInfoModel = new CompanyInfoModel();
+        CompanyDetailsVo vo = companyService.getCompanyDetails(companyId,account);
+        if(vo != null && vo.getCompanyInfoShow()!=null){
+            companyInfoModel.setCompanyId(companyId);
+            companyInfoModel.setCompanyName(vo.getCompanyInfoShow().getComName());
+            companyInfoModel.setCompanyAvatar( IBPSFileUtils.getFilePath(vo.getCompanyInfoShow().getAvatar()));
+        }else{
+            throw new JnSpringCloudException(CompanyExceptionEnum.COMPANY_INFO_NOT_EXIST);
+        }
+        return companyInfoModel;
+    }
+
+    @Override
+    @ServiceLog(doAction = "企业缴费成功修改企业信息")
+    public Boolean updateCompanyInfoAfterPay(UpdateCompanyInfoParam updateCompanyInfoParam) {
+        TbServiceCompany tbServiceCompany = tbServiceCompanyMapper.selectByPrimaryKey(updateCompanyInfoParam.getComId());
+        if(null == tbServiceCompany){
+            logger.warn("[企业缴费成功修改企业信息] 企业信息不存在，comId：{}", updateCompanyInfoParam.getComId());
+            throw new JnSpringCloudException(CompanyExceptionEnum.COMPANY_INFO_NOT_EXIST);
+        }
+        BeanUtils.copyProperties(updateCompanyInfoParam, tbServiceCompany);
+        int i = tbServiceCompanyMapper.updateByPrimaryKeySelective(tbServiceCompany);
+        return i == 1;
     }
 
 

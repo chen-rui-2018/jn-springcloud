@@ -121,12 +121,12 @@
             </div>
             <!-- 详情弹框 -->
             <div class="detailRes" v-if="detailFlag==i.id">
-              <el-card>
+              <!-- <el-card> -->
                 <div class="detail">招聘详情</div>
                 <p class="p1">企业名称：{{humanDetail.comName}}</p>
                 <p class="p1">发布时间：{{humanDetail.createdTime}}</p>
-                <p class="p1">岗位详情：{{humanDetail.details}}</p>
-              </el-card>
+                <p class="p1" v-html="humanDetail.details">岗位详情：</p>
+              <!-- </el-card> -->
             </div>
           </li>
         </ul>
@@ -829,7 +829,11 @@ export default {
     position: absolute;
     right: 95px;
     top: -80px;
+    z-index: 3;
     text-align: left;
+    padding: 20px 30px;
+    background: #fff;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.5);
     .detail {
       margin-bottom: 10px;
       color: #333;
@@ -837,9 +841,9 @@ export default {
     p {
       font-size: 13px;
     }
-    .el-card__body {
-      padding: 20px 30px;
-    }
+    // .el-card__body {
+    //   padding: 20px 30px;
+    // }
   }
 }
 </style>

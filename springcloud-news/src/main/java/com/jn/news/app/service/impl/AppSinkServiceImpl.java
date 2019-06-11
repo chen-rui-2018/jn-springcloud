@@ -21,12 +21,15 @@ import com.jn.news.app.model.JPushData;
 import com.jn.news.app.model.JPushResult;
 import com.jn.news.app.service.AppSinkService;
 import com.jn.news.app.utils.JPushUtil;
+import com.jn.news.config.NewsSwitchProperties;
 import com.jn.news.enums.NewsExceptionEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,292 +42,11 @@ import java.util.List;
 public class AppSinkServiceImpl implements AppSinkService {
 
     Logger logger = LoggerFactory.getLogger(AppSinkServiceImpl.class);
+    @Autowired
+    private NewsSwitchProperties newsSwitchProperties;
 
     private static String APP_KEY = JPushEnum.J_PUSH_APP_KEY.getMessage();
     private static String  MASTER_SECRET = JPushEnum.J_PUSH_MASTER_SECRET.getMessage();
-
-    /**
-     * 消息推送
-     * @param content 推送的消息内容
-     * @param title   推送的消息标题
-     * @param ids     推送的目标id列表
-     * @param platFromType 平台类型 ANDROID/IOS/null  如果为null 则发送给所有平台
-     */
-    //@Override
-    public void pushMessage(String content, String title, List<String> ids, String platFromType) {
-        try {
-            //所有人所有平台
-            if (ids.isEmpty() && StringUtils.isBlank(platFromType)) {
-                pushAll(content, title);
-            }
-            //指定人所有平台
-            if (ids!=null && ids .size()>0  && StringUtils.isBlank(platFromType)) {
-                pushAll(content, title, ids);
-            }
-            //所有人Android平台
-            if(ids.isEmpty() && JPushEnum.J_PUSH_MASTER_ANDROID.getMessage().equals(platFromType)){
-                pushAllForAndroid(content,title);
-            }
-            //指定人Android平台
-            if(ids!=null && ids .size()>0   && JPushEnum.J_PUSH_MASTER_ANDROID.getMessage().equals(platFromType)){
-                pushToIdsForAndroid(content,title,ids);
-            }
-            //所有人IOS平台
-            if(ids.isEmpty() && JPushEnum.J_PUSH_MASTER_IOS.getMessage().equals(platFromType)){
-                pushAllForIOS(content,title);
-            }
-            //指定人IOS平台
-            if(ids!=null && ids .size()>0  && JPushEnum.J_PUSH_MASTER_IOS.getMessage().equals(platFromType)){
-                pushToIdsForIOS(content,title,ids);
-            }
-        }catch (APIConnectionException e) {
-            System.out.println("connection err");
-            e.printStackTrace();
-        } catch (APIRequestException e) {
-            System.out.println("request error");
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 发给所有用户 所有平台
-     * @param content
-     * @param title
-     * @throws Exception
-     */
-    private  void pushAll(String content,String title) throws Exception {
-        try {
-            JPushClient jPushClient=new JPushClient(MASTER_SECRET,APP_KEY);
-            PushPayload payload=PushPayload.newBuilder().setPlatform(Platform.all())
-                    .setAudience(Audience.all())
-                    .setNotification(Notification.newBuilder()
-                            .setAlert(content)
-                            .addPlatformNotification(AndroidNotification.newBuilder()
-                                    .setTitle(title)
-                                    .build())
-                            .addPlatformNotification(IosNotification.newBuilder()
-                                    .incrBadge(1)
-                                    .setSound("happy")
-                                    .build())
-                            .build()).setNotification(
-                            Notification.newBuilder()
-                                    .setAlert(content)
-                                    .build())
-                    .setOptions(Options.newBuilder()
-                            //此字段的值是用来指定本推送要推送的apns环境，false表示开发，true表示生产；对android和自定义消息无意义
-                            .setApnsProduction(true)
-                            //此字段是给开发者自己给推送编号，方便推送者分辨推送记录
-                            .setSendno(1)
-                            //此字段的值是用来指定本推送的离线保存时长，如果不传此字段则默认保存一天，最多指定保留十天，单位为秒
-                            .setTimeToLive(86400)
-                            .build())
-                    .build();
-
-            PushResult result=jPushClient.sendPush(payload);
-        } catch (APIConnectionException e) {
-            System.out.println("connection err");
-            e.printStackTrace();
-        } catch (APIRequestException e) {
-            System.out.println("request error");
-            e.printStackTrace();
-        }
-    }
-    /**
-     * 发给指定用户 所有平台
-     * @param content
-     * @param title
-     * @throws Exception
-     */
-    private  void pushAll(String content,String title,List<String> ids) throws Exception {
-        try {
-            JPushClient jPushClient=new JPushClient(MASTER_SECRET,APP_KEY);
-            PushPayload payload=PushPayload.newBuilder().setPlatform(Platform.all())
-                    .setAudience(Audience.registrationId(ids))
-                    .setNotification(Notification.newBuilder()
-                            .setAlert(content)
-                            .addPlatformNotification(AndroidNotification.newBuilder()
-                                    .setTitle(title)
-                                    .build())
-                            .addPlatformNotification(IosNotification.newBuilder()
-                                    .incrBadge(1)
-                                    .setSound("happy")
-                                    .build())
-                            .build())
-                    .setOptions(Options.newBuilder()
-                            //此字段的值是用来指定本推送要推送的apns环境，false表示开发，true表示生产；对android和自定义消息无意义
-                            .setApnsProduction(true)
-                            //此字段是给开发者自己给推送编号，方便推送者分辨推送记录
-                            .setSendno(1)
-                            //此字段的值是用来指定本推送的离线保存时长，如果不传此字段则默认保存一天，最多指定保留十天，单位为秒
-                            .setTimeToLive(86400)
-                            .build())
-                    .build();
-
-            PushResult result = jPushClient.sendPush(payload);
-            logger.info("极光推送返回result:{}", result.toString());
-        } catch (APIConnectionException e) {
-            System.out.println("connection err");
-            e.printStackTrace();
-        } catch (APIRequestException e) {
-            System.out.println("request error");
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     *所有人Android平台
-     * @param content
-     * @param title
-     * @throws Exception
-     */
-    private  void pushAllForAndroid(String content,String title) throws Exception {
-        try {
-            JPushClient jPushClient=new JPushClient(MASTER_SECRET,APP_KEY);
-            PushPayload payload=PushPayload.newBuilder().setPlatform(Platform.android())
-                    .setAudience(Audience.all())
-                    .setNotification(Notification.newBuilder()
-                            .setAlert(content)
-                            .addPlatformNotification(AndroidNotification.newBuilder()
-                                    .setTitle(title)
-                                    .build())
-                            .build())
-                    .setOptions(Options.newBuilder()
-                            //此字段的值是用来指定本推送要推送的apns环境，false表示开发，true表示生产；对android和自定义消息无意义
-                            .setApnsProduction(true)
-                            //此字段是给开发者自己给推送编号，方便推送者分辨推送记录
-                            .setSendno(1)
-                            //此字段的值是用来指定本推送的离线保存时长，如果不传此字段则默认保存一天，最多指定保留十天，单位为秒
-                            .setTimeToLive(86400)
-                            .build())
-                    .build();
-
-            PushResult result=jPushClient.sendPush(payload);
-        } catch (APIConnectionException e) {
-            System.out.println("connection err");
-            e.printStackTrace();
-        } catch (APIRequestException e) {
-            System.out.println("request error");
-            e.printStackTrace();
-        }
-    }
-    /**
-     *所有人IOS平台
-     * @param content
-     * @param title
-     * @throws Exception
-     */
-    private  void pushAllForIOS(String content,String title) throws Exception {
-        try {
-            JPushClient jPushClient=new JPushClient(MASTER_SECRET,APP_KEY);
-            PushPayload payload=PushPayload.newBuilder().setPlatform(Platform.ios())
-                    .setAudience(Audience.all())
-                    .setNotification(Notification.newBuilder()
-                            .addPlatformNotification(IosNotification.newBuilder()
-                                    .setAlert(content)
-                                    .build())
-                            .build())
-                    .setMessage(Message.newBuilder()
-                            .setMsgContent(content)
-                            .setTitle(title)
-                            .build())
-                    .setOptions(Options.newBuilder()
-                            //此字段的值是用来指定本推送要推送的apns环境，false表示开发，true表示生产；对android和自定义消息无意义
-                            .setApnsProduction(true)
-                            //此字段是给开发者自己给推送编号，方便推送者分辨推送记录
-                            .setSendno(1)
-                            //此字段的值是用来指定本推送的离线保存时长，如果不传此字段则默认保存一天，最多指定保留十天，单位为秒
-                            .setTimeToLive(86400)
-                            .build())
-                    .build();
-
-            PushResult result=jPushClient.sendPush(payload);
-        } catch (APIConnectionException e) {
-            System.out.println("connection err");
-            e.printStackTrace();
-        } catch (APIRequestException e) {
-            System.out.println("request error");
-            e.printStackTrace();
-        }
-    }
-    /**
-     *z指定人员IOS平台
-     * @param content
-     * @param title
-     * @throws Exception
-     */
-    private  void pushToIdsForIOS(String content,String title,List<String> ids) throws Exception {
-        try {
-            JPushClient jPushClient=new JPushClient(MASTER_SECRET,APP_KEY);
-            PushPayload payload=PushPayload.newBuilder().setPlatform(Platform.ios())
-                    .setAudience(Audience.registrationId(ids))
-                    .setNotification(Notification.newBuilder()
-                            .addPlatformNotification(IosNotification.newBuilder()
-                                    .setAlert(content)
-                                    .incrBadge(1)
-                                    .setSound("happy")
-                                    .build())
-                            .build())
-                    .setMessage(Message.newBuilder()
-                            .setMsgContent(content)
-                            .setTitle(title)
-                            .build())
-                    .setOptions(Options.newBuilder()
-                            //此字段的值是用来指定本推送要推送的apns环境，false表示开发，true表示生产；对android和自定义消息无意义
-                            .setApnsProduction(true)
-                            //此字段是给开发者自己给推送编号，方便推送者分辨推送记录
-                            .setSendno(1)
-                            //此字段的值是用来指定本推送的离线保存时长，如果不传此字段则默认保存一天，最多指定保留十天，单位为秒
-                            .setTimeToLive(86400)
-                            .build())
-                    .build();
-
-            PushResult result=jPushClient.sendPush(payload);
-        } catch (APIConnectionException e) {
-            System.out.println("connection err");
-            e.printStackTrace();
-        } catch (APIRequestException e) {
-            System.out.println("request error");
-            e.printStackTrace();
-        }
-    }
-    /**
-     *指定人员 Android平台
-     * @param content
-     * @param title
-     * @throws Exception
-     */
-    private void pushToIdsForAndroid(String content,String title,List<String> ids) throws Exception {
-        try {
-            JPushClient jPushClient=new JPushClient(MASTER_SECRET,APP_KEY);
-            PushPayload payload=PushPayload.newBuilder().setPlatform(Platform.android())
-                    .setAudience(Audience.registrationId(ids))
-                    .setNotification(Notification.newBuilder()
-                            .setAlert(content)
-                            .addPlatformNotification(AndroidNotification.newBuilder()
-                                    .setTitle(title)
-                                    .build())
-                            .build())
-                    .setOptions(Options.newBuilder()
-                            //此字段的值是用来指定本推送要推送的apns环境，false表示开发，true表示生产；对android和自定义消息无意义
-                            .setApnsProduction(true)
-                            //此字段是给开发者自己给推送编号，方便推送者分辨推送记录
-                            .setSendno(1)
-                            //此字段的值是用来指定本推送的离线保存时长，如果不传此字段则默认保存一天，最多指定保留十天，单位为秒
-                            .setTimeToLive(86400)
-                            .build())
-                    .build();
-
-            PushResult result=jPushClient.sendPush(payload);
-        } catch (APIConnectionException e) {
-            System.out.println("connection err");
-            e.printStackTrace();
-        } catch (APIRequestException e) {
-            System.out.println("request error");
-            e.printStackTrace();
-        }
-    }
 
     /**
      * 推送消息
@@ -339,6 +61,8 @@ public class AppSinkServiceImpl implements AppSinkService {
     @Override
     public JPushResult pushMessage(String title, String content, List<String> ids, String pushType, String platFromType,
                                           String noticeType, String message) {
+        //判断app消息推送发送状态，如果是关闭状态则发送至配置的测试的ids
+        ids = this.appSwitchJudge(ids);
         // 判断必传字段
         if (StringUtils.isBlank(content)) {
             throw new JnSpringCloudException(JPushExceptionEnum.JPUSH_NOTNULL_CONTENT);
@@ -397,7 +121,7 @@ public class AppSinkServiceImpl implements AppSinkService {
             }
         }
         jPushData.setAudience(audience);
-
+        logger.info("\napp消息推送,调用激光推送接口,构建接口所需参数:【{}】",jPushData.toString());
         PushPayload payload = JPushUtil.buildPushObject(jPushData);
         try {
             pushResult = new JPushClient(MASTER_SECRET, APP_KEY).sendPush(payload);
@@ -407,4 +131,34 @@ public class AppSinkServiceImpl implements AppSinkService {
         BeanUtils.copyProperties(pushResult, jPushResult);
         return jPushResult;
     }
+
+
+    /**
+     * 判断app消息推送发送状态，如果是关闭状态,则判断ids是否在配置的测试地址中，没有配置则默认取配置的第一个
+     * @param ids
+     * @return
+     */
+    public List<String> appSwitchJudge(List<String> ids) {
+        //防止app消息推送不走mq，故在此判断是否开启邮件发送
+        logger.info("\n判断APP消息推送开关状态,状态是:【{}】",newsSwitchProperties.getApp());
+        if(!newsSwitchProperties.getApp()) {
+            List<String> newIds = new ArrayList<>();
+            logger.info("\napp消息推送开关未开启,如有需要请向组长申请开启,测试环境测试可在配置中心springcloud-news文件中配置白名单.");
+            //关闭状态，设置app消息推送接收者
+            if(null == newsSwitchProperties.getIds() || newsSwitchProperties.getIds().size()==0) {
+                throw new JnSpringCloudException(JPushExceptionEnum.JPUSH_SWITCH_NOTNULL_IDS);
+            }
+            for(String id : ids) {
+                if(newsSwitchProperties.getIds().contains(id)) {
+                    newIds.add(id);
+                }
+            }
+            if(newIds.size()==0) {
+                newIds.add(newsSwitchProperties.getIds().get(0));
+            }
+            ids = newIds;
+        }
+        return ids;
+    }
+
 }

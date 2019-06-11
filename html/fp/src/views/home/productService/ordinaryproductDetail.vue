@@ -13,7 +13,7 @@
             </el-form-item>
           </div>
           <div>
-            <el-form-item label="服务顾问：">
+            <el-form-item label="服务专员：">
               <span>{{productDetail.advisorName}}</span>
             </el-form-item>
           </div>

@@ -72,9 +72,9 @@ export default {
     getBusinessAdContent: 'springcloud-park/guest/portal/businessAd/getBusinessAdContent', // 获取招商信息
     getParkDetails: 'springcloud-park/guest/portal/park/get', // 根据ID获取对应园区详情
     // 能耗统计App
-    todayelectro: 'springcloud-park/meter/todayelectro', // 今日用电情况
-    monthelectro: 'springcloud-park/meter/monthelectro', // 本月用电情况
-    yearelectro: 'springcloud-park/meter/yearelectro', // 今年用电情况
+    todayelectro: 'springcloud-park/meter/todayElectric', // 今日用电情况
+    monthelectro: 'springcloud-park/meter/monthElectric', // 本月用电情况
+    yearelectro: 'springcloud-park/meter/yearElectric', // 今年用电情况
     getCompanyDetailByNowAccount: 'springcloud-enterprise/guest/company/getCompanyDetailByNowAccount' // 获取用户企业信息
 
   },

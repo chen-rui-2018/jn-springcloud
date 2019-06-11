@@ -7,7 +7,7 @@
     <div class="actiTime">
       <div class="timeTit">报名截止还剩</div>
       <div class="timeSecond">
-        <span class="time1">{{d}}</span>
+        <span class="time1 time2">{{d}}</span>
         <span class="date1">天</span>
         <span class="time1">{{h}}</span>
         <span class="date1">小时</span>
@@ -48,14 +48,16 @@
         </ul>
         <div class="applyNum">
           <span>......</span>
+          <!-- <span>&hellip;</span> -->
           <span>{{actiForm.applyNum}}人已报名</span>
         </div>
       </div>
     </div>
     <div class="fenge"></div>
     <div class="actiDel">
-      <p class="del1">详情</p>
-      <p>{{actiForm.actiDetail}}</p>
+      <div class="del1">详情</div>
+      <p v-html="actiForm.actiDetail" v-if="actiForm.actiDetail"></p>
+      <p v-else>暂无内容!</p>
     </div>
     <div class="actiFooter">
       <div class="attention">
@@ -121,11 +123,16 @@ export default {
                 clearInterval(_this._interval)
               }
             }, 1000)
+          } else {
+            _this.$vux.toast.text(res.result)
           }
         }
       })
     },
     handleLike (id) {
+      if (!sessionStorage.token) {
+        this.$vux.toast.text('请先登录')
+      }
       let _this = this
       this.api.post({
         url: 'activityLike',
@@ -138,11 +145,16 @@ export default {
             _this.actiForm.actiLike = _this.actiForm.actiLike * 1 + 1
             // _this.$message.success('点赞成功')
             _this.accountIsLike = true
+          } else {
+            _this.$vux.toast.text(res.result)
           }
         }
       })
     },
     cancelLike (id) {
+      if (!sessionStorage.token) {
+        this.$vux.toast.text('请先登录')
+      }
       let _this = this
       this.api.post({
         url: 'CancelLike',
@@ -154,11 +166,16 @@ export default {
           if (res.code === '0000') {
             _this.actiForm.actiLike -= 1
             _this.accountIsLike = false
+          } else {
+            _this.$vux.toast.text(res.result)
           }
         }
       })
     },
     quickSign (id) {
+      if (!sessionStorage.token) {
+        this.$vux.toast.text('请先登录')
+      }
       let _this = this
       this.api.post({
         url: `springcloud-park/activity/activityApply/quickApply?activityId=${id}`,
@@ -172,13 +189,17 @@ export default {
             _this.activityApplyShow = '2'
             // this.actiDel()
           } else {
-            alert(res.result)
+            _this.$vux.toast.text(res.result)
           }
         }
       })
     },
     // 取消报名
     stopApply (id) {
+      if (!sessionStorage.token) {
+        this.$vux.toast.text('请先登录')
+      }
+      this.$vux.toast.text('请先登录')
       let _this = this
       this.api.post({
         url: `springcloud-park/activity/activityApply/cancelApply?activityId=${id}`,
@@ -190,6 +211,8 @@ export default {
           if (res.code === '0000') {
             _this.activityApplyShow = '1'
             // _this.actiDel()
+          } else {
+            _this.$vux.toast.text(res.result)
           }
         }
       })
@@ -270,6 +293,9 @@ export default {
       font-size: 29px;
       font-weight: 400;
     }
+    .time2{
+      margin-left:7px;
+    }
     .date1 {
       font-size: 22px;
       font-weight: 400;
@@ -328,6 +354,10 @@ export default {
     .applyNum {
       font-size: 30px;
       color: #8c8c8c;
+      span:nth-child(2){
+        display: inline-block;
+        vertical-align: middle;
+      }
     }
   }
   .fenge {
@@ -341,6 +371,9 @@ export default {
       border-left: 6px solid #00a041;
       font-size: 30px;
       margin-bottom: 30px;
+    }
+    >p{
+      line-height: 40px;
     }
   }
   .actiFooter {
@@ -370,13 +403,14 @@ export default {
     }
     .attend {
       width: 40%;
-      height: 100px;
+      height: 100%;
       line-height: 100px;
+      // padding: 30px;
       span {
         display: inline-block;
         background: #00a041;
         color: #fff;
-        // padding: 30px;
+        // padding: 40px;
         font-size: 34px;
         width: 100%;
         text-align: center;

@@ -1,10 +1,10 @@
 <template>
     <div class="policyDetails">
         <div class="policyTitle">
-            <div class="anTitle">《{{getGuideDetal.policyTitle}}》</div>
+            <p class="anTitle">《{{getGuideDetal.policyTitle}}》</p>
             <div class="anTime">
                 <span>{{getGuideDetal.releaseDate}}</span>
-                <span>{{getGuideDetal.readNum}}浏览</span>
+                <span>{{getGuideDetal.readNum}}人浏览</span>
             </div>
             <div class="level">
                 <span>级别：{{getGuideDetal.policyLevelName}}</span>
@@ -38,6 +38,8 @@ export default {
         callback: function (res) {
           if (res.code === '0000') {
             _this.getGuideDetal = res.data
+          } else {
+            _this.$vux.toast.text(res.result)
           }
         }
       })
@@ -59,6 +61,7 @@ export default {
       font-size: 34px;
       padding:20px;
       font-weight: bold;
+      line-height: 50px;
   }
   .anTime{
       display: flex;
@@ -73,10 +76,11 @@ export default {
       padding:20px;
       font-size: 24px;
       color:#666;
+      font-weight: bold;
       >span{
           margin-right:30px;
           display: inline-block;
-          line-height: 35px;
+          line-height: 40px;
       }
   }
   .anContent{

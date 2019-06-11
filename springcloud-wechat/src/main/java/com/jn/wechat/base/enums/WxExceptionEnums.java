@@ -16,7 +16,8 @@ public enum WxExceptionEnums implements CodeAndMsg {
     NOT_ALLOW_ACCESS_TOKEN("1500302","微信接口url参数中不允许有access_token"),
     JSON_PROCESS_FAL("1500303","对象参数转换json字符串失败"),
     NOT_FINDE_WX_MSG_HANDLE("1500304","无法找到微信消息的处理类"),
-    SEND_TEMPLATE_MSG_FAIL("1500305","发送模板信息异常")
+    SEND_TEMPLATE_MSG_FAIL("1500305","发送模板信息异常"),
+    GET_ACCESS_TOKEN_FAIL("1500306","获取access_token失败.")
     ;
 
     private String code;

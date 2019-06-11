@@ -21,7 +21,7 @@
                 <el-table-column prop="productName" label="产品名称" align="center" width="140"> </el-table-column>
                 <el-table-column prop="orgName" label="服务机构" align="center"> </el-table-column>
                 <el-table-column prop="signoryName" label="业务领域" align="center"> </el-table-column>
-                <el-table-column prop="advisorName" label="服务顾问" align="center"> </el-table-column>
+                <el-table-column prop="advisorName" label="服务专员" align="center"> </el-table-column>
                 <el-table-column prop="releaseTime" label="发布日期" align="center" width="180"> </el-table-column>
                 <el-table-column label="发布状态" align="center"> 
                   <template slot-scope="scope">
@@ -37,7 +37,7 @@
                   <template slot-scope="scope">
                     <div class="specialbth" >
                       <span  @click="gospecialdetail(scope.row)">详情</span>
-                      <span v-show="scope.row.status!='1'&&scope.row.status!='0'&&scope.row.status!='2'" @click="gospecialedit(scope.row.productId)">编辑</span>
+                      <!-- <span v-show="scope.row.status!='1'&&scope.row.status!='0'&&scope.row.status!='2'" @click="gospecialedit(scope.row.productId)">编辑</!--> 
                       <span v-show="scope.row.status!='2'&&scope.row.status!='0'&&scope.row.status!='1'" @click="gospecialshelf('1',scope.row.productId)">上架</span>
                       <span v-show="scope.row.status!='2'&&scope.row.status!='0'&&scope.row.status==='1'" @click="gospecialshelf('-1',scope.row.productId)">下架</span>
                       <!-- <span v-show="scope.row.status==='2'" @click="applyagain(scope.row.productId)">重新申请</span> -->

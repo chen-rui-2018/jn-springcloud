@@ -42,7 +42,7 @@
     <block wx:for="{{parkDetail}}" wx:key>
       <view class="li" >
         <view class="title">
-          <view>{{detailSend.carLicense}} </view>
+          <view>{{item.carLicense}} </view>
         </view>
         <view class="detail paddihng_side">
           <view>车场名称：</view>

@@ -96,6 +96,9 @@ $bg-gray: #f3f3f3;
       left: 0;
       .message-chat,
       .chat-win {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
         .chat-win-cell {
           width: 100%;
           height: 100%;
@@ -106,8 +109,6 @@ $bg-gray: #f3f3f3;
           box-sizing: border-box;
           background-color: #fff;
         }
-        width: 100%;
-        height: 100%;
         .chat-header {
           width: 100%;
           position: absolute;
@@ -121,6 +122,9 @@ $bg-gray: #f3f3f3;
           margin-top: 0;
           padding: 0;
           box-sizing: border-box;
+        }
+        .app-chat-footer {
+          position: fixed;
         }
       }
     }

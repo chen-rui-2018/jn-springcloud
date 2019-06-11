@@ -4,7 +4,12 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.enterprise.enums.OrgExceptionEnum;
+import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.joinpark.org.service.OrgJoinService;
+import com.jn.enterprise.propaganda.enums.ApprovalStatusEnum;
+import com.jn.enterprise.servicemarket.org.dao.TbServiceOrgMapper;
+import com.jn.enterprise.servicemarket.org.entity.TbServiceOrg;
+import com.jn.enterprise.servicemarket.org.entity.TbServiceOrgCriteria;
 import com.jn.enterprise.servicemarket.org.model.*;
 import com.jn.enterprise.servicemarket.org.service.OrgService;
 import com.jn.enterprise.utils.IBPSFileUtils;
@@ -16,6 +21,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -33,14 +39,31 @@ public class OrgJoinServiceImpl implements OrgJoinService {
     @Autowired
     private OrgService orgService;
 
+    @Autowired
+    private TbServiceOrgMapper tbServiceOrgMapper;
+
     @ServiceLog(doAction = "机构认证保存/更新")
     @Override
     public int saveOrUpdateOrgDetail(OrgDetailParameter orgDetailParameter,String account){
+        //机构id为空
+        if(StringUtils.isBlank(orgDetailParameter.getOrgId())){
+            //校验当前用户是否已认证机构认证
+            TbServiceOrgCriteria example=new TbServiceOrgCriteria();
+            example.createCriteria().andOrgAccountEqualTo(account)
+                    .andOrgStatusIn(Arrays.asList(ApprovalStatusEnum.NOT_APPROVED.getValue(),ApprovalStatusEnum.APPROVAL.getValue()))
+                    .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+            long existNum = tbServiceOrgMapper.countByExample(example);
+            if(existNum>0){
+                logger.warn("当前用户[{}]信息已存在，请不要重复进行机构认证",account);
+                throw new JnSpringCloudException(OrgExceptionEnum.ORG_INFO_HAS_EXIST);
+            }
+        }
         OrgBasicData orgBasicData = new OrgBasicData();
         //机构logo处理
         if(StringUtils.isNotBlank(orgDetailParameter.getOrgLogo())){
             IBPSFileUtils.uploadFile2Json(account,orgDetailParameter.getOrgLogo());
         }
+        //基本信息处理
         BeanUtils.copyProperties(orgDetailParameter,orgBasicData);
         String orgId = orgService.saveOrUpdateOrgBasicData(orgBasicData, account);
         logger.info("保存服务机构基本信息，响应机构ID ===>{}",orgId);

@@ -29,4 +29,5 @@
     </card-list>
   </view>
 </navigator>
-<view wx:if="{{ noMore }}" class="row-tc">已加载完全部列表</view>
+<view wx:if="{{ equipmentList.length > 0 && noMore }}" class="row-tc">已加载完全部列表</view>
+<view wx:if="{{ equipmentList.length === length }}" class="row-tc">暂无数据</view>

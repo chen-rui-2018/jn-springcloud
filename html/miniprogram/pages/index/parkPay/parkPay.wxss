@@ -9,7 +9,7 @@
 .search text{
   position: absolute;
   left:59rpx;
-  top:50rpx;
+  top:47rpx;
 }
 .search input{
   width:91%;

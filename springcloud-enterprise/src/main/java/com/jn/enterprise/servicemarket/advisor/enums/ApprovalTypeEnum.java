@@ -15,7 +15,7 @@ public enum ApprovalTypeEnum implements CodeAndMsg {
     NO_FEEDBACK("noFeedBack","0","未反馈"),
     REJECTED("rejected","-1","已拒绝"),
     APPROVED("approved","2","审批通过"),
-    HAS_BEEN_LIFTED("hasBeenLifted","4","已解除");
+    HAS_BEEN_LIFTED("hasBeenLifted","4","已解除"),
     ;
 
     /**
@@ -36,6 +36,14 @@ public enum ApprovalTypeEnum implements CodeAndMsg {
         this.code = code;
         this.value = value;
         this.message = message;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 
     @Override

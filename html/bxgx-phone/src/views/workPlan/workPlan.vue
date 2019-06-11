@@ -187,7 +187,7 @@ export default {
               this.workNameList.push({ value: val.itemName, key: val.id })
             })
           } else {
-            this.$vux.toast.text(res.result, 'top')
+            this.$vux.toast.text(res.result)
           }
         }
       })
@@ -207,7 +207,7 @@ export default {
                   this.workList.push(...res.data.rows)
                   // console.log(...res.data.rows)
                 } else {
-                  this.$vux.toast.text(res.result, 'top')
+                  this.$vux.toast.text(res.result)
                 }
               }
             })
@@ -233,7 +233,7 @@ export default {
             // this.isSlider = false
           } else {
             // this.$worning
-            this.$vux.toast.text(res.result, 'top')
+            this.$vux.toast.text(res.result)
           }
         }
       })

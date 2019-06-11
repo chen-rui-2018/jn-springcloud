@@ -132,6 +132,7 @@ export default {
     },
     // 政策中心首页
     getPolicyCenterList () {
+      this.page = 1
       let _this = this
       this.api.get({
         url: 'getPolicyCenterList',
@@ -148,6 +149,8 @@ export default {
           if (res.code === '0000') {
             _this.policyCenterList = res.data.rows
             _this.total = res.data.total
+          } else {
+            _this.$vux.toast.text(res.result)
           }
         }
       })
@@ -161,6 +164,8 @@ export default {
         callback: function (res) {
           if (res.code === '0000') {
             _this.policyClass = res.data
+          } else {
+            _this.$vux.toast.text(res.result)
           }
         }
       })
@@ -183,7 +188,7 @@ export default {
     }
     .vux-search-box {
       position: fixed;
-      top: 105px !important;
+      // top: 105px !important;
     }
     .weui-search-bar__input {
       height: 63px;
@@ -312,7 +317,7 @@ export default {
       li {
         border-bottom: 1px solid #eee;
         padding: 30px;
-        .tit{
+        .tit {
           font-weight: bold;
         }
         .tit,
@@ -324,12 +329,18 @@ export default {
           span {
             font-size: 30px;
           }
-          span:nth-child(1){
-            width: 80%;
+          span:nth-child(1) {
+            width: 70%;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
           }
           span:nth-child(2) {
-            width: 20%;
+            width: 25%;
             color: #00a041;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
           }
         }
         p {

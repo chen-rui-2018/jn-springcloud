@@ -2,9 +2,9 @@
     <div class="serverConDetail w">
         <div class="serverOrgMenu color2">
             <span class="pointer" @click="$router.push({path:'/serMatHp'})">首页/</span>
-            <span class="pointer" @click="$router.push({path:'/serverCon'})">服务顾问</span>
+            <span class="pointer" @click="$router.push({path:'/serverCon'})">服务专员</span>
             <span>/</span>
-            <span class="mainColor agent">服务顾问详情</span>
+            <span class="mainColor agent">服务专员详情</span>
         </div>
         <div class="agentInfo">
             <el-card v-if="serverConDetailList">
@@ -32,14 +32,14 @@
             </el-card>
         </div>
         <div class="agentDel">
-            <div class="agentDelTit">顾问详情</div>
+            <div class="agentDelTit">专员详情</div>
             <div class="agentDelCon pr color1">
                 <div class="mainColor shouqi pointer" v-if="zankaiFlag" @click='handleZd'>
                     收起
                     <i class="el-icon-arrow-up"></i>
                 </div>
                 <div class="mainColor shouqi zhankai pointer" v-else @click='handleZk'>
-                    <i class="el-icon-arrow-down"></i>
+                    展开<i class="el-icon-arrow-down"></i>
                 </div>
                 <el-card>
                     <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -49,27 +49,27 @@
                                     <tr>
                                         <td class="table-orgspace-title">业务领域：</td>
                                         <td class="table-orgspace-detail" width="300px" colspan="2">
-                                            <div>{{serverConDetailList.advisorServiceInfo.businessAreaName}}</div>
+                                            <div>{{advisorServiceInfo.businessAreaName}}</div>
                                         </td>
                                         <td class="table-orgspace-title">从业年限：</td>
                                         <td class="table-orgspace-detail" style="width:322px;word-break: break-all;">
-                                            <div>{{serverConDetailList.advisorServiceInfo.workingYears}}</div>
+                                            <div>{{advisorServiceInfo.workingYears}}</div>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="table-orgspace-title">毕业学校：</td>
                                         <td class="table-orgspace-detail" width="300px" colspan="2">
-                                            <div>{{serverConDetailList.advisorServiceInfo.graduatedSchool}}</div>
+                                            <div>{{advisorServiceInfo.graduatedSchool}}</div>
                                         </td>
                                         <td class="table-orgspace-title">学&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;历：</td>
                                         <td class="table-orgspace-detail" style="width:322px;word-break: break-all;">
-                                            <div>{{serverConDetailList.advisorServiceInfo.education}}</div>
+                                            <div>{{advisorServiceInfo.education}}</div>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="table-orgspace-title">个人简介：</td>
                                         <td class="table-orgspace-detail" colspan="4">
-                                            <div class="table-orgspace-col table-orgspace-detail-container">{{serverConDetailList.advisorServiceInfo.personalProfile}}</div>
+                                            <div class="table-orgspace-col table-orgspace-detail-container">{{advisorServiceInfo.personalProfile}}</div>
                                         </td>
                                     </tr>
                                 </table>
@@ -190,9 +190,10 @@
                                         <!-- 参考信息、交易均价 begin -->
                                         <div class="detail-contact inner-product">
                                             <div class="search_area text-of">服务顾问：{{i.advisorName}}</div>
-                                            <div class="text-of mt5">参考价格：{{i.referPrice}}元</div>
+                                            <div class="text-of mt5">参考价格：
+                                                <span class="mainColor">{{i.referPrice}}</span>&nbsp;元</div>
                                             <div>累计
-                                                <span class="mainColor">{{i.transactionsNumber}}</span>笔交易</div>
+                                                <span class="mainColor">{{i.transactionsNumber}}</span>&nbsp;笔交易</div>
                                         </div>
                                         <!-- 参考信息、交易均价 end -->
                                         <!-- 评价 begin -->
@@ -258,8 +259,8 @@
                                     <!-- 中间下半部分--参考信息、交易均价和交易 begin -->
                                     <div class="list-info-bottom-detail clearfix">
                                         <!-- 参考信息、交易均价 begin -->
-                                        <div class="detail-contact inner-product">
-                                            <div class="search_area text-of" title="王振英 , 包美芬 , 高凤清">服务顾问：{{i.advisorName}}</div>
+                                        <div class="detail-contact inner-product fl">
+                                            <div class="search_area text-of" title="王振英 , 包美芬 , 高凤清">服务专员：{{i.advisorName}}</div>
                                             <!-- <div class="text-of mt5">参考价格：1000-10000元</div> -->
                                             <span class="evaluate-container">
                                                 <span class="arrow-container">{{i.evaluationDesc}}</span>
@@ -267,7 +268,7 @@
                                         </div>
                                         <!-- 参考信息、交易均价 end -->
                                         <!-- 评价 begin -->
-                                        <div class="detail-evaluate inner-product">
+                                        <div class="detail-evaluate inner-product fl">
                                             <div class="score">
                                                 <el-rate v-model="i.evaluationScore*1" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" style="display:inline-block" score-template="{value}">
                                                 </el-rate>
@@ -280,9 +281,9 @@
                                         </div>
                                         <!-- 评价 end -->
                                         <!-- 交易量 begin -->
-                                        <div class="detail-count" clearfix>
+                                        <div class="detail-count fr conAccou">
                                             <div class="list-item-info fr">
-                                                <p>{{i.evaluationAccount}}</p>
+                                                <p class="mainColor">{{i.evaluationAccount}}</p>
                                                 <p>{{i.evaluationTime}}</p>
                                             </div>
                                         </div>
@@ -343,7 +344,7 @@ export default {
     return {
       islogin: true,
       concatVisible: false,
-      zankaiFlag: false,
+      zankaiFlag: true,
       activeName: "baseInfo",
       activeName1: "serverPro",
       serverConDetailList: "",
@@ -367,7 +368,9 @@ export default {
         requireDetail: "",
         productId: "",
         productName: ""
-      }
+      },
+      advisorInfo:{},
+      advisorServiceInfo:{}
     };
   },
   mounted() {
@@ -514,6 +517,9 @@ export default {
           if (res.code == "0000") {
             _this.serviceRatingList = res.data.rows;
             _this.total2 = res.data.total;
+             setTimeout(()=>{
+              _this.$refs['tabP'].$children[0].$forceUpdate() 
+            },0)
           } else {
             _this.$message.error(res.result);
           }
@@ -521,7 +527,7 @@ export default {
       });
     },
     advisorProductList() {
-      //顾问-服务产品
+      //专员-服务产品
       let _this = this;
       this.api.get({
         url: "advisorProductList",
@@ -546,7 +552,7 @@ export default {
       });
     },
     initList() {
-      //获取顾问详情
+      //获取专员详情
       let _this = this;
       this.api.get({
         url: "getServiceAdvisorInfo",
@@ -556,6 +562,8 @@ export default {
         callback: function(res) {
           if (res.code == "0000") {
             _this.serverConDetailList = res.data;
+            _this.advisorInfo=res.data.advisorIntroduction
+            _this.advisorServiceInfo=res.data.advisorServiceInfo
           } else {
             _this.$message.error(res.result);
           }
@@ -583,6 +591,9 @@ export default {
   .agentCon {
     .pagination-container {
       margin-top: 50px;
+    }
+    .conAccou{
+        margin-top:0 !important;
     }
   }
   .agentDel {

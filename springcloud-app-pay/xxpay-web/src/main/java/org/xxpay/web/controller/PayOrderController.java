@@ -131,6 +131,10 @@ public class PayOrderController extends BaseController implements PayOrderClient
                    String aliPayWapParam =  payOrderServiceClient.doAliPayWapReq(getJsonParam("payOrder", payOrder));
                    return returnResult(aliPayWapParam,resKey);
 
+                case ALIPAY_QR :
+                    String aliPayQrParam =  payOrderServiceClient.doAliPayQrReq(getJsonParam("payOrder", payOrder));
+                    return returnResult(aliPayQrParam,resKey);
+
                 default:
                     return new Result(PayEnum.ERR_0016.getCode(),PayEnum.ERR_0016.getMessage());
             }

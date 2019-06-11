@@ -1,56 +1,56 @@
 <template>
-    <div class="moreActi">
-        <div class="approvalGuide_search">
-            <search v-model="keyWord" ref="search" @keyup.enter.native="searchFun"></search>
-        </div>
-        <div class="approvalGuide_main">
-            <div class="approvalGuide_tab">
-                <tab>
-                    <tab-item :selected="active===''">
-                        <span :class="{active:active===''}" @click="toggle('','')">全部</span>
-                    </tab-item>
-                    <tab-item v-for="(item,$index) in actiTypeList" :key="$index" :selected="$index===active">
-                        <span :class="{active:$index===active}" @click="toggle($index,item.typeId)">{{item.typeName}}</span>
-                    </tab-item>
-                </tab>
-            </div>
-            <div class="approvalGuide_cont">
-                <ul>
-                    <li class="actiLi" v-for="(i,k) in actiListSlim" :key="k">
-                        <div class="imgItem" @click="$router.push({path:'/actiDetail',query:{activityId:i.id}})">
-                            <img :src="i.actiPosterUrl" alt="">
-                        </div>
-                        <div class="contentLi">
-                            <div class="tit">{{i.actiName}}</div>
-                            <div class="acinfo">
-                                <div class="info1">
-                                    <img src="@/./assets/images/zhiyuandidian1.png" alt="">
-                                    <span>{{i.actiAddress}}</span>
-                                </div>
-                                <div class="info2">
-                                    <img src="@/./assets/images/shijian00.png" alt="">
-                                    <span>{{i.actiStartTime}}-{{i.actiEndTime}}</span>
-                                </div>
-                            </div>
-                            <div class="apply">
-                                <div class="apply1">
-                                    <ul>
-                                        <li v-for="(item,index) in i.avatarList" :key="index"><img :src="item" alt=""></li>
-                                        <!-- <li><img src="@/./assets/images/tuceng.png" alt=""></li> -->
-                                    </ul>
-                                    <span>{{i.applyNum}}/{{i.actiNumber}}</span>
-                                </div>
-                                <div class="apply2">
-                                    <img src="@/./assets/images/xin.png" alt="">
-                                    <span>{{i.actiLike}}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
+  <div class="moreActi">
+    <div class="approvalGuide_search">
+      <search v-model="keyWord" ref="search" @keyup.enter.native="searchFun"></search>
     </div>
+    <div class="approvalGuide_main">
+      <div class="approvalGuide_tab">
+        <tab>
+          <tab-item :selected="active===''">
+            <span :class="{active:active===''}" @click="toggle('','')">全部</span>
+          </tab-item>
+          <tab-item v-for="(item,$index) in actiTypeList" :key="$index" :selected="$index===active">
+            <span :class="{active:$index===active}" @click="toggle($index,item.typeId)">{{item.typeName}}</span>
+          </tab-item>
+        </tab>
+      </div>
+      <div class="approvalGuide_cont">
+        <ul>
+          <li class="actiLi" v-for="(i,k) in actiListSlim" :key="k">
+            <div class="imgItem" @click="$router.push({path:'/actiDetail',query:{activityId:i.id}})">
+              <img :src="i.actiPosterUrl" alt="">
+            </div>
+            <div class="contentLi">
+              <div class="tit">{{i.actiName}}</div>
+              <div class="acinfo">
+                <div class="info1">
+                  <img src="@/./assets/images/zhiyuandidian1.png" alt="">
+                  <span>{{i.actiAddress}}</span>
+                </div>
+                <div class="info2">
+                  <img src="@/./assets/images/shijian00.png" alt="">
+                  <span>{{i.actiStartTime}}-{{i.actiEndTime}}</span>
+                </div>
+              </div>
+              <div class="apply">
+                <div class="apply1">
+                  <ul>
+                    <li v-for="(item,index) in i.avatarList" :key="index"><img :src="item" alt=""></li>
+                    <!-- <li><img src="@/./assets/images/tuceng.png" alt=""></li> -->
+                  </ul>
+                  <span>{{i.applyNum}}/{{i.actiNumber}}</span>
+                </div>
+                <div class="apply2">
+                  <img src="@/./assets/images/xin.png" alt="">
+                  <span>{{i.actiLike}}</span>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
 import {
@@ -106,7 +106,7 @@ export default {
     },
     // tab栏
     scrollBottom () {
-    //   let _this = this
+      //   let _this = this
       window.onscroll = () => {
         var scrollHeight = Math.max(
           document.documentElement.scrollHeight,
@@ -122,7 +122,7 @@ export default {
             document.documentElement.clientHeight,
             document.body.clientHeight
           )
-        if (clientHeight + scrollTop >= scrollHeight - document.getElementsByClassName('adniministrativeHeader')[0].clientHeight) {
+        if (clientHeight + scrollTop >= scrollHeight) {
           if (this.page < Math.ceil(this.total / this.rows)) {
             this.page++
             this.api.post({
@@ -146,6 +146,7 @@ export default {
     },
     // 获取活动数据
     initList () {
+      this.page = 1
       let _this = this
       this.api.post({
         url: 'activityListSlim',
@@ -159,6 +160,8 @@ export default {
           if (res.code === '0000') {
             _this.actiListSlim = res.data.rows
             _this.total = res.data.total
+          } else {
+            _this.$vux.toast.text(res.result)
           }
         }
       })
@@ -172,6 +175,8 @@ export default {
         callback: function (res) {
           if (res.code === '0000') {
             _this.actiTypeList = res.data.rows
+          } else {
+            _this.$vux.toast.text(res.result)
           }
         }
       })
@@ -194,7 +199,7 @@ export default {
     }
     .vux-search-box {
       position: fixed;
-      top: 105px !important;
+      // top: 105px !important;
     }
     .weui-search-bar__input {
       height: 63px;
@@ -265,7 +270,7 @@ export default {
     }
     .approvalGuide_cont {
       margin: 30px;
-    //   margin-top: 44%;
+      //   margin-top: 44%;
       margin-top: 230px;
       height: 100%;
       overflow: auto;
@@ -350,13 +355,31 @@ export default {
         align-items: center;
         margin: 20px 0;
       }
+      .info1 {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        width: 48%;
+      }
       .info1,
       .info2 {
+
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
         img {
+          display: inline-block;
           vertical-align: middle;
           width: 18px;
           //   height: 20px;
         }
+        span{
+          display: inline-block;
+          vertical-align: middle;
+        }
+      }
+      .info2{
+         width: 40%;
       }
       .apply {
         display: flex;

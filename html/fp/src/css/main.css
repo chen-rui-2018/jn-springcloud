@@ -441,12 +441,22 @@ img {
 .actiTrain .actiContent .actiTab .allActiUl > li .actiInfo > .actiNameItem {
   color: #222;
   font-size: 16px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .actiCenter .actiContent .actiTab .allActiUl > li .actiInfo .actiTimer,
 .actiTrain .actiContent .actiTab .allActiUl > li .actiInfo .actiTimer {
   text-indent: -10px;
   margin: 10px 0 5px 18px;
+}
+
+.actiCenter .actiContent .actiTab .allActiUl > li .actiInfo .actiAddress,
+.actiTrain .actiContent .actiTab .allActiUl > li .actiInfo .actiAddress {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .actiCenter .actiContent .actiTab .allActiUl li:nth-child(4n),
@@ -1096,7 +1106,7 @@ img {
 .finaInstitution .serverOrgContent > ul > li .orgCon .conContent .right1 > p,
 .finaPro .serverOrgContent > ul > li .orgCon .conContent .right1 > p,
 .companyProfile .serverOrgContent > ul > li .orgCon .conContent .right1 > p {
-  margin-bottom: 5px;
+  margin-top: 4px;
 }
 
 .serverOrg .serverOrgContent > ul > li .orgCon .conContent .right1 .el-rate,
@@ -1417,7 +1427,12 @@ img {
 .quickSearch .agentDel .agentDelCon > .zhankai,
 .finaInsDetail .agentDel .agentDelCon > .zhankai,
 .finaProDetail .agentDel .agentDelCon > .zhankai {
-  width: 30px;
+  position: absolute;
+  right: 25px;
+  top: 30px;
+  font-size: 14px;
+  z-index: 2;
+  text-align: center;
 }
 
 .serverOrgDetail .agentDel .agentDelCon .basicInfo .table-orgspace,
@@ -1964,7 +1979,6 @@ img {
 .finaProDetail .agentCon .serConsultant .list-imgleft .list-item,
 .finaProDetail .agentCon .serEvaluation .list-imgleft .list-item {
   padding: 20px 0;
-  padding-top: 10px;
   border-bottom: 1px solid #eee;
 }
 
@@ -2241,6 +2255,27 @@ img {
   cursor: pointer;
 }
 
+.serverOrgDetail .agentCon .serverPro .list-imgleft .list-item:nth-child(1),
+.serverOrgDetail .agentCon .serConsultant .list-imgleft .list-item:nth-child(1),
+.serverOrgDetail .agentCon .serEvaluation .list-imgleft .list-item:nth-child(1),
+.serverProDetail .agentCon .serverPro .list-imgleft .list-item:nth-child(1),
+.serverProDetail .agentCon .serConsultant .list-imgleft .list-item:nth-child(1),
+.serverProDetail .agentCon .serEvaluation .list-imgleft .list-item:nth-child(1),
+.serverConDetail .agentCon .serverPro .list-imgleft .list-item:nth-child(1),
+.serverConDetail .agentCon .serConsultant .list-imgleft .list-item:nth-child(1),
+.serverConDetail .agentCon .serEvaluation .list-imgleft .list-item:nth-child(1),
+.quickSearch .agentCon .serverPro .list-imgleft .list-item:nth-child(1),
+.quickSearch .agentCon .serConsultant .list-imgleft .list-item:nth-child(1),
+.quickSearch .agentCon .serEvaluation .list-imgleft .list-item:nth-child(1),
+.finaInsDetail .agentCon .serverPro .list-imgleft .list-item:nth-child(1),
+.finaInsDetail .agentCon .serConsultant .list-imgleft .list-item:nth-child(1),
+.finaInsDetail .agentCon .serEvaluation .list-imgleft .list-item:nth-child(1),
+.finaProDetail .agentCon .serverPro .list-imgleft .list-item:nth-child(1),
+.finaProDetail .agentCon .serConsultant .list-imgleft .list-item:nth-child(1),
+.finaProDetail .agentCon .serEvaluation .list-imgleft .list-item:nth-child(1) {
+  padding-top: 10px;
+}
+
 .serverOrgDetail .agentCon .serConsultant .list-imgleft-container,
 .serverProDetail .agentCon .serConsultant .list-imgleft-container,
 .serverConDetail .agentCon .serConsultant .list-imgleft-container,
@@ -2499,6 +2534,9 @@ img {
 .finaProDetail .agentCon .actiConsultation .allActiUl > li .actiInfo > .actiNameItem {
   color: #222;
   font-size: 16px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .serverOrgDetail .agentCon .actiConsultation .allActiUl > li .actiInfo .actiTimer,
@@ -2509,6 +2547,17 @@ img {
 .finaProDetail .agentCon .actiConsultation .allActiUl > li .actiInfo .actiTimer {
   text-indent: -10px;
   margin: 10px 0 5px 18px;
+}
+
+.serverOrgDetail .agentCon .actiConsultation .allActiUl > li .actiInfo .actiAddress,
+.serverProDetail .agentCon .actiConsultation .allActiUl > li .actiInfo .actiAddress,
+.serverConDetail .agentCon .actiConsultation .allActiUl > li .actiInfo .actiAddress,
+.quickSearch .agentCon .actiConsultation .allActiUl > li .actiInfo .actiAddress,
+.finaInsDetail .agentCon .actiConsultation .allActiUl > li .actiInfo .actiAddress,
+.finaProDetail .agentCon .actiConsultation .allActiUl > li .actiInfo .actiAddress {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .serverOrgDetail .agentCon .actiConsultation .allActiUl li:nth-child(4n),
@@ -3553,6 +3602,9 @@ img {
 .enterpriseservice .popularActi .acti .actiUl > li .actiInfo > .actiNameItem {
   color: #222;
   font-size: 16px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .portalIndex .popularActi .acti .actiUl > li .actiInfo .actiTimer,
@@ -3935,12 +3987,13 @@ img {
 
 .portalIndex .enterprisesPark .enterPark > ul li p,
 .enterpriseservice .enterprisesPark .enterPark > ul li p {
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
 .portalIndex .enterprisesPark .enterPark > ul li img,
 .enterpriseservice .enterprisesPark .enterPark > ul li img {
   width: 50px;
+  height: 50px;
 }
 
 .portalIndex .enterprisesPark .enterPark > ul .li1Div,

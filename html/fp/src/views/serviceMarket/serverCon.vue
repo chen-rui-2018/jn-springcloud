@@ -3,7 +3,7 @@
         <div class="serverOrgMenu">
             <span class="pointer" @click="$router.push({path:'/serMatHp'})">首页</span>
             <span>/</span>
-            <span class="mainColor agent">服务顾问</span>
+            <span class="mainColor agent">服务专员</span>
         </div>
         <div class="serverOrgNav mainBorder">
             <div class="nav1 clearfix" id="nav1">
@@ -48,7 +48,7 @@
                                 </p>
                                 <p>业务擅长：{{i.goodAtBusiness}}</p>
                                 <p>累计
-                                    <span class="mainColor">{{i.transactionNum}}</span>笔交易</p>
+                                    <span class="mainColor">{{i.transactionNum}}</span>&nbsp;笔交易</p>
                             </div>
                             <div class="right1 fl">
                                 <p>

@@ -175,7 +175,9 @@
             message_recipient,
             message_sender,
             message_one_sort,
+            message_one_sort_name,
             message_tow_sort,
+            message_tow_sort_name,
             creator_account,
             created_time
             )
@@ -188,7 +190,9 @@
             #{messageRecipien,jdbcType=VARCHAR},
             #{messageSender,jdbcType=VARCHAR},
             #{messageOneSort,jdbcType=VARCHAR},
+            #{messageOneSortName,jdbcType=VARCHAR},
             #{messageTowSort,jdbcType=VARCHAR},
+            #{messageTowSortName,jdbcType=VARCHAR},
             #{creatorAccount,jdbcType=VARCHAR},
             SYSDATE()
             )

@@ -4,7 +4,7 @@
       <div class="banner pr">
         <div class="swiper-container">
           <div class="swiper-wrapper">
-            <div class="swiper-slide" style="width:100%" v-for="(banner, index) in bannerList" :key="index">
+            <div class="swiper-slide pointer" style="width:100%" v-for="(banner, index) in bannerList" :key="index">
               <img :src="banner.posterUrl" :data-path="'/serMatHp'" alt="">
             </div>
             <!-- <div class="swiper-slide" style="width:100%">
@@ -284,7 +284,7 @@
                   <i class="el-icon-time"></i>
                   <span>{{i.actiStartTime}}-{{i.actiEndTime}}</span>
                 </p>
-                <p>
+                <p class="actiAddress">
                   <i class="el-icon-location-outline"></i>
                   <span>{{i.actiAddress}}</span>
                 </p>
@@ -499,75 +499,76 @@
         </div>
         <div class="humanResInfo w" ref="human2" data-class="bottom1">
           <el-card>
-            <div class="infoTit clearfix">
-              <div class="btn fl">
-                <button class="btn0 pointer" :class="{'btnActive':flag55}" @click="flag55=true">企业招聘</button>
-                <button class="btn2 pointer" :class="{'btnActive':!flag55}" @click="flag55=false">服务</button>
-              </div>
-              <div class="chage fr color3 pointer" @click="hanlepage">
-                <img src="@/../static/img/huanyipi.png" alt=""> 换一批
-              </div>
+          <div class="infoTit clearfix">
+            <div class="btn fl">
+              <button class="btn0 pointer" :class="{'btnActive':flag55}" @click="flag55=true">企业招聘</button>
+              <button class="btn2 pointer" :class="{'btnActive':!flag55}" @click="flag55=false">服务</button>
             </div>
-            <ul class="infoCon" ref="human3" data-class="bottom1" v-if='flag55'>
-              <li class="clearfix pr" v-for="(i,k) in humanResourcesList" :key="k">
-                <div class="con1 fl">
-                  <img :src="i.comAvatar" alt="">
+            <div class="chage fr color3 pointer" @click="hanlepage">
+              <img src="@/../static/img/huanyipi.png" alt=""> 换一批
+            </div>
+          </div>
+          <ul class="infoCon" ref="human3" data-class="bottom1" v-if='flag55'>
+            <li class="clearfix pr" v-for="(i,k) in humanResourcesList" :key="k">
+              <div class="con1 fl">
+                <img :src="i.comAvatar" alt="">
+              </div>
+              <div class="con2 fl">
+                <p class="color4">招聘岗位：{{i.post}}</p>
+                <p>招聘企业： {{i.comName}}</p>
+                <p>招聘人数：{{i.num}}人</p>
+                <p>薪资待遇：
+                  <span class="mainColor">{{i.salaryName}}</span>
+                </p>
+                <p>发布时间：{{i.createdTime}}</p>
+              </div>
+              <div class="con3 fr">
+                <button class="btn1 pointer" @click="onlineContact(i.comId)">在线联系</button>
+                <button class="btn2 pointer" @click.stop="getRecruitDetails(i.id),detailFlag=i.id">了解详情</button>
+              </div>
+              <!-- 详情弹框 -->
+              <div class="detailRes" v-if="detailFlag==i.id">
+                <!-- <el-card> -->
+                <div class="detail">招聘详情</div>
+                <p class="p1">企业名称：{{humanDetail.comName}}</p>
+                <p class="p1">发布时间：{{humanDetail.createdTime}}</p>
+                <p class="p1">岗位详情：</p>
+                <span v-html="humanDetail.details"></span>
+                <!-- </el-card> -->
+              </div>
+            </li>
+          </ul>
+          <div class="serverOrgContent" v-else>
+            <ul>
+              <li class="clearfix" v-for="(i,k) in serverProList" :key='k'>
+                <div class="orgImg fl pointer" @click="handleProDel(i.productId,i.signoryId)">
+                  <img v-if="i.pictureUrl" :src="i.pictureUrl" alt="">
+                  <img v-else src="@/../static/img/product.png" alt="">
                 </div>
-                <div class="con2 fl">
-                  <p class="color4">招聘岗位：{{i.post}}</p>
-                  <p>招聘企业： {{i.comName}}</p>
-                  <p>招聘人数：{{i.num}}人</p>
-                  <p>薪资待遇：
-                    <span class="mainColor">{{i.salaryName}}</span>
-                  </p>
-                  <p>发布时间：{{i.createdTime}}</p>
-                </div>
-                <div class="con3 fr">
-                  <button class="btn1 pointer" @click="onlineContact(i.comId)">在线联系</button>
-                  <button class="btn2 pointer" @click.stop="getRecruitDetails(i.id),detailFlag=i.id">了解详情</button>
-                </div>
-                <!-- 详情弹框 -->
-                <div class="detailRes" v-if="detailFlag==i.id">
-                  <el-card>
-                    <div class="detail">招聘详情</div>
-                    <p class="p1">企业名称：{{humanDetail.comName}}</p>
-                    <p class="p1">发布时间：{{humanDetail.createdTime}}</p>
-                    <p class="p1">岗位详情：</p>
-                    <span v-html="humanDetail.details"></span>
-                  </el-card>
-                </div>
-              </li>
-            </ul>
-            <div class="serverOrgContent" v-else>
-              <ul>
-                <li class="clearfix" v-for="(i,k) in serverProList" :key='k'>
-                  <div class="orgImg fl pointer" @click="handleProDel(i.productId,i.signoryId)">
-                    <img :src="i.pictureUrl" alt="">
-                  </div>
-                  <div class="orgCon fl">
-                    <div class="conTil">{{i.productName}}</div>
-                    <div class="conContent clearfix color3">
-                      <div class="left1 fl" id="left1">
-                        <p>服务机构：{{i.orgName}}
-                        </p>
-                        <p>服务顾问：{{i.advisorName}}</p>
-                        <p>参考价格
-                          <span class="mainColor">{{i.referPrice}}</span>元</p>
-                        <p>累计
-                          <span class="mainColor">{{i.transactionsNumber}}</span>笔交易</p>
-                      </div>
-                      <div class="right1 fl">
-                        <p>
-                          <el-rate v-model="i.evaluationScore*1" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
-                          </el-rate>
-                          <span class="mainColor">{{i.evaluationNumber}}</span>条评价</p>
-                      </div>
+                <div class="orgCon fl">
+                  <div class="conTil">{{i.productName}}</div>
+                  <div class="conContent clearfix color3">
+                    <div class="left1 fl" id="left1">
+                      <p>服务机构：{{i.orgName}}
+                      </p>
+                      <p>服务顾问：{{i.advisorName}}</p>
+                      <p>参考价格
+                        <span class="mainColor">{{i.referPrice}}</span>元</p>
+                      <p>累计
+                        <span class="mainColor">{{i.transactionsNumber}}</span>笔交易</p>
+                    </div>
+                    <div class="right1 fl">
+                      <p>
+                        <el-rate v-model="i.evaluationScore*1" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
+                        </el-rate>
+                        <span class="mainColor">{{i.evaluationNumber}}</span>条评价</p>
                     </div>
                   </div>
-                  <div class="orgBtn fr mainColor" @click="demandRaise(i)">提需求</div>
-                </li>
-              </ul>
-            </div>
+                </div>
+                <div class="orgBtn fr mainColor" @click="demandRaise(i)">提需求</div>
+              </li>
+            </ul>
+          </div>
           </el-card>
         </div>
       </div>
@@ -1546,6 +1547,11 @@ export default {
       top: 440px;
       top: 42%;
     }
+    .actiAddress {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
   }
   .policyCenter {
     .paging {
@@ -1924,10 +1930,10 @@ export default {
       background: #fff;
     }
     .humanResInfo {
-      margin-top: 50px;
       .el-card {
         width: 80%;
         margin: 0 auto;
+        overflow: visible;
       }
       .el-card__body {
         padding: 20px 30px;
@@ -2030,9 +2036,15 @@ export default {
         .detailRes {
           width: 500px;
           position: absolute;
-          right: 38px;
-          top: 66px;
+          right: 85px;
+          top: 68px;
           text-align: left;
+          z-index: 3;
+          // height: 300px;
+          // overflow: auto;
+          box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.5);
+          padding: 20px 30px;
+          background: #fff;
           .detail {
             margin-bottom: 10px;
             color: #333;
@@ -2040,10 +2052,10 @@ export default {
           p {
             font-size: 13px;
           }
-          .el-card__body {
-            padding: 20px 30px;
-            // width: 300px;
-          }
+          // .el-card__body {
+          //   padding: 20px 30px;
+          //   // width: 300px;
+          // }
         }
       }
       .serverOrgContent {

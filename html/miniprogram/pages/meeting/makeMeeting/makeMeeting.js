@@ -95,7 +95,9 @@ Page({
     if(this.data.endTime!=''&&this.data.meetingRoomId!=''&&this.data.oaMeetingContent!=''&&this.data.organizationalUser!=''&&this.data.participantsStr!=''&&this.data.startTime!=''&&this.data.title!=''){
       let endMinute=this.data.endTime.split(' ')[1].split(":")
       let starMinute=this.data.startTime.split(' ')[1].split(":")
-      if(endMinute[0]*60+endMinute[1]>starMinute[0]*60+starMinute[1]){
+      let endDay=this.data.endTime.split('/')[1]
+      let starDay=this.data.startTime.split('/')[1]
+      if(endMinute[0]*60+endMinute[1]>starMinute[0]*60+starMinute[1]&&endDay===starDay){
         request.send({
           url: '/springcloud-oa/oa/oaMeeting/add',
           data:  {

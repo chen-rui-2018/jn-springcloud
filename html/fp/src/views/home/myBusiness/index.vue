@@ -140,8 +140,10 @@ export default {
   },
   created() {
     this.getParkList();
+
   },
   mounted() {
+    this.getUserExtension()
     let initArr = JSON.parse(sessionStorage.menuItems);
     initArr.forEach(v => {
       if (v.label === "我的企业") {
@@ -161,9 +163,23 @@ export default {
       }
     });
 
-    this.init();
   },
   methods: {
+       //获取我的所属企业编码
+  getUserExtension(){
+      this.api.get({
+        url: "getUserExtension",
+        data: {},
+        callback: (res)=> {
+          if (res.code == "0000") {
+           this.companyCode=res.data.companyCode
+            this.init();
+          } else {
+            this.$message.error(res.result);
+          }
+        }
+      });
+  },
     //所属园区
     getParkList() {
       let _this = this;
@@ -183,7 +199,7 @@ export default {
       let _this = this;
       _this.api.get({
         url: "getCompanyDetailByAccountOrCompanyId",
-        data: { accountOrCompanyId: sessionStorage.companyCode },
+        data: { accountOrCompanyId: this.companyCode },
         callback: function(res) {
           _this.loading = false;
           if (res.code == "0000") {
@@ -255,7 +271,7 @@ export default {
       // this.$router.push({ path: "/home" });
     },
     toEditBusiness() {
-      this.$router.push({ name: "editBusiness" });
+      this.$router.push({ name: "editBusiness",query:{accountOrCompanyId: this.companyCode } });
     }
   }
 };

@@ -1,7 +1,7 @@
 <template>
   <div class="advisoryInformation">
     <div class="advisory_title font16">
-      <div>顾问资料</div>
+      <div>专员资料</div>
     </div>
 
     <div class="advisory_content">
@@ -12,7 +12,7 @@
       <el-form class="tableEnterprise marBtn" v-if="isShow">
         <div style="display:flex">
           <el-form-item label="从业年限:" class="inline ">
-            <span>{{basicForm.workingYears}}</span>
+            <span>{{basicForm.workingYears}}<i v-if="basicForm.workingYears">年</i></span>
           </el-form-item>
           <el-form-item label="毕业学校:" class="inline bodyName">
             <span>{{basicForm.graduatedSchool}}</span>
@@ -140,7 +140,7 @@
           </el-table-column>
           <el-table-column prop="workTime" align="center" label="入职时间">
           </el-table-column>
-          <el-table-column align="center" label="操作">
+          <el-table-column align="center" label="操作" v-if="isConceal!=='1'">
             <template slot-scope="scope">
               <span class="redColor smallSize cur" @click="updataExperienceList(scope.row)">编辑</span>
             </template>
@@ -174,7 +174,7 @@
           </el-table-column>
           <el-table-column prop="projectTime" align="center" label="项目时间">
           </el-table-column>
-          <el-table-column align="center" label="操作">
+          <el-table-column align="center" label="操作" v-if="isConceal!=='1'">
             <template slot-scope="scope">
               <span class="redColor smallSize cur" @click="updataProjectExperienceList(scope.row)">编辑</span>
             </template>
@@ -690,7 +690,7 @@ export default {
       this.certificatePhoto = row.certificatePhoto;
       this.dialogVisible = true;
     },
-    //获取顾问详情
+    //获取专员详情
     getInit() {
       this.api.get({
         url: "serviceAdvisorInfo",

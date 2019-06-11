@@ -8,8 +8,8 @@
     <div class="ordinary_main">
         <div class="search">
         <div></div>
-        <el-input placeholder="请输入姓名" v-model="searchFiled" clearable>
-          <el-button slot="append" icon="el-icon-search" @click="initList()"></el-button>
+        <el-input placeholder="请输入姓名" v-model="searchFiled" clearable @keyup.enter.native="initList">
+          <el-button slot="append" icon="el-icon-search" @click="initList"></el-button>
         </el-input>
       </div>
       <div class="ordinary_table">
@@ -31,19 +31,19 @@
                 @click="handleCancel(scope.row)" class="greenColor"><span>取消联系人</span>
               </el-button>
               <el-button
-               v-if=" scope.row.orgIdentity==='机构顾问'"
+               v-if=" scope.row.orgIdentity==='机构专员'"
                 size="mini"
                  type="text"
                 @click="handleSetContact( scope.row)" class="greenColor"><span>设为联系人</span>
               </el-button>
               <el-button
-               v-if=" scope.row.orgIdentity==='机构顾问'|| scope.row.orgIdentity==='机构联系人'"
+               v-if=" scope.row.orgIdentity==='机构专员'|| scope.row.orgIdentity==='机构联系人'"
                 size="mini"
                 type="text"
                 @click="handleDetails(scope.row)" class="greenColor"><span>详情</span>
               </el-button>
               <el-button
-               v-if=" scope.row.orgIdentity==='机构顾问'|| scope.row.orgIdentity==='机构联系人'"
+               v-if=" scope.row.orgIdentity==='机构专员'|| scope.row.orgIdentity==='机构联系人'"
                 size="mini"
                 type="text"
                 @click="handleDelete(scope.row)" class="redColor"><span>删除</span>

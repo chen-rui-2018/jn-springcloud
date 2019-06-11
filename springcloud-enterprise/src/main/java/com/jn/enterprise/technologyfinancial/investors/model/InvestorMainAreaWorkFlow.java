@@ -93,4 +93,18 @@ public class InvestorMainAreaWorkFlow implements Serializable {
     public void setRecordStatus(Byte recordStatus) {
         this.recordStatus = recordStatus;
     }
+
+    @Override
+    public String toString() {
+        return "InvestorMainAreaWorkFlow{" +
+                "investorAccount='" + investorAccount + '\'' +
+                ", mainCode='" + mainCode + '\'' +
+                ", mainName='" + mainName + '\'' +
+                ", createdTime='" + createdTime + '\'' +
+                ", creatorAccount='" + creatorAccount + '\'' +
+                ", modifiedTime='" + modifiedTime + '\'' +
+                ", modifierAccount='" + modifierAccount + '\'' +
+                ", recordStatus=" + recordStatus +
+                '}';
+    }
 }

@@ -1,4 +1,4 @@
-package org.xxpay.web.controller;
+package org.xxpay.pay;
 
 import com.alibaba.fastjson.JSON;
 import com.jn.common.model.Result;
@@ -56,7 +56,7 @@ public class PayControllerTest {
         //payOrder.setNotifyUrl("http://192.168.10.80:3010/pay/notice");
         payOrder.setServiceId("springcloud-enterprise");
         payOrder.setServiceUrl("/api/payment/payBill/payCallBack");
-        payOrder.setAliPayReturnUrl("http://www.taobao.com");
+        payOrder.setAliPayReturnUrl("http://www.baidu.com");
         payOrder.setExtra("{\"productId\":\"...\"}");
         payOrder.setClientIp("192.168.10.80");
         payOrder.setDuration(10);

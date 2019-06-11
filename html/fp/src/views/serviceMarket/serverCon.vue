@@ -48,7 +48,7 @@
                                 </p>
                                 <p>业务擅长：{{i.goodAtBusiness}}</p>
                                 <p>累计
-                                    <span class="mainColor">{{i.transactionNum}}</span>笔交易</p>
+                                    <span class="mainColor">{{i.transactionNum}}</span>&nbsp;笔交易</p>
                             </div>
                             <div class="right1 fl">
                                 <p>

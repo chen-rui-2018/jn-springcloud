@@ -49,27 +49,27 @@
                                     <tr>
                                         <td class="table-orgspace-title">业务领域：</td>
                                         <td class="table-orgspace-detail" width="300px" colspan="2">
-                                            <div>{{serverConDetailList.advisorServiceInfo.businessAreaName}}</div>
+                                            <div>{{advisorServiceInfo.businessAreaName}}</div>
                                         </td>
                                         <td class="table-orgspace-title">从业年限：</td>
                                         <td class="table-orgspace-detail" style="width:322px;word-break: break-all;">
-                                            <div>{{serverConDetailList.advisorServiceInfo.workingYears}}</div>
+                                            <div>{{advisorServiceInfo.workingYears}}</div>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="table-orgspace-title">毕业学校：</td>
                                         <td class="table-orgspace-detail" width="300px" colspan="2">
-                                            <div>{{serverConDetailList.advisorServiceInfo.graduatedSchool}}</div>
+                                            <div>{{advisorServiceInfo.graduatedSchool}}</div>
                                         </td>
                                         <td class="table-orgspace-title">学&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;历：</td>
                                         <td class="table-orgspace-detail" style="width:322px;word-break: break-all;">
-                                            <div>{{serverConDetailList.advisorServiceInfo.education}}</div>
+                                            <div>{{advisorServiceInfo.education}}</div>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="table-orgspace-title">个人简介：</td>
                                         <td class="table-orgspace-detail" colspan="4">
-                                            <div class="table-orgspace-col table-orgspace-detail-container">{{serverConDetailList.advisorServiceInfo.personalProfile}}</div>
+                                            <div class="table-orgspace-col table-orgspace-detail-container">{{advisorServiceInfo.personalProfile}}</div>
                                         </td>
                                     </tr>
                                 </table>
@@ -189,10 +189,11 @@
                                     <div class="list-info-bottom-detail clearfix">
                                         <!-- 参考信息、交易均价 begin -->
                                         <div class="detail-contact inner-product">
-                                            <div class="search_area text-of">服务专员：{{i.advisorName}}</div>
-                                            <div class="text-of mt5">参考价格：{{i.referPrice}}元</div>
+                                            <div class="search_area text-of">服务顾问：{{i.advisorName}}</div>
+                                            <div class="text-of mt5">参考价格：
+                                                <span class="mainColor">{{i.referPrice}}</span>&nbsp;元</div>
                                             <div>累计
-                                                <span class="mainColor">{{i.transactionsNumber}}</span>笔交易</div>
+                                                <span class="mainColor">{{i.transactionsNumber}}</span>&nbsp;笔交易</div>
                                         </div>
                                         <!-- 参考信息、交易均价 end -->
                                         <!-- 评价 begin -->
@@ -367,7 +368,9 @@ export default {
         requireDetail: "",
         productId: "",
         productName: ""
-      }
+      },
+      advisorInfo:{},
+      advisorServiceInfo:{}
     };
   },
   mounted() {
@@ -514,6 +517,9 @@ export default {
           if (res.code == "0000") {
             _this.serviceRatingList = res.data.rows;
             _this.total2 = res.data.total;
+             setTimeout(()=>{
+              _this.$refs['tabP'].$children[0].$forceUpdate() 
+            },0)
           } else {
             _this.$message.error(res.result);
           }
@@ -556,6 +562,8 @@ export default {
         callback: function(res) {
           if (res.code == "0000") {
             _this.serverConDetailList = res.data;
+            _this.advisorInfo=res.data.advisorIntroduction
+            _this.advisorServiceInfo=res.data.advisorServiceInfo
           } else {
             _this.$message.error(res.result);
           }

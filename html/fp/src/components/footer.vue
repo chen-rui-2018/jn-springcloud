@@ -32,7 +32,7 @@
                 <a href="http://www.njkj.gov.cn/" target="_blank">南京市科学技术委员会</a>
               </li>
               <li>
-                <a href="http://www.miit.gov.cn/n11293472/index.html" target="_blank">中国人民共和国工业和信息化部</a>
+                <a href="http://www.miit.gov.cn/n11293472/index.html" target="_blank">中华人民共和国工业和信息化部</a>
               </li>
               <li>
                 <a href="http://www.jseic.gov.cn/" target="_blank">江苏省经济和信息化委员会</a>
@@ -41,7 +41,7 @@
                 <a href="http://www.njec.gov.cn/" target="_blank">南京市经济和信息化委员会</a>
               </li>
               <li>
-                <a href="http://www.mofcom.gov.cn/" target="_blank">中国人民共和国商务部</a>
+                <a href="http://www.mofcom.gov.cn/" target="_blank">中华人民共和国商务部</a>
               </li>
             </ul>
           </div>
@@ -54,7 +54,7 @@
                 <a href="http://www.njsmj.gov.cn/" target="_blank">南京商务信息网</a>
               </li>
               <li>
-                <a href="http://www.most.gov.cn/" target="_blank">中国人民共和国科学技术部</a>
+                <a href="http://www.most.gov.cn/" target="_blank">中华人民共和国科学技术部</a>
               </li>
               <li>
                 <a href="jhttp://www.sdpc.gov.cn/" target="_blank">中华人民共和国国家发展和改革委员会</a>

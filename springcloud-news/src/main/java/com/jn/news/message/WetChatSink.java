@@ -36,7 +36,7 @@ public class WetChatSink {
 
     @StreamListener(MessageSink.WET_CHAT)
     public void listenWetChat(WxTemplateMessage wxTemplateMessage) {
-        log.info("收到WET_CHAT的信息:{}",wxTemplateMessage.toString()) ;
+        log.info("收到微信模板的信息:【{}】,判断微信模板消息开关状态是:【{}】",wxTemplateMessage.toString(),newsSwitchProperties.getWx()) ;
         if(!newsSwitchProperties.getWx()) {
             log.info("\n微信模板消息推送开关未开启,如有需要请向组长申请开启,测试环境测试可在配置中心springcloud-news文件中配置白名单.");
             //关闭状态，设置接收人
@@ -46,7 +46,7 @@ public class WetChatSink {
             wxTemplateMessage.setTouser(newsSwitchProperties.getTouser());
         }
         Result<String> result = wechatClient.pushTemplateInfo(wxTemplateMessage);
-        log.info("推送模板消息接口返回结果:{}",result.getResult());
+        log.info("\n推送模板消息接口返回结果:{}",result.getResult());
     }
 
 

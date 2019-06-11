@@ -121,7 +121,7 @@ public class AppSinkServiceImpl implements AppSinkService {
             }
         }
         jPushData.setAudience(audience);
-
+        logger.info("\napp消息推送,调用激光推送接口,构建接口所需参数:【{}】",jPushData.toString());
         PushPayload payload = JPushUtil.buildPushObject(jPushData);
         try {
             pushResult = new JPushClient(MASTER_SECRET, APP_KEY).sendPush(payload);
@@ -140,6 +140,7 @@ public class AppSinkServiceImpl implements AppSinkService {
      */
     public List<String> appSwitchJudge(List<String> ids) {
         //防止app消息推送不走mq，故在此判断是否开启邮件发送
+        logger.info("\n判断APP消息推送开关状态,状态是:【{}】",newsSwitchProperties.getApp());
         if(!newsSwitchProperties.getApp()) {
             List<String> newIds = new ArrayList<>();
             logger.info("\napp消息推送开关未开启,如有需要请向组长申请开启,测试环境测试可在配置中心springcloud-news文件中配置白名单.");

@@ -120,17 +120,4 @@ public class NewsSwitchProperties {
         this.touser = touser;
     }
 
-    @Override
-    public String toString() {
-        return "NewsSwitchProperties{" +
-                "app=" + app +
-                ", ids=" + ids +
-                ", email=" + email +
-                ", emailAddress='" + emailAddress + '\'' +
-                ", sms=" + sms +
-                ", mobiles=" + Arrays.toString(mobiles) +
-                ", wx=" + wx +
-                ", touser='" + touser + '\'' +
-                '}';
-    }
 }

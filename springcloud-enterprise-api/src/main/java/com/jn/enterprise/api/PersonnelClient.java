@@ -27,6 +27,6 @@ public interface PersonnelClient {
      *
      * @return
      */
-    @RequestMapping(value = "/api/pd/personnel", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/pd/personnel", method = RequestMethod.POST)
     Result<List<PersonnelProject>> selectByPersonnelProjectList(@Validated @RequestBody PersonnelProject personnelProject);
 }

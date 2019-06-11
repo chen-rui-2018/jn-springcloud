@@ -51,9 +51,6 @@ public class OrgBasicDataServlet implements Serializable {
             ,notes = "企业字典表type=2的，即发展阶段领域类型。数据从【服务超市-机构字典】接口获取(id)")
     private String[] developmentStage;
 
-    @ApiModelProperty(value = "客户偏好-企业性质[数组][企业字典表type=3的，即企业性质类型。数据从【服务超市-机构字典】接口获取(id)]",example = "['guoyouqiye','minyingqiye']"
-            ,notes = "企业字典表type=3的，即企业性质类型。数据从【服务超市-机构字典】接口获取(id)")
-    private String[] companyNature;
 
     @ApiModelProperty(value = "法人/负责人",example = "王松")
     private String orgPrincipal;
@@ -145,14 +142,6 @@ public class OrgBasicDataServlet implements Serializable {
 
     public void setDevelopmentStage(String[] developmentStage) {
         this.developmentStage = developmentStage;
-    }
-
-    public String[] getCompanyNature() {
-        return companyNature;
-    }
-
-    public void setCompanyNature(String[] companyNature) {
-        this.companyNature = companyNature;
     }
 
     public String getOrgPrincipal() {

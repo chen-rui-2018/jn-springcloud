@@ -79,7 +79,7 @@
   @import "~@/css/common";
 
   .message-row {
-    margin-top: 20px;
+    margin: 20px 0;
     @include flex($h: flex-start, $v: flex-start);
 
     &.right {

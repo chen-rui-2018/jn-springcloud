@@ -39,8 +39,8 @@ export default {
         saveUserInfo:"springcloud-user/user/userInfo/saveUserInfo",//保存用户资料
         getTagCodeList:"springcloud-user/guest/userTag/getTagCodeList",//获取用户字典列表
         findHotProducts:"springcloud-enterprise/guest/servicemarket/product/web/findHotProducts",//热门产品
-        selectIndustryList:"springcloud-enterprise/serviceMarket/industryManage/selectIndustryList",//顾问领域列表
-        getServiceConsultantList:"springcloud-enterprise/guest/serviceMarket/advisorController/getServiceConsultantList",//机构服务顾问
+        selectIndustryList:"springcloud-enterprise/serviceMarket/industryManage/selectIndustryList",//专员领域列表
+        getServiceConsultantList:"springcloud-enterprise/guest/serviceMarket/advisorController/getServiceConsultantList",//机构服务专员
         selectTeamList:"springcloud-enterprise/guest/serviceMarket/industryManage/selectIndustryList",//机构字典
         selectServiceOrgList:"springcloud-enterprise/guest/serviceMarket/org/selectServiceOrgList",//服务机构列表获取
         getServiceRatingInfo:"springcloud-enterprise/guest/serviceMarket/advisorController/getServiceRatingInfo",//最新评价
@@ -72,14 +72,14 @@ export default {
         findProductList:"springcloud-enterprise/guest/servicemarket/product/web/findProductList",//服务产品列表
         findProductDetails:"springcloud-enterprise/guest/servicemarket/product/web/findProductDetails",//服务产品详情
         sameTypeProductList:"springcloud-enterprise/guest/servicemarket/product/web/sameTypeProductList",//服务产品详情下的同类型服务列表
-        getServiceConList:"springcloud-enterprise/guest/serviceMarket/advisorController/getServiceConsultantList",//服务顾问列表
+        getServiceConList:"springcloud-enterprise/guest/serviceMarket/advisorController/getServiceConsultantList",//服务专员列表
         getEvaluationCountInfo:"springcloud-enterprise/guest/serviceMarket/advisorController/getEvaluationCountInfo",//服务评价统计信息
         // selActiList:"springcloud-park/activity/selectActivityList",//获取活动资讯
         selActiList:"springcloud-park/guest/activity/findOrgActivityList",//获取活动资讯
         userDemandTechnology:"springcloud-enterprise/serviceMarket/requireManagementController/userDemandTechnology",//用户提需求(科技金融)
         userDemand:"springcloud-enterprise/serviceMarket/requireManagementController/userDemand",// 用户提需求(非科技金融)(pc/app新增需求)
-        getServiceAdvisorInfo:"springcloud-enterprise/guest/serviceMarket/advisorController/getServiceAdvisorInfo",// 服务顾问详情
-        advisorProductList:"springcloud-enterprise/guest/servicemarket/product/web/advisorProductList",// 服务顾问-服务产品列表
+        getServiceAdvisorInfo:"springcloud-enterprise/guest/serviceMarket/advisorController/getServiceAdvisorInfo",// 服务专员详情
+        advisorProductList:"springcloud-enterprise/guest/servicemarket/product/web/advisorProductList",// 服务专员-服务产品列表
         getInvestorInfoList:"springcloud-enterprise/guest/technologyFinancial/investorController/getInvestorInfoList",// 科技金融-投资人列表
         getInvestorMainArea:"springcloud-enterprise/guest/technologyFinancial/investorController/getInvestorMainArea",// 科技金融-查询投资人主投领域
         getInvestorInfoDetails:"springcloud-enterprise/guest/technologyFinancial/investorController/getInvestorInfoDetails",// 投资人详情/投资人查看
@@ -110,7 +110,7 @@ export default {
         // 个人中心首页
         findEmployeeRequisition:"springcloud-enterprise/userCenter/Index/findEmployeeRequisition", // 员工申请
         findActivityManage:"springcloud-enterprise/userCenter/Index/findActivityManage", // 活动管理
-        findAdviserInvitation:"springcloud-enterprise/userCenter/Index/findAdviserInvitation", // 顾问管理
+        findAdviserInvitation:"springcloud-enterprise/userCenter/Index/findAdviserInvitation", // 专员管理
         findEvaluateManage:"springcloud-enterprise/userCenter/Index/findEvaluateManage", // 评价管理
         findReportedData:"springcloud-enterprise/userCenter/Index/findReportedData", // 数据上报
         findRequirementManage:"springcloud-enterprise/userCenter/Index/findRequirementManage", // 需求管理
@@ -126,7 +126,7 @@ export default {
         refuseInvite:"springcloud-enterprise/enterprise/InvitationController/refuseInvite",//拒绝企业邀请
         getUserAccount:"springcloud-app-system/system/sysUser/getUserInfo",//获取用户账号
         leaveCompany:"springcloud-enterprise/enterprise/ColleagueController/leaveCompany",//离开企业
-        getUserApprovalStatus:"springcloud-enterprise/serviceMarket/advisorEditController/getUserApprovalStatus",//判断当前登录用户认证顾问的状态
+        getUserApprovalStatus:"springcloud-enterprise/serviceMarket/advisorEditController/getUserApprovalStatus",//判断当前登录用户认证专员的状态
         postJob:"springcloud-enterprise/enterprise/RecruitController/publishRecruitInfo",//发布招聘
         getInviteStaffList:"springcloud-enterprise/enterprise/InvitationController/getInviteStaffList",//获取邀请员工的资料
         getCompensation:"springcloud-enterprise/guest/CommonController/getServiceCodeList",//获取薪资待遇
@@ -153,20 +153,20 @@ export default {
         cancelApprove:"springcloud-enterprise/propaganda/businessPromotionController/cancelApprove",//撤消企业申请
         updateCompanyInfo:"springcloud-enterprise/enterprise/company/updateCompanyInfo",//编辑企业
         //我的机构
-        inviteAdvisor:"springcloud-enterprise/serviceMarket/advisorManagementController/inviteAdvisor",//邀请顾问
-        advisorDetails:"springcloud-enterprise/serviceMarket/advisorManagementController/advisorDetails",//获取邀请顾问的资料
-        getAdvisorManagementInfo:"springcloud-enterprise/serviceMarket/advisorManagementController/getAdvisorManagementInfo",//获取顾问管理列表
-        inviteAgain:"springcloud-enterprise/serviceMarket/advisorManagementController/inviteAgain",//再次邀请顾问
+        inviteAdvisor:"springcloud-enterprise/serviceMarket/advisorManagementController/inviteAdvisor",//邀请专员
+        advisorDetails:"springcloud-enterprise/serviceMarket/advisorManagementController/advisorDetails",//获取邀请专员的资料
+        getAdvisorManagementInfo:"springcloud-enterprise/serviceMarket/advisorManagementController/getAdvisorManagementInfo",//获取专员管理列表
+        inviteAgain:"springcloud-enterprise/serviceMarket/advisorManagementController/inviteAgain",//再次邀请专员
         cancelAsContact:"springcloud-enterprise/serviceMarket/orgColleagueController/cancelAsContact",//机构同事取消联系人
         setAsContact:"springcloud-enterprise/serviceMarket/orgColleagueController/setAsContact",//机构同事设为联系人
         deleteContactOrAdvisor:"springcloud-enterprise/serviceMarket/orgColleagueController/deleteContactOrAdvisor",//机构同事删除联系人
         getOrgColleagueList:"springcloud-enterprise/serviceMarket/orgColleagueController/getOrgColleagueList",//获取机构同事列表
         getMyOrgInfo:"springcloud-enterprise/guest/serviceMarket/org/getMyOrgInfo",//获取我的机构信息
-        approvalAdvisorInfo:"springcloud-enterprise/serviceMarket/advisorManagementController/approvalAdvisorInfo",//审批顾问填写信息
-        echoUserInfo:"springcloud-enterprise/serviceMarket/advisorManagementController/echoUserInfo",//获取顾问信息
-        saveOrUpdateAdvisorBaseInfo:"springcloud-enterprise/serviceMarket/advisorEditController/saveOrUpdateAdvisorBaseInfo",//保存顾问基本信息
+        approvalAdvisorInfo:"springcloud-enterprise/serviceMarket/advisorManagementController/approvalAdvisorInfo",//审批专员填写信息
+        echoUserInfo:"springcloud-enterprise/serviceMarket/advisorManagementController/echoUserInfo",//获取专员信息
+        saveOrUpdateAdvisorBaseInfo:"springcloud-enterprise/serviceMarket/advisorEditController/saveOrUpdateAdvisorBaseInfo",//保存专员基本信息
         getCertificateTypeList:"springcloud-enterprise/serviceMarket/advisorEditController/getCertificateTypeList",//获取指定证书类型
-        saveOrUpdateAdvisorHonor:"springcloud-enterprise/serviceMarket/advisorEditController/saveOrUpdateAdvisorHonor",//新增顾问荣誉资质信息
+        saveOrUpdateAdvisorHonor:"springcloud-enterprise/serviceMarket/advisorEditController/saveOrUpdateAdvisorHonor",//新增专员荣誉资质信息
         saveOrUpdateAdvisorExperience:"springcloud-enterprise/serviceMarket/advisorEditController/saveOrUpdateAdvisorExperience",//新增服务经历信息
         saveOrUpdateAdvisorProjectExperience:"springcloud-enterprise/serviceMarket/advisorEditController/saveOrUpdateAdvisorProjectExperience",//新增项目经验信息
         acceptOrgInvitation:"springcloud-enterprise/serviceMarket/acceptOrgInvitationController/acceptOrgInvitation",//接受机构邀请
@@ -178,8 +178,8 @@ export default {
         addInvestorInfo:"springcloud-enterprise/technologyFinancial/investorController/addInvestorInfo",//提交投资人认证资料
         saveOrUpdateOrgDetail:"springcloud-enterprise/orgJoinPark/saveOrUpdateOrgDetail",//服务机构认证
         selectOrgInfo:"springcloud-enterprise/serviceMarket/advisorApproveController/selectOrgInfo",//获取服务机构列表
-        serviceAdvisorInfo:"springcloud-enterprise/serviceMarket/advisorEditController/getServiceAdvisorInfo",//服务顾问详情回显
-        sendApproval:"springcloud-enterprise/serviceMarket/advisorEditController/sendApproval", // 发送申请/提交审批(将顾问信息审批状态由未反馈改为待审批)
+        serviceAdvisorInfo:"springcloud-enterprise/serviceMarket/advisorEditController/getServiceAdvisorInfo",//服务专员详情回显
+        sendApproval:"springcloud-enterprise/serviceMarket/advisorEditController/sendApproval", // 发送申请/提交审批(将专员信息审批状态由未反馈改为待审批)
 
 
 
@@ -246,7 +246,7 @@ export default {
         getCompanyContactAccount:"springcloud-enterprise/guest/company/getCompanyContactAccount",//获取企业在线联系人账号
         addCareOperate:"springcloud-park/park/manage/care/addCareOperate",// 用户添加关注操作
         cancelCareOperate:"springcloud-park/park/manage/care/cancelCareOperate",//用户取消关注操作
-
+        getDataStatistics:"springcloud-enterprise/guest/MarketIndexController/getDataStatistics",//获取企业，机构，活动，服务专员数量
     },
     setToken: function (obj) {   //设置token在请求头上面
         axios.interceptors.request.use(function (config) {

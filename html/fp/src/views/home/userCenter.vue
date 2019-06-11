@@ -66,7 +66,7 @@
           class="notice-content">
           <div class="notice-dot"></div>
           <div v-if="item.messageConnect && item.messageConnect.orgName">
-            {{ item.messageConnect.orgName }}邀请您加入机构，成为机构顾问，点击
+            {{ item.messageConnect.orgName }}邀请您加入机构，成为机构专员，点击
             <router-link
               :to="`/myBody/acceptInvitation?orgId=${item.messageConnect.orgId}&orgName=${item.messageConnect.orgName}&businessArea=${item.messageConnect.businessArea}&messageId=${item.id}`" style="color: #00a041;"
             >查看详情</router-link>。
@@ -77,7 +77,7 @@
       <router-link to="/myBody/counselorManagement">
         <notice
           v-if="cardData.findAdviserInvitation || cardData.findAdviserInvitation === ''"
-          title="顾问管理"
+          title="专员管理"
           type="info"
           :content="cardData.findAdviserInvitation | wrapNumber"
         ></notice>
@@ -141,7 +141,7 @@
           path: '/roleCertifications/investorCertification'
         }, {
           type: 'orange',
-          title: '顾问认证',
+          title: '专员认证',
           path: '/roleCertifications/advisoryInformation'
         }, {
           type: 'purple',
@@ -212,10 +212,10 @@
                 }
               }
             }
-            // 顾问管理
+            // 专员管理
             if (item.label === '我的机构') {
               for (const list of item.resourcesList) {
-                if (list.resourcesName === '顾问管理') {
+                if (list.resourcesName === '专员管理') {
                   this.$set(this.cardData, 'findAdviserInvitation', '')
                   break
                 }
@@ -245,7 +245,7 @@
           this.api.get({
             url: 'getMessageList',
             data: {
-              integer: '',
+              integer: 0,
               messageTowTort: this.messageData[key].messageTowTort
             },
             callback: (res) => {

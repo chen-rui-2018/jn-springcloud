@@ -31,19 +31,19 @@
                 @click="handleCancel(scope.row)" class="greenColor"><span>取消联系人</span>
               </el-button>
               <el-button
-               v-if=" scope.row.orgIdentity==='机构顾问'"
+               v-if=" scope.row.orgIdentity==='机构专员'"
                 size="mini"
                  type="text"
                 @click="handleSetContact( scope.row)" class="greenColor"><span>设为联系人</span>
               </el-button>
               <el-button
-               v-if=" scope.row.orgIdentity==='机构顾问'|| scope.row.orgIdentity==='机构联系人'"
+               v-if=" scope.row.orgIdentity==='机构专员'|| scope.row.orgIdentity==='机构联系人'"
                 size="mini"
                 type="text"
                 @click="handleDetails(scope.row)" class="greenColor"><span>详情</span>
               </el-button>
               <el-button
-               v-if=" scope.row.orgIdentity==='机构顾问'|| scope.row.orgIdentity==='机构联系人'"
+               v-if=" scope.row.orgIdentity==='机构专员'|| scope.row.orgIdentity==='机构联系人'"
                 size="mini"
                 type="text"
                 @click="handleDelete(scope.row)" class="redColor"><span>删除</span>

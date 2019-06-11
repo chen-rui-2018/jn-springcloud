@@ -20,7 +20,7 @@
             <el-form-item label="意向机构：">
               <span class="greenColor">{{sevaluateDetail.orgName}}</span>
             </el-form-item>
-            <el-form-item label="意向顾问：">
+            <el-form-item label="意向专员：">
               <span>{{sevaluateDetail.advisorName}} </span>
             </el-form-item>
             <el-form-item label="意向产品：">

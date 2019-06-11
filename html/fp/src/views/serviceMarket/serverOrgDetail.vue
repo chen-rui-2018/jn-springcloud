@@ -403,7 +403,7 @@
           </div>
         </el-tab-pane>
         <el-tab-pane name="serConsultant">
-          <span slot="label">服务顾问({{total2}})</span>
+          <span slot="label">服务专员({{total2}})</span>
           <div class="serConsultant">
             <ul class="list-imgleft adviser">
               <li class="list-item" v-for="(i,k) in serviceConsultant" :key='k'>
@@ -505,7 +505,7 @@
                   <div class="list-info-bottom-detail clearfix">
                     <!-- 参考信息、交易均价 begin -->
                     <div class="detail-contact inner-product">
-                      <div class="search_area text-of" title="王振英 , 包美芬 , 高凤清">服务顾问：{{i.advisorName}}</div>
+                      <div class="search_area text-of" title="王振英 , 包美芬 , 高凤清">服务专员：{{i.advisorName}}</div>
                       <!-- <div class="text-of mt5">参考价格：1000-10000元</div> -->
                       <span class="evaluate-container">
                         <span class="arrow-container">{{i.evaluationDesc}}</span>
@@ -749,7 +749,7 @@ export default {
         this.findOrgCountProductList();
     },
     screenSerCon(i) {
-      //筛选服务顾问
+      //筛选服务专员
       (this.sortTypes = i),
         (this.flag2 = i),
         (this.page2 = 1),
@@ -918,7 +918,7 @@ export default {
       });
     },
     getServiceConList() {
-      //服务顾问
+      //服务专员
       let _this = this;
       this.api.get({
         url: "getServiceConList",

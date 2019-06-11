@@ -30,7 +30,7 @@ export default {
           if (res.code === '0000') {
             this.noticeDetail = res.data
           } else {
-            _this.$vux.toast.text(res.result)
+            this.$vux.toast.text(res.result)
           }
         }
       })

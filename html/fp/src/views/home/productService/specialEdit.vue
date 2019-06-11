@@ -13,7 +13,7 @@
             </el-form-item>
           </div>
           <div class="finance_data_container">
-            <el-form-item label="服务顾问：" >
+            <el-form-item label="服务专员：" >
               <el-select v-model="specialEditData.advisorAccount" placeholder="请选择">
                 <el-option :label="counseloritem.advisorName" :value="counseloritem.advisorAccount" v-for="(counseloritem,counselorindex) in counselorList" :key="counselorindex">
                 </el-option>
@@ -374,7 +374,7 @@ export default {
         }
       })
     },
-    //顾问列表获取
+    //专员列表获取
     getServiceConsultantList(){
       let _this = this;
       this.api.get({

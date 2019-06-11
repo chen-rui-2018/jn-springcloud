@@ -1,8 +1,8 @@
 <template>
   <div class="counselorManagement">
     <div class="ordinary_title font16">
-      <div>顾问管理</div>
-      <div @click="toInviteAdviser" v-show="isShow">邀请顾问</div>
+      <div>专员管理</div>
+      <div @click="toInviteAdviser" v-show="isShow">邀请专员</div>
     </div>
     <div class="ordinary_main">
       <div class="search">
@@ -12,7 +12,7 @@
           <span :class="approvalStatus==='noFeedBack'?'active':''" @click="noFeedback ">未反馈</span>
           <span :class="approvalStatus==='rejected'?'active':''" @click="denied ">已拒绝</span>
         </div>
-        <el-input placeholder="请输入顾问姓名" v-model="advisorName" clearable>
+        <el-input placeholder="请输入专员姓名" v-model="advisorName" clearable>
           <el-button slot="append" icon="el-icon-search" @click="initList()"></el-button>
         </el-input>
       </div>
@@ -81,7 +81,7 @@ export default {
     initArr.forEach(v => {
       if (v.label === "我的机构") {
         v.resourcesList.forEach(i => {
-          if (i.resourcesName === "邀请顾问") {
+          if (i.resourcesName === "邀请专员") {
             this.isShow = true;
           }
         });
@@ -152,7 +152,7 @@ export default {
         })
         .catch(() => {});
     },
-    // 点击审批 跳转到审批顾问页面
+    // 点击审批 跳转到审批专员页面
     handleConsent(row) {
       this.$router.push({
         name: "approveAdvisory",

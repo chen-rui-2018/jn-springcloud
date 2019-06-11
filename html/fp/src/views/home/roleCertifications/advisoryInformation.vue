@@ -1,7 +1,7 @@
 <template>
   <div class="advisoryInformation">
     <div class="advisory_title font16">
-      <div>顾问资料</div>
+      <div>专员资料</div>
     </div>
 
     <div class="advisory_content">
@@ -690,7 +690,7 @@ export default {
       this.certificatePhoto = row.certificatePhoto;
       this.dialogVisible = true;
     },
-    //获取顾问详情
+    //获取专员详情
     getInit() {
       this.api.get({
         url: "serviceAdvisorInfo",

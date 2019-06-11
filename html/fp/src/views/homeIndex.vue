@@ -1,5 +1,7 @@
 <template>
-  <div class="portalIndex">
+  <div
+    :class="{'h-100': $store.state.isMobile}"
+    class="portalIndex">
     <div class="portalIndexImg" v-if="$store.state.hiddenNav">
       <div class="header" id="header" :class="{'headerw':isCenter||showFF}">
         <div class="headerContainer clearfix">
@@ -68,7 +70,9 @@
     </div>
 
     <!--    主体内容开始-->
-    <div style="position:relative;z-index: 0">
+    <div
+      :class="{'h-100': $store.state.isMobile}"
+      style="position:relative;z-index: 0">
       <router-view></router-view>
     </div>
 

@@ -1,7 +1,7 @@
 <template>
   <div class="inviteAdviser" v-loading="loading">
     <div class="ordinary_title font16">
-      <div>邀请顾问</div>
+      <div>邀请专员</div>
     </div>
     <div class="ordinary_content">
        <el-form label-width="120px" class="postJobInfo">
@@ -33,7 +33,7 @@
     <span v-for="(item, index) in jobs" :key="index" class="hobbys">{{item}}</span>
   </el-form-item>
  <div class="business_footer" @click="submitForm()">
-        邀请该顾问
+        邀请该专员
   </div>
 </el-form>
     </div>
@@ -55,7 +55,7 @@ export default {
     }
   },
   methods: {
-    // 获取邀请顾问信息
+    // 获取邀请专员信息
       getStaffInfo(){
           if(!this.searchFiled){
               this.$message.error('请输入员工账号');

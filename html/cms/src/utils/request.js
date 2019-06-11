@@ -4,6 +4,7 @@ import { getToken, setToken, removeToken } from '@/utils/auth'
 
 // create an axios instance
 const BASE_API = process.env.BASE_API
+const BASE_IBPS_LOGOUT_API = process.env.BASE_IBPS_LOGOUT_API
 const service = axios.create({
   baseURL: BASE_API, // api 的 base_url
   timeout: 1000 // request timeout
@@ -60,14 +61,14 @@ service.interceptors.response.use(response => {
   // console.log('================>请求返回code：' + res.code)
   if (res.code === 'index') {
     removeToken()
-    location.href = 'http://112.94.22.222:2384/ibps/logout.htm'
+    location.href = BASE_IBPS_LOGOUT_API
   } else {
     return response
   }
 }, error => {
   removeToken()
   console.log('请重新登录：' + error)
-  location.href = 'http://112.94.22.222:2384/ibps/logout.htm'
+  location.href = BASE_IBPS_LOGOUT_API
   return Promise.reject(error)
 })
 

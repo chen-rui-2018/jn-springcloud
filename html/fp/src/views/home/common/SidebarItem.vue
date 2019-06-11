@@ -1,7 +1,7 @@
 <template>
   <div class="menu-wrapper">
 
-    <!-- <el-submenu v-if="item.children && item.children.length >= 1&&item.children[1].label!=='服务顾问认证'" :index="item.id + ''">
+    <!-- <el-submenu v-if="item.children && item.children.length >= 1&&item.children[1].label!=='服务专员认证'" :index="item.id + ''">
       <template slot="title">
         <i class="el-icon-menu"/>
         <span slot="title">{{ item.label }}</span>
@@ -21,7 +21,7 @@
       <span slot="title">{{ item.label }}</span>
     </el-menu-item>
     <!-- 选择机构对话框 -->
-    <el-dialog title="申请顾问" :visible.sync="centerDialogVisible" width="460px;" :modal-append-to-body="false" center>
+    <el-dialog title="申请专员" :visible.sync="centerDialogVisible" width="460px;" :modal-append-to-body="false" center>
       <el-form :model="organizationForm" ref="organizationForm" label-width="80px" class="demo-dynamic">
         <el-form-item prop="orgId" label="服务机构" :rules="[
       { required: true, message: '请输入你要申请入驻的机构', trigger: 'change' },
@@ -96,7 +96,7 @@ export default {
     },
     // 弹出选择机构对话框
     checkOrganization(item) {
-      if (item.label === "服务顾问认证") {
+      if (item.label === "服务专员认证") {
         this.api.get({
           url: "getUserApprovalStatus",
           // data: { orgName: "" },

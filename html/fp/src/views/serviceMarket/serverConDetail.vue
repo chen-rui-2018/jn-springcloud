@@ -2,9 +2,9 @@
     <div class="serverConDetail w">
         <div class="serverOrgMenu color2">
             <span class="pointer" @click="$router.push({path:'/serMatHp'})">首页/</span>
-            <span class="pointer" @click="$router.push({path:'/serverCon'})">服务顾问</span>
+            <span class="pointer" @click="$router.push({path:'/serverCon'})">服务专员</span>
             <span>/</span>
-            <span class="mainColor agent">服务顾问详情</span>
+            <span class="mainColor agent">服务专员详情</span>
         </div>
         <div class="agentInfo">
             <el-card v-if="serverConDetailList">
@@ -32,7 +32,7 @@
             </el-card>
         </div>
         <div class="agentDel">
-            <div class="agentDelTit">顾问详情</div>
+            <div class="agentDelTit">专员详情</div>
             <div class="agentDelCon pr color1">
                 <div class="mainColor shouqi pointer" v-if="zankaiFlag" @click='handleZd'>
                     收起
@@ -189,7 +189,7 @@
                                     <div class="list-info-bottom-detail clearfix">
                                         <!-- 参考信息、交易均价 begin -->
                                         <div class="detail-contact inner-product">
-                                            <div class="search_area text-of">服务顾问：{{i.advisorName}}</div>
+                                            <div class="search_area text-of">服务专员：{{i.advisorName}}</div>
                                             <div class="text-of mt5">参考价格：{{i.referPrice}}元</div>
                                             <div>累计
                                                 <span class="mainColor">{{i.transactionsNumber}}</span>笔交易</div>
@@ -259,7 +259,7 @@
                                     <div class="list-info-bottom-detail clearfix">
                                         <!-- 参考信息、交易均价 begin -->
                                         <div class="detail-contact inner-product fl">
-                                            <div class="search_area text-of" title="王振英 , 包美芬 , 高凤清">服务顾问：{{i.advisorName}}</div>
+                                            <div class="search_area text-of" title="王振英 , 包美芬 , 高凤清">服务专员：{{i.advisorName}}</div>
                                             <!-- <div class="text-of mt5">参考价格：1000-10000元</div> -->
                                             <span class="evaluate-container">
                                                 <span class="arrow-container">{{i.evaluationDesc}}</span>
@@ -521,7 +521,7 @@ export default {
       });
     },
     advisorProductList() {
-      //顾问-服务产品
+      //专员-服务产品
       let _this = this;
       this.api.get({
         url: "advisorProductList",
@@ -546,7 +546,7 @@ export default {
       });
     },
     initList() {
-      //获取顾问详情
+      //获取专员详情
       let _this = this;
       this.api.get({
         url: "getServiceAdvisorInfo",

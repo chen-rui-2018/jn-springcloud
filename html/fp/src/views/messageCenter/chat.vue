@@ -225,7 +225,32 @@
             ])
           // 注册滚动加载历史消息事件
           this.checkHistoryMessage()
+          this.resetWindowScrollTop()
+        }
+      },
+      resetWindowScrollTop() {
+        window.addEventListener('blur', () => {
+          // alert('blur');
+          setTimeout(() => {
+            if (document.hasFocus()) {
+              let activeElName = document.activeElement.tagName.toLowerCase();
+              if (activeElName === 'input' || activeElName === 'textarea') {
+                return;
+              }
+            }
+            window.scrollTo(0, document.documentElement.clientHeight);
+          }, 20)
+        }, true)
 
+        // 输入文字的时候，安卓浏览键盘默认不会把聚焦的输入框顶起，这里把输入框滚上去
+        if(/Android 4\.[0-3]/.test(navigator.appVersion)){
+          window.addEventListener("resize", function(){
+            if(document.activeElement.tagName=="INPUT"){
+              window.setTimeout(function(){
+                document.activeElement.scrollIntoViewIfNeeded();
+              },0);
+            }
+          })
         }
       },
       getFromUserInfo() {
@@ -635,6 +660,15 @@
   }
 </style>
 <style>
+  html,
+  body,
+  #app {
+    width: 100%;
+    height: 100%;
+  }
+  #app {
+    overflow: auto;
+  }
   .app-input.el-textarea__inner {
     border-radius: 50px !important;
   }

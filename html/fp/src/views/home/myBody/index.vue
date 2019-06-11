@@ -4,7 +4,7 @@
       <div class=" myBusiness font16">我的机构 </div>
       <div class="business_nav">
         <div @click="toBasicInformation" v-show="isEditBody">编辑机构</div>
-        <div @click="toCounselorManagement" v-show="isCounselor">顾问管理</div>
+        <div @click="toCounselorManagement" v-show="isCounselor">专员管理</div>
         <div @click="toEnterprisePropaganda" v-show="isPublicity">企业宣传</div>
       </div>
 
@@ -241,7 +241,7 @@ export default {
             this.isPublicity = true;
           } else if (i.resourcesName === "修改机构") {
             this.isEditBody = true;
-          } else if (i.resourcesName === "顾问管理") {
+          } else if (i.resourcesName === "专员管理") {
             this.isCounselor = true;
           }
         });

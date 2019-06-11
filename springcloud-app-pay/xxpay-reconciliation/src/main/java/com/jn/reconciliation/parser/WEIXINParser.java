@@ -17,6 +17,7 @@ package com.jn.reconciliation.parser;
 
 import com.jn.reconciliation.enums.BatchStatusEnum;
 import com.jn.reconciliation.service.PayReconciliationCheckBatchService;
+import com.jn.reconciliation.service.ReconciliationIdentService;
 import com.jn.reconciliation.utils.XmlUtils;
 import com.jn.reconciliation.vo.ReconciliationEntityVo;
 import org.apache.commons.io.FileUtils;
@@ -26,7 +27,9 @@ import org.apache.commons.logging.LogFactory;
 import org.dom4j.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.xxpay.common.constant.PayConstant;
 import org.xxpay.dal.dao.entity.reconciliation.TbPayReconciliationCheckBatch;
+import org.xxpay.dal.dao.entity.reconciliation.TbPayReconciliationIdent;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,6 +57,9 @@ public class WEIXINParser implements ParserInterface {
 
 	@Autowired
 	private PayReconciliationCheckBatchService payReconciliationCheckBatchService;
+
+	@Autowired
+	private ReconciliationIdentService reconciliationIdentService;
 
 	/**
 	 * 解析器的入口方法，每个解析器都必须有这个方法
@@ -182,17 +188,21 @@ public class WEIXINParser implements ParserInterface {
 			return new ArrayList<ReconciliationEntityVo>();
 		}
 
+		//获取有效的appid标识
+		List<TbPayReconciliationIdent> identList = reconciliationIdentService.getListByPayType(PayConstant.CHANNEL_NAME_WX);
+
 		// 解析出来的数据保存在list中
 		List<ReconciliationEntityVo> entityVoList = new ArrayList<ReconciliationEntityVo>();
 		for (String rawData : list) {
+			//解析后的对账信息实体类
 			ReconciliationEntityVo entityVo = new ReconciliationEntityVo();
-			entityVoList.add(entityVo);
 
 			Matcher matcher = pattern.matcher(rawData);
 			if (matcher.find()) {
-
 				// 交易时间
 				String tradeTimeStr = matcher.group(1);
+				// 公众账号ID
+				String appId = matcher.group(2);
 				// 微信订单号(微信流水号)
 				String bankTrxNo = matcher.group(6);
 				// 商户订单号(平台传递给微信的银行订单号)
@@ -206,26 +216,33 @@ public class WEIXINParser implements ParserInterface {
 				// 手续费
 				String bankFee = matcher.group(17);
 
-				try {
-					// 设置支付时间
-					SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_STYLE);
-					entityVo.setOrderTime(sdf.parse(tradeTimeStr));
-				} catch (ParseException e) {
-					LOG.warn("解析交易时间出错, billDate[" + billDate + "], billType[SUCCESS], tradeTime[" + tradeTimeStr + "], rawdata[" + rawData + "]", e);
-					batch.setStatus(BatchStatusEnum.FAIL.getCode());
-					batch.setCheckFailMsg("解析交易时间出错, tradeTime[" + tradeTimeStr + "], rawdata[" + rawData + "]");
-					return null;
+				//账单的appid不存在identList中 表示该订单不属于本支付系统的订单,不需要进行对账
+				if(checkAppid(identList,appId)) {
+
+					try {
+						// 设置支付时间
+						SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_STYLE);
+						entityVo.setOrderTime(sdf.parse(tradeTimeStr));
+					} catch (ParseException e) {
+						LOG.warn("解析交易时间出错, billDate[" + billDate + "], billType[SUCCESS], tradeTime[" + tradeTimeStr + "], rawdata[" + rawData + "]", e);
+						batch.setStatus(BatchStatusEnum.FAIL.getCode());
+						batch.setCheckFailMsg("解析交易时间出错, tradeTime[" + tradeTimeStr + "], rawdata[" + rawData + "]");
+						return null;
+					}
+
+					// 设置微信流水号
+					entityVo.setBankTrxNo(bankTrxNo);
+					// 设置平台银行订单号
+					entityVo.setBankOrderNo(bankOrderNo);
+					// 设置微信订单状态（默认全部是success）
+					entityVo.setBankTradeStatus(bankTradeStatus);
+					// 设置微信账单金额:(单位是元)
+					entityVo.setBankAmount(new BigDecimal(orderAmount));
+					// 设置银行
+					entityVo.setBankFee(new BigDecimal(bankFee));
+					//存入对账集合中
+					entityVoList.add(entityVo);
 				}
-				// 设置微信流水号
-				entityVo.setBankTrxNo(bankTrxNo);
-				// 设置平台银行订单号
-				entityVo.setBankOrderNo(bankOrderNo);
-				// 设置微信订单状态（默认全部是success）
-				entityVo.setBankTradeStatus(bankTradeStatus);
-				// 设置微信账单金额:(单位是元)
-				entityVo.setBankAmount(new BigDecimal(orderAmount));
-				// 设置银行
-				entityVo.setBankFee(new BigDecimal(bankFee));
 			} else {
 				batch.setStatus(BatchStatusEnum.FAIL.getCode());
 				batch.setCheckFailMsg("匹配账单明细失败, rawdata[" + rawData + "]");
@@ -269,6 +286,26 @@ public class WEIXINParser implements ParserInterface {
 		} catch (IOException e) {
 			LOG.error("解析微信账单(判断返回是否正确)失败", e);
 		}
+	}
+
+	/**
+	 * 校验账单的appid是否在identList中
+	 * 存在返回：true ,否则为false
+	 * @since 账单的appid不存在identList中 表示该订单不属于本支付系统的订单,不需要进行对账
+	 * @param identList 有效appid集合
+	 * @param appId 公众账号ID
+	 * */
+	private boolean checkAppid(List<TbPayReconciliationIdent> identList,String appId){
+		boolean result = false;
+		for(TbPayReconciliationIdent ident : identList){
+			if(ident.equals(appId)){
+				result = true;
+				break;
+			}
+		}
+
+
+    	return result;
 	}
 
 }

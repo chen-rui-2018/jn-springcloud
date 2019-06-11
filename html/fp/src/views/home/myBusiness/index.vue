@@ -140,6 +140,7 @@ export default {
   },
   created() {
     this.getParkList();
+     this.getUserExtension()
   },
   mounted() {
     let initArr = JSON.parse(sessionStorage.menuItems);
@@ -164,6 +165,21 @@ export default {
     this.init();
   },
   methods: {
+       //获取我的所属企业编码
+  getUserExtension(){
+     let _this = this;
+      this.api.get({
+        url: "getUserExtension",
+        data: {},
+        callback: function(res) {
+          if (res.code == "0000") {
+            sessionStorage.companyCode=res.data.companyCode
+          } else {
+            _this.$message.error(res.result);
+          }
+        }
+      });
+  },
     //所属园区
     getParkList() {
       let _this = this;

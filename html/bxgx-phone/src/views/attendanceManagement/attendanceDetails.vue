@@ -237,7 +237,7 @@ export default {
               })
             }
           } else {
-            this.$vux.toast.text(res.result, 'top')
+            this.$vux.toast.text(res.result)
           }
         }
       })
@@ -261,7 +261,7 @@ export default {
               this.num = res.data.totalNumber
             }
           } else {
-            this.$vux.toast.text(res.result, 'top')
+            this.$vux.toast.text(res.result)
           }
         }
       })

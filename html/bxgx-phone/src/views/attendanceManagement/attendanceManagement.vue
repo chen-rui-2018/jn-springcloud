@@ -79,7 +79,7 @@ export default {
     // 点击签退
     signOut () {
       if (!this.upTime) {
-        this.$vux.toast.text('您未签到，请先签到', 'top')
+        this.$vux.toast.text('您未签到，请先签到')
         return false
       }
       this.userInfo.type = '2'
@@ -99,7 +99,7 @@ export default {
               this.downTime = res.data.attendanceTime.substr(11, 8)
             }
           } else {
-            this.$vux.toast.text(res.result, 'top')
+            this.$vux.toast.text(res.result)
           }
         }
       })
@@ -107,7 +107,7 @@ export default {
     // 点击签到
     signIn () {
       if (this.upTime) {
-        this.$vux.toast.text('签到失败，不能进行多次签到', 'top')
+        this.$vux.toast.text('签到失败，不能进行多次签到')
         return false
       }
 
@@ -129,7 +129,7 @@ export default {
               this.upTime = res.data.signInAttendanceTime.substr(11, 8)
             }
           } else {
-            this.$vux.toast.text(res.result, 'top')
+            this.$vux.toast.text(res.result)
           }
         }
       })
@@ -175,12 +175,12 @@ export default {
                     }
                   }
                 } else {
-                  this.$vux.toast.text(res.result, 'top')
+                  this.$vux.toast.text(res.result)
                 }
               }
             })
           } else {
-            this.$vux.toast.text(res.result, 'top')
+            this.$vux.toast.text(res.result)
           }
         }
       })
@@ -311,7 +311,7 @@ export default {
           if (res.code === '0000') {
             this.distance = Number(res.data.distance).toFixed(0)
           } else {
-            this.$vux.toast.text(res.result, 'top')
+            this.$vux.toast.text(res.result)
           }
         }
       })

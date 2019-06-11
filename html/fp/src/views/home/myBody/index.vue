@@ -58,7 +58,7 @@
         </div>
         <div style="display:flex">
           <el-form-item
-            label="主营业务:"
+            label="核心服务:"
             class="inline border-bottom"
           >
             <span>{{orgBusiness}}</span>
@@ -75,7 +75,7 @@
                  <div>{{item.certName}}</div>
                  <div>颁发部门：{{item.awardDepart}}</div>
                 </div>
-                 <div class="businessLicenseImg"><img src="/static/img/营业执照.png" alt=""></div>
+                 <div class="businessLicenseImg"><img :src="item.fileUrl" alt=""></div>
                 </div>
             </div>
              <div class="businessArea ">
@@ -86,7 +86,7 @@
                  <div>{{item.certName}}</div>
                  <div>颁发部门：{{item.awardDepart}}</div>
                 </div>
-                 <div class="businessLicenseImg"><img src="/static/img/营业执照.png" alt=""></div>
+                 <div class="businessLicenseImg"><img :src="item.fileUrl" alt=""></div>
                 </div>
             </div>
  <div class="enterprise">团队信息</div>
@@ -94,13 +94,13 @@
   <el-form class="tableEnterprise">
         <div style="display:flex">
           <el-form-item
-            label="员工总人数:"
+            label="员工总人数（人）:"
             class="inline "
           >
             <span>{{staffCount}}</span>
           </el-form-item>
           <el-form-item
-            label="职业人员人数:"
+            label="执业人员人数（人）:"
             class="inline bodyName"
           >
             <span>{{professionNum}}</span>
@@ -108,14 +108,14 @@
         </div>
         <div style="display:flex">
           <el-form-item
-            label="本科:"
+            label="本科（人）:"
             class="inline"
           >
            <label slot="label">本&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;科:</label>
             <span>{{bachelorNum}}</span>
           </el-form-item>
           <el-form-item
-            label="硕士:"
+            label="硕士（人）:"
             class="inline bodyName"
           >
            <label slot="label">硕&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;士:</label>
@@ -124,20 +124,11 @@
         </div>
         <div style="display:flex">
           <el-form-item
-            label="博士:"
+            label="博士（人）:"
             class="inline"
           >
            <label slot="label">博&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;士:</label>
             <span>{{doctorNum}}</span>
-          </el-form-item>
-        </div>
-        <div style="display:flex">
-          <el-form-item
-            label="海归:"
-            class="inline"
-          >
-           <label slot="label">海&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;归:</label>
-            <span>{{returneeNum}}</span>
           </el-form-item>
         </div>
         <div style="display:flex">
@@ -219,7 +210,7 @@ export default {
            orgSpeciality:'',//业务擅长
            orgHobby:'',//客户偏好
            orgSynopsis:'',//服务机构简介
-           orgBusiness:'',//主营业务
+           orgBusiness:'',//核心服务
            businessType:'',//业务领域
           //  awardTime:'',//颁发时间
           //  certType:'',//证书类型：1营业执照2执业资质
@@ -230,7 +221,7 @@ export default {
            bachelorNum:'',//本科学历人数
            masterNum:'',//硕士学历人数
            doctorNum:'',//博士学历人数
-           returneeNum:'',//海归员工人数
+          //  returneeNum:'',//海归员工人数
            conName:'',//联系人姓名
            conPhone:'',//联系人电话
            conEmail:'',//联系人邮箱
@@ -290,7 +281,7 @@ export default {
             _this.conPhone = res.data.orgDetailVo.conPhone
             _this.conEmail = res.data.orgDetailVo.conEmail
             _this.orgPhone = res.data.orgDetailVo.orgPhone
-            _this.orgAddress = res.data.orgDetailVo.orgAddress
+            _this.orgAddress = res.data.orgDetailVo.orgAddressDetail
             _this.orgWeb = res.data.orgDetailVo.orgWeb
 
 
@@ -311,7 +302,7 @@ export default {
         this.$router.push({ name: "counselorManagement" });
     },
     toBasicInformation(){
-        this.$router.push({ path: "/roleCertifications/basicInformation" });
+        this.$router.push({ path: "/roleCertifications/basicInformation",query:{title:'编辑机构'} });
     }
   }
 };
@@ -325,6 +316,10 @@ export default {
   .businessLicenseImg{
     display: inline-block;margin-left:65px;
      vertical-align: middle;
+     img{
+       width: 85px;
+       height: 85px;
+     }
   }
   .itemInfo{
     display: inline-block;
@@ -379,7 +374,7 @@ margin-bottom: 59px;
       display: inline-block;
     }
     .el-form-item__label {
-      width: 132px;
+      width:140px;
       // padding: 15px 0;
       display: inline-block;
       background-color: #f0f0f0;

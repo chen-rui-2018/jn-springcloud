@@ -3,7 +3,7 @@
     <div>{{currentDate}}</div>
     <div>{{enterpriseName}}</div>
     <div class="site">
-      <div><span>{{site}}</span><span>{{roomNumber}}</span></div>
+      <div><span>{{site}}</span></div>
       <!-- <div><span> <i class="room1"></i> 607室</span> <span> <i class="room2"> </i> 608室</span></div> -->
     </div>
     <div>今日用电</div>
@@ -58,7 +58,7 @@ export default {
               })
             }
           } else {
-            this.$vux.toast.text(res.result, 'top')
+            this.$vux.toast.text(res.result)
           }
         }
       })
@@ -87,7 +87,7 @@ export default {
               })
             }
           } else {
-            this.$vux.toast.text(res.result, 'top')
+            this.$vux.toast.text(res.result)
           }
         }
       })
@@ -117,7 +117,7 @@ export default {
               })
             }
           } else {
-            this.$vux.toast.text(res.result, 'top')
+            this.$vux.toast.text(res.result)
           }
         }
       })

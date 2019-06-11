@@ -8,8 +8,8 @@
     <div class="ordinary_main">
         <div class="search">
         <div></div>
-        <el-input placeholder="请输入姓名" v-model="searchFiled" clearable>
-          <el-button slot="append" icon="el-icon-search" @click="initList()"></el-button>
+        <el-input placeholder="请输入姓名" v-model="searchFiled" clearable @keyup.enter.native="initList">
+          <el-button slot="append" icon="el-icon-search" @click="initList"></el-button>
         </el-input>
       </div>
       <div class="ordinary_table">

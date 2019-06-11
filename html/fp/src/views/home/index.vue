@@ -90,7 +90,7 @@ export default {
   //   }
   // },
   beforeRouteEnter(to, from, next) {
-    
+
     let token=sessionStorage.token
     api.post({
       url: "getDynamicMenu",
@@ -110,9 +110,7 @@ export default {
             }
           })
 
-        } else {
-          this.$message.error(res.result);
-        }
+        } 
       }
     });
   },

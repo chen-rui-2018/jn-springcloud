@@ -102,12 +102,15 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
         <!--对账批次表-->
-         <table tableName="tb_pay_reconciliation_check_batch" ></table>
-         <!--对账差错暂存池-->
-        <table tableName="tb_pay_reconciliation_mistake_scratch_pool" ></table>
-         <!--对账差错池-->
-        <table tableName="tb_pay_reconciliation_mistake" ></table>
-        <table tableName="tb_pay_reconciliation_notice_user" ></table>
+        <!--<table tableName="tb_pay_reconciliation_check_batch" ></table>-->
+       <!--对账差错暂存池-->
+        <!--<table tableName="tb_pay_reconciliation_mistake_scratch_pool" ></table>-->
+        <!--对账差错池-->
+        <!-- <table tableName="tb_pay_reconciliation_mistake" ></table>-->
+        <!--对账用户通知表-->
+        <!-- <table tableName="tb_pay_reconciliation_notice_user" ></table>-->
+        <!--对账标识表-->
+        <table tableName="tb_pay_reconciliation_ident" ></table>
     </context>
 
 

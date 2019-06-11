@@ -119,7 +119,7 @@ export default {
         rangeId:'',//所属类型
         sortType:'1',//排序
         page:1,
-        rows:4,
+        rows:6,
         perennialList:[],
       }
     },

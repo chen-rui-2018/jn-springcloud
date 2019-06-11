@@ -41,7 +41,7 @@
           <i class="el-icon-arrow-up"></i>
         </div>
         <div class="mainColor shouqi zhankai pointer" v-else @click='zankaiFlag=!zankaiFlag'>
-          <i class="el-icon-arrow-down"></i>
+          展开<i class="el-icon-arrow-down"></i>
         </div>
         <el-card>
           <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -385,7 +385,7 @@
           </div>
         </el-tab-pane>
         <el-tab-pane name="serEvaluation">
-          <span slot="label">服务评价({{total4}})</span>
+          <span slot="label">服务评价({{evaCount.evaluationTotal}})</span>
           <div class="serEvaluation">
             <ul class="list-imgleft">
               <li class="list-item pr" v-for="(i,k) in serviceRatingList" :key='k'>

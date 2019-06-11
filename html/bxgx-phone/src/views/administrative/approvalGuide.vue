@@ -300,7 +300,7 @@ export default {
       .approvalGuide_cont{
         margin:30px;
         margin-top: 27%;
-        height: 100%;
+        height: 100% ;
         overflow: auto;
         .weui-cells{
           box-shadow: 0px 2px 18px 0px rgba(121, 121, 121, 0.15);

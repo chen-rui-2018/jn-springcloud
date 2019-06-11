@@ -115,7 +115,7 @@ export default {
         rangeId:'',//所属类型
         sortType:'1',//排序
         page:1,
-        rows:5,
+        rows:6,
         perennialList:[],
         // centerDialogVisible:false
       }

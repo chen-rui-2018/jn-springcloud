@@ -2,6 +2,7 @@ package com.jn.news.email.service.impl;
 
 import com.jn.common.enums.CommonExceptionEnum;
 import com.jn.common.exception.JnSpringCloudException;
+import com.jn.news.config.NewsSwitchProperties;
 import com.jn.news.email.enums.EmailExceptionEnum;
 import com.jn.news.email.service.EmailService;
 import com.jn.news.email.utils.EmailComposeMessageHeaderUtil;
@@ -39,6 +40,8 @@ public class EmailServiceImpl implements EmailService {
 
     @Autowired
     private JavaMailSender mailSender;
+    @Autowired
+    private NewsSwitchProperties newsSwitchProperties;
 
     /**
      * 模板引擎对象
@@ -64,6 +67,8 @@ public class EmailServiceImpl implements EmailService {
      */
     @Override
     public void sendEmail(EmailVo emailVo) {
+        //判断是否邮件发送状态，如果是关闭状态则发送至配置的测试邮箱地址
+        this.emailSwitchJudge(emailVo);
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         //消息处理助手对象
         MimeMessageHelper helper = null;
@@ -88,6 +93,7 @@ public class EmailServiceImpl implements EmailService {
             logger.error("邮件发送异常：",e);
             throw new JnSpringCloudException(CommonExceptionEnum.EMAIL_ERROR);
         }
+
     }
 
     /**
@@ -96,6 +102,8 @@ public class EmailServiceImpl implements EmailService {
      */
     @Override
     public void sendEmailByTemplate(EmailVo emailVo) throws JnSpringCloudException{
+        //判断是否邮件发送状态，如果是关闭状态则发送至配置的测试邮箱地址
+        this.emailSwitchJudge(emailVo);
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         try {
             //邮件内容
@@ -150,6 +158,24 @@ public class EmailServiceImpl implements EmailService {
                 }
             }
         }
+    }
+
+    /**
+     * 判断邮件发送状态，如果是关闭状态则发送至配置的测试邮箱地址
+     * @param emailVo
+     * @return
+     */
+    public EmailVo emailSwitchJudge(EmailVo emailVo) {
+        //防止发送邮件不走mq，故在此判断是否开启邮件发送
+        if(!newsSwitchProperties.getEmail()) {
+            logger.info("\n邮件发送开关未开启,如有需要请向组长申请开启.");
+            //关闭状态，设置邮件接收人
+            if(StringUtils.isBlank(newsSwitchProperties.getEmailAddress())) {
+                throw new JnSpringCloudException(EmailExceptionEnum.EMAIL_SWITCH_NOTNULL_EMAILADDRESS);
+            }
+            emailVo.setEmail(newsSwitchProperties.getEmailAddress());
+        }
+        return emailVo;
     }
 
 }

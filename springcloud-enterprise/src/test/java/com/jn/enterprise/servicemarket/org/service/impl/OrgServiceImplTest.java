@@ -79,11 +79,10 @@ public class OrgServiceImplTest {
         orgBasicData.setOrgRegisterTime("2018-10-11");
         orgBasicData.setOrgSynopsis("服务商简介服务商简介服务商简介服务商简介");
         orgBasicData.setOrgBusiness("主营业务主营业务主营业务");
-        orgBasicData.setOrgSpeciality(new String[]{"业务擅长业务","擅长业务擅长"});
+        orgBasicData.setOrgSpeciality("业务擅长业务");
         orgBasicData.setIndustrySector(new String[]{"行业领域1","行业领域2"});
         orgBasicData.setOrgLogo("机构LOGO机构LOGO---URL");
         orgBasicData.setDevelopmentStage(new String[]{"发展阶段2","发展阶段3","发展阶段4"});
-        orgBasicData.setCompanyNature(new String[]{"企业性质1","企业性质2"});
         try{
             String s = orgService.saveOrUpdateOrgBasicData(orgBasicData, account);
             assertThat(s,notNullValue());

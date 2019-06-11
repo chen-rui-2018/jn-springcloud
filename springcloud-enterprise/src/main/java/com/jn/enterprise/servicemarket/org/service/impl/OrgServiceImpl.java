@@ -13,6 +13,7 @@ import com.jn.enterprise.company.entity.TbServiceCompanyCriteria;
 import com.jn.enterprise.enums.InvestorExceptionEnum;
 import com.jn.enterprise.enums.OrgExceptionEnum;
 import com.jn.enterprise.enums.RecordStatusEnum;
+import com.jn.enterprise.model.IBPSFile;
 import com.jn.enterprise.model.ServiceOrg;
 import com.jn.enterprise.servicemarket.advisor.dao.TbServiceAdvisorMapper;
 import com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor;
@@ -20,6 +21,7 @@ import com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisorCriteria;
 import com.jn.enterprise.servicemarket.industryarea.dao.TbServicePreferMapper;
 import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePrefer;
 import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePreferCriteria;
+import com.jn.enterprise.servicemarket.org.TraitTypeEnum;
 import com.jn.enterprise.servicemarket.org.dao.*;
 import com.jn.enterprise.servicemarket.org.entity.*;
 import com.jn.enterprise.servicemarket.org.model.*;
@@ -49,6 +51,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -141,9 +144,6 @@ public class OrgServiceImpl implements OrgService {
     public PaginationData<List<ServiceOrg>> selectServiceOrgList(OrgParameter orgParameter){
         Page<Object> objects = PageHelper.startPage(orgParameter.getPage(), orgParameter.getRows() == 0 ? 15 : orgParameter.getRows());
         List<String> sList = new ArrayList<>(16);
-        if(null!=orgParameter.getCompanyNature()&&orgParameter.getCompanyNature().length>0){
-            sList.addAll(Arrays.asList(orgParameter.getCompanyNature()));
-        }
         if(null!=orgParameter.getDevelopmentStage()&&orgParameter.getDevelopmentStage().length>0){
             sList.addAll(Arrays.asList(orgParameter.getDevelopmentStage()));
         }
@@ -168,26 +168,95 @@ public class OrgServiceImpl implements OrgService {
                 serviceOrgResult.add(serOrg);
             }
         }
-
         PaginationData<List<ServiceOrg>> data = new PaginationData(serviceOrgResult, objects.getTotal());
         return data;
     }
 
+
     @ServiceLog(doAction = "根据机构ID查询机构详情")
     @Override
     public OrgDetailVo getServiceOrgDetail(String orgId){
-        OrgDetailVo serviceOrgDetailVo = orgMapper.getServiceOrgDetail(orgId);
-        if(null == serviceOrgDetailVo){
-            throw new JnSpringCloudException(OrgExceptionEnum.ORG_IS_NOT_EXIT);
+        //获取机构基本信息
+        OrgDetailVo orgDetailVo = orgMapper.getServiceOrgDetail(orgId);
+        if(orgDetailVo==null){
+            logger.warn("根据机构ID查询机构详情异常，当前机构id:[{}]在系统中不存在或已失效",orgId);
+            throw new JnSpringCloudException(OrgExceptionEnum.ORG_INFO_NOT_EXIST);
         }
+        //处理logo图片格式
+        orgDetailVo.setOrgLogo(IBPSFileUtils.getFilePath(orgDetailVo.getOrgLogo()));
+        //获取客户偏好--行业领域
+        List<TbServiceOrgTrait> serviceOrgTraitList = getOrgIndustrySector(orgId,TraitTypeEnum.INDUSTRY_FIELDS.getValue());
+        if(!serviceOrgTraitList.isEmpty()){
+            List<String>industrySectorList=new ArrayList<>(16);
+            for(TbServiceOrgTrait tbServiceOrgTrait:serviceOrgTraitList){
+                industrySectorList.add(tbServiceOrgTrait.getTraitValue());
+            }
+            orgDetailVo.setIndustrySector(industrySectorList);
+        }
+        //获取客户偏好--发展阶段
+        serviceOrgTraitList=getOrgIndustrySector(orgId,TraitTypeEnum.STAGE_OF_DEVELOP.getValue());
+        if(!serviceOrgTraitList.isEmpty()){
+            List<String>developmentStageList=new ArrayList<>(16);
+            for(TbServiceOrgTrait tbServiceOrgTrait:serviceOrgTraitList){
+                developmentStageList.add(tbServiceOrgTrait.getTraitValue());
+            }
+            orgDetailVo.setDevelopmentStage(developmentStageList);
+        }
+        //获取机构荣誉资质
+        getOrgHonorInfoByOrgId(orgId, orgDetailVo);
+        //获取机构团队信息
+        TbServiceOrgTeamCriteria example=new TbServiceOrgTeamCriteria();
+        example.createCriteria().andOrgIdEqualTo(orgId)
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        List<TbServiceOrgTeam> serviceOrgTeamList = tbServiceOrgTeamMapper.selectByExample(example);
+        if(!serviceOrgTeamList.isEmpty()){
+            List<OrgTeam> orgTeamList=new ArrayList<>(16);
+            for(TbServiceOrgTeam serviceOrgTeam:serviceOrgTeamList){
+                OrgTeam orgTeam=new OrgTeam();
+                BeanUtils.copyProperties(serviceOrgTeam,orgTeam);
+                orgTeamList.add(orgTeam);
+            }
+           orgDetailVo.setOrgTeams(orgTeamList);
+        }
+        return orgDetailVo;
+    }
 
-        // 处理图片格式
-        List<OrgLicense> honorLicense = serviceOrgDetailVo.getHonorLicense();
-        for(OrgLicense orgLicense:honorLicense){
-            orgLicense.setFileUrl(IBPSFileUtils.getFilePath(orgLicense.getFileUrl()));
+    /**
+     * 根据机构id获取机构荣誉资质信息
+     * @param orgId
+     * @param orgDetailVo
+     */
+    @ServiceLog(doAction = "根据机构id获取机构荣誉资质信息")
+    private void getOrgHonorInfoByOrgId(String orgId, OrgDetailVo orgDetailVo) {
+        TbServiceOrgLicenseCriteria example=new TbServiceOrgLicenseCriteria();
+        example.createCriteria().andOrgIdEqualTo(orgId)
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        List<TbServiceOrgLicense> serviceOrgLicenseList = tbServiceOrgLicenseMapper.selectByExample(example);
+        if(!serviceOrgLicenseList.isEmpty()){
+            List<OrgLicense> honorLicense=new ArrayList<>(16);
+            for(TbServiceOrgLicense serviceOrgLicense:serviceOrgLicenseList){
+                OrgLicense orgLicense=new OrgLicense();
+                //处理图片格式
+                serviceOrgLicense.setFileUrl(IBPSFileUtils.getFilePath(serviceOrgLicense.getFileUrl()));
+                BeanUtils.copyProperties(serviceOrgLicense, orgLicense);
+                honorLicense.add(orgLicense);
+            }
+            orgDetailVo.setOrgLicenses(honorLicense);
         }
-        serviceOrgDetailVo.setOrgLogo(IBPSFileUtils.getFilePath(serviceOrgDetailVo.getOrgLogo()));
-        return serviceOrgDetailVo;
+    }
+
+    /**
+     * 根据机构id获取客户偏好--行业领域,发展阶段
+     * @param orgId
+     * @return
+     */
+    @ServiceLog(doAction = "")
+    private List<TbServiceOrgTrait> getOrgIndustrySector(String orgId,String traitType) {
+        TbServiceOrgTraitCriteria example=new TbServiceOrgTraitCriteria();
+        example.createCriteria().andOrgIdEqualTo(orgId)
+                .andTraitTypeEqualTo(traitType)
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        return tbServiceOrgTraitMapper.selectByExample(example);
     }
 
     @ServiceLog(doAction = "保存服务机构基本信息(id为空时为新增)")
@@ -196,30 +265,21 @@ public class OrgServiceImpl implements OrgService {
         String r = "";
         TbServiceOrg tbServiceOrg = new TbServiceOrg();
         BeanUtils.copyProperties(orgBasicData,tbServiceOrg);
-
         tbServiceOrg.setRecordStatus(new Byte(RECORD_STATUS_VALID));
-
         if(null != orgBasicData.getIndustrySector()&&orgBasicData.getIndustrySector().length>0){
             List<String> hobby = new ArrayList<>(16);
             hobby.addAll(Arrays.asList(orgBasicData.getIndustrySector()));
             TbServicePreferCriteria preferCriteria = new TbServicePreferCriteria();
             preferCriteria.createCriteria().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
             List<TbServicePrefer> tbServicePrefers = tbServicePreferMapper.selectByExample(preferCriteria);
-            List<String>sbSpeciality=new ArrayList<>(16);
             List<String>sbHobby=new ArrayList<>(16);
             for (TbServicePrefer prefer:tbServicePrefers) {
-                for (String sp:orgBasicData.getOrgSpeciality()) {
-                    if(StringUtils.equals(sp,prefer.getId())){
-                        sbSpeciality.add(prefer.getPreValue());
-                    }
-                }
                 for (String shobby :hobby) {
                     if(StringUtils.equals(shobby,prefer.getId())){
                         sbHobby.add(prefer.getPreValue());
                     }
                 }
             }
-            tbServiceOrg.setOrgSpeciality(StringUtils.join(sbSpeciality,","));
             tbServiceOrg.setOrgHobby(StringUtils.join(sbHobby,","));
         }
 
@@ -229,7 +289,6 @@ public class OrgServiceImpl implements OrgService {
             logger.info("保存/修改服务机构基本信息。失败原因：时间转换异常{}", e.getMessage(), e);
             throw new JnSpringCloudException(OrgExceptionEnum.ORG_TIME_PARSE_ERROR);
         }
-
         if(StringUtils.isEmpty(orgBasicData.getOrgId())){
             //新增，设置状态为待审核
             tbServiceOrg.setOrgStatus("0");
@@ -249,11 +308,6 @@ public class OrgServiceImpl implements OrgService {
         TbServiceOrgTraitCriteria traitCriteria = new TbServiceOrgTraitCriteria();
         TbServiceOrgTraitCriteria.Criteria criteria = traitCriteria.createCriteria().andOrgIdEqualTo(tbServiceOrg.getOrgId());
         //trait_type : 特性类型(1业务擅长2行业领域3发展阶段4企业性质)
-        if(null != orgBasicData.getOrgSpeciality() && orgBasicData.getOrgSpeciality().length>0){
-            criteria.andTraitTypeEqualTo("1");
-            tbServiceOrgTraitMapper.deleteByExample(traitCriteria);
-            traits.addAll(setTraitBean(orgBasicData.getOrgSpeciality(),"1",tbServiceOrg.getOrgId(),account));
-        }
         if(null != orgBasicData.getIndustrySector() && orgBasicData.getIndustrySector().length>0){
             criteria.andTraitTypeEqualTo("2");
             tbServiceOrgTraitMapper.deleteByExample(traitCriteria);
@@ -263,11 +317,6 @@ public class OrgServiceImpl implements OrgService {
             criteria.andTraitTypeEqualTo("3");
             tbServiceOrgTraitMapper.deleteByExample(traitCriteria);
             traits.addAll(setTraitBean(orgBasicData.getDevelopmentStage(),"3",tbServiceOrg.getOrgId(),account));
-        }
-        if(null != orgBasicData.getCompanyNature() && orgBasicData.getCompanyNature().length>0){
-            criteria.andTraitTypeEqualTo("4");
-            tbServiceOrgTraitMapper.deleteByExample(traitCriteria);
-            traits.addAll(setTraitBean(orgBasicData.getCompanyNature(),"4",tbServiceOrg.getOrgId(),account));
         }
         if(traits.size()>0){
             Map<String,Object> map = new HashMap<>(4);

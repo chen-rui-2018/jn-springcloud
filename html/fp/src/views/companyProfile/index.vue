@@ -175,10 +175,17 @@ export default {
   mounted() {
     this.getParkList();
     this.selectIndustryList();
-    this.getCompanyList();
+    // this.getCompanyList();
     if (this.$route.query.id) {
       this.induType = this.$route.query.id;
       this.filterFlag1 = this.$route.query.id;
+    //   this.getParkList();
+    // this.selectIndustryList();
+    this.getCompanyList();
+    } else {
+    //   this.getParkList();
+    // this.selectIndustryList();
+    this.getCompanyList();
     }
   },
   methods: {

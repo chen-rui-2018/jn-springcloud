@@ -50,4 +50,11 @@ public interface CareDao {
      */
     CommentModel findCareComment(@Param("id") String id);
 
+    /**
+     * 获取用户关注的企业信息列表
+     * @param account
+     * @return
+     */
+    List<CareUserShow> findCompanyCareList(@Param("account") String account);
+
 }

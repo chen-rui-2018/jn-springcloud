@@ -383,6 +383,15 @@ public class CompanyServiceImpl implements CompanyService {
            }
         }
         vo.setCompanyInfoShow(show);
+        //产看详情时 浏览数加1
+        String browseNumber = vo.getCompanyInfoShow().getBrowseNumber();
+        if(StringUtils.isBlank(browseNumber)){
+            browseNumber="0";
+        }
+        TbServiceCompany tbServiceCompany = new TbServiceCompany();
+        tbServiceCompany.setId(companyId);
+        tbServiceCompany.setBrowseNumber(String.valueOf((Integer.valueOf(browseNumber)+1)));
+        tbServiceCompanyMapper.updateByPrimaryKeySelective(tbServiceCompany);
         return vo;
     }
 

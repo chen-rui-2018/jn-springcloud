@@ -6,8 +6,8 @@
     <select id="findCareList" resultType="com.jn.park.gamtopic.model.CareUserShow">
       select
        t1.receive_account as "account",
-       ifnull((select count(1) from tb_person_care tc where tc.receive_account = t1.receive_account and and tc.record_status = 1),0) as "fansNum",
-       ifnull((SELECT SUM(1) FROM tb_person_care tpc WHERE tpc.care_account= t1. receive_account and tpc.receive_account = #{account}  and tpc.record_status = 1 ),0) AS "careStatus"
+       ifnull((select count(1) from tb_person_care tc where tc.receive_account = t1.receive_account and tc.record_status = 1),0) as "fansNum",
+       ifnull((select count(1) from tb_person_care tpc where tpc.care_account= t1. receive_account and tpc.receive_account = #{account}  and tpc.record_status = 1 ),0) AS "careStatus"
         from tb_person_care t1
               where  t1.care_account = #{account} and t1.record_status = 1 and (t1.receive_type = '0' or t1.receive_type = '1')
     </select>

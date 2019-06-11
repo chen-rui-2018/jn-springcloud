@@ -48,11 +48,14 @@
         <el-table :data="honorData" style="width: 98%">
           <el-table-column align="center" prop="certificateName" label="证书名称" >
           </el-table-column>
-          <el-table-column align="center" prop="certificateType" label="证书类型" >
+          <el-table-column align="center" prop="certificateTypeName" label="证书类型" >
           </el-table-column>
           <el-table-column prop="getTime" align="center" label="颁发时间">
           </el-table-column>
           <el-table-column align="center" prop="certificatePhoto" label="附件">
+            <template slot-scope="scope">
+                      <img :src="scope.row.certificatePhoto" alt="" style="width:40px;height:40px;">
+                    </template>
           </el-table-column>
         </el-table>
       </div>

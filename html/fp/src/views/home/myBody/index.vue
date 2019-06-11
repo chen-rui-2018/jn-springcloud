@@ -70,11 +70,11 @@
             <div class="businessArea ">
               <span>营业执照</span>
                <div class="businessLicense" v-for="(item, index) in honorLicense" :key="index">
-               <span class="themeColor smallSize mr">{{item.awardTime}}&nbsp;获得</span>
-               <div class="itemInfo">
+               <!-- <span class="themeColor smallSize mr">{{item.awardTime}}&nbsp;获得</span> -->
+               <!-- <div class="itemInfo">
                  <div>{{item.certName}}</div>
                  <div>颁发部门：{{item.awardDepart}}</div>
-                </div>
+                </div> -->
                  <div class="businessLicenseImg"><img :src="item.fileUrl" alt=""></div>
                 </div>
             </div>
@@ -97,13 +97,13 @@
             label="员工总人数（人）:"
             class="inline "
           >
-            <span>{{staffCount}}</span>
+            <span>{{staffCount?staffCount:'暂无信息'}} </span>
           </el-form-item>
           <el-form-item
             label="执业人员人数（人）:"
             class="inline bodyName"
           >
-            <span>{{professionNum}}</span>
+            <span>{{professionNum}} <i v-show="professionNum">占比({{((professionNum/staffCount)*100).toFixed(2)}}%)</i> <i v-show="!professionNum">暂无信息</i> </span>
           </el-form-item>
         </div>
         <div style="display:flex">
@@ -112,14 +112,14 @@
             class="inline"
           >
            <label slot="label">本&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;科:</label>
-            <span>{{bachelorNum}}</span>
+            <span>{{bachelorNum}} <i v-show="bachelorNum">占比({{((bachelorNum/staffCount)*100).toFixed(2)}}%)</i> <i v-show="!bachelorNum">暂无信息</i></span>
           </el-form-item>
           <el-form-item
             label="硕士（人）:"
             class="inline bodyName"
           >
            <label slot="label">硕&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;士:</label>
-            <span>{{masterNum}}</span>
+            <span>{{masterNum}} <i v-show="masterNum">占比({{((masterNum/staffCount)*100).toFixed(2)}}%)</i> <i v-show="!masterNum">暂无信息</i></span>
           </el-form-item>
         </div>
         <div style="display:flex">
@@ -128,7 +128,7 @@
             class="inline"
           >
            <label slot="label">博&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;士:</label>
-            <span>{{doctorNum}}</span>
+            <span>{{doctorNum}} <i v-show="doctorNum">占比({{((doctorNum/staffCount)*100).toFixed(2)}}%)</i> <i v-show="!doctorNum">暂无信息</i></span>
           </el-form-item>
         </div>
         <div style="display:flex">

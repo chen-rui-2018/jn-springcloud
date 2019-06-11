@@ -140,9 +140,10 @@ export default {
   },
   created() {
     this.getParkList();
-     this.getUserExtension()
+
   },
   mounted() {
+    this.getUserExtension()
     let initArr = JSON.parse(sessionStorage.menuItems);
     initArr.forEach(v => {
       if (v.label === "我的企业") {

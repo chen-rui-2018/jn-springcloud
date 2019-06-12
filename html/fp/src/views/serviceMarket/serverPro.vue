@@ -51,11 +51,11 @@
               <div class="left1 fl" id="left1">
                 <p>服务机构：{{i.orgName}}
                 </p>
-                <p>服务专员：{{i.advisorName}}</p>
-                <p>参考价格
-                  <span class="mainColor">{{i.referPrice}}</span>元</p>
+                <p>服务顾问：{{i.advisorName}}</p>
+                <p>参考价格：
+                  <span class="mainColor">{{i.referPrice}}</span>&nbsp;元</p>
                 <p>累计
-                  <span class="mainColor">{{i.transactionsNumber}}</span>笔交易</p>
+                  <span class="mainColor">{{i.transactionsNumber}}</span>&nbsp;笔交易</p>
               </div>
               <div class="right1 fl">
                 <p>
@@ -90,7 +90,7 @@
         </div>
         <div v-else class="loginTip">
           你还未
-          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          <span class="mainColor pointer" @click="goLogin">登录</span>
           /
           <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
           企业账号
@@ -138,6 +138,10 @@ export default {
     }
   },
   methods: {
+      goLogin() {
+      window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
+      this.$router.push({ path: "/login" });
+    },
      //判断是否登录
     isLogin() {
       if (!sessionStorage.userInfo) {

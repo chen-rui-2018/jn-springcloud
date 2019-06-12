@@ -5,6 +5,7 @@ import com.jn.common.model.Result;
 import com.jn.company.model.CreditUpdateParam;
 import com.jn.company.model.ServiceCompany;
 import com.jn.company.model.ServiceCompanyParam;
+import com.jn.company.model.UpdateCompanyInfoParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -48,6 +49,12 @@ public interface CompanyClient {
     @RequestMapping(value = "/api/company/updateCreditPoints", method = RequestMethod.POST)
     Result<Boolean> updateCreditPoints(@RequestBody CreditUpdateParam creditUpdateParam);
 
-
+    /**
+     * 企业缴费成功修改企业信息
+     * @param updateCompanyInfoParam
+     * @return
+     */
+    @RequestMapping(value = "/api/company/updateCompanyInfoAfterPay", method = RequestMethod.POST)
+    Result<Boolean> updateCompanyInfoAfterPay(@Validated @RequestBody UpdateCompanyInfoParam updateCompanyInfoParam);
 
 }

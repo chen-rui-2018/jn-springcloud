@@ -1,5 +1,7 @@
 package com.jn.enterprise.servicemarket.org.vo;
 
+import com.jn.enterprise.servicemarket.org.entity.TbServiceOrgTrait;
+import com.jn.enterprise.servicemarket.org.model.IndustryTypeShow;
 import com.jn.enterprise.servicemarket.org.model.OrgLicense;
 import com.jn.enterprise.servicemarket.org.model.OrgTeam;
 import io.swagger.annotations.ApiModel;
@@ -41,17 +43,17 @@ public class OrgDetailVo implements Serializable {
     @ApiModelProperty(value = "业务擅长")
     private String  orgSpeciality;
     @ApiModelProperty(value = "客户偏好-行业领域")
-    private List<String> industrySector;
+    private List<IndustryTypeShow> industrySector;
     @ApiModelProperty(value = "客户偏好-发展阶段")
-    private List<String> developmentStage;
+    private List<IndustryTypeShow> developmentStage;
     @ApiModelProperty(value = "浏览量")
     private String orgShow;
     @ApiModelProperty(value = "交易次数")
     private String transactionCount;
     @ApiModelProperty(value = "机构服务评分")
     private String orgServiceScore;
-    @ApiModelProperty(value = "机构服务资质标签")
-    private List<OrgLicense> orgLicenses;
+    @ApiModelProperty(value = "营业执照url")
+    private String orgLicensesUrl;
     @ApiModelProperty("机构状态(0未审核[审核中]1审核通过2审核不通过3已删除) ")
     private String orgStatus;
     @ApiModelProperty(value = "经营状态[0冻结 1正常户]")
@@ -193,19 +195,19 @@ public class OrgDetailVo implements Serializable {
         this.orgSpeciality = orgSpeciality;
     }
 
-    public List<String> getIndustrySector() {
+    public List<IndustryTypeShow> getIndustrySector() {
         return industrySector;
     }
 
-    public void setIndustrySector(List<String> industrySector) {
+    public void setIndustrySector(List<IndustryTypeShow> industrySector) {
         this.industrySector = industrySector;
     }
 
-    public List<String> getDevelopmentStage() {
+    public List<IndustryTypeShow> getDevelopmentStage() {
         return developmentStage;
     }
 
-    public void setDevelopmentStage(List<String> developmentStage) {
+    public void setDevelopmentStage(List<IndustryTypeShow> developmentStage) {
         this.developmentStage = developmentStage;
     }
 
@@ -233,12 +235,13 @@ public class OrgDetailVo implements Serializable {
         this.orgServiceScore = orgServiceScore;
     }
 
-    public List<OrgLicense> getOrgLicenses() {
-        return orgLicenses;
+
+    public String getOrgLicensesUrl() {
+        return orgLicensesUrl;
     }
 
-    public void setOrgLicenses(List<OrgLicense> orgLicenses) {
-        this.orgLicenses = orgLicenses;
+    public void setOrgLicensesUrl(String orgLicensesUrl) {
+        this.orgLicensesUrl = orgLicensesUrl;
     }
 
     public String getOrgStatus() {
@@ -468,7 +471,7 @@ public class OrgDetailVo implements Serializable {
                 ", orgShow='" + orgShow + '\'' +
                 ", transactionCount='" + transactionCount + '\'' +
                 ", orgServiceScore='" + orgServiceScore + '\'' +
-                ", orgLicenses=" + orgLicenses +
+                ", orgLicensesUrl='" + orgLicensesUrl + '\'' +
                 ", orgStatus='" + orgStatus + '\'' +
                 ", operateStatus='" + operateStatus + '\'' +
                 ", orgPrincipal='" + orgPrincipal + '\'' +

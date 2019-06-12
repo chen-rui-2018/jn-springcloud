@@ -137,6 +137,7 @@
 <script>
 import { deepClone, isMobile } from '@/util'
 import treeToArray from './eval'
+import { getToken, removeToken } from '@/util/auth'
 export default {
   name: 'TreeTable',
   props: {
@@ -179,7 +180,7 @@ export default {
       leftCol: null,
       isMobile: isMobile(),
       headers: {
-        token: sessionStorage.token
+        token: getToken()
       },
       getRowKeys(row) {
         return row.id;

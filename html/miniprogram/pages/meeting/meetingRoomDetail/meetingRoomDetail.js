@@ -17,11 +17,8 @@ Page({
   },
   onLoad: function (options) {
     this.setData({
-      sendData:{
-        meetingRoomId:options.id
-      }
+      "sendData.meetingRoomId":options.id
     })
-    
    },
   onReady: function () { },
   onShow: function () {

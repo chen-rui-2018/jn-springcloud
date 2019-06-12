@@ -2,7 +2,7 @@
   <div class="ordinaryProduct"  v-loading="loading">
     <div class="ordinary_title">
       <div>常规服务产品</div>
-      <div @click="goputaway()" >常规产品上架</div>
+      <div @click="goputaway()" v-show="isAdd">常规产品上架</div>
     </div>
     <div class="ordinary_main">
       <div class="search">
@@ -31,7 +31,7 @@
           <el-table-column label="操作" align="center" width="140">
             <template slot-scope="scope">
               <div class="ordinarybth" >
-                <span v-if="scope.row.status!='1'&&scope.row.status!='0'&&scope.row.status!='2'&&businessType!='technology_finance'" @click="goEdit(scope.row.productId)">编辑</span>
+                <!-- <span v-if="scope.row.status!='1'&&scope.row.status!='0'&&scope.row.status!='2'&&businessType!='technology_finance'" @click="goEdit(scope.row.productId)">编辑</span> -->
                 <span @click="goDetail(scope.row)">详情</span>
                 <span v-if="scope.row.status!='2'&&scope.row.status!='0'&&scope.row.status==='1'"  @click="handleshelf('-1',scope.row.productId)">下架</span>
                 <span v-if="scope.row.status!='2'&&scope.row.status!='0'&&scope.row.status!='1'" @click="handleshelf('1',scope.row.productId)">上架</span>
@@ -71,7 +71,7 @@ export default {
       },
       orgProductList:[],
       businessType:"",
-        isAdd:true
+        isAdd:false
     }
   },
   filters: {
@@ -94,20 +94,18 @@ export default {
   },
   mounted () {
     this.getOrgId()
-    // this.getOrgProductList()
-    // let menu=JSON.parse(sessionStorage.menuItems)
-    // let _this=this
-    // menu.forEach(v=>{
-    //   if(v.label==='产品管理'){
-    //     v.children[0].resourcesList.forEach(i=>{
-    //         console.log(i)
-
-    //       if(i.resourcesName==="科技金融上架常规服务产品"){
-    //         _this.isAdd=false
-    //       }
-    //     })
-    //   }
-    // })
+    this.getOrgProductList()
+    let menu=JSON.parse(sessionStorage.menuItems)
+    let _this=this
+    menu.forEach(v=>{
+      if(v.label==='产品管理'){
+        v.children[0].resourcesList.forEach(i=>{
+          if(i.resourcesName==="产品上架下架操作"){
+            _this.isAdd=true
+          }
+        })
+      }
+    })
   },
   methods: {
     // 获取当前登录id

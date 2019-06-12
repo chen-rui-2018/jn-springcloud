@@ -40,6 +40,7 @@
 </template>
 
 <script>
+import { setToken } from '@/util/auth'
 export default {
   data() {
     return {
@@ -134,7 +135,7 @@ export default {
                   callback: function(res) {
                     _this.loading = false;
                     if (res.code == "0000") {
-                      sessionStorage.token = res.data;
+                      setToken(res.data)
                       _this.$router.push({
                         path: "/"
                         // query: { account: _this.phone }

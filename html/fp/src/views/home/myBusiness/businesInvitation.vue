@@ -59,7 +59,7 @@
             <span>{{unifyCode}}</span>
           </el-form-item>
           <el-form-item label="企业性质:" class="borr borb">
-            <span>{{comPropertyNames}}</span>
+            <span>{{comPropertyName}}</span>
           </el-form-item>
         </div>
         <!-- <div style="display:flex">
@@ -153,7 +153,7 @@ export default {
       // comWeb: "", //企业官网地址
       avatar: "", //企业logo
       businessLicense: "", //营业执照
-      comPropertyNames: "", //企业性质名称，
+      comPropertyName: "", //企业性质名称，
       supplementForm: {
         // account: sessionStorage.account,
         birthday: "",
@@ -263,8 +263,9 @@ export default {
             _this.unifyCode = res.data.unifyCode;
             _this.comAddress = res.data.comAddress;
             _this.addrPark = res.data.addrPark;
-            _this.conPhone = res.data.conPhone;
+            _this.conPhone = res.data.ownerPhone;
             _this.regCapital = res.data.regCapital;
+            _this.comPropertyName = res.data.comPropertyName;
             _this.comScale = res.data.comScale;
             _this.comType = res.data.comType;
             // _this.parkBuildName = res.data.parkBuildName;

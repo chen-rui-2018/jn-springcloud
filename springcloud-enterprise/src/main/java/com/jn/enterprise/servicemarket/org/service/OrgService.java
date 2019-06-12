@@ -19,9 +19,10 @@ public interface OrgService {
     /**
      * 查询服务机构列表
      * @param orgParment
+     * @param allowTechnology 是否允许展示科技金融业务领域数据  true:允许展示  false:不允许展示
      * @return
      */
-    PaginationData<List<ServiceOrg>> selectServiceOrgList(OrgParameter orgParment);
+    PaginationData<List<ServiceOrg>> selectServiceOrgList(OrgParameter orgParment,boolean allowTechnology);
 
     /**
      * 根据机构ID查询机构详情

@@ -150,6 +150,7 @@
   </el-container>
 </template>
 <script>
+import { getToken } from '@/util/auth'
 import bus from '@/util/bus'
 export default {
   props:['userData'],
@@ -170,7 +171,7 @@ export default {
       value5: [],
       value11: [],
       headers: {
-        token: sessionStorage.token
+        token: getToken()
       }
     };
   },

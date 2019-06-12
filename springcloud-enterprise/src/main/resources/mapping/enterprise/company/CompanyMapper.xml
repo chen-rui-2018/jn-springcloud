@@ -294,6 +294,7 @@
           ,t1.products as "products"
           ,t1.credit_points as "creditPoints"
           ,t1.com_scale as "comScale"
+          ,t1.main_products as "mainProducts"
           ,date_format(t1.credit_update_time,"%Y-%m-%d %H:%i:%s") as "creditUpdateTime"
         from tb_service_company t1 left join tb_service_prefer t2 on t1.com_property = t2.id
          where t1.id=#{companyId};

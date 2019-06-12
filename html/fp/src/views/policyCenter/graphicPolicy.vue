@@ -80,7 +80,7 @@
                         </div>
                         <div class="agent2 color2" v-if="zankaiFlag">
                             <div class="agent2Con">
-                                {{getDetal.policyDiagramUrl}}
+                                <img :src="getDetal.policyDiagramUrl" alt="">
                             </div>
                             <!-- <div class="agent2Con" v-else>
                             暂无内容！

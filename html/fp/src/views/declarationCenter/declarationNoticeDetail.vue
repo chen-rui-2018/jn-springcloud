@@ -122,7 +122,7 @@ export default {
         declareEnterprise:"",//申报企业
         declareItem:""//申报项目名称
       },
-      headers:{token: sessionStorage.token},
+      headers:{token: getToken()},
       fileList:[],
       rules:{
         appointmentItemName:[
@@ -202,7 +202,7 @@ export default {
     goappointment(){
       this.appointmentVisible=true
       // this.headers=sessionStorage.getItem("token")
-      if(sessionStorage.getItem("token")){
+      if(getToken()){
         let _this = this;
         this.api.get({
           url: "getUserExtension",

@@ -55,6 +55,7 @@
 </template>
 
 <script>
+  import { getToken, removeToken } from '@/util/auth'
   import { downloadService, download} from '@/util/downloadService'
   export default {
     name: "sciencePartDataReportEntrance",
@@ -115,7 +116,7 @@
           url: `springcloud-enterprise/data/garden/getScienceHeaderExcel?modelid=${this.modelId}&taskbatch=${this.taskInfo.taskBatch}`,
           responseType: 'blob',
           headers: {
-            token: sessionStorage.token
+            token: getToken()
           }
         }).then(response => {
           download(response, '下载模板')
@@ -132,7 +133,7 @@
           url: `springcloud-enterprise/data/garden/getScienceExcel?modelid=${this.modelId}&taskbatch=${this.taskInfo.taskBatch}`,
           responseType: 'blob',
           headers: {
-            token: sessionStorage.token
+            token: getToken()
           }
         }).then(response => {
           download(response, '导出模板')

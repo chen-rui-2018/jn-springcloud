@@ -97,6 +97,7 @@
 import $ from 'jquery'
 import bus from "@/util/bus";
 import UserHome from '@/components/userHome'
+import { getToken, removeToken } from '@/util/auth'
 export default {
   components:{UserHome},
   data() {
@@ -199,7 +200,7 @@ export default {
     },
     handleSearch() {},
     loginOut() {
-      window.sessionStorage.removeItem("token");
+      removeToken();
       this.$router.push({ path: "/" });
     },
     dianji(i) {

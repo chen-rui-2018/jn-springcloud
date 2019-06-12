@@ -1,5 +1,5 @@
 <template>
-  <div class="advisoryInformation">
+  <div class="advisoryInformation" v-loading="loading">
     <div class="advisory_title font16">
       <div>专员资料</div>
     </div>
@@ -238,6 +238,7 @@ export default {
       }
     };
     return {
+      loading:false,
       baseUrl: this.api.host,
       orgId: undefined,
       isConceal: undefined,
@@ -364,9 +365,15 @@ export default {
   methods: {
     //发送申请
     acceptInvitation() {
+       if (!this.basicForm.phone) {
+        this.$message.error("请先填写基本信息");
+        return false;
+      }
+      this.loading=true
       this.api.post({
         url: "sendApproval",
         callback: res => {
+          this.loading=false
           if (res.code === "0000") {
             this.$message({
               message: "操作成功,请等待后台审核",
@@ -499,8 +506,18 @@ export default {
     // 取消基本信息的更改
     cancelBasic() {
       this.isShow = true;
+      this.basicForm.personalProfile=''
+      this.basicForm.practiceQualification=''
+      this.basicForm.workingYears=''
+      this.basicForm.graduatedSchool=''
+      this.basicForm.goodAtBusiness=''
+      this.basicForm.education=''
+      this.basicForm.contactEmail=''
+      this.basicForm.phone=''
+      this.init()
       this.showBtn = true;
       this.basicText = "编 辑";
+
     },
     // 取消服务经历的更改
     cancelExperienceList() {

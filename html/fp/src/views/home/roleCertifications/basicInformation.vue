@@ -46,12 +46,12 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="机构简介:" prop="orgSynopsis" class="myPersonalProfile">
-                <el-input v-model="OrgBasicForm.orgSynopsis" type="textarea" maxlength="500" show-word-limit autosize
-                  placeholder="请填写机构简介,限500字" clearable></el-input>
+                <el-input v-model="OrgBasicForm.orgSynopsis" type="textarea" maxlength="1000" show-word-limit autosize
+                  placeholder="请填写机构简介,限1000字" clearable></el-input>
               </el-form-item>
               <el-form-item label="核心服务:" prop="orgBusiness" class="myPersonalProfile">
-                <el-input v-model="OrgBasicForm.orgBusiness" type="textarea" maxlength="500" show-word-limit autosize
-                  placeholder="请填写核心服务,限500字" clearable></el-input>
+                <el-input v-model="OrgBasicForm.orgBusiness" type="textarea" maxlength="1000" show-word-limit autosize
+                  placeholder="请填写核心服务,限1000字" clearable></el-input>
               </el-form-item>
               <el-form-item label="业务擅长:" prop="orgSpeciality" class="investorMainAreaList">
                 <el-input v-model="OrgBasicForm.orgSpeciality" placeholder="请输入业务擅长" clearable></el-input>
@@ -121,7 +121,7 @@
                 </el-table-column>
               </el-table>
               <el-form-item label="其它资质/荣誉:" class="otherInfo">
-                <span class="curtomer">附件请上传相关资质荣誉证书照片，单个文件不超过1M</span> <span class="otherOperation mainColor pr smailSize cancel"
+                <span class="curtomer">附件请上传相关资质荣誉证书照片，单个文件不超过1M</span> <span class="otherOperation mainColor cur smailSize cancel"
                   @click="cancelOtherList" v-if="isShowOtherList">取&nbsp;消</span>
                 <span class="otherOperation mainColor cur smailSize" @click="addOtherList('otherForm')">
                   <i class="el-icon-plus"></i>
@@ -137,7 +137,7 @@
                     </template>
                   </el-table-column>
                   <el-table-column prop="awardTime" align="center" label="颁发时间"></el-table-column>
-                  <el-table-column prop="awardDepart" align="center" label="主管部门"></el-table-column>
+                  <el-table-column prop="awardDepart" align="center" label="颁发部门"></el-table-column>
                   <el-table-column align="center" label="附件">
                     <template slot-scope="scope">
                       <span v-if="scope.row.fileUrl" class="themeColor smallSize cur" @click="lookPoster(scope.row)">点击查看</span>
@@ -158,11 +158,11 @@
                   <el-form-item label="资质荣誉名称:" prop="certName">
                     <el-input v-model="otherForm.certName" placeholder="请输入资质荣誉名称" clearable></el-input>
                   </el-form-item>
-                  <el-form-item label="颁发时间:">
+                  <el-form-item label="颁发时间:" prop="awardTime" >
                     <el-date-picker v-model="otherForm.awardTime" type="date" value-format="yyyy-MM-dd" placeholder="请选择颁发时间"></el-date-picker>
                   </el-form-item>
-                  <el-form-item label="主管部门:">
-                    <el-input v-model="otherForm.awardDepart" placeholder="请输入主管部门" maxlength='20' clearable></el-input>
+                  <el-form-item label="颁发部门:" prop="awardDepart">
+                    <el-input v-model="otherForm.awardDepart" placeholder="请输入颁发部门" maxlength='20' clearable></el-input>
                   </el-form-item>
                   <el-form-item label="附件:" class="otherAccessory">
                     <label slot="label">附&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;件:</label>
@@ -522,6 +522,12 @@ export default {
       otherFormRules: {
         certName: [
           { required: true, message: "请填写资质荣誉名称", trigger: "blur" }
+        ],
+        awardTime: [
+          { required: true, message: "请选择颁发时间", trigger: "change" }
+        ],
+        awardDepart: [
+          { required: true, message: "请填写颁发部门", trigger: "blur" }
         ]
       },
       kernelRules: {
@@ -683,13 +689,13 @@ export default {
           }
         });
       } else if (this.investorCertificationTitle == "机构资质") {
-        this.$refs["licensesForm"].validate(valid => {
-          if (valid) {
-            if (!this.licenseList[0].fileUrl) {
-              this.$message.error("请上传企业营业执照照片");
-              return;
-            }
-            this.status = 2;
+
+
+        if (!this.licenseList[0].fileUrl) {
+          this.$message.error("请上传企业营业执照照片");
+          return;
+        }
+        this.status = 2;
             this.investorCertificationTitle = "团队信息";
             // this.OrgBasicForm.businessType = this.licensesForm.businessType;
             // this.licenseList = this.licenseList.map(item =>
@@ -712,10 +718,7 @@ export default {
               this.otherList
             );
             console.log(this.OrgBasicForm);
-          } else {
-            return false;
-          }
-        });
+
       } else if (this.investorCertificationTitle == "团队信息") {
         this.$refs["teamForm"].validate(valid => {
           if (valid) {
@@ -887,6 +890,7 @@ export default {
       this.otherForm.id = row.id;
       this.otherForm.fileUrl = row.fileUrl;
       this.isShowOtherList = true;
+      this.showBtn=true
       this.otherText = "保存并更新";
     },
     // 删除其它资质/荣誉
@@ -911,6 +915,15 @@ export default {
     cancelOtherList() {
       this.isShowOtherList = false;
       this.otherText = "添加其它资质/荣誉";
+       this.showBtn = false
+        this.otherForm.fileUrl = "";
+        this.otherForm.certName = "";
+        this.otherForm.awardDepart = "";
+        this.otherForm.id = 0;
+        this.otherForm.awardTime = "";
+        // this.isShowOtherList = true;
+        // this.showBtn = true;
+        // this.otherText = "保存并更新";
     },
     // // 添加其它荣誉资质表单
     addOtherList(otherForm) {
@@ -921,10 +934,15 @@ export default {
         this.otherForm.id = 0;
         this.otherForm.awardTime = "";
         this.isShowOtherList = true;
+        this.showBtn = true;
         this.otherText = "保存并更新";
       } else {
-        this.$refs[otherForm].validate(valid => {
+        this.$refs['otherForm'].validate(valid => {
           if (valid) {
+            if(!this.otherForm.fileUrl){
+               this.$message.error("请上传附件");
+          return;
+            }
             if (this.otherForm.id != 0) {
               let otherFormObj = this.otherForm.id;
               this.otherList[otherFormObj - 1] = {
@@ -945,6 +963,7 @@ export default {
             }
             this.isShowOtherList = false;
             this.otherText = "添加其它资质/荣誉";
+            this.showBtn = false
           } else {
             return false;
           }

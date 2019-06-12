@@ -69,24 +69,25 @@
             <div class="businessArea martop"> <span>业务领域</span> <span>{{businessType}}</span></div>
             <div class="businessArea ">
               <span>营业执照</span>
-               <div class="businessLicense" v-for="(item, index) in honorLicense" :key="index">
+               <!-- <div class="businessLicense" v-for="(item, index) in honorLicense" :key="index"> -->
                <!-- <span class="themeColor smallSize mr">{{item.awardTime}}&nbsp;获得</span> -->
                <!-- <div class="itemInfo">
                  <div>{{item.certName}}</div>
                  <div>颁发部门：{{item.awardDepart}}</div>
                 </div> -->
-                 <div class="businessLicenseImg"><img :src="item.fileUrl" alt=""></div>
-                </div>
+                 <div class="businessLicenseImg" v-show="orgLicensesUrl" @click="lookPhoto(orgLicensesUrl)"><img  :src="orgLicensesUrl" alt="营业执照"></div>
+                 <div class="businessLicenseImg" v-show="!orgLicensesUrl" >暂无营业执照</div>
+                <!-- </div> -->
             </div>
              <div class="businessArea ">
-              <span>企业资质/荣誉</span>
+              <div>企业资质/荣誉</div>
                 <div class="enterpriseQualification" v-for="(item, index) in honorLicense" :key="index">
                <span class="themeColor smallSize mr">{{item.awardTime}}&nbsp;获得</span>
                <div class="itemInfo">
                  <div>{{item.certName}}</div>
                  <div>颁发部门：{{item.awardDepart}}</div>
                 </div>
-                 <div class="businessLicenseImg"><img :src="item.fileUrl" alt=""></div>
+                 <div class="businessLicenseImg" @click="lookPhoto(item.fileUrl)"><img :src="item.fileUrl" alt=""></div>
                 </div>
             </div>
  <div class="enterprise">团队信息</div>
@@ -189,6 +190,12 @@
         </div>
       </el-form>
      </div>
+      <el-dialog :visible.sync="dialogVisible" :append-to-body="true"  width="50%" >
+      <img :src="photoUrl" alt="图片" style="width:100%">
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">返 回</el-button>
+      </span>
+    </el-dialog>
     </div>
 
   <!-- </div> -->
@@ -198,11 +205,14 @@
 export default {
   data() {
     return {
+      photoUrl:'',
+      dialogVisible:false,
       isEditBody:false,
       isCounselor:false,
       isPublicity:false,
       // businessArea:'',
       honorLicense:[],
+      orgLicensesUrl:'',//营业执照
            userAccount:'',
            orgName:'',//机构名称
            orgCode:'',//统一社会信用代码
@@ -250,6 +260,11 @@ export default {
         this.init()
   },
   methods: {
+    // 查看图片
+    lookPhoto(url){
+        this.dialogVisible=true
+        this.photoUrl=url
+    },
       init(){
        this.userAccount=  sessionStorage.getItem("account");
           let _this = this;
@@ -283,6 +298,7 @@ export default {
             _this.orgPhone = res.data.orgDetailVo.orgPhone
             _this.orgAddress = res.data.orgDetailVo.orgAddressDetail
             _this.orgWeb = res.data.orgDetailVo.orgWeb
+            _this.orgLicensesUrl = res.data.orgDetailVo.orgLicensesUrl
 
 
           }
@@ -310,12 +326,17 @@ export default {
 
 <style lang="scss" >
 .myBody {
+  // .el-dialog{
+  //   height: 680px;
+  //   overflow: auto;
+  // }
   .mr{
     margin-right:36px;
   }
   .businessLicenseImg{
-    display: inline-block;margin-left:65px;
+    display: inline-block;margin-left:90px;
      vertical-align: middle;
+     cursor: pointer;
      img{
        width: 85px;
        height: 85px;
@@ -323,7 +344,7 @@ export default {
   }
   .itemInfo{
     display: inline-block;
-    width: 179px;
+    width: 240px;
         vertical-align: middle;
         >div:nth-child(2){
           margin-top:5px;
@@ -334,7 +355,8 @@ export default {
   .enterpriseQualification{
     display: inline-block;
     vertical-align: middle;
-    margin-left: 80px;
+    margin:10px 0px;
+    margin-left: 180px;
   }
   .businessLicense{
     display: inline-block;

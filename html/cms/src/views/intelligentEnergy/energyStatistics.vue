@@ -25,7 +25,7 @@
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="init()">查询</el-button>
       <!-- </div> -->
     </el-form>
-    <h3>日均能耗</h3>
+    <!-- <h3>日均能耗</h3> -->
     <div id="myCharts" style="width:100%;height:400px;" />
     <!-- 表格 -->
     <el-table ref="multipleTable" :data="energyList" border fit highlight-current-row style="width: 98%;">
@@ -78,9 +78,11 @@ export default {
   data() {
     return {
       typeOptions: [
+        { value: 0, label: '企业用电' },
         { value: 1, label: '公共照明' },
         { value: 2, label: '空调用电' },
         { value: 3, label: '楼层用电' }
+
       ],
       energyList: [],
       listLoading: false,
@@ -175,7 +177,7 @@ export default {
             data: xData
           },
           yAxis: {
-            name: '每日用电趋势',
+            name: '每日用电趋势(千瓦时)',
             type: 'value'
           },
           series: [

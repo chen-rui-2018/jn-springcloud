@@ -203,7 +203,6 @@ export default {
         // dataFlag:true,
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
             _this.recruitmentTable = res.data.rows;
             _this.total = res.data.total;
           } else {

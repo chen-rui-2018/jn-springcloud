@@ -71,11 +71,7 @@ public class AssetArticleLeaseOrdersServiceImpl implements AssetArticleLeaseOrde
     public AssetArticleLeaseOrdersModel getLeaseOrders(String id) {
         AssetArticleLeaseOrdersModel assetArticleLeaseOrdersModel = assetArticleLeaseOrdersDao.getLeaseOrders(id);
         //设置条形码
-        String barCode = "";
-        Random random = new Random();
-        for (int i = 0; i < 5; i++) {
-            barCode += random.nextInt(10);
-        }
+        String barCode = assetArticleLeaseOrdersModel.getAssetNumber().substring(7);
         assetArticleLeaseOrdersModel.setBarCode(barCode);
         return assetArticleLeaseOrdersModel;
     }
@@ -104,7 +100,8 @@ public class AssetArticleLeaseOrdersServiceImpl implements AssetArticleLeaseOrde
               String lastTime = sdf.format(cal.getTime());
               leaseOrdersModel.setLastPayTime(lastTime);
               //设置条形码
-              leaseOrdersModel.setBarCode(leaseOrdersModel.getAssetNumber());
+              String barCode = leaseOrdersModel.getAssetNumber().substring(7);
+              leaseOrdersModel.setBarCode(barCode);
               AssetArticleLeaseModel articleLease = assetArticleLeaseDao.getArticleLease(leaseOrdersModel.getAssetNumber());
               //设置最低租借时间
               leaseOrdersModel.setLeaseTime(articleLease.getLeaseTime());

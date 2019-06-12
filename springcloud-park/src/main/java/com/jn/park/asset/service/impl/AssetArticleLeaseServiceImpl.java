@@ -68,11 +68,7 @@ public class AssetArticleLeaseServiceImpl implements AssetArticleLeaseService {
         assetArticleLeaseModel.setContactName(userExtension.getName());
         assetArticleLeaseModel.setContactPhone(userExtension.getPhone());
         //设置条形码
-        String barCode = "";
-        Random random = new Random();
-        for (int i = 0; i < 5; i++) {
-            barCode += random.nextInt(10);
-        }
+        String barCode = assetArticleLeaseModel.getAssetNumber().substring(7);
         assetArticleLeaseModel.setBarCode(barCode);
         return assetArticleLeaseModel;
     }

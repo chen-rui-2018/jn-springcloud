@@ -120,13 +120,11 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
             logger.warn("当前账号{}在服务机构表中不存在",loginAccount);
             throw new JnSpringCloudException(AdvisorExceptionEnum.SERVICE_ORG_NOT_EXIST);
         }
-        List<String>approvalStatus=new ArrayList<>(8);
-        approvalStatus.add(ApprovalStatusEnum.APPROVAL_NOT_PASSED.getValue());
-        approvalStatus.add(ApprovalStatusEnum.LIFTED.getValue());
         TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
         example.createCriteria().andOrgIdEqualTo(serviceOrgInfo.getOrgId())
                 .andAdvisorAccountEqualTo(registerAccount)
-                .andApprovalStatusNotIn(approvalStatus);
+                .andApprovalStatusNotIn(Arrays.asList(ApprovalStatusEnum.APPROVAL_NOT_PASSED.getValue(),ApprovalStatusEnum.LIFTED.getValue()))
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         List<TbServiceAdvisor> tbServiceAdvisorList = tbServiceAdvisorMapper.selectByExample(example);
         //不存在当前机构和顾问关联的数据（审核状态为非解除状态）
         if(tbServiceAdvisorList.isEmpty()){
@@ -222,7 +220,7 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
     private void judgeAccountIsOrgManage(String loginAccount) {
         List<String> accountList=new ArrayList<>(8);
         accountList.add(loginAccount);
-        String roleName="机构管理员";
+        String roleName=HomeRoleEnum.ORG_ADMIN.getCode();
         List<UserRoleInfo> userRoleInfoList = orgColleagueService.getUserRoleInfoList(accountList, roleName);
         if(userRoleInfoList.isEmpty() || !StringUtils.equals(roleName, userRoleInfoList.get(0).getRoleName())){
             logger.warn("当前账号:[{}]不是{},不能邀请顾问",loginAccount,roleName);
@@ -479,12 +477,21 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
             logger.warn("当前账号{}在服务机构表中不存在",loginAccount);
             throw new JnSpringCloudException(AdvisorExceptionEnum.SERVICE_ORG_NOT_EXIST);
         }
-        //判断顾问表中是否已存在当前机构和顾问关联的数据（状态为已拒绝（value="3"））
+        //判断顾问表中是否已存在当前机构和顾问关联的数据（状态为已拒绝（value="3"）），或者已删除的数据
         TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
-        example.createCriteria().andOrgIdEqualTo(serviceOrgInfo.getOrgId())
+        //根据状态查询
+        TbServiceAdvisorCriteria.Criteria criteriaStatus = example.createCriteria();
+        criteriaStatus.andOrgIdEqualTo(serviceOrgInfo.getOrgId())
                 .andAdvisorAccountEqualTo(advisorAccount)
                 .andApprovalStatusEqualTo(ApprovalStatusEnum.REFUSED.getValue())
                 .andRecordStatusEqualTo(RECORD_STATUS);
+        //根据已删除查询
+        TbServiceAdvisorCriteria.Criteria criteriaDel = example.createCriteria();
+        criteriaDel.andOrgIdEqualTo(serviceOrgInfo.getOrgId())
+                .andAdvisorAccountEqualTo(advisorAccount)
+                .andRecordStatusEqualTo(RecordStatusEnum.DELETE.getValue());
+        example.or(criteriaStatus);
+        example.or(criteriaDel);
         long existNum = tbServiceAdvisorMapper.countByExample(example);
         //没有数据
         if(existNum==0){

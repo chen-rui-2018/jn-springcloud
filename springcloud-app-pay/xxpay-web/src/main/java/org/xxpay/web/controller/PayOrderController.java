@@ -11,7 +11,6 @@ import com.jn.pay.model.PayOrderQueryRsp;
 import com.jn.pay.model.PayOrderReq;
 import com.jn.pay.model.PayOrderRsp;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -219,8 +218,6 @@ public class PayOrderController extends BaseController implements PayOrderClient
         String mchOrderNo = payOrderReq.getMchOrderNo();
         // 渠道ID
         String channelId = payOrderReq.getChannelId();
-        // 支付金额（单位分）
-        String amount = payOrderReq.getAmount().toString();
         // 币种
         String currency = PayConstant.PAY_RMB;
         // 客户端IP
@@ -264,10 +261,11 @@ public class PayOrderController extends BaseController implements PayOrderClient
             errorMessage = "request params[channelId] error.";
             return errorMessage;
         }
-        if(!NumberUtils.isNumber(amount)) {
-            errorMessage = "request params[amount] error.";
+        if(null == payOrderReq.getAmount() || payOrderReq.getAmount() <= 0){
+            errorMessage = "request params[amount] error：支付金额必须大于0";
             return errorMessage;
         }
+
         // notifyUrl如果为空,serviceId和serviceUrl为必传
         //serviceId和serviceUrl如果为空,notifyUrl为必传
         if(StringUtils.isBlank(notifyUrl) && (StringUtils.isBlank(serviceId) || StringUtils.isBlank(serviceUrl))) {
@@ -396,7 +394,7 @@ public class PayOrderController extends BaseController implements PayOrderClient
         payOrder.put("mchId", mchId);
         payOrder.put("mchOrderNo", mchOrderNo);
         payOrder.put("channelId", channelId);
-        payOrder.put("amount", Long.parseLong(amount));
+        payOrder.put("amount", payOrderReq.getAmount());
         payOrder.put("currency", currency);
         payOrder.put("clientIp", clientIp);
         payOrder.put("device", device);

@@ -5,6 +5,8 @@
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="level" jdbcType="TINYINT" property="level" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
@@ -69,7 +71,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, record_status, creator_account, created_time, modifier_account, modified_time
+    id, name, record_status, level, sort, creator_account, created_time, modifier_account, 
+    modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.sp.entity.TbSpDictDepartCriteria" resultMap="BaseResultMap">
     select
@@ -103,11 +106,13 @@
   </delete>
   <insert id="insert" parameterType="com.jn.park.sp.entity.TbSpDictDepart">
     insert into tb_sp_dict_depart (id, name, record_status, 
-      creator_account, created_time, modifier_account, 
-      modified_time)
+      level, sort, creator_account, 
+      created_time, modifier_account, modified_time
+      )
     values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
-      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP})
+      #{level,jdbcType=TINYINT}, #{sort,jdbcType=INTEGER}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.sp.entity.TbSpDictDepart">
     insert into tb_sp_dict_depart
@@ -120,6 +125,12 @@
       </if>
       <if test="recordStatus != null">
         record_status,
+      </if>
+      <if test="level != null">
+        level,
+      </if>
+      <if test="sort != null">
+        sort,
       </if>
       <if test="creatorAccount != null">
         creator_account,
@@ -143,6 +154,12 @@
       </if>
       <if test="recordStatus != null">
         #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="level != null">
+        #{level,jdbcType=TINYINT},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=INTEGER},
       </if>
       <if test="creatorAccount != null">
         #{creatorAccount,jdbcType=VARCHAR},
@@ -176,6 +193,12 @@
       <if test="record.recordStatus != null">
         record_status = #{record.recordStatus,jdbcType=TINYINT},
       </if>
+      <if test="record.level != null">
+        level = #{record.level,jdbcType=TINYINT},
+      </if>
+      <if test="record.sort != null">
+        sort = #{record.sort,jdbcType=INTEGER},
+      </if>
       <if test="record.creatorAccount != null">
         creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       </if>
@@ -198,6 +221,8 @@
     set id = #{record.id,jdbcType=VARCHAR},
       name = #{record.name,jdbcType=VARCHAR},
       record_status = #{record.recordStatus,jdbcType=TINYINT},
+      level = #{record.level,jdbcType=TINYINT},
+      sort = #{record.sort,jdbcType=INTEGER},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
@@ -214,6 +239,12 @@
       </if>
       <if test="recordStatus != null">
         record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="level != null">
+        level = #{level,jdbcType=TINYINT},
+      </if>
+      <if test="sort != null">
+        sort = #{sort,jdbcType=INTEGER},
       </if>
       <if test="creatorAccount != null">
         creator_account = #{creatorAccount,jdbcType=VARCHAR},
@@ -234,6 +265,8 @@
     update tb_sp_dict_depart
     set name = #{name,jdbcType=VARCHAR},
       record_status = #{recordStatus,jdbcType=TINYINT},
+      level = #{level,jdbcType=TINYINT},
+      sort = #{sort,jdbcType=INTEGER},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},

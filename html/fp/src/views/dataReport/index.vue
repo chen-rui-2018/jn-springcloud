@@ -293,12 +293,16 @@
         this.toFillData(item, type)
       },
       toFillData(item, type) {
+        let query = {
+          fileId: item.fillId,
+          type: type
+        }
+        if (this.$route.query.iframe) {
+          query.iframe = 1
+        }
         this.$router.push({
           path:'/servicemarket/product/productService/report',
-          query:{
-            fileId: item.fillId,
-            type: type
-          }
+          query: query
         })
       },
       formatReported(item) {

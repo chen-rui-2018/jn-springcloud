@@ -83,7 +83,7 @@
   import swiper from "swiper";
   import userInfo from './common/userInfoData'
   export default {
-     components: {
+    components: {
       userInfo
     },
     data() {
@@ -117,7 +117,35 @@
         })
       }
     },
+    // computed: {
+    //   isCenter() {
+    //     const list = ['portalIndex', 'enterpriseservice']
+    //     let flag
+    //     for (const item of this.$route.matched) {
+    //       for (const name of list) {
+    //         if (item.name === name) {
+    //           flag = true
+    //         }
+    //       }
+    //     }
+    //     return flag
+    //   }
+    // },
+    mounted() {
+      this.swiperinit();
+      window.addEventListener("scroll", this.handleScroll);
+      // this.islogin()
+    },
+    destroyed() {
+      window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
+    },
     methods: {
+      // islogin(){
+      //   this.accoutInfo=sessionStorage.getItem('account')
+      //   if(this.accoutInfo){
+      //     this.isLogin=true
+      //   }
+      // },
       showH(){
         this.show1 = true;
         // setTimeout(()=>{
@@ -140,8 +168,108 @@
           this.sw='fir'
         }
       },
+      swiperinit() {
+        var mySwiper = new swiper(".swiper-container", {
+          direction: "horizontal", // 垂直切换选项
+          loop: true, // 循环模式选项
+          noSwiping: true,
+          // autoplay: true,
+          // autoplay: {
+          //   delay: 5000,
+          // },
+
+          // 如果需要分页器
+          pagination: {
+            el: ".swiper-pagination"
+          },
+          // 如果需要前进后退按钮
+          navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev"
+          },
+
+          // 如果需要滚动条
+          scrollbar: {
+            el: ".swiper-scrollbar"
+          }
+        });
+      },
       onClick() {
         document.body.scrollTop = document.documentElement.scrollTop = 0;
+      },
+      getElementLeft(element) {
+        var top = element.offsetTop;
+        var curEle = element.offsetParent;
+
+        while (curEle !== null) {
+          top += curEle.offsetTop;
+          curEle = curEle.offsetParent;
+        }
+        return top;
+      },
+      getScrollOffset(){
+        // 除IE8及更早版本
+        if( window.pageXOffset != null ){
+          return {
+            x : window.pageXOffset,
+            y : window.pageYOffset
+          }
+        }
+        // 标准模式下的IE
+        if( document.compatMode == "css1Compat" ){
+          return {
+            x : document.documentElement.scrollLeft,
+            y : document.documentElement.scrollTop
+          }
+        }
+        // 怪异模式下的浏览器
+        return {
+          x : document.body.scrollLeft,
+          y : document.body.scrollTop
+        }
+      },
+      handleScroll() {
+        const osTop = this.getScrollOffset().y;
+
+        // const arr = document.getElementsByClassName('.animation-dom')
+        for (const key in this.$refs) {
+          const top = this.getElementLeft(this.$refs[key]);
+
+          // console.dir(top);
+          if (osTop + innerHeight + 300 >= top + 100) {
+            const name = this.$refs[key].dataset.class;
+            this.$refs[key].classList.add(name);
+
+          }
+        }
+        if (this.getScrollTop() > document.getElementById("header").clientHeight) {
+          this.showFF = true;
+          this.show4 = false;
+        } else {
+          this.showFF = false;
+        }
+        //    if (
+        //     this.getScrollTop() > document.getElementById("search_box").clientHeight
+        //   ) {
+        //     this.show4 = false;
+        //   }
+        // console.log(this.getScrollTop())HAOhao
+        // if (
+        //   this.getScrollTop() > document.getElementById("header").clientHeight
+        // ) {
+        //   this.headFlag = true;
+        // } else {
+        //   this.headFlag = false;
+        // }
+      },
+      getScrollTop() {
+        var scroll_top = 0;
+        if (document.documentElement && document.documentElement.scrollTop) {
+          scroll_top = document.documentElement.scrollTop;
+        } else if (document.body) {
+          scroll_top = document.body.scrollTop;
+        }
+        return scroll_top;
       }
     }
   };
@@ -201,8 +329,8 @@
           }
         }
         .ru-active{
-            color: #00a041;
-          }
+          color: #00a041;
+        }
       }
       .search_box {
         background: rgba(0, 0, 0, 0.3);
@@ -260,4 +388,3 @@
     }
   }
 </style>
-

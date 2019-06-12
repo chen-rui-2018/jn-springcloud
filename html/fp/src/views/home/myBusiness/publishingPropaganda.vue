@@ -81,6 +81,7 @@
   </div>
 </template>
 <script>
+import { getToken, removeToken } from '@/util/auth'
 export default {
   data() {
     return {
@@ -90,7 +91,7 @@ export default {
       priceIndex: undefined,
       index: undefined,
       headers: {
-        token: sessionStorage.token
+        token: getToken()
       },
       currentItem: "",
       isDisabled: false,

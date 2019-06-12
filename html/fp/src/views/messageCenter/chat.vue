@@ -100,6 +100,7 @@
   import messageRow from './common/messageRow'
   import sockHttp from '@/util/sockHttp'
   import { WS_URL } from '@/util/url'
+  import { RemoveClass, AddClass } from '@/util/func'
   export default {
     name: "Chat",
     components: {
@@ -134,13 +135,21 @@
         noMore: false,
         tempMessageList: [],
         loaded: false,
-        lastMessageSendTime: ''
+        lastMessageSendTime: '',
+        html: null,
+        body: null
       }
     },
     mounted() {
       this.$nextTick(
         this.init()
       )
+    },
+    destroyed() {
+      if (this.$store.state.isMobile) {
+        this.html.classList.remove('h-100')
+        this.body.classList.remove('h-100')
+      }
     },
     watch: {
       '$route'() {
@@ -203,8 +212,8 @@
         /*  1.app路由要求传参发送人账号fromUser, 接收人账号toUser, 发送人昵称nickName(仅用于对话框显示与xxx在聊天)
          *  2.pc端路由参数可以只有发送人账号fromUser, 因为pc端有联系人列表
          */
+        this.setWindowHeight()
         const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
-
         this.userListParam.fromUser = this.param.fromUser = this.$route.query.fromUser || userInfo.account
         if (!this.param.fromUser) {
           this.$message.error('缺少发送人账号')
@@ -226,11 +235,19 @@
           // 注册滚动加载历史消息事件
           this.checkHistoryMessage()
           this.resetWindowScrollTop()
+
+        }
+      },
+      setWindowHeight() {
+        if (this.$store.state.isMobile) {
+          this.html = document.getElementsByTagName('html')[0]
+          this.body = document.getElementsByTagName('body')[0]
+          this.html.classList.add('h-100')
+          this.body.classList.add('h-100')
         }
       },
       resetWindowScrollTop() {
         window.addEventListener('blur', () => {
-          // alert('blur');
           setTimeout(() => {
             if (document.hasFocus()) {
               let activeElName = document.activeElement.tagName.toLowerCase();

@@ -44,6 +44,7 @@ import { isMobile } from "@/util"
 import bus from "@/util/bus"
 import UserHome from "@/components/userHome"
 import ElementUI from 'element-ui'
+import { getToken, removeToken } from '@/util/auth'
 export default {
   components: { UserHome ,SidebarItem},
   //  components: { SidebarItem },
@@ -92,7 +93,7 @@ export default {
   // },
   beforeRouteEnter(to, from, next) {
 
-    let token=sessionStorage.token
+    let token = getToken()
     api.post({
       url: "getDynamicMenu",
       headers: { token: token },
@@ -189,7 +190,7 @@ export default {
     },
     handleSearch() {},
     loginOut() {
-      window.sessionStorage.removeItem("token");
+      removeToken()
       this.$router.push({ path: "/" });
     },
     dianji(i) {

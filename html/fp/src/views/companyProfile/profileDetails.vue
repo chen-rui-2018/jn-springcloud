@@ -192,6 +192,7 @@
   </div>
 </template>
 <script>
+import { getToken } from '@/util/auth'
 import swiper from "swiper";
 export default {
   data() {
@@ -219,7 +220,7 @@ export default {
   methods: {
     //关注
     handleAttention(id) {
-      if (sessionStorage.token) {
+      if (getToken()) {
         this.api.post({
           url: "addCareOperate",
           data: {
@@ -244,7 +245,7 @@ export default {
     },
     //取消关注
     cancelAttention(id) {
-      if (sessionStorage.token) {
+      if (getToken()) {
         this.api.post({
           url: "cancelCareOperate",
           data: {

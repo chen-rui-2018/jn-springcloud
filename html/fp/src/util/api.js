@@ -1,5 +1,6 @@
 ﻿import axios from "axios"
 import { BASE_URL } from './url'
+import { getToken, removeToken } from '@/util/auth'
 export default {
     host: BASE_URL,//api的域名提出来放这里
     apiURL:{ //API路径统一管理,需要的路径在这里加就可以了
@@ -274,16 +275,15 @@ export default {
         axios.get(this.host + url, {
             params: data || {},
             headers:{
-                'token':sessionStorage.token || ''
+                'token': getToken()
             }
         })
             .then(function (response) {
                 if (typeof callback === "function"){
                     if(response.data.code == "index"){
-                        window.sessionStorage.removeItem('token')
+                        removeToken()
                         window.sessionStorage.removeItem('account')
                         window.sessionStorage.removeItem('userInfo')
-                        alert(response.data.result);
                         location.href="#/";
                         return
                     }
@@ -352,16 +352,15 @@ export default {
         axios.post(this.host + url, headerType ? data : params,{
             headers: {
                 'Content-Type': headerType ? headerType : headerSS,
-                'token':sessionStorage.token || ''
+                'token': getToken()
             }
         })
           .then(function (response) {
             if (typeof callback === "function"){
                 if(response.data.code == "index"){
-                    window.sessionStorage.removeItem('token')
+                    removeToken()
                     window.sessionStorage.removeItem('account')
                     window.sessionStorage.removeItem('userInfo')
-                    alert(response.data.result);
                     location.href="#login";
                     return
                 }

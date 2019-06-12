@@ -136,7 +136,7 @@ public class MeetingServiceImpl implements MeetingService {
     @Override
     @ServiceLog(doAction = "新增会议申请")
     @Transactional(rollbackFor = Exception.class)
-    public void insertOaMeeting(OaMeetingAdd oaMeetingAdd) {
+    public synchronized void insertOaMeeting(OaMeetingAdd oaMeetingAdd) {
         TbOaMeeting tbOaMeeting = new TbOaMeeting();
         BeanUtils.copyProperties(oaMeetingAdd, tbOaMeeting);
 
@@ -263,7 +263,7 @@ public class MeetingServiceImpl implements MeetingService {
             String outFilePath = tempUpload.getAbsolutePath() + File.separator + fileName;  
 
             //4、二维码连接
-            String contents = "会议室二维码签到开发中";
+            String contents = "https://njbxq.mynatapp.cc/springcloud-oa/oa/meeting?id="+tbOaMeeting.getId();
 
             //5、调用工具类生成二维码
             QRCodeUtils.EncodeHelper(QRCodeUtils.width, QRCodeUtils.height, contents, outFilePath, "");

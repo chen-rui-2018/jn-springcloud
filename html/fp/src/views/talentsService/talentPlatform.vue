@@ -20,9 +20,9 @@
       <!-- 平台列表 -->
       <div class="talentPlatform_list">
         <div class="platform_recommend">
-          <el-tabs v-model="subordinatePlatformName" @tab-click="switchtype">
+          <el-tabs>
             <el-tab-pane v-for="(typeitem,typeindex) in platformType" :key="typeindex">
-              <div slot="label" :name="typeitem.id">{{typeitem.name}}</div>
+              <div slot="label" @click="switchtype(typeitem.id)">{{typeitem.name}}</div>
               <div class="platform_titile"><span></span>平台介绍</div>
               <!-- 表格 -->
               <div class="platform_table">
@@ -30,24 +30,37 @@
                   <el-form v-for="(item,index) in pladformList" :key="index">
                     <div class="full_line" >
                       <el-form-item label="平台名称">
-                        <div class="table_item_cont"><span>{{item.platformTitle}}</span> <span class="el-icon-d-arrow-right"></span></div>
+                        <a :href="item.linkAddress" target="_blank">
+                          <div class="table_item_cont">
+                            <span>{{item.platformTitle}}</span><span class="el-icon-d-arrow-right"></span></div>
+                        </a>
                       </el-form-item>
                     </div>
                     <div class="full_line">
                       <el-form-item label="平台功能">
-                        <div class="table_item_cont">{{item.remark}}</div>
+                        <div class="table_item_cont" v-if="item.remark">{{item.remark}}</div>
+                        <div class="table_item_cont" v-else>暂无</div>
                       </el-form-item>
                     </div>
                     <div class="full_line">
                       <el-form-item label="业务咨询">
-                        <div class="table_item_cont" v-html="item.businessConsult"></div>
+                        <div class="table_item_cont" v-html="item.businessConsult" v-if="item.businessConsult"></div>
+                        <div class="table_item_cont" v-else>暂无</div>
                       </el-form-item>
                     </div>
                     <div class="full_line">
                       <el-form-item label="系统支持">
-                        <div class="table_item_cont system_support" v-html="item.systemSupport">
-                          <!-- <div>邮箱：xxxx@sipac.gov.cn</div>
-                          <div>电话：<span>13866666666</span></div> -->
+                        <div class="table_item_cont " v-html="item.systemSupport" v-if="item.systemSupport">
+                        </div>
+                          <div class="table_item_cont" v-else>暂无</div>
+                      </el-form-item>
+                    </div>
+                    <div class="full_line">
+                      <el-form-item label="账号密码">
+                        <div class="table_item_cont ">
+                          <textarea placeholder="在此输入账号密码作为备忘信息,例：admin/123(限50字)" maxlength="50" v-model="item.accountAndPassword" @input="changeap(item.accountAndPassword,item.id)">
+                            {{item.accountAndPassword}}
+                          </textarea>
                         </div>
                       </el-form-item>
                     </div>
@@ -77,22 +90,40 @@
 export default {
   data () {
     return {
-      subordinatePlatformName:'',
+      subordinatePlatformName:'1',
       platformType:[],
       pladformList:[],
       page:1,
       rows:3,
-      total:0
+      total:0,
+      residuenum:50,
+      accountAndPassword:'',
+      platformId:''
     }
-  },
-  filters: {
-    
   },
   mounted () {
     this.getPlatformType()//平台类型
     this.getPlatformList()//列表数据
     },
   methods: {
+    changeap(accountAndPassword,id){
+      this.platformId=id
+      this.accountAndPassword=accountAndPassword
+        let _this = this;
+        this.api.post({
+          url: "addOrEditMemorandum",
+          data: {
+            accountAndPassword:this.accountAndPassword,
+            platformId:this.platformId
+           },
+           dataFlag:true,
+          callback: function(res) {
+            // console.log(res);
+            if (res.code == "0000") {
+            }
+          }
+        });
+    },
     getPlatformList(){
       let _this = this;
       this.api.get({
@@ -103,7 +134,7 @@ export default {
           rows:this.rows
          },
         callback: function(res) {
-          console.log(res);
+          // console.log(res);
           if (res.code == "0000") {
             _this.pladformList = res.data.rows;
             _this.total=res.data.total
@@ -125,7 +156,8 @@ export default {
       });
     },
     //切换平台
-    switchtype(){
+    switchtype(id){
+      this.subordinatePlatformName =id
       this.getPlatformList()
     },
     handleSizeChange(val) {
@@ -142,7 +174,8 @@ export default {
 
 <style lang="scss">
   .talentPlatform{
-    margin-top: 230px;
+    padding-top: 67px;
+    // margin-top: 230px;
     .talentPlatform_content{
       width: 1190px;
       margin: 0 auto;
@@ -204,6 +237,7 @@ export default {
             margin-top: 15px;
             margin-bottom: 32px;
             .el-form{
+              margin-bottom: 32px;
               .full_line{
                 width: 100%;
                 // background-color: #f8f8f8;
@@ -226,8 +260,24 @@ export default {
                   padding: 10px 0 10px 10px;
                   display: flex;
                   align-items: center;
+                  textarea{
+                      height: 14px;
+                      width:80%;
+                      outline:none;
+                      border:none;
+                      resize: none;
+                      overflow-y:hidden;
+                      font-size: 14px;
+                      &::placeholder{
+                        font-size:12px
+                      }
+                    }
+                    textarea:focus{
+                      border:none;
+                    }
                   .table_item_cont{
                     padding: 0px 12px;
+                    width:100%;
                     div{
                       line-height: 1;
                       padding: 6px 0;

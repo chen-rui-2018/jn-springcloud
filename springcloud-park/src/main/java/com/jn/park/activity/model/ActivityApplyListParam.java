@@ -17,6 +17,8 @@ import java.io.Serializable;
  */
 @ApiModel(value = "ActivityApplyListParam",description = "用户中心-报名活动列表 查询条件")
 public class ActivityApplyListParam extends Page implements Serializable {
+    @ApiModelProperty(value = "活动名称",example = "重阳登高")
+    private String actiName;
     @ApiModelProperty(value = "用户账号",required = true ,example = "wangsong")
     @NotBlank(message = "用户账号不能为空")
     private String account;
@@ -24,6 +26,14 @@ public class ActivityApplyListParam extends Page implements Serializable {
     @Pattern(regexp = "^[1-2]$",message = "状态值只能为 1或 2, 1:报名成功-2报名待审核")
     @NotBlank(message = "报名转态不能为空")
     private String applyStatus;
+
+    public String getActiName() {
+        return actiName;
+    }
+
+    public void setActiName(String actiName) {
+        this.actiName = actiName;
+    }
 
     public String getAccount() {
         return account;

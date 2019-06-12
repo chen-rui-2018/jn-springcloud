@@ -9,6 +9,7 @@
     <result column="issue_platform" jdbcType="VARCHAR" property="issuePlatform" />
     <result column="effective_date" jdbcType="TIMESTAMP" property="effectiveDate" />
     <result column="invalid_date" jdbcType="TIMESTAMP" property="invalidDate" />
+    <result column="propaganda_details" jdbcType="VARCHAR" property="propagandaDetails" />
     <result column="propaganda_area" jdbcType="VARCHAR" property="propagandaArea" />
     <result column="propaganda_area_url" jdbcType="VARCHAR" property="propagandaAreaUrl" />
     <result column="poster_url" jdbcType="VARCHAR" property="posterUrl" />
@@ -21,15 +22,13 @@
     <result column="is_pay" jdbcType="VARCHAR" property="isPay" />
     <result column="approval_status" jdbcType="VARCHAR" property="approvalStatus" />
     <result column="approval_desc" jdbcType="VARCHAR" property="approvalDesc" />
+    <result column="view_count" jdbcType="VARCHAR" property="viewCount" />
     <result column="order_code" jdbcType="VARCHAR" property="orderCode" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
-  </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.jn.enterprise.propaganda.entity.TbPropaganda">
-    <result column="propaganda_details" jdbcType="LONGVARCHAR" property="propagandaDetails" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -91,29 +90,11 @@
   </sql>
   <sql id="Base_Column_List">
     id_, propaganda_code, propaganda_title, propaganda_type, issue_platform, effective_date, 
-    invalid_date, propaganda_area, propaganda_area_url, poster_url, sort, status, org_id, 
-    org_name, pro_fee_rule_code, propaganda_fee, is_pay, approval_status, approval_desc, 
-    order_code, created_time, creator_account, modified_time, modifier_account, record_status
+    invalid_date, propaganda_details, propaganda_area, propaganda_area_url, poster_url, 
+    sort, status, org_id, org_name, pro_fee_rule_code, propaganda_fee, is_pay, approval_status, 
+    approval_desc, view_count, order_code, created_time, creator_account, modified_time, 
+    modifier_account, record_status
   </sql>
-  <sql id="Blob_Column_List">
-    propaganda_details
-  </sql>
-  <select id="selectByExampleWithBLOBs" parameterType="com.jn.enterprise.propaganda.entity.TbPropagandaCriteria" resultMap="ResultMapWithBLOBs">
-    select
-    <if test="distinct">
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from tb_propaganda
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-  </select>
   <select id="selectByExample" parameterType="com.jn.enterprise.propaganda.entity.TbPropagandaCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
@@ -128,11 +109,9 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
     from tb_propaganda
     where id_ = #{id,jdbcType=VARCHAR}
   </select>
@@ -149,22 +128,24 @@
   <insert id="insert" parameterType="com.jn.enterprise.propaganda.entity.TbPropaganda">
     insert into tb_propaganda (id_, propaganda_code, propaganda_title, 
       propaganda_type, issue_platform, effective_date, 
-      invalid_date, propaganda_area, propaganda_area_url, 
-      poster_url, sort, status, 
-      org_id, org_name, pro_fee_rule_code, 
-      propaganda_fee, is_pay, approval_status, 
-      approval_desc, order_code, created_time, 
-      creator_account, modified_time, modifier_account, 
-      record_status, propaganda_details)
+      invalid_date, propaganda_details, propaganda_area, 
+      propaganda_area_url, poster_url, sort, 
+      status, org_id, org_name, 
+      pro_fee_rule_code, propaganda_fee, is_pay, 
+      approval_status, approval_desc, view_count, 
+      order_code, created_time, creator_account, 
+      modified_time, modifier_account, record_status
+      )
     values (#{id,jdbcType=VARCHAR}, #{propagandaCode,jdbcType=VARCHAR}, #{propagandaTitle,jdbcType=VARCHAR}, 
       #{propagandaType,jdbcType=VARCHAR}, #{issuePlatform,jdbcType=VARCHAR}, #{effectiveDate,jdbcType=TIMESTAMP}, 
-      #{invalidDate,jdbcType=TIMESTAMP}, #{propagandaArea,jdbcType=VARCHAR}, #{propagandaAreaUrl,jdbcType=VARCHAR}, 
-      #{posterUrl,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER}, #{status,jdbcType=VARCHAR}, 
-      #{orgId,jdbcType=VARCHAR}, #{orgName,jdbcType=VARCHAR}, #{proFeeRuleCode,jdbcType=VARCHAR}, 
-      #{propagandaFee,jdbcType=DOUBLE}, #{isPay,jdbcType=VARCHAR}, #{approvalStatus,jdbcType=VARCHAR}, 
-      #{approvalDesc,jdbcType=VARCHAR}, #{orderCode,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{recordStatus,jdbcType=TINYINT}, #{propagandaDetails,jdbcType=LONGVARCHAR})
+      #{invalidDate,jdbcType=TIMESTAMP}, #{propagandaDetails,jdbcType=VARCHAR}, #{propagandaArea,jdbcType=VARCHAR}, 
+      #{propagandaAreaUrl,jdbcType=VARCHAR}, #{posterUrl,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER}, 
+      #{status,jdbcType=VARCHAR}, #{orgId,jdbcType=VARCHAR}, #{orgName,jdbcType=VARCHAR}, 
+      #{proFeeRuleCode,jdbcType=VARCHAR}, #{propagandaFee,jdbcType=DOUBLE}, #{isPay,jdbcType=VARCHAR}, 
+      #{approvalStatus,jdbcType=VARCHAR}, #{approvalDesc,jdbcType=VARCHAR}, #{viewCount,jdbcType=VARCHAR}, 
+      #{orderCode,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.propaganda.entity.TbPropaganda">
     insert into tb_propaganda
@@ -189,6 +170,9 @@
       </if>
       <if test="invalidDate != null">
         invalid_date,
+      </if>
+      <if test="propagandaDetails != null">
+        propaganda_details,
       </if>
       <if test="propagandaArea != null">
         propaganda_area,
@@ -226,6 +210,9 @@
       <if test="approvalDesc != null">
         approval_desc,
       </if>
+      <if test="viewCount != null">
+        view_count,
+      </if>
       <if test="orderCode != null">
         order_code,
       </if>
@@ -243,9 +230,6 @@
       </if>
       <if test="recordStatus != null">
         record_status,
-      </if>
-      <if test="propagandaDetails != null">
-        propaganda_details,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -269,6 +253,9 @@
       </if>
       <if test="invalidDate != null">
         #{invalidDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="propagandaDetails != null">
+        #{propagandaDetails,jdbcType=VARCHAR},
       </if>
       <if test="propagandaArea != null">
         #{propagandaArea,jdbcType=VARCHAR},
@@ -306,6 +293,9 @@
       <if test="approvalDesc != null">
         #{approvalDesc,jdbcType=VARCHAR},
       </if>
+      <if test="viewCount != null">
+        #{viewCount,jdbcType=VARCHAR},
+      </if>
       <if test="orderCode != null">
         #{orderCode,jdbcType=VARCHAR},
       </if>
@@ -323,9 +313,6 @@
       </if>
       <if test="recordStatus != null">
         #{recordStatus,jdbcType=TINYINT},
-      </if>
-      <if test="propagandaDetails != null">
-        #{propagandaDetails,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -358,6 +345,9 @@
       </if>
       <if test="record.invalidDate != null">
         invalid_date = #{record.invalidDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.propagandaDetails != null">
+        propaganda_details = #{record.propagandaDetails,jdbcType=VARCHAR},
       </if>
       <if test="record.propagandaArea != null">
         propaganda_area = #{record.propagandaArea,jdbcType=VARCHAR},
@@ -395,6 +385,9 @@
       <if test="record.approvalDesc != null">
         approval_desc = #{record.approvalDesc,jdbcType=VARCHAR},
       </if>
+      <if test="record.viewCount != null">
+        view_count = #{record.viewCount,jdbcType=VARCHAR},
+      </if>
       <if test="record.orderCode != null">
         order_code = #{record.orderCode,jdbcType=VARCHAR},
       </if>
@@ -413,42 +406,7 @@
       <if test="record.recordStatus != null">
         record_status = #{record.recordStatus,jdbcType=TINYINT},
       </if>
-      <if test="record.propagandaDetails != null">
-        propaganda_details = #{record.propagandaDetails,jdbcType=LONGVARCHAR},
-      </if>
     </set>
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExampleWithBLOBs" parameterType="map">
-    update tb_propaganda
-    set id_ = #{record.id,jdbcType=VARCHAR},
-      propaganda_code = #{record.propagandaCode,jdbcType=VARCHAR},
-      propaganda_title = #{record.propagandaTitle,jdbcType=VARCHAR},
-      propaganda_type = #{record.propagandaType,jdbcType=VARCHAR},
-      issue_platform = #{record.issuePlatform,jdbcType=VARCHAR},
-      effective_date = #{record.effectiveDate,jdbcType=TIMESTAMP},
-      invalid_date = #{record.invalidDate,jdbcType=TIMESTAMP},
-      propaganda_area = #{record.propagandaArea,jdbcType=VARCHAR},
-      propaganda_area_url = #{record.propagandaAreaUrl,jdbcType=VARCHAR},
-      poster_url = #{record.posterUrl,jdbcType=VARCHAR},
-      sort = #{record.sort,jdbcType=INTEGER},
-      status = #{record.status,jdbcType=VARCHAR},
-      org_id = #{record.orgId,jdbcType=VARCHAR},
-      org_name = #{record.orgName,jdbcType=VARCHAR},
-      pro_fee_rule_code = #{record.proFeeRuleCode,jdbcType=VARCHAR},
-      propaganda_fee = #{record.propagandaFee,jdbcType=DOUBLE},
-      is_pay = #{record.isPay,jdbcType=VARCHAR},
-      approval_status = #{record.approvalStatus,jdbcType=VARCHAR},
-      approval_desc = #{record.approvalDesc,jdbcType=VARCHAR},
-      order_code = #{record.orderCode,jdbcType=VARCHAR},
-      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
-      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
-      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
-      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      record_status = #{record.recordStatus,jdbcType=TINYINT},
-      propaganda_details = #{record.propagandaDetails,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -462,6 +420,7 @@
       issue_platform = #{record.issuePlatform,jdbcType=VARCHAR},
       effective_date = #{record.effectiveDate,jdbcType=TIMESTAMP},
       invalid_date = #{record.invalidDate,jdbcType=TIMESTAMP},
+      propaganda_details = #{record.propagandaDetails,jdbcType=VARCHAR},
       propaganda_area = #{record.propagandaArea,jdbcType=VARCHAR},
       propaganda_area_url = #{record.propagandaAreaUrl,jdbcType=VARCHAR},
       poster_url = #{record.posterUrl,jdbcType=VARCHAR},
@@ -474,6 +433,7 @@
       is_pay = #{record.isPay,jdbcType=VARCHAR},
       approval_status = #{record.approvalStatus,jdbcType=VARCHAR},
       approval_desc = #{record.approvalDesc,jdbcType=VARCHAR},
+      view_count = #{record.viewCount,jdbcType=VARCHAR},
       order_code = #{record.orderCode,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
@@ -504,6 +464,9 @@
       </if>
       <if test="invalidDate != null">
         invalid_date = #{invalidDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="propagandaDetails != null">
+        propaganda_details = #{propagandaDetails,jdbcType=VARCHAR},
       </if>
       <if test="propagandaArea != null">
         propaganda_area = #{propagandaArea,jdbcType=VARCHAR},
@@ -541,6 +504,9 @@
       <if test="approvalDesc != null">
         approval_desc = #{approvalDesc,jdbcType=VARCHAR},
       </if>
+      <if test="viewCount != null">
+        view_count = #{viewCount,jdbcType=VARCHAR},
+      </if>
       <if test="orderCode != null">
         order_code = #{orderCode,jdbcType=VARCHAR},
       </if>
@@ -559,39 +525,7 @@
       <if test="recordStatus != null">
         record_status = #{recordStatus,jdbcType=TINYINT},
       </if>
-      <if test="propagandaDetails != null">
-        propaganda_details = #{propagandaDetails,jdbcType=LONGVARCHAR},
-      </if>
     </set>
-    where id_ = #{id,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.jn.enterprise.propaganda.entity.TbPropaganda">
-    update tb_propaganda
-    set propaganda_code = #{propagandaCode,jdbcType=VARCHAR},
-      propaganda_title = #{propagandaTitle,jdbcType=VARCHAR},
-      propaganda_type = #{propagandaType,jdbcType=VARCHAR},
-      issue_platform = #{issuePlatform,jdbcType=VARCHAR},
-      effective_date = #{effectiveDate,jdbcType=TIMESTAMP},
-      invalid_date = #{invalidDate,jdbcType=TIMESTAMP},
-      propaganda_area = #{propagandaArea,jdbcType=VARCHAR},
-      propaganda_area_url = #{propagandaAreaUrl,jdbcType=VARCHAR},
-      poster_url = #{posterUrl,jdbcType=VARCHAR},
-      sort = #{sort,jdbcType=INTEGER},
-      status = #{status,jdbcType=VARCHAR},
-      org_id = #{orgId,jdbcType=VARCHAR},
-      org_name = #{orgName,jdbcType=VARCHAR},
-      pro_fee_rule_code = #{proFeeRuleCode,jdbcType=VARCHAR},
-      propaganda_fee = #{propagandaFee,jdbcType=DOUBLE},
-      is_pay = #{isPay,jdbcType=VARCHAR},
-      approval_status = #{approvalStatus,jdbcType=VARCHAR},
-      approval_desc = #{approvalDesc,jdbcType=VARCHAR},
-      order_code = #{orderCode,jdbcType=VARCHAR},
-      created_time = #{createdTime,jdbcType=TIMESTAMP},
-      creator_account = #{creatorAccount,jdbcType=VARCHAR},
-      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
-      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
-      record_status = #{recordStatus,jdbcType=TINYINT},
-      propaganda_details = #{propagandaDetails,jdbcType=LONGVARCHAR}
     where id_ = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.propaganda.entity.TbPropaganda">
@@ -602,6 +536,7 @@
       issue_platform = #{issuePlatform,jdbcType=VARCHAR},
       effective_date = #{effectiveDate,jdbcType=TIMESTAMP},
       invalid_date = #{invalidDate,jdbcType=TIMESTAMP},
+      propaganda_details = #{propagandaDetails,jdbcType=VARCHAR},
       propaganda_area = #{propagandaArea,jdbcType=VARCHAR},
       propaganda_area_url = #{propagandaAreaUrl,jdbcType=VARCHAR},
       poster_url = #{posterUrl,jdbcType=VARCHAR},
@@ -614,6 +549,7 @@
       is_pay = #{isPay,jdbcType=VARCHAR},
       approval_status = #{approvalStatus,jdbcType=VARCHAR},
       approval_desc = #{approvalDesc,jdbcType=VARCHAR},
+      view_count = #{viewCount,jdbcType=VARCHAR},
       order_code = #{orderCode,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.increase.dao.InsuredDetailMapper">
+      <select id="map" parameterType="com.jn.hr.increase.model.InsuredDetaildPage"
+		resultType="com.jn.hr.increase.model.InsuredDetaild">
+		select sum(t1.personal_social_security + t1.personal_accumulation_fund) as personalPayment,
+		sum(t1.company_social_security + t1.company_accumulation_fund) as companyPayment,job_number,id from tb_manpower_insured_detail t1
+		where t1.is_effective = 1
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
+            and t1.name like concat('%',#{name},'%')
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(insuredMonth)">
+            and t1.insured_month like CONCAT('%', #{insuredMonth,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
+            and department_id=#{departmentId}
+        </if>
+        group by job_number
+	</select>
+	
+	<select id="selectByJobNumberAndMonth" parameterType="com.jn.hr.increase.model.InsuredDetaild"
+		resultType="com.jn.hr.increase.model.InsuredDetaild">
+		select * from tb_manpower_insured_detail t1
+		where t1.is_effective = 1
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(insuredMonth)">
+            and t1.insured_month like CONCAT('%', #{insuredMonth,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(jobNumber)">
+            and job_number=#{jobNumber}
+        </if>
+	</select>
+	
+	<select id="list" parameterType="com.jn.hr.increase.model.InsuredDetaildPage"
+		resultType="com.jn.hr.increase.model.InsuredDetaild">
+		select * from tb_manpower_insured_detail t1
+		where t1.is_effective = 1
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
+            and t1.name like concat('%',#{name},'%')
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
+            and department_id=#{departmentId}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(insuredMonth)">
+            and t1.insured_month like CONCAT('%', #{insuredMonth,jdbcType=VARCHAR},'%')
+        </if>
+	</select>
+	
+	<select id="selectBySchemeId" parameterType="com.jn.hr.increase.model.InsuredDetaildPage"
+		resultType="com.jn.hr.increase.model.InsuredDetaild">
+		select count(distinct(scheme_id)) as number,personal_social_security, company_social_security, 
+      personal_accumulation_fund, company_accumulation_fund,scheme_id from tb_manpower_insured_detail t1
+		where t1.is_effective = 1
+	</select>
+	
+	<select id="selectBySchemeIdNumber" parameterType="java.lang.String" resultType="java.lang.Integer">
+		select count(*) from tb_manpower_insured_detail t1
+		where t1.is_effective = 1 and t1.scheme_id = #{schemeId,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="selectSumByMonth" parameterType="com.jn.hr.increase.model.InsuredDetaild"
+		resultType="com.jn.hr.increase.model.InsuredDetaild">
+		select sum(personal_social_security + company_social_security) as socialSecurity,
+		sum(personal_accumulation_fund + company_accumulation_fund) as accumulationFund ,count(*) as number ,sum(personal_social_security) as personal_social_security,
+		sum(company_accumulation_fund) as company_accumulation_fund, sum(personal_accumulation_fund) as personal_accumulation_fund,sum(company_social_security) as company_social_security 
+		from tb_manpower_insured_detail t1
+		where t1.is_effective = 1
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(insuredMonth)">
+            and t1.insured_month like CONCAT('%', #{insuredMonth,jdbcType=VARCHAR},'%')
+        </if>
+	</select>
+	
+	<select id="selectByDepartmentTotalCost" parameterType="map"
+		resultType="com.jn.hr.increase.model.SalaryKeyValue">
+		select  department name,sum(personal_social_security + company_social_security + personal_accumulation_fund + company_accumulation_fund) value
+		from tb_manpower_insured_detail t1
+		where t1.is_effective = 1 and t1.insured_month like CONCAT('%', #{insuredMonth},'%')
+        group by department
+	</select>
+	
+	<select id="selectByDepartmentCompanyCost" parameterType="map"
+		resultType="com.jn.hr.increase.model.SalaryKeyValue">
+		select  department name,sum( company_social_security + company_accumulation_fund) value
+		from tb_manpower_insured_detail t1
+		where t1.is_effective = 1 and t1.insured_month like CONCAT('%', #{insuredMonth},'%')
+        group by department
+	</select>
+	
+	<select id="selectByDepartmentPersonalCost" parameterType="map"
+		resultType="com.jn.hr.increase.model.SalaryKeyValue">
+		select  department name,sum( personal_social_security + personal_accumulation_fund) value
+		from tb_manpower_insured_detail t1
+		where t1.is_effective = 1 and t1.insured_month like CONCAT('%', #{insuredMonth},'%')
+        group by department
+	</select>
+	
+	<select id="selectByDepartmentNumber" parameterType="map"
+		resultType="com.jn.hr.increase.model.SalaryKeyValue">
+		select  department name,count(1) value
+		from tb_manpower_insured_detail t1
+		where t1.is_effective = 1 and t1.insured_month like CONCAT('%', #{insuredMonth},'%')
+        group by department
+	</select>
+	
+	<select id="selectByMonthAndType" parameterType="map"
+		resultType="com.jn.hr.increase.model.InsuredDetaild">
+		select department, sum(personal_social_security) personalSocialSecurity,sum(company_social_security) companySocialSecurity,
+		sum(personal_accumulation_fund) personalAccumulationFund,sum(company_accumulation_fund) companyAccumulationFund,
+		sum(personal_social_security + company_social_security) socialSecurity,sum(personal_accumulation_fund + company_accumulation_fund) accumulationFund
+		from tb_manpower_insured_detail t1
+		where t1.is_effective = 1 and t1.insured_month like CONCAT('%', #{insuredMonth},'%')
+        group by department
+	</select>
+	
+	<select id="selectByCountNumber" parameterType="map"
+		resultType="com.jn.hr.increase.model.InsuredDetaild">
+		select count(1) number,sum(personal_social_security + company_social_security) socialSecurity,sum(personal_accumulation_fund + company_accumulation_fund) accumulationFund
+		from tb_manpower_insured_detail t1
+		where t1.is_effective = 1 and t1.insured_month like CONCAT('%', #{insuredMonth},'%')
+        group by insured_month
+	</select>
+	
+	<insert id="insertBatch" parameterType="java.util.List">
+        insert into tb_manpower_insured_detail
+        ( id, creat_date,insured_month, job_number, 
+      name, department, department_id,city_id, 
+      city_name, personal_social_security, company_social_security, 
+      personal_accumulation_fund, company_accumulation_fund, 
+      scheme_id, is_effective
+        ) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.id}, #{item.creatDate},#{item.insuredMonth}, #{item.jobNumber}, 
+      #{item.name}, #{item.department},#{item.departmentId}, #{item.cityId}, 
+      #{item.cityName}, #{item.personalSocialSecurity}, #{item.companySocialSecurity}, 
+      #{item.personalAccumulationFund}, #{item.companyAccumulationFund}, 
+      #{item.schemeId}, #{item.isEffective}
+            )
+        </foreach>
+    </insert>
+	
+</mapper>

@@ -24,8 +24,8 @@
           <div class="accessory">
             <span>附件下载:</span>
             <div class="accessory_right">
-              <a href="javascript:;">附件一  企业发展沙龙活动承办须知.docx</a>
-              <a href="javascript:;">附件一  企业发展沙龙活动承办须知.docx</a>
+              <a v-if="fileList.length===0" href="javascript:;">暂无</a>
+              <a  :href="item.filePath" v-for="(item,index) in fileList " :key="index">附件{{index+1}}  {{item.fileName}}</a>
               <p>
                 <span>反馈表递交截止日期{{detailList.deadline|time}}</span>
                 <span>阅读量: {{detailList.browseTimes}}次 <span>发布时间: {{detailList.createdTime|time}}</span></span>
@@ -65,7 +65,7 @@
             <!-- 附件 -->
             <el-form-item label="附件：" class="upload" >
               <el-upload
-                action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
+                :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
                 list-type="picture-card"
                 :on-success="uploadsuccess"
                 :headers="headers"
@@ -104,6 +104,7 @@
 export default {
   data () {
     return {
+      baseUrl: this.api.host,
       id:'',
       appointmentVisible:false,
       telephoneVisible:false,
@@ -121,7 +122,7 @@ export default {
         declareEnterprise:"",//申报企业
         declareItem:""//申报项目名称
       },
-      headers:{headers:''},
+      headers:{token: sessionStorage.token},
       fileList:[],
       rules:{
         appointmentItemName:[
@@ -142,7 +143,7 @@ export default {
        declareItem:[
          { required: true, message: '内容不能为空'}
        ]
-      }
+      },
     }
   },
   filters: {
@@ -171,9 +172,11 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-            // console.log(res)
-            _this.detailList = res.data;
+            _this.detailList = res.data
             _this.appointment. appointmentItemName= res.data.titleName;
+            if(res.data.fileUrl!==''){
+              _this.fileList=JSON.parse(res.data.fileUrl)
+            }
           }
         }
       });
@@ -193,12 +196,12 @@ export default {
     },
     // 文本域字数显示
     counselnum(){
-      this.residuenum=500-this.messageform.content.length
+      this.residuenum=500-this.appointment.remark.length
     },
     //去预约
     goappointment(){
       this.appointmentVisible=true
-      this.headers.headers=sessionStorage.getItem("token")
+      // this.headers=sessionStorage.getItem("token")
       if(sessionStorage.getItem("token")){
         let _this = this;
         this.api.get({
@@ -221,8 +224,9 @@ export default {
       }
     },
     uploadsuccess(file, fileList){
-      console.log(file)
-      console.log(fileList)
+      // console.log(file)
+      // console.log(fileList)
+      this.appointment.fileUrl=file.data
     },
     //提交
     submit(){
@@ -232,7 +236,9 @@ export default {
           data: this.appointment,
           callback: function(res) {
             if (res.code == "0000") {
-              console.log(res)
+              // console.log(res)
+              _this.$message.success("预约成功")
+              _this.appointmentVisible=false
             }
           }
         });
@@ -246,6 +252,7 @@ export default {
 </script>
 <style lang="scss">
   .declarationNoticeDetail{
+    padding-top: 67px;
     .declarationNoticeDetail_content{
       width: 1190px;
       margin: 0 auto;
@@ -358,6 +365,7 @@ export default {
             border-color:#00a041; 
           }
         }
+                                     
         .el-upload--picture-card{ 
           width: 100px;
           height: 100px;
@@ -455,3 +463,4 @@ export default {
   }
 </style>
 
+                                         

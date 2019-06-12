@@ -300,3 +300,60 @@ export function uniqueArr(arr) {
 export function isExternal(path) {
   return /^(https?:|mailto:|tel:)/.test(path)
 }
+
+export function isMobile() {
+  const userAgentInfo = navigator.userAgent
+  const Agents = ["Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod"]
+  return Agents.some(str =>{
+    return userAgentInfo.indexOf(str) > 0
+  })
+}
+export function isArray (obj) {
+  if (Object.prototype.toString.call(obj) === '[object Object]') {
+    return 'Object'
+  } else if (Object.prototype.toString.call(obj) === '[object Array]') {
+    return 'Array'
+  } else if (Object.prototype.toString.call(obj) === '[object String]') {
+    return 'String'
+  } else if (Object.prototype.toString.call(obj) === '[object Boolean]') {
+    return 'Boolean'
+  } else if (Object.prototype.toString.call(obj) === '[object Number]') {
+    return 'Number'
+  }
+}
+
+export function getDateString (str) {
+  const date = str ? new Date(str) : new Date()
+  const year = date.getFullYear()
+  let month = date.getMonth() + 1
+  month = month > 9 ? month : '0' + month
+  let day = date.getDate()
+  day = day > 9 ? day : '0' + day
+  let hour = date.getHours()
+  hour = hour > 9 ? hour : '0' + hour
+  let min = date.getMinutes()
+  min = min > 9 ? min : '0' + min
+  let sec = date.getSeconds()
+  sec = sec > 9 ? sec : '0' + sec
+  return year + '-' + month + '-' + day + ' ' + hour + ':' + min + ':' + sec
+}
+function UrlSearch () {
+  var name, value
+  var str = location.href // 取得整个地址栏
+  var num = str.indexOf('?')
+  str = str.substr(num + 1) // 取得所有参数   stringvar.substr(start [, length ]
+
+  var arr = str.split('&') // 各个参数放到数组里
+  for (var i = 0; i < arr.length; i++) {
+    num = arr[i].indexOf('=')
+    if (num > 0) {
+      name = arr[i].substring(0, num)
+      value = arr[i].substr(num + 1)
+      this[name] = value
+    }
+  }
+}
+const urlSearch = new UrlSearch()
+export {
+  urlSearch
+}

@@ -26,6 +26,17 @@ public class ColleagueListParam extends Page implements Serializable {
     @ApiModelProperty(value = "姓名/手机号[模糊搜索]", example = "张三")
     private String searchFiled;
 
+    @ApiModelProperty(value = "企业ID[不传查当前用户企业同事]", example = "2220112212")
+    private String comId;
+
+    public String getComId() {
+        return comId;
+    }
+
+    public void setComId(String comId) {
+        this.comId = comId;
+    }
+
     public String getSearchFiled() {
         return searchFiled;
     }
@@ -42,4 +53,12 @@ public class ColleagueListParam extends Page implements Serializable {
         this.needPage = needPage;
     }
 
+    @Override
+    public String toString() {
+        return "ColleagueListParam{" +
+                "needPage='" + needPage + '\'' +
+                ", searchFiled='" + searchFiled + '\'' +
+                ", comId='" + comId + '\'' +
+                '}';
+    }
 }

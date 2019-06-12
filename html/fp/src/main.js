@@ -4,14 +4,18 @@ import "@babel/polyfill";
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import '../static/UE/ueditor.config'
+import '../static/UE/ueditor.all'
+import '../static/UE/lang/zh-cn/zh-cn'
+import '../static/UE/ueditor.parse.min.js'
 import './assets/iconfont/iconfont.css'
 import 'swiper/dist/css/swiper.css'
-import animate from 'animate.css'
+// import animate from 'animate.css'
 import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
+import '@/css/theme.scss'
 // import VueAwesomeSwiper from 'vue-awesome-swiper'
-// import swiper from 'swiper'
-import 'swiper/dist/css/swiper.css'
+import '@/css/theme.css'
+import store from './store'
 
 Vue.use(ElementUI)
 // Vue.use(VueAwesomeSwiper, /* { default global options } */)
@@ -19,13 +23,13 @@ Vue.use(ElementUI)
 import api from '@/util/api'
 Vue.prototype.api = api
 
-
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

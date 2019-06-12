@@ -245,6 +245,7 @@ public class DataModelServiceImpl implements DataModelService {
                 treeData = new TreeData();
                 treeData.setId(tbDataReportingModel.getModelId());
                 treeData.setText(tbDataReportingModel.getModelName());
+                treeData.setOrderNumber(tbDataReportingModel.getOrderNumber());
                 treeDataList.add(treeData);
             }
         }
@@ -289,7 +290,15 @@ public class DataModelServiceImpl implements DataModelService {
             for(TabVO tabVO: tabVOList){
                 tbDataReportingModelTab = new TbDataReportingModelTab();
                 BeanUtils.copyProperties(tabVO,tbDataReportingModelTab);
-                tbDataReportingModelTab.setTabClumnType(new Byte(tabVO.getTabClumnType()));
+                if(tabVO.getTabCreateType().toString().equals(DataUploadConstants.IS_SCIENT_MODEL)){
+                    //科技园模板单独处理
+                    tbDataReportingModelTab.setTabClumnType(null);
+                    tbDataReportingModelTab.setTabClumnTargetShow("");
+
+                }else{
+                    tbDataReportingModelTab.setTabClumnType(new Byte(tabVO.getTabClumnType()));
+                }
+
                 if(StringUtils.isNotBlank(tabVO.getStatus())){
                     tbDataReportingModelTab.setStatus(new Byte(tabVO.getStatus()));
                 }else{
@@ -383,10 +392,15 @@ public class DataModelServiceImpl implements DataModelService {
         for (int tabIndex=0 ,tabSize =tabPOList.size();tabIndex<tabSize;tabIndex++) {
             tabVO = new TabVO();
             BeanUtils.copyProperties(tabPOList.get(tabIndex),tabVO);
-
-            tabVO.setTabClumnType(tabPOList.get(tabIndex).getTabClumnType().toString());
-            tabVO.setStatus(tabPOList.get(tabIndex).getStatus().toString());
+            if(tabPOList.get(tabIndex).getTabCreateType().toString().equals(DataUploadConstants.IS_SCIENT_MODEL)){
+                tabVO.setTabClumnType(null);
+            }else{
+                tabVO.setTabClumnType(tabPOList.get(tabIndex).getTabClumnType().toString());
+            }
             tabVO.setTabCreateType(tabPOList.get(tabIndex).getTabCreateType().toString());
+
+            tabVO.setStatus(tabPOList.get(tabIndex).getStatus().toString());
+
             tabVO.setOrderNumber(tabPOList.get(tabIndex).getOrderNumber());
 
 
@@ -394,19 +408,22 @@ public class DataModelServiceImpl implements DataModelService {
             //自己写语句
             List<TbDataReportingTarget> targetList = targetDao.getTargetFromTab(tabPOList.get(tabIndex).getTabId());
 
-            for(int targetIndex=0 ,targetSize =targetList.size();targetIndex<targetSize;targetIndex++){
-                //inputFormatModelListVO = new ArrayList<>();
-                targetVO = new TargetModelVO();
-                BeanUtils.copyProperties(targetList.get(targetIndex),targetVO);
-                targetVO.setIsMuiltRow(targetList.get(targetIndex).getIsMuiltRow().toString());
-                targetVO.setTargetType(targetList.get(targetIndex).getTargetType().toString());
-                targetVO.setRecordStatus(targetList.get(targetIndex).getRecordStatus().toString());
+            if(targetList !=null || targetList.size()>0){
+                for(int targetIndex=0 ,targetSize =targetList.size();targetIndex<targetSize;targetIndex++){
+                    //inputFormatModelListVO = new ArrayList<>();
+                    targetVO = new TargetModelVO();
+                    BeanUtils.copyProperties(targetList.get(targetIndex),targetVO);
+                    targetVO.setIsMuiltRow(targetList.get(targetIndex).getIsMuiltRow().toString());
+                    targetVO.setTargetType(targetList.get(targetIndex).getTargetType().toString());
+                    targetVO.setRecordStatus(targetList.get(targetIndex).getRecordStatus().toString());
 
-                targetVO.setId(targetList.get(targetIndex).getTargetId());
-                targetVO.setPid(targetList.get(targetIndex).getParentId());
-                targetVO.setText(targetList.get(targetIndex).getTargetName());
-                listTargetVO.add(targetVO);
+                    targetVO.setId(targetList.get(targetIndex).getTargetId());
+                    targetVO.setPid(targetList.get(targetIndex).getParentId());
+                    targetVO.setText(targetList.get(targetIndex).getTargetName());
+                    listTargetVO.add(targetVO);
+                }
             }
+
             tabVO.setTargetList(listTargetVO);
             tabVOList.add(tabVO);
         }

@@ -1,19 +1,19 @@
 <template>
   <div class="productPutaway"  >
     <div class="putaway_title">
-      <div>常规产品上架</div>
+      <div>{{this.$route.meta.title}}</div>
       <div @click="$router.go(-1)">返回列表</div>
     </div>
     <div class="putaway_main">
-      <div class="putaway_form" v-if="territory===1">
+      <div class="putaway_form" v-if="businessType!='technology_finance'">
         <el-form label-position="right" label-width="100px" >
           <div :model="productDetail" class="">
             <el-form-item label="业务领域：">
-              <span>非科技金融</span>
+              <span>{{businessTypeName}}</span>
             </el-form-item>
           </div>
           <div>
-            <el-form-item label="服务顾问：">
+            <el-form-item label="服务专员：">
               <el-select v-model="advisorAccount" multiple placeholder="请选择">
                 <el-option :label="counseloritem.advisorName" :value="counseloritem.advisorAccount" v-for="(counseloritem,counselorindex) in counselorList" :key="counselorindex">
                 </el-option>
@@ -28,7 +28,7 @@
             </el-form-item>
           </div>
           <div class="">
-            <el-form-item label="产品编号">
+            <el-form-item label="产品编号：">
               <span>{{productDetail.serialNumber}}</span>
             </el-form-item>
           </div>
@@ -49,7 +49,7 @@
           </div>
           <div class="">
             <el-form-item label="产品描述：">
-              <div>{{productDetail.productDetails}}</div>
+              <div v-html="productDetail.productDetails"></div>
             </el-form-item>
           </div>
         </el-form>
@@ -70,7 +70,7 @@
           </div>
           <div :model="productDetail" class="">
             <el-form-item label="产品编号：">
-              <span>{{productDetail.serialNumber}}</span>
+              <span >{{productDetail.serialNumber}}</span>
             </el-form-item>
           </div>
          <div :model="productDetail" class="">
@@ -154,40 +154,44 @@
 export default {
   data () {
     return {
-      // loading:true,
       productDetail:{},//产品详情
-      counselorList:[],//服务顾问列表
+      counselorList:[],//服务专员列表
       productName:'',//产品名称
-      territory:'',
+      // territory:0,
       productNameList:[],//产品名称列表
       advisorAccount:'',
       orgId:'',
-      templateId:''
-      //上架
+      templateId:'',
+      businessType:'',
+      businessTypeName:""
     }
   },
   mounted () {
-    this.territory=this.$route.query.territory
-    this.templateId=this.$route.query.productId
-    if(this.territory===0){
-      this.orgId='285bfb89580a422ea927200f5d7accc4'
-     /*  if(this.templateId){
-        this.getProductDetails()
-      }elses{} */
-      // this.$nextTick(()=>{
-        this.getShelfProductList()
-      // })
-    }else if(this.territory===1){
-      this.orgId=this.$route.query.orgid
-      this.$nextTick(()=>{
-        this.getShelfProductList()
-        this.getServiceConsultantList()
-        this.getProductDetails()
-      })
-    }
+    this.orgId=this.$route.query.orgid
+    this.getType()
   },
   //territory为0是科技金融，为1是非科技金融
   methods: {
+    //通过id判断是否科技金融
+    getType(){
+      let _this = this;
+      this.api.get({
+      url: "getActivityDetailsFm",
+      data: {orgId:this.orgId},
+      callback: function(res) {
+        if (res.code == "0000") {
+          _this.businessType= res.data.businessType
+          _this.businessTypeName= res.data.businessTypeName
+          if(_this.businessType=='technology_finance'){
+            _this.getShelfProductList()
+          }else{
+            _this.getShelfProductList()
+            _this.getServiceConsultantList()
+          }
+          }
+        }
+      })
+    },
     // 获取产品名称列表公用
     getShelfProductList(){
       let _this = this;
@@ -196,17 +200,13 @@ export default {
       data: {orgId:this.orgId},
       callback: function(res) {
         if (res.code == "0000") {
-          // console.log(res)
           if(res.data.length!=0){
             _this.productNameList= res.data
             _this.templateId=res.data[0].productId
-            if(_this.territory===0){
-              //调用科技金融接口
+            if(_this.businessType=='technology_finance'){
                 _this.getFinancialProductDetails()
-              }else if(_this.territory===1){
-                _this.$nextTick(()=>{
+              }else{
                 _this.getProductDetails()
-                })
               }
             }
           }
@@ -214,7 +214,7 @@ export default {
       })
       
     },
-    // 获取服务顾问列表（非科技金融）
+    // 获取服务专员列表（非科技金融）
     getServiceConsultantList(){
       let _this = this;
       this.api.get({
@@ -222,6 +222,7 @@ export default {
       data: {orgId:this.orgId},
       callback: function(res) {
         if (res.code == "0000") {
+          // console.log(res)
           _this.counselorList= res.data.rows
           }
         }
@@ -249,7 +250,6 @@ export default {
       data: {productId:this.templateId},
       callback: function(res) {
         if (res.code == "0000") {
-          // console.log(res)
           _this.productDetail= res.data
           }
         }
@@ -260,17 +260,17 @@ export default {
       if(this.templateId===''){
         this.productDetail={}
       }else{
-        if(this.territory===0){
+        if(this.businessType=='technology_finance'){
           //调用科技金融接口
           this.getFinancialProductDetails()
-        }else if(this.territory===1){
+        }else{
           this.getProductDetails()
         }
       }
     },
     //上架
     submit(){
-      if(this.territory===0){
+      if(this.businessType=='technology_finance'){
         let _this = this
         this.api.post({
         url: "upShelfCommonProduct",
@@ -285,7 +285,7 @@ export default {
             }
           }
         })
-      }else if(this.territory===1){
+      }else{
         let _this = this
         _this.templateId.toString()
         this.api.post({
@@ -338,10 +338,15 @@ export default {
       margin-top: 14px;
       background-color: #fff;
       padding: 17px;
+      border-radius: 5px;
       // 表单
       .putaway_form{
         width: 43%;
         margin: 0 auto;
+        img{
+          width: 100px;
+          height: 100px;
+        }
         .el-form-item__label{
           padding: 0 25px 0 0;
           line-height:25px;

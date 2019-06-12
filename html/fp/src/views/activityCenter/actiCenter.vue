@@ -1,146 +1,50 @@
 <template>
   <div class="actiCenter" @click="showList = false">
-    <div id="header11" v-if="headFlag">
-      <div class="headerContainer clearfix">
-        <div class="titleImg fl"><img src="@/../static/img/LOGO.png" alt=""></div>
-        <div class="menu" style="display:none">
-          <i class="el-icon-close"></i>
-          <input type="text">
-          <i class="el-icon-search"></i>
-        </div>
-        <div class="headerRight fr">
-          <div class="search" v-if="!sousuo">
-            <i class="el-icon-search" @click="handleChange" style="font-size:20px"></i>
-          </div>
-          <div class="navlogin">
-            <a>登录</a>
-            <span class="line">|</span>
-            <a>注册</a>
-          </div>
-          <!-- <div class="navlogin" v-if="this.$route.name =='actiManagent'">
-            <i class="el-icon-bell"></i>
-            <span class="line">|</span>
-            <img src="" alt="">
-          </div> -->
-        </div>
-        <div class="nav">
-          <transition name="fade">
-            <div class="sousuo posA" v-if="sousuo">
-              <i class="el-icon-close" style="vertical-align: middle;" @click="sousuo=false"></i>
-              <input type="text" v-focus @keyup.enter="handleSearch">
-              <i class="el-icon-search" style="vertical-align: middle;" @click="sousuo=false"></i>
-            </div>
-            <ul class="posA clearfix" v-else>
-              <li>
-                <a href="javascript:void(0);">首页</a>
-              </li>
-              <li>
-                <a href="javascript:void(0);">招商引资</a>
-              </li>
-              <li>
-                <a href="javascript:void(0);">智慧党建</a>
-              </li>
-              <li>
-                <a href="javascript:void(0);">企业服务</a>
-              </li>
-            </ul>
-
-          </transition>
-        </div>
-      </div>
-    </div>
-    <div id="headerW11" v-else>
-      <div class="headerContainer clearfix">
-        <div class="titleImg fl"><img src="@/../static/img/login-logo.png" alt=""></div>
-        <div class="menu" style="display:none">
-          <i class="el-icon-close"></i>
-          <input type="text">
-          <i class="el-icon-search"></i>
-        </div>
-        <div class="headerRight fr">
-          <div class="search" v-if="!sousuo">
-            <i class="el-icon-search" @click="handleChange" style="font-size:20px"></i>
-          </div>
-          <div class="navlogin">
-            <a>登录</a>
-            <span class="line">|</span>
-            <a>注册</a>
-          </div>
-          <!-- <div class="navlogin" v-if="this.$route.name =='actiManagent'">
-            <i class="el-icon-bell"></i>
-            <span class="line">|</span>
-            <img src="" alt="">
-          </div> -->
-        </div>
-        <div class="nav">
-          <transition name="fade">
-            <div class="sousuo posA" v-if="sousuo">
-              <i class="el-icon-close" style="vertical-align: middle;" @click="sousuo=false"></i>
-              <input type="text" v-focus @keyup.enter="handleSearch">
-              <i class="el-icon-search" style="vertical-align: middle;" @click="sousuo=false"></i>
-            </div>
-            <ul class="posA clearfix" v-else>
-              <li>
-                <a href="javascript:void(0);">首页</a>
-              </li>
-              <li>
-                <a href="javascript:void(0);">招商引资</a>
-              </li>
-              <li>
-                <a href="javascript:void(0);">智慧党建</a>
-              </li>
-              <li>
-                <a href="javascript:void(0);">企业服务</a>
-              </li>
-            </ul>
-
-          </transition>
-        </div>
-      </div>
-    </div>
     <div class="navImg"></div>
     <div class="actiContent">
       <div class="actiNav">
-        <el-breadcrumb separator="/">
+        <!-- <el-breadcrumb separator="/">
           <el-breadcrumb-item :to="{ path: '/' }">企业服务</el-breadcrumb-item>
           <el-breadcrumb-item>
             <a href="/">活动中心</a>
           </el-breadcrumb-item>
-        </el-breadcrumb>
+        </el-breadcrumb> -->
+        <span class="pointer" @click="$router.push({path:'enterpriseservice'})">企业服务/</span>
+        <span class="mainColor">活动中心</span>
       </div>
       <div class="actiFilter clearfix">
         <div class="timeFilter">
           <i>时间筛选:</i>
-          <span :class="{'active':timeIndexFlag == ''}" @click="timeSelect('','')">不限</span>
-          <span :class="{'active':timeIndexFlag == -7}" @click="timeSelect(0,-7)">最近一周</span>
-          <span :class="{'active':timeIndexFlag == -30}" @click="timeSelect(0,-30)">最近一月</span>
+          <span :class="{'active0':timeIndexFlag == ''}" @click="timeSelect('','')">不限</span>
+          <span :class="{'active0':timeIndexFlag == -7}" @click="timeSelect(0,-7)">最近一周</span>
+          <span :class="{'active0':timeIndexFlag == -30}" @click="timeSelect(0,-30)">最近一月</span>
         </div>
         <div class="timeOrder">
           <ul>
-            <li @click="handleTime('acti_start_time')" :class="{'active':colorFlag == 'acti_start_time'}">
+            <li @click="handleTime('acti_start_time')" :class="{'active0':colorFlag == 'acti_start_time'}">
               <i class="iconfont icon-clock-"></i>
               <span>时间排序</span>
             </li>
-            <li @click="handleTime('acti_Like')" :class="{'active':colorFlag == 'acti_Like'}">
+            <li @click="handleTime('acti_Like')" :class="{'active0':colorFlag == 'acti_Like'}">
               <i class="iconfont icon-hot"></i>
               <span>热度排序</span>
             </li>
             <li class="showListLi">
-              <i class="iconfont icon-menu1" @click="handleCrosswise('icon-menu1')" :class="{'active':showListFlag == 'icon-menu1'}"></i>
-              <i class="iconfont icon-menu" @click="handleVertical('icon-menu')" :class="{'active':showListFlag == 'icon-menu'}"></i>
+              <i class="iconfont icon-menu" @click="handleCrosswise('icon-menu')" :class="{'active0':showListFlag == 'icon-menu'}"></i>
+              <i class="iconfont icon-menu1" @click="handleVertical('icon-menu1')" :class="{'active0':showListFlag == 'icon-menu1'}"></i>
             </li>
           </ul>
         </div>
       </div>
       <div class="allActi clearfix">
         <ul class="actiFilterUl fl clearfix">
-          <li :class="{'active':actiFilflag == ''}" @click="handleFil('')">全部活动</li>
-          <li v-if="i<5" v-for="(v,i) in actiTypeList" :key="i" :class="{'active':actiFilflag == v.typeName}" @click="handleFil(v.typeName)">{{v.typeName}}</li>
+          <li :class="{'active0':actiFilflag == ''}" @click="handleFil('')">全部活动</li>
+          <li v-if="i<5" v-for="(v,i) in actiTypeList" :key="i" :class="{'active0':actiFilflag == v.typeId}" @click="handleFil(v.typeId)">{{v.typeName}}</li>
           <li v-if="this.actiTypeList.length>4" class="bottomLi pr">
             <i class="iconfont icon-bottom" @click.stop="handleTypeList"></i>
             <el-card class="box-card" v-if="showList" style="overflow:auto">
               <ul class="listUl clearfix">
-                <li v-if="k>4" v-for="(i,k) in actiTypeList" :key='k' :class="{'active':actiFilflag == i.typeName}" @click.stop="handleFil(i.typeName)">
+                <li v-if="k>4" v-for="(i,k) in actiTypeList" :key='k' :class="{'active0':actiFilflag == i.typeId}" @click.stop="handleFil(i.typeId)">
                   <i class="iconfont icon-yuandian"></i>{{i.typeName}}</li>
               </ul>
             </el-card>
@@ -154,8 +58,8 @@
       <div class="actiTab">
         <ul class="allActiUl clearfix" v-if="flag">
           <li v-for="(item,index) in actiListSlim" :key='index'>
-            <div class="postImgItem">
-              <img :src="item.actiPosterUrl" class="postImg" alt="活动海报图片" @click="handleRout(item.id)">
+            <div class="postImgItem pointer" @click="handleRout(item.id)">
+              <img :src="item.actiPosterUrl" class="postImg" alt="活动海报图片" >
             </div>
             <div class="actiInfo">
               <p class="actiNameItem">{{item.actiName}}</p>
@@ -165,7 +69,7 @@
                 <!-- <span>{{item.actiStartTime}}-{{item.actiEndTime.split(' ')[1]}}</span> -->
                 <!-- <span>周日14：00-17：00</span> -->
               </p>
-              <p>
+              <p class="actiAddress">
                 <i class="el-icon-location-outline"></i>
                 <span>{{item.actiAddress}}</span>
               </p>
@@ -184,7 +88,7 @@
         </ul>
         <ul class="verticalUl" v-else>
           <li class="clearfix" v-for="(item,index) in actiListSlim" :key='index'>
-            <div class="verticalLeft fl" @click="handleRout(item.id)">
+            <div class="verticalLeft fl pointer" @click="handleRout(item.id)">
               <img :src="item.actiPosterUrl" alt="活动海报图片">
             </div>
             <div class="verticalMiddle fl">
@@ -209,14 +113,16 @@
                     <li><img src="@/../static/img/heng2.png" alt=""></li> -->
                   </ul>
                 </div>
-                <i>{{item.actiNumber}}</i>
+                <i>{{item.applyNum}}/{{item.actiNumber}}</i>
               </div>
             </div>
             <div class="verticalRight fr">
-              <el-button type="success" v-if="item.showApplyNum==1" plain @click="nowApply(item.id)" style="width:112px;border:1px solid #00a042;background:#ebfdf1;color:#00a042">立即报名</el-button>
+              <!-- <el-button type="success" v-if="item.showApplyNum==1" plain @click="nowApply(item.id)" style="width:112px;border:1px solid #00a041;background:#ebfdf1;color:#00a041">立即报名</el-button>
               <el-button type="success" v-else-if="item.showApplyNum==0" style="background:#00a042;color:#fff" plain>活动已结束</el-button>
-              <el-button type="success" v-else style="width:112px;background:#00a042;color:#fff">报名成功</el-button>
-
+              <el-button type="success" v-else style="width:112px;background:#00a042;color:#fff">报名成功</el-button> -->
+              <el-button type="success" v-if="item.actiStatus=='3'" style="background:#00a041;height:38px;width:110px" >活动已结束</el-button>
+              <el-button type="success" v-if="item.actiStatus=='4'" style="background:#00a041;height:38px;width:110px" >活动已取消</el-button>
+              <el-button type="success" v-if="item.actiStatus=='2'" style="background:#ecfcf2;height:38px;width:110px;border:1px solid #00a041;color:#00a041;" >报名中</el-button>
             </div>
           </li>
         </ul>
@@ -236,7 +142,7 @@ export default {
       headFlag: true,
       sousuo: false,
       flag: true,
-      showListFlag: "",
+      showListFlag: "icon-menu",
       currentPage4: 1,
       actiFilflag: "",
       colorFlag: "",
@@ -250,7 +156,8 @@ export default {
       timeIndexFlag: "",
       startTime: "",
       endTime: "",
-      showList: false
+      showList: false,
+      typeId:''
     };
   },
   mounted() {
@@ -284,19 +191,19 @@ export default {
     },
     handleFil(v) {
       //筛选
-      this.keyWord = v;
+      this.typeId = v;
       this.actiFilflag = v;
       this.initList();
     },
     handleCrosswise(v) {
       //横向显示
       this.flag = true;
-      this.showListFlag = "icon-menu1";
+      this.showListFlag = "icon-menu";
     },
     handleVertical() {
       //竖向显示
       this.flag = false;
-      this.showListFlag = "icon-menu";
+      this.showListFlag = "icon-menu1";
     },
     handleSizeChange(val) {
       //改变每页显示多少条的回调函数
@@ -351,7 +258,7 @@ export default {
           page: this.page,
           rows: this.row,
           startTime: this.startTime,
-          typeId: ""
+          typeId: this.typeId
         },
         dataFlag: false,
         callback: function(res) {
@@ -382,6 +289,7 @@ export default {
 <style lang="scss">
 .actiCenter {
   margin-bottom: 100px;
+  padding-top: 65px;
   #header11 {
     position: relative;
     padding: 0 160px;

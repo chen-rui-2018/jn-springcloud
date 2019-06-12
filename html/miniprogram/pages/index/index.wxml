@@ -1,15 +1,101 @@
-
-<swiper class="screen-swiper round-dot" indicator-dots="true" circular="true" autoplay="true" interval="5000" duration="500">
-  <swiper-item wx:for="{{3}}" wx:key>
-    <image src="../../images/swiper/4x3-{{index+1}}.jpg" mode='aspectFill'></image>
-  </swiper-item>
-</swiper>
-
-<view class='nav-list' style="padding-top:15px;">
-  <navigator hover-class='none' url="../{{item.name}}/{{item.name}}" class="nav-li bg-{{item.color}}" style='animation: show {{(index+1)*0.2+1}}s 1;-webkit-animation: show {{(index+1)*0.2+1}}s 1;' wx:for="{{elements}}" wx:key>
-    <view class="nav-title">{{item.title}}</view>
-    <view class="nav-name">{{item.name}}</view>
-    <text class='icon-{{item.icon}}'></text>
-  </navigator>
+<!-- <nav-bar navbar-data='{{nvabarData}}'></nav-bar> -->
+<view class="index bg_white">
+  <!-- 轮播图 -->
+  <view class="swiper_box bg_white">
+    <view class="bg"></view>
+    <view class="swiper_main"> 
+      <swiper class="screen-swiper round-dot" indicator-dots="true" circular="true" autoplay="true" interval="5000" duration="500">
+        <swiper-item wx:for="{{bannarList}}" wx:key="{{index}}">
+          <!-- <navigator url=""> -->
+            <image src="{{item.posterUrl}} " mode='aspectFill'></image>
+          <!-- </navigator> -->
+        </swiper-item>
+      </swiper> 
+    </view>
+  </view>
+  <!-- 公告 -->
+  <view class="notice bg_white paddihng_side">
+    <view class="notice_img">
+      <image wx:if="{{imgBaseUrl}}" class="" src="{{imgBaseUrl}}index_notice.png"> </image>
+    </view>
+    <view class="notice_main">
+      <swiper class='notice_swiper' autoplay='{{true}}' interval='2000' vertical='{{true}}' circular='{{true}}'>
+        <swiper-item class='item' wx:for='{{noticeLise}}' wx:key="{{index}}" bindtap="goparkDetais" data-noticeid="{{item.noticeId}}">{{item.noticeTitle}}</swiper-item>
+      </swiper>
+    </view>
+  </view>
+  <!-- 导航图标 -->
+  <view class="nav bg_white paddihng_side">
+    <view class="nav_item"> 
+      <navigator url="/pages/index/policyGuide/policyGuide">
+        <image wx:if="{{imgBaseUrl}}" class="" src="{{imgBaseUrl}}index_nav1.png"></image>
+      </navigator>
+      <text class=""> 政策指南 </text>
+    </view>
+    <view class="nav_item"> 
+      <navigator url="/pages/index/declarationNotice/declarationNotice">
+        <image wx:if="{{imgBaseUrl}}" class="" src="{{imgBaseUrl}}index_nav2.png" > </image>
+      </navigator>
+        <text class=""> 申告公告 </text>
+    </view>
+    <view class="nav_item"> 
+      <navigator class="" target="" url="/pages/index/parkPay/parkPay">
+        <image wx:if="{{imgBaseUrl}}" class="" src="{{imgBaseUrl}}index_nav3.png" > </image>
+      </navigator>
+      <text class=""> 停车缴费 </text>
+    </view>
+    <view class="nav_item"> 
+      <navigator class="" target="" url="/pages/index/maintenance/maintenance">
+        <image wx:if="{{imgBaseUrl}}" class="" src="{{imgBaseUrl}}index_nav4.png" > </image>
+      </navigator>
+      <text class=""> 维保录入 </text>
+    </view>
+  </view>
+  <!-- 热门活动 -->
+  <view class="hot_act paddihng_side bg_white">
+    <view class="hot_title">
+      <text>热门活动</text>
+      <navigator url="/pages/index/hotAct/hotAct">
+        <view class="gray">
+          <text>更多</text>
+          <text class="icon-right"></text>
+        </view>
+      </navigator>
+    </view>
+    <view class="hot_ul">
+      <block wx:for="{{hotList}}" wx:key="{{index}}">
+        <!-- <navigator url="/pages/index/actiDetail/actiDetail" > -->
+          <view class="hot_li" bindtap="goDetail" data-id="{{item.id}}">
+            <view class="hot_li_img">
+              <image class="" src="{{item.actiPosterUrl}} "> </image>
+            </view>
+            <view class="hot_li_title paddihng_side">{{item.actiName}} </view>
+            <view class="hot_li_detail gray paddihng_side">
+              <view>
+                <text class="icon-location icon"></text>
+                <text>{{item.actiAddress}}</text>
+              </view>
+              <view>
+                <text class="icon-countdown icon"></text>
+                <text>10/17  周日14:00-17:00</text>
+              </view>
+            </view>
+            <view class="hot_li_num paddihng_side">
+              <view class="num_left">
+                <view class="{{headIndex!=0?'num_img':''}} " wx:for="{{item.avatarList}}" wx:for-item="headItem" wx:for-index="headIndex" wx:key="{{headIndex}}">
+                  <image class="cu-avatar round" src="{{headItem}}" > </image>
+               </view>
+                <text class="gray person_num">{{item.applyNum}}/{{item.actiNumber}}名</text>
+              </view>
+              <view class="num_right">
+                <image wx:if="{{imgBaseUrl}}" class="" src="{{imgBaseUrl}}xin@2x.png"> </image>
+                <text>{{item.actiLike}}</text>
+              </view>
+            </view>
+          </view>
+        <!-- </navigator> -->
+      </block>
+    </view>
+  </view>
 </view>
-<view class='cu-tabbar-height'></view>
+

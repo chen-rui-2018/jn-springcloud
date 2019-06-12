@@ -18,6 +18,8 @@ public class TbPropaganda implements Serializable {
 
     private Date invalidDate;
 
+    private String propagandaDetails;
+
     private String propagandaArea;
 
     private String propagandaAreaUrl;
@@ -42,6 +44,8 @@ public class TbPropaganda implements Serializable {
 
     private String approvalDesc;
 
+    private String viewCount;
+
     private String orderCode;
 
     private Date createdTime;
@@ -53,8 +57,6 @@ public class TbPropaganda implements Serializable {
     private String modifierAccount;
 
     private Byte recordStatus;
-
-    private String propagandaDetails;
 
     private static final long serialVersionUID = 1L;
 
@@ -112,6 +114,14 @@ public class TbPropaganda implements Serializable {
 
     public void setInvalidDate(Date invalidDate) {
         this.invalidDate = invalidDate;
+    }
+
+    public String getPropagandaDetails() {
+        return propagandaDetails;
+    }
+
+    public void setPropagandaDetails(String propagandaDetails) {
+        this.propagandaDetails = propagandaDetails == null ? null : propagandaDetails.trim();
     }
 
     public String getPropagandaArea() {
@@ -210,6 +220,14 @@ public class TbPropaganda implements Serializable {
         this.approvalDesc = approvalDesc == null ? null : approvalDesc.trim();
     }
 
+    public String getViewCount() {
+        return viewCount;
+    }
+
+    public void setViewCount(String viewCount) {
+        this.viewCount = viewCount == null ? null : viewCount.trim();
+    }
+
     public String getOrderCode() {
         return orderCode;
     }
@@ -258,14 +276,6 @@ public class TbPropaganda implements Serializable {
         this.recordStatus = recordStatus;
     }
 
-    public String getPropagandaDetails() {
-        return propagandaDetails;
-    }
-
-    public void setPropagandaDetails(String propagandaDetails) {
-        this.propagandaDetails = propagandaDetails == null ? null : propagandaDetails.trim();
-    }
-
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -285,6 +295,7 @@ public class TbPropaganda implements Serializable {
             && (this.getIssuePlatform() == null ? other.getIssuePlatform() == null : this.getIssuePlatform().equals(other.getIssuePlatform()))
             && (this.getEffectiveDate() == null ? other.getEffectiveDate() == null : this.getEffectiveDate().equals(other.getEffectiveDate()))
             && (this.getInvalidDate() == null ? other.getInvalidDate() == null : this.getInvalidDate().equals(other.getInvalidDate()))
+            && (this.getPropagandaDetails() == null ? other.getPropagandaDetails() == null : this.getPropagandaDetails().equals(other.getPropagandaDetails()))
             && (this.getPropagandaArea() == null ? other.getPropagandaArea() == null : this.getPropagandaArea().equals(other.getPropagandaArea()))
             && (this.getPropagandaAreaUrl() == null ? other.getPropagandaAreaUrl() == null : this.getPropagandaAreaUrl().equals(other.getPropagandaAreaUrl()))
             && (this.getPosterUrl() == null ? other.getPosterUrl() == null : this.getPosterUrl().equals(other.getPosterUrl()))
@@ -297,13 +308,13 @@ public class TbPropaganda implements Serializable {
             && (this.getIsPay() == null ? other.getIsPay() == null : this.getIsPay().equals(other.getIsPay()))
             && (this.getApprovalStatus() == null ? other.getApprovalStatus() == null : this.getApprovalStatus().equals(other.getApprovalStatus()))
             && (this.getApprovalDesc() == null ? other.getApprovalDesc() == null : this.getApprovalDesc().equals(other.getApprovalDesc()))
+            && (this.getViewCount() == null ? other.getViewCount() == null : this.getViewCount().equals(other.getViewCount()))
             && (this.getOrderCode() == null ? other.getOrderCode() == null : this.getOrderCode().equals(other.getOrderCode()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
-            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
-            && (this.getPropagandaDetails() == null ? other.getPropagandaDetails() == null : this.getPropagandaDetails().equals(other.getPropagandaDetails()));
+            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()));
     }
 
     @Override
@@ -317,6 +328,7 @@ public class TbPropaganda implements Serializable {
         result = prime * result + ((getIssuePlatform() == null) ? 0 : getIssuePlatform().hashCode());
         result = prime * result + ((getEffectiveDate() == null) ? 0 : getEffectiveDate().hashCode());
         result = prime * result + ((getInvalidDate() == null) ? 0 : getInvalidDate().hashCode());
+        result = prime * result + ((getPropagandaDetails() == null) ? 0 : getPropagandaDetails().hashCode());
         result = prime * result + ((getPropagandaArea() == null) ? 0 : getPropagandaArea().hashCode());
         result = prime * result + ((getPropagandaAreaUrl() == null) ? 0 : getPropagandaAreaUrl().hashCode());
         result = prime * result + ((getPosterUrl() == null) ? 0 : getPosterUrl().hashCode());
@@ -329,13 +341,13 @@ public class TbPropaganda implements Serializable {
         result = prime * result + ((getIsPay() == null) ? 0 : getIsPay().hashCode());
         result = prime * result + ((getApprovalStatus() == null) ? 0 : getApprovalStatus().hashCode());
         result = prime * result + ((getApprovalDesc() == null) ? 0 : getApprovalDesc().hashCode());
+        result = prime * result + ((getViewCount() == null) ? 0 : getViewCount().hashCode());
         result = prime * result + ((getOrderCode() == null) ? 0 : getOrderCode().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
-        result = prime * result + ((getPropagandaDetails() == null) ? 0 : getPropagandaDetails().hashCode());
         return result;
     }
 
@@ -352,6 +364,7 @@ public class TbPropaganda implements Serializable {
         sb.append(", issuePlatform=").append(issuePlatform);
         sb.append(", effectiveDate=").append(effectiveDate);
         sb.append(", invalidDate=").append(invalidDate);
+        sb.append(", propagandaDetails=").append(propagandaDetails);
         sb.append(", propagandaArea=").append(propagandaArea);
         sb.append(", propagandaAreaUrl=").append(propagandaAreaUrl);
         sb.append(", posterUrl=").append(posterUrl);
@@ -364,13 +377,13 @@ public class TbPropaganda implements Serializable {
         sb.append(", isPay=").append(isPay);
         sb.append(", approvalStatus=").append(approvalStatus);
         sb.append(", approvalDesc=").append(approvalDesc);
+        sb.append(", viewCount=").append(viewCount);
         sb.append(", orderCode=").append(orderCode);
         sb.append(", createdTime=").append(createdTime);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", modifiedTime=").append(modifiedTime);
         sb.append(", modifierAccount=").append(modifierAccount);
         sb.append(", recordStatus=").append(recordStatus);
-        sb.append(", propagandaDetails=").append(propagandaDetails);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

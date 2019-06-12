@@ -2,9 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.enterprise.servicemarket.product.dao.ServiceAdvisorDao">
     <insert id="addServiceAdvisor" parameterType="java.util.List">
-        insert into tb_service_and_advisor (product_id, advisor_account) values
+        insert into tb_service_and_advisor ( id,product_id_, advisor_account) values
         <foreach collection="list" index="index" open="" close="" separator="," item="item">
-            (#{item.productId,jdbcType=VARCHAR},
+            (#{item.id},
+            #{item.productId,jdbcType=VARCHAR},
             #{item.advisorAccount,jdbcType=VARCHAR})
         </foreach>
     </insert>
@@ -12,6 +13,7 @@
        select
         tt.productId,  <!--服务产品Id-->
         tt.productName, <!--服务产品名称-->
+        tt.signoryId,    <!--领域id-->
         tt.productType,  <!--服务产品类型-->
         tt.pictureUrl,    <!--服务产品图片路径-->
         tt.advisorName,    <!--顾问名称-->
@@ -50,6 +52,7 @@
         select
         t1.product_id_ as "productId",
         t1.product_name as "productName",
+        t1.signory_id as "signoryId",
         t1.serial_number as "serialNumber",
         t1.product_type as "productType",
         t1.refer_price as "referPrice",

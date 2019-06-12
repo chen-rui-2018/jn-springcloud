@@ -30,14 +30,14 @@ export default {
     @include  flex;
     border: 1px solid $gray;
     .row-l {
-      width: 160px;
+      width: 10%;
       padding: 10px;
       @include flex-center;
       border-right: $gray;
       color: #A8A8A8;
     }
     .row-r {
-      flex: 1;
+      width: 90%;
       padding: 20px;
       font-size: 14px;
       background-color: #fff;

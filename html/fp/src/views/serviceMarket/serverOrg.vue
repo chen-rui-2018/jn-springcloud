@@ -1,7 +1,7 @@
 <template>
   <div class="serverOrg w">
     <div class="serverOrgMenu">
-      <span>首页</span>
+      <span class="pointer" @click="$router.push({path:'/serMatHp'})">首页</span>
       <span>/</span>
       <span class="mainColor agent">服务机构</span>
     </div>
@@ -9,10 +9,10 @@
       <div class="nav1 clearfix">
         <div class="nav1Tit fl">业务领域：</div>
         <ul class="nav1Ul fl clearfix" style="width:auto;">
-          <li :class="{'active':filterFlag == ''}" @click="handleFilter('')">不限</li>
+          <li :class="{'active1':filterFlag == ''}" @click="handleFilter('')">不限</li>
         </ul>
         <ul class="nav1Ul fl clearfix" :class="{'sh':!flag1}">
-          <li class="wid1" v-for="(i,k) in businessArea" :key='k' @click="handleFilter(i.id)" :class="{'active':filterFlag == i.id}">{{i.preValue}}</li>
+          <li class="wid1" v-for="(i,k) in businessArea" :key='k' @click="handleFilter(i.id)" :class="{'active1':filterFlag == i.id}">{{i.preValue}}</li>
         </ul>
         <div class="fr" v-if="widFun('wid1')">
           <i class="el-icon-arrow-down" v-if="flag1" @click="flag1 = !flag1"></i>
@@ -27,10 +27,10 @@
           <div class="nav1Tit fl">所属行业：</div>
           <!-- <div class="fl" :class="{'active':filterFlag1 == ''}" @click="handleFilter1('')">不限</div> -->
           <ul class="nav1Ul fl clearfix" style="width:auto;">
-            <li :class="{'active':filterFlag1 == ''}" @click="handleFilter1('')">不限</li>
+            <li :class="{'active1':filterFlag1 == ''}" @click="handleFilter1('')">不限</li>
           </ul>
           <ul class="nav1Ul fl clearfix" :class="{'sh':!flag2}">
-            <li class="wid2" v-for="(i,k) in industryField" :key='k' @click="handleFilter1(i.id)" :class="{'active':filterFlag1 == i.id}">{{i.preValue}}</li>
+            <li class="wid2" v-for="(i,k) in industryField" :key='k' @click="handleFilter1(i.id)" :class="{'active1':filterFlag1 == i.id}">{{i.preValue}}</li>
           </ul>
           <div class="fr" v-if="widFun('wid2')">
             <i class="el-icon-arrow-down" v-if="flag2" @click="flag2 = !flag2"></i>
@@ -40,29 +40,29 @@
         <div class="nav1 clearfix">
           <div class="nav1Tit fl">发展阶段：</div>
           <ul class="nav1Ul fl clearfix" style="width:auto">
-            <li :class="{'active':filterFlag2 == ''}" @click="handleFilter2('')">不限</li>
+            <li :class="{'active1':filterFlag2 == ''}" @click="handleFilter2('')">不限</li>
           </ul>
           <ul class="nav1Ul fl clearfix" :class="{'sh':!flag3}">
-            <li class="wid3" v-for="(i,k) in developStage" :key='k' @click="handleFilter2(i.id)" :class="{'active':filterFlag2 == i.id}">{{i.preValue}}</li>
+            <li class="wid3" v-for="(i,k) in developStage" :key='k' @click="handleFilter2(i.id)" :class="{'active1':filterFlag2 == i.id}">{{i.preValue}}</li>
           </ul>
           <div class="fr" v-if="widFun('wid3')">
             <i class="el-icon-arrow-down" v-if="flag3" @click="flag3 = !flag3"></i>
             <i class="el-icon-arrow-up" v-else @click="flag3 = !flag3"></i>
           </div>
         </div>
-        <div class="nav1 clearfix">
+        <!-- <div class="nav1 clearfix">
           <div class="nav1Tit fl">企业性质：</div>
           <ul class="nav1Ul fl clearfix" style="width:auto">
-            <li :class="{'active':filterFlag3 == ''}" @click="handleFilter3('')">不限</li>
+            <li :class="{'active1':filterFlag3 == ''}" @click="handleFilter3('')">不限</li>
           </ul>
           <ul class="nav1Ul fl clearfix" :class="{'sh':!flag4}">
-            <li class="wid4" v-for="(i,k) in enterpriseNature" :key='k' @click="handleFilter3(i.id)" :class="{'active':filterFlag3 == i.id}">{{i.preValue}}</li>
+            <li class="wid4" v-for="(i,k) in enterpriseNature" :key='k' @click="handleFilter3(i.id)" :class="{'active1':filterFlag3 == i.id}">{{i.preValue}}</li>
           </ul>
           <div class="fr" v-if="widFun('wid4')">
             <i class="el-icon-arrow-down" v-if="flag4" @click="flag4 = !flag4"></i>
             <i class="el-icon-arrow-up" v-else @click="flag4 = !flag4"></i>
           </div>
-        </div>
+        </div> -->
         <div class="nav1 nav2 mainColor pointer" style="color:#00a041" @click="showFlag=!showFlag">
           收起
           <i class="el-icon-arrow-up" style="color:#00a041"></i>
@@ -77,10 +77,10 @@
     </div>
     <div class="serverOrgFilter mainBorder clearfix">
       <div class="filLeft fl">排序：
-        <span @click="handleFil('')" :class="{'active':colorFlag == ''}">综合</span>
-        <span @click="handleFil('popularity')" :class="{'active':colorFlag == 'popularity'}">人气</span>
-        <!-- <span>好评</span> -->
-        <span @click="handleFil('serviceNum')" :class="{'active':colorFlag == 'serviceNum'}">服务量</span>
+        <span @click="handleFil('')" :class="{'active2':colorFlag == ''}">综合</span>
+        <span @click="handleFil('popularity')" :class="{'active2':colorFlag == 'popularity'}">人气</span>
+        <span @click="handleFil('attitudeScore')" :class="{'active2':colorFlag == 'popularity'}">好评</span>
+        <span @click="handleFil('serviceNum')" :class="{'active2':colorFlag == 'serviceNum'}">服务量</span>
       </div>
       <div class="filRight fr">
         <input type="text" placeholder="搜索关键字" v-model="keyW">
@@ -90,7 +90,7 @@
     <div class="serverOrgContent">
       <ul>
         <li class="clearfix" v-for="(i,k) in serverAgent" :key='k'>
-          <div class="orgImg mainBorder fl" @click="handleOrgDel(i.orgId)">
+          <div class="orgImg fl" @click="handleOrgDel(i.orgId)">
             <!-- <img src="@/../static/img/ins1.png" alt=""> -->
             <img :src="i.orgLogo" alt="">
           </div>
@@ -103,11 +103,11 @@
                 </p>
                 <p>地址：{{i.orgAddress}}</p>
                 <p>累计
-                  <span class="mainColor">{{i.transactionNum}}</span>笔交易</p>
+                  <span class="mainColor">{{i.transactionNum}}</span>&nbsp;笔交易</p>
               </div>
               <div class="right1 fl">
                 <p>
-                  <el-rate v-model="i.attitudeScore" :colors="['#99A9BF', '#00a041', '#FF9900']" disabled text-color="#00a041" score-template="{value}">
+                  <el-rate v-model="i.attitudeScore*1" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
                   </el-rate>
                   <span class="mainColor">{{i.evaluationNum}}</span>条评价</p>
                 <p>
@@ -116,22 +116,35 @@
               </div>
             </div>
           </div>
-          <div class="orgBtn fr mainColor">
-            <a href="">在线联系</a>
+          <div class="orgBtn fr mainColor pointer" @click="onlineContat(i.orgAccount,i.orgName)">
+            <a href="javascript:;">在线联系</a>
           </div>
         </li>
       </ul>
     </div>
     <div class="pagination-container">
-      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row" layout="total, sizes, prev, pager, next, jumper" :total="total">
+      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
       </el-pagination>
     </div>
+    <!-- 在线联系弹框 -->
+    <template v-if="concatVisible">
+      <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :append-to-body="true" :lock-scroll="false">
+        <div class="loginTip" style="text-align:center;padding-bottom:20px">
+          你还未
+          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          /
+          <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+          账号
+        </div>
+      </el-dialog>
+    </template>
   </div>
 </template>
 <script>
 export default {
   data() {
     return {
+      concatVisible: false,
       total: 0,
       currentPage1: 1,
       row: 3,
@@ -140,9 +153,9 @@ export default {
       sortTypes: "",
       keyW: "",
       businessType: "",
-      industrySector:"",
-      developmentStage:"",
-      companyNature:"",
+      industrySector: "",
+      developmentStage: "",
+      companyNature: "",
       colorFlag: "",
       filterFlag1: "",
       filterFlag2: "",
@@ -160,10 +173,30 @@ export default {
     };
   },
   mounted() {
-    this.initList();
     this.selectIndustryList();
+    if (this.$route.query.searchData) {
+      this.keyW = this.$route.query.searchData;
+      this.initList();
+    } else {
+      this.initList();
+    }
   },
   methods: {
+    //在线联系
+    onlineContat(orgAccount, orgName) {
+      if (!sessionStorage.userInfo) {
+        this.concatVisible = true;
+        return;
+      }
+      this.$router.push({
+        path: "/chat",
+        query: {
+          fromUser: JSON.parse(sessionStorage.userInfo).account,
+          toUser: orgAccount,
+          nickName: orgName
+        }
+      });
+    },
     widFun(i) {
       let doc = document.getElementsByClassName(i);
       let num = 0;
@@ -186,26 +219,25 @@ export default {
     },
     //领域搜索
     handleFilter(i) {
-      this.businessType=`${i}`,
-      this.filterFlag = i;
+      (this.businessType = `${i}`), (this.filterFlag = i);
       this.initList();
     },
     handleFilter1(i) {
-      this.industrySector=`${i}`,
-      // this.industrySector=[]
-      // this.industrySector.push(i);
-      this.filterFlag1 = i;
+      (this.industrySector = `${i}`),
+        // this.industrySector=[]
+        // this.industrySector.push(i);
+        (this.filterFlag1 = i);
       this.initList();
     },
     handleFilter2(i) {
-      this.developmentStage=`${i}`,
-      // this.developmentStage=[]
-      // this.developmentStage.push(i);
-      this.filterFlag2 = i;
+      (this.developmentStage = `${i}`),
+        // this.developmentStage=[]
+        // this.developmentStage.push(i);
+        (this.filterFlag2 = i);
       this.initList();
     },
-    handleFilter3(i) {  
-      this.companyNature=`${i}`
+    handleFilter3(i) {
+      this.companyNature = `${i}`;
       this.filterFlag3 = i;
       this.initList();
     },
@@ -233,20 +265,19 @@ export default {
     initList() {
       let _this = this;
       let data = {
-          businessType: _this.businessType,
-          industrySector: _this.industrySector,
-          developmentStage: _this.developmentStage,
-          companyNature: _this.companyNature,
-          page: _this.page,
-          rows: _this.row,
-          sortTypes: _this.sortTypes,
-          orgName: _this.keyW
-        }
-        console.log(data)
+        businessType: _this.businessType,
+        industrySector: _this.industrySector,
+        developmentStage: _this.developmentStage,
+        companyNature: _this.companyNature,
+        page: _this.page,
+        rows: _this.row,
+        sortTypes: _this.sortTypes,
+        orgName: _this.keyW
+      };
       this.api.get({
         url: "selectServiceOrgList",
         data: data,
-        dataFlag:true,
+        dataFlag: true,
         callback: function(res) {
           if (res.code == "0000") {
             _this.serverAgent = res.data.rows;
@@ -293,5 +324,8 @@ export default {
   }
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
+.serverOrg {
+  padding-top: 65px;
+}
 </style>

@@ -1,6 +1,5 @@
 package com.jn.enterprise.servicemarket.require.model;
 
-import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -14,7 +13,7 @@ import java.util.Date;
  * @modified By:
  */
 @ApiModel(value = "RequireReceivedDetails", description = "我收到的需求详情")
-public class RequireReceivedDetails extends Page implements Serializable {
+public class RequireReceivedDetails implements Serializable {
     @ApiModelProperty(value = "企业名称")
     private String companyName;
     @ApiModelProperty(value = "需求单号")
@@ -56,6 +55,11 @@ public class RequireReceivedDetails extends Page implements Serializable {
     private String fundsReqDesc;
     @ApiModelProperty(value = "[科技金融]资金需求日期")
     private Date expectedDate;
+
+    @ApiModelProperty(value = "评价分数")
+    private String ratingScore;
+    @ApiModelProperty(value = "评价描述")
+    private String evaluationDesc;
 
 
     public String getCompanyName() {
@@ -216,6 +220,22 @@ public class RequireReceivedDetails extends Page implements Serializable {
 
     public void setExpectedDate(Date expectedDate) {
         this.expectedDate = expectedDate;
+    }
+
+    public String getRatingScore() {
+        return ratingScore;
+    }
+
+    public void setRatingScore(String ratingScore) {
+        this.ratingScore = ratingScore;
+    }
+
+    public String getEvaluationDesc() {
+        return evaluationDesc;
+    }
+
+    public void setEvaluationDesc(String evaluationDesc) {
+        this.evaluationDesc = evaluationDesc;
     }
 
     @Override

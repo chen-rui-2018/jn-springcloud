@@ -1,7 +1,7 @@
 <template>
   <div class="finaInstitution w">
     <div class="serverOrgMenu">
-      <span>首页</span>
+      <span class="pointer" @click="$router.push({path:'/tfindex'})">首页</span>
       <span>/</span>
       <span class="mainColor agent">金融机构</span>
     </div>
@@ -11,10 +11,10 @@
           <div class="nav1Tit fl">所属行业：</div>
           <!-- <div class="fl" :class="{'active':filterFlag1 == ''}" @click="handleFilter1('')">不限</div> -->
           <ul class="nav1Ul fl clearfix" style="width:auto;">
-            <li :class="{'active':filterFlag1 == ''}" @click="handleFilter1('')">不限</li>
+            <li :class="{'active1':filterFlag1 == ''}" @click="handleFilter1('')">不限</li>
           </ul>
           <ul class="nav1Ul fl clearfix" :class="{'sh':!flag2}">
-            <li class="wid2" v-for="(i,k) in industryField" :key='k' @click="handleFilter1(i.id)" :class="{'active':filterFlag1 == i.id}">{{i.preValue}}</li>
+            <li class="wid2" v-for="(i,k) in industryField" :key='k' @click="handleFilter1(i.id)" :class="{'active1':filterFlag1 == i.id}">{{i.preValue}}</li>
           </ul>
           <div class="fr" v-if="widFun('wid2')">
             <i class="el-icon-arrow-down" v-if="flag2" @click="flag2 = !flag2"></i>
@@ -24,10 +24,10 @@
         <div class="nav1 clearfix">
           <div class="nav1Tit fl">发展阶段：</div>
           <ul class="nav1Ul fl clearfix" style="width:auto">
-            <li :class="{'active':filterFlag2 == ''}" @click="handleFilter2('')">不限</li>
+            <li :class="{'active1':filterFlag2 == ''}" @click="handleFilter2('')">不限</li>
           </ul>
           <ul class="nav1Ul fl clearfix" :class="{'sh':!flag3}">
-            <li class="wid3" v-for="(i,k) in developStage" :key='k' @click="handleFilter2(i.id)" :class="{'active':filterFlag2 == i.id}">{{i.preValue}}</li>
+            <li class="wid3" v-for="(i,k) in developStage" :key='k' @click="handleFilter2(i.id)" :class="{'active1':filterFlag2 == i.id}">{{i.preValue}}</li>
           </ul>
           <div class="fr" v-if="widFun('wid3')">
             <i class="el-icon-arrow-down" v-if="flag3" @click="flag3 = !flag3"></i>
@@ -37,10 +37,10 @@
         <div class="nav1 clearfix">
           <div class="nav1Tit fl">企业性质：</div>
           <ul class="nav1Ul fl clearfix" style="width:auto">
-            <li :class="{'active':filterFlag3 == ''}" @click="handleFilter3('')">不限</li>
+            <li :class="{'active1':filterFlag3 == ''}" @click="handleFilter3('')">不限</li>
           </ul>
           <ul class="nav1Ul fl clearfix" :class="{'sh':!flag4}">
-            <li class="wid4" v-for="(i,k) in enterpriseNature" :key='k' @click="handleFilter3(i.id)" :class="{'active':filterFlag3 == i.id}">{{i.preValue}}</li>
+            <li class="wid4" v-for="(i,k) in enterpriseNature" :key='k' @click="handleFilter3(i.id)" :class="{'active1':filterFlag3 == i.id}">{{i.preValue}}</li>
           </ul>
           <div class="fr" v-if="widFun('wid4')">
             <i class="el-icon-arrow-down" v-if="flag4" @click="flag4 = !flag4"></i>
@@ -61,10 +61,10 @@
     </div>
     <div class="serverOrgFilter mainBorder clearfix">
       <div class="filLeft fl">排序：
-        <span @click="handleFil('')" :class="{'active':colorFlag == ''}">综合</span>
-        <span @click="handleFil('popularity')" :class="{'active':colorFlag == 'popularity'}">人气</span>
+        <span @click="handleFil('')" :class="{'active2':colorFlag == ''}">综合</span>
+        <span @click="handleFil('popularity')" :class="{'active2':colorFlag == 'popularity'}">人气</span>
         <!-- <span>好评</span> -->
-        <span @click="handleFil('serviceNum')" :class="{'active':colorFlag == 'serviceNum'}">服务量</span>
+        <span @click="handleFil('serviceNum')" :class="{'active2':colorFlag == 'serviceNum'}">服务量</span>
       </div>
       <div class="filRight fr">
         <input type="text" placeholder="搜索关键字" v-model="keyW">
@@ -74,9 +74,9 @@
     <div class="serverOrgContent">
       <ul>
         <li class="clearfix" v-for="(i,k) in serverAgent" :key='k'>
-          <div class="orgImg mainBorder fl" @click="handleOrgDel(i.orgId)">
-            <!-- <img src="@/../static/img/ins1.png" alt=""> -->
+          <div class="orgImg fl" @click="handleOrgDel(i.orgId)">
             <img :src="i.orgLogo" alt="">
+            <!-- <img v-else src="@/../static/img/product.png" alt=""> -->
           </div>
           <div class="orgCon fl">
             <div class="conTil">{{i.orgName}}</div>
@@ -91,7 +91,7 @@
               </div>
               <div class="right1 fl">
                 <p>
-                  <el-rate v-model="i.attitudeScore" :colors="['#99A9BF', '#00a041', '#FF9900']" disabled text-color="#00a041" score-template="{value}">
+                  <el-rate v-model="i.attitudeScore*1" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
                   </el-rate>
                   <span class="mainColor">{{i.evaluationNum}}</span>条评价</p>
                 <p>
@@ -100,22 +100,34 @@
               </div>
             </div>
           </div>
-          <div class="orgBtn fr mainColor">
-            <a href="">在线联系</a>
+          <div class="orgBtn fr mainColor pointer" @click="onlineContat(i.orgAccount,i.orgName)">
+            <a href="javascript:;">在线联系</a>
           </div>
         </li>
       </ul>
     </div>
     <div class="pagination-container">
-      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row" layout="total, sizes, prev, pager, next, jumper" :total="total">
+      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
       </el-pagination>
     </div>
+      <template v-if="concatVisible">
+      <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :modal-append-to-body=false :lock-scroll="false">
+        <div class="loginTip">
+          你还未
+          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          /
+          <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+          账号
+        </div>
+      </el-dialog>
+    </template>
   </div>
 </template>
 <script>
 export default {
   data() {
     return {
+      concatVisible:false,
       total: 0,
       currentPage1: 1,
       row: 3,
@@ -147,6 +159,14 @@ export default {
     this.selectIndustryList();
   },
   methods: {
+      //在线联系
+    onlineContat(orgAccount,orgName){
+       if (!sessionStorage.userInfo) {
+        this.concatVisible=true
+        return
+      }
+      this.$router.push({path:'/chat',query:{fromUser: JSON.parse(sessionStorage.userInfo).account,fromUser:sessionStorage.userInfo.account,toUser:orgAccount,nickName:orgName}})
+    },
     widFun(i) {
       let doc = document.getElementsByClassName(i);
       let num = 0;
@@ -267,4 +287,7 @@ export default {
 };
 </script>
 <style lang="scss">
+.finaInstitution{
+  padding-top:65px;
+}
 </style>

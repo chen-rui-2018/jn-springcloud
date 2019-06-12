@@ -17,9 +17,9 @@ public class ServiceRecruitParam extends ServiceWebRecruitParam implements Seria
     private String comId;
     @ApiModelProperty(value = "状态（1：已上架[默认] 0：已下架 2：全部）", example = "1")
     private String status;
-    @ApiModelProperty(value = "开始查询日期yyyy-MM-dd", example = "2019-01-01")
+    @ApiModelProperty(value = "开始查询日期yyyy-MM-dd", example = "2019-01-01", hidden = true)
     private String beginDate;
-    @ApiModelProperty(value = "结束查询日期yyyy-MM-dd", example = "2019-01-01")
+    @ApiModelProperty(value = "结束查询日期yyyy-MM-dd", example = "2019-01-01", hidden = true)
     private String endDate;
 
     public String getComId() {
@@ -52,5 +52,15 @@ public class ServiceRecruitParam extends ServiceWebRecruitParam implements Seria
 
     public void setEndDate(String endDate) {
         this.endDate = endDate;
+    }
+
+    @Override
+    public String toString() {
+        return "ServiceRecruitParam{" +
+                "comId='" + comId + '\'' +
+                ", status='" + status + '\'' +
+                ", beginDate='" + beginDate + '\'' +
+                ", endDate='" + endDate + '\'' +
+                '}';
     }
 }

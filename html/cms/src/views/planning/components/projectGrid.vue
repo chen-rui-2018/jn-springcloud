@@ -1,36 +1,45 @@
 <template>
   <el-col :span="12" :xs="24" :lg="8" >
-    <router-link to="/planning/project/detail" class="c-item-grid">
+    <router-link :to="{path: '/planning/details', query: {projectNo: iData.projectNo,title:iData.projectName,day:iData.nowTime }}" class="c-item-grid">
       <div class="flex-column-wrap">
-        <h3 class="r1 f-18 "><span class="text-blue"> {{ iData.content.title }} </span></h3>
+        <h3 class="r1 f-18 ">
+          <el-tooltip class="item" effect="dark" content="项目进度：  将子任务的进度相加/任务数 得到任务进度的平均值，就是项目的进度" placement="top">
+            <!-- <span class="iconfont">&#xe838;</span> -->
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon--dengpao"/>
+            </svg>
+        </el-tooltip><span class="text-blue"> {{ iData.projectName }} </span></h3>
         <div class="r2 f-25">
           <div class="chart-tips">
-            <p>截止 {{ iData.content.deadline }} 剩余任务</p>
-            <p><span class="value"><strong> {{ iData.content.remainingPercentage }} </strong></span></p>
+            <p>截止 {{ iData.planStopTime }} 剩余任务</p>
+            <p><span class="value"><strong> {{ iData.projectSurplusTask }} </strong></span></p>
           </div>
-          <table>
-            <tbody>
-              <tr class="text-nowrap">
-                <td class="text-left">剩余任务量</td>
-                <td class="text-right" colspan="2">进度：<b class="text-green"> {{ iData.content.scheduleStatus }} </b>
-                </td>
-              </tr>
-              <tr>
-                <td colspan="2">
-                  <chart :id="'chart_'+gIndex" :chartopts="iData.chart" height="200px" width="100%" />
-                </td>
-                <td width="18" valign="bottom">工期</td>
-              </tr>
-            </tbody>
-          </table>
+          <!-- <table>
+            <tbody> -->
+          <div class="text-nowrap">
+            <span class="fl">剩余任务量</span>
+            <span class="fr text-right">进度：<span class="text-green"> {{ iData.progress }} </span>
+            </span>
+          </div>
+          <div>
+            <div >
+              <chart :id="'chart_'+gIndex" :chartopts="iData" height="200px" width="100%" />
+            </div>
+            <!-- <td width="18" valign="bottom">工期</td> -->
+          </div>
+          <!-- </tbody>
+          </table> -->
         </div>
         <div class="r3">
           <p class="text-muted f-14">距离计划工期余剩</p>
-          <p class="f-18"> {{ iData.content.daysRemaining }} </p>
+          <p class="f-18"> {{ iData.surplusTime }} </p>
         </div>
       </div>
       <footer class="bg-blue f-18">
-        {{ iData.content.projectStatus }}
+        <!-- {{ iData.projectStatus }} -->
+        <span v-show="iData.projectState==='1'">进行中</span>
+        <span v-show="iData.projectState==='0'">未开始</span>
+        <span v-show="iData.projectState==='2'">已完成</span>
         <i class="iconfont icon-clock" />
       </footer>
     </router-link>
@@ -53,10 +62,29 @@ export default {
   },
   data() {
     return {}
+  },
+  mounted() {
+    // console.log(this.iData.progress)
   }
 }
 </script>
 <style lang="scss" scoped  >
+.bulb {
+  width: 24px;
+  height: 20px;
+  float: left;
+  margin-left: 20px;
+}
+.icon{
+  width: 27px;
+    height: 20px;
+    float: left;
+    margin-left: 28px;
+}
+.bot {
+  background: rgb(203, 203, 203);
+  color:#666;
+}
 .c-item-grid {
   display: block;
   margin-bottom: 15px;
@@ -75,7 +103,7 @@ export default {
     color: #595959;
   }
   .r1 {
-    padding: 15px;
+    padding: 15px 0px 5px 15px;
     font-size: 22px;
     color: #000;
   }
@@ -136,7 +164,7 @@ export default {
   text-align: right;
   position: absolute;
   right: 15px;
-  top: 40px;
+  top:18px;
   color: #666;
 }
 

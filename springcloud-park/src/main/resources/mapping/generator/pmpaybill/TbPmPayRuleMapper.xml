@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.pmpaybill.dao.TbPmPayRuleMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.pmpaybill.entity.TbPmPayRule">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="calc_mode" jdbcType="TINYINT" property="calcMode" />
+    <result column="share_percentage" jdbcType="INTEGER" property="sharePercentage" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="pay_type" jdbcType="VARCHAR" property="payType" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, name, calc_mode, share_percentage, status, remark, price, pay_type
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.park.pmpaybill.entity.TbPmPayRuleCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_pm_pay_rule
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_pm_pay_rule
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_pm_pay_rule
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.park.pmpaybill.entity.TbPmPayRuleCriteria">
+    delete from tb_pm_pay_rule
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.park.pmpaybill.entity.TbPmPayRule">
+    insert into tb_pm_pay_rule (id, name, calc_mode, 
+      share_percentage, status, remark, 
+      price, pay_type)
+    values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{calcMode,jdbcType=TINYINT}, 
+      #{sharePercentage,jdbcType=INTEGER}, #{status,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR}, 
+      #{price,jdbcType=DECIMAL}, #{payType,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.park.pmpaybill.entity.TbPmPayRule">
+    insert into tb_pm_pay_rule
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="calcMode != null">
+        calc_mode,
+      </if>
+      <if test="sharePercentage != null">
+        share_percentage,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="payType != null">
+        pay_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="calcMode != null">
+        #{calcMode,jdbcType=TINYINT},
+      </if>
+      <if test="sharePercentage != null">
+        #{sharePercentage,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="payType != null">
+        #{payType,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.park.pmpaybill.entity.TbPmPayRuleCriteria" resultType="java.lang.Long">
+    select count(*) from tb_pm_pay_rule
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_pm_pay_rule
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.calcMode != null">
+        calc_mode = #{record.calcMode,jdbcType=TINYINT},
+      </if>
+      <if test="record.sharePercentage != null">
+        share_percentage = #{record.sharePercentage,jdbcType=INTEGER},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=TINYINT},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.price != null">
+        price = #{record.price,jdbcType=DECIMAL},
+      </if>
+      <if test="record.payType != null">
+        pay_type = #{record.payType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_pm_pay_rule
+    set id = #{record.id,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      calc_mode = #{record.calcMode,jdbcType=TINYINT},
+      share_percentage = #{record.sharePercentage,jdbcType=INTEGER},
+      status = #{record.status,jdbcType=TINYINT},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      price = #{record.price,jdbcType=DECIMAL},
+      pay_type = #{record.payType,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.pmpaybill.entity.TbPmPayRule">
+    update tb_pm_pay_rule
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="calcMode != null">
+        calc_mode = #{calcMode,jdbcType=TINYINT},
+      </if>
+      <if test="sharePercentage != null">
+        share_percentage = #{sharePercentage,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="payType != null">
+        pay_type = #{payType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.pmpaybill.entity.TbPmPayRule">
+    update tb_pm_pay_rule
+    set name = #{name,jdbcType=VARCHAR},
+      calc_mode = #{calcMode,jdbcType=TINYINT},
+      share_percentage = #{sharePercentage,jdbcType=INTEGER},
+      status = #{status,jdbcType=TINYINT},
+      remark = #{remark,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      pay_type = #{payType,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

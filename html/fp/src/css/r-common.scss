@@ -54,6 +54,16 @@
   @include flex-center;
 }
 
+// 宽度转换
+@function trsw($px) {
+  @return $px * 0.8 + px;
+}
+.flex-center {
+  @include flex-center;
+}
+.flex-none {
+  flex: none;
+}
 // 字号
 .fs-12 {
   font-size: 12px;
@@ -63,7 +73,9 @@
 .fw-600 {
   font-weight: 600;
 }
-
+.op-0 {
+  opacity: 0;
+}
 // 对齐
 .tc {
   text-align: center;
@@ -97,4 +109,31 @@
 .mg-v-20 {
   margin-top: 20px;
   margin-bottom: 20px;
+}
+.pd-10 {
+  padding: 10px;
+}
+.pd-h-10 {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.pd-v-10 {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.h-100 {
+  height: 100%;
+  overflow: auto;
+}
+.w-100 {
+  width: 100%;
+}
+// 通用
+.fw-title {
+  font-size: 15px;
+  color: #333;
+}
+.gray-tips {
+  font-size: 12px;
+  color: #999;
 }

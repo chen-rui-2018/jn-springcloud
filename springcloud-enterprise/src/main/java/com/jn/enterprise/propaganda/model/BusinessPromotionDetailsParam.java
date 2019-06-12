@@ -31,7 +31,7 @@ public class BusinessPromotionDetailsParam implements Serializable {
             message = "{effectiveDate:'生效日期格式错误'}")
     private String effectiveDate;
     @ApiModelProperty(value = "宣传时间(1:一个月  3：三个月  6：半年  12：一年)",required = true,example = "1")
-    @Pattern(regexp = "^[0-9]*$",message = "issuePlatform:只能输入大于0的数字")
+    @Pattern(regexp = "^[0-9]*$",message = "propagandaTime:只能输入大于0的数字")
     @NotNull(message="宣传时间不能为空")
     private String propagandaTime;
     @ApiModelProperty(value = "宣传产品/宣传标题",required = true,example = "xxx产品")

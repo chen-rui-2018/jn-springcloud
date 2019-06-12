@@ -3,6 +3,9 @@ import Vue from 'vue'
 import Cookies from 'js-cookie'
 import ECharts from 'vue-echarts'
 Vue.component('chart', ECharts)
+// 级联多选
+// import elCascaderMulti from 'el-cascader-multi'
+// Vue.use(elCascaderMulti)
 
 import echarts from 'echarts'
 Vue.prototype.$echarts = echarts
@@ -14,6 +17,7 @@ import '@/styles/index.scss' // global css
 // 引入字体图标
 import '@/assets/icon/css/font-awesome.min.css'
 import '@/assets/iconfont/iconfont.css'
+import '@/assets/iconfont/iconfont.js'
 import '../static/UE/ueditor.config'
 import '../static/UE/ueditor.all'
 import '../static/UE/lang/zh-cn/zh-cn'

@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.oa.goods.dao.TbOaGoodsMapper">
+  <resultMap id="BaseResultMap" type="com.jn.oa.goods.entity.TbOaGoods">
+    <id column="id_" jdbcType="VARCHAR" property="id" />
+    <result column="goods_serial_num" jdbcType="VARCHAR" property="goodsSerialNum" />
+    <result column="goods_type" jdbcType="VARCHAR" property="goodsType" />
+    <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
+    <result column="goods_photo_url" jdbcType="VARCHAR" property="goodsPhotoUrl" />
+    <result column="model_number" jdbcType="VARCHAR" property="modelNumber" />
+    <result column="specification" jdbcType="VARCHAR" property="specification" />
+    <result column="goods_num" jdbcType="INTEGER" property="goodsNum" />
+    <result column="goods_unit" jdbcType="VARCHAR" property="goodsUnit" />
+    <result column="attachment" jdbcType="VARCHAR" property="attachment" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id_, goods_serial_num, goods_type, goods_name, goods_photo_url, model_number, specification, 
+    goods_num, goods_unit, attachment, remark, record_status, creator_account, created_time, 
+    modifier_account, modified_time
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.oa.goods.entity.TbOaGoodsCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_oa_goods
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_oa_goods
+    where id_ = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_oa_goods
+    where id_ = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.oa.goods.entity.TbOaGoodsCriteria">
+    delete from tb_oa_goods
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.oa.goods.entity.TbOaGoods">
+    insert into tb_oa_goods (id_, goods_serial_num, goods_type, 
+      goods_name, goods_photo_url, model_number, 
+      specification, goods_num, goods_unit, 
+      attachment, remark, record_status, 
+      creator_account, created_time, modifier_account, 
+      modified_time)
+    values (#{id,jdbcType=VARCHAR}, #{goodsSerialNum,jdbcType=VARCHAR}, #{goodsType,jdbcType=VARCHAR}, 
+      #{goodsName,jdbcType=VARCHAR}, #{goodsPhotoUrl,jdbcType=VARCHAR}, #{modelNumber,jdbcType=VARCHAR}, 
+      #{specification,jdbcType=VARCHAR}, #{goodsNum,jdbcType=INTEGER}, #{goodsUnit,jdbcType=VARCHAR}, 
+      #{attachment,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.oa.goods.entity.TbOaGoods">
+    insert into tb_oa_goods
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id_,
+      </if>
+      <if test="goodsSerialNum != null">
+        goods_serial_num,
+      </if>
+      <if test="goodsType != null">
+        goods_type,
+      </if>
+      <if test="goodsName != null">
+        goods_name,
+      </if>
+      <if test="goodsPhotoUrl != null">
+        goods_photo_url,
+      </if>
+      <if test="modelNumber != null">
+        model_number,
+      </if>
+      <if test="specification != null">
+        specification,
+      </if>
+      <if test="goodsNum != null">
+        goods_num,
+      </if>
+      <if test="goodsUnit != null">
+        goods_unit,
+      </if>
+      <if test="attachment != null">
+        attachment,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsSerialNum != null">
+        #{goodsSerialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsType != null">
+        #{goodsType,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsName != null">
+        #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsPhotoUrl != null">
+        #{goodsPhotoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="modelNumber != null">
+        #{modelNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="specification != null">
+        #{specification,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsNum != null">
+        #{goodsNum,jdbcType=INTEGER},
+      </if>
+      <if test="goodsUnit != null">
+        #{goodsUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment != null">
+        #{attachment,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.oa.goods.entity.TbOaGoodsCriteria" resultType="java.lang.Long">
+    select count(*) from tb_oa_goods
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_oa_goods
+    <set>
+      <if test="record.id != null">
+        id_ = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.goodsSerialNum != null">
+        goods_serial_num = #{record.goodsSerialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.goodsType != null">
+        goods_type = #{record.goodsType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.goodsName != null">
+        goods_name = #{record.goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.goodsPhotoUrl != null">
+        goods_photo_url = #{record.goodsPhotoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modelNumber != null">
+        model_number = #{record.modelNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.specification != null">
+        specification = #{record.specification,jdbcType=VARCHAR},
+      </if>
+      <if test="record.goodsNum != null">
+        goods_num = #{record.goodsNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.goodsUnit != null">
+        goods_unit = #{record.goodsUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.attachment != null">
+        attachment = #{record.attachment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_oa_goods
+    set id_ = #{record.id,jdbcType=VARCHAR},
+      goods_serial_num = #{record.goodsSerialNum,jdbcType=VARCHAR},
+      goods_type = #{record.goodsType,jdbcType=VARCHAR},
+      goods_name = #{record.goodsName,jdbcType=VARCHAR},
+      goods_photo_url = #{record.goodsPhotoUrl,jdbcType=VARCHAR},
+      model_number = #{record.modelNumber,jdbcType=VARCHAR},
+      specification = #{record.specification,jdbcType=VARCHAR},
+      goods_num = #{record.goodsNum,jdbcType=INTEGER},
+      goods_unit = #{record.goodsUnit,jdbcType=VARCHAR},
+      attachment = #{record.attachment,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.oa.goods.entity.TbOaGoods">
+    update tb_oa_goods
+    <set>
+      <if test="goodsSerialNum != null">
+        goods_serial_num = #{goodsSerialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsType != null">
+        goods_type = #{goodsType,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsName != null">
+        goods_name = #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsPhotoUrl != null">
+        goods_photo_url = #{goodsPhotoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="modelNumber != null">
+        model_number = #{modelNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="specification != null">
+        specification = #{specification,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsNum != null">
+        goods_num = #{goodsNum,jdbcType=INTEGER},
+      </if>
+      <if test="goodsUnit != null">
+        goods_unit = #{goodsUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment != null">
+        attachment = #{attachment,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id_ = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.oa.goods.entity.TbOaGoods">
+    update tb_oa_goods
+    set goods_serial_num = #{goodsSerialNum,jdbcType=VARCHAR},
+      goods_type = #{goodsType,jdbcType=VARCHAR},
+      goods_name = #{goodsName,jdbcType=VARCHAR},
+      goods_photo_url = #{goodsPhotoUrl,jdbcType=VARCHAR},
+      model_number = #{modelNumber,jdbcType=VARCHAR},
+      specification = #{specification,jdbcType=VARCHAR},
+      goods_num = #{goodsNum,jdbcType=INTEGER},
+      goods_unit = #{goodsUnit,jdbcType=VARCHAR},
+      attachment = #{attachment,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id_ = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

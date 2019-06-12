@@ -20,7 +20,7 @@
       />
       <div v-show="menuVisible">
         <ul id="menu" :style="menuStyle" class="menu">
-          <li class="menu__item" @click="isAddCardPing = true">新建模板</li>
+          <li class="menu__item" @click="addModel">新建模板</li>
         </ul>
       </div>
     </div>
@@ -83,7 +83,10 @@
                 <el-col :span="6" class="tr">截止上报时间为</el-col>
                 <el-col :span="6">
                   <el-form-item prop="filllInFormDeadlineMonth" style="margin-bottom: 0;">
-                    <el-select v-model="filllInFormDeadlineMonth" placeholder="请选择" style="width: 100%; min-width: 80px;">
+                    <el-select
+                      v-model="filllInFormDeadlineMonth"
+                      placeholder="请选择"
+                      style="width: 100%; min-width: 80px;">
                       <el-option label="当月" value="当月"/>
                       <el-option label="下月" value="下月"/>
                     </el-select>
@@ -110,14 +113,18 @@
             <el-col :span="5">
               <el-date-picker
                 v-model="formData.taskCreateTime"
+                :picker-options="startTimePickerOptions"
                 type="date"
                 placeholder="选择日期"
-                style="width: 100%; min-width: 80px;"/>
+                style="width: 100%; min-width: 80px;"
+                @change="startTimeChange"/>
             </el-col>
             <el-col :span="6" class="tc">生成去年的模板数据，截止</el-col>
             <el-col :span="5">
               <el-date-picker
                 v-model="formData.filllInFormDeadline"
+                :picker-options="endTimePickerOptions"
+                :disabled="!formData.taskCreateTime"
                 type="date"
                 placeholder="选择日期"
                 style="width: 100%; min-width: 80px;"/>
@@ -127,12 +134,12 @@
         </target-row>
         <target-row class="target-row" title="提前多久预警">
           <el-form-item :style="{margin: 0}" prop="warningBeforeDays">
-            <el-input-number v-model="formData.warningBeforeDays" :min="1" placeholder="请输入天数" style="width: 200px" />
+            <el-input-number v-model="formData.warningBeforeDays" :min="1" placeholder="请输入天数" style="width: 200px"/>
           </el-form-item>
         </target-row>
         <target-row class="target-row" title="预警方式">
           <el-form-item :style="{margin: 0}" prop="warningBy">
-            <el-checkbox-group v-model="formData.warningBy" >
+            <el-checkbox-group v-model="formData.warningBy">
               <el-checkbox label="0">短信</el-checkbox>
               <el-checkbox label="1">邮件</el-checkbox>
               <el-checkbox label="2">app</el-checkbox>
@@ -158,13 +165,14 @@
                   :rules="{ required: true, message: '请填写表名', trigger: 'change' }">
                   <el-radio-group v-model="form.tabCreateType" @change="(value) => { targetTypeChange(value, index) }">
                     <el-radio label="0">普通模板</el-radio>
-                    <el-radio :disabled="formData.modelType !== '1'" label="1">科技园模板</el-radio>
+                    <el-radio :disabled="formData.modelType !== '1' || formData.tabs.length > 1" label="1">科技园模板
+                    </el-radio>
                   </el-radio-group>
                 </el-form-item>
               </el-col>
               <el-col :span="6" style="text-align: right;">
-                <i class="el-icon-circle-plus green" @click="addTargetFormData(index)" />
-                <i class="el-icon-circle-close red" @click="deleteTargetFormData(index)" />
+                <i class="el-icon-circle-plus green" @click="addTargetFormData(index, form)"/>
+                <i class="el-icon-circle-close red" @click="deleteTargetFormData(index)"/>
               </el-col>
             </el-row>
             <target-frame>
@@ -180,9 +188,9 @@
                   show-checkbox
                   check-on-click-node
                   @check="(a, b, c) => setBroNode(index, a, b, c)"
-                  @node-click="targetNodeClick(index)"
                 />
-                <el-button class="add-more-target" icon="el-icon-plus" type="primary">去新增更多指标</el-button>
+                <el-button class="add-more-target" icon="el-icon-plus" type="primary" @click="toTargetPage">去新增更多指标
+                </el-button>
               </div>
               <div slot="right">
                 <target-row v-if="form.tabCreateType !== '1'" class="target-row" title="填报数据列">
@@ -199,15 +207,11 @@
                 <target-row v-if="form.tabCreateType !== '1'" class="target-row" title="列表指标展示">
                   <el-form-item
                     :style="{margin: 0}"
-                    :prop="'tabs.' + index + '.tabClumnTargetShow'"
-                    :rules="{
-                      required: true, message: '不能为空', trigger: 'change'
-                    }"
                   >
                     <el-checkbox-group v-model="form.tabClumnTargetShow">
                       <el-checkbox label="0">上月填报值</el-checkbox>
-                      <el-checkbox v-if="formData.modelType === '1'" label="1">上年同期值</el-checkbox>
-                      <el-checkbox v-if="formData.modelType === '1'" label="2">上月上年同期值</el-checkbox>
+                      <el-checkbox label="1">上年同期值</el-checkbox>
+                      <el-checkbox label="2">上月上年同期值</el-checkbox>
                       <el-checkbox label="3">增幅</el-checkbox>
                     </el-checkbox-group>
                   </el-form-item>
@@ -227,7 +231,9 @@
               </div>
             </target-frame>
           </div>
-          <div class="preview-form"><el-button type="primary" @click="previewForm">预览</el-button></div>
+          <div class="preview-form">
+            <el-button type="primary" @click="previewForm">预览</el-button>
+          </div>
           <el-tabs v-loading="previewing" v-if="!previewing" type="border-card">
             <el-tab-pane v-for="(tab, formIndex) in formData.tabs" :key="formIndex" :label="tab.tabName">
               <tree-table v-if="tab.treeTableData" :data="tab.treeTableData" :columns="tab.columns" border expand-all/>
@@ -330,6 +336,7 @@ import targetFrame from '../common/target-frame'
 import targetForm from '../common/target-form'
 import treeTable from '../common/tree-table/index'
 import { deepClone } from '../../../utils'
+
 export default {
   name: 'TargetManagement',
   components: {
@@ -347,12 +354,17 @@ export default {
       }
     }
     return {
+      startTimePickerOptions: {
+        disabledDate(time) {
+          return time.getTime() < Date.now() - 8.64e7
+        }
+      },
+      endTimePickerOptions: {},
       loading: false,
       menuStyle: {},
       currentModel: '',
       previewing: true,
       menuVisible: false,
-      isAddCardPing: false,
       tempPcUrl: '',
       tempAppUrl: '',
       otherDataUrl: '',
@@ -365,7 +377,7 @@ export default {
       dialogVisible: false,
       templateTree: [],
       modelFormTargetOptions: [], // 填报对象列表选项
-      filllInFormDeadlineMonth: '', // 选择当月或下月
+      filllInFormDeadlineMonth: '当月', // 选择当月或下月
       originTab: { // tab表初始化数据
         tabName: '', // tab名称 表名
         tabClumnType: '', // 表填报列类型（0：累计值；1：本期值）
@@ -400,7 +412,7 @@ export default {
         departmentName: '', // 填报对象，类型是园区时候
         groupId: '', // 填报对象，类型是园区企业时候
         modelFormTargetId: '', // 填报对象 填报群组(企业群组)/园区填报部门
-        modelCycle: '', // 填报周期（1：年，0：月）
+        modelCycle: 0, // 填报周期（1：年，0：月）
         taskCreateTime: '', // 年报表：任务生成日期（YYYYMMDD）月报表：是一个01-31之间的数字
         filllInFormDeadline: '', // 年报表：截止日期（YYYYMMDD）月报表：当月/下月+01-31之间的数字
         warningBeforeDays: '', // 提前预警天数
@@ -517,6 +529,13 @@ export default {
     this.init()
   },
   methods: {
+    startTimeChange() {
+      this.endTimePickerOptions = {
+        disabledDate: (time) => {
+          return new Date(this.formData.taskCreateTime).getTime() >= time.getTime() + 8.64e7
+        }
+      }
+    },
     init() {
       this.getModelTree()
       this.getData()
@@ -526,12 +545,28 @@ export default {
     getData() {
       // 获取树形指标
       this.$_get(`${this.GLOBAL.enterpriseUrl}data/target/getTargetTree`).then(data => {
-        this.originTab.treeData = data.data
+        const treeList = data.data
+        this.sortTree(treeList, 'orderNumber')
+        this.originTab.treeData = treeList
       })
       // 获取预警人
       this.$_get(`${this.GLOBAL.enterpriseUrl}data/dataModel/getWarner`).then(data => {
         this.warnerOptions = data.data.map(item => ({ id: item.id, label: item.creatorAccount }))
       })
+    },
+    sortTree(tree, key) {
+      for (let i = 0, length = tree.length; i < length; i++) {
+        for (let j = i + 1; j < length; j++) {
+          if (tree[i][key] > tree[j][key]) {
+            const temp = tree[j]
+            tree[j] = tree[i]
+            tree[i] = temp
+          }
+        }
+        if (tree[i].children && tree[i].children.length > 0) {
+          this.sortTree(tree[i].children, key)
+        }
+      }
     },
     getModelTree() {
       // 获取树形模板
@@ -564,7 +599,7 @@ export default {
       })
     },
     partDeepClone(source, arr) {
-      // 因为formData.tabs存在循环引用的树节点，不能直接提交或者克隆，这里先跳过tabs属性克隆，后面再克隆tabs属性
+      // 因为formData.tabs存在循getNode环引用的树节点，不能直接提交或者克隆，这里先跳过tabs属性克隆，后面再克隆tabs属性
       if (!source && typeof source !== 'object') {
         throw new Error('error arguments', 'shallowClone')
       }
@@ -588,19 +623,47 @@ export default {
           // 保存的时候再预览一遍, 获取选中指标树的填报格式
           this.previewForm()
             .then(() => {
-              const formData = this.partDeepClone(this.formData, ['tabs', 'filllInFormDeadline', 'taskCreateTime'])
-              // 先克隆提交表单对象
-              formData.tabs = this.formData.tabs.map(item => this.partDeepClone(item, ['treeData', 'treeTableData', 'columns']))
-              // 再处理提交格式
+              let cache = []
+              let formData = JSON.stringify(this.formData, function(key, value) {
+                if (typeof value === 'object' && value !== null) {
+                  if (cache.indexOf(value) !== -1) {
+                    // Duplicate reference found
+                    try {
+                      // If this value does not reference a parent it can be deduped
+                      return JSON.parse(JSON.stringify(value))
+                    } catch (error) {
+                      // discard key if value cannot be deduped
+                      return
+                    }
+                  }
+                  // Store value in our collection
+                  cache.push(value)
+                }
+                return value
+              })
+              // Enable garbage collection
+              cache = null
+              formData = JSON.parse(formData)
+
               formData.tabs.forEach((item, index) => {
+                delete item.treeData
+                delete item.treeTableData
+                delete item.columns
                 // tab增加排序
                 item.orderNumber = index.toString()
                 // 多选值转字符串 1.表类型（0：上月填报值；1：上年同期值；2：上月上年同期值；3增幅)
-                item.tabClumnTargetShow = item.tabClumnTargetShow.join('，')
+                item.tabClumnTargetShow = item.tabClumnTargetShow.join(',')
+                for (const list of item.inputList) {
+                  if (list.formType === '4') {
+                    list.value = ''
+                  }
+                }
               })
+
               if (formData.modelCycle === 0) {
                 // 如果填报周期是月
-                formData.filllInFormDeadline = this.filllInFormDeadlineMonth + this.formData.filllInFormDeadline
+                const filllInFormDeadline = this.formData.filllInFormDeadline < 10 ? '0' + this.formData.filllInFormDeadline : this.formData.filllInFormDeadline
+                formData.filllInFormDeadline = this.filllInFormDeadlineMonth + filllInFormDeadline
                 formData.taskCreateTime = this.formData.taskCreateTime
               } else {
                 // 如果填报周期是年
@@ -608,11 +671,21 @@ export default {
                 formData.taskCreateTime = this.getDate(this.formData.taskCreateTime)
               }
               // 预警方式数据格式由数组转字符串
-              formData.warningBy = formData.warningBy.join('，')
+              formData.warningBy = formData.warningBy.join(',')
               // 附件和图片url
               formData.pcAd = this.tempPcUrl ? this.tempPcUrl : formData.pcAd
               formData.appAd = this.tempAppUrl ? this.tempAppUrl : formData.appAd
               formData.otherData = this.otherDataUrl ? this.otherDataUrl : formData.otherData
+              // 把填报格式是多选的value把数组转成字符串
+              // console.dir(formData)
+              // return
+              formData.tabs.forEach((item, index) => {
+                for (const list of item.inputList) {
+                  if (list.formType === '4') {
+                    list.value = ''
+                  }
+                }
+              })
               this.$_post(`${this.GLOBAL.enterpriseUrl}data/dataModel/updateModel`, formData).then(data => {
                 if (data.code === '0000') {
                   this.submitting = false
@@ -638,7 +711,7 @@ export default {
       // 保存时给动态表单填报格式添加行号排序，以免回显时和填报时顺序不一样
       return new Promise(resolve => {
         for (const form of tree) {
-          for (const arr of form.otherColumn) {
+          for (const arr of form.inputFormatModel) {
             arr.forEach((item, index) => {
               item.order = index
             })
@@ -653,9 +726,9 @@ export default {
     targetTypeChange(value, index) {
       // 把已选表单清空，对应的指标树根据普通模板或科技园模板设置禁用
       const tab = this.formData.tabs[index]
+      this.$refs.targetTree[index].setCheckedKeys([])
       tab.tabClumnType = ''
       tab.tabClumnTargetShow = []
-      this.$refs.targetTree[index].setCheckedKeys([])
     },
     filterNode(value, data) {
       if (!value) return true
@@ -667,11 +740,14 @@ export default {
         this.$_get(`${this.GLOBAL.enterpriseUrl}data/dataModel/getModel`, { modelId: id }).then(data => resolve(data))
       })
     },
-    nodeClick(node, refresh) {
+    nodeClick(node) {
+      //  隐藏菜单栏
+      this.menuVisible = false
+
       // 查看模板信息，右侧显示模板信息
       const id = node.id
       // 如果点击的是当前模板就return
-      if (this.formData.modelId === id || !refresh) {
+      if (this.formData.modelId === id || node.id === '001' || node.id === '002') {
         return
       }
       // 回显模板信息
@@ -691,13 +767,33 @@ export default {
               .then(() => {
                 // 等上一步递归完成
                 // tab表排序
-                this.ascArr(formData.tabs, 'orderNumber')
+                formData.tabs.sort((a, b) => {
+                  return a['orderNumber'] - b['orderNumber']
+                })
                 formData.tabs.forEach((item, index) => {
-                  item.tabClumnTargetShow = item.tabClumnTargetShow.split('，')
-                  item.treeData = deepClone(this.originTab.treeData)
+                  this.$set(item, 'treeTableData', [])
+                  item.tabClumnTargetShow = item.tabClumnTargetShow.length > 0 ? item.tabClumnTargetShow.split(',') : []
 
+                  item.treeData = deepClone(this.originTab.treeData)
                   // 等上一步深拷贝完成
                   this.$nextTick(() => {
+                    // 指标树同级不选中设置禁用
+                    // 因为选择指标时，最高级的父指标只能选择一个，它的兄弟指标和其子指标都设置禁用
+                    let parentNode
+                    for (const list of item.targetList) {
+                      if (list.pid === '0') {
+                        parentNode = list
+                        break
+                      }
+                    }
+                    const treeData = item.treeData
+                    // 如果指标树不是空状态
+                    for (const tree of treeData) {
+                      // 如果不属于选择节点的最高级父指标，即兄弟指标，那么设置禁用
+                      if (tree.id !== parentNode.id) {
+                        // this.setBroDisabled(tree)
+                      }
+                    }
                     for (const obj of item.targetList) {
                       for (const list of item.targetList) {
                         if (obj.id === list.pid) {
@@ -708,14 +804,13 @@ export default {
                     }
                     // 设置对应的指标树
                     const arr = item.targetList.filter(list => !list.hasChild)
-                    this.$refs.targetTree[index].setCheckedNodes([])
                     this.$refs.targetTree[index].setCheckedNodes(arr)
                   })
                 })
               })
 
-            // 返回的字符串放回多选v-model数组 预警方式
-            formData.warningBy = formData.warningBy.split('，')
+              // 返回的字符串放回多选v-model数组 预警方式
+            formData.warningBy = formData.warningBy.length > 0 ? formData.warningBy.split(',') : []
             if (formData.modelCycle === 0) {
               // 如果填报周期是月
               this.filllInFormDeadlineMonth = formData.filllInFormDeadline.substring(0, 2)
@@ -757,8 +852,8 @@ export default {
         left: MouseEvent.clientX + 'px',
         top: MouseEvent.clientY + 'px'
       }
-      // 给整个document添加监听鼠标事件，点击任何位置执行foo方法
-      document.addEventListener('click', this.addModel)
+      // 给整个document添加监听鼠标事件，点击任何位置执行cancelAddModel方法
+      document.addEventListener('click', this.cancelAddModel)
     },
     addModel() {
       // 新建模板和取消鼠标监听事件 菜单栏
@@ -776,6 +871,11 @@ export default {
       this.otherFileList = []
       // 要及时关掉监听，不关掉的是一个坑，加一个alert就知道了
       document.removeEventListener('click', this.addModel)
+      this.$message.success(this.formData.modelType === '0' ? '你新建了一个企业模板' : '你新建了一个园区模板')
+    },
+    cancelAddModel() {
+      // 隐藏菜单栏
+      this.menuVisible = false
     },
     setBroNode(index, target, nodes) {
       // 因为选择指标时，最高级的父指标只能选择一个，它的兄弟指标和其子指标都设置禁用
@@ -809,9 +909,12 @@ export default {
       // 切换年月填报周期时，把上次输入的值清空
       this.formData.taskCreateTime = ''
       this.formData.filllInFormDeadline = ''
-      this.filllInFormDeadlineMonth = ''
     },
-    addTargetFormData(index) {
+    addTargetFormData(index, form) {
+      if (form.tabCreateType === '1') {
+        this.$message.warning('一个模板只能创建一个科技园模板表单')
+        return
+      }
       this.$message.success('添加表格成功')
       this.formData.tabs.push(deepClone(this.originTab))
     },
@@ -890,144 +993,126 @@ export default {
         // 预览处理中的状态
         this.previewing = true
         // 循环表格生成预览数据
+        const promiseList = []
         this.formData.tabs.map((tab, tabIndex) => {
-          // 预览时清空一下表头和表格树数据
-          tab.columns = []
-          tab.treeTableData = []
+          const p = new Promise((listResolve, listReject) => {
+            // 预览时清空一下表头和表格树数据
+            tab.columns = []
+            tab.treeTableData = []
 
-          // 获取选中的指标树，包括半选节点
-          const nodeList = this.$refs.targetTree[tabIndex].getCheckedNodes(false, true)
-          if (nodeList.length === 0) {
-            reject(`请选择第${tabIndex}个表格的指标，指标至少要选择一个！`)
-          }
-          // 判断是普通模板或科技园模板，生成对应的报表
-          const isCommonType = tab.tabCreateType === '0'
-          if (isCommonType) {
-            // 普通模板时
-            // 填报数据列 表填报列类型（0：累计值；1：本期值）
-            if (tab.tabClumnType === '') {
-              this.$message.warning('请完善填报数据列！')
-              return
-            }
-            if (tab.tabCreateType === '') {
-              this.$message.warning('请填写模板生成方式！')
-              return
-            }
-            if (tab.tabClumnTargetShow.length === 0) {
-              this.$message.warning('请勾选列表指标展示！')
-              return
+            // 获取选中的指标树，包括半选节点
+            const nodeList = this.$refs.targetTree[tabIndex].getCheckedNodes(false, true)
+            if (nodeList.length === 0) {
+              reject(`请选择第${tabIndex + 1}个表格的指标，指标至少要选择一个！`)
             }
 
-            // 整合表头
-            const tabClumnTypeOption = {
-              0: '2019年1-9月',
-              1: '2019年9月'
-            }
-
-            // 模拟的数据
-            const tabClumnTargetShow = tab.tabClumnTargetShow
-            const tabClumnTargetShowOption = {
-              0: {
-                text: '2019年9月',
-                value: 'lastMonth'
-              },
-              1: {
-                text: '2018年9月',
-                value: 'lastYear'
-              },
-              2: {
-                text: '2019年9',
-                value: 'lastYearMonth'
-              },
-              3: {
-                text: '增幅',
-                value: 'increase'
+            // 判断是普通模板或科技园模板，生成对应的报表
+            const isCommonType = tab.tabCreateType === '0'
+            if (isCommonType) {
+              // 普通模板时
+              // 填报数据列 表填报列类型（0：累计值；1：本期值）
+              if (tab.tabClumnType === '') {
+                this.$message.warning('请完善填报数据列！')
+                return
               }
-            }
-            const tabClumnTargetShowList = []
-            for (const item of tabClumnTargetShow) {
-              tabClumnTargetShowList.push(tabClumnTargetShowOption[item])
-            }
-            // 表头
-            tab.columns = this.columns.concat([{
-              text: tabClumnTypeOption[tab.tabClumnType],
-              value: 'otherColumn',
-              width: 600
-            }], tabClumnTargetShowList)
+              if (tab.tabCreateType === '') {
+                this.$message.warning('请填写模板生成方式！')
+                return
+              }
 
-            // 选中的一维指标获取node节点
-            const arr = nodeList.map(item => this.$refs.targetTree[tabIndex].getNode(item.id))
-            // 把渲染表单规则挂载到已经勾选的各个结构指标
-            const targetIdList = nodeList.map(list => list.id)
-            this.getInputFormat(targetIdList)
-              .then(data => {
-                tab.inputList = deepClone(data.data)
-                let formModels = data.data
-                formModels = this.ascArr(formModels, 'rowNum')
-                this.treeMerge(formModels, arr)
-                // 一维的结构指标转成树结构
-                const list = []
-                for (const node of arr) {
-                  if (node.level === 1) {
-                    const obj = {
-                      ...node.data,
-                      nodeId: node.id,
-                      pid: node.parent.id,
-                      children: []
-                    }
-                    obj.children = this.treeFormat(arr, obj)
-                    list.push(obj)
-                  }
+              // 整合表头
+              const date = new Date()
+              const year = date.getFullYear()
+              const month = date.getMonth() + 1
+              const tabClumnTypeOption = {
+                0: `${year}年1-${month}月`,
+                1: `${year}年${month}月`
+              }
+
+              // 模拟的数据
+              const tabClumnTargetShow = tab.tabClumnTargetShow
+              const tabClumnType = tab.tabClumnType // 填报数据列
+              const tabClumnTargetShowOption = {
+                0: {
+                  text: `${year}年${month - 1}月`,
+                  value: 'lastMonth'
+                },
+                1: {
+                  text: tabClumnType === '0' ? `${year - 1}年1-${month}月` : `${year - 1}年${month}月`,
+                  value: 'lastYear'
+                },
+                2: {
+                  text: `${year - 1}年${month - 1}月`,
+                  value: 'lastYearMonth'
+                },
+                3: {
+                  text: '增幅%',
+                  value: 'increase'
                 }
-                // 勾选的树结构指标挂载到tree-table
-                tab.treeTableData = list
-                resolve()
+              }
+              const tabClumnTargetShowList = []
+              tabClumnTargetShow && tabClumnTargetShow.sort((a, b) => {
+                return Number(a) - Number(b)
               })
-          } else {
-            //  科技园模板表头
-            tab.columns = nodeList.map(node => ({ text: node.text, value: node.text }))
-          }
+              for (const item of tabClumnTargetShow) {
+                tabClumnTargetShowList.push(tabClumnTargetShowOption[item])
+              }
+              // 表头
+              tab.columns = this.columns.concat([{
+                text: tabClumnTypeOption[tabClumnType],
+                value: 'inputFormatModel',
+                width: 600
+              }], tabClumnTargetShowList)
+
+              // 把渲染表单规则挂载到已经勾选的各个结构指标
+              const targetIdList = nodeList.map(list => list.id)
+              this.getInputFormat(targetIdList)
+                .then(data => {
+                  // "66383ef743624c69b8f8f9e44b980119"
+                  tab.inputList = deepClone(data.data)
+                  const formModels = tab.inputList
+                  formModels.sort((a, b) => {
+                    return a['rowNum'] - b['rowNum']
+                  })
+                  nodeList.sort((a, b) => {
+                    return a.orderNumber - b.orderNumber
+                  })
+                  this.treeMerge(formModels, nodeList)
+                  // 一维的结构指标转成树结构
+                  const list = this.toTree(nodeList)
+
+                  // 勾选的树结构指标挂载到tree-table
+                  this.sortTree(list, 'orderNumber')
+                  this.$nextTick(() => {
+                    this.$set(tab, 'treeTableData', list)
+                    listResolve()
+                  })
+                })
+            } else {
+              //  科技园模板表头
+              tab.columns = nodeList.map(node => ({ text: node.text, value: node.text }))
+              listResolve()
+            }
+          })
+          promiseList.push(p)
         })
-        this.$nextTick(() => {
-          this.previewing = false
-        })
+        Promise.all(promiseList)
+          .then(() => {
+            this.previewing = false
+            resolve()
+          })
       })
     },
-    treeFormat(arr, node) {
-      // 把一维树指标节点转回树结构的函数
-      const children = []
-      for (let i = 0; i < arr.length; i++) {
-        if (arr[i].parent.id === node.nodeId) {
-          const obj = {
-            ...arr[i].data,
-            nodeId: arr[i].id,
-            parent: {
-              id: arr[i].parent.id
-            },
-            children: []
-          }
-          arr.splice(i, 1)
-          i--
-          if (arr.length > 0) {
-            obj.children = this.treeFormat(arr, obj)
-          }
-          children.push(obj)
-        }
-      }
-      return children
-    },
-    ascArr(arr, key) {
-      // 升序
-      for (let i = 0, length = arr.length; i < length; i++) {
-        for (let j = i + 1; j < length; j++) {
-          if (arr[i][key] > arr[j][key]) {
-            const temp = arr[j]
-            arr[j] = arr[i]
-            arr[i] = temp
-          }
-        }
-      }
-      return arr
+    toTree(arr) {
+      const ids = arr.map(a => a.id)
+      const arrNotParent = arr.filter(({ pid }) => pid && !ids.includes(pid))
+      const _ = (arr, pID) =>
+        arr.filter(({ pid }) => pid === pID)
+          .map(a => ({
+            ...a,
+            children: _(arr.filter(({ pid }) => pid !== pID), a.id)
+          }))
+      return _(arr).concat(arrNotParent)
     },
     getInputFormat(list) {
       // 根据选中的指标，获取它们对应的填报格式
@@ -1037,7 +1122,7 @@ export default {
             resolve(data)
           } else {
             reject()
-            this.$message.error('提交失败')
+            this.$message.error('获取指标填报格式失败，请重新操作')
           }
         })
       })
@@ -1045,25 +1130,25 @@ export default {
     treeMerge(formModels, tree) {
       // 递归选中的指标树节点和获取到的填报格式数组比对，寻找对应的填报格式，并挂载到指标节点中
       for (const target of tree) {
-        if (!target.data.hasOwnProperty('otherColumn')) {
-          this.$set(target.data, 'otherColumn', [[]])
+        if (!target.hasOwnProperty('inputFormatModel')) {
+          this.$set(target, 'inputFormatModel', [[]])
         } else {
-          target.data.otherColumn = [[]]
+          target.inputFormatModel = [[]]
         }
         for (const item of formModels) {
-          if (target.data.id === item.targetId) {
+          if (target.id === item.targetId) {
             if (item.formType === '2') {
               item.value = null
             } else if (item.formType === '4') {
               item.value = []
             }
-            target.data.otherColumn[0].push(item)
+            target.inputFormatModel[0].push(item)
           }
         }
       }
     },
     uploadDone(res, file, fileList, name) {
-      this[name ] = res.data
+      this[name] = res.data
     },
     beforeUpload(file, isRequireFileType) {
       // 判断上传文件类型
@@ -1090,6 +1175,21 @@ export default {
     },
     handleExceed(files, fileList) {
       this.$message.warning(`最多只能上传1个附件`)
+    },
+    toTargetPage() {
+      if (!this.formData.modelId) {
+        this.$confirm('将要跳到指标管理页面，当前已填写表单信息会丢失，确定跳转?', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$router.push('/dataReport/targetManagement')
+        }).catch(() => {
+
+        })
+      } else {
+        this.$router.push('/dataReport/targetManagement')
+      }
     }
   }
 }
@@ -1097,6 +1197,7 @@ export default {
 
 <style lang="scss" scoped>
   @import "~@/styles/r-common";
+
   .target-management {
     min-width: 1100px;
     $gray: #ebebeb;
@@ -1104,83 +1205,105 @@ export default {
     @include flex($v: flex-start);
     background-color: #fff;
     border: 1px solid $gray;
+
     .target-management-l {
+      width: 200px;
       .tree-filter-bg {
         padding: 4px;
       }
+
       .filter-tree {
         min-height: 100%;
       }
+
       min-height: 100%;
       padding: 15px;
     }
+
     .target-management-r {
       min-height: 100%;
-      flex: 1;
+      width: calc(100% - 200px);
       padding: 15px;
       border-left: 1px solid $gray;
+
       .chart-list {
         margin: 20px auto;
       }
+
       .target-row {
         margin: 5px auto;
       }
     }
+
     .submit-row {
       margin: 20px auto;
       text-align: center;
     }
+
     .target-data-l {
       min-height: 100%;
       display: flex;
       flex-direction: column;
       overflow: auto;
+
       .filter-tree {
         min-height: calc(100%);
       }
+
       .add-more-target {
         margin-top: 20px;
       }
     }
+
     .preview-form {
       margin: 20px auto;
       text-align: center;
     }
+
     $gray: #ebebeb;
+
     .target-form-header {
       padding: 10px;
       background-color: $gray;
       @include flex($h: space-between);
     }
+
     .target-form-title {
       text-align: center;
       background-color: $gray;
       padding: 10px;
     }
+
     .target-form-body {
       padding: 10px;
       border: 1px solid $gray;
+
       .target-tags {
         margin: 10px;
       }
     }
+
     .green {
       color: limegreen;
       font-size: 18px;
-      margin:0 10px;
+      margin: 0 10px;
     }
+
     .red {
       color: orangered;
       font-size: 18px;
     }
+
     .green,
     .red {
       cursor: pointer;
       transition: .2s;
+
       &:hover {
         opacity: .8;
       }
     }
+
     .menu {
       position: fixed;
       z-index: 1;
@@ -1192,6 +1315,7 @@ export default {
       -webkit-box-shadow: 0 0.5em 1em 0 rgba(0, 0, 0, 0.1);
       box-shadow: 0 0.5em 1em 0 rgba(0, 0, 0, 0.1);
     }
+
     .menu__item {
       width: 90px;
       height: 32px;
@@ -1200,10 +1324,23 @@ export default {
       display: block;
       color: #1a1a1a;
       cursor: pointer;
+
       &:hover {
         background-color: #409EFF;
         color: white;
       }
+    }
+  }
+</style>
+<style lang="scss">
+  .target-management {
+    .el-tree-node__content {
+      height: auto;
+      padding: 2px;
+    }
+
+    .el-tree-node {
+      white-space: normal;
     }
   }
 </style>

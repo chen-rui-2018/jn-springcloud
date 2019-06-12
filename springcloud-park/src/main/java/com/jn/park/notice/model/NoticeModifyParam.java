@@ -52,7 +52,7 @@ public class NoticeModifyParam implements Serializable {
     private String platformName;
     @ApiModelProperty(value="公告内容",required = true,example = "公告内容...")
     @NotBlank(message = "公告内容不能为空")
-    private String noticeContent;
+    private String noticeDetails;
     @ApiModelProperty(value="排序字段,用于公告的默认,1,2,3,4",example = "1")
     @NotBlank(message = "排序字段的值不能为空")
     private String sortField;
@@ -129,12 +129,12 @@ public class NoticeModifyParam implements Serializable {
         this.platformType = platformType;
     }
 
-    public String getNoticeContent() {
-        return noticeContent;
+    public String getNoticeDetails() {
+        return noticeDetails;
     }
 
-    public void setNoticeContent(String noticeContent) {
-        this.noticeContent = noticeContent;
+    public void setNoticeDetails(String noticeDetails) {
+        this.noticeDetails = noticeDetails;
     }
 
     public String getSortField() {

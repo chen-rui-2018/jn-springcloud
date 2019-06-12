@@ -1,9 +1,9 @@
 <template>
   <div class="attendanceSign write">
-    <header class="clearfix">
+    <!-- <header class="clearfix">
       <strong>考勤签到</strong>
       <div><i class="el-icon-edit-outline"/><span><router-link :to="{name:'attendanceManagementList'}">明细</router-link></span></div>
-    </header>
+    </header> -->
     <el-row :gutter="20">
       <el-col :sm="12" :lg="12" :xs="12" :span="12">
         <el-card class="box-card">
@@ -110,10 +110,10 @@ export default {
               if (res.data.data) {
                 this.signInText = '已签到'
                 this.upTime = res.data.data.signInAttendanceTime.substr(11, 8)
-              }
-              if (res.data.data.signOutAttendanceTime !== null) {
-                this.signOutText = '已签退'
-                this.downTime = res.data.data.signOutAttendanceTime.substr(11, 8)
+                if (res.data.data.signOutAttendanceTime !== null) {
+                  this.signOutText = '已签退'
+                  this.downTime = res.data.data.signOutAttendanceTime.substr(11, 8)
+                }
               }
             } else {
               this.$message.error(res.data.result)
@@ -188,6 +188,7 @@ export default {
     >span{
       font-size: 12px;
       color:rgb(78, 173, 241);
+      cursor: pointer;
     }
     >div{
       margin-top:5px;

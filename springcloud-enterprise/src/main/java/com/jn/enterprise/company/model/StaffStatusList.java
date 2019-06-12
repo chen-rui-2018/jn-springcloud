@@ -22,7 +22,17 @@ public class StaffStatusList extends Page implements Serializable {
 
     private String account;
 
+    private String joinPattern;
+
     private Date checkTime;
+
+    public String getJoinPattern() {
+        return joinPattern;
+    }
+
+    public void setJoinPattern(String joinPattern) {
+        this.joinPattern = joinPattern;
+    }
 
     public Date getCheckTime() {
         return checkTime;
@@ -54,5 +64,16 @@ public class StaffStatusList extends Page implements Serializable {
 
     public void setAccount(String account) {
         this.account = account;
+    }
+
+    @Override
+    public String toString() {
+        return "StaffStatusList{" +
+                "staffId='" + staffId + '\'' +
+                ", statusShow='" + statusShow + '\'' +
+                ", account='" + account + '\'' +
+                ", joinPattern='" + joinPattern + '\'' +
+                ", checkTime=" + checkTime +
+                '}';
     }
 }

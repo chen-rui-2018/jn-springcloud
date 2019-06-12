@@ -11,7 +11,8 @@ import com.jn.common.api.CodeAndMsg;
  */
 public enum CompanyExceptionEnum implements CodeAndMsg {
     NETWORK_ANOMALY("5020901", "网络异常，请稍后重试。"),
-    USER_IS_COMPANY_EXIST("5020580","该用户已是员工账号，不能再次邀请"),
+    USER_LOGIN_IS_INVALID("5020503","登录已失效，请重新登录"),
+    USER_IS_COMPANY_EXIST("5020580","该用户已是员工账号或有待处理的企业邀请，不能再次邀请"),
     USER_IS_NOT_EXIST("5020581","用户不存在"),
     USER_IS_NOT_COMPANY_ADMIN("5020582","用户不是企业管理员"),
     USER_NO_STAFF("5020583","用户非企业用户"),
@@ -23,8 +24,14 @@ public enum CompanyExceptionEnum implements CodeAndMsg {
     ACCOUNT_IS_NOT_CURRENT_COMPANY_CONTACTS("5020589","该账号不是企业联系人"),
     USER_NOT_INVITE_AGAIN("5020590","员工不符合再次邀请条件"),
     PARAM_IS_NULL("5020591","请求参数不能为空"),
+    COMPANY_CHECK_ING("5020592","企业信息正在审核中，请勿重复提交"),
+    COMPANY_CHECK_ERROR("5020593","企业信息提交审核出错，请检查提交数据"),
+    USER_IS_COMPANY_ADMIN("5020594","该账号是企业管理员，不能发出邀请"),
+    GET_USER_EXTENSION_INFO_ERROR("5020595","获取用户信息发生错误"),
+    UPDATE_USER_EXTENSION_INFO_ERROR("5020596","更新用户信息发生错误"),
+    COMPANY_ADMIN_LEAVE_ERROR("5020597","企业管理员不能离开企业"),
 
-    CALL_SERVICE_ERROR("5020401","调用内部服务出错"),
+    CALL_SYSTEM_SERVICE_ERROR("5020401","调用system服务出错"),
     ;
     /**
      * 编码

@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -20,14 +21,16 @@ public class AdvisorBaseInfoParam implements Serializable {
     @ApiModelProperty(value = "机构Id(邀请链接有机构id)",required = true,example="1234")
     @NotNull(message="机构id不能为空")
     private String orgId;
-    @ApiModelProperty(value = "业务领域(从机构字典接口获取),可以有多个",required = true,example = "technology_financial")
+    @ApiModelProperty(value = "业务领域(从邀请信息中获取),可以有多个",required = true,example = "technology_finance")
     @NotNull(message="业务领域不能为空")
     private String[] businessAreas;
     @ApiModelProperty(value = "顾问账号",required = true,example = "wangsong")
     @NotNull(message="顾问账号不能为空")
     private String advisorAccount;
     @ApiModelProperty(value = "从业年限",example ="10")
-    private Double workingYears;
+    @Pattern(regexp = "^([0-9]*)|([0-9]*)(\\.[0-9]{0,2})$",message = "workingYears:只能输入的数字和小数点")
+    @Size(max=60,message = "从业年限最大不能超过60年")
+    private String workingYears;
     @ApiModelProperty(value = "毕业学校",example = "中南大学")
     private String graduatedSchool;
     @ApiModelProperty(value = "学历",example = "硕士")
@@ -79,11 +82,11 @@ public class AdvisorBaseInfoParam implements Serializable {
         this.advisorAccount = advisorAccount;
     }
 
-    public Double getWorkingYears() {
+    public String getWorkingYears() {
         return workingYears;
     }
 
-    public void setWorkingYears(Double workingYears) {
+    public void setWorkingYears(String workingYears) {
         this.workingYears = workingYears;
     }
 

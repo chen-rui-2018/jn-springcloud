@@ -18,10 +18,7 @@ public class CommonProductShelf implements Serializable{
     @ApiModelProperty(value = "服务产品模板Id,所选产品的Id",required = true,example = "00000000000000001111111111111111")
     @NotBlank(message = "模板id不能为空")
     private String templateId;
-    @ApiModelProperty(value = "上架此产品的机构id" ,required = true,example = "00000000000000001111111111111111")
-    @NotBlank(message = "机构名称不能为空")
-    private String orgId;
-    @ApiModelProperty(value = "服务产品顾问账号,多个时使用逗号','分隔",example = "wangsong,qianqi")
+    @ApiModelProperty(value = "服务产品顾问账号,多个时使用逗号','分隔（科技金融产品上架是顾问不给值）",example = "wangsong,qianqi")
     private String advisorAccount;
 
     public String getTemplateId() {
@@ -30,14 +27,6 @@ public class CommonProductShelf implements Serializable{
 
     public void setTemplateId(String templateId) {
         this.templateId = templateId;
-    }
-
-    public String getOrgId() {
-        return orgId;
-    }
-
-    public void setOrgId(String orgId) {
-        this.orgId = orgId;
     }
 
     public String getAdvisorAccount() {

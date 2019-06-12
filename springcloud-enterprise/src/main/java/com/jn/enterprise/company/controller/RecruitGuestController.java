@@ -6,17 +6,18 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.common.util.StringUtils;
+import com.jn.enterprise.company.enums.CompanyExceptionEnum;
 import com.jn.enterprise.company.enums.RecruitDataTypeEnum;
 import com.jn.enterprise.company.enums.RecruitExceptionEnum;
 import com.jn.enterprise.company.model.ServiceRecruitParam;
 import com.jn.enterprise.company.model.ServiceWebRecruitParam;
 import com.jn.enterprise.company.service.RecruitService;
-import com.jn.enterprise.company.vo.RecruitDetailsVO;
 import com.jn.enterprise.company.vo.RecruitVO;
 import com.jn.system.log.annotation.ControllerLog;
+import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -48,6 +49,10 @@ public class RecruitGuestController extends BaseController {
         ServiceRecruitParam serviceRecruitParam = new ServiceRecruitParam();
         BeanUtils.copyProperties(serviceWebRecruitParam, serviceRecruitParam);
 
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        if(user != null && StringUtils.isNotBlank(user.getAccount())){
+            serviceRecruitParam.setAccount(user.getAccount());
+        }
         //前台查询只能查有效数据
         serviceRecruitParam.setStatus(RecruitDataTypeEnum.ON_SHELVES.getCode());
         return new Result(recruitService.getRecruitList(serviceRecruitParam, RecruitDataTypeEnum.APPROVAL_STATUS_PASS.getCode()));
@@ -56,11 +61,15 @@ public class RecruitGuestController extends BaseController {
     @ControllerLog(doAction = "招聘详情")
     @ApiOperation(value = "招聘详情（app/pc-招聘详情）", notes = "必传招聘ID")
     @RequestMapping(value = "/viewRecruitDetails",method = RequestMethod.GET)
-    public Result<RecruitDetailsVO> addRecruitClick(@RequestParam String recruitId){
-        if (StringUtils.isBlank(recruitId)) {
-            throw new JnSpringCloudException(RecruitExceptionEnum.RECRUIT_ID_IS_NULL);
+    public Result<RecruitVO> addRecruitClick(@RequestParam(required = false) String recruitId){
+        Assert.notNull(recruitId, CompanyExceptionEnum.PARAM_IS_NULL.getMessage());
+
+        String account = null;
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        if(user != null && StringUtils.isNotBlank(user.getAccount())){
+            account= user.getAccount();
         }
-        return new Result(recruitService.getRecruitDetailsById(recruitId));
+        return new Result(recruitService.getRecruitDetailsById(recruitId, account));
     }
 
 }

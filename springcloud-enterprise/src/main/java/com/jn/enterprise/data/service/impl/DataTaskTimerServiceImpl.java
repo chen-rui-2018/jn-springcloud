@@ -29,6 +29,7 @@ import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import com.jn.news.vo.SmsTemplateVo;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.xml.ws.BindingType;
 import java.util.*;
@@ -88,6 +89,7 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
 
     @Override
     @ServiceLog(doAction = "创建任务")
+    @Transactional(rollbackFor = Exception.class)
     public void createTask() {
         //扫描有效的模板，检测是否到了新建任务的时候
         TbDataReportingModelCriteria modelCri = new TbDataReportingModelCriteria();
@@ -355,6 +357,7 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
 
                     //当前园区任务的某个tab哪些部门可以填报
                     fillerBean = new TbDataReportingGardenFiller();
+                    fillerBean.setId(UUID.randomUUID().toString().replaceAll("-",""));
                     fillerBean.setFillId(id);
                     fillerBean.setDepartmentId(targetBean.getDepartmentId());
                     fillerBean.setDepartmentName(targetBean.getDepartmentName());
@@ -584,8 +587,8 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
 
         //获取未填报的任务【1：未填报已逾期，未填报到了提醒日期】
         //查询所有快要逾期和已经逾期的数据进行预警
-        String fillId=null;
-        String taskBatck=null;
+        String fillId="";
+        String taskBatck="";
         List<WarningTaskModel> taskList = targetDao.getWarningTask(fillId,taskBatck);
 
         if(taskList != null && taskList.size()>0){
@@ -621,16 +624,17 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
                                     TbDataReportingGardenLinkerCriteria  gardenLinkerCriteria = new TbDataReportingGardenLinkerCriteria();
                                     gardenLinkerCriteria.or().andDepartmentIdEqualTo(fillerBean.getDepartmentId()).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
 
-                                    //todo 假装此处具有园区联系人的账号
                                     List<TbDataReportingGardenLinker> linkers =  tbDataReportingGardenLinkerMapper.selectByExample(gardenLinkerCriteria);
                                     if(linkers !=null && linkers.size()>0){
                                         User user;
                                         String  title="数据上报系统任务预警";
                                         for(TbDataReportingGardenLinker linkerBean :  linkers){
                                             //通过预警人账号查询，预警人的email
-                                            //String account = linkerBean.getUserAccount();
-                                            String account = "wangsong";
-                                            user = getUserInfo(account);
+                                            String userId = linkerBean.getLinkAccount();
+                                            user = getUserInfo(userId);
+                                            if(user == null ){
+                                                continue;
+                                            }
                                             if(StringUtils.isNotBlank(user.getEmail())){
                                                 message =new StringBuilder();
                                                 message.append("[数据上报系统] 任务名称 ：").append(taskBean.getTaskName());
@@ -658,8 +662,13 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
                                 for(TbServiceCompany  tbServiceCompanyBean : list){
                                     //todo 假装此处具有园区联系人的email号码
                                     //String email =tbServiceCompanyBean.getOwnerEmail();
-                                    email ="";
-                                    if(StringUtils.isNotBlank(email)){
+                                    String userId = tbServiceCompanyBean.getId();
+                                    User user = getUserInfo(userId);
+                                    if(user == null ){
+                                        continue;
+                                    }
+
+                                    if(StringUtils.isNotBlank(user.getEmail())){
                                         message =new StringBuilder();
                                         message.append("[数据上报系统] 任务名称 ：").append(taskBean.getTaskName());
                                         if(taskBean.getInLine() !=0){
@@ -689,17 +698,17 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
                                     //查询电话
                                     TbDataReportingGardenLinkerCriteria  gardenLinkerCriteria = new TbDataReportingGardenLinkerCriteria();
                                     gardenLinkerCriteria.or().andDepartmentIdEqualTo(fillerBean.getDepartmentId()).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
-
-                                    //todo 假装此处具有园区联系人的账号
                                     List<TbDataReportingGardenLinker> linkers =  tbDataReportingGardenLinkerMapper.selectByExample(gardenLinkerCriteria);
                                     if(linkers !=null && linkers.size()>0){
                                         User user;
                                         for(TbDataReportingGardenLinker linkerBean :  linkers){
 
                                             //通过预警人账号查询，预警人的手机号码
-                                            //String account = linkerBean.getUserAccount();
-                                            String account = "wangsong";
-                                            user = getUserInfo(account);
+                                            String userId = linkerBean.getLinkAccount();
+                                            user = getUserInfo(userId);
+                                            if(user == null ){
+                                                continue;
+                                            }
                                             if(StringUtils.isNotBlank(user.getPhone())){
                                                 phone  =user.getPhone();
                                                 message =new StringBuilder();
@@ -747,13 +756,13 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
 
     /**
      * 通过用户账号查询用户信息
-     * @param userAccount
+     * @param userId
      * @return
      */
-    private User getUserInfo(String userAccount){
+    private User getUserInfo(String userId){
         //通过预警人账号查询，预警人的手机号码
         User user = new User();
-        user.setAccount(userAccount);
+        user.setId(userId);
         Result<User> concurentUser = systemClient.getUser(user);
         return concurentUser.getData();
     }
@@ -768,7 +777,7 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
             throw new JnSpringCloudException(DataUploadExceptionEnum.USER_PHONE_IS_NOT_EXIST);
         }
         SmsTemplateVo smsTemplateVo = new SmsTemplateVo();
-        smsTemplateVo.setTemplateId("1000");
+        smsTemplateVo.setTemplateId("999");
         String[] m = {phone};
         smsTemplateVo.setMobiles(m);
         String[] t = {message};

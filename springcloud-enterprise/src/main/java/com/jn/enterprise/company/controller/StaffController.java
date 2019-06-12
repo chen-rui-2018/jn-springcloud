@@ -1,5 +1,6 @@
 package com.jn.enterprise.company.controller;
 
+import com.codingapi.tx.annotation.TxTransaction;
 import com.jn.common.controller.BaseController;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
@@ -47,6 +48,7 @@ public class StaffController extends BaseController {
         return new Result(staffService.getStaffList(staffListParam, user.getAccount()));
     }
 
+    @TxTransaction(isStart = true)
     @ControllerLog(doAction = "员工审核")
     @ApiOperation(value = "员工审核（app/pc-员工审核）", notes = "返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/reviewStaff",method = RequestMethod.POST)
@@ -63,7 +65,7 @@ public class StaffController extends BaseController {
     public User checkUserValid() {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         if(user == null){
-            throw new JnSpringCloudException(CompanyExceptionEnum.NETWORK_ANOMALY);
+            throw new JnSpringCloudException(CompanyExceptionEnum.USER_LOGIN_IS_INVALID);
         }
         return user;
     }

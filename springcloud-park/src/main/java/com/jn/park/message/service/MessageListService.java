@@ -1,8 +1,7 @@
 package com.jn.park.message.service;
 
-import com.jn.park.message.model.FindAllMessageListVo;
-import com.jn.park.message.model.MessageListModel;
-import com.jn.park.message.model.addMessageModel;
+import com.jn.common.model.PaginationData;
+import com.jn.park.message.model.*;
 import com.jn.system.model.User;
 
 import java.util.List;
@@ -14,19 +13,39 @@ import java.util.List;
  */
 public interface MessageListService {
 
+
+
+
+    List<MessageListModel> findAllList(String messageOneSort,String isRead,User user);
+
     /**
-     * 查询所有消息
-     * @param messageTowTort 一级消息类别
+     * 获取二级消息类别
+     * @param messageOneTort 一级消息类别
      * @return
      */
-    List<FindAllMessageListVo> findAll(Integer messageTowTort, User user);
+    List<MessageTowListModel> getMessageOneTort(String messageOneTort,User user);
 
+
+    PaginationData<List<MessageListModel>> findAllApp(findAllAppMessageListModel findAllAppMessageListModel, User user);
+
+    /**
+     * 查询所有消息
+     * @param findAllMessageListModel
+     * @return
+     */
+    PaginationData<List<MessageListModel>> findAll(findAllMessageListModel findAllMessageListModel, User user);
+
+    /**
+     * 获取是否有已读消息
+     * @return
+     */
+    int getIsRead(String messageOneTort,String messageTowTort,User user);
 
     /**
      * 添加消息
      * @param addMessageModel
      */
-    void addMessage(addMessageModel addMessageModel);
+    void addMessage(AddMessageModel addMessageModel);
 
 
     /**
@@ -53,5 +72,5 @@ public interface MessageListService {
      * 修改已读状态
      * @param id
      */
-    void updateIsReadStatus(String id);
+    String updateIsReadStatus(String id);
 }

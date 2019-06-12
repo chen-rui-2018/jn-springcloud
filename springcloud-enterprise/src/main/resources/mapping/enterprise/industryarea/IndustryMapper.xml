@@ -39,7 +39,7 @@
 
     <select id="selectIndustryProductList" resultMap="getIndustryDetailMap">
 
-        SELECT
+SELECT
            p.id AS "p_id"
           ,p.pre_value AS "p_preValue"
           ,pr.product_id_ AS "pr_productId"
@@ -50,7 +50,7 @@
             r.pre_value
           FROM
             tb_service_prefer r
-          WHERE r.pre_type = '0') p
+          WHERE r.pre_type = '0' AND r.id != 'technology_finance' AND r.record_status = '1') p
           LEFT JOIN tb_service_product pr
             ON p.id = pr.signory_id
             AND (
@@ -58,6 +58,7 @@
               OR pr.template_id = ''
             )
             AND pr.status = '1'
+            AND pr.product_type = '0'
             AND pr.record_status = '1'
 
     </select>

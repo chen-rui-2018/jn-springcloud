@@ -14,26 +14,28 @@
                   <div class="title">服务超市</div>
                 </div>
                 <div class="bannerUl">
-                  <li class="active" :class="{'liActiv':isActClass===true}">首页</li>
-                    <li>服务机构</li>
-                    <li>服务产品</li>
-                    <li>服务顾问</li>
-                    <li>活动培训</li>
-                    <li>关于我们</li>
+                  <li class="active_header" :class="{'liActiv':isActClass===true}" >首页</li>
+                    <li @click='$router.push({path:"/serverOrg"})'> 服务机构</li>
+                    <li @click='$router.push({path:"/serverPro"})'>服务产品</li>
+                    <li @click='$router.push({path:"/serverCon"})'>服务专员</li>
+                    <li @click='$router.push({path:"/actiTrain"})'>活动培训</li>
+                    <li @click='$router.push({path:"/aboutUs"})'>关于我们</li>
+                    <li @click='$router.push({path:"/register"})'>加入我们</li>
                 </div>
-                <div class="headerRight">
+                <div class="headerRight pr">
                   <div class="search" >
                     <i class="el-icon-search" style="font-size:20px" @click="show3=true"></i>
                   </div>
-                  <div class="navlogin">
-                    <a>登录</a>
+                  <user-info></user-info>
+                  <!-- <div class="navlogin">
+                    <a href="javascript:;">登录</a>
                     <span class="line">|</span>
-                    <a>注册</a>
+                    <a href="javascript:;"> 注册</a>
                   </div>
                   <div class="navlogin">
                     <i class="el-icon-bell"></i>
                     <span class="line">|</span>
-                  </div>
+                  </div> -->
                 </div>
             </div>
         </div>
@@ -44,13 +46,13 @@
           <div v-if="show3">
             <div class="transition-box">
               <el-input placeholder="请输入内容" v-model="searchData" class="input-with-select">
-                <el-select v-model="select" slot="prepend" placeholder="产品" @visible-change="changeselectShow">
+                <el-select v-model="select" slot="prepend" placeholder="选择" @visible-change="changeselectShow">
                   <el-option label="机构" value="1"></el-option>
                   <el-option label="产品" value="2"></el-option>
-                  <el-option label="顾问" value="3"></el-option>
-                  <el-option label="活动" value="3"></el-option>
+                  <el-option label="专员" value="3"></el-option>
+                  <el-option label="活动" value="4"></el-option>
                 </el-select>
-                <el-button slot="append" icon="el-icon-search">搜索 </el-button>
+                <el-button slot="append" icon="el-icon-search" @click="goSearch">搜索 </el-button>
               </el-input>
             </div>
           </div>
@@ -60,9 +62,9 @@
     <transition name='fade' appear  enter-active-class='animated fadeInDown' leave-active-class='animated fadeOutUp'>
       <div class="nav" v-if="!show3&&isNavShow">
         <div class="nav_cont" v-for="(slideitem,slideindex) in sliderData " :key="slideindex">
-          <div class="nav_cont_father">{{slideitem.preValue}} <i class="el-icon-arrow-right"></i></div>
+          <div class="nav_cont_father" @click="$router.push({path:'/quickSearch',query:{signoryId:slideitem.id,preValue:slideitem.preValue}})">{{slideitem.preValue}} <i class="el-icon-arrow-right"></i></div>
           <div class="nav_cont_son" :class="{'hidder_son':slideitem.products.length===0} ">  
-            <div v-for="(item,index) in slideitem.products" :key="index" >
+            <div v-for="(item,index) in slideitem.products" :key="index" @click="$router.push({path:'/serverProDetail',query:{productId:item.productId,signoryId:slideitem.id}})">
               <span></span>
               {{item.productName}}
             </div>
@@ -76,9 +78,7 @@
     <div class="banner" ref="banner">
       <div class="swiper-container">
           <div class="swiper-wrapper">
-              <div class="swiper-slide"> <img src="@/../static/img/serMatHp.png" alt=""> </div>
-              <div class="swiper-slide"> <img src="@/../static/img/serMatHp.png" alt=""> </div>
-              <div class="swiper-slide"> <img src="@/../static/img/serMatHp.png" alt=""> </div>
+              <div class="swiper-slide" v-for="(item,index) in bannerList" :key="index"> <img :src="item.posterUrl" alt=""> </div>
           </div>
           <!-- 如果需要分页器 -->
           <div class="swiper-pagination"></div>
@@ -96,12 +96,6 @@
     </div>
     <div class="market_content"><!-- 版心 -->
       <div class="market_breadcrumb">
-          <!-- <el-breadcrumb separator="/">
-            <el-breadcrumb-item :to="{ path: '/' }">企业服务</el-breadcrumb-item>
-            <el-breadcrumb-item>
-              <a href="/">服务超市</a>
-            </el-breadcrumb-item>
-          </el-breadcrumb> -->
           <span class="pointer" @click="$router.push({path:'/enterpriseservice'})">企业服务</span>
           <span>/</span>
           <span class="mainColor">服务超市</span>
@@ -109,32 +103,27 @@
       <div class="market_navicon" ref="market_navicon2" data-class="allFade">
         <a href="javascript:;">
           <div class="nav_icon"><i class="iconfont icon-jigou2"></i></div>
-          <div class="nav_discribe"> <span>已注册买家<span class="">8929</span>个</span> </div>
-          <div class="nav_todo"><span>申请注册</span></div>
+          <div class="nav_discribe"> <span>入住企业数<span class="">{{navData.comNum}}</span>个</span> </div>
+          <div class="nav_todo"><span @click="$router.push({path:'/upgradeEnterprise'})">申请注册</span></div>
         </a>
         <a href="javascript:;">
           <div class="nav_icon"><i class="iconfont icon-jigou1"></i></div>
-          <div class="nav_discribe"> <span>已入驻机构 <span>1057</span>家</span> </div>
+          <div class="nav_discribe"> <span>已入住服务机构 <span>{{navData.orgNum}}</span>家</span> </div>
           <div class="nav_todo"><span>机构入驻</span></div>
         </a>
         <a href="javascript:;">
           <div class="nav_icon"><i class="iconfont icon-huodong"></i></div>
-          <div class="nav_discribe"> <span>累计举办活动<span>378</span>场</span> </div>
-          <div class="nav_todo"><span>近期活动</span></div>
+          <div class="nav_discribe"> <span>累计举办活动<span>{{navData.activityNum}}</span>场</span> </div>
+          <div class="nav_todo"><span @click='$router.push({path:"/actiTrain"})'>近期活动</span></div>
         </a>
         <a href="javascript:;">
           <div class="nav_icon"><i class="iconfont icon-jigou11"></i></div>
-          <div class="nav_discribe"> <span>已入驻顾问<span>3786</span>人</span> </div>
-          <div class="nav_todo" @click="isVisibility=true"><span>申请顾问</span></div>
-        </a>
-        <a href="javascript:;">
-          <div class="nav_icon"><i class="iconfont icon-shangwuqianbiqian"></i></div>
-          <div class="nav_discribe"> <span>已入驻投资人<span>956</span>人</span> </div>
-          <div class="nav_todo"><span>投资人入驻</span></div>
+          <div class="nav_discribe"> <span>已入住服务专员<span>{{navData.advisorNum}}</span>人</span> </div>
+          <div class="nav_todo" @click="isVisibility=true"><span>申请专员</span></div>
         </a>
       </div>
-      <!-- 申请顾问弹窗 -->
-      <el-dialog title="申请顾问" :visible.sync="isVisibility" center>
+      <!-- 申请专员弹窗 -->
+      <el-dialog title="申请专员" :visible.sync="isVisibility" center>
         <el-form :model="counselorform" label-width="80px">
           <el-form-item label="服务机构">
             <el-input v-model="counselorform.orgname" autocomplete="off" placeholder="请输入你要申请入住的机构"></el-input>
@@ -148,7 +137,7 @@
       <div class="new_active" ref="new_active2" data-class="allFade">
         <div class="active_title">
           <span>最新活动</span>
-          <span class="pointer">MORE<i class="iconfont icon-you"></i></span>
+          <span class="pointer" @click="$router.push({path:'/actiTrain'})">MORE<i class="iconfont icon-you"></i></span>
         </div>
         <div class="active_list">
           <div class="active_btn to_left" @click="prev"><span class="iconfont icon-zuo" ></span></div>
@@ -156,7 +145,7 @@
             <el-carousel-item v-for="(pageItem,pageIndex) in pageNum" :key='pageIndex'>
               <div class="actiTab">
                 <ul class="allActiUl clearfix">
-                  <li v-for="(item,index) in actiListSlim" :key='index'>
+                  <li v-for="(item,index) in actiListSlim" :key='index' @click="$router.push({path:'actiDetail',query:{activityId:item.id}})">
                     <div class="postImgItem"><img :src="item.actiPosterUrl" alt="活动海报图片" class="postImg">
                     </div>
                     <div class="actiInfo">
@@ -186,11 +175,11 @@
         <div class="hot_product" ref="hot_product2" data-class="allFade">
           <div class="hot_titile">
             <span>热门产品</span>
-            <span class="pointer">MORE<i class="iconfont icon-you"></i></span>
+            <span class="pointer" @click="$router.push({path:'/serverPro'})">MORE<i class="iconfont icon-you"></i></span>
           </div>
           <div class="hot_list">
             <ul class="clearfix">
-              <li v-for="(item,index) in hotActiveList" :key="index">
+              <li v-for="(item,index) in hotActiveList" :key="index" @click="$router.push({path:'/serverProDetail',query:{productId:item.productId,signoryId:item.signoryId}})" >
                 <div class="hot_img">
                   <img :src="item.pictureUrl" alt="">
                 </div>
@@ -198,7 +187,7 @@
                   <div class="hot_name">{{item.productName}}</div>
                   <div class="hot_detail">
                     <span>机构  {{item.orgCount}}</span>
-                    <span>顾问  {{item.advisorCount}}</span>
+                    <span>专员  {{item.advisorCount}}</span>
                     <span>评价 {{item.ratingCount}}</span>
                   </div>
                   <div class="hot_price">
@@ -214,33 +203,38 @@
       <!-- 战略合作伙伴 -->
       <div class="partner" ref="partner2" data-class="allFade">
         <div class="partner_titile">战略合作伙伴</div>
-        <div class="partner_list">
-          <ul>
-            <li  v-for="(item,index) in 18" :key="index"> <img src="../../assets/image/testsn.png" alt=""> </li>
-          </ul>
+        <div class="partner_box">
+          <div class="partner_list">
+            <ul class="partner_list_ul">
+              <li  v-for="(item,index) in partnerLogo" :key="index" > <img :src="item.orgLogo" alt=""></li>
+            </ul>
+            <ul class="partner_list_ul2" ></ul>
+          </div>
         </div>
       </div>
-      <!-- 优质顾问 -->
+      <!-- 优质专员 -->
       <div class="counselor" ref="counselor2" data-class="allFade">
         <div class="counselor_title">
-          <span>优质顾问</span>
-          <span class="pointer">MORE<i class="iconfont icon-you"></i></span>
+          <span>优质专员</span>
+          <span class="pointer" @click="$router.push({path:'/serverCon'})">MORE<i class="iconfont icon-you"></i></span>
         </div>
         <div class="conselor_introduce">
           <ul class="conselor_tab clearfix">
-            <li :class="{'active':domain === ''}" @click="changedomain('')">全部</li>
-            <li v-for="(counseloitem,counseloindex) in IndustryList" :key="counseloindex" :class="{'active':domain === counseloitem.id}" @click="changedomain(counseloitem.id)">{{counseloitem.preValue}}</li>
+            <li :class="{'conseloractive':domain === ''}" @click="changedomain('')">全部</li>
+            <li v-for="(counseloitem,counseloindex) in sliderData" :key="counseloindex" :class="{'conseloractive':domain === counseloitem.id}" @click="changedomain(counseloitem.id)">{{counseloitem.preValue}}</li>
           </ul>
           <div class="conselor_info">
             <ul>
               <!-- v-show控制前两个大图 -->
               <li class="conselor_left">
-                <div v-for="(counselorinfoItem,counselorinfoindex) in counselorList" :key="counselorinfoindex" v-if="counselorinfoindex<2">
+                <div v-for="(counselorinfoItem,counselorinfoindex) in counselorList" :key="counselorinfoindex" v-if="counselorinfoindex<2"  @click="$router.push({path:'/serverConDetail',query:{orgId: counselorinfoItem.orgId,advisorAccount:counselorinfoItem.advisorAccount}})">
                   <a href="javascript:;">
                     <div class="info_img">
                       <div>
-                        <img src="../../assets/image/test2.png" alt="">
+                        <!-- <img src="../../assets/image/test2.png" alt=""> -->
+                        <img :src="counselorinfoItem.avatar" alt="">
                       </div>
+                      
                     </div>
                     <div class="info_all">
                       <div class="info_name"><span>{{counselorinfoItem.advisorName}}</span>/<span>{{counselorinfoItem.position}} </span></div>
@@ -253,10 +247,10 @@
                 </div>
               </li>
               <li class="conselor_mid">
-                <div v-for="(counselorinfoItem2,counselorinfoindex2) in counselorList" :key="counselorinfoindex2" class="conselor_mid_list" v-if="counselorinfoindex2>=2&&counselorinfoindex2<10">
+                <div v-for="(counselorinfoItem2,counselorinfoindex2) in counselorList" :key="counselorinfoindex2" class="conselor_mid_list" v-if="counselorinfoindex2>=2&&counselorinfoindex2<10" @click="$router.push({path:'/serverConDetail',query:{orgId: counselorinfoItem2.orgId,advisorAccount:counselorinfoItem2.advisorAccount}})">
                   <a href="javascript:;">
-                    <div class="info_img"><img src="../../assets/image/test2.png" alt=""></div>
-                    <!-- <div class="info_img"><img :src="counselorinfoItem.avatar" alt=""></div> -->
+                    <!-- <div class="info_img"><img src="../../assets/image/test2.png" alt=""></div> -->
+                    <div class="info_img"><img :src="counselorinfoItem2.avatar" alt=""></div>
                     <div class="info_all">
                       <div class="info_name"><span>{{counselorinfoItem2.advisorName}}</span>/<span>{{counselorinfoItem2.position}} </span></div>
                       <div class="info_detail">
@@ -277,8 +271,8 @@
           <div class="liveness_titile">机构活跃度</div>
           <div class="liveness_list">
             <ul class="team_tab clearfix">
-              <li :class="{'active':isActive === ''}" @click="changeindustry('')">全部</li>
-              <li v-for="(teamitem,teamindex) in teamIndustryList" :key="teamindex" @click="changeindustry(teamitem.id)" :class="{'active':isActive === teamitem.id}" >{{teamitem.preValue}}</li>
+              <li :class="{'teamactive':isActive === ''}" @click="changeindustry('')">全部</li>
+              <li v-for="(teamitem,teamindex) in teamIndustryList" :key="teamindex" @click="changeindustry(teamitem.id)" :class="{'teamactive':isActive === teamitem.id}" >{{teamitem.preValue}}</li>
             </ul>
             <ul class="team_tab clearfix">
               <li>筛选</li>
@@ -288,17 +282,16 @@
             </ul>
             <div class="liveness_info">
               <ul>
-                <li v-for="(item,index) in serviceOrgList " :key="index">
+                <li v-for="(item,index) in serviceOrgList " :key="index" @click="$router.push({path:'/serverOrgDetail',query:{orgId:item.orgId}})">
                   <a href="javascript:;">
                     <div class="liveness_img">
-                      <!-- <img :src="item.orgLogo" alt=""> -->
-                      <img src="../../assets/image/test3.png" alt="">
+                      <img :src="item.orgLogo" alt="">
                     </div>
                     <div class="liveness_detail">
                       <p>{{item.orgName}}</p>
                       <p>{{item.orgSpeciality}}</p>
                       <p>
-                        <el-rate v-model="item.attitudeScore*1" :colors="['#99A9BF', '#00a041', '#FF9900']" disabled text-color="#00a041">
+                        <el-rate v-model="item.attitudeScore*1" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041">
                         </el-rate>
                       </p>
                     </div>
@@ -312,30 +305,22 @@
           <div class="liveness_titile">最新评价</div>
           <div class="comment_box">
             <div class="comment_list" >
-              <!-- <div class="swiper-container swiper2 ">
-                <div class="swiper-wrapper">
-                  <div class="swiper-slide" >  -->
-                    <!-- <p> -->
-                      <ul class="comment_list_ul">
-                        <li v-for="(item,index) in RatingList" :key="index">
-                            <p>{{item.evaluationAccount|hiddentel}} ：@ <span>{{item.orgName}}</span>@{{item.advisorName}}</p>
-                            <p>              
-                              <span :class="[item.evaluationScore>=1?'iconfont icon-xing brightstar':'iconfont icon-xing']"></span>
-                              <span :class="[item.evaluationScore>=2?'iconfont icon-xing brightstar':'iconfont icon-xing']"></span> 
-                              <span :class="[item.evaluationScore>=3?'iconfont icon-xing brightstar':'iconfont icon-xing']"></span> 
-                              <span :class="[item.evaluationScore>=4?'iconfont icon-xing brightstar':'iconfont icon-xing']"></span> 
-                              <span :class="[item.evaluationScore>=5?'iconfont icon-xing brightstar':'iconfont icon-xing']"></span> 
-                            </p>
-                            <p><span>评分（{{item.evaluationScore}}）</span></p>
-                            <p>"{{item.evaluationDesc}}"</p>
-                            <p>{{item.createdTime}}2019-02-25  15:28:30</p>
-                        </li>
-                      </ul>
-                      <ul class="comment_list_ul2"></ul>
-                    <!-- </p> -->
-                  <!-- </div>
-                </div>
-              </div> -->
+              <ul class="comment_list_ul">
+                <li v-for="(item,index) in RatingList" :key="index">
+                    <p>{{item.evaluationAccount|hiddentel}} ：@ <span>{{item.orgName}}</span>@{{item.advisorName}}</p>
+                    <p>              
+                      <span :class="[item.evaluationScore>=1?'iconfont icon-xing brightstar':'iconfont icon-xing']"></span>
+                      <span :class="[item.evaluationScore>=2?'iconfont icon-xing brightstar':'iconfont icon-xing']"></span> 
+                      <span :class="[item.evaluationScore>=3?'iconfont icon-xing brightstar':'iconfont icon-xing']"></span> 
+                      <span :class="[item.evaluationScore>=4?'iconfont icon-xing brightstar':'iconfont icon-xing']"></span> 
+                      <span :class="[item.evaluationScore>=5?'iconfont icon-xing brightstar':'iconfont icon-xing']"></span> 
+                    </p>
+                    <p><span>评分（{{item.evaluationScore}}）</span></p>
+                    <p>"{{item.evaluationDesc}}"</p>
+                    <p>{{item.createdTime}}2019-02-25  15:28:30</p>
+                </li>
+              </ul>
+              <ul class="comment_list_ul2"></ul>
             </div>
           </div>
         </div>
@@ -346,20 +331,24 @@
 </template>
 <script>
 import Swiper from 'swiper'
+import userInfo from '../common/userInfoData'
 export default {
+  components: {
+      userInfo
+    },
   data() {
     return {
       actiTypeList:[],
       actiListSlim:[],//最新活动
       hotActiveList:[],//热门活动
-      counselorList:[],//优质顾问
+      counselorList:[],//优质专员
       page:1,
       row:4,
       typeId:"a29e14a21352473ebf26420ddffb1c60",//类型带确认
       total:'',
       pageNum:'',
-      IndustryList:[],//顾问领域列表
-      domain:'',//顾问领域
+      IndustryList:[],//专员领域列表
+      domain:'',//专员领域
       teamIndustryList:[],//机构业务领域列表
       serviceOrgList:[],//机构列表
       isActive:"",//机构类别id
@@ -377,7 +366,10 @@ export default {
        select:'',
        menuShow:true,
        sliderData:[],
-       sekectShow:false
+       sekectShow:false,
+       partnerLogo:[],
+       bannerList:[],
+       navData:{}
     };
   },
   filters: {
@@ -390,13 +382,12 @@ export default {
     this.$nextTick(() => {
       this.swiperInit()  
     })
-     
     this.getActiType()
     this.getNewActive()
     this.getHotActive()
-    //顾问领域列表、
+    //专员领域列表、
     this.getIndustryList()
-    //顾问列表
+    //专员列表
     this.getCounselorList()
     //机构业务领域
     this.getSelectTeamList()
@@ -406,11 +397,55 @@ export default {
     this.getRatingList()
     this.selectIndustryProductList()
     window.addEventListener('scroll', this.handleScroll)
+    this.getBannarList()
+    this.getPartner()
+    // 图标数据
+    this.getNavData()
   },
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
   },
   methods: {
+    // 图标数据
+    getNavData(){
+      this.api.get({
+        url: "getDataStatistics",
+        data: { },
+        dataFlag: false,
+        callback: res=> {
+          if (res.code == "0000") {
+            this.navData=res.data
+          }
+        }
+      });
+    },
+    // 轮播图列表
+    getBannarList(){
+      this.api.get({
+        url: "getPromotionList",
+        data: {
+          issuePlatform:'1',
+          needPage:'1',
+          propagandaArea:'top',
+          propagandaType:'market_banner'
+        },
+        callback: res=>{
+          this.bannerList=res.data.rows
+        }
+      });
+    },
+    // 搜索
+    goSearch(){
+      if(this.select==='1'){
+        this.$router.push({path:'/serverOrg',query:{searchData:this.searchData}})
+      }else if(this.select==='2'){
+        this.$router.push({path:'/serverPro',query:{searchData:this.searchData}})
+      }else if(this.select==='3'){
+        this.$router.push({path:'/serverCon',query:{searchData:this.searchData}})
+      }else if(this.select==='4'){
+        this.$router.push({path:'/actiTrain',query:{searchData:this.searchData}})
+      }
+    },
     searchLeave() {
       if (this.sekectShow) {
         this.show3 = true
@@ -421,26 +456,42 @@ export default {
     changeselectShow(val){
       this.sekectShow=val
     },
+    // 合作伙伴无限滚动
+    scrollpartner(){
+      let speed = 50;
+      let demo=document.querySelector('.partner_list');
+      let demo2=document.querySelector('.partner_list_ul2');
+      let demo1=document.querySelector('.partner_list_ul');
+          demo2.innerHTML = demo1.innerHTML;
+      function Marquee(){
+        if(demo.scrollTop>=demo1.offsetHeight){
+          demo.scrollTop=0;
+        }
+        else{
+          demo.scrollTop=demo.scrollTop+1;
+        }
+      }
+      let MyMar=setInterval(Marquee,speed);
+      demo.onmouseover=function(){clearInterval(MyMar)};
+      demo.onmouseout=function(){MyMar=setInterval(Marquee,speed); };
+    },
     // 列表无限滚动
     scrollList(){
-      let box = document.querySelector('.comment_list')
-      let ul = document.querySelector('.comment_list_ul')
-      let oUl = document.createElement('ul');
-      var speed = 100;
-            var demo=document.querySelector('.comment_list');
-            var demo2=document.querySelector('.comment_list_ul2');
-            var demo1=document.querySelector('.comment_list_ul');;
-            demo2.innerHTML = demo1.innerHTML;
-            function Marquee(){if(demo.scrollTop>=demo1.offsetHeight){
-                    demo.scrollTop=0;
-                }
-                else{
-                    demo.scrollTop=demo.scrollTop+2;
-                }
-            }
-            var MyMar=setInterval(Marquee,speed);
-            demo.onmouseover=function(){clearInterval(MyMar)};
-            demo.onmouseout=function(){MyMar=setInterval(Marquee,speed); };
+      let speed = 50;
+      let demo=document.querySelector('.comment_list');
+      let demo2=document.querySelector('.comment_list_ul2');
+      let demo1=document.querySelector('.comment_list_ul');;
+          demo2.innerHTML = demo1.innerHTML;
+          function Marquee(){if(demo.scrollTop>=demo1.offsetHeight){
+                  demo.scrollTop=0;
+              }
+              else{
+                  demo.scrollTop=demo.scrollTop+1;
+              }
+          }
+          let MyMar=setInterval(Marquee,speed);
+          demo.onmouseover=function(){clearInterval(MyMar)};
+          demo.onmouseout=function(){MyMar=setInterval(Marquee,speed); };
     },
     // 初始化swiper
     swiperInit(){
@@ -456,23 +507,6 @@ export default {
           nextEl: '.swiper-button-next',
           prevEl: '.swiper-button-prev',
         },
-      })
-      var mySwiper2 = new Swiper ('.swiper2', {
-        /* loop : true,
-        direction: 'vertical',
-        slidesPerView: 1,
-        freeMode:true,
-        speed:150000,
-        speed:15000,
-        mousewheelControl:true,
-        autoplayDisableOnInteraction: false,
-        roundLengths:true,
-        autoplay: true,
-        spaceBetween:0 */
-        // loop: true, 
-        // speed:15000,
-        direction: 'vertical',
-        // autoplay: true
       })
     },
     // 屏幕滚动
@@ -574,25 +608,27 @@ export default {
         },
         callback: function(res) {
           // console.log(res);
-          _this.hotActiveList = res.data.rows;
+          if(res.code==="0000"){
+            _this.hotActiveList = res.data.rows;
+          }
         }
       });
     },
-    // 获取顾问领域
+    // 获取专员领域
     getIndustryList(){
       let _this = this;
       this.api.get({
         url: "selectIndustryList",
         data: { },
         callback: function(res) {
-          // console.log(res);
+          // console.log(res)
           if (res.code == "0000") {
             _this.IndustryList = res.data.rows;
           }
         }
       });
     },
-    //改变顾问领域列表
+    //改变专员领域列表
     changedomain(domain){
       this.domain=domain
       this.getCounselorList()
@@ -614,7 +650,7 @@ export default {
         }
       });
     },
-    // 优质顾问列表
+    // 优质专员列表
     getCounselorList(){
       let _this = this;
       this.api.get({
@@ -659,6 +695,27 @@ export default {
         }
       });
     },
+    //合作伙伴logo
+    getPartner(){
+      let _this = this;
+      this.api.get({
+        url: "selectServiceOrgList",
+        data: {
+          businessType:'',
+          page:1,
+          rows:50,
+          sortTypes:''
+         },
+        callback: function(res) {
+          if(res.code==='0000'){
+            _this.partnerLogo = res.data.rows;
+            _this.$nextTick(()=>{
+              _this.scrollpartner()              
+            })
+          }
+        }
+      });
+    },
     // 获取最新评价
     getRatingList(){
       let _this = this;
@@ -672,7 +729,6 @@ export default {
           rows:10
          },
         callback: function(res) {
-          // console.log(res);
           _this.RatingList = res.data.rows;
            _this.$nextTick(()=>{
               _this.scrollList()
@@ -689,7 +745,6 @@ export default {
       
          },
         callback: function(res) {
-          // console.log(res);
           _this.sliderData = res.data;
         }
       });
@@ -1166,6 +1221,7 @@ export default {
             width: 100%;
             height: 192px;
             overflow: hidden;
+            border-radius: 5px;
             img{
               height: 100%;
               width: 100%;
@@ -1201,33 +1257,44 @@ export default {
           font-size: 28px;
           text-align: center;
         }
+        .partner_box{
+          width: 100%;
+          border: 1px solid #dedede;
+          border-radius: 10px;
+          margin-top: 28px;
+        }
         .partner_list{
-          margin-top: 39px;
+          margin: 30px 0;
+          overflow: hidden;
+          height: 228px;
+          padding: 13px 0;
           ul{
             display: flex;
-            justify-content: space-between;
+            // justify-content: space-between;
             flex-wrap: wrap;
-            margin-bottom: 27px;
+            // margin-bottom: 27px;
             li{
               border:1px solid #dedede;
               padding:5px 14px;
               transition: all 0.5s;
               margin-bottom: 17px;
+              margin-left: 20px;
               &:hover{
                 box-shadow: 0px 0px 12px 1px rgba(0, 0, 0, 0.07);     
                 transform: translateY(-5px)
               }
               img{
-                width:77%;
+                width:137px;
                 display: block;
-                padding: 7px 10px;
+                // padding: 7px 10px;
                 margin: 0 auto;
+                height: 43px;
               }
             }
           }
         }
       }
-      // 优质顾问
+      // 优质专员
       .counselor{
         margin-top: 73px;
         .counselor_title{
@@ -1255,8 +1322,9 @@ export default {
                 color:#666666;
                 font-size: 13px;
                 padding:0 5px 5px 5px;
+                cursor: pointer;
               }
-              .active{
+              .conseloractive{
                 border-bottom: 3px solid #00a041;
                 color:#00a041;
               }
@@ -1290,6 +1358,8 @@ export default {
                       border-radius: 50%;
                       display: block;
                       // margin: 20px auto;
+                      width:157px;
+                      height: 157px;
                     }
                   }
                   .info_all{
@@ -1323,8 +1393,9 @@ export default {
                   .info_img{
                     width: 27%;
                     img{
-                      width: 79%;
-                      border-radius: 50%;
+                      width: 75px;
+                      height: 75px;
+                      border-radius: 75px;
                       display: block;
                       margin: 6px auto;
                     }
@@ -1366,9 +1437,9 @@ export default {
                   color:#666666;
                   font-size: 13px;
                   padding:0 5px 5px 5px;
-                 
+                  cursor: pointer;
                 }
-                .active{
+                .teamactive{
                   border-bottom: 3px solid #00a041;
                   color:#00a041;
                 }
@@ -1397,12 +1468,15 @@ export default {
                   }
                   .liveness_img{
                     overflow: hidden;
+                    margin-bottom: 15px;
                     height: 113px;
                     img{
-                      margin-left: 57px;
-                      height: 63%;
+                      margin: 0 auto;
+                      width: 85%;
                       padding-top: 20px;
                       transition: all 0.6s;
+                      margin: 0 auto;
+                      display: block;
                     }
                   }
                   .liveness_detail{
@@ -1446,10 +1520,9 @@ export default {
           }
           .comment_box{
             width: 100%;
-                  border: 1px solid #dedede;
+            border: 1px solid #dedede;
+            margin-top: 24px;
             .comment_list{
-              // margin-top: 33px;
-              // border: 1px solid #dedede;
               height: 572px;
               width:95%;
               overflow: hidden;
@@ -1571,7 +1644,7 @@ export default {
           cursor: pointer;
           border-radius: 5px;
         }
-        .active{
+        .active_header{
           background: #fff;
           color:#00a041;
         }
@@ -1583,6 +1656,7 @@ export default {
       .headerRight {
         font-size: 12px;
         display: flex;
+        line-height: 65px;
         .search {
           display: inline-block;
           margin-right: 20px;
@@ -1619,18 +1693,21 @@ export default {
     // animation: fadeInDown 3s ;
     position: absolute;
     left: 13%;
-    width: 16%;
+    width: 12%;
     margin-top: 14px;
     font-size: 13px;
     // border:1px solid black;
     .nav_cont{
       display: flex;
       flex-wrap: wrap;
+      // a{
+      // }
       .nav_cont_son {
         display: none;
         color:#fff;
         background: rgba(0, 0, 0,0.3);
         padding:20px 20px;
+        cursor: pointer;
         span{
             display: inline-block;
             width: 5px;
@@ -1674,6 +1751,7 @@ export default {
         padding:20px 20px 20px 28px;
         display: flex;
         justify-content: space-between;
+        cursor: pointer;
       }
     }
   }

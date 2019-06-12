@@ -10,6 +10,8 @@ import com.jn.system.enums.ShiroUserEnum;
 import com.jn.system.model.User;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authc.credential.AllowAllCredentialsMatcher;
+import org.apache.shiro.authc.credential.CredentialsMatcher;
+import org.apache.shiro.authc.credential.SimpleCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.cache.Cache;
@@ -73,6 +75,8 @@ public class ShiroDbRealm extends AuthorizingRealm {
 
         if (token.isNoPassword()) {
             setCredentialsMatcher(new AllowAllCredentialsMatcher());
+        }else{
+            setCredentialsMatcher(new SimpleCredentialsMatcher());
         }
 
         clearAuthorizationInfoCache(user);

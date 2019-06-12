@@ -14,20 +14,27 @@ import com.jn.enterprise.company.entity.TbServiceCompanyStaff;
 import com.jn.enterprise.company.entity.TbServiceCompanyStaffCriteria;
 import com.jn.enterprise.company.enums.CompanyDataEnum;
 import com.jn.enterprise.company.enums.CompanyExceptionEnum;
+import com.jn.enterprise.company.enums.RecruitExceptionEnum;
 import com.jn.enterprise.company.model.*;
 import com.jn.enterprise.company.service.CompanyService;
 import com.jn.enterprise.company.service.StaffService;
+import com.jn.enterprise.company.vo.ColleagueListVO;
 import com.jn.enterprise.company.vo.StaffAuditVO;
 import com.jn.enterprise.company.vo.StaffListVO;
+import com.jn.enterprise.company.vo.UserExtensionInfoVO;
 import com.jn.enterprise.enums.OrgExceptionEnum;
+import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.servicemarket.org.model.UserRoleInfo;
 import com.jn.enterprise.servicemarket.org.service.OrgColleagueService;
+import com.jn.park.api.MessageClient;
+import com.jn.park.message.model.AddMessageModel;
 import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.SysRole;
 import com.jn.system.model.User;
 import com.jn.system.vo.SysUserRoleVO;
 import com.jn.user.api.UserExtensionClient;
+import com.jn.user.enums.HomeRoleEnum;
 import com.jn.user.model.SearchFiledParam;
 import com.jn.user.model.UserCompanyInfo;
 import com.jn.user.model.UserExtensionInfo;
@@ -36,6 +43,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisKeyValueTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,6 +83,9 @@ public class StaffServiceImpl implements StaffService {
     @Autowired
     private CompanyService companyService;
 
+    @Autowired
+    private MessageClient messageClient;
+
     /**
      * 查询员工列表
      * @param staffListParam 列表查询入参
@@ -80,8 +94,8 @@ public class StaffServiceImpl implements StaffService {
     @Override
     @ServiceLog(doAction = "查询员工列表")
     public PaginationData getStaffList(StaffListParam staffListParam, String curAccount) {
-        // 判断当前角色为企业管理员
-        String comId = checkAccountIsCompanyAdmin(curAccount).getId();
+        UserExtensionInfo userExtensionInfo = getUserExtensionByAccount(curAccount);
+        String comId = userExtensionInfo.getCompanyCode();
 
         // 分页相关
         com.github.pagehelper.Page<Object> objects = null;
@@ -123,7 +137,7 @@ public class StaffServiceImpl implements StaffService {
 
             if (staffStatusList != null && !staffStatusList.isEmpty()) {
                 // 组合对象
-                if (null != staffStatusList && staffStatusList.size() > 0) {
+                if (staffStatusList.size() > 0) {
                     for (StaffStatusList ssl : staffStatusList) {
                         StaffListVO staff = new StaffListVO();
                         BeanUtils.copyProperties(tempMap.get(ssl.getAccount()), staff);
@@ -143,25 +157,35 @@ public class StaffServiceImpl implements StaffService {
      */
     @Override
     @ServiceLog(doAction = "查询同事列表")
-    public Map<String, Object> getColleagueList(StaffListParam staffListParam, String curAccount) {
-        Map<String, Object> map = new HashMap<>();
-        boolean isShowFlag = false;
-        ServiceCompany company = companyService.getCompanyDetailByAccountOrId(curAccount);
-        if (company != null) {
-            isShowFlag = true;
-        }
-        map.put("isShow", isShowFlag);
+    public ColleagueListVO getColleagueList(StaffListParam staffListParam, String curAccount) {
+        ColleagueListVO colleagueListVO = new ColleagueListVO();
 
-        // 获取当前用户扩展信息
-        Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(curAccount);
-        if(userExtension == null || userExtension.getData() == null){
-            throw new JnSpringCloudException(OrgExceptionEnum.USER_EXTENSION_IS_NULL);
+        // 企业ID
+        String comId = "";
+
+        // 如果入参企业ID不为空，则不判断权限，反之判断当前用户是否企业用户
+        if (StringUtils.isNotBlank(staffListParam.getComId())) {
+            comId = staffListParam.getComId();
+        } else {
+            // 获取当前用户扩展信息
+            Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(curAccount);
+            if (userExtension == null || userExtension.getData() == null) {
+                throw new JnSpringCloudException(OrgExceptionEnum.USER_EXTENSION_IS_NULL);
+            }
+            // 判断当前用户是否为企业用户并获取企业ID
+            comId = userExtension.getData().getCompanyCode();
+            if (StringUtils.isBlank(comId)) {
+                throw new JnSpringCloudException(CompanyExceptionEnum.USER_NO_STAFF);
+            }
         }
-        // 判断当前用户是否为企业用户并获取企业ID
-        String comId = userExtension.getData().getCompanyCode();
-        if(StringUtils.isBlank(comId)){
-            throw new JnSpringCloudException(CompanyExceptionEnum.USER_NO_STAFF);
+
+        // 判断当前用户是否企业管理员
+        String isShowFlag = "0";
+        ServiceCompany company = companyService.getCompanyDetailByAccountOrId(comId);
+        if (company != null && company.getComAdmin().equals(curAccount)) {
+            isShowFlag = "1";
         }
+        colleagueListVO.setIsShow(isShowFlag);
 
         List<StaffListVO> dataList = new ArrayList<>(16);
         List<String> accountList = new ArrayList<>(16);
@@ -171,8 +195,8 @@ public class StaffServiceImpl implements StaffService {
 
         // 查询用户表员工信息
         SearchFiledParam searchFiledParam = new SearchFiledParam();
-        searchFiledParam.setComId(comId);
         BeanUtils.copyProperties(staffListParam, searchFiledParam);
+        searchFiledParam.setComId(comId);
 
         Map<String, Object> maps = getUserExtensionInfoList(searchFiledParam, staffListParam);
         List<UserExtensionInfo> userExtensionInfoList = (List<UserExtensionInfo>) maps.get("data");
@@ -192,7 +216,7 @@ public class StaffServiceImpl implements StaffService {
                 staff.setCheckTime(uei.getModifiedTime());
 
                 staff = setRoleName(userRoleList, staff);
-                if (StringUtils.isNotEmpty(staff.getRoleName()) && staff.getRoleName().equals(CompanyDataEnum.COMPANY_ADMIN.getCode())) {
+                if (StringUtils.isNotEmpty(staff.getRoleName()) && staff.getRoleName().equals(HomeRoleEnum.COM_ADMIN.getCode())) {
                     companyAdmin = staff;
                 } else {
                     dataList.add(staff);
@@ -206,150 +230,121 @@ public class StaffServiceImpl implements StaffService {
 
         }
         PaginationData paginationData = new PaginationData(dataList, staffListParam.getNeedPage().equals("1") ? (Integer) maps.get("total") : dataList.size());
-        map.put("data", paginationData);
-        return map;
+        colleagueListVO.setData(paginationData);
+        return colleagueListVO;
     }
 
     /**
-     * 邀请新成员列表
-     * @param staffListParam 入参
+     * 根据手机号或账号查询用户信息
+     * @param phone 手机号或账号
      * @return
      */
     @Override
-    @ServiceLog(doAction = "邀请新成员列表")
-    public PaginationData getInviteStaffList(StaffListParam staffListParam, String curAccount) {
-        String comId = checkAccountIsCompanyAdmin(curAccount).getId();
-
-        // 返回数据集合
-        List<StaffListVO> dataList = new ArrayList<>(16);
-
-        // 账号集合
-        List<String> accountList = new ArrayList<>(16);
-
-        // 企管理员账号集合
-        List<String> comAdminAccountList = new ArrayList<>(5);
-
-        // 根据企业ID查询已邀请的账号列表
-        StaffListInParam staffListInParam = new StaffListInParam();
-        staffListInParam.setComId(comId);
-        List<StaffStatusList> staffStatusList = staffMapper.getStaffStatusList(staffListInParam);
-        for (StaffStatusList usl : staffStatusList) {
-            accountList.add(usl.getAccount());
+    @ServiceLog(doAction = "根据手机号或账号查询用户信息")
+    public UserExtensionInfoVO getInviteStaffList(String phone) {
+        if (StringUtils.isBlank(phone)) {
+            throw new JnSpringCloudException(CompanyExceptionEnum.PARAM_IS_NULL);
         }
 
-        // 查询所有用户表信息
-        SearchFiledParam searchFiledParam = new SearchFiledParam();
-        BeanUtils.copyProperties(staffListParam, searchFiledParam);
-        searchFiledParam.setAccountList(accountList);
-        searchFiledParam.setNeedPage("0");
-
-        try {
-            List<UserExtensionInfo> userExtensionInfoList = (List<UserExtensionInfo>) getUserExtensionInfoList(searchFiledParam, staffListParam).get("data");
-            // 清空账号集合并获取权限
-            accountList.clear();
-            for (UserExtensionInfo uei : userExtensionInfoList) {
-                accountList.add(uei.getAccount());
-            }
-
-            // 获取企业管理员账号并加入过滤
-            List<UserRoleInfo> userRoleInfoList = orgColleagueService.getUserRoleInfoList(accountList, CompanyDataEnum.COMPANY_ADMIN.getCode());
-            for (UserRoleInfo userRole : userRoleInfoList) {
-                if (StringUtils.isNotEmpty(userRole.getRoleName())) {
-                    comAdminAccountList.add(userRole.getAccount());
-                }
-            }
-
-            for (UserExtensionInfo uei : userExtensionInfoList) {
-                // 如果是企业管理员，不返回
-                boolean isFlag = true;
-                for (String companyAccount : comAdminAccountList) {
-                    if (companyAccount.equals(uei.getAccount())) {
-                        isFlag = false;
-                        break;
-                    }
-                }
-                if (isFlag) {
-                    StaffListVO staff = new StaffListVO();
-                    BeanUtils.copyProperties(uei, staff);
-                    staff.setStaffId(uei.getId());
-                    staff.setCheckTime(uei.getModifiedTime());
-                    dataList.add(staff);
-                }
-            }
-        } catch (JnSpringCloudException e) {
-            return new PaginationData(dataList, dataList.size());
+        Result result = userExtensionClient.getUserExtension(phone);
+        UserExtensionInfoVO userExtensionInfoVO = new UserExtensionInfoVO();
+        if (result == null || result.getData() == null) {
+            logger.warn("[根据手机号或账号查询用户信息] 用户不存在，phone:{}", phone);
+            throw new JnSpringCloudException(CompanyExceptionEnum.USER_IS_NOT_EXIST);
         }
-        return new PaginationData(dataList, dataList.size());
+        UserExtensionInfo userExtensionInfo = (UserExtensionInfo) result.getData();
+        BeanUtils.copyProperties(userExtensionInfo, userExtensionInfoVO);
+        return userExtensionInfoVO;
     }
 
     /**
      * 邀请员工
-     * @param accounts 受邀请账号数组
+     * @param inviteAccount 受邀请账号
+     * @param curAccount 当前账号
      * @return
      */
     @Override
     @ServiceLog(doAction = "邀请员工")
     @Transactional(rollbackFor = Exception.class)
-    public Integer inviteStaff(String[] accounts, User user) {
-        if (accounts.length == 0) {
-            throw new JnSpringCloudException(CompanyExceptionEnum.ACCOUNT_LIST_IS_NULL);
+    public Integer inviteStaff(String inviteAccount, String curAccount) {
+        if (StringUtils.isBlank(inviteAccount)) {
+            throw new JnSpringCloudException(CompanyExceptionEnum.PARAM_IS_NULL);
         }
-        // 判断用户是否为企业管理员
-        ServiceCompany company = checkAccountIsCompanyAdmin(user.getAccount());
 
-        // 公共字段
-        List<TbServiceCompanyStaff> list = new ArrayList<>(accounts.length + 1);
+        // 获取用户扩展信息-企业信息
+        UserExtensionInfo userExtensionInfo = checkCompanyUser(curAccount);
+        ServiceCompany company = companyService.getCompanyDetailByAccountOrId(userExtensionInfo.getCompanyCode());
+
+        // 判断邀请账号不是企业管理员
+        List<String> accountList = new ArrayList<>();
+        accountList.add(inviteAccount);
+        List<UserRoleInfo> userRoleInfoList = orgColleagueService.getUserRoleInfoList(accountList, HomeRoleEnum.COM_ADMIN.getCode());
+        for (UserRoleInfo userRole : userRoleInfoList) {
+            if (StringUtils.isNotEmpty(userRole.getRoleName()) && userRole.getAccount().equals(inviteAccount)) {
+                throw new JnSpringCloudException(CompanyExceptionEnum.USER_IS_COMPANY_ADMIN);
+            }
+        }
+
+        // 判断邀请账号不是企业员工
+        TbServiceCompanyStaffCriteria staffCriteria = new TbServiceCompanyStaffCriteria();
+        TbServiceCompanyStaffCriteria companyStaffCriteria = new TbServiceCompanyStaffCriteria();
+        TbServiceCompanyStaffCriteria.Criteria criteria = companyStaffCriteria.createCriteria();
+
+        staffCriteria.createCriteria().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue())
+                .andCheckStatusNotEqualTo(CompanyDataEnum.STAFF_CHECK_STATUS_NOT_PASS.getCode())
+                .andInviteStatusNotEqualTo(CompanyDataEnum.STAFF_INVITE_STATUS_REFUSE.getCode())
+                .andAccountEqualTo(inviteAccount);
+
+        criteria.andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue()).andAccountEqualTo(inviteAccount)
+                .andInviteStatusNotEqualTo(CompanyDataEnum.STAFF_INVITE_STATUS_REFUSE.getCode())
+                .andCheckStatusIsNull();
+        staffCriteria.or(criteria);
+
+        List<TbServiceCompanyStaff> staffList = tbServiceCompanyStaffMapper.selectByExample(staffCriteria);
+        if(staffList != null && !staffList.isEmpty()) {
+            throw new JnSpringCloudException(CompanyExceptionEnum.USER_IS_COMPANY_EXIST);
+        }
+
+        // 删除所有拒绝或未审批的数据
+//        TbServiceCompanyStaffCriteria deleteCriteria = new TbServiceCompanyStaffCriteria();
+//        deleteCriteria.createCriteria().andAccountEqualTo(inviteAccount);
+//        TbServiceCompanyStaff deleteStaff = new TbServiceCompanyStaff();
+//        deleteStaff.setRecordStatus(RecordStatusEnum.DELETE.getValue());
+//        tbServiceCompanyStaffMapper.updateByExampleSelective(deleteStaff, deleteCriteria);
+
+        // 封装数据
         TbServiceCompanyStaff staff = new TbServiceCompanyStaff();
         staff.setComId(company.getId());
         staff.setComName(company.getComName());
         staff.setInviteStatus(CompanyDataEnum.STAFF_INVITE_STATUS_SEND.getCode());
-        staff.setInviterAccount(user.getAccount());
+        staff.setJoinPattern(CompanyDataEnum.COMPANY_STAFF_JOIN_PATTERN_INVITE.getCode());
+        staff.setInviterAccount(curAccount);
         staff.setInviteTime(new Date());
         staff.setCreatedTime(new Date());
-        staff.setCreatorAccount(user.getAccount());
-        staff.setRecordStatus(new Byte(CompanyDataEnum.RECORD_STATUS_VALID.getCode()));
-
-        // 组合集合
-        List<String> accountList = Arrays.asList(accounts);
-        for (String account : accountList) {
-            TbServiceCompanyStaff tempStaff = new TbServiceCompanyStaff();
-            BeanUtils.copyProperties(staff, tempStaff);
-            tempStaff.setId(UUID.randomUUID().toString().replaceAll("-", ""));
-            tempStaff.setAccount(account);
-            list.add(tempStaff);
-        }
+        staff.setCreatorAccount(curAccount);
+        staff.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
+        staff.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+        staff.setAccount(inviteAccount);
 
         // 插入数据
-        Integer responseNums = staffMapper.inviteStaffs(list);
-        logger.info("[企业邀请] 邀请员工成功 预计邀请:{},实际邀请:{}", accounts.length, responseNums);
-        return responseNums;
-    }
+        Integer responseNums = tbServiceCompanyStaffMapper.insertSelective(staff);
+        if (responseNums == 1) {
+            AddMessageModel addMessageModel = new AddMessageModel();
+            addMessageModel.setCreatorAccount(curAccount);
+            addMessageModel.setMessageSender(curAccount);
+            addMessageModel.setMessageRecipien(inviteAccount);
+            addMessageModel.setMessageOneSort(0);
+            addMessageModel.setMessageOneSortName("个人动态");
+            addMessageModel.setMessageTowSort(8);
+            addMessageModel.setMessageTowSortName("企业邀请");
+            addMessageModel.setMessageConnect("{\"comId\":\"" + company.getId() + "\",\"comName\":\"" + company.getComName() + "\"}");
+            addMessageModel.setMessageConnectName("企业邀请");
+            addMessageModel.setMessageTitle("企业邀请待处理通知");
+            addMessageModel.setMessageContent(company.getComName());
+            messageClient.addMessage(addMessageModel);
 
-
-    /**
-     * 再次邀请员工
-     * @param staffId 员工ID
-     * @return
-     */
-    @Override
-    @ServiceLog(doAction = "再次邀请员工")
-    @Transactional(rollbackFor = Exception.class)
-    public Integer inviteStaffAgain(String staffId, String curAccount) {
-        // 判断用户是否为企业管理员
-        checkAccountIsCompanyAdmin(curAccount);
-
-        TbServiceCompanyStaffCriteria staffCriteria = new TbServiceCompanyStaffCriteria();
-        staffCriteria.createCriteria().andRecordStatusEqualTo(new Byte(CompanyDataEnum.RECORD_STATUS_VALID.getCode()))
-                .andInviteStatusEqualTo(CompanyDataEnum.STAFF_INVITE_STATUS_REFUSE.getCode()).andIdEqualTo(staffId);
-
-        List<TbServiceCompanyStaff> companyStaffs = tbServiceCompanyStaffMapper.selectByExample(staffCriteria);
-        if (companyStaffs == null || companyStaffs.size() == 0) {
-            throw new JnSpringCloudException(CompanyExceptionEnum.USER_NOT_INVITE_AGAIN);
+            logger.info("[企业邀请] 邀请员工成功,account:{}", inviteAccount);
         }
-        TbServiceCompanyStaff companyStaff = companyStaffs.get(0);
-        companyStaff.setInviteStatus(CompanyDataEnum.STAFF_INVITE_STATUS_SEND.getCode());
-        int responseNums = tbServiceCompanyStaffMapper.updateByPrimaryKeySelective(companyStaff);
-        logger.info("[企业邀请] 再次邀请员工成功 响应条数:{}", responseNums);
         return responseNums;
     }
 
@@ -362,13 +357,14 @@ public class StaffServiceImpl implements StaffService {
     @ServiceLog(doAction = "审核员工申请")
     @Transactional(rollbackFor = Exception.class)
     public Integer reviewStaff(ReviewStaffParam reviewStaffParam, String curAccount) {
-        // 判断当前角色为企业管理员
-        ServiceCompany company = checkAccountIsCompanyAdmin(curAccount);
+        // 获取用户扩展信息-企业信息
+        UserExtensionInfo userExtensionInfo = checkCompanyUser(curAccount);
+        ServiceCompany company = companyService.getCompanyDetailByAccountOrId(userExtensionInfo.getCompanyCode());
 
         // 核实员工身份
         TbServiceCompanyStaffCriteria staffCriteria = new TbServiceCompanyStaffCriteria();
         staffCriteria.createCriteria().andIdEqualTo(reviewStaffParam.getStaffId()).andComIdEqualTo(company.getId())
-                .andRecordStatusEqualTo(new Byte(CompanyDataEnum.RECORD_STATUS_VALID.getCode()))
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue())
                 .andCheckStatusEqualTo(CompanyDataEnum.STAFF_CHECK_STATUS_WAIT.getCode());
 
         List<TbServiceCompanyStaff> companyStaffs = tbServiceCompanyStaffMapper.selectByExample(staffCriteria);
@@ -388,20 +384,88 @@ public class StaffServiceImpl implements StaffService {
         // 审核通过，增加角色，修改用户信息
         if (reviewStaffParam.getCheckStatus().equals(CompanyDataEnum.STAFF_CHECK_STATUS_PASS.getCode())) {
             List<String> addRoleIds = new ArrayList<>();
-            addRoleIds.add(CompanyDataEnum.COMPANY_STAFF.getCode());
-            boolean addRoleResult = updateRoleByAccount(companyStaff.getAccount(), addRoleIds, null);
+            List<String> delRoleIds = new ArrayList<>();
+            addRoleIds.add(HomeRoleEnum.COM_EMPLOYEE.getCode());
+            delRoleIds.add(HomeRoleEnum.NORMAL_USER.getCode());
+            boolean addRoleResult = updateRoleByAccount(companyStaff.getAccount(), addRoleIds, delRoleIds);
             if (addRoleResult) {
-                logger.info("[审核员工] {}增加角色{}成功", companyStaff.getAccount(), CompanyDataEnum.COMPANY_STAFF.getCode());
+                logger.info("[审核员工] {}增加角色{}成功", companyStaff.getAccount(), HomeRoleEnum.COM_EMPLOYEE.getCode());
             }
 
             String[] accountList = new String[] {companyStaff.getAccount()};
             UserCompanyInfo userCompanyInfo = new UserCompanyInfo();
-            userCompanyInfo.setAccountList(accountList);
+            userCompanyInfo.setAccountList(Arrays.asList(accountList));
             userCompanyInfo.setCompanyCode(company.getId());
             userCompanyInfo.setCompanyName(company.getComName());
             Result result = userExtensionClient.updateCompanyInfo(userCompanyInfo);
-            checkCallServiceSuccess(result);
+            if (result == null || result.getData() == null) {
+                logger.warn("[审核员工] 更新用户信息发生错误");
+                throw new JnSpringCloudException(CompanyExceptionEnum.UPDATE_USER_EXTENSION_INFO_ERROR);
+            }
             logger.info("[审核员工] 更新用户扩展信息返回:{}", result.getData());
+        }
+
+        return responseNums;
+    }
+
+    /**
+     * 离开企业
+     * @param curAccount 当前用户账号
+     * @return
+     */
+    @Override
+    @ServiceLog(doAction = "离开企业")
+    @Transactional(rollbackFor = Exception.class)
+    public Integer leaveCompany(String curAccount) {
+        // 获取用户扩展信息-企业信息
+        UserExtensionInfo userExtensionInfo = checkCompanyUser(curAccount);
+        ServiceCompany company = companyService.getCompanyDetailByAccountOrId(userExtensionInfo.getCompanyCode());
+
+        // 企业管理员不能离开企业
+        if (company.getComAdmin().equals(curAccount)) {
+            logger.warn("[离开企业] 企业管理员{}不能离开企业{}", curAccount, company.getComName());
+            throw new JnSpringCloudException(CompanyExceptionEnum.COMPANY_ADMIN_LEAVE_ERROR);
+        }
+
+        // 核实员工身份
+        TbServiceCompanyStaffCriteria staffCriteria = new TbServiceCompanyStaffCriteria();
+        staffCriteria.createCriteria().andComIdEqualTo(company.getId()).andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue())
+                .andCheckStatusEqualTo(CompanyDataEnum.STAFF_CHECK_STATUS_PASS.getCode()).andAccountEqualTo(curAccount)
+                .andInviteStatusEqualTo(CompanyDataEnum.STAFF_INVITE_STATUS_AGREE.getCode());
+
+        List<TbServiceCompanyStaff> companyStaffs = tbServiceCompanyStaffMapper.selectByExample(staffCriteria);
+        if (null == companyStaffs || companyStaffs.size() == 0) {
+            throw new JnSpringCloudException(CompanyExceptionEnum.USER_NO_STAFF);
+        }
+        TbServiceCompanyStaff companyStaff = companyStaffs.get(0);
+
+        companyStaff.setRecordStatus(RecordStatusEnum.DELETE.getValue());
+        int responseNums = tbServiceCompanyStaffMapper.updateByPrimaryKeySelective(companyStaff);
+        logger.info("[离开企业]  account:{} 响应条数:{}", curAccount, responseNums);
+
+        // 审核通过，增加角色，修改用户信息
+        if (responseNums == 1) {
+            List<String> addRoleIds = new ArrayList<>();
+            List<String> delRoleIds = new ArrayList<>();
+            addRoleIds.add(HomeRoleEnum.NORMAL_USER.getCode());
+            delRoleIds.add(HomeRoleEnum.COM_CONTACTS.getCode());
+            delRoleIds.add(HomeRoleEnum.COM_EMPLOYEE.getCode());
+            boolean addRoleResult = updateRoleByAccount(companyStaff.getAccount(), addRoleIds, delRoleIds);
+            if (addRoleResult) {
+                logger.info("[离开企业] {}删除角色成功", companyStaff.getAccount());
+            }
+
+            String[] accountList = new String[] {companyStaff.getAccount()};
+            UserCompanyInfo userCompanyInfo = new UserCompanyInfo();
+            userCompanyInfo.setAccountList(Arrays.asList(accountList));
+            userCompanyInfo.setCompanyCode("");
+            userCompanyInfo.setCompanyName("");
+            Result result = userExtensionClient.updateCompanyInfo(userCompanyInfo);
+            if (result == null || result.getData() == null) {
+                logger.warn("[离开企业] 更新用户信息发生错误");
+                throw new JnSpringCloudException(CompanyExceptionEnum.UPDATE_USER_EXTENSION_INFO_ERROR);
+            }
+            logger.info("[离开企业] 更新用户扩展信息返回:{}", result.getData());
         }
 
         return responseNums;
@@ -417,7 +481,7 @@ public class StaffServiceImpl implements StaffService {
     @Transactional(rollbackFor = Exception.class)
     public Integer acceptInvite(AcceptInviteParam acceptInviteParam) {
         TbServiceCompanyStaffCriteria staffCriteria = new TbServiceCompanyStaffCriteria();
-        staffCriteria.createCriteria().andRecordStatusEqualTo(new Byte(CompanyDataEnum.RECORD_STATUS_VALID.getCode()))
+        staffCriteria.createCriteria().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue())
                 .andInviteStatusEqualTo(CompanyDataEnum.STAFF_INVITE_STATUS_SEND.getCode())
                 .andAccountEqualTo(acceptInviteParam.getAccount()).andComIdEqualTo(acceptInviteParam.getComId());
 
@@ -435,17 +499,20 @@ public class StaffServiceImpl implements StaffService {
         userInfo.setAccount(staff.getAccount());
         BeanUtils.copyProperties(acceptInviteParam, userInfo);
         Result result = userExtensionClient.saveOrUpdateUserInfo(userInfo);
-        checkCallServiceSuccess(result);
+        if (result == null || result.getData() == null) {
+            logger.warn("[接受企业邀请] 更新用户扩展信息错误");
+            return responseNums;
+        }
 
         // 修改信息成功之后接收邀请
         if ((Integer) result.getData() == 1) {
-            TbServiceCompanyStaff tscs = new TbServiceCompanyStaff();
-            tscs.setId(staff.getId());
-            tscs.setInviteStatus(CompanyDataEnum.STAFF_INVITE_STATUS_AGREE.getCode());
-            tscs.setCheckStatus(CompanyDataEnum.STAFF_CHECK_STATUS_WAIT.getCode());
-            tscs.setInviteTime(new Date());
-            tscs.setInviterAccount(staff.getAccount());
-            responseNums = tbServiceCompanyStaffMapper.updateByPrimaryKeySelective(tscs);
+            TbServiceCompanyStaff tbServiceCompanyStaff = new TbServiceCompanyStaff();
+            tbServiceCompanyStaff.setId(staff.getId());
+            tbServiceCompanyStaff.setInviteStatus(CompanyDataEnum.STAFF_INVITE_STATUS_AGREE.getCode());
+            tbServiceCompanyStaff.setCheckStatus(CompanyDataEnum.STAFF_CHECK_STATUS_WAIT.getCode());
+            tbServiceCompanyStaff.setInviteTime(new Date());
+            tbServiceCompanyStaff.setInviterAccount(staff.getAccount());
+            responseNums = tbServiceCompanyStaffMapper.updateByPrimaryKeySelective(tbServiceCompanyStaff);
             logger.info("[企业邀请] 接受邀请成功,staffId:{},响应条数:{}", staff.getId(), responseNums);
         } else {
             logger.info("[企业邀请] 接受企业邀请失败,修改用户信息失败");
@@ -455,24 +522,36 @@ public class StaffServiceImpl implements StaffService {
 
     /**
      * 拒绝企业邀请
-     * @param staffId 员工ID
+     * @param comId 企业ID
+     * @param account 账号
      * @return
      */
     @Override
     @ServiceLog(doAction = "拒绝企业邀请")
     @Transactional(rollbackFor = Exception.class)
-    public Integer refuseInvite(String staffId) {
-        TbServiceCompanyStaff tscs = new TbServiceCompanyStaff();
-        tscs.setId(staffId);
-        tscs.setInviteStatus(CompanyDataEnum.STAFF_INVITE_STATUS_REFUSE.getCode());
-        Integer responseNums = tbServiceCompanyStaffMapper.updateByPrimaryKeySelective(tscs);
-        logger.info("[企业邀请] 拒绝邀请成功,staffId:{},响应条数:{}", staffId, responseNums);
+    public Integer refuseInvite(String comId, String account) {
+        TbServiceCompanyStaffCriteria staffCriteria = new TbServiceCompanyStaffCriteria();
+        staffCriteria.createCriteria().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue())
+                .andInviteStatusEqualTo(CompanyDataEnum.STAFF_INVITE_STATUS_SEND.getCode())
+                .andAccountEqualTo(account).andComIdEqualTo(comId);
+
+        List<TbServiceCompanyStaff> staffList = tbServiceCompanyStaffMapper.selectByExample(staffCriteria);
+        if (staffList == null || staffList.size() == 0) {
+            logger.warn("[企业邀请] 该账号未收到企业邀请,企业ID:{}", comId);
+            throw new JnSpringCloudException(CompanyExceptionEnum.ACCOUNT_NOT_GET_INVITE);
+        }
+
+        TbServiceCompanyStaff staff = staffList.get(0);
+        staff.setInviteStatus(CompanyDataEnum.STAFF_INVITE_STATUS_REFUSE.getCode());
+        int responseNums = tbServiceCompanyStaffMapper.updateByPrimaryKeySelective(staff);
+
+        logger.info("[企业邀请] 拒绝邀请成功,account:{},响应条数:{}", account, responseNums);
         return responseNums;
     }
 
     @Override
     @ServiceLog(doAction = "获取待审核列表")
-    public List<StaffAuditVO> getAuditStatus(String curAccount) {
+    public StaffAuditVO getAuditStatus(String curAccount) {
         return staffMapper.getAuditStatus(curAccount);
     }
 
@@ -485,6 +564,7 @@ public class StaffServiceImpl implements StaffService {
     @ServiceLog(doAction = "企业成员-批量删除成员")
     @Transactional(rollbackFor = Exception.class)
     public Integer delMoreStaffs(String[] accountList, String curAccount) {
+        // 只有企业管理员能删除
         String comId = checkAccountIsCompanyAdmin(curAccount).getId();
         if (accountList.length == 0) {
             throw new JnSpringCloudException(CompanyExceptionEnum.ACCOUNT_LIST_IS_NULL);
@@ -494,13 +574,12 @@ public class StaffServiceImpl implements StaffService {
         // 逻辑删除员工表
         List<String> delStaffsList = Arrays.asList(accountList);
         TbServiceCompanyStaffCriteria staffCriteria = new TbServiceCompanyStaffCriteria();
-        staffCriteria.createCriteria().andAccountIn(delStaffsList).andRecordStatusEqualTo(new Byte(CompanyDataEnum.RECORD_STATUS_VALID.getCode()));
+        staffCriteria.createCriteria().andAccountIn(delStaffsList).andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
 
         TbServiceCompanyStaff tbServiceCompanyStaff = new TbServiceCompanyStaff();
         tbServiceCompanyStaff.setModifierAccount(curAccount);
         tbServiceCompanyStaff.setModifiedTime(new Date());
-        tbServiceCompanyStaff.setRecordStatus(new Byte(CompanyDataEnum.RECORD_STATUS_NOT_VALID.getCode()));
-        tbServiceCompanyStaff.setComId(comId);
+        tbServiceCompanyStaff.setRecordStatus(RecordStatusEnum.DELETE.getValue());
 
         Integer responseNums = tbServiceCompanyStaffMapper.updateByExampleSelective(tbServiceCompanyStaff, staffCriteria);
         logger.info("[企业成员] 批量删除企业成员成功,计划删除:{},实际删除:{}", delStaffsList.size(), responseNums);
@@ -510,18 +589,23 @@ public class StaffServiceImpl implements StaffService {
         UserCompanyInfo userCompanyInfo = new UserCompanyInfo();
         userCompanyInfo.setCompanyName("");
         userCompanyInfo.setCompanyCode("");
-        userCompanyInfo.setAccountList(accountList);
+        userCompanyInfo.setAccountList(Arrays.asList(accountList));
         Result result1 = userExtensionClient.updateCompanyInfo(userCompanyInfo);
-        checkCallServiceSuccess(result1);
+        if (result1 == null || result1.getData() == null) {
+            logger.warn("[企业成员] 更新用户扩展信息错误");
+            throw new JnSpringCloudException(CompanyExceptionEnum.UPDATE_USER_EXTENSION_INFO_ERROR);
+        }
         logger.info("[企业成员] 批量修改用户扩展信息成功,计划删除:{},实际删除:{}", delStaffsList.size(), result1.getData());
 
 
         // 删除角色
         for (String account : accountList) {
-            List<String> roleLit = new ArrayList<>(2);
-            roleLit.add(CompanyDataEnum.COMPANY_CONTACTS.getCode());
-            roleLit.add(CompanyDataEnum.COMPANY_STAFF.getCode());
-            boolean roleResult = updateRoleByAccount(account, null, roleLit);
+            List<String> addRoleList = new ArrayList<>(2);
+            List<String> delRoleList = new ArrayList<>(2);
+            addRoleList.add(HomeRoleEnum.NORMAL_USER.getCode());
+            delRoleList.add(HomeRoleEnum.COM_CONTACTS.getCode());
+            delRoleList.add(HomeRoleEnum.COM_EMPLOYEE.getCode());
+            boolean roleResult = updateRoleByAccount(account, addRoleList, delRoleList);
             if (roleResult) {
                 logger.info("[企业成员-批量删除] 删除{}角色信息成功", account);
             } else {
@@ -546,16 +630,16 @@ public class StaffServiceImpl implements StaffService {
         checkCompanyAndStaff(account, comId);
 
         // 获取企业联系人角色名称
-        String companyContactsRoleName = CompanyDataEnum.COMPANY_CONTACTS.getCode();
+        String companyContactsRoleName = HomeRoleEnum.COM_CONTACTS.getCode();
 
         List<String> addRoleIds = new ArrayList<>(2);
         List<String> delRoleIds = new ArrayList<>(2);
 
         if (isSet) {
             addRoleIds.add(companyContactsRoleName);
-            delRoleIds.add(CompanyDataEnum.COMPANY_STAFF.getCode());
+            delRoleIds.add(HomeRoleEnum.COM_EMPLOYEE.getCode());
         } else {
-            addRoleIds.add(CompanyDataEnum.COMPANY_STAFF.getCode());
+            addRoleIds.add(HomeRoleEnum.COM_EMPLOYEE.getCode());
             delRoleIds.add(companyContactsRoleName);
         }
         boolean setOrCancelRoleResult = updateRoleByAccount(account, addRoleIds, delRoleIds);
@@ -576,7 +660,7 @@ public class StaffServiceImpl implements StaffService {
         TbServiceCompanyStaffCriteria staffCriteria = new TbServiceCompanyStaffCriteria();
         staffCriteria.createCriteria().andAccountEqualTo(account).andComIdEqualTo(comId)
                 .andCheckStatusEqualTo(CompanyDataEnum.STAFF_CHECK_STATUS_PASS.getCode())
-                .andRecordStatusEqualTo(new Byte(CompanyDataEnum.RECORD_STATUS_VALID.getCode()));
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         List<TbServiceCompanyStaff> staffList = tbServiceCompanyStaffMapper.selectByExample(staffCriteria);
         if (staffList == null || staffList.size() == 0) {
             throw new JnSpringCloudException(CompanyExceptionEnum.USER_NO_STAFF);
@@ -592,8 +676,8 @@ public class StaffServiceImpl implements StaffService {
     @ServiceLog(doAction = "调用内部服务")
     public void checkCallServiceSuccess(Result result) {
         if (result == null || result.getData() == null) {
-            logger.warn("[服务调用] 调用内部服务出现未知错误");
-            throw new JnSpringCloudException(CompanyExceptionEnum.CALL_SERVICE_ERROR);
+            logger.warn("[服务调用] 调用system服务出现未知错误");
+            throw new JnSpringCloudException(CompanyExceptionEnum.CALL_SYSTEM_SERVICE_ERROR);
         }
     }
 
@@ -609,13 +693,26 @@ public class StaffServiceImpl implements StaffService {
     }
 
     /**
+     * 判断当前账号是否为企业员工
+     * @return
+     */
+    @ServiceLog(doAction = "判断当前账号是否为企业员工")
+    public UserExtensionInfo getUserExtensionByAccount(String account) {
+        Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(account);
+        if (userExtension == null || userExtension.getData() == null || StringUtils.isEmpty(userExtension.getData().getCompanyCode())) {
+            throw new JnSpringCloudException(CompanyExceptionEnum.USER_NO_STAFF);
+        }
+        return userExtension.getData();
+    }
+
+    /**
      * 根据账号修改联系人角色
      * @param account 账号
      * @param addRoleNames 添加角色名称列表
      * @param delRoleNames 删除角色名称列表
      * @return
      */
-    @ServiceLog(doAction = "根据角色名称获取角色ID")
+    @ServiceLog(doAction = "根据账号修改联系人角色")
     public boolean updateRoleByAccount(String account, List<String> addRoleNames, List<String> delRoleNames) {
         if ((addRoleNames == null || addRoleNames.isEmpty()) && (delRoleNames == null || delRoleNames.isEmpty())) {
             logger.warn("没有需要删除或增加的角色");
@@ -654,6 +751,9 @@ public class StaffServiceImpl implements StaffService {
         sysUserRoleVO.setUser(modifyUser);
         Result<Boolean> updateRoleResult = systemClient.updateUserRole(sysUserRoleVO);
         checkCallServiceSuccess(updateRoleResult);
+
+        // 删除redis缓存
+        userExtensionClient.removeUserExtensionRedis(account);
         return updateRoleResult.getData();
     }
 
@@ -675,21 +775,24 @@ public class StaffServiceImpl implements StaffService {
             }
         }
 
+        Map<String, Object> map = new HashMap<>();
+
         // 批量获取用户信息
         Result userExtensionInfo = userExtensionClient.getUserExtensionBySearchFiled(searchFiledParam);
-        checkCallServiceSuccess(userExtensionInfo);
-
-        Map<String, Object> map = new HashMap<>();
-        // 获取用户列表
-        HashMap<String, Object> data = (HashMap<String, Object>) userExtensionInfo.getData();
-        List<Object> rows = (List<Object>) data.get("rows");
-        ObjectMapper objectMapper = new ObjectMapper();
-        List<UserExtensionInfo> userExtensionInfoList = new ArrayList<>();
-        for (Object obj : rows) {
-            userExtensionInfoList.add(objectMapper.convertValue(obj, UserExtensionInfo.class));
+        if (userExtensionInfo == null || userExtensionInfo.getData() == null) {
+            logger.warn("[封装查询字段获取用户列表] 批量获取用户信息失败");
+        } else {
+            // 获取用户列表
+            HashMap<String, Object> data = (HashMap<String, Object>) userExtensionInfo.getData();
+            List<Object> rows = (List<Object>) data.get("rows");
+            ObjectMapper objectMapper = new ObjectMapper();
+            List<UserExtensionInfo> userExtensionInfoList = new ArrayList<>();
+            for (Object obj : rows) {
+                userExtensionInfoList.add(objectMapper.convertValue(obj, UserExtensionInfo.class));
+            }
+            map.put("total", data.get("total"));
+            map.put("data", userExtensionInfoList);
         }
-        map.put("total", data.get("total"));
-        map.put("data", userExtensionInfoList);
         return map;
     }
 
@@ -707,5 +810,22 @@ public class StaffServiceImpl implements StaffService {
             }
         }
         return staff;
+    }
+
+    /**
+     * 判断账号是否企业账号
+     * @param account
+     * @return
+     */
+    public UserExtensionInfo checkCompanyUser (String account) {
+        Result<UserExtensionInfo> result = userExtensionClient.getUserExtension(account);
+        if (result == null || result.getData() == null) {
+            throw new JnSpringCloudException(CompanyExceptionEnum.GET_USER_EXTENSION_INFO_ERROR);
+        }
+        UserExtensionInfo userExtensionInfo = result.getData();
+        if (StringUtils.isBlank(userExtensionInfo.getCompanyCode()) || StringUtils.isBlank(userExtensionInfo.getCompanyName())) {
+            throw new JnSpringCloudException(RecruitExceptionEnum.RECRUIT_USER_NOT_COMPANY_USER);
+        }
+        return userExtensionInfo;
     }
 }

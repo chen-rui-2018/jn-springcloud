@@ -2,15 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.park.comment.dao.TbCommentSensitiveWordMapper">
   <resultMap id="BaseResultMap" type="com.jn.park.comment.entity.TbCommentSensitiveWord">
+    <result column="sensitive_word" jdbcType="VARCHAR" property="sensitiveWord" />
     <result column="sensitive_type" jdbcType="VARCHAR" property="sensitiveType" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
-  </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.jn.park.comment.entity.TbCommentSensitiveWord">
-    <result column="sensitive_word" jdbcType="LONGVARCHAR" property="sensitiveWord" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -71,27 +69,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    sensitive_type, creator_account, created_time, modifier_account, modified_time, record_status
+    sensitive_word, sensitive_type, creator_account, created_time, modifier_account, 
+    modified_time, record_status
   </sql>
-  <sql id="Blob_Column_List">
-    sensitive_word
-  </sql>
-  <select id="selectByExampleWithBLOBs" parameterType="com.jn.park.comment.entity.TbCommentSensitiveWordCriteria" resultMap="ResultMapWithBLOBs">
-    select
-    <if test="distinct">
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from tb_comment_sensitive_word
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-  </select>
   <select id="selectByExample" parameterType="com.jn.park.comment.entity.TbCommentSensitiveWordCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
@@ -113,16 +93,19 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.park.comment.entity.TbCommentSensitiveWord">
-    insert into tb_comment_sensitive_word (sensitive_type, creator_account, created_time, 
-      modifier_account, modified_time, record_status, 
-      sensitive_word)
-    values (#{sensitiveType,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=TINYINT}, 
-      #{sensitiveWord,jdbcType=LONGVARCHAR})
+    insert into tb_comment_sensitive_word (sensitive_word, sensitive_type, creator_account, 
+      created_time, modifier_account, modified_time, 
+      record_status)
+    values (#{sensitiveWord,jdbcType=VARCHAR}, #{sensitiveType,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{recordStatus,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.comment.entity.TbCommentSensitiveWord">
     insert into tb_comment_sensitive_word
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="sensitiveWord != null">
+        sensitive_word,
+      </if>
       <if test="sensitiveType != null">
         sensitive_type,
       </if>
@@ -141,11 +124,11 @@
       <if test="recordStatus != null">
         record_status,
       </if>
-      <if test="sensitiveWord != null">
-        sensitive_word,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="sensitiveWord != null">
+        #{sensitiveWord,jdbcType=VARCHAR},
+      </if>
       <if test="sensitiveType != null">
         #{sensitiveType,jdbcType=VARCHAR},
       </if>
@@ -164,9 +147,6 @@
       <if test="recordStatus != null">
         #{recordStatus,jdbcType=TINYINT},
       </if>
-      <if test="sensitiveWord != null">
-        #{sensitiveWord,jdbcType=LONGVARCHAR},
-      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.park.comment.entity.TbCommentSensitiveWordCriteria" resultType="java.lang.Long">
@@ -178,6 +158,9 @@
   <update id="updateByExampleSelective" parameterType="map">
     update tb_comment_sensitive_word
     <set>
+      <if test="record.sensitiveWord != null">
+        sensitive_word = #{record.sensitiveWord,jdbcType=VARCHAR},
+      </if>
       <if test="record.sensitiveType != null">
         sensitive_type = #{record.sensitiveType,jdbcType=VARCHAR},
       </if>
@@ -196,30 +179,15 @@
       <if test="record.recordStatus != null">
         record_status = #{record.recordStatus,jdbcType=TINYINT},
       </if>
-      <if test="record.sensitiveWord != null">
-        sensitive_word = #{record.sensitiveWord,jdbcType=LONGVARCHAR},
-      </if>
     </set>
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExampleWithBLOBs" parameterType="map">
-    update tb_comment_sensitive_word
-    set sensitive_type = #{record.sensitiveType,jdbcType=VARCHAR},
-      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
-      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
-      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
-      record_status = #{record.recordStatus,jdbcType=TINYINT},
-      sensitive_word = #{record.sensitiveWord,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
     update tb_comment_sensitive_word
-    set sensitive_type = #{record.sensitiveType,jdbcType=VARCHAR},
+    set sensitive_word = #{record.sensitiveWord,jdbcType=VARCHAR},
+      sensitive_type = #{record.sensitiveType,jdbcType=VARCHAR},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},

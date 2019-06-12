@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,6 +104,7 @@ public class BusinessPromotionController extends BaseController {
     @ApiOperation(value = "(撤销申请)",notes ="propagandaId:宣传id,返回数据响应条数，正常为1" )
     @RequestMapping(value = "/cancelApprove",method = RequestMethod.POST)
     public Result<Integer> cancelApprove(String propagandaId){
+        Assert.notNull(propagandaId, BusinessPromotionExceptionEnum.PROPAGANDA_ID_NOT_NULL.getMessage());
         User user = (User)SecurityUtils.getSubject().getPrincipal();
         if(user==null || user.getAccount()==null){
             logger.warn("取消申请获取当前登录用户失败");
@@ -127,41 +129,18 @@ public class BusinessPromotionController extends BaseController {
         return  new Result(responseNum);
     }
 
-    @ControllerLog(doAction = "生成订单号")
-    @RequiresPermissions("/propaganda/businessPromotionController/getOrderNumber")
-    @ApiOperation(value = "(生成订单号)")
-    @RequestMapping(value = "/getOrderNumber",method = RequestMethod.GET)
-    public Result<String> getOrderNumber(){
-        return  new Result(businessPromotionService.getOrderNumber());
-    }
-
-    @ControllerLog(doAction = "创建账单")
-    @RequiresPermissions("/propaganda/businessPromotionController/createBill")
-    @ApiOperation(value = "(创建账单)",notes = "返回账单号，请求成功后，携带账单号跳转至支付方法选择页")
-    @RequestMapping(value = "/createBill",method = RequestMethod.GET)
-    public Result<String> createBill(@ApiParam(value = "订单号(调用生成订单号接口获得)" ,required = true,example = "AD-2019XXX")@RequestParam("orderNum") String orderNum){
-        Assert.notNull(orderNum, BusinessPromotionExceptionEnum.ORDER_NUM_NOT_NULL.getMessage());
-        User user = (User)SecurityUtils.getSubject().getPrincipal();
-        if(user==null || user.getAccount()==null){
-            logger.warn("创建账单获取当前登录用户失败");
-            return new Result(BusinessPromotionExceptionEnum.NETWORK_ANOMALY.getCode(),BusinessPromotionExceptionEnum.NETWORK_ANOMALY.getMessage());
-        }
-        return  new Result(businessPromotionService.createBill(orderNum,user.getAccount()));
-    }
-
     @ControllerLog(doAction = "提交审核")
     @RequiresPermissions("/propaganda/businessPromotionController/submitAudit")
-    @ApiOperation(value = "提交审核)",notes ="propagandaId:宣传id" )
+    @ApiOperation(value = "提交审核",notes ="propagandaId:宣传id" )
     @RequestMapping(value = "/submitAudit",method = RequestMethod.POST)
-    public Result<Integer> submitAudit(String propagandaId){
+    public Result<JSONObject> submitAudit(String propagandaId){
         Assert.notNull(propagandaId, BusinessPromotionExceptionEnum.PROPAGANDA_ID_NOT_NULL.getMessage());
         User user = (User)SecurityUtils.getSubject().getPrincipal();
         if(user==null || user.getAccount()==null){
             logger.warn("提交审核获取当前登录用户失败");
             return new Result(BusinessPromotionExceptionEnum.NETWORK_ANOMALY.getCode(),BusinessPromotionExceptionEnum.NETWORK_ANOMALY.getMessage());
         }
-        businessPromotionService.submitAudit(propagandaId,user.getAccount());
-        return  new Result();
+        return  new Result(businessPromotionService.submitAudit(propagandaId, user.getAccount()));
     }
 
     @ControllerLog(doAction = "获取宣传区域信息")
@@ -171,4 +150,39 @@ public class BusinessPromotionController extends BaseController {
     public Result<List<PropagandaAreaShow>> getPropagandaAreaList(){
         return  new Result(businessPromotionService.getPropagandaAreaList());
     }
+
+    @ControllerLog(doAction = "生成订单号")
+    @RequiresPermissions("/propaganda/businessPromotionController/getOrderNumber")
+    @ApiOperation(value = "(生成订单号)")
+    @RequestMapping(value = "/getOrderNumber",method = RequestMethod.GET)
+    public Result<String> getOrderNumber(){
+        return  new Result(businessPromotionService.getOrderNumber());
+    }
+
+
+    @RequiresPermissions("/propaganda/businessPromotionController/createBill")
+    @ApiOperation(value = "(创建账单)",notes = "返回账单号，请求成功后，携带账单号跳转至支付方法选择页")
+    @RequestMapping(value = "/createBill",method = RequestMethod.POST)
+    public Result<String> createBill(@RequestBody @Validated CreateBillParam createBillParam){
+        logger.info("进入创建账单API,入参：{}",createBillParam.toString());
+        User user = (User)SecurityUtils.getSubject().getPrincipal();
+        if(user==null || user.getAccount()==null){
+            logger.warn("创建账单获取当前登录用户失败");
+            return new Result(BusinessPromotionExceptionEnum.NETWORK_ANOMALY.getCode(),BusinessPromotionExceptionEnum.NETWORK_ANOMALY.getMessage());
+        }
+        return  new Result(businessPromotionService.createBill(createBillParam,user.getAccount(),user.getName()));
+    }
+
+    @ControllerLog(doAction = "根据账单号修改支付状态")
+    @RequiresPermissions("/propaganda/businessPromotionController/updatePayStatus")
+    @ApiOperation(value = "根据账单号修改支付状态",notes = "orderCode:账单号，支付成功后回调方法,返回数据响应条数，正常为1")
+    @RequestMapping(value = "/updatePayStatus",method = RequestMethod.POST)
+    public Result<Integer> updatePayStatus(@RequestBody String orderCode){
+        logger.info("根据账单号修改支付状态API,入参：{}",orderCode);
+        Assert.notNull(orderCode,BusinessPromotionExceptionEnum.ORDER_CODE_NOT_NULL.getMessage());
+        int resNum= businessPromotionService.updatePayStatus(orderCode);
+        logger.info("-------------根据账单号修改支付状态成功，数据响应条数：{}---------------",resNum);
+        return  new Result(resNum);
+    }
+
 }

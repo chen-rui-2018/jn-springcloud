@@ -81,10 +81,10 @@
            and  Date(t.sign_in_attendance_time) = DATE_FORMAT(#{attendanceTime},'%Y-%m-%d')
        </if>
        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(userName)">
-           and u.name like CONCAT('%', #{userName,jdbcType=VARCHAR}, '%')
+           and u.name like CONCAT('%', trim(#{userName,jdbcType=VARCHAR}), '%')
        </if>
        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentName)">
-           and u.department_name like CONCAT('%', #{departmentName,jdbcType=VARCHAR}, '%')
+           and u.department_name like CONCAT('%', trim(#{departmentName,jdbcType=VARCHAR}), '%')
        </if>
        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
            and u.departmentId= #{departmentId,jdbcType=VARCHAR}
@@ -97,6 +97,8 @@
        <if test="endTime != null">
         and   Date( t.sign_in_attendance_time ) &lt;= #{endTime}
        </if>
+
+       order by t.sign_in_attendance_time desc
 
    </select>
 
@@ -112,7 +114,7 @@
         u.departmentId
         from tb_oa_attendance t
 
-        LEFT JOIN (
+        , (
             SELECT
                 t.id,
                 t.name,
@@ -136,10 +138,10 @@
             ) tt ON t.id = tt.user_id
             WHERE
             t.record_status = 1
-        ) u ON t.attendance_user = u.id
+        ) u
 
         where
-        1=1
+        t.attendance_user = u.id
 
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(userId)">
             and t.attendance_user= #{userId,jdbcType=VARCHAR}
@@ -153,6 +155,7 @@
         <if test="endTime != null">
             and   Date( t.sign_in_attendance_time ) &lt;= DATE_FORMAT(#{endTime},'%Y-%m-%d')
         </if>
+        order by t.sign_in_attendance_time desc
 
     </select>
 

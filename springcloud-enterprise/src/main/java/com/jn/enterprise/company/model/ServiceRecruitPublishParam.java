@@ -63,4 +63,15 @@ public class ServiceRecruitPublishParam implements Serializable {
     public void setDetails(String details) {
         this.details = details;
     }
+
+    @Override
+    public String toString() {
+        return "ServiceRecruitPublishParam{" +
+                "post='" + post + '\'' +
+                ", salary='" + salary + '\'' +
+                ", num=" + num +
+                ", type='" + type + '\'' +
+                ", details='" + details + '\'' +
+                '}';
+    }
 }

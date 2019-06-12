@@ -12,26 +12,28 @@
                   <div class="title">服务超市</div>
                 </div>
                 <div class="bannerUl">
-                  <li class="active" :class="{'liActiv':isActClass===true}">首页</li>
-                    <li>服务机构</li>
-                    <li>服务产品</li>
-                    <li>服务顾问</li>
-                    <li>活动培训</li>
-                    <li>关于我们</li>
+                    <li @click='$router.push({path:"/serMatHp"})'>首页</li>
+                    <li :class="{'active11':this.$route.name==='serverOrg'||this.$route.name==='serverOrgDetail'}" @click='$router.push({path:"/serverOrg"})'>服务机构</li>
+                    <li @click='$router.push({path:"/serverPro"})' :class="{'active11':this.$route.name==='serverPro'||this.$route.name==='serverProDetail'}">服务产品</li>
+                    <li @click='$router.push({path:"/serverCon"})' :class="{'active11':this.$route.name==='serverCon'||this.$route.name==='serverConDetail'}">服务专员</li>
+                    <li @click='$router.push({path:"/actiTrain"})' :class="{'active11':this.$route.name==='actiTrain'||this.$route.name==='actiTrainDetail'}">活动培训</li>
+                    <li @click='$router.push({path:"/aboutUs"})' :class="{'active11':this.$route.name==='aboutUs'}">关于我们</li>
+                    <li @click='$router.push({path:"/register"})' :class="{'active11':this.$route.name==='register'}">加入我们</li>
                 </div>
-                <div class="headerRight">
+                <div class="headerRight pr">
                   <div class="search" >
                     <i class="el-icon-search" style="font-size:20px" @click="show3=true"></i>
                   </div>
-                  <div class="navlogin">
+                  <user-info></user-info>
+                  <!-- <div class="navlogin">
                     <a>登录</a>
                     <span class="line">|</span>
                     <a>注册</a>
-                  </div>
-                  <div class="navlogin">
+                  </div> -->
+                  <!-- <div class="navlogin">
                     <i class="el-icon-bell"></i>
                     <span class="line">|</span>
-                  </div>
+                  </div> -->
                 </div>
             </div>
         </div>
@@ -45,35 +47,25 @@
                 <el-select v-model="select" slot="prepend" placeholder="产品" @visible-change="changeselectShow">
                   <el-option label="机构" value="1"></el-option>
                   <el-option label="产品" value="2"></el-option>
-                  <el-option label="顾问" value="3"></el-option>
+                  <el-option label="专员" value="3"></el-option>
                   <el-option label="活动" value="3"></el-option>
                 </el-select>
-                <el-button slot="append" icon="el-icon-search">搜索 </el-button>
+                <el-button slot="append" icon="el-icon-search" @click="goSearch">搜索</el-button>
               </el-input>
             </div>
           </div>
       </el-collapse-transition>
     </div>
-    <!-- 侧边栏 -->
-    <!-- <transition name='fade' appear  enter-active-class='animated fadeInDown' leave-active-class='animated fadeOutUp'>
-      <div class="nav" v-if="!show3&&isNavShow">
-        <div class="nav_cont" v-for="(slideitem,slideindex) in sliderData " :key="slideindex" >
-          <div class="nav_cont_father">{{slideitem.name}} <i class="el-icon-arrow-right"></i></div>
-          <div class="nav_cont_son">  
-            <div v-for="(item,index) in slideitem.childs" :key="index">
-              <span></span>
-              {{item.name}}
-            </div>
-          </div>
-        </div>
-      </div>
-    </transition> -->
   </div>
 </template>
 
 <script>
 import swiper from "swiper"
+import userInfo from '../views/common/userInfoData'
 export default {
+    components: {
+      userInfo
+    },
   data() {
     return {
       offsetTop:0,
@@ -119,6 +111,17 @@ export default {
    this.getIndustryList()
   },
   methods: {
+     goSearch(){
+      if(this.select==='1'){
+        this.$router.push({path:'/serverOrg',query:{searchData:this.searchData}})
+      }else if(this.select==='2'){
+        this.$router.push({path:'/serverPro',query:{searchData:this.searchData}})
+      }else if(this.select==='3'){
+        this.$router.push({path:'/serverCon',query:{searchData:this.searchData}})
+      }else if(this.select==='4'){
+        this.$router.push({path:'/actiTrain',query:{searchData:this.searchData}})
+      }
+    },
      searchLeave() {
       if (this.sekectShow) {
         this.show3 = true
@@ -162,6 +165,7 @@ export default {
       width: 100%;
       color: #000;
       background: #fff;
+      border-bottom: 1px solid #eee;
       box-shadow: 0px 0px 12px 1px rgba(0, 0, 0, 0.07) ;
       .type_page{
         display: flex;
@@ -187,7 +191,7 @@ export default {
       }
       .bannerUl {
         list-style: none;
-        line-height: 64px;
+        line-height: 65px;
         font-size: 13px;
         display: flex;
         margin: 0 7%;
@@ -199,18 +203,14 @@ export default {
           cursor: pointer;
           border-radius: 5px;
         }
-        .active{
-          background: #fff;
+        .active11{
           color:#00a041;
-        }
-        .liActiv{
-          // background-color:#00a041;
-          // color:#00a041;
         }
       }
       .headerRight {
         font-size: 12px;
         display: flex;
+        line-height: 65px;
         .search {
           display: inline-block;
           margin-right: 20px;
@@ -301,6 +301,57 @@ export default {
       }
     }
   }
+
+.search_box{
+  background: #fff;
+  text-align: center;
+  box-shadow:0 10px 10px -10px #ccc;
+  .el-input-group{
+   
+    border-radius: 28px;
+    width:42%;
+    margin:43px 0;
+    .el-input{
+      width:94px;
+    }
+    .el-input__inner:focus{
+      border-color: #00a041;
+      
+    }
+    .el-input-group__append, .el-input-group__prepend{
+      border-radius: 28px;
+    }
+    .el-input-group__append{
+      /* border-top-left-radius: 0;
+      border-bottom-left-radius: 0; */
+      background: #00a041;
+      color:#fff;
+      right: 58px;
+      .el-button{
+        margin: -10px -10px;
+      }
+    }
+    .el-input-group__prepend{
+      border-top-right-radius: 0; 
+      border-bottom-right-radius: 0;
+      background-color: #fff;
+      padding: 0px 17px 0 9px;
+      
+      input{
+        color:#666666;
+        text-align: right;
+        border-right: none;
+        &:focus{
+          border-left: none;
+        }
+      }
+    }
+  }
+}
+.search_box_act{
+  background:#fff;
+  box-shadow:0 10px 10px -10px #ccc;
+}
   
 }
 

@@ -5,6 +5,7 @@ import com.jn.enterprise.servicemarket.org.model.*;
 import com.jn.enterprise.servicemarket.org.vo.OrgApplyCountVo;
 import com.jn.enterprise.servicemarket.org.vo.OrgApplyDetailVo;
 import com.jn.enterprise.servicemarket.org.vo.OrgApplyVo;
+import com.jn.system.model.User;
 
 import java.util.List;
 
@@ -37,11 +38,5 @@ public interface OrgApproveService {
      */
     OrgApplyDetailVo getOrgApplyDetail(String orgId);
 
-    /**
-     * 机构申请审核
-     * @param orgApplyCheckData
-     * @return
-     */
-    Boolean checkOrgApply(OrgApplyCheckData orgApplyCheckData);
 
 }

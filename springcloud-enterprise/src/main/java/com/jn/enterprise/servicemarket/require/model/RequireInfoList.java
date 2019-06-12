@@ -1,6 +1,5 @@
 package com.jn.enterprise.servicemarket.require.model;
 
-import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -13,7 +12,7 @@ import java.io.Serializable;
  * @modified By:
  */
 @ApiModel(value = "RequireInfoList", description = "需求列表信息")
-public class RequireInfoList extends Page implements Serializable {
+public class RequireInfoList implements Serializable {
     @ApiModelProperty(value = "需求单号")
     private String reqNum;
     @ApiModelProperty(value = "领域id")
@@ -34,10 +33,16 @@ public class RequireInfoList extends Page implements Serializable {
     private String advisorName;
     @ApiModelProperty(value = "提需求日期")
     private String requireTime;
-    @ApiModelProperty(value = "需求状态")
+    @ApiModelProperty(value = "需求状态(-1:已撤销 1：待处理，2：已处理)")
     private String status;
-    @ApiModelProperty(value = "对接结果")
+    @ApiModelProperty(value = "对接结果((1:对接成功  2:对接失败  3:企业需求撤销 4:未对接))")
     private String handleResult;
+    @ApiModelProperty(value = "点评状态 (0未点评  1已点评)")
+    private String isComment;
+    @ApiModelProperty(value = "评价分数")
+    private String ratingScore;
+    @ApiModelProperty(value = "评价描述")
+    private String evaluationDesc;
 
 
     public String getReqNum() {
@@ -136,6 +141,30 @@ public class RequireInfoList extends Page implements Serializable {
         this.handleResult = handleResult;
     }
 
+    public String getIsComment() {
+        return isComment;
+    }
+
+    public void setIsComment(String isComment) {
+        this.isComment = isComment;
+    }
+
+    public String getRatingScore() {
+        return ratingScore;
+    }
+
+    public void setRatingScore(String ratingScore) {
+        this.ratingScore = ratingScore;
+    }
+
+    public String getEvaluationDesc() {
+        return evaluationDesc;
+    }
+
+    public void setEvaluationDesc(String evaluationDesc) {
+        this.evaluationDesc = evaluationDesc;
+    }
+
     @Override
     public String toString() {
         return "RequireInfoList{" +
@@ -151,6 +180,8 @@ public class RequireInfoList extends Page implements Serializable {
                 ", requireTime='" + requireTime + '\'' +
                 ", status='" + status + '\'' +
                 ", handleResult='" + handleResult + '\'' +
+                ", isComment='" + isComment + '\'' +
+                ", ratingScore='" + ratingScore + '\'' +
                 '}';
     }
 }

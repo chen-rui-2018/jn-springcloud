@@ -21,13 +21,13 @@
     on t1.creator_account = t2.account
     WHERE t1.record_status != 0
     <if test="@org.apache.commons.lang.StringUtils@isNotBlank(noticeTitle)">
-      and t1.notice_title like CONCAT('%', #{noticeTitle,jdbcType=VARCHAR}, '%')
+      and t1.notice_title like CONCAT('%', trim(#{noticeTitle,jdbcType=VARCHAR}), '%')
     </if>
     <if test="@org.apache.commons.lang.StringUtils@isNotBlank(recordStatus)">
       and t1.record_status = #{recordStatus,jdbcType=TINYINT}
     </if>
     <if test="@org.apache.commons.lang.StringUtils@isNotBlank(platformType)">
-      and t1.platform_type like CONCAT('%"key":"', #{platformType,jdbcType=VARCHAR}, '"%')
+      and t1.platform_type like CONCAT('%"key":"', trim(#{platformType,jdbcType=VARCHAR}), '"%')
     </if>
     ORDER BY t1.created_time DESC,t1.id DESC
   </select>

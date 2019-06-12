@@ -1,11 +1,21 @@
 package com.jn.park.index.service.impl;
 
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.util.DateUtils;
+import com.jn.common.util.StringUtils;
+import com.jn.enterprise.enums.RecordStatusEnum;
+import com.jn.park.index.dao.TbAchievementMapper;
 import com.jn.park.index.dao.TbImportantNewsMapper;
+import com.jn.park.index.entity.TbAchievement;
+import com.jn.park.index.entity.TbAchievementCriteria;
 import com.jn.park.index.entity.TbImportantNews;
 import com.jn.park.index.entity.TbImportantNewsCriteria;
 import com.jn.park.index.enums.IndexDataEnum;
+import com.jn.park.index.enums.IndexExceptionEnum;
+import com.jn.park.index.model.Achievement;
+import com.jn.park.index.model.AchievementParam;
 import com.jn.park.index.model.ImportantNews;
+import com.jn.park.index.model.ImportantNewsParam;
 import com.jn.park.index.service.IndexService;
 import com.jn.system.log.annotation.ServiceLog;
 import org.slf4j.Logger;
@@ -36,20 +46,31 @@ public class IndexServiceImpl implements IndexService {
     @Autowired
     TbImportantNewsMapper importantNewsMapper;
 
+    @Autowired
+    TbAchievementMapper tbAchievementMapper;
+
     @Override
     @ServiceLog(doAction = "获取重要消息列表")
-    public List<ImportantNews> getImportantNewsList() {
+    public List<ImportantNews> getImportantNewsList(ImportantNewsParam importantNewsParam) {
         List<ImportantNews> dataList = new ArrayList<>();
 
         String curDateStr = DateUtils.formatDate(new Date(), "yyyy-MM-dd 00:00:00");
         try {
             Date curDate = DateUtils.parseDate(curDateStr, "yyyy-MM-dd HH:mm:ss");
             TbImportantNewsCriteria criteria = new TbImportantNewsCriteria();
-            criteria.createCriteria().andRecordStatusEqualTo(new Byte(IndexDataEnum.RECORD_STATUS_VALID.getCode()))
+            TbImportantNewsCriteria criteria1 = new TbImportantNewsCriteria();
+            TbImportantNewsCriteria.Criteria platFormCriteria = criteria1.createCriteria();
+            criteria.createCriteria().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue())
                     .andStatusEqualTo(IndexDataEnum.IMPORTANT_NEWS_STATUS_VALID.getCode())
                     .andPlatformTypeEqualTo(IndexDataEnum.IMPORTANT_NEWS_PLATFORM_TYPE_ALL.getCode())
                     .andStartTimeLessThanOrEqualTo(curDate).andEndTimeGreaterThanOrEqualTo(curDate);
 
+            platFormCriteria.andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue())
+                    .andStatusEqualTo(IndexDataEnum.IMPORTANT_NEWS_STATUS_VALID.getCode())
+                    .andStartTimeLessThanOrEqualTo(curDate).andEndTimeGreaterThanOrEqualTo(curDate)
+                    .andPlatformTypeEqualTo(importantNewsParam.getPlatFormType());
+
+            criteria.or(platFormCriteria);
 
             List<TbImportantNews> newsList = importantNewsMapper.selectByExample(criteria);
             if (newsList != null && !newsList.isEmpty()) {
@@ -63,5 +84,55 @@ public class IndexServiceImpl implements IndexService {
             e.printStackTrace();
         }
         return dataList;
+    }
+
+    @Override
+    @ServiceLog(doAction = "获取园区成果列表")
+    public List<Achievement> getAchievementList(AchievementParam achievementParam) {
+        List<Achievement> dataList = new ArrayList<>();
+        TbAchievementCriteria achievementCriteria = new TbAchievementCriteria();
+        TbAchievementCriteria.Criteria criteria = achievementCriteria.createCriteria();
+        criteria.andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue())
+                .andStatusEqualTo(IndexDataEnum.IMPORTANT_NEWS_STATUS_VALID.getCode());
+
+        if (StringUtils.isNotBlank(achievementParam.getType())) {
+            criteria.andTypeEqualTo(achievementParam.getType());
+        }
+        if (StringUtils.isNotBlank(achievementParam.getTitle())) {
+            criteria.andTitleLike("%" + achievementParam.getTitle() + "%");
+        }
+        achievementCriteria.setOrderByClause("sort ASC, created_time DESC");
+
+        List<TbAchievement> achList = tbAchievementMapper.selectByExample(achievementCriteria);
+        if (achList != null && !achList.isEmpty()) {
+            for (TbAchievement ach : achList) {
+                Achievement achievement = new Achievement();
+                BeanUtils.copyProperties(ach, achievement);
+                dataList.add(achievement);
+            }
+        }
+        logger.info("[获取园区成果列表] 成果返回条数:{}", dataList.size());
+        return dataList;
+    }
+
+    @Override
+    @ServiceLog(doAction = "获取成果详情")
+    public Achievement getAchievementDetails(String achievementId) {
+        if (StringUtils.isBlank(achievementId)) {
+            throw new JnSpringCloudException(IndexExceptionEnum.PARAM_IS_NULL);
+        }
+        TbAchievementCriteria criteria = new TbAchievementCriteria();
+        criteria.createCriteria().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue()).andIdEqualTo(achievementId);
+        List<TbAchievement> tbAchievements = tbAchievementMapper.selectByExample(criteria);
+        if (tbAchievements == null || tbAchievements.isEmpty()) {
+            throw new JnSpringCloudException(IndexExceptionEnum.ACHIEVEMENT_NOT_EXIST);
+        }
+        TbAchievement tbAchievement = tbAchievements.get(0);
+        tbAchievement.setViewCount(tbAchievement.getViewCount() + 1);
+        tbAchievementMapper.updateByPrimaryKeySelective(tbAchievement);
+
+        Achievement achievement = new Achievement();
+        BeanUtils.copyProperties(tbAchievement, achievement);
+        return achievement;
     }
 }

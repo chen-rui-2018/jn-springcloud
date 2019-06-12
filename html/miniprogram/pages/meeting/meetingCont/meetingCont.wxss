@@ -1,0 +1,27 @@
+/* pages/meeting/meetingPerson/meetingPerson.wxss */
+.meetingCont{
+  width:100%;
+  margin-top: 27rpx;
+}
+.meetingCont .title{
+  background-color: #fff;
+  padding: 28rpx 30rpx;
+  font-size: 26rpx;
+}
+.meetingCont textarea{
+  background-color: #fff;
+  width: 100%;
+  padding: 0 30rpx;
+  font-size: 25rpx;
+}
+.submit{
+  background-color: #ecfcf2;
+	border-radius: 41px;
+  border: solid 1px #009966;
+  color: #07ab50;
+  margin:0 33rpx;
+  margin-top: 32rpx;
+  font-size: 30rpx;
+  line-height: 1;
+  padding:27rpx 0;
+}

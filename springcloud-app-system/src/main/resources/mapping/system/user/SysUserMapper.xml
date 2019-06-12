@@ -20,6 +20,14 @@
             <result property="isDefault" column="is_default" jdbcType="VARCHAR"/>
         </collection>
     </resultMap>
+    <resultMap id="SimpleResultMap" type="com.jn.system.model.User">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="account" jdbcType="VARCHAR" property="account"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="wechat_account" jdbcType="VARCHAR" property="wechatAccount"/>
+    </resultMap>
 
     <sql id="Get_User_Page_Column">
         t.id,
@@ -342,6 +350,24 @@
         ON t.id = tt.user_id
         WHERE t.record_status = 1
         ORDER BY t.created_time DESC
+    </select>
+    <select id="selectUserByIds" resultMap="SimpleResultMap"  parameterType="java.util.Arrays">
+          SELECT
+            t.id,
+            t.account,
+            t.phone,
+            t.email,
+            t.wechat_account,
+            case when t.`name` is null  then t.account
+            else t.`name` end  name
+          FROM
+          `tb_sys_user` t
+          WHERE t.record_status = 1
+
+        and id in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
     </select>
 
 

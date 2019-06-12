@@ -1,0 +1,43 @@
+package com.jn.hr.common.enums;
+
+import com.jn.common.api.CodeAndMsg;
+
+/**
+ * OA管理异常枚举
+ * @author： shaobao
+ * @date： Created on 2018/11/21 16:56
+ * @version： v1.0
+ * @modified By:
+ **/
+public enum HrExceptionEnums implements CodeAndMsg {
+
+    ADDERR_NAME_EXIST("7000501","添加失败,名称已存在"),
+    UPDATEERR_NAME_EXIST("7000502", "修改失败,名称已存在"),
+    UPDATEDATA_NOT_EXIST("7000503","修改失败,修改信息不存在"),
+    ID_NOT_NULL("7000504","ID不能为空"),
+    TIMING_FAILURE("7000510","定时设置失败,请稍后再试"),
+    FILE_IS_NULL("7013507","附件上传失败,上传文件为空"),
+    UPLOAD_FILE_ERRPR("7013508","附件上传失败,请稍后再试"),
+    DEPARTMENT_QUERY_ERRPR("7013509","部门查询出错"),
+    POST_QUERY_ERRPR("7013509","岗位查询出错"),
+
+    ;
+
+    private String code;
+    private String message;
+
+    HrExceptionEnums(String code, String message) {
+        this.code = code;
+        this.message = message;
+    }
+
+    @Override
+    public String getCode() {
+        return code;
+    }
+
+    @Override
+    public String getMessage() {
+        return message;
+    }
+}

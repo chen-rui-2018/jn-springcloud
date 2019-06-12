@@ -4,33 +4,13 @@
     <div id="calendar" />
     <!-- <div :style="tooltipStyle" class="tooltip" v-html="htmlText">2233</div> -->
 
-    <el-dialog
-      :visible.sync="addDialogVisible"
-      :title="titleText"
-      width="600"
-      class="sched"
-    >
-      <el-form
-        ref="scheduleForm"
-        :rules="rules"
-        :disabled="isdisabled"
-        :model="scheduleForm"
-        label-width="100px"
-      >
-        <el-form-item
-          label="日程标题:"
-          prop="title"
-        >
+    <el-dialog :visible.sync="addDialogVisible" :title="titleText" width="600" class="sched">
+      <el-form ref="scheduleForm" :rules="rules" :disabled="isdisabled" :model="scheduleForm" label-width="100px">
+        <el-form-item label="日程标题:" prop="title">
           <el-input v-model="scheduleForm.title" />
         </el-form-item>
-        <el-form-item
-          label="日程内容:"
-          prop="content"
-        >
-          <el-input
-            v-model="scheduleForm.content"
-            type="textarea"
-          />
+        <el-form-item label="日程内容:" prop="content">
+          <el-input v-model="scheduleForm.content" type="textarea" />
         </el-form-item>
         <el-form-item label="全天:">
           <el-radio-group v-model="scheduleForm.allDay">
@@ -39,81 +19,69 @@
           </el-radio-group>
         </el-form-item>
         <div>
-          <el-form-item
-            label="开始时间:"
-            prop="startTime"
-          >
+          <el-form-item v-if="scheduleForm.allDay==='0'" label="开始时间:" prop="startTime">
             <el-date-picker
               v-model="scheduleForm.startTime"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              type="datetime"
+              placeholder="选择时间" />
+          </el-form-item>
+          <el-form-item v-if="scheduleForm.allDay!=='0'" label="开始时间:" prop="dateTime">
+            <el-date-picker
+              v-model="scheduleForm.dateTime"
               value-format="yyyy-MM-dd"
               type="date"
-              placeholder="选择日期"
-            />
-            <el-time-picker
-              v-if="scheduleForm.allDay==='0'"
-              v-model="startMinute"
-              value-format="HH:mm:ss"
-              arrow-control
-              placeholder="请选择时间"
-            />
+              placeholder="选择日期" />
           </el-form-item>
         </div>
-        <div v-if="scheduleForm.allDay==='0'">
-          <el-form-item
-            label="结束时间:"
-            prop="endTime"
-          >
+        <div>
+          <el-form-item v-if="scheduleForm.allDay==='0'" label="结束时间:" prop="endTime">
             <el-date-picker
               v-model="scheduleForm.endTime"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              type="datetime"
+              placeholder="选择时间" />
+              <!-- <el-date-picker
+              v-if="scheduleForm.allDay!=='0'"
+              v-model="endTime"
               value-format="yyyy-MM-dd"
               type="date"
-              placeholder="选择日期"
-            />
-            <el-time-picker
+              placeholder="选择日期" /> -->
+              <!-- <el-time-picker
               v-if="scheduleForm.allDay==='0'"
               v-model="endMinute"
               value-format="HH:mm:ss"
               arrow-control
-              placeholder="请选择时间"
-            />
+              placeholder="请选择时间" /> -->
           </el-form-item>
-        </div>
-        <div v-if="scheduleForm.allDay==='1'">
-          <el-form-item label="结束时间:">
+          <el-form-item v-if="scheduleForm.allDay!=='0'" label="结束时间:" prop="dateTime">
             <el-date-picker
-              v-model="scheduleForm.startTime"
+              v-model="scheduleForm.dateTime"
               value-format="yyyy-MM-dd"
               type="date"
-              placeholder="选择日期"
-            />
+              placeholder="选择日期" />
           </el-form-item>
         </div>
-        <el-form-item
-          label="是否提醒"
-          prop="isRemind"
-        >
+        <!-- <div v-if="scheduleForm.allDay==='1'">
+          <el-form-item label="结束时间:">
+            <el-date-picker v-model="scheduleForm.startTime" value-format="yyyy-MM-dd" type="date" placeholder="选择日期" />
+          </el-form-item>
+        </div> -->
+        <el-form-item label="是否提醒" prop="isRemind">
           <el-radio-group v-model="scheduleForm.isRemind">
             <el-radio label="1">是</el-radio>
             <el-radio label="0">否</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item
-          v-if="scheduleForm.isRemind==='1'"
-          label="提醒时间"
-          prop="remindTime"
-        >
+        <el-form-item v-if="scheduleForm.isRemind==='1'" label="提醒时间" prop="remindTime">
           <el-date-picker
             v-model="scheduleForm.remindTime"
             value-format="yyyy-MM-dd HH:mm:ss"
             type="datetime"
-            placeholder="选择提醒时间"
-          />
+            placeholder="选择提醒时间" />
 
         </el-form-item>
-        <el-form-item
-          v-if="scheduleForm.isRemind==='1'"
-          label="提醒方式:"
-        >
+        <el-form-item v-if="scheduleForm.isRemind==='1'" label="提醒方式:">
           <el-checkbox-group v-model="scheduleForm.remindWay">
             <el-checkbox label="1">微信</el-checkbox>
             <el-checkbox label="2">短信</el-checkbox>
@@ -121,56 +89,22 @@
             <el-checkbox label="4">app端</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
-        <el-form-item
-          label="备注:"
-          prop="remark"
-        >
-          <el-input
-            v-model="scheduleForm.remark"
-            type="textarea"
-          />
+        <el-form-item label="备注:" prop="remark">
+          <el-input v-model="scheduleForm.remark" type="textarea" />
         </el-form-item>
       </el-form>
-      <span
-        slot="footer"
-        class="dialog-footer"
-      >
-        <el-button
-          v-if="titleText!=='新增日程'"
-          type="danger"
-          icon="el-icon-delete"
-          size="mini"
-          @click="handleDelete()"
-        >删除</el-button>
-        <el-button
-          v-if="titleText!=='查看日程'"
-          :disabled="isDisabled"
-          type="primary"
-          size="mini"
-          @click="submitScheduleForm('scheduleForm')"
-        >确定</el-button>
-        <el-button
-          v-if="titleText!=='查看日程'"
-          size="mini"
-          @click="addDialogVisible = false"
-        >取消</el-button>
-        <el-button
-          v-if="titleText==='查看日程'"
-          size="mini"
-          @click="addDialogVisible = false"
-        >返回</el-button>
-        <el-button
-          v-if="updataBtn&& titleText==='查看日程'"
-          size="mini"
-          @click="changeUpdata"
-        >编辑</el-button>
+      <span slot="footer" class="dialog-footer">
+        <el-button v-if="titleText!=='新增日程'" type="danger" icon="el-icon-delete" size="mini" @click="handleDelete()">删除</el-button>
+        <el-button v-if="titleText!=='查看日程'" :disabled="isDisabled" type="primary" size="mini" @click="submitScheduleForm('scheduleForm')">确定</el-button>
+        <el-button v-if="titleText!=='查看日程'" size="mini" @click="addDialogVisible = false">取消</el-button>
+        <el-button v-if="titleText==='查看日程'" size="mini" @click="addDialogVisible = false">返回</el-button>
+        <el-button v-if="updataBtn&& titleText==='查看日程'" size="mini" @click="changeUpdata">编辑</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
-
 import { api, paramApi } from '@/api/axios'
 import { Calendar } from '@fullcalendar/core'
 import dayGridPlugin from '@fullcalendar/daygrid'
@@ -207,10 +141,11 @@ export default {
       isdisabled: false,
       titleText: '',
       scheduleList: [],
-      startMinute: '',
-      endMinute: '',
+      // startMinute: '',
+      // endMinute: '',
       addDialogVisible: false,
       scheduleForm: {
+        dateTime: '',
         allDay: '0',
         id: '',
         remindTime: '',
@@ -229,17 +164,21 @@ export default {
         startTime: [
           { required: true, message: '请选择日期', trigger: 'change' }
         ],
+        dateTime: [
+          { required: true, message: '请选择日期', trigger: 'change' }
+        ],
         endTime: [{ required: true, message: '请选择日期', trigger: 'change' }]
       }
     }
   },
-  // watch: {
+  watch: {
   // 如果 `allDay` 发生改变，这个函数就会运行
-  //   'scheduleForm.allDay': function() {
-  //     this.scheduleForm.startTime = ''
-  //     this.scheduleForm.endTime = ''
-  //   }
-  // },
+    // 'scheduleForm.allDay': function() {
+    //   this.scheduleForm.startTime = ''
+    //   this.scheduleForm.endTime = ''
+    //   this.scheduleForm.dateTime = ''
+    // }
+  },
   mounted() {
     // this.showSchedule()
     this.initList()
@@ -272,15 +211,14 @@ export default {
           this.isdisabled = false
           this.scheduleForm.id = ''
           this.scheduleForm.title = ''
-          this.scheduleForm.startTime = info.dateStr
+          this.scheduleForm.startTime = ''
           this.scheduleForm.endTime = ''
           this.scheduleForm.content = ''
           this.scheduleForm.remark = ''
           this.scheduleForm.remindTime = ''
           this.scheduleForm.isRemind = '1'
           this.scheduleForm.remindWay = ['4']
-          this.startMinute = ''
-          this.endMinute = ''
+          this.scheduleForm.dateTime = ''
           this.addDialogVisible = true
         },
         eventClick: info => {
@@ -301,11 +239,12 @@ export default {
               console.log(res)
               this.scheduleForm.title = res.data.data.title
               this.scheduleForm.content = res.data.data.content
-              // this.scheduleForm.startTime = res.data.data.start.substring(0, 10)
-              this.scheduleForm.startTime = res.data.data.date
-              this.scheduleForm.endTime = res.data.data.end.substring(0, 10)
-              this.startMinute = res.data.data.start.substring(11, 16) + ':00'
-              this.endMinute = res.data.data.end.substring(11, 16) + ':00'
+              if (res.data.data.allDay === '0') {
+                this.scheduleForm.startTime = res.data.data.start + ':00'
+                this.scheduleForm.endTime = res.data.data.end + ':00'
+              } else {
+                this.scheduleForm.dateTime = res.data.data.date
+              }
               this.scheduleForm.allDay = res.data.data.allDay
               this.scheduleForm.isRemind = res.data.data.isRemind
               this.startData = res.data.data.start
@@ -316,7 +255,6 @@ export default {
                 this.scheduleForm.remindWay = res.data.data.remindWay.split(
                   ','
                 )
-                console.log(this.scheduleForm.remindWay)
               }
 
               if (res.data.data.remindTime) {
@@ -374,8 +312,7 @@ export default {
               this.scheduleForm.content = ''
               this.scheduleForm.remark = ''
               this.scheduleForm.isRemind = '1'
-              this.startMinute = ''
-              this.endMinute = ''
+              this.scheduleForm.dateTime = ''
               this.addDialogVisible = true
             }
           }
@@ -405,38 +342,34 @@ export default {
       this.$refs[scheduleForm].validate(valid => {
         if (valid) {
           if (this.scheduleForm.allDay === '0') {
-            if (!this.scheduleForm.startTime || !this.startMinute) {
+            if (!this.scheduleForm.startTime) {
               this.$message.error('请选择开始时间')
               this.isDisabled = false
               return
             }
-            if (!this.scheduleForm.endTime || !this.endMinute) {
+            if (!this.scheduleForm.endTime) {
               this.$message.error('请选择结束时间')
               this.isDisabled = false
               return
             }
-            this.scheduleForm.startTime =
-              this.scheduleForm.startTime + ' ' + this.startMinute
-            this.scheduleForm.endTime =
-              this.scheduleForm.endTime + ' ' + this.startMinute
+            // this.scheduleForm.startTime =
+            //   this.scheduleForm.startTime + ' ' + this.startMinute
+            // this.scheduleForm.endTime =
+            //   this.scheduleForm.endTime + ' ' + this.startMinute
             var today_time = new Date().getTime()
-            if (new Date(this.scheduleForm.startTime + ':00') < today_time) {
+            if (new Date(this.scheduleForm.startTime) < today_time) {
               this.$message.error('开始时间必须大于当前时间')
               this.isDisabled = false
               return
             }
             if (
-              new Date(this.scheduleForm.endTime + ':00') <=
-              new Date(this.scheduleForm.startTime + ':00')
+              new Date(this.scheduleForm.endTime) <=
+              new Date(this.scheduleForm.startTime)
             ) {
-              this.$message.error('结束时间必须大于当前时间')
+              this.$message.error('结束时间必须大于开始时间')
               this.isDisabled = false
               return
             }
-          } else {
-            this.scheduleForm.endTime = this.scheduleForm.startTime + ' 23:59'
-            this.scheduleForm.startTime =
-              this.scheduleForm.startTime + ' 00:00'
           }
           if (this.scheduleForm.isRemind === '1') {
             if (!this.scheduleForm.remindTime) {
@@ -444,23 +377,36 @@ export default {
               this.isDisabled = false
               return
             }
-            if (this.scheduleForm.allDay === '0') {
-              if (
-                new Date(this.scheduleForm.remindTime) >=
-                new Date(this.scheduleForm.startTime + ':00')
-              ) {
-                this.$message.error('提醒时间必须小于开始时间')
-                this.isDisabled = false
-                return
-              }
-            }
             if (new Date(this.scheduleForm.remindTime) < today_time) {
-              this.$message.error('提醒必须大于当前时间')
+              this.$message.error('提醒时间必须大于当前时间')
               this.isDisabled = false
               return
             }
-            // this.scheduleForm.remindTime = this.scheduleForm.remindTime.substring(0, 16)
+            if (this.scheduleForm.allDay === '0') {
+              if (
+                new Date(this.scheduleForm.remindTime) >=
+                new Date(this.scheduleForm.startTime)
+              ) {
+                this.$message.error('提醒时间必须小于开始时间')
+                this.isDisabled = false
+                return false
+              }
+            } else {
+              if (
+                (new Date(this.scheduleForm.remindTime.replace(new RegExp('-', 'gm'), '/'))).getTime() >=
+                (new Date((this.scheduleForm.dateTime + ' 00:00:00').replace(new RegExp('-', 'gm'), '/'))).getTime()
+              ) {
+                this.$message.error('提醒时间必须小于开始时间')
+                this.isDisabled = false
+                return false
+              }
+            }
             this.scheduleForm.remindWay = this.scheduleForm.remindWay.toString()
+          }
+          if (this.scheduleForm.allDay === '1') {
+            this.scheduleForm.endTime = this.scheduleForm.dateTime + ' 23:59'
+            this.scheduleForm.startTime =
+              this.scheduleForm.dateTime + ' 00:00'
           }
           api(
             `${this.GLOBAL.oaUrl}oa/schedule/addOrUpdate`,
@@ -483,11 +429,14 @@ export default {
               this.isDisabled = false
               this.addDialogVisible = false
             } else {
+              this.scheduleForm.remindWay = this.scheduleForm.remindWay.split(',')
               this.$message.error(res.data.result)
               this.isDisabled = false
+              return false
             }
           })
         } else {
+          this.isDisabled = false
           return false
         }
       })
@@ -538,17 +487,17 @@ export default {
       width: 45% !important;
     }
   }
-//  .tooltip {
-//     position: fixed;
-//     z-index: 1;
-//     background: #FFC107;
-//     color: black;
-//     width: 150px;
-//     border-radius: 3px;
-//     box-shadow: 0 0 2px rgba(0,0,0,0.5);
-//     padding: 10px;
-//     text-align: center;
-//   }
+  //  .tooltip {
+  //     position: fixed;
+  //     z-index: 1;
+  //     background: #FFC107;
+  //     color: black;
+  //     width: 150px;
+  //     border-radius: 3px;
+  //     box-shadow: 0 0 2px rgba(0,0,0,0.5);
+  //     padding: 10px;
+  //     text-align: center;
+  //   }
 }
 .fc-button-primary {
   color: unset;
@@ -558,102 +507,101 @@ export default {
 }
 
 .popper,
-  .tooltip {
-    position: absolute;
-    z-index: 9999;
-    background: black;
-    color: #fff;
-    width: 150px;
-    // height: 100px;
-    word-wrap:break-word;
-    border-radius: 3px;
-    box-shadow: 0 0 2px rgba(0,0,0,0.5);
-    padding: 10px;
-    text-align: center;
-  }
-  .style5 .tooltip {
-    background: #1E252B;
-    color: #FFFFFF;
-    max-width: 200px;
-    width: auto;
-    font-size: .8rem;
-    padding: .5em 1em;
-  }
-  .popper .popper__arrow,
-  .tooltip .tooltip-arrow {
-    width: 0;
-    height: 0;
-    border-style: solid;
-    position: absolute;
-    margin: 5px;
-  }
+.tooltip {
+  position: absolute;
+  z-index: 9999;
+  background: black;
+  color: #fff;
+  width: 150px;
+  // height: 100px;
+  word-wrap: break-word;
+  border-radius: 3px;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  text-align: center;
+}
+.style5 .tooltip {
+  background: #1e252b;
+  color: #ffffff;
+  max-width: 200px;
+  width: auto;
+  font-size: 0.8rem;
+  padding: 0.5em 1em;
+}
+.popper .popper__arrow,
+.tooltip .tooltip-arrow {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  position: absolute;
+  margin: 5px;
+}
 
-  .tooltip .tooltip-arrow,
-  .popper .popper__arrow {
-    border-color: #FFC107;
-  }
-  .style5 .tooltip .tooltip-arrow {
-    border-color: #1E252B;
-  }
-  .popper[x-placement^="top"],
-  .tooltip[x-placement^="top"] {
-    margin-bottom: 5px;
-  }
-  .popper[x-placement^="top"] .popper__arrow,
-  .tooltip[x-placement^="top"] .tooltip-arrow {
-    border-width: 5px 5px 0 5px;
-    border-left-color: transparent;
-    border-right-color: transparent;
-    border-bottom-color: transparent;
-    bottom: -5px;
-    left: calc(50% - 5px);
-    margin-top: 0;
-    margin-bottom: 0;
-  }
-  .popper[x-placement^="bottom"],
-  .tooltip[x-placement^="bottom"] {
-    margin-top: 5px;
-  }
-  .tooltip[x-placement^="bottom"] .tooltip-arrow,
-  .popper[x-placement^="bottom"] .popper__arrow {
-    border-width: 0 5px 5px 5px;
-    border-left-color: transparent;
-    border-right-color: transparent;
-    border-top-color: transparent;
-    top: -5px;
-    left: calc(50% - 5px);
-    margin-top: 0;
-    margin-bottom: 0;
-  }
-  .tooltip[x-placement^="right"],
-  .popper[x-placement^="right"] {
-    margin-left: 5px;
-  }
-  .popper[x-placement^="right"] .popper__arrow,
-  .tooltip[x-placement^="right"] .tooltip-arrow {
-    border-width: 5px 5px 5px 0;
-    border-left-color: transparent;
-    border-top-color: transparent;
-    border-bottom-color: transparent;
-    left: -5px;
-    top: calc(50% - 5px);
-    margin-left: 0;
-    margin-right: 0;
-  }
-  .popper[x-placement^="left"],
-  .tooltip[x-placement^="left"] {
-    margin-right: 5px;
-  }
-  .popper[x-placement^="left"] .popper__arrow,
-  .tooltip[x-placement^="left"] .tooltip-arrow {
-    border-width: 5px 0 5px 5px;
-    border-top-color: transparent;
-    border-right-color: transparent;
-    border-bottom-color: transparent;
-    right: -5px;
-    top: calc(50% - 5px);
-    margin-left: 0;
-    margin-right: 0;
-  }
-
+.tooltip .tooltip-arrow,
+.popper .popper__arrow {
+  border-color: #ffc107;
+}
+.style5 .tooltip .tooltip-arrow {
+  border-color: #1e252b;
+}
+.popper[x-placement^="top"],
+.tooltip[x-placement^="top"] {
+  margin-bottom: 5px;
+}
+.popper[x-placement^="top"] .popper__arrow,
+.tooltip[x-placement^="top"] .tooltip-arrow {
+  border-width: 5px 5px 0 5px;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+  bottom: -5px;
+  left: calc(50% - 5px);
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.popper[x-placement^="bottom"],
+.tooltip[x-placement^="bottom"] {
+  margin-top: 5px;
+}
+.tooltip[x-placement^="bottom"] .tooltip-arrow,
+.popper[x-placement^="bottom"] .popper__arrow {
+  border-width: 0 5px 5px 5px;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  top: -5px;
+  left: calc(50% - 5px);
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.tooltip[x-placement^="right"],
+.popper[x-placement^="right"] {
+  margin-left: 5px;
+}
+.popper[x-placement^="right"] .popper__arrow,
+.tooltip[x-placement^="right"] .tooltip-arrow {
+  border-width: 5px 5px 5px 0;
+  border-left-color: transparent;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  left: -5px;
+  top: calc(50% - 5px);
+  margin-left: 0;
+  margin-right: 0;
+}
+.popper[x-placement^="left"],
+.tooltip[x-placement^="left"] {
+  margin-right: 5px;
+}
+.popper[x-placement^="left"] .popper__arrow,
+.tooltip[x-placement^="left"] .tooltip-arrow {
+  border-width: 5px 0 5px 5px;
+  border-top-color: transparent;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+  right: -5px;
+  top: calc(50% - 5px);
+  margin-left: 0;
+  margin-right: 0;
+}
 </style>

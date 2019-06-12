@@ -21,10 +21,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -196,6 +193,15 @@ public class SysUserController extends BaseController {
     @RequestMapping(value = "/getUserAll", method = RequestMethod.POST)
     public Result<List<User>> getUserAll() {
         List<User> userAll = sysUserService.getUserAll();
+        return new Result(userAll);
+    }
+
+    @ControllerLog(doAction = "根据用户ids查询用户信息")
+    @RequiresPermissions("/system/sysUser/selectUserByIds")
+    @ApiOperation(value = "根据用户ids查询用户信息", notes = "根据用户ids查询有效用户信息")
+    @RequestMapping(value = "/selectUserByIds", method = RequestMethod.GET)
+    public Result<List<User>> selectUserByIds(@RequestParam(value = "userIds") String[] userIds) {
+        List<User> userAll = sysUserService.selectUserByIds(userIds);
         return new Result(userAll);
     }
 

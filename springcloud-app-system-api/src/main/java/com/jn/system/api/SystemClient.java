@@ -164,6 +164,15 @@ public interface SystemClient {
     Result<List<User>> getUserInfoByAccount(@RequestBody List<String> accountList);
 
     /**
+     * 通过用户id获取用户信息,传多id,返回多个用户信息
+     *
+     * @param ids
+     * @return
+     */
+    @RequestMapping(value = "/api/system/getUserInfoByIds", method = RequestMethod.POST)
+    Result<List<User>> getUserInfoByIds(@RequestBody List<String> ids);
+
+    /**
      * 修改用户角色信息
      *
      * @param sysUserRoleVO
@@ -193,6 +202,7 @@ public interface SystemClient {
 
     /**
      * 根据条件查询数据字典的值
+     *
      * @param sysDictInvoke
      * @return
      */
@@ -201,9 +211,38 @@ public interface SystemClient {
 
     /**
      * 调用数据字典
+     *
      * @return
      */
     @RequestMapping(value = "/api/system/getDict", method = RequestMethod.POST)
-    public Result<List<SysDictKeyValue>> getDict(@RequestBody SysDictInvoke sysDictInvoke);
+    Result<List<SysDictKeyValue>> getDict(@RequestBody SysDictInvoke sysDictInvoke);
+
+    /**
+     * 根据角色id或角色名称获取角色拥有的用户信息
+     * 当id和角色名称同时存在时,优先使用id信息
+     *
+     * @param role
+     * @return
+     */
+    @RequestMapping(value = "/api/system/getUserByRole", method = RequestMethod.POST)
+    Result<List<User>> getUserByRole(@RequestBody SysRole role);
+
+    /**
+     * 获取所有岗位信息
+     *
+     * @return
+     */
+    @RequestMapping(value = "/api/system/getPostAll", method = RequestMethod.POST)
+    Result<List<SysPost>> getPostAll();
+
+
+    /**
+     * 校验用户账号是否存在
+     *
+     * @param account 用户账号
+     * @return success:账号不存在; fail:账号存在
+     */
+    @RequestMapping(value = "/api/system/checkUserAccount", method = RequestMethod.POST)
+    Result<String> checkUserAccount(@RequestParam("account") String account);
 
 }

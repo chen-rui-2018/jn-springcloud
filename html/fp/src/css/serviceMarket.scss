@@ -31,14 +31,14 @@
   .el-dialog{
     width: 20%;
     margin: 0 !important;
+    height: 100%;
    }
    .el-dialog__headerbtn{
     font-size: 25px;
     color:#00a042;
    }
    .el-dialog__body{
-    padding:0; 
-    height: 100vh;
+    padding:0;
   }
 }
 .el-menu--popup-bottom-start{

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.employee.dao.ResumeDatabaseMapper">
+    <select id="list" parameterType="com.jn.hr.employee.model.ResumeDatabasePage"
+            resultType="com.jn.hr.employee.model.ResumeDatabase">
+        SELECT
+        t1.id,  t1.`name`, t1. sex, phone,  t1.mailbox,  t1.department_id, t1. department_name,  t1.job_id,
+        t1.job_name,
+        t1.certificate_id,  t1.certificate_type,  t1.certificate_number,  t1.education_id,  t1.education_name,
+        t1.gradua_academy,  t1.resume_info,  t1.is_background_invest,  t1.application_result,  t1.record_status,
+        t1.created_time,  t1.modified_time,
+        t1.creator_account,
+        t1.modifier_account
+        FROM
+        `tb_manpower_resume_database` t1
+        WHERE t1.record_status = 1
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(educationId)">
+            and t1.education_id =#{educationId,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(applicationResult)">
+            and t1.application_result =#{applicationResult,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(isBackgroundInvest)">
+            and t1.is_background_invest =#{isBackgroundInvest,jdbcType=VARCHAR}
+      </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
+            and t1.name like CONCAT('%', #{name,jdbcType=VARCHAR}, '%')
+        </if>
+        ORDER BY t1.created_time DESC
+    </select>
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into tb_manpower_resume_database
+        (
+        id, `name`, sex, phone, mailbox, department_id, department_name, job_id, job_name,
+        certificate_id, certificate_type, certificate_number, education_id, education_name,
+        gradua_academy, resume_info, is_background_invest, application_result, record_status,
+        creator_account, created_time, modifier_account, modified_time
+        ) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.id},
+            #{item.name},
+            #{item.sex},
+            #{item.phone},
+            #{item.mailbox},
+            #{item.departmentId},
+            #{item.departmentName},
+            #{item.jobId},
+            #{item.jobName},
+            #{item.certificateId},
+            #{item.certificateType},
+            #{item.certificateNumber},
+            #{item.educationId},
+            #{item.educationName},
+            #{item.graduaAcademy},
+            #{item.resumeInfo},
+            #{item.isBackgroundInvest},
+            #{item.applicationResult},
+            #{item.recordStatus},
+            #{item.creatorAccount},
+            #{item.createdTime},
+            #{item.modifierAccount},
+            #{item.modifiedTime}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectByPhone" parameterType="map"
+            resultType="com.jn.hr.employee.model.ResumeDatabase">
+         SELECT
+        t1.id,  t1.`name`, t1. sex, phone,  t1.mailbox,  t1.department_id, t1. department_name,  t1.job_id,
+        t1.job_name,
+        t1.certificate_id,  t1.certificate_type,  t1.certificate_number,  t1.education_id,  t1.education_name,
+        t1.gradua_academy,  t1.resume_info,  t1.is_background_invest,  t1.application_result,  t1.record_status,
+        t1.created_time,  t1.modified_time,
+        t1.creator_account,
+        t1.modifier_account
+        FROM
+        `tb_manpower_resume_database` t1
+        WHERE t1.record_status != 0 and t1.phone =#{phone,jdbcType=VARCHAR}
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(id)">
+            and t1.id!=#{id}
+        </if>
+     </select>
+
+    <select id="selectByMailbox" parameterType="map"
+            resultType="com.jn.hr.employee.model.ResumeDatabase">
+         SELECT
+        t1.id,  t1.`name`, t1. sex, phone,  t1.mailbox,  t1.department_id, t1. department_name,  t1.job_id,
+        t1.job_name,
+        t1.certificate_id,  t1.certificate_type,  t1.certificate_number,  t1.education_id,  t1.education_name,
+        t1.gradua_academy,  t1.resume_info,  t1.is_background_invest,  t1.application_result,  t1.record_status,
+        t1.created_time,  t1.modified_time,
+        t1.creator_account,
+        t1.modifier_account
+        FROM
+        `tb_manpower_resume_database` t1
+        WHERE t1.record_status != 0 and t1.mailbox =#{mailbox,jdbcType=VARCHAR}
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(id)">
+            and t1.id!=#{id}
+        </if>
+     </select>
+
+    <select id="selectByCertificateNumber" parameterType="map"
+            resultType="com.jn.hr.employee.model.ResumeDatabase">
+         SELECT
+       t1.id,  t1.`name`, t1. sex, phone,  t1.mailbox,  t1.department_id, t1. department_name,  t1.job_id,
+        t1.job_name,
+        t1.certificate_id,  t1.certificate_type,  t1.certificate_number,  t1.education_id,  t1.education_name,
+        t1.gradua_academy,  t1.resume_info,  t1.is_background_invest,  t1.application_result,  t1.record_status,
+        t1.created_time,  t1.modified_time,
+        t1.creator_account,
+        t1.modifier_account
+        FROM
+        `tb_manpower_resume_database` t1
+        WHERE t1.record_status != 0 and t1.certificate_number =#{certificateNumber,jdbcType=VARCHAR}
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(id)">
+            and t1.id!=#{id}
+        </if>
+     </select>
+
+</mapper>

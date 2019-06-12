@@ -26,6 +26,9 @@ public class TreeData implements Serializable {
     private String text;
     @ApiModelProperty(value = "指标状态是否删除（0标记删除，1正常）",example = "0")
     private String state;
+    @ApiModelProperty(value = "模板排序序号",example = "0")
+    private Integer orderNumber;
+
     @ApiModelProperty(value = "子节点",example = "1")
     public List<TreeData> children;
 
@@ -67,5 +70,13 @@ public class TreeData implements Serializable {
 
     public void setChildren(List<TreeData> children) {
         this.children = children;
+    }
+
+    public Integer getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(Integer orderNumber) {
+        this.orderNumber = orderNumber;
     }
 }

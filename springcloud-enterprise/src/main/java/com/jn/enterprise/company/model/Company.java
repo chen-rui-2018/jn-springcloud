@@ -18,7 +18,7 @@ public class Company implements Serializable {
     @ApiModelProperty(value = "企业ID")
     private String id;
 
-    @ApiModelProperty(value = "企业ID")
+    @ApiModelProperty(value = "企业名称")
     private String comName;
 
     @ApiModelProperty(value = "企业logo")
@@ -46,5 +46,14 @@ public class Company implements Serializable {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    @Override
+    public String toString() {
+        return "Company{" +
+                "id='" + id + '\'' +
+                ", comName='" + comName + '\'' +
+                ", avatar='" + avatar + '\'' +
+                '}';
     }
 }

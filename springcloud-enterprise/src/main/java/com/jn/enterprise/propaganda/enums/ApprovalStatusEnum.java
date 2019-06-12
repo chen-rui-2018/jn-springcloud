@@ -15,6 +15,9 @@ public enum ApprovalStatusEnum implements CodeAndMsg {
     APPROVAL("approval","1","审批中"),
     APPROVED("approved","2","审批通过"),
     APPROVAL_NOT_PASSED("approvalNotPassed","3","审批不通过"),
+    LIFTED("lifted","4","已解除"),
+    REFUSED("refused","-1","已拒绝"),
+    NETWORK_ANOMALY("network_anomaly","-1","网络异常，请稍后重试。"),
     ;
 
     ApprovalStatusEnum(String code, String value, String message) {

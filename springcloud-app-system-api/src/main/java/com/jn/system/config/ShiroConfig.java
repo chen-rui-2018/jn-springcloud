@@ -47,6 +47,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/hystrix.stream", "anon");
         filterChainDefinitionMap.put("/login", "anon");
         filterChainDefinitionMap.put("/authLogin", "anon");
+        filterChainDefinitionMap.put("/noPwdLogin", "anon");
         //所有内部提供的api接口不需要拦截
         filterChainDefinitionMap.put("/api/**", "anon");
         filterChainDefinitionMap.put("/metaData/**", "anon");
@@ -129,7 +130,7 @@ public class ShiroConfig {
         MySessionManager mySessionManager = new MySessionManager();
         mySessionManager.setSessionDAO(redisSessionDAO());
         mySessionManager.setSessionIdCookie(sessionIdCookie());
-        mySessionManager.setGlobalSessionTimeout(shiroRedisSession);
+        mySessionManager.setGlobalSessionTimeout(-1000L);
         return mySessionManager;
     }
 

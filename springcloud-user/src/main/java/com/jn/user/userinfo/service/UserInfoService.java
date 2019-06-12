@@ -4,7 +4,7 @@ package com.jn.user.userinfo.service;
 import com.jn.common.model.PaginationData;
 import com.jn.system.model.User;
 import com.jn.user.model.*;
-import com.jn.user.userinfo.entity.TbUserPerson;
+import com.jn.user.userinfo.model.UserDeviceParam;
 import com.jn.user.userinfo.model.UserInfoParam;
 
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.List;
  */
 public interface UserInfoService {
     /**
-     * 根据账号获取用户扩展信息
+     * 根据用户账号/手机号/邮箱获取用户扩展信息
      * @param account 用户账号
      * @return
      */
@@ -95,5 +95,12 @@ public interface UserInfoService {
      * @return
      */
     PaginationData getUserExtensionBySearchFiled(SearchFiledParam searchFiledParam);
+
+    /**
+     * 保存用户极光推送注册ID
+     * @param userDeviceParam
+     * @return
+     */
+    int saveRegistrationId(UserDeviceParam userDeviceParam);
 
 }

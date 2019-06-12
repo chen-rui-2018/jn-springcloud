@@ -1,10 +1,19 @@
 <template>
   <div class="talentsService">
+    <div class="banner" ref="banner">
+      <div class="swiper-container">
+          <div class="swiper-wrapper">
+              <div class="swiper-slide"> <img src="@/assets/image/talents.png" alt=""> </div>
+          </div>
+          <div class="swiper-pagination"></div>
+         
+      </div>
+    </div>
     <div class="talentsService_cont">
       <!-- 面包屑 -->
       <div class="talentsService_breadcrumb">
         <el-breadcrumb separator="/">
-          <el-breadcrumb-item :to="{ path: '/' }">企业服务</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/enterpriseservice' }">企业服务</el-breadcrumb-item>
           <el-breadcrumb-item>
             <a href="javascript:;">人才服务</a>
           </el-breadcrumb-item>
@@ -16,14 +25,14 @@
           <div>申报平台</div>
           <div @click="gotalentplatform">MORE <span class="el-icon-arrow-right"></span></div>
         </div>
-        <div class="platform_cont">
+        <div class="platform_cont" @click="gotalentplatform">
           <p>
             <span class="iconfont icon-deng"> </span>
               汇集常用申报平台，便于企业快速查阅和进入。包含了各类科技项目、企业资质、产品认定、人才计划申报、资金兑现、 技术合同登记等业务申报系统。
-            <span @click="gotalentplatform">查看详情<span class="el-icon-d-arrow-right"></span> </span> 
+            <span >查看详情<span class="el-icon-d-arrow-right"></span> </span> 
           </p>
           <div>
-            <img src="@/assets/image/矢量智能对象.png" alt="">
+            <img src="@/assets/image/platform.png" alt="">
           </div>
         </div>
       </div>
@@ -35,42 +44,22 @@
         </div>
         <div class="perennial_list">
           <ul>
-            <li v-for="(item,index) in 4" :key="index">
+            <li v-for="(item,index) in perennialList" :key="index">
               <div class="list_cont">
-                <p><img src="" alt=""> </p>
-                <p>国家千人项目（顶尖人才与创新团队项目）顶尖人才与创新团队项目顶尖人才与创新团队项目顶尖人才与创新团队项目顶尖人才与创新团队项目顶尖人才与创新团队项目顶尖人才与创新团队项目顶尖人才与创新团队项目顶尖人才与创新团队项目</p>
-                <p><span class="el-icon-location"></span>全国</p>
-                <p>收益：<span>￥365万元</span> </p>
-                <p>价格：面议</p>
+                <p><img src="@/assets/image/perennial.png" alt=""> </p>
+                <p>{{item.title}}</p>
+                <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
+                <p>收益：<span>{{item.profit}}</span> </p>
+                <p>价格：{{item.price}}</p>
               </div>
               <div class="list_view"><span>查看详情</span> </div>
             </li>
           </ul>
         </div>
       </div>
-      <!-- 常见问题 -->
-      <!-- <div class="familiar_problem">
-        <div class="perennial_titile">
-          <div>常见问题</div>
-          <div @click="gofamiliarProblem">MORE <span class="el-icon-arrow-right"></span></div>
-        </div>
-        <div class="perennial_list">
-          <ul>
-            <li v-for="(familiaritem,familiarindex) in familiarList" :key="familiarindex">
-              <div class="list_cont">
-                <p><img src="" alt=""> </p>
-                <p>{{familiaritem.noticeTitle}} </p>
-                <p>阅读量：{{familiaritem.browseTimes}}次阅读</p>
-                <p>发布日期：{{familiaritem.createdTime|time}}</p>
-              </div>
-              <div class="list_view" @click="gofamiliardetail(familiaritem.id)"><span>查看详情</span> </div>
-            </li>
-          </ul>
-        </div>
-      </div> -->
       <!-- 申报中心列表 -->
       <div class="talentsService_centerList">
-        <div class="declaration_titile">申报中心列表</div>
+        <div class="declaration_titile">人才服务列表</div>
         <div class="declaration_list">
           <!-- 筛选 -->
           <div class="filter">
@@ -87,11 +76,11 @@
                 <div slot="label" :name="typeitem.id">{{typeitem.name}}</div>
                 <div class="lists" v-for="(talentsitem,talentsindex) in talentsList" :key="talentsindex" >
                   <div class="list_cont_left">
-                    <p><span v-show="talentsitem.rangeId!='5'">【{{talentsitem.rangeName}}】</span>{{talentsitem.noticeTitle}}</p>
+                    <p><span>【{{talentsitem.rangeId|type}}】</span>{{talentsitem.noticeTitle}}</p>
                     <!-- <p v-show="talentsitem.rangeId=5">{{talentsitem.noticeTitle}} </p> -->
                     <p><span>发布日期：{{talentsitem.createdTime|time}}</span><span>状态：<span class="fontcolor">{{talentsitem.isRoofPlacement|isRoof}}</span></span></p>
                     <p>最近要求：{{talentsitem.timeNode}}</p>
-                    <p>截止时间：<span class="fontcolor">{{talentsitem.deadline|time}}</span></p>
+                    <p v-show="talentsitem.deadline">截止时间：<span class="fontcolor">{{talentsitem.deadline|time}}</span></p>
                   </div>
                   <div class="list_cont_check" @click="gotalentdetail(talentsitem.id)"> <span>查看详情</span> </div>
                 </div>
@@ -126,8 +115,9 @@ export default {
         rangeId:'',//所属类型
         sortType:'1',//排序
         page:1,
-        rows:5,
-        familiarList:[],
+        rows:6,
+        perennialList:[],
+        // centerDialogVisible:false
       }
     },
     filters: {
@@ -144,12 +134,25 @@ export default {
           return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '') 
           // return time.split("T")[0]
         }
+      },
+      type(rangeId){
+        if(rangeId==='1'){
+          return '人才工作动态'
+        }else if(rangeId==='2'){
+          return '人才服务指南'
+        }else if(rangeId==='3'){
+          return '人才企业培训'
+        }else if(rangeId==='4'){
+          return '人才扶持计划'
+        }else if(rangeId==='5'){
+          return '常见问题'
+        }
       }
     },
     created () {
       this.getdeclarationcentertype()//区类型
       this.getdeclarationcenterList()//公告列表获取
-      this.getfamiliarList()//常见问题
+      this.getperennialList()//常年申报
     },
     methods: {
       //区类型获取
@@ -199,21 +202,19 @@ export default {
           }
         });
       },
-      // 常见问题列表获取
-      getfamiliarList(){
+      //常年申报列表
+      getperennialList(){
         let _this = this;
         this.api.get({
-          url: "gettalentsList",
+          url: "list",
           data: {
-            rangeId:5,
-            sortType:1,
             page:1,
             rows:4
           },
           callback: function(res) {
             if (res.code == "0000") {
               // console.log(res)
-              _this.familiarList = res.data.rows;
+              _this.perennialList = res.data.rows;
             }
           }
         });
@@ -230,20 +231,24 @@ export default {
       },
       //跳转页面
       gotalentplatform(){
-        this.$router.push({name:'talentPlatform'})
+        if(sessionStorage.token){
+          this.$router.push({name:'talentPlatform'})
+        }else{
+          this.$confirm('亲，您需要登录后才能访问以下界面哦！', '提示', {
+            confirmButtonText: '去登陆',
+            cancelButtonText: '留在当前页面',
+            type: 'warning',
+            center: true
+          }).then(() => {
+             this.$router.push({path:"/login"})
+          }).catch(() => {
+          })
+        }
       },
       //跳转页面
       gotalentdetail(id){
         this.$router.push({path:'/talentsServiceDetail',query:{id:id}})
       },
-      // 跳转页面
-      // gofamiliardetail(id){
-      //   this.$router.push({path:'/familiarProblemDetail',query:{id:id}})
-      // },
-      // 跳转页面
-      // gofamiliarProblem(){
-      //   this.$router.push({name:'familiarProblem'})
-      // },
       //翻页
       handleSizeChange(val) {
         this.rows=val
@@ -260,7 +265,88 @@ export default {
 
 <style lang="scss">
   .talentsService{
-    margin-top: 230px;
+    // margin-top: 230px;
+    .banner{
+      position: relative;
+      .swiper-button-prev, .swiper-button-next{
+        display: block;
+        width: 43px;
+        height: 43px;
+        border: 1px solid #fff;
+        border-radius: 50%;
+        background-size: 0 0;
+        text-align: center;
+        i{
+          font-size: 36px;
+          line-height: 44px;
+          color:#fff;
+        }
+      }
+      .swiper-button-next{
+        right: 95px;
+      }
+      .swiper-button-prev{
+        left:95px;
+      }
+    }
+  .swiper-container-horizontal > .swiper-pagination-bullets .swiper-pagination-bullet{
+    margin: 5px 4px;
+  }
+  .swiper-pagination-bullet{
+    background-color: #fff;
+    opacity: 0.5;
+  }
+   .swiper-pagination-fraction, .swiper-pagination-custom, .swiper-container-horizontal > .swiper-pagination-bullets{
+      position: absolute;
+      right: 152px;
+      top: 0;
+      left: auto;
+      width: 1%;
+      }
+    .swiper-container{
+      img{
+        width:100%;
+        vertical-align: middle;
+      }
+      .swiper-pagination{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .swiper-pagination-bullet-active{
+        border-radius: 5px;
+        height: 50px;
+        background: #fff;
+        opacity: 1;
+      }
+    }
+    @keyframes bounce-up {
+    25% {
+        transform: translateY(5px);
+    }
+    50%, 100% {
+        transform: translateY(0);
+    }
+    75% {
+        transform: translateY(-5px);
+        }
+    }
+    .animate-bounce-up{
+      animation: bounce-up 2s linear infinite;
+    }
+    .approve_content{
+      width: 1190px;
+      margin: 0 auto;
+    }
+    // 加载动画
+    .el-loading-mask{
+      .el-loading-spinner .path{
+        stroke:#00a041;
+      }
+      .el-loading-spinner{
+        top:30%;
+      }
+    }
     .talentsService_cont{
       width: 1190px;
       margin: 0 auto;
@@ -295,6 +381,7 @@ export default {
           margin-top: 23px;
           display: flex;
           justify-content: space-between;
+          cursor: pointer;
           p{
             margin: 51px 0 51px 60px;
             line-height: 24px;
@@ -340,6 +427,7 @@ export default {
           ul{
             display: flex;
             li{
+              cursor: pointer;
               width:25%;
               margin-right: 35px;
               border: solid 1px #eeeeee;
@@ -364,6 +452,12 @@ export default {
                   border-bottom: 1px solid #eeeeee;
                   padding: 11px 0;
                   margin-top: 0;
+                  img{
+                    width: 51%;
+                    height: 100%;
+                    display: block;
+                    margin: auto;
+                  }
                 }
                 p:nth-child(2){
                   color:black;
@@ -374,6 +468,7 @@ export default {
                   -webkit-box-orient: vertical;
                   -webkit-line-clamp: 2;
                   overflow: hidden;
+                  height: 48px;
                 }
                 p:nth-child(4){
                  span{
@@ -396,84 +491,6 @@ export default {
           }
         }
       }
-      // 常见问题
-      /* .familiar_problem{
-         margin-top: 29px;
-        .perennial_titile{
-          display: flex;
-          justify-content: space-between;
-          div:nth-child(1){
-            padding-left: 10px;
-            border-left: 4px solid #00a041;
-            line-height: 1;
-          }
-          div:nth-child(2){
-            font-size: 12px;
-            color:#00a041;
-          }
-        }
-        .perennial_list{
-          margin-top: 25px;
-          ul{
-            display: flex;
-            li{
-              width:25%;
-              margin-right: 35px;
-              border: solid 1px #eeeeee;
-              transition:all .3s linear;
-              &:hover{
-                box-shadow: 0px 0px 14px 4px rgba(0, 0, 0, 0.09);
-              }
-              &:last-child{
-                margin-right: 0;
-              }
-              .list_cont{
-                padding:0 29px;
-                color:#797979;
-                font-size: 12px;
-                p{
-                  margin-top: 8px; 
-                }
-                p:nth-child(1){
-                  width:100%;
-                  height: 78px;
-                  padding: 11px 0;
-                  margin-top: 0;
-                }
-                p:nth-child(2){
-                  color:black;
-                  font-size: 14px;
-                  margin-top: 3px;
-                  line-height: 24px;
-                  margin-bottom: 14px;
-                  display: -webkit-box;
-                  -webkit-box-orient: vertical;
-                  -webkit-line-clamp: 2;
-                  overflow: hidden;
-                }
-                p:nth-child(3){
-                 border-top: 1px solid #eee;
-                 padding-top: 9px;
-                }
-                p:nth-child(4){
-                 margin-bottom: 10px;
-                }
-              }
-              .list_view{
-                text-align: center;
-                background: #00a041;
-                font-size: 13px;
-                cursor: pointer;
-                span{
-                  display: block;
-                  padding:11px 0;
-                  color:#fff;
-                }
-              }
-            }
-          }
-        }
-      } */
       // 申报中心列表
       .talentsService_centerList{
         margin-top: 54px;
@@ -579,7 +596,7 @@ export default {
           border: 1px solid #eee;
         }
         .el-pagination.is-background .el-pager li:not(.disabled):hover{
-          color:#fff;
+          color:#000;
         }
         .el-pagination.is-background .el-pager li:not(.disabled).active{
           background-color: #00a041;

@@ -1,8 +1,7 @@
 package com.jn.park.message.dao;
 
-import com.jn.park.message.model.FindAllMessageListVo;
-import com.jn.park.message.model.MessageListModel;
-import com.jn.park.message.model.addMessageModel;
+import com.jn.park.message.model.*;
+import com.jn.system.model.User;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -14,18 +13,34 @@ import java.util.List;
  */
 public interface MessageListDao {
 
+
+    List<MessageListModel> findAllList(@Param("messageOneSort") String messageOneSort,@Param("isRead") String isRead,@Param("account")  String account);
+
+    List<MessageTowListModel> getMessageOneTort(@Param("account") String account, @Param("messageOneTort") String messageOneTort);
+
+
+    List<MessageListModel> findAllApp(@Param("messageOneSort") String messageOneSort,@Param("isRead") Integer isRead, @Param("account") String account);
+
+
     /**
      * 查询所有消息
-     * @param messageTowTort 一级消息类别
+     * @param
      * @return
      */
-    List<FindAllMessageListVo> findAll(@Param("messageTowTort") Integer messageTowTort, @Param("account") String account);
+    List<MessageListModel> findAll(@Param("messageTowTort") String messageTowTort,@Param("isRead") Integer isRead, @Param("account") String account);
+
+    /**
+     * 获取是否有已读消息
+     * @return
+     */
+    int getIsRead(@Param("messageOneTort") String messageOneTort,@Param("messageTowTort") String messageTowTort,@Param("account") String account);
+
 
     /**
      * 添加消息
      * @param addMessageModel
      */
-    void addMessage(addMessageModel addMessageModel);
+    void addMessage(AddMessageModel addMessageModel);
 
 
     /**

@@ -196,6 +196,9 @@ export default {
   },
   filters: {
     setColor: (value, time) => {
+      if (time === '18:00') {
+        return true
+      }
       var timeArr = time.split(':')
       if (timeArr[0] < 10) {
         time = '0' + time
@@ -444,7 +447,6 @@ export default {
   },
 
   methods: {
-
     rowClass({ row, column, rowIndex, columnIndex }) {
       if (columnIndex >= this.leftCol) {
         if (
@@ -570,17 +572,17 @@ export default {
         }
         this.isSelected.push(false)
       }
-      var selectDay = new Date(this.params.selectDay)
-      var today_time = new Date().getTime()
-      var time = (today_time - selectDay) / 1000 / 60 / 60 / 24
-      if (time > 1) {
-        alert('对不起,您不能预约当前日期之前的会议,请重新选择')
-        this.errorTime = false
-        this.errorText = '对不起,您不能预约当前日期之前的会议,请重新选择'
-        return
-      } else {
-        this.errorTime = true
-      }
+      // var selectDay = new Date(this.params.selectDay)
+      // var today_time = new Date().getTime()
+      // var time = (today_time - selectDay) / 1000 / 60 / 60 / 24
+      // if (time > 1) {
+      //   alert('对不起,您不能预约当前日期之前的会议,请重新选择')
+      //   this.errorTime = false
+      //   this.errorText = '对不起,您不能预约当前日期之前的会议,请重新选择'
+      //   return
+      // } else {
+      //   this.errorTime = true
+      // }
       this.listQuery.meetingStartTime = this.params.selectDay
       this.initList()
     },
@@ -708,6 +710,7 @@ export default {
       for (var i = _start_col; i <= _end_col; i++) {
         _arr.push(i)
       }
+
       return _arr
     },
     calcDataA() {
@@ -727,15 +730,16 @@ export default {
           }
           _arr.push(obj)
         }
+
         for (var k = 0; k < arr_data[i].meetingList.length; k++) {
           var startTime = (arr_data[i].meetingList[k].startTime).replace(/^.* /, '').slice(0, 5)
           var endTime = (arr_data[i].meetingList[k].endTime).replace(/^.* /, '').slice(0, 5)
           var get_arr = this.calTdMerge(startTime, endTime)
-          for (var l = 0; l < get_arr.length; l++) {
+          for (var l = 0; l < get_arr.length - 1; l++) {
             var _index = get_arr[l]
             if (l === 0) {
               _arr[_index].status = 1
-              _arr[_index].size = get_arr.length
+              _arr[_index].size = get_arr.length - 1
             } else {
               _arr[_index].status = 2
             }
@@ -748,6 +752,7 @@ export default {
       this.rowTableData = arr_row
     },
     arraySpanMethod({ row, column, rowIndex, columnIndex }) {
+      // console.dir(arguments)
       // 合并单元格
       var _num = this.leftCol
 

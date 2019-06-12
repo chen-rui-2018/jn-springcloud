@@ -35,6 +35,40 @@ public class DynamicWebShow implements Serializable {
     private String likeNum;
     @ApiModelProperty(value = "图片列表")
     private List<String> imgList;
+    @ApiModelProperty(value = "图片字符串")
+    private String imgString;
+    @ApiModelProperty(value = "是否已关注 1是 0 否")
+    private String careStatus;
+    @ApiModelProperty(value = "账号身份 0 个人- 1 企业")
+    private String identity;
+    @ApiModelProperty(value = "是否为本人发布动态 0 否- 1 是")
+    private String isSelf;
+    @ApiModelProperty(value = "是已经点赞 0 否- 1 是")
+    private String isLike;
+
+    public String getIsLike() {
+        return isLike;
+    }
+
+    public void setIsLike(String isLike) {
+        this.isLike = isLike;
+    }
+
+    public String getIsSelf() {
+        return isSelf;
+    }
+
+    public void setIsSelf(String isSelf) {
+        this.isSelf = isSelf;
+    }
+
+    public String getIdentity() {
+        return identity;
+    }
+
+    public void setIdentity(String identity) {
+        this.identity = identity;
+    }
 
     public String getTopicId() {
         return topicId;
@@ -114,5 +148,21 @@ public class DynamicWebShow implements Serializable {
 
     public void setImgList(List<String> imgList) {
         this.imgList = imgList;
+    }
+
+    public String getCareStatus() {
+        return careStatus;
+    }
+
+    public void setCareStatus(String careStatus) {
+        this.careStatus = careStatus;
+    }
+
+    public String getImgString() {
+        return imgString;
+    }
+
+    public void setImgString(String imgString) {
+        this.imgString = imgString;
     }
 }

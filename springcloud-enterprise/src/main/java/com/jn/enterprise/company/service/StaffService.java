@@ -1,15 +1,12 @@
 package com.jn.enterprise.company.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.company.model.ServiceCompany;
 import com.jn.enterprise.company.model.AcceptInviteParam;
 import com.jn.enterprise.company.model.ReviewStaffParam;
 import com.jn.enterprise.company.model.StaffListParam;
+import com.jn.enterprise.company.vo.ColleagueListVO;
 import com.jn.enterprise.company.vo.StaffAuditVO;
-import com.jn.system.model.User;
-
-import java.util.List;
-import java.util.Map;
+import com.jn.enterprise.company.vo.UserExtensionInfoVO;
 
 /**
  * 企业人员Service
@@ -32,28 +29,22 @@ public interface StaffService {
      * @param staffListParam 列表查询入参
      * @return
      */
-    Map<String, Object> getColleagueList(StaffListParam staffListParam, String curAccount);
+    ColleagueListVO getColleagueList(StaffListParam staffListParam, String curAccount);
 
     /**
-     * 邀请新成员列表
-     * @param staffListParam 列表查询入参
+     * 根据手机号或账号查询用户信息
+     * @param phone 手机号
      * @return
      */
-    PaginationData getInviteStaffList(StaffListParam staffListParam, String curAccount);
+    UserExtensionInfoVO getInviteStaffList(String phone);
 
     /**
      * 邀请员工
-     * @param account 受邀请账号
+     * @param inviteAccount 受邀请账号
+     * @param curAccount 当前账号
      * @return
      */
-    Integer inviteStaff(String[] account, User user);
-
-    /**
-     * 再次邀请员工
-     * @param staffId 员工ID
-     * @return
-     */
-    Integer inviteStaffAgain(String staffId, String curAccount);
+    Integer inviteStaff(String inviteAccount, String curAccount);
 
     /**
      * 审核员工申请
@@ -61,6 +52,13 @@ public interface StaffService {
      * @return
      */
     Integer reviewStaff(ReviewStaffParam reviewStaffParam, String curAccount);
+
+    /**
+     * 离开企业
+     * @param curAccount 账号
+     * @return
+     */
+    Integer leaveCompany(String curAccount);
 
     /**
      * 接受邀请
@@ -71,16 +69,17 @@ public interface StaffService {
 
     /**
      * 拒绝邀请
-     * @param staffId 员工ID
+     * @param comId 企业ID
+     * @param account 账号
      * @return
      */
-    Integer refuseInvite(String staffId);
+    Integer refuseInvite(String comId, String account);
 
     /**
      * 获取审核信息
      * @return
      */
-    List<StaffAuditVO> getAuditStatus(String curAccount);
+    StaffAuditVO getAuditStatus(String curAccount);
 
     /**
      * 批量删除员工

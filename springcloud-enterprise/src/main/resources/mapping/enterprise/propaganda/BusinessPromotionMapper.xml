@@ -8,16 +8,34 @@
           ,sp.propaganda_type as "propagandaType"
           ,sp.propaganda_code as "propagandaCode"
           ,sp.propaganda_title as "propagandaTitle"
+          ,sp.propaganda_details as "propagandaDetails"
           ,sp.issue_platform as "issuePlatform"
           ,date_format(sp.effective_date,'%Y/%m/%d')as "effectiveDate"
           ,date_format(sp.invalid_date,'%Y/%m/%d')as "invalidDate"
-          ,sp.approval_status as "approvalStatus"
+            <if test="bpp.approvalStatus!=null and bpp.approvalStatus!=''">
+                ,#{bpp.approvalStatus} as "approvalStatus"
+            </if>
+            <if test="bpp.approvalStatus==null or bpp.approvalStatus==''">
+            ,case when sp.approval_status=0 and sp.is_pay=0 and sp.status=0 then "0"
+            when sp.approval_status=1 and sp.is_pay=0 and sp.status=0 then "1"
+            when sp.approval_status=3 then "3"
+            when sp.approval_status=2 and sp.is_pay=0 and sp.status=0 then "4"
+            when sp.approval_status=2 and sp.is_pay=1 and sp.status=0 then "5"
+            when sp.approval_status=2 and sp.is_pay=1 and sp.status=1 then "6"
+            when sp.approval_status=2 then "2"
+            when sp.record_status=0 then "7"
+            end  as "approvalStatus"
+            </if>
           ,sp.propaganda_area as "propagandaArea"
           ,sp.poster_url as "posterUrl"
           ,sp.propaganda_fee as "propagandaFee"
           ,sp.status as "status"
+          ,sp.view_count as "viewCount"
           ,date_format(sp.created_time,'%Y-%m-%d %H:%i:%s') as "createdTime"
+          ,sc.code_name as "propagandaTypeName"
         from tb_propaganda sp
+        left join tb_service_code sc
+        on sp.propaganda_type=sc.code_value
         where 1=1
         <if test="bpp.approvalStatus!=null and bpp.approvalStatus!=''
                   and (bpp.approvalStatus==0 or bpp.approvalStatus==1 or  bpp.approvalStatus==2 or bpp.approvalStatus==3)">
@@ -38,6 +56,9 @@
             and sp.is_pay='1'           <!--已付款-->
             and sp.status='1'           <!--已上架-->
         </if>
+        <if test="bpp.approvalStatus==7"><!--已撤销-->
+            and sp.record_status=0
+        </if>
         <if test="bpp.searchContent !=null and bpp.searchContent !='' ">
             and sp.propaganda_title like concat('%',#{bpp.searchContent},'%')
         </if>
@@ -47,10 +68,18 @@
         <if test="bpp.status !=null and bpp.status!=''">
             and sp.status=#{bpp.status}
         </if>
+        <if test="bpp.issuePlatform !=null and bpp.issuePlatform !=''">
+            and sp.issue_platform=#{bpp.issuePlatform}
+        </if>
+        <if test="bpp.propagandaArea !=null and bpp.propagandaArea !=''">
+            and sp.propaganda_area=#{bpp.propagandaArea}
+        </if>
         <if test="creator !=null and creator !=''">
             and sp.creator_account=#{creator}
         </if>
-        and sp.record_status=1
+        <if test="bpp.approvalStatus!=7"><!--不是已撤销-->
+            and sp.record_status=1
+        </if>
         order by sp.sort,sp.created_time desc
     </select>
 
@@ -66,16 +95,29 @@
          end as "issuePlatform"
         ,date_format(sp.effective_date,'%Y/%m/%d')as "effectiveDate"
         ,date_format(sp.invalid_date,'%Y/%m/%d')as "invalidDate"
+        ,sp.propaganda_type as "propagandaType"
         ,sp.propaganda_title as "propagandaTitle"
         ,sp.propaganda_details as "propagandaDetails"
         ,sp.propaganda_area as "propagandaArea"
         ,sp.propaganda_area_url as "propagandaAreaUrl"
         ,sp.poster_url as "posterUrl"
         ,sp.propaganda_fee as "propagandaFee"
+        ,sp.created_time AS "createdTime"
+        ,sp.view_count as "viewCount"
+        ,sc.code_name as "propagandaTypeName"
         from tb_propaganda sp
+        left join tb_service_code sc
+        on sp.propaganda_type=sc.code_value
         where 1=1
         and sp.id_=#{propagandaId}
         and sp.record_status=1
     </select>
+
+    <!-- 增加点击量 -->
+    <update id="addClickNumById">
+        UPDATE tb_propaganda SET
+          view_count = view_count + 1
+        WHERE id_ = #{id}
+    </update>
 
 </mapper>

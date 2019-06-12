@@ -6,6 +6,9 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
+import com.jn.park.activity.dao.TbParkLikeMapper;
+import com.jn.park.activity.entity.TbParkLike;
+import com.jn.park.activity.entity.TbParkLikeCriteria;
 import com.jn.park.comment.dao.TbCommentMapper;
 import com.jn.park.enums.GamTopicExceptionEnum;
 import com.jn.park.fileimg.service.FileImgService;
@@ -15,6 +18,7 @@ import com.jn.park.gamtopic.dao.TbPersonCareMapper;
 import com.jn.park.gamtopic.entity.TbGamTopic;
 import com.jn.park.gamtopic.entity.TbPersonCare;
 import com.jn.park.gamtopic.entity.TbPersonCareCriteria;
+import com.jn.park.gamtopic.enums.DynamicEnum;
 import com.jn.park.gamtopic.model.*;
 import com.jn.park.gamtopic.service.DynamicService;
 import com.jn.park.gamtopic.vo.DnnamicCommentDetailsVo;
@@ -30,9 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author： chenr
@@ -62,9 +64,11 @@ public class DynamicServiceImpl implements DynamicService {
     private TbPersonCareMapper tbPersonCareMapper;
     @Autowired
     private TbCommentMapper tbCommentMapper;
+    @Autowired
+    private TbParkLikeMapper tbParkLikeMapper;
 
 
-    @ServiceLog(doAction = "发布动态")
+    @ServiceLog(doAction = "发布匝道")
     @Transactional(rollbackFor = Exception.class)
     @Override
     public int addDynamicInfo(DynamicAddParam dynamicAddParam, String dynamicId, String account) {
@@ -176,31 +180,67 @@ public class DynamicServiceImpl implements DynamicService {
             accountList =null;
         }
         Page<Object> objects = PageHelper.startPage(pageNum,pageSize,true);
-        List<DynamicWebShow> dynamicWebList =   dynamicDao.findDynamicWebList(accountList);
+        List<DynamicWebShow> dynamicWebList =   dynamicDao.findDynamicWebList(accountList,account);
+        if(!dynamicWebList.isEmpty()) {
+            dynamicWebList = improveWebUserInfo(dynamicWebList);
+        }
+        for(DynamicWebShow show :dynamicWebList){
+            show.setIsSelf(show.getCreatorAccount().equals(account)? DynamicEnum.IS_SELF.getCode():DynamicEnum.NOT_IS_SELF.getCode());
+        }
+        return new PaginationData<>(dynamicWebList,objects==null?0:objects.getTotal() );
+    }
+    @ServiceLog(doAction = "查找前台用户关注的用户的动态列表")
+    @Override
+    public PaginationData<List<DynamicWebShow>> findCareDynamicList(com.jn.common.model.Page page, String account) {
+        int pageNum = page.getPage();
+        int pageSize = page.getRows()==0?15:page.getRows();
+        Page<Object> objects = PageHelper.startPage(pageNum,pageSize,true);
+        List<DynamicWebShow> dynamicWebList =   dynamicDao.findCareDynamicList(account);
         if(!dynamicWebList.isEmpty()) {
             dynamicWebList = improveWebUserInfo(dynamicWebList);
         }
         return new PaginationData<>(dynamicWebList,objects==null?0:objects.getTotal() );
     }
+
     @ServiceLog(doAction = "查找前台动态详情+评论列表")
     @Override
-    public DynamicWebDetailsVo findDynamicWebDetails(String dynamicId) {
+    public DynamicWebDetailsVo findDynamicWebDetails(String dynamicId,String account) {
         DynamicWebDetailsVo  vo = new DynamicWebDetailsVo();
        //获取动态详情
-        DynamicWebShow dynamicWebShow =  dynamicDao.findDynamicWebDetails(dynamicId);
-        Result<UserExtensionInfo> result = userExtensionClient.getUserExtension(dynamicWebShow.getCreatorAccount());
-        UserExtensionInfo info = result.getData();
-        if(info!=null) {
-            dynamicWebShow.setAvatar(info.getAvatar());
-            dynamicWebShow.setNickName(info.getNickName());
-        }
-        vo.setDynamicWebShow(dynamicWebShow);
-        //获取评论列表
-        Page objects = PageHelper.startPage(0,10,true);
-        List<DynamicComments> commentsList = dynamicDao.findDynamicComments(dynamicId);
-        if(!commentsList.isEmpty()){
-            commentsList = improveWebCommentUserInfo(commentsList);
-            vo.setCommentList(new PaginationData<>(commentsList,objects==null?0:objects.getTotal()));
+        DynamicWebShow dynamicWebShow =  dynamicDao.findDynamicWebDetails(dynamicId,account);
+
+        if(dynamicWebShow != null){
+            Result<UserExtensionInfo> result = userExtensionClient.getUserExtension(dynamicWebShow.getCreatorAccount());
+            UserExtensionInfo info = result.getData();
+            if(info!=null) {
+                dynamicWebShow.setAvatar(info.getAvatar());
+                dynamicWebShow.setNickName(info.getNickName());
+            }
+            if (StringUtils.isNotBlank(dynamicWebShow.getImgString())){
+                String imgString = dynamicWebShow.getImgString();
+                dynamicWebShow.setImgList(Arrays.asList(imgString.split(",")));
+            }
+            //是否为自己发布的动态
+            if(dynamicWebShow.getCreatorAccount().equals(account)){
+                dynamicWebShow.setIsSelf(DynamicEnum.IS_SELF.getCode());
+            }else{
+                dynamicWebShow.setIsSelf(DynamicEnum.NOT_IS_SELF.getCode());
+            }
+            vo.setDynamicWebShow(dynamicWebShow);
+            DynamicCommentsParam param = new DynamicCommentsParam();
+            param.setParamId(dynamicId);
+            param.setPage(1);
+            param.setRows(10);
+            //获取评论列表
+            PaginationData<List<DynamicCommentReplyShow>> data = findDynamicCommentAndReplyList(param);
+            if(data != null) {
+                List<DynamicCommentReplyShow> commentsList = data.getRows();
+                if (!commentsList.isEmpty()) {
+                    commentsList = improveWebCommentAndReplyUserInfo(commentsList);
+                    data.setRows(commentsList);
+                }
+                vo.setCommentList(data);
+            }
         }
         return vo;
     }
@@ -274,10 +314,102 @@ public class DynamicServiceImpl implements DynamicService {
             currentAccount = null;
         }
         List<DynamicWebShow> dynamicList = dynamicDao.findDynamicByAccount(param.getParamAccount(),currentAccount);
-        if(!dynamicList.isEmpty()){
+        if(dynamicList !=null && !dynamicList.isEmpty()){
             dynamicList = improveWebUserInfo(dynamicList);
         }
         return new PaginationData<>(dynamicList,objects==null?0:objects.getTotal());
+    }
+    @ServiceLog(doAction = "根据动态id 返回动态评论列表+ 评论回复列表")
+    @Override
+    public PaginationData<List<DynamicCommentReplyShow>> findDynamicCommentAndReplyList(DynamicCommentsParam param) {
+        int pageSize  = param.getRows()==0?15:param.getRows();
+        int pageNum = param.getPage();
+        Page objects = PageHelper.startPage(pageNum,pageSize,true);
+        List<DynamicCommentReplyShow> commentsList = dynamicDao.findDynamicCommentAndReplyList(param.getParamId());
+        if(!commentsList.isEmpty()){
+            commentsList = improveWebCommentAndReplyUserInfo(commentsList);
+            List<String> parentIdList = new ArrayList<>();
+            for (DynamicCommentReplyShow show : commentsList){
+                      parentIdList.add(show.getCommentId());
+            }
+            List<DynamicComments> replyList =  dynamicDao.findReplyList(parentIdList);
+            if(!replyList.isEmpty()){
+                replyList = improveWebCommentUserInfo(replyList);
+            }
+            for(DynamicCommentReplyShow show : commentsList){
+                List<DynamicComments>  list = new ArrayList<>();
+                show.setReplyList(list);
+                for (DynamicComments comments : replyList){
+                    if(comments.getParentId().equals(show.getCommentId())){
+                        show.getReplyList().add(comments);
+                    }
+                }
+            }
+        }
+
+
+        return new PaginationData(commentsList,objects==null?0:objects.getTotal());
+    }
+
+    @ServiceLog(doAction = "动态点赞/取消点赞")
+    @Override
+    public int dynamicLikeOperate(DynamicLikeOperate dynamicLikeOperate, String account) {
+        int i;
+
+        TbGamTopic tbGamTopic = tbGamTopicMapper.selectByPrimaryKey(dynamicLikeOperate.getDynamicId());
+        if(tbGamTopic == null ){
+            logger.warn("当前进行点赞的动态不存在请刷新后再试{}动态id:"+dynamicLikeOperate.getDynamicId());
+            throw new JnSpringCloudException(GamTopicExceptionEnum.DYNAMIC_IS_NOT_EXIST);
+        }
+        TbParkLikeCriteria criteria = new TbParkLikeCriteria();
+        criteria.createCriteria().andLikeParentIdEqualTo(dynamicLikeOperate.getDynamicId()).andCreatorAccountEqualTo(account);
+        List<TbParkLike> likes =  tbParkLikeMapper.selectByExample(criteria);
+        //只有首次点赞时添加一条数据, 否则进行修改,同一账号对同一动态只有一条点赞数据
+        if(likes.isEmpty()){
+            i =  addDynamicLikeOperate(dynamicLikeOperate,account);
+        }else{
+            i = modifyDynamicLikeOperate(dynamicLikeOperate,account);
+        }
+        return i;
+    }
+
+    /**
+     * 添加点赞信息
+     * @param dynamicLikeOperate
+     * @param account
+     * @return
+     */
+    private int addDynamicLikeOperate(DynamicLikeOperate dynamicLikeOperate, String account){
+        // 状态值为 1 ( 有效 )
+        byte recordStatus = 1;
+        TbParkLike like  = new TbParkLike();
+        like.setId(UUID.randomUUID().toString().replaceAll("-",""));
+        like.setLikeStatus(dynamicLikeOperate.getLikeStatus());
+        like.setLikeParentId(dynamicLikeOperate.getDynamicId());
+        like.setCreatorAccount(account);
+        like.setRecordStatus(recordStatus);
+        like.setCreatedTime(new Date());
+        return tbParkLikeMapper.insertSelective(like);
+    }
+
+    /**
+     * 修改点赞信息
+     * @param dynamicLikeOperate
+     * @param account
+     * @return
+     */
+    private int modifyDynamicLikeOperate(DynamicLikeOperate dynamicLikeOperate, String account){
+        // 状态值为 1 ( 有效 )
+        byte recordStatus = 1;
+        TbParkLikeCriteria criteria = new TbParkLikeCriteria();
+        criteria.createCriteria().andLikeParentIdEqualTo(dynamicLikeOperate.getDynamicId()).andCreatorAccountEqualTo(account);
+        TbParkLike like  = new TbParkLike();
+        like.setLikeStatus(dynamicLikeOperate.getLikeStatus());
+        like.setLikeParentId(dynamicLikeOperate.getDynamicId());
+        like.setModifierAccount(account);
+        like.setRecordStatus(recordStatus);
+        like.setModifiedTime(new Date());
+        return tbParkLikeMapper.updateByExampleSelective(like,criteria);
     }
 
     /**
@@ -330,6 +462,29 @@ public class DynamicServiceImpl implements DynamicService {
         return commentsList;
     }
     /**
+     * 前台动态详情完善评论用户信息
+     * @return
+     */
+    private   List<DynamicCommentReplyShow>  improveWebCommentAndReplyUserInfo(List<DynamicCommentReplyShow> commentsList){
+        List<String> accountList = new ArrayList<>();
+        for(DynamicCommentReplyShow show : commentsList){
+            accountList.add(show.getCreatorAccount());
+        }
+        Result<List<UserExtensionInfo>> result = userExtensionClient.getMoreUserExtension(accountList);
+        if(!result.getData().isEmpty()){
+            List<UserExtensionInfo> userList = result.getData();
+            for(DynamicCommentReplyShow show : commentsList){
+                for(UserExtensionInfo user : userList){
+                    if(show.getCreatorAccount().equals(user.getAccount())){
+                        show.setAvatar(user.getAvatar());
+                        show.setNickName(user.getNickName());
+                    }
+                }
+            }
+        }
+        return commentsList;
+    }
+    /**
      * 前台列表完善用户信息
      * @return
      */
@@ -347,6 +502,11 @@ public class DynamicServiceImpl implements DynamicService {
                         show.setAvatar(user.getAvatar());
                         show.setNickName(user.getNickName());
                         show.setCompanyName(user.getCompanyName());
+                        if(StringUtils.isNotBlank(show.getImgString())){
+                            String imgs = show.getImgString();
+                            show.setImgList(Arrays.asList(imgs.split(",")));
+                            show.setImgString("");
+                        }
                     }
                 }
             }

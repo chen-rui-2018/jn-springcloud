@@ -1,15 +1,16 @@
 package com.jn.enterprise.company.controller;
 
+import com.codingapi.tx.annotation.TxTransaction;
 import com.jn.common.controller.BaseController;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
-import com.jn.enterprise.company.enums.CompanyDataEnum;
 import com.jn.enterprise.company.enums.CompanyExceptionEnum;
 import com.jn.enterprise.company.model.ColleagueListParam;
 import com.jn.enterprise.company.model.ColleagueUpdateParam;
 import com.jn.enterprise.company.model.StaffListParam;
 import com.jn.enterprise.company.service.StaffService;
+import com.jn.enterprise.company.vo.ColleagueListVO;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import com.jn.user.api.UserExtensionClient;
@@ -25,8 +26,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Map;
 
 /**
  * @author： huxw
@@ -49,17 +48,16 @@ public class ColleagueController extends BaseController {
     @ApiOperation(value = "同事列表（pc/app-同事列表）", notes = "按手机号或名称（模糊查询）[分页查询]")
     @RequestMapping(value = "/getColleagueList",method = RequestMethod.GET)
     @RequiresPermissions("/enterprise/ColleagueController/getColleagueList")
-    public Result<Map<String, Object>> getColleagueList(@Validated ColleagueListParam colleagueListParam){
+    public Result<ColleagueListVO> getColleagueList(@Validated ColleagueListParam colleagueListParam){
         User user = checkUserValid();
         StaffListParam staffListParam = new StaffListParam();
         BeanUtils.copyProperties(colleagueListParam, staffListParam);
-        // 查询通过审核的员工
-        staffListParam.setStatus(CompanyDataEnum.STAFF_CHECK_STATUS_PASS.getCode());
         return new Result(staffService.getColleagueList(staffListParam, user.getAccount()));
     }
 
+    @TxTransaction(isStart = true)
     @ControllerLog(doAction = "批量删除同事")
-    @ApiOperation(value = "批量删除同事（pc/app-删除同事）", notes = "返回数据响应条数")
+    @ApiOperation(value = "批量删除同事（pc/app-删除同事）", notes = "企业管理员，返回数据响应条数")
     @RequestMapping(value = "/delColleague",method = RequestMethod.POST)
     @RequiresPermissions("/enterprise/ColleagueController/delColleague")
     public Result<Integer> delColleague(String[] accounts){
@@ -68,8 +66,9 @@ public class ColleagueController extends BaseController {
         return new Result(staffService.delMoreStaffs(accounts, user.getAccount()));
     }
 
+    @TxTransaction(isStart = true)
     @ControllerLog(doAction = "设置联系人")
-    @ApiOperation(value = "设置联系人（pc-设为联系人）", notes = "返回数据响应条数，正常情况为1")
+    @ApiOperation(value = "设置联系人（pc-设为联系人）", notes = "企业管理员，返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/setContact",method = RequestMethod.POST)
     @RequiresPermissions("/enterprise/ColleagueController/setContact")
     public Result<Integer> setContact(String account){
@@ -78,8 +77,9 @@ public class ColleagueController extends BaseController {
         return new Result(staffService.setOrCancelContact(account, user.getAccount(), true));
     }
 
+    @TxTransaction(isStart = true)
     @ControllerLog(doAction = "取消联系人")
-    @ApiOperation(value = "取消联系人（pc-取消联系人）", notes = "返回数据响应条数，正常情况为1")
+    @ApiOperation(value = "取消联系人（pc-取消联系人）", notes = "企业管理员，返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/cancelContact",method = RequestMethod.POST)
     @RequiresPermissions("/enterprise/ColleagueController/cancelContact")
     public Result<Integer> cancelContact(String account){
@@ -88,18 +88,26 @@ public class ColleagueController extends BaseController {
         return new Result(staffService.setOrCancelContact(account, user.getAccount(), false));
     }
 
+    @TxTransaction(isStart = true)
     @ControllerLog(doAction = "编辑同事信息")
-    @ApiOperation(value = "编辑同事信息", notes = "编辑自己的信息")
+    @ApiOperation(value = "编辑同事信息", notes = "编辑自己的信息", hidden = true)
     @RequestMapping(value = "/updateUserInfo",method = RequestMethod.POST)
     public Result updateUserInfo(@Validated @RequestBody ColleagueUpdateParam colleagueUpdateParam){
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        if(user == null) {
-            return new Result(CompanyExceptionEnum.NETWORK_ANOMALY.getCode(),CompanyExceptionEnum.NETWORK_ANOMALY.getMessage());
-        }
+        User user = checkUserValid();
         UserInfo userInfo = new UserInfo();
         userInfo.setAccount(user.getAccount());
         BeanUtils.copyProperties(colleagueUpdateParam, userInfo);
         return userExtensionClient.saveOrUpdateUserInfo(userInfo);
+    }
+
+    @TxTransaction(isStart = true)
+    @ControllerLog(doAction = "离开企业")
+    @ApiOperation(value = "离开企业", notes = "企业管理员不能离开企业，返回数据响应条数")
+    @RequestMapping(value = "/leaveCompany",method = RequestMethod.POST)
+    @RequiresPermissions("/enterprise/ColleagueController/leaveCompany")
+    public Result<Integer> leaveCompany(){
+        User user = checkUserValid();
+        return new Result(staffService.leaveCompany(user.getAccount()));
     }
 
     /**
@@ -109,7 +117,7 @@ public class ColleagueController extends BaseController {
     public User checkUserValid() {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         if(user == null){
-            throw new JnSpringCloudException(CompanyExceptionEnum.NETWORK_ANOMALY);
+            throw new JnSpringCloudException(CompanyExceptionEnum.USER_LOGIN_IS_INVALID);
         }
         return user;
     }

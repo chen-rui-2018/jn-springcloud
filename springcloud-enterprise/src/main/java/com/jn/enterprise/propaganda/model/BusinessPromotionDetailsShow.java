@@ -1,9 +1,11 @@
 package com.jn.enterprise.propaganda.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @Author: yangph
@@ -23,6 +25,10 @@ public class BusinessPromotionDetailsShow implements Serializable {
     private String effectiveDate;
     @ApiModelProperty(value = "失效日期")
     private String invalidDate;
+    @ApiModelProperty(value = "宣传类型")
+    private String propagandaType;
+    @ApiModelProperty(value = "宣传类型名称")
+    private String propagandaTypeName;
     @ApiModelProperty(value = "宣传产品/宣传标题")
     private String propagandaTitle;
     @ApiModelProperty(value = "宣传详情")
@@ -35,6 +41,27 @@ public class BusinessPromotionDetailsShow implements Serializable {
     private String posterUrl;
     @ApiModelProperty(value = "宣传费用")
     private String propagandaFee;
+    @ApiModelProperty(value = "浏览量")
+    private String viewCount;
+    @ApiModelProperty(value = "创建时间")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm")
+    private Date createdTime;
+
+    public String getViewCount() {
+        return viewCount;
+    }
+
+    public void setViewCount(String viewCount) {
+        this.viewCount = viewCount;
+    }
+
+    public Date getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
+    }
 
     public String getId() {
         return id;
@@ -76,6 +103,22 @@ public class BusinessPromotionDetailsShow implements Serializable {
         this.invalidDate = invalidDate;
     }
 
+    public String getPropagandaType() {
+        return propagandaType;
+    }
+
+    public void setPropagandaType(String propagandaType) {
+        this.propagandaType = propagandaType;
+    }
+
+    public String getPropagandaTypeName() {
+        return propagandaTypeName;
+    }
+
+    public void setPropagandaTypeName(String propagandaTypeName) {
+        this.propagandaTypeName = propagandaTypeName;
+    }
+
     public String getPropagandaTitle() {
         return propagandaTitle;
     }
@@ -91,6 +134,7 @@ public class BusinessPromotionDetailsShow implements Serializable {
     public void setPropagandaDetails(String propagandaDetails) {
         this.propagandaDetails = propagandaDetails;
     }
+
 
     public String getPropagandaArea() {
         return propagandaArea;
@@ -124,6 +168,7 @@ public class BusinessPromotionDetailsShow implements Serializable {
         this.propagandaFee = propagandaFee;
     }
 
+
     @Override
     public String toString() {
         return "BusinessPromotionDetailsShow{" +
@@ -131,13 +176,17 @@ public class BusinessPromotionDetailsShow implements Serializable {
                 ", propagandaCode='" + propagandaCode + '\'' +
                 ", issuePlatform='" + issuePlatform + '\'' +
                 ", effectiveDate='" + effectiveDate + '\'' +
-                ", invalidDate=" + invalidDate +
+                ", invalidDate='" + invalidDate + '\'' +
+                ", propagandaType='" + propagandaType + '\'' +
+                ", propagandaTypeName='" + propagandaTypeName + '\'' +
                 ", propagandaTitle='" + propagandaTitle + '\'' +
                 ", propagandaDetails='" + propagandaDetails + '\'' +
                 ", propagandaArea='" + propagandaArea + '\'' +
                 ", propagandaAreaUrl='" + propagandaAreaUrl + '\'' +
                 ", posterUrl='" + posterUrl + '\'' +
                 ", propagandaFee='" + propagandaFee + '\'' +
+                ", viewCount='" + viewCount + '\'' +
+                ", createdTime=" + createdTime +
                 '}';
     }
 }

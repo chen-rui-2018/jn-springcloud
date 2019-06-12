@@ -2,14 +2,9 @@ package com.jn.park.gamtopic.service;
 
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
-import com.jn.common.model.Result;
-import com.jn.park.gamtopic.model.CareAddParam;
-import com.jn.park.gamtopic.model.CareDetailsQueryParam;
-import com.jn.park.gamtopic.model.CareUserDetails;
-import com.jn.park.gamtopic.model.CareUserShow;
+import com.jn.park.care.model.ServiceEnterpriseCompany;
+import com.jn.park.gamtopic.model.*;
 import com.jn.park.gamtopic.vo.CareDetailsVo;
-import io.swagger.annotations.ApiParam;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -67,4 +62,26 @@ public interface CareService {
      * @return
      */
     CareUserDetails findCompanyCareInfo(String account,String currentAccount);
+
+    /**
+     * 查询关注的企业
+     * @param account
+     * @return
+     */
+    List<String> findCareCompanyList(String account);
+
+    /**
+     * 企业简介
+     * @param serviceEnterpriseCompany
+     * @return
+     */
+    List<ServiceEnterpriseCompany> getCompanyNewList(List<ServiceEnterpriseCompany> serviceEnterpriseCompany,String account);
+
+    /**
+     * 获取用户的关注的企业列表
+     * @param page
+     * @param account
+     * @return
+     */
+    PaginationData<List<CareUserShow>> findCompanyCareList(Page page,String account);
 }

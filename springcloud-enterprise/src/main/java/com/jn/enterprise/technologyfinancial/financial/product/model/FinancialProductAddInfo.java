@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -18,6 +19,8 @@ import java.io.Serializable;
 public class FinancialProductAddInfo implements Serializable {
     @ApiModelProperty(value = "产品id,不要传值")
     private String productId;
+    @ApiModelProperty(value = "浏览数", hidden = true)
+    private String viewCount;
     @ApiModelProperty(value = "产品类型,(0:常规-1:特色)",example = "0",required = true)
     @NotBlank(message = "产品类型不能为空")
     @Pattern(regexp = "^[0-1]$",message = "产品类型,只能为0或1")
@@ -33,12 +36,13 @@ public class FinancialProductAddInfo implements Serializable {
     private String signoryName;
     @ApiModelProperty(value = "产品名称",required = true,example = "无忧贷款")
     @NotBlank(message = "产品名称不能为空")
+    @Size(max = 20,message = "产品名称最大字符数为20")
     private String productName;
-    @ApiModelProperty(value = "服务机构id,", required =  true, example = "00000000000000001111111111111111")
-    @NotBlank(message = "服务机构id不能为空")
+    @ApiModelProperty(value = "服务机构id,", hidden =  true, example = "00000000000000001111111111111111")
+//    @NotBlank(message = "服务机构id不能为空")
     private String orgId;
-    @ApiModelProperty(value = "服务机构名称",required = true,example = "北京快手")
-    @NotBlank(message = "服务机构名称不能为空")
+    @ApiModelProperty(value = "服务机构名称",hidden = true,example = "北京快手")
+//    @NotBlank(message = "服务机构名称不能为空")
     private String orgName;
     @ApiModelProperty(value = "参考利率最小值",required = true,example = "2.56")
     @NotBlank(message = "参考利率不能为空")
@@ -95,15 +99,46 @@ public class FinancialProductAddInfo implements Serializable {
     @ApiModelProperty(value = "产品图片")
     private String pictureUrl;
     @ApiModelProperty(value = "产品特点")
+    @Size(max = 165 , message = "产品特点最大长度为165个字符")
     private String productFeature;
     @ApiModelProperty(value = "申请条件")
+    @Size(max = 165 , message = "产品特点最大长度为165个字符")
     private String applyCondition;
     @ApiModelProperty(value = "提交材料")
+    @Size(max = 85 , message = "产品特点最大长度为85个字符")
     private String submitMaterial;
     @ApiModelProperty(value = "适用客户")
     private String applicableCust;
     @ApiModelProperty(value = "模板id,机构上架产品时使用,不用传值")
     private String templateId;
+    @ApiModelProperty(value = "创建时间", hidden = true)
+    private String createdTime;
+    @ApiModelProperty(value = "创建者账号", hidden = true)
+    private String creatorAccount;
+
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public String getCreatorAccount() {
+        return creatorAccount;
+    }
+
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount;
+    }
+
+    public String getViewCount() {
+        return viewCount;
+    }
+
+    public void setViewCount(String viewCount) {
+        this.viewCount = viewCount;
+    }
 
     public String getProductType() {
         return productType;

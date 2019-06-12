@@ -17,12 +17,12 @@
           @change="handleChange"/>
       </el-form-item>
       <el-form-item label="打卡时间:">
-        <el-date-picker v-model="listQuery.startTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择开始时间" />
+        <el-date-picker v-model="listQuery.startTime" value-format="yyyy-MM-dd" type="date" placeholder="选择开始日期" />
         至
-        <el-date-picker v-model="listQuery.endTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择结束时间"/>
+        <el-date-picker v-model="listQuery.endTime" type="date" value-format="yyyy-MM-dd" placeholder="选择结束日期"/>
       </el-form-item>
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
-      <el-button type="primary"> <router-link :to="{name:'attendanceSign'}">返回</router-link></el-button>
+      <!-- <el-button type="primary"> <router-link :to="{name:'attendanceSign'}">返回</router-link></el-button> -->
       <!-- <el-button type="primary"> <router-link :to="{name:'att'}">考勤</router-link></el-button> -->
 
     </el-form>
@@ -160,9 +160,11 @@ export default {
           return
         }
       }
-      if (new Date(this.listQuery.startTime.replace(/-/g, '\/')) > new Date(this.listQuery.endTime.replace(/-/g, '\/'))) {
-        alert('开始时间不能大于结束时间,请重新选择 ')
-        return
+      if (this.listQuery.startTime && this.listQuery.endTime) {
+        if (new Date(this.listQuery.startTime.replace(/-/g, '\/')) > new Date(this.listQuery.endTime.replace(/-/g, '\/'))) {
+          alert('开始时间不能大于结束时间,请重新选择 ')
+          return
+        }
       }
       this.listQuery.page = 1
       this.initList()

@@ -26,6 +26,9 @@ public enum BusinessPromotionExceptionEnum implements CodeAndMsg {
     ORDER_NUM_NOT_NULL("5020552","订单号不能为空"),
     SUBMIT_AUDIT_NOT_ALLOW("5020553","当前宣传信息不存在或不允许当前操作"),
     PROPAGANDA_AREA_NOT_EXIST("5020554","系统中没有宣传区域信息"),
+    PROMOTION_FEE_NOT_RIGHT("5020555","传递的宣传费用与系统计算结果不符"),
+    ORDER_CODE_NOT_NULL("5020556","账单号不能为空"),
+    CURRENT_PROPAGANDA_HAVE_PAID("5020557","当前宣传已支付宣传费用");
     ;
 
     /**

@@ -27,7 +27,7 @@ public class InvestorAuthenticateParam implements Serializable {
     @NotNull(message = "性别不能为空")
     @Pattern(regexp="^[01]$",message="{sex:'默认值值只允许为0,1'}")
     private String sex;
-    @ApiModelProperty(value = "所属单位id",example = "123234")
+    @ApiModelProperty(value = "所属单位id",example = "xxx123234")
     private String orgId;
     @ApiModelProperty(value = "所属单位名称",example = "xxx单位")
     private String orgName;
@@ -48,6 +48,7 @@ public class InvestorAuthenticateParam implements Serializable {
     private String phone;
     @ApiModelProperty(value = "邮箱",required = true,example = "123@qq.com")
     @NotNull(message = "邮箱不能为空")
+    @Pattern(regexp="^(\\w)+(\\.\\w+)*@(\\w)+((\\.\\w+)+)$",message="请正确联邮箱")
     private String email;
     @ApiModelProperty(value = "个人简介",required = true,example = "个人简介....")
     @NotNull(message = "个人简介不能为空")

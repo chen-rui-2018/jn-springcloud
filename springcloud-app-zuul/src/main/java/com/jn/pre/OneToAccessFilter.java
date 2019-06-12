@@ -2,6 +2,7 @@ package com.jn.pre;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jn.config.Context;
 import com.jn.enums.ZuulExceptionEnum;
 import com.jn.model.Result;
 import com.netflix.zuul.ZuulFilter;
@@ -9,6 +10,7 @@ import com.netflix.zuul.context.RequestContext;
 import com.jn.enums.FilterTypeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +24,7 @@ import java.io.IOException;
  * @version： v1.0
  * @modified By:
  */
+@Component
 public class OneToAccessFilter extends ZuulFilter  {
 
     private final static String[] NOT_ALLOW_URL =  new String[]{"/api/"};
@@ -61,7 +64,10 @@ public class OneToAccessFilter extends ZuulFilter  {
         RequestContext ctx = RequestContext.getCurrentContext();
         HttpServletRequest request = ctx.getRequest();
         String requestUrl = request.getRequestURL().toString();
-        log.info("send {} request to {}", request.getMethod(), requestUrl);
+        log.info("发送 {} 请求 到 {} ", request.getMethod(), requestUrl);
+        Context.getContext().put("method",request.getMethod());
+        Context.getContext().put("url",requestUrl);
+        Context.getContext().put("start",System.currentTimeMillis());
         for(String notAllow : NOT_ALLOW_URL){
             if(requestUrl.contains(notAllow)){
                 log.warn("不允许访问");

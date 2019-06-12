@@ -575,6 +575,76 @@ public class TbPropagandaCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andPropagandaDetailsIsNull() {
+            addCriterion("propaganda_details is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaDetailsIsNotNull() {
+            addCriterion("propaganda_details is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaDetailsEqualTo(String value) {
+            addCriterion("propaganda_details =", value, "propagandaDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaDetailsNotEqualTo(String value) {
+            addCriterion("propaganda_details <>", value, "propagandaDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaDetailsGreaterThan(String value) {
+            addCriterion("propaganda_details >", value, "propagandaDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaDetailsGreaterThanOrEqualTo(String value) {
+            addCriterion("propaganda_details >=", value, "propagandaDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaDetailsLessThan(String value) {
+            addCriterion("propaganda_details <", value, "propagandaDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaDetailsLessThanOrEqualTo(String value) {
+            addCriterion("propaganda_details <=", value, "propagandaDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaDetailsLike(String value) {
+            addCriterion("propaganda_details like", value, "propagandaDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaDetailsNotLike(String value) {
+            addCriterion("propaganda_details not like", value, "propagandaDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaDetailsIn(List<String> values) {
+            addCriterion("propaganda_details in", values, "propagandaDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaDetailsNotIn(List<String> values) {
+            addCriterion("propaganda_details not in", values, "propagandaDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaDetailsBetween(String value1, String value2) {
+            addCriterion("propaganda_details between", value1, value2, "propagandaDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropagandaDetailsNotBetween(String value1, String value2) {
+            addCriterion("propaganda_details not between", value1, value2, "propagandaDetails");
+            return (Criteria) this;
+        }
+
         public Criteria andPropagandaAreaIsNull() {
             addCriterion("propaganda_area is null");
             return (Criteria) this;
@@ -1392,6 +1462,76 @@ public class TbPropagandaCriteria {
 
         public Criteria andApprovalDescNotBetween(String value1, String value2) {
             addCriterion("approval_desc not between", value1, value2, "approvalDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewCountIsNull() {
+            addCriterion("view_count is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewCountIsNotNull() {
+            addCriterion("view_count is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewCountEqualTo(String value) {
+            addCriterion("view_count =", value, "viewCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewCountNotEqualTo(String value) {
+            addCriterion("view_count <>", value, "viewCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewCountGreaterThan(String value) {
+            addCriterion("view_count >", value, "viewCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewCountGreaterThanOrEqualTo(String value) {
+            addCriterion("view_count >=", value, "viewCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewCountLessThan(String value) {
+            addCriterion("view_count <", value, "viewCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewCountLessThanOrEqualTo(String value) {
+            addCriterion("view_count <=", value, "viewCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewCountLike(String value) {
+            addCriterion("view_count like", value, "viewCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewCountNotLike(String value) {
+            addCriterion("view_count not like", value, "viewCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewCountIn(List<String> values) {
+            addCriterion("view_count in", values, "viewCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewCountNotIn(List<String> values) {
+            addCriterion("view_count not in", values, "viewCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewCountBetween(String value1, String value2) {
+            addCriterion("view_count between", value1, value2, "viewCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewCountNotBetween(String value1, String value2) {
+            addCriterion("view_count not between", value1, value2, "viewCount");
             return (Criteria) this;
         }
 

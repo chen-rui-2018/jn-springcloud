@@ -1,5 +1,5 @@
 <template>
-  <el-table :data="formatData" :row-style="showRow" v-bind="$attrs">
+  <el-table :data="formatData" :row-key="getRowKeys" :row-style="showRow" v-bind="$attrs">
     <el-table-column v-if="columns.length===0" width="150">
       <template slot-scope="scope">
         <span v-for="space in scope.row._level" :key="space" class="ms-tree-space"/>
@@ -21,8 +21,8 @@
           <i v-else class="el-icon-minus"/>
         </span>
         <!--          类型（0：文本框1：多行文本框2：数字3：单选框4：多选框5：图片上传）-->
-        <div v-if="typeof scope.row['otherColumn'] === 'object' && column.value === 'otherColumn'" class="target-row">
-          <el-row v-for="(ruleRow, index) in scope.row['otherColumn']" :key="index" class="target-bg">
+        <div v-if="typeof scope.row['inputFormatModel'] === 'object' && column.value === 'inputFormatModel'" class="target-row">
+          <el-row v-for="(ruleRow, index) in scope.row['inputFormatModel']" :key="index" class="target-bg">
             <el-col v-for="(item, itemIndex) in ruleRow" :key="itemIndex" :span="18" class="target-bg-cell">
               <el-row v-if="item.formType === '0'" :gutter="10" type="flex" align="middle">
                 <el-col :span="6">{{ item.formName }}</el-col>
@@ -45,16 +45,16 @@
               <el-row v-else-if="item.formType === '3'" :gutter="10" type="flex" align="middle">
                 <el-col :span="6">{{ item.formName }}</el-col>
                 <el-col :span="18">
-                  <el-radio-group v-model="item.value" @change="change">
-                    <el-radio v-for="name in item.choiceOption.split('，')" :key="name" :label="name">{{ name }}</el-radio>
+                  <el-radio-group v-model="item.value">
+                    <el-radio v-for="name in item.choiceOption.split(',')" :key="name" :label="name">{{ name }}</el-radio>
                   </el-radio-group>
                 </el-col>
               </el-row>
               <el-row v-else-if="item.formType === '4'" :gutter="10" type="flex" align="middle">
                 <el-col :span="6">{{ item.formName }}</el-col>
                 <el-col :span="18">
-                  <el-checkbox-group v-model="item.value" @change="change">
-                    <el-checkbox v-for="name in item.choiceOption.split('，')" :key="name" :label="name">{{ name }}</el-checkbox>
+                  <el-checkbox-group v-model="item.value">
+                    <el-checkbox v-for="name in item.choiceOption.split(',')" :key="name" :label="name" >{{ name }}</el-checkbox>
                   </el-checkbox-group>
                 </el-col>
               </el-row>
@@ -78,8 +78,8 @@
               </el-row>
             </el-col>
             <el-col v-if="scope.row.isMuiltRow === '0'" :span="6" style="text-align: right">
-              <el-button size="mini" type="primary" icon="el-icon-plus" @click="addMultipleForm(scope.row['otherColumn'])"/>
-              <el-button v-if="index !== 0" size="mini" type="warning" icon="el-icon-minus" @click="deleteMultipleForm(scope.row['otherColumn'], index)"/>
+              <el-button size="mini" type="primary" icon="el-icon-plus" @click="addMultipleForm(scope.row['inputFormatModel'], index)"/>
+              <el-button v-if="index !== 0" size="mini" type="warning" icon="el-icon-minus" @click="deleteMultipleForm(scope.row['inputFormatModel'], index)"/>
             </el-col>
           </el-row>
         </div>
@@ -104,10 +104,6 @@ export default {
       type: Array,
       default: () => []
     },
-    evalFunc: {
-      type: Function,
-      required: true
-    },
     evalArgs: {
       type: Array,
       default() {
@@ -121,7 +117,10 @@ export default {
   },
   data() {
     return {
-      baseUrl: process.env.BASE_API
+      baseUrl: process.env.BASE_API,
+      getRowKeys(row) {
+        return row.id
+      }
     }
   },
   computed: {
@@ -133,16 +132,13 @@ export default {
       } else {
         tmp = this.data
       }
-      const func = this.evalFunc || treeToArray
+      const func = treeToArray
       const args = this.evalArgs ? Array.concat([tmp, this.expandAll], this.evalArgs) : [tmp, this.expandAll]
       return func.apply(null, args)
     }
   },
   methods: {
-    change(value) {
-      console.dir(value)
-    },
-    addMultipleForm(form) {
+    addMultipleForm(form, index) {
       // 动态添加多行
       const row = deepClone(form[0])
       for (const item of row) {
@@ -157,8 +153,7 @@ export default {
             item.value = ''
         }
       }
-      console.dir(row)
-      form.push(row)
+      form.splice(index + 1, 0, row)
     },
     deleteMultipleForm(form, index) {
       if (form.length === 1) {

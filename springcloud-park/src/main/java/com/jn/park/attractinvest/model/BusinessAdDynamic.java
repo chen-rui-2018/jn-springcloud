@@ -25,6 +25,9 @@ public class BusinessAdDynamic implements Serializable {
     @ApiModelProperty(value = "标题")
     private String title;
 
+    @ApiModelProperty(value = "广告封面")
+    private String adCover;
+
     @ApiModelProperty(value = "开始时间")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
@@ -41,9 +44,10 @@ public class BusinessAdDynamic implements Serializable {
     public BusinessAdDynamic() {
     }
 
-    public BusinessAdDynamic(String id, String title, Date startTime, Date endTime, String content) {
+    public BusinessAdDynamic(String id, String title, String adCover, Date startTime, Date endTime, String content) {
         this.id = id;
         this.title = title;
+        this.adCover = adCover;
         this.startTime = startTime;
         this.endTime = endTime;
         this.content = content;
@@ -63,6 +67,14 @@ public class BusinessAdDynamic implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getAdCover() {
+        return adCover;
+    }
+
+    public void setAdCover(String adCover) {
+        this.adCover = adCover;
     }
 
     public Date getStartTime() {
@@ -89,11 +101,13 @@ public class BusinessAdDynamic implements Serializable {
         this.content = content;
     }
 
+
     @Override
     public String toString() {
         return "BusinessAdDynamic{" +
                 "id='" + id + '\'' +
                 ", title='" + title + '\'' +
+                ", adCover='" + adCover + '\'' +
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
                 ", content='" + content + '\'' +

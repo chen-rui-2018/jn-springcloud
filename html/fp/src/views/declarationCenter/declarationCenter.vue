@@ -1,10 +1,24 @@
 <template>
   <div class="declarationCenter">
+    <div class="banner" ref="banner">
+      <div class="swiper-container">
+          <div class="swiper-wrapper">
+              <div class="swiper-slide"> <img src="@/assets/image/declaration.png" alt=""> </div>
+          </div>
+          <!-- <div class="swiper-pagination"></div> -->
+         <!--  <div class="swiper-button-prev">
+            <i class="el-icon-arrow-left"></i>
+          </div>
+          <div class="swiper-button-next">
+            <i class="el-icon-arrow-right"></i>
+          </div> -->
+      </div>
+    </div>
     <div class="declarationCenter_content"><!-- 版心 -->
       <!-- 面包屑 -->
       <div class="approve_breadcrumb">
         <el-breadcrumb separator="/">
-          <el-breadcrumb-item :to="{ path: '/' }">企业服务</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/enterpriseservice' }">企业服务</el-breadcrumb-item>
           <el-breadcrumb-item>
             <a href="javascript:;">申报中心</a>
           </el-breadcrumb-item>
@@ -16,14 +30,14 @@
           <div>申报平台</div>
           <div @click="goplatform">MORE <span class="el-icon-arrow-right"></span></div>
         </div>
-        <div class="platform_cont">
+        <div class="platform_cont" @click="goplatform">
           <p>
             <span class="iconfont icon-deng"> </span>
               汇集常用申报平台，便于企业快速查阅和进入。包含了各类科技项目、企业资质、产品认定、人才计划申报、资金兑现、技术合同登记等业务申报系统。
-            <span @click="goplatform">查看详情<span class="el-icon-d-arrow-right"></span> </span> 
+            <span >查看详情<span class="el-icon-d-arrow-right"></span> </span> 
           </p>
           <div>
-            <img src="@/assets/image/矢量智能对象.png" alt="">
+            <img src="@/assets/image/platform.png" alt="">
           </div>
         </div>
       </div>
@@ -35,13 +49,13 @@
         </div>
         <div class="perennial_list">
           <ul>
-            <li v-for="(item,index) in 4" :key="index">
+            <li v-for="(item,index) in perennialList" :key="index">
               <div class="list_cont">
-                <p><img src="" alt=""> </p>
-                <p>国家千人项目（顶尖人才与创新团队项目）</p>
-                <p><span class="el-icon-location"></span>全国</p>
-                <p>收益：<span>￥365万元</span> </p>
-                <p>价格：面议</p>
+                <p><img src="@/assets/image/perennial.png" alt=""> </p>
+                <p>{{item.title}}</p>
+                <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
+                <p>收益：<span>{{item.profit}}</span> </p>
+                <p>价格：{{item.price}}</p>
               </div>
               <div class="list_view"><span>查看详情</span> </div>
             </li>
@@ -67,7 +81,7 @@
                 <div slot="label" :name="typeitem.id">{{typeitem.name}}</div>
                 <div class="lists" v-for="(centeritem,centerindex) in centerList" :key="centerindex" >
                   <div class="list_cont_left">
-                    <p>【{{centeritem.rangeName}}】{{centeritem.titleName}}</p> 
+                    <p>【{{centeritem.rangeId|type}}】{{centeritem.titleName}}</p> 
                     <p><span>发布日期：{{centeritem.createdTime|time}}</span><span>状态：<span class="fontcolor">{{centeritem.isRoofPlacement|isRoof}}</span></span></p>
                     <p>最近要求：{{centeritem.timeNode}}</p>
                     <p>截止时间：<span class="fontcolor">{{centeritem.deadline|time}}</span></p>
@@ -105,7 +119,8 @@ export default {
         rangeId:'',//所属类型
         sortType:'1',//排序
         page:1,
-        rows:4
+        rows:6,
+        perennialList:[],
       }
     },
     filters: {
@@ -122,11 +137,25 @@ export default {
           let dateee = new Date(time).toJSON();
           return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
         }
+      },
+      type(rangeId){
+        if(rangeId==='1'){
+          return '白下高新区'
+        }else if(rangeId==='2'){
+          return '秦淮区'
+        }else if(rangeId==='3'){
+          return '南京市'
+        }else if(rangeId==='4'){
+          return '江苏省'
+        }else if(rangeId==='5'){
+          return '国家'
+        }
       }
     },
     created () {
       this.getdeclarationcentertype()//区类型
       this.getdeclarationcenterList()//公告列表获取
+      this.getperennialList()//常年申报
     },
     methods: {
       //区类型获取
@@ -138,7 +167,7 @@ export default {
           },
           callback: function(res) {
             if (res.code == "0000") {
-              console.log(res)
+              // console.log(res)
               let typelist=[]
               res.data.forEach((item,index)=>{
                 typelist.push({
@@ -175,6 +204,23 @@ export default {
           }
         });
       },
+      //常年申报列表
+      getperennialList(){
+        let _this = this;
+        this.api.get({
+          url: "list",
+          data: {
+            page:1,
+            rows:4
+          },
+          callback: function(res) {
+            if (res.code == "0000") {
+              // console.log(res)
+              _this.perennialList = res.data.rows;
+            }
+          }
+        });
+      },
       //排序
       filter(val){
         this.sortType=val
@@ -185,7 +231,19 @@ export default {
         this.getdeclarationcenterList()
       },
       goplatform(){
-        this.$router.push({name:'declarationPlatform'})
+        if(sessionStorage.token){
+          this.$router.push({name:'declarationPlatform'})
+        }else{
+          this.$confirm('亲，您需要登录后才能访问以下界面哦！', '提示', {
+            confirmButtonText: '去登陆',
+            cancelButtonText: '留在当前页面',
+            type: 'warning',
+            center: true
+          }).then(() => {
+             this.$router.push({path:"/login"})
+          }).catch(() => {
+          })
+        }
       },
       gonoticedetail(id){
         this.$router.push({path:'/declarationNoticeDetail',query:{id:id}})
@@ -206,7 +264,88 @@ export default {
 
 <style lang="scss">
   .declarationCenter{
-    margin-top: 230px;
+    // margin-top: 230px;
+    .banner{
+      position: relative;
+      .swiper-button-prev, .swiper-button-next{
+        display: block;
+        width: 43px;
+        height: 43px;
+        border: 1px solid #fff;
+        border-radius: 50%;
+        background-size: 0 0;
+        text-align: center;
+        i{
+          font-size: 36px;
+          line-height: 44px;
+          color:#fff;
+        }
+      }
+      .swiper-button-next{
+        right: 95px;
+      }
+      .swiper-button-prev{
+        left:95px;
+      }
+    }
+  .swiper-container-horizontal > .swiper-pagination-bullets .swiper-pagination-bullet{
+    margin: 5px 4px;
+  }
+  .swiper-pagination-bullet{
+    background-color: #fff;
+    opacity: 0.5;
+  }
+   .swiper-pagination-fraction, .swiper-pagination-custom, .swiper-container-horizontal > .swiper-pagination-bullets{
+      position: absolute;
+      right: 152px;
+      top: 0;
+      left: auto;
+      width: 1%;
+      }
+    .swiper-container{
+      img{
+        width:100%;
+        vertical-align: middle;
+      }
+      .swiper-pagination{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .swiper-pagination-bullet-active{
+        border-radius: 5px;
+        height: 50px;
+        background: #fff;
+        opacity: 1;
+      }
+    }
+    @keyframes bounce-up {
+    25% {
+        transform: translateY(5px);
+    }
+    50%, 100% {
+        transform: translateY(0);
+    }
+    75% {
+        transform: translateY(-5px);
+        }
+    }
+    .animate-bounce-up{
+      animation: bounce-up 2s linear infinite;
+    }
+    .approve_content{
+      width: 1190px;
+      margin: 0 auto;
+    }
+    // 加载动画
+    .el-loading-mask{
+      .el-loading-spinner .path{
+        stroke:#00a041;
+      }
+      .el-loading-spinner{
+        top:30%;
+      }
+    }
     .declarationCenter_content{
       width: 1190px;
       margin: 0 auto;
@@ -241,6 +380,7 @@ export default {
           margin-top: 23px;
           display: flex;
           justify-content: space-between;
+          cursor: pointer;
           p{
             margin: 51px 0 51px 60px;
             line-height: 24px;
@@ -286,6 +426,7 @@ export default {
           ul{
             display: flex;
             li{
+              cursor: pointer;
               width:25%;
               margin-right: 35px;
               border: solid 1px #eeeeee;
@@ -309,6 +450,12 @@ export default {
                   border-bottom: 1px solid #eeeeee;
                   padding: 11px 0;
                   margin-top: 0;
+                  img{
+                    width: 51%;
+                    height: 100%;
+                    display: block;
+                    margin: auto;
+                  }
                 }
                 p:nth-child(2){
                   color:black;
@@ -319,6 +466,8 @@ export default {
                   -webkit-box-orient: vertical;
                   -webkit-line-clamp: 2;
                   overflow: hidden;
+                  height: 48px;
+
                 }
                 p:nth-child(4){
                  span{

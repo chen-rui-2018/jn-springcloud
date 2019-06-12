@@ -1,7 +1,7 @@
 
 <view wx:if="{{canIUse}}">
     <view class='header'>
-        <image src='/images/logo.jpg'></image>
+        <image wx:if="{{imgBaseUrl}}" src='{{imgBaseUrl}}logo.jpg'></image>
     </view>
 
     <view class='content'>

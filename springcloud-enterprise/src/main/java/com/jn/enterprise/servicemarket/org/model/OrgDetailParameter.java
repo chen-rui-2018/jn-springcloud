@@ -48,7 +48,7 @@ public class OrgDetailParameter implements Serializable {
     @ApiModelProperty(value = "组织机构代码(统一社会信用代码)",required = true,example = "65151****")
     @NotNull(message = "组织机构代码不能为空")
     private String orgCode;
-    @ApiModelProperty(value = "业务擅长",  required = true,example = "金融投资")
+    @ApiModelProperty(value = "业务擅长",  required = true,example = "金融投资,代理记账...")
     @NotNull(message = "业务擅长不能为空")
     private String  orgSpeciality;
     @NotNull(message = "行业领域不能为空")

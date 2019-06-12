@@ -93,6 +93,9 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
         //所属机构入参
         AffiliateParam affiliateParam=new AffiliateParam();
         affiliateParam.setAffiliateCode(affiliateCode);
+        if(StringUtils.isNotBlank(orgColleagueParam.getName())){
+            affiliateParam.setName(orgColleagueParam.getName());
+        }
         com.github.pagehelper.Page<Object> objects = null;
         //分页标识
         String isPage="1";
@@ -143,16 +146,67 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
         //从顾问信息表获取用户毕业学校，担任职务，入驻时间
         List<TbServiceAdvisor> tbServiceAdvisorList = getTbServiceAdvisorList(accountList);
         List<OrgColleagueInfo> orgColleagueInfoList=new ArrayList<>();
+        String loginAccountRoleName="";
         for(UserExtensionInfo extensionInfo:userExtensionInfoList){
             OrgColleagueInfo orgColleagueInfo=new OrgColleagueInfo();
             BeanUtils.copyProperties(extensionInfo, orgColleagueInfo);
             //遍历机构身份表，设置用户机构身份，
-            setUserRoleName(userRoleInfoList, extensionInfo, orgColleagueInfo);
+            String accountRoleName = setUserRoleName(userRoleInfoList, extensionInfo, orgColleagueInfo, account);
+            if(StringUtils.isNotBlank(accountRoleName)){
+                loginAccountRoleName=accountRoleName;
+            }
             //设置用户教育信息（毕业学校，担任职务，入驻时间）
             setUserEducationInfo(tbServiceAdvisorList, extensionInfo, orgColleagueInfo);
             orgColleagueInfoList.add(orgColleagueInfo);
         }
+        //设置用户对机构同事的操作权限
+        setOptionPermissions(orgColleagueInfoList,loginAccountRoleName);
         return new PaginationData(orgColleagueInfoList,total==null ? 0 :total.intValue());
+    }
+
+    /**
+     * 设置用户对机构同事的操作权限
+     * @param orgColleagueInfoList
+     * @param loginAccountRoleName
+     */
+    @ServiceLog(doAction = "设置用户对机构同事的操作权限")
+    private void setOptionPermissions(List<OrgColleagueInfo> orgColleagueInfoList, String loginAccountRoleName) {
+        //登录用户是机构管理员
+        if(StringUtils.equals(HomeRoleEnum.ORG_ADMIN.getCode(),loginAccountRoleName)){
+            for(OrgColleagueInfo orgInfo:orgColleagueInfoList){
+                if(StringUtils.equals(orgInfo.getOrgIdentity(),HomeRoleEnum.ORG_ADMIN.getCode())){
+                    //ignore(机构管理员,全部操作权限为false)
+                }else if(StringUtils.equals(orgInfo.getOrgIdentity(),HomeRoleEnum.ORG_CONTACTS.getCode())){
+                    //机构联系人,取消联系人设为true
+                    orgInfo.setCancelContact(true);
+                    //删除设为true
+                    orgInfo.setDelOrgAdvisor(true);
+                    //详情设为true
+                    orgInfo.setOrgDetail(true);
+                }else if(StringUtils.equals(orgInfo.getOrgIdentity(), HomeRoleEnum.ORG_ADVISER.getCode())){
+                    //机构专员,设为联系人设为true
+                    orgInfo.setSetContact(true);
+                    //删除设为true
+                    orgInfo.setDelOrgAdvisor(true);
+                    //详情设为true
+                    orgInfo.setOrgDetail(true);
+                }
+            }
+        }else if(StringUtils.equals(HomeRoleEnum.ORG_CONTACTS.getCode(),loginAccountRoleName)
+                ||StringUtils.equals(HomeRoleEnum.ORG_ADVISER.getCode(),loginAccountRoleName)){
+            //登录用户是机构联系人或机构专员
+            for(OrgColleagueInfo orgInfo:orgColleagueInfoList){
+                if(StringUtils.equals(orgInfo.getOrgIdentity(),HomeRoleEnum.ORG_ADMIN.getCode())){
+                    //ignore(机构管理员,全部操作权限为false)
+                }else if(StringUtils.equals(orgInfo.getOrgIdentity(),HomeRoleEnum.ORG_CONTACTS.getCode())){
+                    //详情设为true
+                    orgInfo.setOrgDetail(true);
+                }else if(StringUtils.equals(orgInfo.getOrgIdentity(), HomeRoleEnum.ORG_ADVISER.getCode())){
+                    //详情设为true
+                    orgInfo.setOrgDetail(true);
+                }
+            }
+        }
     }
 
     /**
@@ -170,6 +224,10 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
                 orgColleagueInfo.setWorkingYears(tbServiceAdvisor.getWorkingYears().toString());
                 //毕业学校
                 orgColleagueInfo.setGraduatedSchool(tbServiceAdvisor.getGraduatedSchool());
+                //学历
+                orgColleagueInfo.setEducation(tbServiceAdvisor.getEducation());
+                //联系邮箱
+                orgColleagueInfo.setEmail(tbServiceAdvisor.getContactEmail());
                 //担任职务
                 orgColleagueInfo.setPosition(tbServiceAdvisor.getPosition());
                 //入驻日期
@@ -188,11 +246,17 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
      * @param userRoleInfoList
      * @param extensionInfo
      * @param orgColleagueInfo
+     * @param account  登录用户账号
      */
     @ServiceLog(doAction = "设置用户的角色名称")
-    private void setUserRoleName(List<UserRoleInfo> userRoleInfoList, UserExtensionInfo extensionInfo, OrgColleagueInfo orgColleagueInfo) {
+    private String setUserRoleName(List<UserRoleInfo> userRoleInfoList, UserExtensionInfo extensionInfo,
+                                   OrgColleagueInfo orgColleagueInfo,String account) {
+        String loginAccountRoleName="";
         for(UserRoleInfo userRoleInfo: userRoleInfoList){
-            if(extensionInfo.getAccount().equals(userRoleInfo.getAccount())){
+            if(StringUtils.equals(extensionInfo.getAccount(),userRoleInfo.getAccount())){
+                if(StringUtils.equals(userRoleInfo.getAccount(),account)){
+                    loginAccountRoleName=userRoleInfo.getRoleName();
+                }
                 orgColleagueInfo.setOrgIdentity(userRoleInfo.getRoleName());
                 String orgMangeRole="机构管理员";
                 //判断是否为机构管理员，若是从机构表获取入驻日期
@@ -207,6 +271,7 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
                 break;
             }
         }
+        return loginAccountRoleName;
     }
 
     /**

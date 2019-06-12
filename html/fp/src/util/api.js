@@ -204,11 +204,11 @@ export default {
         getRequireReceivedList:"springcloud-enterprise/serviceMarket/requireManagementController/getRequireReceivedList",//我收到的需求列表查询
         getReceivedRequireDetails:"springcloud-enterprise/serviceMarket/requireManagementController/getReceivedRequireDetails",//收到的需求详情
         cancelRequire:"springcloud-enterprise/serviceMarket/requireManagementController/cancelRequire",//撤销需求
-        getGiveOthersCommentList:"springcloud-enterprise/guest/serviceMarket/comment/getGiveOthersCommentList",//获取对他人的评价列表
+        getGiveOthersCommentList:"springcloud-enterprise/serviceMarket/comment/getGiveOthersCommentList",//获取对他人的评价列表
         handleRequire:"springcloud-enterprise/serviceMarket/requireManagementController/handleRequire",//对接需求
-        getRatingCommentDetail:"springcloud-enterprise/guest/serviceMarket/comment/getRatingCommentDetail",//获取评价页详情
-        getGiveMeCommentList:"springcloud-enterprise/guest/serviceMarket/comment/getGiveMeCommentList",//获取我收到的评价
-        saveRatingComment:"springcloud-enterprise/guest/serviceMarket/comment/saveRatingComment",//提交评价信息
+        getRatingCommentDetail:"springcloud-enterprise/serviceMarket/comment/getRatingCommentDetail",//获取评价页详情
+        getGiveMeCommentList:"springcloud-enterprise/serviceMarket/comment/getGiveMeCommentList",//获取我收到的评价
+        saveRatingComment:"springcloud-enterprise/serviceMarket/comment/saveRatingComment",//提交评价信息
 
         getPolicyCenterList:"springcloud-park/guest/policy/policyCenterController/getPolicyCenterList",//政策中心首页列表
         getPolicyClassList:"springcloud-park/guest/policy/policyCenterController/getPolicyClassList",//政策分类列表

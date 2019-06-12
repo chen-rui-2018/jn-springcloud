@@ -70,7 +70,7 @@ export default {
     return {
       orgName:'',
       total:0,
-      isAdd:true,
+      isAdd:false,
       statusList:[ 
         { lable:'已发布', id:'1' }, 
         { lable:'待审批', id:'0' }, 
@@ -109,17 +109,17 @@ export default {
   mounted () {
     // this.getspecialList()
     this. getOrgId()
-    //   let menu=JSON.parse(sessionStorage.menuItems)
-    // let _this=this
-    // menu.forEach(v=>{
-    //   if(v.label==='产品管理'){
-    //     v.children[0].resourcesList.forEach(i=>{
-    //       if(i.resourcesName==="科技金融上架常规服务产品"){
-    //         _this.isAdd=false
-    //       }
-    //     })
-    //   }
-    // })
+      let menu=JSON.parse(sessionStorage.menuItems)
+    let _this=this
+    menu.forEach(v=>{
+      if(v.label==='产品管理'){
+        v.children[0].resourcesList.forEach(i=>{
+          if(i.resourcesName==="产品上架下架操作"){
+            _this.isAdd=true
+          }
+        })
+      }
+    })
   },
   methods: {
     // 获取当前登录id

@@ -12,7 +12,7 @@
           </el-breadcrumb>
         </div>
         <!-- 主体内容 -->
-        <el-container>
+        <el-container style="min-height: 500px">
           <!-- 侧边栏 -->
           <div class="slider" v-if="$store.state.hiddenNav">
             <el-aside width="150px">

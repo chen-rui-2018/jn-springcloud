@@ -244,7 +244,7 @@
           this.api.get({
             url: 'getMessageList',
             data: {
-              integer: 0,
+              isRead: 0,
               messageTowTort: this.messageData[key].messageTowTort
             },
             callback: (res) => {

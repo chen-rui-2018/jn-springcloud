@@ -258,8 +258,8 @@ export default {
             padding-bottom: 5px;
           }
         }
-        
-        
+
+
     }
     .right_nav{
       position: fixed;
@@ -293,7 +293,7 @@ export default {
             }
           }
           /* .right_nav_tel{
-           
+
           }
           .weixin:hover{
 

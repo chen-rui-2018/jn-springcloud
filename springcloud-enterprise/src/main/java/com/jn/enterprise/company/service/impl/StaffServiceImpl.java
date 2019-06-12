@@ -564,8 +564,6 @@ public class StaffServiceImpl implements StaffService {
     @ServiceLog(doAction = "企业成员-批量删除成员")
     @Transactional(rollbackFor = Exception.class)
     public Integer delMoreStaffs(String[] accountList, String curAccount) {
-        // 只有企业管理员能删除
-        String comId = checkAccountIsCompanyAdmin(curAccount).getId();
         if (accountList.length == 0) {
             throw new JnSpringCloudException(CompanyExceptionEnum.ACCOUNT_LIST_IS_NULL);
         }

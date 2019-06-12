@@ -132,7 +132,8 @@ public class RoomInformationServiceImpl implements RoomInformationService {
     @Override
     @ServiceLog(doAction ="新增房间订单")
     public Result addRoomOrders(String roomId,  String contactName, String contactPhone, Date leaseStartTime, String month,String userAccount) {
-
+        //获取房间集合
+       // String[] rooms = roomIds.split(",");
         TbRoomInformation tbRoomInformation= tbRoomInformationMapper.selectByPrimaryKey(roomId);
         //通过用户account查询企业
         Result<ServiceCompany> companyDetailByAccountOrCompanyId = companyClient.getCompanyDetailByAccountOrCompanyId(userAccount);

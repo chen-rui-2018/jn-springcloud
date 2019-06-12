@@ -167,7 +167,7 @@ public class AssetArticleLeaseServiceImpl implements AssetArticleLeaseService {
             tbAssetArticleLeaseOrders.setCreatorAccount(user.getAccount());
             tbAssetArticleLeaseOrders.setRecordStatus(Byte.parseByte(AssetStatusEnums.EFFECTIVE.getCode()));
             //计算开始时间和结束时间的相差天数
-            int days = (int) ((tbAssetInformation.getLeaseEndTime().getTime() - tbAssetInformation.getLeaseStartTime().getTime()) / (1000*3600*24)+1);
+            int days = (int) ((tbAssetInformation.getLeaseEndTime().getTime() - tbAssetInformation.getLeaseStartTime().getTime()) / (1000*3600*24));
             //计算总共需要付款的金额
             BigDecimal day = new BigDecimal(String.valueOf(days));
             BigDecimal price = new BigDecimal(tbAssetInformation.getLeasePrice().toString());

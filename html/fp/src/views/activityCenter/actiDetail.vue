@@ -143,7 +143,7 @@
       <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :append-to-body="true" :lock-scroll="false">
         <div class="loginTip" style="padding-bottom:20px;text-align:center;font-size:15px">
           你还未
-          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          <span class="mainColor pointer" @click="goLogin">登录</span>
           /
           <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
           账号
@@ -186,10 +186,14 @@ export default {
     clearInterval(this._interval);
   },
   methods: {
+    goLogin() {
+      window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
+      this.$router.push({ path: "/login" });
+    },
     //留言
     leaveMessage(id) {
       if (!sessionStorage.userInfo) {
-        this.concatVisible=true;
+        this.concatVisible = true;
         return;
       }
       let _this = this;
@@ -215,8 +219,8 @@ export default {
       if (this.inFlag == i) {
         return;
       }
-       if (!sessionStorage.userInfo) {
-        this.concatVisible=true;
+      if (!sessionStorage.userInfo) {
+        this.concatVisible = true;
         return;
       }
       this.textarea = "";
@@ -249,7 +253,7 @@ export default {
     },
     comLike(item) {
       if (!sessionStorage.userInfo) {
-        this.concatVisible=true;
+        this.concatVisible = true;
         return;
       }
       //评论点赞
@@ -314,7 +318,7 @@ export default {
     handCheck(id) {
       //跳转报名人列表
       if (!sessionStorage.userInfo) {
-        this.concatVisible=true;
+        this.concatVisible = true;
         return;
       }
       this.$router.push({ path: "regStatus", query: { activityId: id } });
@@ -322,7 +326,7 @@ export default {
     quickApply(id) {
       //立即报名
       if (!sessionStorage.userInfo) {
-        this.concatVisible=true;
+        this.concatVisible = true;
         return;
       }
       let _this = this;
@@ -345,7 +349,7 @@ export default {
     stopApply(id) {
       //停止报名
       if (!sessionStorage.userInfo) {
-        this.concatVisible=true;
+        this.concatVisible = true;
         return;
       }
       let _this = this;
@@ -367,7 +371,7 @@ export default {
     },
     handleLike(id) {
       if (!sessionStorage.userInfo) {
-        this.concatVisible=true;
+        this.concatVisible = true;
         return;
       }
       //活动点赞
@@ -489,9 +493,9 @@ export default {
   width: 1190px;
   margin: 0 auto;
   padding-top: 65px;
-  .loginTip{
+  .loginTip {
     text-align: center;
-    margin-bottom:20px;
+    margin-bottom: 20px;
     font-size: 15px;
   }
   .delnav {

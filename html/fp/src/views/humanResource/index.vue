@@ -122,10 +122,10 @@
             <!-- 详情弹框 -->
             <div class="detailRes" v-if="detailFlag==i.id">
               <!-- <el-card> -->
-                <div class="detail">招聘详情</div>
-                <p class="p1">企业名称：{{humanDetail.comName}}</p>
-                <p class="p1">发布时间：{{humanDetail.createdTime}}</p>
-                <p class="p1" v-html="humanDetail.details">岗位详情：</p>
+              <div class="detail">招聘详情</div>
+              <p class="p1">企业名称：{{humanDetail.comName}}</p>
+              <p class="p1">发布时间：{{humanDetail.createdTime}}</p>
+              <p class="p1" v-html="humanDetail.details">岗位详情：</p>
               <!-- </el-card> -->
             </div>
           </li>
@@ -145,11 +145,11 @@
          <p class="p1">{{humanDetail.details}}</p>
       </el-dialog>
     </template> -->
-     <template v-if="concatVisible">
+    <template v-if="concatVisible">
       <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :append-to-body="true" :lock-scroll="false">
         <div class="loginTip" style="text-align:center;padding-bottom:20px">
           你还未
-          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          <span class="mainColor pointer" @click="goLogin">登录</span>
           /
           <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
           账号
@@ -164,7 +164,7 @@ import bus from "@/util/bus";
 export default {
   data() {
     return {
-      concatVisible:false,
+      concatVisible: false,
       detailFlag: "",
       sousuo: false,
       searchData: "",
@@ -201,10 +201,14 @@ export default {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
   },
   methods: {
+    goLogin() {
+      window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
+      this.$router.push({ path: "/login" });
+    },
     //在线联系
     onlineContat(id) {
       if (!sessionStorage.userInfo) {
-        this.concatVisible=true;
+        this.concatVisible = true;
         return;
       }
       this.api.get({
@@ -842,7 +846,7 @@ export default {
       font-size: 13px;
     }
     // .el-card__body {
-    //   padding: 20px 30px;
+    // padding: 20px 30px;
     // }
   }
 }

@@ -48,13 +48,6 @@ public class RoomOrderClientController implements RoomOrderClient {
     }
 
     @Override
-    @ControllerLog(doAction = "是否支付,未支付取消订单")
-    public Result updateRoomPayStatus() {
-        roomInformationService.updateRoomPayStatus();
-        return new Result();
-    }
-
-    @Override
     @ControllerLog(doAction = "定时生成缴费单")
     public Result createOrderBill() {
         roomInformationService.createOrderBill();

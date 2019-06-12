@@ -110,33 +110,6 @@ public class RoomManageController {
         return new Result<>(roomPayOrdersModel);
     }
 
-    @ControllerLog(doAction = "房间租赁历史列表")
-    @ApiOperation(value = "房间租赁历史列表",notes = "获取房间租赁历史列表")
-    @GetMapping(value = "/getRoomOrdersList")
-    public Result<PaginationData<List<RoomPayOrdersModel>>> getRoomOrdersList(Page page){
-        //获取登录信息
-        User user=(User) SecurityUtils.getSubject().getPrincipal();
-        if (page.getPage() > 0 && page.getRows() > 0){
-            PaginationData<List<RoomPayOrdersModel>> roomOrdersList = roomInformationService.getRoomOrdersList(user.getAccount(),page);
-            return new Result<>(roomOrdersList);
-        }else{
-            throw new JnSpringCloudException(PageExceptionEnums.PAGE_NOT_NULL);
-        }
-    }
-
-    @ControllerLog(doAction = "房间租借详情")
-    @ApiOperation(value = "房间租借详情",notes = "根据订单编号获取租借详情")
-    @GetMapping(value = "/getRoomOrders")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "orderId",value = "订单编号",example = "2019050811515490657")
-    })
-    public Result<RoomPayOrdersModel> getRoomOrders (String orderId){
-        User user=(User) SecurityUtils.getSubject().getPrincipal();
-        Assert.notNull(orderId,"订单编号不能为空");
-        RoomPayOrdersModel roomPayOrdersModel =  roomInformationService.getRoomOrders(orderId,user.getAccount());
-        return new Result<>(roomPayOrdersModel);
-    }
-
     @ControllerLog(doAction = "房间退租")
     @ApiOperation(value = "房间退租",notes = "房间退租")
     @GetMapping(value = "/quitApply")
@@ -148,16 +121,6 @@ public class RoomManageController {
         return new Result(roomPayOrdersItemModel);
     }
 
-    @ControllerLog(doAction = "取消订单")
-    @ApiOperation(value = "取消订单",notes = "取消订单")
-    @GetMapping(value = "/cancelOrder")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "orderId",value = "订单编号",example = "2019050811515490657"),
-    })
-    public Result cancelOrder(String orderId){
-       roomInformationService.cancelOrder(orderId);
-        return new Result();
-    }
 
     @ControllerLog(doAction = "房间租赁历史列表(新)")
     @ApiOperation(value = "房间租赁历史列表(新)",notes = "获取房间租赁历史列表")

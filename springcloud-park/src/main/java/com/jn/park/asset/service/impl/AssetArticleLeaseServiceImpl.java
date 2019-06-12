@@ -106,7 +106,7 @@ public class AssetArticleLeaseServiceImpl implements AssetArticleLeaseService {
         java.sql.Date endTime=new java.sql.Date(calTime.getTime());
         tbAssetInformation.setLeaseEndTime(endTime);
         //判断租借时间是否大于最短租期
-        int days = (int) ((tbAssetInformation.getLeaseEndTime().getTime() - tbAssetInformation.getLeaseStartTime().getTime()) / (1000*3600*24)+1);
+        int days = (int) ((tbAssetInformation.getLeaseEndTime().getTime() - tbAssetInformation.getLeaseStartTime().getTime()) / (1000*3600*24));
         //最短租借时间
         int leaseTime = Integer.parseInt(tbAssetInformation.getLeaseTime());
         if (leaseTime > days){
@@ -157,6 +157,7 @@ public class AssetArticleLeaseServiceImpl implements AssetArticleLeaseService {
             tbAssetArticleLeaseOrders.setSpecification(tbAssetInformation.getSpecification());
             tbAssetArticleLeaseOrders.setArticleUrl(tbAssetInformation.getImgUrl());
             tbAssetArticleLeaseOrders.setArticleIntroduction(tbAssetInformation.getAssetExplain());
+            tbAssetArticleLeaseOrders.setLeaseEnterpriseId(tbAssetInformation.getLeaseEnterpriseId());
             tbAssetArticleLeaseOrders.setLeaseEnterprise(tbAssetInformation.getLeaseEnterpriseName());
             tbAssetArticleLeaseOrders.setContactName(tbAssetInformation.getLeaseContactName());
             tbAssetArticleLeaseOrders.setContactPhone(tbAssetInformation.getLeaseContactPhone());

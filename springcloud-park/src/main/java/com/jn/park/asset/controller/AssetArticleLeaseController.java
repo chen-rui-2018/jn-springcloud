@@ -146,37 +146,5 @@ public class AssetArticleLeaseController {
         return new Result<>(assetArticleLeaseOrdersModel);
     }
 
-    @ControllerLog(doAction = "确认归还")
-    @ApiOperation(value = "确认归还",notes = "确认归还")
-    @GetMapping(value = "/returnArticle")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id",value = "订单编号",example = "2019050417220960019"),
-    })
-    public Result returnArticle(String id){
-        assetArticleLeaseOrdersService.returnArticle(id);
-        return new Result();
-    }
-
-    @ControllerLog(doAction = "确认交付")
-    @ApiOperation(value = "确认交付",notes = "确认交付")
-    @GetMapping(value = "/deliveryArticle")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id",value = "订单编号",example = "2019050417220960019"),
-    })
-    public Result deliveryArticle(String id){
-        assetArticleLeaseOrdersService.deliveryArticle(id);
-        return new Result();
-    }
-
-    @ControllerLog(doAction = "取消订单")
-    @ApiOperation(value = "取消订单",notes = "取消订单")
-    @GetMapping(value = "/cancelOrder")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "orderId",value = "订单编号",example = "2019050811515490657"),
-    })
-    public Result cancelOrder(String orderId){
-        assetArticleLeaseOrdersService.cancelOrder(orderId);
-        return new Result();
-    }
 
 }

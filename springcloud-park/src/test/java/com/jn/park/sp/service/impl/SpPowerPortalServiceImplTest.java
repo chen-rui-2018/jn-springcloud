@@ -111,8 +111,8 @@ public class SpPowerPortalServiceImplTest {
      */
     @Test
     public void departList(){
-        List<SpDictDepartModel> spDictDepartModelList = spPowerPortalService.departList(busiName);
-        assertThat(spDictDepartModelList,notNullValue());
+        List<List<SpDictDepartModel>> lists = spPowerPortalService.departList();
+        assertThat(lists,notNullValue());
     }
 
     /**

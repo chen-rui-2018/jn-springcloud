@@ -100,7 +100,6 @@
   import messageRow from './common/messageRow'
   import sockHttp from '@/util/sockHttp'
   import { WS_URL } from '@/util/url'
-  // import { RemoveClass, AddClass } from '@/util/func'
   export default {
     name: "Chat",
     components: {

@@ -67,7 +67,7 @@ import {
   Popup,
   Tab,
   TabItem
-} from 'vux';
+} from 'vux'
 
 export default {
   data () {

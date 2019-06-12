@@ -8,6 +8,8 @@ public class TbManpowerRetirementManagement implements Serializable {
 
     private String jobNumber;
 
+    private String department;
+
     private String name;
 
     private Date applicationDate;
@@ -22,7 +24,7 @@ public class TbManpowerRetirementManagement implements Serializable {
 
     private String remark;
 
-    private Byte approvalStatus;
+    private Byte status;
 
     private static final long serialVersionUID = 1L;
 
@@ -40,6 +42,14 @@ public class TbManpowerRetirementManagement implements Serializable {
 
     public void setJobNumber(String jobNumber) {
         this.jobNumber = jobNumber == null ? null : jobNumber.trim();
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department == null ? null : department.trim();
     }
 
     public String getName() {
@@ -98,12 +108,12 @@ public class TbManpowerRetirementManagement implements Serializable {
         this.remark = remark == null ? null : remark.trim();
     }
 
-    public Byte getApprovalStatus() {
-        return approvalStatus;
+    public Byte getStatus() {
+        return status;
     }
 
-    public void setApprovalStatus(Byte approvalStatus) {
-        this.approvalStatus = approvalStatus;
+    public void setStatus(Byte status) {
+        this.status = status;
     }
 
     @Override
@@ -120,6 +130,7 @@ public class TbManpowerRetirementManagement implements Serializable {
         TbManpowerRetirementManagement other = (TbManpowerRetirementManagement) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getJobNumber() == null ? other.getJobNumber() == null : this.getJobNumber().equals(other.getJobNumber()))
+            && (this.getDepartment() == null ? other.getDepartment() == null : this.getDepartment().equals(other.getDepartment()))
             && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
             && (this.getApplicationDate() == null ? other.getApplicationDate() == null : this.getApplicationDate().equals(other.getApplicationDate()))
             && (this.getApplicationReason() == null ? other.getApplicationReason() == null : this.getApplicationReason().equals(other.getApplicationReason()))
@@ -127,7 +138,7 @@ public class TbManpowerRetirementManagement implements Serializable {
             && (this.getFinalWorkDate() == null ? other.getFinalWorkDate() == null : this.getFinalWorkDate().equals(other.getFinalWorkDate()))
             && (this.getSalarySettlementDate() == null ? other.getSalarySettlementDate() == null : this.getSalarySettlementDate().equals(other.getSalarySettlementDate()))
             && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
-            && (this.getApprovalStatus() == null ? other.getApprovalStatus() == null : this.getApprovalStatus().equals(other.getApprovalStatus()));
+            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()));
     }
 
     @Override
@@ -136,6 +147,7 @@ public class TbManpowerRetirementManagement implements Serializable {
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getJobNumber() == null) ? 0 : getJobNumber().hashCode());
+        result = prime * result + ((getDepartment() == null) ? 0 : getDepartment().hashCode());
         result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
         result = prime * result + ((getApplicationDate() == null) ? 0 : getApplicationDate().hashCode());
         result = prime * result + ((getApplicationReason() == null) ? 0 : getApplicationReason().hashCode());
@@ -143,7 +155,7 @@ public class TbManpowerRetirementManagement implements Serializable {
         result = prime * result + ((getFinalWorkDate() == null) ? 0 : getFinalWorkDate().hashCode());
         result = prime * result + ((getSalarySettlementDate() == null) ? 0 : getSalarySettlementDate().hashCode());
         result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
-        result = prime * result + ((getApprovalStatus() == null) ? 0 : getApprovalStatus().hashCode());
+        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         return result;
     }
 
@@ -155,6 +167,7 @@ public class TbManpowerRetirementManagement implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", jobNumber=").append(jobNumber);
+        sb.append(", department=").append(department);
         sb.append(", name=").append(name);
         sb.append(", applicationDate=").append(applicationDate);
         sb.append(", applicationReason=").append(applicationReason);
@@ -162,7 +175,7 @@ public class TbManpowerRetirementManagement implements Serializable {
         sb.append(", finalWorkDate=").append(finalWorkDate);
         sb.append(", salarySettlementDate=").append(salarySettlementDate);
         sb.append(", remark=").append(remark);
-        sb.append(", approvalStatus=").append(approvalStatus);
+        sb.append(", status=").append(status);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

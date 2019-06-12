@@ -340,7 +340,7 @@ public class StaffServiceImpl implements StaffService {
             addMessageModel.setMessageConnect("{\"comId\":\"" + company.getId() + "\",\"comName\":\"" + company.getComName() + "\"}");
             addMessageModel.setMessageConnectName("企业邀请");
             addMessageModel.setMessageTitle("企业邀请待处理通知");
-            addMessageModel.setMessageContent(company.getComName());
+            addMessageModel.setMessageContent(company.getComName() + "邀请您加入他们的企业");
             messageClient.addMessage(addMessageModel);
 
             logger.info("[企业邀请] 邀请员工成功,account:{}", inviteAccount);

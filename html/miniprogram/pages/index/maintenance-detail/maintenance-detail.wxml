@@ -6,7 +6,7 @@
       <text slot="right" class="icon-right"></text>
     </cell>
   </view> -->
-  <view class="row-block-title">咨询内容</view>
+  <view class="row-block-title">设备信息</view>
   <view class="cell-row">
     <cell content="设备编号" tips="{{ mainTainData.assetNumber }}"></cell>
   </view>

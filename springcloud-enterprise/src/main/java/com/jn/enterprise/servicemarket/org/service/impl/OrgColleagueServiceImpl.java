@@ -258,7 +258,7 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
                     loginAccountRoleName=userRoleInfo.getRoleName();
                 }
                 orgColleagueInfo.setOrgIdentity(userRoleInfo.getRoleName());
-                String orgMangeRole="机构管理员";
+                String orgMangeRole=HomeRoleEnum.ORG_ADMIN.getCode();
                 //判断是否为机构管理员，若是从机构表获取入驻日期
                 if(orgMangeRole.equals(userRoleInfo.getRoleName())){
                     //用户基本信息（手机，邮箱，职位，学历，毕业学校）
@@ -364,7 +364,7 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
             throw new JnSpringCloudException(OrgExceptionEnum.ACCOUNT_NOT_ORG_ADVISOR);
         }
         //获取机构联系人角色id
-        roleName="机构联系人";
+        roleName=HomeRoleEnum.ORG_CONTACTS.getCode();
         Result<SysRole> sysRoleData = systemClient.getRoleByName(roleName);
         if(sysRoleData==null || sysRoleData.getData()==null){
             logger.warn("设置为联系人,获取机构联系人角色id失败");
@@ -388,7 +388,7 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
         judgeRoleIsOrgManage(loginAccount);
         List<String> accountList =new ArrayList<>(16);
         accountList.add(account);
-        String roleName="机构联系人";
+        String roleName=HomeRoleEnum.ORG_CONTACTS.getCode();
         List<UserRoleInfo> userRoleInfoList = getUserRoleInfoList(accountList, roleName);
         if(userRoleInfoList.isEmpty() || !roleName.equals(userRoleInfoList.get(0).getRoleName())){
             logger.warn("取消联系人的账号：[{}]，不是机构联系人",account);
@@ -416,7 +416,7 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
     private void judgeRoleIsOrgManage(String loginAccount) {
         List<String> accountList=new ArrayList<>(16);
         accountList.add(loginAccount);
-        String roleName="机构管理员";
+        String roleName=HomeRoleEnum.ORG_ADMIN.getCode();
         List<UserRoleInfo> userRoleInfoList = getUserRoleInfoList(accountList, roleName);
         if(userRoleInfoList.isEmpty() || !roleName.equals(userRoleInfoList.get(0).getRoleName())){
             logger.warn("当前登录用户不是{}，不能进行当前操作",roleName);

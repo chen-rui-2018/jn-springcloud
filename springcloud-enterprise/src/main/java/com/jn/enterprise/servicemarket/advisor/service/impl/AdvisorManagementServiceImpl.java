@@ -220,7 +220,7 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
     private void judgeAccountIsOrgManage(String loginAccount) {
         List<String> accountList=new ArrayList<>(8);
         accountList.add(loginAccount);
-        String roleName="机构管理员";
+        String roleName=HomeRoleEnum.ORG_ADMIN.getCode();
         List<UserRoleInfo> userRoleInfoList = orgColleagueService.getUserRoleInfoList(accountList, roleName);
         if(userRoleInfoList.isEmpty() || !StringUtils.equals(roleName, userRoleInfoList.get(0).getRoleName())){
             logger.warn("当前账号:[{}]不是{},不能邀请顾问",loginAccount,roleName);

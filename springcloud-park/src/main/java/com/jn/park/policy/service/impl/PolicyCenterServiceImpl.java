@@ -164,11 +164,21 @@ public class PolicyCenterServiceImpl implements PolicyCenterService {
         }
         List<PolicyCenterHomeShow> investorInfoList = policyCenterMapper.getPolicyCenterList(policyCenterHomeParam,thematicType);
 
-        // 处理图片格式
-        if (investorInfoList != null && !investorInfoList.isEmpty()) {
+        // 处理图片格式和简要内容
+        if (!investorInfoList.isEmpty()) {
             for (PolicyCenterHomeShow policy : investorInfoList){
+                //处理图片
                 if (StringUtils.isNotBlank(policy.getPolicyDiagramUrl())) {
                     policy.setPolicyDiagramUrl(IBPSFileUtils.getFilePath(policy.getPolicyDiagramUrl()));
+                }
+                //设置简要内容
+                String briefContent=policy.getPolicyContent().replaceAll("</?[^>]+>","");
+                if(StringUtils.isNotBlank(briefContent)){
+                    String briefSummaries=briefContent.substring(0,briefContent.length()>100?100:briefContent.length());
+                    briefSummaries=briefContent.length()>100?briefSummaries+"......":briefSummaries;
+                    policy.setBriefContent(briefSummaries);
+                    //清空详情
+                    policy.setPolicyContent("");
                 }
             }
         }

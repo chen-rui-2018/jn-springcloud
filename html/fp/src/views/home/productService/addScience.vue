@@ -143,6 +143,7 @@
   </div>
 </template>
 <script>
+import { getToken } from '@/util/auth'
 export default {
   data () {
     return {
@@ -162,7 +163,7 @@ export default {
       },
       loading:false,
       counselorList:[],
-      headers:{token: sessionStorage.token},
+      headers:{token: getToken()},
       fileList:[],
       businessType:'',
       LoanTypeList:[],//金融产品贷款类别

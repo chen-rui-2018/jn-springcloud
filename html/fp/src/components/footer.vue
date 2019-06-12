@@ -135,7 +135,7 @@
         </div>
       </div>
       <div class="footer2">
-        <div class="w">苏ICP备xxxxxx号&nbsp;&nbsp;&copy;版权所有&nbsp;&nbsp;南京白下高新技术产业园区投资发展有限责任公司</div>
+        <div class="w"><a href="http://www.beian.gov.cn/" target="_blank">苏ICP备xxxxxx号</a>&nbsp;&nbsp;&copy;版权所有&nbsp;&nbsp;南京白下高新技术产业园区投资发展有限责任公司</div>
       </div>
     </div>
   </div>

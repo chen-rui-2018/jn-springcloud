@@ -152,6 +152,7 @@
 </template>
 
 <script>
+import { getToken } from '@/util/auth'
 export default {
   data() {
     var checkPhoneNumber = (rule, value, callback) => {
@@ -188,7 +189,7 @@ export default {
       input: "",
       imageUrl: "",
       headers: {
-        token: sessionStorage.token
+        token: getToken()
       },
       comSourceOptions: [
         {

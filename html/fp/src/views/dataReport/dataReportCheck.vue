@@ -10,6 +10,7 @@
 <script>
 import dataReportForm from './dataReportForm'
 import { downloadService, download} from '@/util/downloadService'
+import { getToken, removeToken } from '@/util/auth'
 export default {
   name: 'DataReportCheck',
   components: {
@@ -31,7 +32,7 @@ export default {
         url: url,
         responseType: 'blob',
         headers: {
-          token: sessionStorage.token
+          token: getToken()
         }
       }).then(response => {
         download(response, '导出模板')

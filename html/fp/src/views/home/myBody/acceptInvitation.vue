@@ -234,6 +234,7 @@
 </template>
 
 <script>
+import { getToken } from '@/util/auth'
 export default {
   data() {
     var checkPhone = (rule, value, callback) => {
@@ -260,7 +261,7 @@ export default {
       dialogImageUrl: "",
       dialogVisible: false,
       headers: {
-        token: sessionStorage.token
+        token: getToken()
       },
       certificateAreasOptions: [], //证书类型
       editText: "添加荣誉资质",

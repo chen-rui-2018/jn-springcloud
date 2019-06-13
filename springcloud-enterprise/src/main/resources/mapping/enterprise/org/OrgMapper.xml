@@ -59,6 +59,9 @@
                 #{item}
             </foreach>
         </if>
+        <if test="allowTechnology!=null and allowTechnology=='technology_finance' ">
+            and a.business_type !=#{allowTechnology}
+        </if>
         <if test="businessSType != null and businessSType != ''">
             and a.business_s_type = #{businessSType}
         </if>

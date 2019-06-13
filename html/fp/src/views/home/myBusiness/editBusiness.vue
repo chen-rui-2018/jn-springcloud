@@ -214,6 +214,7 @@
 </template>
 
 <script>
+import { getToken } from '@/util/auth'
 export default {
   data() {
       var checkPhone = (rule, value, callback) => {
@@ -248,7 +249,7 @@ export default {
       fileList: [],
       showImg: false,
       headers: {
-        token: sessionStorage.token
+        token: getToken()
       },
       comSourceOptions: [
         {

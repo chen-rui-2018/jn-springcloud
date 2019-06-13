@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.hr.employee.dao.TbManpowerLeaveManagementMapper">
   <resultMap id="BaseResultMap" type="com.jn.hr.employee.entity.TbManpowerLeaveManagement">
-    <id column="id" jdbcType="VARCHAR" property="id" />
+    <id column="id_" jdbcType="VARCHAR" property="id" />
     <result column="job_number" jdbcType="VARCHAR" property="jobNumber" />
     <result column="application_date" jdbcType="TIMESTAMP" property="applicationDate" />
     <result column="name" jdbcType="VARCHAR" property="name" />
@@ -12,7 +12,8 @@
     <result column="final_work_date" jdbcType="TIMESTAMP" property="finalWorkDate" />
     <result column="salary_settlement_date" jdbcType="TIMESTAMP" property="salarySettlementDate" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
-    <result column="approval_status" jdbcType="TINYINT" property="approvalStatus" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="department" jdbcType="VARCHAR" property="department" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -73,8 +74,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, job_number, application_date, name, turnover_type, reasons_leav, estimate_leave_date, 
-    final_work_date, salary_settlement_date, remark, approval_status
+    id_, job_number, application_date, name, turnover_type, reasons_leav, estimate_leave_date, 
+    final_work_date, salary_settlement_date, remark, status, department
   </sql>
   <select id="selectByExample" parameterType="com.jn.hr.employee.entity.TbManpowerLeaveManagementCriteria" resultMap="BaseResultMap">
     select
@@ -94,11 +95,11 @@
     select 
     <include refid="Base_Column_List" />
     from tb_manpower_leave_management
-    where id = #{id,jdbcType=VARCHAR}
+    where id_ = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_manpower_leave_management
-    where id = #{id,jdbcType=VARCHAR}
+    where id_ = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.hr.employee.entity.TbManpowerLeaveManagementCriteria">
     delete from tb_manpower_leave_management
@@ -107,20 +108,22 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.hr.employee.entity.TbManpowerLeaveManagement">
-    insert into tb_manpower_leave_management (id, job_number, application_date, 
+    insert into tb_manpower_leave_management (id_, job_number, application_date, 
       name, turnover_type, reasons_leav, 
       estimate_leave_date, final_work_date, salary_settlement_date, 
-      remark, approval_status)
+      remark, status, department
+      )
     values (#{id,jdbcType=VARCHAR}, #{jobNumber,jdbcType=VARCHAR}, #{applicationDate,jdbcType=TIMESTAMP}, 
       #{name,jdbcType=VARCHAR}, #{turnoverType,jdbcType=TINYINT}, #{reasonsLeav,jdbcType=VARCHAR}, 
       #{estimateLeaveDate,jdbcType=TIMESTAMP}, #{finalWorkDate,jdbcType=TIMESTAMP}, #{salarySettlementDate,jdbcType=TIMESTAMP}, 
-      #{remark,jdbcType=VARCHAR}, #{approvalStatus,jdbcType=TINYINT})
+      #{remark,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{department,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.hr.employee.entity.TbManpowerLeaveManagement">
     insert into tb_manpower_leave_management
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
-        id,
+        id_,
       </if>
       <if test="jobNumber != null">
         job_number,
@@ -149,8 +152,11 @@
       <if test="remark != null">
         remark,
       </if>
-      <if test="approvalStatus != null">
-        approval_status,
+      <if test="status != null">
+        status,
+      </if>
+      <if test="department != null">
+        department,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -184,8 +190,11 @@
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
       </if>
-      <if test="approvalStatus != null">
-        #{approvalStatus,jdbcType=TINYINT},
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="department != null">
+        #{department,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -199,7 +208,7 @@
     update tb_manpower_leave_management
     <set>
       <if test="record.id != null">
-        id = #{record.id,jdbcType=VARCHAR},
+        id_ = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.jobNumber != null">
         job_number = #{record.jobNumber,jdbcType=VARCHAR},
@@ -228,8 +237,11 @@
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
       </if>
-      <if test="record.approvalStatus != null">
-        approval_status = #{record.approvalStatus,jdbcType=TINYINT},
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=TINYINT},
+      </if>
+      <if test="record.department != null">
+        department = #{record.department,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -238,7 +250,7 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update tb_manpower_leave_management
-    set id = #{record.id,jdbcType=VARCHAR},
+    set id_ = #{record.id,jdbcType=VARCHAR},
       job_number = #{record.jobNumber,jdbcType=VARCHAR},
       application_date = #{record.applicationDate,jdbcType=TIMESTAMP},
       name = #{record.name,jdbcType=VARCHAR},
@@ -248,7 +260,8 @@
       final_work_date = #{record.finalWorkDate,jdbcType=TIMESTAMP},
       salary_settlement_date = #{record.salarySettlementDate,jdbcType=TIMESTAMP},
       remark = #{record.remark,jdbcType=VARCHAR},
-      approval_status = #{record.approvalStatus,jdbcType=TINYINT}
+      status = #{record.status,jdbcType=TINYINT},
+      department = #{record.department,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -283,11 +296,14 @@
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
-      <if test="approvalStatus != null">
-        approval_status = #{approvalStatus,jdbcType=TINYINT},
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="department != null">
+        department = #{department,jdbcType=VARCHAR},
       </if>
     </set>
-    where id = #{id,jdbcType=VARCHAR}
+    where id_ = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.hr.employee.entity.TbManpowerLeaveManagement">
     update tb_manpower_leave_management
@@ -300,7 +316,8 @@
       final_work_date = #{finalWorkDate,jdbcType=TIMESTAMP},
       salary_settlement_date = #{salarySettlementDate,jdbcType=TIMESTAMP},
       remark = #{remark,jdbcType=VARCHAR},
-      approval_status = #{approvalStatus,jdbcType=TINYINT}
-    where id = #{id,jdbcType=VARCHAR}
+      status = #{status,jdbcType=TINYINT},
+      department = #{department,jdbcType=VARCHAR}
+    where id_ = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

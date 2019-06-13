@@ -119,7 +119,7 @@
       <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :append-to-body="true" :lock-scroll="false">
         <div class="loginTip" style="text-align:center;padding-bottom:20px">
           你还未
-          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          <span class="mainColor pointer" @click="goLogin">登录</span>
           /
           <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
           账号
@@ -129,6 +129,7 @@
   </div>
 </template>
 <script>
+import { getToken } from '@/util/auth'
 export default {
   data() {
     return {
@@ -170,7 +171,7 @@ export default {
     };
   },
   created() {
-    this.token = sessionStorage.getItem("token");
+    this.token = getToken();
   },
   mounted() {
     this.getParkList();
@@ -189,19 +190,24 @@ export default {
     }
   },
   methods: {
+    goLogin() {
+      window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
+      this.$router.push({ path: "/login" });
+    },
     //关注
     handleAttention(id) {
-      if (sessionStorage.token) {
+      if (getToken()) {
         this.api.post({
           url: "addCareOperate",
           data: {
             account: id,
-            receiveType: -2
+            receiveType: 2
           },
           // dataFlag:true,
           callback: res => {
             if (res.code == "0000") {
               // _this.parkList = res.data;
+              this.$message.success('关注成功');
               this.getCompanyList()
             } else {
               this.$message.error(res.result);
@@ -215,7 +221,7 @@ export default {
     },
     //取消关注
     cancelAttention(id) {
-      if (sessionStorage.token) {
+      if (getToken()) {
         this.api.post({
           url: "cancelCareOperate",
           data: {
@@ -224,6 +230,7 @@ export default {
           dataFlag: true,
           callback: res => {
             if (res.code == "0000") {
+              this.$message.success('取消关注成功');
               // _this.parkList = res.data;
               this.getCompanyList()
             } else {
@@ -232,7 +239,7 @@ export default {
           }
         });
       } else {
-        this.$message.error("你还未登录");
+        this.concatVisible=true;
         return;
       }
     },
@@ -242,7 +249,7 @@ export default {
       for (let it of doc) {
         num += it.offsetWidth * 1;
       }
-      // console.log(num);
+      console.log(num);
       if (num >= 860) {
         return true;
       } else {

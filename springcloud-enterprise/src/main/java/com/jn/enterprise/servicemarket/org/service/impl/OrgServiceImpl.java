@@ -124,6 +124,10 @@ public class OrgServiceImpl implements OrgService {
      * 日期格式
      */
     private static final String PATTERN="yyyy-MM-dd HH:mm:ss";
+    /**
+     * 科技金融业务领域
+     */
+    private static final String BUSINESS_TECHNOLOGY="technology_finance";
 
     /**
      * 机构认证流程id
@@ -151,7 +155,7 @@ public class OrgServiceImpl implements OrgService {
 
     @ServiceLog(doAction = "查询服务机构列表")
     @Override
-    public PaginationData<List<ServiceOrg>> selectServiceOrgList(OrgParameter orgParameter){
+    public PaginationData<List<ServiceOrg>> selectServiceOrgList(OrgParameter orgParameter,boolean allowTechnology){
         Page<Object> objects = PageHelper.startPage(orgParameter.getPage(), orgParameter.getRows() == 0 ? 15 : orgParameter.getRows());
         List<String> sList = new ArrayList<>(16);
         if(null!=orgParameter.getDevelopmentStage()&&orgParameter.getDevelopmentStage().length>0){
@@ -167,6 +171,19 @@ public class OrgServiceImpl implements OrgService {
         String sortType="integrate";
         if(StringUtils.isBlank(orgParameter.getSortTypes())|| StringUtils.equals(orgParameter.getSortTypes(),sortType)){
             //设置排序权重值，目前使用默认排序权重
+        }
+        //若是查询条件有科技金融，去掉不允许展示科技金融条件
+        String[] businessType = orgParameter.getBusinessType();
+        if(businessType!=null && businessType.length>0){
+            String join = StringUtils.join(businessType, ",");
+            if(join.contains(BUSINESS_TECHNOLOGY)){
+                allowTechnology=true;
+            }
+        }
+
+        //不予许展示科技金融
+        if(!allowTechnology){
+            orgListParam.setAllowTechnology(BUSINESS_TECHNOLOGY);
         }
         List<ServiceOrg> serviceOrg = orgMapper.selectServiceOrgList(orgListParam);
 

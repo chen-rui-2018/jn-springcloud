@@ -22,7 +22,9 @@ public class TbManpowerAbroadManagement implements Serializable {
 
     private Byte abroadType;
 
-    private Byte approvalStatus;
+    private Byte status;
+
+    private String department;
 
     private static final long serialVersionUID = 1L;
 
@@ -98,12 +100,20 @@ public class TbManpowerAbroadManagement implements Serializable {
         this.abroadType = abroadType;
     }
 
-    public Byte getApprovalStatus() {
-        return approvalStatus;
+    public Byte getStatus() {
+        return status;
     }
 
-    public void setApprovalStatus(Byte approvalStatus) {
-        this.approvalStatus = approvalStatus;
+    public void setStatus(Byte status) {
+        this.status = status;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department == null ? null : department.trim();
     }
 
     @Override
@@ -127,7 +137,8 @@ public class TbManpowerAbroadManagement implements Serializable {
             && (this.getAbroadTimeEnd() == null ? other.getAbroadTimeEnd() == null : this.getAbroadTimeEnd().equals(other.getAbroadTimeEnd()))
             && (this.getAbroadApplication() == null ? other.getAbroadApplication() == null : this.getAbroadApplication().equals(other.getAbroadApplication()))
             && (this.getAbroadType() == null ? other.getAbroadType() == null : this.getAbroadType().equals(other.getAbroadType()))
-            && (this.getApprovalStatus() == null ? other.getApprovalStatus() == null : this.getApprovalStatus().equals(other.getApprovalStatus()));
+            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
+            && (this.getDepartment() == null ? other.getDepartment() == null : this.getDepartment().equals(other.getDepartment()));
     }
 
     @Override
@@ -143,7 +154,8 @@ public class TbManpowerAbroadManagement implements Serializable {
         result = prime * result + ((getAbroadTimeEnd() == null) ? 0 : getAbroadTimeEnd().hashCode());
         result = prime * result + ((getAbroadApplication() == null) ? 0 : getAbroadApplication().hashCode());
         result = prime * result + ((getAbroadType() == null) ? 0 : getAbroadType().hashCode());
-        result = prime * result + ((getApprovalStatus() == null) ? 0 : getApprovalStatus().hashCode());
+        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        result = prime * result + ((getDepartment() == null) ? 0 : getDepartment().hashCode());
         return result;
     }
 
@@ -162,7 +174,8 @@ public class TbManpowerAbroadManagement implements Serializable {
         sb.append(", abroadTimeEnd=").append(abroadTimeEnd);
         sb.append(", abroadApplication=").append(abroadApplication);
         sb.append(", abroadType=").append(abroadType);
-        sb.append(", approvalStatus=").append(approvalStatus);
+        sb.append(", status=").append(status);
+        sb.append(", department=").append(department);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

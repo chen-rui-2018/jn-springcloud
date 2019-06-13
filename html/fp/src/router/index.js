@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import { urlSearch } from '@/util/index'
+import { setToken } from '@/util/auth'
 Vue.use(Router)
 
 const router= new Router({
@@ -431,7 +432,8 @@ const router= new Router({
               path: '/myBusiness/publishingPropaganda',
               name: 'publishingPropaganda',
               meta: {
-                title: '发布宣传'
+                title: '发布宣传',
+                keepAlive: true
               },
               component: resolve => require(['@/views/home/myBusiness/publishingPropaganda'], resolve)
             },
@@ -440,6 +442,8 @@ const router= new Router({
               name: 'propagandaDetails',
               meta: {
                 title: '宣传详情'
+
+
               },
               component: resolve => require(['@/views/home/myBusiness/propagandaDetails'], resolve)
             },
@@ -1117,7 +1121,7 @@ const router= new Router({
 router.beforeEach((to, from, next) => {
   const token = urlSearch.token
   if (token) {
-    sessionStorage.setItem('token', token)
+    setToken(token)
   }
   next()
 })

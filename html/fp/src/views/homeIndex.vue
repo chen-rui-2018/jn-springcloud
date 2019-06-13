@@ -83,7 +83,7 @@
   import swiper from "swiper";
   import userInfo from './common/userInfoData'
   export default {
-     components: {
+    components: {
       userInfo
     },
     data() {
@@ -329,8 +329,8 @@
           }
         }
         .ru-active{
-            color: #00a041;
-          }
+          color: #00a041;
+        }
       }
       .search_box {
         background: rgba(0, 0, 0, 0.3);
@@ -388,4 +388,3 @@
     }
   }
 </style>
-

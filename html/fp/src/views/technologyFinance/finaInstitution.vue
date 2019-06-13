@@ -110,11 +110,11 @@
       <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
       </el-pagination>
     </div>
-      <template v-if="concatVisible">
+    <template v-if="concatVisible">
       <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :modal-append-to-body=false :lock-scroll="false">
         <div class="loginTip">
           你还未
-          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          <span class="mainColor pointer" @click="goLogin">登录</span>
           /
           <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
           账号
@@ -127,7 +127,7 @@
 export default {
   data() {
     return {
-      concatVisible:false,
+      concatVisible: false,
       total: 0,
       currentPage1: 1,
       row: 3,
@@ -135,9 +135,9 @@ export default {
       serverAgent: [],
       sortTypes: "",
       keyW: "",
-      industrySector:"",
-      developmentStage:"",
-      companyNature:"",
+      industrySector: "",
+      developmentStage: "",
+      companyNature: "",
       colorFlag: "",
       filterFlag1: "",
       filterFlag2: "",
@@ -159,13 +159,25 @@ export default {
     this.selectIndustryList();
   },
   methods: {
-      //在线联系
-    onlineContat(orgAccount,orgName){
-       if (!sessionStorage.userInfo) {
-        this.concatVisible=true
-        return
+    goLogin() {
+      window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
+      this.$router.push({ path: "/login" });
+    },
+    //在线联系
+    onlineContat(orgAccount, orgName) {
+      if (!sessionStorage.userInfo) {
+        this.concatVisible = true;
+        return;
       }
-      this.$router.push({path:'/chat',query:{fromUser: JSON.parse(sessionStorage.userInfo).account,fromUser:sessionStorage.userInfo.account,toUser:orgAccount,nickName:orgName}})
+      this.$router.push({
+        path: "/chat",
+        query: {
+          fromUser: JSON.parse(sessionStorage.userInfo).account,
+          fromUser: sessionStorage.userInfo.account,
+          toUser: orgAccount,
+          nickName: orgName
+        }
+      });
     },
     widFun(i) {
       let doc = document.getElementsByClassName(i);
@@ -188,17 +200,15 @@ export default {
       this.initList();
     },
     handleFilter1(i) {
-      this.industrySector=`${i}`,
-      this.filterFlag1 = i;
+      (this.industrySector = `${i}`), (this.filterFlag1 = i);
       this.initList();
     },
     handleFilter2(i) {
-      this.developmentStage=`${i}`,
-      this.filterFlag2 = i;
+      (this.developmentStage = `${i}`), (this.filterFlag2 = i);
       this.initList();
     },
     handleFilter3(i) {
-      this.companyNature=`${i}`
+      this.companyNature = `${i}`;
       this.filterFlag3 = i;
       this.initList();
     },
@@ -226,20 +236,20 @@ export default {
     initList() {
       let _this = this;
       let data = {
-          businessType: "technology_finance",
-          industrySector: _this.industrySector,
-          developmentStage: _this.developmentStage,
-          companyNature: _this.companyNature,
-          page: _this.page,
-          rows: _this.row,
-          sortTypes: _this.sortTypes,
-          orgName: _this.keyW
-        }
-        console.log(data)
+        businessType: "technology_finance",
+        industrySector: _this.industrySector,
+        developmentStage: _this.developmentStage,
+        companyNature: _this.companyNature,
+        page: _this.page,
+        rows: _this.row,
+        sortTypes: _this.sortTypes,
+        orgName: _this.keyW
+      };
+      // console.log(data)
       this.api.get({
         url: "selectServiceOrgList",
         data: data,
-        dataFlag:true,
+        dataFlag: true,
         callback: function(res) {
           if (res.code == "0000") {
             _this.serverAgent = res.data.rows;
@@ -287,7 +297,7 @@ export default {
 };
 </script>
 <style lang="scss">
-.finaInstitution{
-  padding-top:65px;
+.finaInstitution {
+  padding-top: 65px;
 }
 </style>

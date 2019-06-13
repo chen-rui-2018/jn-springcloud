@@ -279,10 +279,6 @@ public class ReconciliationNoticeBiz {
 		logger.info("[对账邮件通知] =======结束=======");
 	}
 
-	public static void main(String[] args) {
-		String str1 = "大秦,{0},{0},{0}";
-		System.out.println(MessageFormat.format(str1, "将军", "梦回", "秦朝"));
 
-	}
 
 }

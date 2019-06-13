@@ -1,10 +1,10 @@
 ﻿//服务请求url
 // var service_url="http://112.94.22.222:8000/springcloud-park/";
 // var service_url="http://localhost/springcloud-park/";
-var service_url="http://cms.bxgxq.com/springcloud-park/";
+var service_url="http://m.bxgxq.com/springcloud-park/";
 
 //获取token的Url
-var token_Url="http://cms.bxgxq.com/springcloud-app-system";
+var token_Url="http://m.bxgxq.com/springcloud-app-system";
 //客服连接服务器ip
 var serviceIp="172.16.160.29";
 //客服连接服务器端口号
@@ -33,10 +33,10 @@ var initLevelId="1";
 var token="";
 $(function () {
 	//获取token
-	token=getCookie('Admin-Token');
+	token = $.cookie('Admin-Token');
 	if(token==undefined || token==''){
 		getServiceToken();
-		token=getCookie('Admin-Token');
+		token = $.cookie('Admin-Token');
 	}
 	//设置服务器连接ip和端口号
 	$("#serverIp").val(serviceIp);
@@ -56,19 +56,6 @@ function initLoginAccountInfo(){
 	$("#levelId").val(initLevelId);
 }
 
-//获取cookie
-function getCookie(cookieName) {
-    var strCookie = document.cookie;
-    var arrCookie = strCookie.split("; ");
-    for(var i = 0; i < arrCookie.length; i++){
-        var arr = arrCookie[i].split("=");
-        if(cookieName == arr[0]){
-            return arr[1];
-        }
-    }
-    return "";
-}
-
 //获取token
 function getServiceToken(){
 	$.ajax({
@@ -85,7 +72,7 @@ function getServiceToken(){
 			if (data.code === '0000') {
 				if (data.data !== null) {
 					console.log('================>authLogin请求返回：' + data.data)
-					document.cookie ="Admin-Token="+data.data+"; path=/";
+					$.cookie('Admin-Token',data.data,{ domain: 'bxgxq.com',path: '/' });
 				}
 			}
 		},

@@ -1,5 +1,5 @@
 <template>
-  <div class="productPutaway"  >
+  <div class="productPutaway" v-loading="loading">
     <div class="putaway_title">
       <div>{{this.$route.meta.title}}</div>
       <div @click="$router.go(-1)">返回列表</div>
@@ -163,7 +163,8 @@ export default {
       orgId:'',
       templateId:'',
       businessType:'',
-      businessTypeName:""
+      businessTypeName:"",
+      loading:false
     }
   },
   mounted () {
@@ -270,6 +271,7 @@ export default {
     },
     //上架
     submit(){
+      this.loading=true
       if(this.businessType=='technology_finance'){
         let _this = this
         this.api.post({
@@ -280,8 +282,12 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
+              _this.loading=false
               _this.$message.success("上架成功")
               _this.$router.back(-1)
+            }else{
+            _this.loading=false 
+             _this.$message.error(res.result)
             }
           }
         })
@@ -297,8 +303,12 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
+              _this.loading=false
               _this.$message.success("上架成功")
               _this.$router.back(-1)
+            }else{
+               _this.loading=false 
+             _this.$message.error(res.result)
             }
           }
         })

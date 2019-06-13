@@ -3,6 +3,7 @@ package com.jn.park.pmpaybill.service;
 import com.jn.park.pmpaybill.entity.TbPmPayBillItem;
 import com.jn.park.property.model.PayCallBackNotify;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -16,9 +17,9 @@ import java.util.List;
 public interface PmPayBillService {
 
     /**
-     * 每月1号凌辰两点,自动生成物业费账单明细
+     * 每季度第一天凌晨,为企业生成物业费账单
      */
-    void autoGeneratePmPayBillDeatils();
+    void createPmPayBillByQuarter();
 
     /**
      * 每月16号凌晨更新缴费单条目是否逾期状态
@@ -38,4 +39,12 @@ public interface PmPayBillService {
      * @param payCallBackNotify
      */
     void pmPayBillCallBack(PayCallBackNotify payCallBackNotify);
+
+    /**
+     * 为企业生成物业费账单明细
+     *
+     * @param companyId     公司id
+     * @param rentStartTime 开始租赁时间
+     */
+    void createPmBill(String companyId, Date rentStartTime);
 }

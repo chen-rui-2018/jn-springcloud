@@ -910,9 +910,9 @@ export default {
     },
     //用户提交需求
     demandDia() {
-      if(!this.financialProform.financingPeriod){
-        return
-      }
+      // if(!this.financialProform.financingPeriod){
+      //   return
+      // }
       let _this = this;
       let max = this.arr[this.financialProform.financingPeriod].loanTermMax;
       let min = this.arr[this.financialProform.financingPeriod].loanTermMin;

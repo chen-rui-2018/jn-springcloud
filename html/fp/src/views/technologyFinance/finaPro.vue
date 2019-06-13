@@ -133,6 +133,9 @@
         </li>
       </ul>
     </div>
+    <!-- <div class="serverOrgContent" id="serverOrgContent" v-else>
+      <nodata></nodata>
+    </div> -->
     <div class="pagination-container">
       <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
       </el-pagination>
@@ -180,7 +183,11 @@
   </div>
 </template>
 <script>
+import nodata from "../common/noData.vue";
 export default {
+  components: {
+    nodata
+  },
   data() {
     return {
       islogin: true,
@@ -386,9 +393,9 @@ export default {
     },
     //提交需求
     demandDia() {
-      if(!this.financialProform.financingPeriod){
-        return
-      }
+      // if(!this.financialProform.financingPeriod){
+      //   return
+      // }
       let _this = this;
       let max = this.arr[this.financialProform.financingPeriod].loanTermMax;
       let min = this.arr[this.financialProform.financingPeriod].loanTermMin;

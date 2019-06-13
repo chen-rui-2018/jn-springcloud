@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import { urlSearch } from '@/util/index'
-import { setToken } from '@/util/auth'
+import { setToken, getToken, setLastToken, getLastToken } from '@/util/auth'
+import api from '@/util/api'
 Vue.use(Router)
 
 const router= new Router({
@@ -295,7 +296,7 @@ const router= new Router({
               path: '/servicemarket/product/productService/ordinaryproductDetail',
               name: 'ordinaryproductDetail',
               meta: {
-                title: '常规产品详情'
+                title: '产品详情'
               },
               component: resolve => require(['@/views/home/productService/ordinaryproductDetail'], resolve)
             },

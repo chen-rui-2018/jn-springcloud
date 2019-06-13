@@ -68,11 +68,7 @@ public class AssetArticleLeaseServiceImpl implements AssetArticleLeaseService {
         assetArticleLeaseModel.setContactName(userExtension.getName());
         assetArticleLeaseModel.setContactPhone(userExtension.getPhone());
         //设置条形码
-        String barCode = "";
-        Random random = new Random();
-        for (int i = 0; i < 5; i++) {
-            barCode += random.nextInt(10);
-        }
+        String barCode = assetArticleLeaseModel.getAssetNumber().substring(7);
         assetArticleLeaseModel.setBarCode(barCode);
         return assetArticleLeaseModel;
     }
@@ -106,7 +102,7 @@ public class AssetArticleLeaseServiceImpl implements AssetArticleLeaseService {
         java.sql.Date endTime=new java.sql.Date(calTime.getTime());
         tbAssetInformation.setLeaseEndTime(endTime);
         //判断租借时间是否大于最短租期
-        int days = (int) ((tbAssetInformation.getLeaseEndTime().getTime() - tbAssetInformation.getLeaseStartTime().getTime()) / (1000*3600*24)+1);
+        int days = (int) ((tbAssetInformation.getLeaseEndTime().getTime() - tbAssetInformation.getLeaseStartTime().getTime()) / (1000*3600*24));
         //最短租借时间
         int leaseTime = Integer.parseInt(tbAssetInformation.getLeaseTime());
         if (leaseTime > days){
@@ -157,6 +153,7 @@ public class AssetArticleLeaseServiceImpl implements AssetArticleLeaseService {
             tbAssetArticleLeaseOrders.setSpecification(tbAssetInformation.getSpecification());
             tbAssetArticleLeaseOrders.setArticleUrl(tbAssetInformation.getImgUrl());
             tbAssetArticleLeaseOrders.setArticleIntroduction(tbAssetInformation.getAssetExplain());
+            tbAssetArticleLeaseOrders.setLeaseEnterpriseId(tbAssetInformation.getLeaseEnterpriseId());
             tbAssetArticleLeaseOrders.setLeaseEnterprise(tbAssetInformation.getLeaseEnterpriseName());
             tbAssetArticleLeaseOrders.setContactName(tbAssetInformation.getLeaseContactName());
             tbAssetArticleLeaseOrders.setContactPhone(tbAssetInformation.getLeaseContactPhone());
@@ -170,7 +167,7 @@ public class AssetArticleLeaseServiceImpl implements AssetArticleLeaseService {
             tbAssetArticleLeaseOrders.setCreatorAccount(user.getAccount());
             tbAssetArticleLeaseOrders.setRecordStatus(Byte.parseByte(AssetStatusEnums.EFFECTIVE.getCode()));
             //计算开始时间和结束时间的相差天数
-            int days = (int) ((tbAssetInformation.getLeaseEndTime().getTime() - tbAssetInformation.getLeaseStartTime().getTime()) / (1000*3600*24)+1);
+            int days = (int) ((tbAssetInformation.getLeaseEndTime().getTime() - tbAssetInformation.getLeaseStartTime().getTime()) / (1000*3600*24));
             //计算总共需要付款的金额
             BigDecimal day = new BigDecimal(String.valueOf(days));
             BigDecimal price = new BigDecimal(tbAssetInformation.getLeasePrice().toString());

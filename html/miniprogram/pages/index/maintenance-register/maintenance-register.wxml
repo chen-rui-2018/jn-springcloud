@@ -10,7 +10,7 @@
    <view class="cell-row">
     <cell
       wx:if="{{ mainTainData.assetNumber }}"
-      content="设备编号"
+      content="资产编号"
       tips="{{ mainTainData.assetNumber }}">
     </cell>
     <cell

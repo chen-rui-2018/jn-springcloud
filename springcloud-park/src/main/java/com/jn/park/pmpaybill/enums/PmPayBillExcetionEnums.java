@@ -11,7 +11,10 @@ import com.jn.common.api.CodeAndMsg;
  * @modified By:
  */
 public enum PmPayBillExcetionEnums implements CodeAndMsg {
-    GENERATOR_ERROR("5010301", "生成缴费单失败");
+    GENERATOR_ERROR("5010301", "生成缴费单失败"),
+    GET_PM_PRICE_FAIL("5010302", "获取物业信息失败"),
+    GET_COMPANY_INFO_FAIL("5010303", "获取企业信息失败"),
+    ;
 
     private String code;
 

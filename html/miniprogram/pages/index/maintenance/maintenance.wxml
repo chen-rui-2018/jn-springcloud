@@ -18,7 +18,7 @@
   <view
     class="card-list-row">
     <card-list url="{{ item.assetUrl }}" title="设备名称 {{ item.name }}">
-      <view class="card-list-text">设备编号 {{ item.assetNumber }}</view>
+      <view class="card-list-text">资产编号 {{ item.assetNumber }}</view>
       <view class="card-list-tips">
         <text>维保期限 {{ filter.formatEmpty(item.maintenancePeriod) }} 天</text>
         <text>

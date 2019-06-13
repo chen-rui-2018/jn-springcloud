@@ -2,11 +2,11 @@ package com.jn.system.config;
 
 import com.jn.common.model.Result;
 import com.jn.common.util.LoadBalancerUtil;
+import com.jn.common.util.StringUtils;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -44,7 +44,7 @@ public class AccessAutoLoginManager implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String account = com.lc.ibps.auth.client.context.Context.getUsername();
-        if (com.jn.common.util.StringUtils.isNotBlank(exclusions_url)) {
+        if (StringUtils.isNotBlank(exclusions_url)) {
             List<String> ignore = Arrays.asList(exclusions_url.split(","));
             String servletPath = httpRequest.getServletPath();
             if (ignore != null) {
@@ -74,9 +74,10 @@ public class AccessAutoLoginManager implements Filter {
                 Result result = loadBalancerUtils.getClientPostForEntity(SYSTEM_CLIENT, SYSTEM_CLIENT_NOPASSWORDLOGIN_SERVICE, jsonObject.toString());
                 String id = result.getData().toString();
                 AccessContext.setTokenContext(id);
-                ///logger.info("【oauth】 autoLogin user:{},id:{},token:{}", account, id, AccessContext.getTokenContext());
+                logger.info("【oauth】 autoLogin user:{},id:{},token:{}", account, id, AccessContext.getTokenContext());
             }
         }
+        com.lc.ibps.auth.client.context.Context.remove();
         chain.doFilter(request, response);
     }
 

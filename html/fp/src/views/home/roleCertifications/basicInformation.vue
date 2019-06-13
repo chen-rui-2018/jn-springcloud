@@ -50,8 +50,8 @@
                   placeholder="请填写机构简介,限1000字" clearable></el-input>
               </el-form-item>
               <el-form-item label="核心服务:" prop="orgBusiness" class="myPersonalProfile">
-                <el-input v-model="OrgBasicForm.orgBusiness" type="textarea" maxlength="1000" show-word-limit autosize
-                  placeholder="请填写核心服务,限1000字" clearable></el-input>
+                <el-input v-model="OrgBasicForm.orgBusiness" type="textarea" maxlength="500" show-word-limit autosize
+                  placeholder="请填写核心服务,限500字" clearable></el-input>
               </el-form-item>
               <el-form-item label="业务擅长:" prop="orgSpeciality" class="investorMainAreaList">
                 <el-input v-model="OrgBasicForm.orgSpeciality" placeholder="请输入业务擅长" clearable></el-input>

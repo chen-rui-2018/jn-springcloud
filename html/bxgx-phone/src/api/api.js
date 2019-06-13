@@ -59,7 +59,7 @@ export default {
     getPolicyClassList: 'springcloud-park/guest/policy/policyCenterController/getPolicyClassList', // 政策分类列表
     getPolicyCenterList: 'springcloud-park/guest/policy/policyCenterController/getPolicyCenterList', // 政策中心首页列表
     getPolicyDetails: 'springcloud-park/guest/policy/policyCenterController/getPolicyDetails', // 政策指南详情
-
+    getPromotionDetails: 'springcloud-enterprise/guest/businessHomePageController/getBusinessPromotionDetails', // (门户各首页企业宣传详情)
     // 招商引资
     getPromotionList: 'springcloud-enterprise/guest/businessHomePageController/getBusinessPromotionList', // (门户各首页企业宣传列表查询)
     basic: 'springcloud-park/guest/portal/park/basic', // 获取园区概况

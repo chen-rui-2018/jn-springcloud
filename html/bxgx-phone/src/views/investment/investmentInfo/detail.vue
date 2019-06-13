@@ -11,7 +11,9 @@
     </div>
     <div class="investment-policy-main">
       <div class="investment-policy-desc">{{ detail.subTitle }}</div>
-      <div class="tag-row">
+      <div
+        v-if="detail.adFlag"
+        class="tag-row">
         <tag-btn
           v-for="(tag, index) in detail.adFlag.split(',')"
           :key="index"

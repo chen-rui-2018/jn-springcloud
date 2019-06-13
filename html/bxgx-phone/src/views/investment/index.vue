@@ -512,13 +512,14 @@ export default {
       .tab-nav {
         padding: 0 40px;
         .vux-tab .vux-tab-item {
-          font-size: 30px;
+          font-size: 28px;
         }
       }
       .more-desc {
         position: absolute;
         right: 40px;
         bottom: 0;
+        font-size: 28px;
       }
     }
     .investment-banner {

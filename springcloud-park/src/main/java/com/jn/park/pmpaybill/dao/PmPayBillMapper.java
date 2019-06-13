@@ -1,7 +1,6 @@
 package com.jn.park.pmpaybill.dao;
 
 import com.jn.park.pmpaybill.entity.TbPmPayBill;
-import com.jn.park.pmpaybill.entity.TbPmPayRule;
 
 import java.util.List;
 

@@ -4,26 +4,22 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class TbPmPayRule implements Serializable {
+public class TbPmPriceRules implements Serializable {
     private String id;
 
     private String companyId;
 
     private String companyName;
 
-    private String name;
+    private String pmRuleName;
 
-    private Byte calcMode;
+    private String pricingWay;
 
-    private Integer sharePercentage;
+    private BigDecimal unitPrice;
 
-    private Byte status;
+    private String equallySharedCoefficient;
 
     private String remark;
-
-    private BigDecimal price;
-
-    private String payType;
 
     private Byte recordStatus;
 
@@ -61,36 +57,36 @@ public class TbPmPayRule implements Serializable {
         this.companyName = companyName == null ? null : companyName.trim();
     }
 
-    public String getName() {
-        return name;
+    public String getPmRuleName() {
+        return pmRuleName;
     }
 
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+    public void setPmRuleName(String pmRuleName) {
+        this.pmRuleName = pmRuleName == null ? null : pmRuleName.trim();
     }
 
-    public Byte getCalcMode() {
-        return calcMode;
+    public String getPricingWay() {
+        return pricingWay;
     }
 
-    public void setCalcMode(Byte calcMode) {
-        this.calcMode = calcMode;
+    public void setPricingWay(String pricingWay) {
+        this.pricingWay = pricingWay == null ? null : pricingWay.trim();
     }
 
-    public Integer getSharePercentage() {
-        return sharePercentage;
+    public BigDecimal getUnitPrice() {
+        return unitPrice;
     }
 
-    public void setSharePercentage(Integer sharePercentage) {
-        this.sharePercentage = sharePercentage;
+    public void setUnitPrice(BigDecimal unitPrice) {
+        this.unitPrice = unitPrice;
     }
 
-    public Byte getStatus() {
-        return status;
+    public String getEquallySharedCoefficient() {
+        return equallySharedCoefficient;
     }
 
-    public void setStatus(Byte status) {
-        this.status = status;
+    public void setEquallySharedCoefficient(String equallySharedCoefficient) {
+        this.equallySharedCoefficient = equallySharedCoefficient == null ? null : equallySharedCoefficient.trim();
     }
 
     public String getRemark() {
@@ -99,22 +95,6 @@ public class TbPmPayRule implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public String getPayType() {
-        return payType;
-    }
-
-    public void setPayType(String payType) {
-        this.payType = payType == null ? null : payType.trim();
     }
 
     public Byte getRecordStatus() {
@@ -168,17 +148,15 @@ public class TbPmPayRule implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        TbPmPayRule other = (TbPmPayRule) that;
+        TbPmPriceRules other = (TbPmPriceRules) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getCompanyId() == null ? other.getCompanyId() == null : this.getCompanyId().equals(other.getCompanyId()))
             && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()))
-            && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
-            && (this.getCalcMode() == null ? other.getCalcMode() == null : this.getCalcMode().equals(other.getCalcMode()))
-            && (this.getSharePercentage() == null ? other.getSharePercentage() == null : this.getSharePercentage().equals(other.getSharePercentage()))
-            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
+            && (this.getPmRuleName() == null ? other.getPmRuleName() == null : this.getPmRuleName().equals(other.getPmRuleName()))
+            && (this.getPricingWay() == null ? other.getPricingWay() == null : this.getPricingWay().equals(other.getPricingWay()))
+            && (this.getUnitPrice() == null ? other.getUnitPrice() == null : this.getUnitPrice().equals(other.getUnitPrice()))
+            && (this.getEquallySharedCoefficient() == null ? other.getEquallySharedCoefficient() == null : this.getEquallySharedCoefficient().equals(other.getEquallySharedCoefficient()))
             && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
-            && (this.getPrice() == null ? other.getPrice() == null : this.getPrice().equals(other.getPrice()))
-            && (this.getPayType() == null ? other.getPayType() == null : this.getPayType().equals(other.getPayType()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
@@ -193,13 +171,11 @@ public class TbPmPayRule implements Serializable {
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getCompanyId() == null) ? 0 : getCompanyId().hashCode());
         result = prime * result + ((getCompanyName() == null) ? 0 : getCompanyName().hashCode());
-        result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
-        result = prime * result + ((getCalcMode() == null) ? 0 : getCalcMode().hashCode());
-        result = prime * result + ((getSharePercentage() == null) ? 0 : getSharePercentage().hashCode());
-        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        result = prime * result + ((getPmRuleName() == null) ? 0 : getPmRuleName().hashCode());
+        result = prime * result + ((getPricingWay() == null) ? 0 : getPricingWay().hashCode());
+        result = prime * result + ((getUnitPrice() == null) ? 0 : getUnitPrice().hashCode());
+        result = prime * result + ((getEquallySharedCoefficient() == null) ? 0 : getEquallySharedCoefficient().hashCode());
         result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
-        result = prime * result + ((getPrice() == null) ? 0 : getPrice().hashCode());
-        result = prime * result + ((getPayType() == null) ? 0 : getPayType().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
@@ -217,13 +193,11 @@ public class TbPmPayRule implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", companyId=").append(companyId);
         sb.append(", companyName=").append(companyName);
-        sb.append(", name=").append(name);
-        sb.append(", calcMode=").append(calcMode);
-        sb.append(", sharePercentage=").append(sharePercentage);
-        sb.append(", status=").append(status);
+        sb.append(", pmRuleName=").append(pmRuleName);
+        sb.append(", pricingWay=").append(pricingWay);
+        sb.append(", unitPrice=").append(unitPrice);
+        sb.append(", equallySharedCoefficient=").append(equallySharedCoefficient);
         sb.append(", remark=").append(remark);
-        sb.append(", price=").append(price);
-        sb.append(", payType=").append(payType);
         sb.append(", recordStatus=").append(recordStatus);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", createdTime=").append(createdTime);

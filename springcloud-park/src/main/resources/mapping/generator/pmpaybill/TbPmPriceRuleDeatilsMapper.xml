@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jn.park.pmpaybill.dao.TbPmPayRuleMapper">
-  <resultMap id="BaseResultMap" type="com.jn.park.pmpaybill.entity.TbPmPayRule">
+<mapper namespace="com.jn.park.pmpaybill.dao.TbPmPriceRuleDeatilsMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.pmpaybill.entity.TbPmPriceRuleDeatils">
     <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="company_id" jdbcType="VARCHAR" property="companyId" />
-    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="calc_mode" jdbcType="TINYINT" property="calcMode" />
-    <result column="share_percentage" jdbcType="INTEGER" property="sharePercentage" />
-    <result column="status" jdbcType="TINYINT" property="status" />
-    <result column="remark" jdbcType="VARCHAR" property="remark" />
-    <result column="price" jdbcType="DECIMAL" property="price" />
-    <result column="pay_type" jdbcType="VARCHAR" property="payType" />
+    <result column="rule_id" jdbcType="VARCHAR" property="ruleId" />
+    <result column="room_id" jdbcType="VARCHAR" property="roomId" />
+    <result column="room_name" jdbcType="VARCHAR" property="roomName" />
+    <result column="room_area" jdbcType="DECIMAL" property="roomArea" />
+    <result column="tower_id" jdbcType="VARCHAR" property="towerId" />
+    <result column="tower_name" jdbcType="VARCHAR" property="towerName" />
+    <result column="pm_unit_price" jdbcType="DECIMAL" property="pmUnitPrice" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -77,17 +76,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, company_id, company_name, name, calc_mode, share_percentage, status, remark, 
-    price, pay_type, record_status, creator_account, created_time, modifier_account, 
-    modified_time
+    id, rule_id, room_id, room_name, room_area, tower_id, tower_name, pm_unit_price, 
+    record_status, creator_account, created_time, modifier_account, modified_time, remark
   </sql>
-  <select id="selectByExample" parameterType="com.jn.park.pmpaybill.entity.TbPmPayRuleCriteria" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.jn.park.pmpaybill.entity.TbPmPriceRuleDeatilsCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_pm_pay_rule
+    from tb_pm_price_rule_deatils
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -98,65 +96,57 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_pm_pay_rule
+    from tb_pm_price_rule_deatils
     where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from tb_pm_pay_rule
+    delete from tb_pm_price_rule_deatils
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.jn.park.pmpaybill.entity.TbPmPayRuleCriteria">
-    delete from tb_pm_pay_rule
+  <delete id="deleteByExample" parameterType="com.jn.park.pmpaybill.entity.TbPmPriceRuleDeatilsCriteria">
+    delete from tb_pm_price_rule_deatils
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jn.park.pmpaybill.entity.TbPmPayRule">
-    insert into tb_pm_pay_rule (id, company_id, company_name, 
-      name, calc_mode, share_percentage, 
-      status, remark, price, 
-      pay_type, record_status, creator_account, 
-      created_time, modifier_account, modified_time
-      )
-    values (#{id,jdbcType=VARCHAR}, #{companyId,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, 
-      #{name,jdbcType=VARCHAR}, #{calcMode,jdbcType=TINYINT}, #{sharePercentage,jdbcType=INTEGER}, 
-      #{status,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, 
-      #{payType,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
-      )
+  <insert id="insert" parameterType="com.jn.park.pmpaybill.entity.TbPmPriceRuleDeatils">
+    insert into tb_pm_price_rule_deatils (id, rule_id, room_id, 
+      room_name, room_area, tower_id, 
+      tower_name, pm_unit_price, record_status, 
+      creator_account, created_time, modifier_account, 
+      modified_time, remark)
+    values (#{id,jdbcType=VARCHAR}, #{ruleId,jdbcType=VARCHAR}, #{roomId,jdbcType=VARCHAR}, 
+      #{roomName,jdbcType=VARCHAR}, #{roomArea,jdbcType=DECIMAL}, #{towerId,jdbcType=VARCHAR}, 
+      #{towerName,jdbcType=VARCHAR}, #{pmUnitPrice,jdbcType=DECIMAL}, #{recordStatus,jdbcType=TINYINT}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.jn.park.pmpaybill.entity.TbPmPayRule">
-    insert into tb_pm_pay_rule
+  <insert id="insertSelective" parameterType="com.jn.park.pmpaybill.entity.TbPmPriceRuleDeatils">
+    insert into tb_pm_price_rule_deatils
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
       </if>
-      <if test="companyId != null">
-        company_id,
+      <if test="ruleId != null">
+        rule_id,
       </if>
-      <if test="companyName != null">
-        company_name,
+      <if test="roomId != null">
+        room_id,
       </if>
-      <if test="name != null">
-        name,
+      <if test="roomName != null">
+        room_name,
       </if>
-      <if test="calcMode != null">
-        calc_mode,
+      <if test="roomArea != null">
+        room_area,
       </if>
-      <if test="sharePercentage != null">
-        share_percentage,
+      <if test="towerId != null">
+        tower_id,
       </if>
-      <if test="status != null">
-        status,
+      <if test="towerName != null">
+        tower_name,
       </if>
-      <if test="remark != null">
-        remark,
-      </if>
-      <if test="price != null">
-        price,
-      </if>
-      <if test="payType != null">
-        pay_type,
+      <if test="pmUnitPrice != null">
+        pm_unit_price,
       </if>
       <if test="recordStatus != null">
         record_status,
@@ -173,37 +163,34 @@
       <if test="modifiedTime != null">
         modified_time,
       </if>
+      <if test="remark != null">
+        remark,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=VARCHAR},
       </if>
-      <if test="companyId != null">
-        #{companyId,jdbcType=VARCHAR},
+      <if test="ruleId != null">
+        #{ruleId,jdbcType=VARCHAR},
       </if>
-      <if test="companyName != null">
-        #{companyName,jdbcType=VARCHAR},
+      <if test="roomId != null">
+        #{roomId,jdbcType=VARCHAR},
       </if>
-      <if test="name != null">
-        #{name,jdbcType=VARCHAR},
+      <if test="roomName != null">
+        #{roomName,jdbcType=VARCHAR},
       </if>
-      <if test="calcMode != null">
-        #{calcMode,jdbcType=TINYINT},
+      <if test="roomArea != null">
+        #{roomArea,jdbcType=DECIMAL},
       </if>
-      <if test="sharePercentage != null">
-        #{sharePercentage,jdbcType=INTEGER},
+      <if test="towerId != null">
+        #{towerId,jdbcType=VARCHAR},
       </if>
-      <if test="status != null">
-        #{status,jdbcType=TINYINT},
+      <if test="towerName != null">
+        #{towerName,jdbcType=VARCHAR},
       </if>
-      <if test="remark != null">
-        #{remark,jdbcType=VARCHAR},
-      </if>
-      <if test="price != null">
-        #{price,jdbcType=DECIMAL},
-      </if>
-      <if test="payType != null">
-        #{payType,jdbcType=VARCHAR},
+      <if test="pmUnitPrice != null">
+        #{pmUnitPrice,jdbcType=DECIMAL},
       </if>
       <if test="recordStatus != null">
         #{recordStatus,jdbcType=TINYINT},
@@ -220,46 +207,43 @@
       <if test="modifiedTime != null">
         #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jn.park.pmpaybill.entity.TbPmPayRuleCriteria" resultType="java.lang.Long">
-    select count(*) from tb_pm_pay_rule
+  <select id="countByExample" parameterType="com.jn.park.pmpaybill.entity.TbPmPriceRuleDeatilsCriteria" resultType="java.lang.Long">
+    select count(*) from tb_pm_price_rule_deatils
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_pm_pay_rule
+    update tb_pm_price_rule_deatils
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=VARCHAR},
       </if>
-      <if test="record.companyId != null">
-        company_id = #{record.companyId,jdbcType=VARCHAR},
+      <if test="record.ruleId != null">
+        rule_id = #{record.ruleId,jdbcType=VARCHAR},
       </if>
-      <if test="record.companyName != null">
-        company_name = #{record.companyName,jdbcType=VARCHAR},
+      <if test="record.roomId != null">
+        room_id = #{record.roomId,jdbcType=VARCHAR},
       </if>
-      <if test="record.name != null">
-        name = #{record.name,jdbcType=VARCHAR},
+      <if test="record.roomName != null">
+        room_name = #{record.roomName,jdbcType=VARCHAR},
       </if>
-      <if test="record.calcMode != null">
-        calc_mode = #{record.calcMode,jdbcType=TINYINT},
+      <if test="record.roomArea != null">
+        room_area = #{record.roomArea,jdbcType=DECIMAL},
       </if>
-      <if test="record.sharePercentage != null">
-        share_percentage = #{record.sharePercentage,jdbcType=INTEGER},
+      <if test="record.towerId != null">
+        tower_id = #{record.towerId,jdbcType=VARCHAR},
       </if>
-      <if test="record.status != null">
-        status = #{record.status,jdbcType=TINYINT},
+      <if test="record.towerName != null">
+        tower_name = #{record.towerName,jdbcType=VARCHAR},
       </if>
-      <if test="record.remark != null">
-        remark = #{record.remark,jdbcType=VARCHAR},
-      </if>
-      <if test="record.price != null">
-        price = #{record.price,jdbcType=DECIMAL},
-      </if>
-      <if test="record.payType != null">
-        pay_type = #{record.payType,jdbcType=VARCHAR},
+      <if test="record.pmUnitPrice != null">
+        pm_unit_price = #{record.pmUnitPrice,jdbcType=DECIMAL},
       </if>
       <if test="record.recordStatus != null">
         record_status = #{record.recordStatus,jdbcType=TINYINT},
@@ -276,61 +260,57 @@
       <if test="record.modifiedTime != null">
         modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_pm_pay_rule
+    update tb_pm_price_rule_deatils
     set id = #{record.id,jdbcType=VARCHAR},
-      company_id = #{record.companyId,jdbcType=VARCHAR},
-      company_name = #{record.companyName,jdbcType=VARCHAR},
-      name = #{record.name,jdbcType=VARCHAR},
-      calc_mode = #{record.calcMode,jdbcType=TINYINT},
-      share_percentage = #{record.sharePercentage,jdbcType=INTEGER},
-      status = #{record.status,jdbcType=TINYINT},
-      remark = #{record.remark,jdbcType=VARCHAR},
-      price = #{record.price,jdbcType=DECIMAL},
-      pay_type = #{record.payType,jdbcType=VARCHAR},
+      rule_id = #{record.ruleId,jdbcType=VARCHAR},
+      room_id = #{record.roomId,jdbcType=VARCHAR},
+      room_name = #{record.roomName,jdbcType=VARCHAR},
+      room_area = #{record.roomArea,jdbcType=DECIMAL},
+      tower_id = #{record.towerId,jdbcType=VARCHAR},
+      tower_name = #{record.towerName,jdbcType=VARCHAR},
+      pm_unit_price = #{record.pmUnitPrice,jdbcType=DECIMAL},
       record_status = #{record.recordStatus,jdbcType=TINYINT},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      remark = #{record.remark,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.pmpaybill.entity.TbPmPayRule">
-    update tb_pm_pay_rule
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.pmpaybill.entity.TbPmPriceRuleDeatils">
+    update tb_pm_price_rule_deatils
     <set>
-      <if test="companyId != null">
-        company_id = #{companyId,jdbcType=VARCHAR},
+      <if test="ruleId != null">
+        rule_id = #{ruleId,jdbcType=VARCHAR},
       </if>
-      <if test="companyName != null">
-        company_name = #{companyName,jdbcType=VARCHAR},
+      <if test="roomId != null">
+        room_id = #{roomId,jdbcType=VARCHAR},
       </if>
-      <if test="name != null">
-        name = #{name,jdbcType=VARCHAR},
+      <if test="roomName != null">
+        room_name = #{roomName,jdbcType=VARCHAR},
       </if>
-      <if test="calcMode != null">
-        calc_mode = #{calcMode,jdbcType=TINYINT},
+      <if test="roomArea != null">
+        room_area = #{roomArea,jdbcType=DECIMAL},
       </if>
-      <if test="sharePercentage != null">
-        share_percentage = #{sharePercentage,jdbcType=INTEGER},
+      <if test="towerId != null">
+        tower_id = #{towerId,jdbcType=VARCHAR},
       </if>
-      <if test="status != null">
-        status = #{status,jdbcType=TINYINT},
+      <if test="towerName != null">
+        tower_name = #{towerName,jdbcType=VARCHAR},
       </if>
-      <if test="remark != null">
-        remark = #{remark,jdbcType=VARCHAR},
-      </if>
-      <if test="price != null">
-        price = #{price,jdbcType=DECIMAL},
-      </if>
-      <if test="payType != null">
-        pay_type = #{payType,jdbcType=VARCHAR},
+      <if test="pmUnitPrice != null">
+        pm_unit_price = #{pmUnitPrice,jdbcType=DECIMAL},
       </if>
       <if test="recordStatus != null">
         record_status = #{recordStatus,jdbcType=TINYINT},
@@ -347,25 +327,27 @@
       <if test="modifiedTime != null">
         modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jn.park.pmpaybill.entity.TbPmPayRule">
-    update tb_pm_pay_rule
-    set company_id = #{companyId,jdbcType=VARCHAR},
-      company_name = #{companyName,jdbcType=VARCHAR},
-      name = #{name,jdbcType=VARCHAR},
-      calc_mode = #{calcMode,jdbcType=TINYINT},
-      share_percentage = #{sharePercentage,jdbcType=INTEGER},
-      status = #{status,jdbcType=TINYINT},
-      remark = #{remark,jdbcType=VARCHAR},
-      price = #{price,jdbcType=DECIMAL},
-      pay_type = #{payType,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.pmpaybill.entity.TbPmPriceRuleDeatils">
+    update tb_pm_price_rule_deatils
+    set rule_id = #{ruleId,jdbcType=VARCHAR},
+      room_id = #{roomId,jdbcType=VARCHAR},
+      room_name = #{roomName,jdbcType=VARCHAR},
+      room_area = #{roomArea,jdbcType=DECIMAL},
+      tower_id = #{towerId,jdbcType=VARCHAR},
+      tower_name = #{towerName,jdbcType=VARCHAR},
+      pm_unit_price = #{pmUnitPrice,jdbcType=DECIMAL},
       record_status = #{recordStatus,jdbcType=TINYINT},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
-      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

@@ -24,9 +24,9 @@ public class PmPayBillServiceController implements PmPayBillServiceClient {
     private PmPayBillService pmPayBillService;
 
     @Override
-    @ControllerLog(doAction = "每月初1号凌晨两点生成物业费缴费单")
-    public Result<Boolean> autoGeneratePmPayBillDeatils() {
-        pmPayBillService.autoGeneratePmPayBillDeatils();
+    @ControllerLog(doAction = "每季度第一天凌晨,为企业生成物业费账单")
+    public Result<Boolean> createPmPayBillByQuarter() {
+        pmPayBillService.createPmPayBillByQuarter();
         return new Result<>(true);
     }
 

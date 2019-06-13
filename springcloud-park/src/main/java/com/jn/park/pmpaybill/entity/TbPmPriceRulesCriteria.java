@@ -5,14 +5,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class TbPmPayRuleCriteria {
+public class TbPmPriceRulesCriteria {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public TbPmPayRuleCriteria() {
+    public TbPmPriceRulesCriteria() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -316,253 +316,273 @@ public class TbPmPayRuleCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andNameIsNull() {
-            addCriterion("name is null");
+        public Criteria andPmRuleNameIsNull() {
+            addCriterion("pm_rule_name is null");
             return (Criteria) this;
         }
 
-        public Criteria andNameIsNotNull() {
-            addCriterion("name is not null");
+        public Criteria andPmRuleNameIsNotNull() {
+            addCriterion("pm_rule_name is not null");
             return (Criteria) this;
         }
 
-        public Criteria andNameEqualTo(String value) {
-            addCriterion("name =", value, "name");
+        public Criteria andPmRuleNameEqualTo(String value) {
+            addCriterion("pm_rule_name =", value, "pmRuleName");
             return (Criteria) this;
         }
 
-        public Criteria andNameNotEqualTo(String value) {
-            addCriterion("name <>", value, "name");
+        public Criteria andPmRuleNameNotEqualTo(String value) {
+            addCriterion("pm_rule_name <>", value, "pmRuleName");
             return (Criteria) this;
         }
 
-        public Criteria andNameGreaterThan(String value) {
-            addCriterion("name >", value, "name");
+        public Criteria andPmRuleNameGreaterThan(String value) {
+            addCriterion("pm_rule_name >", value, "pmRuleName");
             return (Criteria) this;
         }
 
-        public Criteria andNameGreaterThanOrEqualTo(String value) {
-            addCriterion("name >=", value, "name");
+        public Criteria andPmRuleNameGreaterThanOrEqualTo(String value) {
+            addCriterion("pm_rule_name >=", value, "pmRuleName");
             return (Criteria) this;
         }
 
-        public Criteria andNameLessThan(String value) {
-            addCriterion("name <", value, "name");
+        public Criteria andPmRuleNameLessThan(String value) {
+            addCriterion("pm_rule_name <", value, "pmRuleName");
             return (Criteria) this;
         }
 
-        public Criteria andNameLessThanOrEqualTo(String value) {
-            addCriterion("name <=", value, "name");
+        public Criteria andPmRuleNameLessThanOrEqualTo(String value) {
+            addCriterion("pm_rule_name <=", value, "pmRuleName");
             return (Criteria) this;
         }
 
-        public Criteria andNameLike(String value) {
-            addCriterion("name like", value, "name");
+        public Criteria andPmRuleNameLike(String value) {
+            addCriterion("pm_rule_name like", value, "pmRuleName");
             return (Criteria) this;
         }
 
-        public Criteria andNameNotLike(String value) {
-            addCriterion("name not like", value, "name");
+        public Criteria andPmRuleNameNotLike(String value) {
+            addCriterion("pm_rule_name not like", value, "pmRuleName");
             return (Criteria) this;
         }
 
-        public Criteria andNameIn(List<String> values) {
-            addCriterion("name in", values, "name");
+        public Criteria andPmRuleNameIn(List<String> values) {
+            addCriterion("pm_rule_name in", values, "pmRuleName");
             return (Criteria) this;
         }
 
-        public Criteria andNameNotIn(List<String> values) {
-            addCriterion("name not in", values, "name");
+        public Criteria andPmRuleNameNotIn(List<String> values) {
+            addCriterion("pm_rule_name not in", values, "pmRuleName");
             return (Criteria) this;
         }
 
-        public Criteria andNameBetween(String value1, String value2) {
-            addCriterion("name between", value1, value2, "name");
+        public Criteria andPmRuleNameBetween(String value1, String value2) {
+            addCriterion("pm_rule_name between", value1, value2, "pmRuleName");
             return (Criteria) this;
         }
 
-        public Criteria andNameNotBetween(String value1, String value2) {
-            addCriterion("name not between", value1, value2, "name");
+        public Criteria andPmRuleNameNotBetween(String value1, String value2) {
+            addCriterion("pm_rule_name not between", value1, value2, "pmRuleName");
             return (Criteria) this;
         }
 
-        public Criteria andCalcModeIsNull() {
-            addCriterion("calc_mode is null");
+        public Criteria andPricingWayIsNull() {
+            addCriterion("pricing_way is null");
             return (Criteria) this;
         }
 
-        public Criteria andCalcModeIsNotNull() {
-            addCriterion("calc_mode is not null");
+        public Criteria andPricingWayIsNotNull() {
+            addCriterion("pricing_way is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCalcModeEqualTo(Byte value) {
-            addCriterion("calc_mode =", value, "calcMode");
+        public Criteria andPricingWayEqualTo(String value) {
+            addCriterion("pricing_way =", value, "pricingWay");
             return (Criteria) this;
         }
 
-        public Criteria andCalcModeNotEqualTo(Byte value) {
-            addCriterion("calc_mode <>", value, "calcMode");
+        public Criteria andPricingWayNotEqualTo(String value) {
+            addCriterion("pricing_way <>", value, "pricingWay");
             return (Criteria) this;
         }
 
-        public Criteria andCalcModeGreaterThan(Byte value) {
-            addCriterion("calc_mode >", value, "calcMode");
+        public Criteria andPricingWayGreaterThan(String value) {
+            addCriterion("pricing_way >", value, "pricingWay");
             return (Criteria) this;
         }
 
-        public Criteria andCalcModeGreaterThanOrEqualTo(Byte value) {
-            addCriterion("calc_mode >=", value, "calcMode");
+        public Criteria andPricingWayGreaterThanOrEqualTo(String value) {
+            addCriterion("pricing_way >=", value, "pricingWay");
             return (Criteria) this;
         }
 
-        public Criteria andCalcModeLessThan(Byte value) {
-            addCriterion("calc_mode <", value, "calcMode");
+        public Criteria andPricingWayLessThan(String value) {
+            addCriterion("pricing_way <", value, "pricingWay");
             return (Criteria) this;
         }
 
-        public Criteria andCalcModeLessThanOrEqualTo(Byte value) {
-            addCriterion("calc_mode <=", value, "calcMode");
+        public Criteria andPricingWayLessThanOrEqualTo(String value) {
+            addCriterion("pricing_way <=", value, "pricingWay");
             return (Criteria) this;
         }
 
-        public Criteria andCalcModeIn(List<Byte> values) {
-            addCriterion("calc_mode in", values, "calcMode");
+        public Criteria andPricingWayLike(String value) {
+            addCriterion("pricing_way like", value, "pricingWay");
             return (Criteria) this;
         }
 
-        public Criteria andCalcModeNotIn(List<Byte> values) {
-            addCriterion("calc_mode not in", values, "calcMode");
+        public Criteria andPricingWayNotLike(String value) {
+            addCriterion("pricing_way not like", value, "pricingWay");
             return (Criteria) this;
         }
 
-        public Criteria andCalcModeBetween(Byte value1, Byte value2) {
-            addCriterion("calc_mode between", value1, value2, "calcMode");
+        public Criteria andPricingWayIn(List<String> values) {
+            addCriterion("pricing_way in", values, "pricingWay");
             return (Criteria) this;
         }
 
-        public Criteria andCalcModeNotBetween(Byte value1, Byte value2) {
-            addCriterion("calc_mode not between", value1, value2, "calcMode");
+        public Criteria andPricingWayNotIn(List<String> values) {
+            addCriterion("pricing_way not in", values, "pricingWay");
             return (Criteria) this;
         }
 
-        public Criteria andSharePercentageIsNull() {
-            addCriterion("share_percentage is null");
+        public Criteria andPricingWayBetween(String value1, String value2) {
+            addCriterion("pricing_way between", value1, value2, "pricingWay");
             return (Criteria) this;
         }
 
-        public Criteria andSharePercentageIsNotNull() {
-            addCriterion("share_percentage is not null");
+        public Criteria andPricingWayNotBetween(String value1, String value2) {
+            addCriterion("pricing_way not between", value1, value2, "pricingWay");
             return (Criteria) this;
         }
 
-        public Criteria andSharePercentageEqualTo(Integer value) {
-            addCriterion("share_percentage =", value, "sharePercentage");
+        public Criteria andUnitPriceIsNull() {
+            addCriterion("unit_price is null");
             return (Criteria) this;
         }
 
-        public Criteria andSharePercentageNotEqualTo(Integer value) {
-            addCriterion("share_percentage <>", value, "sharePercentage");
+        public Criteria andUnitPriceIsNotNull() {
+            addCriterion("unit_price is not null");
             return (Criteria) this;
         }
 
-        public Criteria andSharePercentageGreaterThan(Integer value) {
-            addCriterion("share_percentage >", value, "sharePercentage");
+        public Criteria andUnitPriceEqualTo(BigDecimal value) {
+            addCriterion("unit_price =", value, "unitPrice");
             return (Criteria) this;
         }
 
-        public Criteria andSharePercentageGreaterThanOrEqualTo(Integer value) {
-            addCriterion("share_percentage >=", value, "sharePercentage");
+        public Criteria andUnitPriceNotEqualTo(BigDecimal value) {
+            addCriterion("unit_price <>", value, "unitPrice");
             return (Criteria) this;
         }
 
-        public Criteria andSharePercentageLessThan(Integer value) {
-            addCriterion("share_percentage <", value, "sharePercentage");
+        public Criteria andUnitPriceGreaterThan(BigDecimal value) {
+            addCriterion("unit_price >", value, "unitPrice");
             return (Criteria) this;
         }
 
-        public Criteria andSharePercentageLessThanOrEqualTo(Integer value) {
-            addCriterion("share_percentage <=", value, "sharePercentage");
+        public Criteria andUnitPriceGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("unit_price >=", value, "unitPrice");
             return (Criteria) this;
         }
 
-        public Criteria andSharePercentageIn(List<Integer> values) {
-            addCriterion("share_percentage in", values, "sharePercentage");
+        public Criteria andUnitPriceLessThan(BigDecimal value) {
+            addCriterion("unit_price <", value, "unitPrice");
             return (Criteria) this;
         }
 
-        public Criteria andSharePercentageNotIn(List<Integer> values) {
-            addCriterion("share_percentage not in", values, "sharePercentage");
+        public Criteria andUnitPriceLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("unit_price <=", value, "unitPrice");
             return (Criteria) this;
         }
 
-        public Criteria andSharePercentageBetween(Integer value1, Integer value2) {
-            addCriterion("share_percentage between", value1, value2, "sharePercentage");
+        public Criteria andUnitPriceIn(List<BigDecimal> values) {
+            addCriterion("unit_price in", values, "unitPrice");
             return (Criteria) this;
         }
 
-        public Criteria andSharePercentageNotBetween(Integer value1, Integer value2) {
-            addCriterion("share_percentage not between", value1, value2, "sharePercentage");
+        public Criteria andUnitPriceNotIn(List<BigDecimal> values) {
+            addCriterion("unit_price not in", values, "unitPrice");
             return (Criteria) this;
         }
 
-        public Criteria andStatusIsNull() {
-            addCriterion("status is null");
+        public Criteria andUnitPriceBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("unit_price between", value1, value2, "unitPrice");
             return (Criteria) this;
         }
 
-        public Criteria andStatusIsNotNull() {
-            addCriterion("status is not null");
+        public Criteria andUnitPriceNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("unit_price not between", value1, value2, "unitPrice");
             return (Criteria) this;
         }
 
-        public Criteria andStatusEqualTo(Byte value) {
-            addCriterion("status =", value, "status");
+        public Criteria andEquallySharedCoefficientIsNull() {
+            addCriterion("equally_shared_coefficient is null");
             return (Criteria) this;
         }
 
-        public Criteria andStatusNotEqualTo(Byte value) {
-            addCriterion("status <>", value, "status");
+        public Criteria andEquallySharedCoefficientIsNotNull() {
+            addCriterion("equally_shared_coefficient is not null");
             return (Criteria) this;
         }
 
-        public Criteria andStatusGreaterThan(Byte value) {
-            addCriterion("status >", value, "status");
+        public Criteria andEquallySharedCoefficientEqualTo(String value) {
+            addCriterion("equally_shared_coefficient =", value, "equallySharedCoefficient");
             return (Criteria) this;
         }
 
-        public Criteria andStatusGreaterThanOrEqualTo(Byte value) {
-            addCriterion("status >=", value, "status");
+        public Criteria andEquallySharedCoefficientNotEqualTo(String value) {
+            addCriterion("equally_shared_coefficient <>", value, "equallySharedCoefficient");
             return (Criteria) this;
         }
 
-        public Criteria andStatusLessThan(Byte value) {
-            addCriterion("status <", value, "status");
+        public Criteria andEquallySharedCoefficientGreaterThan(String value) {
+            addCriterion("equally_shared_coefficient >", value, "equallySharedCoefficient");
             return (Criteria) this;
         }
 
-        public Criteria andStatusLessThanOrEqualTo(Byte value) {
-            addCriterion("status <=", value, "status");
+        public Criteria andEquallySharedCoefficientGreaterThanOrEqualTo(String value) {
+            addCriterion("equally_shared_coefficient >=", value, "equallySharedCoefficient");
             return (Criteria) this;
         }
 
-        public Criteria andStatusIn(List<Byte> values) {
-            addCriterion("status in", values, "status");
+        public Criteria andEquallySharedCoefficientLessThan(String value) {
+            addCriterion("equally_shared_coefficient <", value, "equallySharedCoefficient");
             return (Criteria) this;
         }
 
-        public Criteria andStatusNotIn(List<Byte> values) {
-            addCriterion("status not in", values, "status");
+        public Criteria andEquallySharedCoefficientLessThanOrEqualTo(String value) {
+            addCriterion("equally_shared_coefficient <=", value, "equallySharedCoefficient");
             return (Criteria) this;
         }
 
-        public Criteria andStatusBetween(Byte value1, Byte value2) {
-            addCriterion("status between", value1, value2, "status");
+        public Criteria andEquallySharedCoefficientLike(String value) {
+            addCriterion("equally_shared_coefficient like", value, "equallySharedCoefficient");
             return (Criteria) this;
         }
 
-        public Criteria andStatusNotBetween(Byte value1, Byte value2) {
-            addCriterion("status not between", value1, value2, "status");
+        public Criteria andEquallySharedCoefficientNotLike(String value) {
+            addCriterion("equally_shared_coefficient not like", value, "equallySharedCoefficient");
+            return (Criteria) this;
+        }
+
+        public Criteria andEquallySharedCoefficientIn(List<String> values) {
+            addCriterion("equally_shared_coefficient in", values, "equallySharedCoefficient");
+            return (Criteria) this;
+        }
+
+        public Criteria andEquallySharedCoefficientNotIn(List<String> values) {
+            addCriterion("equally_shared_coefficient not in", values, "equallySharedCoefficient");
+            return (Criteria) this;
+        }
+
+        public Criteria andEquallySharedCoefficientBetween(String value1, String value2) {
+            addCriterion("equally_shared_coefficient between", value1, value2, "equallySharedCoefficient");
+            return (Criteria) this;
+        }
+
+        public Criteria andEquallySharedCoefficientNotBetween(String value1, String value2) {
+            addCriterion("equally_shared_coefficient not between", value1, value2, "equallySharedCoefficient");
             return (Criteria) this;
         }
 
@@ -633,136 +653,6 @@ public class TbPmPayRuleCriteria {
 
         public Criteria andRemarkNotBetween(String value1, String value2) {
             addCriterion("remark not between", value1, value2, "remark");
-            return (Criteria) this;
-        }
-
-        public Criteria andPriceIsNull() {
-            addCriterion("price is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPriceIsNotNull() {
-            addCriterion("price is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPriceEqualTo(BigDecimal value) {
-            addCriterion("price =", value, "price");
-            return (Criteria) this;
-        }
-
-        public Criteria andPriceNotEqualTo(BigDecimal value) {
-            addCriterion("price <>", value, "price");
-            return (Criteria) this;
-        }
-
-        public Criteria andPriceGreaterThan(BigDecimal value) {
-            addCriterion("price >", value, "price");
-            return (Criteria) this;
-        }
-
-        public Criteria andPriceGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("price >=", value, "price");
-            return (Criteria) this;
-        }
-
-        public Criteria andPriceLessThan(BigDecimal value) {
-            addCriterion("price <", value, "price");
-            return (Criteria) this;
-        }
-
-        public Criteria andPriceLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("price <=", value, "price");
-            return (Criteria) this;
-        }
-
-        public Criteria andPriceIn(List<BigDecimal> values) {
-            addCriterion("price in", values, "price");
-            return (Criteria) this;
-        }
-
-        public Criteria andPriceNotIn(List<BigDecimal> values) {
-            addCriterion("price not in", values, "price");
-            return (Criteria) this;
-        }
-
-        public Criteria andPriceBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("price between", value1, value2, "price");
-            return (Criteria) this;
-        }
-
-        public Criteria andPriceNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("price not between", value1, value2, "price");
-            return (Criteria) this;
-        }
-
-        public Criteria andPayTypeIsNull() {
-            addCriterion("pay_type is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPayTypeIsNotNull() {
-            addCriterion("pay_type is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPayTypeEqualTo(String value) {
-            addCriterion("pay_type =", value, "payType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPayTypeNotEqualTo(String value) {
-            addCriterion("pay_type <>", value, "payType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPayTypeGreaterThan(String value) {
-            addCriterion("pay_type >", value, "payType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPayTypeGreaterThanOrEqualTo(String value) {
-            addCriterion("pay_type >=", value, "payType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPayTypeLessThan(String value) {
-            addCriterion("pay_type <", value, "payType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPayTypeLessThanOrEqualTo(String value) {
-            addCriterion("pay_type <=", value, "payType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPayTypeLike(String value) {
-            addCriterion("pay_type like", value, "payType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPayTypeNotLike(String value) {
-            addCriterion("pay_type not like", value, "payType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPayTypeIn(List<String> values) {
-            addCriterion("pay_type in", values, "payType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPayTypeNotIn(List<String> values) {
-            addCriterion("pay_type not in", values, "payType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPayTypeBetween(String value1, String value2) {
-            addCriterion("pay_type between", value1, value2, "payType");
-            return (Criteria) this;
-        }
-
-        public Criteria andPayTypeNotBetween(String value1, String value2) {
-            addCriterion("pay_type not between", value1, value2, "payType");
             return (Criteria) this;
         }
 

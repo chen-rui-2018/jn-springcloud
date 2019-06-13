@@ -385,63 +385,63 @@ public class TbPmPayBillItemPmListCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andRentalAreaIsNull() {
-            addCriterion("rental_area is null");
+        public Criteria andPmUnitPriceIsNull() {
+            addCriterion("pm_unit_price is null");
             return (Criteria) this;
         }
 
-        public Criteria andRentalAreaIsNotNull() {
-            addCriterion("rental_area is not null");
+        public Criteria andPmUnitPriceIsNotNull() {
+            addCriterion("pm_unit_price is not null");
             return (Criteria) this;
         }
 
-        public Criteria andRentalAreaEqualTo(BigDecimal value) {
-            addCriterion("rental_area =", value, "rentalArea");
+        public Criteria andPmUnitPriceEqualTo(BigDecimal value) {
+            addCriterion("pm_unit_price =", value, "pmUnitPrice");
             return (Criteria) this;
         }
 
-        public Criteria andRentalAreaNotEqualTo(BigDecimal value) {
-            addCriterion("rental_area <>", value, "rentalArea");
+        public Criteria andPmUnitPriceNotEqualTo(BigDecimal value) {
+            addCriterion("pm_unit_price <>", value, "pmUnitPrice");
             return (Criteria) this;
         }
 
-        public Criteria andRentalAreaGreaterThan(BigDecimal value) {
-            addCriterion("rental_area >", value, "rentalArea");
+        public Criteria andPmUnitPriceGreaterThan(BigDecimal value) {
+            addCriterion("pm_unit_price >", value, "pmUnitPrice");
             return (Criteria) this;
         }
 
-        public Criteria andRentalAreaGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("rental_area >=", value, "rentalArea");
+        public Criteria andPmUnitPriceGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("pm_unit_price >=", value, "pmUnitPrice");
             return (Criteria) this;
         }
 
-        public Criteria andRentalAreaLessThan(BigDecimal value) {
-            addCriterion("rental_area <", value, "rentalArea");
+        public Criteria andPmUnitPriceLessThan(BigDecimal value) {
+            addCriterion("pm_unit_price <", value, "pmUnitPrice");
             return (Criteria) this;
         }
 
-        public Criteria andRentalAreaLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("rental_area <=", value, "rentalArea");
+        public Criteria andPmUnitPriceLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("pm_unit_price <=", value, "pmUnitPrice");
             return (Criteria) this;
         }
 
-        public Criteria andRentalAreaIn(List<BigDecimal> values) {
-            addCriterion("rental_area in", values, "rentalArea");
+        public Criteria andPmUnitPriceIn(List<BigDecimal> values) {
+            addCriterion("pm_unit_price in", values, "pmUnitPrice");
             return (Criteria) this;
         }
 
-        public Criteria andRentalAreaNotIn(List<BigDecimal> values) {
-            addCriterion("rental_area not in", values, "rentalArea");
+        public Criteria andPmUnitPriceNotIn(List<BigDecimal> values) {
+            addCriterion("pm_unit_price not in", values, "pmUnitPrice");
             return (Criteria) this;
         }
 
-        public Criteria andRentalAreaBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("rental_area between", value1, value2, "rentalArea");
+        public Criteria andPmUnitPriceBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("pm_unit_price between", value1, value2, "pmUnitPrice");
             return (Criteria) this;
         }
 
-        public Criteria andRentalAreaNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("rental_area not between", value1, value2, "rentalArea");
+        public Criteria andPmUnitPriceNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("pm_unit_price not between", value1, value2, "pmUnitPrice");
             return (Criteria) this;
         }
 
@@ -502,6 +502,66 @@ public class TbPmPayBillItemPmListCriteria {
 
         public Criteria andTotalAmountNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("total_amount not between", value1, value2, "totalAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andRentalAreaIsNull() {
+            addCriterion("rental_area is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRentalAreaIsNotNull() {
+            addCriterion("rental_area is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRentalAreaEqualTo(BigDecimal value) {
+            addCriterion("rental_area =", value, "rentalArea");
+            return (Criteria) this;
+        }
+
+        public Criteria andRentalAreaNotEqualTo(BigDecimal value) {
+            addCriterion("rental_area <>", value, "rentalArea");
+            return (Criteria) this;
+        }
+
+        public Criteria andRentalAreaGreaterThan(BigDecimal value) {
+            addCriterion("rental_area >", value, "rentalArea");
+            return (Criteria) this;
+        }
+
+        public Criteria andRentalAreaGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("rental_area >=", value, "rentalArea");
+            return (Criteria) this;
+        }
+
+        public Criteria andRentalAreaLessThan(BigDecimal value) {
+            addCriterion("rental_area <", value, "rentalArea");
+            return (Criteria) this;
+        }
+
+        public Criteria andRentalAreaLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("rental_area <=", value, "rentalArea");
+            return (Criteria) this;
+        }
+
+        public Criteria andRentalAreaIn(List<BigDecimal> values) {
+            addCriterion("rental_area in", values, "rentalArea");
+            return (Criteria) this;
+        }
+
+        public Criteria andRentalAreaNotIn(List<BigDecimal> values) {
+            addCriterion("rental_area not in", values, "rentalArea");
+            return (Criteria) this;
+        }
+
+        public Criteria andRentalAreaBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("rental_area between", value1, value2, "rentalArea");
+            return (Criteria) this;
+        }
+
+        public Criteria andRentalAreaNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("rental_area not between", value1, value2, "rentalArea");
             return (Criteria) this;
         }
     }

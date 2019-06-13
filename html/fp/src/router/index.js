@@ -295,7 +295,7 @@ const router= new Router({
               path: '/servicemarket/product/productService/ordinaryproductDetail',
               name: 'ordinaryproductDetail',
               meta: {
-                title: '常规产品详情'
+                title: '产品详情'
               },
               component: resolve => require(['@/views/home/productService/ordinaryproductDetail'], resolve)
             },

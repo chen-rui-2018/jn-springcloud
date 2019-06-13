@@ -106,6 +106,9 @@
         </li>
       </ul>
     </div>
+    <!-- <div class="serverOrgContent"  v-else>
+      <nodata></nodata>
+    </div> -->
     <div class="pagination-container">
       <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
       </el-pagination>
@@ -124,7 +127,11 @@
   </div>
 </template>
 <script>
+import nodata from "../common/noData.vue";
 export default {
+   components: {
+    nodata
+  },
   data() {
     return {
       concatVisible: false,

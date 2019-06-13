@@ -55,7 +55,7 @@
                 <div class="actiTab">
                     <ul class="allActiUl clearfix" v-if="flag">
                         <li v-for="(item,index) in actiListSlim" :key='index'>
-                            <div style="width:100%;height:200px" class="pointer"  @click="handleRout(item.id)">
+                            <div style="width:100%;height:200px" class="pointer" @click="handleRout(item.id)">
                                 <img style="width:100%;height:100%" :src="item.actiPosterUrl" alt="活动海报图片" class="posterImg">
                             </div>
                             <div class="actiInfo">
@@ -63,8 +63,6 @@
                                 <p class="actiTimer">
                                     <i class="el-icon-time"></i>
                                     <span>{{item.actiStartTime}}-{{item.actiEndTime}}</span>
-                                    <!-- <span>{{item.actiStartTime}}-{{item.actiEndTime.split(' ')[1]}}</span> -->
-                                    <!-- <span>周日14：00-17：00</span> -->
                                 </p>
                                 <p class="actiAddress">
                                     <i class="el-icon-location-outline"></i>
@@ -75,10 +73,6 @@
                                 <div class="avatar">
                                     <ul>
                                         <li v-for="(avr,key) in item.avatarList" :key="key"><img :src="avr" alt=""></li>
-                                        <!-- <li><img src="" alt=""></li>
-                                        <li><img src="" alt=""></li>
-                                        <li><img src="" alt=""></li>
-                                        <li><img src="" alt=""></li> -->
                                     </ul>
                                 </div>
                                 <i>{{item.applyNum}}/{{item.actiNumber}}</i>
@@ -124,6 +118,9 @@
                         </li>
                     </ul>
                 </div>
+                 <!-- <div class="actiTab" v-else v-loading="actiloading">
+                    <nodata></nodata>
+                </div> -->
             </div>
             <div class="pagination-container" style="margin:50px auto;">
                 <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[12, 24, 36, 48]" :page-size="row" layout="total, sizes, prev, pager, next, jumper" :total="total">
@@ -133,9 +130,14 @@
     </div>
 </template>
 <script>
+import nodata from "../common/noData.vue";
 export default {
+  components: {
+    nodata
+  },
   data() {
     return {
+      actiloading: false,
       currentPage4: 1,
       checkActi: "",
       flag: true,
@@ -249,6 +251,7 @@ export default {
     },
     initList() {
       //请求数据
+      this.actiloading = true;
       let _this = this;
       this.api.post({
         url: "activityListSlim",
@@ -263,6 +266,7 @@ export default {
         },
         dataFlag: false,
         callback: function(res) {
+          _this.actiloading = false;
           if (res.code == "0000") {
             _this.actiListSlim = res.data.rows;
             _this.total = res.data.total;

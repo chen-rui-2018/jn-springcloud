@@ -1,14 +1,18 @@
 package com.jn.park.parking.controller;
 
 import com.jn.common.controller.BaseController;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
+import com.jn.common.util.StringUtils;
 import com.jn.park.enums.ParkingExceptionEnum;
+import com.jn.park.finance.enums.FinanceBudgetExceptionEnums;
 import com.jn.park.parking.model.ParkingSpaceApplyModel;
 import com.jn.park.parking.model.ParkingSpaceAmountModel;
 import com.jn.park.parking.model.ParkingSpaceParam;
+import com.jn.park.parking.model.ParkingSpaceProtocolParam;
 import com.jn.park.parking.service.ParkingSpaceService;
 import com.jn.park.parking.vo.*;
 import com.jn.system.log.annotation.ControllerLog;
@@ -38,6 +42,22 @@ public class ParkingSpaceController extends BaseController {
 
     @Autowired
     private ParkingSpaceService parkingSpaceService;
+
+
+    @ControllerLog(doAction = " 查询停车位租赁协议")
+    @ApiOperation(value = "查询停车位租赁协议[前端用户/后台管理共用]", notes = "查询停车位租赁协议")
+    @RequestMapping(value = "/getParkingSpaceProtocol ",method = RequestMethod.GET)
+    public Result<ParkingSpaceProtocolVo> getParkingSpaceProtocol(ParkingSpaceProtocolParam parkingSpaceProtocolParam){
+        if(StringUtils.isBlank(parkingSpaceProtocolParam.getAreaId())){
+            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"停车场ID不能为空");
+        }
+        if(StringUtils.isBlank(parkingSpaceProtocolParam.getName())){
+            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"车主账号不能为空");
+        }
+        ParkingSpaceProtocolVo parkingSpaceProtocol = parkingSpaceService.getParkingSpaceProtocol(parkingSpaceProtocolParam);
+        return new Result<>(parkingSpaceProtocol);
+    }
+
 
     @ControllerLog(doAction = " 查询停车位列表")
     @ApiOperation(value = "查询停车位列表[前端用户/后台管理共用]", notes = "查询停车位列表数据")

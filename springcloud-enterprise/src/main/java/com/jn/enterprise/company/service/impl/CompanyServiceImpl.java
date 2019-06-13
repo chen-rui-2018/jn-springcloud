@@ -514,6 +514,51 @@ public class CompanyServiceImpl implements CompanyService {
         return i == 1;
     }
 
+    @Override
+    @ServiceLog(doAction = "查询当前企业信息")
+    public ServiceCompany getCurCompanyInfo(String account) {
+        Result<UserExtensionInfo> userExtensionResult = userExtensionClient.getUserExtension(account);
+        if (userExtensionResult == null || userExtensionResult.getData() == null) {
+            logger.warn("[查询当前企业信息] 用户信息获取失败");
+            return null;
+        }
+
+        UserExtensionInfo userExtensionInfo = userExtensionResult.getData();
+        if (StringUtils.isBlank(userExtensionInfo.getCompanyCode())) {
+            logger.warn("[查询当前企业信息] 当前用户非企业用户");
+            return null;
+        }
+
+        ServiceCompany company = new ServiceCompany();
+        String comId = userExtensionInfo.getCompanyCode();
+        TbServiceCompany tbServiceCompany = tbServiceCompanyMapper.selectByPrimaryKey(comId);
+        BeanUtils.copyProperties(tbServiceCompany, company);
+
+        if(null != tbServiceCompany.getFoundingTime()){
+            company.setFoundingTime(DateUtils.formatDate(tbServiceCompany.getFoundingTime(),PATTERN));
+        }
+        if(null != tbServiceCompany.getRunTime()){
+            company.setRunTime(DateUtils.formatDate(tbServiceCompany.getRunTime(),PATTERN));
+        }
+        if(null != tbServiceCompany.getLicStarttime()){
+            company.setLicStarttime(DateUtils.formatDate(tbServiceCompany.getLicStarttime(),PATTERN));
+        }
+        if(null != tbServiceCompany.getLicEndtime()){
+            company.setLicEndtime(DateUtils.formatDate(tbServiceCompany.getLicEndtime(),PATTERN));
+        }
+        if(null != tbServiceCompany.getCheckTime()){
+            company.setCheckTime(DateUtils.formatDate(tbServiceCompany.getCheckTime(),PATTERN_DETAIL));
+        }
+        if(null != tbServiceCompany.getCreatedTime()){
+            company.setCreatedTime(DateUtils.formatDate(tbServiceCompany.getCreatedTime(),PATTERN_DETAIL));
+        }
+        if(null != tbServiceCompany.getModifiedTime()){
+            company.setModifiedTime(DateUtils.formatDate(tbServiceCompany.getModifiedTime(),PATTERN_DETAIL));
+        }
+        company = setCompanyInfo(company);
+        return company;
+    }
+
 
     /**
      * 设置企业性质，行业领域名称

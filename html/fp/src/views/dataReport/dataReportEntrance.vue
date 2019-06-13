@@ -480,6 +480,7 @@
                 _this.$message.error(res.result)
                 reject()
               }
+              _this.loadingTab = false
               _this.loadingFormData = false
             }
           })

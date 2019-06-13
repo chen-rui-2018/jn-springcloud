@@ -212,7 +212,7 @@
                   <!-- <span>{{item.actiStartTime}}-{{item.actiEndTime.split(' ')[1]}}</span> -->
                   <!-- <span>周日14：00-17：00</span> -->
                 </p>
-                <p>
+                <p class="actiAddress">
                   <i class="el-icon-location-outline"></i>
                   <span>{{i.actiAddress}}</span>
                 </p>
@@ -280,7 +280,7 @@
         </div>
         <div class="enterPriseCon" ref="enterInfo1" data-class="bottom1">
           <div class="con1" v-for="(i,k) in recruitmentTable" :key="k" v-if="k==0">
-            <div class="con1Img"><img :src="i.posterUrl" alt=""></div>     
+            <div class="con1Img"><img :src="i.posterUrl" alt=""></div>
             <!-- <img src="@/../static/img/图层 4.png" alt=""> -->
             <div class="conTit1 color1">{{i.propagandaTitle}}</div>
             <div class="conInfo">
@@ -380,7 +380,7 @@
         </div>
         <div class="enterPark w" ref="enter2" data-class="bottom2">
           <ul ref="enter3">
-            <li :ref="i.id" :class="{'bottom2':i.flag}" class="pointer" v-for="(i,k) in companyList1" :key="k" @click="$router.push({path:'/companyProfile',query:{id:i.id}})">
+            <li :ref="i.id" v-if="k<8" :class="{'bottom2':i.flag}" class="pointer" v-for="(i,k) in companyList1" :key="k" @click="$router.push({path:'/companyProfile',query:{id:i.id}})">
               <div class="li1Div">
                 <img :src='"@/../static/img/"+i.id+".png"' alt="">
                 <p>{{i.preValue}}</p>
@@ -450,8 +450,8 @@ export default {
       noticeList: [],
       timer: "",
       achievementList: [
-        { name: "学术交流", content: "" ,type:'science'},
-        { name: "科技成果", content: "" ,type:'technology'}
+        { name: "学术交流", content: "", type: "science" },
+        { name: "科技成果", content: "", type: "technology" }
       ],
       companyList1: [],
       showSSSNum: 0,
@@ -465,16 +465,16 @@ export default {
   mounted() {
     window.addEventListener("scroll", this.handleScroll);
     this.gettalentsList();
-    this.getBannerList()
-    this.getBusinessAdContent()
-    this.getPolicyCenterList()
+    this.getBannerList();
+    this.getBusinessAdContent();
+    this.getPolicyCenterList();
     this.getActiList();
     this.getBusinessPromotionList();
     // this.getPropagandaTypeList();//获取宣传类型
     this.getCompanyList();
 
     this.showNoticeList(); //园区公告滚动
-    
+
   },
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
@@ -504,7 +504,7 @@ export default {
         this.sw = "0";
       }
     },
-    swiperinit(name,obj) {
+    swiperinit(name, obj) {
       var mySwiper = new swiper(name, obj);
     },
     bannerJump(url) {
@@ -698,58 +698,58 @@ export default {
     //政策指南
     getPolicyCenterList() {
       // return new Promise((resolve, reject) => {
-        let _this = this;
-        this.api.get({
-          url: "getPolicyCenterList",
-          data: {
-            needPage: 1,
-            page: _this.page2,
-            rows: _this.rows2,
-            tableType: "allPolicy",
-            policyType: "0"
-          },
-          callback: function(res) {
-            if (res.code == "0000") {
-              // let aaa = res.data.rows.concat(res.data.rows)
-              _this.policyCenterList = _this.formatArr(res.data.rows, 4);
-              // let baseArray = res.data.rows;
-              // let len = baseArray.length;
-              // let n = 4;
-              // let lineNum = len % 4 === 0 ? len / 4 : Math.floor(len / 4 + 1);
-              // for (let i = 0; i < lineNum; i++) {
-              //   let temp = baseArray.slice(i * n, i * n + n);
-              //   _this.policyCenterList.push(temp);
-              // }
-              _this.total2 = res.data.total;
-              // setTimeout(() => {
-              //   _this.swiperinit();
-              // }, 0);
-              let obj = {
-                autoplay: false,
-                // 如果需要分页器
-                pagination: {
-                  el: ".swiper-pagination"
-                },
-                // 如果需要前进后退按钮
-                navigation: {
-                  nextEl: ".swiper-button-next",
-                  prevEl: ".swiper-button-prev"
-                },
+      let _this = this;
+      this.api.get({
+        url: "getPolicyCenterList",
+        data: {
+          needPage: 1,
+          page: _this.page2,
+          rows: _this.rows2,
+          tableType: "allPolicy",
+          policyType: "0"
+        },
+        callback: function(res) {
+          if (res.code == "0000") {
+            // let aaa = res.data.rows.concat(res.data.rows)
+            _this.policyCenterList = _this.formatArr(res.data.rows, 4);
+            // let baseArray = res.data.rows;
+            // let len = baseArray.length;
+            // let n = 4;
+            // let lineNum = len % 4 === 0 ? len / 4 : Math.floor(len / 4 + 1);
+            // for (let i = 0; i < lineNum; i++) {
+            //   let temp = baseArray.slice(i * n, i * n + n);
+            //   _this.policyCenterList.push(temp);
+            // }
+            _this.total2 = res.data.total;
+            // setTimeout(() => {
+            //   _this.swiperinit();
+            // }, 0);
+            let obj = {
+              autoplay: false,
+              // 如果需要分页器
+              pagination: {
+                el: ".swiper-pagination"
+              },
+              // 如果需要前进后退按钮
+              navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev"
+              },
 
-                // 如果需要滚动条
-                scrollbar: {
-                  el: ".swiper-scrollbar"
-                }
+              // 如果需要滚动条
+              scrollbar: {
+                el: ".swiper-scrollbar"
               }
-            setTimeout(()=>{
-              _this.swiperinit('.swiper-container2',obj);
-            },0)
-              // resolve();
-            } else {
-              _this.$message.error(res.result);
-            }
+            };
+            setTimeout(() => {
+              _this.swiperinit(".swiper-container2", obj);
+            }, 0);
+            // resolve();
+          } else {
+            _this.$message.error(res.result);
           }
-        });
+        }
+      });
       // });
     },
     //热门活动
@@ -793,51 +793,51 @@ export default {
     // 首页轮播图
     getBannerList() {
       // return new Promise((resolve, reject) => {
-        this.api.get({
-          url: "getPromotionList",
-          data: {
-            issuePlatform: 2,
-            // propagandaType: 'home_banner_pc',//没有图片，暂时先用招商的测试
-            propagandaType: "home_banner",
-            needPage: 0
-          },
-          callback: res => {
-            if (res.code === "0000") {
-              this.bannerList = res.data.rows;
-              let obj = {
-                direction: "horizontal", // 垂直切换选项
-                loop: true, // 循环模式选项
-                noSwiping: true,
-                // autoplay: true,
-                observer:false,
-                // autoplay: {
-                //   delay: 2000,
-                // },
-                // 如果需要分页器
-                pagination: {
-                  el: ".swiper-pagination"
-                },
-                // 如果需要前进后退按钮
-                navigation: {
-                  nextEl: ".swiper-button-next",
-                  prevEl: ".swiper-button-prev"
-                },
+      this.api.get({
+        url: "getPromotionList",
+        data: {
+          issuePlatform: 2,
+          // propagandaType: 'home_banner_pc',//没有图片，暂时先用招商的测试
+          propagandaType: "home_banner",
+          needPage: 0
+        },
+        callback: res => {
+          if (res.code === "0000") {
+            this.bannerList = res.data.rows;
+            let obj = {
+              direction: "horizontal", // 垂直切换选项
+              loop: true, // 循环模式选项
+              noSwiping: true,
+              // autoplay: true,
+              observer: false,
+              // autoplay: {
+              //   delay: 2000,
+              // },
+              // 如果需要分页器
+              pagination: {
+                el: ".swiper-pagination"
+              },
+              // 如果需要前进后退按钮
+              navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev"
+              },
 
-                // 如果需要滚动条
-                scrollbar: {
-                  el: ".swiper-scrollbar"
-                }
+              // 如果需要滚动条
+              scrollbar: {
+                el: ".swiper-scrollbar"
               }
-            setTimeout(()=>{
-              this.swiperinit('.swiper-container',obj);
-            },0)
-              // resolve();
-            } else {
-              // reject();
-              this.$message.error(res.result);
-            }
+            };
+            setTimeout(() => {
+              this.swiperinit(".swiper-container", obj);
+            }, 0);
+            // resolve();
+          } else {
+            // reject();
+            this.$message.error(res.result);
           }
-        });
+        }
+      });
       // });
     },
     // 企业咨讯  企业宣传列表查询   资讯详情没有返回，日期前边的图标还没确定
@@ -921,11 +921,11 @@ export default {
               navigation: {
                 nextEl: ".swiper-button-next",
                 prevEl: ".swiper-button-prev"
-              },
-            }
-            setTimeout(()=>{
-              _this.swiperinit('.swiper-container1',obj1);
-            },0)
+              }
+            };
+            setTimeout(() => {
+              _this.swiperinit(".swiper-container1", obj1);
+            }, 0);
           } else {
             _this.$message.error(res.result);
           }
@@ -1394,6 +1394,11 @@ export default {
       color: #d0d0d0;
       top: 440px;
       top: 42%;
+    }
+    .actiAddress {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
   }
 

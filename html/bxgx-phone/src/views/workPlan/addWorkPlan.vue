@@ -95,42 +95,42 @@ export default {
               }
             })
           } else {
-            this.$vux.toast.text(res.result, 'top')
+            this.$vux.toast.text(res.result)
           }
         }
       })
     },
     submitWorkForm () {
       if (!this.workForm.itemId) {
-        this.$vux.toast.text('请选择所属项目', 'top')
+        this.$vux.toast.text('请选择所属项目')
         return false
       }
       if (!this.workForm.workPlanName) {
-        this.$vux.toast.text('请输入工作计划名称', 'top')
+        this.$vux.toast.text('请输入工作计划名称')
         return false
       }
       if (!this.workForm.responsibleUserAccount) {
-        this.$vux.toast.text('请选择项目负责人', 'top')
+        this.$vux.toast.text('请选择项目负责人')
         return false
       }
       if (!this.workForm.planStartTime) {
-        this.$vux.toast.text('请选择计划开始时间', 'top')
+        this.$vux.toast.text('请选择计划开始时间')
         return false
       }
       if (!this.workForm.planEndTime) {
-        this.$vux.toast.text('请选择计划结束时间', 'top')
+        this.$vux.toast.text('请选择计划结束时间')
         return false
       }
       if (!this.workForm.planTime) {
-        this.$vux.toast.text('请输入预计工时', 'top')
+        this.$vux.toast.text('请输入预计工时')
         return false
       }
       if (!this.workForm.content) {
-        this.$vux.toast.text('请填写任务内容', 'top')
+        this.$vux.toast.text('请填写任务内容')
         return false
       }
       if (!this.workForm.demandDescribe) {
-        this.$vux.toast.text('请填写需求描述', 'top')
+        this.$vux.toast.text('请填写需求描述')
         return false
       }
       this.api.post({
@@ -138,10 +138,10 @@ export default {
         data: this.workForm,
         callback: res => {
           if (res.code === '0000') {
-            this.$vux.toast.text('添加成功', 'top')
+            this.$vux.toast.text('添加成功')
             this.$router.push({path: '/workPlan/workPlan'})
           } else {
-            this.$vux.toast.text(res.result, 'top')
+            this.$vux.toast.text(res.result)
           }
         }
       })
@@ -159,7 +159,7 @@ export default {
               this.workForm.attachment = res.data
               this.submitWorkForm()
             } else {
-              this.$vux.toast.text(res.result, 'top')
+              this.$vux.toast.text(res.result)
             }
           }
         })
@@ -178,7 +178,7 @@ export default {
               this.workNameList.push({ value: val.itemName, key: val.id })
             })
           } else {
-            this.$vux.toast.text(res.result, 'top')
+            this.$vux.toast.text(res.result)
           }
         }
       })

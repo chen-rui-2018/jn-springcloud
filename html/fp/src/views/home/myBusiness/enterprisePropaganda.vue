@@ -10,6 +10,7 @@
           <span :class="approvalStatus==='4'?'active':''" @click="approvalPending">未付款</span>
           <span :class="approvalStatus==='6'?'active':''" @click="disapprove ">已发布</span>
           <span :class="approvalStatus==='0'?'active':''" @click="noFeedback ">未审批</span>
+          <span :class="approvalStatus==='1'?'active':''" @click="approvalIn ">审批中</span>
           <span :class="approvalStatus==='3'?'active':''" @click="denied ">审批不通过</span>
         </div>
         <el-input placeholder="请输入产品名称" v-model="searchContent" clearable>
@@ -44,10 +45,13 @@
               </el-button>  -->
               <el-button size="mini" type="text" class="greenColor" @click="toPropagandaDetails(scope.row)"><span>详情</span>
               </el-button>
+               <el-button size="mini" v-show="scope.row.approvalStatus==='4'"  type="text" @click="goPayment( scope.row)" class="greenColor"><span>去付款</span>
+              </el-button>
               <el-button v-show="scope.row.approvalStatus==='0'" size="mini" type="text" class="greenColor" @click="submitAudit(scope.row)"><span>提交审核</span>
               </el-button>
-              <el-button size="mini" type="text" @click="cancelApprove( scope.row)" class="redColor"><span>撤消申请</span>
+              <el-button size="mini" v-show="scope.row.approvalStatus==='4'||scope.row.approvalStatus==='0'" type="text" @click="cancelApprove( scope.row)" class="redColor"><span>撤消申请</span>
               </el-button>
+
             </template>
           </el-table-column>
         </el-table>
@@ -78,6 +82,9 @@ export default {
     };
   },
   mounted() {
+      if(this.$route.query.status){
+            this.approvalStatus=this.$route.query.status
+    }
     this.initList();
   },
   methods: {
@@ -152,11 +159,14 @@ export default {
     toPropagandaDetails(row) {
       this.$router.push({
         name: "propagandaDetails",
-        query: { propagandaId: row.id }
+        query: { propagandaId: row.id,status:row.approvalStatus }
       });
     },
     toPublishingPropaganda() {
       this.$router.push({ name: "publishingPropaganda" });
+    },
+    goPayment(){
+ console.log(123)
     },
     approvalPending() {
       this.approvalStatus = "4";
@@ -174,6 +184,10 @@ export default {
       this.approvalStatus = "3";
       this.initList();
     },
+    approvalIn(){
+this.approvalStatus = "1";
+      this.initList();
+    },
     handleSizeChange(val) {
       //改变每页显示多少条的回调函数
       this.rows = val;
@@ -189,9 +203,6 @@ export default {
 
     initList() {
       let _this = this;
-    //   if(this.$route.query.approvalStatus){
-    //         this.approvalStatus=this.$route.query.approvalStatus
-    // }
       this.api.get({
         url: "getBusinessPromotionList",
         data: {

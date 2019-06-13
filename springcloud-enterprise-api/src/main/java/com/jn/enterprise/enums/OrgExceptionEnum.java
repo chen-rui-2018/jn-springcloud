@@ -33,6 +33,7 @@ public enum OrgExceptionEnum  implements CodeAndMsg {
     ACCOUNT_NOT_ORG_CONTACT("5020520","取消联系人的账号不是机构联系人"),
     ORG_APPLY_PARAM_NOT_NULL("5020521","机构认证流程后置处理入参不能为空"),
     ORG_INFO_NOT_EXIST("5020522","机构信息在系统中不存在或已失效"),
+    ORG_INFO_HAS_EXIST("5020523","当前用户信息已存在，请不要重复进行机构认证"),
     ;
 
     /**

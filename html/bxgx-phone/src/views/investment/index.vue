@@ -35,70 +35,70 @@
         </div>
       </div>
 
-      <div class="investment-block">
-        <div class="investment-block-title">
-          <div class="block-title">招商政策</div>
-          <div
-            class="block-more"
-            @click="$router.push({path:'/investmentPolicy'})"
-          >
-            <span>更多</span>
-            <i class="icon iconfont icon-jiantou"></i>
-          </div>
-        </div>
-        <div class="investment-block-content">
-          <div
-            v-for="(item, index) in businessAdPolicy"
-            :key="index"
-            class="card-list"
-            @click="$router.push({path:'/investmentPolicyDetail',query:{id: item.id}})"
-          >
-            <div class="card-list-poster" :style="{backgroundImage: 'url(' + item.adCover + ')'}">
-            </div>
-            <div class="card-list-content">
-              <div class="card-list-title">{{ item.title }}</div>
-              <div class="card-list-text">{{ item.subTitle }}</div>
-              <div class="card-list-tips">
-                <span>{{ item.startTime }}</span>
-                <span class="flex-center">
-                  <i class="view-icon icon iconfont icon-view"></i>
-                  <span class="card-list-warning">{{ item.viewCount }}</span>
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+<!--      <div class="investment-block">-->
+<!--        <div class="investment-block-title">-->
+<!--          <div class="block-title">招商政策</div>-->
+<!--          <div-->
+<!--            class="block-more"-->
+<!--            @click="$router.push({path:'/investmentPolicy'})"-->
+<!--          >-->
+<!--            <span>更多</span>-->
+<!--            <i class="icon iconfont icon-jiantou"></i>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="investment-block-content">-->
+<!--          <div-->
+<!--            v-for="(item, index) in businessAdPolicy"-->
+<!--            :key="index"-->
+<!--            class="card-list"-->
+<!--            @click="$router.push({path:'/investmentPolicyDetail',query:{id: item.id}})"-->
+<!--          >-->
+<!--            <div class="card-list-poster" :style="{backgroundImage: 'url(' + item.adCover + ')'}">-->
+<!--            </div>-->
+<!--            <div class="card-list-content">-->
+<!--              <div class="card-list-title">{{ item.title }}</div>-->
+<!--              <div class="card-list-text">{{ item.subTitle }}</div>-->
+<!--              <div class="card-list-tips">-->
+<!--                <span>{{ item.startTime }}</span>-->
+<!--                <span class="flex-center">-->
+<!--                  <i class="view-icon icon iconfont icon-view"></i>-->
+<!--                  <span class="card-list-warning">{{ item.viewCount }}</span>-->
+<!--                </span>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
 
-      <div class="investment-block">
-        <div class="investment-block-title">
-          <div class="block-title">招商动态</div>
-          <div
-            class="block-more"
-            @click="$router.push({path:'/investmentDynamic'})"
-          >
-            <span>更多</span>
-            <i class="icon iconfont icon-jiantou"></i>
-          </div>
-        </div>
-        <div class="investment-block-content">
-          <div
-            v-for="(item, index) in businessAdDynamic"
-            :key="index"
-            class="card-list"
-            @click="$router.push({path:'/investmentDynamicDetail',query:{id: item.id}})"
-          >
-            <div class="card-list-poster" :style="{backgroundImage: 'url(' + item.adCover + ')'}"></div>
-            <div class="card-list-content">
-              <div class="card-list-title">{{ item.title }}</div>
-              <div class="card-list-text">{{ item.content }}</div>
-              <div class="card-list-tips">
-                <span>{{ item.startTime }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+<!--      <div class="investment-block">-->
+<!--        <div class="investment-block-title">-->
+<!--          <div class="block-title">招商动态</div>-->
+<!--          <div-->
+<!--            class="block-more"-->
+<!--            @click="$router.push({path:'/investmentDynamic'})"-->
+<!--          >-->
+<!--            <span>更多</span>-->
+<!--            <i class="icon iconfont icon-jiantou"></i>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="investment-block-content">-->
+<!--          <div-->
+<!--            v-for="(item, index) in businessAdDynamic"-->
+<!--            :key="index"-->
+<!--            class="card-list"-->
+<!--            @click="$router.push({path:'/investmentDynamicDetail',query:{id: item.id}})"-->
+<!--          >-->
+<!--            <div class="card-list-poster" :style="{backgroundImage: 'url(' + item.adCover + ')'}"></div>-->
+<!--            <div class="card-list-content">-->
+<!--              <div class="card-list-title">{{ item.title }}</div>-->
+<!--              <div class="card-list-text">{{ item.content }}</div>-->
+<!--              <div class="card-list-tips">-->
+<!--                <span>{{ item.startTime }}</span>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
 
       <div class="investment-block br-n">
         <div class="investment-block-title">

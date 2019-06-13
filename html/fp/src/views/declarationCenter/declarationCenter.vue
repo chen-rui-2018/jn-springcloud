@@ -110,6 +110,7 @@
   </div>
 </template>
 <script>
+import { getToken } from '@/util/auth'
 export default {
     data () {
       return {
@@ -231,7 +232,7 @@ export default {
         this.getdeclarationcenterList()
       },
       goplatform(){
-        if(sessionStorage.token){
+        if(getToken()){
           this.$router.push({name:'declarationPlatform'})
         }else{
           this.$confirm('亲，您需要登录后才能访问以下界面哦！', '提示', {

@@ -2,10 +2,7 @@ package com.jn.enterprise.company.service;
 
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
-import com.jn.company.model.CreditUpdateParam;
-import com.jn.company.model.ServiceCompany;
-import com.jn.company.model.ServiceCompanyParam;
-import com.jn.company.model.ServiceEnterpriseParam;
+import com.jn.company.model.*;
 import com.jn.enterprise.company.model.CompanyUpdateParam;
 import com.jn.enterprise.company.vo.CompanyContactVO;
 import com.jn.enterprise.company.vo.CompanyDetailsVo;
@@ -108,5 +105,12 @@ public interface CompanyService {
      * @return
      */
     CompanyInfoModel getCompanyInfo(String companyId,String account);
+
+    /**
+     * 企业缴费成功修改企业信息
+     * @param updateCompanyInfoParam
+     * @return
+     */
+    Boolean updateCompanyInfoAfterPay(UpdateCompanyInfoParam updateCompanyInfoParam);
 
 }

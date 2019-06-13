@@ -407,7 +407,7 @@ export default {
             if (this.meetingForm.participantsStr.length > 0 && this.meetingForm.startTime && this.meetingForm.endTime) {
               // 调用接口发送请求
               const meetingForm = Object.assign({}, this.meetingForm)
-              meetingForm.participantsStr = meetingForm.participantsStr.join('、')
+              meetingForm.participantsStr = meetingForm.participantsStr.join(',')
               meetingForm.fileUrl = this.tempFileUrl ? this.tempFileUrl : meetingForm.fileUrl
               api(`${this.GLOBAL.oaUrl}oa/oaMeeting/update`, meetingForm, 'post').then(res => {
                 if (res.data.code === this.GLOBAL.code) {
@@ -462,7 +462,7 @@ export default {
             if (this.meetingForm.participantsStr.length > 0 && this.meetingForm.startTime && this.meetingForm.endTime) {
             // 调用接口发送请求
               const meetingForm = Object.assign({}, this.meetingForm)
-              meetingForm.participantsStr = meetingForm.participantsStr.join('、')
+              meetingForm.participantsStr = meetingForm.participantsStr.join(',')
               meetingForm.fileUrl = this.tempFileUrl ? this.tempFileUrl : meetingForm.fileUrl
               api(`${this.GLOBAL.oaUrl}oa/oaMeeting/add`, meetingForm, 'post').then(res => {
                 if (res.data.code === this.GLOBAL.code) {
@@ -585,7 +585,7 @@ export default {
               var data = res.data.data
               this.meetingForm.title = data.title
               this.meetingForm.departmentsId = data.departmentsId
-              this.meetingForm.participantsStr = data.participantsStr.split('、')
+              this.meetingForm.participantsStr = data.participantsStr.split(',')
               this.meetingForm.departmentsId = data.organizationalId
               this.meetingForm.organizationalUser = data.organizationalUserId
               this.meetingForm.meetingRoomId = data.meetingRoomId

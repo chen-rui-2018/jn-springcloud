@@ -66,7 +66,7 @@
           class="notice-content">
           <div class="notice-dot"></div>
           <div v-if="item.messageConnect && item.messageConnect.orgName">
-            {{ item.messageConnect.orgName }}邀请您加入机构，成为机构顾问，点击
+            {{ item.messageConnect.orgName }}邀请您加入机构，成为机构专员，点击
             <router-link
               :to="`/myBody/acceptInvitation?orgId=${item.messageConnect.orgId}&orgName=${item.messageConnect.orgName}&businessArea=${item.messageConnect.businessArea}&messageId=${item.id}`" style="color: #00a041;"
             >查看详情</router-link>。
@@ -77,18 +77,20 @@
       <router-link to="/myBody/counselorManagement">
         <notice
           v-if="cardData.findAdviserInvitation || cardData.findAdviserInvitation === ''"
-          title="顾问管理"
+          title="专员管理"
           type="info"
           :content="cardData.findAdviserInvitation | wrapNumber"
         ></notice>
       </router-link>
-      <router-link to="/serviceMarket/requireManagementController/forothersneed">
+      <router-link
+        v-if="cardData.findRequirementManage || cardData.findRequirementManage === ''"
+        :to="needManagementPath">
         <notice
-          v-if="cardData.findRequirementManage || cardData.findRequirementManage === ''"
           title="需求管理"
           type="primary"
           :content="cardData.findRequirementManage | wrapNumber"
-        ></notice>
+        >
+        </notice>
       </router-link>
       <router-link to="/serviceMarket/comment/forOthersevaluate">
         <notice
@@ -139,7 +141,7 @@
           path: '/roleCertifications/investorCertification'
         }, {
           type: 'orange',
-          title: '顾问认证',
+          title: '服务专员认证',
           path: '/roleCertifications/advisoryInformation'
         }, {
           type: 'purple',
@@ -150,7 +152,8 @@
           // findReportedData: '', // 数据上报
         },
         messageData: {},
-        requestList: []
+        requestList: [],
+        needManagementPath: ''
       }
     },
     filters: {
@@ -179,10 +182,9 @@
         return new Promise(resolve => {
           // 上方4个导航
           const menuItems = JSON.parse(sessionStorage.menuItems)
-          console.log(menuItems)
           menuItems.forEach(item => {
             // 角色认证
-            if (item.label === '角色认证') {
+            if (item.label === '加入机构') {
               this.jurisdictionTagList = this.tagList
               this.roleJurisdiction = true
               // 机构邀请
@@ -209,10 +211,10 @@
                 }
               }
             }
-            // 顾问管理
+            // 专员管理
             if (item.label === '我的机构') {
               for (const list of item.resourcesList) {
-                if (list.resourcesName === '顾问管理') {
+                if (list.resourcesName === '专员管理') {
                   this.$set(this.cardData, 'findAdviserInvitation', '')
                   break
                 }
@@ -229,6 +231,9 @@
             // 需求管理
             if (item.label === '需求管理') {
               this.$set(this.cardData, 'findRequirementManage', '')
+              if ( item.children && item.children.length > 0) {
+                this.needManagementPath = item.children[0].path
+              }
             }
           })
           resolve()
@@ -239,7 +244,7 @@
           this.api.get({
             url: 'getMessageList',
             data: {
-              integer: '',
+              isRead: 0,
               messageTowTort: this.messageData[key].messageTowTort
             },
             callback: (res) => {

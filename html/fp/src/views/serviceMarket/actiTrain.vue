@@ -3,8 +3,10 @@
         <div class="trainContent">
             <div class="actiContent">
                 <div class="actiNav">
-                    <span class="pointer" @click="$router.push({ path: '/enterpriseservice'})">企业服务/</span>
-                    <span class="pointer" @click="$router.push({ path: '/serMatHp'})">服务超市/</span>
+                    <span class="pointer" @click="$router.push({ path: '/enterpriseservice'})">企业服务</span>
+                    <span>/</span>
+                    <span class="pointer" @click="$router.push({ path: '/serMatHp'})">服务超市</span>
+                    <span>/</span>
                     <span class="mainColor">活动培训</span>
                 </div>
                 <div class="actiFilter clearfix">
@@ -64,7 +66,7 @@
                                     <!-- <span>{{item.actiStartTime}}-{{item.actiEndTime.split(' ')[1]}}</span> -->
                                     <!-- <span>周日14：00-17：00</span> -->
                                 </p>
-                                <p>
+                                <p class="actiAddress">
                                     <i class="el-icon-location-outline"></i>
                                     <span>{{item.actiAddress}}</span>
                                 </p>

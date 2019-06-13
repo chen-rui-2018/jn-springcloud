@@ -42,6 +42,8 @@ public class OrgListParam extends Page implements Serializable {
     private Float serviceWeight=0.1f;
     @ApiModelProperty(value = "其他因素分值")
     private Float otherFactorScore=0.0f;
+    @ApiModelProperty(value = "允许展示科技金融")
+    private String allowTechnology;
 
     public String[] getBusinessType() {
         return businessType;
@@ -147,6 +149,14 @@ public class OrgListParam extends Page implements Serializable {
         this.otherFactorScore = otherFactorScore;
     }
 
+    public String getAllowTechnology() {
+        return allowTechnology;
+    }
+
+    public void setAllowTechnology(String allowTechnology) {
+        this.allowTechnology = allowTechnology;
+    }
+
     @Override
     public String toString() {
         return "OrgListParam{" +
@@ -163,6 +173,7 @@ public class OrgListParam extends Page implements Serializable {
                 ", praiseWeight=" + praiseWeight +
                 ", serviceWeight=" + serviceWeight +
                 ", otherFactorScore=" + otherFactorScore +
+                ", allowTechnology='" + allowTechnology + '\'' +
                 '}';
     }
 }

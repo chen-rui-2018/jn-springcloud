@@ -54,7 +54,7 @@ public class OrgServiceImplTest {
     @Test
     public void selectServiceOrgList() {
         OrgParameter orgParameter = new OrgParameter();
-        PaginationData paginationData = orgService.selectServiceOrgList(orgParameter);
+        PaginationData paginationData = orgService.selectServiceOrgList(orgParameter,false);
         List<ServiceOrg> a = (List<ServiceOrg>)paginationData.getRows();
         assertThat(a.size(),greaterThanOrEqualTo(0));
     }

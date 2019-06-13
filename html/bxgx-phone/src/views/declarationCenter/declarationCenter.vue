@@ -1,11 +1,10 @@
 <template>
 <div>
-    <div class="declarationCenter_search">
-      <search
-      v-model="sendData.titleName"
-      @on-change="gosearch"
-      ref="search" v-if="isShow!=1"></search>
+    <div class="declarationCenter_search" v-if="isShow!=1">
+      <i class="weui-icon-search" v-if="sendData.titleName===''"></i>
+      <input type="text" placeholder="搜索" @change="gosearch" v-model="sendData.titleName" >
     </div>
+    <!-- v-if="isShow!=1" gosearch-->
   <div class="declarationCenter" :class="{'padding':isShow!=1} ">
     <div class="banner" v-if="isShow===1"><img src="@/assets/image/declarationCenter-baner.png" alt=""></div>
     <!-- 常年申报 -->
@@ -48,7 +47,6 @@
     </div>
     <div class="before" v-if="isShow===1"></div>
     <!-- 申报中心列表 -->
-
     <div class="declaration_list">
       <div class="declaration_list_tab">
         <ul >
@@ -145,7 +143,6 @@ export default {
         var scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight)
         var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
         var clientHeight = window.innerHeight || Math.min(document.documentElement.clientHeight, document.body.clientHeight)
-        console.log()
         if (clientHeight + scrollTop >= scrollHeight) {
           if (this.sendData.page < Math.ceil(this.total / this.sendData.rows)) {
             this.sendData.page++
@@ -229,43 +226,24 @@ export default {
     position: fixed;
     z-index: 10;
     width: 100%;
-    .weui-search-bar{
-      padding:22px 32px;
+    background-color: #F5F5F5;
+    padding: 0 35px;
+    display: flex;
+    input::placeholder{
+      text-align: center;
+      font-size: 21px;
     }
-    .vux-search-box{
-      position: fixed;
-      // top:105px !important;
-    }
-    .weui-search-bar__label span{
-      font-size: 23px;
-    }
-    .weui-search-bar__input{
-      height: 63px;
-      line-height: 63px;
+    input{
+      height: 60px;
+      width:100%;
+      margin: 22px 0;
       border-radius: 30px;
+      padding: 0 40px;
     }
-    .weui-icon-search{
-      line-height: 63px;
-      font-size: 23px;
-    }
-    .weui-search-bar__box .weui-icon-clear{
-      line-height: 63px;
-    }
-    .weui-search-bar.weui-search-bar_focusing .weui-search-bar__cancel-btn{
-      display: flex;
-      align-items: center;
-    }
-    .weui-search-bar__box{
-      padding:0 70px;
-      .weui-icon-search{
-        left:20px;
-        top:20px;
-      }
-      .weui-search-bar__input{
-        padding:0;
-        height: 63px;
-        font-size: 23px;
-      }
+    i{
+      position: absolute;
+      top: 37%;
+      right: 54%
     }
   }
   .padding{

@@ -29,6 +29,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -120,7 +121,7 @@ public class AppSinkServiceImpl implements AppSinkService {
             }
         }
         jPushData.setAudience(audience);
-
+        logger.info("\napp消息推送,调用激光推送接口,构建接口所需参数:【{}】",jPushData.toString());
         PushPayload payload = JPushUtil.buildPushObject(jPushData);
         try {
             pushResult = new JPushClient(MASTER_SECRET, APP_KEY).sendPush(payload);
@@ -133,19 +134,29 @@ public class AppSinkServiceImpl implements AppSinkService {
 
 
     /**
-     * 判断app消息推送发送状态，如果是关闭状态则发送至配置的测试的ids
+     * 判断app消息推送发送状态，如果是关闭状态,则判断ids是否在配置的测试地址中，没有配置则默认取配置的第一个
      * @param ids
      * @return
      */
     public List<String> appSwitchJudge(List<String> ids) {
         //防止app消息推送不走mq，故在此判断是否开启邮件发送
+        logger.info("\n判断APP消息推送开关状态,状态是:【{}】",newsSwitchProperties.getApp());
         if(!newsSwitchProperties.getApp()) {
-            logger.info("\napp消息推送开关未开启,如有需要请向组长申请开启.");
+            List<String> newIds = new ArrayList<>();
+            logger.info("\napp消息推送开关未开启,如有需要请向组长申请开启,测试环境测试可在配置中心springcloud-news文件中配置白名单.");
             //关闭状态，设置app消息推送接收者
             if(null == newsSwitchProperties.getIds() || newsSwitchProperties.getIds().size()==0) {
                 throw new JnSpringCloudException(JPushExceptionEnum.JPUSH_SWITCH_NOTNULL_IDS);
             }
-            ids = newsSwitchProperties.getIds();
+            for(String id : ids) {
+                if(newsSwitchProperties.getIds().contains(id)) {
+                    newIds.add(id);
+                }
+            }
+            if(newIds.size()==0) {
+                newIds.add(newsSwitchProperties.getIds().get(0));
+            }
+            ids = newIds;
         }
         return ids;
     }

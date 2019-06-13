@@ -29,7 +29,7 @@
             </el-form-item>
           </div>
           <div>
-            <el-form-item label="意向顾问：">
+            <el-form-item label="意向专员：">
               <span>{{receiveDetail.advisorName}} </span>
             </el-form-item>
           </div>

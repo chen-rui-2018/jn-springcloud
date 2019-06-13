@@ -484,7 +484,8 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         }else if(tb3.getPaymentState().equals(PaymentBillEnum.BILL_ORDER_IS_PAY.getCode())){
             //已支付状态，发送缴费成功短信通知
             StringBuffer str = new StringBuffer();
-            str.append(tpbmr.getBillId()).append(PaymentBillEnum.BILL_AC_BOOK_TYPE_1.getMessage()).append(tpbmr.getMoney()).append(tpbmr.getCreatedTime());
+            str.append(tpbmr.getBillId()).append(",").append(PaymentBillEnum.BILL_AC_BOOK_TYPE_1.getMessage()).append(",")
+                    .append(tpbmr.getMoney()).append(",").append(tpbmr.getCreatedTime());
             sendPaymentNotice("1021","13265603090",str.toString());
         }
         return result;
@@ -937,7 +938,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         smsTemplateVo.setContents(t);
         logger.info("短信发送成功：接收号码：{},短信内容：{}", phone, message);
         boolean sendStatus = messageSource.outputSms().send(MessageBuilder.withPayload(smsTemplateVo).build());
-        if (sendStatus) {
+         if (sendStatus) {
             logger.info("[白下智慧园区]发送短信成功");
         } else {
             logger.error("[白下智慧园区]发送短信失败");

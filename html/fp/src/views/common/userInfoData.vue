@@ -62,6 +62,7 @@
 </template>
 <script>
 import bus from "@/util/bus";
+import { removeToken } from '@/util/auth'
 export default {
   data() {
     return {
@@ -137,7 +138,7 @@ export default {
       }
     },
     loginOut() {
-      window.sessionStorage.removeItem("token");
+      removeToken();
       window.sessionStorage.removeItem("userInfo");
       window.sessionStorage.removeItem("accout");
       this.$router.push({ path: "/" });
@@ -155,6 +156,7 @@ export default {
       this.api.get({
         url: "findAllApp",
         data: {
+          isRead:0
         },
         callback: (res) =>{
           if (res.code == "0000") {

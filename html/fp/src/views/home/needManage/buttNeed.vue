@@ -28,7 +28,7 @@
             </el-form-item>
           </div>
           <div>
-            <el-form-item label="意向顾问：">
+            <el-form-item label="意向专员：">
               <span>{{receiveDetail.advisorName}}</span>
             </el-form-item>
           </div>
@@ -109,12 +109,13 @@
   </div>
 </template>
 <script>
+import { getToken, removeToken } from '@/util/auth'
 export default {
   data () {
     return {
       baseUrl: this.api.host,
       receiveDetail:{},
-      headers:{token: sessionStorage.token},
+      headers:{token: getToken()},
       fileList:[],
       fileList2:[],
       sendData:{

@@ -54,6 +54,8 @@
     <result column="employ_status" jdbcType="TINYINT" property="employStatus" />
     <result column="user_id" jdbcType="VARCHAR" property="userId" />
     <result column="user_account" jdbcType="VARCHAR" property="userAccount" />
+    <result column="supply_status" jdbcType="CHAR" property="supplyStatus" />
+    <result column="status" jdbcType="CHAR" property="status" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -122,7 +124,7 @@
     highest_academic, political_outlook, marital_status, emergency_contact_name, emergency_contact_phone, 
     QQ, wechat, start_current, end_current, work_mailbox, work_phone, expiration_date, 
     probation_period, record_status, creator_account, created_time, modifier_account, 
-    modified_time, employ_status, user_id, user_account
+    modified_time, employ_status, user_id, user_account, supply_status, status
   </sql>
   <select id="selectByExample" parameterType="com.jn.hr.employee.entity.TbManpowerEmployeeBasicInfoCriteria" resultMap="BaseResultMap">
     select
@@ -172,7 +174,8 @@
       expiration_date, probation_period, record_status, 
       creator_account, created_time, modifier_account, 
       modified_time, employ_status, user_id, 
-      user_account)
+      user_account, supply_status, status
+      )
     values (#{id,jdbcType=VARCHAR}, #{employeePortrait,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
       #{sex,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{mailbox,jdbcType=VARCHAR}, 
       #{departmentId,jdbcType=VARCHAR}, #{departmentName,jdbcType=VARCHAR}, #{jobId,jdbcType=VARCHAR}, 
@@ -190,7 +193,8 @@
       #{expirationDate,jdbcType=TIMESTAMP}, #{probationPeriod,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
       #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
       #{modifiedTime,jdbcType=TIMESTAMP}, #{employStatus,jdbcType=TINYINT}, #{userId,jdbcType=VARCHAR}, 
-      #{userAccount,jdbcType=VARCHAR})
+      #{userAccount,jdbcType=VARCHAR}, #{supplyStatus,jdbcType=CHAR}, #{status,jdbcType=CHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.hr.employee.entity.TbManpowerEmployeeBasicInfo">
     insert into tb_manpower_employee_basic_info
@@ -351,6 +355,12 @@
       <if test="userAccount != null">
         user_account,
       </if>
+      <if test="supplyStatus != null">
+        supply_status,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -508,6 +518,12 @@
       </if>
       <if test="userAccount != null">
         #{userAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyStatus != null">
+        #{supplyStatus,jdbcType=CHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=CHAR},
       </if>
     </trim>
   </insert>
@@ -676,6 +692,12 @@
       <if test="record.userAccount != null">
         user_account = #{record.userAccount,jdbcType=VARCHAR},
       </if>
+      <if test="record.supplyStatus != null">
+        supply_status = #{record.supplyStatus,jdbcType=CHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=CHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -734,7 +756,9 @@
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       employ_status = #{record.employStatus,jdbcType=TINYINT},
       user_id = #{record.userId,jdbcType=VARCHAR},
-      user_account = #{record.userAccount,jdbcType=VARCHAR}
+      user_account = #{record.userAccount,jdbcType=VARCHAR},
+      supply_status = #{record.supplyStatus,jdbcType=CHAR},
+      status = #{record.status,jdbcType=CHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -895,6 +919,12 @@
       <if test="userAccount != null">
         user_account = #{userAccount,jdbcType=VARCHAR},
       </if>
+      <if test="supplyStatus != null">
+        supply_status = #{supplyStatus,jdbcType=CHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=CHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -950,7 +980,9 @@
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       employ_status = #{employStatus,jdbcType=TINYINT},
       user_id = #{userId,jdbcType=VARCHAR},
-      user_account = #{userAccount,jdbcType=VARCHAR}
+      user_account = #{userAccount,jdbcType=VARCHAR},
+      supply_status = #{supplyStatus,jdbcType=CHAR},
+      status = #{status,jdbcType=CHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

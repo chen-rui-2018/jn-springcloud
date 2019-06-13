@@ -102,7 +102,7 @@ export default {
               this.workForm.attachment = res.data
               this.submitWorkForm()
             } else {
-              this.$vux.toast.text(res.result, 'top')
+              this.$vux.toast.text(res.result)
               return false
             }
           }
@@ -117,10 +117,10 @@ export default {
         data: this.workForm,
         callback: res => {
           if (res.code === '0000') {
-            this.$vux.toast.text('操作成功', 'top')
+            this.$vux.toast.text('操作成功')
             this.$router.push({ path: '/workPlan/workPlan' })
           } else {
-            this.$vux.toast.text(res.result, 'top')
+            this.$vux.toast.text(res.result)
             if (this.workForm.startTime) {
               this.workForm.startTime = this.workForm.startTime.substring(
                 0,
@@ -164,7 +164,7 @@ export default {
 
             this.history = res.data.workPlanHistorys
           } else {
-            this.$vux.toast.text(res.result, 'top')
+            this.$vux.toast.text(res.result)
           }
         }
       })

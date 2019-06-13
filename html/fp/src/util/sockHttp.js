@@ -2,6 +2,7 @@ import http from 'axios'
 
 // baseUrl
 import { SOCK_URL } from '@/util/url.js'
+import { getToken } from '@/util/auth'
 
 const axios = http.create({
     baseURL: SOCK_URL
@@ -9,7 +10,7 @@ const axios = http.create({
 })
 // 全局请求拦截
 axios.interceptors.request.use(function (response) {
-  response.headers.token = window.sessionStorage.getItem('token')
+  response.headers.token = getToken()
   return response;
 }, function (error) {
   return Promise.reject(error);

@@ -70,13 +70,14 @@ public class MarketIndexServiceImpl implements MarketIndexService {
     }
 
     /**
-     * 获取入驻机构数
+     * 获取服务超市入驻机构数
      * @return
      */
     private String getOrgNum() {
         TbServiceOrgCriteria example = new TbServiceOrgCriteria();
         example.createCriteria().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue())
-                .andOrgStatusEqualTo(CompanyDataEnum.ORG_APPROVAL_STATUS.getCode());
+                .andOrgStatusEqualTo(CompanyDataEnum.ORG_APPROVAL_STATUS.getCode())
+                .andBusinessTypeNotEqualTo("technology_finance");
         long l = tbServiceOrgMapper.countByExample(example);
         return l + "";
     }

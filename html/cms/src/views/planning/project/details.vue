@@ -1,5 +1,8 @@
 <template>
   <div class="projectDetails">
+    <div class="gantt_ot" style="width:800px; margin:100px auto;">
+      <div class="gantt"/>
+    </div>
     <div class="projectDetails-title">
       <div>
         <span>{{ title }}</span>
@@ -91,8 +94,130 @@ export default {
     this.init()
   },
   methods: {
+    ganttInit() {
+      // 初始化gantt
+      /* global $ */
+      $('.gantt').gantt({
+        source: [
+          {
+            name: 'task  1',
+            desc: '',
+            values: [{
+              from: '/Date(1320192000000)/',
+              to: '/Date(1320592000000)/',
+              label: '',
+              customClass: 'ganttRed'
+            }]
+          }, {
+            name: 'task  2',
+            desc: '这是描述',
+            values: [{
+              from: '/Date(1322611200000)/',
+              to: '/Date(1323302400000)/',
+              label: '',
+              customClass: 'ganttRed'
+            }]
+          }, {
+            name: 'task  3',
+            desc: '',
+            values: [{
+              from: '/Date(1323802400000)/',
+              to: '/Date(1325685200000)/',
+              label: '',
+              customClass: 'ganttGreen'
+            }]
+          }, {
+            name: 'task  4',
+            desc: '描述',
+            values: [{
+              from: '/Date(1325685200000)/',
+              to: '/Date(1325695200000)/',
+              label: '',
+              customClass: 'ganttBlue'
+            }]
+          }, {
+            name: 'task  5',
+            desc: '',
+            values: [{
+              from: '/Date(1326785200000)/',
+              to: '/Date(1325785200000)/',
+              label: '',
+              customClass: 'ganttGreen'
+            }]
+          }, {
+            name: 'task  6',
+            desc: '',
+            values: [{
+              from: '/Date(1328785200000)/',
+              to: '/Date(1328905200000)/',
+              label: '',
+              customClass: 'ganttBlue'
+            }]
+          }, {
+            name: 'task  7',
+            desc: '',
+            values: [{
+              from: '/Date(1330011200000)/',
+              to: '/Date(1336611200000)/',
+              label: '',
+              customClass: 'ganttOrange'
+            }]
+          }, {
+            name: 'task  8',
+            desc: '',
+            values: [{
+              from: '/Date(1336611200000)/',
+              to: '/Date(1338711200000)/',
+              label: '',
+              customClass: 'ganttOrange'
+            }]
+          },
 
+          {
+            name: 'more',
+            desc: '',
+            values: [
+              {
+                from: '/Date(1322611200000)/',
+                to: '/Date(1323302400000)/',
+                label: '',
+                customClass: 'ganttBlue'
+              },
+              {
+                from: '/Date(1323802400000)/',
+                to: '/Date(1325685200000)/',
+                label: '',
+                customClass: 'ganttOrange'
+              },
+              {
+                from: '/Date(1328785200000)/',
+                to: '/Date(1328905200000)/',
+                label: '',
+                customClass: 'ganttGreen'
+              }
+
+            ]
+          }],
+        navigate: 'scroll', // buttons  scroll
+        scale: 'weeks', // months  weeks days  hours
+        maxScale: 'months',
+        minScale: 'days',
+        itemsPerPage: 10,
+        onItemClick: function(data) {
+          alert('Item clicked - show some details')
+        },
+        onAddClick: function(dt, rowId) {
+          alert('Empty space clicked - add an item!')
+        },
+        onRender: function() {
+          if (window.console && typeof console.log === 'function') {
+            console.log('chart rendered')
+          }
+        }
+      })
+    },
     init() {
+      this.ganttInit()
       // console.log(this.$route.query.projectNo)
       this.projectNo = this.$route.query.projectNo
       this.title = this.$route.query.title

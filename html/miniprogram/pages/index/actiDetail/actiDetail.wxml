@@ -1,0 +1,4 @@
+<view>
+  <web-view src="{{url}}?activityId={{id}}"></web-view>
+</view>
+

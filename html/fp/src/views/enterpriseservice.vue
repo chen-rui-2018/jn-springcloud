@@ -4,7 +4,7 @@
       <div class="banner pr">
         <div class="swiper-container">
           <div class="swiper-wrapper">
-            <div class="swiper-slide" style="width:100%" v-for="(banner, index) in bannerList" :key="index">
+            <div class="swiper-slide pointer" style="width:100%" v-for="(banner, index) in bannerList" :key="index">
               <img :src="banner.posterUrl" :data-path="'/serMatHp'" alt="">
             </div>
             <!-- <div class="swiper-slide" style="width:100%">
@@ -284,7 +284,7 @@
                   <i class="el-icon-time"></i>
                   <span>{{i.actiStartTime}}-{{i.actiEndTime}}</span>
                 </p>
-                <p>
+                <p class="actiAddress">
                   <i class="el-icon-location-outline"></i>
                   <span>{{i.actiAddress}}</span>
                 </p>
@@ -528,13 +528,13 @@
                 </div>
                 <!-- 详情弹框 -->
                 <div class="detailRes" v-if="detailFlag==i.id">
-                  <el-card>
-                    <div class="detail">招聘详情</div>
-                    <p class="p1">企业名称：{{humanDetail.comName}}</p>
-                    <p class="p1">发布时间：{{humanDetail.createdTime}}</p>
-                    <p class="p1">岗位详情：</p>
-                    <span v-html="humanDetail.details"></span>
-                  </el-card>
+                  <!-- <el-card> -->
+                  <div class="detail">招聘详情</div>
+                  <p class="p1">企业名称：{{humanDetail.comName}}</p>
+                  <p class="p1">发布时间：{{humanDetail.createdTime}}</p>
+                  <p class="p1">岗位详情：</p>
+                  <span v-html="humanDetail.details"></span>
+                  <!-- </el-card> -->
                 </div>
               </li>
             </ul>
@@ -589,7 +589,9 @@
             </el-form-item>
 
             <el-form-item label="资金需求日期:" prop="expectedDate">
-              <el-input v-model.trim="financialProform.expectedDate" placeholder="请输入需求日期，如2019-04-10" maxlength="100" clearable/>
+              <!-- <el-input v-model.trim="financialProform.expectedDate" placeholder="请输入需求日期，如2019-04-10" maxlength="100" clearable/> -->
+              <el-date-picker v-model="financialProform.expectedDate" type="date" placeholder="选择日期" style="width:100%" value-format="yyyy-MM-dd">
+              </el-date-picker>
             </el-form-item>
             <el-form-item label="资金需求说明:" prop="fundsReqDesc">
               <el-input v-model.trim="financialProform.fundsReqDesc" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
@@ -608,7 +610,7 @@
         </div>
         <div v-else class="loginTip" style="text-align:center;padding-bottom:20px">
           你还未
-          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          <span class="mainColor pointer" @click="goLogin">登录</span>
           /
           <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
           企业账号
@@ -641,7 +643,7 @@
         </div>
         <div v-else class="loginTip" style="text-align:center;padding-bottom:20px">
           你还未
-          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          <span class="mainColor pointer" @click="goLogin">登录</span>
           /
           <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
           企业账号
@@ -652,7 +654,7 @@
       <el-dialog :visible.sync="concatVisible" width="530px" :append-to-body="true" :lock-scroll="false">
         <div class="loginTip" style="text-align:center;padding-bottom:20px">
           你还未
-          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          <span class="mainColor pointer" @click="goLogin">登录</span>
           /
           <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
           账号
@@ -830,6 +832,10 @@ export default {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
   },
   methods: {
+     goLogin() {
+      window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
+      this.$router.push({ path: "/login" });
+    },
     //判断是否登录
     isLogin() {
       if (!sessionStorage.userInfo) {
@@ -904,6 +910,9 @@ export default {
     },
     //用户提交需求
     demandDia() {
+      if(!this.financialProform.financingPeriod){
+        return
+      }
       let _this = this;
       let max = this.arr[this.financialProform.financingPeriod].loanTermMax;
       let min = this.arr[this.financialProform.financingPeriod].loanTermMin;
@@ -1547,6 +1556,11 @@ export default {
       top: 440px;
       top: 42%;
     }
+    .actiAddress {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
   }
   .policyCenter {
     .paging {
@@ -1925,10 +1939,10 @@ export default {
       background: #fff;
     }
     .humanResInfo {
-      margin-top: 50px;
       .el-card {
         width: 80%;
         margin: 0 auto;
+        overflow: visible;
       }
       .el-card__body {
         padding: 20px 30px;
@@ -2031,9 +2045,15 @@ export default {
         .detailRes {
           width: 500px;
           position: absolute;
-          right: 38px;
-          top: 66px;
+          right: 85px;
+          top: 68px;
           text-align: left;
+          z-index: 3;
+          // height: 300px;
+          // overflow: auto;
+          box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.5);
+          padding: 20px 30px;
+          background: #fff;
           .detail {
             margin-bottom: 10px;
             color: #333;
@@ -2041,10 +2061,10 @@ export default {
           p {
             font-size: 13px;
           }
-          .el-card__body {
-            padding: 20px 30px;
-            // width: 300px;
-          }
+          // .el-card__body {
+          //   padding: 20px 30px;
+          //   // width: 300px;
+          // }
         }
       }
       .serverOrgContent {

@@ -34,15 +34,12 @@ public class AppSink {
         if (appSinkVo == null) {
             throw new JnSpringCloudException(CommonExceptionEnum.ARGS_ERROR);
         }
-
-        log.info("收到极光推送的信息:{}",appSinkVo.toString()) ;
-
-        // TODO: 2018/11/8 请陈苗按这个模式来完成异步的功能
+        log.info("\n收到极光推送的信息:{}",appSinkVo.toString()) ;
         JPushResult jPushResult = appSinkService.pushMessage(appSinkVo.getTitle(), appSinkVo.getContent(), appSinkVo.getIds(),
                 appSinkVo.getPushType(), appSinkVo.getPlatFromType(), appSinkVo.getNoticeType(),
                 appSinkVo.getMessage());
 
-        log.info("极光推送返回信息：{}", jPushResult.toString());
+        log.info("\n极光推送返回信息：{}", jPushResult.toString());
     }
 
 }

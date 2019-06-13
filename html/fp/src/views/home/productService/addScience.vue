@@ -11,7 +11,7 @@
               <span >{{addScienceData.signoryName}} </span>
             </el-form-item>
       
-            <el-form-item label="服务顾问：" >
+            <el-form-item label="服务专员：" >
               <el-select v-model="addScienceData.advisorAccount" placeholder="请选择">
                 <el-option :label="counseloritem.advisorName" :value="counseloritem.advisorAccount" v-for="(counseloritem,counselorindex) in counselorList" :key="counselorindex">
                 </el-option>
@@ -143,6 +143,7 @@
   </div>
 </template>
 <script>
+import { getToken } from '@/util/auth'
 export default {
   data () {
     return {
@@ -162,7 +163,7 @@ export default {
       },
       loading:false,
       counselorList:[],
-      headers:{token: sessionStorage.token},
+      headers:{token: getToken()},
       fileList:[],
       businessType:'',
       LoanTypeList:[],//金融产品贷款类别
@@ -315,7 +316,7 @@ export default {
         }
       })
     },
-    //顾问列表获取
+    //专员列表获取
     getServiceConsultantList(){
       let _this = this;
       this.api.get({

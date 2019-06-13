@@ -1,5 +1,5 @@
 <template>
-  <div class="acceptInvitation">
+  <div class="acceptInvitation" v-loading="loading">
     <div class="advisory_title font16">
       <div>{{title}}</div>
       <div @click="toCounselorManagement">返回</div>
@@ -12,7 +12,7 @@
       <el-form class="tableEnterprise marBtn" v-if="isShow">
         <div style="display:flex">
           <el-form-item label="从业年限:" class="inline ">
-            <span>{{basicForm.workingYears}}</span>
+            <span>{{basicForm.workingYears}}<i v-if="basicForm.workingYears">年</i></span>
           </el-form-item>
           <el-form-item label="毕业学校:" class="inline bodyName">
             <span>{{basicForm.graduatedSchool}}</span>
@@ -219,7 +219,7 @@
 
       </el-form>
       <div v-show="showBtn" class="footer ct">
-        <el-button v-show="!isConceal" size="mini" @click="acceptInvitation" :disabled="disabled" class="mainColor accept">接受邀请</el-button>
+        <el-button v-show="!isConceal" size="mini" @click="acceptInvitation"  class="mainColor accept">接受邀请</el-button>
         <el-button v-show="!isConceal" size="mini" type="success" @click="refuseInvitation">拒绝邀请</el-button>
       </div>
 
@@ -234,6 +234,7 @@
 </template>
 
 <script>
+import { getToken } from '@/util/auth'
 export default {
   data() {
     var checkPhone = (rule, value, callback) => {
@@ -253,13 +254,14 @@ export default {
       }
     };
     return {
+      loading:false,
       isConceal: false,
       baseUrl: this.api.host,
       showBtn: true,
       dialogImageUrl: "",
       dialogVisible: false,
       headers: {
-        token: sessionStorage.token
+        token: getToken()
       },
       certificateAreasOptions: [], //证书类型
       editText: "添加荣誉资质",
@@ -272,7 +274,7 @@ export default {
       // businessAreasOptions: [],
       basicText: "编 辑",
       isShow: true,
-      disabled: false,
+      // disabled: false,
       certificatePhoto: "",
       dialogVisible: false,
       // counselorForm:{
@@ -382,7 +384,6 @@ export default {
       url: "getUserApprovalStatus",
       // data: { orgName: "" },
       callback: res => {
-        console.log(res);
         if (res.code == "0000") {
           if (res.data.approvalDesc === "认证中") {
             this.isConceal = true;
@@ -431,27 +432,28 @@ export default {
     },
     // 接受邀请
     acceptInvitation() {
-      this.disabled = true;
+
       if (!this.basicForm.workingYears) {
         this.$message.error("请先填写基本信息");
-        this.disabled = false;
-        return;
+        return false;
       }
+      this.loading=true
       this.api.post({
         url: "acceptOrgInvitation",
         data: { advisorAccount: this.basicForm.advisorAccount },
         dataFlag: true,
         callback: res => {
+          this.loading=false
           if (res.code === "0000") {
             this.$message({
               message: "操作成功,请等待后台审核",
               type: "success"
             });
             this.changeStatus();
-            this.disabled = false;
+
           } else {
             this.$message.error(res.result);
-            this.disabled = false;
+
           }
         }
       });
@@ -656,21 +658,6 @@ export default {
         });
       }
     },
-    // 获取业务领域
-    // getBusinessAreas() {
-    //   this.api.get({
-    //     url: "selectTeamList",
-    //     data: { preType: "0" },
-    //     callback: res => {
-    //       if (res.code === "0000") {
-    //         console.log(res);
-    //         this.businessAreasOptions = res.data;
-    //       } else {
-    //         this.$message.error(res.result);
-    //       }
-    //     }
-    //   });
-    // },
     // 获取证书类型
     getCertificateTypeList() {
       this.api.get({
@@ -713,15 +700,12 @@ export default {
     // 保存基本信息
     editBasic(basicForm) {
       if (this.basicText === "保 存") {
-        console.log(12);
         this.$refs[basicForm].validate(valid => {
           if (valid) {
-            console.log(this.basicForm);
             this.api.post({
               url: "saveOrUpdateAdvisorBaseInfo",
               data: this.basicForm,
               callback: res => {
-                console.log(res);
                 if (res.code == "0000") {
                   this.$message({
                     message: "操作成功",
@@ -797,43 +781,10 @@ export default {
         }
       });
     },
-    submitForm(formName) {
-      this.disabled = true;
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          this.api.post({
-            url: "approvalAdvisorInfo",
-            data: this.counselorForm,
-            callback: res => {
-              console.log(res);
-              if (res.code == "0000") {
-                this.$message({
-                  message: "操作成功",
-                  type: "success"
-                });
-                this.$router.push({
-                  path: "/home"
-                });
-                this.disabled = false;
-              } else {
-                this.$message.error(res.result);
-                this.disabled = false;
-                return false;
-              }
-            }
-          });
-        } else {
-          this.disabled = false;
-          return false;
-        }
-      });
-    },
+
     toCounselorManagement() {
       this.$router.push({ path: "/home" });
     }
-    // toEditAdvisers() {
-    //   this.$router.push({ name: "editAdvisers" });
-    // }
   }
 };
 </script>

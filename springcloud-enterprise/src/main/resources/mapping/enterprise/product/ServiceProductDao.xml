@@ -158,13 +158,17 @@
           t1.product_name as "productName", <!--产品名称-->
           t1.signory_id as "signoryId",     <!--领域id-->
           t1.picture_url as "pictureUrl",   <!--产品图片-->
-          (select count(tp.org_id_) from tb_service_product tp where tp.org_id_ is not null  and  tp.template_id = t1.template_id group by tp.template_id) as "orgCount", <!--机构数-->
+          (select count(tp.org_id_) from tb_service_product tp where tp.org_id_ is not null and tp.org_id_ != '' and tp.record_status = '1' and  tp.template_id = t1.template_id group by tp.template_id) as "orgCount", <!--机构数-->
           count(t2.advisor_account) as "advisorCount", <!--顾问数-->
           count(t3.product_id_) as "ratingCount"        <!--评论数-->
           from tb_service_product t1
           left join tb_service_and_advisor t2 on t1.product_id_ = t2.product_id_
           left join tb_service_rating t3 on  t1.product_id_ = t3.product_id_
           where t1.org_id_  is not null
+          and t1.org_id_ != ''
+          and t1.template_id != ''
+          and t1.record_status = '1'
+          and t1.signory_id != 'technology_finance'
           group by t1.template_id order by 'orgCount','advisorCount','ratingCount' desc
     </select>
 
@@ -333,7 +337,7 @@ from tb_service_product t1
        where
        t1.product_id_ not  in(
            select t2.template_id from tb_service_product t2 where  t2.signory_id =
-              ( select t3.business_type from tb_service_org t3 where t3.org_id_=#{orgId}) and t2.template_id is not null and t2.template_id !="" AND t2.record_status = 1 AND t2.status != 2
+              ( select t3.business_type from tb_service_org t3 where t3.org_id_=#{orgId}) and t2.template_id is not null AND t2.org_id_ = #{orgId} and t2.template_id !="" AND t2.record_status = 1 AND t2.status != 2
            )
          and (t1.template_id is null or t1.template_id = "")
          and t1.status='1' and t1.record_status='1'and t1.signory_id =

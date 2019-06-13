@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.pmpaybill.dao.PmPriceRuleDeatilsMapper">
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        INSERT INTO `tb_pm_price_rule_deatils` (
+        `id`,
+        `rule_id`,
+        `room_id`,
+        `room_name`,
+        `room_area`,
+        `tower_id`,
+        `tower_name`,
+        `pm_unit_price`,
+        `record_status`,
+        `creator_account`,
+        `created_time`,
+        `remark`
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+                #{item.id,jdbcType=VARCHAR},
+                #{item.ruleId,jdbcType=VARCHAR},
+                #{item.roomId,jdbcType=VARCHAR},
+                #{item.roomName,jdbcType=VARCHAR},
+                #{item.roomArea,jdbcType=DECIMAL},
+                #{item.towerId,jdbcType=VARCHAR},
+                #{item.towerName,jdbcType=VARCHAR},
+                #{item.pmUnitPrice,jdbcType=DECIMAL},
+                #{item.recordStatus,jdbcType=TINYINT},
+                #{item.creatorAccount,jdbcType=VARCHAR},
+                now(),
+                #{item.remark,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+</mapper>

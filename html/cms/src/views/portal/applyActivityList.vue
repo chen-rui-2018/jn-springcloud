@@ -1,8 +1,8 @@
 <template>
   <div class="actiList">
     <el-row type="flex" justify="space-between">
-      <el-col :span="16"/>
-      <el-col :span="8">
+      <el-col :span="15"/>
+      <el-col :span="9">
         <div class="grid-content bg-purple-light">
           <!-- <el-button class="filter-item" type="primary" round @click="ApproveApplicant">审批报名人</el-button> -->
           <el-button v-if="$route.query.applyCheck == '1'" class="filter-item" type="primary" round @click="ApproveApplicant">审批报名人</el-button>

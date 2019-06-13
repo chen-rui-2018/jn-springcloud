@@ -17,6 +17,7 @@
         <el-date-picker v-model="listQuery.endTime" type="datetime" value-format="yyyy/MM/dd HH:mm:ss" placeholder="选择结束时间" />
       </el-form-item>
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
+      <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleExcel">导出</el-button>
 
     </el-form>
     <!-- 表格 -->
@@ -86,6 +87,12 @@ export default {
     this.initList()
   },
   methods: {
+    // 导出功能
+    handleExcel() {
+      api(`${this.GLOBAL.oaUrl}oa/oaMeetingAttendance/exportExcelMeetingAttendance`, '', 'get').then(res => {
+        window.location.href = res.request.responseURL
+      })
+    },
     handleFilter() {
       this.initList()
     },

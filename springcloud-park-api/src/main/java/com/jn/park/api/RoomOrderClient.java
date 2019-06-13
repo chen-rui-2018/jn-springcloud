@@ -39,13 +39,6 @@ public interface RoomOrderClient {
     @RequestMapping(value = "/api/order/createPay", method = RequestMethod.POST)
     public Result<PayOrderRsp> createPay(@RequestBody CreatePayReqModel createPayReqModel);
 
-     /**
-     * 是否支付,未支付取消订单
-     * @return
-     */
-    @RequestMapping(value = "/api/order/updateRoomPayStatus",method = RequestMethod.POST)
-    Result updateRoomPayStatus();
-
     /**
      * 定时生成缴费单
      * @return

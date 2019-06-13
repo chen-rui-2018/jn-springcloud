@@ -63,8 +63,7 @@ public class FinancialProductController extends BaseController {
 
     @ControllerLog(doAction = "金融产品贷款类别")
     @ApiOperation(value = "金融产品贷款类别")
-    @RequiresPermissions("/technologyFinancial/financialProductController/getFinancialProductLoanType")
-    @RequestMapping(value = "/technologyFinancial/financialProductController/getFinancialProductLoanType",method = RequestMethod.GET)
+    @RequestMapping(value = "/guest/technologyFinancial/financialProductController/getFinancialProductLoanType",method = RequestMethod.GET)
     public Result<List<FinancialProductLoanType>> getFinancialProductLoanType(){
         List<FinancialProductLoanType> financialProductLoanTypeList = financialProductService.getFinancialProductLoanType();
         return  new Result(financialProductLoanTypeList);
@@ -72,8 +71,7 @@ public class FinancialProductController extends BaseController {
 
     @ControllerLog(doAction = "金融产品担保方式")
     @ApiOperation(value = "金融产品担保方式")
-    @RequiresPermissions("/technologyFinancial/financialProductController/getFinancialProductAssureType")
-    @RequestMapping(value = "/technologyFinancial/financialProductController/getFinancialProductAssureType",method = RequestMethod.GET)
+    @RequestMapping(value = "/guest/technologyFinancial/financialProductController/getFinancialProductAssureType",method = RequestMethod.GET)
     public Result<List<FinancialProductAssureType>> getFinancialProductAssureType(){
         List<FinancialProductAssureType> financialProductAssureTypeList = financialProductService.getFinancialProductAssureType();
         return  new Result(financialProductAssureTypeList);

@@ -24,15 +24,6 @@ public class AssetScheduledController {
     private RoomOrderClient roomOrderClient;
 
     /**
-     * 每30分钟查询物品支付订单状态,未付款取消订单
-     */
-    @Scheduled(cron = "0 0/30 * * * ?")
-    public void updateArticlePayStatus(){
-        logger.info("是否支付,未支付取消订单");
-        articleOrderClient.updateArticlePayStatus();
-    }
-
-    /**
      * 每天凌晨两点执行执行,更新物品租借是否逾期
      */
     @Scheduled(cron = "0 0 2 * * ?")
@@ -40,16 +31,6 @@ public class AssetScheduledController {
         //更新租借物品逾期状态
         logger.info("更新租借物品是否逾期,修改状态");
         articleOrderClient.updateAssetArticleStatus();
-    }
-
-
-    /**
-     * 每30分钟查询房间支付订单状态,未付款取消订单
-     */
-    @Scheduled(cron = "0 0/30 * * * ?")
-    public void updateRoomPayStatus(){
-        logger.info("是否支付,未支付取消订单");
-        roomOrderClient.updateRoomPayStatus();
     }
 
     /**

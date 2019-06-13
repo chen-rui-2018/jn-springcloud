@@ -12,6 +12,7 @@ import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.common.util.zxing.MatrixToImageWriter;
+import com.jn.park.activity.ApplyStatusEnum;
 import com.jn.park.activity.dao.ActivityApplyMapper;
 import com.jn.park.activity.dao.TbActivityApplyMapper;
 import com.jn.park.activity.dao.TbActivityMapper;
@@ -114,19 +115,17 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         }
         //根据id和account，通过状态（0：取消报名，1：报名成功））查询用户信息是否已存在
         boolean existApplyFlag = existApplyInfo(activityId, account);
-        //已报名状态
-        String applyState = "1";
         //判断是否已报名，主要是防止重复报名/取消报名
-        boolean existStateFlag = existApplyOrCancelApply(activityId, account, applyState);
+        boolean existStateFlag = existApplyOrCancelApply(activityId, account, ApplyStatusEnum.APPLY_SUCCESS.getValue());
         //没有报名
         if (!existStateFlag) {
             //判断当前活动报名是否需要审核
             boolean needToReview = activityNeddToReview(activityId);
             //报名状态   0：取消报名  1：报名成功  2：待审核
-            String status = "1";
+            String status =ApplyStatusEnum.APPLY_SUCCESS.getValue();
             //判断当前活动报名是否需要审核
             if (needToReview) {
-                status = "2";
+                status = ApplyStatusEnum.APPLY_PENDING.getValue();
             }
             //用户信息已存在
             if (existApplyFlag) {
@@ -143,7 +142,6 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
 
     /**
      * 判断当前活动报名是否需要审核
-     *
      * @param activityId
      * @return true:需要审核  false:不需要审核
      */
@@ -169,16 +167,14 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         checkIsApply(activityId);
         //根据id和account，通过状态（0：取消报名，1：报名成功））查询用户信息是否已存在
         boolean existApplyFlag = existApplyInfo(activityId, account);
-        //取消报名状态
-        String applyState = "0";
         //判断是否已报名，主要是防止重复报名/取消报名
-        boolean existStateFlag = existApplyOrCancelApply(activityId, account, applyState);
+        boolean existStateFlag = existApplyOrCancelApply(activityId, account, ApplyStatusEnum.CANCEL_APPLY.getValue());
         //没有取消报名
         if (!existStateFlag) {
             //用户信息已存在
             if (existApplyFlag) {
                 //更新报名状态为取消报名  0：取消报名  1：报名成功
-                String status = "0";
+                String status = ApplyStatusEnum.CANCEL_APPLY.getValue();
                 updateApplyState(activityId, account, status);
             } else {
                 //删除活动报名信息

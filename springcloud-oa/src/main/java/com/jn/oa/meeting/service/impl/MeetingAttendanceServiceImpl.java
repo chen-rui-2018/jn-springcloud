@@ -135,7 +135,7 @@ public class MeetingAttendanceServiceImpl implements MeetingAttendanceService {
      */
     @Override
     @ServiceLog(doAction = "会议考勤列表查询")
-    public PaginationData selectMeetingAttendanceList(OaMeetingAttendancePage oaMeetingAttendancePage) {
+    public PaginationData<List<OaMeetingParticipantsAttendanceVo>> selectMeetingAttendanceList(OaMeetingAttendancePage oaMeetingAttendancePage) {
         Page<Object> objects = PageHelper.startPage(oaMeetingAttendancePage.getPage(), oaMeetingAttendancePage.getRows());
         List<OaMeetingParticipantsAttendanceVo> oaMeetingParticipantsAttendanceVoList= meetingParticipantMapper.selectMeetingAttendanceListByCondition(oaMeetingAttendancePage);
         for(int i=0;i<oaMeetingParticipantsAttendanceVoList.size();i++){

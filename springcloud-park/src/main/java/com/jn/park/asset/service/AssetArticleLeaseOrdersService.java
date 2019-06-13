@@ -35,17 +35,6 @@ public interface AssetArticleLeaseOrdersService {
      */
     LeaseOrdersModel getPayOrders(String id);
 
-    /**
-     * 确认归还
-     * @param id
-     */
-    void returnArticle(String id);
-
-    /**
-     * 确认交付
-     * @param id
-     */
-    void deliveryArticle(String id);
 
     /**
      * 归还
@@ -68,16 +57,6 @@ public interface AssetArticleLeaseOrdersService {
      */
     Result articlePayCallBack(PayOrderNotify payOrderNotify);
 
-    /**
-     * 定时调度,是否支付,未支付取消订单
-     */
-    void updateArticlePayStatus();
-
-    /**
-     * 取消订单
-     * @param orderId
-     */
-    void cancelOrder(String orderId);
 
     /**
      * 物品租借是否逾期,修改状态

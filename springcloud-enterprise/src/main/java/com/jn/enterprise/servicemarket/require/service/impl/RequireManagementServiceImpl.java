@@ -414,16 +414,7 @@ public class RequireManagementServiceImpl implements RequireManagementService {
     @ServiceLog(doAction = "需求详情（对他人需求）")
     @Override
     public RequireOtherDetails getOtherRequireDetails(String reqNum) {
-        TbServiceRequireCriteria  example=new TbServiceRequireCriteria();
-        //数据状态  0：删除  1：有效
-        byte recordStatus=1;
-        example.createCriteria().andReqNumEqualTo(reqNum).andRecordStatusEqualTo(recordStatus);
-        List<TbServiceRequire> tbServiceRequireList = tbServiceRequireMapper.selectByExample(example);
-        if(tbServiceRequireList.isEmpty()){
-            logger.warn("需求单号为：{}的需求在系统中不存在或已失效",reqNum);
-            throw new JnSpringCloudException(RequireExceptionEnum.REQUIRE_INFO_NOT_EXIST);
-        }
-        TbServiceRequire tbServiceRequire = tbServiceRequireList.get(0);
+        TbServiceRequire tbServiceRequire = getTbServiceRequire(reqNum);
         RequireOtherDetails requireOtherDetails=new RequireOtherDetails();
         BeanUtils.copyProperties(tbServiceRequire, requireOtherDetails);
         //根据企业账号获取企业名称
@@ -440,7 +431,27 @@ public class RequireManagementServiceImpl implements RequireManagementService {
             requireOtherDetails.setRatingScore(ratingInfo.getAttitudeScore());
             requireOtherDetails.setEvaluationDesc(ratingInfo.getEvaluationDesc());
         }
+        if(requireOtherDetails.getExpectedDate()!=null){
+            requireOtherDetails.setExpectedDate(DateUtils.parseDate(DateUtils.formatDate(requireOtherDetails.getExpectedDate(), PATTERN)));
+        }
         return requireOtherDetails;
+    }
+
+    /**
+     * 根据需求单号获取需求信息
+     * @param reqNum
+     * @return
+     */
+    @ServiceLog(doAction = "根据需求单号获取需求信息")
+    private TbServiceRequire getTbServiceRequire(String reqNum) {
+        TbServiceRequireCriteria example = new TbServiceRequireCriteria();
+        example.createCriteria().andReqNumEqualTo(reqNum).andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        List<TbServiceRequire> tbServiceRequireList = tbServiceRequireMapper.selectByExample(example);
+        if (tbServiceRequireList.isEmpty()) {
+            logger.warn("需求单号为：{}的需求在系统中不存在或已失效", reqNum);
+            throw new JnSpringCloudException(RequireExceptionEnum.REQUIRE_INFO_NOT_EXIST);
+        }
+        return tbServiceRequireList.get(0);
     }
 
     /**
@@ -542,16 +553,7 @@ public class RequireManagementServiceImpl implements RequireManagementService {
     @ServiceLog(doAction = "需求详情（我收到的需求）")
     @Override
     public RequireReceivedDetails getReceivedRequireDetails(String reqNum) {
-        TbServiceRequireCriteria  example=new TbServiceRequireCriteria();
-        //数据状态  0：删除  1：有效
-        byte recordStatus=1;
-        example.createCriteria().andReqNumEqualTo(reqNum).andRecordStatusEqualTo(recordStatus);
-        List<TbServiceRequire> tbServiceRequireList = tbServiceRequireMapper.selectByExample(example);
-        if(tbServiceRequireList.isEmpty()){
-            logger.warn("需求单号为：{}的需求在系统中不存在或已失效",reqNum);
-            throw new JnSpringCloudException(RequireExceptionEnum.REQUIRE_INFO_NOT_EXIST);
-        }
-        TbServiceRequire tbServiceRequire = tbServiceRequireList.get(0);
+        TbServiceRequire tbServiceRequire = getTbServiceRequire(reqNum);
         RequireReceivedDetails requireReceivedDetails=new RequireReceivedDetails();
         BeanUtils.copyProperties(tbServiceRequire, requireReceivedDetails);
         //根据企业账号获取企业名称
@@ -565,8 +567,12 @@ public class RequireManagementServiceImpl implements RequireManagementService {
         //根据需求id获取评价信息
         TbServiceRating ratingInfo = getRatingInfo(tbServiceRequire.getId());
         if(ratingInfo!=null){
-            requireReceivedDetails.setRatingScore(ratingInfo.getAttitudeScore());
             requireReceivedDetails.setEvaluationDesc(ratingInfo.getEvaluationDesc());
+            requireReceivedDetails.setRatingScore(ratingInfo.getAttitudeScore());
+
+        }
+        if(requireReceivedDetails.getExpectedDate()!=null){
+            requireReceivedDetails.setExpectedDate(DateUtils.parseDate(DateUtils.formatDate(requireReceivedDetails.getExpectedDate(),PATTERN)));
         }
         return requireReceivedDetails;
     }

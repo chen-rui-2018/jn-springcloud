@@ -31,7 +31,7 @@ public interface RoomInformationService {
 
     /**
      *
-     * @param roomId
+     * @param roomIds
      * @param contactName
      * @param contactPhone
      * @param leaseStartTime
@@ -39,7 +39,7 @@ public interface RoomInformationService {
      * @param userAccount
      * @return
      */
-    Result addRoomOrders(String roomId, String contactName, String contactPhone, Date leaseStartTime,  String month, String userAccount);
+    Result addRoomOrders(String roomIds, String contactName, String contactPhone, Date leaseStartTime,  String month, String userAccount);
 
     /**
      * 根据订单生成缴费单
@@ -85,20 +85,6 @@ public interface RoomInformationService {
     RoomPayOrdersModel getPayOrders(String orderId);
 
     /**
-     * 分页返回房间租借历史
-     * @param page
-     * @return
-     */
-    PaginationData<List<RoomPayOrdersModel>> getRoomOrdersList(String account, Page page);
-
-    /**
-     * 获取房间租借订单详情信息
-     * @param orderId
-     * @return
-     */
-    RoomPayOrdersModel getRoomOrders(String orderId,String userAccount);
-
-    /**
      * 房间退租申请
      * @param id
      * @return
@@ -120,17 +106,6 @@ public interface RoomInformationService {
      * @return
      */
     RoomOrdersModel getNewRoomOrders(String itemId, String account);
-
-    /**
-     * 取消订单
-     * @param orderId
-     */
-    void cancelOrder(String orderId);
-
-    /**
-     * 定时任务,是否支付,未支付取消订单
-     */
-    void updateRoomPayStatus();
 
     /**
      * 定时任务,生成缴费单

@@ -32,15 +32,6 @@ public class ArticleOrderClientController implements ArticleOrderClient {
         return assetArticleLeaseOrdersService.articlePayCallBack(payOrderNotify);
     }
 
-    /**
-     * 是否支付,未支付取消订单
-     */
-    @Override
-    @ControllerLog(doAction = "是否支付,未支付取消订单")
-    public Result updateArticlePayStatus() {
-        assetArticleLeaseOrdersService.updateArticlePayStatus();
-        return new Result();
-    }
 
     /**
      * 是否逾期,修改状态

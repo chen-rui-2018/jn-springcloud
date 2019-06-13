@@ -1,6 +1,6 @@
 ﻿import axios from "axios"
 import { BASE_URL } from './url'
-import { getToken, removeToken } from '@/util/auth'
+import { getToken, removeToken, removeUserInfo } from '@/util/auth'
 export default {
     host: BASE_URL,//api的域名提出来放这里
     apiURL:{ //API路径统一管理,需要的路径在这里加就可以了
@@ -35,7 +35,7 @@ export default {
         addUser:"springcloud-user/guest/userJoin/addUser",//用户注册
         accountIsExist:"springcloud-user/guest/userJoin/accountIsExist",//当前账号是否已存在
         updatePassword:"springcloud-user/guest/userJoin/updatePassword",//修改密码
-        getUserPersonInfo:"springcloud-user/user/center/getUserPersonInfo",//根据用户账号获取用户资料信息
+        getUserPersonInfo:"springcloud-user/user/userInfo/getUserExtension",//根据用户账号获取用户资料信息
         modifyUserPassword:"springcloud-user/user/center/modifyUserPassword",//修改用户密码
         saveUserInfo:"springcloud-user/user/userInfo/saveUserInfo",//保存用户资料
         getTagCodeList:"springcloud-user/guest/userTag/getTagCodeList",//获取用户字典列表
@@ -282,8 +282,7 @@ export default {
                 if (typeof callback === "function"){
                     if(response.data.code == "index"){
                         removeToken()
-                        window.sessionStorage.removeItem('account')
-                        window.sessionStorage.removeItem('userInfo')
+                        removeUserInfo()
                         location.href="#/";
                         return
                     }
@@ -359,8 +358,7 @@ export default {
             if (typeof callback === "function"){
                 if(response.data.code == "index"){
                     removeToken()
-                    window.sessionStorage.removeItem('account')
-                    window.sessionStorage.removeItem('userInfo')
+                    removeUserInfo()
                     location.href="#login";
                     return
                 }

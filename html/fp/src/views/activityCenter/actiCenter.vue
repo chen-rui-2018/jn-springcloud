@@ -234,8 +234,8 @@ export default {
         this.startTime = "";
         this.endTime = "";
       } else {
-        this.startTime = this.api.AddMinTime(new Date(), "day", s);
-        this.endTime = this.api.AddMinTime(new Date(), "day", i);
+        this.startTime = this.api.AddMinTime(new Date(), "day", i);
+        this.endTime = this.api.AddMinTime(new Date(), "day", s);
       }
       this.initList();
     },

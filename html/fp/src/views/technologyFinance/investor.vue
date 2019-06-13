@@ -49,6 +49,9 @@
         </li>
       </ul>
     </div>
+    <!-- <div class="investorContent" v-if="investorInfoList.length==0">
+      <nodata></nodata>
+    </div> -->
     <div class="pagination-container">
       <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
       </el-pagination>
@@ -56,7 +59,11 @@
   </div>
 </template>
 <script>
+import nodata from "../common/noData.vue";
 export default {
+  components: {
+    nodata
+  },
   data() {
     return {
       total: 0,
@@ -124,7 +131,7 @@ export default {
           mainCode: _this.mainCode,
           page: _this.page,
           rows: _this.row,
-          keyWords:_this.keyWords
+          keyWords: _this.keyWords
         },
         callback: function(res) {
           if (res.code == "0000") {
@@ -317,7 +324,7 @@ export default {
         background: #00a041;
         color: #fff;
         border-top-right-radius: 5px;
-        border-bottom-right-radius: 5px
+        border-bottom-right-radius: 5px;
       }
     }
   }

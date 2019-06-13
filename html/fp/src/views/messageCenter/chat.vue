@@ -95,6 +95,7 @@
 </template>
 
 <script>
+  import { getUserInfo } from '@/util/auth'
   import { isArray, getDateString } from '@/util'
   import avatar from './common/avatar'
   import messageRow from './common/messageRow'
@@ -212,7 +213,7 @@
          *  2.pc端路由参数可以只有发送人账号fromUser, 因为pc端有联系人列表
          */
         this.setWindowHeight()
-        const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
+        const userInfo = JSON.parse(getUserInfo())
         this.userListParam.fromUser = this.param.fromUser = this.$route.query.fromUser || userInfo.account
         if (!this.param.fromUser) {
           this.$message.error('缺少发送人账号')

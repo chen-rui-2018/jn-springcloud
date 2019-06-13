@@ -20,12 +20,12 @@ public interface PmPayBillServiceClient {
 
 
     /**
-     * 定时月初生成物业费缴费单
+     * 每季度第一天凌晨,为企业生成物业费账单
      *
      * @return
      */
-    @RequestMapping(value = "/api/pm/autoGeneratePmPayBillDeatils", method = RequestMethod.POST)
-    Result<Boolean> autoGeneratePmPayBillDeatils();
+    @RequestMapping(value = "/api/pm/createPmPayBillByQuarter", method = RequestMethod.POST)
+    Result<Boolean> createPmPayBillByQuarter();
 
     /**
      * 每月16号凌晨更新缴费单条目是否逾期状态

@@ -71,6 +71,9 @@
         </li>
       </ul>
     </div>
+    <!-- <div class="serverOrgContent" v-if="serverProList.length==0">
+      <nodata></nodata>
+    </div> -->
     <div class="pagination-container">
       <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
       </el-pagination>
@@ -100,7 +103,11 @@
   </div>
 </template>
 <script>
+import nodata from "../common/noData.vue";
 export default {
+  components: {
+    nodata
+  },
   data() {
     return {
       islogin:true,

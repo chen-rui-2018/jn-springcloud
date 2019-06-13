@@ -202,6 +202,7 @@
 </template>
 
 <script>
+import { getUserInfo } from '@/util/auth'
 export default {
   data() {
     return {
@@ -266,7 +267,7 @@ export default {
         this.photoUrl=url
     },
       init(){
-       this.userAccount=  sessionStorage.getItem("account");
+       this.userAccount = JSON.parse(getUserInfo()).account;
           let _this = this;
              _this.api.get({
                    url: "getMyOrgInfo",

@@ -56,16 +56,8 @@ public class LoginController extends BaseController {
             notes = "ibps oauth 自动登录使用", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/authLogin")
     public Result authLogin() {
-        String account = com.lc.ibps.auth.client.context.Context.getUsername();
-        logger.info("用户：{}，进行authLogin获取token", account);
-        if (StringUtils.isNotBlank(account)) {
-            UserLogin userLogin = new UserLogin();
-            userLogin.setAccount(account);
-            userLogin.setPassword("");
-            loginService.login(userLogin, Boolean.TRUE);
-            return new Result(SecurityUtils.getSubject().getSession().getId());
-        }
-        return new Result();
+        logger.info("用户：{}，进行authLogin获取token", SecurityUtils.getSubject().getSession().getId());
+        return new Result(SecurityUtils.getSubject().getSession().getId());
     }
 
     @ControllerLog(doAction = "noPwdLogin")

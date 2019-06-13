@@ -44,6 +44,7 @@
   </div>
 </template>
 <script>
+import { getUserInfo } from '@/util/auth'
 export default {
   data() {
     return {
@@ -162,7 +163,7 @@ export default {
     },
     // 初始话页面
     initList() {
-      this.account = sessionStorage.getItem("account");
+      this.account = JSON.parse(getUserInfo()).account;
       let _this = this;
       this.api.get({
         url: "getColleagueList",

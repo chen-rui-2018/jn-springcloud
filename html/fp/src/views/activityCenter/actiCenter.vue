@@ -69,7 +69,7 @@
                 <!-- <span>{{item.actiStartTime}}-{{item.actiEndTime.split(' ')[1]}}</span> -->
                 <!-- <span>周日14：00-17：00</span> -->
               </p>
-              <p>
+              <p class="actiAddress">
                 <i class="el-icon-location-outline"></i>
                 <span>{{item.actiAddress}}</span>
               </p>
@@ -234,8 +234,8 @@ export default {
         this.startTime = "";
         this.endTime = "";
       } else {
-        this.startTime = this.api.AddMinTime(new Date(), "day", s);
-        this.endTime = this.api.AddMinTime(new Date(), "day", i);
+        this.startTime = this.api.AddMinTime(new Date(), "day", i);
+        this.endTime = this.api.AddMinTime(new Date(), "day", s);
       }
       this.initList();
     },

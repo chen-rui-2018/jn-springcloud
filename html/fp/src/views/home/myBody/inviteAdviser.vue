@@ -1,13 +1,13 @@
 <template>
-  <div class="inviteAdviser">
+  <div class="inviteAdviser" v-loading="loading">
     <div class="ordinary_title font16">
-      <div>邀请顾问</div>
+      <div>邀请专员</div>
     </div>
     <div class="ordinary_content">
        <el-form label-width="120px" class="postJobInfo">
   <el-form-item label="员工账号:" prop="post" class="staffAccount">
-    <el-input placeholder="请输入员工账号" v-model="searchFiled" clearable>
-          <el-button slot="append" icon="el-icon-search" @click="getStaffInfo"></el-button>
+    <el-input placeholder="请输入员工账号" v-model="searchFiled" clearable @keyup.enter.native="getStaffInfo">
+          <el-button slot="append" icon="el-icon-search" @click="getStaffInfo" ></el-button>
         </el-input>
   </el-form-item>
   <el-form-item label="昵称:">
@@ -33,7 +33,7 @@
     <span v-for="(item, index) in jobs" :key="index" class="hobbys">{{item}}</span>
   </el-form-item>
  <div class="business_footer" @click="submitForm()">
-        邀请该顾问
+        邀请该专员
   </div>
 </el-form>
     </div>
@@ -43,6 +43,7 @@
 export default {
   data () {
     return {
+      loading:false,
       hobbys:[],
         searchFiled:'',
         nickName:'',
@@ -54,7 +55,7 @@ export default {
     }
   },
   methods: {
-    // 获取邀请顾问信息
+    // 获取邀请专员信息
       getStaffInfo(){
           if(!this.searchFiled){
               this.$message.error('请输入员工账号');
@@ -63,14 +64,16 @@ export default {
      url:'echoUserInfo',
      data:{registerAccount  :this.searchFiled },
      callback:(res=>{
-         console.log(res)
-         this.nickName=res.data.nickName
-         this.name=res.data.name
-         this.sex=res.data.sex
-         this.account=res.data.account
-         this.jobs=res.data.jobs
-         this.signature=res.data.signature
-         this.hobbys=res.data.hobbys
+         if(res.data){
+
+           this.nickName=res.data.nickName
+           this.name=res.data.name
+           this.sex=res.data.sex
+           this.account=res.data.account
+           this.jobs=res.data.jobs
+           this.signature=res.data.signature
+           this.hobbys=res.data.hobbys
+         }
      })
  })
       },
@@ -79,15 +82,16 @@ export default {
          this.$message.error('请输入员工账号');
          return
        }
+       this.loading=true
       this.api.post({
      url:'inviteAdvisor',
      data:{registerAccount:this.searchFiled},
      dataFlag:true,
      callback:(res=>{
-         console.log(res)
+       this.loading=false
           if (res.code == "0000") {
              this.$message({
-                message: '发送邀请成功',
+                message: '操作成功',
                 type: 'success'
               })
                 this.$router.push({name:'counselorManagement'})
@@ -152,16 +156,8 @@ export default {
     border-left: 0;
         }
         .postJobInfo{
-            // width: 50%;
-            // margin: 0 auto;
-            margin-left:140px;
-
-
-            // .hobbies{
-            //    .el-form-item__content,.el-select{
-            //     width:100%;
-            // }
-            // }
+            width: 50%;
+            margin: 0 auto;
              .el-textarea__inner{
                  width: 348px;
                 min-height: 100px !important;

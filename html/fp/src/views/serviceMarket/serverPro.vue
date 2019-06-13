@@ -52,10 +52,10 @@
                 <p>服务机构：{{i.orgName}}
                 </p>
                 <p>服务顾问：{{i.advisorName}}</p>
-                <p>参考价格
-                  <span class="mainColor">{{i.referPrice}}</span>元</p>
+                <p>参考价格：
+                  <span class="mainColor">{{i.referPrice}}</span>&nbsp;元</p>
                 <p>累计
-                  <span class="mainColor">{{i.transactionsNumber}}</span>笔交易</p>
+                  <span class="mainColor">{{i.transactionsNumber}}</span>&nbsp;笔交易</p>
               </div>
               <div class="right1 fl">
                 <p>
@@ -71,6 +71,9 @@
         </li>
       </ul>
     </div>
+    <!-- <div class="serverOrgContent" v-if="serverProList.length==0">
+      <nodata></nodata>
+    </div> -->
     <div class="pagination-container">
       <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
       </el-pagination>
@@ -90,7 +93,7 @@
         </div>
         <div v-else class="loginTip">
           你还未
-          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          <span class="mainColor pointer" @click="goLogin">登录</span>
           /
           <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
           企业账号
@@ -100,7 +103,11 @@
   </div>
 </template>
 <script>
+import nodata from "../common/noData.vue";
 export default {
+  components: {
+    nodata
+  },
   data() {
     return {
       islogin:true,
@@ -138,6 +145,10 @@ export default {
     }
   },
   methods: {
+      goLogin() {
+      window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
+      this.$router.push({ path: "/login" });
+    },
      //判断是否登录
     isLogin() {
       if (!sessionStorage.userInfo) {

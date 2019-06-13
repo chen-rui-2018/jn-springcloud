@@ -422,11 +422,19 @@ img {
             >.actiNameItem {
               color: #222;
               font-size: 16px;
+              overflow:hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
             }
 
             .actiTimer {
               text-indent: -10px;
               margin: 10px 0 5px 18px;
+            }
+            .actiAddress{
+              overflow:hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
             }
           }
         }
@@ -1004,6 +1012,7 @@ img {
             color: #666;
             background-color: #f8f8f8;
             font-size: 13px;
+            width: 146px;
           }
 
           .table-orgspace-detail {
@@ -1020,10 +1029,19 @@ img {
           }
         }
       }
-
+      .basicInfo{
+        .table-orgspace-title {
+          width: 146px;
+        }
+      }
       .businessinfo {
         .table-orgspace-title {
           width: 146px;
+        }
+      }
+      .contactInfo{
+        .table-orgspace-title.ta_c{
+          width: auto;
         }
       }
 
@@ -1442,6 +1460,9 @@ img {
             >.actiNameItem {
               color: #222;
               font-size: 16px;
+              overflow:hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
             }
 
             .actiTimer {
@@ -2275,6 +2296,9 @@ img {
             >.actiNameItem {
               color: #222;
               font-size: 16px;
+              overflow:hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
             }
 
             .actiTimer {
@@ -2611,11 +2635,12 @@ img {
           // border: 1px solid #fff;
           // margin-right: 30px;
           p {
-            margin-top: 20px;
+            margin-top: 30px;
           }
 
           img {
             width: 50px;
+            height: 50px;
           }
         }
 

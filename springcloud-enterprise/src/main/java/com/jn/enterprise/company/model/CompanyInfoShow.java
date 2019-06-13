@@ -85,10 +85,20 @@ public class CompanyInfoShow  implements Serializable {
     private String ownerPhone;
     @ApiModelProperty(value = "企业产品")
     private String  products;
+    @ApiModelProperty(value = "主要产品")
+    private String  mainProducts;
     @ApiModelProperty(value = "信用积分")
     private String creditPoints;
     @ApiModelProperty(value = "信用积分更新时间")
     private String creditUpdateTime;
+
+    public String getMainProducts() {
+        return mainProducts;
+    }
+
+    public void setMainProducts(String mainProducts) {
+        this.mainProducts = mainProducts;
+    }
 
     public String getCompanyId() {
         return companyId;

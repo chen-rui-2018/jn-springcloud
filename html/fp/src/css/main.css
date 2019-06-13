@@ -441,12 +441,22 @@ img {
 .actiTrain .actiContent .actiTab .allActiUl > li .actiInfo > .actiNameItem {
   color: #222;
   font-size: 16px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .actiCenter .actiContent .actiTab .allActiUl > li .actiInfo .actiTimer,
 .actiTrain .actiContent .actiTab .allActiUl > li .actiInfo .actiTimer {
   text-indent: -10px;
   margin: 10px 0 5px 18px;
+}
+
+.actiCenter .actiContent .actiTab .allActiUl > li .actiInfo .actiAddress,
+.actiTrain .actiContent .actiTab .allActiUl > li .actiInfo .actiAddress {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .actiCenter .actiContent .actiTab .allActiUl li:nth-child(4n),
@@ -1509,6 +1519,7 @@ img {
   color: #666;
   background-color: #f8f8f8;
   font-size: 13px;
+  width: 146px;
 }
 
 .serverOrgDetail .agentDel .agentDelCon .basicInfo .table-orgspace .table-orgspace-detail,
@@ -1570,6 +1581,15 @@ img {
   font-size: 13px;
 }
 
+.serverOrgDetail .agentDel .agentDelCon .basicInfo .table-orgspace-title,
+.serverProDetail .agentDel .agentDelCon .basicInfo .table-orgspace-title,
+.serverConDetail .agentDel .agentDelCon .basicInfo .table-orgspace-title,
+.quickSearch .agentDel .agentDelCon .basicInfo .table-orgspace-title,
+.finaInsDetail .agentDel .agentDelCon .basicInfo .table-orgspace-title,
+.finaProDetail .agentDel .agentDelCon .basicInfo .table-orgspace-title {
+  width: 146px;
+}
+
 .serverOrgDetail .agentDel .agentDelCon .businessinfo .table-orgspace-title,
 .serverProDetail .agentDel .agentDelCon .businessinfo .table-orgspace-title,
 .serverConDetail .agentDel .agentDelCon .businessinfo .table-orgspace-title,
@@ -1577,6 +1597,15 @@ img {
 .finaInsDetail .agentDel .agentDelCon .businessinfo .table-orgspace-title,
 .finaProDetail .agentDel .agentDelCon .businessinfo .table-orgspace-title {
   width: 146px;
+}
+
+.serverOrgDetail .agentDel .agentDelCon .contactInfo .table-orgspace-title.ta_c,
+.serverProDetail .agentDel .agentDelCon .contactInfo .table-orgspace-title.ta_c,
+.serverConDetail .agentDel .agentDelCon .contactInfo .table-orgspace-title.ta_c,
+.quickSearch .agentDel .agentDelCon .contactInfo .table-orgspace-title.ta_c,
+.finaInsDetail .agentDel .agentDelCon .contactInfo .table-orgspace-title.ta_c,
+.finaProDetail .agentDel .agentDelCon .contactInfo .table-orgspace-title.ta_c {
+  width: auto;
 }
 
 .serverOrgDetail .agentDel .agentDelCon .honor,
@@ -2524,6 +2553,9 @@ img {
 .finaProDetail .agentCon .actiConsultation .allActiUl > li .actiInfo > .actiNameItem {
   color: #222;
   font-size: 16px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .serverOrgDetail .agentCon .actiConsultation .allActiUl > li .actiInfo .actiTimer,
@@ -3589,6 +3621,9 @@ img {
 .enterpriseservice .popularActi .acti .actiUl > li .actiInfo > .actiNameItem {
   color: #222;
   font-size: 16px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .portalIndex .popularActi .acti .actiUl > li .actiInfo .actiTimer,
@@ -3971,12 +4006,13 @@ img {
 
 .portalIndex .enterprisesPark .enterPark > ul li p,
 .enterpriseservice .enterprisesPark .enterPark > ul li p {
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
 .portalIndex .enterprisesPark .enterPark > ul li img,
 .enterpriseservice .enterprisesPark .enterPark > ul li img {
   width: 50px;
+  height: 50px;
 }
 
 .portalIndex .enterprisesPark .enterPark > ul .li1Div,

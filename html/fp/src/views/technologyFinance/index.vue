@@ -263,9 +263,9 @@
                 <div class="finaDiv1">
                   <div class="finaTit">{{i.productName}}</div>
                   <div class="finaContent">
-                    <p>服务机构：{{i.orgName}}</p>
+                    <p class="finaOrg">服务机构：{{i.orgName}}</p>
                     <p>参考利率范围：
-                      <span class="mainColor">{{i.refRateMin}}%—{{i.refRateMax}}%</span>
+                      <span class="mainColor">{{i.refRateMin}}%-{{i.refRateMax}}%</span>
                     </p>
                     <p>贷款期限：{{i.loanTermMin}}个月—{{i.loanTermMax}}个月</p>
                     <p>担保方式：{{i.assureMethodName}}</p>
@@ -348,42 +348,44 @@
 
     <!-- 提需求弹框 -->
     <template v-if="financialProVisible">
-      <el-dialog :visible.sync="financialProVisible" width="600px" :modal-append-to-body="false" :lock-scroll="false"> 
+      <el-dialog :visible.sync="financialProVisible" width="600px" :modal-append-to-body="false" :lock-scroll="false">
         <div v-if="islogin">
           <el-form ref="financialProform" :rules="rules" :model="financialProform" label-position="right" label-width="150px" style="max-width:500px;">
-          <el-form-item label="融资金额(万元):" prop="financingAmount">
-            <el-input v-model.trim="financialProform.financingAmount" placeholder="请输入融资金额" maxlength="100" clearable/>
-          </el-form-item>
-          <el-form-item label="融资期限(月):" prop="financingPeriod">
-            <el-select v-model="financialProform.financingPeriod" placeholder="请选择" style="width:100%">
-              <el-option v-for="(item,index) in options" :key="index" :label="item.label" :value="item.value" />
-            </el-select>
-          </el-form-item>
+            <el-form-item label="融资金额(万元):" prop="financingAmount">
+              <el-input v-model.trim="financialProform.financingAmount" placeholder="请输入融资金额" maxlength="100" clearable/>
+            </el-form-item>
+            <el-form-item label="融资期限(月):" prop="financingPeriod">
+              <el-select v-model="financialProform.financingPeriod" placeholder="请选择" style="width:100%">
+                <el-option v-for="(item,index) in options" :key="index" :label="item.label" :value="item.value" />
+              </el-select>
+            </el-form-item>
 
-          <el-form-item label="资金需求日期:" prop="expectedDate">
-            <el-input v-model.trim="financialProform.expectedDate" placeholder="请输入需求日期，如2019-04-10" maxlength="100" clearable/>
-          </el-form-item>
-          <el-form-item label="资金需求说明:" prop="fundsReqDesc">
-            <el-input v-model.trim="financialProform.fundsReqDesc" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
-          </el-form-item>
-        </el-form>
-        <div class="demandLine"></div>
-        <div class="demandDia" @click="demandDia()">提交需求</div>
+            <el-form-item label="资金需求日期:" prop="expectedDate">
+              <!-- <el-input v-model.trim="financialProform.expectedDate" placeholder="请输入需求日期，如2019-04-10" maxlength="100" clearable/> -->
+              <el-date-picker v-model="financialProform.expectedDate" type="date" placeholder="选择日期" style="width:100%" value-format="yyyy-MM-dd">
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item label="资金需求说明:" prop="fundsReqDesc">
+              <el-input v-model.trim="financialProform.fundsReqDesc" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
+            </el-form-item>
+          </el-form>
+          <div class="demandLine"></div>
+          <div class="demandDia" @click="demandDia()">提交需求</div>
         </div>
         <div v-else class="loginTip">
           你还未
-          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          <span class="mainColor pointer" @click="goLogin">登录</span>
           /
           <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
           企业账号
         </div>
       </el-dialog>
     </template>
-      <template v-if="concatVisible">
+    <template v-if="concatVisible">
       <el-dialog :visible.sync="concatVisible" width="530px" :modal-append-to-body="false" :lock-scroll="false">
         <div class="loginTip">
           你还未
-          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          <span class="mainColor pointer" @click="goLogin">登录</span>
           /
           <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
           账号
@@ -402,7 +404,7 @@ export default {
   data() {
     return {
       islogin: true,
-      concatVisible:false,
+      concatVisible: false,
       sousuo: false,
       searchData: "",
       showFF: false,
@@ -503,7 +505,11 @@ export default {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
   },
   methods: {
-      //判断是否登录
+     goLogin() {
+      window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
+      this.$router.push({ path: "/login" });
+    },
+    //判断是否登录
     isLogin() {
       if (!sessionStorage.userInfo) {
         this.islogin = false;
@@ -511,8 +517,8 @@ export default {
     },
     handleInvertor() {
       if (!sessionStorage.userInfo) {
-        this.concatVisible=true
-        return
+        this.concatVisible = true;
+        return;
       }
       this.$router.push({ name: "investorCertification" });
     },
@@ -568,8 +574,8 @@ export default {
       };
     },
     handleScroll() {
-      if(!document.getElementById("header")){
-        return
+      if (!document.getElementById("header")) {
+        return;
       }
       const osTop = this.getScrollOffset().y;
       if (
@@ -605,6 +611,9 @@ export default {
     //用户提需求
     demandDia() {
       let _this = this;
+      // if(!this.financialProform.financingPeriod){
+      //   return
+      // }
       let max = this.arr[this.financialProform.financingPeriod].loanTermMax;
       let min = this.arr[this.financialProform.financingPeriod].loanTermMin;
       this.api.post({
@@ -635,7 +644,7 @@ export default {
       //   this.$message.error("请先登录");
       //   return;
       // }
-      this.isLogin()
+      this.isLogin();
       this.financialProVisible = true;
       this.financialProform.expectedDate = "";
       this.financialProform.financingAmount = "";
@@ -740,10 +749,10 @@ export default {
 </script>
 <style lang="scss">
 .TechnologyFinance {
-    .loginTip{
+  .loginTip {
     text-align: center;
     font-size: 15px;
-    margin-bottom:20px;
+    margin-bottom: 20px;
   }
   #finaPP {
     padding: 20px 10px;
@@ -1170,6 +1179,11 @@ export default {
               }
               .finaContent {
                 // margin: 10px 0;
+              }
+              .finaOrg {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
               }
             }
             .finaPP {

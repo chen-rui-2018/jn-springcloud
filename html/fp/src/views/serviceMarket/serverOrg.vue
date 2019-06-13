@@ -103,7 +103,7 @@
                 </p>
                 <p>地址：{{i.orgAddress}}</p>
                 <p>累计
-                  <span class="mainColor">{{i.transactionNum}}</span>笔交易</p>
+                  <span class="mainColor">{{i.transactionNum}}</span>&nbsp;笔交易</p>
               </div>
               <div class="right1 fl">
                 <p>
@@ -122,6 +122,9 @@
         </li>
       </ul>
     </div>
+    <!-- <div class="serverOrgContent" v-else>
+      <nodata></nodata>
+    </div> -->
     <div class="pagination-container">
       <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
       </el-pagination>
@@ -131,7 +134,7 @@
       <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :append-to-body="true" :lock-scroll="false">
         <div class="loginTip" style="text-align:center;padding-bottom:20px">
           你还未
-          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          <span class="mainColor pointer" @click="goLogin">登录</span>
           /
           <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
           账号
@@ -141,7 +144,11 @@
   </div>
 </template>
 <script>
+import nodata from "../common/noData.vue";
 export default {
+  components: {
+    nodata
+  },
   data() {
     return {
       concatVisible: false,
@@ -174,6 +181,7 @@ export default {
   },
   mounted() {
     this.selectIndustryList();
+    this.businessAreaList()
     if (this.$route.query.searchData) {
       this.keyW = this.$route.query.searchData;
       this.initList();
@@ -182,6 +190,10 @@ export default {
     }
   },
   methods: {
+    goLogin() {
+      window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
+      this.$router.push({ path: "/login" });
+    },
     //在线联系
     onlineContat(orgAccount, orgName) {
       if (!sessionStorage.userInfo) {
@@ -306,7 +318,7 @@ export default {
           if (res.code == "0000") {
             for (let it in res.data) {
               if (res.data[it].preType == "0") {
-                _this.businessArea.push(res.data[it]);
+                // _this.businessArea.push(res.data[it]);
               } else if (res.data[it].preType == "1") {
                 _this.industryField.push(res.data[it]);
               } else if (res.data[it].preType == "2") {
@@ -315,6 +327,26 @@ export default {
                 _this.enterpriseNature.push(res.data[it]);
               }
             }
+          } else {
+            _this.$message.error(res.result);
+          }
+        }
+      });
+    },
+    //业务领域
+    businessAreaList() {
+      let _this = this;
+      this.api.get({
+        url: "selectIndustryProductList",
+        data: {},
+        callback: function(res) {
+          if (res.code == "0000") {
+            // for (let it in res.data) {
+            //   if (res.data[it].preType == "0") {
+            //     _this.businessArea.push(res.data[it]);
+            //   }
+            // }
+            _this.businessArea = res.data;
           } else {
             _this.$message.error(res.result);
           }

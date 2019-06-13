@@ -55,7 +55,6 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.zip.Inflater;
 
 /**
  * 企业信息Service
@@ -383,6 +382,15 @@ public class CompanyServiceImpl implements CompanyService {
            }
         }
         vo.setCompanyInfoShow(show);
+        //产看详情时 浏览数加1
+        String browseNumber = vo.getCompanyInfoShow().getBrowseNumber();
+        if(StringUtils.isBlank(browseNumber)){
+            browseNumber="0";
+        }
+        TbServiceCompany tbServiceCompany = new TbServiceCompany();
+        tbServiceCompany.setId(companyId);
+        tbServiceCompany.setBrowseNumber(String.valueOf((Integer.valueOf(browseNumber)+1)));
+        tbServiceCompanyMapper.updateByPrimaryKeySelective(tbServiceCompany);
         return vo;
     }
 
@@ -491,6 +499,19 @@ public class CompanyServiceImpl implements CompanyService {
             throw new JnSpringCloudException(CompanyExceptionEnum.COMPANY_INFO_NOT_EXIST);
         }
         return companyInfoModel;
+    }
+
+    @Override
+    @ServiceLog(doAction = "企业缴费成功修改企业信息")
+    public Boolean updateCompanyInfoAfterPay(UpdateCompanyInfoParam updateCompanyInfoParam) {
+        TbServiceCompany tbServiceCompany = tbServiceCompanyMapper.selectByPrimaryKey(updateCompanyInfoParam.getComId());
+        if(null == tbServiceCompany){
+            logger.warn("[企业缴费成功修改企业信息] 企业信息不存在，comId：{}", updateCompanyInfoParam.getComId());
+            throw new JnSpringCloudException(CompanyExceptionEnum.COMPANY_INFO_NOT_EXIST);
+        }
+        BeanUtils.copyProperties(updateCompanyInfoParam, tbServiceCompany);
+        int i = tbServiceCompanyMapper.updateByPrimaryKeySelective(tbServiceCompany);
+        return i == 1;
     }
 
 

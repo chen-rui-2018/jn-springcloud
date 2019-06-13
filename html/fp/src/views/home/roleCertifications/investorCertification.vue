@@ -1,5 +1,5 @@
 <template>
-  <div class="investorCertification">
+  <div class="investorCertification" v-loading="loading">
     <div class="investorCertification-header font16">
       <div>投资人认证</div>
     </div>
@@ -187,6 +187,7 @@
   </div>
 </template>
 <script>
+import { getToken } from '@/util/auth'
 import axios from "axios";
 export default {
   data() {
@@ -203,6 +204,7 @@ export default {
         }
       }
     return {
+      loading:false,
       baseUrl:this.api.host,
       submitBtn:true,
       disabled: false,
@@ -261,7 +263,7 @@ export default {
       block: "",
       // avarUrl: "",
       headers: {
-        token: sessionStorage.token
+        token: getToken()
       },
       rules: {
         investorMainRoundList: [
@@ -362,10 +364,12 @@ export default {
           this.disabled = true;
           this.investorForm.investorWorkExperienceParamList = this.workList;
           this.investorForm.investorEducationExperienceParamList = this.educationList;
+          this.loading=true
           this.api.post({
             url: "addInvestorInfo",
             data: this.investorForm,
             callback: res => {
+              this.loading=false
               if (res.code == "0000") {
                 this.$message({
                   message: "操作成功",
@@ -375,6 +379,7 @@ export default {
         path: "/home"
       });
                 this.disabled = false;
+
               } else {
                 this.$message.error(res.result);
                 this.disabled = false;
@@ -423,6 +428,10 @@ export default {
     },
     // 添加工作经历表单
     addWorkList(workForm) {
+       if (!this.investorForm.phone) {
+        this.$message.error("请先填写基本信息");
+        return false;
+      }
       this.submitBtn=false
       if (this.workText === "添加工作经历") {
         this.workForm.startTime = "";
@@ -506,6 +515,10 @@ export default {
     },
     // 添加教育经历表单
     addEducationList(educationForm) {
+       if (!this.investorForm.phone) {
+        this.$message.error("请先填写基本信息");
+        return false;
+      }
       this.submitBtn=false
       if (this.educationText === "添加教育经历") {
         this.educationForm.startTime = "";

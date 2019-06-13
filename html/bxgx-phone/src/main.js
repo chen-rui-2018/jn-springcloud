@@ -10,7 +10,7 @@ import { XHeader, Selector, Checker, CheckerItem, PopupRadio, Group, Icon, Searc
 // import BaiduMap from 'vue-baidu-map'
 // import { get, post} from '@/api/http'
 // import MintUI from 'mint-ui'
-import 'mint-ui/lib/style.css'
+// import 'mint-ui/lib/style.css'
 // import './assets/iconfont/iconfont.css'
 import './assets/font-awesome/css/font-awesome.min.css'
 // Vue.prototype.$get = get

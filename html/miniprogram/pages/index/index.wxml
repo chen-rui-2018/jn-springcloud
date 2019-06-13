@@ -6,7 +6,9 @@
     <view class="swiper_main"> 
       <swiper class="screen-swiper round-dot" indicator-dots="true" circular="true" autoplay="true" interval="5000" duration="500">
         <swiper-item wx:for="{{bannarList}}" wx:key="{{index}}">
-          <image src="{{item.posterUrl}} " mode='aspectFill'></image>
+          <!-- <navigator url=""> -->
+            <image src="{{item.posterUrl}} " mode='aspectFill'></image>
+          <!-- </navigator> -->
         </swiper-item>
       </swiper> 
     </view>
@@ -18,15 +20,15 @@
     </view>
     <view class="notice_main">
       <swiper class='notice_swiper' autoplay='{{true}}' interval='2000' vertical='{{true}}' circular='{{true}}'>
-        <swiper-item class='item' wx:for='{{noticeLise}}' wx:key="{{index}}">{{item.noticeTitle}}</swiper-item>
+        <swiper-item class='item' wx:for='{{noticeLise}}' wx:key="{{index}}" bindtap="goparkDetais" data-noticeid="{{item.noticeId}}">{{item.noticeTitle}}</swiper-item>
       </swiper>
     </view>
   </view>
   <!-- 导航图标 -->
   <view class="nav bg_white paddihng_side">
     <view class="nav_item"> 
-      <navigator url="/page/navigate/navigate?title=navigate">
-        <image wx:if="{{imgBaseUrl}}" class="" src="{{imgBaseUrl}}index_nav1.png" > </image>
+      <navigator url="/pages/index/policyGuide/policyGuide">
+        <image wx:if="{{imgBaseUrl}}" class="" src="{{imgBaseUrl}}index_nav1.png"></image>
       </navigator>
       <text class=""> 政策指南 </text>
     </view>
@@ -53,41 +55,45 @@
   <view class="hot_act paddihng_side bg_white">
     <view class="hot_title">
       <text>热门活动</text>
-      <view class="gray">
-        <text>更多</text>
-        <text class="icon-right"></text>
-      </view>
+      <navigator url="/pages/index/hotAct/hotAct">
+        <view class="gray">
+          <text>更多</text>
+          <text class="icon-right"></text>
+        </view>
+      </navigator>
     </view>
     <view class="hot_ul">
       <block wx:for="{{hotList}}" wx:key="{{index}}">
-        <view class="hot_li">
-          <view class="hot_li_img">
-            <image class="" src="{{item.actiPosterUrl}} "> </image>
+        <!-- <navigator url="/pages/index/actiDetail/actiDetail" > -->
+          <view class="hot_li" bindtap="goDetail" data-id="{{item.id}}">
+            <view class="hot_li_img">
+              <image class="" src="{{item.actiPosterUrl}} "> </image>
+            </view>
+            <view class="hot_li_title paddihng_side">{{item.actiName}} </view>
+            <view class="hot_li_detail gray paddihng_side">
+              <view>
+                <text class="icon-location icon"></text>
+                <text>{{item.actiAddress}}</text>
+              </view>
+              <view>
+                <text class="icon-countdown icon"></text>
+                <text>10/17  周日14:00-17:00</text>
+              </view>
+            </view>
+            <view class="hot_li_num paddihng_side">
+              <view class="num_left">
+                <view class="{{headIndex!=0?'num_img':''}} " wx:for="{{item.avatarList}}" wx:for-item="headItem" wx:for-index="headIndex" wx:key="{{headIndex}}">
+                  <image class="cu-avatar round" src="{{headItem}}" > </image>
+               </view>
+                <text class="gray person_num">{{item.applyNum}}/{{item.actiNumber}}名</text>
+              </view>
+              <view class="num_right">
+                <image wx:if="{{imgBaseUrl}}" class="" src="{{imgBaseUrl}}xin@2x.png"> </image>
+                <text>{{item.actiLike}}</text>
+              </view>
+            </view>
           </view>
-          <view class="hot_li_title paddihng_side">{{item.actiName}} </view>
-          <view class="hot_li_detail gray paddihng_side">
-            <view>
-              <text class="icon-location icon"></text>
-              <text>{{item.actiAddress}}</text>
-            </view>
-            <view>
-              <text class="icon-countdown icon"></text>
-              <text>10/17  周日14:00-17:00</text>
-            </view>
-          </view>
-          <view class="hot_li_num paddihng_side">
-            <view class="num_left">
-              <view class="{{headIndex!=0?'num_img':''}} " wx:for="{{item.avatarList}}" wx:for-item="headItem" wx:for-index="headIndex" wx:key="{{headIndex}}">
-                <image class="cu-avatar round" src="{{headItem}}" > </image>
-             </view>
-              <text class="gray person_num">{{item.applyNum}}/{{item.actiNumber}}名</text>
-            </view>
-            <view class="num_right">
-              <image wx:if="{{imgBaseUrl}}" class="" src="{{imgBaseUrl}}xin@2x.png"> </image>
-              <text>{{item.actiLike}}</text>
-            </view>
-          </view>
-        </view>
+        <!-- </navigator> -->
       </block>
     </view>
   </view>

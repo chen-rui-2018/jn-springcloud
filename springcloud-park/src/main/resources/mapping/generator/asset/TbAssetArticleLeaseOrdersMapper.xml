@@ -11,6 +11,7 @@
     <result column="article_name" jdbcType="VARCHAR" property="articleName" />
     <result column="article_url" jdbcType="VARCHAR" property="articleUrl" />
     <result column="article_introduction" jdbcType="VARCHAR" property="articleIntroduction" />
+    <result column="lease_enterprise_id" jdbcType="VARCHAR" property="leaseEnterpriseId" />
     <result column="lease_enterprise" jdbcType="VARCHAR" property="leaseEnterprise" />
     <result column="contact_name" jdbcType="VARCHAR" property="contactName" />
     <result column="contact_phone" jdbcType="VARCHAR" property="contactPhone" />
@@ -87,9 +88,9 @@
   </sql>
   <sql id="Base_Column_List">
     id, asset_number, article_id, type_id, asset_type, specification, article_name, article_url, 
-    article_introduction, lease_enterprise, contact_name, contact_phone, lease_cash, 
-    lease_price, start_time, end_time, pay_sum, article_status, payment_status, record_status, 
-    creator_account, create_time, modifier_account, modified_time
+    article_introduction, lease_enterprise_id, lease_enterprise, contact_name, contact_phone, 
+    lease_cash, lease_price, start_time, end_time, pay_sum, article_status, payment_status, 
+    record_status, creator_account, create_time, modifier_account, modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.asset.entity.TbAssetArticleLeaseOrdersCriteria" resultMap="BaseResultMap">
     select
@@ -125,21 +126,21 @@
     insert into tb_asset_article_lease_orders (id, asset_number, article_id, 
       type_id, asset_type, specification, 
       article_name, article_url, article_introduction, 
-      lease_enterprise, contact_name, contact_phone, 
-      lease_cash, lease_price, start_time, 
-      end_time, pay_sum, article_status, 
-      payment_status, record_status, creator_account, 
-      create_time, modifier_account, modified_time
-      )
+      lease_enterprise_id, lease_enterprise, contact_name, 
+      contact_phone, lease_cash, lease_price, 
+      start_time, end_time, pay_sum, 
+      article_status, payment_status, record_status, 
+      creator_account, create_time, modifier_account, 
+      modified_time)
     values (#{id,jdbcType=VARCHAR}, #{assetNumber,jdbcType=VARCHAR}, #{articleId,jdbcType=VARCHAR}, 
       #{typeId,jdbcType=VARCHAR}, #{assetType,jdbcType=VARCHAR}, #{specification,jdbcType=VARCHAR}, 
       #{articleName,jdbcType=VARCHAR}, #{articleUrl,jdbcType=VARCHAR}, #{articleIntroduction,jdbcType=VARCHAR}, 
-      #{leaseEnterprise,jdbcType=VARCHAR}, #{contactName,jdbcType=VARCHAR}, #{contactPhone,jdbcType=VARCHAR}, 
-      #{leaseCash,jdbcType=DECIMAL}, #{leasePrice,jdbcType=DECIMAL}, #{startTime,jdbcType=DATE}, 
-      #{endTime,jdbcType=DATE}, #{paySum,jdbcType=DECIMAL}, #{articleStatus,jdbcType=TINYINT}, 
-      #{paymentStatus,jdbcType=TINYINT}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
-      )
+      #{leaseEnterpriseId,jdbcType=VARCHAR}, #{leaseEnterprise,jdbcType=VARCHAR}, #{contactName,jdbcType=VARCHAR}, 
+      #{contactPhone,jdbcType=VARCHAR}, #{leaseCash,jdbcType=DECIMAL}, #{leasePrice,jdbcType=DECIMAL}, 
+      #{startTime,jdbcType=DATE}, #{endTime,jdbcType=DATE}, #{paySum,jdbcType=DECIMAL}, 
+      #{articleStatus,jdbcType=TINYINT}, #{paymentStatus,jdbcType=TINYINT}, #{recordStatus,jdbcType=TINYINT}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.asset.entity.TbAssetArticleLeaseOrders">
     insert into tb_asset_article_lease_orders
@@ -170,6 +171,9 @@
       </if>
       <if test="articleIntroduction != null">
         article_introduction,
+      </if>
+      <if test="leaseEnterpriseId != null">
+        lease_enterprise_id,
       </if>
       <if test="leaseEnterprise != null">
         lease_enterprise,
@@ -244,6 +248,9 @@
       </if>
       <if test="articleIntroduction != null">
         #{articleIntroduction,jdbcType=VARCHAR},
+      </if>
+      <if test="leaseEnterpriseId != null">
+        #{leaseEnterpriseId,jdbcType=VARCHAR},
       </if>
       <if test="leaseEnterprise != null">
         #{leaseEnterprise,jdbcType=VARCHAR},
@@ -328,6 +335,9 @@
       <if test="record.articleIntroduction != null">
         article_introduction = #{record.articleIntroduction,jdbcType=VARCHAR},
       </if>
+      <if test="record.leaseEnterpriseId != null">
+        lease_enterprise_id = #{record.leaseEnterpriseId,jdbcType=VARCHAR},
+      </if>
       <if test="record.leaseEnterprise != null">
         lease_enterprise = #{record.leaseEnterprise,jdbcType=VARCHAR},
       </if>
@@ -389,6 +399,7 @@
       article_name = #{record.articleName,jdbcType=VARCHAR},
       article_url = #{record.articleUrl,jdbcType=VARCHAR},
       article_introduction = #{record.articleIntroduction,jdbcType=VARCHAR},
+      lease_enterprise_id = #{record.leaseEnterpriseId,jdbcType=VARCHAR},
       lease_enterprise = #{record.leaseEnterprise,jdbcType=VARCHAR},
       contact_name = #{record.contactName,jdbcType=VARCHAR},
       contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
@@ -434,6 +445,9 @@
       </if>
       <if test="articleIntroduction != null">
         article_introduction = #{articleIntroduction,jdbcType=VARCHAR},
+      </if>
+      <if test="leaseEnterpriseId != null">
+        lease_enterprise_id = #{leaseEnterpriseId,jdbcType=VARCHAR},
       </if>
       <if test="leaseEnterprise != null">
         lease_enterprise = #{leaseEnterprise,jdbcType=VARCHAR},
@@ -493,6 +507,7 @@
       article_name = #{articleName,jdbcType=VARCHAR},
       article_url = #{articleUrl,jdbcType=VARCHAR},
       article_introduction = #{articleIntroduction,jdbcType=VARCHAR},
+      lease_enterprise_id = #{leaseEnterpriseId,jdbcType=VARCHAR},
       lease_enterprise = #{leaseEnterprise,jdbcType=VARCHAR},
       contact_name = #{contactName,jdbcType=VARCHAR},
       contact_phone = #{contactPhone,jdbcType=VARCHAR},

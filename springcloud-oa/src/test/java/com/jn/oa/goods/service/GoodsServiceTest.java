@@ -44,18 +44,19 @@ public class GoodsServiceTest {
     @Test
     public void updateGoodsAccount() {
         GoodsApplicationVo goodsApplicationVo = new GoodsApplicationVo();
-        goodsApplicationVo.setId("583374906578698240");
+        goodsApplicationVo.setId("575734531932291072");
         goodsApplicationVo.setCreatorAccount(user.getAccount());
         goodsApplicationVo.setTotal(10);
         goodsApplicationVo.setCreatedTime(new Date());
 
         List<TbOaGoodsApplicationDetails> list = new ArrayList<>();
         TbOaGoodsApplicationDetails goodsApplicationDetails1 = new TbOaGoodsApplicationDetails();
-        goodsApplicationDetails1.setGoodsId("576825572752097280");
-        goodsApplicationDetails1.setApplyNum(7);
+        goodsApplicationDetails1.setGoodsId("584112170917167104");
+        goodsApplicationDetails1.setApplyNum(21);
         list.add(goodsApplicationDetails1);
 
         goodsApplicationVo.setTb_oa_goods_application_details(list);
         goodsService.updateGoodsAccount(goodsApplicationVo, user);
     }
+
 }

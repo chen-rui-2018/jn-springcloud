@@ -4,7 +4,7 @@
       <div class=" myBusiness font16">我的机构 </div>
       <div class="business_nav">
         <div @click="toBasicInformation" v-show="isEditBody">编辑机构</div>
-        <div @click="toCounselorManagement" v-show="isCounselor">顾问管理</div>
+        <div @click="toCounselorManagement" v-show="isCounselor">专员管理</div>
         <div @click="toEnterprisePropaganda" v-show="isPublicity">企业宣传</div>
       </div>
 
@@ -58,7 +58,7 @@
         </div>
         <div style="display:flex">
           <el-form-item
-            label="主营业务:"
+            label="核心服务:"
             class="inline border-bottom"
           >
             <span>{{orgBusiness}}</span>
@@ -69,24 +69,25 @@
             <div class="businessArea martop"> <span>业务领域</span> <span>{{businessType}}</span></div>
             <div class="businessArea ">
               <span>营业执照</span>
-               <div class="businessLicense" v-for="(item, index) in honorLicense" :key="index">
-               <span class="themeColor smallSize mr">{{item.awardTime}}&nbsp;获得</span>
-               <div class="itemInfo">
+               <!-- <div class="businessLicense" v-for="(item, index) in honorLicense" :key="index"> -->
+               <!-- <span class="themeColor smallSize mr">{{item.awardTime}}&nbsp;获得</span> -->
+               <!-- <div class="itemInfo">
                  <div>{{item.certName}}</div>
                  <div>颁发部门：{{item.awardDepart}}</div>
-                </div>
-                 <div class="businessLicenseImg"><img src="/static/img/营业执照.png" alt=""></div>
-                </div>
+                </div> -->
+                 <div class="businessLicenseImg" v-show="orgLicensesUrl" @click="lookPhoto(orgLicensesUrl)"><img  :src="orgLicensesUrl" alt="营业执照"></div>
+                 <div class="businessLicenseImg" v-show="!orgLicensesUrl" >暂无营业执照</div>
+                <!-- </div> -->
             </div>
              <div class="businessArea ">
-              <span>企业资质/荣誉</span>
+              <div>企业资质/荣誉</div>
                 <div class="enterpriseQualification" v-for="(item, index) in honorLicense" :key="index">
                <span class="themeColor smallSize mr">{{item.awardTime}}&nbsp;获得</span>
                <div class="itemInfo">
                  <div>{{item.certName}}</div>
                  <div>颁发部门：{{item.awardDepart}}</div>
                 </div>
-                 <div class="businessLicenseImg"><img src="/static/img/营业执照.png" alt=""></div>
+                 <div class="businessLicenseImg" @click="lookPhoto(item.fileUrl)"><img :src="item.fileUrl" alt=""></div>
                 </div>
             </div>
  <div class="enterprise">团队信息</div>
@@ -94,50 +95,41 @@
   <el-form class="tableEnterprise">
         <div style="display:flex">
           <el-form-item
-            label="员工总人数:"
+            label="员工总人数（人）:"
             class="inline "
           >
-            <span>{{staffCount}}</span>
+            <span>{{staffCount?staffCount:'暂无信息'}} </span>
           </el-form-item>
           <el-form-item
-            label="职业人员人数:"
+            label="执业人员人数（人）:"
             class="inline bodyName"
           >
-            <span>{{professionNum}}</span>
+            <span>{{professionNum}} <i v-show="professionNum">占比({{((professionNum/staffCount)*100).toFixed(2)}}%)</i> <i v-show="!professionNum">暂无信息</i> </span>
           </el-form-item>
         </div>
         <div style="display:flex">
           <el-form-item
-            label="本科:"
+            label="本科（人）:"
             class="inline"
           >
            <label slot="label">本&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;科:</label>
-            <span>{{bachelorNum}}</span>
+            <span>{{bachelorNum}} <i v-show="bachelorNum">占比({{((bachelorNum/staffCount)*100).toFixed(2)}}%)</i> <i v-show="!bachelorNum">暂无信息</i></span>
           </el-form-item>
           <el-form-item
-            label="硕士:"
+            label="硕士（人）:"
             class="inline bodyName"
           >
            <label slot="label">硕&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;士:</label>
-            <span>{{masterNum}}</span>
+            <span>{{masterNum}} <i v-show="masterNum">占比({{((masterNum/staffCount)*100).toFixed(2)}}%)</i> <i v-show="!masterNum">暂无信息</i></span>
           </el-form-item>
         </div>
         <div style="display:flex">
           <el-form-item
-            label="博士:"
+            label="博士（人）:"
             class="inline"
           >
            <label slot="label">博&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;士:</label>
-            <span>{{doctorNum}}</span>
-          </el-form-item>
-        </div>
-        <div style="display:flex">
-          <el-form-item
-            label="海归:"
-            class="inline"
-          >
-           <label slot="label">海&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;归:</label>
-            <span>{{returneeNum}}</span>
+            <span>{{doctorNum}} <i v-show="doctorNum">占比({{((doctorNum/staffCount)*100).toFixed(2)}}%)</i> <i v-show="!doctorNum">暂无信息</i></span>
           </el-form-item>
         </div>
         <div style="display:flex">
@@ -198,20 +190,30 @@
         </div>
       </el-form>
      </div>
+      <el-dialog :visible.sync="dialogVisible" :append-to-body="true"  width="50%" >
+      <img :src="photoUrl" alt="图片" style="width:100%">
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">返 回</el-button>
+      </span>
+    </el-dialog>
     </div>
 
   <!-- </div> -->
 </template>
 
 <script>
+import { getUserInfo } from '@/util/auth'
 export default {
   data() {
     return {
+      photoUrl:'',
+      dialogVisible:false,
       isEditBody:false,
       isCounselor:false,
       isPublicity:false,
       // businessArea:'',
       honorLicense:[],
+      orgLicensesUrl:'',//营业执照
            userAccount:'',
            orgName:'',//机构名称
            orgCode:'',//统一社会信用代码
@@ -219,7 +221,7 @@ export default {
            orgSpeciality:'',//业务擅长
            orgHobby:'',//客户偏好
            orgSynopsis:'',//服务机构简介
-           orgBusiness:'',//主营业务
+           orgBusiness:'',//核心服务
            businessType:'',//业务领域
           //  awardTime:'',//颁发时间
           //  certType:'',//证书类型：1营业执照2执业资质
@@ -230,7 +232,7 @@ export default {
            bachelorNum:'',//本科学历人数
            masterNum:'',//硕士学历人数
            doctorNum:'',//博士学历人数
-           returneeNum:'',//海归员工人数
+          //  returneeNum:'',//海归员工人数
            conName:'',//联系人姓名
            conPhone:'',//联系人电话
            conEmail:'',//联系人邮箱
@@ -250,7 +252,7 @@ export default {
             this.isPublicity = true;
           } else if (i.resourcesName === "修改机构") {
             this.isEditBody = true;
-          } else if (i.resourcesName === "顾问管理") {
+          } else if (i.resourcesName === "专员管理") {
             this.isCounselor = true;
           }
         });
@@ -259,8 +261,13 @@ export default {
         this.init()
   },
   methods: {
+    // 查看图片
+    lookPhoto(url){
+        this.dialogVisible=true
+        this.photoUrl=url
+    },
       init(){
-       this.userAccount=  sessionStorage.getItem("account");
+       this.userAccount = JSON.parse(getUserInfo()).account;
           let _this = this;
              _this.api.get({
                    url: "getMyOrgInfo",
@@ -290,8 +297,9 @@ export default {
             _this.conPhone = res.data.orgDetailVo.conPhone
             _this.conEmail = res.data.orgDetailVo.conEmail
             _this.orgPhone = res.data.orgDetailVo.orgPhone
-            _this.orgAddress = res.data.orgDetailVo.orgAddress
+            _this.orgAddress = res.data.orgDetailVo.orgAddressDetail
             _this.orgWeb = res.data.orgDetailVo.orgWeb
+            _this.orgLicensesUrl = res.data.orgDetailVo.orgLicensesUrl
 
 
           }
@@ -311,7 +319,7 @@ export default {
         this.$router.push({ name: "counselorManagement" });
     },
     toBasicInformation(){
-        this.$router.push({ path: "/roleCertifications/basicInformation" });
+        this.$router.push({ path: "/roleCertifications/basicInformation",query:{title:'编辑机构'} });
     }
   }
 };
@@ -319,16 +327,25 @@ export default {
 
 <style lang="scss" >
 .myBody {
+  // .el-dialog{
+  //   height: 680px;
+  //   overflow: auto;
+  // }
   .mr{
     margin-right:36px;
   }
   .businessLicenseImg{
-    display: inline-block;margin-left:65px;
+    display: inline-block;margin-left:90px;
      vertical-align: middle;
+     cursor: pointer;
+     img{
+       width: 85px;
+       height: 85px;
+     }
   }
   .itemInfo{
     display: inline-block;
-    width: 179px;
+    width: 240px;
         vertical-align: middle;
         >div:nth-child(2){
           margin-top:5px;
@@ -339,7 +356,8 @@ export default {
   .enterpriseQualification{
     display: inline-block;
     vertical-align: middle;
-    margin-left: 80px;
+    margin:10px 0px;
+    margin-left: 180px;
   }
   .businessLicense{
     display: inline-block;
@@ -379,7 +397,7 @@ margin-bottom: 59px;
       display: inline-block;
     }
     .el-form-item__label {
-      width: 132px;
+      width:140px;
       // padding: 15px 0;
       display: inline-block;
       background-color: #f0f0f0;

@@ -46,15 +46,12 @@ public class OrgController extends BaseController {
     private OrgService orgService;
     @Autowired
     private ServiceProductService productService;
-    @Autowired
-    private UserExtensionClient userExtensionClient;
-
 
     @ControllerLog(doAction = "获取服务机构列表")
     @ApiOperation(value = "获取服务机构列表,(pc/app机构列表)")
     @RequestMapping(value = "/selectServiceOrgList",method = RequestMethod.GET)
     public Result<PaginationData<List<ServiceOrg>>> selectServiceOrgList(@Validated OrgParameter orgParameter){
-        PaginationData<List<ServiceOrg>> paginationData = orgService.selectServiceOrgList(orgParameter);
+        PaginationData<List<ServiceOrg>> paginationData = orgService.selectServiceOrgList(orgParameter,false);
         return new Result<>(paginationData);
     }
 

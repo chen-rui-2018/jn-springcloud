@@ -38,7 +38,7 @@
               <li>
                 <div class="itemImg"><img src="@/../static/img/k3.png" alt=""></div>
                 <div class="itemInfo">
-                  <p>顾问</p>
+                  <p>专员</p>
                   <p class="mainColor">{{businessAreaNum.advisorNum}}家</p>
                 </div>
               </li>
@@ -214,7 +214,7 @@
             </div>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="服务顾问" name="serConsultant">
+        <el-tab-pane label="服务专员" name="serConsultant">
           <div class="serverOrgContent">
             <ul class="list-imgleft adviser">
               <li class="clearfix" v-for="(i,k) in serviceConsultant" :key='k'>
@@ -268,7 +268,7 @@
         </div>
         <div v-else class="loginTip">
           你还未
-          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          <span class="mainColor pointer" @click="goLogin">登录</span>
           /
           <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
           企业账号
@@ -279,7 +279,7 @@
       <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :modal-append-to-body="false" :lock-scroll="false">
         <div class="loginTip">
           你还未
-          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          <span class="mainColor pointer" @click="goLogin">登录</span>
           /
           <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
           账号
@@ -345,6 +345,10 @@ export default {
     this.commentProductList();
   },
   methods: {
+    goLogin() {
+      window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
+      this.$router.push({ path: "/login" });
+    },
     //判断是否登录
     isLogin() {
       if (!sessionStorage.userInfo) {
@@ -354,7 +358,7 @@ export default {
     onlineContact(advisorAccount, advisorName) {
       if (!sessionStorage.userInfo) {
         this.concatVisible = true;
-        return
+        return;
       }
       this.$router.push({
         path: "/chat",
@@ -498,7 +502,7 @@ export default {
       });
     },
     getServiceConList() {
-      //服务顾问
+      //服务专员
       let _this = this;
       this.api.get({
         url: "getServiceConList",

@@ -44,7 +44,7 @@
     <div class="avaMenu" v-if="menuFlag" @mouseleave="menuFlag=!menuFlag">
       <el-card class="box-card bxcard">
         <ul class="avaUL">
-          <li style="border-bottom:1px solid #eee;color:#333" @click="$router.push({path:'/home'})">您好,{{accoutInfo}}</li>
+          <li style="border-bottom:1px solid #eee;color:#333" @click="$router.push({path:'/home'})">您好,{{ userInfoData.account }}</li>
           <!-- <li class="homeLi" v-for="(i,k) in list" :key="k" :class="{'act':bgFlag==i.name}" @click="$router.push({path:i.path})">{{i.name}}</li> -->
           <!-- <li class="homeLi" @click="$router.push({path:'/home'})">首页</li> -->
           <!-- <li class="homeLi" @click="$router.push({path:'/userHome'})">用户资料</li>
@@ -62,13 +62,13 @@
 </template>
 <script>
 import bus from "@/util/bus";
+import { removeToken, removeUserInfo, getUserInfo, setUserInfo } from '@/util/auth'
 export default {
   data() {
     return {
       colorFlag:'',
       showMesFlag:true,
       isLogin: false,
-      accoutInfo: "",
       menuFlag: false,
       showMes: false,
       userInfoData: "",
@@ -93,7 +93,7 @@ export default {
     bus.$on("upUserData", msg => {
       _this.upUserdata();
     });
-    
+
   },
   methods: {
     goRoute(i){
@@ -128,18 +128,17 @@ export default {
       }
     },
     islogin() {
-      this.accoutInfo = sessionStorage.getItem("account");
-      this.userInfoData = JSON.parse(sessionStorage.getItem("userInfo"));
-      if (this.userInfoData) {
+      let userInfo = getUserInfo();
+      if (userInfo) {
         this.isLogin = true;
+        this.userInfoData = JSON.parse(userInfo);
       } else {
         this.isLogin = false;
       }
     },
     loginOut() {
-      window.sessionStorage.removeItem("token");
-      window.sessionStorage.removeItem("userInfo");
-      window.sessionStorage.removeItem("accout");
+      removeToken();
+      removeUserInfo()
       this.$router.push({ path: "/" });
       this.islogin();
     },
@@ -155,6 +154,7 @@ export default {
       this.api.get({
         url: "findAllApp",
         data: {
+          isRead:0
         },
         callback: (res) =>{
           if (res.code == "0000") {
@@ -176,7 +176,7 @@ export default {
           callback: function(res) {
             if (res.code === "0000") {
               _this.userInfoData = res.data;
-              sessionStorage.setItem('userInfo', JSON.stringify(res.data));
+              setUserInfo(JSON.stringify(res.data))
             } else {
               _this.$message.error(res.result);
             }

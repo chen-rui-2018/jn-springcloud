@@ -763,6 +763,76 @@ public class TbAssetArticleLeaseOrdersCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andLeaseEnterpriseIdIsNull() {
+            addCriterion("lease_enterprise_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaseEnterpriseIdIsNotNull() {
+            addCriterion("lease_enterprise_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaseEnterpriseIdEqualTo(String value) {
+            addCriterion("lease_enterprise_id =", value, "leaseEnterpriseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaseEnterpriseIdNotEqualTo(String value) {
+            addCriterion("lease_enterprise_id <>", value, "leaseEnterpriseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaseEnterpriseIdGreaterThan(String value) {
+            addCriterion("lease_enterprise_id >", value, "leaseEnterpriseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaseEnterpriseIdGreaterThanOrEqualTo(String value) {
+            addCriterion("lease_enterprise_id >=", value, "leaseEnterpriseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaseEnterpriseIdLessThan(String value) {
+            addCriterion("lease_enterprise_id <", value, "leaseEnterpriseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaseEnterpriseIdLessThanOrEqualTo(String value) {
+            addCriterion("lease_enterprise_id <=", value, "leaseEnterpriseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaseEnterpriseIdLike(String value) {
+            addCriterion("lease_enterprise_id like", value, "leaseEnterpriseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaseEnterpriseIdNotLike(String value) {
+            addCriterion("lease_enterprise_id not like", value, "leaseEnterpriseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaseEnterpriseIdIn(List<String> values) {
+            addCriterion("lease_enterprise_id in", values, "leaseEnterpriseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaseEnterpriseIdNotIn(List<String> values) {
+            addCriterion("lease_enterprise_id not in", values, "leaseEnterpriseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaseEnterpriseIdBetween(String value1, String value2) {
+            addCriterion("lease_enterprise_id between", value1, value2, "leaseEnterpriseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLeaseEnterpriseIdNotBetween(String value1, String value2) {
+            addCriterion("lease_enterprise_id not between", value1, value2, "leaseEnterpriseId");
+            return (Criteria) this;
+        }
+
         public Criteria andLeaseEnterpriseIsNull() {
             addCriterion("lease_enterprise is null");
             return (Criteria) this;

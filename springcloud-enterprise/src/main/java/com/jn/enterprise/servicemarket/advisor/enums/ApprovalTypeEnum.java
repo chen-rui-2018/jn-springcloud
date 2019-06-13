@@ -38,6 +38,14 @@ public enum ApprovalTypeEnum implements CodeAndMsg {
         this.message = message;
     }
 
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
     @Override
     public String getCode() {
         return code;

@@ -12,7 +12,7 @@
           <div class="agentTil fl color1">{{serverOrgDetailList.productName}}</div>
           <div class="orgBtn fr mainColor" v-if="serverOrgDetailList.orgName" @click="raiseDemand(serverOrgDetailList.productId,serverOrgDetailList.productName)">提需求</div>
         </div>
-        <div class="agent2 clearfix color2">
+        <div class="agent2 clearfix pr color2">
           <div class="agentImg fl">
             <img v-if="serverOrgDetailList.pictureUrl" :src="serverOrgDetailList.pictureUrl" alt="">
             <img v-else src="@/../static/img/product.png" alt="">
@@ -23,7 +23,7 @@
             <p>贷款额度：
               <span class="mainColor">{{serverOrgDetailList.loanAmountMin}}-{{serverOrgDetailList.loanAmountMax}}</span>万元
             </p>
-            <p>贷款期限：{{serverOrgDetailList.loanTermMin}}-{{serverOrgDetailList.loanTermMax}}</p>
+            <p>贷款期限：{{serverOrgDetailList.loanTermMin}}个月-{{serverOrgDetailList.loanTermMax}}个月</p>
             <p class="fl" style="margin-top:20px">产品编号：
               <span class="mainColor">{{serverOrgDetailList.serialNumber}}</span>
             </p>
@@ -44,7 +44,8 @@
           <i class="el-icon-arrow-up"></i>
         </div>
         <div class="mainColor shouqi zhankai pointer" v-else @click="zankaiFlag=!zankaiFlag">
-          展开<i class="el-icon-arrow-down"></i>
+          展开
+          <i class="el-icon-arrow-down"></i>
         </div>
         <el-card>
           <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -78,7 +79,7 @@
                     </td>
                     <td class="table-orgspace-title">是否通用产品：</td>
                     <td class="table-orgspace-detail" style="width:322px;word-break: break-all;">
-                     <div v-if="serverOrgDetailList.isGeneralPro=='0'">
+                      <div v-if="serverOrgDetailList.isGeneralPro=='0'">
                         否
                       </div>
                       <div v-if="serverOrgDetailList.isGeneralPro=='1'">
@@ -105,7 +106,8 @@
                     <td class="table-orgspace-title">贷款额度：</td>
                     <td class="table-orgspace-detail" width="300px" colspan="2">
                       <div>
-                        <span class="mainColor">{{serverOrgDetailList.loanAmountMin}}</span>万元-<span class="mainColor">{{serverOrgDetailList.loanAmountMax}}</span>万元
+                        <span class="mainColor">{{serverOrgDetailList.loanAmountMin}}</span>万元-
+                        <span class="mainColor">{{serverOrgDetailList.loanAmountMax}}</span>万元
                       </div>
                     </td>
                     <td class="table-orgspace-title">贷款期限：</td>
@@ -130,13 +132,13 @@
                   <tr>
                     <td class="table-orgspace-title">申请条件：</td>
                     <td class="table-orgspace-detail" colspan="4">
-                      <div class="table-orgspace-col">{{serverOrgDetailList.applyCondition}}</div>
+                      <div class="table-orgspace-col" v-html="serverOrgDetailList.applyCondition"></div>
                     </td>
                   </tr>
                   <tr>
                     <td class="table-orgspace-title">提交材料：</td>
                     <td class="table-orgspace-detail" colspan="4">
-                      <div class="table-orgspace-col">{{serverOrgDetailList.submitMaterial}}</div>
+                      <div class="table-orgspace-col" v-html="serverOrgDetailList.submitMaterial"></div>
                     </td>
                   </tr>
                   <tr>
@@ -152,38 +154,40 @@
         </el-card>
       </div>
     </div>
-     <!-- 提需求弹框 -->
+    <!-- 提需求弹框 -->
     <template v-if="financialProVisible">
       <el-dialog :visible.sync="financialProVisible" width="600px" :modal-append-to-body=false :lock-scroll="false">
-      <div v-if="islogin">
+        <div v-if="islogin">
           <el-form ref="financialProform" :rules="rules" :model="financialProform" label-position="right" label-width="150px" style="max-width:500px;">
-          <el-form-item label="融资金额(万元):" prop="financingAmount">
-            <el-input v-model.trim="financialProform.financingAmount" placeholder="请输入融资金额" maxlength="100" clearable/>
-          </el-form-item>
-          <el-form-item label="融资期限(月):" prop="financingPeriod">
-            <el-select v-model="financialProform.financingPeriod" placeholder="请选择" style="width:100%">
-              <el-option v-for="(item,index) in options" :key="index" :label="item.label" :value="item.value" />
-              <!-- <el-option value="3个月及以下"/>
+            <el-form-item label="融资金额(万元):" prop="financingAmount">
+              <el-input v-model.trim="financialProform.financingAmount" placeholder="请输入融资金额" maxlength="100" clearable/>
+            </el-form-item>
+            <el-form-item label="融资期限(月):" prop="financingPeriod">
+              <el-select v-model="financialProform.financingPeriod" placeholder="请选择" style="width:100%">
+                <el-option v-for="(item,index) in options" :key="index" :label="item.label" :value="item.value" />
+                <!-- <el-option value="3个月及以下"/>
               <el-option value="6个月及以下"/>
               <el-option value="12个月及以下"/>
               <el-option value="36个月及以下"/>
               <el-option value="36个月以上"/> -->
-            </el-select>
-          </el-form-item>
+              </el-select>
+            </el-form-item>
 
-          <el-form-item label="资金需求日期:" prop="expectedDate">
-            <el-input v-model.trim="financialProform.expectedDate" placeholder="请输入需求日期，如2019-04-10" maxlength="100" clearable/>
-          </el-form-item>
-          <el-form-item label="资金需求说明:" prop="fundsReqDesc">
-            <el-input v-model.trim="financialProform.fundsReqDesc" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
-          </el-form-item>
-        </el-form>
-        <div class="demandLine"></div>
-        <div class="demandDia" @click="demandDia()">提交需求</div>
-      </div>
-      <div v-else class="loginTip">
+            <el-form-item label="资金需求日期:" prop="expectedDate">
+              <!-- <el-input v-model.trim="financialProform.expectedDate" placeholder="请输入需求日期，如2019-04-10" maxlength="100" clearable/> -->
+              <el-date-picker v-model="financialProform.expectedDate" type="date" placeholder="选择日期" style="width:100%" value-format="yyyy-MM-dd">
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item label="资金需求说明:" prop="fundsReqDesc">
+              <el-input v-model.trim="financialProform.fundsReqDesc" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
+            </el-form-item>
+          </el-form>
+          <div class="demandLine"></div>
+          <div class="demandDia" @click="demandDia()">提交需求</div>
+        </div>
+        <div v-else class="loginTip">
           你还未
-          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          <span class="mainColor pointer" @click="goLogin">登录</span>
           /
           <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
           企业账号
@@ -196,11 +200,11 @@
 export default {
   data() {
     return {
-      islogin:true,
+      islogin: true,
       zankaiFlag: true,
       activeName: "baseInfo",
       serverOrgDetailList: {},
-      financialProVisible:false,
+      financialProVisible: false,
       financialProform: {
         financingAmount: "",
         financingPeriod: "",
@@ -219,10 +223,14 @@ export default {
           { required: true, message: "请选择融资期限", trigger: "change" }
         ],
         expectedDate: [
-          { required: true, message: "请输入需求日期，格式为xxxx-yy-rr", trigger: "blur" }
+          {
+            required: true,
+            message: "请输入需求日期，格式为xxxx-yy-rr",
+            trigger: "blur"
+          }
         ]
       },
-       options: [
+      options: [
         {
           value: 0,
           label: "3个月及以下"
@@ -271,24 +279,31 @@ export default {
         productId: "",
         productName: ""
       },
-      evaCount:{},
-      sortTypes:'',
-      ratingType:'',
-      timeInterval:'0',
+      evaCount: {},
+      sortTypes: "",
+      ratingType: "",
+      timeInterval: "0"
     };
   },
   created() {
     this.initList();
   },
   methods: {
-      //判断是否登录
+    goLogin() {
+      window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
+      this.$router.push({ path: "/login" });
+    },
+    //判断是否登录
     isLogin() {
       if (!sessionStorage.userInfo) {
         this.islogin = false;
       }
     },
-      //用户提需求
+    //用户提需求
     demandDia() {
+      // if(!this.financialProform.financingPeriod){
+      //   return
+      // }
       let _this = this;
       let max = this.arr[this.financialProform.financingPeriod].loanTermMax;
       let min = this.arr[this.financialProform.financingPeriod].loanTermMin;
@@ -316,12 +331,12 @@ export default {
       });
     },
     //提需求
-    raiseDemand(productId,productName) {
+    raiseDemand(productId, productName) {
       //  if (!sessionStorage.userInfo) {
       //   this.$message.error("请先登录");
       //   return;
       // }
-      this.isLogin()
+      this.isLogin();
       this.financialProVisible = true;
       this.financialProform.expectedDate = "";
       this.financialProform.financingAmount = "";
@@ -331,7 +346,7 @@ export default {
       this.financialProform.fundsReqDesc = "";
       this.financialProform.productId = productId;
       this.financialProform.productName = productName;
-    }, 
+    },
     handleClick(tab, event) {
       // console.log(tab, event);
     },
@@ -341,7 +356,7 @@ export default {
       this.api.get({
         url: "getFinancialProductDetails",
         data: {
-          productId : _this.$route.query.productId 
+          productId: _this.$route.query.productId
         },
         callback: function(res) {
           if (res.code == "0000") {
@@ -357,16 +372,16 @@ export default {
 </script>
 <style lang="scss">
 .finaProDetail {
-  .agentDel{
+  .agentDel {
     padding-bottom: 50px;
   }
-  #agent2Info{
-    >p{
+  #agent2Info {
+    > p {
       margin-bottom: 5px;
     }
-    .lastP{
+    .lastP {
       padding-top: 20px;
-      position: static;
+      // position: static;
     }
   }
   .serverPro,
@@ -380,8 +395,8 @@ export default {
   .el-textarea__inner:focus {
     outline: 0;
     border-color: #00a041;
-}
- .demandDia {
+  }
+  .demandDia {
     background: #ecfcf2;
     padding: 8px 10px;
     width: 80px;
@@ -391,8 +406,8 @@ export default {
     text-align: center;
     cursor: pointer;
     color: #00a041;
- }
-.demandLine {
+  }
+  .demandLine {
     height: 1px;
     width: 600px;
     position: relative;
@@ -400,6 +415,6 @@ export default {
     background: #eee;
     margin-bottom: 20px;
     margin-top: 10px;
-}
+  }
 }
 </style>

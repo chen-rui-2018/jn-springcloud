@@ -19,7 +19,7 @@
           </div>
           <div class="agent2Info fl">
             <p>服务机构：{{proDelInfo.orgName}}</p>
-            <p>服务顾问：{{proDelInfo.advisorName}}</p>
+            <p>服务专员：{{proDelInfo.advisorName}}</p>
             <p>参考价格：
               <span class="mainColor">{{proDelInfo.referPrice}}</span>元
             </p>
@@ -48,7 +48,8 @@
                 <i class="el-icon-arrow-up"></i>
               </div>
               <div class="mainColor shouqi zhankai pointer" v-else @click='zankaiFlag=!zankaiFlag'>
-                展开<i class="el-icon-arrow-down"></i>
+                展开
+                <i class="el-icon-arrow-down"></i>
               </div>
             </div>
           </div>
@@ -110,8 +111,8 @@
                 <!-- 上架时间 begin -->
                 <!-- <div class="list-item-date"></div> -->
                 <!-- 上架时间 end -->
-                <!-- 左侧logo begin-->
-                <div class="list-imgleft-container product nopic pointer fl" @click="$router.push({path: 'serverProDetail',query: { productId: i.productId, signoryId: i.signoryId }})">
+                <!-- 左侧logo begin-->"
+                <div class="list-imgleft-container product nopic pointer fl" @click="handlePro(i.productId,i.signoryId)">
                   <img v-if="i.pictureUrl" :src="i.pictureUrl" alt="">
                   <img v-else src="@/../static/img/product.png" alt="">
                 </div>
@@ -134,10 +135,10 @@
                     <!-- 参考信息、交易均价 begin -->
                     <div class="detail-contact inner-product">
                       <div class="search_area text-of">服务机构：{{i.orgName}}</div>
-                      <div class="text-of mt5">服务顾问：{{i.advisorName }}</div>
+                      <div class="text-of mt5">服务专员：{{i.advisorName }}</div>
                       <div class="text-of mt5">参考价格：{{i.referPrice}}元</div>
                       <div>累计
-                        <span class="mainColor">{{i.transactionsNumber}}</span>笔交易</div>
+                        <span class="mainColor">{{i.transactionsNumber}}</span>&nbsp;笔交易</div>
                     </div>
                     <!-- 参考信息、交易均价 end -->
                     <!-- 评价 begin -->
@@ -201,7 +202,7 @@
                   <div class="list-info-bottom-detail clearfix">
                     <!-- 参考信息、交易均价 begin -->
                     <div class="detail-contact inner-product">
-                      <div class="search_area text-of" title="王振英 , 包美芬 , 高凤清">服务顾问：{{i.advisorName}}</div>
+                      <div class="search_area text-of" title="王振英 , 包美芬 , 高凤清">服务专员：{{i.advisorName}}</div>
                       <!-- <div class="text-of mt5">参考价格：1000-10000元</div> -->
                       <span class="evaluate-container">
                         <span class="arrow-container">{{i.evaluationDesc}}</span>
@@ -259,7 +260,7 @@
         </div>
         <div v-else class="loginTip">
           你还未
-          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          <span class="mainColor pointer" @click="goLogin">登录</span>
           /
           <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
           企业账号
@@ -307,11 +308,26 @@ export default {
     this.getEvaluationCountInfo();
   },
   methods: {
+    goLogin() {
+      window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
+      this.$router.push({ path: "/login" });
+    },
     //判断是否登录
     isLogin() {
       if (!sessionStorage.userInfo) {
         this.islogin = false;
       }
+    },
+    //跳转详情
+    handlePro(productId, signoryId) {
+      this.$router.push({
+        path: "/serverProDetail",
+        query: { productId: productId, signoryId: signoryId }
+      });
+      this.findProductDetails();
+      this.sameTypeProductList();
+      this.getServiceRatingInfo();
+      this.getEvaluationCountInfo();
     },
     screenPro(i) {
       (this.productType = i),
@@ -486,12 +502,12 @@ export default {
         callback: res => {
           if (res.code == "0000") {
             this.proDelInfo = res.data.info;
-            
+
             // console.log(document.getElementById('agent2Con').clientHeight)
             // console.log(window.getComputedStyle(document.getElementById('agent2Con')).height)
             setTimeout(() => {
               //由于组件嵌套太多，vue有可能会无法执行到数据更新视图也更新，所以就要在得到数据的时候渲染了  把对应组件执行$forceUpdate这个方法就好 你可以准确定位到这个不刷新的组件  用this.$refs也行
-              this.$children[2].$children[0].$forceUpdate() 
+              this.$children[2].$children[0].$forceUpdate();
               if (document.getElementById("agent2Con").clientHeight >= 50) {
                 this.showMoreFlag = true;
               }

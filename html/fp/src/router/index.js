@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import { urlSearch } from '@/util/index'
+import { setToken, getToken, setLastToken, getLastToken } from '@/util/auth'
+import api from '@/util/api'
 Vue.use(Router)
 
 const router= new Router({
@@ -294,7 +296,7 @@ const router= new Router({
               path: '/servicemarket/product/productService/ordinaryproductDetail',
               name: 'ordinaryproductDetail',
               meta: {
-                title: '常规产品详情'
+                title: '产品详情'
               },
               component: resolve => require(['@/views/home/productService/ordinaryproductDetail'], resolve)
             },
@@ -318,7 +320,7 @@ const router= new Router({
               path: '/servicemarket/product/productService/specialproduct',
               name: 'specialproduct',
               meta: {
-                title: '特色服务产品'
+                title: '特色服务产品管理'
               },
               component: resolve => require(['@/views/home/productService/specialproduct'], resolve)
 
@@ -407,7 +409,7 @@ const router= new Router({
               path: '/roleCertifications/advisoryInformation',
               name: 'advisoryInformation',
               meta: {
-                title: '服务顾问认证'
+                title: '服务专员认证'
               },
               component: resolve => require(['@/views/home/roleCertifications/advisoryInformation'], resolve)
             },
@@ -431,7 +433,8 @@ const router= new Router({
               path: '/myBusiness/publishingPropaganda',
               name: 'publishingPropaganda',
               meta: {
-                title: '发布宣传'
+                title: '发布宣传',
+                keepAlive: true
               },
               component: resolve => require(['@/views/home/myBusiness/publishingPropaganda'], resolve)
             },
@@ -440,6 +443,8 @@ const router= new Router({
               name: 'propagandaDetails',
               meta: {
                 title: '宣传详情'
+
+
               },
               component: resolve => require(['@/views/home/myBusiness/propagandaDetails'], resolve)
             },
@@ -471,7 +476,7 @@ const router= new Router({
               path: '/myBody/counselorManagement',
               name: 'counselorManagement',
               meta: {
-                title: '顾问管理'
+                title: '专员管理'
               },
               component: resolve => require(['@/views/home/myBody/counselorManagement'], resolve)
             },
@@ -479,7 +484,7 @@ const router= new Router({
               path: '/myBody/inviteAdviser',
               name: 'inviteAdviser',
               meta: {
-                title: '邀请顾问'
+                title: '邀请专员'
               },
               component: resolve => require(['@/views/home/myBody/inviteAdviser'], resolve)
             },
@@ -487,15 +492,23 @@ const router= new Router({
               path: '/myBody/advisoryDetails',
               name: 'advisoryDetails',
               meta: {
-                title: '顾问详情'
+                title: '专员详情'
               },
               component: resolve => require(['@/views/home/myBody/advisoryDetails'], resolve)
             },
+            // {
+            //   path: '/myBody/editAdvisers',
+            //   name: 'editAdvisers',
+            //   meta: {
+            //     title: '编辑专员'
+            //   },
+            //   component: resolve => require(['@/views/home/myBody/editAdvisers'], resolve)
+            // },
             {
               path: '/myBody/approveAdvisory',
               name: 'approveAdvisory',
               meta: {
-                title: '审批顾问'
+                title: '审批专员'
               },
               component: resolve => require(['@/views/home/myBody/approveAdvisory'], resolve)
             },
@@ -932,7 +945,7 @@ const router= new Router({
       path: '/serverCon',
       component: resolve => require(['@/views/serviceMarket/serverCon'], resolve),
       meta: {
-        title: '服务顾问'
+        title: '服务专员'
       },
       name: 'serverCon'
     },
@@ -940,7 +953,7 @@ const router= new Router({
       path: '/serverConDetail',
       component: resolve => require(['@/views/serviceMarket/serverConDetail'], resolve),
       meta: {
-        title: '服务顾问详情'
+        title: '服务专员详情'
       },
       name: 'serverConDetail'
     },
@@ -1109,7 +1122,7 @@ const router= new Router({
 router.beforeEach((to, from, next) => {
   const token = urlSearch.token
   if (token) {
-    sessionStorage.setItem('token', token)
+    setToken(token)
   }
   next()
 })

@@ -8,6 +8,8 @@ import com.jn.oa.meeting.vo.OaMeetingAttendanceVo;
 import com.jn.oa.meeting.vo.OaMeetingParticipantsAttendanceVo;
 import com.jn.system.model.User;
 
+import java.util.List;
+
 /**
  * 会议考勤service
  * @author： yuanyy
@@ -39,7 +41,7 @@ public interface MeetingAttendanceService {
      * @param oaMeetingAttendancePage
      * @return
      */
-    PaginationData selectMeetingAttendanceList(OaMeetingAttendancePage oaMeetingAttendancePage);
+    PaginationData<List<OaMeetingParticipantsAttendanceVo>> selectMeetingAttendanceList(OaMeetingAttendancePage oaMeetingAttendancePage);
 
 
 

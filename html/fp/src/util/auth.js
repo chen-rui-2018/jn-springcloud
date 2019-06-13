@@ -14,15 +14,15 @@ export function removeToken() {
   return Cookies.remove(TokenKey, { path: '/' })
 }
 
-const LastTokenKey = 'Last-Admin-Token'
+const UserInfo = 'User-Info'
 
-export function setLastToken(token) {
-  return Cookies.set(LastTokenKey, token, { path: '/' })
+export function setUserInfo(info) {
+  return Cookies.set(UserInfo, info, { path: '/' })
 }
 
-export function getLastToken(token) {
-  return Cookies.get(LastTokenKey, { path: '/' })
+export function getUserInfo() {
+  return Cookies.get(UserInfo, { path: '/' })
 }
-export function removeLastToken() {
-  return Cookies.remove(LastTokenKey, { path: '/' })
+export function removeUserInfo() {
+  return Cookies.remove(UserInfo, { path: '/' })
 }

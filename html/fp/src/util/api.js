@@ -1,6 +1,6 @@
 ﻿import axios from "axios"
 import { BASE_URL } from './url'
-import { getToken, removeToken } from '@/util/auth'
+import { getToken, removeToken, removeUserInfo } from '@/util/auth'
 export default {
     host: BASE_URL,//api的域名提出来放这里
     apiURL:{ //API路径统一管理,需要的路径在这里加就可以了
@@ -282,8 +282,7 @@ export default {
                 if (typeof callback === "function"){
                     if(response.data.code == "index"){
                         removeToken()
-                        window.sessionStorage.removeItem('account')
-                        window.sessionStorage.removeItem('userInfo')
+                        removeUserInfo()
                         location.href="#/";
                         return
                     }
@@ -359,8 +358,7 @@ export default {
             if (typeof callback === "function"){
                 if(response.data.code == "index"){
                     removeToken()
-                    window.sessionStorage.removeItem('account')
-                    window.sessionStorage.removeItem('userInfo')
+                    removeUserInfo()
                     location.href="#login";
                     return
                 }

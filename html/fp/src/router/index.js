@@ -1124,28 +1124,7 @@ router.beforeEach((to, from, next) => {
   if (token) {
     setToken(token)
   }
-  const lastToken = getLastToken()
-  const nowToken = getToken()
-  const userInfo = sessionStorage.getItem('userInfo')
-  if (!userInfo && nowToken) {
-    api.get({
-      url: "getUserPersonInfo",
-      callback: function(res) {
-        if (res.code === "0000") {
-          sessionStorage.setItem("userInfo", JSON.stringify(res.data));
-        }
-        next()
-      }
-    })
-  } else {
-    next()
-  }
-  // if ((userInfo && lastToken !== nowToken)) {
-  //
-  // } else {
-  //   next()
-  // }
-
+  next()
 })
 
 export default router

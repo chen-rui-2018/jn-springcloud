@@ -334,7 +334,7 @@
   </div>
 </template>
 <script>
-import { getToken } from '@/util/auth'
+import { getToken, getUserInfo } from '@/util/auth'
 import axios from "axios";
 export default {
   data() {
@@ -627,7 +627,7 @@ export default {
 
       this.api.get({
         url: "getMyOrgInfo",
-        data: { account: sessionStorage.getItem("account") },
+        data: { account: JSON.parse(getUserInfo()).account },
         callback: (res)=> {
           console.log(res);
           if (res.data) {

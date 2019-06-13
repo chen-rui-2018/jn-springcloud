@@ -111,7 +111,7 @@
                 <!-- 上架时间 begin -->
                 <!-- <div class="list-item-date"></div> -->
                 <!-- 上架时间 end -->
-                <!-- 左侧logo begin-->"> -->
+                <!-- 左侧logo begin-->"
                 <div class="list-imgleft-container product nopic pointer fl" @click="handlePro(i.productId,i.signoryId)">
                   <img v-if="i.pictureUrl" :src="i.pictureUrl" alt="">
                   <img v-else src="@/../static/img/product.png" alt="">

@@ -359,8 +359,8 @@ export default {
                _this.loading=false 
               _this.$router.go(-1)
             }else{
+              _this.loading=false 
              _this.$message.error(res.result)
-             _this.loading=false 
             }
           }
         }) 

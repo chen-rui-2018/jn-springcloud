@@ -120,6 +120,7 @@
   </div>
 </template>
 <script>
+  import { getUserInfo } from '@/util/auth'
   import tag from './common/tag'
   import notice from './common/notice'
 
@@ -289,7 +290,7 @@
           })
       },
       getUserInfo() {
-        this.userInfo = JSON.parse(window.sessionStorage.getItem('userInfo'))
+        this.userInfo = JSON.parse(getUserInfo())
       }
     }
   }

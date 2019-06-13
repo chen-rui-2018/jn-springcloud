@@ -147,7 +147,8 @@ public class WEIXINParser implements ParserInterface {
 		}
 
 		// 解析统计数据
-		String totalRawData = list.remove(list.size() - 1); // 这两行的顺序不能变
+		// 这两行的顺序不能变
+		String totalRawData = list.remove(list.size() - 1);
 		String totalTitleRawData = list.remove(list.size() - 1);
 		if (!totalTitlePattern.matcher(totalTitleRawData).find()) {
 			batch.setStatus(BatchStatusEnum.FAIL.getCode());
@@ -238,7 +239,7 @@ public class WEIXINParser implements ParserInterface {
 					entityVo.setBankTradeStatus(bankTradeStatus);
 					// 设置微信账单金额:(单位是元)
 					entityVo.setBankAmount(new BigDecimal(orderAmount));
-					// 设置银行
+					// 设置手续费
 					entityVo.setBankFee(new BigDecimal(bankFee));
 					//存入对账集合中
 					entityVoList.add(entityVo);

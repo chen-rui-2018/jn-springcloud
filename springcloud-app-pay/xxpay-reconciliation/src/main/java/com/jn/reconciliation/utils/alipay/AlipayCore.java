@@ -1,10 +1,8 @@
 package com.jn.reconciliation.utils.alipay;
 
-import com.jn.config.AlipayConfig;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.httpclient.methods.multipart.FilePartSource;
 import org.apache.commons.httpclient.methods.multipart.PartSource;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -25,18 +23,9 @@ import java.util.*;
 
 public class AlipayCore {
 
-    private static AlipayConfig alipayConfig;
-
-    @Autowired
-    public AlipayCore(AlipayConfig alipayConfig) {
-        AlipayCore.alipayConfig = alipayConfig;
-    }
+    public static String logPath = "/test/alipay/";
 
 
-    /**
-     * 调试用，创建TXT日志文件夹路径
-     */
-    private static final String LOG_PATH = alipayConfig.getLogPath();
 
     /** 
      * 除去数组中的空值和签名参数
@@ -96,7 +85,7 @@ public class AlipayCore {
     public static void logResult(String sWord) {
         FileWriter writer = null;
         try {
-            writer = new FileWriter(LOG_PATH + "alipay_log_" + System.currentTimeMillis()+".txt");
+            writer = new FileWriter(logPath + "alipay_log_" + System.currentTimeMillis()+".txt");
             writer.write(sWord);
         } catch (Exception e) {
             e.printStackTrace();

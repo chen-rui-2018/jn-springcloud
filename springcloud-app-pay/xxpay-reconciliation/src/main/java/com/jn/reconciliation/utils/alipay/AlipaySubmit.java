@@ -1,12 +1,10 @@
 package com.jn.reconciliation.utils.alipay;
 
-import com.jn.config.AlipayConfig;
 import org.apache.commons.httpclient.NameValuePair;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -28,38 +26,11 @@ import java.util.Map;
 
 public class AlipaySubmit {
 
-	private static AlipayConfig alipayConfig;
-
-	@Autowired
-	public AlipaySubmit(AlipayConfig alipayConfig) {
-		AlipaySubmit.alipayConfig = alipayConfig;
-	}
-
-	/**
-	 * 合作身份者ID，签约账号
-	 */
-	private static final String PARTNER = alipayConfig.getPartner();
-
-	/**
-	 * MD5密钥，安全检验码
-	 */
-	private static final String KEY = alipayConfig.getKey();
-
-	/**
-	 * 支付宝提供给商户的服务接入网关URL(新)
-	 */
-	private static final String ALIPAY_GATEWAY_NEW = alipayConfig.getUrl();
-
-	/**
-	 * 签名方式
-	 */
-	private static final String SIGN_TYPE = alipayConfig.getSignType();
-
-	/**
-	 * 字符编码格式 目前支持
-	 */
-	private static final String INPUT_CHARSET = alipayConfig.getCharset();
-
+	public static String signType = "MD5";
+	public static String key = "d8pc5yeh813c3we5v5asvn7k30skl7b0";
+	public static String charset = "utf-8";
+	public static String url = "https://mapi.alipay.com/gateway.do?";
+	public static String partner = "2088431935431474";
 	/**
 	 * 生成签名结果
 	 * 
@@ -68,10 +39,11 @@ public class AlipaySubmit {
 	 * @return 签名结果字符串
 	 */
 	public static String buildRequestMysign(Map<String, String> sPara) {
-		String prestr = AlipayCore.createLinkString(sPara); // 把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
+		// 把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
+		String prestr = AlipayCore.createLinkString(sPara);
 		String mysign = "";
-		if (SIGN_TYPE.equals("MD5")) {
-			mysign = MD5.sign(prestr, KEY, INPUT_CHARSET);
+		if ("MD5".equals(signType)) {
+			mysign = MD5.sign(prestr, key, charset);
 		}
 		return mysign;
 	}
@@ -92,7 +64,7 @@ public class AlipaySubmit {
 
 		// 签名结果与签名方式加入请求提交参数组中
 		sPara.put("sign", mysign);
-		sPara.put("sign_type", SIGN_TYPE);
+		sPara.put("sign_type", signType);
 
 		return sPara;
 	}
@@ -116,7 +88,7 @@ public class AlipaySubmit {
 
 		StringBuffer sbHtml = new StringBuffer();
 
-		sbHtml.append("<form id=\"alipaysubmit\" name=\"alipaysubmit\" action=\"" + ALIPAY_GATEWAY_NEW + "_input_charset=" + INPUT_CHARSET + "\" method=\"" + strMethod + "\">");
+		sbHtml.append("<form id=\"alipaysubmit\" name=\"alipaysubmit\" action=\"" + url + "_input_charset=" + charset + "\" method=\"" + strMethod + "\">");
 
 		for (int i = 0; i < keys.size(); i++) {
 			String name = (String) keys.get(i);
@@ -160,7 +132,7 @@ public class AlipaySubmit {
 	public static String query_timestamp() throws MalformedURLException, DocumentException, IOException {
 
 		// 构造访问query_timestamp接口的URL串
-		String strUrl = ALIPAY_GATEWAY_NEW + "service=query_timestamp&partner=" + PARTNER + "&_input_charset" + INPUT_CHARSET;
+		String strUrl = url + "service=query_timestamp&partner=" + partner + "&_input_charset" + charset;
 		StringBuffer result = new StringBuffer();
 
 		SAXReader reader = new SAXReader();

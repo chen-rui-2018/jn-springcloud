@@ -304,24 +304,24 @@ public class AssetArticleLeaseOrdersServiceImpl implements AssetArticleLeaseOrde
     @Override
     @ServiceLog(doAction = "物品租借是否逾期,修改状态")
     public void updateAssetArticleStatus() {
-        TbAssetArticleLeaseCriteria tbAssetArticleLeaseCriteria = new TbAssetArticleLeaseCriteria();
+        TbAssetInformationCriteria tbAssetInformationCriteria = new TbAssetInformationCriteria();
         //租借状态为租借中,没有逾期并且有效的资产
-        tbAssetArticleLeaseCriteria.createCriteria().andArticleStatusEqualTo(Byte.parseByte(LeaseStatusEnums.LEASE.getValue())).andIsOverdueEqualTo(0).andRecordStatusEqualTo(Byte.parseByte(AssetStatusEnums.EFFECTIVE.getCode()));
-        List<TbAssetArticleLease> tbAssetArticleLeases = tbAssetArticleLeaseMapper.selectByExample(tbAssetArticleLeaseCriteria);
-        if (tbAssetArticleLeases != null && tbAssetArticleLeases.size() > 0){
-            for (TbAssetArticleLease tbAssetArticleLease : tbAssetArticleLeases) {
+        tbAssetInformationCriteria.createCriteria().andLeaseStatusEqualTo(Byte.parseByte(LeaseStatusEnums.LEASE.getValue())).andLeaseIsOverdueEqualTo(0).andRecordStatusEqualTo(Byte.parseByte(AssetStatusEnums.EFFECTIVE.getCode()));
+        List<TbAssetInformation> tbAssetInformations = tbAssetInformationMapper.selectByExample(tbAssetInformationCriteria);
+        if (tbAssetInformations != null && tbAssetInformations.size() > 0){
+            for (TbAssetInformation tbAssetInformation : tbAssetInformations) {
                 //当前时间
                 Date date = new Date();
                 long nowTime = date.getTime();
                 //结束时间
-                long endTime = tbAssetArticleLease.getEndTime().getTime();
+                long endTime = tbAssetInformation.getLeaseEndTime().getTime();
                 //结束时间大于当前时间
                 if (endTime > nowTime){
-                    tbAssetArticleLease.setIsOverdue(1);
-                    logger.info("租借物品已经逾期,更改资产状态为逾期 {}",tbAssetArticleLease);
-                    int updateCount = tbAssetArticleLeaseMapper.updateByPrimaryKeySelective(tbAssetArticleLease);
+                    tbAssetInformation.setLeaseIsOverdue(1);
+                    logger.info("租借物品已经逾期,更改资产状态为逾期 {}",tbAssetInformation);
+                    int updateCount = tbAssetInformationMapper.updateByPrimaryKeySelective(tbAssetInformation);
                     if (updateCount != 1){
-                        throw new JnSpringCloudException(new Result("-1","更新租借物品信息表tb_asset_article_lease失败"));
+                        throw new JnSpringCloudException(new Result("-1","更新资产管理-资产信息表tb_asset_information失败"));
                     }
                 }
             }

@@ -66,9 +66,9 @@ export default {
             setToken(res.data);
             sessionStorage.setItem("account", _this.loginform.account);
             _this.api.get({
-              url: "getUserPersonInfo",
+              url: "getUserExtension",
               data: {
-                account: _this.loginform.account
+                // account: _this.loginform.account
               },
               dataFlag: false,
               callback: function(res) {

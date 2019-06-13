@@ -140,7 +140,7 @@ export default {
     loginOut() {
       removeToken();
       window.sessionStorage.removeItem("userInfo");
-      window.sessionStorage.removeItem("accout");
+      window.sessionStorage.removeItem("account");
       this.$router.push({ path: "/" });
       this.islogin();
     },

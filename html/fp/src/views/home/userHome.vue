@@ -298,7 +298,7 @@ export default {
     submit() {
       let psw = /^(?!^\d+$)(?!^[A-Za-z]+$)(?!^[^A-Za-z0-9]+$)(?!^.*[\u4E00-\u9FA5].*$)^\S{8,16}$/;
       if (!psw.test(this.oldPassword)) {
-        this.$message.error("请先输入旧密码");
+        this.$message.error("旧密码校验错误");
         return;
       }
       if (!psw.test(this.newPassword)) {

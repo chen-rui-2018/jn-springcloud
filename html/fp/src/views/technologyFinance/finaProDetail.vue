@@ -23,7 +23,7 @@
             <p>贷款额度：
               <span class="mainColor">{{serverOrgDetailList.loanAmountMin}}-{{serverOrgDetailList.loanAmountMax}}</span>万元
             </p>
-            <p>贷款期限：{{serverOrgDetailList.loanTermMin}}-{{serverOrgDetailList.loanTermMax}}</p>
+            <p>贷款期限：{{serverOrgDetailList.loanTermMin}}个月-{{serverOrgDetailList.loanTermMax}}个月</p>
             <p class="fl" style="margin-top:20px">产品编号：
               <span class="mainColor">{{serverOrgDetailList.serialNumber}}</span>
             </p>
@@ -132,13 +132,13 @@
                   <tr>
                     <td class="table-orgspace-title">申请条件：</td>
                     <td class="table-orgspace-detail" colspan="4">
-                      <div class="table-orgspace-col">{{serverOrgDetailList.applyCondition}}</div>
+                      <div class="table-orgspace-col" v-html="serverOrgDetailList.applyCondition"></div>
                     </td>
                   </tr>
                   <tr>
                     <td class="table-orgspace-title">提交材料：</td>
                     <td class="table-orgspace-detail" colspan="4">
-                      <div class="table-orgspace-col">{{serverOrgDetailList.submitMaterial}}</div>
+                      <div class="table-orgspace-col" v-html="serverOrgDetailList.submitMaterial"></div>
                     </td>
                   </tr>
                   <tr>
@@ -381,7 +381,7 @@ export default {
     }
     .lastP {
       padding-top: 20px;
-      position: static;
+      // position: static;
     }
   }
   .serverPro,

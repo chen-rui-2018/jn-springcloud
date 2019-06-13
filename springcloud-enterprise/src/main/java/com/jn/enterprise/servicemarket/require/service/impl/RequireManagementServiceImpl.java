@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.xxpay.common.util.DateUtil;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -417,6 +418,9 @@ public class RequireManagementServiceImpl implements RequireManagementService {
         TbServiceRequire tbServiceRequire = getTbServiceRequire(reqNum);
         RequireOtherDetails requireOtherDetails=new RequireOtherDetails();
         BeanUtils.copyProperties(tbServiceRequire, requireOtherDetails);
+        if(tbServiceRequire.getExpectedDate()!=null){
+            requireOtherDetails.setExpectedDate(DateUtils.formatDate(tbServiceRequire.getExpectedDate(),"yyyy-MM-dd"));
+        }
         //根据企业账号获取企业名称
         Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(tbServiceRequire.getIssueAccount());
         if(userExtension==null || userExtension.getData()==null){
@@ -430,9 +434,6 @@ public class RequireManagementServiceImpl implements RequireManagementService {
         if(ratingInfo!=null){
             requireOtherDetails.setRatingScore(ratingInfo.getAttitudeScore());
             requireOtherDetails.setEvaluationDesc(ratingInfo.getEvaluationDesc());
-        }
-        if(requireOtherDetails.getExpectedDate()!=null){
-            requireOtherDetails.setExpectedDate(DateUtils.parseDate(DateUtils.formatDate(requireOtherDetails.getExpectedDate(), PATTERN)));
         }
         return requireOtherDetails;
     }
@@ -556,6 +557,9 @@ public class RequireManagementServiceImpl implements RequireManagementService {
         TbServiceRequire tbServiceRequire = getTbServiceRequire(reqNum);
         RequireReceivedDetails requireReceivedDetails=new RequireReceivedDetails();
         BeanUtils.copyProperties(tbServiceRequire, requireReceivedDetails);
+        if(tbServiceRequire.getExpectedDate()!=null){
+            requireReceivedDetails.setExpectedDate(DateUtils.formatDate(tbServiceRequire.getExpectedDate(),"yyyy-MM-dd"));
+        }
         //根据企业账号获取企业名称
         Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(tbServiceRequire.getIssueAccount());
         if(userExtension==null || userExtension.getData()==null){
@@ -570,9 +574,6 @@ public class RequireManagementServiceImpl implements RequireManagementService {
             requireReceivedDetails.setEvaluationDesc(ratingInfo.getEvaluationDesc());
             requireReceivedDetails.setRatingScore(ratingInfo.getAttitudeScore());
 
-        }
-        if(requireReceivedDetails.getExpectedDate()!=null){
-            requireReceivedDetails.setExpectedDate(DateUtils.parseDate(DateUtils.formatDate(requireReceivedDetails.getExpectedDate(),PATTERN)));
         }
         return requireReceivedDetails;
     }

@@ -31,7 +31,7 @@ public interface RoomInformationService {
 
     /**
      *
-     * @param roomId
+     * @param roomIds
      * @param contactName
      * @param contactPhone
      * @param leaseStartTime
@@ -39,7 +39,7 @@ public interface RoomInformationService {
      * @param userAccount
      * @return
      */
-    Result addRoomOrders(String roomId, String contactName, String contactPhone, Date leaseStartTime,  String month, String userAccount);
+    Result addRoomOrders(String roomIds, String contactName, String contactPhone, Date leaseStartTime,  String month, String userAccount);
 
     /**
      * 根据订单生成缴费单

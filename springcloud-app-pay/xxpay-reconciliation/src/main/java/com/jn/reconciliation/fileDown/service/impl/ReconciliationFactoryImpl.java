@@ -5,6 +5,7 @@ import com.jn.reconciliation.fileDown.service.ReconciliationFactory;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.stereotype.Service;
+import org.xxpay.dal.dao.entity.reconciliation.TbPayReconciliationInterface;
 
 import java.io.File;
 import java.util.Date;
@@ -39,16 +40,16 @@ public class ReconciliationFactoryImpl implements ReconciliationFactory , BeanFa
     /**
      * 账单下载
      *
-     * @param payInterface
-     *            支付渠道
+     * @param reconciliationInter
+     *            支付接口信息
      *
      * @param billDate
      *            账单日
      */
     @Override
-    public File fileDown(String payInterface, Date billDate) throws Exception {
+    public File fileDown(TbPayReconciliationInterface reconciliationInter, Date billDate) throws Exception {
         // 找到具体的FileDown实现，做向上转型
-        FileDown fileDown = (FileDown) this.getService(payInterface + "FileDown");
-        return fileDown.fileDown(billDate);
+        FileDown fileDown = (FileDown) this.getService(reconciliationInter.getInterfaceCode() + "FileDown");
+        return fileDown.fileDown(reconciliationInter,billDate);
     }
 }

@@ -35,7 +35,7 @@ export default {
         addUser:"springcloud-user/guest/userJoin/addUser",//用户注册
         accountIsExist:"springcloud-user/guest/userJoin/accountIsExist",//当前账号是否已存在
         updatePassword:"springcloud-user/guest/userJoin/updatePassword",//修改密码
-        getUserPersonInfo:"springcloud-user/user/center/getUserPersonInfo",//根据用户账号获取用户资料信息
+        getUserPersonInfo:"springcloud-user/user/userInfo/getUserExtension",//根据用户账号获取用户资料信息
         modifyUserPassword:"springcloud-user/user/center/modifyUserPassword",//修改用户密码
         saveUserInfo:"springcloud-user/user/userInfo/saveUserInfo",//保存用户资料
         getTagCodeList:"springcloud-user/guest/userTag/getTagCodeList",//获取用户字典列表

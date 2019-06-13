@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import { urlSearch } from '@/util/index'
-import { setToken } from '@/util/auth'
+import { setToken, getToken, setLastToken, getLastToken } from '@/util/auth'
+import api from '@/util/api'
 Vue.use(Router)
 
 const router= new Router({
@@ -1123,7 +1124,28 @@ router.beforeEach((to, from, next) => {
   if (token) {
     setToken(token)
   }
-  next()
+  const lastToken = getLastToken()
+  const nowToken = getToken()
+  const userInfo = sessionStorage.getItem('userInfo')
+  if (!userInfo && nowToken) {
+    api.get({
+      url: "getUserPersonInfo",
+      callback: function(res) {
+        if (res.code === "0000") {
+          sessionStorage.setItem("userInfo", JSON.stringify(res.data));
+        }
+        next()
+      }
+    })
+  } else {
+    next()
+  }
+  // if ((userInfo && lastToken !== nowToken)) {
+  //
+  // } else {
+  //   next()
+  // }
+
 })
 
 export default router

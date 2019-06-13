@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { setToken } from '@/util/auth'
+import { setToken, setLastToken, getLastToken } from '@/util/auth'
 export default {
   data() {
     return {
@@ -62,26 +62,27 @@ export default {
         },
         dataFlag: false,
         callback: function(res) {
-          if (res.code == "0000") {
+          if (res.code === "0000") {
             setToken(res.data);
+            if (!getLastToken()) {
+              setLastToken(res.data);
+            }
             sessionStorage.setItem("account", _this.loginform.account);
-            _this.api.get({
-              url: "getUserExtension",
-              data: {
-                // account: _this.loginform.account
-              },
-              dataFlag: false,
-              callback: function(res) {
-                if (res.code === "0000") {
-                  sessionStorage.setItem("userInfo", JSON.stringify(res.data));
-                  _this.$router.push({
-                    path: window.sessionStorage.getItem("PresetRoute")
-                  });
-                } else {
-                  _this.$message.error(res.result);
-                }
-              }
+            _this.$router.push({
+              path: window.sessionStorage.getItem("PresetRoute") || '/'
             });
+            // _this.api.get({
+            //   url: "getUserPersonInfo",
+            //   dataFlag: false,
+            //   callback: function(res) {
+            //     if (res.code === "0000") {
+            //       sessionStorage.setItem("userInfo", JSON.stringify(res.data));
+
+            //     } else {
+            //       _this.$message.error(res.result);
+            //     }
+            //   }
+            // });
             // _this.api.setToken(res.data);
           } else {
             _this.$message.error(res.result);

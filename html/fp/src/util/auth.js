@@ -13,3 +13,16 @@ export function setToken(token) {
 export function removeToken() {
   return Cookies.remove(TokenKey, { path: '/' })
 }
+
+const LastTokenKey = 'Last-Admin-Token'
+
+export function setLastToken(token) {
+  return Cookies.set(LastTokenKey, token, { path: '/' })
+}
+
+export function getLastToken(token) {
+  return Cookies.get(LastTokenKey, { path: '/' })
+}
+export function removeLastToken() {
+  return Cookies.remove(LastTokenKey, { path: '/' })
+}

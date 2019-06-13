@@ -172,6 +172,15 @@ public class OrgServiceImpl implements OrgService {
         if(StringUtils.isBlank(orgParameter.getSortTypes())|| StringUtils.equals(orgParameter.getSortTypes(),sortType)){
             //设置排序权重值，目前使用默认排序权重
         }
+        //若是查询条件有科技金融，去掉不允许展示科技金融条件
+        String[] businessType = orgParameter.getBusinessType();
+        if(businessType!=null && businessType.length>0){
+            String join = StringUtils.join(businessType, ",");
+            if(join.contains(BUSINESS_TECHNOLOGY)){
+                allowTechnology=true;
+            }
+        }
+
         //不予许展示科技金融
         if(!allowTechnology){
             orgListParam.setAllowTechnology(BUSINESS_TECHNOLOGY);

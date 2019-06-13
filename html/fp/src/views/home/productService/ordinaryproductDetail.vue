@@ -68,7 +68,7 @@
           </div>
          <div :model="productDetail" class="">
             <el-form-item label="参考利率范围：">
-              <span>{{productDetail.refRateMin}}-{{productDetail.refRateMax}} </span>
+              <span>{{productDetail.refRateMin}}%-{{productDetail.refRateMax}}%</span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
@@ -98,7 +98,7 @@
           </div>
           <div :model="productDetail" class="">
             <el-form-item label="贷款期限：">
-              <span>{{productDetail.loanTermMin}}-{{productDetail.loanTermMax}} </span>
+              <span>{{productDetail.loanTermMin}}月-{{productDetail.loanTermMax}}月</span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">

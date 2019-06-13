@@ -58,6 +58,7 @@
 </template>
 
 <script>
+import { getUserInfo } from '@/util/auth'
 export default {
   name: "MessageCenter",
   data() {
@@ -71,7 +72,7 @@ export default {
     }
   },
   mounted() {
-    let userInfo = sessionStorage.getItem("userInfo");
+    let userInfo = getUserInfo();
     if (userInfo) {
       userInfo = JSON.parse(userInfo);
       this.avartImg = userInfo.avatar;

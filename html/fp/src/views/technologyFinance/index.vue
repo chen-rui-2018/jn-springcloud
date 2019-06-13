@@ -611,9 +611,9 @@ export default {
     //用户提需求
     demandDia() {
       let _this = this;
-      if(!this.financialProform.financingPeriod){
-        return
-      }
+      // if(!this.financialProform.financingPeriod){
+      //   return
+      // }
       let max = this.arr[this.financialProform.financingPeriod].loanTermMax;
       let min = this.arr[this.financialProform.financingPeriod].loanTermMin;
       this.api.post({

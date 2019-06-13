@@ -12,9 +12,11 @@ public class TbPmPayBillItemPmList implements Serializable {
 
     private String roomAddress;
 
-    private BigDecimal rentalArea;
+    private BigDecimal pmUnitPrice;
 
     private BigDecimal totalAmount;
+
+    private BigDecimal rentalArea;
 
     private static final long serialVersionUID = 1L;
 
@@ -50,12 +52,12 @@ public class TbPmPayBillItemPmList implements Serializable {
         this.roomAddress = roomAddress == null ? null : roomAddress.trim();
     }
 
-    public BigDecimal getRentalArea() {
-        return rentalArea;
+    public BigDecimal getPmUnitPrice() {
+        return pmUnitPrice;
     }
 
-    public void setRentalArea(BigDecimal rentalArea) {
-        this.rentalArea = rentalArea;
+    public void setPmUnitPrice(BigDecimal pmUnitPrice) {
+        this.pmUnitPrice = pmUnitPrice;
     }
 
     public BigDecimal getTotalAmount() {
@@ -64,6 +66,14 @@ public class TbPmPayBillItemPmList implements Serializable {
 
     public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
+    }
+
+    public BigDecimal getRentalArea() {
+        return rentalArea;
+    }
+
+    public void setRentalArea(BigDecimal rentalArea) {
+        this.rentalArea = rentalArea;
     }
 
     @Override
@@ -82,8 +92,9 @@ public class TbPmPayBillItemPmList implements Serializable {
             && (this.getItemId() == null ? other.getItemId() == null : this.getItemId().equals(other.getItemId()))
             && (this.getPmName() == null ? other.getPmName() == null : this.getPmName().equals(other.getPmName()))
             && (this.getRoomAddress() == null ? other.getRoomAddress() == null : this.getRoomAddress().equals(other.getRoomAddress()))
-            && (this.getRentalArea() == null ? other.getRentalArea() == null : this.getRentalArea().equals(other.getRentalArea()))
-            && (this.getTotalAmount() == null ? other.getTotalAmount() == null : this.getTotalAmount().equals(other.getTotalAmount()));
+            && (this.getPmUnitPrice() == null ? other.getPmUnitPrice() == null : this.getPmUnitPrice().equals(other.getPmUnitPrice()))
+            && (this.getTotalAmount() == null ? other.getTotalAmount() == null : this.getTotalAmount().equals(other.getTotalAmount()))
+            && (this.getRentalArea() == null ? other.getRentalArea() == null : this.getRentalArea().equals(other.getRentalArea()));
     }
 
     @Override
@@ -94,8 +105,9 @@ public class TbPmPayBillItemPmList implements Serializable {
         result = prime * result + ((getItemId() == null) ? 0 : getItemId().hashCode());
         result = prime * result + ((getPmName() == null) ? 0 : getPmName().hashCode());
         result = prime * result + ((getRoomAddress() == null) ? 0 : getRoomAddress().hashCode());
-        result = prime * result + ((getRentalArea() == null) ? 0 : getRentalArea().hashCode());
+        result = prime * result + ((getPmUnitPrice() == null) ? 0 : getPmUnitPrice().hashCode());
         result = prime * result + ((getTotalAmount() == null) ? 0 : getTotalAmount().hashCode());
+        result = prime * result + ((getRentalArea() == null) ? 0 : getRentalArea().hashCode());
         return result;
     }
 
@@ -109,8 +121,9 @@ public class TbPmPayBillItemPmList implements Serializable {
         sb.append(", itemId=").append(itemId);
         sb.append(", pmName=").append(pmName);
         sb.append(", roomAddress=").append(roomAddress);
-        sb.append(", rentalArea=").append(rentalArea);
+        sb.append(", pmUnitPrice=").append(pmUnitPrice);
         sb.append(", totalAmount=").append(totalAmount);
+        sb.append(", rentalArea=").append(rentalArea);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

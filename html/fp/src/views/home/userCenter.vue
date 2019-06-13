@@ -141,7 +141,7 @@
           path: '/roleCertifications/investorCertification'
         }, {
           type: 'orange',
-          title: '专员认证',
+          title: '服务专员认证',
           path: '/roleCertifications/advisoryInformation'
         }, {
           type: 'purple',
@@ -244,7 +244,7 @@
           this.api.get({
             url: 'getMessageList',
             data: {
-              integer: 0,
+              isRead: 0,
               messageTowTort: this.messageData[key].messageTowTort
             },
             callback: (res) => {

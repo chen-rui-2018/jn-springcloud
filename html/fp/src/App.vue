@@ -88,7 +88,7 @@ import SerHeader from './components/serverHeader'
 import adminApproveHeader from './components/adminApproveHeader'
 import TechnologyHeader from './components/technologyHeader'
 import './common/font/font.css'
-
+import { getToken, setToken, removeToken } from '@/util/auth'
 import { isMobile } from '@/util'
 import bus from '@/util/bus'
 
@@ -112,10 +112,6 @@ export default {
     }
   },
   created(){
-    // if(sessionStorage.token){
-    //     this.api.setToken(sessionStorage.token)
-    // }
-    // this.init()
     let vm =this;
       window.onscroll=function(){
         if (document.documentElement.scrollTop>60) {
@@ -131,26 +127,10 @@ export default {
     }
   },
   methods:{
-    // init(){
-    //   let _this=this
-    //   this.api.post({
-    //     url: "loginURL",
-    //     data: {
-    //       account: "wangsong",
-    //       password: "wangsong"
-    //     },
-    //     dataFlag: false,
-    //     callback: function(res) {
-    //       if (res.code == "0000") {
-    //         sessionStorage.token=res.data
-    //       }
-    //     }
-    //   })
-    // },
     setEnvironment() {
       const token = this.$route.query.token
       if (token) {
-        sessionStorage.sestItem('token', token)
+        setToken(token)
       }
       const iframe = this.$route.query.iframe
       if (iframe === '1' || this.isMobile) {
@@ -258,8 +238,8 @@ export default {
             padding-bottom: 5px;
           }
         }
-        
-        
+
+
     }
     .right_nav{
       position: fixed;
@@ -293,7 +273,7 @@ export default {
             }
           }
           /* .right_nav_tel{
-           
+
           }
           .weixin:hover{
 

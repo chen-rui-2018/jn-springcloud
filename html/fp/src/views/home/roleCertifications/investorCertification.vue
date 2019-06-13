@@ -187,6 +187,7 @@
   </div>
 </template>
 <script>
+import { getToken } from '@/util/auth'
 import axios from "axios";
 export default {
   data() {
@@ -262,7 +263,7 @@ export default {
       block: "",
       // avarUrl: "",
       headers: {
-        token: sessionStorage.token
+        token: getToken()
       },
       rules: {
         investorMainRoundList: [

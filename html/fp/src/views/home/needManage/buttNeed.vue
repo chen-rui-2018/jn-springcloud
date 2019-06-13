@@ -109,12 +109,13 @@
   </div>
 </template>
 <script>
+import { getToken, removeToken } from '@/util/auth'
 export default {
   data () {
     return {
       baseUrl: this.api.host,
       receiveDetail:{},
-      headers:{token: sessionStorage.token},
+      headers:{token: getToken()},
       fileList:[],
       fileList2:[],
       sendData:{

@@ -39,7 +39,8 @@
                     <i class="el-icon-arrow-up"></i>
                 </div>
                 <div class="mainColor shouqi zhankai pointer" v-else @click='handleZk'>
-                    展开<i class="el-icon-arrow-down"></i>
+                    展开
+                    <i class="el-icon-arrow-down"></i>
                 </div>
                 <el-card>
                     <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -318,7 +319,7 @@
                 </div>
                 <div v-else class="loginTip">
                     你还未
-                    <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+                    <span class="mainColor pointer" @click="goLogin">登录</span>
                     /
                     <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
                     企业账号
@@ -329,7 +330,7 @@
             <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :modal-append-to-body=false :lock-scroll="false">
                 <div class="loginTip">
                     你还未
-                    <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+                    <span class="mainColor pointer" @click="goLogin">登录</span>
                     /
                     <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
                     账号
@@ -369,8 +370,8 @@ export default {
         productId: "",
         productName: ""
       },
-      advisorInfo:{},
-      advisorServiceInfo:{}
+      advisorInfo: {},
+      advisorServiceInfo: {}
     };
   },
   mounted() {
@@ -380,6 +381,10 @@ export default {
     this.getEvaluationCountInfo();
   },
   methods: {
+    goLogin() {
+      window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
+      this.$router.push({ path: "/login" });
+    },
     //判断是否登录
     isLogin() {
       if (!sessionStorage.userInfo) {
@@ -517,9 +522,9 @@ export default {
           if (res.code == "0000") {
             _this.serviceRatingList = res.data.rows;
             _this.total2 = res.data.total;
-             setTimeout(()=>{
-              _this.$refs['tabP'].$children[0].$forceUpdate() 
-            },0)
+            setTimeout(() => {
+              _this.$refs["tabP"].$children[0].$forceUpdate();
+            }, 0);
           } else {
             _this.$message.error(res.result);
           }
@@ -542,9 +547,9 @@ export default {
           if (res.code == "0000") {
             _this.serverPro = res.data.rows;
             _this.total1 = res.data.total;
-            setTimeout(()=>{
-              _this.$refs['tabP'].$children[0].$forceUpdate() 
-            },0)
+            setTimeout(() => {
+              _this.$refs["tabP"].$children[0].$forceUpdate();
+            }, 0);
           } else {
             _this.$message.error(res.result);
           }
@@ -562,8 +567,8 @@ export default {
         callback: function(res) {
           if (res.code == "0000") {
             _this.serverConDetailList = res.data;
-            _this.advisorInfo=res.data.advisorIntroduction
-            _this.advisorServiceInfo=res.data.advisorServiceInfo
+            _this.advisorInfo = res.data.advisorIntroduction;
+            _this.advisorServiceInfo = res.data.advisorServiceInfo;
           } else {
             _this.$message.error(res.result);
           }
@@ -592,8 +597,8 @@ export default {
     .pagination-container {
       margin-top: 50px;
     }
-    .conAccou{
-        margin-top:0 !important;
+    .conAccou {
+      margin-top: 0 !important;
     }
   }
   .agentDel {

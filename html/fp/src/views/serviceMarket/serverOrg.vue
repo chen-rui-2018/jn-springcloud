@@ -131,7 +131,7 @@
       <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :append-to-body="true" :lock-scroll="false">
         <div class="loginTip" style="text-align:center;padding-bottom:20px">
           你还未
-          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          <span class="mainColor pointer" @click="goLogin">登录</span>
           /
           <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
           账号
@@ -174,6 +174,7 @@ export default {
   },
   mounted() {
     this.selectIndustryList();
+    this.businessAreaList()
     if (this.$route.query.searchData) {
       this.keyW = this.$route.query.searchData;
       this.initList();
@@ -182,6 +183,10 @@ export default {
     }
   },
   methods: {
+    goLogin() {
+      window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
+      this.$router.push({ path: "/login" });
+    },
     //在线联系
     onlineContat(orgAccount, orgName) {
       if (!sessionStorage.userInfo) {
@@ -306,7 +311,7 @@ export default {
           if (res.code == "0000") {
             for (let it in res.data) {
               if (res.data[it].preType == "0") {
-                _this.businessArea.push(res.data[it]);
+                // _this.businessArea.push(res.data[it]);
               } else if (res.data[it].preType == "1") {
                 _this.industryField.push(res.data[it]);
               } else if (res.data[it].preType == "2") {
@@ -315,6 +320,26 @@ export default {
                 _this.enterpriseNature.push(res.data[it]);
               }
             }
+          } else {
+            _this.$message.error(res.result);
+          }
+        }
+      });
+    },
+    //业务领域
+    businessAreaList() {
+      let _this = this;
+      this.api.get({
+        url: "selectIndustryProductList",
+        data: {},
+        callback: function(res) {
+          if (res.code == "0000") {
+            // for (let it in res.data) {
+            //   if (res.data[it].preType == "0") {
+            //     _this.businessArea.push(res.data[it]);
+            //   }
+            // }
+            _this.businessArea = res.data;
           } else {
             _this.$message.error(res.result);
           }

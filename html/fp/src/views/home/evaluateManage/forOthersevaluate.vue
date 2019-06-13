@@ -92,7 +92,6 @@ export default {
       data: this.sendData,
       callback: function(res) {
         if (res.code == "0000") {
-            // console.log(res)
             _this.othersValuateList=res.data.rows
             _this.total=res.data.total
           }

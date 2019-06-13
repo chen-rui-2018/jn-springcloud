@@ -158,17 +158,8 @@ export default {
       border-left: 0;
     }
     .postJobInfo {
-      // width: 50%;
-      // margin: 0 auto;
-      padding-left: 140px;
-
-
-      // .hobbies {
-      //   .el-form-item__content,
-      //   .el-select {
-      //     width:100%;
-      //   }
-      // }
+      width: 50%;
+      margin: 0 auto;
       .el-textarea__inner {
         width: 348px;
         min-height: 100px !important;

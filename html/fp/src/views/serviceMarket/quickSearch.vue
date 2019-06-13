@@ -268,7 +268,7 @@
         </div>
         <div v-else class="loginTip">
           你还未
-          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          <span class="mainColor pointer" @click="goLogin">登录</span>
           /
           <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
           企业账号
@@ -279,7 +279,7 @@
       <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :modal-append-to-body="false" :lock-scroll="false">
         <div class="loginTip">
           你还未
-          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          <span class="mainColor pointer" @click="goLogin">登录</span>
           /
           <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
           账号
@@ -345,6 +345,10 @@ export default {
     this.commentProductList();
   },
   methods: {
+    goLogin() {
+      window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
+      this.$router.push({ path: "/login" });
+    },
     //判断是否登录
     isLogin() {
       if (!sessionStorage.userInfo) {
@@ -354,7 +358,7 @@ export default {
     onlineContact(advisorAccount, advisorName) {
       if (!sessionStorage.userInfo) {
         this.concatVisible = true;
-        return
+        return;
       }
       this.$router.push({
         path: "/chat",

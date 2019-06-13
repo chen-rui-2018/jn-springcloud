@@ -187,6 +187,7 @@
   </div>
 </template>
 <script>
+import { getToken } from '@/util/auth'
 export default {
   data () {
     return {
@@ -210,7 +211,7 @@ export default {
       signoryId:'',
       signoryName:'',
       counselorList:[],
-      headers:{token: sessionStorage.token},
+      headers:{token: getToken()},
       fileList:[],
       businessType:'',
       productId:"b1c22cd7bc794ea6ba11fc869e17101e",

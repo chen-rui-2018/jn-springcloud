@@ -1,8 +1,8 @@
 <template>
-  <div class="agencyColleaguesList">
+  <div class="agencyColleaguesList" v-loading="loading">
     <div class="ordinary_title font16">
       <div>机构同事</div>
-      <!-- <div @click="toInviteEmployees">邀请员工</div> -->
+      <div @click="$router.push({path:'/myBody/index'})">返回</div>
     </div>
 
     <div class="ordinary_main">
@@ -14,7 +14,7 @@
       </div>
       <div class="ordinary_table">
         <el-table :data="recruitmentTable" stripe border :header-cell-style="{background:'#f8f8f8',color:'#666666'}" style="width: 100%">
-          <el-table-column prop="account" label="姓名" align="center"> </el-table-column>
+          <el-table-column prop="name" label="姓名" align="center"> </el-table-column>
           <el-table-column prop="phone" label="联系手机" align="center"> </el-table-column>
           <el-table-column prop="email" label="联系邮箱" align="center"  width="150"> </el-table-column>
           <el-table-column prop="graduatedSchool" label="毕业学校" align="center"> </el-table-column>
@@ -64,6 +64,7 @@
 export default {
   data () {
     return {
+      loading:false,
       // isShow:'',
      account:'',
       page:1,
@@ -78,10 +79,9 @@ export default {
   },
   methods: {
     handleDetails(row){
-      console.log(row)
       // return
        this.$router.push({name:'advisoryDetails',query:{
-         account:row.account
+         account:row.account,path:'agencyColleaguestList'
        }})
     },
     //   删除数据
@@ -94,12 +94,14 @@ export default {
         type: 'warning'
       })
         .then(() => {
+          this.loading=true
       this.api.post({
         url: "deleteContactOrAdvisor",
-        data: [row.account],
+        data:{accountList:row.account},
+        dataFlag:true,
         callback: function(res) {
+           this.loading=false
           if (res.code === "0000") {
-            console.log(res)
               _this.$message({
                 message: '删除成功',
                 type: 'success'
@@ -124,11 +126,13 @@ export default {
         type: 'warning'
       })
         .then(() => {
+           this.loading=true
       this.api.post({
         url: "cancelAsContact",
         data:{account:row.account} ,
          dataFlag:true,
         callback: function(res) {
+           _this.loading=false
           if (res.code === "0000") {
               _this.$message({
                 message: '操作成功',
@@ -154,11 +158,13 @@ handleSetContact(row){
         type: 'warning'
       })
         .then(() => {
+            this.loading=true
       this.api.post({
         url: "setAsContact",
         data: {account:row.account},
          dataFlag:true,
         callback: function(res) {
+            _this.loading=true
           if (res.code === "0000") {
               _this.$message({
                 message: '设置成功',
@@ -192,13 +198,14 @@ handleSetContact(row){
     // 初始话页面
     initList(){
       let _this = this;
+      this.loading=true
       this.api.get({
         url: "getOrgColleagueList",
         data: {page:this.page,rows:this.rows,searchFiled:this.searchFiled,needPage:1},
         // dataFlag:true,
         callback: function(res) {
+          _this.loading=false
           if (res.code === "0000") {
-            console.log(res)
             _this.recruitmentTable = res.data.rows;
             // _this.isShow = res.data.isShow;
             _this.total = res.data.total;
@@ -219,13 +226,25 @@ handleSetContact(row){
     }
     width: 100%;
     .ordinary_title{
-      background-color: #fff;
+        background-color: #fff;
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding:17px;
       // font-size: 13px;
       border-radius: 5px;
+      div:nth-child(2){
+                width:88px;
+height:26px;
+background:rgba(236,252,242,1);
+border:1px solid rgba(65,215,135,1);
+border-radius:4px;
+text-align: center;
+line-height: 26px;
+        font-size: 12px;
+        color:#00A041;
+        cursor: pointer;
+      }
     }
     .ordinary_main{
       margin-top: 14px;

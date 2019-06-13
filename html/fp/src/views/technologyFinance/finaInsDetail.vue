@@ -18,7 +18,10 @@
             <!-- <img v-else src="@/../static/img/product.png" alt=""> -->
           </div>
           <div class="agent2Info fl color2">
-            <p>客户偏好：{{serverOrgDetailList.orgHobby}}</p>
+            <p>客户偏好：
+              <span v-for="(item1,k1) in serverOrgDetailList.developmentStage" :key="k1">{{item1.orgTraitName}},</span>
+              <span v-for="(item2,k2) in serverOrgDetailList.industrySector" :key="k2">{{item2.orgTraitName}}</span>
+            </p>
             <p>业务擅长：{{serverOrgDetailList.orgSpeciality}}</p>
             <p>咨询电话：
               <span class="mainColor">{{serverOrgDetailList.orgPhone}}</span>
@@ -315,7 +318,7 @@
       </div>
       <el-tabs v-model="activeName1" @tab-click="handleSerpro" ref="tabP">
         <el-tab-pane name="serverPro">
-          <span slot="label" v-if="serverPro.length>0">服务产品({{serverPro[0].serviceTotal}})</span>
+          <span slot="label" v-if="serverPro.length>0">服务产品({{total1}})</span>
           <span slot="label" v-else>服务产品(0)</span>
           <div class="serverPro">
             <ul class="list-imgleft">
@@ -515,7 +518,7 @@
         </div>
         <div v-else class="loginTip">
           你还未
-          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          <span class="mainColor pointer" @click="goLogin">登录</span>
           /
           <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
           企业账号
@@ -526,7 +529,7 @@
       <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :modal-append-to-body=false :lock-scroll="false">
         <div class="loginTip">
           你还未
-          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          <span class="mainColor pointer" @click="goLogin">登录</span>
           /
           <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
           账号
@@ -542,7 +545,7 @@ export default {
       islogin: true,
       concatVisible: false,
       serverConVisible: false,
-      zankaiFlag: false,
+      zankaiFlag: true,
       activeName1: "serverPro",
       activeName: "baseInfo",
       serverOrgDetailList: {},
@@ -577,7 +580,10 @@ export default {
         requireDetail: "",
         productId: "",
         productName: ""
-      }
+      },
+      productType:'',
+      timeInterval:'0',
+      ratingType:''
     };
   },
   created() {
@@ -588,6 +594,10 @@ export default {
     this.getEvaluationCountInfo();
   },
   methods: {
+     goLogin() {
+      window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
+      this.$router.push({ path: "/login" });
+    },
     //判断是否登录
     isLogin() {
       if (!sessionStorage.userInfo) {
@@ -734,6 +744,9 @@ export default {
           if (res.code == "0000") {
             _this.evaCount = res.data;
             _this.total4 = res.data.total;
+            setTimeout(()=>{
+              _this.$refs['tabP'].$children[0].$forceUpdate() 
+            },0)
           } else {
             _this.$message.error(res.result);
           }
@@ -751,7 +764,8 @@ export default {
           needPage: 1,
           isPublicPage: 0,
           page: _this.page4,
-          rows: _this.row4
+          rows: _this.row4,
+          ratingType:_this.ratingType
         },
         callback: function(res) {
           if (res.code == "0000") {
@@ -771,7 +785,8 @@ export default {
         data: {
           // actiType: "org_activity",
           page: _this.page3,
-          rows: _this.row3
+          rows: _this.row3,
+          timeInterval:_this.timeInterval
         },
         callback: function(res) {
           if (res.code == "0000") {
@@ -792,7 +807,7 @@ export default {
           orgd: _this.$route.query.orgId,
           page: _this.page1,
           rows: _this.row1,
-          productType: ""
+          productType: _this.productType
         },
         callback: function(res) {
           if (res.code == "0000") {

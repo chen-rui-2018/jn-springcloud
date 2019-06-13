@@ -2,10 +2,7 @@ package com.jn.park.parking.service;
 
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
-import com.jn.park.parking.model.ParkingSpaceAmountModel;
-import com.jn.park.parking.model.ParkingSpaceApplyModel;
-import com.jn.park.parking.model.ParkingSpaceModel;
-import com.jn.park.parking.model.ParkingSpaceParam;
+import com.jn.park.parking.model.*;
 import com.jn.park.parking.vo.*;
 import com.jn.system.model.User;
 
@@ -20,6 +17,14 @@ import java.util.List;
  * @modified By:
  */
 public interface ParkingSpaceService {
+
+
+    /**
+     * 查询停车位租赁协议
+     * @param parkingSpaceProtocolParam
+     * @return
+     */
+    ParkingSpaceProtocolVo getParkingSpaceProtocol(ParkingSpaceProtocolParam parkingSpaceProtocolParam);
 
     /**
      * 查询停车位列表

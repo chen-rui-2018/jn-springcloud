@@ -15,35 +15,35 @@
       <div class="ordinary_table">
         <el-table :data="recruitmentTable" stripe border :header-cell-style="{background:'#f8f8f8',color:'#666666'}" style="width: 100%">
           <el-table-column prop="name" label="姓名" align="center"> </el-table-column>
-          <el-table-column prop="phone" label="联系手机" align="center"> </el-table-column>
-          <el-table-column prop="email" label="联系邮箱" align="center"  width="150"> </el-table-column>
+          <el-table-column prop="phone" label="联系手机" align="center" min-width="100"> </el-table-column>
+          <el-table-column prop="email" label="联系邮箱" align="center"  min-width="160"> </el-table-column>
           <el-table-column prop="graduatedSchool" label="毕业学校" align="center"> </el-table-column>
           <el-table-column prop="education" label="学历" align="center"> </el-table-column>
           <el-table-column prop="position" label="担任职务" align="center" > </el-table-column>
           <el-table-column prop="orgIdentity" label="机构身份" align="center"> </el-table-column>
-          <el-table-column prop="entryDate" label="入驻日期" align="center" width="100"> </el-table-column>
-          <el-table-column label="操作" align="center" width='120'  >
+          <el-table-column prop="entryDate" label="入驻日期" align="center" width="150"> </el-table-column>
+          <el-table-column label="操作" align="center" min-width='170'  >
             <template slot-scope="scope">
               <el-button
-              v-if=" scope.row.orgIdentity==='机构联系人'"
+              v-if=" scope.row.cancelContact===true"
                 size="mini"
                  type="text"
                 @click="handleCancel(scope.row)" class="greenColor"><span>取消联系人</span>
               </el-button>
               <el-button
-               v-if=" scope.row.orgIdentity==='机构专员'"
+               v-if=" scope.row.setContact===true"
                 size="mini"
                  type="text"
                 @click="handleSetContact( scope.row)" class="greenColor"><span>设为联系人</span>
               </el-button>
               <el-button
-               v-if=" scope.row.orgIdentity==='机构专员'|| scope.row.orgIdentity==='机构联系人'"
+               v-if=" scope.row.orgDetail===true"
                 size="mini"
                 type="text"
                 @click="handleDetails(scope.row)" class="greenColor"><span>详情</span>
               </el-button>
               <el-button
-               v-if=" scope.row.orgIdentity==='机构专员'|| scope.row.orgIdentity==='机构联系人'"
+               v-if=" scope.row.delOrgAdvisor===true"
                 size="mini"
                 type="text"
                 @click="handleDelete(scope.row)" class="redColor"><span>删除</span>

@@ -57,10 +57,6 @@ export default {
       this.init();
     },
     handleInfo(account) {
-      if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
-        return;
-      }
       this.$router.push({
         path: "actiTrainData",
         query: { account: account, activityId: this.$route.query.activityId }

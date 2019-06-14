@@ -29,7 +29,7 @@
           </div>
         </div>
         <div class="investment-block-content investment-park">
-          <div v-if="!showMore">{{  parkDesc | formatParkDesc}}</div>
+          <div v-if="!showMore" class="park-profile-desc">{{  parkDesc | formatParkDesc}}</div>
           <div v-else>{{ parkDesc }}</div>
           <more-btn v-if="!showMore" class="more-desc" @click.native="showMore = true"></more-btn>
         </div>
@@ -386,7 +386,7 @@ export default {
     .tc-row {
       padding: 20px;
       text-align: center;
-      font-size: 12px;
+      font-size: 28px;
     }
     .no-more-row {
       padding: 20px;
@@ -467,7 +467,7 @@ export default {
 
     }
     .investment-block {
-      border-bottom: 40px solid #fafafa;
+      border-bottom: 22px solid #fafafa;
       background-color: #fff;
       &.br-n {
         border-bottom: none;
@@ -479,6 +479,10 @@ export default {
         line-height: 50px;
         letter-spacing: 4px;
         padding: 0 40px;
+        .park-profile-desc {
+          font-size: 28px;
+          text-indent: 2em;
+        }
       }
       .investment-block-title {
         padding: 20px 40px;
@@ -507,15 +511,19 @@ export default {
       }
       .tab-nav {
         padding: 0 40px;
+        .vux-tab .vux-tab-item {
+          font-size: 28px;
+        }
       }
       .more-desc {
         position: absolute;
-        right: 0;
+        right: 40px;
         bottom: 0;
+        font-size: 28px;
       }
     }
     .investment-banner {
-      margin: 40px auto;
+      margin: 40px auto 16px;
       .swiper-img {
         width: 100%;
         border-radius: 16px;

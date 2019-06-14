@@ -23,7 +23,7 @@
         title="留言成功，是否跳到上一页"
         theme="android"
         @on-cancel="onCancel"
-        @on-confirm="this.$router.go(-1)"
+        @on-confirm="$router.go(-1)"
        >
         </confirm>
       </div>
@@ -56,7 +56,7 @@ export default {
   },
   methods: {
     sumbmit () {
-      this.api.get({
+      this.api.post({
         url: 'spMessage',
         data: this.messageform,
         callback: res => {

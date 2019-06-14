@@ -65,7 +65,7 @@ export default {
         appointment:"springcloud-enterprise/pd/online/onlineBooking",//预约申报
         getTechnologyInfoNum:"springcloud-enterprise/guest/technologyFinancial/financialProductController/getTechnologyInfoNum",//科技金融首页投资人数，金融产品数，金融机构数
         getFinancialProList:"springcloud-enterprise/guest/technologyFinancial/financialProductController/getFinancialProductList",//金融产品列表查询
-        getAssureType:"springcloud-enterprise//technologyFinancial/financialProductController/getFinancialProductAssureType",//金融产品担保方式
+        getAssureType:"springcloud-enterprise/guest/technologyFinancial/financialProductController/getFinancialProductAssureType",//金融产品担保方式
 
         getActivityDetailsFm:"springcloud-enterprise/guest/serviceMarket/org/getActivityDetailsForManage",//获取服务机构详情
         findOrgProductList:"springcloud-enterprise/servicemarket/product/web/findOrgProductList",//机构-服务产品列表
@@ -248,6 +248,7 @@ export default {
         addCareOperate:"springcloud-park/park/manage/care/addCareOperate",// 用户添加关注操作
         cancelCareOperate:"springcloud-park/park/manage/care/cancelCareOperate",//用户取消关注操作
         getDataStatistics:"springcloud-enterprise/guest/MarketIndexController/getDataStatistics",//获取企业，机构，活动，服务专员数量
+        queryOnlineInfo:"springcloud-enterprise/pd/online/queryOnlineInfo",//通过公告ID和登录人查询预约信息
     },
     setToken: function (obj) {   //设置token在请求头上面
         axios.interceptors.request.use(function (config) {

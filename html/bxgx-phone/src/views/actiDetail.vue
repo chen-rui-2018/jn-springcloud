@@ -132,6 +132,7 @@ export default {
     handleLike (id) {
       if (!sessionStorage.token) {
         this.$vux.toast.text('请先登录')
+        return
       }
       let _this = this
       this.api.post({
@@ -142,9 +143,11 @@ export default {
         dataFlag: true,
         callback: function (res) {
           if (res.code === '0000') {
+            _this.$vux.toast.text('点赞成功')
             _this.actiForm.actiLike = _this.actiForm.actiLike * 1 + 1
             // _this.$message.success('点赞成功')
             _this.accountIsLike = true
+            window.location.href = 'protocol://android?code=toast&data=' + _this.actiForm.actiLike
           } else {
             _this.$vux.toast.text(res.result)
           }
@@ -154,6 +157,7 @@ export default {
     cancelLike (id) {
       if (!sessionStorage.token) {
         this.$vux.toast.text('请先登录')
+        return
       }
       let _this = this
       this.api.post({
@@ -164,8 +168,10 @@ export default {
         dataFlag: true,
         callback: function (res) {
           if (res.code === '0000') {
+            _this.$vux.toast.text('取消点赞成功')
             _this.actiForm.actiLike -= 1
             _this.accountIsLike = false
+            window.location.href = 'protocol://android?code=toast&data=' + _this.actiForm.actiLike
           } else {
             _this.$vux.toast.text(res.result)
           }
@@ -175,6 +181,7 @@ export default {
     quickSign (id) {
       if (!sessionStorage.token) {
         this.$vux.toast.text('请先登录')
+        return
       }
       let _this = this
       this.api.post({
@@ -198,8 +205,8 @@ export default {
     stopApply (id) {
       if (!sessionStorage.token) {
         this.$vux.toast.text('请先登录')
+        return
       }
-      this.$vux.toast.text('请先登录')
       let _this = this
       this.api.post({
         url: `springcloud-park/activity/activityApply/cancelApply?activityId=${id}`,

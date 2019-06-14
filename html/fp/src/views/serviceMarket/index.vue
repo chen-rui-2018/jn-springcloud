@@ -344,7 +344,7 @@ export default {
       counselorList:[],//优质专员
       page:1,
       row:4,
-      typeId:"a29e14a21352473ebf26420ddffb1c60",//类型带确认
+      typeId:"org_activity",
       total:'',
       pageNum:'',
       IndustryList:[],//专员领域列表

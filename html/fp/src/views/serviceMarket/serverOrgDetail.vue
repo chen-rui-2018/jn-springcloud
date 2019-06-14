@@ -17,7 +17,7 @@
             <!-- <img src="@/../static/img/ins1.png" alt=""> -->
             <img :src="serverOrgDetailList.orgLogo" alt="">
           </div>
-          <div class="agent2Info fl color2">
+          <div class="agent2Info fl color2" style="width:80%">
             <p>客户偏好：
               <span v-for="(item1,k1) in serverOrgDetailList.developmentStage" :key="k1">{{item1.orgTraitName}},</span>
               <span v-for="(item2,k2) in serverOrgDetailList.industrySector" :key="k2">{{item2.orgTraitName}}</span>
@@ -424,7 +424,7 @@
                   <div class="list-info-top-title">
                     <!-- 头部 begin -->
                     <div class="info-top">
-                      <div class="top-title inner-consultant" onclick="window.open('/epservice/techsub/Apps/epssm/index.php?s=/Home/ConsultantSpace/space/id/86c91e1d-b3ce-11e7-9663-000c29881ee3')">
+                      <div class="top-title">
                         <span>{{i.advisorName}}/{{i.position}}</span>
                         <div class="icons">
                           <!-- 是否认证标签 -->
@@ -695,14 +695,14 @@ export default {
     },
     //在线联系
     onlineContat(orgAccount, ogeName) {
-      if (!sessionStorage.userInfo) {
+      if (!this.getUserInfo()) {
         this.concatVisible=true
         return
       }
       this.$router.push({
         path: "/chat",
         query: {
-          fromUser: JSON.parse(sessionStorage.userInfo).account,
+          fromUser: JSON.parse(this.getUserInfo()).account,
           toUser: orgAccount,
           nickName: ogeName
         }
@@ -710,21 +710,12 @@ export default {
     },
     //判断是否登录
     isLogin() {
-      if (!sessionStorage.userInfo) {
+      if (!this.getToken()) {
         this.islogin = false;
       }
     },
     demandRaise(i) {
       //提需求
-      // this.accout=sessionStorage.getItem('account')
-      // if(!this.accout){
-      //   debugger
-      //   this.islogin=false
-      // }
-      // if (!sessionStorage.userInfo) {
-      //   this.$message.error("请先登录");
-      //   return;
-      // }
       this.isLogin()
       this.serverOrgVisible = true;
       this.serverProform.requireDetail = "";

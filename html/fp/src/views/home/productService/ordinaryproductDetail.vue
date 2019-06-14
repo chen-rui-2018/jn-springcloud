@@ -98,7 +98,7 @@
           </div>
           <div :model="productDetail" class="">
             <el-form-item label="贷款期限：">
-              <span>{{productDetail.loanTermMin}}月-{{productDetail.loanTermMax}}月</span>
+              <span>{{productDetail.loanTermMin}}个月-{{productDetail.loanTermMax}}个月</span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">

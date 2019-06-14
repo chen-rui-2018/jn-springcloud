@@ -10,8 +10,8 @@
           <picker bindchange="selectcarLicense" value="{{detailSend.carLicense}}" range="{{carLicenseList}}" range-key="{{'carLicense'}}">
             <text class="select green">{{detailSend.carLicense}} </text>
           </picker>
-          <text class="icon-triangleupfill" wx:if="{{isShow}}"></text>
-          <text class="icon-triangledownfill" wx:else></text>
+          <!-- <text class="icon-triangleupfill" wx:if="{{isShow}}"></text>
+          <text class="icon-triangledownfill" wx:else></text> -->
         </view>
       </view>
     </view>

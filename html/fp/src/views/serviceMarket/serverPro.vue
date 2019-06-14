@@ -37,8 +37,11 @@
         <i class="iconfont icon-sousuo" @click="handleSearchList"></i>
       </div>
     </div>
-    <div class="serverOrgContent">
-      <ul>
+    <div class="serverOrgContent" v-loading="proloading">
+      <div v-if="serverProList.length==0">
+        <nodata></nodata>
+      </div>
+      <ul v-else>
         <!-- <li class="clearfix" v-for="(i,k) in serverAgent" :key='k'> -->
         <li class="clearfix" v-for="(i,k) in serverProList" :key='k'>
           <div class="orgImg fl" @click="handleProDel(i.productId,i.signoryId)">
@@ -71,9 +74,6 @@
         </li>
       </ul>
     </div>
-    <!-- <div class="serverOrgContent" v-if="serverProList.length==0">
-      <nodata></nodata>
-    </div> -->
     <div class="pagination-container">
       <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
       </el-pagination>
@@ -110,7 +110,8 @@ export default {
   },
   data() {
     return {
-      islogin:true,
+      proloading: false,
+      islogin: true,
       colorFlag: "integrate",
       bgFlag: "",
       sortTypes: "integrate",
@@ -140,18 +141,18 @@ export default {
     if (this.$route.query.searchData) {
       this.keyW = this.$route.query.searchData;
       this.initList();
-    } else{
+    } else {
       this.initList();
     }
   },
   methods: {
-      goLogin() {
+    goLogin() {
       window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
       this.$router.push({ path: "/login" });
     },
-     //判断是否登录
+    //判断是否登录
     isLogin() {
-      if (!sessionStorage.userInfo) {
+      if (!this.getToken()) {
         this.islogin = false;
       }
     },
@@ -168,11 +169,7 @@ export default {
       }
     },
     demandRaise(i) {
-      // if (!sessionStorage.userInfo) {
-      //   this.$message.error("请先登录");
-      //   return;
-      // }
-      this.isLogin()
+      this.isLogin();
       this.serverProVisible = true;
       this.serverProform.requireDetail = "";
       this.serverProform.productId = i.productId;
@@ -237,6 +234,7 @@ export default {
     },
     //服务产品列表
     initList() {
+      this.proloading = true;
       let _this = this;
       this.api.get({
         url: "findProductList",
@@ -256,6 +254,7 @@ export default {
           } else {
             _this.$message.error(res.result);
           }
+          _this.proloading = false;
         }
       });
     },

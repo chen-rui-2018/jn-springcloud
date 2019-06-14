@@ -75,7 +75,8 @@ export default {
     todayelectro: 'springcloud-park/meter/todayElectric', // 今日用电情况
     monthelectro: 'springcloud-park/meter/monthElectric', // 本月用电情况
     yearelectro: 'springcloud-park/meter/yearElectric', // 今年用电情况
-    getCompanyDetailByNowAccount: 'springcloud-enterprise/guest/company/getCompanyDetailByNowAccount' // 获取用户企业信息
+    getCompanyDetailByNowAccount: 'springcloud-enterprise/guest/company/getCompanyDetailByNowAccount', // 获取用户企业信息
+    addOrEditMemorandum: 'springcloud-enterprise/pd/declaration/addOrEditMemorandum'// 申报平台备忘录
 
   },
   setToken: function (obj) {

@@ -32,7 +32,7 @@
     <div class="declaration_platform" v-if="isShow===1">
       <div class="platform_titile">
         <div>申报平台</div>
-        <div >MORE <span class="iconfont icon-jiantou"></span></div>
+        <div @click="$router.push({path:'/guest/pd/declarationPlatform'})">MORE <span class="iconfont icon-jiantou"></span></div>
       </div>
       <div class="platform_cont" @click="$router.push({path:'/guest/pd/declarationPlatform'})">
         <p>
@@ -242,8 +242,9 @@ export default {
     }
     i{
       position: absolute;
-      top: 37%;
-      right: 54%
+      top: 42%;
+      right: 54%;
+      font-size: 21px;
     }
   }
   .padding{
@@ -255,6 +256,7 @@ export default {
     .perennial{
       background-color: #fff;
       margin:0 23px;
+      margin-top: 31px;
       .perennial_titile{
         display: flex;
         justify-content: space-between;

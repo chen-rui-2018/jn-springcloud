@@ -29,7 +29,7 @@ export default {
         url: 'loginURL',
         data: {
           account: 'wangsong',
-          password: 'wangsong'
+          password: '123456'
         },
         dataFlag: false,
         callback: function (res) {

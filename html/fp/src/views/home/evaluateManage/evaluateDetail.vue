@@ -72,10 +72,10 @@
               <span >{{sevaluateDetail.financingAmount}}</span>
             </el-form-item>
             <el-form-item label="融资期限：">
-              <span>{{sevaluateDetail.financingPeriod}} </span>
+              <span>{{sevaluateDetail.financingPeriod|time}} </span>
             </el-form-item>
             <el-form-item label="资金需求日期：">
-              <span>{{sevaluateDetail.expectedDate}}</span>
+              <span>{{sevaluateDetail.expectedDate|time}}</span>
             </el-form-item>
             <el-form-item label="意向机构：">
               <span>{{sevaluateDetail.orgName}}</span>

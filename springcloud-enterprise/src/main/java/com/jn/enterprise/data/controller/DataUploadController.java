@@ -189,7 +189,8 @@ public class DataUploadController  extends BaseController {
 
     })
     public Result importData(@RequestParam("formTime") String formTime,@RequestParam("fillId") String fillId,@RequestParam("modelId") String modelId, @RequestParam("file") MultipartFile file){
-        Integer result = uploadService.importData(file,formTime,fillId,modelId);
+        User user = (User)SecurityUtils.getSubject().getPrincipal();
+        Integer result = uploadService.importData(file,formTime,fillId,modelId,user);
         return new Result(result);
     }
 

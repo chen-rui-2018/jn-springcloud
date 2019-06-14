@@ -25,4 +25,11 @@ public class ActivityTypeParam extends Page implements Serializable {
     public void setTypeStatus(String typeStatus) {
         this.typeStatus = typeStatus;
     }
+
+    @Override
+    public String toString() {
+        return "ActivityTypeParam{" +
+                "typeStatus='" + typeStatus + '\'' +
+                '}';
+    }
 }

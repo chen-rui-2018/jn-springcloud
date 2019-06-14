@@ -46,4 +46,13 @@ public class ServiceProductApproval implements Serializable {
     public void setApprovalComments(String approvalComments) {
         this.approvalComments = approvalComments;
     }
+
+    @Override
+    public String toString() {
+        return "ServiceProductApproval{" +
+                "productId='" + productId + '\'' +
+                ", status='" + status + '\'' +
+                ", approvalComments='" + approvalComments + '\'' +
+                '}';
+    }
 }

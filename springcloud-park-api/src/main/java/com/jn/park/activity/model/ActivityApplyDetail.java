@@ -156,4 +156,24 @@ public class ActivityApplyDetail implements Serializable {
     public void setApplyStatus(String applyStatus) {
         this.applyStatus = applyStatus;
     }
+
+    @Override
+    public String toString() {
+        return "ActivityApplyDetail{" +
+                "id='" + id + '\'' +
+                ", activityId='" + activityId + '\'' +
+                ", account='" + account + '\'' +
+                ", name='" + name + '\'' +
+                ", sex='" + sex + '\'' +
+                ", age=" + age +
+                ", company='" + company + '\'' +
+                ", post='" + post + '\'' +
+                ", phone='" + phone + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", signStatus='" + signStatus + '\'' +
+                ", applyStatus='" + applyStatus + '\'' +
+                ", applyTime='" + applyTime + '\'' +
+                ", signTime='" + signTime + '\'' +
+                '}';
+    }
 }

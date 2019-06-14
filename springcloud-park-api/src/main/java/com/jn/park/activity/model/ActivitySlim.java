@@ -175,4 +175,26 @@ public class ActivitySlim implements Serializable {
     public void setAvatarList(List<String> avatarList) {
         this.avatarList = avatarList;
     }
+
+    @Override
+    public String toString() {
+        return "ActivitySlim{" +
+                "id='" + id + '\'' +
+                ", actiName='" + actiName + '\'' +
+                ", actiStatus='" + actiStatus + '\'' +
+                ", actiAddress='" + actiAddress + '\'' +
+                ", actiStartTime='" + actiStartTime + '\'' +
+                ", actiEndTime='" + actiEndTime + '\'' +
+                ", actiNumber=" + actiNumber +
+                ", actiPosterUrl='" + actiPosterUrl + '\'' +
+                ", actiLike=" + actiLike +
+                ", applyNum=" + applyNum +
+                ", avatar='" + avatar + '\'' +
+                ", avatarList=" + avatarList +
+                ", showApplyNum='" + showApplyNum + '\'' +
+                ", applyStatus='" + applyStatus + '\'' +
+                ", actiViews='" + actiViews + '\'' +
+                ", issueTime='" + issueTime + '\'' +
+                '}';
+    }
 }

@@ -34,4 +34,13 @@ public class FianceDynamicTableVo<T> implements Serializable {
     public void setRows(T rows) {
         this.rows = rows;
     }
+
+
+    @Override
+    public String toString() {
+        return "FianceDynamicTableVo{" +
+                "dynamicHeadList=" + dynamicHeadList +
+                ", rows=" + rows +
+                '}';
+    }
 }

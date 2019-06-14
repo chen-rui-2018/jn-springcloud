@@ -34,4 +34,13 @@ public class FinanceExpendFinanceTypeVo implements Serializable {
     public void setFinanceName(String financeName) {
         this.financeName = financeName;
     }
+
+
+    @Override
+    public String toString() {
+        return "FinanceExpendFinanceTypeVo{" +
+                "id='" + id + '\'' +
+                ", financeName='" + financeName + '\'' +
+                '}';
+    }
 }

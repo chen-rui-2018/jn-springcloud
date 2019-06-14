@@ -37,4 +37,13 @@ public class FinanceExpensesTypeNameModel implements Serializable {
     public void setCostAfterTypeName(String costAfterTypeName) {
         this.costAfterTypeName = costAfterTypeName;
     }
+
+
+    @Override
+    public String toString() {
+        return "FinanceExpensesTypeNameModel{" +
+                "costAfterTypeId='" + costAfterTypeId + '\'' +
+                ", costAfterTypeName='" + costAfterTypeName + '\'' +
+                '}';
+    }
 }

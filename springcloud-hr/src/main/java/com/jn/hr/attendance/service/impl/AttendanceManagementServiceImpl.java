@@ -641,7 +641,20 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
 		AttendanceManageApiVo attendanceObject = new AttendanceManageApiVo();
 		List<AttendanceManageObject> attendancemanageList = new ArrayList<AttendanceManageObject>();
 		EmployeeBasicInfoPage employeeBasicInfoPage = new EmployeeBasicInfoPage();
-		employeeBasicInfoPage.setDepartmentId(attendanceManagement.getDepartmentId());
+		if (!StringUtils.isEmpty(attendanceManagement.getDepartmentId())) {
+			List<String> rootList = new ArrayList<String>();
+			Result result = systemClient.selectDeptByParentId(attendanceManagement.getDepartmentId(), true);
+			if (result == null || !"0000".equals(result.getCode()) || result.getData() == null) {
+				throw new JnSpringCloudException(HrExceptionEnums.DEPARTMENT_QUERY_ERRPR);
+			}
+			HashMap<String, Object> childMap = (HashMap<String, Object>) result.getData();
+			rootList.add((String) childMap.get("id"));
+			if (childMap.get("children") != null) {
+				List<HashMap<String, Object>> childrenSub = (List<HashMap<String, Object>>) childMap.get("children");
+				getChildrenDepartment(rootList, childrenSub);
+			}
+			employeeBasicInfoPage.setDepartmentIds(rootList);
+		}
 		List<EmployeeBasicInfo> basicList = employeeBasicInfoMapper.list(employeeBasicInfoPage);
 		attendanceObject.setTotalNumber(basicList.size());
 		// integer
@@ -685,7 +698,7 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
 		for (EmployeeBasicInfo basic : basicList) {
 			attendanceManagement.setUserId(basic.getUserId());
 			List<AttendanceManagementApiVo> attendanceManagementList = selectAttendanceManagementByUserId(
-					attendanceManagement);
+					attendanceManagement,basic.getUserId());
 			if (attendanceManagementList.size() == 0) {
 				continue;
 			}
@@ -728,8 +741,9 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
 	@Override
 	@ServiceLog(doAction = "根据用户id与年月获取考勤信息")
 	public List<AttendanceManagementApiVo> selectAttendanceManagementByUserId(
-			AttendanceManagement attendanceManagement) {
+			AttendanceManagement attendanceManagement,String userId) {
 		// TODO Auto-generated method stub
+		attendanceManagement.setUserId(userId);
 		List<AttendanceManagementApiVo> attendanceManagementApiList = new ArrayList<AttendanceManagementApiVo>();
 		Date firstDate = null;
 		Date lastDate = null;

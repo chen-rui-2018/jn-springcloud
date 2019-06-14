@@ -27,7 +27,7 @@
         </if>
 
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(fileId)">
-            and t1.file_id =#{fileId,jdbcType=VARCHAR}
+            and t1.file_id like concat('%',#{fileId,jdbcType=VARCHAR},'%')
         </if>
         ORDER BY t1.created_time DESC
     </select>

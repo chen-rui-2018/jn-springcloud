@@ -5,8 +5,10 @@
 
 
     <select id="selectByJobNumber" parameterType="map" resultType="com.jn.hr.employee.model.SocialSecurity">
-        select id, job_number, salary_bank, salary_number, provident_fund_account, provident_fund_payment,
-    social_security_account, social_security_payment from tb_manpower_social_security
+        select id, job_number jobNumber, salary_bank salaryBank, salary_number salaryNumber,
+         provident_fund_account providentFundAccount, provident_fund_payment providentFundPayment,
+    social_security_account socialSecurityAccount, social_security_payment socialSecurityPayment
+    from tb_manpower_social_security
          where job_number=#{jobNumber}
     </select>
 
@@ -30,5 +32,12 @@
             )
         </foreach>
     </insert>
+
+    <select id="selectAllSocialSecurityToMap" resultType="com.jn.hr.employee.model.SocialSecurity">
+        select id, job_number jobNumber, salary_bank salaryBank, salary_number salaryNumber,
+         provident_fund_account providentFundAccount, provident_fund_payment providentFundPayment,
+    social_security_account socialSecurityAccount, social_security_payment socialSecurityPayment
+    from tb_manpower_social_security
+    </select>
 
 </mapper>

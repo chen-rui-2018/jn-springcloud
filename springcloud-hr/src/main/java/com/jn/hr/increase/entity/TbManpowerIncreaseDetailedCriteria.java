@@ -1,7 +1,6 @@
 package com.jn.hr.increase.entity;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class TbManpowerIncreaseDetailedCriteria {
@@ -185,52 +184,62 @@ public class TbManpowerIncreaseDetailedCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andInsuredMonthEqualTo(Date value) {
+        public Criteria andInsuredMonthEqualTo(String value) {
             addCriterion("insured_month =", value, "insuredMonth");
             return (Criteria) this;
         }
 
-        public Criteria andInsuredMonthNotEqualTo(Date value) {
+        public Criteria andInsuredMonthNotEqualTo(String value) {
             addCriterion("insured_month <>", value, "insuredMonth");
             return (Criteria) this;
         }
 
-        public Criteria andInsuredMonthGreaterThan(Date value) {
+        public Criteria andInsuredMonthGreaterThan(String value) {
             addCriterion("insured_month >", value, "insuredMonth");
             return (Criteria) this;
         }
 
-        public Criteria andInsuredMonthGreaterThanOrEqualTo(Date value) {
+        public Criteria andInsuredMonthGreaterThanOrEqualTo(String value) {
             addCriterion("insured_month >=", value, "insuredMonth");
             return (Criteria) this;
         }
 
-        public Criteria andInsuredMonthLessThan(Date value) {
+        public Criteria andInsuredMonthLessThan(String value) {
             addCriterion("insured_month <", value, "insuredMonth");
             return (Criteria) this;
         }
 
-        public Criteria andInsuredMonthLessThanOrEqualTo(Date value) {
+        public Criteria andInsuredMonthLessThanOrEqualTo(String value) {
             addCriterion("insured_month <=", value, "insuredMonth");
             return (Criteria) this;
         }
 
-        public Criteria andInsuredMonthIn(List<Date> values) {
+        public Criteria andInsuredMonthLike(String value) {
+            addCriterion("insured_month like", value, "insuredMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andInsuredMonthNotLike(String value) {
+            addCriterion("insured_month not like", value, "insuredMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andInsuredMonthIn(List<String> values) {
             addCriterion("insured_month in", values, "insuredMonth");
             return (Criteria) this;
         }
 
-        public Criteria andInsuredMonthNotIn(List<Date> values) {
+        public Criteria andInsuredMonthNotIn(List<String> values) {
             addCriterion("insured_month not in", values, "insuredMonth");
             return (Criteria) this;
         }
 
-        public Criteria andInsuredMonthBetween(Date value1, Date value2) {
+        public Criteria andInsuredMonthBetween(String value1, String value2) {
             addCriterion("insured_month between", value1, value2, "insuredMonth");
             return (Criteria) this;
         }
 
-        public Criteria andInsuredMonthNotBetween(Date value1, Date value2) {
+        public Criteria andInsuredMonthNotBetween(String value1, String value2) {
             addCriterion("insured_month not between", value1, value2, "insuredMonth");
             return (Criteria) this;
         }

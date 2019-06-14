@@ -320,3 +320,32 @@ export default {
     }
 }
 </style>
+<style scoped>
+  .hide-dialog {
+    display: none;
+  }
+
+  .download-template {
+    margin-top: 20px;
+  }
+  .download-template a:hover{
+    color:red
+  }
+  .failure-reason h4{
+    margin: 10px 0;
+    line-height:20px;
+    font-size:14px;
+    color:red;
+
+  }
+  .failure-reason ul{
+    padding:0 0;
+    margin: 0 0;
+  }
+
+  .failure-reason ul li {
+    color: red;
+    line-height:20px;
+  }
+
+</style>

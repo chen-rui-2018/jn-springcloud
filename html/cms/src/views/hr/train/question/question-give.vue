@@ -281,6 +281,12 @@ export default {
     },
     // 保存
     save() {
+      if (this.formData.researchMethod === 1) {
+        // 匿名时
+        this.formData.isShowJobNumber = 2
+        this.formData.isShowName = 2
+        this.formData.isShowPhone = 2
+      }
       api('hr/train/quest/sendInvestiageQuest', this.formData).then(res => {
         if (res.data.code === '0000') {
           this.$message.success('保存成功！')

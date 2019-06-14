@@ -59,7 +59,7 @@ export default {
     getPolicyClassList: 'springcloud-park/guest/policy/policyCenterController/getPolicyClassList', // 政策分类列表
     getPolicyCenterList: 'springcloud-park/guest/policy/policyCenterController/getPolicyCenterList', // 政策中心首页列表
     getPolicyDetails: 'springcloud-park/guest/policy/policyCenterController/getPolicyDetails', // 政策指南详情
-
+    getPromotionDetails: 'springcloud-enterprise/guest/businessHomePageController/getBusinessPromotionDetails', // (门户各首页企业宣传详情)
     // 招商引资
     getPromotionList: 'springcloud-enterprise/guest/businessHomePageController/getBusinessPromotionList', // (门户各首页企业宣传列表查询)
     basic: 'springcloud-park/guest/portal/park/basic', // 获取园区概况
@@ -75,7 +75,8 @@ export default {
     todayelectro: 'springcloud-park/meter/todayElectric', // 今日用电情况
     monthelectro: 'springcloud-park/meter/monthElectric', // 本月用电情况
     yearelectro: 'springcloud-park/meter/yearElectric', // 今年用电情况
-    getCompanyDetailByNowAccount: 'springcloud-enterprise/guest/company/getCompanyDetailByNowAccount' // 获取用户企业信息
+    getCompanyDetailByNowAccount: 'springcloud-enterprise/guest/company/getCompanyDetailByNowAccount', // 获取用户企业信息
+    addOrEditMemorandum: 'springcloud-enterprise/pd/declaration/addOrEditMemorandum'// 申报平台备忘录
 
   },
   setToken: function (obj) {

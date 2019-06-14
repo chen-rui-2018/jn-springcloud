@@ -55,7 +55,9 @@ export default {
   methods: {
     initChart() {
       const opts = this.chartopts // 图表参数
-      const dateData = opts.arrayModel.createdTime // 项目月份周期数组  ;
+      if (opts.arrayModel.createdTime) {
+        var dateData = opts.arrayModel.createdTime // 项目月份周期数组  ;
+      }
       const mLength = dateData[dateData.length - 1]// 当前月份
       if (opts.planStartTime !== opts.arrayModel.createdTime[0]) {
         dateData.unshift(opts.planStartTime)

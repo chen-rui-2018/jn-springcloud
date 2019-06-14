@@ -131,10 +131,10 @@ export default {
       if (row && row.projectId) {
         this.$router.push({
           name: 'invest-edit',
-          query: { id: row.projectId, title: '编辑项目' }
+          query: { id: row.projectId }
         })
       } else {
-        this.$router.push({ name: 'invest-add', query: { title: '新建项目' }})
+        this.$router.push({ name: 'invest-add' })
       }
     },
     // 发放调研
@@ -144,8 +144,7 @@ export default {
         query: {
           id: row.projectId,
           researchProject: row.researchProject,
-          status: row.status,
-          title: '发放调研'
+          status: row.status
         }
       })
     },
@@ -153,7 +152,7 @@ export default {
     handleResult(row) {
       this.$router.push({
         name: 'invest-result',
-        query: { id: row.projectId, title: '调研结果' }
+        query: { id: row.projectId, researchMethod: row.researchMethod }
       })
     },
     // 删除

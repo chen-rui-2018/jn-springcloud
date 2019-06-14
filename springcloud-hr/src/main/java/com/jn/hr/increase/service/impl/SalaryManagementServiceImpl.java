@@ -359,7 +359,7 @@ public class SalaryManagementServiceImpl implements SalaryManagementService {
 			//排序
 			attendanceSort(salarySevenList);
 			for(int i = 0; i < 7; i++){
-				salarySevenList.add(salarySevenList.get(i));
+				salaryList.add(salarySevenList.get(i));
 			}
 		}else{
 			salaryList.addAll(salarySevenList);

@@ -99,8 +99,10 @@ export default {
             message: res.data.data,
             type: 'success'
           })
+          this.initList()
         } else {
           this.$message.error(res.data.result)
+          this.initList()
         }
       })
     },

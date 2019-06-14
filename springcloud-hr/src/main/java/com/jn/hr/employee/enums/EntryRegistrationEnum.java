@@ -3,20 +3,20 @@ package com.jn.hr.employee.enums;
 import com.jn.common.api.CodeAndMsg;
 
 /**
- * @author dt
- * @create 2019-04-23 上午 10:46
+ * 是否发送入职登记表
  */
-public enum EmployStatusEnum implements CodeAndMsg {
-    ON_JOB("1","在职"),
-    NOT_ON_JOB("2","医疗期"),
-    RETIRE("3","退休"),
-    LEAVE("4","离职"),
+public enum EntryRegistrationEnum implements CodeAndMsg {
+    SEND("1", "已发送"),
+    NOT_SEND("2", "未发送"),
+    NONE("3", "无"),
     ;
+
+
     private String code;
 
     private String message;
 
-    EmployStatusEnum(String code, String message) {
+    EntryRegistrationEnum(String code, String message) {
         this.code = code;
         this.message = message;
     }

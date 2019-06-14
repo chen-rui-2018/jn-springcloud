@@ -45,15 +45,13 @@
                         <div class="table_item_cont" v-html="item.businessConsult"></div>
                       </el-form-item>
                     </div>
-                    <div class="full_line">
+                    <!-- <div class="full_line">
                       <el-form-item label="系统支持">
                         <div class="table_item_cont system_support" v-html="item.systemSupport">
-                          <!-- <div>邮箱：xxxx@sipac.gov.cn</div>
-                          <div>电话：<span>13866666666</span></div> -->
                         </div>
                       </el-form-item>
-                    </div>
-                    <div class="full_line">
+                    </div> -->
+                    <div class="full_line" v-if="id!='1'">
                       <el-form-item label="账号密码">
                         <div class="table_item_cont ">
                           <textarea placeholder="在此输入账号密码作为备忘信息,例：admin/123(限50字)" maxlength="50" v-model="item.accountAndPassword" @input="changeap(item.accountAndPassword,item.id)">

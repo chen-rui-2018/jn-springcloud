@@ -215,12 +215,20 @@ const router = new Router({
       name: 'policyDetails',
       component: () => import('@/views/policyDetails'),
       meta: {title: '政策详情'}
+    },
+    {
+      path: '/enterpriseInformation',
+      name: 'enterpriseInformation',
+      component: () => import('@/views/enterpriseInformation'),
+      meta: {title: '企业资讯'}
     }
+
   ]
 })
 
 router.beforeEach((to, from, next) => {
   const token = urlSearch.token
+  console.log(token)
   if (token) {
     sessionStorage.setItem('token', token)
   }

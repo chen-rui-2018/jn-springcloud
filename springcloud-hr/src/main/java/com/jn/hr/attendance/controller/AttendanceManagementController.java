@@ -317,9 +317,10 @@ public class AttendanceManagementController extends BaseController{
 	@ApiOperation(value = "根据用户id与考勤年月查询历史考勤列表", notes = "根据用户id与考勤年月查询历史考勤列表")
     @RequestMapping(value = "/selectAttendanceManagementByUserId", method = RequestMethod.POST)
 	public Result<List<AttendanceManagementApiVo>> selectAttendanceManagementByUserId(@Validated @RequestBody AttendanceManagement attendanceManagement){
-    	Assert.notNull(attendanceManagement.getUserId(),"用户ID不能为空");
+		User user = (User) SecurityUtils.getSubject().getPrincipal();
+		Assert.notNull(attendanceManagement.getUserId(),"用户ID不能为空");
 		Assert.notNull(attendanceManagement.getAttendanceMonth(),"考勤月份不能为空");
-    	List<AttendanceManagementApiVo> list = attendanceManagementService.selectAttendanceManagementByUserId(attendanceManagement);
+    	List<AttendanceManagementApiVo> list = attendanceManagementService.selectAttendanceManagementByUserId(attendanceManagement,user.getId());
 		return new Result(list);
 	}
     

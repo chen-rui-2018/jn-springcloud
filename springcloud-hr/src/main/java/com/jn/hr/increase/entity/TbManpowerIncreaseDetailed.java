@@ -1,12 +1,11 @@
 package com.jn.hr.increase.entity;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class TbManpowerIncreaseDetailed implements Serializable {
     private String id;
 
-    private Date insuredMonth;
+    private String insuredMonth;
 
     private String jobNumber;
 
@@ -30,12 +29,12 @@ public class TbManpowerIncreaseDetailed implements Serializable {
         this.id = id == null ? null : id.trim();
     }
 
-    public Date getInsuredMonth() {
+    public String getInsuredMonth() {
         return insuredMonth;
     }
 
-    public void setInsuredMonth(Date insuredMonth) {
-        this.insuredMonth = insuredMonth;
+    public void setInsuredMonth(String insuredMonth) {
+        this.insuredMonth = insuredMonth == null ? null : insuredMonth.trim();
     }
 
     public String getJobNumber() {

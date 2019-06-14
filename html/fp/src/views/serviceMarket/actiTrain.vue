@@ -170,27 +170,6 @@ export default {
     }
   },
   methods: {
-    //立即报名
-    immediateSign(id) {
-      if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
-        return;
-      }
-      this.api.post({
-        url: `springcloud-park/activity/activityApply/quickApply?activityId=${id}`,
-        data: {
-          activityId: id
-        },
-        // dataFlag: false,
-        urlFlag: true,
-        callback: res => {
-          if (res.code == "0000") {
-            // _this.actiTypeList = res.data.rows;
-            this.$message(res.result);
-          }
-        }
-      });
-    },
     handleTypeList() {
       this.showList = !this.showList;
     },

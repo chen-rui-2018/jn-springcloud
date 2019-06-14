@@ -94,7 +94,7 @@
       <!-- <div v-else> -->
         <ul v-else>
           <li class="clearfix" v-for="(i,k) in serverAgent" :key='k'>
-            <div class="orgImg fl" @click="handleOrgDel(i.orgId)">
+            <div class="orgImg fl pointer" @click="handleOrgDel(i.orgId)">
               <!-- <img src="@/../static/img/ins1.png" alt=""> -->
               <img :src="i.orgLogo" alt="">
             </div>
@@ -199,14 +199,14 @@ export default {
     },
     //在线联系
     onlineContat(orgAccount, orgName) {
-      if (!sessionStorage.userInfo) {
+      if (!this.getUserInfo()) {
         this.concatVisible = true;
         return;
       }
       this.$router.push({
         path: "/chat",
         query: {
-          fromUser: JSON.parse(sessionStorage.userInfo).account,
+          fromUser: JSON.parse(this.getUserInfo()).account,
           toUser: orgAccount,
           nickName: orgName
         }

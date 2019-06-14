@@ -125,7 +125,7 @@
                   <span class="mainColor">{{i.ratingNum}}</span>条评价</p>
                 <p style="text-align:center">
                   累计
-                  <span class="mainColor">{{i.transactionNum}}</span>笔交易
+                  <span class="mainColor">{{i.transactionNum}}</span>&nbsp;笔交易
                 </p>
               </div>
             </div>
@@ -375,7 +375,7 @@ export default {
     },
     //判断是否登录
     isLogin() {
-      if (!sessionStorage.userInfo) {
+      if (!this.getToken()) {
         this.islogin = false;
       }
     },
@@ -424,10 +424,6 @@ export default {
     },
     //提需求
     raiseDemand(i) {
-      // if (!sessionStorage.userInfo) {
-      //   this.$message.error("请先登录");
-      //   return;
-      // }
       this.isLogin();
       this.finaProVisible = true;
       this.financialProform.expectedDate = "";

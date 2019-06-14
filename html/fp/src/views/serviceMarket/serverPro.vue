@@ -152,7 +152,7 @@ export default {
     },
     //判断是否登录
     isLogin() {
-      if (!sessionStorage.userInfo) {
+      if (!this.getToken()) {
         this.islogin = false;
       }
     },
@@ -169,10 +169,6 @@ export default {
       }
     },
     demandRaise(i) {
-      // if (!sessionStorage.userInfo) {
-      //   this.$message.error("请先登录");
-      //   return;
-      // }
       this.isLogin();
       this.serverProVisible = true;
       this.serverProform.requireDetail = "";

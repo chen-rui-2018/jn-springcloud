@@ -121,7 +121,7 @@
                     <div class="left1">N</div>
                     <div class="right1">
                       <div class="rightTit color1">{{item.policyTitle}}</div>
-                      <p class="color2">{{item.briefContent}}</p>
+                      <p class="color2 policyCon">{{item.briefContent}}</p>
                       <div class="liBom clearfix">
                         <p class="fl color3">
                           <i class="el-icon-view"></i>&nbsp;{{item.readNum}}</p>
@@ -832,26 +832,30 @@ export default {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
   },
   methods: {
-     goLogin() {
+    goLogin() {
       window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
       this.$router.push({ path: "/login" });
     },
     //判断是否登录
     isLogin() {
-      if (!sessionStorage.userInfo) {
+      const token=this.getToken()
+      console.log(token)
+      if (!token) {
         this.islogin = false;
       }
     },
     //在线联系
     onlineContat(orgAccount, orgName) {
-      if (!sessionStorage.userInfo) {
+      const userInfo=this.getUserInfo()
+      // console.log(JSON.parse(userInfo))
+      if (!userInfo) {
         this.concatVisible = true;
         return;
       }
       this.$router.push({
         path: "/chat",
         query: {
-          fromUser: JSON.parse(sessionStorage.userInfo).account,
+          fromUser: JSON.parse(userInfo).account,
           toUser: orgAccount,
           nickName: orgName
         }
@@ -859,7 +863,7 @@ export default {
     },
     //企业招聘列表在线联系
     onlineContact(id) {
-      if (!sessionStorage.userInfo) {
+      if (!this.getUserInfo()) {
         this.concatVisible = true;
         return;
       }
@@ -872,7 +876,7 @@ export default {
           if (res.code == "0000") {
             // this.typeList = res.data;
             if (
-              JSON.parse(sessionStorage.userInfo).account == res.data.account
+              JSON.parse(this.getUserInfo()).account == res.data.account
             ) {
               this.$message.error("当前登录的账号跟聊天对象一样");
               return;
@@ -880,7 +884,7 @@ export default {
             this.$router.push({
               path: "/chat",
               query: {
-                fromUser: JSON.parse(sessionStorage.userInfo).account,
+                fromUser: JSON.parse(this.getUserInfo()).account,
                 toUser: res.data.account,
                 nickName: res.data.nickName
               }
@@ -1565,6 +1569,8 @@ export default {
   .policyCenter {
     .paging {
       overflow: hidden;
+      margin-top:50px;
+      padding-bottom:20px;
       .swiper-container {
         padding: 40px 0;
       }
@@ -1631,6 +1637,13 @@ export default {
               > span {
                 margin-left: 20px;
               }
+            }
+            .policyCon {
+              height: 50px;
+              display: -webkit-box;
+              -webkit-box-orient: vertical;
+              -webkit-line-clamp: 3;
+              overflow: hidden;
             }
           }
           //   .right1:hover {

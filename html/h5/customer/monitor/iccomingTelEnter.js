@@ -31,10 +31,10 @@ var initLevelId="1";
 var token="";
 $(function () {
 	//获取token
-	token=getCookie('Admin-Token');
+	token = $.cookie('Admin-Token');
 	if(token==undefined || token==''){
 		getServiceToken();
-		token=getCookie('Admin-Token');
+		token = $.cookie('Admin-Token');
 	}
 	//设置服务器连接ip和端口号
 	$("#serverIp").val(serviceIp);
@@ -54,19 +54,6 @@ function initLoginAccountInfo(){
 	$("#levelId").val(initLevelId);
 }
 
-//获取cookie
-function getCookie(cookieName) {
-    var strCookie = document.cookie;
-    var arrCookie = strCookie.split("; ");
-    for(var i = 0; i < arrCookie.length; i++){
-        var arr = arrCookie[i].split("=");
-        if(cookieName == arr[0]){
-            return arr[1];
-        }
-    }
-    return "";
-}
-
 //获取token
 function getServiceToken(){
 	$.ajax({
@@ -83,7 +70,7 @@ function getServiceToken(){
 			if (data.code === '0000') {
 				if (data.data !== null) {
 					console.log('================>authLogin请求返回：' + data.data)
-					document.cookie ="Admin-Token="+data.data+"; path=/";
+					$.cookie('Admin-Token',data.data,{ domain: 'bxgxq.com',path: '/' });
 				}
 			}
 		},

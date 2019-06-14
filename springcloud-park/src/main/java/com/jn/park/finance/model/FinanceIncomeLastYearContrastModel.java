@@ -43,4 +43,13 @@ public class FinanceIncomeLastYearContrastModel implements Serializable {
     public void setMonth(String month) {
         this.month = month;
     }
+
+    @Override
+    public String toString() {
+        return "FinanceIncomeLastYearContrastModel{" +
+                "lastYearIncome='" + lastYearIncome + '\'' +
+                ", income='" + income + '\'' +
+                ", month='" + month + '\'' +
+                '}';
+    }
 }

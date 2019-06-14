@@ -1,7 +1,6 @@
 ﻿//服务请求url
-//var service_url="http://112.94.22.222:8000/springcloud-park/";
-//var service_url="http://112.94.22.222:8000/springcloud-park/";
-var service_url="http://localhost/springcloud-park/";
+var service_url="http://112.94.22.222:8000/springcloud-park/";
+//var service_url="http://localhost/springcloud-park/";
 //获取token的Url
 var token_Url="http://112.94.22.222:8000/springcloud-app-system";
 
@@ -36,7 +35,7 @@ function getServiceToken(){
 			if (data.code === '0000') {
 				if (data.data !== null) {
 					console.log('================>authLogin请求返回：' + data.data)
-					$.cookie('Admin-Token',data.data,{ domain: 'bxgxq.com',path: '/' });
+					$.cookie('Admin-Token',data.data,{path: '/' });
 				}
 			}
 		},

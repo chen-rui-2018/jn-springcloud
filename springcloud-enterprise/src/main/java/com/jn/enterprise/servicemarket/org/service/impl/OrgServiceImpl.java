@@ -152,6 +152,8 @@ public class OrgServiceImpl implements OrgService {
      */
     private final static String REQUIRE_HANDLE_RESULT_SUCCESS = "1";
     private final static String ORG_APPLY_IS_CHECKING = "0";
+    private final static String TECHNOLOGY_FINANCE = "technology_finance";
+
 
     @ServiceLog(doAction = "查询服务机构列表")
     @Override
@@ -818,7 +820,8 @@ public class OrgServiceImpl implements OrgService {
         String productId = businessStatisticalParam.getProductId();
 
         TbServiceProductCriteria productCriteria = new TbServiceProductCriteria();
-        TbServiceProductCriteria.Criteria productCriteriac = productCriteria.createCriteria().andStatusEqualTo(STATUS_EFFECTIVE).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
+        TbServiceProductCriteria.Criteria productCriteriac = productCriteria.createCriteria().andStatusEqualTo(STATUS_EFFECTIVE).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID))
+                .andSignoryIdNotEqualTo(TECHNOLOGY_FINANCE).andOrgIdIsNotNull().andOrgIdNotEqualTo("");
 
         if(StringUtils.isNotEmpty(businessType)){
 

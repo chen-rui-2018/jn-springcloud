@@ -497,7 +497,6 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
 
-
     /**
      * 活动消息发送接口
      *
@@ -527,13 +526,13 @@ public class ActivityServiceImpl implements ActivityService {
             if (tbActivityApplyList != null && !tbActivityApplyList.isEmpty()) {
                 AddMessageModel messageTemplate = new AddMessageModel();
                 messageTemplate.setMessageTitle("园区活动提醒");
-                messageTemplate.setMessageContent(activity.getActiName()+"将于"+actiStartTime+"开始，请准时参加");
-                messageTemplate.setMessageSender("admin");
+                messageTemplate.setMessageContent("“" + activity.getActiName()+"” 将于 "+actiStartTime+" 开始，请您准时参加");
+                messageTemplate.setMessageSender("system");
                 messageTemplate.setMessageOneSort(0);
                 messageTemplate.setMessageOneSortName("个人动态");
-                messageTemplate.setMessageTowSort(11);
-                messageTemplate.setMessageTowSortName("园区活动");
-                messageTemplate.setCreatorAccount("admin");
+                messageTemplate.setMessageTowSort(1);
+                messageTemplate.setMessageTowSortName("园区通知");
+                messageTemplate.setCreatorAccount("system");
 
                 for (TbActivityApply apply : tbActivityApplyList) {
                     AddMessageModel addMessageModel = new AddMessageModel();

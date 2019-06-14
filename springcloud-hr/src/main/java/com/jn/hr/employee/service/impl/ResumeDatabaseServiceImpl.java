@@ -1,30 +1,31 @@
 package com.jn.hr.employee.service.impl;
+import java.util.Date;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
 import com.jn.common.util.excel.ExcelUtil;
+import com.jn.hr.common.enums.HrExceptionEnums;
 import com.jn.hr.common.enums.HrStatusEnums;
 import com.jn.hr.common.service.CommonService;
+import com.jn.hr.common.util.DepartMentUtil;
+import com.jn.hr.common.util.IDCardUtil;
+import com.jn.hr.common.util.SysDictKeyValueUtil;
 import com.jn.hr.common.util.ValidateUtil;
-import com.jn.hr.employee.dao.ResumeDatabaseMapper;
-import com.jn.hr.employee.dao.TbManpowerBackgroundInvestMapper;
-import com.jn.hr.employee.dao.TbManpowerDepartmentMapper;
-import com.jn.hr.employee.dao.TbManpowerResumeDatabaseMapper;
-import com.jn.hr.employee.entity.TbManpowerBackgroundInvest;
-import com.jn.hr.employee.entity.TbManpowerDepartment;
-import com.jn.hr.employee.entity.TbManpowerDepartmentCriteria;
-import com.jn.hr.employee.entity.TbManpowerResumeDatabase;
-import com.jn.hr.employee.enums.ApplicationResultEnum;
-import com.jn.hr.employee.enums.BackgroundInvestEnum;
-import com.jn.hr.employee.enums.EmployeeExceptionEnums;
+import com.jn.hr.employee.dao.*;
+import com.jn.hr.employee.entity.*;
+import com.jn.hr.employee.enums.*;
 import com.jn.hr.employee.model.*;
 import com.jn.hr.employee.service.ResumeDatabaseService;
 import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.SysPost;
 import com.jn.system.model.User;
+import com.jn.system.vo.SysDepartmentPostVO;
+import com.jn.system.vo.SysDictKeyValue;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,10 +35,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author dt
@@ -59,6 +57,8 @@ public class ResumeDatabaseServiceImpl implements ResumeDatabaseService {
     private TbManpowerDepartmentMapper tbManpowerDepartmentMapper;
     @Autowired
     private CommonService commonService;
+    @Autowired
+    private TbManpowerEntryManagementMapper tbManpowerEntryManagementMapper;
 
 
     @Override
@@ -176,6 +176,37 @@ public class ResumeDatabaseServiceImpl implements ResumeDatabaseService {
         database.setModifierAccount(user.getAccount());
         database.setApplicationResult(new Byte(ApplicationResultEnum.PASS.getCode()));
         tbManpowerResumeDatabaseMapper.updateByPrimaryKeySelective(database);
+        TbManpowerResumeDatabase resumeDatabase=tbManpowerResumeDatabaseMapper.selectByPrimaryKey(id);
+        //新增入职登记表
+        TbManpowerEntryManagement record=new TbManpowerEntryManagement();
+        record.setId(UUID.randomUUID().toString());
+        record.setJobNumber("");
+        record.setName(resumeDatabase.getName());
+        record.setExpectedEntryDate(null);
+        record.setConfirmEntryDate(null);
+        record.setIsEntryRegistration(Byte.parseByte(EntryRegistrationEnum.SEND.getCode()));
+        record.setStatus(Byte.parseByte(EntryStatusEnum.NOT_ENTRY.getCode()));
+        record.setRecordStatus(Byte.parseByte(HrStatusEnums.EFFECTIVE.getCode()));
+        record.setCreatorAccount(user.getAccount());
+        record.setCreatedTime(new Date());
+        record.setModifierAccount(user.getAccount());
+        record.setModifiedTime(new Date());
+        record.setSex(resumeDatabase.getSex());
+        record.setPhone(resumeDatabase.getPhone());
+        record.setMailbox(resumeDatabase.getMailbox());
+        record.setDepartmentId(resumeDatabase.getDepartmentId());
+        record.setDepartmentName(resumeDatabase.getDepartmentName());
+        record.setJobId("");
+        record.setJobName("");
+        record.setPostId(resumeDatabase.getJobId());
+        record.setPostName(resumeDatabase.getJobName());
+        record.setContractId("");
+        record.setContractName("");
+        record.setEmployeeType("");
+        record.setCertificateId(resumeDatabase.getCertificateId());
+        record.setCertificateType(resumeDatabase.getCertificateType());
+        record.setCertificateNumber(resumeDatabase.getCertificateNumber());
+        tbManpowerEntryManagementMapper.insert(record);
         logger.info("[简历库管理] 通过简历,id:{}", id);
     }
 
@@ -226,14 +257,72 @@ public class ResumeDatabaseServiceImpl implements ResumeDatabaseService {
         int i=0;
         StringBuffer sb=new StringBuffer();
         List<TbManpowerResumeDatabase> batchResult=new ArrayList<TbManpowerResumeDatabase>();
+        Result deptResult= systemClient.selectDeptByParentId("",true);
+        if(deptResult==null || !"0000".equals(deptResult.getCode()) || deptResult.getData()==null){
+            throw new JnSpringCloudException(HrExceptionEnums.DEPARTMENT_QUERY_ERRPR);
+        }
+        Map<String,String>  departMap=DepartMentUtil.convertDepartList((List<HashMap<String, Object>>)deptResult.getData());
+        Result<List<SysPost>> postResult=systemClient.getPostAll();
+        if(postResult==null || !"0000".equals(postResult.getCode()) || CollectionUtils.isEmpty(postResult.getData())){
+            throw new JnSpringCloudException(HrExceptionEnums.POST_QUERY_ERRPR);
+        }
+        List<SysPost>  postList=postResult.getData();
+        List<SysDictKeyValue>  certificateTypeList= commonService.queryDictList
+                ("employee","certificate_type");
+        List<SysDictKeyValue>  educationList= commonService.queryDictList
+                ("employee","education");
+        Set<String> phoneSet=new HashSet<String>();
+        Set<String> mailboxSet=new HashSet<String>();
+        Set<String> certificateNumberSet=new HashSet<String>();
+
+        Map<String,ResumeDatabase> phoneMap=new HashMap<String,ResumeDatabase>();
+        Map<String,ResumeDatabase> mailboxMap=new HashMap<String,ResumeDatabase>();
+        Map<String,ResumeDatabase> certificateNumberMap=new HashMap<String,ResumeDatabase>();
+
+        List<ResumeDatabase> databaseList= resumeDatabaseMapper.list(new ResumeDatabasePage());
+        databaseList.forEach(e->{
+            phoneMap.put(e.getPhone(),e);
+            mailboxMap.put(e.getMailbox(),e);
+            certificateNumberMap.put(e.getCertificateNumber(),e);
+        });
         for(Object result:resultList){
             i++;
             ResumeDatabase database= (ResumeDatabase) result;
-            String str=checkImportValue(database);
+            String str=checkImportValue(database,departMap,postList,certificateTypeList,educationList);
             if(!StringUtils.isBlank(str)){
                 sb.append("第"+i+"行:"+str+";");
                 continue;
             }
+
+            if(phoneSet.contains(database.getPhone())){
+                sb.append("第"+i+"行:"+database.getPhone()+"号码在当前EXCEL中重复;");
+                continue;
+            }
+            if(phoneMap.containsKey(database.getPhone())){
+                sb.append("第"+i+"行:"+database.getPhone()+"号码在简历库中已经存在记录;");
+                continue;
+            }
+            phoneSet.add(database.getPhone());
+
+            if(mailboxSet.contains(database.getMailbox())){
+                sb.append("第"+i+"行:"+database.getMailbox()+"邮箱在当前EXCEL中重复;");
+                continue;
+            }
+            if(mailboxMap.containsKey(database.getMailbox())){
+                sb.append("第"+i+"行:"+database.getMailbox()+"邮箱在简历库中已经存在记录;");
+                continue;
+            }
+
+            mailboxSet.add(database.getMailbox());
+            if(certificateNumberSet.contains(database.getCertificateNumber())){
+                sb.append("第"+i+"行:"+database.getCertificateNumber()+"证件号码在当前EXCEL中重复;");
+                continue;
+            }
+            if(certificateNumberMap.containsKey(database.getCertificateNumber())){
+                sb.append("第"+i+"行:"+database.getCertificateNumber()+"证件号码在简历库中已经存在记录;");
+                continue;
+            }
+            certificateNumberSet.add(database.getCertificateNumber());
 
             TbManpowerResumeDatabase tbdatabase=new TbManpowerResumeDatabase();
             BeanUtils.copyProperties(database,tbdatabase);
@@ -262,7 +351,8 @@ public class ResumeDatabaseServiceImpl implements ResumeDatabaseService {
         }
 
     }
-    private String checkImportValue(ResumeDatabase database){
+    private String checkImportValue(ResumeDatabase database,Map<String,String> departMap,List<SysPost> postList,
+                                    List<SysDictKeyValue> certificateTypeList,List<SysDictKeyValue> educationList){
         if(StringUtils.isBlank(database.getName())){
             return "姓名不能为空";
         }
@@ -288,7 +378,7 @@ public class ResumeDatabaseServiceImpl implements ResumeDatabaseService {
             return "部门名称不能为空";
         }
         if(StringUtils.isBlank(database.getJobName())){
-            return "职位名称不能为空";
+            return "岗位名称不能为空";
         }
         if(StringUtils.isBlank(database.getCertificateType())){
             return "证件类型不能为空";
@@ -296,6 +386,17 @@ public class ResumeDatabaseServiceImpl implements ResumeDatabaseService {
         if(StringUtils.isBlank(database.getCertificateNumber())){
             return "证件号不能为空";
         }
+
+        if("身份证".equals(database.getCertificateType())){
+            if(!IDCardUtil.validateIdCard(database.getCertificateNumber())){
+                return "证件号码错误";
+            }
+        }else{
+            if(!ValidateUtil.validCommonZjhm(database.getCertificateNumber())){
+                return "证件号码错误";
+            }
+        }
+
         if(StringUtils.isBlank(database.getEducationName())){
             return "学历名称不能为空";
         }
@@ -312,36 +413,46 @@ public class ResumeDatabaseServiceImpl implements ResumeDatabaseService {
             return "邮箱格式不正确";
         }
 
-        database.setJobId(commonService.queryDictValueByLable("employee","job"
-                ,database.getJobName()));
+
+        database.setJobId(SysDictKeyValueUtil.getPostIdByName(postList,database.getJobName()));
         if(StringUtils.isBlank(database.getJobId())){
-            return "职位名称错误";
+            return "岗位名称错误";
         }
 
-        database.setCertificateId(commonService.queryDictValueByLable("employee","certificate_type"
-                ,database.getCertificateType()));
+        database.setCertificateId(SysDictKeyValueUtil.getKeyByLabel(certificateTypeList,database.getCertificateType()));
 
         if(StringUtils.isBlank(database.getCertificateId())){
             return "证件类型错误";
         }
 
-        database.setEducationId(commonService.queryDictValueByLable("employee","education"
-                ,database.getEducationName()));
+        database.setEducationId(SysDictKeyValueUtil.getKeyByLabel(educationList,database.getEducationName()));
 
         if(StringUtils.isBlank(database.getEducationId())){
             return "学历名称错误";
         }
-
-        TbManpowerDepartmentCriteria example=new TbManpowerDepartmentCriteria();
-        TbManpowerDepartmentCriteria.Criteria criteria=example.createCriteria();
-        criteria.andDepartmentNameEqualTo(database.getDepartmentName());
-        List<TbManpowerDepartment> departments= tbManpowerDepartmentMapper.selectByExample(example);
-
-        if(CollectionUtils.isEmpty(departments)){
+        database.setDepartmentId(departMap.get(database.getDepartmentName()));
+        if(StringUtils.isEmpty(database.getDepartmentId())){
             return "部门名称错误";
         }
-        database.setDepartmentId(departments.get(0).getDepartmentId());
         return "";
+    }
+
+    @Override
+    public boolean checkPhoneExist(String phone,String id) {
+        ResumeDatabase info=resumeDatabaseMapper.selectByPhone(phone,id);
+        return info==null ? true:false;
+    }
+
+    @Override
+    public boolean checkMailboxExist(String mailBox,String id) {
+        ResumeDatabase info=resumeDatabaseMapper.selectByMailbox(mailBox,id);
+        return info==null ? true:false;
+    }
+
+    @Override
+    public boolean checkCertificateNumberExist(String certificateNumber,String id) {
+        ResumeDatabase info=resumeDatabaseMapper.selectByCertificateNumber(certificateNumber,id);
+        return info==null ? true:false;
     }
 
 }

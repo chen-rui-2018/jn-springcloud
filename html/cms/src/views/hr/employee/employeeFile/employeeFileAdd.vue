@@ -5,13 +5,13 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="归类：" prop="nodeName">
-              <el-input v-model="addForm.nodeName" disabled style="width: 200px" placeholder="" clearable/>
+              <el-input v-model.trim="addForm.nodeName" disabled style="width: 200px" placeholder="" clearable/>
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
             <el-form-item label="登记部门：" prop="regDepartment">
-              <el-input v-model="addForm.regDepartment" style="width: 200px" placeholder="请输入登记部门" clearable/>
+              <el-input v-model.trim="addForm.regDepartment" style="width: 200px" placeholder="请输入登记部门" clearable/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -20,7 +20,7 @@
 
           <el-col :span="12">
             <el-form-item label="文号：" prop="symbol">
-              <el-input v-model="addForm.symbol" style="width: 200px" placeholder="请输入文号" clearable/>
+              <el-input v-model.trim="addForm.symbol" style="width: 200px" placeholder="请输入文号" clearable/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -28,13 +28,13 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="题名：" prop="titleName">
-              <el-input v-model="addForm.titleName" style="width: 200px" placeholder="请输入题名" clearable/>
+              <el-input v-model.trim="addForm.titleName" style="width: 200px" placeholder="请输入题名" clearable/>
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
             <el-form-item label="责任人：" prop="personLiable">
-              <el-input v-model="addForm.personLiable" style="width: 200px" placeholder="请输入责任人" clearable/>
+              <el-input v-model.trim="addForm.personLiable" disabled style="width: 200px" placeholder="请输入责任人" clearable/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -42,7 +42,7 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="备注：" prop="remark">
-              <el-input v-model="addForm.remark" type="textarea" style="width: 200px"/>
+              <el-input v-model.trim="addForm.remark" type="textarea" style="width: 200px"/>
             </el-form-item>
           </el-col>
 
@@ -84,8 +84,8 @@ export default {
       rules: {
         regDepartment: [{ required: true, message: '请输入登记部门', trigger: 'blur' }, { validator: checkName, trigger: 'blur' }],
         symbol: [{ required: true, message: '请输入文号', trigger: 'blur' }],
-        titleName: [{ required: true, message: '请输入题名', trigger: 'blur' }],
-        personLiable: [{ required: true, message: '请输入责任人', trigger: 'blur' }, { validator: checkName, trigger: 'blur' }]
+        titleName: [{ required: true, message: '请输入题名', trigger: 'blur' }]/*,
+        personLiable: [{ required: true, message: '请输入责任人', trigger: 'blur' }, { validator: checkName, trigger: 'blur' }]*/
       },
       addForm: {
         classId: '',
@@ -182,6 +182,7 @@ export default {
       this.title = query.title
       this.addForm.classId = query.classId
       this.addForm.nodeName = query.nodeName
+      this.addForm.personLiable = localStorage.getItem('userName')
       if (query.fileId) {
         this.addForm.fileId = query.fileId
         getEmployeeFile(query.fileId).then(res => {

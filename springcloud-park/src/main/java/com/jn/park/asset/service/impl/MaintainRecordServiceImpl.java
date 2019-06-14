@@ -6,6 +6,7 @@ import com.jn.park.asset.dao.TbAssetMaintainRecordMapper;
 import com.jn.park.asset.entity.TbAssetMaintainRecord;
 import com.jn.park.asset.enums.AssetStatusEnums;
 import com.jn.park.asset.model.MaintainManageModel;
+import com.jn.park.asset.model.MaintainRecordModel;
 import com.jn.park.asset.service.MaintainRecordService;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
@@ -32,15 +33,14 @@ public class MaintainRecordServiceImpl implements MaintainRecordService {
 
     /**
      * 新增维保记录
-     * @param maintainId
-     * @param message
-     * @param imgUrl
+     * @param user
+     * @param maintainRecordModel
      * @return
      */
     @Override
     @ServiceLog(doAction = "新增维保记录")
-    public Integer addRecord(User user,String assetNumber, String message, String imgUrl) {
-        MaintainManageModel maintain = maintainManageDao.getMaintain(assetNumber);
+    public Integer addRecord(User user, MaintainRecordModel maintainRecordModel) {
+        MaintainManageModel maintain = maintainManageDao.getMaintain(maintainRecordModel.getAssetNumber());
         if (maintain != null){
             TbAssetMaintainRecord tbAssetMaintainRecord = new TbAssetMaintainRecord();
             tbAssetMaintainRecord.setId(UUID.randomUUID().toString());
@@ -50,8 +50,8 @@ public class MaintainRecordServiceImpl implements MaintainRecordService {
             tbAssetMaintainRecord.setTypeId(maintain.getTypeId());
             tbAssetMaintainRecord.setAssetType(maintain.getAssetType());
             tbAssetMaintainRecord.setMaintenanceTime(maintain.getMaintenanceTime());
-            tbAssetMaintainRecord.setMessage(message);
-            tbAssetMaintainRecord.setImgUrl(imgUrl);
+            tbAssetMaintainRecord.setMessage(maintainRecordModel.getMessage());
+            tbAssetMaintainRecord.setImgUrl(maintainRecordModel.getImgUrl());
             tbAssetMaintainRecord.setRecordStatus(Byte.parseByte(AssetStatusEnums.EFFECTIVE.getCode()));
             tbAssetMaintainRecord.setCreatorAccount(user.getAccount());
             tbAssetMaintainRecord.setCreateTime(new Date());

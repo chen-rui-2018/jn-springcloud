@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
  */
 public class ValidateUtil {
 
+
     public static boolean isMobile(String phoneNumber){
         if(StringUtils.isBlank(phoneNumber)){
             return false;
@@ -32,4 +33,13 @@ public class ValidateUtil {
         String regexp="^[1-9][0-9]{4,14}$";
         return Pattern.compile(regexp).matcher(qq).matches();
     }
+
+    public static boolean validCommonZjhm(String zjhm){
+        if(StringUtils.isBlank(zjhm)){
+            return false;
+        }
+        String regexp="^\\w{5,18}$";
+        return Pattern.compile(regexp).matcher(zjhm).matches();
+    }
+
 }

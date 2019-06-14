@@ -233,7 +233,7 @@ public interface DataUploadService {
      * @param multipartFile
      * @return
      */
-    int importData(MultipartFile multipartFile, String formTime,String fillId,String modelId);
+    int importData(MultipartFile multipartFile, String formTime,String fillId,String modelId,User user);
 
     /**
      * 科技园查询接口

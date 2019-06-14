@@ -1,5 +1,7 @@
 <template>
-  <div class="portalIndex">
+  <div
+    :class="{'h-100': $store.state.isMobile}"
+    class="portalIndex">
     <div class="portalIndexImg" v-if="$store.state.hiddenNav">
       <div class="header" id="header" :class="{'headerw':isCenter||showFF}">
         <div class="headerContainer clearfix">
@@ -12,9 +14,9 @@
               <i class="el-icon-bell" style="font-size:20px"></i>
             </router-link> -->
             <!-- <span v-if="isLogin" style="margin-right:10px">您好！{{accoutInfo}}</span> -->
-            <div class="search pointer">
+            <!-- <div class="search pointer" v-if="luyouString.indexOf($route.name) == -1">
               <i class="el-icon-search" @click="show4=true" style="font-size:20px"></i>
-            </div>
+            </div> -->
             <user-info></user-info>
             <!-- <div class="navlogin">
               <router-link to="/parkNotice" class="" v-if="isLogin">
@@ -35,9 +37,6 @@
                 <router-link to="/investment" class="router-link" :class="{'ru-active':$route.path == '/investment'}">招商引资</router-link>
               </li>
               <li>
-                <router-link to="" class="router-link" :class="{'ru-active':$route.path == ''}">智慧党建</router-link>
-              </li>
-              <li>
                 <router-link to="/enterpriseservice" class="router-link" :class="{'ru-active':$route.path == '/enterpriseservice'}">企业服务</router-link>
               </li>
             </ul>
@@ -54,12 +53,15 @@
         <div class="checkAll ct color1 pointer">查看全部</div>
         </el-card>
       </div> -->
-      <div class="search_box" id="search_box" :class="{'searchbox':showFF}" @mouseleave="show4=!show4">
+      <!-- @mouseleave="show4=!show4" -->
+      <div class="search_box" id="search_box" :class="{'searchbox':showFF}" @mouseleave="show4=!show4" >
         <el-collapse-transition>
-          <div v-show="show4">
+          <div v-show="show4" style="width:100%">
             <div class="transition-box">
-              <el-input placeholder="请输入内容" v-model="searchData" class="input-with-select">
-                <el-button slot="append" icon="el-icon-search">搜索 </el-button>
+              <el-input placeholder="请输入内容" v-model="searchData">
+                <template slot="append">
+                  <el-button icon="el-icon-search">搜索 </el-button>
+                </template>
               </el-input>
             </div>
           </div>
@@ -68,7 +70,12 @@
     </div>
 
     <!--    主体内容开始-->
-    <router-view></router-view>
+    <div
+      :class="{'h-100': $store.state.isMobile}"
+      style="position:relative;z-index: 0">
+      <router-view></router-view>
+    </div>
+
     <!--    主体内容结束-->
   </div>
 </template>
@@ -76,11 +83,12 @@
   import swiper from "swiper";
   import userInfo from './common/userInfoData'
   export default {
-     components: {
+    components: {
       userInfo
     },
     data() {
       return {
+        luyouString:'portalIndex,enterpriseservice,investment,home,messageCenter',
         showMes:false,
         // sousuo: false,
         show1: false,
@@ -101,7 +109,7 @@
     },
     computed: {
       isCenter() {
-        const list = 'portalIndex,enterpriseservice,investment,serMatHp,tfindex,actiCenter,incubatorEnterprises,academicExchange,policyCenter,recruitmentList';
+        const list = 'portalIndex,enterpriseservice,investment,serMatHp,tfindex,actiCenter,incubatorEnterprises,compassView,declarationCenter,talentsService,academicExchange,policyCenter,recruitmentList,profileDetails';
         return this.$route.matched.some(item => {
           if(item.name){
             return list.indexOf(item.name) == -1
@@ -150,16 +158,16 @@
         this.show1 = false;
         // },500)
       },
-      // handleChangeName(val) {
-      //   console.log(val);
-      //   if(val=='two'){
-      //     this.sw='tw'
-      //   } else if(val=='three'){
-      //     this.sw='th'
-      //   } else{
-      //     this.sw='fir'
-      //   }
-      // },
+      handleChangeName(val) {
+        console.log(val);
+        if(val=='two'){
+          this.sw='tw'
+        } else if(val=='three'){
+          this.sw='th'
+        } else{
+          this.sw='fir'
+        }
+      },
       swiperinit() {
         var mySwiper = new swiper(".swiper-container", {
           direction: "horizontal", // 垂直切换选项
@@ -283,49 +291,6 @@
     display: inline-block;
   }
   .portalIndex {
-
-    .portalCon{
-      .portalNotice,
-      .policyGuide,
-      .popularActi,
-      .districtGardens,
-      .enterpriseinfo,
-      .enterprisesPark {
-        opacity: 0;
-      }
-    }
-    .enterPark {
-      li {
-        opacity: 0;
-      }
-    }
-    .bottom {
-      animation: fadeInUp 2s ease forwards;
-    }
-    .bottom1 {
-      animation: fadeInUp 2s ease 0.5s forwards;
-    }
-    .bottom2 {
-      animation: fadeInUp 2s ease 1s forwards;
-    }
-    .bottom3 {
-      animation: fadeInUp 1s ease 1.5s forwards;
-    }
-    .bottom4 {
-      animation: fadeInUp 1s ease 2s forwards;
-    }
-    .bottom5 {
-      animation: fadeInUp 1s ease 2.5s forwards;
-    }
-    .bottom6 {
-      animation: fadeInUp 1s ease 3s forwards;
-    }
-    .bottom7 {
-      animation: fadeInUp 1s ease 3.5s forwards;
-    }
-    .bottom8 {
-      animation: fadeInUp 1s ease 4s forwards;
-    }
     .portalIndexImg {
       position: fixed;
       z-index: 99;
@@ -364,20 +329,25 @@
           }
         }
         .ru-active{
-            color: #00a041;
-          }
+          color: #00a041;
+        }
       }
       .search_box {
         background: rgba(0, 0, 0, 0.3);
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        width:100%;
         .el-input-group {
-          position: relative;
-          left: 50%;
-          transform: translateX(-50%);
+          // position: relative;
+          // left: 50%;
+          // transform: translateX(-50%);
           border-radius: 28px;
-          width: 42%;
+          overflow: hidden;
+          width: 50%;
           margin: 43px 0;
           .el-input {
-            width: 94px;
+            // width: 94px;
           }
           .el-input__inner:focus {
             border-color: #00a041;
@@ -387,8 +357,6 @@
             border-radius: 28px;
           }
           .el-input-group__append {
-            /* border-top-left-radius: 0;
-          border-bottom-left-radius: 0; */
             background: #00a041;
             color: #fff;
             right: 58px;
@@ -420,4 +388,3 @@
     }
   }
 </style>
-

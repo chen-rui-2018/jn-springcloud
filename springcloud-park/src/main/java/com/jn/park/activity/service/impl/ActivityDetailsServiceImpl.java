@@ -6,6 +6,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
+import com.jn.park.activity.ApplyStatusEnum;
 import com.jn.park.activity.dao.ActivityDetailsMapper;
 import com.jn.park.activity.dao.TbActivityApplyMapper;
 import com.jn.park.activity.dao.TbActivityMapper;
@@ -19,11 +20,13 @@ import com.jn.park.activity.model.ActivityPagingParam;
 import com.jn.park.activity.model.Comment;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
+import com.jn.user.enums.RecordStatusEnum;
 import com.jn.user.model.UserExtensionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.xxpay.common.util.DateUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,11 +83,13 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
             return  new ActivityDetailVO();
         }
         ActivityDetail activityDetail=list.get(0);
+        //通过活动id统计活动报名人数
+        long applyNum = getApplyNum(activityId);
+        activityDetail.setApplyNum(applyNum+"");
         ActivityDetailVO activityDetailVO=new ActivityDetailVO();
         activityDetailVO.setActivityDetail(activityDetail);
         //根据活动id查询点赞信息
         List<TbParkLike> activityLikeInfo = getActivityLikeInfo(activityId);
-        int minLikeNum=0;
         if (activityLikeInfo.isEmpty() || StringUtils.isBlank(account)) {
             //当前用户没有点赞
             activityDetailVO.setAccountIsLike(false);
@@ -117,8 +122,54 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
         applyCountdown(activityId, account, activityDetailVO);
         //更新园区活动的阅读人数
         updateActivityViews(activityId, activityDetail.getActiViews());
+        //设置活动报名显示状态
+        setActivityApplyShow(activityDetailVO);
         //把活动详情封装到result中返回前端
         return  activityDetailVO;
+    }
+
+    /**
+     * 根据活动id获取活动报名成功人数
+     * @param activityId
+     * @return
+     */
+    private long getApplyNum(String activityId) {
+        TbActivityApplyCriteria example=new TbActivityApplyCriteria();
+        example.createCriteria().andActivityIdEqualTo(activityId)
+                .andApplyStatusEqualTo(ApplyStatusEnum.APPLY_SUCCESS.getValue())
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        return tbActivityApplyMapper.countByExample(example);
+    }
+
+    /**
+     * 设置活动报名展示状态
+     * @param activityDetailVO
+     */
+    private void setActivityApplyShow(ActivityDetailVO activityDetailVO) {
+        //是否可报名  0：否  1：是
+        String isApply="1";
+        //活动状态1草稿 2报名中 3活动结束4活动取消
+        String activityStatus="2";
+        long sysTemTime =Long.valueOf(activityDetailVO.getSysTemTime().replaceAll("[-\\s:]", "")) ;
+        long applyEndTime=Long.valueOf(activityDetailVO.getActivityDetail().getApplyEndTime().replaceAll("[-\\s:]", ""));
+
+        //设置活动报名显示状态
+        if(activityDetailVO.getApplySuccess()
+                && StringUtils.equals(activityDetailVO.getActivityDetail().getIsApply(),isApply)
+                && StringUtils.equals(activityDetailVO.getActivityDetail().getActiStatus(), activityStatus)
+                && applyEndTime>sysTemTime){
+            //报名成功，且活动为报名中，允许报名，报名截止晚于系统当前时间,则展示取消报名
+            activityDetailVO.setActivityApplyShow("2");
+        }else if(!activityDetailVO.getApplySuccess()
+                && StringUtils.equals(activityDetailVO.getActivityDetail().getIsApply(),isApply)
+                && StringUtils.equals(activityDetailVO.getActivityDetail().getActiStatus(), activityStatus)
+                && applyEndTime>sysTemTime){
+            //没有报名，活动为报名中，允许报名，报名截止晚于系统当前时间,则展示快速报名
+            activityDetailVO.setActivityApplyShow("1");
+        }else{
+            //停止报名
+            activityDetailVO.setActivityApplyShow("0");
+        }
     }
 
     /**
@@ -173,11 +224,14 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
     @ServiceLog(doAction = "获取活动点评信息")
     @Override
     public PaginationData<List<Comment>> getCommentInfo(ActivityPagingParam activityPagingParam, String loginAccount, Boolean isPage){
-        Page<Object> objects=null;
+        com.github.pagehelper.Page<Object> objects = null;
         try {
             if(isPage){
                 //默认查询前15条
                 objects = PageHelper.startPage(activityPagingParam.getPage(), activityPagingParam.getRows() == 0 ? 15 : activityPagingParam.getRows(), true);
+            }else{
+                //不分页默认查询前15条
+                objects = PageHelper.startPage(1, 15, true);
             }
             //获取第一层级评论
             List<String>parentIds=new ArrayList<>(16);

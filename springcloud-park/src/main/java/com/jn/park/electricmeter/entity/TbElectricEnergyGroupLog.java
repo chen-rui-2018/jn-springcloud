@@ -11,9 +11,6 @@ public class TbElectricEnergyGroupLog implements Serializable {
     /*@ApiModelProperty("规则Id")*/
     private String ruleId;
 
-    /*@ApiModelProperty("项目id")*/
-    private String projectId;
-
     /*@ApiModelProperty("企业id")*/
     private String companyId;
 
@@ -66,14 +63,6 @@ public class TbElectricEnergyGroupLog implements Serializable {
 
     public void setRuleId(String ruleId) {
         this.ruleId = ruleId == null ? null : ruleId.trim();
-    }
-
-    public String getProjectId() {
-        return projectId;
-    }
-
-    public void setProjectId(String projectId) {
-        this.projectId = projectId == null ? null : projectId.trim();
     }
 
     public String getCompanyId() {
@@ -186,7 +175,6 @@ public class TbElectricEnergyGroupLog implements Serializable {
         TbElectricEnergyGroupLog other = (TbElectricEnergyGroupLog) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getRuleId() == null ? other.getRuleId() == null : this.getRuleId().equals(other.getRuleId()))
-            && (this.getProjectId() == null ? other.getProjectId() == null : this.getProjectId().equals(other.getProjectId()))
             && (this.getCompanyId() == null ? other.getCompanyId() == null : this.getCompanyId().equals(other.getCompanyId()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
@@ -207,7 +195,6 @@ public class TbElectricEnergyGroupLog implements Serializable {
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getRuleId() == null) ? 0 : getRuleId().hashCode());
-        result = prime * result + ((getProjectId() == null) ? 0 : getProjectId().hashCode());
         result = prime * result + ((getCompanyId() == null) ? 0 : getCompanyId().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
@@ -231,7 +218,6 @@ public class TbElectricEnergyGroupLog implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", ruleId=").append(ruleId);
-        sb.append(", projectId=").append(projectId);
         sb.append(", companyId=").append(companyId);
         sb.append(", recordStatus=").append(recordStatus);
         sb.append(", creatorAccount=").append(creatorAccount);

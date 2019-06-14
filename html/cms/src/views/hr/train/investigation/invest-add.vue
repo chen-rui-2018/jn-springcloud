@@ -2,9 +2,9 @@
   <el-card>
     <!-- 标题 -->
     <el-tabs v-model="activeName">
-      <el-tab-pane label="编辑调研" name="first" />
-      <el-tab-pane label="发放调研" name="second" />
-      <el-tab-pane label="调研结果" name="third" />
+      <el-tab-pane label="编辑调研" name="first"/>
+      <el-tab-pane :disabled="true" label="发放调研" name="second"/>
+      <el-tab-pane :disabled="true" label="调研结果" name="third"/>
     </el-tabs>
     <!-- 试题名称 -->
     <ExamTitle ref="examTitle" :is-add="true" />
@@ -122,7 +122,8 @@ export default {
           if (latestView) {
             this.$router.push('invest-analysis')
           } else {
-            this.$router.push('/')
+            // this.$router.push('/')
+            this.$router.push('invest-analysis')
           }
         }
       })

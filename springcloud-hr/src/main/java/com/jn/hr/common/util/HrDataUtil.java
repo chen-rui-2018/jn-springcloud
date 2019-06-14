@@ -55,6 +55,22 @@ public class HrDataUtil {
 	}
 
 	/**
+	 * 获取指定日期的星期
+	 * @param num1
+	 * @param num2
+	 * @return
+	 */
+	 public static String getWeek(Date date){
+		String[] weeks = {"星期日","星期一","星期二","星期三","星期四","星期五","星期六"};
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		int week_index = cal.get(Calendar.DAY_OF_WEEK) - 1;
+		if(week_index<0){
+		week_index = 0;
+		} 
+		return weeks[week_index];
+	}
+	/**
 	 * 获取指定日期当天23:59:59
 	 * 
 	 * @param time
@@ -100,6 +116,12 @@ public class HrDataUtil {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		return sdf.parse(dateStr);
 	}
+	
+	// 将字符串转为date时间
+	public static Date conversionDate(String dateStr) throws ParseException{
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+		return sdf.parse(dateStr);
+	}
 
 	public static Date getDateMonth(String dateStr) throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
@@ -118,7 +140,7 @@ public class HrDataUtil {
 
 		return date;
 	}
-	
+
 	public static Date formatConversionMinute(String dateStr) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		Date date = null;
@@ -132,7 +154,6 @@ public class HrDataUtil {
 		return date;
 	}
 
-	
 	/**
 	 * 获取某月的第一天和最后一天
 	 * 
@@ -152,7 +173,6 @@ public class HrDataUtil {
 		calendar.setTime(date);
 		// calendar.add(Calendar.MONTH, -1);
 		Date firstDate = calendar.getTime();
-
 
 		calendar.add(Calendar.MONTH, 1);
 		calendar.set(Calendar.DATE, 1);
@@ -185,7 +205,7 @@ public class HrDataUtil {
 			return Math.abs(v2 - v1) / 1000;
 		}
 	}
-	
+
 	// 获取上个月时间
 	public static Date getLastdayMonth(String time) {
 
@@ -225,7 +245,7 @@ public class HrDataUtil {
 		String dayBefore = new SimpleDateFormat("yyyy-MM-dd").format(c.getTime());
 		return dayBefore;
 	}
-	
+
 	public static Date getBeforeDay(Date date) {
 		Calendar c = Calendar.getInstance();
 
@@ -235,7 +255,7 @@ public class HrDataUtil {
 
 		return c.getTime();
 	}
-	
+
 	public static String getDayBefore(Date date) {
 		Calendar c = Calendar.getInstance();
 
@@ -246,7 +266,7 @@ public class HrDataUtil {
 		String dayBefore = new SimpleDateFormat("yyyy-MM").format(c.getTime());
 		return dayBefore;
 	}
-	
+
 	/***
 	 * 求两个字符串的相似度
 	 * 
@@ -340,17 +360,19 @@ public class HrDataUtil {
 		} else {
 			// 多选题
 			if (answer.length() < standardAnswer.length()) {
-				// 判断answerArr中的字符是否全在standardAnswerArr中如果是就得一半分
-				char[] answerArr = answer.toCharArray();
-				// 标志，一旦有一个字符不在standardAnswerArr中 就变为 0,不得分
-				int flag = 1;
-				for (int i = 0; i < answerArr.length; i++) {
-					if (standardAnswer.indexOf(String.valueOf(answerArr[i])) == -1) {
-						flag = 0;
+				if (answer.length() > 0) {
+					// 判断answerArr中的字符是否全在standardAnswerArr中如果是就得一半分
+					char[] answerArr = answer.toCharArray();
+					// 标志，一旦有一个字符不在standardAnswerArr中 就变为 0,不得分
+					int flag = 1;
+					for (int i = 0; i < answerArr.length; i++) {
+						if (standardAnswer.indexOf(String.valueOf(answerArr[i])) == -1) {
+							flag = 0;
+						}
 					}
-				}
-				if (flag == 1) {
-					newScore = score / 2;
+					if (flag == 1) {
+						newScore = score / 2;
+					}
 				}
 			} else if (answer.length() == standardAnswer.length()) {
 				// 判断answerArr中的字符是否全在standardAnswerArr中 如果是就得全分

@@ -130,7 +130,7 @@ public class ShiroConfig {
         MySessionManager mySessionManager = new MySessionManager();
         mySessionManager.setSessionDAO(redisSessionDAO());
         mySessionManager.setSessionIdCookie(sessionIdCookie());
-        mySessionManager.setGlobalSessionTimeout(shiroRedisSession);
+        mySessionManager.setGlobalSessionTimeout(-1000L);
         return mySessionManager;
     }
 

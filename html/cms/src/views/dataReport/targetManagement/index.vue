@@ -1,6 +1,6 @@
 <template>
   <div class="target-management">
-    <div class="target-management-l" @contextmenu.prevent="rightClick">
+    <div class="target-management-l target-tree-auto" @contextmenu.prevent="rightClick">
       <div class="tree-filter-bg bg-gray">
         <el-input
           v-model="filterText"
@@ -313,12 +313,18 @@ export default {
       })
     },
     sortTree(tree, key) {
-      tree.sort((a, b) => {
-        if (a.children && a.children.length > 0) {
-          this.sortTree(a.children, key)
+      for (let i = 0, length = tree.length; i < length; i++) {
+        for (let j = i + 1; j < length; j++) {
+          if (tree[i][key] > tree[j][key]) {
+            const temp = tree[j]
+            tree[j] = tree[i]
+            tree[i] = temp
+          }
         }
-        return a[key] - b[key]
-      })
+        if (tree[i].children && tree[i].children.length > 0) {
+          this.sortTree(tree[i].children, key)
+        }
+      }
     },
     addFormType(index) {
       this.formData.inputFormatModels.splice(index + 1, 0, deepClone(this.originalInputFormatModels))
@@ -448,16 +454,16 @@ export default {
       //  隐藏菜单栏
       this.menuVisible = false
     },
-    nodeClick(node) {
+    nodeClick(node, treeNode) {
       //  隐藏菜单栏
-      this.menuVisible = false
-      this.loadingTarget = true
       const id = node.id
       if (this.formData.targetId === id) {
         return
       }
+      this.menuVisible = false
+      this.loadingTarget = true
       this.currentTarget = ''
-      this.parentName = node.text
+      this.parentName = treeNode.parent.data.text
       this.formData.parentId = id
       this.$_get(`${this.GLOBAL.enterpriseUrl}data/target/getTargetInfo`, { targetId: id }).then(data => {
         if (data.code === '0000') {
@@ -467,7 +473,10 @@ export default {
               formData[key] = data.data[key]
             }
           }
-          formData.inputFormatModels.forEach(item => { item.required = !!item.required })
+          formData.inputFormatModels.forEach(item => { item.required = !!Number(item.required) })
+          formData.inputFormatModels.sort((a, b) => {
+            return a['orderNumber'] - b['orderNumber']
+          })
           formData.targetType = formData.targetType.toString()
         } else {
           this.$message.error(data.result)
@@ -493,6 +502,8 @@ export default {
     background-color: #fff;
     .target-management-l {
       border-top: 1px solid $gray;
+      max-height: 600px;
+      overflow: auto;
       .tree-filter-bg {
         padding: 4px;
       }

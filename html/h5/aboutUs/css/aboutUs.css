@@ -1,0 +1,47 @@
+body{
+  margin:0;
+}
+a{
+  text-decoration: none;
+  color:#454545;
+}
+a:visited{
+  text-decoration: none; 
+  color:#454545;
+}
+html{
+  height: 100%;
+  background-color: #f1f1f1;
+}
+.aboutUs .logo{
+  width:76px;
+  margin:50px auto;
+}
+.logo img{
+  width:100%;
+}
+.detail ul{
+  color:#454545;
+  margin: 0;
+  font-size: 15px;
+  list-style:none;
+  background-color: #fff;
+  padding: 0 14px;
+}
+.detail ul li a{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 11px 0;
+}
+.detail ul li i{
+
+  font-size: 13px;
+}
+.copyright{
+  color:#686868;
+  text-align: center;
+  font-size: 12px;
+  padding: 0 40px;
+  padding-top: 146px;
+}

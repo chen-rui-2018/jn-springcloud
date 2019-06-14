@@ -35,23 +35,12 @@ public interface AssetArticleLeaseOrdersService {
      */
     LeaseOrdersModel getPayOrders(String id);
 
-    /**
-     * 确认归还
-     * @param id
-     */
-    void returnArticle(String id);
-
-    /**
-     * 确认交付
-     * @param id
-     */
-    void deliveryArticle(String id);
 
     /**
      * 归还
      * @param id
      */
-    void giveBack(String id);
+    AssetArticleLeaseOrdersModel giveBack(String id);
 
     /**
      * 返回物品租赁历史列表
@@ -62,18 +51,25 @@ public interface AssetArticleLeaseOrdersService {
     PaginationData<List<AssetArticleLeaseOrdersModel>> getArticleLeaseOrdersList(String account, Page page);
 
     /**
-     * 创建支付订单
-     * @param orderId
-     * @param channelId
-     * @param userAccount
-     * @return
-     */
-    Result<PayOrderRsp> createPayOrder(String orderId, String channelId, BigDecimal paySum, String userAccount);
-
-    /**
      * 支付回调
      * @param payOrderNotify
      * @return
      */
     Result articlePayCallBack(PayOrderNotify payOrderNotify);
+
+
+    /**
+     * 物品租借是否逾期,修改状态
+     */
+    void updateAssetArticleStatus();
+
+    /**
+     * 创建支付订单
+     * @param orderId
+     * @param channelId
+     * @param paySum
+     * @param userAccount
+     * @return
+     */
+    Result<PayOrderRsp> createArticlePay(String orderId, String channelId, BigDecimal paySum, String userAccount);
 }

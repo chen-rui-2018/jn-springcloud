@@ -27,7 +27,7 @@ public class RoomOrdersModel implements Serializable {
     private String roomId;
 
     @ApiModelProperty(value = "房间名称",example = "101")
-    private String roomName;
+    private String name;
 
     @ApiModelProperty(value = "楼层",example = "1")
     private String floor;
@@ -38,8 +38,17 @@ public class RoomOrdersModel implements Serializable {
     @ApiModelProperty(value = "楼宇名称",example = "1号楼")
     private String towerName;
 
-    @ApiModelProperty(value = "房间图片")
+    @ApiModelProperty(value = "图片集合")
+    private List<String> image;
+
+    @ApiModelProperty(value = "实景图片",example = "实景图片")
     private String imgUrl;
+
+    @ApiModelProperty(value = "流程平面图",example = "流程平面图")
+    private String floorPlan;
+
+    @ApiModelProperty(value = "户型图",example = "户型图")
+    private String roomPlan;
 
     @ApiModelProperty(value = "面积(平方米)",example = "500")
     private String roomArea;
@@ -119,12 +128,12 @@ public class RoomOrdersModel implements Serializable {
         this.roomId = roomId;
     }
 
-    public String getRoomName() {
-        return roomName;
+    public String getName() {
+        return name;
     }
 
-    public void setRoomName(String roomName) {
-        this.roomName = roomName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getFloor() {
@@ -157,6 +166,30 @@ public class RoomOrdersModel implements Serializable {
 
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
+    }
+
+    public List<String> getImage() {
+        return image;
+    }
+
+    public void setImage(List<String> image) {
+        this.image = image;
+    }
+
+    public String getFloorPlan() {
+        return floorPlan;
+    }
+
+    public void setFloorPlan(String floorPlan) {
+        this.floorPlan = floorPlan;
+    }
+
+    public String getRoomPlan() {
+        return roomPlan;
+    }
+
+    public void setRoomPlan(String roomPlan) {
+        this.roomPlan = roomPlan;
     }
 
     public String getRoomArea() {
@@ -309,11 +342,14 @@ public class RoomOrdersModel implements Serializable {
                 "id='" + id + '\'' +
                 ", orderId='" + orderId + '\'' +
                 ", roomId='" + roomId + '\'' +
-                ", roomName='" + roomName + '\'' +
+                ", name='" + name + '\'' +
                 ", floor='" + floor + '\'' +
                 ", towerId='" + towerId + '\'' +
                 ", towerName='" + towerName + '\'' +
+                ", image=" + image +
                 ", imgUrl='" + imgUrl + '\'' +
+                ", floorPlan='" + floorPlan + '\'' +
+                ", roomPlan='" + roomPlan + '\'' +
                 ", roomArea='" + roomArea + '\'' +
                 ", houseType='" + houseType + '\'' +
                 ", leasePrice=" + leasePrice +

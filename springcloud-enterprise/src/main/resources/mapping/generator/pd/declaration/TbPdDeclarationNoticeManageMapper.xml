@@ -21,6 +21,7 @@
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="brief_introduct" jdbcType="VARCHAR" property="briefIntroduct" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -84,7 +85,7 @@
     id, title_name, range_id, range_name, subordinate_platform_id, subordinate_platform_name, 
     deadline, time_node, is_roof_placement, contact_phone_configuration, announcement_content, 
     browse_times, status, file_url, record_status, creator_account, created_time, modifier_account, 
-    modified_time
+    modified_time, brief_introduct
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationNoticeManageCriteria" resultMap="BaseResultMap">
     select
@@ -123,14 +124,16 @@
       contact_phone_configuration, announcement_content, 
       browse_times, status, file_url, 
       record_status, creator_account, created_time, 
-      modifier_account, modified_time)
+      modifier_account, modified_time, brief_introduct
+      )
     values (#{id,jdbcType=VARCHAR}, #{titleName,jdbcType=VARCHAR}, #{rangeId,jdbcType=VARCHAR}, 
       #{rangeName,jdbcType=VARCHAR}, #{subordinatePlatformId,jdbcType=VARCHAR}, #{subordinatePlatformName,jdbcType=VARCHAR}, 
       #{deadline,jdbcType=TIMESTAMP}, #{timeNode,jdbcType=VARCHAR}, #{isRoofPlacement,jdbcType=TINYINT}, 
       #{contactPhoneConfiguration,jdbcType=VARCHAR}, #{announcementContent,jdbcType=VARCHAR}, 
       #{browseTimes,jdbcType=INTEGER}, #{status,jdbcType=TINYINT}, #{fileUrl,jdbcType=VARCHAR}, 
       #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{briefIntroduct,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationNoticeManage">
     insert into tb_pd_declaration_notice_manage
@@ -192,6 +195,9 @@
       <if test="modifiedTime != null">
         modified_time,
       </if>
+      <if test="briefIntroduct != null">
+        brief_introduct,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -250,6 +256,9 @@
       </if>
       <if test="modifiedTime != null">
         #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="briefIntroduct != null">
+        #{briefIntroduct,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -319,6 +328,9 @@
       <if test="record.modifiedTime != null">
         modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.briefIntroduct != null">
+        brief_introduct = #{record.briefIntroduct,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -344,7 +356,8 @@
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      brief_introduct = #{record.briefIntroduct,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -406,6 +419,9 @@
       <if test="modifiedTime != null">
         modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="briefIntroduct != null">
+        brief_introduct = #{briefIntroduct,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -428,7 +444,8 @@
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
-      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      brief_introduct = #{briefIntroduct,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

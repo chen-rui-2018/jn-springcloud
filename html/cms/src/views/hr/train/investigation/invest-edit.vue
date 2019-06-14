@@ -1,7 +1,7 @@
 <template>
   <el-card>
     <!-- 标题 -->
-    <el-tabs v-model="activeName">
+    <el-tabs v-model="activeName" @tab-click="tabsCLick">
       <el-tab-pane label="编辑调研" name="first"/>
       <el-tab-pane label="发放调研" name="second"/>
       <el-tab-pane label="调研结果" name="third"/>
@@ -228,6 +228,17 @@ export default {
         }
       })
     },
+    tabsCLick(item) {
+      if (this.activeName === 'first') {
+        this.$router.push({ path: 'invest-edit', query: { id: this.$route.query.id }})
+      }
+      if (this.activeName === 'second') {
+        this.$router.push({ path: 'invest-give', query: { id: this.$route.query.id }})
+      }
+      if (this.activeName === 'third') {
+        this.$router.push({ path: 'invest-result', query: { id: this.$route.query.id }})
+      }
+    },
     // 2.鼠标移入移除
     changeActive($event) {
       $event.currentTarget.className = 'examBlock bgColor'
@@ -329,7 +340,8 @@ export default {
           if (latestView) {
             this.$router.push('invest-analysis')
           } else {
-            this.$router.push('/')
+            // this.$router.push('/')
+            this.$router.push('invest-analysis')
           }
         }
       })
@@ -342,72 +354,72 @@ export default {
 </script>
 
 <style lang="scss"  scoped>
-.examBlock {
-  position: relative;
-  padding: 20px;
-  margin-bottom: 20px;
-  .editIcon {
-    text-align: right;
+  .examBlock {
+    position: relative;
+    padding: 20px;
     margin-bottom: 20px;
-  }
-  .showBtn {
-    position: absolute;
-    right: -57px;
-    top: 0;
-  }
-  .examType {
-    display: flex;
-    align-items: center;
-    i.add {
-      font-size: 30px;
-      color: #67c23a;
-      margin-right: 15px;
+    .editIcon {
+      text-align: right;
+      margin-bottom: 20px;
     }
-  }
-  .ptionIcon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding-top: 10px;
-    color: #999;
-    cursor: pointer;
-    i {
-      font-size: 20px;
+    .showBtn {
+      position: absolute;
+      right: -57px;
+      top: 0;
     }
-  }
-  .addOption {
-    width: 100%;
-  }
-  .operateBtn {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 120px;
-    height: 100%;
-    position: absolute;
-    right: 0;
-    top: 0;
-    background-color: #f5f5f5;
-    visibility: hidden;
-    i {
-      font-size: 22px;
+    .examType {
+      display: flex;
+      align-items: center;
+      i.add {
+        font-size: 30px;
+        color: #67c23a;
+        margin-right: 15px;
+      }
+    }
+    .ptionIcon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-top: 10px;
       color: #999;
-      margin: 15px 0;
       cursor: pointer;
+      i {
+        font-size: 20px;
+      }
+    }
+    .addOption {
+      width: 100%;
+    }
+    .operateBtn {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 120px;
+      height: 100%;
+      position: absolute;
+      right: 0;
+      top: 0;
+      background-color: #f5f5f5;
+      visibility: hidden;
+      i {
+        font-size: 22px;
+        color: #999;
+        margin: 15px 0;
+        cursor: pointer;
+      }
     }
   }
-}
-.editContent {
-  border-top: 1px dashed #ccc;
-  border-bottom: 1px dashed #ccc;
-  padding: 20px;
-}
-.bgColor {
-  background-color: #fafafa;
-  cursor: pointer;
-}
-.examBlock:hover .operateBtn {
-  visibility: visible;
-}
+  .editContent {
+    border-top: 1px dashed #ccc;
+    border-bottom: 1px dashed #ccc;
+    padding: 20px;
+  }
+  .bgColor {
+    background-color: #fafafa;
+    cursor: pointer;
+  }
+  .examBlock:hover .operateBtn {
+    visibility: visible;
+  }
 </style>

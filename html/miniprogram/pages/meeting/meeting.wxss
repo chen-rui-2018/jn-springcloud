@@ -1,45 +1,30 @@
 /* pages/meeting/meeting.wxss */
 
 /* 头部 搜索框 */
-.head{
-  display: flex;
-  align-items: center;
-  position: fixed;
-  /* top:0; */
-  width:100%;
-  margin-top: 51rpx;
-  padding: 33rpx 0 27rpx 34rpx;
-  background-color: #fff;
-  z-index: 200;
-}
+
 .head_scan{
-  font-size: 26rpx;
+  font-size: 46rpx;
   display: flex;
   align-items: center;
+  justify-content: center;
+  padding-right: 28rpx;
 }
-.head_scan text{
-  font-size: 39rpx;
-  padding-right: 22rpx;
-}
-.head_title{
-  font-size: 31rpx;
-  padding-left: 122rpx;
+.searchBox{
+  flex:1;
 }
 .search{
-  margin-top:151rpx;
-  background-color: #f5f5f5;
+  background-color: #f0f0f0;
   display: flex;
-  justify-content: center;
   width: 100%;
   position: fixed;
+  align-items: center;
 }
-.search text{
+.search .icon-search{
   position: absolute;
-  left:59rpx;
-  top:50rpx;
+  left:16%;
+  top:47rpx;
 }
 .search input{
-  width:91%;
   background-color: #fff;
   margin: 37rpx 0;
   padding:0 58rpx;
@@ -47,10 +32,12 @@
   box-shadow: 0px 2px 18px 0px 
     rgba(121, 121, 121, 0.15);
 }
-
+.center{
+  text-align: center;
+}
 /* 列表 */
 .meeting_list{
-  padding-top:274rpx;
+  padding-top:126rpx;
 }
 .meeting_main{
   background-color: #fff;

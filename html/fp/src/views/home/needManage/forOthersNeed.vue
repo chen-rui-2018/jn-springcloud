@@ -6,10 +6,13 @@
     </div>
     <div class="forothersneed_main">
       <div class="searh_tab">
-        <el-input placeholder="意向产品" v-model="sendData.intentProduct" class="input-with-select" clearable>
+        <span>意向产品：</span>
+        <el-input placeholder="请输入意向产品" v-model="sendData.intentProduct" class="input-with-select" clearable>
         </el-input>
-        <el-input placeholder="意向机构" v-model="sendData.intentOrg" class="input-with-select" clearable>
+        <span>意向机构：</span>
+        <el-input placeholder="请输入意向机构" v-model="sendData.intentOrg" class="input-with-select" clearable>
         </el-input>
+        <span>对接结果：</span>
         <el-select v-model="sendData.handleResult" placeholder="请选择对接结果" clearable >
           <el-option label="对接成功" value="1"></el-option>
           <el-option label="对接失败" value="2"></el-option>
@@ -25,7 +28,7 @@
           <el-table-column prop="orgName" label="意向机构" align="center" width="120"> </el-table-column>
           <el-table-column prop="businessArea" label="业务领域" align="center"> </el-table-column>
           <el-table-column prop="productName" label="意向产品" align="center"> </el-table-column>
-          <el-table-column prop="advisorName" label="意向顾问" align="center" width="100"> </el-table-column>
+          <el-table-column prop="advisorName" label="意向专员" align="center" width="100"> </el-table-column>
           <el-table-column prop="requireTime" label="提需求日期" align="center" width="120"> </el-table-column>
           <el-table-column prop="status" label="需求状态" align="center"> </el-table-column>
           <el-table-column prop="handleResult" label="对接结果" align="center" width="110"> </el-table-column>
@@ -162,7 +165,7 @@ export default {
           border-color: #00a041;
         }
         .el-input{
-          width: 25%;
+          width: 17%;
         }
         .el-select>.el-input{
           width:100%;

@@ -17,11 +17,12 @@
                   <li class="active_header" :class="{'liActiv':isActClass===true}" >首页</li>
                     <li @click='$router.push({path:"/serverOrg"})'> 服务机构</li>
                     <li @click='$router.push({path:"/serverPro"})'>服务产品</li>
-                    <li @click='$router.push({path:"/serverCon"})'>服务顾问</li>
+                    <li @click='$router.push({path:"/serverCon"})'>服务专员</li>
                     <li @click='$router.push({path:"/actiTrain"})'>活动培训</li>
                     <li @click='$router.push({path:"/aboutUs"})'>关于我们</li>
+                    <li @click='$router.push({path:"/register"})'>加入我们</li>
                 </div>
-                <div class="headerRight">
+                <div class="headerRight pr">
                   <div class="search" >
                     <i class="el-icon-search" style="font-size:20px" @click="show3=true"></i>
                   </div>
@@ -45,13 +46,13 @@
           <div v-if="show3">
             <div class="transition-box">
               <el-input placeholder="请输入内容" v-model="searchData" class="input-with-select">
-                <el-select v-model="select" slot="prepend" placeholder="产品" @visible-change="changeselectShow">
+                <el-select v-model="select" slot="prepend" placeholder="选择" @visible-change="changeselectShow">
                   <el-option label="机构" value="1"></el-option>
                   <el-option label="产品" value="2"></el-option>
-                  <el-option label="顾问" value="3"></el-option>
-                  <el-option label="活动" value="3"></el-option>
+                  <el-option label="专员" value="3"></el-option>
+                  <el-option label="活动" value="4"></el-option>
                 </el-select>
-                <el-button slot="append" icon="el-icon-search">搜索 </el-button>
+                <el-button slot="append" icon="el-icon-search" @click="goSearch">搜索 </el-button>
               </el-input>
             </div>
           </div>
@@ -77,9 +78,7 @@
     <div class="banner" ref="banner">
       <div class="swiper-container">
           <div class="swiper-wrapper">
-              <div class="swiper-slide"> <img src="@/../static/img/serMatHp.png" alt=""> </div>
-              <div class="swiper-slide"> <img src="@/../static/img/serMatHp.png" alt=""> </div>
-              <div class="swiper-slide"> <img src="@/../static/img/serMatHp.png" alt=""> </div>
+              <div class="swiper-slide" v-for="(item,index) in bannerList" :key="index"> <img :src="item.posterUrl" alt=""> </div>
           </div>
           <!-- 如果需要分页器 -->
           <div class="swiper-pagination"></div>
@@ -97,12 +96,6 @@
     </div>
     <div class="market_content"><!-- 版心 -->
       <div class="market_breadcrumb">
-          <!-- <el-breadcrumb separator="/">
-            <el-breadcrumb-item :to="{ path: '/' }">企业服务</el-breadcrumb-item>
-            <el-breadcrumb-item>
-              <a href="/">服务超市</a>
-            </el-breadcrumb-item>
-          </el-breadcrumb> -->
           <span class="pointer" @click="$router.push({path:'/enterpriseservice'})">企业服务</span>
           <span>/</span>
           <span class="mainColor">服务超市</span>
@@ -110,32 +103,27 @@
       <div class="market_navicon" ref="market_navicon2" data-class="allFade">
         <a href="javascript:;">
           <div class="nav_icon"><i class="iconfont icon-jigou2"></i></div>
-          <div class="nav_discribe"> <span>已注册买家<span class="">8929</span>个</span> </div>
+          <div class="nav_discribe"> <span>入住企业数<span class="">{{navData.comNum}}</span>个</span> </div>
           <div class="nav_todo"><span @click="$router.push({path:'/upgradeEnterprise'})">申请注册</span></div>
         </a>
         <a href="javascript:;">
           <div class="nav_icon"><i class="iconfont icon-jigou1"></i></div>
-          <div class="nav_discribe"> <span>已入驻机构 <span>1057</span>家</span> </div>
+          <div class="nav_discribe"> <span>已入住服务机构 <span>{{navData.orgNum}}</span>家</span> </div>
           <div class="nav_todo"><span>机构入驻</span></div>
         </a>
         <a href="javascript:;">
           <div class="nav_icon"><i class="iconfont icon-huodong"></i></div>
-          <div class="nav_discribe"> <span>累计举办活动<span>378</span>场</span> </div>
+          <div class="nav_discribe"> <span>累计举办活动<span>{{navData.activityNum}}</span>场</span> </div>
           <div class="nav_todo"><span @click='$router.push({path:"/actiTrain"})'>近期活动</span></div>
         </a>
         <a href="javascript:;">
           <div class="nav_icon"><i class="iconfont icon-jigou11"></i></div>
-          <div class="nav_discribe"> <span>已入驻顾问<span>3786</span>人</span> </div>
-          <div class="nav_todo" @click="isVisibility=true"><span>申请顾问</span></div>
-        </a>
-        <a href="javascript:;">
-          <div class="nav_icon"><i class="iconfont icon-shangwuqianbiqian"></i></div>
-          <div class="nav_discribe"> <span>已入驻投资人<span>956</span>人</span> </div>
-          <div class="nav_todo"><span @click="$router.push({path:'/roleCertifications/investorCertification'})">投资人入驻</span></div>
+          <div class="nav_discribe"> <span>已入住服务专员<span>{{navData.advisorNum}}</span>人</span> </div>
+          <div class="nav_todo" @click="isVisibility=true"><span>申请专员</span></div>
         </a>
       </div>
-      <!-- 申请顾问弹窗 -->
-      <el-dialog title="申请顾问" :visible.sync="isVisibility" center>
+      <!-- 申请专员弹窗 -->
+      <el-dialog title="申请专员" :visible.sync="isVisibility" center>
         <el-form :model="counselorform" label-width="80px">
           <el-form-item label="服务机构">
             <el-input v-model="counselorform.orgname" autocomplete="off" placeholder="请输入你要申请入住的机构"></el-input>
@@ -199,7 +187,7 @@
                   <div class="hot_name">{{item.productName}}</div>
                   <div class="hot_detail">
                     <span>机构  {{item.orgCount}}</span>
-                    <span>顾问  {{item.advisorCount}}</span>
+                    <span>专员  {{item.advisorCount}}</span>
                     <span>评价 {{item.ratingCount}}</span>
                   </div>
                   <div class="hot_price">
@@ -218,23 +206,22 @@
         <div class="partner_box">
           <div class="partner_list">
             <ul class="partner_list_ul">
-              <!-- <li  v-for="(item,index) in 18" :key="index"> <img src="../../assets/image/testsn.png" alt=""></li> -->
               <li  v-for="(item,index) in partnerLogo" :key="index" > <img :src="item.orgLogo" alt=""></li>
             </ul>
-            <ul class="partner_list_ul2" v-if="partnerLogo.length>18"></ul>
+            <ul class="partner_list_ul2" ></ul>
           </div>
         </div>
       </div>
-      <!-- 优质顾问 -->
+      <!-- 优质专员 -->
       <div class="counselor" ref="counselor2" data-class="allFade">
         <div class="counselor_title">
-          <span>优质顾问</span>
-          <span class="pointer">MORE<i class="iconfont icon-you"></i></span>
+          <span>优质专员</span>
+          <span class="pointer" @click="$router.push({path:'/serverCon'})">MORE<i class="iconfont icon-you"></i></span>
         </div>
         <div class="conselor_introduce">
           <ul class="conselor_tab clearfix">
             <li :class="{'conseloractive':domain === ''}" @click="changedomain('')">全部</li>
-            <li v-for="(counseloitem,counseloindex) in IndustryList" :key="counseloindex" :class="{'conseloractive':domain === counseloitem.id}" @click="changedomain(counseloitem.id)">{{counseloitem.preValue}}</li>
+            <li v-for="(counseloitem,counseloindex) in sliderData" :key="counseloindex" :class="{'conseloractive':domain === counseloitem.id}" @click="changedomain(counseloitem.id)">{{counseloitem.preValue}}</li>
           </ul>
           <div class="conselor_info">
             <ul>
@@ -354,14 +341,14 @@ export default {
       actiTypeList:[],
       actiListSlim:[],//最新活动
       hotActiveList:[],//热门活动
-      counselorList:[],//优质顾问
+      counselorList:[],//优质专员
       page:1,
       row:4,
-      typeId:"a29e14a21352473ebf26420ddffb1c60",//类型带确认
+      typeId:"org_activity",
       total:'',
       pageNum:'',
-      IndustryList:[],//顾问领域列表
-      domain:'',//顾问领域
+      IndustryList:[],//专员领域列表
+      domain:'',//专员领域
       teamIndustryList:[],//机构业务领域列表
       serviceOrgList:[],//机构列表
       isActive:"",//机构类别id
@@ -380,7 +367,9 @@ export default {
        menuShow:true,
        sliderData:[],
        sekectShow:false,
-       partnerLogo:[]
+       partnerLogo:[],
+       bannerList:[],
+       navData:{}
     };
   },
   filters: {
@@ -393,13 +382,12 @@ export default {
     this.$nextTick(() => {
       this.swiperInit()  
     })
-     
     this.getActiType()
     this.getNewActive()
     this.getHotActive()
-    //顾问领域列表、
+    //专员领域列表、
     this.getIndustryList()
-    //顾问列表
+    //专员列表
     this.getCounselorList()
     //机构业务领域
     this.getSelectTeamList()
@@ -409,13 +397,55 @@ export default {
     this.getRatingList()
     this.selectIndustryProductList()
     window.addEventListener('scroll', this.handleScroll)
-    this.scrollpartner()
+    this.getBannarList()
     this.getPartner()
+    // 图标数据
+    this.getNavData()
   },
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
   },
   methods: {
+    // 图标数据
+    getNavData(){
+      this.api.get({
+        url: "getDataStatistics",
+        data: { },
+        dataFlag: false,
+        callback: res=> {
+          if (res.code == "0000") {
+            this.navData=res.data
+          }
+        }
+      });
+    },
+    // 轮播图列表
+    getBannarList(){
+      this.api.get({
+        url: "getPromotionList",
+        data: {
+          issuePlatform:'1',
+          needPage:'1',
+          propagandaArea:'top',
+          propagandaType:'market_banner'
+        },
+        callback: res=>{
+          this.bannerList=res.data.rows
+        }
+      });
+    },
+    // 搜索
+    goSearch(){
+      if(this.select==='1'){
+        this.$router.push({path:'/serverOrg',query:{searchData:this.searchData}})
+      }else if(this.select==='2'){
+        this.$router.push({path:'/serverPro',query:{searchData:this.searchData}})
+      }else if(this.select==='3'){
+        this.$router.push({path:'/serverCon',query:{searchData:this.searchData}})
+      }else if(this.select==='4'){
+        this.$router.push({path:'/actiTrain',query:{searchData:this.searchData}})
+      }
+    },
     searchLeave() {
       if (this.sekectShow) {
         this.show3 = true
@@ -432,16 +462,14 @@ export default {
       let demo=document.querySelector('.partner_list');
       let demo2=document.querySelector('.partner_list_ul2');
       let demo1=document.querySelector('.partner_list_ul');
-      if(demo2){
-        demo2.innerHTML = demo1.innerHTML;
-      }
+          demo2.innerHTML = demo1.innerHTML;
       function Marquee(){
         if(demo.scrollTop>=demo1.offsetHeight){
           demo.scrollTop=0;
-          }
-          else{
-              demo.scrollTop=demo.scrollTop+1;
-          }
+        }
+        else{
+          demo.scrollTop=demo.scrollTop+1;
+        }
       }
       let MyMar=setInterval(Marquee,speed);
       demo.onmouseover=function(){clearInterval(MyMar)};
@@ -580,25 +608,27 @@ export default {
         },
         callback: function(res) {
           // console.log(res);
-          _this.hotActiveList = res.data.rows;
+          if(res.code==="0000"){
+            _this.hotActiveList = res.data.rows;
+          }
         }
       });
     },
-    // 获取顾问领域
+    // 获取专员领域
     getIndustryList(){
       let _this = this;
       this.api.get({
         url: "selectIndustryList",
         data: { },
         callback: function(res) {
-          // console.log(res);
+          // console.log(res)
           if (res.code == "0000") {
             _this.IndustryList = res.data.rows;
           }
         }
       });
     },
-    //改变顾问领域列表
+    //改变专员领域列表
     changedomain(domain){
       this.domain=domain
       this.getCounselorList()
@@ -620,7 +650,7 @@ export default {
         }
       });
     },
-    // 优质顾问列表
+    // 优质专员列表
     getCounselorList(){
       let _this = this;
       this.api.get({
@@ -677,8 +707,12 @@ export default {
           sortTypes:''
          },
         callback: function(res) {
-          // console.log(res);
+          if(res.code==='0000'){
             _this.partnerLogo = res.data.rows;
+            _this.$nextTick(()=>{
+              _this.scrollpartner()              
+            })
+          }
         }
       });
     },
@@ -695,7 +729,6 @@ export default {
           rows:10
          },
         callback: function(res) {
-          // console.log(res);
           _this.RatingList = res.data.rows;
            _this.$nextTick(()=>{
               _this.scrollList()
@@ -712,7 +745,6 @@ export default {
       
          },
         callback: function(res) {
-          // console.log(res);
           _this.sliderData = res.data;
         }
       });
@@ -1262,7 +1294,7 @@ export default {
           }
         }
       }
-      // 优质顾问
+      // 优质专员
       .counselor{
         margin-top: 73px;
         .counselor_title{
@@ -1488,10 +1520,9 @@ export default {
           }
           .comment_box{
             width: 100%;
-                  border: 1px solid #dedede;
+            border: 1px solid #dedede;
+            margin-top: 24px;
             .comment_list{
-              // margin-top: 33px;
-              // border: 1px solid #dedede;
               height: 572px;
               width:95%;
               overflow: hidden;

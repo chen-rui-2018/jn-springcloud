@@ -9,16 +9,21 @@
 		"postcss": true,
 		"minified": true,
 		"newFeature": true,
-		"autoAudits": false
+		"autoAudits": false,
+		"checkInvalidKey": true
 	},
 	"compileType": "miniprogram",
 	"libVersion": "2.4.2",
-	"appid": "wx816ec9e5713da036",
+	"appid": "wx5465894ef700cd7a",
 	"projectname": "miniprogram",
+	"cloudfunctionTemplateRoot": "",
 	"debugOptions": {
 		"hidedInDevtools": []
 	},
 	"isGameTourist": false,
+	"scripts": {},
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
 	"condition": {
 		"search": {
 			"current": -1,
@@ -33,52 +38,36 @@
 			"list": []
 		},
 		"game": {
-			"currentL": -1,
 			"list": []
 		},
 		"miniprogram": {
-			"current": 2,
+			"current": 3,
 			"list": [
 				{
 					"id": 0,
-					"name": "meeting",
-					"pathName": "pages/meeting/meetingRoomDetail/meetingRoomDetail",
-					"query": "id=b954a4ea-50fb-49f1-a85a-291b0ee44dc2",
+					"name": "我的爱车",
+					"pathName": "pages/home/maCar/maCar",
+					"query": "",
 					"scene": null
 				},
 				{
 					"id": 1,
-					"name": "预约",
-					"pathName": "pages/meeting/makeMeeting/makeMeeting",
-					"query": "meetingRoomId=b954a4ea-50fb-49f1-a85a-291b0ee44dc2&name=测试会议室",
-					"scene": 1001
-				},
-				{
-					"id": 2,
-					"name": "会议考勤",
-					"pathName": "pages/meeting/meetingAttendance/meetingAttendance",
+					"name": "缴费",
+					"pathName": "pages/home/payRecord/payRecord",
 					"query": "",
 					"scene": null
 				},
 				{
-					"id": 3,
-					"name": "组织部门",
-					"pathName": "pages/meeting/orgDepartment/orgDepartment",
+					"id": -1,
+					"name": "编辑车",
+					"pathName": "pages/home/aboutUs/aboutUs",
 					"query": "",
 					"scene": null
 				},
 				{
-					"id": 4,
-					"name": "组织人",
-					"pathName": "pages/meeting/orgPerson/orgPerson",
-					"query": "departmentId=a794452f-fad6-4697-afe1-e62542bd753a",
-					"scene": null
-				},
-				{
-					"id": 5,
-					"name": "参会人员",
-					"pathName": "pages/meeting/meetingPerson/meetingPerson",
-					"query": "",
+					"id": -1,
+					"name": "维保列表",
+					"pathName": "pages/index/maintenance/maintenance",
 					"scene": null
 				}
 			]

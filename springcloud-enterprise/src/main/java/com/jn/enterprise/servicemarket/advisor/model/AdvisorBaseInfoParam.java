@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -20,7 +21,7 @@ public class AdvisorBaseInfoParam implements Serializable {
     @ApiModelProperty(value = "机构Id(邀请链接有机构id)",required = true,example="1234")
     @NotNull(message="机构id不能为空")
     private String orgId;
-    @ApiModelProperty(value = "业务领域(从邀请信息中获取),可以有多个",required = true,example = "technology_finance")
+    @ApiModelProperty(value = "业务领域(从邀请信息中获取),可以有多个",required = true,example ="[technology_finance]")
     @NotNull(message="业务领域不能为空")
     private String[] businessAreas;
     @ApiModelProperty(value = "顾问账号",required = true,example = "wangsong")
@@ -28,6 +29,7 @@ public class AdvisorBaseInfoParam implements Serializable {
     private String advisorAccount;
     @ApiModelProperty(value = "从业年限",example ="10")
     @Pattern(regexp = "^([0-9]*)|([0-9]*)(\\.[0-9]{0,2})$",message = "workingYears:只能输入的数字和小数点")
+    @Size(max=60,message = "从业年限最大不能超过60年")
     private String workingYears;
     @ApiModelProperty(value = "毕业学校",example = "中南大学")
     private String graduatedSchool;
@@ -41,9 +43,9 @@ public class AdvisorBaseInfoParam implements Serializable {
     @Pattern(regexp = "[\\w!#$%&'*+/=?^_`{|}~-]+(?:\\.[\\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\\w](?:[\\w-]*[\\w])?\\.)+[\\w](?:[\\w-]*[\\w])?",
             message = "{email:'邮箱验证出错'}")
     private String contactEmail;
-    @ApiModelProperty(value = "执业资质",example = "高级律师证")
+    @ApiModelProperty(value = "执业资质",example = "高级注册会计师")
     private String practiceQualification;
-    @ApiModelProperty(value = "业务擅长",example = "打官司")
+    @ApiModelProperty(value = "业务擅长",example = "代理记账")
     private String goodAtBusiness;
     @ApiModelProperty(value = "个人简介",example = "我是xxx")
     private String personalProfile;

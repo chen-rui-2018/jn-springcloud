@@ -2,13 +2,13 @@
   <div class="invest-result">
     <el-card>
       <!-- 标题 -->
-      <el-tabs v-model="activeName">
+      <el-tabs v-model="activeName" @tab-click="tabsCLick">
         <el-tab-pane label="编辑调研" name="first"/>
         <el-tab-pane label="发放调研" name="second"/>
         <el-tab-pane label="调研结果" name="third"/>
       </el-tabs>
       <!-- Tab -->
-      <el-tabs v-model="tabName" type="border-card">
+      <el-tabs v-model="tabName" type="border-card" @tab-click="handleTab">
         <el-tab-pane class="total" label="汇总统计" name="total">
           <!-- 汇总统计 -->
           <div v-for="(item,index) in examList" :key="index" class="examList">
@@ -212,6 +212,7 @@ export default {
       tableData: [],
       listQuery: {
         projectId: this.$route.query.id,
+        // researchMethod: this.$route.query.researchMethod,
         name: '',
         page: 1,
         rows: 10
@@ -242,6 +243,10 @@ export default {
     },
     // 单人统计
     init2() {
+      // if (this.$route.query.researchMethod === 1) {
+      //   // 匿名时
+      //   return false
+      // }
       api('hr/train/surveyResultList', this.listQuery).then(res => {
         if (res.data.code === '0000') {
           this.tableData = res.data.data.rows
@@ -255,6 +260,22 @@ export default {
     search() {
       this.listQuery.page = 1
       this.init2()
+    },
+    tabsCLick(item) {
+      if (this.activeName === 'first') {
+        this.$router.push({ path: 'invest-edit', query: { id: this.$route.query.id }})
+      }
+      if (this.activeName === 'second') {
+        this.$router.push({ path: 'invest-give', query: { id: this.$route.query.id }})
+      }
+      if (this.activeName === 'third') {
+        this.$router.push({ path: 'invest-result', query: { id: this.$route.query.id }})
+      }
+    },
+    handleTab() {
+      if (this.tabName === 'single') {
+        this.isDetail = false
+      }
     },
     // 表格分页功能
     handleCurrentChange(val) {
@@ -277,53 +298,53 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.invest-result {
-  font-size: 14px;
-  .total {
-    padding: 20px;
-    .examList {
-      margin-bottom: 20px;
-    }
-    .el-progress /deep/ .el-progress__text {
-      display: none;
-    }
-  }
-  .single {
-    padding: 20px;
-    min-height: 260px;
-    .search {
-      margin-bottom: 20px;
-    }
-    .see {
-      color: #409eff;
-      cursor: pointer;
-    }
-  }
-  .modeTit {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    height: 26px;
-    span {
-      display: inline-block;
-      width: 108px;
-      font-size: 14px;
-      font-weight: bold;
-    }
-    .line {
-      display: inline-block;
-      width: 100%;
-      height: 2px;
-      background-color: #f5f5f5;
-    }
-  }
-  .modeCon {
-    padding: 20px;
+  .invest-result {
     font-size: 14px;
-    margin-bottom: 36px;
-    .examList {
-      margin-bottom: 20px;
+    .total {
+      padding: 20px;
+      .examList {
+        margin-bottom: 20px;
+      }
+      .el-progress /deep/ .el-progress__text {
+        display: none;
+      }
+    }
+    .single {
+      padding: 20px;
+      min-height: 260px;
+      .search {
+        margin-bottom: 20px;
+      }
+      .see {
+        color: #409eff;
+        cursor: pointer;
+      }
+    }
+    .modeTit {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      height: 26px;
+      span {
+        display: inline-block;
+        width: 108px;
+        font-size: 14px;
+        font-weight: bold;
+      }
+      .line {
+        display: inline-block;
+        width: 100%;
+        height: 2px;
+        background-color: #f5f5f5;
+      }
+    }
+    .modeCon {
+      padding: 20px;
+      font-size: 14px;
+      margin-bottom: 36px;
+      .examList {
+        margin-bottom: 20px;
+      }
     }
   }
-}
 </style>

@@ -27,7 +27,7 @@ import java.util.List;
  */
 @Api(tags = "服务连接-管理")
 @RestController
-@RequestMapping("/connect/manage")
+@RequestMapping("/guest/connect/manage")
 public class ServiceConnectController extends BaseController {
     protected User getUser(){
         return  (User) SecurityUtils.getSubject().getPrincipal();
@@ -38,11 +38,9 @@ public class ServiceConnectController extends BaseController {
     @ControllerLog(doAction = "获取连接")
     @ApiOperation(value = "获取连接",notes = "获取连接以及图片", httpMethod = "GET")
     @GetMapping(value = "/getImgAndAddress")
-    @RequiresPermissions("/connect/manage/getImgAndAddress")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "entranceNameCode",value = "名称编号",dataType = "String",paramType = "query")
-    })
-    public Result<FindAllMessageListVo> getImgAndAddress(String entranceNameCode){
+    /*@RequiresPermissions("/connect/manage/getImgAndAddress")*/
+    @ApiImplicitParam(name = "entranceNameCode",value = "名称编号",dataType = "String",paramType = "query")
+    public Result<ServiceConnectModel> getImgAndAddress(String entranceNameCode){
         // TODO: 2019/4/19
 
         ServiceConnectModel serviceConnectModel=serviceConnectService.getImgAndAddress(entranceNameCode);

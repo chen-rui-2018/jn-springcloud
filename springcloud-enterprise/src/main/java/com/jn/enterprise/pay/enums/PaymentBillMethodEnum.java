@@ -13,6 +13,7 @@ public enum PaymentBillMethodEnum implements CodeAndMsg {
     BILL_STATE_QIAN_BAO("QIAN_BAO","1"),
     BILL_STATE_WX_("WX","2"),
     BILL_STATE_ALIPAY_("ALIPAY","3"),
+    BILL_STATE_UNDER("5","线下支付"),
     ;
 
 

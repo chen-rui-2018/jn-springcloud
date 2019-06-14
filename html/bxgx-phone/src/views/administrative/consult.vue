@@ -23,7 +23,7 @@
         title="留言成功，是否跳到上一页"
         theme="android"
         @on-cancel="onCancel"
-        @on-confirm="this.$router.go(-1)"
+        @on-confirm="$router.go(-1)"
        >
         </confirm>
       </div>
@@ -56,7 +56,7 @@ export default {
   },
   methods: {
     sumbmit () {
-      this.api.get({
+      this.api.post({
         url: 'spMessage',
         data: this.messageform,
         callback: res => {
@@ -84,7 +84,7 @@ export default {
     height: 100vh;
     background-color: #f5f5f5;
     .consult_main{
-      padding-top:26px;
+      // padding-top:26px;
       .consult_cont{
         background-color: #fff;
         padding: 0 31px;
@@ -142,7 +142,7 @@ export default {
           display: inline-block;
           background-color: #ecfcf2;
           border-radius: 41px;
-          border: solid 1px #009966;
+          border: solid 1.5px #009966;
           padding:26px 312px;
           color:#07ab50;
           // margin: 38px 37px;

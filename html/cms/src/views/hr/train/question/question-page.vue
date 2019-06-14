@@ -9,7 +9,7 @@
             <p>{{ loginData.projectNote }}</p>
           </div>
           <!-- 入口 -->
-          <div v-if="isEntry" class="entry">
+          <div v-show="isEntry&&loginData.researchMethod===2" class="entry">
             <div class="form">
               <el-row type="flex" justify="center">
                 <el-col :span="10" :xs="16">
@@ -136,6 +136,11 @@ export default {
       api('hr/train/quest/loginInvestiageQuest', data).then(res => {
         if (res.data.code === '0000') {
           this.loginData = res.data.data
+          if (this.loginData.researchMethod === 1) {
+            // 匿名时
+            this.userData = {}
+            this.save('userData')
+          }
         } else {
           this.$message.error(res.data.result)
         }
@@ -186,7 +191,8 @@ export default {
           if (latestView) {
             this.$router.push('invest-analysis')
           } else {
-            this.$router.push('/')
+            // this.$router.push('/')
+            this.$router.push('invest-analysis')
           }
         }
       })

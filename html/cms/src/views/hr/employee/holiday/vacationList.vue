@@ -5,10 +5,15 @@
         <el-input v-model="listQuery.name" maxlength="20" placeholder="请输入姓名" class="filter-item" clearable @keyup.enter.native="handleFilter" />
       </el-form-item>
       <el-form-item label="部门">
-        <el-select v-model="listQuery.departmentId" placeholder="请选择" clearable style="width: 150px" class="filter-item">
-          <el-option label="请选择" value="" />
-          <el-option v-for="item in departmentList" :key="item.departmentId" :label="item.departmentName" :value="item.departmentId" />
-        </el-select>
+        <el-cascader
+          ref="departRef"
+          :options="departmentList"
+          v-model="currentDepartmentIds"
+          change-on-select
+          placeholder="请选择"
+          clearable
+          @change="handleChangeDepartment"
+        />
       </el-form-item>
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
     </el-form>
@@ -70,8 +75,11 @@
 
 <script>
 import {
-  api, getDepartMents, updateVacation
+  postapi, updateVacation
 } from '@/api/hr/holidayList'
+import {
+  api
+} from '@/api/axios'
 export default {
   filters: {
     formatVacationType(val) {
@@ -127,13 +135,18 @@ export default {
     this.initList()
   },
   methods: {
+    handleChangeDepartment(value) {
+      this.listQuery.departmentId = this.currentDepartmentIds[this.currentDepartmentIds.length - 1]
+    },
     initDepartMents() {
-      getDepartMents().then(res => {
-        if (res.data.code === '0000') {
+      this.departmentListLoading = true
+      api(`${this.GLOBAL.systemUrl}system/sysDepartment/findDepartmentAllByLevel`, '', 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.departmentList = res.data.data
         } else {
           this.$message.error(res.data.result)
         }
+        this.departmentListLoading = false
       })
     },
     handleFilter() {
@@ -143,7 +156,10 @@ export default {
     initList() {
       console.log('查询。。。')
       this.listLoading = true
-      api('hr/holidayRule/inquireVacationManage', this.listQuery).then(res => {
+      if (!this.listQuery.departmentId) {
+        this.listQuery.departmentId = ''
+      }
+      postapi('hr/holidayRule/inquireVacationManage', this.listQuery).then(res => {
         if (res.data.code === '0000') {
           this.vacationList = res.data.data.rows
           this.total = res.data.data.total

@@ -441,27 +441,11 @@ public class TrainInvestigateServiceImpl implements TrainInvestigateService {
 					tbHrinvestiage.getStatus());
 			throw new JnSpringCloudException(TrainExceptionEnums.JOIN_MANAGEMENT_ERROR, "参加调研分析失败，当前调研未开始/已结束");
 		}
-		// if (tbHrinvestiage.getEffectiveTimeStart().compareTo(new Date()) > 0)
-		// {
-		// logger.warn("参加调研分析失败，当前时间未在调研时间范围内,project:{},start~end:{}",
-		// tbHrinvestiage.getProjectId(),
-		// tbHrinvestiage.getEffectiveTimeStart() + "~" +
-		// tbHrinvestiage.getEffectiveTimeEnd());
-		// throw new
-		// JnSpringCloudException(TrainExceptionEnums.JOIN_MANAGEMENT_ERROR);
-		// }
-		// if (tbHrinvestiage.getEffectiveTimeEnd().compareTo(new Date()) < 0) {
-		// logger.warn("参加调研分析失败，当前时间未在调研时间范围内,project:{},start~end:{}",
-		// tbHrinvestiage.getProjectId(),
-		// tbHrinvestiage.getEffectiveTimeStart() + "~" +
-		// tbHrinvestiage.getEffectiveTimeEnd());
-		// throw new
-		// JnSpringCloudException(TrainExceptionEnums.JOIN_MANAGEMENT_ERROR);
-		// }
 
 		TbManpowerTrainResearchSet researchSet = tbManpowerTrainResearchSetMapper
 				.selectByPrimaryKey(tbHrinvestiage.getProjectId());
-		if (null != researchSet) {
+		if (null != researchSet
+				&& InvestigateStatusEnums.REAL_NAME.getCode().equals(researchSet.getResearchMethod().toString())) {
 			if (researchSet.getIsShowName().toString().equals(InvestigateStatusEnums.DISPLAY.getCode())) {
 				if (StringUtils.isBlank(investigate.getName())) {
 					logger.warn("参加调研分析失败，姓名为必填项,project:{}", tbHrinvestiage.getProjectId());
@@ -497,7 +481,6 @@ public class TrainInvestigateServiceImpl implements TrainInvestigateService {
 			logger.warn("当前调研未设置,project:{}", tbHrinvestiage.getProjectId());
 			throw new JnSpringCloudException(TrainExceptionEnums.JOIN_MANAGEMENT_ERROR, "参加调研分析失败，当前调研未发放");
 		}
-
 	}
 
 	/**
@@ -632,7 +615,6 @@ public class TrainInvestigateServiceImpl implements TrainInvestigateService {
 	 */
 	@Override
 	@ServiceLog(doAction = "调研页面展示功能")
-	@Transactional(rollbackFor = Exception.class)
 	public ResearchSet loginInvestiage(String projectId) {
 		ResearchSet researchSet = new ResearchSet();
 		TbManpowerTrainInvestiga tbHrinvestiage = selectQuestInvestigate(projectId);
@@ -646,6 +628,7 @@ public class TrainInvestigateServiceImpl implements TrainInvestigateService {
 			throw new JnSpringCloudException(TrainExceptionEnums.RESEARCH_SET_NOT_EXIST, "登陆调研失败，当前调研未发放");
 		}
 		BeanUtils.copyProperties(tbResearchSet, researchSet);
+
 		logger.info("调研页面信息查询成功,projectId:{}", researchSet.getProjectId());
 		return researchSet;
 	}
@@ -659,7 +642,6 @@ public class TrainInvestigateServiceImpl implements TrainInvestigateService {
 	 */
 	@Override
 	@ServiceLog(doAction = "汇总统计功能")
-	@Transactional(rollbackFor = Exception.class)
 	public List<AnswerVo> questionAnswerList(String projectId) {
 		List<AnswerVo> answerVos = questAnswerList(projectId);
 		return answerVos;
@@ -672,8 +654,16 @@ public class TrainInvestigateServiceImpl implements TrainInvestigateService {
 	 * @return
 	 */
 	@Override
-	@ServiceLog(doAction = "分页查询调研结果")
+	@ServiceLog(doAction = "单人统计功能")
 	public PaginationData<List<SurveyResultVo>> surveyResultList(SurveyResultPage surveyResultPage) {
+		// 查询当前项目设置详情
+		TbManpowerTrainResearchSet tbManpowerTrainQuestResearchSet = tbManpowerTrainResearchSetMapper
+				.selectByPrimaryKey(surveyResultPage.getProjectId());
+		if (null != tbManpowerTrainQuestResearchSet && InvestigateStatusEnums.HIDE_NAME.getCode()
+				.equals(tbManpowerTrainQuestResearchSet.getResearchMethod().toString())) {
+			logger.warn("[调研分析] 查看单人统计页面失败,当前项目为匿名统计项目,projectId:{}", surveyResultPage.getProjectId());
+			throw new JnSpringCloudException(TrainExceptionEnums.INTERFACE_NOT_EXIT, "匿名统计项目无单人统计界面");
+		}
 		Page<Object> objects = PageHelper.startPage(surveyResultPage.getPage(), surveyResultPage.getRows());
 		List<SurveyResultVo> noticeList = surveyResultMapper.list(surveyResultPage);
 		for (SurveyResultVo notice : noticeList) {
@@ -749,7 +739,14 @@ public class TrainInvestigateServiceImpl implements TrainInvestigateService {
 				tbAnswerInfo.setId(tbResult.getId());
 			}
 			if (StringUtils.isBlank(tbAnswerInfo.getJobNumber())) {
-				tbAnswerInfo.setJobNumber(resultAnswerAdd.getJobNumber());
+				String jobNumber = resultAnswerAdd.getJobNumber();
+				if (StringUtils.isBlank(jobNumber)) {
+					jobNumber = resultAnswerAdd.getPhone();
+				}
+				if (StringUtils.isBlank(jobNumber)) {
+					jobNumber = resultAnswerAdd.getName();
+				}
+				tbAnswerInfo.setJobNumber(jobNumber);
 			}
 			if (StringUtils.isBlank(tbAnswerInfo.getTitleId())) {
 				tbAnswerInfo.setTitleId(answer.getTitleId());
@@ -867,8 +864,8 @@ public class TrainInvestigateServiceImpl implements TrainInvestigateService {
 				BeanUtils.copyProperties(tbTitleOption, titleOption);
 				titleOptionList.add(titleOption);
 			}
-
 			question.setTitleOptionList(titleOptionList);
+
 			List<InvestigateAnswerAdd> answerList = new ArrayList<InvestigateAnswerAdd>();
 			InvestigateAnswerAdd answerAdd = new InvestigateAnswerAdd();
 			answerAdd.setTitleId(tbQuestion.getTitleId());

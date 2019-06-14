@@ -88,6 +88,8 @@ public class AdvisorServiceImpl implements AdvisorService {
         com.github.pagehelper.Page<Object> objects = null;
         if(needPage){
             objects = PageHelper.startPage(advisorListParam.getPage(), advisorListParam.getRows() == 0 ? 15 : advisorListParam.getRows(), true);
+        }else{
+            objects = PageHelper.startPage(1, 100, true);
         }
         AdvisorQueryConditions queryConditions=new AdvisorQueryConditions();
         BeanUtils.copyProperties(advisorListParam, queryConditions);
@@ -96,7 +98,7 @@ public class AdvisorServiceImpl implements AdvisorService {
             queryConditions.setSortTypes(ServiceSortTypeEnum.INTEGRATE.getCode());
         }
         if(ServiceSortTypeEnum.INTEGRATE.getCode().equals(queryConditions.getSortTypes())) {
-            //todo：从数据字典表获取综合排序各个因素的权重并给相应元素赋值  yangph
+            //
         }
         List<AdvisorListInfo> advisorListInfoList=advisorMapper.getServiceConsultantList(queryConditions);
         return new PaginationData(advisorListInfoList, objects == null ? 0 : objects.getTotal());
@@ -114,6 +116,9 @@ public class AdvisorServiceImpl implements AdvisorService {
         AdvisorDetailsVo advisorDetailsVo=new AdvisorDetailsVo();
         //1.获取用户基本信息
         AdvisorServiceInfo advisorServiceInfo= getAdvisorInfoByAccount(advisorAccount,approvalStatus);
+        if(advisorServiceInfo==null){
+            return null;
+        }
         //设置顾问基础信息
         advisorDetailsVo.setAdvisorServiceInfo(advisorServiceInfo);
         //创建顾问详情简介对象
@@ -413,20 +418,18 @@ public class AdvisorServiceImpl implements AdvisorService {
         List<IndustryDictionary> industryDictionaryList = industryService.getIndustryDictionary(industryDictParameter);
         AdvisorServiceInfo advisorServiceInfo=new AdvisorServiceInfo();
         BeanUtils.copyProperties(tbServiceAdvisor, advisorServiceInfo);
-        if(tbServiceAdvisor.getBusinessArea()!=null){
+        if(StringUtils.isNotBlank(tbServiceAdvisor.getBusinessArea())){
             String []businessAreaArray=tbServiceAdvisor.getBusinessArea().split(",");
-            StringBuilder businessAreaBul=new StringBuilder();
+            List<String> businessAreaBul=new ArrayList<>();
             for(IndustryDictionary industryDictionary:industryDictionaryList){
                 for(String businessArea:businessAreaArray){
                     if(StringUtils.equals(industryDictionary.getId(), businessArea)){
-                        businessAreaBul.append(industryDictionary.getPreValue());
-                        businessAreaBul.append(",");
+                        businessAreaBul.add(industryDictionary.getPreValue());
                         break;
                     }
                 }
             }
-            int length = businessAreaBul.length()-1;
-            advisorServiceInfo.setBusinessAreaName(businessAreaBul.toString().substring(0, length));
+            advisorServiceInfo.setBusinessAreaName(StringUtils.join(businessAreaBul,","));
         }
         return advisorServiceInfo;
     }

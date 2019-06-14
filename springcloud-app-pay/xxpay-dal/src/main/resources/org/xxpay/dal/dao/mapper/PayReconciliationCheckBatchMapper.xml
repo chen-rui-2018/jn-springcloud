@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.xxpay.dal.dao.mapper.PayReconciliationCheckBatchMapper" >
+
+  <sql id="table_name">TB_PAY_RECONCILIATION_CHECK_BATCH</sql>
+
+  <resultMap id="BaseResultMap" type="org.xxpay.dal.dao.entity.reconciliation.TbPayReconciliationCheckBatch">
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="version" property="version" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="editor" property="editor" jdbcType="VARCHAR" />
+    <result column="creater" property="creater" jdbcType="VARCHAR" />
+    <result column="edit_time" property="editTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="batch_no" property="batchNo" jdbcType="VARCHAR" />
+    <result column="bill_date" property="billDate" jdbcType="DATE" />
+    <result column="bill_type" property="billType" jdbcType="VARCHAR" />
+    <result column="handle_status" property="handleStatus" jdbcType="VARCHAR" />
+    <result column="bank_type" property="bankType" jdbcType="VARCHAR" />
+    <result column="mistake_count" property="mistakeCount" jdbcType="INTEGER" />
+    <result column="unhandle_mistake_count" property="unhandleMistakeCount" jdbcType="INTEGER" />
+    <result column="trade_count" property="tradeCount" jdbcType="INTEGER" />
+    <result column="bank_trade_count" property="bankTradeCount" jdbcType="INTEGER" />
+    <result column="trade_amount" property="tradeAmount" jdbcType="DECIMAL" />
+    <result column="bank_trade_amount" property="bankTradeAmount" jdbcType="DECIMAL" />
+    <result column="refund_amount" property="refundAmount" jdbcType="DECIMAL" />
+    <result column="bank_refund_amount" property="bankRefundAmount" jdbcType="DECIMAL" />
+    <result column="bank_fee" property="bankFee" jdbcType="DECIMAL" />
+    <result column="org_check_file_path" property="orgCheckFilePath" jdbcType="VARCHAR" />
+    <result column="release_check_file_path" property="releaseCheckFilePath" jdbcType="VARCHAR" />
+    <result column="release_status" property="releaseStatus" jdbcType="VARCHAR" />
+    <result column="check_fail_msg" property="checkFailMsg" jdbcType="VARCHAR" />
+    <result column="bank_err_msg" property="bankErrMsg" jdbcType="VARCHAR" />
+  </resultMap>
+
+
+  <!-- 对账批次条件 -->
+  <sql id="reconciliation_sql">
+    <!-- billDate 的格式：2016-05-20 -->
+    <if test="billDate != null and billDate != ''">
+      and bill_date between #{billDate} AND CONCAT(#{billDate},' 23:59:59')
+    </if>
+    <if test="interfaceCode != null and interfaceCode != ''">
+      and bank_type = #{interfaceCode}
+    </if>
+    <!-- 不存在的状态 -->
+    <if test="notInStatus != null and notInStatus != ''">
+      and status not in ( #{notInStatus})
+    </if>
+    <!-- 存在的状态 -->
+    <if test="inStatus != null and inStatus != ''">
+      and status in ( #{inStatus})
+    </if>
+
+  </sql>
+
+  <!-- list查询 -->
+  <select id="listByCondition" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select *
+    from
+    <include refid="table_name" />
+    <where>
+      <include refid="reconciliation_sql" />
+    </where>
+  </select>
+
+
+</mapper>

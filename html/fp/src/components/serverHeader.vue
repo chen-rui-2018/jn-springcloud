@@ -15,9 +15,10 @@
                     <li @click='$router.push({path:"/serMatHp"})'>首页</li>
                     <li :class="{'active11':this.$route.name==='serverOrg'||this.$route.name==='serverOrgDetail'}" @click='$router.push({path:"/serverOrg"})'>服务机构</li>
                     <li @click='$router.push({path:"/serverPro"})' :class="{'active11':this.$route.name==='serverPro'||this.$route.name==='serverProDetail'}">服务产品</li>
-                    <li @click='$router.push({path:"/serverCon"})' :class="{'active11':this.$route.name==='serverCon'||this.$route.name==='serverConDetail'}">服务顾问</li>
+                    <li @click='$router.push({path:"/serverCon"})' :class="{'active11':this.$route.name==='serverCon'||this.$route.name==='serverConDetail'}">服务专员</li>
                     <li @click='$router.push({path:"/actiTrain"})' :class="{'active11':this.$route.name==='actiTrain'||this.$route.name==='actiTrainDetail'}">活动培训</li>
                     <li @click='$router.push({path:"/aboutUs"})' :class="{'active11':this.$route.name==='aboutUs'}">关于我们</li>
+                    <li @click='$router.push({path:"/register"})' :class="{'active11':this.$route.name==='register'}">加入我们</li>
                 </div>
                 <div class="headerRight pr">
                   <div class="search" >
@@ -46,10 +47,10 @@
                 <el-select v-model="select" slot="prepend" placeholder="产品" @visible-change="changeselectShow">
                   <el-option label="机构" value="1"></el-option>
                   <el-option label="产品" value="2"></el-option>
-                  <el-option label="顾问" value="3"></el-option>
+                  <el-option label="专员" value="3"></el-option>
                   <el-option label="活动" value="3"></el-option>
                 </el-select>
-                <el-button slot="append" icon="el-icon-search">搜索 </el-button>
+                <el-button slot="append" icon="el-icon-search" @click="goSearch">搜索</el-button>
               </el-input>
             </div>
           </div>
@@ -110,6 +111,17 @@ export default {
    this.getIndustryList()
   },
   methods: {
+     goSearch(){
+      if(this.select==='1'){
+        this.$router.push({path:'/serverOrg',query:{searchData:this.searchData}})
+      }else if(this.select==='2'){
+        this.$router.push({path:'/serverPro',query:{searchData:this.searchData}})
+      }else if(this.select==='3'){
+        this.$router.push({path:'/serverCon',query:{searchData:this.searchData}})
+      }else if(this.select==='4'){
+        this.$router.push({path:'/actiTrain',query:{searchData:this.searchData}})
+      }
+    },
      searchLeave() {
       if (this.sekectShow) {
         this.show3 = true

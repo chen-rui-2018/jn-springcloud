@@ -1,6 +1,6 @@
 <template>
-  <div class="investorCertification">
-    <div class="investorCertification-header">
+  <div class="investorCertification" v-loading="loading">
+    <div class="investorCertification-header font16">
       <div>投资人认证</div>
     </div>
     <el-main style="padding:0 25px;text-align:left;background:#fff;">
@@ -9,12 +9,11 @@
         <div class="basicInfo pr">
           <div class="setdistance uploadImgItem">
             <span class="textRight mg">照片：</span>
-            <el-upload class="avatar-uploader avatarImg" :show-file-list="false" action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
-              :on-success="handleAvaSuccess" :headers="headers" :before-upload="beforeAvaUpload" style="display:inline-block">
+            <el-upload class="avatar-uploader avatar-img" :show-file-list="false" :on-success="handleAvaSuccess" :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'" :headers="headers" :before-upload="beforeAvaUpload" style="display:inline-block">
               <img v-if="investorForm.avatar" :src="investorForm.avatar" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
-            <div class="textImg">只支持JPG格式，大小不要超过500k<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;建议使用一寸证件照70*100像素</div>
+            <div class="textImg">只支持JPG、PNG格式，大小不要超过2M<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;建议使用一寸证件照70*100像素</div>
           </div>
           <el-form :rules="rules" :model="investorForm" label-width="100px" ref="investorForm">
             <el-form-item label="姓名:" prop="investorName" class="maxWidth">
@@ -31,7 +30,7 @@
             </el-form-item>
 
             <el-form-item label="所属单位:">
-              <el-select v-model="investorForm.orgId" placeholder="请输入所属单位">
+              <el-select v-model="investorForm.orgId" placeholder="请选择所属单位" clearable>
                 <el-option v-for="item in orgOptions" :key="item.orgId" :label="item.orgName" :value="item.orgId">
                 </el-option>
               </el-select>
@@ -100,7 +99,7 @@
         <div class="basicStyle">工作经历 <span class="cancel" @click="cancelWorkList" v-if="isShowWorkList">取&nbsp;消</span><span
             @click="addWorkList('workForm')"> <i class="el-icon-plus"></i>&nbsp;{{workText}}</span> </div>
         <div class="marBtn" v-if="!isShowWorkList">
-          <el-table :data="workList" style="width: 100%">
+          <el-table :data="workList" style="width: 98%">
             <el-table-column prop="startTime" align="center" label="开始时间">
             </el-table-column>
             <el-table-column prop="endTime" align="center" label="结束时间">
@@ -142,7 +141,7 @@
             @click="addEducationList('educationForm')"> <i class="el-icon-plus"></i>&nbsp;{{educationText}}</span>
         </div>
         <div class="marBtn" v-if="!isShowEducationList">
-          <el-table :data="educationList" style="width: 100%">
+          <el-table :data="educationList" style="width: 98%">
             <el-table-column prop="startTime" align="center" label="开始时间">
             </el-table-column>
             <el-table-column prop="endTime" align="center" label="结束时间">
@@ -182,12 +181,13 @@
       </div>
       <div v-show="submitBtn" class="footer ct">
         <el-button size="mini" class="mainColor accept" :disabled='disabled' @click="submit('investorForm')">提交</el-button>
-        <el-button size="mini" type="success">返回</el-button>
+        <!-- <el-button size="mini" type="success">返回</el-button> -->
       </div>
     </el-main>
   </div>
 </template>
 <script>
+import { getToken } from '@/util/auth'
 import axios from "axios";
 export default {
   data() {
@@ -195,8 +195,7 @@ export default {
         if (!value) {
           return callback(new Error('手机号不能为空'));
         } else {
-          const reg = /^1[3|4|5|7|8][0-9]\d{8}$/
-          console.log(reg.test(value));
+          const reg = /^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\d{8}$/
           if (reg.test(value)) {
             callback();
           } else {
@@ -205,6 +204,8 @@ export default {
         }
       }
     return {
+      loading:false,
+      baseUrl:this.api.host,
       submitBtn:true,
       disabled: false,
       orgOptions: [],
@@ -235,7 +236,7 @@ export default {
         orgId: "",
         personalProfile: "",
         position: "",
-        sex: "",
+        sex: '1',
         investorName: "",
         invesFinanExper: "",
         avatar: "",
@@ -262,7 +263,7 @@ export default {
       block: "",
       // avarUrl: "",
       headers: {
-        token: sessionStorage.token
+        token: getToken()
       },
       rules: {
         investorMainRoundList: [
@@ -275,7 +276,7 @@ export default {
           { required: true, message: "请输入姓名", trigger: "blur" }
         ],
         email: [
-          { required: true, message: "请选择邮箱", trigger: "change" },
+          { required: true, message: "请选择邮箱", trigger: "blur" },
           {
             type: "email",
             message: "请输入正确的邮箱地址",
@@ -349,10 +350,10 @@ export default {
     submit(investorForm) {
       this.$refs[investorForm].validate(valid => {
         if (valid) {
-          // if (!this.investorForm.avatar) {
-          //   this.$message.error("请选择照片后在提交");
-          //   return;
-          // }
+          if (!this.investorForm.avatar) {
+            this.$message.error("请选择照片后在提交");
+            return;
+          }
           if (!this.investorForm.addressProvince) {
             this.$message.error("请选择常住省份");
           } else if (!this.investorForm.addressCity) {
@@ -363,20 +364,22 @@ export default {
           this.disabled = true;
           this.investorForm.investorWorkExperienceParamList = this.workList;
           this.investorForm.investorEducationExperienceParamList = this.educationList;
-          console.log(this.investorForm);
+          this.loading=true
           this.api.post({
             url: "addInvestorInfo",
             data: this.investorForm,
             callback: res => {
+              this.loading=false
               if (res.code == "0000") {
                 this.$message({
-                  message: "认证成功",
+                  message: "操作成功",
                   type: "success"
                 });
            this.$router.push({
-        path: "/servicemarket/product/userCenter"
+        path: "/home"
       });
                 this.disabled = false;
+
               } else {
                 this.$message.error(res.result);
                 this.disabled = false;
@@ -425,6 +428,10 @@ export default {
     },
     // 添加工作经历表单
     addWorkList(workForm) {
+       if (!this.investorForm.phone) {
+        this.$message.error("请先填写基本信息");
+        return false;
+      }
       this.submitBtn=false
       if (this.workText === "添加工作经历") {
         this.workForm.startTime = "";
@@ -504,10 +511,14 @@ export default {
     cancelEducationList() {
       this.isShowEducationList = false;
       this.educationText = "添加教育经历";
-      tis.submitBtn=true
+      this.submitBtn=true
     },
     // 添加教育经历表单
     addEducationList(educationForm) {
+       if (!this.investorForm.phone) {
+        this.$message.error("请先填写基本信息");
+        return false;
+      }
       this.submitBtn=false
       if (this.educationText === "添加教育经历") {
         this.educationForm.startTime = "";
@@ -643,15 +654,15 @@ export default {
     },
     init() {},
     beforeAvaUpload(file) {
-      const isJPG = file.type === "image/jpeg";
-      const isLt2M = file.size / 1024 < 500;
+      const isJPG = file.type === "image/jpeg"||file.type === "image/png";
+      const isLt2M = file.size / 1024 < 1024<2;
 
       if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
+        this.$message.error("上传头像图片只能是 JPG或PNG 格式!");
         return false;
       }
       if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 500kb!");
+        this.$message.error("上传头像图片大小不能超过 2M!");
         return false;
       }
     },
@@ -728,12 +739,13 @@ export default {
     background-color: #fff;
     padding: 17px;
     margin-bottom: 14px;
-    font-size: 13px;
+    // font-size: 13px;
     border-radius: 5px;
   }
   .el-table__header {
     border-right: 1px solid rgba(65, 215, 135, 1);
     border-left: 1px solid rgba(65, 215, 135, 1);
+    table-layout:auto;
   }
   .cancel {
     margin-left: 15px;
@@ -749,7 +761,6 @@ export default {
     padding: 5px;
   }
   .el-table th {
-    width: 750px;
     height: 28px;
     background: rgba(236, 252, 242, 1);
     border-top: 1px solid rgba(65, 215, 135, 1);
@@ -904,11 +915,11 @@ export default {
   // .infoInput:nth-child(2) {
   //   margin: 15px 0;
   // }
-  .avatarImg {
+  .avatar-img {
     width: 100px;
     height: 100px;
   }
-  .avatarImg .el-upload {
+  .avatar-img .el-upload {
     // border: 1px dashed #d9d9d9;
     border-radius: 6px;
     cursor: pointer;
@@ -917,7 +928,7 @@ export default {
     display: inline-block;
     vertical-align: middle;
   }
-  .avatarImg .avatar-uploader-icon {
+  .avatar-img .avatar-uploader-icon {
     border: 2px dashed #eee;
     font-size: 28px;
     color: #8c939d;
@@ -926,7 +937,7 @@ export default {
     line-height: 100px;
     text-align: center;
   }
-  .avatarImg .avatar {
+  .avatar-img .avatar {
     width: 100px;
     height: 100px;
     border-radius: 5px;

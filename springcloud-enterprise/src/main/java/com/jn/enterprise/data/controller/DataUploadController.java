@@ -189,7 +189,8 @@ public class DataUploadController  extends BaseController {
 
     })
     public Result importData(@RequestParam("formTime") String formTime,@RequestParam("fillId") String fillId,@RequestParam("modelId") String modelId, @RequestParam("file") MultipartFile file){
-        Integer result = uploadService.importData(file,formTime,fillId,modelId);
+        User user = (User)SecurityUtils.getSubject().getPrincipal();
+        Integer result = uploadService.importData(file,formTime,fillId,modelId,user);
         return new Result(result);
     }
 
@@ -241,14 +242,12 @@ public class DataUploadController  extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name="taskbatch",value = "任务批次",dataType = "String",paramType = "query",example = "6745d724836540ff9fc661337c36020a"),
             @ApiImplicitParam(name="modelid",value = "模板ID",dataType = "String",paramType = "query",example = "e12f8f4bd1d94c068917955ed258617b"),
-
     })
     public void getDescribeExcel(String taskbatch, String modelid, HttpServletRequest req,
                                 HttpServletResponse resp)throws IOException {
         List<CompanyTree> list = targetDao.getExcel(taskbatch,modelid);
         POIDescribe de = new POIDescribe();
         de.getDescribeTable(list,req,resp);
-
     }
 
     @ControllerLog(doAction = "数据上报-园区数据上报统计-科技园模板")
@@ -265,7 +264,6 @@ public class DataUploadController  extends BaseController {
         List<CompanyTree> list = targetDao.getExcel(taskbatch,modelid);
         POIScience science = new POIScience();
         science.getScienceTable(list,req,resp);
-
     }
 
     @ControllerLog(doAction = "数据上报-园区数据上报统计-科技园模板表头")
@@ -275,14 +273,12 @@ public class DataUploadController  extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name="taskbatch",value = "任务批次",dataType = "String",paramType = "query",example = "6745d724836540ff9fc661337c36020a"),
             @ApiImplicitParam(name="modelid",value = "模板ID",dataType = "String",paramType = "query",example = "e12f8f4bd1d94c068917955ed258617b"),
-
     })
     public void getScienceHeaderExcel(String taskbatch, String modelid, HttpServletRequest req,
                                 HttpServletResponse resp)throws IOException {
         List<CompanyTree> list = targetDao.getExcel(taskbatch,modelid);
         POIScienceHeader header = new POIScienceHeader();
         header.getScienceHeaderTable(list,req,resp);
-
     }
 
 }

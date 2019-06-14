@@ -1,12 +1,10 @@
 // pages/meeting/meetingPerson/meetingPerson.js
-import {CreateHeader} from "./../../../utils/require"
-
+import request from "./../../../utils/http"
 Page({
   data: {
     nvabarData: {
       title: '参会人员', //导航栏 中间的标题
     },
-    token:'',
     userList:[],
     sendData:{
       name:'',
@@ -47,37 +45,29 @@ Page({
     })
   },
   onLoad:function(){
-    CreateHeader()
-    .then(header=>{
-      this.data.token=header.token
-      this.getUserList()
-    })
+    this.getUserList()
   },
   onReady: function () { },
   onShow: function () { },
   onHide: function () { },
-  onPullDownRefresh: function () { },
+  onPullDownRefresh: function () {
+    this.onLoad()
+   },
   onReachBottom:function(){
     if(this.data.sendData.page<Math.ceil(this.data.total/this.data.sendData.rows)){
       this.data.sendData.page++
-      wx.request({
-        url: 'http://192.168.10.31:1101/springcloud-app-system/system/sysUser/findSysUserByPage',
+      request.send({
+        url: '/springcloud-app-system/system/sysUser/findSysUserByPage',
         data: this.data.sendData,
-        header: {'content-type':'application/json','token':this.data.token},
         method: 'POST',
-        dataType: 'json',
-        responseType: 'text',
-        success: (res)=>{
-          if(res.data.code==='0000'){
-            this.setData({
-              userList:this.data.userList.concat(res.data.data.rows),
-              total:res.data.data.total
-            })
-          }
-        },
-        fail: ()=>{},
-        complete: ()=>{}
-      });
+      }).then(res=>{
+        if(res.data.code==='0000'){
+          this.setData({
+            userList:this.data.userList.concat(res.data.data.rows),
+            total:res.data.data.total
+          })
+        }
+      })
     }else{
       wx.showToast({
         title: '已到最后一页',
@@ -88,30 +78,23 @@ Page({
     }
   },
   getUserList(){
-    wx.request({
-      url: 'http://192.168.10.31:1101/springcloud-app-system/system/sysUser/findSysUserByPage',
+    request.send({
+      url: '/springcloud-app-system/system/sysUser/findSysUserByPage',
       data: this.data.sendData,
-      header: {'content-type':'application/json','token':this.data.token},
       method: 'POST',
-      dataType: 'json',
-      responseType: 'text',
-      success: (res)=>{
-        if(res.data.code==='0000'){
-          this.setData({
-            userList:res.data.data.rows,
-            total:res.data.data.total
-          })
-
-          this.data.userList.forEach((ele,index) => {
-           ele.checked = false
-          });
-          this.setData({
-            userList: this.data.userList
-          })
-        }
-      },
-      fail: ()=>{},
-      complete: ()=>{}
-    });
+    }).then(res=>{
+      if(res.data.code==='0000'){
+        this.setData({
+          userList:res.data.data.rows,
+          total:res.data.data.total
+        })
+        this.data.userList.forEach((ele,index) => {
+         ele.checked = false
+        });
+        this.setData({
+          userList: this.data.userList
+        })
+      }
+    })
   }
 })

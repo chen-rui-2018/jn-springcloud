@@ -29,6 +29,7 @@ public enum CompanyExceptionEnum implements CodeAndMsg {
     USER_IS_COMPANY_ADMIN("5020594","该账号是企业管理员，不能发出邀请"),
     GET_USER_EXTENSION_INFO_ERROR("5020595","获取用户信息发生错误"),
     UPDATE_USER_EXTENSION_INFO_ERROR("5020596","更新用户信息发生错误"),
+    COMPANY_ADMIN_LEAVE_ERROR("5020597","企业管理员不能离开企业"),
 
     CALL_SYSTEM_SERVICE_ERROR("5020401","调用system服务出错"),
     ;

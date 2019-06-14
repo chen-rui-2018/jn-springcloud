@@ -2,12 +2,12 @@
   <div class="ordinaryProduct"  v-loading="loading">
     <div class="ordinary_title">
       <div>常规服务产品</div>
-      <div @click="goputaway()">常规产品上架</div>
+      <div @click="goputaway()" v-show="isAdd">常规产品上架</div>
     </div>
     <div class="ordinary_main">
       <div class="search">
         <div></div>
-        <el-input placeholder="请输入内容" v-model="sendData.keyWords">
+        <el-input placeholder="服务产品名称" v-model="sendData.keyWords">
           <el-button slot="append" icon="el-icon-search" @click="handlesearch"></el-button>
         </el-input>
       </div>
@@ -16,7 +16,7 @@
           <el-table-column prop="productName" label="产品名称" align="center" width="120"> </el-table-column>
           <el-table-column prop="orgName" label="服务机构" align="center"> </el-table-column>
           <el-table-column prop="signoryName" label="业务领域" align="center"> </el-table-column>
-          <el-table-column prop="advisorName" label="服务顾问" align="center"> </el-table-column>
+          <el-table-column prop="advisorName" label="服务专员" align="center"> </el-table-column>
           <el-table-column prop="releaseTime" label="发布日期" align="center" width="180"> </el-table-column>
           <el-table-column label="发布状态" align="center"> 
             <template slot-scope="scope">
@@ -31,7 +31,7 @@
           <el-table-column label="操作" align="center" width="140">
             <template slot-scope="scope">
               <div class="ordinarybth" >
-                <span v-if="scope.row.status!='1'&&scope.row.status!='0'&&scope.row.status!='2'&&businessType!='technology_finance'" @click="goEdit(scope.row.productId)">编辑</span>
+                <!-- <span v-if="scope.row.status!='1'&&scope.row.status!='0'&&scope.row.status!='2'&&businessType!='technology_finance'" @click="goEdit(scope.row.productId)">编辑</span> -->
                 <span @click="goDetail(scope.row)">详情</span>
                 <span v-if="scope.row.status!='2'&&scope.row.status!='0'&&scope.row.status==='1'"  @click="handleshelf('-1',scope.row.productId)">下架</span>
                 <span v-if="scope.row.status!='2'&&scope.row.status!='0'&&scope.row.status!='1'" @click="handleshelf('1',scope.row.productId)">上架</span>
@@ -70,7 +70,8 @@ export default {
         rows:8
       },
       orgProductList:[],
-      businessType:""
+      businessType:"",
+        isAdd:false
     }
   },
   filters: {
@@ -93,7 +94,18 @@ export default {
   },
   mounted () {
     this.getOrgId()
-    // this.getOrgProductList()
+    this.getOrgProductList()
+    let menu=JSON.parse(sessionStorage.menuItems)
+    let _this=this
+    menu.forEach(v=>{
+      if(v.label==='产品管理'){
+        v.children[0].resourcesList.forEach(i=>{
+          if(i.resourcesName==="产品上架下架操作"){
+            _this.isAdd=true
+          }
+        })
+      }
+    })
   },
   methods: {
     // 获取当前登录id
@@ -146,9 +158,6 @@ export default {
     goputaway(){
       //territory为0是科技金融，为1是非科技金融
         this.$router.push({path:'/servicemarket/product/productService/productPutaway',query:{orgid:this.sendData.orgId}})
-     /*  else if(this.territory===1){
-        this.$router.push({path:'/servicemarket/product/productService/productPutaway',query:{orgid:this.sendData.orgId,territory:1}})
-      } */
     },
     // 去编辑
     goEdit(productId){
@@ -203,14 +212,14 @@ export default {
       justify-content: space-between;
       align-items: center;
       padding:17px;
-      font-size: 13px;
+      font-size: 16px;
       border-radius: 5px;
       div:nth-child(2){
         background-color: #ecfcf2;
         border-radius: 5px;
         border: solid 2px #41d787;
         padding:8px 11px;
-        font-size: 12px;
+        font-size: 14px;
         color:#00a041;
         cursor: pointer;
       }
@@ -232,6 +241,7 @@ export default {
           height: 27px;
           line-height: 27px;
           border: 1px solid #eee;
+          font-size: 12px;
         }
         .el-input-group__append{
           background-color:#00a041;

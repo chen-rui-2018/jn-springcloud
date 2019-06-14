@@ -6,10 +6,13 @@
     </div>
     <div class="receivedNeed_main">
       <div class="searh_tab">
-        <el-input placeholder="需求人" v-model="sendData.requirePerson" class="input-with-select" clearable>
+        <span>需求人：</span>
+        <el-input placeholder="请输入需求人" v-model="sendData.requirePerson" class="input-with-select" clearable>
         </el-input>
-        <el-input placeholder="意向产品" v-model="sendData.intentProduct" class="input-with-select" clearable>
+        <span>意向产品：</span>
+        <el-input placeholder="请输入意向产品" v-model="sendData.intentProduct" class="input-with-select" clearable>
         </el-input>
+        <span>对接结果：</span>
         <el-select v-model="sendData.handleResult" placeholder="请选择对接结果" clearable >
           <el-option label="对接成功" value="1"></el-option>
           <el-option label="对接失败" value="2"></el-option>
@@ -25,7 +28,7 @@
           <el-table-column prop="orgName" label="意向机构" align="center" width="120"> </el-table-column>
           <el-table-column prop="businessArea" label="业务领域" align="center"> </el-table-column>
           <el-table-column prop="productName" label="意向产品" align="center" width="100"> </el-table-column>
-          <el-table-column prop="advisorName" label="意向顾问" align="center"  width="100"> </el-table-column>
+          <el-table-column prop="advisorName" label="意向专员" align="center"  width="100"> </el-table-column>
           <el-table-column prop="requireTime" label="提需求日期" align="center" width="120"> </el-table-column>
           <el-table-column prop="status" label="需求状态" align="center"> </el-table-column>
           <el-table-column prop="handleResult" label="对接结果" align="center" width="110"> </el-table-column>
@@ -80,7 +83,7 @@ export default {
       data: this.sendData,
       callback: function(res) {
         if (res.code == "0000") {
-            console.log(res)
+            // console.log(res)
             _this.receivedtList=res.data.rows
             _this.total=res.data.total
           }
@@ -109,11 +112,14 @@ export default {
       }
     },
     handleSizeChange(val) {
-      // this.sendData.rows=val
+      this.sendData.rows=val
+      this.getreceivedtList()
     },
     //翻页
     handleCurrentChange(val) {
-      // this.sendData.page=val
+      this.sendData.page=val
+      this.getreceivedtList()
+
     },
   }
 }
@@ -144,7 +150,7 @@ export default {
           border-color: #00a041;
         }
         .el-input{
-          width: 25%;
+          width: 17%;
         }
         .el-select>.el-input{
           width:100%;
@@ -207,9 +213,6 @@ export default {
         .el-pagination.is-background .el-pager li{
           background-color: #fff;
           border: 1px solid #eee;
-        }
-        .el-pagination.is-background .el-pager li:not(.disabled):hover{
-          color:#fff;
         }
         .el-pagination.is-background .el-pager li:not(.disabled).active{
           background-color: #00a041;

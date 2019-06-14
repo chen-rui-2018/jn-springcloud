@@ -113,4 +113,20 @@ public class InvestorEducationExperienceWorkFlow implements Serializable {
     public void setRecordStatus(byte recordStatus) {
         this.recordStatus = recordStatus;
     }
+
+    @Override
+    public String toString() {
+        return "InvestorEducationExperienceWorkFlow{" +
+                "investorAccount='" + investorAccount + '\'' +
+                ", startTime='" + startTime + '\'' +
+                ", endTime='" + endTime + '\'' +
+                ", schoolName='" + schoolName + '\'' +
+                ", professionTitle='" + professionTitle + '\'' +
+                ", createdTime='" + createdTime + '\'' +
+                ", creatorAccount='" + creatorAccount + '\'' +
+                ", modifiedTime='" + modifiedTime + '\'' +
+                ", modifierAccount='" + modifierAccount + '\'' +
+                ", recordStatus=" + recordStatus +
+                '}';
+    }
 }

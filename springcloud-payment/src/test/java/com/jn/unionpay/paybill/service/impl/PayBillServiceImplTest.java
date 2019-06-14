@@ -5,6 +5,8 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
+import com.jn.pay.model.CreateOrderAndPayReqModel;
+import com.jn.pay.model.CreatePayReqModel;
 import com.jn.pay.model.PayOrderNotify;
 import com.jn.paybill.enums.PayBillExceptionEnum;
 import com.jn.paybill.model.*;
@@ -151,7 +153,8 @@ public class PayBillServiceImplTest {
         payInitiateParam.setBillIds(new String[]{"48w55wwffno383915","48w55wwffno383914"});
         payInitiateParam.setPayMenthed("0");
         try {
-            Result result = payBillService.createPayOrder("48w55wwffno383915","ALIPAY_MOBILE","0", user);
+            CreatePayReqModel createPayReqModel = new CreatePayReqModel();
+            Result result = payBillService.createPayOrder(createPayReqModel);
             assertThat(result,anything());
         }catch (JnSpringCloudException e){
             logger.warn("缴费单支付发起-- 数据错误,请核实测试对象数据。");

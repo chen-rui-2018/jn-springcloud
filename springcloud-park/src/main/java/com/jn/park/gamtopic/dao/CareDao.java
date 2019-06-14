@@ -3,6 +3,7 @@ package com.jn.park.gamtopic.dao;
 import com.jn.park.gamtopic.model.CareCompanyShow;
 import com.jn.park.gamtopic.model.CareUserDetails;
 import com.jn.park.gamtopic.model.CareUserShow;
+import com.jn.park.gamtopic.model.CommentModel;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -41,5 +42,19 @@ public interface CareDao {
      * @return
      */
     List<String> findCareCompanyList(@Param("account") String account);
+
+    /**
+     * 根据企业ID获取相关联的关注数和平路数
+     * @param id
+     * @return
+     */
+    CommentModel findCareComment(@Param("id") String id);
+
+    /**
+     * 获取用户关注的企业信息列表
+     * @param account
+     * @return
+     */
+    List<CareUserShow> findCompanyCareList(@Param("account") String account);
 
 }

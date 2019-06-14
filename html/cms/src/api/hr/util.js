@@ -79,20 +79,43 @@ export function isvalidName(str) {
   const reg = /^[\u4e00-\u9fa5\w]{1,30}$/
   return reg.test(str)
 }
-const aCity = { 11: '北京', 12: '天津', 13: '河北', 14: '山西', 15: '内蒙古', 21: '辽宁', 22: '吉林', 23: '黑龙江', 31: '上海', 32: '江苏', 33: '浙江', 34: '安徽', 35: '福建', 36: '江西', 37: '山东', 41: '河南', 42: '湖北', 43: '湖南', 44: '广东', 45: '广西', 46: '海南', 50: '重庆', 51: '四川', 52: '贵州', 53: '云南', 54: '西藏', 61: '陕西', 62: '甘肃', 63: '青海', 64: '宁夏', 65: '新疆', 71: '台湾', 81: '香港', 82: '澳门', 91: '国外' }
 
-export function isvalidZjhm(sId) {
-  var iSum = 0
-  if (!/^\d{17}(\d|x)$/i.test(sId)) return '你输入的身份证长度或格式错误'
-  sId = sId.replace(/x$/i, 'a')
-  if (aCity[parseInt(sId.substr(0, 2))] == null) return '你的身份证地区非法'
-  const sBirthday = sId.substr(6, 4) + '-' + Number(sId.substr(10, 2)) + '-' + Number(sId.substr(12, 2))
-  var d = new Date(sBirthday.replace(/-/g, '/'))
-  if (sBirthday !== (d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate())) return '身份证上的出生日期非法'
-  for (var i = 17; i >= 0; i--) iSum += (Math.pow(2, i) % 11) * parseInt(sId.charAt(17 - i), 11)
-  if (iSum % 11 !== 1) return '你输入的身份证号非法'
-  // aCity[parseInt(sId.substr(0,2))]+","+sBirthday+","+(sId.substr(16,1)%2?"男":"女");//此次还可以判断出输入的身份证号的人性别
-  return true
+export function isvalidZjhm(code) {
+  const city = { 11: '北京', 12: '天津', 13: '河北', 14: '山西', 15: '内蒙古', 21: '辽宁', 22: '吉林', 23: '黑龙江 ', 31: '上海', 32: '江苏', 33: '浙江', 34: '安徽', 35: '福建', 36: '江西', 37: '山东', 41: '河南', 42: '湖北 ', 43: '湖南', 44: '广东', 45: '广西', 46: '海南', 50: '重庆', 51: '四川', 52: '贵州', 53: '云南', 54: '西藏 ', 61: '陕西', 62: '甘肃', 63: '青海', 64: '宁夏', 65: '新疆', 71: '台湾', 81: '香港', 82: '澳门', 91: '国外 ' }
+  // let tip = ''
+  let pass = true
+
+  if (!code || !/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[012])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i.test(code)) {
+    // tip = '身份证号格式错误'
+    pass = false
+  } else if (!city[code.substr(0, 2)]) {
+    // tip = '地址编码错误'
+    pass = false
+  } else {
+    // 18位身份证需要验证最后一位校验位
+    if (code.length === 18) {
+      code = code.split('')
+      // ∑(ai×Wi)(mod 11)
+      // 加权因子
+      const factor = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2]
+      // 校验位
+      const parity = ['1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2']
+      let sum = 0
+      let ai = 0
+      let wi = 0
+      for (var i = 0; i < 17; i++) {
+        ai = code[i]
+        wi = factor[i]
+        sum += ai * wi
+      }
+      const last = parity[sum % 11]
+      if (last !== code[17]) {
+        // tip = '校验位错误'
+        pass = false
+      }
+    }
+  }
+  return pass
 }
 
 export function formatDate(objDate, format) {
@@ -114,6 +137,38 @@ export function formatDate(objDate, format) {
     }
   }
   return format
+}
+
+export function setChild(nodes, children) {
+  children.forEach(item => {
+    nodes.push({
+      'id': item.id,
+      'label': item.label,
+      'parentId': item.parentId
+    })
+    if (item.children && item.children.length > 0) {
+      setChild(nodes, item.children)
+    }
+  })
+}
+
+export function findNodeById(zNodes, id) {
+  for (var i = 0; i < zNodes.length; i++) {
+    if (zNodes[i].id === id) {
+      return zNodes[i]
+    }
+  }
+}
+
+export function findP(zNodes, node, pNodes) {
+  for (var i = 0; i < zNodes.length; i++) {
+    if (node.parentId === zNodes[i].id) {
+      pNodes.push(zNodes[i])
+      if (zNodes[i].parentId !== '1') {
+        findP(zNodes, zNodes[i], pNodes)
+      }
+    }
+  }
 }
 
 export const uploadUrl = baseurl + `hr/common/uploadAttachment`

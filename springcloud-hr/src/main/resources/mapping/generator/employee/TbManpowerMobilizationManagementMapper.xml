@@ -2,13 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.hr.employee.dao.TbManpowerMobilizationManagementMapper">
   <resultMap id="BaseResultMap" type="com.jn.hr.employee.entity.TbManpowerMobilizationManagement">
-    <id column="id" jdbcType="VARCHAR" property="id" />
+    <id column="id_" jdbcType="VARCHAR" property="id" />
     <result column="job_number" jdbcType="VARCHAR" property="jobNumber" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="department" jdbcType="VARCHAR" property="department" />
-    <result column="job_id" jdbcType="VARCHAR" property="jobId" />
     <result column="job_name" jdbcType="VARCHAR" property="jobName" />
-    <result column="rank_id" jdbcType="VARCHAR" property="rankId" />
     <result column="rank_name" jdbcType="VARCHAR" property="rankName" />
     <result column="salary" jdbcType="DOUBLE" property="salary" />
     <result column="contact_number" jdbcType="VARCHAR" property="contactNumber" />
@@ -17,7 +15,15 @@
     <result column="enclosure" jdbcType="VARCHAR" property="enclosure" />
     <result column="application_reason" jdbcType="VARCHAR" property="applicationReason" />
     <result column="take_effect_date" jdbcType="TIMESTAMP" property="takeEffectDate" />
-    <result column="approval_status" jdbcType="TINYINT" property="approvalStatus" />
+    <result column="new_department" jdbcType="VARCHAR" property="newDepartment" />
+    <result column="new_job_name" jdbcType="VARCHAR" property="newJobName" />
+    <result column="new_rank_name" jdbcType="VARCHAR" property="newRankName" />
+    <result column="new_salary" jdbcType="DECIMAL" property="newSalary" />
+    <result column="new_contact_number" jdbcType="VARCHAR" property="newContactNumber" />
+    <result column="new_work_place" jdbcType="VARCHAR" property="newWorkPlace" />
+    <result column="new_directly_leader" jdbcType="VARCHAR" property="newDirectlyLeader" />
+    <result column="applicate_time" jdbcType="TIMESTAMP" property="applicateTime" />
+    <result column="status" jdbcType="TINYINT" property="status" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -78,8 +84,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, job_number, name, department, job_id, job_name, rank_id, rank_name, salary, contact_number, 
-    work_place, directly_leader, enclosure, application_reason, take_effect_date, approval_status
+    id_, job_number, name, department, job_name, rank_name, salary, contact_number, work_place, 
+    directly_leader, enclosure, application_reason, take_effect_date, new_department, 
+    new_job_name, new_rank_name, new_salary, new_contact_number, new_work_place, new_directly_leader, 
+    applicate_time, status
   </sql>
   <select id="selectByExample" parameterType="com.jn.hr.employee.entity.TbManpowerMobilizationManagementCriteria" resultMap="BaseResultMap">
     select
@@ -99,11 +107,11 @@
     select 
     <include refid="Base_Column_List" />
     from tb_manpower_mobilization_management
-    where id = #{id,jdbcType=VARCHAR}
+    where id_ = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_manpower_mobilization_management
-    where id = #{id,jdbcType=VARCHAR}
+    where id_ = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.hr.employee.entity.TbManpowerMobilizationManagementCriteria">
     delete from tb_manpower_mobilization_management
@@ -112,24 +120,28 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.hr.employee.entity.TbManpowerMobilizationManagement">
-    insert into tb_manpower_mobilization_management (id, job_number, name, 
-      department, job_id, job_name, 
-      rank_id, rank_name, salary, 
-      contact_number, work_place, directly_leader, 
-      enclosure, application_reason, take_effect_date, 
-      approval_status)
+    insert into tb_manpower_mobilization_management (id_, job_number, name, 
+      department, job_name, rank_name, 
+      salary, contact_number, work_place, 
+      directly_leader, enclosure, application_reason, 
+      take_effect_date, new_department, new_job_name, 
+      new_rank_name, new_salary, new_contact_number, 
+      new_work_place, new_directly_leader, applicate_time, 
+      status)
     values (#{id,jdbcType=VARCHAR}, #{jobNumber,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
-      #{department,jdbcType=VARCHAR}, #{jobId,jdbcType=VARCHAR}, #{jobName,jdbcType=VARCHAR}, 
-      #{rankId,jdbcType=VARCHAR}, #{rankName,jdbcType=VARCHAR}, #{salary,jdbcType=DOUBLE}, 
-      #{contactNumber,jdbcType=VARCHAR}, #{workPlace,jdbcType=VARCHAR}, #{directlyLeader,jdbcType=VARCHAR}, 
-      #{enclosure,jdbcType=VARCHAR}, #{applicationReason,jdbcType=VARCHAR}, #{takeEffectDate,jdbcType=TIMESTAMP}, 
-      #{approvalStatus,jdbcType=TINYINT})
+      #{department,jdbcType=VARCHAR}, #{jobName,jdbcType=VARCHAR}, #{rankName,jdbcType=VARCHAR}, 
+      #{salary,jdbcType=DOUBLE}, #{contactNumber,jdbcType=VARCHAR}, #{workPlace,jdbcType=VARCHAR}, 
+      #{directlyLeader,jdbcType=VARCHAR}, #{enclosure,jdbcType=VARCHAR}, #{applicationReason,jdbcType=VARCHAR}, 
+      #{takeEffectDate,jdbcType=TIMESTAMP}, #{newDepartment,jdbcType=VARCHAR}, #{newJobName,jdbcType=VARCHAR}, 
+      #{newRankName,jdbcType=VARCHAR}, #{newSalary,jdbcType=DECIMAL}, #{newContactNumber,jdbcType=VARCHAR}, 
+      #{newWorkPlace,jdbcType=VARCHAR}, #{newDirectlyLeader,jdbcType=VARCHAR}, #{applicateTime,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.hr.employee.entity.TbManpowerMobilizationManagement">
     insert into tb_manpower_mobilization_management
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
-        id,
+        id_,
       </if>
       <if test="jobNumber != null">
         job_number,
@@ -140,14 +152,8 @@
       <if test="department != null">
         department,
       </if>
-      <if test="jobId != null">
-        job_id,
-      </if>
       <if test="jobName != null">
         job_name,
-      </if>
-      <if test="rankId != null">
-        rank_id,
       </if>
       <if test="rankName != null">
         rank_name,
@@ -173,8 +179,32 @@
       <if test="takeEffectDate != null">
         take_effect_date,
       </if>
-      <if test="approvalStatus != null">
-        approval_status,
+      <if test="newDepartment != null">
+        new_department,
+      </if>
+      <if test="newJobName != null">
+        new_job_name,
+      </if>
+      <if test="newRankName != null">
+        new_rank_name,
+      </if>
+      <if test="newSalary != null">
+        new_salary,
+      </if>
+      <if test="newContactNumber != null">
+        new_contact_number,
+      </if>
+      <if test="newWorkPlace != null">
+        new_work_place,
+      </if>
+      <if test="newDirectlyLeader != null">
+        new_directly_leader,
+      </if>
+      <if test="applicateTime != null">
+        applicate_time,
+      </if>
+      <if test="status != null">
+        status,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -190,14 +220,8 @@
       <if test="department != null">
         #{department,jdbcType=VARCHAR},
       </if>
-      <if test="jobId != null">
-        #{jobId,jdbcType=VARCHAR},
-      </if>
       <if test="jobName != null">
         #{jobName,jdbcType=VARCHAR},
-      </if>
-      <if test="rankId != null">
-        #{rankId,jdbcType=VARCHAR},
       </if>
       <if test="rankName != null">
         #{rankName,jdbcType=VARCHAR},
@@ -223,8 +247,32 @@
       <if test="takeEffectDate != null">
         #{takeEffectDate,jdbcType=TIMESTAMP},
       </if>
-      <if test="approvalStatus != null">
-        #{approvalStatus,jdbcType=TINYINT},
+      <if test="newDepartment != null">
+        #{newDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="newJobName != null">
+        #{newJobName,jdbcType=VARCHAR},
+      </if>
+      <if test="newRankName != null">
+        #{newRankName,jdbcType=VARCHAR},
+      </if>
+      <if test="newSalary != null">
+        #{newSalary,jdbcType=DECIMAL},
+      </if>
+      <if test="newContactNumber != null">
+        #{newContactNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="newWorkPlace != null">
+        #{newWorkPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="newDirectlyLeader != null">
+        #{newDirectlyLeader,jdbcType=VARCHAR},
+      </if>
+      <if test="applicateTime != null">
+        #{applicateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
@@ -238,7 +286,7 @@
     update tb_manpower_mobilization_management
     <set>
       <if test="record.id != null">
-        id = #{record.id,jdbcType=VARCHAR},
+        id_ = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.jobNumber != null">
         job_number = #{record.jobNumber,jdbcType=VARCHAR},
@@ -249,14 +297,8 @@
       <if test="record.department != null">
         department = #{record.department,jdbcType=VARCHAR},
       </if>
-      <if test="record.jobId != null">
-        job_id = #{record.jobId,jdbcType=VARCHAR},
-      </if>
       <if test="record.jobName != null">
         job_name = #{record.jobName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.rankId != null">
-        rank_id = #{record.rankId,jdbcType=VARCHAR},
       </if>
       <if test="record.rankName != null">
         rank_name = #{record.rankName,jdbcType=VARCHAR},
@@ -282,8 +324,32 @@
       <if test="record.takeEffectDate != null">
         take_effect_date = #{record.takeEffectDate,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.approvalStatus != null">
-        approval_status = #{record.approvalStatus,jdbcType=TINYINT},
+      <if test="record.newDepartment != null">
+        new_department = #{record.newDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.newJobName != null">
+        new_job_name = #{record.newJobName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.newRankName != null">
+        new_rank_name = #{record.newRankName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.newSalary != null">
+        new_salary = #{record.newSalary,jdbcType=DECIMAL},
+      </if>
+      <if test="record.newContactNumber != null">
+        new_contact_number = #{record.newContactNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.newWorkPlace != null">
+        new_work_place = #{record.newWorkPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="record.newDirectlyLeader != null">
+        new_directly_leader = #{record.newDirectlyLeader,jdbcType=VARCHAR},
+      </if>
+      <if test="record.applicateTime != null">
+        applicate_time = #{record.applicateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=TINYINT},
       </if>
     </set>
     <if test="_parameter != null">
@@ -292,13 +358,11 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update tb_manpower_mobilization_management
-    set id = #{record.id,jdbcType=VARCHAR},
+    set id_ = #{record.id,jdbcType=VARCHAR},
       job_number = #{record.jobNumber,jdbcType=VARCHAR},
       name = #{record.name,jdbcType=VARCHAR},
       department = #{record.department,jdbcType=VARCHAR},
-      job_id = #{record.jobId,jdbcType=VARCHAR},
       job_name = #{record.jobName,jdbcType=VARCHAR},
-      rank_id = #{record.rankId,jdbcType=VARCHAR},
       rank_name = #{record.rankName,jdbcType=VARCHAR},
       salary = #{record.salary,jdbcType=DOUBLE},
       contact_number = #{record.contactNumber,jdbcType=VARCHAR},
@@ -307,7 +371,15 @@
       enclosure = #{record.enclosure,jdbcType=VARCHAR},
       application_reason = #{record.applicationReason,jdbcType=VARCHAR},
       take_effect_date = #{record.takeEffectDate,jdbcType=TIMESTAMP},
-      approval_status = #{record.approvalStatus,jdbcType=TINYINT}
+      new_department = #{record.newDepartment,jdbcType=VARCHAR},
+      new_job_name = #{record.newJobName,jdbcType=VARCHAR},
+      new_rank_name = #{record.newRankName,jdbcType=VARCHAR},
+      new_salary = #{record.newSalary,jdbcType=DECIMAL},
+      new_contact_number = #{record.newContactNumber,jdbcType=VARCHAR},
+      new_work_place = #{record.newWorkPlace,jdbcType=VARCHAR},
+      new_directly_leader = #{record.newDirectlyLeader,jdbcType=VARCHAR},
+      applicate_time = #{record.applicateTime,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=TINYINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -324,14 +396,8 @@
       <if test="department != null">
         department = #{department,jdbcType=VARCHAR},
       </if>
-      <if test="jobId != null">
-        job_id = #{jobId,jdbcType=VARCHAR},
-      </if>
       <if test="jobName != null">
         job_name = #{jobName,jdbcType=VARCHAR},
-      </if>
-      <if test="rankId != null">
-        rank_id = #{rankId,jdbcType=VARCHAR},
       </if>
       <if test="rankName != null">
         rank_name = #{rankName,jdbcType=VARCHAR},
@@ -357,20 +423,42 @@
       <if test="takeEffectDate != null">
         take_effect_date = #{takeEffectDate,jdbcType=TIMESTAMP},
       </if>
-      <if test="approvalStatus != null">
-        approval_status = #{approvalStatus,jdbcType=TINYINT},
+      <if test="newDepartment != null">
+        new_department = #{newDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="newJobName != null">
+        new_job_name = #{newJobName,jdbcType=VARCHAR},
+      </if>
+      <if test="newRankName != null">
+        new_rank_name = #{newRankName,jdbcType=VARCHAR},
+      </if>
+      <if test="newSalary != null">
+        new_salary = #{newSalary,jdbcType=DECIMAL},
+      </if>
+      <if test="newContactNumber != null">
+        new_contact_number = #{newContactNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="newWorkPlace != null">
+        new_work_place = #{newWorkPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="newDirectlyLeader != null">
+        new_directly_leader = #{newDirectlyLeader,jdbcType=VARCHAR},
+      </if>
+      <if test="applicateTime != null">
+        applicate_time = #{applicateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
       </if>
     </set>
-    where id = #{id,jdbcType=VARCHAR}
+    where id_ = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.hr.employee.entity.TbManpowerMobilizationManagement">
     update tb_manpower_mobilization_management
     set job_number = #{jobNumber,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
       department = #{department,jdbcType=VARCHAR},
-      job_id = #{jobId,jdbcType=VARCHAR},
       job_name = #{jobName,jdbcType=VARCHAR},
-      rank_id = #{rankId,jdbcType=VARCHAR},
       rank_name = #{rankName,jdbcType=VARCHAR},
       salary = #{salary,jdbcType=DOUBLE},
       contact_number = #{contactNumber,jdbcType=VARCHAR},
@@ -379,7 +467,15 @@
       enclosure = #{enclosure,jdbcType=VARCHAR},
       application_reason = #{applicationReason,jdbcType=VARCHAR},
       take_effect_date = #{takeEffectDate,jdbcType=TIMESTAMP},
-      approval_status = #{approvalStatus,jdbcType=TINYINT}
-    where id = #{id,jdbcType=VARCHAR}
+      new_department = #{newDepartment,jdbcType=VARCHAR},
+      new_job_name = #{newJobName,jdbcType=VARCHAR},
+      new_rank_name = #{newRankName,jdbcType=VARCHAR},
+      new_salary = #{newSalary,jdbcType=DECIMAL},
+      new_contact_number = #{newContactNumber,jdbcType=VARCHAR},
+      new_work_place = #{newWorkPlace,jdbcType=VARCHAR},
+      new_directly_leader = #{newDirectlyLeader,jdbcType=VARCHAR},
+      applicate_time = #{applicateTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=TINYINT}
+    where id_ = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

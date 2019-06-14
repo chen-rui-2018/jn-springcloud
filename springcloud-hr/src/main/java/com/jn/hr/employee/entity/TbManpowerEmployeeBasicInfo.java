@@ -108,6 +108,10 @@ public class TbManpowerEmployeeBasicInfo implements Serializable {
 
     private String userAccount;
 
+    private String supplyStatus;
+
+    private String status;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -526,6 +530,22 @@ public class TbManpowerEmployeeBasicInfo implements Serializable {
         this.userAccount = userAccount == null ? null : userAccount.trim();
     }
 
+    public String getSupplyStatus() {
+        return supplyStatus;
+    }
+
+    public void setSupplyStatus(String supplyStatus) {
+        this.supplyStatus = supplyStatus == null ? null : supplyStatus.trim();
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status == null ? null : status.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -589,7 +609,9 @@ public class TbManpowerEmployeeBasicInfo implements Serializable {
             && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
             && (this.getEmployStatus() == null ? other.getEmployStatus() == null : this.getEmployStatus().equals(other.getEmployStatus()))
             && (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
-            && (this.getUserAccount() == null ? other.getUserAccount() == null : this.getUserAccount().equals(other.getUserAccount()));
+            && (this.getUserAccount() == null ? other.getUserAccount() == null : this.getUserAccount().equals(other.getUserAccount()))
+            && (this.getSupplyStatus() == null ? other.getSupplyStatus() == null : this.getSupplyStatus().equals(other.getSupplyStatus()))
+            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()));
     }
 
     @Override
@@ -648,6 +670,8 @@ public class TbManpowerEmployeeBasicInfo implements Serializable {
         result = prime * result + ((getEmployStatus() == null) ? 0 : getEmployStatus().hashCode());
         result = prime * result + ((getUserId() == null) ? 0 : getUserId().hashCode());
         result = prime * result + ((getUserAccount() == null) ? 0 : getUserAccount().hashCode());
+        result = prime * result + ((getSupplyStatus() == null) ? 0 : getSupplyStatus().hashCode());
+        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         return result;
     }
 
@@ -709,6 +733,8 @@ public class TbManpowerEmployeeBasicInfo implements Serializable {
         sb.append(", employStatus=").append(employStatus);
         sb.append(", userId=").append(userId);
         sb.append(", userAccount=").append(userAccount);
+        sb.append(", supplyStatus=").append(supplyStatus);
+        sb.append(", status=").append(status);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

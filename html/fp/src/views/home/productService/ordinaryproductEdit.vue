@@ -13,7 +13,7 @@
             </el-form-item>
           </div>
           <div>
-            <el-form-item label="服务顾问：">
+            <el-form-item label="服务专员：">
               <el-select v-model="advisorAccount" multiple placeholder="请选择">
                 <el-option :label="counseloritem.advisorName" :value="counseloritem.advisorAccount" v-for="(counseloritem,counselorindex) in counselorList" :key="counselorindex">
                 </el-option>
@@ -47,7 +47,7 @@
           </div>
           <div class="">
             <el-form-item label="产品描述：">
-              <div>{{productDetail.productDetails}}</div>
+              <div v-html="productDetail.productDetails"></div>
             </el-form-item>
           </div>
         </el-form>
@@ -62,7 +62,7 @@ export default {
     return {
       // loading:true,
       productDetail:{},//产品详情
-      counselorList:[],//服务顾问列表
+      counselorList:[],//服务专员列表
       productName:'',//产品名称
       advisorAccount:'',
       orgId:'',
@@ -77,7 +77,7 @@ export default {
     this.getProductDetails()
   },
   methods: {
-    //顾问
+    //专员
     getServiceConsultantList(){
       let _this = this;
       this.api.get({

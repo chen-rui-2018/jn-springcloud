@@ -12,15 +12,16 @@ import com.jn.company.api.CompanyClient;
 import com.jn.company.model.ServiceCompany;
 import com.jn.park.api.ParkingClient;
 import com.jn.pay.api.PayOrderClient;
+import com.jn.pay.api.PropagandaClient;
+import com.jn.pay.enums.ChannelIdEnum;
 import com.jn.pay.enums.MchIdEnum;
-import com.jn.pay.model.PayOrderNotify;
-import com.jn.pay.model.PayOrderReq;
-import com.jn.pay.model.PayOrderRsp;
+import com.jn.pay.model.*;
 import com.jn.pay.utils.BeanToMap;
 import com.jn.pay.utils.PayDigestUtil;
 import com.jn.pay.utils.XXPayUtil;
 import com.jn.paybill.enums.PayBillExceptionEnum;
 import com.jn.paybill.model.*;
+import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import com.jn.unionpay.paybill.dao.PaymentBillMapper;
@@ -31,10 +32,14 @@ import com.jn.unionpay.paybill.entity.*;
 import com.jn.unionpay.paybill.enums.PayBillEnum;
 import com.jn.paybill.enums.PayTypeEnum;
 import com.jn.unionpay.paybill.service.PayBillService;
+import com.jn.user.api.MiniProgramRegisterClient;
+import com.jn.user.api.UserExtensionClient;
 import com.jn.user.api.UserPointServerClient;
 import com.jn.user.model.PointDeductionParam;
 import com.jn.user.model.PointDeductionVO;
 import com.jn.user.model.PointOrderPayParam;
+import com.jn.user.model.UserExtensionInfo;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -42,6 +47,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.xxpay.common.util.JsonUtil;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -74,8 +80,19 @@ public class PayBillServiceImpl implements PayBillService {
     private TbPaymentPayLogMapper tbPaymentPayLogMapper;
     @Autowired
     private ParkingClient parkingClient;
+    @Autowired
+    private SystemClient systemClient;
+    @Autowired
+    private PropagandaClient propagandaClient;
+    @Autowired
+    private MiniProgramRegisterClient miniProgramRegisterClient;
 
     private final static String TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+
+    /**
+     * 该值需前台传入，但目前暂无积分使用功能，故设置为0，以后开放积分使用， 请将该值删除   jiangyl
+     */
+    private final static String NOT_USER_POINT = "0";
 
     /**
      * 使用积分
@@ -147,12 +164,6 @@ public class PayBillServiceImpl implements PayBillService {
             logger.error("创建缴费账单：参数时间转换错误。{}",e.getMessage(),e);
             throw new JnSpringCloudException(PayBillExceptionEnum.TIME_CONVERSION_ERROR);
         }
-        Result<ServiceCompany> companyDetailByAccount = companyClient.getCompanyDetailByAccountOrCompanyId(paymentBillModel.getBillObjId());
-        if(companyDetailByAccount.getData()!=null){
-            tbPaymentBill.setBillObjType(PayBillEnum.BILL_OBJ_TYPE_IS_COMPANY.getCode());
-        }else{
-            tbPaymentBill.setBillObjType(PayBillEnum.BILL_OBJ_TYPE_IS_INDIVIDUAL.getCode());
-        }
         tbPaymentBill.setBillStatus(PayBillEnum.BILL_ORDER_IS_NOT_PAY.getCode());
         tbPaymentBill.setCreatorAccount(paymentBillModel.getBillCreateAccount());
         tbPaymentBill.setCreatedTime(new Date());
@@ -202,49 +213,90 @@ public class PayBillServiceImpl implements PayBillService {
     @ServiceLog(doAction = "缴费单支付发起")
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
-    public Result<PayOrderRsp> createPayOrder(String billId, String channelId,String userPoint, User user){
+    public Result<PayOrderRsp> createPayOrder(CreatePayReqModel createPayReqModel){
+        if(StringUtils.isEmpty(createPayReqModel.getUserAccount())){
+            throw new JnSpringCloudException(PayBillExceptionEnum.PAY_ORDER_USER_IS_NOT);
+        }
+        List<String> account = new ArrayList<>(16);
+        account.add(createPayReqModel.getUserAccount());
+        Result<List<User>> userInfoByAccount = systemClient.getUserInfoByAccount(account);
+        if(null == userInfoByAccount || userInfoByAccount.getData() == null || userInfoByAccount.getData().size() == 0){
+            throw new JnSpringCloudException(PayBillExceptionEnum.PAY_ORDER_USER_IS_NOT_EXIST);
+        }
+        User user = userInfoByAccount.getData().get(0);
+
         TbPaymentBillCriteria billCriteria = new TbPaymentBillCriteria();
-        billCriteria.createCriteria().andBillIdEqualTo(billId).andRecordStatusEqualTo(new Byte(PayBillEnum.BILL_STATE_NOT_DELETE.getCode()));
+        billCriteria.createCriteria().andBillIdEqualTo(createPayReqModel.getOrderId()).andRecordStatusEqualTo(new Byte(PayBillEnum.BILL_STATE_NOT_DELETE.getCode()));
         List<TbPaymentBill> tbPaymentBills = tbPaymentBillMapper.selectByExample(billCriteria);
         if(null == tbPaymentBills || tbPaymentBills.size() == 0){
             logger.error("账单不存在");
             throw new JnSpringCloudException(PayBillExceptionEnum.BILL_IS_NOT_EXIT);
         }
-        TbPaymentBill payBill = tbPaymentBills.get(0);
-        BigDecimal totalAmount = new BigDecimal(payBill.getBillAmount());
-        String orderName = payBill.getBillName();
-            if(StringUtils.equals(payBill.getBillStatus(),PayBillEnum.BILL_ORDER_PAY_CHECKED.getCode())){
-                throw new JnSpringCloudException(PayBillExceptionEnum.PAYMENT_STATUS_IS_PAY,"订单："+payBill.getBillNum()+"已确认支付，请刷新页面重试。");
-            }
-            if(StringUtils.equals(payBill.getBillStatus(),PayBillEnum.BILL_ORDER_IS_PAY.getCode())){
-                throw new JnSpringCloudException(PayBillExceptionEnum.PAYMENT_STATUS_IS_PAY,"订单："+payBill.getBillNum()+"已支付，请刷新页面重试。");
-            }
-            if(StringUtils.equals(payBill.getBillStatus(),PayBillEnum.REMIND_IS_NOT_CHECK.getCode())){
-                throw new JnSpringCloudException(PayBillExceptionEnum.PAY_ORDER_POINT_IS_NOT_CHECK,"订单："+payBill.getBillNum()+"待审核，暂不能支付，请刷新页面重试。");
-            }
 
-        //如果为单个账单支付，查询是否发起过支付，是则判断支付是否有效，有效则直接返回上次支付请求的数据
-        TbPaymentPayLogCriteria payLogCriteria = new TbPaymentPayLogCriteria();
-        payLogCriteria.createCriteria().andChannelIdEqualTo(channelId) .andBillIdEqualTo(payBill.getBillId()).andPayStatusEqualTo(PayBillEnum.PAYMENT_ORDER_IS_PAYING.getCode());
-        List<TbPaymentPayLog> tbPaymentPayLogs = tbPaymentPayLogMapper.selectByExample(payLogCriteria);
-        if(null != tbPaymentPayLogs && tbPaymentPayLogs.size()>0){
-            for (TbPaymentPayLog payLog:tbPaymentPayLogs) {
-                Date date = DateUtils.addHours(payLog.getStartTime(), 1);
-                if(new Date().before(date)){
-                    //上次支付有效，直接返回支付发起请求。
-                    String responseXml = payLog.getResponseXml();
-                    logger.info("上次支付请求数据有效，沿用上次数据：{}",responseXml);
-                    Object parse = JSON.parse(responseXml);
-                    return new Result(parse);
+        BigDecimal totalAmount = new BigDecimal(0);
+        StringBuilder orderName = new StringBuilder();
+        StringBuilder ids = new StringBuilder();
+        Set<String> set = new HashSet<>();
+        for (TbPaymentBill bill:tbPaymentBills) {
+            if(StringUtils.equals(bill.getBillStatus(),PayBillEnum.BILL_ORDER_PAY_CHECKED.getCode())){
+                throw new JnSpringCloudException(PayBillExceptionEnum.PAYMENT_STATUS_IS_PAY,"订单："+bill.getBillNum()+"已确认支付，请刷新页面重试。");
+            }
+            if(StringUtils.equals(bill.getBillStatus(),PayBillEnum.BILL_ORDER_IS_PAY.getCode())){
+                throw new JnSpringCloudException(PayBillExceptionEnum.PAYMENT_STATUS_IS_PAY,"订单："+bill.getBillNum()+"已支付，请刷新页面重试。");
+            }
+            if(StringUtils.equals(bill.getBillStatus(),PayBillEnum.REMIND_IS_NOT_CHECK.getCode())){
+                throw new JnSpringCloudException(PayBillExceptionEnum.PAY_ORDER_POINT_IS_NOT_CHECK,"订单："+bill.getBillNum()+"待审核，暂不能支付，请刷新页面重试。");
+            }
+            BigDecimal decimal = new BigDecimal(bill.getBillAmount());
+            totalAmount = totalAmount.add(decimal);
+            orderName.append(bill.getBillName()+"、");
+            ids.append(bill.getBillId()+",");
+            set.add(bill.getOrderId());
+        }
+
+        if(createPayReqModel.getPaySum().compareTo(totalAmount.setScale(2, BigDecimal.ROUND_HALF_UP))!=0){
+            throw new JnSpringCloudException(PayBillExceptionEnum.PAY_ORDER_AMOUNT_IS_ERROR);
+        }
+
+        String billId = ids.substring(0,ids.length()-1);
+        //查询是否发起过支付，是则判断支付是否有效，有效则直接返回上次支付请求的数据
+            TbPaymentPayLogCriteria payLogCriteria = new TbPaymentPayLogCriteria();
+            payLogCriteria.createCriteria().andChannelIdEqualTo(createPayReqModel.getChannelId()) .andBillIdEqualTo(billId).andPayStatusEqualTo(PayBillEnum.PAYMENT_ORDER_IS_PAYING.getCode());
+            List<TbPaymentPayLog> tbPaymentPayLogs = tbPaymentPayLogMapper.selectByExample(payLogCriteria);
+            if(null != tbPaymentPayLogs && tbPaymentPayLogs.size()>0){
+                for (TbPaymentPayLog payLog:tbPaymentPayLogs) {
+                    Date date = DateUtils.addHours(payLog.getStartTime(), 1);
+                    if(new Date().before(date)){
+                        //上次支付有效，直接返回支付发起请求。
+                        String responseXml = payLog.getResponseXml();
+                        logger.info("上次支付请求数据有效，沿用上次数据：{}",responseXml);
+                        Object parse = JSON.parse(responseXml);
+                        return new Result(parse);
+                    }
                 }
             }
+        //合并支付情况，查询订单状态，未支付成功且未取消支付的账单不能再次发起支付
+        List<String> orders = new ArrayList<>(set);
+        TbPaymentOrderCriteria orderCriteria = new TbPaymentOrderCriteria();
+        orderCriteria.createCriteria().andIdIn(orders).andOrderStatusEqualTo(PayBillEnum.BILL_ORDER_IS_NOT_PAY.getCode()).andRecordStatusEqualTo(new Byte(PayBillEnum.BILL_STATE_NOT_DELETE.getCode()));
+        List<TbPaymentOrder> tbPaymentOrders = tbPaymentOrderMapper.selectByExample(orderCriteria);
+        if(null != tbPaymentOrders && tbPaymentOrders.size()>1){
+            StringBuffer sb = new StringBuffer();
+            for (TbPaymentBill bill:tbPaymentBills) {
+                for (TbPaymentOrder oder :tbPaymentOrders) {
+                    if(StringUtils.equals(bill.getOrderId(),oder.getId())){
+                        sb.append(bill.getBillNum()+",");
+                    }
+                }
+            }
+            throw new JnSpringCloudException(PayBillExceptionEnum.BILL_PAY_IS_NOT_COMPLETE,"账单："+sb.toString()+"已发起支付，请先取消订单。");
         }
-        //积分抵扣金额
+
+               //积分抵扣金额
         PointDeductionVO pointDeductionVO = new PointDeductionVO();
-        if(StringUtils.equals(USE_POINT,userPoint)){
+        if(StringUtils.equals(USE_POINT,NOT_USER_POINT)){
             PointDeductionParam pointDeductionParam = new PointDeductionParam();
-            String[] billIds = {billId};
-            pointDeductionParam.setBillIds(billIds);
+            pointDeductionParam.setBillIds(new String[]{createPayReqModel.getOrderId()});
             pointDeductionParam.setAccount(user.getAccount());
             Result<PointDeductionVO> pointDeductionVOResult = userPointServerClient.orderPointDeduction(pointDeductionParam);
             pointDeductionVO = pointDeductionVOResult.getData();
@@ -266,16 +318,28 @@ public class PayBillServiceImpl implements PayBillService {
         paymentOrder.setOrderObjName(user.getAccount());
         paymentOrder.setBillIds(billId);
         paymentOrder.setOrderNum(DateUtils.formatDate(new Date(),"yyyyMMdd")+(new Random().nextInt(899999)+100000));
-        paymentOrder.setOrderAmount(totalAmount.setScale(2).doubleValue());
+        paymentOrder.setOrderAmount(totalAmount.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue());
         paymentOrder.setOrderStatus(PayBillEnum.BILL_ORDER_IS_NOT_PAY.getCode());
-        paymentOrder.setPayType(channelId);
+        paymentOrder.setPayType(createPayReqModel.getChannelId());
         paymentOrder.setCreatedTime(new Date());
         paymentOrder.setCreatorAccount(user.getAccount());
-        paymentOrder.setPayAmount((StringUtils.equals(USE_POINT,userPoint)&&pointDeductionVO.getDeductionTotalAmount()!=null)?(totalAmount.setScale(2).doubleValue()-pointDeductionVO.getDeductionTotalAmount()):totalAmount.setScale(2).doubleValue());
-        paymentOrder.setIntegralAmount((StringUtils.equals(USE_POINT,userPoint)&&pointDeductionVO.getDeductionTotalAmount()!=null)?pointDeductionVO.getDeductionTotalAmount():0);
+        paymentOrder.setPayAmount((StringUtils.equals(USE_POINT,NOT_USER_POINT)&&pointDeductionVO.getDeductionTotalAmount()!=null)?(totalAmount.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue()-pointDeductionVO.getDeductionTotalAmount()):totalAmount.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue());
+        paymentOrder.setIntegralAmount((StringUtils.equals(USE_POINT,NOT_USER_POINT)&&pointDeductionVO.getDeductionTotalAmount()!=null)?pointDeductionVO.getDeductionTotalAmount():0);
         paymentOrder.setRecordStatus(new Byte(PayBillEnum.BILL_STATE_NOT_DELETE.getCode()));
         logger.info("统一支付接口，发起支付下单开始。");
-        Map<String, Object> map = createPayOrder(channelId, paymentOrder);
+
+        if(StringUtils.equals(createPayReqModel.getChannelId(), ChannelIdEnum.WX_PROGRAM.getCode())){
+            Map<String,String> map = new HashMap<>(16);
+
+            Result openIdByAccount = miniProgramRegisterClient.getOpenIdByAccount(user.getAccount());
+            if(openIdByAccount == null || openIdByAccount.getData() == null){
+                throw new JnSpringCloudException(PayBillExceptionEnum.PAY_ORDER_OPEN_ID_IS_NULL);
+            }
+            map.put("openId",(String)openIdByAccount.getData());
+            createPayReqModel.setExtra(JsonUtil.object2Json(map));
+        }
+
+        Map<String, Object> map = createPayOrder(createPayReqModel.getChannelId(),createPayReqModel.getExtra(), paymentOrder);
         Result payOrder = (Result<PayOrderRsp>)map.get("result");
         boolean verifyFlag = XXPayUtil.verifyPaySign(BeanToMap.toMap(payOrder.getData()), MchIdEnum.MCH_BASE.getRspKey());
         if(!verifyFlag) {
@@ -289,7 +353,7 @@ public class PayBillServiceImpl implements PayBillService {
         }
 
         //支付接口调用成功，处理用户积分
-        if(StringUtils.equals(USE_POINT,userPoint)){
+        if(StringUtils.equals(USE_POINT,NOT_USER_POINT)){
             PointOrderPayParam pointOrderPayParam = new PointOrderPayParam();
             BeanUtils.copyProperties(pointDeductionVO,pointOrderPayParam);
             pointOrderPayParam.setOrderId(orderId);
@@ -305,7 +369,7 @@ public class PayBillServiceImpl implements PayBillService {
         tbPaymentPayLog.setOrderId(orderId);
         tbPaymentPayLog.setOrderNum(paymentOrder.getOrderNum());
         tbPaymentPayLog.setBillId(billId);
-        tbPaymentPayLog.setChannelId(channelId);
+        tbPaymentPayLog.setChannelId(createPayReqModel.getChannelId());
         tbPaymentPayLog.setPayStatus(PayBillEnum.PAYMENT_ORDER_IS_PAYING.getCode());
         tbPaymentPayLog.setStartTime(new Date());
         tbPaymentPayLog.setRequestXml((String)map.get("request"));
@@ -324,7 +388,7 @@ public class PayBillServiceImpl implements PayBillService {
      * @param paymentOrder
      * @return
      */
-    public Map<String,Object> createPayOrder(String channelId,TbPaymentOrder paymentOrder){
+    public Map<String,Object> createPayOrder(String channelId,String extra,TbPaymentOrder paymentOrder){
         Map<String,Object> map = new HashMap<>(16);
         PayOrderReq payOrderReq = new PayOrderReq();
         payOrderReq.setMchId(MchIdEnum.MCH_BASE.getCode());
@@ -337,6 +401,7 @@ public class PayBillServiceImpl implements PayBillService {
         payOrderReq.setServiceUrl(PayBillEnum.PAYMENT_ORDER_PAYMENT_URL_NAME.getCode());
         payOrderReq.setSubject(paymentOrder.getOrderName());
         payOrderReq.setBody(paymentOrder.getOrderName());
+        payOrderReq.setExtra(extra);
         payOrderReq.setSign(PayDigestUtil.getSign(BeanToMap.toMap(payOrderReq),MchIdEnum.MCH_BASE.getReqKey()));
         Result<PayOrderRsp> payOrder = payOrderClient.createPayOrder(payOrderReq);
         map.put("result",payOrder);
@@ -402,7 +467,6 @@ public class PayBillServiceImpl implements PayBillService {
 
 
     public Boolean callBackBusiness(TbPaymentBill bill,PayOrderNotify payOrderNotify){
-        //TODO jiangyl 判断账单类型，并回调各业务侧接口处理业务数据。
         String billType = bill.getBillType();
         if(StringUtils.equals(billType,PayTypeEnum.PAYMENT_ORDER_TYPE_PARKING_FEE.getCode())||StringUtils.equals(billType, PayTypeEnum.PAYMENT_ORDER_TYPE_PARKING_MONTH.getCode())){
             PaymentBillCallBack paymentBillCallBack = new PaymentBillCallBack();
@@ -410,8 +474,11 @@ public class PayBillServiceImpl implements PayBillService {
             paymentBillCallBack.setBillType(billType);
             BeanUtils.copyProperties(payOrderNotify,paymentBillCallBack);
             Result result = parkingClient.parkingPayCallBack(paymentBillCallBack);
-            logger.info("处理统一停车业务成功。响应结果：{}",result.getCode());
+            logger.info("处理统一停车业务支付回调成功。响应结果：{}",result.getCode());
             return (Boolean) result.getData();
+        }else if(StringUtils.equals(billType,PayTypeEnum.PAYMENT_ORDER_TYPE_AD_FREE.getCode())){
+            Result<Integer> integerResult = propagandaClient.updatePayStatus(bill.getBillId());
+            logger.info("处理宣传费业务支付回调成功。响应结果：{}",integerResult==null?"":integerResult.getData());
         }
         return true;
     }
@@ -542,8 +609,8 @@ public class PayBillServiceImpl implements PayBillService {
         TbPaymentBillCriteria billCriteria = new TbPaymentBillCriteria();
         billCriteria.createCriteria().andBillNumEqualTo(billId).andRecordStatusEqualTo(new Byte(PayBillEnum.BILL_STATE_NOT_DELETE.getCode()));
         List<TbPaymentBill> tbPaymentBills = tbPaymentBillMapper.selectByExample(billCriteria);
-        if(null == tbPaymentBills && tbPaymentBills.size() != 0){
-            throw new JnSpringCloudException(PayBillExceptionEnum.BILL_PAY_ORDER_IS_NOT_EXIT);
+        if(null == tbPaymentBills || tbPaymentBills.size() == 0){
+            return true;
         }
         TbPaymentBill tbPaymentBill = tbPaymentBills.get(0);
         tbPaymentBill.setBillStatus(PayBillEnum.PAYMENT_BILL_IS_DELETE.getCode());

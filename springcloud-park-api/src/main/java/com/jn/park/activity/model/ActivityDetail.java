@@ -66,7 +66,7 @@ public class ActivityDetail implements Serializable {
     private String modifierAccount;
     @ApiModelProperty(value = "是否首页展示")
     private String isIndex;
-    @ApiModelProperty(value = "是否可报名")
+    @ApiModelProperty(value = "是否可报名(0：否，1：是)")
     private String isApply;
     @ApiModelProperty(value = "活动内容")
     private String actiDetail;
@@ -82,8 +82,6 @@ public class ActivityDetail implements Serializable {
     private String actiOrder;
     @ApiModelProperty(value = "园区列表")
     private List<ParkCode> parkCodes;
-
-    private static final long serialVersionUID = 1L;
 
     public String getId() {
         return id;
@@ -349,7 +347,43 @@ public class ActivityDetail implements Serializable {
         this.parkCodes = parkCodes;
     }
 
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
+
+    @Override
+    public String toString() {
+        return "ActivityDetail{" +
+                "id='" + id + '\'' +
+                ", actiType='" + actiType + '\'' +
+                ", actiName='" + actiName + '\'' +
+                ", actiStartTime='" + actiStartTime + '\'' +
+                ", actiEndTime='" + actiEndTime + '\'' +
+                ", applyStartTime='" + applyStartTime + '\'' +
+                ", applyEndTime='" + applyEndTime + '\'' +
+                ", mesSendTime='" + mesSendTime + '\'' +
+                ", actiAddress='" + actiAddress + '\'' +
+                ", actiCost='" + actiCost + '\'' +
+                ", actiOrganizer='" + actiOrganizer + '\'' +
+                ", actiNumber='" + actiNumber + '\'' +
+                ", actiPosterUrl='" + actiPosterUrl + '\'' +
+                ", actiViews='" + actiViews + '\'' +
+                ", actiLike='" + actiLike + '\'' +
+                ", applyNum='" + applyNum + '\'' +
+                ", particNum='" + particNum + '\'' +
+                ", actiStatus='" + actiStatus + '\'' +
+                ", createdTime='" + createdTime + '\'' +
+                ", creatorAccount='" + creatorAccount + '\'' +
+                ", issueTime='" + issueTime + '\'' +
+                ", issueAccount='" + issueAccount + '\'' +
+                ", modifiedTime='" + modifiedTime + '\'' +
+                ", modifierAccount='" + modifierAccount + '\'' +
+                ", isIndex='" + isIndex + '\'' +
+                ", isApply='" + isApply + '\'' +
+                ", actiDetail='" + actiDetail + '\'' +
+                ", showApplyNum='" + showApplyNum + '\'' +
+                ", parkId='" + parkId + '\'' +
+                ", parkName='" + parkName + '\'' +
+                ", applyCheck='" + applyCheck + '\'' +
+                ", actiOrder='" + actiOrder + '\'' +
+                ", parkCodes=" + parkCodes +
+                '}';
     }
 }

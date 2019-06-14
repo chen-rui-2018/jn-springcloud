@@ -1,9 +1,11 @@
 package com.jn.enterprise.technologyfinancial.investors.controller;
 
+import com.codingapi.tx.annotation.TxTransaction;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
+import com.jn.enterprise.company.model.ServiceCompany;
 import com.jn.enterprise.enums.InvestorExceptionEnum;
 import com.jn.enterprise.technologyfinancial.investors.model.*;
 import com.jn.enterprise.technologyfinancial.investors.service.InvestorService;
@@ -48,6 +50,39 @@ public class InvestorController extends BaseController {
         return  new Result(investorInfoList);
     }
 
+    @ControllerLog(doAction = "投资人详情")
+    @ApiOperation(value = "投资人详情/投资人查看")
+    @RequestMapping(value = "/guest/technologyFinancial/investorController/getInvestorInfoDetails",method = RequestMethod.GET)
+    public Result<InvestorInfoDetailsVo> getInvestorInfoDetails(@ApiParam(value = "投资人账号" ,required = true,example = "wangsong")@RequestParam("investorAccount") String investorAccount){
+        Assert.notNull(investorAccount, InvestorExceptionEnum.INVESTOR_ACCOUNT_NOT_NULL.getMessage());
+        InvestorInfoDetailsVo investorInfoDetailsVo=investorService.getInvestorInfoDetails(investorAccount);
+        return  new Result(investorInfoDetailsVo);
+    }
+
+    @ControllerLog(doAction = "查询所属单位")
+    @ApiOperation(value = "查询所属单位")
+    @RequestMapping(value = "/guest/technologyFinancial/investorController/getAffiliationUnit",method = RequestMethod.GET)
+    public Result<PaginationData<List<AffiliationUnitShow>>> getAffiliationUnit(@Validated  AffiliationUnitInfoParam affiliationUnitInfoParam){
+        PaginationData result= investorService.getAffiliationUnit(affiliationUnitInfoParam);
+        return  new Result(result);
+    }
+
+    @ControllerLog(doAction = "查询投资人主投领域")
+    @ApiOperation(value = "查询投资人主投领域")
+    @RequestMapping(value = "/guest/technologyFinancial/investorController/getInvestorMainArea",method = RequestMethod.GET)
+    public Result<List<InvestorMainArea>> getInvestorMainArea(){
+        List<InvestorMainArea> investorMainAreaList = investorService.getInvestorMainArea();
+        return  new Result(investorMainAreaList);
+    }
+
+    @ControllerLog(doAction = "查询投资人主投轮次")
+    @ApiOperation(value = "查询投资人主投轮次")
+    @RequestMapping(value = "/guest/technologyFinancial/investorController/getInvestorMainRound",method = RequestMethod.GET)
+    public Result<List<InvestorMainRound>> getInvestorMainRound(){
+        List<InvestorMainRound> investorMainRound = investorService.getInvestorMainRound();
+        return  new Result(investorMainRound);
+    }
+
     @ControllerLog(doAction = "投资人认证")
     @ApiOperation(value = "投资人认证",notes = "返回数据状态为200，表示投资人认证提交成功，启动审批流程成功")
     @RequiresPermissions("/technologyFinancial/investorController/addInvestorInfo")
@@ -61,39 +96,30 @@ public class InvestorController extends BaseController {
         return  new Result(investorService.addInvestorInfo(investorAuthenticateParam, user.getAccount()));
     }
 
-    @ControllerLog(doAction = "投资人详情")
-    @ApiOperation(value = "投资人详情/投资人查看")
-    @RequestMapping(value = "/guest/technologyFinancial/investorController/getInvestorInfoDetails",method = RequestMethod.GET)
-    public Result<InvestorInfoDetailsVo> getInvestorInfoDetails(@ApiParam(value = "投资人账号" ,required = true,example = "wangsong")@RequestParam("investorAccount") String investorAccount){
-        Assert.notNull(investorAccount, InvestorExceptionEnum.INVESTOR_ACCOUNT_NOT_NULL.getMessage());
-        InvestorInfoDetailsVo investorInfoDetailsVo=investorService.getInvestorInfoDetails(investorAccount);
-        return  new Result(investorInfoDetailsVo);
+
+    @ControllerLog(doAction = "添加投资人角色")
+    @ApiOperation(value = "添加投资人角色",notes = "投资人认证审批通过后，ibps后置处理器调用此接口添加投资人角色,返回数据响应条数")
+    @RequiresPermissions("/technologyFinancial/investorController/addInvestorRole")
+    @RequestMapping(value = "/technologyFinancial/investorController/addInvestorRole",method = RequestMethod.POST)
+    public Result<Integer> addInvestorRole(String investorAccount){
+        Assert.notNull(investorAccount,InvestorExceptionEnum.INVESTOR_ACCOUNT_NOT_NULL.getMessage());
+        int resNum = investorService.addInvestorRole(investorAccount);
+        logger.info("-----------添加投资人角色成功，数据响应条数：{}----------",resNum);
+        return  new Result(resNum);
     }
 
-    @ControllerLog(doAction = "查询所属单位")
-    @ApiOperation(value = "查询所属单位")
-    @RequiresPermissions("/technologyFinancial/investorController/getAffiliationUnit")
-    @RequestMapping(value = "/technologyFinancial/investorController/getAffiliationUnit",method = RequestMethod.GET)
-    public Result<PaginationData<List<AffiliationUnitShow>>> getAffiliationUnit(@Validated  AffiliationUnitInfoParam affiliationUnitInfoParam){
-        PaginationData result= investorService.getAffiliationUnit(affiliationUnitInfoParam);
-        return  new Result(result);
+    @ControllerLog(doAction = "投资人认证流程后置处理")
+    @ApiOperation(value = "投资人认证流程后置处理", notes = "设置投资人认证申请人角色为投资人")
+    @RequestMapping(value = "/technologyFinancial/investorController/setAccountRoleToInvestor", method = RequestMethod.POST)
+    @RequiresPermissions("/technologyFinancial/investorController/setAccountRoleToInvestor")
+    @TxTransaction(isStart = true)
+    public Result<Integer> setAccountRoleToInvestor(@Validated @RequestBody InvestorInfoWorkFlow  investorInfoWorkFlow) {
+        logger.info("进入投资人认证流程后置处理API,入参：{}",investorInfoWorkFlow.toString());
+        Assert.notNull(investorInfoWorkFlow,InvestorExceptionEnum.INVESTOR_PARAM_NOT_NULL.getMessage());
+        Assert.notNull(investorInfoWorkFlow.getInvestorAccount(),InvestorExceptionEnum.INVESTOR_ACCOUNT_NOT_NULL.getMessage());
+        int resNum = investorService.addInvestorRole(investorInfoWorkFlow.getInvestorAccount());
+        logger.info("-----------添加投资人角色成功，数据响应条数：{}----------",resNum);
+        return  new Result(resNum);
     }
 
-    @ControllerLog(doAction = "查询投资人主投领域")
-    @ApiOperation(value = "查询投资人主投领域")
-    @RequiresPermissions("/technologyFinancial/investorController/getInvestorMainArea")
-    @RequestMapping(value = "/technologyFinancial/investorController/getInvestorMainArea",method = RequestMethod.GET)
-    public Result<List<InvestorMainArea>> getInvestorMainArea(){
-        List<InvestorMainArea> investorMainAreaList = investorService.getInvestorMainArea();
-        return  new Result(investorMainAreaList);
-    }
-
-    @ControllerLog(doAction = "查询投资人主投轮次")
-    @ApiOperation(value = "查询投资人主投轮次")
-    @RequiresPermissions("/technologyFinancial/investorController/getInvestorMainRound")
-    @RequestMapping(value = "/technologyFinancial/investorController/getInvestorMainRound",method = RequestMethod.GET)
-    public Result<List<InvestorMainRound>> getInvestorMainRound(){
-        List<InvestorMainRound> investorMainRound = investorService.getInvestorMainRound();
-        return  new Result(investorMainRound);
-    }
 }

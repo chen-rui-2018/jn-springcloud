@@ -14,6 +14,7 @@ import com.jn.pay.model.CreatePayReqModel;
 import com.jn.pay.model.PayOrderRsp;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
+import com.jn.unionpay.paybill.service.PayBillService;
 import io.swagger.annotations.*;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -38,6 +39,8 @@ import java.math.BigDecimal;
 public class PayController {
     @Autowired
     private LoadBalancerUtil loadBalancerUtil;
+    @Autowired
+    private PayBillService payBillService;
 
     private static Result NOT_SUPPORT_RESULT=new Result<>("-1","暂不支持的此缴费类型");
 
@@ -58,15 +61,15 @@ public class PayController {
             case ROOM_LEASE://
                 return loadBalancerUtil.getClientPostForEntity("springcloud-park","/api/order/createPay",JSONObject.toJSONString(createPayReqModel));
             case GOODS_LEASE://
-                return NOT_SUPPORT_RESULT;
+                return loadBalancerUtil.getClientPostForEntity("springcloud-park","/api/order/createArticlePay",JSONObject.toJSONString(createPayReqModel));
             case TEMPORARY_PARKING://
-                return NOT_SUPPORT_RESULT;
+                return loadBalancerUtil.getClientPostForEntity("springcloud-payment","/api/pay/bill/createPayOrder",JSONObject.toJSONString(createPayReqModel));
             case PARKING_LEASE://
-                return NOT_SUPPORT_RESULT;
+                return loadBalancerUtil.getClientPostForEntity("springcloud-payment","/api/pay/bill/createPayOrder",JSONObject.toJSONString(createPayReqModel));
             case WATER://
                 return NOT_SUPPORT_RESULT;
             case PROMOTION://
-                return NOT_SUPPORT_RESULT;
+                return loadBalancerUtil.getClientPostForEntity("springcloud-payment","/api/pay/bill/createPayOrder",JSONObject.toJSONString(createPayReqModel));
             case HEALTH://
                 return NOT_SUPPORT_RESULT;
             case ELECTRIC_RECHARGE:

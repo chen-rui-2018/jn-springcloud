@@ -23,6 +23,7 @@ import com.jn.enterprise.servicemarket.product.enums.ProductConstantEnum;
 import com.jn.enterprise.servicemarket.product.model.*;
 import com.jn.enterprise.servicemarket.product.service.ServiceProductService;
 import com.jn.enterprise.servicemarket.product.vo.WebServiceProductDetails;
+import com.jn.enterprise.utils.IBPSFileUtils;
 import com.jn.enterprise.utils.IBPSUtils;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
@@ -75,8 +76,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public String addServiceProduct(ServiceContent content, String account,String templateId) {
-
-        if(ProductConstantEnum.PRODUCT_FEATURE_TYPE.getCode().equals(content.getProductType())){
+        if(ProductConstantEnum.PRODUCT_FEATURE_TYPE.getCode().equals(content.getProductType()) && StringUtils.isBlank(content.getProductId())){
             TbServiceProductCriteria criteria = new TbServiceProductCriteria();
             criteria.createCriteria().andProductNameEqualTo(content.getProductName()).andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue())
                     .andStatusNotEqualTo(ProductConstantEnum.PRODUCT_STATUS_APPROVAL_NOT_PASS.getCode());
@@ -112,7 +112,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         content.setCreatedTime(DateUtils.formatDate(new Date(),"yyyy-MM-dd HH:mm:ss"));
         content.setOrgId(orgId);
         content.setOrgName(userExtension.getAffiliateName());
-
+        content.setPictureUrl(IBPSFileUtils.uploadFile2Json(account,content.getPictureUrl()));
         if (StringUtils.isBlank(content.getViewCount())) {
             content.setViewCount("0");
         }
@@ -161,6 +161,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         List<ServiceProductManage> productList = productDao.findServiceList(map);
         return new PaginationData(productList,objects==null?0:objects.getTotal());
     }
+
     @ServiceLog(doAction = "上架常规产品")
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -203,9 +204,12 @@ public class ServiceProductServiceImpl implements ServiceProductService {
                  content.setProductDetails(content.getServiceDetails());
                  content.setServiceDetails(null);
                  content.setServiceDetails(null);
+                 //ibps图片路径转全路径
+                 content.setPictureUrl(IBPSFileUtils.getFilePath(detail.getContent().getPictureUrl()));
                  detail.setContent(content);
                 }
             }
+
         //添加产品浏览数
         TbServiceProduct product =tbServiceProductMapper.selectByPrimaryKey(productId);
         TbServiceProduct productUpdate = new TbServiceProduct();
@@ -237,9 +241,9 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     public void productShelf(ProductShelfOperation operation , String account) {
         //如果进行上架操作,则需要进行审核,修改状态为待审核
         String productStatus = operation.getStatus();
-        if(ProductConstantEnum.PRODUCT_STATUS_EFFECTIVE.getCode().equals(productStatus)){
-            productStatus = ProductConstantEnum.PRODUCT_STATUS_APPROVAL.getCode();
-        }
+//        if(ProductConstantEnum.PRODUCT_STATUS_EFFECTIVE.getCode().equals(productStatus)){
+//            productStatus = ProductConstantEnum.PRODUCT_STATUS_APPROVAL.getCode();
+//        }
         productDao.productShelf(operation.getProductId(),productStatus,account);
     }
 
@@ -258,6 +262,10 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         }
         objects = PageHelper.startPage(page,rows==0?15:rows,true);
         List<ServiceProductManage> productList =  productDao.featuredProductRelease(map);
+        //ibps图片路径转全路径
+        for(ServiceProductManage manage : productList){
+            manage.setPictureUrl(IBPSFileUtils.getFilePath(manage.getPictureUrl()));
+        }
         return new PaginationData(productList,objects==null?0:objects.getTotal());
 
     }
@@ -273,7 +281,6 @@ public class ServiceProductServiceImpl implements ServiceProductService {
             logger.warn("[编辑常规产品]，编辑常规产品{}产品已有机构上架,不能修改：productId: {}编辑常规产品,产品已有机构上架,不能修改!");
             throw new JnSpringCloudException(ServiceProductExceptionEnum.SERVICE_PRODUCT_PRODUCT_SHELF);
         }
-
         if (content.getReferPrice() != null) {
             checkReferPrice(content.getReferPrice());
         }
@@ -282,8 +289,9 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         product.setModifierAccount(account);
         product.setModifiedTime(new Date());
         product.setProductDetails(content.getProductDetails());
+        //修改 图片路径为ibps形式
+        product.setPictureUrl(IBPSFileUtils.uploadFile2Json(account,product.getPictureUrl()));
         tbServiceProductMapper.updateByPrimaryKeySelective(product);
-
     }
     @ServiceLog(doAction = "服务超市首页,热门服务产品列表")
     @Override
@@ -295,6 +303,11 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         }
        object = PageHelper.startPage(page.getPage(),page.getRows());
        List<HotProducts> products =  productDao.findHotProducts();
+
+        //ibps图片路径转全路径
+        for(HotProducts product : products){
+            product.setPictureUrl(IBPSFileUtils.getFilePath(product.getPictureUrl()));
+        }
         return new PaginationData(products,object==null?0:object.getTotal());
     }
     @ServiceLog(doAction = "web前台服务产品详情")
@@ -313,6 +326,11 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         WebServiceProductDetails details = new WebServiceProductDetails();
         details.setInfo(info);
         details.setInfoList(infoList);
+        //转换ibps路劲为全部路径
+        details.getInfo().setPictureUrl(IBPSFileUtils.getFilePath(details.getInfo().getPictureUrl()));
+        for(WebServiceProductInfo product: infoList){
+            product.setPictureUrl(IBPSFileUtils.getFilePath(product.getPictureUrl()));
+        }
         //添加产品浏览数
         TbServiceProduct product =tbServiceProductMapper.selectByPrimaryKey(productId);
         TbServiceProduct productUpdate = new TbServiceProduct();
@@ -339,6 +357,10 @@ public class ServiceProductServiceImpl implements ServiceProductService {
             //todo：从数据字典表获取综合排序各个因素的权重并给相应元素赋值  chenr
         }
          List<WebServiceProductInfo> data= productDao.findWebProductList(conditions);
+
+        for(WebServiceProductInfo product: data){
+            product.setPictureUrl(IBPSFileUtils.getFilePath(product.getPictureUrl()));
+        }
         return new PaginationData(data,objects==null?0:objects.getTotal());
     }
     @ServiceLog(doAction = "机构-前台服务产品列表")
@@ -349,6 +371,9 @@ public class ServiceProductServiceImpl implements ServiceProductService {
             objects = PageHelper.startPage(query.getPage(), query.getRows() == 0 ? 15 : query.getRows(), true);
         }
          List<ServiceProductManage>  data = productDao.findOrgProductList(query.getKeyWords(), query.getOrgId(), query.getProductType(),query.getProductStatus());
+        for(ServiceProductManage product: data){
+            product.setPictureUrl(IBPSFileUtils.getFilePath(product.getPictureUrl()));
+        }
         return new PaginationData(data,objects==null?0:objects.getTotal());
     }
     @ServiceLog(doAction = "服务产品列表,只包含服务Id和服务名称,用于机构上架常规服务产品")
@@ -366,6 +391,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         WebServiceProductInfo data =   productDao.findShelfProductInfo(productId);
         data.setProductDetails(data.getServiceDetails());
         data.setServiceDetails(null);
+        data.setPictureUrl(IBPSFileUtils.getFilePath(data.getPictureUrl()));
         return data;
     }
 
@@ -388,6 +414,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
 
         ServiceContent content = new ServiceContent();
         BeanUtils.copyProperties(tbServiceProduct, content);
+        content.setPictureUrl(IBPSFileUtils.uploadFile2Json(account,content.getPictureUrl()));
         content.setAdvisorAccount(product.getAdvisorAccount());
         content.setViewCount(tbServiceProduct.getViewCount().toString());
         content.setModifierAccount(tbServiceProduct.getCreatorAccount());
@@ -411,6 +438,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         content.setViewCount(tbServiceProduct.getViewCount().toString());
         content.setModifierAccount(tbServiceProduct.getCreatorAccount());
         content.setModifiedTime(DateUtils.formatDate(tbServiceProduct.getCreatedTime(), "yyyy-MM-dd HH:mm:ss"));
+        content.setPictureUrl(IBPSFileUtils.uploadFile2Json(account,content.getPictureUrl()));
         if (StringUtils.isNotEmpty(product.getAdvisorAccount())) {
             content.setAdvisorAccount(product.getAdvisorAccount());
         }
@@ -425,7 +453,9 @@ public class ServiceProductServiceImpl implements ServiceProductService {
             objects = PageHelper.startPage(query.getPage(), query.getRows() == 0 ? 15 : query.getRows(), true);
         }
           List<AdvisorProductInfo> data =  advisorDao.advisorProductList(query.getAdvisorAccount(),query.getProductType(),query.getPraise());
-
+        for(AdvisorProductInfo product : data){
+            product.setPictureUrl(IBPSFileUtils.getFilePath(product.getPictureUrl()));
+        }
         return new PaginationData(data,objects==null?0:objects.getTotal());
     }
     @ServiceLog(doAction = "机构(查看)-服务产品列表")
@@ -436,7 +466,9 @@ public class ServiceProductServiceImpl implements ServiceProductService {
             objects = PageHelper.startPage(query.getPage(), query.getRows() == 0 ? 15 : query.getRows(), true);
         }
         List<OrgCountProductInfo> data =  serviceOrgDao.findOrgCountProductList(query.getOrgd(),query.getProductType(),query.getPraise());
-
+        for(OrgCountProductInfo product : data){
+            product.setPictureUrl(IBPSFileUtils.getFilePath(product.getPictureUrl()));
+        }
         return new PaginationData(data,objects==null?0:objects.getTotal());
     }
     @ServiceLog(doAction = "服务产品列表界面的统计信息")
@@ -451,6 +483,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         UpdateCommonProductShow show = productDao.modifyCommonServiceShow(productId);
         show.setProductDetails(show.getServiceDetails());
         show.setServiceDetails(null);
+        show.setPictureUrl(IBPSFileUtils.getFilePath(show.getPictureUrl()));
         return  show;
     }
 

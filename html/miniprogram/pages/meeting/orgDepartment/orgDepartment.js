@@ -1,5 +1,5 @@
 // pages/meeting/meeting.js
-import {CreateHeader} from "./../../../utils/require"
+import request from "./../../../utils/http"
 Page({
   data: {
     nvabarData: {
@@ -12,36 +12,43 @@ Page({
   },
 
   onLoad: function (options) {
-    CreateHeader()
-    .then(header=>{
-      this.data.token=header.token
-      this.getDepartment()
-    })
+    this.getDepartment()
    },
   onReady: function () { },
   onShow: function () { },
   onHide: function () { },
-  onPullDownRefresh: function () { },
+  onPullDownRefresh: function () {
+    this.onLoad()
+   },
   onReachBottom: function () { },
   getDepartment(){
-    wx.request({
-      url: 'http://192.168.10.31:1101/springcloud-park/finance/expenses/selectDepartment',
-      data:{},
-      header: {'content-type':'application/json','token':this.data.token},
+    // wx.request({
+    //   url: 'http://192.168.10.31:1101/springcloud-park/finance/expenses/selectDepartment',
+    //   data:{},
+    //   header: {'content-type':'application/json','token':this.data.token},
+    //   method: 'GET',
+    //   dataType: 'json',
+    //   responseType: 'text',
+    //   success: (res)=>{
+    //     // console.log(res)
+    //     if(res.data.code==='0000'){
+    //       this.setData({
+    //         departmentList:res.data.data
+    //       })
+    //     }
+    //   },
+    //   fail: ()=>{},
+    //   complete: ()=>{}
+    // });
+    request.send({
+      url: '/springcloud-park/finance/expenses/selectDepartment',
+      data: this.data.sendData,
       method: 'GET',
-      dataType: 'json',
-      responseType: 'text',
-      success: (res)=>{
-        // console.log(res)
-        if(res.data.code==='0000'){
-          this.setData({
-            departmentList:res.data.data
-          })
-        }
-      },
-      fail: ()=>{},
-      complete: ()=>{}
-    });
+    }).then(res=>{
+      this.setData({
+        departmentList:res.data.data
+      })
+    })
   },
   selectDepart(e){
     this.setData({

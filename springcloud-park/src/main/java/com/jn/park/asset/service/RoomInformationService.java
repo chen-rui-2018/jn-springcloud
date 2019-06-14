@@ -4,8 +4,10 @@ import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.park.asset.model.*;
+import com.jn.park.property.model.PayCallBackNotify;
 import com.jn.pay.model.PayOrderNotify;
 import com.jn.pay.model.PayOrderRsp;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -25,11 +27,11 @@ public interface RoomInformationService {
      * @param id
      * @return
      */
-    RoomInformationModel getRoomInformation(String id);
+    RoomInformationModel getRoomInformation(String id,String account);
 
     /**
      *
-     * @param roomId
+     * @param roomIds
      * @param contactName
      * @param contactPhone
      * @param leaseStartTime
@@ -37,7 +39,14 @@ public interface RoomInformationService {
      * @param userAccount
      * @return
      */
-    Result addRoomOrders(String roomId, String contactName, String contactPhone, Date leaseStartTime,  String month, String userAccount);
+    Result addRoomOrders(String roomIds, String contactName, String contactPhone, Date leaseStartTime,  String month, String userAccount);
+
+    /**
+     * 根据订单生成缴费单
+     * @param orderId 房间订单ID
+     * @return
+     */
+    Result createRoomOrderBillByOrder(String orderId);
 
     /**
      * 获取房间基本信息
@@ -76,25 +85,11 @@ public interface RoomInformationService {
     RoomPayOrdersModel getPayOrders(String orderId);
 
     /**
-     * 分页返回房间租借历史
-     * @param page
-     * @return
-     */
-    PaginationData<List<RoomPayOrdersModel>> getRoomOrdersList(String account, Page page);
-
-    /**
-     * 获取房间租借订单详情信息
-     * @param orderId
-     * @return
-     */
-    RoomPayOrdersModel getRoomOrders(String orderId,String userAccount);
-
-    /**
      * 房间退租申请
      * @param id
      * @return
      */
-    RoomPayOrdersItemModel quitApply(String id);
+    RoomPayOrdersItemModel quitApply(String orderItemId);
 
     /**
      * 房间租借历史订单(新)
@@ -113,8 +108,29 @@ public interface RoomInformationService {
     RoomOrdersModel getNewRoomOrders(String itemId, String account);
 
     /**
-     * 取消订单
-     * @param orderId
+     * 定时任务,生成缴费单
      */
-    void cancelOrder(String orderId);
+    void createOrderBill();
+
+    /**
+     * 查询企业租借房间信息
+     * @param enterpriseId
+     * @return
+     */
+    List<RoomEnterpriseModel> selectRoomEnterprise(List<String> enterpriseId);
+
+    /**
+     * 缴费单回调
+     * @param payCallBackNotify
+     * @return
+     */
+    Result updateBill(PayCallBackNotify payCallBackNotify);
+
+    /**
+     * 调用生成缴费单接口
+     * @param billId
+     * @param billSum
+     * @return
+     */
+    Result createBill(String billId,String billSum);
 }

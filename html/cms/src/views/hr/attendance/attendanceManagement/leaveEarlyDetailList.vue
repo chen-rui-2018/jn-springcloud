@@ -21,7 +21,7 @@
       <el-table-column label="部门" align="center" prop="department"/>
       <el-table-column label="姓名" align="center" prop="name"/>
       <el-table-column label="日期" align="center" prop="absenceDate"/>
-      <el-table-column label="签退时间" align="center" prop="absenceDate"/>
+      <el-table-column label="签退时间" align="center" prop="signInAttendanceTime"/>
     </el-table>
 
     <!--<el-pagination

@@ -1,0 +1,7 @@
+<view class="uploader-bg" bindtap="onTap">
+  <text class="upload-plus icon-plus"></text>
+  <image
+    wx:if="{{ url }}"
+    src="{{ url }}"
+    class="uploader-img"/>
+</view>

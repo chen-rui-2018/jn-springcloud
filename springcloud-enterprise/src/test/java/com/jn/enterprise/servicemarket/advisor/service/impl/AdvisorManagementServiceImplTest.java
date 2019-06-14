@@ -95,7 +95,7 @@ public class AdvisorManagementServiceImplTest {
     @Test
     public void getAdvisorManagementInfo() {
         try {
-            PaginationData paginationData = advisorManagementService.getAdvisorManagementInfo(advisorManagementParam);
+            PaginationData paginationData = advisorManagementService.getAdvisorManagementInfo(advisorManagementParam,"wangsong");
             List<TbServiceAdvisor> list= (List<TbServiceAdvisor>)paginationData.getRows();
             if(list!=null){
                 for(TbServiceAdvisor advisor:list){

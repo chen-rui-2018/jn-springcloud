@@ -40,10 +40,10 @@ public class EmployeeBasicInfo extends BaseRowModel implements Serializable {
     @ApiModelProperty(value = "部门名称")
     @ExcelProperty(value = "部门名称", index = 4)
     private String departmentName;
-    @ApiModelProperty(value = "职位ID")
+    @ApiModelProperty(value = "职级ID")
     private String jobId;
-    @ApiModelProperty(value = "职位名称")
-    @ExcelProperty(value = "职位名称", index = 5)
+    @ApiModelProperty(value = "职级名称")
+    @ExcelProperty(value = "职级名称", index = 5)
     private String jobName;
     @ApiModelProperty(value = "证件ID")
     private String certificateId;
@@ -53,10 +53,10 @@ public class EmployeeBasicInfo extends BaseRowModel implements Serializable {
     @ApiModelProperty(value = "证件号码")
     @ExcelProperty(value = "证件号码", index = 7)
     private String certificateNumber;
-    @ApiModelProperty(value = "职务ID")
+    @ApiModelProperty(value = "岗位ID")
     private String postId;
-    @ApiModelProperty(value = "职务名称")
-    @ExcelProperty(value = "职务名称", index = 8)
+    @ApiModelProperty(value = "岗位名称")
+    @ExcelProperty(value = "岗位名称", index = 8)
     private String postName;
     @ApiModelProperty(value = "工号")
     @ExcelProperty(value = "工号")
@@ -163,9 +163,9 @@ public class EmployeeBasicInfo extends BaseRowModel implements Serializable {
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date modifiedTime;
 
-    @ApiModelProperty(value = "员工状态(1在职，2医疗期)")
+    @ApiModelProperty(value = "员工状态(1在职，2医疗期,3退休,4离职)")
     private Byte employStatus;
-    @ApiModelProperty(value = "员工状态(1在职，2医疗期)")
+    @ApiModelProperty(value = "员工状态(1在职，2医疗期,3退休,4离职)")
     @ExcelProperty(value = "员工状态", index = 19)
     private String employStatusStr;
 

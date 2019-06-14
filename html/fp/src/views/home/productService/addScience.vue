@@ -1,5 +1,5 @@
 <template>
-  <div class="addScience">
+  <div class="addScience" v-loading="loading">
     <div class="putaway_title">
       <div>新增特色产品</div>
       <div @click="$router.go(-1)">返回列表</div>
@@ -11,7 +11,7 @@
               <span >{{addScienceData.signoryName}} </span>
             </el-form-item>
       
-            <el-form-item label="服务顾问：" >
+            <el-form-item label="服务专员：" >
               <el-select v-model="addScienceData.advisorAccount" placeholder="请选择">
                 <el-option :label="counseloritem.advisorName" :value="counseloritem.advisorAccount" v-for="(counseloritem,counselorindex) in counselorList" :key="counselorindex">
                 </el-option>
@@ -27,7 +27,7 @@
             </el-form-item>
             <el-form-item label="产品图片：" >
               <el-upload
-                action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
+                :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
                 list-type="picture-card"
                 :on-success="uploadsuccess"
                 :headers="headers"
@@ -118,7 +118,7 @@
             </el-form-item>
             <el-form-item label="产品图片：" class="product_img">
               <el-upload
-                action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
+                :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
                 list-type="picture-card"
                 :on-success="uploadsuccess"
                 :headers="headers"
@@ -143,10 +143,12 @@
   </div>
 </template>
 <script>
+import { getToken } from '@/util/auth'
 export default {
   data () {
     return {
-      addScienceData:{
+        baseUrl: this.api.host,
+        addScienceData:{
         advisorAccount:'',
         orgId:"",
         pictureUrl:"",
@@ -159,9 +161,9 @@ export default {
         signoryId:"",
         signoryName:""
       },
-  
+      loading:false,
       counselorList:[],
-      headers:{token: sessionStorage.token},
+      headers:{token: getToken()},
       fileList:[],
       businessType:'',
       LoanTypeList:[],//金融产品贷款类别
@@ -244,6 +246,8 @@ export default {
     this.addFinancialProduct.orgId=this.$route.query.orgid
     this.getType()
     this.getProductSerialNumber()
+  
+    
   },
   methods: {
     //判断机构类型
@@ -254,7 +258,7 @@ export default {
       data: {orgId:this.addScienceData.orgId},
       callback: function(res) {
         if (res.code == "0000") {
-          console.log(res)
+          // console.log(res)
           _this.businessType= res.data.businessType
           _this.addScienceData.signoryName=res.data.businessTypeName
           _this.addScienceData.signoryId=res.data.businessType
@@ -307,13 +311,12 @@ export default {
       data: {},
       callback: function(res) {
         if (res.code == "0000") {
-          // console.log(res)
           _this.AssureTypeList= res.data
           }
         }
       })
     },
-    //顾问列表获取
+    //专员列表获取
     getServiceConsultantList(){
       let _this = this;
       this.api.get({
@@ -321,7 +324,6 @@ export default {
       data: {orgId:this.addScienceData.orgId},
       callback: function(res) {
         if (res.code == "0000") {
-          // console.log(res)
           _this.counselorList= res.data.rows
           }
         }
@@ -336,8 +338,7 @@ export default {
       this.addFinancialProduct.assureMethodName=name
     },
     uploadsuccess(file, fileList){
-      // console.log(file)
-      // console.log(fileList)
+      // console.l
       if(this.businessType==='technology_finance'){
         this.addFinancialProduct.pictureUrl=file.data
       }else{
@@ -347,22 +348,25 @@ export default {
     //提交新增
     submit(){
       if(this.businessType==='technology_finance'){
+        this.loading=true
         let _this = this;                                  
         this.api.post({               
         url: "upShelfFeatureProduct",
         data: this.addFinancialProduct,
         callback: function(res) {
           if (res.code == "0000") {
-              // console.log(res)
               _this.$message.success("新增成功")
+               _this.loading=false 
               _this.$router.go(-1)
             }else{
-             _this.$message.error('带*号为必填哦，亲')
+              _this.loading=false 
+             _this.$message.error(res.result)
             }
           }
         }) 
       }else {
         let _this = this; 
+        this.loading=true
         this.api.post({               
         url: "addFeatureService",
         data: this.addScienceData,
@@ -370,9 +374,11 @@ export default {
           if (res.code == "0000") {
               // console.log(res)
               _this.$message.success("新增成功")
+               _this.loading=false 
               _this.$router.go(-1)
             }else{
-              _this.$message.error('带*号为必填哦，亲')
+             _this.$message.error(res.result)
+             _this.loading=false 
             }
           }
         }) 
@@ -452,7 +458,7 @@ export default {
         }
         .el-form-item__label{
           padding: 0 25px 0 0;
-          line-height:25px;
+          line-height:40px;
         }
        
         .el-select{

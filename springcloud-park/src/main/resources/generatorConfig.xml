@@ -836,6 +836,8 @@
       <table tableName="tb_room_orders_item"></table>
       <!--房间管理-房间分组-->
       <table tableName="tb_room_group"></table>
+      <!--房间管理-缴费单-->
+      <table tableName="tb_room_orders_bill"></table>
     </context>
 
 
@@ -1078,6 +1080,8 @@
     <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
     <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
     <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+    <!--覆盖生成XML文件-->
+    <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"/>
     <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
       <property name="searchString" value="Example$"/>
       <property name="replaceString" value="Criteria"/>
@@ -1126,6 +1130,8 @@
     <table tableName="tb_business_ad_policy"></table>
     <!--招商管理-项目管理表-->
     <table tableName="tb_project_info"></table>
+    <!--招商管理-项目入驻企业租赁信息管理表-->
+    <table tableName="tb_project_enter_details"></table>
 
   </context>
 
@@ -1136,6 +1142,8 @@
     <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
     <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
     <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+    <!--覆盖生成XML文件-->
+    <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"/>
     <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
       <property name="searchString" value="Example$"/>
       <property name="replaceString" value="Criteria"/>
@@ -1191,6 +1199,8 @@
     <table tableName="tb_hatch_incubator_team">
     </table>
     <table tableName="tb_hatch_incubator_type">
+    </table>
+    <table tableName="tb_hatch_incubator_enterprise_and_team">
     </table>
 
   </context>
@@ -1266,7 +1276,12 @@
     <table tableName="tb_electric_reading_source"></table>
     <table tableName="tb_electric_reading_fail_log"></table>
     <table tableName="tb_electric_cost"></table>
-
+    <table tableName="tb_electric_error_log"></table>
+    <table tableName="tb_electric_energy_bill"></table>
+    <table tableName="tb_electric_energy_bill_detail"></table>
+    <table tableName="tb_electric_meter_switch_log"></table>
+    <!--电量规则监控信息视图-->
+    <table tableName="v_electric_rules_info"></table>
   </context>
   <!--物业维修-->
   <context id="repair">
@@ -1315,6 +1330,127 @@
     </javaClientGenerator>
     <table tableName="tb_pm_repair">
     </table>
+  </context>
+
+  <!--物业缴费-->
+  <context id="pmpaybill">
+    <!-- 实现Serializable接口 -->
+    <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+    <!--覆盖生成XML文件-->
+    <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"/>
+    <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+      <property name="searchString" value="Example$"/>
+      <property name="replaceString" value="Criteria"/>
+    </plugin>
+    <commentGenerator>
+      <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
+      <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
+      <property name="suppressDate" value="true"/>
+      <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+      <property name="suppressAllComments" value="true"/>
+    </commentGenerator>
+    <!--数据库链接URL，用户名、密码 -->
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                    connectionURL="jdbc:mysql://192.168.10.28:3306/dcs?useUnicode=true&amp;characterEncoding=utf-8&amp;tinyInt1isBit=false"
+                    userId="dcsuser" password="dcs_u_123">
+    </jdbcConnection>
+    <javaTypeResolver>
+      <property name="forceBigDecimals" value="false"/>
+    </javaTypeResolver>
+
+    <!-- 生成模型的包名和位置 -->
+    <javaModelGenerator targetPackage="com.jn.park.pmpaybill.entity"
+                        targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+      <property name="trimStrings" value="true"/>
+    </javaModelGenerator>
+
+    <!-- 生成映射文件的包名和位置 -->
+    <sqlMapGenerator targetPackage="mapping.generator.pmpaybill"
+                     targetProject="src/main/resources">
+      <property name="enableSubPackages" value="true"/>
+    </sqlMapGenerator>
+
+    <!-- 生成Mapper 接口的包名和位置-->
+    <javaClientGenerator type="XMLMAPPER"
+                         targetPackage="com.jn.park.pmpaybill.dao"
+                         targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+    </javaClientGenerator>
+
+    <!-- 缴费单管理表-->
+    <table tableName="tb_pm_pay_bill"></table>
+    <!-- 收费规则管理-->
+    <table tableName="tb_pm_pay_rule"></table>
+    <!-- 收费规则管理明细表-->
+    <table tableName="tb_pm_pay_rule_object"></table>
+    <!-- 缴费单-类型条目管理表-->
+    <table tableName="tb_pm_pay_bill_item"></table>
+    <!-- 缴费单-类型条目物业费明细管理表-->
+    <table tableName="tb_pm_pay_bill_item_pm_list"></table>
+    <!-- 物业单价规则管理表-->
+    <table tableName="tb_pm_price_rules"></table>
+    <!-- 物业单价规则明细表-->
+    <table tableName="tb_pm_price_rule_deatils"></table>
+
+  </context>
+
+  <!--XQ00007物业服务管理子系统-电表相关-->
+  <context id="video">
+    <!-- 实现Serializable接口 -->
+    <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+    <!--覆盖生成XML文件-->
+    <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin" />
+    <!--在各个字段添加注解-->
+    <plugin type="com.jn.generator.CommentsPlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+      <property name="searchString" value="Example$"/>
+      <property name="replaceString" value="Criteria"/>
+    </plugin>
+    <commentGenerator>
+      <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
+      <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
+      <property name="suppressDate" value="true"/>
+      <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+      <property name="suppressAllComments" value="true"/>
+    </commentGenerator>
+    <!--数据库链接URL，用户名、密码 -->
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                    connectionURL="jdbc:mysql://192.168.10.28:3306/dcs?useUnicode=true&amp;characterEncoding=utf-8"
+                    userId="dcsuser" password="dcs_u_123">
+    </jdbcConnection>
+    <javaTypeResolver>
+      <property name="forceBigDecimals" value="false"/>
+    </javaTypeResolver>
+
+    <!-- 生成模型的包名和位置 -->
+    <javaModelGenerator targetPackage="com.jn.park.video.entity"
+                        targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+      <property name="trimStrings" value="true"/>
+    </javaModelGenerator>
+
+    <!-- 生成映射文件的包名和位置 -->
+    <sqlMapGenerator targetPackage="mapping.generator.video"
+                     targetProject="src/main/resources">
+      <property name="enableSubPackages" value="true"/>
+    </sqlMapGenerator>
+
+    <!-- 生成Mapper 接口的包名和位置-->
+    <javaClientGenerator type="XMLMAPPER"
+                         targetPackage="com.jn.park.video.dao"
+                         targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+    </javaClientGenerator>
+
+
+    <table tableName="tb_pm_video"></table>
+    <table tableName="tb_pm_video_item"></table>
+    <table tableName="tb_video_info"></table>
   </context>
 
 </generatorConfiguration>

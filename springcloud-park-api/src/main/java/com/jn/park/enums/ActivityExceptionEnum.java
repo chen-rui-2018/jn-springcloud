@@ -72,6 +72,7 @@ public enum ActivityExceptionEnum implements CodeAndMsg {
     APPLY_IS_NOT_EXIST("4020512","点赞评论或服务不存在"),
     EXPORT_COL_NAME_NOT_NULL("4020513","excel导出的字段别名不能为空"),
     EXPORT__TITLE_NOT_NULL("4020514","excel导出字段的标题不能为空"),
+    START_TIME_MORE_THAN_END_TIME("4020515","开始时间晚于结束时间"),
     ;
 
     /**

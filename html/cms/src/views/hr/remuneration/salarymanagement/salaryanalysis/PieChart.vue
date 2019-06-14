@@ -38,7 +38,7 @@ export default {
     },
     height: {
       type: String,
-      default: '300px'
+      default: '350px'
     }
   },
   data() {
@@ -124,7 +124,7 @@ export default {
                   tableHeader = tableHeader + '<td>' + seriesData[i].name + '</td>'
                   tdBodys = tdBodys + '<td>' + seriesData[i].value + '</td>'
                 }
-                table = table + '<tr style="background-color: #1e6abc">' + tableHeader + '</tr>' + '<tr>' + tdBodys + '</tr>'
+                table = table + '<tr>' + tableHeader + '</tr>' + '<tr>' + tdBodys + '</tr>'
                 return table
               }
             }

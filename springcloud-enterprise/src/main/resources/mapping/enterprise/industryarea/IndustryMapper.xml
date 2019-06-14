@@ -50,7 +50,7 @@ SELECT
             r.pre_value
           FROM
             tb_service_prefer r
-          WHERE r.pre_type = '0' AND r.id != 'technology_finance') p
+          WHERE r.pre_type = '0' AND r.id != 'technology_finance' AND r.record_status = '1') p
           LEFT JOIN tb_service_product pr
             ON p.id = pr.signory_id
             AND (

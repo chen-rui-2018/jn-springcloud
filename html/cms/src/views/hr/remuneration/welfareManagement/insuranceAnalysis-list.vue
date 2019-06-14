@@ -20,60 +20,53 @@
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
     </el-form>
 
-    <el-row style="margin-top: 10px;margin-bottom: 10px;">
-      <el-col :span="6">
-        <div style="height:66px; width: 220px;">
-          <span style="height: 100%;width: 80px;display:inline-block; line-height: 15px;">
-            <p style="color: #666666">参保人数</p>
-            <p>{{ statisticalInfo.insuredNumber }}人</p>
-          </span>
-          <span style="width: 140px;float: right;line-height: 66px;display:inline-block;color: #666666">
-            环比{{ statisticalInfo.lastInsuredNumber }}人
-            <img v-if="imgs.insuredNumberUpPng" src="@/assets/images/up.png" style="height: 20px;width: 10px;" alt="图片">
-            <img v-if="imgs.insuredNumberDownPng" src="@/assets/images/down.png" style="height: 20px;width: 10px;" alt="图片">
-          </span>
-        </div>
-      </el-col>
-      <el-col v-if="socialSecurityFlag" :span="6">
-        <div style="height:66px; width: 220px;">
-          <span style="height: 100%;width: 80px;line-height: 15px;display:  inline-block;">
-            <p style="color: #666666">社保费用</p>
-            <p>{{ statisticalInfo.socialSecurityCost }}元</p>
-          </span>
-          <span style="width: 140px;float: right;line-height: 66px;display:inline-block;color: #666666">
-            环比{{ statisticalInfo.lastSocialSecurityCost }}元
-            <img v-if="imgs.socialSecurityUpPng" src="@/assets/images/up.png" style="height: 20px;width: 10px;" alt="图片">
-            <img v-if="imgs.socialSecurityDownPng" src="@/assets/images/down.png" style="height: 20px;width: 10px;" alt="图片">
-          </span>
-        </div>
-      </el-col>
-      <el-col v-if="accumulationFundFlag" :span="6">
-        <div style="height:66px; width: 240px;">
-          <span style="height: 100%;width: 100px;line-height: 15px;display:  inline-block;">
-            <p style="color: #666666">公积金</p>
-            <p>{{ statisticalInfo.accumulationFund }}元</p>
-          </span>
-          <span style="width: 140px;float: right;line-height: 66px;display:inline-block;color: #666666">
-            环比{{ statisticalInfo.lastAccumulationFund }}元
-            <img v-if="imgs.accumulationFundUpPng" src="@/assets/images/up.png" style="height: 20px;width: 10px;" alt="图片">
-            <img v-if="imgs.accumulationFundDownPng" src="@/assets/images/down.png" style="height: 20px;width: 10px;" alt="图片">
-          </span>
-        </div>
-      </el-col>
-      <el-col :span="6">
-        <div style="height:66px; width: 240px;">
-          <span style="height: 100%;line-height: 15px;width: 100px;display:  inline-block;">
-            <p style="color: #666666">总费用</p>
-            <p>{{ statisticalInfo.totalCost }}元</p>
-          </span>
-          <span style="width: 140px;float: right;line-height: 66px;display:inline-block; color: #666666">
-            环比{{ statisticalInfo.lastTotalCost }}元
-            <img v-if="imgs.totalCostUpPng" src="@/assets/images/up.png" style="height: 20px;width: 10px;" alt="图片">
-            <img v-if="imgs.totalCostDownPng" src="@/assets/images/down.png" style="height: 20px;width: 10px;" alt="图片">
-          </span>
-        </div>
-      </el-col>
+    <el-row>
+      <el-col :span="6"><div class="grid-content bg-purple">
+        <span style="float: left;height: 100%;display:inline-block; line-height: 15px;">
+          <p style="color: #666666">参保人数</p>
+          <p>{{ statisticalInfo.insuredNumber }}人</p>
+        </span>
+        <span style="float: left;line-height: 66px;display:inline-block;color: #666666;margin-left: 20px;">
+          环比{{ statisticalInfo.lastInsuredNumber }}人
+          <img v-if="imgs.insuredNumberUpPng" src="@/assets/images/up.png" style="height: 20px;width: 10px;" alt="图片">
+          <img v-if="imgs.insuredNumberDownPng" src="@/assets/images/down.png" style="height: 20px;width: 10px;" alt="图片">
+        </span>
+      </div></el-col>
+      <el-col :span="6"><div class="grid-content bg-purple-light">
+        <span style="float: left;height: 100%;line-height: 15px;display:  inline-block;">
+          <p style="color: #666666">社保费用</p>
+          <p>{{ statisticalInfo.socialSecurityCost }}元</p>
+        </span>
+        <span style="float: left;line-height: 66px;display:inline-block;color: #666666;margin-left: 20px;">
+          环比{{ statisticalInfo.lastSocialSecurityCost }}元
+          <img v-if="imgs.socialSecurityUpPng" src="@/assets/images/up.png" style="height: 20px;width: 10px;" alt="图片">
+          <img v-if="imgs.socialSecurityDownPng" src="@/assets/images/down.png" style="height: 20px;width: 10px;" alt="图片">
+        </span>
+      </div></el-col>
+      <el-col :span="6"><div class="grid-content bg-purple">
+        <span style="float: left;height: 100%;line-height: 15px;display:  inline-block;">
+          <p style="color: #666666">公积金</p>
+          <p>{{ statisticalInfo.accumulationFund }}元</p>
+        </span>
+        <span style="float: left;line-height: 66px;display:inline-block;color: #666666;margin-left: 20px;">
+          环比{{ statisticalInfo.lastAccumulationFund }}元
+          <img v-if="imgs.accumulationFundUpPng" src="@/assets/images/up.png" style="height: 20px;width: 10px;" alt="图片">
+          <img v-if="imgs.accumulationFundDownPng" src="@/assets/images/down.png" style="height: 20px;width: 10px;" alt="图片">
+        </span>
+      </div></el-col>
+      <el-col :span="6"><div class="grid-content bg-purple-light">
+        <span style="float: left;height: 100%;line-height: 15px;display:  inline-block;">
+          <p style="color: #666666">总费用</p>
+          <p>{{ statisticalInfo.totalCost }}元</p>
+        </span>
+        <span style="float: left;line-height: 66px;display:inline-block; color: #666666;margin-left: 20px;">
+          环比{{ statisticalInfo.lastTotalCost }}元
+          <img v-if="imgs.totalCostUpPng" src="@/assets/images/up.png" style="height: 20px;width: 10px;" alt="图片">
+          <img v-if="imgs.totalCostDownPng" src="@/assets/images/down.png" style="height: 20px;width: 10px;" alt="图片">
+        </span>
+      </div></el-col>
     </el-row>
+
     <el-col :xs="40" :sm="40" :lg="24">
       <div class="chart-wrapper">
         <bar-chart :list-data="socialSecurityList" title="各部门月参保费用TOP9统计"/>
@@ -132,9 +125,11 @@ export default {
   },
   watch: {
     'listQuery.insuredMonth': function() {
+      this.listQuery.page = 1
       this.initList()
     },
     'listQuery.type': function() {
+      this.listQuery.page = 1
       this.initList()
     }
   },
@@ -185,30 +180,42 @@ export default {
           if (res.data.data.lastNumber.indexOf('+') !== -1) { // 参保人数
             this.imgs.insuredNumberUpPng = true
             this.imgs.insuredNumberDownPng = false
-          } else {
+          } else if (res.data.data.lastNumber.indexOf('-') !== -1) {
             this.imgs.insuredNumberUpPng = false
             this.imgs.insuredNumberDownPng = true
+          } else {
+            this.imgs.insuredNumberUpPng = false
+            this.imgs.insuredNumberDownPng = false
           }
           if (res.data.data.lastSocialSecurity.indexOf('+') !== -1) { // 社保费用
             this.imgs.socialSecurityUpPng = true
             this.imgs.socialSecurityDownPng = false
-          } else {
+          } else if (res.data.data.lastSocialSecurity.indexOf('-') !== -1) {
             this.imgs.socialSecurityUpPng = false
             this.imgs.socialSecurityDownPng = true
+          } else {
+            this.imgs.socialSecurityUpPng = false
+            this.imgs.socialSecurityDownPng = false
           }
           if (res.data.data.lastAccumulationFund.indexOf('+') !== -1) { // 公积金
             this.imgs.accumulationFundUpPng = true
             this.imgs.accumulationFundDownPng = false
-          } else {
+          } else if (res.data.data.lastAccumulationFund.indexOf('-') !== -1) {
             this.imgs.accumulationFundUpPng = false
             this.imgs.accumulationFundDownPng = true
+          } else {
+            this.imgs.accumulationFundUpPng = false
+            this.imgs.accumulationFundDownPng = false
           }
           if (res.data.data.lastTotalCost.indexOf('+') !== -1) { // 总费用
             this.imgs.totalCostUpPng = true
             this.imgs.totalCostDownPng = false
-          } else {
+          } else if (res.data.data.lastTotalCost.indexOf('-') !== -1) {
             this.imgs.totalCostUpPng = false
             this.imgs.totalCostDownPng = true
+          } else {
+            this.imgs.totalCostUpPng = false
+            this.imgs.totalCostDownPng = false
           }
         } else {
           this.$message.error(res.data.result)

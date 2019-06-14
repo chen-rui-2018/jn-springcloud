@@ -106,76 +106,6 @@ public class TbPayAccountCriteria {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
-        public Criteria andAccountIdIsNull() {
-            addCriterion("ACCOUNT_ID is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andAccountIdIsNotNull() {
-            addCriterion("ACCOUNT_ID is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andAccountIdEqualTo(String value) {
-            addCriterion("ACCOUNT_ID =", value, "accountId");
-            return (Criteria) this;
-        }
-
-        public Criteria andAccountIdNotEqualTo(String value) {
-            addCriterion("ACCOUNT_ID <>", value, "accountId");
-            return (Criteria) this;
-        }
-
-        public Criteria andAccountIdGreaterThan(String value) {
-            addCriterion("ACCOUNT_ID >", value, "accountId");
-            return (Criteria) this;
-        }
-
-        public Criteria andAccountIdGreaterThanOrEqualTo(String value) {
-            addCriterion("ACCOUNT_ID >=", value, "accountId");
-            return (Criteria) this;
-        }
-
-        public Criteria andAccountIdLessThan(String value) {
-            addCriterion("ACCOUNT_ID <", value, "accountId");
-            return (Criteria) this;
-        }
-
-        public Criteria andAccountIdLessThanOrEqualTo(String value) {
-            addCriterion("ACCOUNT_ID <=", value, "accountId");
-            return (Criteria) this;
-        }
-
-        public Criteria andAccountIdLike(String value) {
-            addCriterion("ACCOUNT_ID like", value, "accountId");
-            return (Criteria) this;
-        }
-
-        public Criteria andAccountIdNotLike(String value) {
-            addCriterion("ACCOUNT_ID not like", value, "accountId");
-            return (Criteria) this;
-        }
-
-        public Criteria andAccountIdIn(List<String> values) {
-            addCriterion("ACCOUNT_ID in", values, "accountId");
-            return (Criteria) this;
-        }
-
-        public Criteria andAccountIdNotIn(List<String> values) {
-            addCriterion("ACCOUNT_ID not in", values, "accountId");
-            return (Criteria) this;
-        }
-
-        public Criteria andAccountIdBetween(String value1, String value2) {
-            addCriterion("ACCOUNT_ID between", value1, value2, "accountId");
-            return (Criteria) this;
-        }
-
-        public Criteria andAccountIdNotBetween(String value1, String value2) {
-            addCriterion("ACCOUNT_ID not between", value1, value2, "accountId");
-            return (Criteria) this;
-        }
-
         public Criteria andUserIdIsNull() {
             addCriterion("user_id is null");
             return (Criteria) this;
@@ -243,6 +173,146 @@ public class TbPayAccountCriteria {
 
         public Criteria andUserIdNotBetween(String value1, String value2) {
             addCriterion("user_id not between", value1, value2, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntIdIsNull() {
+            addCriterion("ent_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntIdIsNotNull() {
+            addCriterion("ent_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntIdEqualTo(String value) {
+            addCriterion("ent_id =", value, "entId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntIdNotEqualTo(String value) {
+            addCriterion("ent_id <>", value, "entId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntIdGreaterThan(String value) {
+            addCriterion("ent_id >", value, "entId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntIdGreaterThanOrEqualTo(String value) {
+            addCriterion("ent_id >=", value, "entId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntIdLessThan(String value) {
+            addCriterion("ent_id <", value, "entId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntIdLessThanOrEqualTo(String value) {
+            addCriterion("ent_id <=", value, "entId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntIdLike(String value) {
+            addCriterion("ent_id like", value, "entId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntIdNotLike(String value) {
+            addCriterion("ent_id not like", value, "entId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntIdIn(List<String> values) {
+            addCriterion("ent_id in", values, "entId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntIdNotIn(List<String> values) {
+            addCriterion("ent_id not in", values, "entId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntIdBetween(String value1, String value2) {
+            addCriterion("ent_id between", value1, value2, "entId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntIdNotBetween(String value1, String value2) {
+            addCriterion("ent_id not between", value1, value2, "entId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountIdIsNull() {
+            addCriterion("ACCOUNT_ID is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountIdIsNotNull() {
+            addCriterion("ACCOUNT_ID is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountIdEqualTo(String value) {
+            addCriterion("ACCOUNT_ID =", value, "accountId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountIdNotEqualTo(String value) {
+            addCriterion("ACCOUNT_ID <>", value, "accountId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountIdGreaterThan(String value) {
+            addCriterion("ACCOUNT_ID >", value, "accountId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountIdGreaterThanOrEqualTo(String value) {
+            addCriterion("ACCOUNT_ID >=", value, "accountId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountIdLessThan(String value) {
+            addCriterion("ACCOUNT_ID <", value, "accountId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountIdLessThanOrEqualTo(String value) {
+            addCriterion("ACCOUNT_ID <=", value, "accountId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountIdLike(String value) {
+            addCriterion("ACCOUNT_ID like", value, "accountId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountIdNotLike(String value) {
+            addCriterion("ACCOUNT_ID not like", value, "accountId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountIdIn(List<String> values) {
+            addCriterion("ACCOUNT_ID in", values, "accountId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountIdNotIn(List<String> values) {
+            addCriterion("ACCOUNT_ID not in", values, "accountId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountIdBetween(String value1, String value2) {
+            addCriterion("ACCOUNT_ID between", value1, value2, "accountId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountIdNotBetween(String value1, String value2) {
+            addCriterion("ACCOUNT_ID not between", value1, value2, "accountId");
             return (Criteria) this;
         }
 

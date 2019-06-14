@@ -1,5 +1,6 @@
 package com.jn.hr.archives.controller;
 
+import cn.hutool.core.io.FileUtil;
 import com.alibaba.excel.support.ExcelTypeEnum;
 import com.jn.common.controller.BaseController;
 import com.jn.common.exception.JnSpringCloudException;
@@ -19,7 +20,9 @@ import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.io.FileUtils;
+import org.apache.poi.util.IOUtils;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +39,9 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.util.Date;
 import java.util.List;
 
@@ -54,7 +60,7 @@ public class EmployeeFileController extends BaseController {
     private EmployeeFileService employeeFileService;
 
     @ControllerLog(doAction = "添加员工档案")
-    //@RequiresPermissions("/hr/employeeFile/addEmployeeFile")
+    @RequiresPermissions("/hr/employeeFile/addEmployeeFile")
     @ApiOperation(value = "添加员工档案", notes = "添加员工档案")
     @PostMapping(value = "/addEmployeeFile")
     public Result addEmployeeFile(@Validated @RequestBody EmployeeFileAdd EmployeeFileAdd) {
@@ -63,7 +69,7 @@ public class EmployeeFileController extends BaseController {
         return new Result();
     }
     @ControllerLog(doAction = "修改员工档案")
-    //@RequiresPermissions("/hr/employeeFile/updateEmployeeFile")
+    @RequiresPermissions("/hr/employeeFile/updateEmployeeFile")
     @ApiOperation(value = "修改员工档案", notes = "修改员工档案")
     @PostMapping(value = "/updateEmployeeFile")
     public Result updateResumeData(@Validated @RequestBody EmployeeFileAdd EmployeeFileAdd) {
@@ -74,7 +80,7 @@ public class EmployeeFileController extends BaseController {
     }
 
     @ControllerLog(doAction = "员工档案列表")
-    //@RequiresPermissions("/hr/employeeFile/list")
+    @RequiresPermissions("/hr/employeeFile/list")
     @ApiOperation(value = "员工档案列表", notes = "员工档案列表")
     @PostMapping(value = "/list")
     public Result<PaginationData<List<EmployeeFile>>> list(@Validated @RequestBody EmployeeFilePage employeeFilePage) {
@@ -83,7 +89,7 @@ public class EmployeeFileController extends BaseController {
     }
 
     @ControllerLog(doAction = "查询员工档案详情")
-    //@RequiresPermissions("/hr/employeeFile/getEmployeeFile")
+    @RequiresPermissions("/hr/employeeFile/getEmployeeFile")
     @ApiOperation(value = "查询员工档案详情", notes = "查询员工档案详情")
     @GetMapping(value = "/getEmployeeFile")
     public Result<List<EmployeeFile>> getResumeDatabaseById(@RequestParam("id") String fileId) {
@@ -94,7 +100,7 @@ public class EmployeeFileController extends BaseController {
 
 
     @ControllerLog(doAction = "删除员工档案")
-    //@RequiresPermissions("/hr/employeeFile/deleteEmployeeFile")
+    @RequiresPermissions("/hr/employeeFile/deleteEmployeeFile")
     @ApiOperation(value = "删除员工档案", notes = "删除员工档案")
     @GetMapping(value = "/deleteEmployeeFile")
     public Result delete(@RequestParam("id") String fileId) {
@@ -105,7 +111,7 @@ public class EmployeeFileController extends BaseController {
     }
 
     @ControllerLog(doAction = "附件上传")
-    //@RequiresPermissions("/hr/employeeFile/uploadAttachment")
+    @RequiresPermissions("/hr/employeeFile/uploadAttachment")
     @ApiOperation(value = "附件上传", notes ="附件上传")
     @PostMapping("/uploadAttachment")
     public Result uploadAttachment(HttpServletRequest request) {
@@ -119,7 +125,7 @@ public class EmployeeFileController extends BaseController {
     }
 
     @ControllerLog(doAction = "附件删除")
-    //@RequiresPermissions("/hr/employeeFile/deleteAttachment")
+    @RequiresPermissions("/hr/employeeFile/deleteAttachment")
     @ApiOperation(value = "附件删除", notes ="附件删除")
     @GetMapping("/deleteAttachment")
     public Result deleteAttachment(@RequestParam("id") String id) {
@@ -130,7 +136,7 @@ public class EmployeeFileController extends BaseController {
     }
 
     @ControllerLog(doAction = "导入员工档案")
-    //@RequiresPermissions("/hr/employeeFile/importEmployeeFile")
+    @RequiresPermissions("/hr/employeeFile/importEmployeeFile")
     @ApiOperation(value = "导入员工档案", notes = "导入员工档案")
     @PostMapping(value = "/importEmployeeFile")
     public Result<String> importEmployeeFile(@RequestParam("file") MultipartFile file) {
@@ -140,7 +146,7 @@ public class EmployeeFileController extends BaseController {
     }
 
     @ControllerLog(doAction = "导出员工档案")
-    //@RequiresPermissions("/hr/employeeFile/exportEmployeeFile")
+    @RequiresPermissions("/hr/employeeFile/exportEmployeeFile")
     @ApiOperation(value = "导出员工档案", notes = "导出员工档案")
     @GetMapping(value = "/exportEmployeeFile")
     public void exportEmployeeFile(EmployeeFilePage employeeFilePage,
@@ -155,7 +161,7 @@ public class EmployeeFileController extends BaseController {
         ExcelUtil.writeExcelWithCol(response, fileName, sheetName, exportTitle, exportColName, pageList.getRows());
     }
     @ControllerLog(doAction = "下载员工档案excel模板")
-    //@RequiresPermissions("/hr/employeeFile/downLoadEmployeeFileExcelTemplate")
+    @RequiresPermissions("/hr/employeeFile/downLoadEmployeeFileExcelTemplate")
     @ApiOperation(value = "下载员工档案excel模板", notes = "下载员工档案excel模板")
     @GetMapping(value = "/downLoadEmployeeFileExcelTemplate")
     public ResponseEntity<byte[]> downLoadEmployeeFileExcelTemplate() {
@@ -175,7 +181,7 @@ public class EmployeeFileController extends BaseController {
         }
     }
     @ControllerLog(doAction = "分页查询员工档案附件")
-    //@RequiresPermissions("/hr/employeeFile/getEmployeeFileAttachmentById")
+    @RequiresPermissions("/hr/employeeFile/getEmployeeFileAttachmentById")
     @ApiOperation(value = "分页查询员工档案附件", notes = "分页查询员工档案附件")
     @PostMapping(value = "/getEmployeeFileAttachmentById")
     public Result<List<EmployeeFile>> getResumeDatabaseById(@Validated @RequestBody
@@ -186,12 +192,36 @@ public class EmployeeFileController extends BaseController {
     }
 
     @ControllerLog(doAction = "员工档案附件名称修改")
-    //@RequiresPermissions("/hr/employeeFile/updateEmployeeFileAttachment")
+    @RequiresPermissions("/hr/employeeFile/updateEmployeeFileAttachment")
     @ApiOperation(value = "员工档案附件名称修改", notes = "员工档案附件名称修改")
     @PostMapping(value = "/updateEmployeeFileAttachment")
     public Result<List<EmployeeFile>> updateEmployeeFileAttachment(@Validated @RequestBody
                                                                         FileAttachment fileAttachment) {
         employeeFileService.updateEmployeeFileAttachmentById(fileAttachment);
         return new Result();
+    }
+
+    @ControllerLog(doAction = "下载员工档案附件")
+    @RequiresPermissions("/hr/employeeFile/downloadEmployeeFileAttachment")
+    @ApiOperation(value = "下载员工档案附件", notes = "导入员工档案")
+    @PostMapping(value = "/downloadEmployeeFileAttachment")
+    public ResponseEntity<byte[]> importEmployeeFile(@RequestBody FileAttachment fileAttachment) {
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        String fileName = null;
+        InputStream is=null;
+        try {
+            fileName = new String(fileAttachment.getFileName().getBytes(), "ISO-8859-1");
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Content-Type", "application/octet-stream");
+            headers.add("Content-Disposition", "attachment;filename=" + fileName);
+            is=new URL(fileAttachment.getFilePath()).openStream();
+            return new ResponseEntity<byte[]>(IOUtils.toByteArray(is), headers, HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("[员工档案] ,员工档案附件下载失败，"+e.getMessage(), e);
+            throw new JnSpringCloudException(EmployeeExceptionEnums.DOWNLOAD_EMPLOYEEFILE_ATTACHMENT);
+        }finally {
+            IOUtils.closeQuietly(is);
+        }
+
     }
 }

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.hr.employee.dao.TbManpowerEntryManagementMapper">
   <resultMap id="BaseResultMap" type="com.jn.hr.employee.entity.TbManpowerEntryManagement">
-    <id column="id" jdbcType="VARCHAR" property="id" />
+    <id column="id_" jdbcType="VARCHAR" property="id" />
     <result column="job_number" jdbcType="VARCHAR" property="jobNumber" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="expected_entry_date" jdbcType="TIMESTAMP" property="expectedEntryDate" />
@@ -14,6 +14,21 @@
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="sex" jdbcType="CHAR" property="sex" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="mailbox" jdbcType="VARCHAR" property="mailbox" />
+    <result column="department_id" jdbcType="VARCHAR" property="departmentId" />
+    <result column="department_name" jdbcType="VARCHAR" property="departmentName" />
+    <result column="job_id" jdbcType="VARCHAR" property="jobId" />
+    <result column="job_name" jdbcType="VARCHAR" property="jobName" />
+    <result column="post_id" jdbcType="VARCHAR" property="postId" />
+    <result column="post_name" jdbcType="VARCHAR" property="postName" />
+    <result column="contract_id" jdbcType="VARCHAR" property="contractId" />
+    <result column="contract_name" jdbcType="VARCHAR" property="contractName" />
+    <result column="employee_type" jdbcType="CHAR" property="employeeType" />
+    <result column="certificate_id" jdbcType="CHAR" property="certificateId" />
+    <result column="certificate_type" jdbcType="VARCHAR" property="certificateType" />
+    <result column="certificate_number" jdbcType="VARCHAR" property="certificateNumber" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -74,8 +89,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, job_number, name, expected_entry_date, confirm_entry_date, is_entry_registration, 
-    status, record_status, creator_account, created_time, modifier_account, modified_time
+    id_, job_number, name, expected_entry_date, confirm_entry_date, is_entry_registration, 
+    status, record_status, creator_account, created_time, modifier_account, modified_time, 
+    sex, phone, mailbox, department_id, department_name, job_id, job_name, post_id, post_name, 
+    contract_id, contract_name, employee_type, certificate_id, certificate_type, certificate_number
   </sql>
   <select id="selectByExample" parameterType="com.jn.hr.employee.entity.TbManpowerEntryManagementCriteria" resultMap="BaseResultMap">
     select
@@ -95,11 +112,11 @@
     select 
     <include refid="Base_Column_List" />
     from tb_manpower_entry_management
-    where id = #{id,jdbcType=VARCHAR}
+    where id_ = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_manpower_entry_management
-    where id = #{id,jdbcType=VARCHAR}
+    where id_ = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.hr.employee.entity.TbManpowerEntryManagementCriteria">
     delete from tb_manpower_entry_management
@@ -108,22 +125,32 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.hr.employee.entity.TbManpowerEntryManagement">
-    insert into tb_manpower_entry_management (id, job_number, name, 
+    insert into tb_manpower_entry_management (id_, job_number, name, 
       expected_entry_date, confirm_entry_date, 
       is_entry_registration, status, record_status, 
       creator_account, created_time, modifier_account, 
-      modified_time)
+      modified_time, sex, phone, 
+      mailbox, department_id, department_name, 
+      job_id, job_name, post_id, 
+      post_name, contract_id, contract_name, 
+      employee_type, certificate_id, certificate_type, 
+      certificate_number)
     values (#{id,jdbcType=VARCHAR}, #{jobNumber,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
       #{expectedEntryDate,jdbcType=TIMESTAMP}, #{confirmEntryDate,jdbcType=TIMESTAMP}, 
       #{isEntryRegistration,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{recordStatus,jdbcType=TINYINT}, 
       #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP})
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{sex,jdbcType=CHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{mailbox,jdbcType=VARCHAR}, #{departmentId,jdbcType=VARCHAR}, #{departmentName,jdbcType=VARCHAR}, 
+      #{jobId,jdbcType=VARCHAR}, #{jobName,jdbcType=VARCHAR}, #{postId,jdbcType=VARCHAR}, 
+      #{postName,jdbcType=VARCHAR}, #{contractId,jdbcType=VARCHAR}, #{contractName,jdbcType=VARCHAR}, 
+      #{employeeType,jdbcType=CHAR}, #{certificateId,jdbcType=CHAR}, #{certificateType,jdbcType=VARCHAR}, 
+      #{certificateNumber,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.hr.employee.entity.TbManpowerEntryManagement">
     insert into tb_manpower_entry_management
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
-        id,
+        id_,
       </if>
       <if test="jobNumber != null">
         job_number,
@@ -157,6 +184,51 @@
       </if>
       <if test="modifiedTime != null">
         modified_time,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="mailbox != null">
+        mailbox,
+      </if>
+      <if test="departmentId != null">
+        department_id,
+      </if>
+      <if test="departmentName != null">
+        department_name,
+      </if>
+      <if test="jobId != null">
+        job_id,
+      </if>
+      <if test="jobName != null">
+        job_name,
+      </if>
+      <if test="postId != null">
+        post_id,
+      </if>
+      <if test="postName != null">
+        post_name,
+      </if>
+      <if test="contractId != null">
+        contract_id,
+      </if>
+      <if test="contractName != null">
+        contract_name,
+      </if>
+      <if test="employeeType != null">
+        employee_type,
+      </if>
+      <if test="certificateId != null">
+        certificate_id,
+      </if>
+      <if test="certificateType != null">
+        certificate_type,
+      </if>
+      <if test="certificateNumber != null">
+        certificate_number,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -196,6 +268,51 @@
       <if test="modifiedTime != null">
         #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="sex != null">
+        #{sex,jdbcType=CHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="mailbox != null">
+        #{mailbox,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentId != null">
+        #{departmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentName != null">
+        #{departmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="jobId != null">
+        #{jobId,jdbcType=VARCHAR},
+      </if>
+      <if test="jobName != null">
+        #{jobName,jdbcType=VARCHAR},
+      </if>
+      <if test="postId != null">
+        #{postId,jdbcType=VARCHAR},
+      </if>
+      <if test="postName != null">
+        #{postName,jdbcType=VARCHAR},
+      </if>
+      <if test="contractId != null">
+        #{contractId,jdbcType=VARCHAR},
+      </if>
+      <if test="contractName != null">
+        #{contractName,jdbcType=VARCHAR},
+      </if>
+      <if test="employeeType != null">
+        #{employeeType,jdbcType=CHAR},
+      </if>
+      <if test="certificateId != null">
+        #{certificateId,jdbcType=CHAR},
+      </if>
+      <if test="certificateType != null">
+        #{certificateType,jdbcType=VARCHAR},
+      </if>
+      <if test="certificateNumber != null">
+        #{certificateNumber,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.hr.employee.entity.TbManpowerEntryManagementCriteria" resultType="java.lang.Long">
@@ -208,7 +325,7 @@
     update tb_manpower_entry_management
     <set>
       <if test="record.id != null">
-        id = #{record.id,jdbcType=VARCHAR},
+        id_ = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.jobNumber != null">
         job_number = #{record.jobNumber,jdbcType=VARCHAR},
@@ -243,6 +360,51 @@
       <if test="record.modifiedTime != null">
         modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.sex != null">
+        sex = #{record.sex,jdbcType=CHAR},
+      </if>
+      <if test="record.phone != null">
+        phone = #{record.phone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mailbox != null">
+        mailbox = #{record.mailbox,jdbcType=VARCHAR},
+      </if>
+      <if test="record.departmentId != null">
+        department_id = #{record.departmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.departmentName != null">
+        department_name = #{record.departmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.jobId != null">
+        job_id = #{record.jobId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.jobName != null">
+        job_name = #{record.jobName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.postId != null">
+        post_id = #{record.postId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.postName != null">
+        post_name = #{record.postName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contractId != null">
+        contract_id = #{record.contractId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contractName != null">
+        contract_name = #{record.contractName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.employeeType != null">
+        employee_type = #{record.employeeType,jdbcType=CHAR},
+      </if>
+      <if test="record.certificateId != null">
+        certificate_id = #{record.certificateId,jdbcType=CHAR},
+      </if>
+      <if test="record.certificateType != null">
+        certificate_type = #{record.certificateType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.certificateNumber != null">
+        certificate_number = #{record.certificateNumber,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -250,7 +412,7 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update tb_manpower_entry_management
-    set id = #{record.id,jdbcType=VARCHAR},
+    set id_ = #{record.id,jdbcType=VARCHAR},
       job_number = #{record.jobNumber,jdbcType=VARCHAR},
       name = #{record.name,jdbcType=VARCHAR},
       expected_entry_date = #{record.expectedEntryDate,jdbcType=TIMESTAMP},
@@ -261,7 +423,22 @@
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      sex = #{record.sex,jdbcType=CHAR},
+      phone = #{record.phone,jdbcType=VARCHAR},
+      mailbox = #{record.mailbox,jdbcType=VARCHAR},
+      department_id = #{record.departmentId,jdbcType=VARCHAR},
+      department_name = #{record.departmentName,jdbcType=VARCHAR},
+      job_id = #{record.jobId,jdbcType=VARCHAR},
+      job_name = #{record.jobName,jdbcType=VARCHAR},
+      post_id = #{record.postId,jdbcType=VARCHAR},
+      post_name = #{record.postName,jdbcType=VARCHAR},
+      contract_id = #{record.contractId,jdbcType=VARCHAR},
+      contract_name = #{record.contractName,jdbcType=VARCHAR},
+      employee_type = #{record.employeeType,jdbcType=CHAR},
+      certificate_id = #{record.certificateId,jdbcType=CHAR},
+      certificate_type = #{record.certificateType,jdbcType=VARCHAR},
+      certificate_number = #{record.certificateNumber,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -302,8 +479,53 @@
       <if test="modifiedTime != null">
         modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=CHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="mailbox != null">
+        mailbox = #{mailbox,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentId != null">
+        department_id = #{departmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentName != null">
+        department_name = #{departmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="jobId != null">
+        job_id = #{jobId,jdbcType=VARCHAR},
+      </if>
+      <if test="jobName != null">
+        job_name = #{jobName,jdbcType=VARCHAR},
+      </if>
+      <if test="postId != null">
+        post_id = #{postId,jdbcType=VARCHAR},
+      </if>
+      <if test="postName != null">
+        post_name = #{postName,jdbcType=VARCHAR},
+      </if>
+      <if test="contractId != null">
+        contract_id = #{contractId,jdbcType=VARCHAR},
+      </if>
+      <if test="contractName != null">
+        contract_name = #{contractName,jdbcType=VARCHAR},
+      </if>
+      <if test="employeeType != null">
+        employee_type = #{employeeType,jdbcType=CHAR},
+      </if>
+      <if test="certificateId != null">
+        certificate_id = #{certificateId,jdbcType=CHAR},
+      </if>
+      <if test="certificateType != null">
+        certificate_type = #{certificateType,jdbcType=VARCHAR},
+      </if>
+      <if test="certificateNumber != null">
+        certificate_number = #{certificateNumber,jdbcType=VARCHAR},
+      </if>
     </set>
-    where id = #{id,jdbcType=VARCHAR}
+    where id_ = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.hr.employee.entity.TbManpowerEntryManagement">
     update tb_manpower_entry_management
@@ -317,7 +539,22 @@
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
-      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=VARCHAR}
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      sex = #{sex,jdbcType=CHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      mailbox = #{mailbox,jdbcType=VARCHAR},
+      department_id = #{departmentId,jdbcType=VARCHAR},
+      department_name = #{departmentName,jdbcType=VARCHAR},
+      job_id = #{jobId,jdbcType=VARCHAR},
+      job_name = #{jobName,jdbcType=VARCHAR},
+      post_id = #{postId,jdbcType=VARCHAR},
+      post_name = #{postName,jdbcType=VARCHAR},
+      contract_id = #{contractId,jdbcType=VARCHAR},
+      contract_name = #{contractName,jdbcType=VARCHAR},
+      employee_type = #{employeeType,jdbcType=CHAR},
+      certificate_id = #{certificateId,jdbcType=CHAR},
+      certificate_type = #{certificateType,jdbcType=VARCHAR},
+      certificate_number = #{certificateNumber,jdbcType=VARCHAR}
+    where id_ = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

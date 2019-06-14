@@ -4,9 +4,10 @@
   <resultMap id="BaseResultMap" type="com.jn.hr.attendance.entity.TbManpowerAttendanceManagement">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="job_number" jdbcType="VARCHAR" property="jobNumber" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="department_id" jdbcType="VARCHAR" property="departmentId" />
     <result column="department" jdbcType="VARCHAR" property="department" />
     <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="user_id" jdbcType="VARCHAR" property="userId" />
     <result column="attendance" jdbcType="INTEGER" property="attendance" />
     <result column="late" jdbcType="INTEGER" property="late" />
     <result column="leave_early" jdbcType="INTEGER" property="leaveEarly" />
@@ -80,9 +81,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, job_number, department, name, user_id, attendance, late, leave_early, start_miss_card, 
-    end_miss_card, absenteeism, compassionate_leave, sick_leave, marriage_holiday, funeral_leave, 
-    maternity_leave, annual_leave, attendance_date
+    id, job_number, user_id, department_id, department, name, attendance, late, leave_early, 
+    start_miss_card, end_miss_card, absenteeism, compassionate_leave, sick_leave, marriage_holiday, 
+    funeral_leave, maternity_leave, annual_leave, attendance_date
   </sql>
   <select id="selectByExample" parameterType="com.jn.hr.attendance.entity.TbManpowerAttendanceManagementCriteria" resultMap="BaseResultMap">
     select
@@ -115,20 +116,20 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.hr.attendance.entity.TbManpowerAttendanceManagement">
-    insert into tb_manpower_attendance_management (id, job_number, department, 
-      name, user_id, attendance, 
-      late, leave_early, start_miss_card, 
-      end_miss_card, absenteeism, compassionate_leave, 
-      sick_leave, marriage_holiday, funeral_leave, 
-      maternity_leave, annual_leave, attendance_date
-      )
-    values (#{id,jdbcType=VARCHAR}, #{jobNumber,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, 
-      #{name,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{attendance,jdbcType=INTEGER}, 
-      #{late,jdbcType=INTEGER}, #{leaveEarly,jdbcType=INTEGER}, #{startMissCard,jdbcType=INTEGER}, 
-      #{endMissCard,jdbcType=INTEGER}, #{absenteeism,jdbcType=INTEGER}, #{compassionateLeave,jdbcType=INTEGER}, 
-      #{sickLeave,jdbcType=INTEGER}, #{marriageHoliday,jdbcType=INTEGER}, #{funeralLeave,jdbcType=INTEGER}, 
-      #{maternityLeave,jdbcType=INTEGER}, #{annualLeave,jdbcType=INTEGER}, #{attendanceDate,jdbcType=VARCHAR}
-      )
+    insert into tb_manpower_attendance_management (id, job_number, user_id, 
+      department_id, department, name, 
+      attendance, late, leave_early, 
+      start_miss_card, end_miss_card, absenteeism, 
+      compassionate_leave, sick_leave, marriage_holiday, 
+      funeral_leave, maternity_leave, annual_leave, 
+      attendance_date)
+    values (#{id,jdbcType=VARCHAR}, #{jobNumber,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, 
+      #{departmentId,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{attendance,jdbcType=INTEGER}, #{late,jdbcType=INTEGER}, #{leaveEarly,jdbcType=INTEGER}, 
+      #{startMissCard,jdbcType=INTEGER}, #{endMissCard,jdbcType=INTEGER}, #{absenteeism,jdbcType=INTEGER}, 
+      #{compassionateLeave,jdbcType=INTEGER}, #{sickLeave,jdbcType=INTEGER}, #{marriageHoliday,jdbcType=INTEGER}, 
+      #{funeralLeave,jdbcType=INTEGER}, #{maternityLeave,jdbcType=INTEGER}, #{annualLeave,jdbcType=INTEGER}, 
+      #{attendanceDate,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.hr.attendance.entity.TbManpowerAttendanceManagement">
     insert into tb_manpower_attendance_management
@@ -139,14 +140,17 @@
       <if test="jobNumber != null">
         job_number,
       </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="departmentId != null">
+        department_id,
+      </if>
       <if test="department != null">
         department,
       </if>
       <if test="name != null">
         name,
-      </if>
-      <if test="userId != null">
-        user_id,
       </if>
       <if test="attendance != null">
         attendance,
@@ -195,14 +199,17 @@
       <if test="jobNumber != null">
         #{jobNumber,jdbcType=VARCHAR},
       </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentId != null">
+        #{departmentId,jdbcType=VARCHAR},
+      </if>
       <if test="department != null">
         #{department,jdbcType=VARCHAR},
       </if>
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="userId != null">
-        #{userId,jdbcType=VARCHAR},
       </if>
       <if test="attendance != null">
         #{attendance,jdbcType=INTEGER},
@@ -260,14 +267,17 @@
       <if test="record.jobNumber != null">
         job_number = #{record.jobNumber,jdbcType=VARCHAR},
       </if>
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.departmentId != null">
+        department_id = #{record.departmentId,jdbcType=VARCHAR},
+      </if>
       <if test="record.department != null">
         department = #{record.department,jdbcType=VARCHAR},
       </if>
       <if test="record.name != null">
         name = #{record.name,jdbcType=VARCHAR},
-      </if>
-      <if test="record.userId != null">
-        user_id = #{record.userId,jdbcType=VARCHAR},
       </if>
       <if test="record.attendance != null">
         attendance = #{record.attendance,jdbcType=INTEGER},
@@ -317,9 +327,10 @@
     update tb_manpower_attendance_management
     set id = #{record.id,jdbcType=VARCHAR},
       job_number = #{record.jobNumber,jdbcType=VARCHAR},
+      user_id = #{record.userId,jdbcType=VARCHAR},
+      department_id = #{record.departmentId,jdbcType=VARCHAR},
       department = #{record.department,jdbcType=VARCHAR},
       name = #{record.name,jdbcType=VARCHAR},
-      user_id = #{record.userId,jdbcType=VARCHAR},
       attendance = #{record.attendance,jdbcType=INTEGER},
       late = #{record.late,jdbcType=INTEGER},
       leave_early = #{record.leaveEarly,jdbcType=INTEGER},
@@ -343,14 +354,17 @@
       <if test="jobNumber != null">
         job_number = #{jobNumber,jdbcType=VARCHAR},
       </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentId != null">
+        department_id = #{departmentId,jdbcType=VARCHAR},
+      </if>
       <if test="department != null">
         department = #{department,jdbcType=VARCHAR},
       </if>
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="userId != null">
-        user_id = #{userId,jdbcType=VARCHAR},
       </if>
       <if test="attendance != null">
         attendance = #{attendance,jdbcType=INTEGER},
@@ -397,9 +411,10 @@
   <update id="updateByPrimaryKey" parameterType="com.jn.hr.attendance.entity.TbManpowerAttendanceManagement">
     update tb_manpower_attendance_management
     set job_number = #{jobNumber,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=VARCHAR},
+      department_id = #{departmentId,jdbcType=VARCHAR},
       department = #{department,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
-      user_id = #{userId,jdbcType=VARCHAR},
       attendance = #{attendance,jdbcType=INTEGER},
       late = #{late,jdbcType=INTEGER},
       leave_early = #{leaveEarly,jdbcType=INTEGER},

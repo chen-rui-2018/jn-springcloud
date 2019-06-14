@@ -171,6 +171,11 @@ export default {
         assessmentId: this.delayLow.assessmentId,
         assessmentEndTime: this.delayTime
       }
+      if (new Date(this.delayTime.replace(/-/g, '\/')) < new Date()) { // 小于当前时间
+        alert('延期时间必须大于当前时间,请重新选择')
+        this.isDisabled = false
+        return false
+      }
       if (new Date(this.delayTime.replace(/-/g, '\/')) < new Date(this.delayLow.assessmentStartTime.replace(/-/g, '\/'))) {
         alert('考核开始时间为：' + this.delayLow.assessmentStartTime + '延期时间必须大于生效时间,请重新选择')
         this.isDisabled = false

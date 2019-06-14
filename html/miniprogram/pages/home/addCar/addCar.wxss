@@ -1,0 +1,30 @@
+.editCar{
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  margin-top: 25rpx;
+}
+.editCar image{
+  width: 48rpx;
+  height: 55rpx;
+  margin: 33rpx 0;
+  margin-right: 30rpx;
+}
+.editCar input{
+  font-size: 26rpx;
+}
+.bth{
+  display: flex;
+  text-align: center;
+  padding: 29rpx 31rpx;
+  width:100%; 
+}
+.bth text{
+  width: 100%;
+  background-color: #ecfcf2;
+	border-radius: 41px;
+  border: solid 1px #009966;
+  color:#07ab50;
+  padding: 26rpx 0;
+  font-size:30rpx;
+}

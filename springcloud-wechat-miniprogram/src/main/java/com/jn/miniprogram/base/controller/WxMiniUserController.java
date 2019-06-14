@@ -1,10 +1,15 @@
 package com.jn.miniprogram.base.controller;
 
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import com.jn.common.model.Result;
+import com.jn.miniprogram.base.model.WxMiniGetTokenParam;
+import com.jn.miniprogram.base.model.WxMiniRegisterUserGetTokenParam;
+import com.jn.miniprogram.base.service.WxMiniUserService;
+import com.jn.system.log.annotation.ControllerLog;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,31 +21,29 @@ import org.springframework.web.bind.annotation.RestController;
  * @Version： v1.0
  * @Modified By:
  */
+@Api(tags = "小程序获取TOKEN")
 @RestController
 @RequestMapping("/guest/mini/user")
 public class WxMiniUserController {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @Autowired
+    private WxMiniUserService wxMiniUserService;
 
     /**
-     * 登陆接口
+     * 获取token
      */
-    @GetMapping("/login")
-    public String login(String code) {
-        if (StringUtils.isBlank(code)) {
-            return "empty jscode";
-        }
-        //todo 做自己的业务
-        return "";
+    @ControllerLog(doAction = "小程序登陆凭证校验,返回Token")
+    @ApiOperation(value = "登陆凭证校验,返回Token", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/checkCodeAndGetToken")
+    public Result<String> checkCodeAndGetToken(@Validated @RequestBody WxMiniGetTokenParam wxMiniGetTokenParam) {
+        return wxMiniUserService.checkCodeAndGetToken(wxMiniGetTokenParam);
     }
 
-    /**
-     * 获取用户信息接口
-     * @return
-     */
-    @GetMapping("/info")
-    public String info() {
-        //todo 需补充
-        return null;
+    @ControllerLog(doAction = "小程序注册绑定微信用户信息,返回token")
+    @ApiOperation(value = "注册绑定微信用户信息，返回token", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/registerUserAndGetToken")
+    public Result<String> registerUserAndGetToken(@Validated @RequestBody WxMiniRegisterUserGetTokenParam wxMiniRegisterUserGetTokenParam) {
+        return wxMiniUserService.registerUserAndGetToken(wxMiniRegisterUserGetTokenParam);
     }
 
 }

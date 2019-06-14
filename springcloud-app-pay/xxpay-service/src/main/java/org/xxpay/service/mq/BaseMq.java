@@ -105,6 +105,7 @@ public class BaseMq  {
         if(StringUtils.isNotBlank(respUrl)){
             //http 回调通知
             noticeResult = httpPost(respUrl, (10 * 1000),(5 * 1000));
+            _log.info("======MQ http方式回调 通知url:{},返回结果：{}",respUrl,noticeResult);
         }else {
             //springCloud 回调通知
             String payOrderJson = msgObj.getString("payOrderJson");
@@ -112,6 +113,8 @@ public class BaseMq  {
             if(GlobalConstants.SUCCESS_CODE.equals(apiResult.getCode())){
                 noticeResult = PayConstant.MCH_NOTICE_REQUEST_SUCCESS;
             }
+
+            _log.info("======MQ springCloud方式回调 serviceId:{},serviceUrl:{},返回结果code：{}",serviceId,serviceUrl,apiResult.getCode());
         }
 
         return noticeResult;

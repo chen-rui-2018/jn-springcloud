@@ -99,11 +99,6 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
         spPowerBusiDetailVo.setTime(format);
 
         spPowerBusiDetailVo.setFlowPic(spPowerBusiDetailVo.getFlowPic().replace("/ibps/components/upload/ueditor/preview.htm",ibpsUrl+"/ibps/components/upload/ueditor/preview.htm"));
-        //替换标签,只要纯文本
-        String dealConditions = spPowerBusiDetailVo.getDealConditions();
-        dealConditions = dealConditions.replace("<p><span style=\"color: rgb(50, 50, 50); font-family: &quot;Microsoft Yahei&quot;; font-size: 15px; background-color: rgb(255, 255, 255);\">","");
-        dealConditions = dealConditions.replace("</span></p>","");
-        spPowerBusiDetailVo.setDealConditions(dealConditions);
         //通过业务id查询业务对象的办理材料集合
         TbSpPowerBusiMaterialsCriteria tbSpPowerBusiMaterialsCriteria = new TbSpPowerBusiMaterialsCriteria();
         TbSpPowerBusiMaterialsCriteria.Criteria criteria = tbSpPowerBusiMaterialsCriteria.createCriteria();
@@ -119,15 +114,16 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
                 SpPowerBusiMaterialsModel spPowerBusiMaterialsModel = new SpPowerBusiMaterialsModel();
                 BeanUtils.copyProperties(tbSpPowerBusiMaterial,spPowerBusiMaterialsModel);
                 String sample = spPowerBusiMaterialsModel.getSample();
-                //拼接附件下载链接
-                Object parse = JSONValue.parse(sample);
-                JSONArray array=(JSONArray)parse;
-                JSONObject obj2=(JSONObject)array.get(0);
-                String spring =(String) obj2.get("id");
-                String fileName =  (String)obj2.get("fileName");
-                String sid = "/components/upload/preview.htm?downloadId=" + spring;
-                spPowerBusiMaterialsModel.setSampleName(fileName);
-                spPowerBusiMaterialsModel.setSample(sid);
+                if(StringUtils.isNotEmpty(sample)){
+                    //附件下载链接
+                    Object parse = JSONValue.parse(sample);
+                    JSONArray array=(JSONArray)parse;
+                    JSONObject obj2=(JSONObject)array.get(0);
+                    String filePath =(String) obj2.get("filePath");
+                    String fileName =  (String)obj2.get("fileName");
+                    spPowerBusiMaterialsModel.setSampleName(fileName);
+                    spPowerBusiMaterialsModel.setSample(filePath);
+                }
                 spPowerBusiMaterialsModelList.add(spPowerBusiMaterialsModel);
             }
             spPowerBusiDetailVo.setMaterialsModelList(spPowerBusiMaterialsModelList);
@@ -173,35 +169,6 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
         return spPowerDetailVoList;
     }
 
-    /**
-     * 通过部门名称获取全部的实施部门(模糊查询)
-     * @param name
-     * @return
-     */
-    @Override
-    @ServiceLog(doAction = "通过部门名称获取全部的实施部门(模糊查询)")
-    public List<SpDictDepartModel> departList(String name) {
-       List<SpDictDepartModel> spDictDepartModelList = new ArrayList<SpDictDepartModel>();
-       //根据名称模糊查询出全部的实施部门
-       TbSpDictDepartCriteria tbSpDictDepartCriteria = new TbSpDictDepartCriteria();
-       TbSpDictDepartCriteria.Criteria criteria = tbSpDictDepartCriteria.createCriteria();
-       if(name != null){
-           //模糊查询实施部门
-           criteria.andNameLike("%"+name+"%");
-       }
-       //只查询有效的部门
-        Byte recordStatus = Byte.parseByte(SpStatusEnums.EFFECTIVE.getCode());
-        criteria.andRecordStatusEqualTo(recordStatus);
-        List<TbSpDictDepart> tbSpDictDeparts = tbSpDictDepartMapper.selectByExample(tbSpDictDepartCriteria);
-        if (tbSpDictDeparts != null && tbSpDictDeparts.size() > 0){
-            for (TbSpDictDepart tbSpDictDepart : tbSpDictDeparts) {
-                SpDictDepartModel spDictDepartModel = new SpDictDepartModel();
-                BeanUtils.copyProperties(tbSpDictDepart,spDictDepartModel);
-                spDictDepartModelList.add(spDictDepartModel);
-            }
-        }
-        return spDictDepartModelList;
-    }
 
     /**
      * 返回全部的权力清单(包含孩子)
@@ -344,6 +311,54 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
             count+=this.pushPowerBusi(powerBusiIdArr[i],serviceCompanyParam,userId);
         }
         return count;
+    }
+
+    /**
+     * (新)实施部门列表
+     * @return
+     */
+    @Override
+    public List<List<SpDictDepartModel>> departList() {
+        List<List<SpDictDepartModel>> list = new ArrayList<>();
+        //查询省级并排序
+        TbSpDictDepartCriteria  province = new TbSpDictDepartCriteria();
+        province.createCriteria().andLevelEqualTo(Byte.parseByte("1"));
+        province.setOrderByClause("sort ASC");
+        List<TbSpDictDepart> provinceList = tbSpDictDepartMapper.selectByExample(province);
+        List<SpDictDepartModel> provinceModelList = copyBean(provinceList);
+        list.add(provinceModelList);
+        //查询市级并排序
+        TbSpDictDepartCriteria  city = new TbSpDictDepartCriteria();
+        city.createCriteria().andLevelEqualTo(Byte.parseByte("2"));
+        city.setOrderByClause("sort ASC");
+        List<TbSpDictDepart> cityList = tbSpDictDepartMapper.selectByExample(city);
+        List<SpDictDepartModel> cityModelList = copyBean(cityList);
+        list.add(cityModelList);
+        //查询区级并排序
+        TbSpDictDepartCriteria  district = new TbSpDictDepartCriteria();
+        district.createCriteria().andLevelEqualTo(Byte.parseByte("3"));
+        district.setOrderByClause("sort ASC");
+        List<TbSpDictDepart> districtList = tbSpDictDepartMapper.selectByExample(district);
+        List<SpDictDepartModel> districtModelList = copyBean(districtList);
+        list.add(districtModelList);
+        return list;
+    }
+
+    /**
+     * 使用BeanUtils复制Bean
+     * @param tbSpDictDepartList
+     * @return
+     */
+    public static List<SpDictDepartModel> copyBean(List<TbSpDictDepart> tbSpDictDepartList){
+        List<SpDictDepartModel> spDictDepartModelList = new ArrayList<>();
+        if (tbSpDictDepartList != null && tbSpDictDepartList.size() > 0){
+            for (TbSpDictDepart tbSpDictDepart : tbSpDictDepartList) {
+                SpDictDepartModel spDictDepartModel = new SpDictDepartModel();
+                BeanUtils.copyProperties(tbSpDictDepart,spDictDepartModel);
+                spDictDepartModelList.add(spDictDepartModel);
+            }
+        }
+        return spDictDepartModelList;
     }
 
     /**

@@ -57,7 +57,7 @@
         </el-row>
         <el-form-item>
           <div class="editContent">
-            <p>{{ parentData.projectNote }}</p>
+            <p v-html="parentData.projectNote"/>
           </div>
         </el-form-item>
       </el-form>

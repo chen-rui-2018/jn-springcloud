@@ -1,10 +1,13 @@
 package com.jn.hr.employee.dao;
 
 import com.jn.hr.employee.entity.TbManpowerSocialSecurity;
+import com.jn.hr.employee.model.DirectlyLeader;
 import com.jn.hr.employee.model.SocialSecurity;
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author dt
@@ -13,4 +16,6 @@ import java.util.List;
 public interface SocialSecurityMapper {
     SocialSecurity selectByJobNumber(@Param("jobNumber") String jobNumber);
     int insertBatch(List<TbManpowerSocialSecurity> list);
+    @MapKey("jobNumber")
+    Map<String,SocialSecurity> selectAllSocialSecurityToMap();
 }

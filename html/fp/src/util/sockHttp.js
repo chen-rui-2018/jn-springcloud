@@ -1,15 +1,16 @@
 import http from 'axios'
-import ElementUI from 'element-ui'
+
 // baseUrl
-const api = 'http://192.168.10.31:8888'
+import { SOCK_URL } from '@/util/url.js'
+import { getToken } from '@/util/auth'
 
 const axios = http.create({
-    baseURL: api
+    baseURL: SOCK_URL
     // timeout: 10000
 })
 // 全局请求拦截
 axios.interceptors.request.use(function (response) {
-  response.headers.token = window.sessionStorage.getItem('token')
+  response.headers.token = getToken()
   return response;
 }, function (error) {
   return Promise.reject(error);
@@ -20,7 +21,6 @@ axios.interceptors.response.use(function (response) {
   return response
 }, function (error) {
   // 处理响应失败
-  // ElementUI.Message.error(error.message)
   return Promise.reject(error)
 })
 // import qs from 'qs'

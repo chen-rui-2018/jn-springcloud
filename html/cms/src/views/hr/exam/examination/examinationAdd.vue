@@ -19,7 +19,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="试题内容：" prop="examinationQuestion">
-          <el-input v-model="addForm.examinationQuestion" type="textarea" placeholder="" clearable/>
+          <el-input v-model.trim="addForm.examinationQuestion" type="textarea" placeholder="" clearable/>
         </el-form-item>
 
         <div class="exam-bg">
@@ -38,7 +38,7 @@
                       :rules="{required: true, message: '请输入选项内容', trigger: 'blur'}"
                       label-width="30px">
                       <el-input
-                        v-model="item.optionName"
+                        v-model.trim="item.optionName"
                         type="text"
                         style="width:800px;"
                         placeholder=""
@@ -70,7 +70,7 @@
                       :rules="{required: true, message: '请输入选项内容', trigger: 'blur'}"
                       label-width="30px">
                       <el-input
-                        v-model="item.optionName"
+                        v-model.trim="item.optionName"
                         type="text"
                         style="width:800px;"
                         placeholder=""
@@ -94,7 +94,7 @@
           <div v-if="addForm.testQuestionType=='3'" class="exam-option-question">
 
             <el-form-item label="答案：" prop="answerHtml">
-              <el-input v-model="addForm.answerHtml" type="textarea" placeholder="" clearable/>
+              <el-input v-model.trim="addForm.answerHtml" type="textarea" placeholder="" clearable/>
             </el-form-item>
 
           </div>
@@ -131,7 +131,7 @@
             </el-row>
 
             <el-form-item label="试题分析：" prop="itemAnalysis">
-              <el-input v-model="addForm.itemAnalysis" type="textarea" placeholder="" clearable/>
+              <el-input v-model.trim="addForm.itemAnalysis" type="textarea" placeholder="" clearable/>
             </el-form-item>
 
             <el-form-item>

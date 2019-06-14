@@ -1,10 +1,9 @@
-import {CreateHeader} from "./../../../utils/require"
+import request from "./../../../utils/http"
 Page({
   data: {
     nvabarData: {
       title: '组织人员', //导航栏 中间的标题
     },
-    token:'',
     sendData:{
       departmentId:'',
       name:'',
@@ -20,24 +19,36 @@ Page({
     this.setData({
       'sendData.name':e.detail.value
     })
-    wx.request({
-      url: 'http://192.168.10.31:1101/springcloud-oa/oa/addressBook/list',
+    // wx.request({
+    //   url: 'http://192.168.10.31:1101/springcloud-oa/oa/addressBook/list',
+    //   data: this.data.sendData,
+    //   header: {'content-type':'application/json','token':this.data.token},
+    //   method: 'POST',
+    //   dataType: 'json',
+    //   responseType: 'text',
+    //   success: (res)=>{
+    //     if(res.data.code==='0000'){
+    //       this.setData({
+    //         userList:res.data.data.rows,
+    //         total:res.data.data.total
+    //       })
+    //     }
+    //   },
+    //   fail: ()=>{},
+    //   complete: ()=>{}
+    // });
+    request.send({
+      url: '/springcloud-oa/oa/addressBook/list',
       data: this.data.sendData,
-      header: {'content-type':'application/json','token':this.data.token},
       method: 'POST',
-      dataType: 'json',
-      responseType: 'text',
-      success: (res)=>{
-        if(res.data.code==='0000'){
-          this.setData({
-            userList:res.data.data.rows,
-            total:res.data.data.total
-          })
-        }
-      },
-      fail: ()=>{},
-      complete: ()=>{}
-    });
+    }).then(res=>{
+      if(res.data.code==='0000'){
+        this.setData({
+          userList:res.data.data.rows,
+          total:res.data.data.total
+        })
+      }
+    })
   },
   selectUser(e){
     this.setData({
@@ -49,14 +60,10 @@ Page({
     this.setData({
       'sendData.departmentId':options.departmentId
     })
-    CreateHeader()
-    .then(header=>{
-      this.data.token=header.token
-      this.getUser()
-    })
+    this.getUser()
    },
    getUser(){
-    wx.request({
+  /*   wx.request({
       url: 'http://192.168.10.31:1101/springcloud-oa/oa/addressBook/list',
       data: this.data.sendData,
       header: {'content-type':'application/json','token':this.data.token},
@@ -73,12 +80,26 @@ Page({
       },
       fail: ()=>{},
       complete: ()=>{}
-    });
+    }); */
+    request.send({
+      url: '/springcloud-oa/oa/addressBook/list',
+      data: this.data.sendData,
+      method: 'POST',
+    }).then(res=>{
+      if(res.data.code==='0000'){
+        this.setData({
+          userList:this.data.userList.concat(res.data.data.rows),
+          total:res.data.data.total
+        })
+      }
+    })
    },
   onReady: function () { },
   onShow: function () { },
   onHide: function () { },
-  onPullDownRefresh: function () { },
+  onPullDownRefresh: function () {
+    this.getUser()
+   },
   onReachBottom: function () {
     if(this.data.sendData.page<Math.ceil(this.data.total/this.data.sendData.rows)){
       this.data.sendData.page++

@@ -10,7 +10,7 @@
                 <div class="infotop pr">
                     <img class="infoImg" :src="getDetails.mainPicture" alt="">
                     <div class="infotitle">
-                        <div class="tit color4">一区多园 — 白下高新XXXX园区</div>
+                        <div class="tit color4">{{getDetails.parkName}}</div>
                         <div class="eng mainColor">Area more garden</div>
                         <div class="line"></div>
                     </div>
@@ -44,7 +44,8 @@ export default {
       this.api.get({
         url: "getParkDetails",
         data: {
-          id: "570295002484178944"
+          // id: "570329542049136640"
+          id: this.$route.query.id
         },
         callback: function(res) {
           if (res.code == "0000") {
@@ -67,6 +68,7 @@ export default {
   .delnav {
     padding: 20px 0;
     font-size: 13px;
+    font-weight: bold;
   }
   .delinfo {
     margin-top: 40px;
@@ -126,7 +128,7 @@ export default {
   }
   .delbody {
     margin-top: 40px;
-    margin-bottom: 20px;
+    margin-bottom: 50px;
     .delTil {
       padding-left: 10px;
       border-left: 5px solid #00a041;

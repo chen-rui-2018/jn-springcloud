@@ -100,8 +100,8 @@ public class SalaryPayrollAdd extends BaseRowModel implements Serializable{
 
 	@ApiModelProperty(value = "入账日期")
 	@ExcelProperty(value = "入账日期", index = 18)
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
 	private Date accountEntryTime;
 
 	public String getJobNumber() {

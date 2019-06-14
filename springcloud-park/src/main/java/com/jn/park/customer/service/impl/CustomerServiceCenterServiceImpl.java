@@ -150,6 +150,7 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
         }
         CustomerServiceCenterDetailVo customerVo=new CustomerServiceCenterDetailVo();
         BeanUtils.copyProperties(clientServiceCenterList.get(0),customerVo);
+        customerVo.setCreatedTime(DateUtils.formatDate(clientServiceCenterList.get(0).getCreatedTime(),PATTERN));
         if(clientServiceCenterList.get(0).getQuesUrl()!=null){
             customerVo.setQuesUrl(Arrays.asList(clientServiceCenterList.get(0).getQuesUrl().split(";")));
         }
@@ -173,15 +174,18 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
      */
     @ServiceLog(doAction = "封装处理处理历史记录")
     private CustomerServiceCenterDetailVo getExecuteHistoryInfo(CustomerServiceCenterDetailVo customerVo,IBPSResult ibpsResult) {
+        //获取历史记录信息
         Object data = ibpsResult.getData();
         LinkedTreeMap dataMap=(LinkedTreeMap)data;
         List<LinkedTreeMap> dataResult = (List<LinkedTreeMap> )dataMap.get("dataResult");
         List<ExecuteHistoryResult> resultList=new ArrayList<>(16);
         for(LinkedTreeMap linkedTreeMap:dataResult){
             ObjectMapper objectMapper = new ObjectMapper();
+            //把json转为javaBean
             ExecuteHistoryResult executeHistoryResult = objectMapper.convertValue(linkedTreeMap, ExecuteHistoryResult.class);
             resultList.add(executeHistoryResult);
         }
+        //处理历史数据
         List<ExecuteHistoryShow> executeHistoryShowList=new ArrayList<>(16);
         for(ExecuteHistoryResult result:resultList){
             ExecuteHistoryShow historyShow=new ExecuteHistoryShow();
@@ -207,7 +211,7 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
             if(StringUtils.equals(SEND_NODE, result.getTaskName())){
                 //设置发起节点信息
                 setSendPersonInfo(result.getStatus(), historyShow, userInfo.getData());
-                historyShow.setOptionDeptName(CUSTER_CENTER);
+                historyShow.setOptionDeptName(historyShow.getAuditorName());
             }else if(StringUtils.equals(CUSTER_CENTER, result.getTaskName())
                     || StringUtils.equals(EXECUTE_PERSON, result.getTaskName())){
                 //设置客户中心分发/处理节点信息
@@ -221,9 +225,31 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
                         throw new JnSpringCloudException(CustomerCenterExceptionEnum.NETWORK_ANOMALY);
                     }
                     for(TbClientRolePersonInfo personInfo:rolePersonInfoList){
-                        if(StringUtils.equals(StringUtils.join(userIds,","), personInfo.getUserId())){
-                            historyShow.setOptionDeptId(personInfo.getRoleId());
-                            historyShow.setOptionDeptName(personInfo.getRoleName());
+                        if(StringUtils.equals(CUSTER_CENTER, result.getTaskName())){
+                            historyShow.setOptionDeptName(CUSTER_CENTER);
+                        }else if(StringUtils.equals(EXECUTE_PERSON, result.getTaskName())){
+                            //把数值转换为字符串，以逗号分隔
+                            String joinUserId = StringUtils.join(userIds, ",");
+                            String[] reverseUserIds = ArraysReverse(userIds.toArray(new String[userIds.size()]));
+                            //反转userId
+                            String revUserId = StringUtils.join(reverseUserIds,",");
+                            if(StringUtils.equals(joinUserId, personInfo.getUserId())
+                                    || StringUtils.equals(revUserId, personInfo.getUserId())){
+                                historyShow.setOptionDeptId(personInfo.getRoleId());
+                                historyShow.setOptionDeptName(personInfo.getRoleName());
+                                break;
+                            }
+                        }
+                    }
+                }else{
+                    List<LinkedTreeMap<String, String>> qualifiedExecutor = result.getQualifiedExecutor();
+                    //执行人类型为角色
+                    String type="role";
+                    for(LinkedTreeMap<String, String> map:qualifiedExecutor){
+                        if(StringUtils.equals(type,map.get("type"))){
+                            String roleId = map.get("executId").replace("user", "");
+                            historyShow.setOptionDeptId(roleId);
+                            historyShow.setOptionDeptName("客服中心");
                             break;
                         }
                     }
@@ -247,6 +273,22 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
         }
         customerVo.setExecuteHistoryShowList(executeHistoryShowList);
         return customerVo;
+    }
+
+    /**
+     * 反转数组元素
+     * @param resource 初始数组
+     * @return
+     */
+    @ServiceLog(doAction = "反转数组元素")
+    private String[] ArraysReverse(String [] resource){
+        String[] target = new String[resource.length];
+        int n = resource.length - 1;
+        for (int i = 0; i < resource.length; i++) {
+            target[n] = resource[i];
+            n--;
+        }
+        return target;
     }
 
     /**
@@ -475,8 +517,16 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
     @ServiceLog(doAction ="根据用户账号获取客服中心问题列表")
     private List<ConsultationCustomerListShow> getCustomerCenterList(String loginAccount) {
         TbClientServiceCenterCriteria example=new TbClientServiceCenterCriteria();
-        example.createCriteria().andCreatorAccountEqualTo(loginAccount).andProcessInsIdIsNotNull()
-                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        //流程实例id为空或为null的不被查询
+        if(StringUtils.isBlank(loginAccount)){
+            example.createCriteria().andProcessInsIdIsNotNull()
+                    .andProcessInsIdNotEqualTo("")
+                    .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        }else{
+            example.createCriteria().andCreatorAccountLike("%"+loginAccount+"%").andProcessInsIdIsNotNull()
+                    .andProcessInsIdNotEqualTo("")
+                    .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        }
         example.setOrderByClause("created_time desc");
         List<TbClientServiceCenter> tbClientServiceCenterList = tbClientServiceCenterMapper.selectByExample(example);
         if(tbClientServiceCenterList.isEmpty()){
@@ -486,10 +536,28 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
             for(TbClientServiceCenter tbClientServiceCenter:tbClientServiceCenterList){
                 ConsultationCustomerListShow customerListShow=new ConsultationCustomerListShow();
                 BeanUtils.copyProperties(tbClientServiceCenter, customerListShow);
+                customerListShow.setUserAccount(tbClientServiceCenter.getCreatorAccount());
                 customerListShow.setCreatedTime(DateUtils.formatDate(tbClientServiceCenter.getCreatedTime(),PATTERN));
                 resultList.add(customerListShow);
             }
             return resultList;
         }
     }
+
+    /**
+     * 查询用户来电历史信息
+     * @param calledPhoneHistoryParam
+     * @return
+     */
+    @ServiceLog(doAction = "查询用户来电历史信息")
+    @Override
+    public PaginationData getUserCalledHistory(CalledPhoneHistoryParam calledPhoneHistoryParam) {
+        ConsultationCustomerListParam param=new ConsultationCustomerListParam();
+        param.setNeedPage("1");
+        param.setPage(calledPhoneHistoryParam.getPage());
+        param.setRows(calledPhoneHistoryParam.getRows());
+        //若没有输入手机号，默认查询20条用户信息，按时间倒序排序,若有输入手机号，默认查询该手机号的20条历史信息
+        return consultationCustomerList(param, calledPhoneHistoryParam.getSearchPhone());
+    }
+
 }

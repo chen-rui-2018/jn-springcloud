@@ -86,6 +86,7 @@ public class PayChannel4AlipayController {
         model.setTotalAmount(AmountUtil.convertCent2Dollar(payOrder.getAmount().toString()));
         model.setBody(payOrder.getBody());
         model.setProductCode("QUICK_WAP_PAY");
+        model.setStoreId(AlipayConstant.ALIPAY_STORE_ID);
         model.setTimeoutExpress(createTimeoutExpress(payOrder.getDuration()));
         // 获取objParams参数
         String objParams = payOrder.getExtra();
@@ -108,7 +109,9 @@ public class PayChannel4AlipayController {
         try {
             payUrl = client.pageExecute(alipay_request).getBody();
         } catch (AlipayApiException e) {
-            e.printStackTrace();
+            _log.error("订单号：{} 支付下单报错 ",payOrderId,e);
+            Map<String, Object> map = XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_SUCCESS, "", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0019);
+            return XXPayUtil.makeRetData(map, resKey);
         }
         _log.info("{}生成跳转路径：payUrl={}", logPrefix, payUrl);
         payOrderService.updateStatus4Ing(payOrderId, null);
@@ -159,6 +162,7 @@ public class PayChannel4AlipayController {
         model.setTotalAmount(AmountUtil.convertCent2Dollar(payOrder.getAmount().toString()));
         model.setBody(payOrder.getBody());
         model.setProductCode("FAST_INSTANT_TRADE_PAY");
+        model.setStoreId(AlipayConstant.ALIPAY_STORE_ID);
         model.setTimeoutExpress(createTimeoutExpress(payOrder.getDuration()));
         // 获取objParams参数
         String objParams = payOrder.getExtra();
@@ -184,7 +188,9 @@ public class PayChannel4AlipayController {
         try {
             payUrl = client.pageExecute(alipay_request).getBody();
         } catch (AlipayApiException e) {
-            e.printStackTrace();
+            _log.error("订单号：{} 支付下单报错 ",payOrderId,e);
+            Map<String, Object> map = XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_SUCCESS, "", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0019);
+            return XXPayUtil.makeRetData(map, resKey);
         }
         _log.info("{}生成跳转路径：payUrl={}", logPrefix, payUrl);
         payOrderService.updateStatus4Ing(payOrderId, null);
@@ -235,6 +241,7 @@ public class PayChannel4AlipayController {
         model.setTotalAmount(AmountUtil.convertCent2Dollar(payOrder.getAmount().toString()));
         model.setBody(payOrder.getBody());
         model.setProductCode("QUICK_MSECURITY_PAY");
+        model.setStoreId(AlipayConstant.ALIPAY_STORE_ID);
         model.setTimeoutExpress(createTimeoutExpress(payOrder.getDuration()));
         alipay_request.setBizModel(model);
         // 设置异步通知地址
@@ -245,7 +252,9 @@ public class PayChannel4AlipayController {
         try {
             payParams = client.sdkExecute(alipay_request).getBody();
         } catch (AlipayApiException e) {
-            e.printStackTrace();
+            _log.error("订单号：{} 支付下单报错 ",payOrderId,e);
+            Map<String, Object> map = XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_SUCCESS, "", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0019);
+            return XXPayUtil.makeRetData(map, resKey);
         }
         payOrderService.updateStatus4Ing(payOrderId, null);
         _log.info("{}生成请求支付宝数据,payParams={}", logPrefix, payParams);
@@ -296,6 +305,7 @@ public class PayChannel4AlipayController {
         model.setSubject(payOrder.getSubject());
         model.setTotalAmount(AmountUtil.convertCent2Dollar(payOrder.getAmount().toString()));
         model.setBody(payOrder.getBody());
+        model.setStoreId(AlipayConstant.ALIPAY_STORE_ID);
         model.setTimeoutExpress(createTimeoutExpress(payOrder.getDuration()));
         // 获取objParams参数
         String objParams = payOrder.getExtra();
@@ -323,7 +333,9 @@ public class PayChannel4AlipayController {
         try {
             payUrl = client.execute(alipay_request).getBody();
         } catch (AlipayApiException e) {
-            e.printStackTrace();
+            _log.error("订单号：{} 支付下单报错 ",payOrderId,e);
+            Map<String, Object> map = XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_SUCCESS, "", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0019);
+            return XXPayUtil.makeRetData(map, resKey);
         }
         _log.info("{}生成跳转路径：payUrl={}", logPrefix, payUrl);
         payOrderService.updateStatus4Ing(payOrderId, null);
@@ -337,9 +349,7 @@ public class PayChannel4AlipayController {
         //渠道ID
         map.put("channelId",payOrder.getChannelId());
         //封装orderInfo(发起支付需要的参数JSON格式)
-        JSONObject orderInfo = new JSONObject();
-        orderInfo.put("payUrl",payUrl);
-        map.put("orderInfo",orderInfo.toJSONString());
+        map.put("orderInfo",payUrl);
 
         return XXPayUtil.makeRetData(map, resKey);
 
@@ -384,6 +394,7 @@ public class PayChannel4AlipayController {
         model.setOutRequestNo(refundOrderId);
         model.setRefundAmount(AmountUtil.convertCent2Dollar(refundOrder.getRefundAmount().toString()));
         model.setRefundReason("正常退款");
+        model.setStoreId(AlipayConstant.ALIPAY_STORE_ID);
         request.setBizModel(model);
         Map<String, Object> map = new HashMap<>();
         map.put("refundOrderId", refundOrderId);

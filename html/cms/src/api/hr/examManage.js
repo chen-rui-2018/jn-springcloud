@@ -85,11 +85,19 @@ export function examUpdateResult(query) {
 }
 // 更新考试成绩
 export function examExportResultList(query) {
+  let params = ''
+  for (const i in query) {
+    params += `&${i}=${query[i]}`
+  }
   return request({
-    url: baseurl + `hr/exam/exportResultList`,
-    method: 'post',
-    data: query
+    url: baseurl + `hr/exam/exportResultList?q=a${params}`,
+    method: 'get'
   })
+  // return request({
+  //   url: baseurl + `hr/exam/exportResultList`,
+  //   method: 'post',
+  //   data: query
+  // })
 }
 // 发送邮件
 export function examSendExaminaManagement(query) {
@@ -99,4 +107,3 @@ export function examSendExaminaManagement(query) {
     data: query
   })
 }
-

@@ -14,10 +14,10 @@
           <p>试卷总分：{{ examInfo.totalScore }}(分)</p>
           <p>答题时间：{{ examInfo.answerTime }}(分钟)</p>
           <p class="notesBox"><span>考试须知：</span><br > <span class="notes">{{ examInfo.examinaNotes }}</span></p>
-          <p><i class="el-icon-warning" style="color: #09bb07;"/><span style="color: #999;">参加考试前，请输入以下信息</span></p>
+          <p><i class="el-icon-warning" style="color: #09bb07;"/><span style="color: #999;">参加考试前，请输入工号</span></p>
           <el-form ref="userFrom" :model="userFrom" class="demo-ruleForm">
             <el-form-item :rules="[{ required: true, message: '工号不能为空'},]" prop="jobNumber">
-              <el-input v-model="userFrom.jobNumber" type="age" autocomplete="off" clearable/>
+              <el-input v-model="userFrom.jobNumber" type="age" placeholder="请输入工号" autocomplete="off" clearable/>
             </el-form-item>
             <el-form-item>
               <el-button type="success" class="btn" @click="submitForm('userFrom')">参加考试</el-button>
@@ -81,6 +81,10 @@
 </template>
 
 <script>
+import {
+  setToken,
+  getToken
+} from '@/utils/auth'
 import moment from 'moment'
 import myContainer from '../../components/responseBox/myContainer' // use clipboard by v-directive
 import {
@@ -101,7 +105,7 @@ export default {
         id: '',
         examinaStartTime: '', // 考试开始时间
         examinaEndTime: '',
-        examinaMethod: 1 // 用户终端后面加上判断
+        examinaMethod: /Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent) ? 0 : 1 // 用户终端后面加上判断
 
       },
       examInfo: {
@@ -109,10 +113,14 @@ export default {
       }
     }
   },
-  created() {
-    console.log(Date.parse(new Date(moment().format('YYYY-MM-DD hh:mm:ss'))))
+  beforeMount() {
     this.userFrom.id = this.$route.query.id
-    this.initData()
+    if (this.$route.query.token && !getToken()) {
+      setToken(this.$route.query.token)
+      window.location.reload()
+    } else {
+      this.initData()
+    }
   },
   methods: {
     initData() {

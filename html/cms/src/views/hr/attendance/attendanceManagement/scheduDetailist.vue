@@ -16,20 +16,16 @@
 
       </el-form-item>
 
-      <el-form-item label="部门:" lable-position="right" label-width="80px">
-        <el-select
-          v-model="listQuery.departmentId"
+      <el-form-item label="部门：" prop="departmentId">
+        <el-cascader
+          ref="departRef"
+          :options="departmentList"
+          v-model="currentDepartmentIds"
+          change-on-select
           placeholder="请选择"
           clearable
-          style="width: 200px"
-          class="filter-item">
-          <el-option label="请选择" value=""/>
-          <el-option
-            v-for="item in departmentList"
-            :key="item.departmentId"
-            :label="item.departmentName"
-            :value="item.departmentId"/>
-        </el-select>
+          @change="handleChangeDepartment"
+        />
       </el-form-item>
 
       <el-form-item label="姓名:" lable-position="right" label-width="80px">
@@ -69,35 +65,20 @@
       <el-table-column type="index" width="60" label="序号" align="center"/>
       <el-table-column label="部门" align="center" width="200">
         <template slot-scope="scope">
-          <el-select
-            v-if="!scope.row.disabled"
-            v-model="scope.row.departmentId"
-            :disabled="scope.row.disabled"
-            placeholder="请选择"
-            clearable
-            class="filter-item"
-            @change="setDepartMentName(scope.row,scope.$index)">
-            <el-option label="请选择" value=""/>
-            <el-option
-              v-for="item in departmentList"
-              :key="item.departmentId"
-              :label="item.departmentName"
-              :value="item.departmentId"/>
-          </el-select>
-          <span v-else>{{ scope.row.departmentName }}</span>
+          <span>{{ scope.row.departmentName }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="姓名" align="center" prop="name" width="150">
         <template slot-scope="scope">
-          <el-input
+          <!-- <el-input
             v-if="!scope.row.disabled"
             v-model.trim="scope.row.name"
             :disabled="scope.row.disabled"
             maxlength="100"
             placeholder="请输入姓名"
-            clearable />
-          <span v-else>{{ scope.row.name }}</span>
+            clearable />-->
+          <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
 
@@ -507,14 +488,15 @@ import {
 } from '@/api/hr/attendance'
 
 import {
-  getTreeList
-} from '@/api/hr/employeeBasicInfo'
+  api
+} from '@/api/axios'
 
 import moment from 'moment'
 
 export default {
   data() {
     return {
+      currentDepartmentIds: [],
       listQuery: {
         page: 1,
         rows: 10,
@@ -534,13 +516,32 @@ export default {
   mounted() {
     this.nextMonth = moment().add(1, 'months').startOf('month').format('YYYYMM')
     this.listQuery.schedulMonth = this.$route.query.schedulMonth
-    this.initDepartMentList()
+    this.getAllDepartment()
     this.initList()
   },
   methods: {
+    getAllDepartment() {
+      this.departmentListLoading = true
+      api(`${this.GLOBAL.systemUrl}system/sysDepartment/findDepartmentAllByLevel`, '', 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
+          this.departmentList = res.data.data
+        } else {
+          this.$message.error(res.data.result)
+        }
+        this.departmentListLoading = false
+      })
+    },
+    handleChangeDepartment(value) {
+      this.listQuery.departmentId = this.currentDepartmentIds[this.currentDepartmentIds.length - 1]
+    },
     initList() {
       console.log('排班明细查询')
       this.listLoading = true
+
+      if (!this.listQuery.departmentId) {
+        this.listQuery.departmentId = ''
+      }
+
       scheduDetailist(this.listQuery).then(res => {
         if (res.data.code === '0000') {
           this.scheduDetailist = res.data.data.rows
@@ -558,27 +559,14 @@ export default {
         this.listLoading = false
       })
     },
-    initDepartMentList() {
-      getTreeList().then(res => {
-        if (res.data.code === '0000') {
-          this.departmentList = res.data.data
-        } else {
-          this.$message.error(res.data.result)
-        }
-      })
-    },
-    setDepartMentName(row, index) {
-      const depart = this.departmentList.find(item => item.departmentId === row.departmentId)
-      if (depart) {
-        row.departmentName = depart['departmentName']
-        this.scheduDetailist.splice(index, 1, row)
-      }
-    },
     handleFilter() {
       this.listQuery.page = 1
       this.initList()
     },
     exportExcel() {
+      if (!this.listQuery.departmentId) {
+        this.listQuery.departmentId = ''
+      }
       exportScheduDetailist(this.listQuery).then(res => {
         console.log('导出。。。')
         window.location.href = res.request.responseURL

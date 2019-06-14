@@ -19,7 +19,13 @@ public class TreeModel {
     private String parentId;
     @ApiModelProperty(value = "层级")
     private String level;
+    @ApiModelProperty(value = "标识1部门,2员工")
+    private boolean flag;
+    @ApiModelProperty(value = "value")
+    private String value;
     private List<TreeModel> children;
+    private String jobNumber;
+    private String mailbox;
 
     public String getId() {
         return id;
@@ -59,5 +65,37 @@ public class TreeModel {
 
     public void setLevel(String level) {
         this.level = level;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public boolean isFlag() {
+        return flag;
+    }
+
+    public void setFlag(boolean flag) {
+        this.flag = flag;
+    }
+
+    public String getJobNumber() {
+        return jobNumber;
+    }
+
+    public void setJobNumber(String jobNumber) {
+        this.jobNumber = jobNumber;
+    }
+
+    public String getMailbox() {
+        return mailbox;
+    }
+
+    public void setMailbox(String mailbox) {
+        this.mailbox = mailbox;
     }
 }

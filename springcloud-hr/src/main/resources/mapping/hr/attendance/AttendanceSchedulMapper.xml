@@ -20,12 +20,30 @@
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
             and  t1.name like concat('%',#{name},'%')
         </if>
-        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
-			and t1.department_id = #{departmentId,jdbcType=VARCHAR}
-		</if>
+      <if test="departmentIds!=null and departmentIds.size>0">
+        and t1.department_id in
+        <foreach collection="departmentIds" item="depart" open="(" close=")" separator=",">
+          #{depart}
+        </foreach>
+      </if>
 		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(jobNumber)">
 			and t1.job_number = #{jobNumber,jdbcType=VARCHAR}
 		</if>
+	</select>
+	
+	 <select id="obtainMap" parameterType="com.jn.hr.attendance.model.AttendanceSchedulPage"
+		resultType="com.jn.hr.attendance.model.AttendanceSchedulVo">
+		SELECT * FROM tb_manpower_attendance_schedul t1
+		where t1.record_status = 1
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(startDate)">
+            and t1.schedul_month &gt;=#{startDate,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(endDate)">
+            and t1.schedul_month &lt;=#{endDate,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(schedulMonth)">
+            and t1.schedul_month =#{schedulMonth,jdbcType=VARCHAR}
+        </if>
 	</select>
 	
 	<select id="selectBySchedulMonth" parameterType="com.jn.hr.attendance.model.AttendanceSchedulPage"

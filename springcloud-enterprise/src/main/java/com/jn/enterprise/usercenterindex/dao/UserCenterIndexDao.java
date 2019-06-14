@@ -20,10 +20,10 @@ public interface UserCenterIndexDao {
 
     /**
      * 员工申请
-     * @param account
+     * @param companyCode
      * @return
      */
-    EmployeeRequisitionModel findEmployeeRequisition(@Param("account") String account);
+    EmployeeRequisitionModel findEmployeeRequisition(@Param("companyCode") String companyCode);
 
 
     RequirementManageModel findRequirementManage(@Param("status") String status,@Param("account") String account);

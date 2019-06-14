@@ -5,61 +5,67 @@
       v-model="value"
       ref="search"></search>
     </div>
-    <div class="approvalGuide_main">
-      <div class="approvalGuide_tab">
-        <span class="slider_btn" @click="isSlider=true"><i class="iconfont icon-icon-"></i> </span>
-        <tab>
-          <tab-item :selected="active===''" ><span :class="{active:active===''}" @click="toggle('','')">全部</span></tab-item>
-          <tab-item v-for="(item,$index) in departList" :key="$index" :selected="$index===active">
-            <span :class="{active:$index===active}" @click="toggle($index,item.id)">{{item.name}}</span>
-          </tab-item>
-        </tab>
-      </div>
-      <!-- 侧边栏-->
-      <popup v-model="isSlider" position="right" width="81%">
-        <div class="slider_box">
-          <div class="slider_title"><span>部门</span> <span @click="toggle('','')">全部</span> </div>
-          <div class="slider_cont">
-            <div v-for="(item,index) in departList" :key="index"  @click="toggle(index,item.id)">{{item.name}}</div>
+        <div class="approvalGuide_main">
+          <div class="approvalGuide_tab">
+            <span class="slider_btn" @click="isSlider=true"><i class="iconfont icon-icon-"></i> </span>
+            <tab>
+              <tab-item :selected="active===''" ><span :class="{active:active===''}" @click="toggle('','')">全部</span></tab-item>
+              <tab-item v-for="(item,$index) in departList" :key="$index" :selected="$index===active">
+                <span :class="{active:$index===active}" @click="toggle($index,item.id)">{{item.name}}</span>
+              </tab-item>
+            </tab>
           </div>
-        </div>
-      </popup>
-        <div class="approvalGuide_cont ">
-          <group v-for="(powerItem,powerIndex) in poweList" :key="powerIndex">
-            <div class="approvalGuide_box" >
-              <cell
-                :title="powerItem.name"
-                :border-intent="false"
-                @click.native="powerItem.isfold = !powerItem.isfold"
-                v-if="powerItem.childs.length!=0"
-                >
-                <div>
-                  <span class="iconfont icon-07jiantouxiangshang" style="color: #cdcdcd " v-if="powerItem.isfold"></span>
-                  <span v-else class="iconfont icon-07jiantouxiangxia" style="color: #cdcdcd " ></span>
-                </div>
-              </cell>
-              <cell
-                :title="powerItem.name"
-                :border-intent="false"
-                @click.native="goPower(powerItem.id)"
-                v-else
-                >
-                <div>
-                  <span class="iconfont icon-07jiantouxiangshang" style="color: #cdcdcd " v-if="powerItem.isfold"></span>
-                  <span v-else class="iconfont icon-07jiantouxiangxia" style="color: #cdcdcd " ></span>
-                </div>
-              </cell>
-              <div class="fold_cont" :class="powerItem.isfold?'animate':''" v-for="(childItem,childIndex) in powerItem.childs " :key="childIndex">
-                <div @click="goPower(childItem.id)"><span>{{childItem.name}} </span><span class="iconfont icon-jiantou" ></span></div>
+          <!-- 侧边栏-->
+          <popup v-model="isSlider" position="right" width="81%">
+            <div class="slider_box">
+              <div class="slider_title"><span>部门</span> <span @click="toggle('','')">全部</span> </div>
+              <div class="slider_cont">
+                <div v-for="(item,index) in departList" :key="index"  @click="toggle(index,item.id)">{{item.name}}</div>
               </div>
             </div>
-          </group>
+          </popup>
+           <!-- <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" style="height:569px">
+              <div class="box2"> -->
+                <div class="approvalGuide_cont">
+                  <group v-for="(powerItem,powerIndex) in poweList" :key="powerIndex">
+                    <div class="approvalGuide_box" >
+                      <cell
+                        :title="powerItem.name"
+                        :border-intent="false"
+                        @click.native="powerItem.isfold = !powerItem.isfold"
+                        v-if="powerItem.childs.length!=0"
+                        >
+                        <div>
+                          <span class="iconfont icon-07jiantouxiangshang" style="color: #cdcdcd " v-if="powerItem.isfold"></span>
+                          <span v-else class="iconfont icon-07jiantouxiangxia" style="color: #cdcdcd " ></span>
+                        </div>
+                      </cell>
+                      <cell
+                        :title="powerItem.name"
+                        :border-intent="false"
+                        @click.native="goPower(powerItem.id)"
+                        v-else
+                        >
+                        <div>
+                          <span class="iconfont icon-07jiantouxiangshang" style="color: #cdcdcd " v-if="powerItem.isfold"></span>
+                          <span v-else class="iconfont icon-07jiantouxiangxia" style="color: #cdcdcd " ></span>
+                        </div>
+                      </cell>
+                      <div class="fold_cont" :class="powerItem.isfold?'animate':''" v-for="(childItem,childIndex) in powerItem.childs " :key="childIndex">
+                        <div @click="goPower(childItem.id)"><span>{{childItem.name}} </span><span class="iconfont icon-jiantou" ></span></div>
+                      </div>
+                    </div>
+                  </group>
+                  <!-- <load-more tip="loading" v-if="onFetching"></load-more> -->
+                </div>
+              <!-- </div>
+          </scroller> -->
         </div>
-    </div>
   </div>
 </template>
 <script>
 import {Cell, CellBox, CellFormPreview, Group, Badge, Search, Popup, Tab, TabItem} from 'vux'
+
 export default {
   data () {
     return {
@@ -144,6 +150,7 @@ export default {
               this.$set(ele, 'isfold', false)
             })
             this.isSlider = false
+            this.onFetching = false
           }
         }
       })
@@ -159,23 +166,52 @@ export default {
       this.sendData.departId = id
       this.getPoweList()
     }
+    /* onScrollBottom () {
+      if (this.onFetching === false) {
+        if (this.sendData.page < Math.ceil(this.total / this.sendData.rows)) {
+          this.onFetching = true
+          setTimeout(() => {
+            this.sendData.page++
+            this.api.get({
+              url: 'powerList',
+              data: this.sendData,
+              callback: res => {
+                if (res.code === '0000') {
+                  this.poweList.push(...res.data.rows)
+                  // this.poweList = res.data.rows
+                  this.total = res.data.total
+                  this.poweList.forEach(ele => {
+                    this.$set(ele, 'isfold', false)
+                  })
+                  this.isSlider = false
+                  this.onFetching = false
+                }
+              }
+            })
+          }, 1000)
+        } else {
+        }
+      }
+    } */
   }
 }
 </script>
 
 <style lang="scss">
   .approvalGuide{
+    overflow: scroll;
+
     .approvalGuide_search{
       position: fixed;
       z-index: 10;
-      top:105px;
+      // top:105px;
         width: 100%;
       .weui-search-bar{
         padding:28px 32px;
       }
       .vux-search-box{
         position: fixed;
-        top:105px !important;
+        // top:105px !important;
       }
       .weui-search-bar__input{
         height: 63px;
@@ -204,7 +240,7 @@ export default {
     }
     .approvalGuide_main{
       .approvalGuide_tab{
-        margin-top: 110px;
+        // margin-top: 110px;
         position: fixed;
         top:113px;
         width:100%;
@@ -263,8 +299,8 @@ export default {
       }
       .approvalGuide_cont{
         margin:30px;
-        margin-top: 44%;
-        height: 100%;
+        margin-top: 27%;
+        height: 100% ;
         overflow: auto;
         .weui-cells{
           box-shadow: 0px 2px 18px 0px rgba(121, 121, 121, 0.15);

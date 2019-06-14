@@ -20,6 +20,9 @@ public class SpDictDepartModel implements Serializable {
     @ApiModelProperty(value = "实施部门名称",example = "秦淮区教育局")
     private String name;
 
+    @ApiModelProperty(value = "级别（1省级，2市级，3区级）",example = "1")
+    private Byte level;
+
     public String getId() {
         return id;
     }
@@ -34,5 +37,22 @@ public class SpDictDepartModel implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Byte getLevel() {
+        return level;
+    }
+
+    public void setLevel(Byte level) {
+        this.level = level;
+    }
+
+    @Override
+    public String toString() {
+        return "SpDictDepartModel{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", level=" + level +
+                '}';
     }
 }

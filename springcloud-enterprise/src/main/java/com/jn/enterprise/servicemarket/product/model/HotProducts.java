@@ -95,4 +95,18 @@ public class HotProducts  implements Serializable {
     public void setSignoryId(String signoryId) {
         this.signoryId = signoryId;
     }
+
+    @Override
+    public String toString() {
+        return "HotProducts{" +
+                "productId='" + productId + '\'' +
+                ", productName='" + productName + '\'' +
+                ", signoryId='" + signoryId + '\'' +
+                ", pictureUrl='" + pictureUrl + '\'' +
+                ", referPrice='" + referPrice + '\'' +
+                ", orgCount=" + orgCount +
+                ", advisorCount=" + advisorCount +
+                ", ratingCount=" + ratingCount +
+                '}';
+    }
 }

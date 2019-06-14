@@ -1,3 +1,8 @@
 {
-  "usingComponents": {"nav-bar": "./../../templates/header"}
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black",
+  "navigationBarTitleText": "会议主题",
+  "backgroundColor": "#eeeeee",
+  "backgroundTextStyle": "light",
+  "enablePullDownRefresh":true
 }

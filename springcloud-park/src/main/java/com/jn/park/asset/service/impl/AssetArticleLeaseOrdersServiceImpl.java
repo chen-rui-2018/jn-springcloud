@@ -6,14 +6,9 @@ import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
-import com.jn.park.asset.dao.AssetArticleLeaseDao;
-import com.jn.park.asset.dao.AssetArticleLeaseOrdersDao;
-import com.jn.park.asset.dao.TbAssetArticleLeaseOrdersMapper;
-import com.jn.park.asset.dao.TbAssetArticleLeaseOrdersPayMapper;
-import com.jn.park.asset.entity.TbAssetArticleLeaseOrders;
-import com.jn.park.asset.entity.TbAssetArticleLeaseOrdersPay;
-import com.jn.park.asset.entity.TbRoomOrders;
-import com.jn.park.asset.entity.TbRoomOrdersPay;
+import com.jn.park.asset.dao.*;
+import com.jn.park.asset.entity.*;
+import com.jn.park.asset.enums.AssetStatusEnums;
 import com.jn.park.asset.enums.LeaseStatusEnums;
 import com.jn.park.asset.enums.OrdersTypeEnums;
 import com.jn.park.asset.enums.PayStatusEnums;
@@ -26,6 +21,7 @@ import com.jn.pay.enums.ChannelIdEnum;
 import com.jn.pay.enums.MchIdEnum;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.pay.model.*;
+import org.apache.poi.ss.formula.functions.T;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +56,10 @@ public class AssetArticleLeaseOrdersServiceImpl implements AssetArticleLeaseOrde
     private PayOrderClient payOrderClient;
     @Autowired
     private TbAssetArticleLeaseOrdersPayMapper tbAssetArticleLeaseOrdersPayMapper;
-
+    @Autowired
+    private TbAssetArticleLeaseMapper tbAssetArticleLeaseMapper;
+    @Autowired
+    private TbAssetInformationMapper tbAssetInformationMapper;
 
     /**
      *根据订单编号查询租借详情
@@ -71,7 +70,9 @@ public class AssetArticleLeaseOrdersServiceImpl implements AssetArticleLeaseOrde
     @ServiceLog(doAction = "根据订单编号查询租借详情")
     public AssetArticleLeaseOrdersModel getLeaseOrders(String id) {
         AssetArticleLeaseOrdersModel assetArticleLeaseOrdersModel = assetArticleLeaseOrdersDao.getLeaseOrders(id);
-
+        //设置条形码
+        String barCode = assetArticleLeaseOrdersModel.getAssetNumber().substring(7);
+        assetArticleLeaseOrdersModel.setBarCode(barCode);
         return assetArticleLeaseOrdersModel;
     }
 
@@ -95,11 +96,12 @@ public class AssetArticleLeaseOrdersServiceImpl implements AssetArticleLeaseOrde
               leaseOrdersModel.setTime(createTime);
               Calendar cal = Calendar.getInstance();
               cal.setTime(sdf.parse(createTime));
-              cal.add(Calendar.HOUR_OF_DAY,1);
+              cal.add(Calendar.MINUTE,30);
               String lastTime = sdf.format(cal.getTime());
               leaseOrdersModel.setLastPayTime(lastTime);
               //设置条形码
-              leaseOrdersModel.setBarCode(leaseOrdersModel.getAssetNumber());
+              String barCode = leaseOrdersModel.getAssetNumber().substring(7);
+              leaseOrdersModel.setBarCode(barCode);
               AssetArticleLeaseModel articleLease = assetArticleLeaseDao.getArticleLease(leaseOrdersModel.getAssetNumber());
               //设置最低租借时间
               leaseOrdersModel.setLeaseTime(articleLease.getLeaseTime());
@@ -116,14 +118,24 @@ public class AssetArticleLeaseOrdersServiceImpl implements AssetArticleLeaseOrde
      */
     @Override
     @ServiceLog(doAction = "归还")
-    public void giveBack(String id) {
-        TbAssetArticleLeaseOrders tbAssetArticleLeaseOrders = tbAssetArticleLeaseOrdersMapper.selectByPrimaryKey(id);
-        Map<String,Object> map = new HashMap<>(16);
-        map.put("assetNumber",tbAssetArticleLeaseOrders.getAssetNumber());
-        map.put("id",id);
-        map.put("status",Byte.parseByte(LeaseStatusEnums.RETURN_ING.getValue()));
-        assetArticleLeaseDao.updateStatus(map);
-        assetArticleLeaseOrdersDao.updateStatus(map);
+    public AssetArticleLeaseOrdersModel giveBack(String id) {
+        //更新订单物品租借状态
+        TbAssetArticleLeaseOrders assetArticleLeaseOrders = tbAssetArticleLeaseOrdersMapper.selectByPrimaryKey(id);
+        assetArticleLeaseOrders.setArticleStatus(Byte.parseByte(LeaseStatusEnums.RETURN_ING.getValue()));
+        int updateCount = tbAssetArticleLeaseOrdersMapper.updateByPrimaryKeySelective(assetArticleLeaseOrders);
+        logger.info("订单表的资产状态更新为：归还中，参数：{}",assetArticleLeaseOrders);
+        if (updateCount != 1){
+            throw new JnSpringCloudException(new Result("-1","订单状态更新失败"));
+        }
+        //更新资产信息表物品租借状态
+        TbAssetInformation tbAssetInformation = tbAssetInformationMapper.selectByPrimaryKey(assetArticleLeaseOrders.getArticleId());
+        tbAssetInformation.setLeaseStatus(Byte.parseByte(LeaseStatusEnums.RETURN_ING.getValue()));
+        updateCount = tbAssetInformationMapper.updateByPrimaryKeySelective(tbAssetInformation);
+        logger.info("资产信息表租借的资产状态更新为：归还中，参数：{}",tbAssetInformation);
+        if (updateCount != 1){
+            throw new JnSpringCloudException(new Result("-1","订单状态更新失败"));
+        }
+        return assetArticleLeaseOrdersDao.getLeaseOrders(id);
     }
 
     /**
@@ -149,25 +161,24 @@ public class AssetArticleLeaseOrdersServiceImpl implements AssetArticleLeaseOrde
      */
     @Override
     @ServiceLog(doAction = "创建支付订单")
-    public Result<PayOrderRsp> createPayOrder(String orderId, String channelId,BigDecimal paySum,String userAccount) {
+    public Result<PayOrderRsp> createArticlePay(String orderId, String channelId,BigDecimal paySum,String userAccount) {
         logger.info("创建支付订单,orderId={}",orderId);
         TbAssetArticleLeaseOrders tbAssetArticleLeaseOrders = tbAssetArticleLeaseOrdersMapper.selectByPrimaryKey(orderId);
-
-        BigDecimal ordersPaySum = tbAssetArticleLeaseOrders.getPaySum();
-        if (!StringUtils.equals(String.valueOf(ordersPaySum),String.valueOf(paySum))){
-            logger.info("支付金额与订单支付金额不一致,无法支付,传入金额:paySum={},订单金额:orderPaySum={}",paySum,ordersPaySum);
-            return new Result("-1","支付金额不一致,支付失败");
-        }
         if(null==tbAssetArticleLeaseOrders){
             logger.info("订单不存在,orderId={}",orderId);
             return new Result("-1","订单不存在");
         }
-
+        BigDecimal ordersPaySum = tbAssetArticleLeaseOrders.getPaySum();
+        int count = paySum.compareTo(ordersPaySum);
+        if (!StringUtils.equals(String.valueOf(count),String.valueOf(0))){
+            logger.info("支付金额与订单支付金额不一致,无法支付,传入金额:paySum={},订单金额:orderPaySum={}",paySum,ordersPaySum);
+            return new Result("-1","支付金额不一致,支付失败");
+        }
         if(!StringUtils.equals(tbAssetArticleLeaseOrders.getCreatorAccount(),userAccount)){
             logger.info("非本人的订单，无法支付,orderId={}",orderId);
             return new Result("-1","非本人的订单，无法支付");
         }
-        if(tbAssetArticleLeaseOrders.getPaymentStatus().equals(2)){
+        if(StringUtils.equals(tbAssetArticleLeaseOrders.getPaymentStatus().toString(),PayStatusEnums.PAYMENT.getCode())){
             logger.info("订单已支付，无需重复支付,orderId={}",orderId);
             return new Result("-1","订单已支付，无需重复支付");
         }
@@ -180,8 +191,8 @@ public class AssetArticleLeaseOrdersServiceImpl implements AssetArticleLeaseOrde
         payOrderReq.setDevice("APP");
         payOrderReq.setServiceId("springcloud-park");
         payOrderReq.setServiceUrl("/api/order/articlePayCallBack");
-        //订单最晚付款时长(60分钟)
-        payOrderReq.setDuration(60);
+        //订单最晚付款时长(30分钟)
+        payOrderReq.setDuration(30);
         //金额的单位是分，需要转换下
         payOrderReq.setAmount(tbAssetArticleLeaseOrders.getPaySum().multiply(new BigDecimal("100")).longValue());
         payOrderReq.setSubject("物品租赁订单"+tbAssetArticleLeaseOrders.getId());
@@ -261,9 +272,20 @@ public class AssetArticleLeaseOrdersServiceImpl implements AssetArticleLeaseOrde
             tbAssetArticleLeaseOrders.setPaymentStatus(updateRecord.getPayState());
             tbAssetArticleLeaseOrders.setModifiedTime(updateRecord.getModifiedTime());
             logger.info("订单表的支付状态更新为：已支付，参数：{}",tbAssetArticleLeaseOrders);
+            //(新)更改物品租借状态为交付中
+            tbAssetArticleLeaseOrders.setArticleStatus(Byte.parseByte(LeaseStatusEnums.DELIVERY.getValue()));
+            logger.info("订单表的物品状态更新为：交付中，参数：{}",tbAssetArticleLeaseOrders);
             updateCount=tbAssetArticleLeaseOrdersMapper.updateByPrimaryKeySelective(tbAssetArticleLeaseOrders);
             if(updateCount!=1){
                 throw new JnSpringCloudException(new Result("-1","业务表tb_asset_article_lease_orders_pay更新失败"));
+            }
+            //(新)更改资产信息表物品租借状态
+            TbAssetInformation tbAssetInformation = tbAssetInformationMapper.selectByPrimaryKey(tbAssetArticleLeaseOrders.getArticleId());
+            tbAssetInformation.setLeaseStatus(Byte.parseByte(LeaseStatusEnums.DELIVERY.getValue()));
+            updateCount = tbAssetInformationMapper.updateByPrimaryKeySelective(tbAssetInformation);
+            logger.info("资产信息表的物品状态更新为：交付中，参数：{}",tbAssetInformation);
+            if(updateCount!=1){
+                throw new JnSpringCloudException(new Result("-1","资产信息表tb_asset_information更新失败"));
             }
             logger.info("回调成功，支付状态更新为：已支付");
             return new Result("回调成功，支付状态更新为：已支付");
@@ -277,39 +299,34 @@ public class AssetArticleLeaseOrdersServiceImpl implements AssetArticleLeaseOrde
     }
 
     /**
-     * 更新租赁物品状态和订单状态为已归还
-     * @param id
+     * 物品状态是否逾期,修改状态
      */
     @Override
-    @ServiceLog(doAction = "确认归还")
-    public void returnArticle(String id) {
-        TbAssetArticleLeaseOrders tbAssetArticleLeaseOrders = tbAssetArticleLeaseOrdersMapper.selectByPrimaryKey(id);
-        Map<String,Object> map = new HashMap<>(16);
-        map.put("assetNumber",tbAssetArticleLeaseOrders.getAssetNumber());
-        map.put("id",id);
-        map.put("status",Byte.parseByte(LeaseStatusEnums.RETURN.getValue()));
-        assetArticleLeaseDao.updateStatus(map);
-        assetArticleLeaseOrdersDao.updateStatus(map);
+    @ServiceLog(doAction = "物品租借是否逾期,修改状态")
+    public void updateAssetArticleStatus() {
+        TbAssetInformationCriteria tbAssetInformationCriteria = new TbAssetInformationCriteria();
+        //租借状态为租借中,没有逾期并且有效的资产
+        tbAssetInformationCriteria.createCriteria().andLeaseStatusEqualTo(Byte.parseByte(LeaseStatusEnums.LEASE.getValue())).andLeaseIsOverdueEqualTo(0).andRecordStatusEqualTo(Byte.parseByte(AssetStatusEnums.EFFECTIVE.getCode()));
+        List<TbAssetInformation> tbAssetInformations = tbAssetInformationMapper.selectByExample(tbAssetInformationCriteria);
+        if (tbAssetInformations != null && tbAssetInformations.size() > 0){
+            for (TbAssetInformation tbAssetInformation : tbAssetInformations) {
+                //当前时间
+                Date date = new Date();
+                long nowTime = date.getTime();
+                //结束时间
+                long endTime = tbAssetInformation.getLeaseEndTime().getTime();
+                //结束时间大于当前时间
+                if (endTime > nowTime){
+                    tbAssetInformation.setLeaseIsOverdue(1);
+                    logger.info("租借物品已经逾期,更改资产状态为逾期 {}",tbAssetInformation);
+                    int updateCount = tbAssetInformationMapper.updateByPrimaryKeySelective(tbAssetInformation);
+                    if (updateCount != 1){
+                        throw new JnSpringCloudException(new Result("-1","更新资产管理-资产信息表tb_asset_information失败"));
+                    }
+                }
+            }
+        }
     }
-
-
-    /**
-     * 更新租赁物品状态和订单状态为租借中
-     * @param id
-     */
-    @Override
-    @ServiceLog(doAction = "确认交付")
-    public void deliveryArticle(String id) {
-        TbAssetArticleLeaseOrders tbAssetArticleLeaseOrders = tbAssetArticleLeaseOrdersMapper.selectByPrimaryKey(id);
-        Map<String,Object> map = new HashMap<>(16);
-        map.put("assetNumber",tbAssetArticleLeaseOrders.getAssetNumber());
-        map.put("id",id);
-        map.put("status",Byte.parseByte(LeaseStatusEnums.LEASE.getValue()));
-        assetArticleLeaseDao.updateStatus(map);
-        assetArticleLeaseOrdersDao.updateStatus(map);
-    }
-
-
 
 
 

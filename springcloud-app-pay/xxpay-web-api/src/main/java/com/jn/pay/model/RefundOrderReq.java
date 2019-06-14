@@ -47,7 +47,7 @@ public class RefundOrderReq implements Serializable {
     /**
      * 退款金额,单位分
      */
-    @NotNull(message = "支付金额不能为空！")
+    @NotNull(message = "退款金额不能为空！")
     private Long amount;
     /**
      * 客户端IP

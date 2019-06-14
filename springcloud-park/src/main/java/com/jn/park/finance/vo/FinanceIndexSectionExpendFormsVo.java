@@ -73,4 +73,16 @@ public class FinanceIndexSectionExpendFormsVo implements Serializable {
     public void setFinanceIndexSectionExpendFormsModels(List<FinanceIndexSectionExpendFormsModel> financeIndexSectionExpendFormsModels) {
         this.financeIndexSectionExpendFormsModels = financeIndexSectionExpendFormsModels;
     }
+
+
+    @Override
+    public String toString() {
+        return "FinanceIndexSectionExpendFormsVo{" +
+                "costTypeId='" + costTypeId + '\'' +
+                ", costTypeName='" + costTypeName + '\'' +
+                ", departmentId='" + departmentId + '\'' +
+                ", departmentName='" + departmentName + '\'' +
+                ", financeIndexSectionExpendFormsModels=" + financeIndexSectionExpendFormsModels +
+                '}';
+    }
 }

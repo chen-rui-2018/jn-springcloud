@@ -21,9 +21,7 @@ public class IncreaseDetailed implements Serializable{
 	private String id;
 	
 	@ApiModelProperty(value = "参保月份")
-	@DateTimeFormat(pattern = "yyyy-MM")
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM")
-    private Date insuredMonth;
+    private String insuredMonth;
 
 	@ApiModelProperty(value = "工号")
     private String jobNumber;
@@ -61,12 +59,12 @@ public class IncreaseDetailed implements Serializable{
 	public void setId(String id) {
 		this.id = id;
 	}
-
-	public Date getInsuredMonth() {
+	
+	public String getInsuredMonth() {
 		return insuredMonth;
 	}
 
-	public void setInsuredMonth(Date insuredMonth) {
+	public void setInsuredMonth(String insuredMonth) {
 		this.insuredMonth = insuredMonth;
 	}
 

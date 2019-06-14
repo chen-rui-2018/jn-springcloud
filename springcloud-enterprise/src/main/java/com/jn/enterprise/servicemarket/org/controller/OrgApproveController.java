@@ -78,13 +78,5 @@ public class OrgApproveController extends BaseController{
         return new Result<>(orgApplyDetailVo);
     }
 
-    @ControllerLog(doAction = "服务机构申请审核")
-    @ApiOperation(value = "服务机构申请审核")
-    @RequestMapping(value = "/checkOrgApply",method = RequestMethod.POST)
-    @RequiresPermissions("/serviceMarket/OrgApproveController/checkOrgApply")
-    public Result<Boolean> checkOrgApply(@RequestBody OrgApplyCheckData orgApplyCheckData){
-        Boolean aBoolean = orgApproveService.checkOrgApply(orgApplyCheckData,getUser());
-        return new Result<>(aBoolean);
-    }
 
 }

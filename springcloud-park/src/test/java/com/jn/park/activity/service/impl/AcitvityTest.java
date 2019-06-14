@@ -255,7 +255,7 @@ public class AcitvityTest {
             activitySlimQuery.setTypeId("");
             activitySlimQuery.setKeyWord("");
             activitySlimQuery.setOrderBy("apply_num");
-            PaginationData data = activityService.activityListSlim(activitySlimQuery);
+            PaginationData data = activityService.activityListSlim(activitySlimQuery,userAccount);
             assertThat((int) data.getTotal(), greaterThanOrEqualTo(0));
         }catch(Exception e) {
             logger.info("活动列表查询失败。失败原因{}", e.getMessage(), e);

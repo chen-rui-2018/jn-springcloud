@@ -183,4 +183,27 @@ public class AdvisorProductInfo implements Serializable {
     public void setSignoryId(String signoryId) {
         this.signoryId = signoryId;
     }
+
+    @Override
+    public String toString() {
+        return "AdvisorProductInfo{" +
+                "productId='" + productId + '\'' +
+                ", serialNumber='" + serialNumber + '\'' +
+                ", productName='" + productName + '\'' +
+                ", signoryId='" + signoryId + '\'' +
+                ", orgName='" + orgName + '\'' +
+                ", advisorName='" + advisorName + '\'' +
+                ", referPrice='" + referPrice + '\'' +
+                ", serviceCycle='" + serviceCycle + '\'' +
+                ", pictureUrl='" + pictureUrl + '\'' +
+                ", transactionsNumber=" + transactionsNumber +
+                ", viewCount=" + viewCount +
+                ", evaluationScore='" + evaluationScore + '\'' +
+                ", evaluationNumber='" + evaluationNumber + '\'' +
+                ", serviceTotal=" + serviceTotal +
+                ", commonTotal=" + commonTotal +
+                ", featureTotal=" + featureTotal +
+                ", praiseTotal=" + praiseTotal +
+                '}';
+    }
 }

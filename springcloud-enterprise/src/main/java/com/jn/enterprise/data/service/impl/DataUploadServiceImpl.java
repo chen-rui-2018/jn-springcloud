@@ -1940,14 +1940,15 @@ public class DataUploadServiceImpl implements DataUploadService {
         List<String> fillInFormId = getFillId(companyInfo,user);
 
         TbDataReportingTaskCriteria task = new TbDataReportingTaskCriteria();
+
         if(getUserType(user).equals(DataUploadConstants.COMPANY_TYPE)){
             task.or().andFillIdEqualTo(fileId).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID))
                     .andFillInFormIdIn(fillInFormId).andFileTypeEqualTo(new Byte(DataUploadConstants.COMPANY_TYPE));
         }else{
-            task.or().andFillIdEqualTo(fileId).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID))
-                    .andFileTypeEqualTo(new Byte(DataUploadConstants.GARDEN_TYPE));
+            task.or().andFillIdEqualTo(fileId).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
+            //园区账号时，不校验权限问题；防止ibps中的园区账号看不见企业录入的任务
+            //.andFileTypeEqualTo(new Byte(DataUploadConstants.GARDEN_TYPE));
         }
-
 
         List<TbDataReportingTask> taskList =tbDataReportingTaskMapper.selectByExample(task);
         if(taskList ==null || taskList.size()==0){

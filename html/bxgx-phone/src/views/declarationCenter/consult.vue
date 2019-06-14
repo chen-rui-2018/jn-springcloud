@@ -2,23 +2,28 @@
   <div class="declartionConsult">
     <div class="declartionConsult_main">
       <div class="declartionConsult_cont">
-        <div class="declartionConsult_title">咨询内容</div>
+        <div class="declartionConsult_title">在线预约</div>
         <div class="declartionConsult_form" >
-          <group label-align="left" label-width="4.5em" label-margin-right="2em">
-            <x-input title="预约项：" placeholder="请输入内容" v-model="appointment.appointmentItemName" ></x-input>
-            <x-input title="预约人：" placeholder="请输入内容" v-model="appointment.contactName"></x-input>
-            <x-input title="联系电话：" placeholder="请输入内容" v-model="appointment.contactPhone"></x-input>
-            <x-input title="电子邮箱：" placeholder="请输入内容" v-model="appointment.email"></x-input>
-            <x-input title="申报企业：" placeholder="请输入内容" v-model="appointment.declareEnterprise"></x-input>
-            <x-input title="申报名称：" placeholder="请输入内容" v-model="appointment.declareItem"></x-input>
+          <group label-align="left" label-width="6em" label-margin-right="1em">
+            <x-input title="* 预约项：" placeholder="请输入内容" v-model="appointment.appointmentItemName" ></x-input>
+            <x-input title="* 预约人：" placeholder="请输入内容" v-model="appointment.contactName"></x-input>
+            <x-input title="* 联系电话：" placeholder="请输入内容" v-model="appointment.contactPhone"></x-input>
+            <x-input title="* 电子邮箱：" placeholder="请输入内容" v-model="appointment.email"></x-input>
+            <x-input title="* 申报企业：" placeholder="请输入内容" v-model="appointment.declareEnterprise"></x-input>
+            <x-input title="* 申报名称：" placeholder="请输入内容" v-model="appointment.declareItem"></x-input>
+            <div class="upload">
+              <div>* 附件：</div>
+              <input type="file" @change="fileChange($event)" v-if="appointment.fileUrl===''">
+              <a v-else :href="appointment.fileUrl">下载<i class="iconfont icon-jiantou"></i></a>
+            </div>
           </group>
         </div>
       </div>
       <div class="form_textarea">
-        <div class="form_textarea_title" >咨询内容</div>
-        <x-textarea placeholder="1、问题描述 2、诉求目的" :show-counter="false" :rows="3" v-model="appointment.message"></x-textarea>
+        <div class="form_textarea_title" >预约内容</div>
+        <x-textarea placeholder="1、问题描述 2、诉求目的" :show-counter="false" :rows="3" v-model="appointment.remark "></x-textarea>
       </div>
-      <div class="sumbmit">
+      <div class="sumbmit" v-if="isSumbmitShow">
         <span @click="sumbmit">提交</span>
       </div>
       <div>
@@ -56,20 +61,55 @@ export default {
         declareEnterprise: '', // 申报企业
         declareItem: ''// 申报项目名称
       },
-      isVisible: false
+      isVisible: false,
+      isSumbmitShow: true
     }
   },
   mounted () {
-    this.appointment.id = this.$route.query.id
+    this.appointment.appointmentItemId = this.$route.query.id
+    this.init()
   },
   methods: {
     sumbmit () {
+      if (this.appointment.appointmentItemName !== '' || this.appointment.contactName !== '' || this.appointment.contactPhone !== '' || this.appointment.email !== '' || this.appointment.fileUrl !== '' || this.appointment.declareEnterprise !== '' || this.appointment.declareItem !== '') {
+        this.api.post({
+          url: 'onlineBooking',
+          data: this.appointment,
+          callback: res => {
+            if (res.code === '0000') {
+              this.isVisible = true
+            } else {
+              this.$vux.toast.text(res.result, 'middle')
+            }
+          }
+        })
+      } else {
+        this.$vux.toast.text('带*号的表格请填写完整', 'middle')
+      }
+    },
+    init () {
       this.api.get({
-        url: 'spMessage',
-        data: this.appointment,
-        callback: res => {
+        url: 'queryOnlineInfo',
+        data: {appointmentItemId: this.appointment.appointmentItemId},
+        callback: (res) => {
           if (res.code === '0000') {
-            this.isVisible = true
+            this.appointment = res.data
+            this.isSumbmitShow = false
+            this.$vux.toast.text('亲！您已经预约过了', 'middle')
+          } else if (res.code === '5011208') {
+            this.api.get({
+              url: 'getUserExtension',
+              data: { },
+              callback: (res) => {
+                if (res.code === '0000') {
+                  this.appointment.contactName = res.data.nickName
+                  this.appointment.contactPhone = res.data.phone
+                  this.appointment.email = res.data.email
+                  this.appointment.declareEnterprise = res.data.companyName
+                }
+              }
+            })
+          } else {
           }
         }
       })
@@ -80,6 +120,22 @@ export default {
       this.appointment.concatName = ''
       this.appointment.concatPhone = ''
       this.appointment.message = ''
+    },
+    fileChange (event) {
+      if (event.target.files[0]) {
+        const formData = new FormData()
+        formData.append('file', event.target.files[0])
+        this.api.post({
+          url: 'fastUpload',
+          data: formData,
+          headerType: 'multipart/form-data',
+          callback: res => {
+            if (res.code === '0000') {
+              this.appointment.fileUrl = res.data
+            }
+          }
+        })
+      }
     }
   }
 }
@@ -99,6 +155,20 @@ export default {
           padding-top: 28px;
         }
         .declartionConsult_form{
+          .upload{
+            padding:28px 0;
+            border-top: 2px solid #efefef;
+            display: flex;
+            div{
+              width:28%
+            }
+            input{
+              width: 70%
+            }
+            a{
+              color: #000;
+            }
+          }
           .weui-cells{
             margin-top: 0;
           }

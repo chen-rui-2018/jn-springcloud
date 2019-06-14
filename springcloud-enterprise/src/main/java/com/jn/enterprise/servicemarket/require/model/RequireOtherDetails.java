@@ -44,7 +44,7 @@ public class RequireOtherDetails implements Serializable {
     @ApiModelProperty(value = "[科技金融]资金需求说明")
     private String fundsReqDesc;
     @ApiModelProperty(value = "[科技金融]资金需求日期")
-    private Date expectedDate;
+    private String expectedDate;
 
     @ApiModelProperty(value = "评价分数")
     private String ratingScore;
@@ -164,11 +164,11 @@ public class RequireOtherDetails implements Serializable {
         this.fundsReqDesc = fundsReqDesc;
     }
 
-    public Date getExpectedDate() {
+    public String getExpectedDate() {
         return expectedDate;
     }
 
-    public void setExpectedDate(Date expectedDate) {
+    public void setExpectedDate(String expectedDate) {
         this.expectedDate = expectedDate;
     }
 

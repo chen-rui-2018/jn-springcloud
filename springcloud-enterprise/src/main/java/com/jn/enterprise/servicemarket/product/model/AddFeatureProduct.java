@@ -134,4 +134,21 @@ public class AddFeatureProduct implements Serializable {
     public void setOrgId(String orgId) {
         this.orgId = orgId;
     }
+
+    @Override
+    public String toString() {
+        return "AddFeatureProduct{" +
+                "serialNumber='" + serialNumber + '\'' +
+                ", productName='" + productName + '\'' +
+                ", referPrice='" + referPrice + '\'' +
+                ", signoryId='" + signoryId + '\'' +
+                ", signoryName='" + signoryName + '\'' +
+                ", serviceCycle='" + serviceCycle + '\'' +
+                ", pictureUrl='" + pictureUrl + '\'' +
+                ", productType='" + productType + '\'' +
+                ", advisorAccount='" + advisorAccount + '\'' +
+                ", productDetails='" + productDetails + '\'' +
+                ", orgId='" + orgId + '\'' +
+                '}';
+    }
 }

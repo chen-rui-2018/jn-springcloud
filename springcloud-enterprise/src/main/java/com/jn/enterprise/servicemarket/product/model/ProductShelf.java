@@ -34,4 +34,12 @@ public class ProductShelf implements Serializable {
     public void setProductName(String productName) {
         this.productName = productName;
     }
+
+    @Override
+    public String toString() {
+        return "ProductShelf{" +
+                "productId='" + productId + '\'' +
+                ", productName='" + productName + '\'' +
+                '}';
+    }
 }

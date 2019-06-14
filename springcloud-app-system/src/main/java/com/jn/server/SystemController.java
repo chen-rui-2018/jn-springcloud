@@ -207,7 +207,7 @@ public class SystemController extends BaseController implements SystemClient {
      */
     @Override
     @ControllerLog(doAction = "通过用户id获取用户信息,传多id,返回多个用户信息")
-    public Result<List<User>> getUserInfoByIds(List<String> ids) {
+    public Result<List<User>> getUserInfoByIds(@RequestBody List<String> ids) {
         List<User> userList = sysUserService.selectUserByIds(ids.toArray(new String[ids.size()]));
         return new Result<>(userList);
     }

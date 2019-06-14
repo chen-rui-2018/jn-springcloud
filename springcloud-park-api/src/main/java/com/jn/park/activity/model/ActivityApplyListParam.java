@@ -51,4 +51,13 @@ public class ActivityApplyListParam extends Page implements Serializable {
     public void setApplyStatus(String applyStatus) {
         this.applyStatus = applyStatus;
     }
+
+    @Override
+    public String toString() {
+        return "ActivityApplyListParam{" +
+                "actiName='" + actiName + '\'' +
+                ", account='" + account + '\'' +
+                ", applyStatus='" + applyStatus + '\'' +
+                '}';
+    }
 }

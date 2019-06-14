@@ -32,49 +32,68 @@
           </span>
         </div>
         <div style="margin-left: 5px; margin-top: 10px;">
-          <el-table ref="socialSecurityTable" :data="addInsuranceData.socialSecurityTableData" tooltip-effect="dark" border stripe style="width: 100%" @selection-change="selectSocialSecurityRow">
-            <el-table-column type="selection" width="45" align="center"/>
-            <el-table-column label="项目" align="center" width="150">
-              <template slot-scope="scope">
-                <el-input v-model="scope.row.projectName"/>
-              </template>
-            </el-table-column>
-            <el-table-column label="默认基数">
-              <template slot-scope="scope">
-                <el-input-number v-model="scope.row.defaultCardinalNumber" :min="0" :max="99999" style="width: 160px"/>
-              </template>
-            </el-table-column>
-            <el-table-column label="可选基数范围起">
-              <template slot-scope="scope">
-                <el-input-number v-model="scope.row.optionalBaseStart" :min="0" :max="99999" style="width: 160px" @blur="checkOptionalBaseValid(scope.row)"/>
-              </template>
-            </el-table-column>
-            <el-table-column label="可选基数范围止">
-              <template slot-scope="scope">
-                <el-input-number v-model="scope.row.optionalBaseEnd" :min="1" :max="99999" style="width: 160px" @blur="checkOptionalBaseValid(scope.row)"/>
-              </template>
-            </el-table-column>
-            <el-table-column label="公司缴纳比例">
-              <template slot-scope="scope">
-                <el-input-number v-model="scope.row.corporateContributionRatio" :min="0" :max="99" style="width: 160px"/>
-              </template>
-            </el-table-column>
-            <el-table-column label="个人缴纳比例">
-              <template slot-scope="scope">
-                <el-input-number v-model="scope.row.individualContributionRatio" :min="0" :max="99" style="width: 160px"/>
-              </template>
-            </el-table-column>
-            <el-table-column label="公司金额" width="150">
-              <template slot-scope="scope">
-                {{ getSocialSecurityCompanyAmount(scope.row) }}
-              </template>
-            </el-table-column>
-            <el-table-column label="个人金额" width="150">
-              <template slot-scope="scope">
-                {{ getSocialSecurityPersonalAmount(scope.row) }}
-              </template>
-            </el-table-column>
-          </el-table>
+          <el-form ref="socialSecurityListForm" :rules="addInsuranceData.socialSecurityRules" :model="addInsuranceData">
+            <el-table ref="socialSecurityTable" :data="addInsuranceData.socialSecurityTableData" tooltip-effect="dark" border stripe style="width: 100%" @selection-change="selectSocialSecurityRow">
+              <el-table-column type="selection" width="45" align="center"/>
+              <el-table-column label="项目" align="center" width="150">
+                <template slot-scope="scope">
+                  <el-form-item :prop="'socialSecurityTableData.' + scope.$index + '.projectName'" :rules="addInsuranceData.socialSecurityRules.projectName">
+                    <el-input v-model="scope.row.projectName"/>
+                  </el-form-item>
+                </template>
+              </el-table-column>
+              <el-table-column label="默认基数">
+                <template slot-scope="scope">
+                  <el-form-item :prop="'socialSecurityTableData.' + scope.$index + '.defaultCardinalNumber'" :rules="addInsuranceData.socialSecurityRules.defaultCardinalNumber">
+                    <!--<el-input-number v-model="scope.row.defaultCardinalNumber" :min="0" :max="99999" style="width: 160px"/>-->
+                    <el-input v-model="scope.row.defaultCardinalNumber" class="short-input" type="number" @keyup.native="proving(scope.row,'defaultCardinalNumber')" @blur="checkOptionalBaseValid(scope.row,'defaultCardinalNumber')"/>
+                  </el-form-item>
+                </template>
+              </el-table-column>
+              <el-table-column label="可选基数范围起">
+                <template slot-scope="scope">
+                  <el-form-item>
+                    <el-input v-model="scope.row.optionalBaseStart" class="short-input" type="number" @keyup.native="proving(scope.row,'optionalBaseStart')" @blur="checkOptionalBaseValid(scope.row,'optionalBaseStart')"/>
+                  </el-form-item>
+                </template>
+              </el-table-column>
+              <el-table-column label="可选基数范围止">
+                <template slot-scope="scope">
+                  <el-form-item>
+                    <el-input v-model="scope.row.optionalBaseEnd" class="short-input" type="number" @keyup.native="proving(scope.row,'optionalBaseEnd')" @blur="checkOptionalBaseValid(scope.row,'optionalBaseEnd')"/>
+                  </el-form-item>
+                </template>
+              </el-table-column>
+              <el-table-column label="公司缴纳比例">
+                <template slot-scope="scope">
+                  <el-form-item>
+                    <el-input v-model="scope.row.corporateContributionRatio" class="short-input" type="number" @keyup.native="proving(scope.row,'corporateContributionRatio')" @blur="checkOptionalBaseValid(scope.row,'corporateContributionRatio')"/>
+                  </el-form-item>
+                </template>
+              </el-table-column>
+              <el-table-column label="个人缴纳比例">
+                <template slot-scope="scope">
+                  <el-form-item>
+                    <el-input v-model="scope.row.individualContributionRatio" class="short-input" type="number" @keyup.native="proving(scope.row,'individualContributionRatio')" @blur="checkOptionalBaseValid(scope.row,'individualContributionRatio')"/>
+                  </el-form-item>
+                </template>
+              </el-table-column>
+              <el-table-column label="公司金额" width="150">
+                <template slot-scope="scope">
+                  <el-form-item>
+                    {{ getSocialSecurityCompanyAmount(scope.row) }}
+                  </el-form-item>
+                </template>
+              </el-table-column>
+              <el-table-column label="个人金额" width="150">
+                <template slot-scope="scope">
+                  <el-form-item>
+                    {{ getSocialSecurityPersonalAmount(scope.row) }}
+                  </el-form-item>
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-form>
         </div>
         <div style="height: 50px; margin-top: 8px;">
           <span style="float: right; color: #666666;width: 300px">
@@ -94,49 +113,67 @@
           </span>
         </div>
         <div style="margin-left: 5px; margin-top: 10px;">
-          <el-table ref="table" :data="addInsuranceData.tableData" tooltip-effect="dark" border stripe style="width: 100%" @selection-change="selectRow">
-            <el-table-column type="selection" width="45" align="center"/>
-            <el-table-column label="项目" align="center" width="150">
-              <template slot-scope="scope">
-                <el-input v-model="scope.row.projectName" :disabled="accumulationFundDisabled" style="width: 100%"/>
-              </template>
-            </el-table-column>
-            <el-table-column label="默认基数">
-              <template slot-scope="scope">
-                <el-input-number v-model="scope.row.defaultCardinalNumber" :min="0" :max="99999"/>
-              </template>
-            </el-table-column>
-            <el-table-column label="可选基数范围起">
-              <template slot-scope="scope">
-                <el-input-number v-model="scope.row.optionalBaseStart" :min="0" :max="99999" style="width: 160px" @blur="checkOptionalBaseValid(scope.row)"/>
-              </template>
-            </el-table-column>
-            <el-table-column label="可选基数范围止">
-              <template slot-scope="scope">
-                <el-input-number v-model="scope.row.optionalBaseEnd" :min="1" :max="99999" style="width: 160px" @blur="checkOptionalBaseValid(scope.row)"/>
-              </template>
-            </el-table-column>
-            <el-table-column label="公司缴纳比例">
-              <template slot-scope="scope">
-                <el-input-number v-model="scope.row.corporateContributionRatio" :min="0" :max="99" style="width: 160px"/>
-              </template>
-            </el-table-column>
-            <el-table-column label="个人缴纳比例">
-              <template slot-scope="scope">
-                <el-input-number v-model="scope.row.individualContributionRatio" :min="0" :max="99" style="width: 160px"/>
-              </template>
-            </el-table-column>
-            <el-table-column label="公司金额" style="background: #666666" width="150">
-              <template slot-scope="scope">
-                {{ getProvidentFundCompanyAmount(scope.row) }}
-              </template>
-            </el-table-column>
-            <el-table-column label="个人金额" width="150">
-              <template slot-scope="scope">
-                {{ getProvidentFundPersonalAmount(scope.row) }}
-              </template>
-            </el-table-column>
-          </el-table>
+          <el-form ref="accumulationFundListForm" :rules="addInsuranceData.accumulationFundRules" :model="addInsuranceData">
+            <el-table ref="table" :data="addInsuranceData.tableData" tooltip-effect="dark" border stripe style="width: 100%" @selection-change="selectRow">
+              <el-table-column type="selection" width="45" align="center"/>
+              <el-table-column label="项目" align="center" width="150">
+                <template slot-scope="scope">
+                  <el-form-item :prop="'tableData.' + scope.$index + '.projectName'" :rules="addInsuranceData.accumulationFundRules.projectName">
+                    <el-input v-model="scope.row.projectName" :disabled="accumulationFundDisabled" style="width: 100%"/>
+                  </el-form-item>
+                </template>
+              </el-table-column>
+              <el-table-column label="默认基数">
+                <template slot-scope="scope">
+                  <el-form-item :prop="'tableData.' + scope.$index + '.defaultCardinalNumber'" :rules="addInsuranceData.accumulationFundRules.defaultCardinalNumber">
+                    <el-input v-model="scope.row.defaultCardinalNumber" :disabled="accumulationFundDisabled" class="short-input" type="number" @keyup.native="proving(scope.row,'defaultCardinalNumber')" @blur="checkOptionalBaseValid(scope.row,'defaultCardinalNumber')"/>
+                  </el-form-item>
+                </template>
+              </el-table-column>
+              <el-table-column label="可选基数范围起">
+                <template slot-scope="scope">
+                  <el-form-item>
+                    <el-input v-model="scope.row.optionalBaseStart" :disabled="accumulationFundDisabled" class="short-input" type="number" @keyup.native="proving(scope.row,'optionalBaseStart')" @blur="checkOptionalBaseValid(scope.row,'optionalBaseStart')"/>
+                  </el-form-item>
+                </template>
+              </el-table-column>
+              <el-table-column label="可选基数范围止">
+                <template slot-scope="scope">
+                  <el-form-item>
+                    <el-input v-model="scope.row.optionalBaseEnd" :disabled="accumulationFundDisabled" class="short-input" type="number" @keyup.native="proving(scope.row,'optionalBaseEnd')" @blur="checkOptionalBaseValid(scope.row,'optionalBaseEnd')"/>
+                  </el-form-item>
+                </template>
+              </el-table-column>
+              <el-table-column label="公司缴纳比例">
+                <template slot-scope="scope">
+                  <el-form-item>
+                    <el-input v-model="scope.row.corporateContributionRatio" :disabled="accumulationFundDisabled" class="short-input" type="number" @keyup.native="proving(scope.row,'corporateContributionRatio')" @blur="checkOptionalBaseValid(scope.row,'corporateContributionRatio')"/>
+                  </el-form-item>
+                </template>
+              </el-table-column>
+              <el-table-column label="个人缴纳比例">
+                <template slot-scope="scope">
+                  <el-form-item>
+                    <el-input v-model="scope.row.individualContributionRatio" :disabled="accumulationFundDisabled" class="short-input" type="number" @keyup.native="proving(scope.row,'individualContributionRatio')" @blur="checkOptionalBaseValid(scope.row,'individualContributionRatio')"/>
+                  </el-form-item>
+                </template>
+              </el-table-column>
+              <el-table-column label="公司金额" style="background: #666666" width="150">
+                <template slot-scope="scope">
+                  <el-form-item>
+                    {{ getProvidentFundCompanyAmount(scope.row) }}
+                  </el-form-item>
+                </template>
+              </el-table-column>
+              <el-table-column label="个人金额" width="150">
+                <template slot-scope="scope">
+                  <el-form-item>
+                    {{ getProvidentFundPersonalAmount(scope.row) }}
+                  </el-form-item>
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-form>
         </div>
         <div style="height: 50px; margin-top: 8px;">
           <span style="float: right; color: #666666;width: 300px">
@@ -175,7 +212,15 @@ export default {
         insuredCityId: '',
         schemeName: '',
         tableData: [],
-        socialSecurityTableData: []
+        socialSecurityTableData: [],
+        accumulationFundRules: {
+          projectName: { type: 'string', required: true, message: '请填项目名称', trigger: 'blur' },
+          defaultCardinalNumber: { type: 'string', required: true, message: '请填写公积金默认基数', trigger: 'blur' }
+        },
+        socialSecurityRules: {
+          projectName: { type: 'string', required: true, message: '请填项目名称', trigger: 'blur' },
+          defaultCardinalNumber: { type: 'string', required: true, message: '请填写社保默认基数', trigger: 'blur' }
+        }
       },
       provinceCityList: [],
       provinceCity: [],
@@ -261,6 +306,10 @@ export default {
     this.initList()
   },
   methods: {
+    proving(row, number) {
+      row[number] = row[number].replace(/[^\.\d]/g, '')
+      row[number] = row[number].replace('.', '')
+    },
     initProvinceCityTree() {
       const tree = []
       province.province.forEach(item => {
@@ -304,12 +353,63 @@ export default {
       this.addInsuranceData.insuredCityName = currNode.label
       this.addInsuranceData.insuredCityId = currNode.value
     },
-    checkOptionalBaseValid(row) {
-      if (row.optionalBaseStart > row.optionalBaseEnd) {
-        alert('可选基数范围开始值应小于可选基数范围结束值')
-        this.isOptionalBaseValid = false
-      } else {
-        this.isOptionalBaseValid = true
+    checkOptionalBaseValid(row, property) {
+      if (row[property].substring(0, 1) === '0' && row[property].length > 1) {
+        row[property] = row[property].substring(1, row[property].length)
+      }
+      if (row[property].substring(0, 1) === '-' && row[property].length > 1) {
+        row[property] = row[property].substring(1, row[property].length)
+      }
+      if (property === 'optionalBaseStart') { // 基数起始值
+        if (parseInt(row.optionalBaseStart) > parseInt(row.optionalBaseEnd)) {
+          row.optionalBaseStart = parseInt(row.optionalBaseEnd) - 1 + ''
+          alert('可选基数范围开始值应小于可选基数范围结束值')
+          this.isOptionalBaseValid = false
+        } else {
+          this.isOptionalBaseValid = true
+        }
+      }
+
+      if (property === 'optionalBaseEnd') { // 基数起始值
+        if (parseInt(row.optionalBaseStart) > parseInt(row.optionalBaseEnd)) {
+          row.optionalBaseEnd = parseInt(row.optionalBaseStart) + 1 + ''
+          alert('可选基数范围结束值应大于默认基数结束值')
+          this.isOptionalBaseValid = false
+        } else {
+          this.isOptionalBaseValid = true
+        }
+        // 与默认基数比较
+        if (parseInt(row.optionalBaseEnd) < parseInt(row.defaultCardinalNumber)) { // 默认基数大于结束值
+          alert('可选基数范围结束值应大于默认基数值')
+          row.optionalBaseEnd = parseInt(row.defaultCardinalNumber) + 1 + ''
+          this.isOptionalBaseValid = false
+        } else {
+          this.isOptionalBaseValid = true
+        }
+      }
+
+      if (property === 'defaultCardinalNumber') {
+        if (parseInt(row.optionalBaseEnd) < parseInt(row.defaultCardinalNumber)) { // 默认基数大于结束值
+          alert('默认基数应小于可选基数范围结束值')
+          row.defaultCardinalNumber = parseInt(row.optionalBaseEnd) - 1 + ''
+          this.isOptionalBaseValid = false
+        } else {
+          this.isOptionalBaseValid = true
+        }
+      }
+      //  corporateContributionRatio  individualContributionRatio
+      if (property === 'corporateContributionRatio') {
+        if (parseInt(row.corporateContributionRatio) > 100) {
+          alert('公司缴纳比例不能大于100')
+          row.corporateContributionRatio = 100
+        }
+      }
+
+      if (property === 'individualContributionRatio') {
+        if (parseInt(row.individualContributionRatio) > 100) {
+          alert('个人缴纳比例不能大于100')
+          row.individualContributionRatio = 100
+        }
       }
     },
     initAddData() {
@@ -634,6 +734,7 @@ export default {
         this.isDisabled = false
         return false
       }
+      /*
       for (let i = 0; i < this.addInsuranceData.socialSecurityTableData.length; i++) {
         if (this.addInsuranceData.socialSecurityTableData[i].defaultCardinalNumber === '') {
           flag = false
@@ -657,6 +758,28 @@ export default {
       if (!flag) {
         this.isDisabled = false
         return false
+      }*/
+      // accumulationFundListForm socialSecurityListForm
+      this.$refs['accumulationFundListForm'].validate(valid => {
+        if (valid) {
+          flag = true
+        } else {
+          flag = false
+          this.isDisabled = false
+          return false
+        }
+      })
+
+      if (this.addInsuranceData.tableData.length > 0 && this.accumulationFundDisabled === false) {
+        this.$refs['socialSecurityListForm'].validate(valid => {
+          if (valid) {
+            flag = true
+          } else {
+            flag = false
+            this.isDisabled = false
+            return false
+          }
+        })
       }
       this.commitRows.insuredCityId = this.addInsuranceData.insuredCityId
       this.commitRows.insuredCityName = this.addInsuranceData.insuredCityName

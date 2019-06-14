@@ -9,17 +9,19 @@
             `pm_name`,
             `room_address`,
             `rental_area`,
+            `pm_unit_price`,
             `total_amount`
         )
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
             (
-            #{item.id,jdbcType=VARCHAR},
-            #{item.itemId,jdbcType=VARCHAR},
-            #{item.pmName,jdbcType=VARCHAR},
-            #{item.roomAddress,jdbcType=VARCHAR},
-            #{item.rentalArea,jdbcType=VARCHAR},
-            #{item.totalAmount,jdbcType=DECIMAL}
+                #{item.id,jdbcType=VARCHAR},
+                #{item.itemId,jdbcType=VARCHAR},
+                #{item.pmName,jdbcType=VARCHAR},
+                #{item.roomAddress,jdbcType=VARCHAR},
+                #{item.rentalArea,jdbcType=VARCHAR},
+                #{item.pmUnitPrice,jdbcType=DECIMAL},
+                #{item.totalAmount,jdbcType=DECIMAL}
             )
         </foreach>
     </insert>

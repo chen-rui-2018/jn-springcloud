@@ -164,11 +164,21 @@ public class PolicyCenterServiceImpl implements PolicyCenterService {
         }
         List<PolicyCenterHomeShow> investorInfoList = policyCenterMapper.getPolicyCenterList(policyCenterHomeParam,thematicType);
 
-        // 处理图片格式
-        if (investorInfoList != null && !investorInfoList.isEmpty()) {
+        // 处理图片格式和简要内容
+        if (!investorInfoList.isEmpty()) {
             for (PolicyCenterHomeShow policy : investorInfoList){
+                //处理图片
                 if (StringUtils.isNotBlank(policy.getPolicyDiagramUrl())) {
                     policy.setPolicyDiagramUrl(IBPSFileUtils.getFilePath(policy.getPolicyDiagramUrl()));
+                }
+                //设置简要内容
+                String briefContent=policy.getPolicyContent().replaceAll("</?[^>]+>","");
+                if(StringUtils.isNotBlank(briefContent)){
+                    String briefSummaries=briefContent.substring(0,briefContent.length()>100?100:briefContent.length());
+                    briefSummaries=briefContent.length()>100?briefSummaries+"......":briefSummaries;
+                    policy.setBriefContent(briefSummaries);
+                    //清空详情
+                    policy.setPolicyContent("");
                 }
             }
         }
@@ -253,10 +263,14 @@ public class PolicyCenterServiceImpl implements PolicyCenterService {
         updatePolicyReadNum(example,tbPolicy.getReadNum()==null?0:tbPolicy.getReadNum());
         //有无关联政策原文  0：无  1：有
         String isPolicyOriginal="1";
-        if(isPolicyOriginal.equals(tbPolicy.getIsPolicyOriginal())){
-            //设置政策原文
+        if(isPolicyOriginal.equals(tbPolicy.getIsPolicyDiagram())){
+            //设置政策原文  获取绑定的普通政策的id
             String relationPolicyOriginalId = tbPolicy.getRelationPolicyOriginalId();
             policyType="0";
+            //查询政策原文的名称
+            //PolicyDetailsShow policyDetails = policyCenterMapper.getPolicyDetails(relationPolicyOriginalId);
+            //获取普通政策的名称
+            //String policyTitle=policyDetails.getPolicyTitle();
             example = getTbPolicyCriteria(relationPolicyOriginalId, policyType);
             long existNum = tbPolicyMapper.countByExample(example);
             if(existNum>0){

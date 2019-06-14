@@ -14,6 +14,8 @@ import java.util.Date;
  */
 @ApiModel(value = "ConsultationCustomerListShow",description = "客服中心园区用户咨询客服列表出参")
 public class ConsultationCustomerListShow implements Serializable {
+    @ApiModelProperty("用户账号)")
+    private String userAccount;
     @ApiModelProperty("流程实例id(启动工作流后的流程实例id)")
     private String processInsId;
     @ApiModelProperty("任务id(工作流流转后的节点任务id)")
@@ -30,6 +32,14 @@ public class ConsultationCustomerListShow implements Serializable {
     private String status;
     @ApiModelProperty("发布时间")
     private String createdTime;
+
+    public String getUserAccount() {
+        return userAccount;
+    }
+
+    public void setUserAccount(String userAccount) {
+        this.userAccount = userAccount;
+    }
 
     public String getProcessInsId() {
         return processInsId;
@@ -98,12 +108,15 @@ public class ConsultationCustomerListShow implements Serializable {
     @Override
     public String toString() {
         return "ConsultationCustomerListShow{" +
-                "processInsId='" + processInsId + '\'' +
+                "userAccount='" + userAccount + '\'' +
+                ", processInsId='" + processInsId + '\'' +
+                ", taskId='" + taskId + '\'' +
                 ", quesCode='" + quesCode + '\'' +
+                ", serviceModuleName='" + serviceModuleName + '\'' +
                 ", quesTitle='" + quesTitle + '\'' +
                 ", quesDetails='" + quesDetails + '\'' +
                 ", status='" + status + '\'' +
-                ", createdTime=" + createdTime +
+                ", createdTime='" + createdTime + '\'' +
                 '}';
     }
 }

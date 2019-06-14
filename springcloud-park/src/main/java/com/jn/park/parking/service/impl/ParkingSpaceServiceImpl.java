@@ -73,6 +73,13 @@ public class ParkingSpaceServiceImpl implements ParkingSpaceService {
 
     private static final String IBPS_ID = "578176874434265088";
 
+    @ServiceLog(doAction = "查询停车位租赁协议")
+    @Override
+    public ParkingSpaceProtocolVo getParkingSpaceProtocol(ParkingSpaceProtocolParam parkingSpaceProtocolParam) {
+        ParkingSpaceProtocolVo parkingSpaceProtocol = parkingSpaceMapper.getParkingSpaceProtocol(parkingSpaceProtocolParam);
+        return parkingSpaceProtocol;
+    }
+
     @ServiceLog(doAction = "查询停车位列表")
     @Override
     public PaginationData<List<ParkingSpaceVo>> getParkingSpaceList(ParkingSpaceParam parkingSpaceParam) {

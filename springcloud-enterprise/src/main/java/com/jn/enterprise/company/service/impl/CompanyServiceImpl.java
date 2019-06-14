@@ -55,7 +55,6 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.zip.Inflater;
 
 /**
  * 企业信息Service
@@ -383,6 +382,15 @@ public class CompanyServiceImpl implements CompanyService {
            }
         }
         vo.setCompanyInfoShow(show);
+        //产看详情时 浏览数加1
+        String browseNumber = vo.getCompanyInfoShow().getBrowseNumber();
+        if(StringUtils.isBlank(browseNumber)){
+            browseNumber="0";
+        }
+        TbServiceCompany tbServiceCompany = new TbServiceCompany();
+        tbServiceCompany.setId(companyId);
+        tbServiceCompany.setBrowseNumber(String.valueOf((Integer.valueOf(browseNumber)+1)));
+        tbServiceCompanyMapper.updateByPrimaryKeySelective(tbServiceCompany);
         return vo;
     }
 
@@ -491,6 +499,64 @@ public class CompanyServiceImpl implements CompanyService {
             throw new JnSpringCloudException(CompanyExceptionEnum.COMPANY_INFO_NOT_EXIST);
         }
         return companyInfoModel;
+    }
+
+    @Override
+    @ServiceLog(doAction = "企业缴费成功修改企业信息")
+    public Boolean updateCompanyInfoAfterPay(UpdateCompanyInfoParam updateCompanyInfoParam) {
+        TbServiceCompany tbServiceCompany = tbServiceCompanyMapper.selectByPrimaryKey(updateCompanyInfoParam.getComId());
+        if(null == tbServiceCompany){
+            logger.warn("[企业缴费成功修改企业信息] 企业信息不存在，comId：{}", updateCompanyInfoParam.getComId());
+            throw new JnSpringCloudException(CompanyExceptionEnum.COMPANY_INFO_NOT_EXIST);
+        }
+        BeanUtils.copyProperties(updateCompanyInfoParam, tbServiceCompany);
+        int i = tbServiceCompanyMapper.updateByPrimaryKeySelective(tbServiceCompany);
+        return i == 1;
+    }
+
+    @Override
+    @ServiceLog(doAction = "查询当前企业信息")
+    public ServiceCompany getCurCompanyInfo(String account) {
+        Result<UserExtensionInfo> userExtensionResult = userExtensionClient.getUserExtension(account);
+        if (userExtensionResult == null || userExtensionResult.getData() == null) {
+            logger.warn("[查询当前企业信息] 用户信息获取失败");
+            return null;
+        }
+
+        UserExtensionInfo userExtensionInfo = userExtensionResult.getData();
+        if (StringUtils.isBlank(userExtensionInfo.getCompanyCode())) {
+            logger.warn("[查询当前企业信息] 当前用户非企业用户");
+            return null;
+        }
+
+        ServiceCompany company = new ServiceCompany();
+        String comId = userExtensionInfo.getCompanyCode();
+        TbServiceCompany tbServiceCompany = tbServiceCompanyMapper.selectByPrimaryKey(comId);
+        BeanUtils.copyProperties(tbServiceCompany, company);
+
+        if(null != tbServiceCompany.getFoundingTime()){
+            company.setFoundingTime(DateUtils.formatDate(tbServiceCompany.getFoundingTime(),PATTERN));
+        }
+        if(null != tbServiceCompany.getRunTime()){
+            company.setRunTime(DateUtils.formatDate(tbServiceCompany.getRunTime(),PATTERN));
+        }
+        if(null != tbServiceCompany.getLicStarttime()){
+            company.setLicStarttime(DateUtils.formatDate(tbServiceCompany.getLicStarttime(),PATTERN));
+        }
+        if(null != tbServiceCompany.getLicEndtime()){
+            company.setLicEndtime(DateUtils.formatDate(tbServiceCompany.getLicEndtime(),PATTERN));
+        }
+        if(null != tbServiceCompany.getCheckTime()){
+            company.setCheckTime(DateUtils.formatDate(tbServiceCompany.getCheckTime(),PATTERN_DETAIL));
+        }
+        if(null != tbServiceCompany.getCreatedTime()){
+            company.setCreatedTime(DateUtils.formatDate(tbServiceCompany.getCreatedTime(),PATTERN_DETAIL));
+        }
+        if(null != tbServiceCompany.getModifiedTime()){
+            company.setModifiedTime(DateUtils.formatDate(tbServiceCompany.getModifiedTime(),PATTERN_DETAIL));
+        }
+        company = setCompanyInfo(company);
+        return company;
     }
 
 

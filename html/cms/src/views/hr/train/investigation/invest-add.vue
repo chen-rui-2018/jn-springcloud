@@ -1,10 +1,10 @@
 <template>
   <el-card>
     <!-- 标题 -->
-    <el-tabs v-model="activeName" @tab-click="tabsCLick">
+    <el-tabs v-model="activeName">
       <el-tab-pane label="编辑调研" name="first"/>
-      <el-tab-pane label="发放调研" name="second"/>
-      <el-tab-pane label="调研结果" name="third"/>
+      <el-tab-pane :disabled="true" label="发放调研" name="second"/>
+      <el-tab-pane :disabled="true" label="调研结果" name="third"/>
     </el-tabs>
     <!-- 试题名称 -->
     <ExamTitle ref="examTitle" :is-add="true" />
@@ -130,17 +130,6 @@ export default {
     },
     isActive(route) {
       return route.path === this.$route.path
-    },
-    tabsCLick(item) {
-      if (this.activeName === 'first') {
-        this.$router.push({ path: 'invest-edit', query: { id: this.$route.query.id }})
-      }
-      if (this.activeName === 'second') {
-        this.$router.push({ path: 'invest-give', query: { id: this.$route.query.id }})
-      }
-      if (this.activeName === 'third') {
-        this.$router.push({ path: 'invest-result', query: { id: this.$route.query.id }})
-      }
     }
   }
 }

@@ -91,6 +91,14 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
        /* if(!checkDepartment(employeeBasicInfoAdd.getDepartmentId())){
             throw new JnSpringCloudException(EmployeeExceptionEnums.EmployeeDEPARTMENT_NOT_EXISTS);
         }*/
+        HanyuPinyinHelper hanyuPinyinHelper = new HanyuPinyinHelper();
+        int count=employeeBasicInfoMapper.selectCountByName(employeeBasicInfoAdd.getName());
+        if(count==0){
+            employeeBasicInfoAdd.setUserAccount(hanyuPinyinHelper.toHanyuPinyin(employeeBasicInfoAdd.getName()));
+        }else{
+            employeeBasicInfoAdd.setUserAccount(hanyuPinyinHelper.toHanyuPinyin(employeeBasicInfoAdd.getName())
+                    +String.format("%03d",count));
+        }
         //用户接口
         User adduser = new User();
         adduser.setAccount(employeeBasicInfoAdd.getUserAccount());
@@ -550,12 +558,31 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
             return sb.toString();
         } else {
             if (!CollectionUtils.isEmpty(batchResult)) {
+                Map<String,Integer> nameCountMap=new HashMap<String,Integer>();
+                HanyuPinyinHelper hanyuPinyinHelper = new HanyuPinyinHelper();
                 List<TbManpowerEmployeeBasicInfo> finalResult = new ArrayList<TbManpowerEmployeeBasicInfo>();
                 batchResult.forEach(e -> {
-                    e.setUserAccount(e.getPhone());
+                    int count=employeeBasicInfoMapper.selectCountByName(e.getName());
+                    if(nameCountMap.containsKey(e.getName())){
+                        e.setUserAccount(hanyuPinyinHelper.toHanyuPinyin(e.getName())+String.format("%03d",
+                                nameCountMap.get(e.getName())));
+                        count=count+1;
+                        nameCountMap.put(e.getName(),count);
+                    }else{
+                        if(count==0){
+                            e.setUserAccount(hanyuPinyinHelper.toHanyuPinyin(e.getName()));
+                            nameCountMap.put(e.getName(),1);
+                        }else{
+                            e.setUserAccount(hanyuPinyinHelper.toHanyuPinyin(e.getName())+String.format("%03d",count));
+                            count=count+1;
+                            nameCountMap.put(e.getName(),count);
+                        }
+                    }
+
+
                     e.setJobNumber(getJobNumber());
                     User adduser = new User();
-                    adduser.setAccount(e.getPhone());
+                    adduser.setAccount(e.getUserAccount());
                     adduser.setName(e.getName());
                     adduser.setPhone(e.getPhone());
                     adduser.setEmail(e.getMailbox());
@@ -615,7 +642,13 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
         List<SysPost> postList = postResult.getData();
         List<SysDictKeyValue> jobList = commonService.queryDictList
                 ("employee", "job");
-
+        Map<String, DirectlyLeader> directlyLeaderMap = directlyLeaderMapper.selectAllDirectlyLeaderToMap();
+        Set<String> jobNumberSet=new HashSet<String>();
+        Map<String,EmployeeBasicInfo> jobNumberMap=new HashMap<String,EmployeeBasicInfo>();
+        List<EmployeeBasicInfo> infoList = employeeBasicInfoMapper.list(new EmployeeBasicInfoPage());
+        infoList.forEach(e->{
+            jobNumberMap.put(e.getJobNumber(),e);
+        });
         for (Object result : resultList) {
             i++;
             DirectlyLeader database = (DirectlyLeader) result;
@@ -624,6 +657,19 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
                 sb.append("第" + i + "行:" + str + ";");
                 continue;
             }
+            if(jobNumberSet.contains(database.getJobNumber())){
+                sb.append("第"+i+"行:"+database.getJobNumber()+"工号在当前EXCEL中重复;");
+                continue;
+            }
+            if(!jobNumberMap.containsKey(database.getJobNumber())){
+                sb.append("第"+i+"行:"+database.getJobNumber()+"工号在员工花名册表中不存在;");
+                continue;
+            }
+            if(directlyLeaderMap.containsKey(database.getJobNumber())){
+                sb.append("第"+i+"行:"+database.getJobNumber()+"工号在直属领导表中已经存在记录;");
+                continue;
+            }
+            jobNumberSet.add(database.getJobNumber());
             TbManpowerDirectlyLeader tbFile = new TbManpowerDirectlyLeader();
             BeanUtils.copyProperties(database, tbFile);
             tbFile.setId(UUID.randomUUID().toString());
@@ -659,14 +705,35 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
         int i = 0;
         StringBuffer sb = new StringBuffer();
         List<TbManpowerSocialSecurity> batchResult = new ArrayList<TbManpowerSocialSecurity>();
+        Map<String, SocialSecurity> socialSecurityMap = socialSecurityMapper.selectAllSocialSecurityToMap();
+        Set<String> jobNumberSet=new HashSet<String>();
+        Map<String,EmployeeBasicInfo> jobNumberMap=new HashMap<String,EmployeeBasicInfo>();
+        List<EmployeeBasicInfo> infoList = employeeBasicInfoMapper.list(new EmployeeBasicInfoPage());
+        infoList.forEach(e->{
+            jobNumberMap.put(e.getJobNumber(),e);
+        });
         for (Object result : resultList) {
             i++;
             SocialSecurity database = (SocialSecurity) result;
-            String str = checkImportDirectlyLeader(database);
+            String str = checkImportSocialSecurity(database);
             if (!StringUtils.isBlank(str)) {
                 sb.append("第" + i + "行:" + str + ";");
                 continue;
             }
+            if(jobNumberSet.contains(database.getJobNumber())){
+                sb.append("第"+i+"行:"+database.getJobNumber()+"工号在当前EXCEL中重复;");
+                continue;
+            }
+            if(!jobNumberMap.containsKey(database.getJobNumber())){
+                sb.append("第"+i+"行:"+database.getJobNumber()+"工号在员工花名册表中不存在;");
+                continue;
+            }
+            if(socialSecurityMap.containsKey(database.getJobNumber())){
+                sb.append("第"+i+"行:"+database.getJobNumber()+"工号在社保福利表中已经存在记录;");
+                continue;
+            }
+            jobNumberSet.add(database.getJobNumber());
+
             TbManpowerSocialSecurity tbFile = new TbManpowerSocialSecurity();
             BeanUtils.copyProperties(database, tbFile);
             tbFile.setId(UUID.randomUUID().toString());
@@ -920,13 +987,18 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
         if (StringUtils.isBlank(database.getEmployStatusStr())) {
             return "员工状态不能为空";
         }
-        if (!"在职".equals(database.getEmployStatusStr()) && !"医疗期".equals(database.getEmployStatusStr())) {
+        if (!"在职".equals(database.getEmployStatusStr()) && !"医疗期".equals(database.getEmployStatusStr())
+         &&!"退休".equals(database.getEmployStatusStr()) &&!"离职".equals(database.getEmployStatusStr()) ) {
             return "员工状态错误";
         }
         if ("在职".equals(database.getEmployStatusStr())) {
             database.setEmployStatus(Byte.parseByte("1"));
-        } else {
+        } else if("医疗期".equals(database.getEmployStatusStr())) {
             database.setEmployStatus(Byte.parseByte("2"));
+        }else if("退休".equals(database.getEmployStatusStr())) {
+            database.setEmployStatus(Byte.parseByte("3"));
+        }else{
+            database.setEmployStatus(Byte.parseByte("4"));
         }
         return "";
     }
@@ -939,18 +1011,12 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
                 && StringUtils.isBlank(database.getDirectLeadershipName())) {
             return "必填字段不能都为空";
         }
-        //查询工号是否存在
-        TbManpowerEmployeeBasicInfo tbManpowerEmployeeBasicInfo = new TbManpowerEmployeeBasicInfo();
+        /*TbManpowerEmployeeBasicInfo tbManpowerEmployeeBasicInfo = new TbManpowerEmployeeBasicInfo();
         tbManpowerEmployeeBasicInfo.setJobNumber(database.getJobNumber());
         List<TbManpowerEmployeeBasicInfo> basicInfos = employeeBasicInfoMapper.getList(tbManpowerEmployeeBasicInfo);
         if (CollectionUtils.isEmpty(basicInfos)) {
             return "工号不存在";
-        }
-        //查询直属领导表判断是否存在
-        DirectlyLeader directlyLeader = directlyLeaderMapper.selectByJobNumber(database.getJobNumber());
-        if (directlyLeader != null) {
-            return "直属领导表已经存在当前工号的记录";
-        }
+        }*/
 
         if (!StringUtils.isBlank(database.getDirectLeaderLevelName())) {
             database.setDirectLeaderLevel(SysDictKeyValueUtil.getKeyByLabel(jobList, database.getDirectLeaderLevelName()));
@@ -1070,23 +1136,16 @@ public class EmployeeBasicInfoServiceImpl implements EmployeeBasicInfoService {
     }
 
 
-    private String checkImportDirectlyLeader(SocialSecurity database) {
+    private String checkImportSocialSecurity(SocialSecurity database) {
         if (StringUtils.isBlank(database.getJobNumber())) {
             return "工号不能为空";
         }
-
-        //查询工号是否存在
-        TbManpowerEmployeeBasicInfo tbManpowerEmployeeBasicInfo = new TbManpowerEmployeeBasicInfo();
+        /*TbManpowerEmployeeBasicInfo tbManpowerEmployeeBasicInfo = new TbManpowerEmployeeBasicInfo();
         tbManpowerEmployeeBasicInfo.setJobNumber(database.getJobNumber());
         List<TbManpowerEmployeeBasicInfo> basicInfos = employeeBasicInfoMapper.getList(tbManpowerEmployeeBasicInfo);
         if (CollectionUtils.isEmpty(basicInfos)) {
             return "工号不存在";
-        }
-        //查询直属领导表判断是否存在
-        SocialSecurity socialSecurity = socialSecurityMapper.selectByJobNumber(database.getJobNumber());
-        if (socialSecurity != null) {
-            return "社保福利表已经存在当前工号的记录";
-        }
+        }*/
         return "";
     }
 

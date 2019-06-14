@@ -16,6 +16,7 @@
     <result column="sub_title" jdbcType="VARCHAR" property="subTitle" />
     <result column="ad_flag" jdbcType="VARCHAR" property="adFlag" />
     <result column="park" jdbcType="VARCHAR" property="park" />
+    <result column="park_name" jdbcType="VARCHAR" property="parkName" />
     <result column="mod_accoun" jdbcType="VARCHAR" property="modAccoun" />
     <result column="mod_time" jdbcType="VARCHAR" property="modTime" />
   </resultMap>
@@ -82,8 +83,8 @@
   </sql>
   <sql id="Base_Column_List">
     id, record_status, creator_account, created_time, modifier_accoun, modified_time, 
-    title, ad_cover, ad_position, start_time, end_time, sub_title, ad_flag, park, mod_accoun, 
-    mod_time
+    title, ad_cover, ad_position, start_time, end_time, sub_title, ad_flag, park, park_name, 
+    mod_accoun, mod_time
   </sql>
   <sql id="Blob_Column_List">
     content
@@ -141,14 +142,16 @@
       created_time, modifier_accoun, modified_time, 
       title, ad_cover, ad_position, 
       start_time, end_time, sub_title, 
-      ad_flag, park, mod_accoun, 
-      mod_time, content)
+      ad_flag, park, park_name, 
+      mod_accoun, mod_time, content
+      )
     values (#{id,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
       #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccoun,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
       #{title,jdbcType=VARCHAR}, #{adCover,jdbcType=VARCHAR}, #{adPosition,jdbcType=VARCHAR}, 
       #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{subTitle,jdbcType=VARCHAR}, 
-      #{adFlag,jdbcType=VARCHAR}, #{park,jdbcType=VARCHAR}, #{modAccoun,jdbcType=VARCHAR}, 
-      #{modTime,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR})
+      #{adFlag,jdbcType=VARCHAR}, #{park,jdbcType=VARCHAR}, #{parkName,jdbcType=VARCHAR}, 
+      #{modAccoun,jdbcType=VARCHAR}, #{modTime,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.attractinvest.entity.TbBusinessAdContent">
     insert into tb_business_ad_content
@@ -194,6 +197,9 @@
       </if>
       <if test="park != null">
         park,
+      </if>
+      <if test="parkName != null">
+        park_name,
       </if>
       <if test="modAccoun != null">
         mod_accoun,
@@ -247,6 +253,9 @@
       </if>
       <if test="park != null">
         #{park,jdbcType=VARCHAR},
+      </if>
+      <if test="parkName != null">
+        #{parkName,jdbcType=VARCHAR},
       </if>
       <if test="modAccoun != null">
         #{modAccoun,jdbcType=VARCHAR},
@@ -310,6 +319,9 @@
       <if test="record.park != null">
         park = #{record.park,jdbcType=VARCHAR},
       </if>
+      <if test="record.parkName != null">
+        park_name = #{record.parkName,jdbcType=VARCHAR},
+      </if>
       <if test="record.modAccoun != null">
         mod_accoun = #{record.modAccoun,jdbcType=VARCHAR},
       </if>
@@ -340,6 +352,7 @@
       sub_title = #{record.subTitle,jdbcType=VARCHAR},
       ad_flag = #{record.adFlag,jdbcType=VARCHAR},
       park = #{record.park,jdbcType=VARCHAR},
+      park_name = #{record.parkName,jdbcType=VARCHAR},
       mod_accoun = #{record.modAccoun,jdbcType=VARCHAR},
       mod_time = #{record.modTime,jdbcType=VARCHAR},
       content = #{record.content,jdbcType=LONGVARCHAR}
@@ -363,6 +376,7 @@
       sub_title = #{record.subTitle,jdbcType=VARCHAR},
       ad_flag = #{record.adFlag,jdbcType=VARCHAR},
       park = #{record.park,jdbcType=VARCHAR},
+      park_name = #{record.parkName,jdbcType=VARCHAR},
       mod_accoun = #{record.modAccoun,jdbcType=VARCHAR},
       mod_time = #{record.modTime,jdbcType=VARCHAR}
     <if test="_parameter != null">
@@ -411,6 +425,9 @@
       <if test="park != null">
         park = #{park,jdbcType=VARCHAR},
       </if>
+      <if test="parkName != null">
+        park_name = #{parkName,jdbcType=VARCHAR},
+      </if>
       <if test="modAccoun != null">
         mod_accoun = #{modAccoun,jdbcType=VARCHAR},
       </if>
@@ -438,6 +455,7 @@
       sub_title = #{subTitle,jdbcType=VARCHAR},
       ad_flag = #{adFlag,jdbcType=VARCHAR},
       park = #{park,jdbcType=VARCHAR},
+      park_name = #{parkName,jdbcType=VARCHAR},
       mod_accoun = #{modAccoun,jdbcType=VARCHAR},
       mod_time = #{modTime,jdbcType=VARCHAR},
       content = #{content,jdbcType=LONGVARCHAR}
@@ -458,6 +476,7 @@
       sub_title = #{subTitle,jdbcType=VARCHAR},
       ad_flag = #{adFlag,jdbcType=VARCHAR},
       park = #{park,jdbcType=VARCHAR},
+      park_name = #{parkName,jdbcType=VARCHAR},
       mod_accoun = #{modAccoun,jdbcType=VARCHAR},
       mod_time = #{modTime,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}

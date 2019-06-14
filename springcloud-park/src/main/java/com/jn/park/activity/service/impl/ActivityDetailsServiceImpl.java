@@ -6,6 +6,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
+import com.jn.park.activity.ApplyStatusEnum;
 import com.jn.park.activity.dao.ActivityDetailsMapper;
 import com.jn.park.activity.dao.TbActivityApplyMapper;
 import com.jn.park.activity.dao.TbActivityMapper;
@@ -19,6 +20,7 @@ import com.jn.park.activity.model.ActivityPagingParam;
 import com.jn.park.activity.model.Comment;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
+import com.jn.user.enums.RecordStatusEnum;
 import com.jn.user.model.UserExtensionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,6 +83,9 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
             return  new ActivityDetailVO();
         }
         ActivityDetail activityDetail=list.get(0);
+        //通过活动id统计活动报名人数
+        long applyNum = getApplyNum(activityId);
+        activityDetail.setApplyNum(applyNum+"");
         ActivityDetailVO activityDetailVO=new ActivityDetailVO();
         activityDetailVO.setActivityDetail(activityDetail);
         //根据活动id查询点赞信息
@@ -121,6 +126,19 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
         setActivityApplyShow(activityDetailVO);
         //把活动详情封装到result中返回前端
         return  activityDetailVO;
+    }
+
+    /**
+     * 根据活动id获取活动报名成功人数
+     * @param activityId
+     * @return
+     */
+    private long getApplyNum(String activityId) {
+        TbActivityApplyCriteria example=new TbActivityApplyCriteria();
+        example.createCriteria().andActivityIdEqualTo(activityId)
+                .andApplyStatusEqualTo(ApplyStatusEnum.APPLY_SUCCESS.getValue())
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        return tbActivityApplyMapper.countByExample(example);
     }
 
     /**

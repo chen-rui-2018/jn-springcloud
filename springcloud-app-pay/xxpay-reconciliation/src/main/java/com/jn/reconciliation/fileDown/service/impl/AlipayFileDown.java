@@ -1,40 +1,33 @@
-/*
- * Copyright 2015-2102 RonCoo(http://www.roncoo.com) Group.
- *  
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *  
- *      http://www.apache.org/licenses/LICENSE-2.0
- *  
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
 package com.jn.reconciliation.fileDown.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alipay.api.AlipayApiException;
+import com.alipay.api.AlipayClient;
+import com.alipay.api.DefaultAlipayClient;
+import com.alipay.api.domain.AlipayDataDataserviceBillDownloadurlQueryModel;
+import com.alipay.api.request.AlipayDataDataserviceBillDownloadurlQueryRequest;
+import com.alipay.api.response.AlipayDataDataserviceBillDownloadurlQueryResponse;
+import com.jn.common.util.StringUtils;
 import com.jn.config.AlipayConfig;
 import com.jn.reconciliation.fileDown.service.FileDown;
-import com.jn.reconciliation.utils.DateUtil;
-import com.jn.reconciliation.utils.alipay.AlipaySubmit;
-import com.jn.reconciliation.utils.alipay.httpClient.HttpProtocolHandler;
-import com.jn.reconciliation.utils.alipay.httpClient.HttpRequest;
-import com.jn.reconciliation.utils.alipay.httpClient.HttpResponse;
-import com.jn.reconciliation.utils.alipay.httpClient.HttpResultType;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.jn.reconciliation.service.PayChannelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.xxpay.common.util.MyLog;
+import org.xxpay.dal.dao.entity.reconciliation.TbPayReconciliationInterface;
+import org.xxpay.dal.dao.model.PayChannel;
 
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @ClassName：支付宝账单下载
@@ -47,159 +40,156 @@ import java.util.Map;
 @Service("ALIPAYFileDown")
 public class AlipayFileDown implements FileDown {
 
+	private final MyLog logger = MyLog.getLog(AlipayFileDown.class);
+
+	SimpleDateFormat billDateSdf = new SimpleDateFormat("yyyy-MM-dd");
+
 	@Autowired
 	private AlipayConfig alipayConfig;
-
-	private static final Log LOG = LogFactory.getLog(AlipayFileDown.class);
-
-	SimpleDateFormat billDateSDF = new SimpleDateFormat("yyyy-MM-dd");
-
-	/*** 配置全部放入alipay_config.properties配置文件中/ ***/
-	// #合作身份者ID，签约账号
-	/*private String partner = alipayConfig.getPartner();
-
-	// 支付宝网关
-	private String url = alipayConfig.getUrl();
-
-	// 请求使用的编码格式
-	private String charset = alipayConfig.getCharset();*/
+	@Autowired
+	private PayChannelService payChannelService;
 
 
-	// 账单查询开始时间：格式为：yyyy-MM-dd HH:mm:ss
-	private String gmt_start_time = "";
-
-	// 账单查询开始时间：格式为：yyyy-MM-dd HH:mm:ss
-	private String gmt_end_time = "";
-
-	// pageNo 分页查询的页号：默认是1
-	private String pageNo = "1";
-
-	/**
-	 * 文件存储路径
-	* */
-	//private String dir = alipayConfig.getDir();
 
 
 	/**
 	 * 文件下载类
-	 *
+	 * @parm reconciliationInter
+	 * 				对账接口信息
 	 * @param billDate
 	 *            账单日
 	 * 
 	 */
 	@Override
-	public File fileDown(Date billDate) throws Exception {
+	public File fileDown(TbPayReconciliationInterface reconciliationInter, Date billDate) throws Exception {
+		File file = null ;
+		//账单日期
+		String billDateStr = billDateSdf.format(billDate);
 
-		LOG.info("======开始下载支付宝对账单");
-		// 格式化账单日期
-		String bill_begin_date = billDateSDF.format(billDate);
-		String bill_end_date = billDateSDF.format(DateUtil.addDay(billDate, 1));
-		gmt_start_time = bill_begin_date + " 00:00:00";
-		gmt_end_time = bill_end_date + " 00:00:00";
 
-		HttpResponse response = null;
+		/**加载支付宝配置参数**/
+		PayChannel payChannel = payChannelService.selectPayChannel(reconciliationInter.getChannelId(),reconciliationInter.getMchId());
+		alipayConfig.init(payChannel.getParam());
 
-		// 把请求参数打包成数组
-		Map<String, String> sParaTemp = new HashMap<String, String>();
-		sParaTemp.put("service", "account.page.query");
-		sParaTemp.put("partner", alipayConfig.getPartner());
-		sParaTemp.put("_input_charset", alipayConfig.getCharset());
-		sParaTemp.put("page_no", pageNo);
-		sParaTemp.put("gmt_start_time", gmt_start_time);
-		sParaTemp.put("gmt_end_time", gmt_end_time);
+        /**拼装文件存放路径(防止多个商户对账时解压在同一文件夹)**/
+        //通过  账期 + appid方式生成文件夹
+        JSONObject paramObj = JSON.parseObject( payChannel.getParam());
+        String appId =  paramObj.getString("appid");
+        StringBuffer filePathSb = new  StringBuffer();
+        filePathSb.append(alipayConfig.getDir());
+        filePathSb.append("/");
+        filePathSb.append(billDateStr);
+        filePathSb.append("_");
+        filePathSb.append(appId);
+        filePathSb.append("alipay_bill_");
+        filePathSb.append(billDateStr);
+        filePathSb.append(".zip");
 
-		response = this.buildRequest(sParaTemp);
-		if (response == null) {
-			return null;
+		//获取支付宝账单下载的URL
+		String url = getAlipayBillUrl(alipayConfig,billDateStr);
+		//下载账单文件
+		if(StringUtils.isNotBlank(url)){
+			file = getBillFile(url,filePathSb.toString());
 		}
-		// 得到支付宝接口返回数据
-		String stringResult = response.getStringResult();
-
-		// 创建保存对账单的本地文件
-		File file = this.createFile(bill_begin_date, stringResult, alipayConfig.getDir());
 
 		return file;
 	}
 
-	/**
-	 * 建立请求，以模拟远程HTTP的POST请求方式构造并获取支付宝的处理结果
-	 * 
-	 * @param sParaTemp
-	 *            请求参数
-	 * @return 支付宝处理结果
-	 * @throws Exception
-	 */
-	public HttpResponse buildRequest(Map<String, String> sParaTemp) throws Exception {
-		// 待请求参数数组
-		Map<String, String> sPara = AlipaySubmit.buildRequestPara(sParaTemp);
-
-		HttpProtocolHandler httpProtocolHandler = HttpProtocolHandler.getInstance();
-
-		HttpRequest request = new HttpRequest(HttpResultType.BYTES);
-		// 设置编码集
-		request.setCharset(alipayConfig.getCharset());
-		// 设置请求参数
-		request.setParameters(AlipaySubmit.generatNameValuePair(sPara));
-		// 设置请求地址
-		request.setUrl(alipayConfig.getUrl() + "_input_charset=" + alipayConfig.getCharset());
-		// 请求接口
-		HttpResponse response = httpProtocolHandler.execute(request, "", "");
-		if (response == null) {
-			return null;
-		}
-		return response;
-	}
 
 	/**
-	 * 创建账单文件
-	 * 
-	 * @param bill_date
+	 * 获取支付宝账单下载的URL
+	 * @parm alipayConfig
+	 * 				支付宝配置信息
+	 * @param billDate
 	 *            账单日
-	 * @param stringResult
-	 *            文件内容
-	 * @param dir
-	 *            文件保存路径
-	 * @return
-	 * @throws IOException
-	 */
-	private File createFile(String bill_date, String stringResult, String dir) throws IOException {
+	 *
+	 * */
+	String getAlipayBillUrl(AlipayConfig alipayConfig,String billDate){
 
-		// 创建本地文件，用于存储支付宝对账文件
-		// String dir = "/home/roncoo/app/accountcheck/billfile/alipay";
-		File file = new File(dir, bill_date + "_" + ".xml");
-		int index = 1;
-		// 判断文件是否已经存在
-		while (file.exists()) {
-			file = new File(dir, bill_date + "_" + index + ".xml");
-			index++;
-		}
+		String downUrl  ;
 
-		// 判断父文件是否存在,不存在就创建
-		if (!file.getParentFile().exists()) {
-			if (!file.getParentFile().mkdirs()) {
-				// 新建文件目录失败，抛异常
-				throw new IOException("创建文件(父层文件夹)失败, filepath: " + file.getAbsolutePath());
-			}
-		}
-		// 判断文件是否存在，不存在则创建
-		if (!file.exists()) {
-			if (!file.createNewFile()) {
-				// 新建文件失败，抛异常
-				throw new IOException("创建文件失败, filepath: " + file.getAbsolutePath());
-			}
-		}
+		//支付宝客户端
+		AlipayClient alipayClient = new DefaultAlipayClient(alipayConfig.getUrl(), alipayConfig.getAppId()
+				, alipayConfig.getPrivateKey(), alipayConfig.getFormat(), alipayConfig.getCharset()
+				, alipayConfig.getPublicKey(), alipayConfig.getSignType());
+
+		AlipayDataDataserviceBillDownloadurlQueryRequest alipay_request = new AlipayDataDataserviceBillDownloadurlQueryRequest();
+		// 封装请求支付信息
+		AlipayDataDataserviceBillDownloadurlQueryModel model = new AlipayDataDataserviceBillDownloadurlQueryModel();
+		model.setBillDate(billDate);
+		model.setBillType("trade");
+		alipay_request.setBizModel(model);
 
 		try {
-			// 把支付宝返回数据写入文件
-			FileWriter fileWriter = new FileWriter(file);
-			fileWriter.write(stringResult);
-			fileWriter.close(); // 关闭数据流
+			//通过alipayClient调用API，获得对应的response类
+			AlipayDataDataserviceBillDownloadurlQueryResponse response = alipayClient.execute(alipay_request);
+			downUrl = response.getBillDownloadUrl();
+			logger.info("账期 ：{}，获取支付宝账单下载的URL路径为：{} ",billDate,downUrl);
+		} catch (AlipayApiException e) {
+			logger.error("账期 ：{}，获取支付宝账单下载的URL路径失败 ",billDate,e);
+			return null;
+		}
+		return downUrl;
 
+	}
+
+
+	/**
+	 * 根据账单URL下载文件
+	 * @parma urlStr   账单下载路径
+	 * @param filePath 文件保存路径
+	* */
+	File getBillFile(String urlStr
+			,String filePath
+	){
+
+		File file = null  ;
+		
+		URL url = null;
+		HttpURLConnection httpUrlConnection = null;
+		InputStream fis = null;
+		FileOutputStream fos = null;
+		try {
+			url = new URL(urlStr);
+			httpUrlConnection = (HttpURLConnection) url.openConnection();
+			httpUrlConnection.setConnectTimeout(5 * 1000);
+			httpUrlConnection.setDoInput(true);
+			httpUrlConnection.setDoOutput(true);
+			httpUrlConnection.setUseCaches(false);
+			httpUrlConnection.setRequestMethod("GET");
+			httpUrlConnection.setRequestProperty("Charsert", "UTF-8");
+			httpUrlConnection.connect();
+			fis = httpUrlConnection.getInputStream();
+			byte[] temp = new byte[1024];
+			int b;
+			file = new File(filePath);
+			fos = new FileOutputStream(file);
+			while ((b = fis.read(temp)) != -1) {
+				fos.write(temp, 0, b);
+				fos.flush();
+			}
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
 		} catch (IOException e) {
-			LOG.info("把支付宝返回的对账数据写入文件异常:" + e);
+			e.printStackTrace();
+		} finally {
+			try {
+				if(fis!=null) {
+					fis.close();
+				}
+				if(fos!=null) {
+					fos.close();
+				}
+				if(httpUrlConnection!=null) {
+					httpUrlConnection.disconnect();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 
 		return file;
 	}
+
 
 }

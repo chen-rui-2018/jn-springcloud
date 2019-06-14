@@ -14,6 +14,7 @@ import java.io.Serializable;
  */
 public class JPushData implements Serializable{
 
+    private static final long serialVersionUID = -13779011141645438L;
     // 标题
     private String title;
     // 内容
@@ -91,4 +92,16 @@ public class JPushData implements Serializable{
         this.audience = audience;
     }
 
+    @Override
+    public String toString() {
+        return "JPushData{" +
+                "title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", platform=" + platform +
+                ", audience=" + audience +
+                ", message='" + message + '\'' +
+                ", sendNotify=" + sendNotify +
+                ", sendMessage=" + sendMessage +
+                '}';
+    }
 }

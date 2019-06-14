@@ -143,4 +143,23 @@ public class OrgActivityShow  implements Serializable {
     public void setActiStatus(String actiStatus) {
         this.actiStatus = actiStatus;
     }
+
+    @Override
+    public String toString() {
+        return "OrgActivityShow{" +
+                "id='" + id + '\'' +
+                ", actiName='" + actiName + '\'' +
+                ", actiAddress='" + actiAddress + '\'' +
+                ", actiStartTime='" + actiStartTime + '\'' +
+                ", actiEndTime='" + actiEndTime + '\'' +
+                ", actiNumber=" + actiNumber +
+                ", actiPosterUrl='" + actiPosterUrl + '\'' +
+                ", actiLike=" + actiLike +
+                ", applyNum=" + applyNum +
+                ", actiStatus='" + actiStatus + '\'' +
+                ", actiNum='" + actiNum + '\'' +
+                ", monthNum='" + monthNum + '\'' +
+                ", weekNum='" + weekNum + '\'' +
+                '}';
+    }
 }

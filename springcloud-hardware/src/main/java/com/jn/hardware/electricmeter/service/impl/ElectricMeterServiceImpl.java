@@ -45,10 +45,10 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
      */
     @Override
     public Result<ElectricAccessTokenShow> getElectricMeterAccessToken(ElectricAccessTokenParam electricAccessTokenParam) {
+        logger.info("\n获取电表access_token,入参：【{}】",electricAccessTokenParam);
         Result result= new Result();
         ElectricResult<ElectricAccessTokenShow> electricResult = new ElectricResult();
         String url = ElectricMeterService.POST_ELECTRIC_ACCESS_TOKEN_URL;
-        String jsonData = JsonStringToObjectUtil.objectToJson(electricAccessTokenParam);
         Map<String,String> dynamicHeaders = new HashMap<>(16);
         dynamicHeaders.put("Authorization","Basic ZXN0YXRlOkNSb142JEV0ZXdSMzNORjI=");
         dynamicHeaders.put("Content-Type", "application/json;charset=UTF-8");
@@ -60,6 +60,7 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
         //获取token前 将从redis中可获取token的状态设置为false
         redisConfigStorage.setAccessTokenController(ElectricMeterEnum.ELECTRIC_GET_TOKEN_FALSE.getCode(),7200);
         String resultString =  RestTemplateUtil.post(url,multiValueMap,dynamicHeaders);
+        logger.info("\n获取电表access_token,硬件接口入参:【{}】,出参：【{}】",multiValueMap,resultString);
         ElectricAccessTokenShow  accessTokenShow = JsonStringToObjectUtil.jsonToObject(resultString, new TypeReference<ElectricAccessTokenShow>(){});
         if(accessTokenShow ==null){
             electricResult =  JsonStringToObjectUtil.jsonToObject(resultString, new TypeReference<ElectricResult<ElectricAccessTokenShow>>(){});
@@ -71,11 +72,11 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
             //设置完成token后  将从redis中可获取token的状态设置为true
             redisConfigStorage.setAccessTokenController(ElectricMeterEnum.ELECTRIC_GET_TOKEN_TRUE.getCode(),7200);
             result.setData(electricResult.getData());
-            logger.info("获取电表平台access_token成功,access_token="+electricResult.getData().getAccess_token());
+            logger.info("获取电表平台access_token成功,access_token={}",electricResult.getData().getAccess_token());
         }else{
             result.setCode(electricResult.getCode());
             result.setResult(electricResult.getMsg());
-            logger.info("获取电表平台access_token失败,失败原因"+electricResult.getMsg());
+            logger.info("获取电表平台access_token失败,失败原因:{}",electricResult.getMsg());
         }
         return result;
     }
@@ -91,14 +92,15 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
         String accessToken = getAccessToken();
         url = String.format(url,accessToken);
         String buildingString = RestTemplateUtil.get(url);
+        logger.info("\n获取物业下所有建筑信息接口地址：【{}】,响应参数:【{}】",url,buildingString);
         ElectricResult<List<ElectricMeterBuildingShow>> electricResult = JsonStringToObjectUtil.jsonToObject(buildingString, new TypeReference<ElectricResult<List<ElectricMeterBuildingShow>>>(){});
         if(electricResult.getCode().equals(GlobalConstants.SUCCESS_CODE)){
             result.setData(electricResult.getData());
-            logger.info("获取电表平台建筑信息成功,buildingInfo:"+buildingString);
+            logger.info("获取电表平台建筑信息成功,buildingInfo:【{}】",buildingString);
         }else{
             result.setCode(electricResult.getCode());
             result.setResult(electricResult.getMsg());
-            logger.info("获取电表平台建筑信息失败,失败原因"+electricResult.getMsg());
+            logger.info("获取电表平台建筑信息失败,失败原因:【{}】",electricResult.getMsg());
         }
         return result;
     }
@@ -110,6 +112,7 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
      */
     @Override
     public Result<ElectricMeterInfoShow> getElectricMeterForBuilding(ElectricMeterInfoParam electricMeterInfoParam) {
+        logger.info("\n获取建筑下仪表信息,入参:【{}】",electricMeterInfoParam);
         Result result= new Result();
         ElectricResult<ElectricMeterInfoShow> electricResult = new ElectricResult();
 
@@ -117,6 +120,7 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
         String url = ElectricMeterService.GET_ELECTRIC_METER_INFO_URL;
         url = String.format(url,accessToken,electricMeterInfoParam.getCode(),electricMeterInfoParam.getPage(),electricMeterInfoParam.getRows());
         String electricString = RestTemplateUtil.get(url);
+        logger.info("\n获取建筑下仪表信息,接口地址：【{}】,出参:【{}】",url,electricString);
         ElectricMeterInfoShow electricShow = JsonStringToObjectUtil.jsonToObject(electricString, new TypeReference<ElectricMeterInfoShow>() {});
         if(electricShow == null ){
             electricResult = JsonStringToObjectUtil.jsonToObject(electricString, new TypeReference<ElectricResult<ElectricMeterInfoShow>>() {});
@@ -124,11 +128,11 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
         electricResult.setData(electricShow);
         if(electricResult.getCode().equals(GlobalConstants.SUCCESS_CODE)){
             result.setData(electricResult.getData());
-            logger.info("获取建筑下的仪表信息成功,electricMeter:"+electricString);
+            logger.info("获取建筑下的仪表信息成功,electricMeter:【{}】",electricString);
         }else{
             result.setCode(electricResult.getCode());
             result.setResult(electricResult.getMsg());
-            logger.info("获取建筑下的仪表信息息失败,失败原因"+electricResult.getMsg());
+            logger.info("获取建筑下的仪表信息息失败,失败原因:【{}】",electricResult.getMsg());
         }
 
         return result;
@@ -147,6 +151,7 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
         String url = ElectricMeterService.GET_ELECTRIC_METER_STATUS_URL;
         url = String.format(url,accessToken,code);
         String statusString = RestTemplateUtil.get(url);
+        logger.info("\n查询仪表开关状态，仪表code:【{}】,接口出参:【{}】",code,statusString);
         ElectricMeterStatusShow show  = JsonStringToObjectUtil.jsonToObject(statusString, new TypeReference<ElectricMeterStatusShow>() {});
         if(show == null){
             electricResult = JsonStringToObjectUtil.jsonToObject(statusString, new TypeReference<ElectricResult<ElectricMeterStatusShow>>() {});
@@ -154,11 +159,11 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
         electricResult.setData(show);
         if(electricResult.getCode().equals(GlobalConstants.SUCCESS_CODE)){
             result.setData(electricResult.getData());
-            logger.info("仪表开关状态信息获取成功,statusString:"+statusString);
+            logger.info("仪表开关状态信息获取成功,statusString:【{}】",statusString);
         }else{
             result.setCode(electricResult.getCode());
             result.setResult(electricResult.getMsg());
-            logger.info("获取建筑下的仪表信息息失败,失败原因"+electricResult.getMsg());
+            logger.info("获取建筑下的仪表信息息失败,失败原因:【{}】",electricResult.getMsg());
         }
         return result;
     }
@@ -170,11 +175,13 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
      */
     @Override
     public Result electricMeterSwitch(ElectricMeterSwitchParam electricMeterSwitchParam) {
+        logger.info("\n仪表开关操作,入参：【{}】",electricMeterSwitchParam);
         Result result= new Result();
         String url = ElectricMeterService.GET_ELECTRIC_METER_SWITCH_URL;
         String accessToken =getAccessToken();
         url = String.format(url,accessToken,electricMeterSwitchParam.getCode(),electricMeterSwitchParam.getFlag());
         String  switchSting = RestTemplateUtil.get(url);
+        logger.info("\n仪表开关操作,接口响应出参：【{}】",switchSting);
         //如果返回不为空,则出现了开关操作错误;
         if(StringUtils.isNotBlank(switchSting)){
            ElectricResult electricResult = JsonStringToObjectUtil.jsonToObject(switchSting, new TypeReference<ElectricResult>() {});
@@ -191,7 +198,6 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
      */
     @Override
     public Result electricMeterDataCollection(ElectricMeterDataCollectionParam electricMeterDataCollectionParam) {
-
         Result result= new Result();
         String url = ElectricMeterService.GET_ELECTRIC_DATA_COLLECTION_URL;
         String accessToken = getAccessToken();
@@ -202,10 +208,10 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
             url = String.format(ElectricMeterService.GET_ELECTRIC_DATA_COLLECTION_NOCODE_URL,electricMeterDataCollectionParam.getDeviceType()
                     , electricMeterDataCollectionParam.getStartTime(), accessToken,electricMeterDataCollectionParam.getPage(),electricMeterDataCollectionParam.getRows());
         }
-        logger.info("\n仪表数据采集{}路径信息 url:"+url);
         String dataString = RestTemplateUtil.get(url);
+        logger.info("\n仪表数据采集接口地址：【{}】,响应参数：【{}】",url,dataString);
         if(StringUtils.isBlank(dataString)){
-            logger.info("\n当前类型的仪表此时间段内无数据{}仪表类型="+electricMeterDataCollectionParam.getDeviceType()+"时间点="+electricMeterDataCollectionParam.getStartTime());
+            logger.info("\n当前类型的仪表此时间段内无数据仪表类型：【{}】,时间点：【{}】",electricMeterDataCollectionParam.getDeviceType(),electricMeterDataCollectionParam.getStartTime());
             return result;
         }
         //查询的表类型为空调表
@@ -216,11 +222,10 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
               if(electricResult.getCode().equals(GlobalConstants.SUCCESS_CODE)) {
                 show.setData(electricResult.getData());
                 result.setData(show);
-                logger.info("\n空调表数据信息采集成功,statusString:"+dataString);
             }else{
                 result.setCode(electricResult.getCode());
                 result.setResult(electricResult.getMsg());
-                logger.info("\n空调表数据信息采集失败,失败原因"+electricResult.getMsg());
+                logger.info("\n空调表数据信息采集失败,失败原因:【{}】",electricResult.getMsg());
             }
         } else {
             //电表 或 水表数据采集 使用相同的返回实体
@@ -239,11 +244,10 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
             if(electricResult.getCode().equals(GlobalConstants.SUCCESS_CODE)) {
                 show.setData(electricResult.getData());
                 result.setData(show);
-                logger.info(meterName+"\n数据信息采集成功,statusString:"+dataString);
             }else{
                 result.setCode(electricResult.getCode());
                 result.setResult(electricResult.getMsg());
-                logger.info(meterName+"\n数据信息采集失败,失败原因"+electricResult.getMsg());
+                logger.info(meterName+"\n数据信息采集失败,失败原因:【{}】",electricResult.getMsg());
             }
         }
         return result;

@@ -968,7 +968,7 @@ public class DataUploadServiceImpl implements DataUploadService {
     @Override
     @ServiceLog(doAction = "科技园导入")
     @Transactional(rollbackFor = Exception.class)
-    public int importData(MultipartFile multipartFile,String formTime,String fillId,String modelId){
+    public int importData(MultipartFile multipartFile,String formTime,String fillId,String modelId,User user){
         int result=0;
 
 //        String formTime=dataVO.getTaskInfo().getFormTime();
@@ -1105,6 +1105,16 @@ public class DataUploadServiceImpl implements DataUploadService {
         taskRecord.setStatus(new Byte(DataUploadConstants.FILLED));
         taskRecord.setUpTime(new Date());
         tbDataReportingTaskMapper.updateByExampleSelective(taskRecord,taskCriteria);
+
+        TbDataReportingGardenFiller gardenFiller = new TbDataReportingGardenFiller();
+        gardenFiller.setStatus(new Byte(DataUploadConstants.FILLED));
+        gardenFiller.setFiller(user.getAccount());
+        gardenFiller.setFillerTel(user.getPhone());
+        TbDataReportingGardenFillerCriteria gardenFillerCriteria =new TbDataReportingGardenFillerCriteria();
+        gardenFillerCriteria.or().andFillIdEqualTo(fillId);
+        tbDataReportingGardenFillerMapper.updateByExampleSelective(gardenFiller,gardenFillerCriteria);
+
+
         return result+1;
     }
 

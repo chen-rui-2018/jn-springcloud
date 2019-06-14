@@ -527,7 +527,7 @@ public class ActivityServiceImpl implements ActivityService {
             if (tbActivityApplyList != null && !tbActivityApplyList.isEmpty()) {
                 AddMessageModel messageTemplate = new AddMessageModel();
                 messageTemplate.setMessageTitle("园区活动提醒");
-                messageTemplate.setMessageConnect(activity.getActiName()+"将于"+actiStartTime+"开始，请准时参加");
+                messageTemplate.setMessageContent(activity.getActiName()+"将于"+actiStartTime+"开始，请准时参加");
                 messageTemplate.setMessageSender("admin");
                 messageTemplate.setMessageOneSort(0);
                 messageTemplate.setMessageOneSortName("个人动态");

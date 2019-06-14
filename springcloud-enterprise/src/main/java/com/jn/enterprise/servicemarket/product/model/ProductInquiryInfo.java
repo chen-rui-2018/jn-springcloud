@@ -84,4 +84,17 @@ public class ProductInquiryInfo extends Page implements Serializable {
     public void setProductType(String productType) {
         this.productType = productType;
     }
+
+    @Override
+    public String toString() {
+        return "ProductInquiryInfo{" +
+                "signoryId='" + signoryId + '\'' +
+                ", orgId='" + orgId + '\'' +
+                ", sortTypes='" + sortTypes + '\'' +
+                ", keyWords='" + keyWords + '\'' +
+                ", productType='" + productType + '\'' +
+                ", productStatus='" + productStatus + '\'' +
+                ", commentProductId='" + commentProductId + '\'' +
+                '}';
+    }
 }

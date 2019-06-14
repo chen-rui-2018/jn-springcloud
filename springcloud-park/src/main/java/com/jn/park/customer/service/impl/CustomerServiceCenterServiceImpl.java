@@ -518,9 +518,15 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
     private List<ConsultationCustomerListShow> getCustomerCenterList(String loginAccount) {
         TbClientServiceCenterCriteria example=new TbClientServiceCenterCriteria();
         //流程实例id为空或为null的不被查询
-        example.createCriteria().andCreatorAccountEqualTo(loginAccount).andProcessInsIdIsNotNull()
-                .andProcessInsIdNotEqualTo("")
-                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        if(StringUtils.isBlank(loginAccount)){
+            example.createCriteria().andProcessInsIdIsNotNull()
+                    .andProcessInsIdNotEqualTo("")
+                    .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        }else{
+            example.createCriteria().andCreatorAccountLike("%"+loginAccount+"%").andProcessInsIdIsNotNull()
+                    .andProcessInsIdNotEqualTo("")
+                    .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        }
         example.setOrderByClause("created_time desc");
         List<TbClientServiceCenter> tbClientServiceCenterList = tbClientServiceCenterMapper.selectByExample(example);
         if(tbClientServiceCenterList.isEmpty()){
@@ -530,10 +536,28 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
             for(TbClientServiceCenter tbClientServiceCenter:tbClientServiceCenterList){
                 ConsultationCustomerListShow customerListShow=new ConsultationCustomerListShow();
                 BeanUtils.copyProperties(tbClientServiceCenter, customerListShow);
+                customerListShow.setUserAccount(tbClientServiceCenter.getCreatorAccount());
                 customerListShow.setCreatedTime(DateUtils.formatDate(tbClientServiceCenter.getCreatedTime(),PATTERN));
                 resultList.add(customerListShow);
             }
             return resultList;
         }
     }
+
+    /**
+     * 查询用户来电历史信息
+     * @param calledPhoneHistoryParam
+     * @return
+     */
+    @ServiceLog(doAction = "查询用户来电历史信息")
+    @Override
+    public PaginationData getUserCalledHistory(CalledPhoneHistoryParam calledPhoneHistoryParam) {
+        ConsultationCustomerListParam param=new ConsultationCustomerListParam();
+        param.setNeedPage("1");
+        param.setPage(calledPhoneHistoryParam.getPage());
+        param.setRows(calledPhoneHistoryParam.getRows());
+        //若没有输入手机号，默认查询20条用户信息，按时间倒序排序,若有输入手机号，默认查询该手机号的20条历史信息
+        return consultationCustomerList(param, calledPhoneHistoryParam.getSearchPhone());
+    }
+
 }

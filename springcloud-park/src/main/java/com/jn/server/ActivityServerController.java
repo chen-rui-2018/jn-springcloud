@@ -4,6 +4,7 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.park.activity.model.ActivityApplyListParam;
+import com.jn.park.activity.model.ActivityContent;
 import com.jn.park.activity.model.CompanyActivityApplyParam;
 import com.jn.park.activity.model.CompanyActivityApplyShow;
 import com.jn.park.activity.service.ActivityService;
@@ -56,5 +57,17 @@ public class ActivityServerController extends BaseController implements Activity
     @ControllerLog(doAction = "获取举办活动总数")
     public Result<Integer> getActivityHistoryNum(){
         return new Result(activityService.getActivityHistoryNum());
+    }
+
+    @Override
+    @ControllerLog(doAction = "活动结束回调方法")
+    public Result<Integer> activityEndByTimedTask(@RequestBody ActivityContent activity) {
+        return new Result(activityService.activityEndByTimedTask(activity));
+    }
+
+    @Override
+    @ControllerLog(doAction = "活动消息自动推送回调方法")
+    public Result<Integer> activitySendMessageByTimedTask(@RequestBody ActivityContent activity) {
+        return new Result(activityService.activitySendMessageByTimedTask(activity));
     }
 }

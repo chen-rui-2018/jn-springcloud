@@ -39,16 +39,16 @@
     <div class="agentDel">
       <div class="agentDelTit">产品详情</div>
       <div class="agentDelCon pr color1">
-        <div class="mainColor shouqi pointer" v-if="zankaiFlag" @click="zankaiFlag=!zankaiFlag">
+        <!-- <div class="mainColor shouqi pointer" v-if="zankaiFlag" @click="zankaiFlag=!zankaiFlag">
           收起
           <i class="el-icon-arrow-up"></i>
         </div>
         <div class="mainColor shouqi zhankai pointer" v-else @click="zankaiFlag=!zankaiFlag">
           展开
           <i class="el-icon-arrow-down"></i>
-        </div>
+        </div> -->
         <el-card>
-          <el-tabs v-model="activeName" @tab-click="handleClick">
+          <!-- <el-tabs v-model="activeName">
             <el-tab-pane label="基本信息" name="baseInfo">
               <div class="basicInfo" v-if="zankaiFlag">
                 <table class="table-orgspace mainBorder">
@@ -150,7 +150,89 @@
                 </table>
               </div>
             </el-tab-pane>
-          </el-tabs>
+          </el-tabs> -->
+          <div class="finaProContent">
+            <div class="d1">
+              <p>
+                <span>参考利率范围：</span>
+                <span class="finaColor">{{serverOrgDetailList.refRateMin}}%-{{serverOrgDetailList.refRateMax}}%</span>
+              </p>
+              <p>
+                <span>是否网贷直联：</span>
+                <span class="finaColor" v-if="serverOrgDetailList.isOnlineLoan=='0'">
+                  否
+                </span>
+                <span class="finaColor" v-if="serverOrgDetailList.isOnlineLoan=='1'">
+                  是
+                </span>
+              </p>
+            </div>
+            <div class="d1">
+              <p>
+                <span>是否政策性产品：</span>
+                <span class="finaColor" v-if="serverOrgDetailList.isPolicyPro=='0'">
+                  否
+                </span>
+                <span class="finaColor" v-if="serverOrgDetailList.isPolicyPro=='1'">
+                  是
+                </span>
+              </p>
+              <p>
+                <span>是否通用产品：</span>
+                <span class="finaColor" v-if="serverOrgDetailList.isGeneralPro=='0'">
+                  否
+                </span>
+                <span class="finaColor" v-if="serverOrgDetailList.isGeneralPro=='1'">
+                  是
+                </span>
+              </p>
+            </div>
+            <div class="d1">
+              <p>
+                <span>是否人民币：</span>
+                <span class="finaColor" v-if="serverOrgDetailList.isRmb=='0'">
+                  否
+                </span>
+                <span class="finaColor" v-if="serverOrgDetailList.isRmb=='1'">
+                  是
+                </span>
+              </p>
+              <p>
+                <span>贷款类别：</span>
+                <span class="finaColor">{{serverOrgDetailList.loanCategoryName}}</span>
+              </p>
+            </div>
+            <div class="d1">
+              <p>
+                <span>贷款额度：</span>
+                <span class="finaColor">{{serverOrgDetailList.loanAmountMin}}万元-{{serverOrgDetailList.loanAmountMax}}万元</span>
+              </p>
+              <p>
+                <span>贷款期限：</span>
+                <span class="finaColor">{{serverOrgDetailList.loanTermMin}}个月-{{serverOrgDetailList.loanTermMax}}个月</span>
+              </p>
+            </div>
+            <div class="d2">
+              <span>担保方式：</span>
+              <span>{{serverOrgDetailList.assureMethodName}}</span>
+            </div>
+            <div class="d2">
+              <span>适用客户：</span>
+              <span class="span1">{{serverOrgDetailList.applicableCuster}}</span>
+            </div>
+            <div class="d2 d4">
+              <span>产品特点：</span>
+              <span class="span1">{{serverOrgDetailList.productFeature}}</span>
+            </div>
+            <div class="d3">
+              <span class="finaColor">申请条件：</span>
+              <p v-html="serverOrgDetailList.applyCondition"></p>
+            </div>
+            <div class="d3">
+              <span class="finaColor">提交材料：</span>
+              <p v-html="serverOrgDetailList.submitMaterial"></p>
+            </div>
+          </div>
         </el-card>
       </div>
     </div>
@@ -347,9 +429,6 @@ export default {
       this.financialProform.productId = productId;
       this.financialProform.productName = productName;
     },
-    handleClick(tab, event) {
-      // console.log(tab, event);
-    },
 
     initList() {
       let _this = this;
@@ -372,6 +451,53 @@ export default {
 </script>
 <style lang="scss">
 .finaProDetail {
+  .finaProContent {
+    .d1 {
+      margin-top: 10px;
+      display: flex;
+      align-items: right;
+      justify-content: space-between;
+      p {
+        width: 50%;
+        > span:nth-child(1) {
+          display: inline-block;
+          width: 110px;
+          text-align: right;
+        }
+      }
+    }
+    .d2 {
+      margin-top: 10px;
+      span:nth-child(1) {
+        display: inline-block;
+        width: 110px;
+        text-align: right;
+      }
+      .span1 {
+        line-height: 20px;
+      }
+    }
+    .d3 {
+      margin-top: 10px;
+      p {
+        font-size: 13px;
+        line-height: 20px;
+        margin-top: 5px;
+      }
+    }
+    .d4 {
+      text-indent: -7rem;
+      margin-left: 7rem;
+    }
+    span {
+      font-size: 13px;
+      color: #666;
+    }
+    .finaColor {
+      color: #d21d00;
+      font-size: 16px;
+    }
+  }
   .agentDel {
     padding-bottom: 50px;
   }

@@ -424,7 +424,7 @@
                   <div class="list-info-top-title">
                     <!-- 头部 begin -->
                     <div class="info-top">
-                      <div class="top-title inner-consultant" onclick="window.open('/epservice/techsub/Apps/epssm/index.php?s=/Home/ConsultantSpace/space/id/86c91e1d-b3ce-11e7-9663-000c29881ee3')">
+                      <div class="top-title">
                         <span>{{i.advisorName}}/{{i.position}}</span>
                         <div class="icons">
                           <!-- 是否认证标签 -->

@@ -87,44 +87,46 @@
         <i class="iconfont icon-sousuo" @click="handleSearchList"></i>
       </div>
     </div>
-    <div class="serverOrgContent">
-      <ul>
-        <li class="clearfix" v-for="(i,k) in serverAgent" :key='k'>
-          <div class="orgImg fl" @click="handleOrgDel(i.orgId)">
-            <!-- <img src="@/../static/img/ins1.png" alt=""> -->
-            <img :src="i.orgLogo" alt="">
-          </div>
-          <div class="orgCon fl">
-            <div class="conTil">{{i.orgName}}</div>
-            <div class="conContent clearfix color3">
-              <div class="left1 fl">
-                <p>电话：
-                  <span class="mainColor">{{i.orgPhone}}</span>
-                </p>
-                <p>地址：{{i.orgAddress}}</p>
-                <p>累计
-                  <span class="mainColor">{{i.transactionNum}}</span>&nbsp;笔交易</p>
-              </div>
-              <div class="right1 fl">
-                <p>
-                  <el-rate v-model="i.attitudeScore*1" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
-                  </el-rate>
-                  <span class="mainColor">{{i.evaluationNum}}</span>条评价</p>
-                <p>
-                  {{i.attitudeScore}}分
-                </p>
+    <div class="serverOrgContent" v-loading="loading">
+      <div v-if="serverAgent.length==0">
+        <nodata></nodata>
+      </div>
+      <!-- <div v-else> -->
+        <ul v-else>
+          <li class="clearfix" v-for="(i,k) in serverAgent" :key='k'>
+            <div class="orgImg fl" @click="handleOrgDel(i.orgId)">
+              <!-- <img src="@/../static/img/ins1.png" alt=""> -->
+              <img :src="i.orgLogo" alt="">
+            </div>
+            <div class="orgCon fl">
+              <div class="conTil">{{i.orgName}}</div>
+              <div class="conContent clearfix color3">
+                <div class="left1 fl">
+                  <p>电话：
+                    <span class="mainColor">{{i.orgPhone}}</span>
+                  </p>
+                  <p>地址：{{i.orgAddress}}</p>
+                  <p>累计
+                    <span class="mainColor">{{i.transactionNum}}</span>&nbsp;笔交易</p>
+                </div>
+                <div class="right1 fl">
+                  <p>
+                    <el-rate v-model="i.attitudeScore*1" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
+                    </el-rate>
+                    <span class="mainColor">{{i.evaluationNum}}</span>条评价</p>
+                  <p>
+                    {{i.attitudeScore}}分
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="orgBtn fr mainColor pointer" @click="onlineContat(i.orgAccount,i.orgName)">
-            <a href="javascript:;">在线联系</a>
-          </div>
-        </li>
-      </ul>
+            <div class="orgBtn fr mainColor pointer" @click="onlineContat(i.orgAccount,i.orgName)">
+              <a href="javascript:;">在线联系</a>
+            </div>
+          </li>
+        </ul>
+      <!-- </div> -->
     </div>
-    <!-- <div class="serverOrgContent" v-else>
-      <nodata></nodata>
-    </div> -->
     <div class="pagination-container">
       <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
       </el-pagination>
@@ -151,6 +153,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       concatVisible: false,
       total: 0,
       currentPage1: 1,
@@ -181,7 +184,7 @@ export default {
   },
   mounted() {
     this.selectIndustryList();
-    this.businessAreaList()
+    this.businessAreaList();
     if (this.$route.query.searchData) {
       this.keyW = this.$route.query.searchData;
       this.initList();
@@ -275,6 +278,7 @@ export default {
     },
     //服务机构列表
     initList() {
+      this.loading = true;
       let _this = this;
       let data = {
         businessType: _this.businessType,
@@ -301,6 +305,7 @@ export default {
           } else {
             _this.$message.error(res.result);
           }
+          _this.loading = false;
         }
       });
     },

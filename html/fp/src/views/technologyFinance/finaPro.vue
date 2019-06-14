@@ -92,8 +92,11 @@
         <i class="iconfont icon-sousuo" @click="handleSearchList"></i>
       </div>
     </div>
-    <div class="serverOrgContent" id="serverOrgContent">
-      <ul>
+    <div class="serverOrgContent" id="serverOrgContent" v-loading="finaloading">
+       <div v-if="serverAgent.length==0">
+        <nodata></nodata>
+      </div>
+      <ul v-else>
         <li class="clearfix" v-for="(i,k) in serverAgent" :key='k'>
           <div class="orgImg fl pointer" @click="handleOrgDel(i.productId)">
             <img v-if="i.pictureUrl" :src="i.pictureUrl" alt="">
@@ -133,15 +136,12 @@
         </li>
       </ul>
     </div>
-    <!-- <div class="serverOrgContent" id="serverOrgContent" v-else>
-      <nodata></nodata>
-    </div> -->
     <div class="pagination-container">
       <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
       </el-pagination>
     </div>
     <!-- 提需求 -->
-    <template v-if="finaProVisible">
+    <template v-loading="finaProVisible">
       <el-dialog :visible.sync="finaProVisible" width="600px" :modal-append-to-body=false :lock-scroll="false">
         <div v-if="islogin">
           <el-form ref="financialProform" :rules="rules" :model="financialProform" label-position="right" label-width="150px" style="max-width:500px;">
@@ -190,6 +190,7 @@ export default {
   },
   data() {
     return {
+      finaloading:false,
       islogin: true,
       guaranteeMode: [],
       assureMethodCode: "",
@@ -499,6 +500,7 @@ export default {
     },
     //金融产品列表
     initList() {
+      this.finaloading=true
       let _this = this;
       let data = {
         needPage: 1,
@@ -524,6 +526,7 @@ export default {
           } else {
             _this.$message.error(res.result);
           }
+          _this.finaloading=false
         }
       });
     },

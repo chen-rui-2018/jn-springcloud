@@ -71,8 +71,11 @@
         <i class="iconfont icon-sousuo" @click="handleSearchList"></i>
       </div>
     </div>
-    <div class="serverOrgContent">
-      <ul>
+    <div class="serverOrgContent" v-loading="finaloading">
+      <div v-if="serverAgent.length==0">
+        <nodata></nodata>
+      </div>
+      <ul v-else>
         <li class="clearfix" v-for="(i,k) in serverAgent" :key='k'>
           <div class="orgImg fl" @click="handleOrgDel(i.orgId)">
             <img :src="i.orgLogo" alt="">
@@ -106,9 +109,6 @@
         </li>
       </ul>
     </div>
-    <!-- <div class="serverOrgContent"  v-else>
-      <nodata></nodata>
-    </div> -->
     <div class="pagination-container">
       <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
       </el-pagination>
@@ -129,11 +129,12 @@
 <script>
 import nodata from "../common/noData.vue";
 export default {
-   components: {
+  components: {
     nodata
   },
   data() {
     return {
+      finaloading: false,
       concatVisible: false,
       total: 0,
       currentPage1: 1,
@@ -241,6 +242,7 @@ export default {
     },
     //服务机构列表
     initList() {
+      this.finaloading = true;
       let _this = this;
       let data = {
         businessType: "technology_finance",
@@ -268,6 +270,7 @@ export default {
           } else {
             _this.$message.error(res.result);
           }
+          _this.finaloading = false;
         }
       });
     },

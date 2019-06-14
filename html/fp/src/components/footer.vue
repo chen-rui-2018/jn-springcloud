@@ -307,7 +307,7 @@ export default {
       line-height: 48px;
       font-size: 12px;
       background-color: #000;
-      text-align: left;
+      text-align: center;
       // padding-left: 160px;
     }
   }

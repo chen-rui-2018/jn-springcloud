@@ -14,28 +14,26 @@ import com.jn.park.activity.dao.*;
 import com.jn.park.activity.entity.TbActivity;
 import com.jn.park.activity.entity.TbActivityCriteria;
 import com.jn.park.activity.entity.TbActivityDetail;
-import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.activity.model.*;
+import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.activity.service.ActivityService;
-import com.jn.park.enums.ActivityEnum;
 import com.jn.park.api.MessageClient;
+import com.jn.park.enums.ActivityEnum;
 import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.park.message.model.AddMessageModel;
+import com.jn.park.parkcode.service.ParkCodeService;
 import com.jn.send.api.DelaySendMessageClient;
 import com.jn.send.model.Delay;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.CompanyParam;
 import com.jn.user.model.UserExtensionInfo;
-import io.swagger.models.auth.In;
-import org.checkerframework.checker.units.qual.C;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import com.jn.park.parkcode.service.ParkCodeService;
 
 import java.text.ParseException;
 import java.util.*;
@@ -256,7 +254,7 @@ public class ActivityServiceImpl implements ActivityService {
             delay.setServiceId(applicationName);
             delay.setDateString(activity.getActiStartTime());
             ObjectMapper objectMapper = new ObjectMapper();
-            delay.setServiceUrl("/activity/activityEndByTimedTask");
+            delay.setServiceUrl("/api/activity/activityEndByTimedTask");
             Boolean getDelay = false;
             if (isUpdate) {
                 if (tbActivityOld.getActiStartTime()==null || !DateUtils.isSameDay(tbActivityOld.getActiStartTime(), tbActivity.getActiStartTime())) {
@@ -280,7 +278,7 @@ public class ActivityServiceImpl implements ActivityService {
                 Date date = DateUtils.addHours(actiStartTime, -24);
                 if (date.after(new Date())) {
                     delay.setDateString(DateUtils.formatDate(date, "yyyy-MM-dd HH:mm:ss"));
-                    delay.setServiceUrl("/activity/activitySendMessageByTimedTask");
+                    delay.setServiceUrl("/api/activity/activitySendMessageByTimedTask");
                     //调用定时器处理消息推送。
                     delaySendMessageClient.delaySend(delay);
                 } else {

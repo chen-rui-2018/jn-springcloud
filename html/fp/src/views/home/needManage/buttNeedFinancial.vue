@@ -17,7 +17,7 @@
               <span>{{receiveDetail.issueTime|time}}</span>
             </el-form-item>
             <el-form-item label="融资金额：">
-              <span >{{receiveDetail.financingAmount}}</span>
+              <span >{{receiveDetail.financingAmount}}万元</span>
             </el-form-item>
             <el-form-item label="融资期限：">
               <span>{{receiveDetail.financingPeriod|time}}</span>
@@ -47,7 +47,7 @@
               { required: true, message: '合同总金额不能为空',trigger: 'blur'},
               { type: 'number', message: '合同总金额必须为数字值'}
         ]">
-              <el-input v-model.number="sendData.actualLoanAmount" placeholder="请填写合同总金额"></el-input>
+              <el-input v-model.number="sendData.actualLoanAmount" placeholder="请填写合同总金额"><template slot="append">万元</template></el-input>
             </el-form-item>
             <el-form-item label="对接结果：" >
               <el-radio-group v-model="sendData.handleResult">
@@ -67,8 +67,11 @@
             <el-upload
               :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
               list-type="picture-card"
+              :limit="1"
+              :on-exceed="handleExceed"
               :on-success="homePageuploadsuccess"
               :headers="headers"
+              :on-remove="deletHome"
               :file-list="fileList"
               >
               <i class="el-icon-plus"></i>
@@ -78,6 +81,9 @@
               <el-upload
                 :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
                 list-type="picture-card"
+                :limit="1"
+                :on-exceed="handleExceed"
+                :on-remove="deletEnd"
                 :on-success="endPageuploadsuccess"
                 :headers="headers"
                 :file-list="fileList2"
@@ -155,9 +161,18 @@ export default {
     homePageuploadsuccess(file, fileList){
       this.sendData.contractHomePage=file.data
     },
+    deletHome(file, fileList){
+      this.sendData.contractHomePage=""
+    },
     endPageuploadsuccess(file, fileList){
       this.sendData.contractEndPage=file.data
-    }
+    },
+     deletEnd(file, fileList){
+      this.sendData.contractEndPage=""
+    },
+    handleExceed(files, fileList) {
+      this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件`);
+    },
   }
 }
 </script>

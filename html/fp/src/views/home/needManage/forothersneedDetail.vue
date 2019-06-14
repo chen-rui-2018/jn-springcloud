@@ -79,7 +79,7 @@
           </div>
           <div class="">
             <el-form-item label="融资金额：">
-              <span >{{othersDetail.financingAmount}}</span>
+              <span >{{othersDetail.financingAmount}}万元</span>
             </el-form-item>
           </div>
           <div>

@@ -39,7 +39,7 @@
               <div>{{sevaluateDetail.reqDetail}}</div>
             </el-form-item>
             <el-form-item label="合同总金额：">
-              <div>{{sevaluateDetail.contractAmount}}</div>
+              <div>{{sevaluateDetail.contractAmount}}万元</div>
             </el-form-item>
             <el-form-item label="结果描述：">
               <div> {{sevaluateDetail.resultDetail}}</div>
@@ -69,7 +69,7 @@
               <span>{{sevaluateDetail.issueTime|time}}</span>
             </el-form-item>
             <el-form-item label="融资金额：">
-              <span >{{sevaluateDetail.financingAmount}}</span>
+              <span >{{sevaluateDetail.financingAmount}}万元</span>
             </el-form-item>
             <el-form-item label="融资期限：">
               <span>{{sevaluateDetail.financingPeriod|time}} </span>
@@ -95,8 +95,8 @@
             <el-form-item label="联系人邮箱：">
               <span>{{sevaluateDetail.reqEmail}}</span>
             </el-form-item>
-            <el-form-item label="实际贷款金额（万元）：">
-              <span>{{sevaluateDetail.actualLoanAmount}}</span>
+            <el-form-item label="实际贷款金额：">
+              <span>{{sevaluateDetail.actualLoanAmount}}万元</span>
             </el-form-item>
             <el-form-item label="结果描述">
               <span>{{sevaluateDetail.serviceCycle}}</span>

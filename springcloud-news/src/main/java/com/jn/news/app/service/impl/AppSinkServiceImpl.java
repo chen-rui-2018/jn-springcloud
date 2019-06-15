@@ -1,22 +1,14 @@
 package com.jn.news.app.service.impl;
 
-import cn.jiguang.common.resp.APIConnectionException;
-import cn.jiguang.common.resp.APIRequestException;
 import cn.jpush.api.JPushClient;
 import cn.jpush.api.push.PushResult;
-import cn.jpush.api.push.model.Message;
-import cn.jpush.api.push.model.Options;
 import cn.jpush.api.push.model.Platform;
 import cn.jpush.api.push.model.PushPayload;
 import cn.jpush.api.push.model.audience.Audience;
-import cn.jpush.api.push.model.notification.AndroidNotification;
-import cn.jpush.api.push.model.notification.IosNotification;
-import cn.jpush.api.push.model.notification.Notification;
-import com.jn.common.enums.CommonExceptionEnum;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.util.StringUtils;
-import com.jn.news.app.enums.JPushEnum;
-import com.jn.news.app.enums.JPushExceptionEnum;
+import com.jn.news.enums.JPushEnum;
+import com.jn.news.enums.JPushExceptionEnum;
 import com.jn.news.app.model.JPushData;
 import com.jn.news.app.model.JPushResult;
 import com.jn.news.app.service.AppSinkService;
@@ -123,7 +115,7 @@ public class AppSinkServiceImpl implements AppSinkService {
             }
         }
         jPushData.setAudience(audience);
-        logger.info("\napp消息推送,调用激光推送接口,构建接口所需参数:【{}】",jPushData.toString());
+        logger.info("\napp消息推送,调用极光推送接口,构建接口所需参数:【{}】",jPushData.toString());
         PushPayload payload = JPushUtil.buildPushObject(jPushData);
         try {
             pushResult = new JPushClient(jpushProperties.getMasterSecret(), jpushProperties.getAppKey()).sendPush(payload);

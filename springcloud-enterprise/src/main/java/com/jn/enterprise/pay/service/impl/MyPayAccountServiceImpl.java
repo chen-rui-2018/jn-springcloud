@@ -240,7 +240,9 @@ public class MyPayAccountServiceImpl implements MyPayAccountService {
         tbPayAccount.setEntId(payAccountBookCreateParam.getEnterId());
         tbPayAccount.setAccountId(AutoOrderUtil.autoOrderId());
         tbPayAccount.setCreatedTime(new Date());
-        tbPayAccount.setCreatorAccount(user.getAccount());
+        if(user != null){
+            tbPayAccount.setCreatorAccount(user.getAccount());
+        }
         tbPayAccount.setRecordStatus(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
         logger.info("【统一缴费-创建账户和账本】，创建账户开始");
         logger.info("【统一缴费-创建账户和账本】，创建账户入參【{}】",JsonUtil.object2Json(tbPayAccount));

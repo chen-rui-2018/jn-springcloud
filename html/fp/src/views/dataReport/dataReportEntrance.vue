@@ -21,7 +21,6 @@
             :key="tabIndex"
             v-loading="loadingTab">
             <span slot="label" class="flex-center">
-<!--              <i v-if="tab.needFilled" class="wait-filled-dot"></i>-->
               {{ tab.tabName }}
             </span>
             <tree-table :isReported="formData.taskInfo.status" :modelType="formData.modelType" :data="tab.targetList"
@@ -205,15 +204,12 @@
         this.formData.departmentId = departmentId
         this.getDepartmentJurisdiction(departmentId)
         this.$nextTick(() => {
-          setTimeout(() => {
-            this.loadingTab = false
-          }, 1)
+          this.loadingTab = false
         })
       },
       getDepartmentJurisdiction(departmentId) {
         //  如果是园区报表，等待填报格式合成完毕再给指标树加上权限控制
         for (const tab of this.formData.tabs) {
-          this.$set(tab, 'needFilled', false)
           this.formatTreeJurisdiction(tab.targetList, departmentId)
         }
       },
@@ -461,24 +457,22 @@
                 _this.formData.tabs.sort((a, b) => {
                   return a['orderNumber'] - b['orderNumber']
                 })
+                const departmentId = _this.formDataListTitle[0].departmentId
+                _this.departmentStatus = _this.formDataListTitle[0].status
+                _this.formData.departmentId = departmentId
                 if (_this.formData.modelType === 1) {
                   const gardenFiller = _this.formData.gardenFiller
-                  const departmentId = _this.formDataListTitle[0].departmentId
-                  const departmentStatus = _this.formDataListTitle[0].status
                   if (gardenFiller) {
                     _this.formDataListTitle = _this.formDataListTitle.concat(gardenFiller)
                   }
                   for (const tab of  _this.formData.tabs) {
-                    _this.$set(tab, 'needFilled', false)
                     _this.formatTreeJurisdiction(tab.targetList, departmentId)
                   }
-                  _this.departmentStatus = departmentStatus
-                  _this.formData.departmentId = departmentId
                 }
                 resolve()
               } else {
                 _this.$message.error(res.result)
-                reject()
+                reject(res.result)
               }
               _this.loadingTab = false
               _this.loadingFormData = false

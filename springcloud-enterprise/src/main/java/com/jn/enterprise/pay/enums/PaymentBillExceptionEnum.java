@@ -40,6 +40,9 @@ public enum PaymentBillExceptionEnum implements CodeAndMsg {
     BILL_ACCOUNT_NOT_EXIT("6020538","当前登录用户与账单所属用户不一致"),
     PAYMENT_STATUS_IS_PAY_REMIND("6020539","账单已支付，无需核对提醒"),
     PAYMENT_REMIND_IS_SEND_OUT("6020540","已发送核对提醒，无需重复发送"),
+    PAYMENT_STATUS_IS_PAY_CONFIRM("6020541","账单已支付，无需缴费确认"),
+    PAYMENT_OFFLINE_CONFIRM_FAIL("6020542","线下缴费确认失败"),
+    PAYMENT_EMAIL_CONTEXT("6020543","【白下高新区】您名下有待缴账单，请及时处理，以免影响您的园区信用分。"),
     ;
     /**
      * 编码

@@ -36,8 +36,14 @@ public class ActivityDetail implements Serializable {
     private String actiAddress;
     @ApiModelProperty(value = "活动费用")
     private String actiCost;
-    @ApiModelProperty(value = "活动主办方")
+    @ApiModelProperty(value = "活动主办单位")
     private String actiOrganizer;
+    @ApiModelProperty(value = "活动指导单位")
+    private String actiGuideOrganizer;
+    @ApiModelProperty(value = "活动承办单位")
+    private String actiUndertakeOrganizer;
+    @ApiModelProperty(value = "活动协办单位")
+    private String actiCoOrganizer;
     @ApiModelProperty(value = "活动人数")
     private String actiNumber;
     @ApiModelProperty(value = "活动主海报")
@@ -169,6 +175,30 @@ public class ActivityDetail implements Serializable {
 
     public void setActiOrganizer(String actiOrganizer) {
         this.actiOrganizer = actiOrganizer;
+    }
+
+    public String getActiGuideOrganizer() {
+        return actiGuideOrganizer;
+    }
+
+    public void setActiGuideOrganizer(String actiGuideOrganizer) {
+        this.actiGuideOrganizer = actiGuideOrganizer;
+    }
+
+    public String getActiUndertakeOrganizer() {
+        return actiUndertakeOrganizer;
+    }
+
+    public void setActiUndertakeOrganizer(String actiUndertakeOrganizer) {
+        this.actiUndertakeOrganizer = actiUndertakeOrganizer;
+    }
+
+    public String getActiCoOrganizer() {
+        return actiCoOrganizer;
+    }
+
+    public void setActiCoOrganizer(String actiCoOrganizer) {
+        this.actiCoOrganizer = actiCoOrganizer;
     }
 
     public String getActiNumber() {
@@ -347,7 +377,6 @@ public class ActivityDetail implements Serializable {
         this.parkCodes = parkCodes;
     }
 
-
     @Override
     public String toString() {
         return "ActivityDetail{" +
@@ -362,6 +391,9 @@ public class ActivityDetail implements Serializable {
                 ", actiAddress='" + actiAddress + '\'' +
                 ", actiCost='" + actiCost + '\'' +
                 ", actiOrganizer='" + actiOrganizer + '\'' +
+                ", actiGuideOrganizer='" + actiGuideOrganizer + '\'' +
+                ", actiUndertakeOrganizer='" + actiUndertakeOrganizer + '\'' +
+                ", actiCoOrganizer='" + actiCoOrganizer + '\'' +
                 ", actiNumber='" + actiNumber + '\'' +
                 ", actiPosterUrl='" + actiPosterUrl + '\'' +
                 ", actiViews='" + actiViews + '\'' +

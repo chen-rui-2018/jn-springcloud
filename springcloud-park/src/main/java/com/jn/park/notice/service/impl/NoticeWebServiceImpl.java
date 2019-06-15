@@ -11,6 +11,7 @@ import com.jn.park.notice.dao.NoticeWebDao;
 import com.jn.park.notice.model.NoticeDetailShow;
 import com.jn.park.notice.model.NoticeManageShow;
 import com.jn.park.notice.service.NoticeWebService;
+import com.jn.park.notice.vo.IntegrationListVo;
 import com.jn.system.log.annotation.ServiceLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +37,28 @@ public class NoticeWebServiceImpl  implements NoticeWebService {
 
     @Autowired
     private NoticeWebDao noticeWebDao;
+
+    @Override
+    public List<IntegrationListVo> integrationList() {
+        List<IntegrationListVo> integrationList=noticeWebDao.integrationList();
+        //把简介中的HTML去除掉.
+        for (int i = 0;i<integrationList.size();i++){
+            IntegrationListVo integrationListVo=integrationList.get(i);
+            String intro = integrationListVo.getIntro();
+            //设置简要内容
+            String briefContent=integrationListVo.getIntro().replaceAll("</?[^>]+>","");
+            if(StringUtils.isNotBlank(briefContent)){
+                String briefSummaries=briefContent.substring(0,briefContent.length()>100?100:briefContent.length());
+                briefSummaries=briefContent.length()>100?briefSummaries+"......":briefSummaries;
+                integrationListVo.setNoticeBiref(briefSummaries);
+                //清空详情
+                integrationListVo.setIntro("");
+            }
+
+        }
+
+        return integrationList;
+    }
 
     @ServiceLog(doAction = "app首页弹出公告列表")
     @Override

@@ -12,7 +12,7 @@ import java.util.List;
  * @Date: 2019/3/21
  * @Version 1.0
  */
-@ApiModel(value = "FianceDynamicTableVo",description = "动态表格包装VO")
+@ApiModel(value = "IntegrationListVo",description = "动态表格包装VO")
 public class FianceDynamicTableVo<T> implements Serializable {
     @ApiModelProperty("动态显示的表头LIST")
     private List<String>dynamicHeadList;
@@ -38,7 +38,7 @@ public class FianceDynamicTableVo<T> implements Serializable {
 
     @Override
     public String toString() {
-        return "FianceDynamicTableVo{" +
+        return "IntegrationListVo{" +
                 "dynamicHeadList=" + dynamicHeadList +
                 ", rows=" + rows +
                 '}';

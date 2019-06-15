@@ -31,12 +31,10 @@ public class OaMeetingParticipantsAttendanceVo implements Serializable {
     private String meetingUserId;
 
     @ApiModelProperty(value = "签到时间")
-    @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss",timezone="GMT+8")
-    private Date signInTime;
+    private String signInTime;
 
     @ApiModelProperty(value = "签退时间")
-    @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss",timezone="GMT+8")
-    private Date signBackTime;
+    private String signBackTime;
 
     @ApiModelProperty(value = "会议日期")
     private String meetingStartDate;
@@ -122,22 +120,21 @@ public class OaMeetingParticipantsAttendanceVo implements Serializable {
         this.meetingUserId = meetingUserId;
     }
 
-    public Date getSignInTime() {
+    public String getSignInTime() {
         return signInTime;
     }
 
-    public void setSignInTime(Date signInTime) {
+    public void setSignInTime(String signInTime) {
         this.signInTime = signInTime;
     }
 
-    public Date getSignBackTime() {
+    public String getSignBackTime() {
         return signBackTime;
     }
 
-    public void setSignBackTime(Date signBackTime) {
+    public void setSignBackTime(String signBackTime) {
         this.signBackTime = signBackTime;
     }
-
 
     public String getMeetingStartDate() {
         return meetingStartDate;

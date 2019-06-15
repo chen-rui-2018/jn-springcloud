@@ -78,8 +78,8 @@ public class MeetingAttendanceController extends BaseController {
     @ApiOperation(value = "导出会议考勤信息")
     public void exportExcelMeeting(OaMeetingAttendancePage oaMeetingAttendancePage, HttpServletResponse response) {
         User user=(User) SecurityUtils.getSubject().getPrincipal();
-        String exportTitle = "会议室,日期,开始时间,结束时间,会议主题,姓名，部门,签到打卡，签退打卡,签到状态，签退状态";
-        String exportColName = "meetingRoomName,startDate,startTime,endTime,meetingTitle,userName,departmentName,signInTime,signBackTime,signInStatus,signOutStatus";
+        String exportTitle = "会议室,日期,开始时间,结束时间,会议主题,姓名,部门,签到打卡,签退打卡,签到状态,签退状态";
+        String exportColName = "meetingRoomName,meetingStartDate,meetingStartTime,meetingEndTime,meetingTitle,userName,departmentName,signInTime,signBackTime,signInStatus,signOutStatus";
         oaMeetingAttendancePage.setPage(1);
         oaMeetingAttendancePage.setRows(200000);
         PaginationData<List<OaMeetingParticipantsAttendanceVo>> data = meetingAttendanceService.selectMeetingAttendanceList(oaMeetingAttendancePage);

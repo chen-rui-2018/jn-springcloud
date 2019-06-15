@@ -13,7 +13,7 @@ import java.io.Serializable;
 @ApiModel(value ="AddMessageModel",description = "添加消息")
 public class AddMessageModel implements Serializable {
 
-    @ApiModelProperty("消息id")
+    @ApiModelProperty(value = "消息id", hidden = true)
     private String id;
 
     @ApiModelProperty("消息标题")

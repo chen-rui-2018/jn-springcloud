@@ -76,7 +76,10 @@ export default {
     monthelectro: 'springcloud-park/meter/monthElectric', // 本月用电情况
     yearelectro: 'springcloud-park/meter/yearElectric', // 今年用电情况
     getCompanyDetailByNowAccount: 'springcloud-enterprise/guest/company/getCompanyDetailByNowAccount', // 获取用户企业信息
-    addOrEditMemorandum: 'springcloud-enterprise/pd/declaration/addOrEditMemorandum'// 申报平台备忘录
+    addOrEditMemorandum: 'springcloud-enterprise/pd/declaration/addOrEditMemorandum', // 申报平台备忘录
+    fastUpload: 'springcloud-app-fastdfs/upload/fastUpload', // 上传文件
+    queryOnlineInfo: 'springcloud-enterprise/pd/online/queryOnlineInfo', // 通过公告ID和登录人查询预约信息
+    getUserExtension: 'springcloud-user/user/userInfo/getUserExtension'
 
   },
   setToken: function (obj) {

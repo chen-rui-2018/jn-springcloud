@@ -23,6 +23,11 @@ export function setUserInfo(info) {
 export function getUserInfo() {
   return Cookies.get(UserInfo, { path: '/' })
 }
+
 export function removeUserInfo() {
   return Cookies.remove(UserInfo, { path: '/' })
+}
+
+export function getIbpsToken() {
+  return Cookies.get('ibpsoauth', { path: '/' })
 }

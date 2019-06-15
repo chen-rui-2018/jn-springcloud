@@ -236,14 +236,16 @@
         // 其他表格列的值（上期值比对）挂载到树形指标，跟着指标循环的时候显示
         for (const target of treeData) {
           for (const key in otherColumn) {
-            this.$set(target, key, [])
-            if (otherColumn[key]) {
-              for (const column of otherColumn[key]) {
-                if (target.id === column.targetId) {
-                  target[key].push({
-                    value: column.value || '-',
-                    label: column.formName
-                  })
+            if (key) {
+              this.$set(target, key, [])
+              if (otherColumn[key]) {
+                for (const column of otherColumn[key]) {
+                  if (target.id === column.targetId) {
+                    target[key].push({
+                      value: column.value || '-',
+                      label: column.formName
+                    })
+                  }
                 }
               }
             }

@@ -180,17 +180,19 @@
         if (!this.isMobile) {
           if (tab.otherColumn) {
             for (const key in tab.otherColumn) {
-              let text
-              if (key.length === 6) {
-                text = key.substring(0, 4) + '年' + key.substring(4, 6) + '月'
-              } else {
-                text = key + '年'
+              if (key) {
+                let text
+                if (key.length === 6) {
+                  text = key.substring(0, 4) + '年' + key.substring(4, 6) + '月'
+                } else {
+                  text = key + '年'
+                }
+                tab.columns.push({
+                  text: text,
+                  value: key,
+                  width: 160
+                })
               }
-              tab.columns.push({
-                text: text,
-                value: key,
-                width: 160
-              })
             }
           }
         }

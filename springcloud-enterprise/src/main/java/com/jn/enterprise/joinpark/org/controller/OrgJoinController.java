@@ -1,5 +1,6 @@
 package com.jn.enterprise.joinpark.org.controller;
 
+import com.codingapi.tx.annotation.TxTransaction;
 import com.jn.common.model.Result;
 import com.jn.enterprise.joinpark.org.service.OrgJoinService;
 import com.jn.enterprise.servicemarket.org.model.OrgDetailParameter;
@@ -35,6 +36,7 @@ public class OrgJoinController {
     @Autowired
     private OrgJoinService orgJoinService;
 
+    @TxTransaction(isStart = true)
     @ControllerLog(doAction = "保存/修改机构认证信息")
     @ApiOperation(value = "保存/修改机构认证信息", notes = "返回数据响应条数，正常情况为1")
     @RequiresPermissions("/orgJoinPark/saveOrUpdateOrgDetail")

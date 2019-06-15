@@ -61,7 +61,7 @@
 		<spring-boot-admin>1.5.7</spring-boot-admin>
 		<alibaba.easyexcel>1.1.2-beta5</alibaba.easyexcel>
 		<google-zxing-core>3.3.3</google-zxing-core>
-		<ibps-auth-client-filter-other>2.8.14-LC.RELEASE</ibps-auth-client-filter-other>
+		<ibps-auth-client-filter-other>2.8.15-LC.RELEASE</ibps-auth-client-filter-other>
 		<jpush-client>3.3.12</jpush-client>
 		<jiguang-common>1.1.6</jiguang-common>
         <alibaba-fastjson>1.2.58</alibaba-fastjson>

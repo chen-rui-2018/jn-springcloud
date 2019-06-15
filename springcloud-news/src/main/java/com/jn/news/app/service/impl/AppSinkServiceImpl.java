@@ -119,6 +119,7 @@ public class AppSinkServiceImpl implements AppSinkService {
         try {
             pushResult = new JPushClient(jpushProperties.getMasterSecret(), jpushProperties.getAppKey()).sendPush(payload);
         } catch (Exception e) {
+            logger.warn("[极光推送] 消息推送失败，异常信息：{}", e.getMessage());
             throw new JnSpringCloudException(NewsExceptionEnum.JPUSH_ERROR);
         }
         return pushResult;

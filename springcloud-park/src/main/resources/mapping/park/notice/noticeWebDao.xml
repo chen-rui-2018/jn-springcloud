@@ -1,6 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.park.notice.dao.NoticeWebDao">
+  <!---->
+  <select id="integrationList" resultType="com.jn.park.notice.vo.IntegrationListVo">
+     <!-- 获取园区公告信息 前四条-->
+      SELECT
+      *
+      from (
+      (SELECT
+      t1.id as "id",
+      t1.notice_title as "title",
+      t2.notice_details as "intro",
+      t1.is_stick  as "isStick",
+      t1.created_time as "createdTime",
+      t1.modified_time as "modifiedTime"
+      FROM
+      (SELECT
+      t.id,
+      t.notice_title,
+      t.is_stick ,
+      t.created_time,
+      t.modified_time
+
+      FROM tb_notice_info t
+      WHERE t.record_status = 1
+      ORDER BY t.is_stick DESC , t.modified_time DESC
+      LIMIT 4
+      )t1
+      INNER JOIN
+      (
+      SELECT
+      t.notice_id,
+      t.notice_details
+      FROM tb_notice_details t
+      )t2
+      ON t2.notice_id=t1.id
+      ORDER BY t1.is_stick DESC , t1.modified_time DESC )
+
+      UNION ALL
+
+      <!-- 查询政策指南信息 前4条-->
+      (
+      SELECT
+      t.policy_id as "id",
+      t.policy_title as "title",
+      t.policy_content as "intro",
+      t.is_stick as "isStick",
+      t.created_time as "createdTime",
+      t.modified_time  as "modifiedTime"
+      from tb_policy t
+      WHERE t.record_status = 1
+      AND t.policy_type = 0
+      ORDER BY t.is_stick DESC , t.modified_time DESC
+      LIMIT 4)
+
+      UNION ALL
+      <!-- 获取热门活动信息 前4条-->
+      (SELECT
+      t1.id  as "id",
+      t1.acti_name as "title",
+      t2.acti_detail as "intro",
+      t1.is_index as "isStick",
+      t1.created_time as "createdTime",
+      t1.modified_time as "modifiedTime"
+      FROM
+      (SELECT
+      t.id,
+      t.acti_name,
+      t.is_index,
+      t.created_time,
+      t.modified_time
+      FROM tb_activity t
+      WHERE t.record_status = 1
+      ORDER BY t.is_index DESC , t.modified_time DESC
+      LIMIT 4)t1
+      INNER JOIN
+      (SELECT
+      t.activity_id,
+      t.acti_detail
+      FROM tb_activity_detail t)t2
+      ON t2.activity_id=t1.id
+      ORDER BY t1.is_index DESC , t1.modified_time DESC )) t
+      ORDER BY t.isStick DESC , t.modifiedTime DESC
+
+  </select>
+
+
   <!--App首页弹出公告列表-->
   <select id="popupNoticeListForApp" resultType="com.jn.park.notice.model.NoticeDetailShow">
       select

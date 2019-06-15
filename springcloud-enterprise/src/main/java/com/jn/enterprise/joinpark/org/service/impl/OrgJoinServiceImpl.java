@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -44,6 +45,7 @@ public class OrgJoinServiceImpl implements OrgJoinService {
 
     @ServiceLog(doAction = "机构认证保存/更新")
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int saveOrUpdateOrgDetail(OrgDetailParameter orgDetailParameter,String account){
         //机构id为空
         if(StringUtils.isBlank(orgDetailParameter.getOrgId())){

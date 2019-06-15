@@ -51,7 +51,7 @@ public class AppSinkServiceImpl implements AppSinkService {
      * @param message 透传消息内容（用户APP处理业务）
      */
     @Override
-    public JPushResult pushMessage(String title, String content, List<String> ids, String pushType, String platFromType,
+    public PushResult pushMessage(String title, String content, List<String> ids, String pushType, String platFromType,
                                           String noticeType, String message) {
         //判断app消息推送发送状态，如果是关闭状态则发送至配置的测试的ids
         ids = this.appSwitchJudge(ids);
@@ -73,7 +73,6 @@ public class AppSinkServiceImpl implements AppSinkService {
 
         // 封装推送对象
         PushResult pushResult = null;
-        JPushResult jPushResult = new JPushResult();
         JPushData jPushData = new JPushData();
         jPushData.setContent(content);
         jPushData.setTitle(title);
@@ -122,8 +121,7 @@ public class AppSinkServiceImpl implements AppSinkService {
         } catch (Exception e) {
             throw new JnSpringCloudException(NewsExceptionEnum.JPUSH_ERROR);
         }
-        BeanUtils.copyProperties(pushResult, jPushResult);
-        return jPushResult;
+        return pushResult;
     }
 
 

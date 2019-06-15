@@ -1,7 +1,7 @@
 
 import axios from 'axios'
 export default {
-  host: 'http://screan.bxgxq.com/',
+  host: 'https://screan.bxgxq.com/',
   apiURL: {
     departList: 'springcloud-park/guest/portal/sp/power/departList', // 实施部门列表
     powerList: 'springcloud-park/guest/portal/sp/power/list', // 权利清单列表

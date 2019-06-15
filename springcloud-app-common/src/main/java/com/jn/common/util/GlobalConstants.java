@@ -18,7 +18,7 @@ public final class GlobalConstants {
     /**
      * 外全站
      */
-    public final static String OVER_HTTP_PRODOCOL = "http://";
+    public final static String OVER_HTTP_PRODOCOL = "https://";
 
     /**
      * 全站，默认成功编码是0000

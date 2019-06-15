@@ -1,10 +1,10 @@
 ﻿//服务请求url
 // var service_url="http://112.94.22.222:8000/springcloud-park/";
 // var service_url="http://localhost/springcloud-park/";
-var service_url="http://m.bxgxq.com/springcloud-park/";
+var service_url="https://m.bxgxq.com/springcloud-park/";
 
 //获取token的Url
-var token_Url="http://m.bxgxq.com/springcloud-app-system";
+var token_Url="https://m.bxgxq.com/springcloud-app-system";
 //设置token作用域的url
 var scope_url="";
 

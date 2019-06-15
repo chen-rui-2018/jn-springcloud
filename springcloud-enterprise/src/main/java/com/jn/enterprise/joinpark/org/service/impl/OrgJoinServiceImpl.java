@@ -45,7 +45,6 @@ public class OrgJoinServiceImpl implements OrgJoinService {
 
     @ServiceLog(doAction = "机构认证保存/更新")
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public int saveOrUpdateOrgDetail(OrgDetailParameter orgDetailParameter,String account){
         //机构id为空
         if(StringUtils.isBlank(orgDetailParameter.getOrgId())){

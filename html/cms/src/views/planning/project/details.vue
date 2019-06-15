@@ -81,7 +81,7 @@
 
 <script>
 // import gantt from 'dhtmlx-gantt' // 引入模块
-import Gantt from '@/components/Gantt.vue'
+import Gantt from '@/components/gantt.vue'
 import { api } from '@/api/axios'
 import PieChart from '../charts/PieChart'
 import BarChart from '../charts/BarChart'

@@ -11,31 +11,27 @@ import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.park.activity.dao.*;
-import com.jn.park.activity.entity.TbActivity;
-import com.jn.park.activity.entity.TbActivityCriteria;
-import com.jn.park.activity.entity.TbActivityDetail;
-import com.jn.park.activity.service.ActivityApplyService;
+import com.jn.park.activity.entity.*;
 import com.jn.park.activity.model.*;
+import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.activity.service.ActivityService;
-import com.jn.park.enums.ActivityEnum;
 import com.jn.park.api.MessageClient;
+import com.jn.park.enums.ActivityEnum;
 import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.park.message.model.AddMessageModel;
+import com.jn.park.parkcode.service.ParkCodeService;
 import com.jn.send.api.DelaySendMessageClient;
 import com.jn.send.model.Delay;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.CompanyParam;
 import com.jn.user.model.UserExtensionInfo;
-import io.swagger.models.auth.In;
-import org.checkerframework.checker.units.qual.C;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import com.jn.park.parkcode.service.ParkCodeService;
 
 import java.text.ParseException;
 import java.util.*;
@@ -70,6 +66,9 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Autowired
     private UserExtensionClient userExtensionClient;
+
+    @Autowired
+    private TbActivityApplyMapper tbActivityApplyMapper;
 
     /**
      * 活动可报名
@@ -209,15 +208,17 @@ public class ActivityServiceImpl implements ActivityService {
         int num = 0;
         TbActivity tbActivityOld = null;
         Boolean isUpdate = true;
+        String activityId = UUID.randomUUID().toString().replaceAll("-", "");
         if (StringUtils.isEmpty(activity.getId())) {
             isUpdate = false;
+            activity.setId(activityId);
             //新增
             tbActivity.setActiLike(0);
             tbActivity.setActiViews(0);
             tbActivity.setApplyNum(0);
             tbActivity.setApplyStartTime(new Date());
             tbActivity.setCreatedTime(new Date());
-            tbActivity.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+            tbActivity.setId(activityId);
             tbActivity.setCreatorAccount(account);
             tbActivity.setRecordStatus(new Byte(ACTIVITY_STATE_NOT_DELETE));
             if (StringUtils.equals(ACTIVITY_STATE_PUBLISH, tbActivity.getActiStatus())) {
@@ -256,7 +257,7 @@ public class ActivityServiceImpl implements ActivityService {
             delay.setServiceId(applicationName);
             delay.setDateString(activity.getActiStartTime());
             ObjectMapper objectMapper = new ObjectMapper();
-            delay.setServiceUrl("/activity/activityEndByTimedTask");
+            delay.setServiceUrl("/api/activity/activityEndByTimedTask");
             Boolean getDelay = false;
             if (isUpdate) {
                 if (tbActivityOld.getActiStartTime()==null || !DateUtils.isSameDay(tbActivityOld.getActiStartTime(), tbActivity.getActiStartTime())) {
@@ -280,7 +281,7 @@ public class ActivityServiceImpl implements ActivityService {
                 Date date = DateUtils.addHours(actiStartTime, -24);
                 if (date.after(new Date())) {
                     delay.setDateString(DateUtils.formatDate(date, "yyyy-MM-dd HH:mm:ss"));
-                    delay.setServiceUrl("/activity/activitySendMessageByTimedTask");
+                    delay.setServiceUrl("/api/activity/activitySendMessageByTimedTask");
                     //调用定时器处理消息推送。
                     delaySendMessageClient.delaySend(delay);
                 } else {
@@ -496,7 +497,6 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
 
-
     /**
      * 活动消息发送接口
      *
@@ -511,26 +511,41 @@ public class ActivityServiceImpl implements ActivityService {
         }
         TbActivity activity = tbActivityMapper.selectByPrimaryKey(activityId);
         if (null == activity) {
+            logger.warn("[活动消息发送接口] 未找到相关活动，activityId：{}", activityId);
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_NOT_EXIST);
         }
         String actiStartTime = DateUtils.formatDate(activity.getActiStartTime(), "yyyy-MM-dd HH:mm:ss");
         if (StringUtils.isEmpty(activityTime) || StringUtils.equals(actiStartTime, activityTime)) {
-            AddMessageModel addMessageModel = new AddMessageModel();
-            addMessageModel.setMessageTitle("园区活动提醒");
-            addMessageModel.setMessageConnect(activity.getActiName()+"将于"+actiStartTime+"开始，请准时参加");
-            addMessageModel.setMessageSender("admin");
-            addMessageModel.setMessageOneSort(0);
-            addMessageModel.setMessageOneSortName("个人动态");
-            addMessageModel.setMessageTowSort(2);
-            addMessageModel.setMessageTowSortName("园区活动");
-            addMessageModel.setCreatorAccount("admin");
-            Result<String> stringResult = messageClient.addMessage(addMessageModel);
-            logger.info("活动提醒：调用消息发送接口,接口返回状态：{}",stringResult.getCode());
-            return 1;
+            // 查询报名人数
+            TbActivityApplyCriteria example = new TbActivityApplyCriteria();
+            example.createCriteria().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue())
+                    .andActivityIdEqualTo(activityId).andApplyStatusEqualTo("1");
+            List<TbActivityApply> tbActivityApplyList = tbActivityApplyMapper.selectByExample(example);
+
+            // 活动如果有人报名，发送通知
+            if (tbActivityApplyList != null && !tbActivityApplyList.isEmpty()) {
+                AddMessageModel messageTemplate = new AddMessageModel();
+                messageTemplate.setMessageTitle("园区活动提醒");
+                messageTemplate.setMessageContent("“" + activity.getActiName()+"” 将于 "+actiStartTime+" 开始，请您准时参加");
+                messageTemplate.setMessageSender("system");
+                messageTemplate.setMessageOneSort(0);
+                messageTemplate.setMessageOneSortName("个人动态");
+                messageTemplate.setMessageTowSort(1);
+                messageTemplate.setMessageTowSortName("园区通知");
+                messageTemplate.setCreatorAccount("system");
+
+                for (TbActivityApply apply : tbActivityApplyList) {
+                    AddMessageModel addMessageModel = new AddMessageModel();
+                    BeanUtils.copyProperties(messageTemplate, addMessageModel);
+                    addMessageModel.setMessageRecipien(apply.getCreatorAccount());
+                    Result<String> stringResult = messageClient.addMessage(addMessageModel);
+                    logger.info("活动提醒：account：{}，调用消息发送接口,接口返回状态：{}", apply.getCreatorAccount(), stringResult.getCode());
+                }
+            }
         }
         //查询该活动已报名人员，批量推送。
         //TODO 需调用短信、消息接口主动推送消息。
-        return 0;
+        return 1;
     }
 
     /**

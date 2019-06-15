@@ -1,26 +1,19 @@
 package com.jn.news.app.service.impl;
 
-import cn.jiguang.common.resp.APIConnectionException;
-import cn.jiguang.common.resp.APIRequestException;
 import cn.jpush.api.JPushClient;
 import cn.jpush.api.push.PushResult;
-import cn.jpush.api.push.model.Message;
-import cn.jpush.api.push.model.Options;
 import cn.jpush.api.push.model.Platform;
 import cn.jpush.api.push.model.PushPayload;
 import cn.jpush.api.push.model.audience.Audience;
-import cn.jpush.api.push.model.notification.AndroidNotification;
-import cn.jpush.api.push.model.notification.IosNotification;
-import cn.jpush.api.push.model.notification.Notification;
-import com.jn.common.enums.CommonExceptionEnum;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.util.StringUtils;
-import com.jn.news.app.enums.JPushEnum;
-import com.jn.news.app.enums.JPushExceptionEnum;
+import com.jn.news.enums.JPushEnum;
+import com.jn.news.enums.JPushExceptionEnum;
 import com.jn.news.app.model.JPushData;
 import com.jn.news.app.model.JPushResult;
 import com.jn.news.app.service.AppSinkService;
 import com.jn.news.app.utils.JPushUtil;
+import com.jn.news.config.JpushProperties;
 import com.jn.news.config.NewsSwitchProperties;
 import com.jn.news.enums.NewsExceptionEnum;
 import org.slf4j.Logger;
@@ -44,9 +37,8 @@ public class AppSinkServiceImpl implements AppSinkService {
     Logger logger = LoggerFactory.getLogger(AppSinkServiceImpl.class);
     @Autowired
     private NewsSwitchProperties newsSwitchProperties;
-
-    private static String APP_KEY = JPushEnum.J_PUSH_APP_KEY.getMessage();
-    private static String  MASTER_SECRET = JPushEnum.J_PUSH_MASTER_SECRET.getMessage();
+    @Autowired
+    private JpushProperties jpushProperties;
 
     /**
      * 推送消息
@@ -105,8 +97,10 @@ public class AppSinkServiceImpl implements AppSinkService {
             platform = Platform.all();
         } else if (platFromType.equals(JPushEnum.J_PUSH_MASTER_ANDROID.getCode())) {
             platform = Platform.android();
-        } else {
+        } else if(platFromType.equals(JPushEnum.J_PUSH_MASTER_IOS.getCode())){
             platform = Platform.ios();
+        }else {
+            throw new JnSpringCloudException(JPushExceptionEnum.JPUSH_PLATFROMTYPE_NOT_EXIST);
         }
         jPushData.setPlatform(platform);
 
@@ -121,10 +115,10 @@ public class AppSinkServiceImpl implements AppSinkService {
             }
         }
         jPushData.setAudience(audience);
-        logger.info("\napp消息推送,调用激光推送接口,构建接口所需参数:【{}】",jPushData.toString());
+        logger.info("\napp消息推送,调用极光推送接口,构建接口所需参数:【{}】",jPushData.toString());
         PushPayload payload = JPushUtil.buildPushObject(jPushData);
         try {
-            pushResult = new JPushClient(MASTER_SECRET, APP_KEY).sendPush(payload);
+            pushResult = new JPushClient(jpushProperties.getMasterSecret(), jpushProperties.getAppKey()).sendPush(payload);
         } catch (Exception e) {
             throw new JnSpringCloudException(NewsExceptionEnum.JPUSH_ERROR);
         }

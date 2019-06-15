@@ -299,9 +299,9 @@ export default {
       this.menuVisible = true
       this.treeSelect = data
       var menu = document.querySelector('#menu-div')
-      menu.style.left = MouseEvent.clientX - 200 + 'px'
+      menu.style.left = MouseEvent.clientX + 'px'
       document.addEventListener('click', this.closeTree)
-      menu.style.top = MouseEvent.clientY - 80 + 'px'
+      menu.style.top = MouseEvent.clientY + 'px'
       console.log('右键被点击的data:', data)
     },
     closeTree() {
@@ -444,6 +444,7 @@ export default {
     margin-top: 15px;
   }
   .menu-div{
+    position: fixed;
     margin: 0 0;
     width:130px;
     height:140px;
@@ -451,7 +452,7 @@ export default {
     border: 1px solid #999999;
     border-radius: 5px;
     background-color: #f4f4f4;
-    position: absolute;
+    /* position: absolute; */
     z-index:999;
   }
 

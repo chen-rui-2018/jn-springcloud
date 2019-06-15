@@ -22,7 +22,7 @@ Vue.prototype.$echarts = echarts
 //   ak: 'KVelCif7fs2D19DQVz9W6fYEnNbEWE8k'
 // })
 Vue.prototype.api = api
-
+Vue.use(ToastPlugin)
 Vue.component('x-table', XTable)
 Vue.component('popup-radio', PopupRadio)
 Vue.component('icon', Icon)

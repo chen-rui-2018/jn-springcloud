@@ -2,6 +2,7 @@ package com.jn.hr.increase.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -71,6 +72,18 @@ public class IncreaseStaffAdd implements Serializable{
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date modifiedTime;
+	
+	@ApiModelProperty(value = "参保明细对象")
+	private List<InsuredSchemeDetailed> insuredSchemeDetailedList;
+
+	
+	public List<InsuredSchemeDetailed> getInsuredSchemeDetailedList() {
+		return insuredSchemeDetailedList;
+	}
+
+	public void setInsuredSchemeDetailedList(List<InsuredSchemeDetailed> insuredSchemeDetailedList) {
+		this.insuredSchemeDetailedList = insuredSchemeDetailedList;
+	}
 
 	public String getId() {
 		return id;

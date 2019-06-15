@@ -1,6 +1,7 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
-import "@babel/polyfill";
+// import "@babel/polyfill";
+import 'babel-polyfill'
 import Vue from 'vue'
 import App from './App'
 import router from './router'
@@ -16,12 +17,19 @@ import '@/css/theme.scss'
 // import VueAwesomeSwiper from 'vue-awesome-swiper'
 import '@/css/theme.css'
 import store from './store'
+import { getToken, setToken, removeToken,setUserInfo,getUserInfo,removeUserInfo } from '@/util/auth'
 
 Vue.use(ElementUI)
 // Vue.use(VueAwesomeSwiper, /* { default global options } */)
 
 import api from '@/util/api'
 Vue.prototype.api = api
+Vue.prototype.getToken = getToken
+Vue.prototype.setToken = setToken
+Vue.prototype.removeToken = removeToken
+Vue.prototype.setUserInfo = setUserInfo
+Vue.prototype.getUserInfo = getUserInfo
+Vue.prototype.removeUserInfo = removeUserInfo
 
 Vue.config.productionTip = false
 

@@ -64,4 +64,15 @@ public class ServiceStatistics  implements Serializable {
     public void setCommentCount(Integer commentCount) {
         this.commentCount = commentCount;
     }
+
+    @Override
+    public String toString() {
+        return "ServiceStatistics{" +
+                "orgCount=" + orgCount +
+                ", productCount=" + productCount +
+                ", advisorCount=" + advisorCount +
+                ", requireCount=" + requireCount +
+                ", commentCount=" + commentCount +
+                '}';
+    }
 }

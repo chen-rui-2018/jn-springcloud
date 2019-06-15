@@ -20,7 +20,7 @@
           <div class="agentMid2">
             <ul class="clearfix">
               <li>
-                <div class="itemImg"><img src="@/../static/img/k1.png" alt=""></div>
+                <div class="itemImg"><img src="@/../static/img/k5.png" alt=""></div>
                 <div class="itemInfo">
                   <p>机构</p>
                   <p class="mainColor">{{businessAreaNum.orgNum}}家</p>
@@ -28,34 +28,34 @@
               </li>
               <li class="line"></li>
               <li>
-                <div class="itemImg"><img src="@/../static/img/k2.png" alt=""></div>
+                <div class="itemImg"><img src="@/../static/img/k1.png" alt=""></div>
                 <div class="itemInfo">
                   <p>产品</p>
-                  <p class="mainColor">{{businessAreaNum.productNum}}家</p>
+                  <p class="mainColor">{{businessAreaNum.productNum}}项</p>
+                </div>
+              </li>
+              <li class="line"></li>
+              <li>
+                <div class="itemImg"><img src="@/../static/img/k2.png" alt=""></div>
+                <div class="itemInfo">
+                  <p>专员</p>
+                  <p class="mainColor">{{businessAreaNum.advisorNum}}名</p>
                 </div>
               </li>
               <li class="line"></li>
               <li>
                 <div class="itemImg"><img src="@/../static/img/k3.png" alt=""></div>
                 <div class="itemInfo">
-                  <p>专员</p>
-                  <p class="mainColor">{{businessAreaNum.advisorNum}}家</p>
+                  <p>评价</p>
+                  <p class="mainColor">{{businessAreaNum.evaluateNum}}条</p>
                 </div>
               </li>
               <li class="line"></li>
               <li>
                 <div class="itemImg"><img src="@/../static/img/k4.png" alt=""></div>
                 <div class="itemInfo">
-                  <p>评价</p>
-                  <p class="mainColor">{{businessAreaNum.evaluateNum}}家</p>
-                </div>
-              </li>
-              <li class="line"></li>
-              <li>
-                <div class="itemImg"><img src="@/../static/img/k5.png" alt=""></div>
-                <div class="itemInfo">
                   <p>交易量</p>
-                  <p class="mainColor">{{businessAreaNum.transactionNum}}家</p>
+                  <p class="mainColor">{{businessAreaNum.transactionNum}}笔</p>
                 </div>
               </li>
             </ul>
@@ -135,7 +135,7 @@
                   <!-- 中间下半部分--参考信息、交易均价和交易 begin -->
                   <div class="list-info-bottom-detail clearfix">
                     <!-- 参考信息、交易均价 begin -->
-                    <div class="detail-contact inner-product">
+                    <div class="detail-contact inner-product fl">
                       <div class="search_area text-of" title="王振英 , 包美芬 , 高凤清">顾&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;问：{{i.advisorName}}</div>
                       <div class="text-of mt5">参考价格：{{i.referPrice}}</div>
                       <div>累计
@@ -143,7 +143,7 @@
                     </div>
                     <!-- 参考信息、交易均价 end -->
                     <!-- 评价 begin -->
-                    <div class="detail-evaluate inner-product">
+                    <div class="detail-evaluate inner-product fl">
                       <div class="score">
                         <el-rate v-model="i.evaluationScore*1" disabled text-color="#00a041" :colors="['#00a041', '#00a041', '#00a041']" style="display:inline-block" score-template="{value}">
                         </el-rate>
@@ -156,7 +156,7 @@
                     </div>
                     <!-- 评价 end -->
                     <!-- 交易量 begin -->
-                    <div class="detail-count">
+                    <div class=" fr">
                       <div class="orgBtn fr mainColor" @click="demandRaise(i)">提需求</div>
                     </div>
                     <!-- 交易量 end -->
@@ -351,19 +351,19 @@ export default {
     },
     //判断是否登录
     isLogin() {
-      if (!sessionStorage.userInfo) {
+      if (!this.getToken()) {
         this.islogin = false;
       }
     },
     onlineContact(advisorAccount, advisorName) {
-      if (!sessionStorage.userInfo) {
+      if (!this.getUserInfo()) {
         this.concatVisible = true;
         return;
       }
       this.$router.push({
         path: "/chat",
         query: {
-          fromUser: JSON.parse(sessionStorage.userInfo).account,
+          fromUser: JSON.parse(this.getUserInfo()).account,
           toUser: advisorAccount,
           nickName: advisorName
         }
@@ -674,7 +674,7 @@ export default {
         > span {
           color: #919191;
         }
-        > span.active {
+        > span.active2 {
           color: #00a041;
         }
       }
@@ -692,7 +692,7 @@ export default {
           line-height: 26px;
           cursor: pointer;
         }
-        > span.active {
+        > span.active2 {
           color: #fff;
           background: linear-gradient(to bottom right, #35bf6d, #00a041);
         }

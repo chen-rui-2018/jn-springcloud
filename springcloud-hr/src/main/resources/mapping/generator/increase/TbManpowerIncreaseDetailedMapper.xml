@@ -3,7 +3,7 @@
 <mapper namespace="com.jn.hr.increase.dao.TbManpowerIncreaseDetailedMapper">
   <resultMap id="BaseResultMap" type="com.jn.hr.increase.entity.TbManpowerIncreaseDetailed">
     <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="insured_month" jdbcType="TIMESTAMP" property="insuredMonth" />
+    <result column="insured_month" jdbcType="VARCHAR" property="insuredMonth" />
     <result column="job_number" jdbcType="VARCHAR" property="jobNumber" />
     <result column="project_id" jdbcType="VARCHAR" property="projectId" />
     <result column="default_cardinal_number" jdbcType="INTEGER" property="defaultCardinalNumber" />
@@ -108,7 +108,7 @@
       project_id, default_cardinal_number, corporate_contribution_ratio, 
       individual_contribution_ratio, project_type
       )
-    values (#{id,jdbcType=VARCHAR}, #{insuredMonth,jdbcType=TIMESTAMP}, #{jobNumber,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=VARCHAR}, #{insuredMonth,jdbcType=VARCHAR}, #{jobNumber,jdbcType=VARCHAR}, 
       #{projectId,jdbcType=VARCHAR}, #{defaultCardinalNumber,jdbcType=INTEGER}, #{corporateContributionRatio,jdbcType=INTEGER}, 
       #{individualContributionRatio,jdbcType=INTEGER}, #{projectType,jdbcType=TINYINT}
       )
@@ -146,7 +146,7 @@
         #{id,jdbcType=VARCHAR},
       </if>
       <if test="insuredMonth != null">
-        #{insuredMonth,jdbcType=TIMESTAMP},
+        #{insuredMonth,jdbcType=VARCHAR},
       </if>
       <if test="jobNumber != null">
         #{jobNumber,jdbcType=VARCHAR},
@@ -181,7 +181,7 @@
         id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.insuredMonth != null">
-        insured_month = #{record.insuredMonth,jdbcType=TIMESTAMP},
+        insured_month = #{record.insuredMonth,jdbcType=VARCHAR},
       </if>
       <if test="record.jobNumber != null">
         job_number = #{record.jobNumber,jdbcType=VARCHAR},
@@ -209,7 +209,7 @@
   <update id="updateByExample" parameterType="map">
     update tb_manpower_increase_detailed
     set id = #{record.id,jdbcType=VARCHAR},
-      insured_month = #{record.insuredMonth,jdbcType=TIMESTAMP},
+      insured_month = #{record.insuredMonth,jdbcType=VARCHAR},
       job_number = #{record.jobNumber,jdbcType=VARCHAR},
       project_id = #{record.projectId,jdbcType=VARCHAR},
       default_cardinal_number = #{record.defaultCardinalNumber,jdbcType=INTEGER},
@@ -224,7 +224,7 @@
     update tb_manpower_increase_detailed
     <set>
       <if test="insuredMonth != null">
-        insured_month = #{insuredMonth,jdbcType=TIMESTAMP},
+        insured_month = #{insuredMonth,jdbcType=VARCHAR},
       </if>
       <if test="jobNumber != null">
         job_number = #{jobNumber,jdbcType=VARCHAR},
@@ -249,7 +249,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.hr.increase.entity.TbManpowerIncreaseDetailed">
     update tb_manpower_increase_detailed
-    set insured_month = #{insuredMonth,jdbcType=TIMESTAMP},
+    set insured_month = #{insuredMonth,jdbcType=VARCHAR},
       job_number = #{jobNumber,jdbcType=VARCHAR},
       project_id = #{projectId,jdbcType=VARCHAR},
       default_cardinal_number = #{defaultCardinalNumber,jdbcType=INTEGER},

@@ -87,11 +87,12 @@
                 <el-table-column
                   label="业务序号"
                   width="180"
+                   type="index"
                   align="center"
                   >
-                  <template slot-scope="scope">
+                 <!--  <template slot-scope="scope">
                     <span @click="goservedetail(scope.row.id)">{{scope.row.id}} </span>
-                  </template>
+                  </template> -->
                 </el-table-column>
                 <el-table-column
                   label="业务名称"

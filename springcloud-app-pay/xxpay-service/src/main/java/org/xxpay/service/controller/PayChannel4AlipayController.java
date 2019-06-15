@@ -86,6 +86,7 @@ public class PayChannel4AlipayController {
         model.setTotalAmount(AmountUtil.convertCent2Dollar(payOrder.getAmount().toString()));
         model.setBody(payOrder.getBody());
         model.setProductCode("QUICK_WAP_PAY");
+        model.setStoreId(AlipayConstant.ALIPAY_STORE_ID);
         model.setTimeoutExpress(createTimeoutExpress(payOrder.getDuration()));
         // 获取objParams参数
         String objParams = payOrder.getExtra();
@@ -161,6 +162,7 @@ public class PayChannel4AlipayController {
         model.setTotalAmount(AmountUtil.convertCent2Dollar(payOrder.getAmount().toString()));
         model.setBody(payOrder.getBody());
         model.setProductCode("FAST_INSTANT_TRADE_PAY");
+        model.setStoreId(AlipayConstant.ALIPAY_STORE_ID);
         model.setTimeoutExpress(createTimeoutExpress(payOrder.getDuration()));
         // 获取objParams参数
         String objParams = payOrder.getExtra();
@@ -239,6 +241,7 @@ public class PayChannel4AlipayController {
         model.setTotalAmount(AmountUtil.convertCent2Dollar(payOrder.getAmount().toString()));
         model.setBody(payOrder.getBody());
         model.setProductCode("QUICK_MSECURITY_PAY");
+        model.setStoreId(AlipayConstant.ALIPAY_STORE_ID);
         model.setTimeoutExpress(createTimeoutExpress(payOrder.getDuration()));
         alipay_request.setBizModel(model);
         // 设置异步通知地址
@@ -302,6 +305,7 @@ public class PayChannel4AlipayController {
         model.setSubject(payOrder.getSubject());
         model.setTotalAmount(AmountUtil.convertCent2Dollar(payOrder.getAmount().toString()));
         model.setBody(payOrder.getBody());
+        model.setStoreId(AlipayConstant.ALIPAY_STORE_ID);
         model.setTimeoutExpress(createTimeoutExpress(payOrder.getDuration()));
         // 获取objParams参数
         String objParams = payOrder.getExtra();
@@ -390,6 +394,7 @@ public class PayChannel4AlipayController {
         model.setOutRequestNo(refundOrderId);
         model.setRefundAmount(AmountUtil.convertCent2Dollar(refundOrder.getRefundAmount().toString()));
         model.setRefundReason("正常退款");
+        model.setStoreId(AlipayConstant.ALIPAY_STORE_ID);
         request.setBizModel(model);
         Map<String, Object> map = new HashMap<>();
         map.put("refundOrderId", refundOrderId);

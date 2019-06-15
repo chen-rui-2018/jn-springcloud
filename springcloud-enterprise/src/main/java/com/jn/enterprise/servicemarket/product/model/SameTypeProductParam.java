@@ -34,4 +34,12 @@ public class SameTypeProductParam extends Page implements Serializable {
     public void setSignoryId(String signoryId) {
         this.signoryId = signoryId;
     }
+
+    @Override
+    public String toString() {
+        return "SameTypeProductParam{" +
+                "signoryId='" + signoryId + '\'' +
+                ", productType='" + productType + '\'' +
+                '}';
+    }
 }

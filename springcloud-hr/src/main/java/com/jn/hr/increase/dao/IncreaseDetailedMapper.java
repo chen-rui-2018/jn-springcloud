@@ -7,4 +7,6 @@ import com.jn.hr.increase.model.IncreaseDetailed;
 public interface IncreaseDetailedMapper {	
 	
 	List<IncreaseDetailed> selectByMonth(IncreaseDetailed increaseDetailed);
+	
+	void insertBatch(List<IncreaseDetailed> records);
 }

@@ -4,6 +4,25 @@
 
 
     <!-- 停车位列表 -->
+    <select id="getParkingSpaceProtocol" resultType="com.jn.park.parking.vo.ParkingSpaceProtocolVo" parameterType="com.jn.park.parking.model.ParkingSpaceProtocolParam">
+        SELECT
+        t.area_name as "areaname",
+        t.name as "name",
+        t.space_serial as "spaceserial",
+        t.car_license as "carlicense",
+        '1' as "carcount",
+        t.start_time as "starttime",
+        t.end_time as "endtime",
+        t.actual_money as "actualmoney"
+        FROM tb_parking_space_rental t
+        WHERE t.record_status = 1
+        AND t.area_id_ = #{areaId,jdbcType=VARCHAR}
+        AND t.account = #{name,jdbcType=VARCHAR}
+
+
+    </select>
+
+    <!-- 停车位列表 -->
     <select id="getParkingSpaceList" resultType="com.jn.park.parking.vo.ParkingSpaceVo" parameterType="com.jn.park.parking.model.ParkingSpaceParam">
         select
         s.space_id_ as "spaceId"

@@ -1,4 +1,4 @@
-package com.jn.news.app.enums;
+package com.jn.news.enums;
 
 import com.jn.common.api.CodeAndMsg;
 
@@ -9,12 +9,7 @@ import com.jn.common.api.CodeAndMsg;
  * @modified By:
  */
 public enum JPushEnum implements CodeAndMsg  {
-    // 测试环境
-    J_PUSH_APP_KEY("appKey","080b2d2bf80c41248e159dba"),
-    J_PUSH_MASTER_SECRET("Master_Secret","2273860de366bd73e545d858"),
-    // 生产环境
-//    J_PUSH_APP_KEY("appKey","7b20e6375099fe80ff706dca"),
-//    J_PUSH_MASTER_SECRET("Master_Secret","2a35e0e5980a109b10814468"),
+    
     J_PUSH_MASTER_ANDROID("ANDROID","安卓"),
     J_PUSH_MASTER_IOS("IOS","IOS"),
 

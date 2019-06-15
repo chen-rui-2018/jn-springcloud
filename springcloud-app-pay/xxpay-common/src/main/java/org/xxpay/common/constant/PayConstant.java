@@ -141,5 +141,10 @@ public class PayConstant {
 	 * 对账标识为有效状态
 	 * */
 	public static final Integer RECONCILIATION_IDENT_EFFECTIVE_STATUS = 1;
+
+	/**
+	 * 对账接口为有效状态
+	 * */
+	public static final Integer RECONCILIATION_INTERFACE_EFFECTIVE_STATUS = 1;
 	
 }

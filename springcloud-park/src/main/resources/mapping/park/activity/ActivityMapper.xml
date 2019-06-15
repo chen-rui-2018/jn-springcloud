@@ -97,13 +97,19 @@
         ,t2.code_name as "parkName"
         ,t1.acti_address as "actiAddress"
         , date_format(t1.acti_start_time,'%Y-%m-%d %H:%i:%s') as "actiStartTime"
-        ,t1.acti_status as "actiStatus"
+        ,case
+         when (t1.acti_status = '4') then "4"
+         when(t1.acti_end_time &lt; now()) then "3"
+         when(t1.apply_start_time &lt; now() and t1.apply_end_time &gt; now()) then "2"
+         when(t1.apply_end_time &lt; now() and t1.acti_end_time &gt; now()) then "6"
+        end
+         as "actiStatus"  <!--活动状态 2报名中 3活动结束4活动取消6报名已结束-->
 
         from tb_activity t1
             left join tb_park_code t2 on t2.id =t1.park_id
             left join tb_activity_type t3 on t3.type_id = t1.acti_type
             where t1.record_status ='1' and t1.acti_status != '1' and  t1.id in (
-            select activity_id from tb_activity_apply where creator_account = #{account} and apply_status=#{applyStatus}
+              select activity_id from tb_activity_apply where creator_account = #{account} and apply_status=#{applyStatus}
             )
             <if test = "actiName != null and actiName != '' ">
                 and t1.acti_name like  concat('%', #{actiName},'%')

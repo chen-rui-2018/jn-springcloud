@@ -17,12 +17,17 @@ export function removeToken() {
 const UserInfo = 'User-Info'
 
 export function setUserInfo(info) {
-  return Cookies.set(UserInfo, info, { path: '/' })
+  return Cookies.set(UserInfo, info, { domain: 'bxgxq.com', path: '/' })
 }
 
 export function getUserInfo() {
-  return Cookies.get(UserInfo, { path: '/' })
+  return Cookies.get(UserInfo, { domain: 'bxgxq.com', path: '/' })
 }
+
 export function removeUserInfo() {
-  return Cookies.remove(UserInfo, { path: '/' })
+  return Cookies.remove(UserInfo, { domain: 'bxgxq.com', path: '/' })
+}
+
+export function getIbpsToken() {
+  return Cookies.get('ibpsoauth', { domain: 'bxgxq.com', path: '/' })
 }

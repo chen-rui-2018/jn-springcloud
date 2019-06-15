@@ -6,5 +6,18 @@
 		select t1.insured_month,count(distinct(t1.insured_month)) as number from tb_manpower_increase_detailed t1
 	</select>
 
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into tb_manpower_increase_detailed
+        ( id, insured_month, job_number, 
+      project_id, default_cardinal_number, corporate_contribution_ratio, 
+      individual_contribution_ratio, project_type
+        ) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id}, #{item.insuredMonth}, #{item.jobNumber}, 
+      #{item.projectId}, #{item.defaultCardinalNumber}, #{item.corporateContributionRatio}, 
+      #{item.individualContributionRatio}, #{item.projectType}
+            )
+        </foreach>
+    </insert>
 </mapper>
 

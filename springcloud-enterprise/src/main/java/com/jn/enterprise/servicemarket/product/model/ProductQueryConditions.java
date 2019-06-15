@@ -113,4 +113,20 @@ public class ProductQueryConditions implements Serializable {
     public void setOrgId(String orgId) {
         this.orgId = orgId;
     }
+
+    @Override
+    public String toString() {
+        return "ProductQueryConditions{" +
+                "popularityWeight=" + popularityWeight +
+                ", praiseWeight=" + praiseWeight +
+                ", serviceWeight=" + serviceWeight +
+                ", otherFactorScore=" + otherFactorScore +
+                ", signoryId='" + signoryId + '\'' +
+                ", orgId='" + orgId + '\'' +
+                ", sortTypes='" + sortTypes + '\'' +
+                ", keyWords='" + keyWords + '\'' +
+                ", productType='" + productType + '\'' +
+                ", commentProductId='" + commentProductId + '\'' +
+                '}';
+    }
 }

@@ -75,4 +75,16 @@ public class ServiceProductDetail implements Serializable {
     public void setAdvisorName(String advisorName) {
         this.advisorName = advisorName;
     }
+
+    @Override
+    public String toString() {
+        return "ServiceProductDetail{" +
+                "content=" + content +
+                ", approvalComments='" + approvalComments + '\'' +
+                ", conName='" + conName + '\'' +
+                ", conPhone='" + conPhone + '\'' +
+                ", advisorName='" + advisorName + '\'' +
+                ", releaseTime='" + releaseTime + '\'' +
+                '}';
+    }
 }

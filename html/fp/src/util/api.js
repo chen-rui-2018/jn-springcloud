@@ -1,6 +1,32 @@
 ﻿import axios from "axios"
 import { BASE_URL } from './url'
-import { getToken, removeToken, removeUserInfo } from '@/util/auth'
+import { getToken, setToken, removeToken, removeUserInfo, getIbpsToken } from '@/util/auth'
+
+const verifyToken = () => {
+  return new Promise((resolve, reject) => {
+    const token = getToken()
+    if (getIbpsToken() && !token) {
+      axios({
+        url: BASE_URL + 'springcloud-app-system/authLogin',
+        method: 'post'
+      })
+        .then((res) => {
+          if (res.data.code === '0000') {
+            if (res.data.data !== null) {
+              // console.log('================>authLogin请求返回：' + data.data)
+              setToken(res.data.data)
+              resolve(res.data.data)
+            } else {
+              reject(res.data.result)
+            }
+          }
+        })
+    } else {
+      resolve(token)
+    }
+  })
+}
+
 export default {
     host: BASE_URL,//api的域名提出来放这里
     apiURL:{ //API路径统一管理,需要的路径在这里加就可以了
@@ -65,7 +91,7 @@ export default {
         appointment:"springcloud-enterprise/pd/online/onlineBooking",//预约申报
         getTechnologyInfoNum:"springcloud-enterprise/guest/technologyFinancial/financialProductController/getTechnologyInfoNum",//科技金融首页投资人数，金融产品数，金融机构数
         getFinancialProList:"springcloud-enterprise/guest/technologyFinancial/financialProductController/getFinancialProductList",//金融产品列表查询
-        getAssureType:"springcloud-enterprise//technologyFinancial/financialProductController/getFinancialProductAssureType",//金融产品担保方式
+        getAssureType:"springcloud-enterprise/guest/technologyFinancial/financialProductController/getFinancialProductAssureType",//金融产品担保方式
 
         getActivityDetailsFm:"springcloud-enterprise/guest/serviceMarket/org/getActivityDetailsForManage",//获取服务机构详情
         findOrgProductList:"springcloud-enterprise/servicemarket/product/web/findOrgProductList",//机构-服务产品列表
@@ -248,14 +274,15 @@ export default {
         addCareOperate:"springcloud-park/park/manage/care/addCareOperate",// 用户添加关注操作
         cancelCareOperate:"springcloud-park/park/manage/care/cancelCareOperate",//用户取消关注操作
         getDataStatistics:"springcloud-enterprise/guest/MarketIndexController/getDataStatistics",//获取企业，机构，活动，服务专员数量
+        queryOnlineInfo:"springcloud-enterprise/pd/online/queryOnlineInfo",//通过公告ID和登录人查询预约信息
     },
     setToken: function (obj) {   //设置token在请求头上面
-        axios.interceptors.request.use(function (config) {
-            config.headers['token'] = obj
-            return config;
-        }, function (error) {
-            return Promise.reject(error);
-        })
+        // axios.interceptors.request.use(function (config) {
+        //     config.headers['token'] = obj
+        //     return config;
+        // }, function (error) {
+        //     return Promise.reject(error);
+        // })
     },
     get: function (url, data, callback, error) {
         let _this = this
@@ -272,30 +299,34 @@ export default {
         url = this.apiURL[url];
         if(!data) data = {}
 
-        axios.get(this.host + url, {
+      verifyToken()
+        .then(token => {
+          axios.get(this.host + url, {
             params: data || {},
             headers:{
-                'token': getToken()
+              'token': token
             }
-        })
+          })
             .then(function (response) {
-                if (typeof callback === "function"){
-                    if(response.data.code == "index"){
-                        removeToken()
-                        removeUserInfo()
-                        location.href="#/";
-                        return
-                    }
-                    callback(response.data);
+              if (typeof callback === "function"){
+                if(response.data.code == "index"){
+                  removeToken()
+                  removeUserInfo()
+                  location.href="#/";
+                  return
                 }
+                callback(response.data);
+              }
 
             })
             .catch(function (err) {
-                if (typeof error === "function")
-                    error(err);
-                else
-                    console.error(err)
+              if (typeof error === "function")
+                error(err);
+              else
+                console.error(err)
             });
+        })
+
 
 
 
@@ -348,31 +379,35 @@ export default {
           var headerSS = 'application/json;charset=UTF-8'
         }
 
-        axios.post(this.host + url, headerType ? data : params,{
+      verifyToken()
+        .then(token => {
+          axios.post(this.host + url, headerType ? data : params,{
             headers: {
-                'Content-Type': headerType ? headerType : headerSS,
-                'token': getToken()
+              'Content-Type': headerType ? headerType : headerSS,
+              'token': token
             }
-        })
-          .then(function (response) {
-            if (typeof callback === "function"){
+          })
+            .then(function (response) {
+              if (typeof callback === "function"){
                 if(response.data.code == "index"){
-                    removeToken()
-                    removeUserInfo()
-                    location.href="#login";
-                    return
+                  removeToken()
+                  removeUserInfo()
+                  location.href="#login";
+                  return
                 }
                 callback(response.data);
-            }
+              }
 
 
-          })
-          .catch(function (err) {
-            if (typeof error === "function")
+            })
+            .catch(function (err) {
+              if (typeof error === "function")
                 error(err);
-            else
+              else
                 console.error(err)
-          });
+            });
+        })
+
 
 
     /**  使用实例
@@ -479,5 +514,4 @@ export default {
     tokenInvalid(){
 
     }
-
 }

@@ -148,4 +148,23 @@ public class UpdateCommonProductShow implements Serializable {
     public void setAdvisorName(String advisorName) {
         this.advisorName = advisorName;
     }
+
+    @Override
+    public String toString() {
+        return "UpdateCommonProductShow{" +
+                "productId='" + productId + '\'' +
+                ", serialNumber='" + serialNumber + '\'' +
+                ", productType='" + productType + '\'' +
+                ", productName='" + productName + '\'' +
+                ", signoryId='" + signoryId + '\'' +
+                ", signoryName='" + signoryName + '\'' +
+                ", referPrice='" + referPrice + '\'' +
+                ", serviceCycle='" + serviceCycle + '\'' +
+                ", orgName='" + orgName + '\'' +
+                ", pictureUrl='" + pictureUrl + '\'' +
+                ", advisorName='" + advisorName + '\'' +
+                ", serviceDetails='" + serviceDetails + '\'' +
+                ", productDetails='" + productDetails + '\'' +
+                '}';
+    }
 }

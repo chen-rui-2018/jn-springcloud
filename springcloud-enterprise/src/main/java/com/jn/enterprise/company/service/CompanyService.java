@@ -113,4 +113,11 @@ public interface CompanyService {
      */
     Boolean updateCompanyInfoAfterPay(UpdateCompanyInfoParam updateCompanyInfoParam);
 
+    /**
+     * 查询当前企业信息
+     * @param account
+     * @return
+     */
+    ServiceCompany getCurCompanyInfo(String account);
+
 }

@@ -86,6 +86,9 @@
               list-type="picture-card"
               :on-success="homePageuploadsuccess"
               :headers="headers"
+              :limit="1"
+              :on-exceed="handleExceed"
+              :on-remove="deletHome"
               :file-list="fileList"
               >
               <i class="el-icon-plus"></i>
@@ -94,9 +97,12 @@
             <el-form-item label="合同尾页：">
               <el-upload
               :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
-              list-type="picture-card"
+              
               :on-success="endPageuploadsuccess"
               :headers="headers"
+              :limit="1"
+              :on-exceed="handleExceed"
+              :on-remove="deletEnd"
               :file-list="fileList2"
               >
               <i class="el-icon-plus"></i>
@@ -173,9 +179,18 @@ export default {
     homePageuploadsuccess(file, fileList){
       this.sendData.contractHomePage=file.data
     },
+    deletHome(file, fileList){
+      this.sendData.contractHomePage=""
+    },
     endPageuploadsuccess(file, fileList){
       this.sendData.contractEndPage=file.data
-    }
+    },
+    deletEnd(file, fileList){
+      this.sendData.contractEndPage=""
+    },
+    handleExceed(files, fileList) {
+      this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件`);
+    },
   }
 }
 </script>

@@ -144,4 +144,21 @@ public class NoticeModifyParam implements Serializable {
     public void setSortField(String sortField) {
         this.sortField = sortField;
     }
+
+    @Override
+    public String toString() {
+        return "NoticeModifyParam{" +
+                "noticeId='" + noticeId + '\'' +
+                ", noticeSerial='" + noticeSerial + '\'' +
+                ", noticeTitle='" + noticeTitle + '\'' +
+                ", startTime='" + startTime + '\'' +
+                ", endTime='" + endTime + '\'' +
+                ", homePopup='" + homePopup + '\'' +
+                ", homeShow='" + homeShow + '\'' +
+                ", platformType='" + platformType + '\'' +
+                ", platformName='" + platformName + '\'' +
+                ", noticeDetails='" + noticeDetails + '\'' +
+                ", sortField='" + sortField + '\'' +
+                '}';
+    }
 }

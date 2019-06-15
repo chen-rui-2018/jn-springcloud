@@ -443,6 +443,7 @@ public class ActivityServiceImpl implements ActivityService {
                 }
             }
         }
+        activitySlimList =  addActivityBrief(activitySlimList);
         return new PaginationData(activitySlimList, objects.getTotal());
     }
 
@@ -710,5 +711,25 @@ public class ActivityServiceImpl implements ActivityService {
             }
         }
         return applyShowList;
+    }
+
+    /**
+     * 添加活动详情简介
+     * @param activitySlimList
+     * @return
+     */
+    public List<ActivitySlim> addActivityBrief( List<ActivitySlim> activitySlimList){
+        for (ActivitySlim show : activitySlimList) {
+            String briefContent = show.getActiDetails();
+            if(StringUtils.isNotBlank(briefContent)){
+                briefContent = briefContent.replaceAll("</?[^>]+>", "");
+                if (StringUtils.isNotBlank(briefContent)) {
+                    String briefSummaries = briefContent.substring(0, briefContent.length() > 100 ? 100 : briefContent.length()-1);
+                    briefSummaries = briefContent.length() > 100 ? briefSummaries + "......" : briefSummaries;
+                    show.setActibrief(briefSummaries);
+                }
+            }
+        }
+        return  activitySlimList;
     }
 }

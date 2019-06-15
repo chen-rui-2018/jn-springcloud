@@ -133,4 +133,20 @@ public class NoticeAddParam implements Serializable {
     public void setPlatformType(String platformType) {
         this.platformType = platformType;
     }
+
+    @Override
+    public String toString() {
+        return "NoticeAddParam{" +
+                "noticeSerial='" + noticeSerial + '\'' +
+                ", noticeTitle='" + noticeTitle + '\'' +
+                ", startTime='" + startTime + '\'' +
+                ", endTime='" + endTime + '\'' +
+                ", homePopup='" + homePopup + '\'' +
+                ", homeShow='" + homeShow + '\'' +
+                ", platformType='" + platformType + '\'' +
+                ", platformName='" + platformName + '\'' +
+                ", noticeDetails='" + noticeDetails + '\'' +
+                ", sortField='" + sortField + '\'' +
+                '}';
+    }
 }

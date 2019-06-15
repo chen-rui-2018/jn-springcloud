@@ -29,6 +29,12 @@ public class TbActivity implements Serializable {
 
     private String actiOrganizer;
 
+    private String actiGuideOrganizer;
+
+    private String actiUndertakeOrganizer;
+
+    private String actiCoOrganizer;
+
     private Integer actiNumber;
 
     private String actiPosterUrl;
@@ -163,6 +169,30 @@ public class TbActivity implements Serializable {
 
     public void setActiOrganizer(String actiOrganizer) {
         this.actiOrganizer = actiOrganizer == null ? null : actiOrganizer.trim();
+    }
+
+    public String getActiGuideOrganizer() {
+        return actiGuideOrganizer;
+    }
+
+    public void setActiGuideOrganizer(String actiGuideOrganizer) {
+        this.actiGuideOrganizer = actiGuideOrganizer == null ? null : actiGuideOrganizer.trim();
+    }
+
+    public String getActiUndertakeOrganizer() {
+        return actiUndertakeOrganizer;
+    }
+
+    public void setActiUndertakeOrganizer(String actiUndertakeOrganizer) {
+        this.actiUndertakeOrganizer = actiUndertakeOrganizer == null ? null : actiUndertakeOrganizer.trim();
+    }
+
+    public String getActiCoOrganizer() {
+        return actiCoOrganizer;
+    }
+
+    public void setActiCoOrganizer(String actiCoOrganizer) {
+        this.actiCoOrganizer = actiCoOrganizer == null ? null : actiCoOrganizer.trim();
     }
 
     public Integer getActiNumber() {
@@ -341,6 +371,9 @@ public class TbActivity implements Serializable {
             && (this.getActiAddress() == null ? other.getActiAddress() == null : this.getActiAddress().equals(other.getActiAddress()))
             && (this.getActiCost() == null ? other.getActiCost() == null : this.getActiCost().equals(other.getActiCost()))
             && (this.getActiOrganizer() == null ? other.getActiOrganizer() == null : this.getActiOrganizer().equals(other.getActiOrganizer()))
+            && (this.getActiGuideOrganizer() == null ? other.getActiGuideOrganizer() == null : this.getActiGuideOrganizer().equals(other.getActiGuideOrganizer()))
+            && (this.getActiUndertakeOrganizer() == null ? other.getActiUndertakeOrganizer() == null : this.getActiUndertakeOrganizer().equals(other.getActiUndertakeOrganizer()))
+            && (this.getActiCoOrganizer() == null ? other.getActiCoOrganizer() == null : this.getActiCoOrganizer().equals(other.getActiCoOrganizer()))
             && (this.getActiNumber() == null ? other.getActiNumber() == null : this.getActiNumber().equals(other.getActiNumber()))
             && (this.getActiPosterUrl() == null ? other.getActiPosterUrl() == null : this.getActiPosterUrl().equals(other.getActiPosterUrl()))
             && (this.getActiStatus() == null ? other.getActiStatus() == null : this.getActiStatus().equals(other.getActiStatus()))
@@ -378,6 +411,9 @@ public class TbActivity implements Serializable {
         result = prime * result + ((getActiAddress() == null) ? 0 : getActiAddress().hashCode());
         result = prime * result + ((getActiCost() == null) ? 0 : getActiCost().hashCode());
         result = prime * result + ((getActiOrganizer() == null) ? 0 : getActiOrganizer().hashCode());
+        result = prime * result + ((getActiGuideOrganizer() == null) ? 0 : getActiGuideOrganizer().hashCode());
+        result = prime * result + ((getActiUndertakeOrganizer() == null) ? 0 : getActiUndertakeOrganizer().hashCode());
+        result = prime * result + ((getActiCoOrganizer() == null) ? 0 : getActiCoOrganizer().hashCode());
         result = prime * result + ((getActiNumber() == null) ? 0 : getActiNumber().hashCode());
         result = prime * result + ((getActiPosterUrl() == null) ? 0 : getActiPosterUrl().hashCode());
         result = prime * result + ((getActiStatus() == null) ? 0 : getActiStatus().hashCode());
@@ -418,6 +454,9 @@ public class TbActivity implements Serializable {
         sb.append(", actiAddress=").append(actiAddress);
         sb.append(", actiCost=").append(actiCost);
         sb.append(", actiOrganizer=").append(actiOrganizer);
+        sb.append(", actiGuideOrganizer=").append(actiGuideOrganizer);
+        sb.append(", actiUndertakeOrganizer=").append(actiUndertakeOrganizer);
+        sb.append(", actiCoOrganizer=").append(actiCoOrganizer);
         sb.append(", actiNumber=").append(actiNumber);
         sb.append(", actiPosterUrl=").append(actiPosterUrl);
         sb.append(", actiStatus=").append(actiStatus);

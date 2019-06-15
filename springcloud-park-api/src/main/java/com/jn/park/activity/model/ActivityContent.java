@@ -38,8 +38,14 @@ public class ActivityContent extends Page implements Serializable {
     private String actiAddress;
     @ApiModelProperty(value = "活动费用",example = "0")
     private BigDecimal actiCost;
-    @ApiModelProperty(value = "活动主办方",example = "园区管委会")
+    @ApiModelProperty(value = "活动主办单位", required = true, example = "园区管委会")
     private String actiOrganizer;
+    @ApiModelProperty(value = "活动指导单位", example = "园区管委会")
+    private String actiGuideOrganizer;
+    @ApiModelProperty(value = "活动承办单位", example = "园区管委会")
+    private String actiUndertakeOrganizer;
+    @ApiModelProperty(value = "活动协办单位", example = "园区管委会")
+    private String actiCoOrganizer;
     @ApiModelProperty(value = "活动人数",example = "100")
     private Integer actiNumber;
     @ApiModelProperty(value = "活动海报路径",example = "**/**/**.png")
@@ -208,5 +214,57 @@ public class ActivityContent extends Page implements Serializable {
 
     public void setApplyCheck(String applyCheck) {
         this.applyCheck = applyCheck;
+    }
+
+    public String getActiGuideOrganizer() {
+        return actiGuideOrganizer;
+    }
+
+    public void setActiGuideOrganizer(String actiGuideOrganizer) {
+        this.actiGuideOrganizer = actiGuideOrganizer;
+    }
+
+    public String getActiUndertakeOrganizer() {
+        return actiUndertakeOrganizer;
+    }
+
+    public void setActiUndertakeOrganizer(String actiUndertakeOrganizer) {
+        this.actiUndertakeOrganizer = actiUndertakeOrganizer;
+    }
+
+    public String getActiCoOrganizer() {
+        return actiCoOrganizer;
+    }
+
+    public void setActiCoOrganizer(String actiCoOrganizer) {
+        this.actiCoOrganizer = actiCoOrganizer;
+    }
+
+    @Override
+    public String toString() {
+        return "ActivityContent{" +
+                "id='" + id + '\'' +
+                ", actiType='" + actiType + '\'' +
+                ", actiName='" + actiName + '\'' +
+                ", actiStartTime='" + actiStartTime + '\'' +
+                ", actiEndTime='" + actiEndTime + '\'' +
+                ", applyEndTime='" + applyEndTime + '\'' +
+                ", mesSendTime='" + mesSendTime + '\'' +
+                ", parkId='" + parkId + '\'' +
+                ", actiAddress='" + actiAddress + '\'' +
+                ", actiCost=" + actiCost +
+                ", actiOrganizer='" + actiOrganizer + '\'' +
+                ", actiGuideOrganizer='" + actiGuideOrganizer + '\'' +
+                ", actiUndertakeOrganizer='" + actiUndertakeOrganizer + '\'' +
+                ", actiCoOrganizer='" + actiCoOrganizer + '\'' +
+                ", actiNumber=" + actiNumber +
+                ", actiPosterUrl='" + actiPosterUrl + '\'' +
+                ", actiStatus='" + actiStatus + '\'' +
+                ", isIndex='" + isIndex + '\'' +
+                ", actiOrder=" + actiOrder +
+                ", actiDetail='" + actiDetail + '\'' +
+                ", showApplyNum='" + showApplyNum + '\'' +
+                ", applyCheck='" + applyCheck + '\'' +
+                '}';
     }
 }

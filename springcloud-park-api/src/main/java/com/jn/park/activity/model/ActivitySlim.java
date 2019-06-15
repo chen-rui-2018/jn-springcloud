@@ -49,6 +49,16 @@ public class ActivitySlim implements Serializable {
     private String issueTime;
     @ApiModelProperty(value = "活动详情")
     private String actiDetails;
+    @ApiModelProperty(value = "活动简介")
+    private String actibrief;
+
+    public String getActibrief() {
+        return actibrief;
+    }
+
+    public void setActibrief(String actibrief) {
+        this.actibrief = actibrief;
+    }
 
     public String getActiViews() {
         return actiViews;
@@ -206,6 +216,7 @@ public class ActivitySlim implements Serializable {
                 ", actiViews='" + actiViews + '\'' +
                 ", issueTime='" + issueTime + '\'' +
                 ", actiDetails='" + actiDetails + '\'' +
+                ", actibrief='" + actibrief + '\'' +
                 '}';
     }
 }

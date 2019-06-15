@@ -23,10 +23,30 @@ public class NoticeDetailShow implements Serializable {
     private String endTime;
     @ApiModelProperty(value="公告内容,页面展示")
     private String noticeDetails;
+    @ApiModelProperty(value="公告简介,页面展示")
+    private String noticeBiref;
+    @ApiModelProperty(value="是否置顶 0 否 1 是")
+    private String isStick;
     @ApiModelProperty(value="发布人名称")
     private String publishName;
     @ApiModelProperty(value="发布时间")
     private String createdTime;
+
+    public String getIsStick() {
+        return isStick;
+    }
+
+    public void setIsStick(String isStick) {
+        this.isStick = isStick;
+    }
+
+    public String getNoticeBiref() {
+        return noticeBiref;
+    }
+
+    public void setNoticeBiref(String noticeBiref) {
+        this.noticeBiref = noticeBiref;
+    }
 
     public String getCreatedTime() {
         return createdTime;
@@ -82,5 +102,20 @@ public class NoticeDetailShow implements Serializable {
 
     public void setPublishName(String publishName) {
         this.publishName = publishName;
+    }
+
+    @Override
+    public String toString() {
+        return "NoticeDetailShow{" +
+                "noticeId='" + noticeId + '\'' +
+                ", noticeTitle='" + noticeTitle + '\'' +
+                ", startTime='" + startTime + '\'' +
+                ", endTime='" + endTime + '\'' +
+                ", noticeDetails='" + noticeDetails + '\'' +
+                ", noticeBiref='" + noticeBiref + '\'' +
+                ", isStick='" + isStick + '\'' +
+                ", publishName='" + publishName + '\'' +
+                ", createdTime='" + createdTime + '\'' +
+                '}';
     }
 }

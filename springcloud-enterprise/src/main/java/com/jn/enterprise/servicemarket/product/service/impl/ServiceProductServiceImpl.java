@@ -308,6 +308,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         for(HotProducts product : products){
             product.setPictureUrl(IBPSFileUtils.getFilePath(product.getPictureUrl()));
         }
+        products = addProductBrief(products);
         return new PaginationData(products,object==null?0:object.getTotal());
     }
     @ServiceLog(doAction = "web前台服务产品详情")
@@ -669,5 +670,25 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         } else {
             throw new JnSpringCloudException(ServiceProductExceptionEnum.PRODUCT_SEND_ERROR);
         }
+    }
+
+    /**
+     * 热门产品添加简介
+     * @param productList
+     * @return
+     */
+  private  List<HotProducts> addProductBrief(List<HotProducts> productList){
+        for (HotProducts show : productList) {
+            String briefContent = show.getProductDetails();
+            if(StringUtils.isNotBlank(briefContent)){
+                briefContent = briefContent.replaceAll("</?[^>]+>", "");
+                if (StringUtils.isNotBlank(briefContent)) {
+                    String briefSummaries = briefContent.substring(0, briefContent.length() > 100 ? 100 : briefContent.length());
+                    briefSummaries = briefContent.length() > 100 ? briefSummaries + "......" : briefSummaries;
+                    show.setProductBrief(briefSummaries);
+                }
+            }
+        }
+        return  productList;
     }
 }

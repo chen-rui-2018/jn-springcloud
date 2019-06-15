@@ -33,6 +33,16 @@ public class HotProducts  implements Serializable {
     private Integer ratingCount;
     @ApiModelProperty(value = "产品详情")
     private String productDetails;
+    @ApiModelProperty(value = "产品简介")
+    private String productBrief;
+
+    public String getProductBrief() {
+        return productBrief;
+    }
+
+    public void setProductBrief(String productBrief) {
+        this.productBrief = productBrief;
+    }
 
     public String getProductId() {
         return productId;
@@ -117,7 +127,8 @@ public class HotProducts  implements Serializable {
                 ", orgCount=" + orgCount +
                 ", advisorCount=" + advisorCount +
                 ", ratingCount=" + ratingCount +
-                ", productDetails=" + productDetails +
+                ", productDetails='" + productDetails + '\'' +
+                ", productBrief='" + productBrief + '\'' +
                 '}';
     }
 }

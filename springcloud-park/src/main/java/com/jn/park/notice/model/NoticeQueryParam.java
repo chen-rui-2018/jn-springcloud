@@ -59,4 +59,14 @@ public class NoticeQueryParam extends Page implements Serializable {
     public void setKeyWord(String keyWord) {
         this.keyWord = keyWord;
     }
+
+    @Override
+    public String toString() {
+        return "NoticeQueryParam{" +
+                "noticeStatus='" + noticeStatus + '\'' +
+                ", homePopup='" + homePopup + '\'' +
+                ", homeShow='" + homeShow + '\'' +
+                ", keyWord='" + keyWord + '\'' +
+                '}';
+    }
 }

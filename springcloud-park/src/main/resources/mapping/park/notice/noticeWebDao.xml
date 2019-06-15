@@ -79,6 +79,7 @@
     <select id="noticeListApp" resultType="com.jn.park.notice.model.NoticeDetailShow">
       select
           t1.id as "noticeId"
+        ,t1.is_stick as "isStick"
         ,t1.notice_title as "noticeTitle"
         ,t1.notice_serial as "noticeSerial"
         ,DATE_FORMAT(t1.start_time,"%Y-%m-%d") as "startTime"
@@ -90,12 +91,13 @@
         left join tb_notice_details t2 on t1.id=t2.notice_id
         where t1.record_status = 1  and  t1.notice_status = '1'
         and (t1.platform_type = 'P002' or t1.platform_type= 'P001' )
-        order by t1.sort_field,t1.created_time desc
+        order by  t1.is_stick desc,t1.sort_field,t1.created_time desc
   </select>
     <!--门户公告列表-->
     <select id="noticeListPortal" resultType="com.jn.park.notice.model.NoticeDetailShow">
       select
           t1.id as "noticeId"
+        ,t1.is_stick as "isStick"
         ,t1.notice_title as "noticeTitle"
         ,t1.notice_serial as "noticeSerial"
         ,DATE_FORMAT(t1.start_time,"%Y-%m-%d") as "startTime"
@@ -107,7 +109,7 @@
         left join tb_notice_details t2 on t1.id=t2.notice_id
         where t1.record_status = 1  and  t1.notice_status = '1'
         and (t1.platform_type = 'P003' or t1.platform_type= 'P001' )
-        order by t1.sort_field,t1.created_time desc
+        order by t1.is_stick desc,t1.sort_field,t1.created_time desc
   </select>
     <!--前端公告详情-->
     <select id="findNoticeDetailsByNoticeId" resultType="com.jn.park.notice.model.NoticeDetailShow">

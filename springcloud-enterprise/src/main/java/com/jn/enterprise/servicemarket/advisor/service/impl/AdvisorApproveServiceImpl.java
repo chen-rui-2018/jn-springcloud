@@ -7,6 +7,7 @@ import com.jn.enterprise.servicemarket.advisor.service.AdvisorApproveService;
 import com.jn.enterprise.servicemarket.org.dao.TbServiceOrgMapper;
 import com.jn.enterprise.servicemarket.org.entity.TbServiceOrg;
 import com.jn.enterprise.servicemarket.org.entity.TbServiceOrgCriteria;
+import com.jn.enterprise.utils.IBPSFileUtils;
 import com.jn.system.log.annotation.ServiceLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,8 +62,10 @@ public class AdvisorApproveServiceImpl implements AdvisorApproveService {
             OrgInfoShow orgInfoShow=new OrgInfoShow();
             orgInfoShow.setOrgId(tbServiceOrg.getOrgId());
             orgInfoShow.setOrgName(tbServiceOrg.getOrgName());
-            orgInfoShow.setOrgLog(tbServiceOrg.getOrgLogo());
             orgInfoShow.setBusinessArea(tbServiceOrg.getBusinessType());
+            if(StringUtils.isNotBlank(tbServiceOrg.getOrgLogo())){
+                orgInfoShow.setOrgLog(IBPSFileUtils.getFilePath(tbServiceOrg.getOrgLogo()));
+            }
             resultList.add(orgInfoShow);
         }
         return resultList;

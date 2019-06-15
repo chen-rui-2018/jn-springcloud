@@ -1,5 +1,6 @@
 package com.jn.enterprise.joinpark.org.controller;
 
+import com.codingapi.tx.annotation.TxTransaction;
 import com.jn.common.model.Result;
 import com.jn.enterprise.joinpark.org.service.OrgJoinService;
 import com.jn.enterprise.servicemarket.org.model.OrgDetailParameter;

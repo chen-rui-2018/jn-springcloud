@@ -116,4 +116,15 @@ public class MyPayBillController extends BaseController {
         return result;
     }
 
+    @ControllerLog(doAction = "我的账单-线下缴费确认回调各业务侧接口")
+    @ApiOperation(value = "我的账单-线下缴费确认回调各业务侧接口",notes = "我的账单-线下缴费确认回调各业务侧接口")
+    @RequestMapping(value = "/callbackServiceSide",method = RequestMethod.POST)
+    @RequiresPermissions("/payment/payAccount/callbackServiceSide")
+    public Result callbackServiceSide(@RequestBody @Validated PayCallbackServiceSideParam payCallbackServiceSideParam){
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        Assert.notNull(payCallbackServiceSideParam.getBillId(),"账单编号不能为空");
+        return myPayBillService.callbackServiceSide(payCallbackServiceSideParam,user);
+    }
+
 }

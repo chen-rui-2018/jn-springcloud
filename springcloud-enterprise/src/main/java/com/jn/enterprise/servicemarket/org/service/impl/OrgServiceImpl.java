@@ -469,6 +469,10 @@ public class OrgServiceImpl implements OrgService {
             if (orgLicense.getAwardTime() != null) {
                 tbServiceOrgLicense.setAwardTime(DateUtils.parseDate(orgLicense.getAwardTime()));
              }
+            if(tbServiceOrgLicense.getCertName()==null){
+                logger.warn("保存服务机构资质信息失败，机构荣誉资质名称不能为空");
+                throw new JnSpringCloudException(OrgExceptionEnum.ORG_HONOR_NAME_NOT_NULL);
+            }
             String certName="营业执照";
             if(tbServiceOrgLicense.getCertName().contains(certName)){
                 //证书类型：1：营业执照    2：执业资质  3：其他

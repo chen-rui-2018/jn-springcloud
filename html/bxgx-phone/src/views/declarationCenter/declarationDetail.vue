@@ -34,7 +34,8 @@
           <!-- </a> -->
         </div>
       </div>
-      <div class="declaration_consult" @click="$router.push({path: '/guest/pd/consult'})"> 咨询 </div>
+
+      <div class="declaration_consult" @click="$router.push({path: '/guest/pd/consult',query:{id:id}})">预约申报</div>
     </div>
   </div>
 </div>

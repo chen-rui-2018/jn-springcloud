@@ -17,6 +17,7 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.xxpay.common.constant.CommonConstants;
 import org.xxpay.common.constant.PayConstant;
 import org.xxpay.common.constant.PayEnum;
 import org.xxpay.common.util.*;
@@ -66,32 +67,44 @@ public class PayOrderController extends BaseController implements PayOrderClient
         _log.info("###### 开始接收商户统一下单请求 ######");
         String logPrefix = "【商户统一下单】";
         ServiceInstance instance = client.getLocalServiceInstance();
-        _log.info("{}/pay/create_order, host:{}, service_id:{}, params:{}", logPrefix, instance.getHost(), instance.getServiceId(), payOrderReq.toString());
+        _log.info("{}/pay/createPayOrder, host:{}, service_id:{}, params:{}", logPrefix, instance.getHost(), instance.getServiceId(), payOrderReq.toString());
 
         try {
+
+            /** step1  校验参数 **/
             JSONObject payOrder = null;
             // 验证参数有效性
             Object object = validatePayParams(payOrderReq);
             if (object instanceof String) {
                 _log.info("{}参数校验不通过:{}", logPrefix, object);
+                _log.info("###### 结束商户统一下单请求 ######");
                 return new Result(PayEnum.ERR_0014.getCode(),(String)object);
             }
             if (object instanceof JSONObject) {
                 payOrder = (JSONObject) object;
             }
             if(payOrder == null) {
+                _log.info("{} validatePayParams验证参数方法异常 ：返回payOrder(JSONObject类型) is null" ,logPrefix);
+                _log.info("###### 结束商户统一下单请求 ######");
                 return new Result(PayEnum.ERR_0010.getCode(),"支付中心下单失败");
             }
-            //创建支付订单
+
+            /** step2  创建支付订单 **/
             String resultStr = payOrderServiceClient.createPayOrder(payOrder.toJSONString());
             _log.info("{}创建支付订单,结果:{}", logPrefix, resultStr);
             if(StringUtils.isEmpty(resultStr)) {
-                return new Result(PayEnum.ERR_0010.getCode(),"创建支付订单失败");
+                _log.info("{} 创建支付订单失败 service响应结果返回空值! " ,logPrefix);
+                _log.info("###### 结束商户统一下单请求 ######");
+                return new Result(PayEnum.ERR_0010.getCode(),"创建支付订单失败 service响应结果返回空值!");
             }
             JSONObject resObj = JSON.parseObject(resultStr);
-            if(resObj == null || !"1".equals(resObj.getString("result"))) {
+            if(resObj == null || !CommonConstants.SUCCESS_CODE.equals(resObj.getString("code"))) {
+                _log.info("{} 创建支付订单失败 service响应结果 = {} " ,resObj.toJSONString());
+                _log.info("###### 结束商户统一下单请求 ######");
                 return new Result(PayEnum.ERR_0010.getCode(),"创建支付订单失败");
             }
+
+            /** step3  请求第三方支付系统下单 **/
             //获取支付渠道ID
             String channelId = payOrder.getString("channelId");
             //响应密钥
@@ -139,6 +152,7 @@ public class PayOrderController extends BaseController implements PayOrderClient
             }
         }catch (Exception e) {
             _log.error(e, "支付异常");
+            _log.info("###### 结束商户统一下单请求 ######");
             return new Result(PayEnum.ERR_0010.getCode(),"支付中心系统异常");
         }
     }
@@ -156,16 +170,22 @@ public class PayOrderController extends BaseController implements PayOrderClient
         _log.info("###### 开始接收商户查询支付订单请求 ######");
         String logPrefix = "【商户支付订单查询】";
         ServiceInstance instance = client.getLocalServiceInstance();
-        _log.info("{}/pay/query_order, host:{}, service_id:{}, params:{}", logPrefix, instance.getHost(), instance.getServiceId(), payOrderQueryReq.toString());
+        _log.info("{}/pay/payOrderQuery, host:{}, service_id:{}, params:{}", logPrefix, instance.getHost(), instance.getServiceId(), payOrderQueryReq.toString());
         try {
+
+            /**step1   校验请求参数 **/
             JSONObject payContext = new JSONObject();
             // 验证参数有效性
             String errorMessage = validateQueryParams(payOrderQueryReq, payContext);
-            if (!"success".equalsIgnoreCase(errorMessage)) {
-                _log.warn(errorMessage);
+            if (!PayConstant.RETURN_VALUE_SUCCESS.equalsIgnoreCase(errorMessage)) {
+                _log.info("{} 参数校验不通过 :{}",logPrefix,errorMessage);
+                _log.info("###### 结束商户查询支付订单请求 ######");
                 return new Result(PayEnum.ERR_0010.getCode(),errorMessage);
             }
             _log.debug("请求参数及签名校验通过");
+
+
+            /**step2  获取订单信息 **/
             // 支付订单号
             String payOrderId = payOrderQueryReq.getPayOrderId();
             // 是否执行回调
@@ -176,22 +196,29 @@ public class PayOrderController extends BaseController implements PayOrderClient
             JSONObject retObj = JSON.parseObject(retStr);
             _log.info("{}查询支付订单,结果:{}", logPrefix, retObj);
             if(!GlobalConstants.SUCCESS_CODE.equals(retObj.getString("code"))) {
+                _log.info("{} 请求service获取订单信息失败 retObj = {}",logPrefix,retObj.toJSONString());
+                _log.info("###### 结束商户查询支付订单请求 ######");
                 return new Result(PayEnum.ERR_0010.getCode(),retObj.getString("msg"));
             }
             payOrder = retObj.getJSONObject("result");
             if (payOrder == null) {
+                _log.info("{} 请求service获取订单信息为空 retObj = {}",logPrefix,retObj.toJSONString());
+                _log.info("###### 结束商户查询支付订单请求 ######");
                 return new Result(PayEnum.ERR_0112.getCode(),PayEnum.ERR_0112.getMessage());
             }
-            _log.info("商户查询订单成功,payOrder={}", payOrder);
-            _log.info("###### 商户查询订单处理完成 ######");
+
             PayOrderQueryRsp payOrderQueryRsp =  JSON.parseObject(payOrder.toJSONString(), PayOrderQueryRsp.class);
             //生成响应签名
             String sign = PayDigestUtil.getSign(BeanToMap.toMap(payOrderQueryRsp), payContext.getString("resKey"), PayConstant.RESULT_PARAM_SIGN);
             payOrderQueryRsp.setSign(sign);
+
+            _log.info("商户查询订单成功,payOrderQueryRsp = {}", payOrderQueryRsp);
+            _log.info("###### 商户查询订单处理完成 ######");
             return new Result(payOrderQueryRsp);
 
         }catch (Exception e) {
             _log.error(e, "查询订单失败！");
+            _log.info("###### 结束商户查询支付订单请求 ######");
             return new Result(PayEnum.ERR_0010.getCode(),"支付中心系统异常");
         }
     }
@@ -422,6 +449,8 @@ public class PayOrderController extends BaseController implements PayOrderClient
     * */
     Result returnResult(String jsonParam,String resKey ){
         if(StringUtils.isBlank(jsonParam)){
+            _log.info(" 第三方支付系统下单失败 service响应结果 jsonParam is null ");
+            _log.info("###### 结束商户统一下单请求 ######");
             return new Result(PayEnum.ERR_0010.getCode(),PayEnum.ERR_0010.getMessage());
         }
         //转成JSON对象
@@ -430,6 +459,8 @@ public class PayOrderController extends BaseController implements PayOrderClient
         String retCode = paramObj.getString("retCode");
         if (!retCode.equals(PayConstant.RETURN_VALUE_SUCCESS)){
             String retMsg = paramObj.getString("retMsg");
+            _log.info(" 第三方支付系统下单失败 service通信响应结果 :{} ",paramObj.toJSONString());
+            _log.info("###### 结束商户统一下单请求 ######");
             return new Result(PayEnum.ERR_0010.getCode(),retMsg);
         }
         //判断业务是否成功
@@ -437,6 +468,8 @@ public class PayOrderController extends BaseController implements PayOrderClient
         if (!resCode.equals(PayConstant.RETURN_VALUE_SUCCESS)){
             String errCode = paramObj.getString("errCode");
             String errCodeDes = paramObj.getString("errCodeDes");
+            _log.info(" 第三方支付系统下单失败 service业务响应结果 :{} ",paramObj.toJSONString());
+            _log.info("###### 结束商户统一下单请求 ######");
             return new Result(errCode,errCodeDes);
         }
 
@@ -446,6 +479,8 @@ public class PayOrderController extends BaseController implements PayOrderClient
         String sign =  PayDigestUtil.getSign(BeanToMap.toMap(payOrderRsp), resKey,PayConstant.RESULT_PARAM_SIGN);
         payOrderRsp.setSign(sign);
 
+        _log.info("  第三方支付系统下单成功 响应结果 payOrderRsp = {} " ,payOrderRsp.toString());
+        _log.info("###### 商户统一下单请求处理完成 ######");
         return  new Result(payOrderRsp);
     }
 
@@ -511,7 +546,7 @@ public class PayOrderController extends BaseController implements PayOrderClient
             return errorMessage;
         }
 
-        return "success";
+        return PayConstant.RETURN_VALUE_SUCCESS;
     }
 
 

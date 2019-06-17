@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 import java.util.List;
 
 /**
@@ -60,6 +61,17 @@ public class CustomerCalledInfoEnterController extends BaseController {
     @RequestMapping(value = "/serviceModules",method = RequestMethod.GET)
     public Result<List<ServiceModuleShow>> serviceModules() {
         return new Result<>(customerServiceCenterService.serviceModules());
+    }
+
+    @ControllerLog(doAction = "获取登录用户信息")
+    @ApiOperation(value = "获取登录用户信息")
+    @RequiresPermissions("/customer/customerCalledInfoEnterController/getBaseUserInfo")
+    @RequestMapping(value = "/getBaseUserInfo",method = RequestMethod.GET)
+    public Result<User> getUserInfo() {
+        //获取当前登录用户基本信息
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        logger.info("-----客服中心获取用户登录信息------，user:{}",user.toString());
+        return new Result<>((User) SecurityUtils.getSubject().getPrincipal());
     }
 
     @ControllerLog(doAction = "获取来电用户问题历史")
@@ -110,5 +122,14 @@ public class CustomerCalledInfoEnterController extends BaseController {
             return new Result(CustomerCenterExceptionEnum.NETWORK_ANOMALY.getCode(),CustomerCenterExceptionEnum.NETWORK_ANOMALY.getMessage());
         }
         return new Result<>(customerServiceCenterService.customerQuesDetail(user.getAccount(), processInsId));
+    }
+
+    @ControllerLog(doAction = "查询用户来电历史信息")
+    @ApiOperation(value = "查询用户来电历史信息")
+    //@RequiresPermissions("/customer/customerCalledInfoEnterController/getUserCalledHistory")
+    @RequestMapping(value = "/getUserCalledHistory",method = RequestMethod.GET)
+    public Result<PaginationData<List<ConsultationCustomerListShow>>> getUserCalledHistory(CalledPhoneHistoryParam calledPhoneHistoryParam) {
+        PaginationData result=customerServiceCenterService.getUserCalledHistory(calledPhoneHistoryParam);
+        return new Result<>(result);
     }
 }

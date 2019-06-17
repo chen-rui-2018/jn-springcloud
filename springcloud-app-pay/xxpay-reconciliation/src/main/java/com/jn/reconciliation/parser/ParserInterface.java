@@ -23,12 +23,14 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
+
 /**
- * 定义一个解析的接口，实现着必须override接口中的parser方法.
- * 
- * 龙果学院：www.roncoo.com
- * 
- * @author：shenjialong
+ * @ClassName：定义一个解析的接口，实现着必须override接口中的parser方法.
+ * @Descript：
+ * @Author： hey
+ * @Date： Created on 2019/5/20 15:54
+ * @Version： v1.0
+ * @Modified By:
  */
 public interface ParserInterface {
 

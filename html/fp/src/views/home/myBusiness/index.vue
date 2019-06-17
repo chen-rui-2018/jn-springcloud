@@ -1,5 +1,5 @@
 <template>
-  <div class="business">
+  <div class="business" v-loading="loading">
     <div class="business_title">
       <div class="myBusiness">我的企业 &nbsp;(<span v-show="isColleague" @click="toColleagueList">查看企业同事</span>)</div>
       <div class="business_nav">
@@ -22,7 +22,7 @@
           </el-form-item>
         </div>
         <div style="display:flex">
-          <el-form-item label="产业领域:" class="">
+          <el-form-item label="主营行业:" class="">
             <span>{{induTypeName}}</span>
           </el-form-item>
           <el-form-item label="法人:" class="borr">
@@ -57,7 +57,7 @@
           <el-form-item label="注册资金（万元）:" class="">
             <span>{{regCapital}}</span>
           </el-form-item>
-          <el-form-item label="企业规模:" class="borr">
+          <el-form-item label="企业规模（人）:" class="borr">
             <span>{{comScale}}</span>
           </el-form-item>
         </div>
@@ -66,12 +66,12 @@
             <span>{{unifyCode}}</span>
           </el-form-item>
           <el-form-item label="企业性质:" class="borr">
-            <span>{{comPropertyNames}}</span>
+            <span>{{comPropertyName}}</span>
           </el-form-item>
         </div>
         <div style="display:flex">
           <el-form-item label="所属园区:" class=" borb">
-            <span>{{parkBuildName}}</span>
+            <span>{{affiliatedName}}</span>
           </el-form-item>
           <el-form-item label="企业官网地址:" class=" borb borr">
             <span>{{comWeb}}</span>
@@ -82,20 +82,20 @@
       </el-form>
       <el-form class="enterprise_bottom" label-position="right" label-width="142px">
         <el-form-item label="企业LOGO:">
-          <img :src="avatar.url" alt="LOGO图片" class="enterprise_img">
+          <img :src="avatar" alt="LOGO图片" class="enterprise_img">
         </el-form-item>
         <el-form-item label="三证一体或营业执照:">
-          <img :src="businessLicense.url" alt="营业执照" class="enterprise_img">
+          <img :src="businessLicense" alt="营业执照" class="enterprise_img">
         </el-form-item>
         <el-form-item label="企业宣传图片:">
-          <div v-for="(item,index) in  proImgs" :key="index">
+          <div class="publicity" v-for="(item,index) in  proImgs" :key="index">
             <img :src="item" alt="企业宣传图片" class="enterprise_img">
           </div>
         </el-form-item>
       </el-form>
-      <div class="business_footer" @click="toUserCenter">
+      <!-- <div v-if="isFooter" class="business_footer" @click="toUserCenter">
         离开企业
-      </div>
+      </div> -->
     </div>
 
   </div>
@@ -105,12 +105,16 @@
 export default {
   data() {
     return {
-      isStaff:false,
-      isEnterprise:false,
-      isColleague:false,
-      isPublicity:false,
-      isInvite:false,
-      resourcesList:'',
+      loading: true,
+      isFooter: false,
+      companyCode: "",
+      parkList: [],
+      isStaff: false,
+      isEnterprise: false,
+      isColleague: false,
+      isPublicity: false,
+      isInvite: false,
+      resourcesList: "",
       userAccount: "",
       foundingTime: "", //注册时间
       comName: "", //企业名称
@@ -126,46 +130,88 @@ export default {
       regCapital: "", //注册资本 万元
       comScale: "", //企业规模
       comType: "", //企业类型
-      parkBuildName: "", //园区名称
+      affiliatedName: "", //园区名称
       comWeb: "", //企业官网地址
       avatar: "", //企业logo
       businessLicense: "", //营业执照
-      comPropertyNames: "", //企业性质名称
+      comPropertyName: "", //企业性质名称
       proImgs: [] //企业宣传图片
     };
   },
-  mounted() {
-    let initArr=JSON.parse(sessionStorage.menuItems)
-    initArr.forEach(v=>{
-      if(v.label==='我的企业'){
-           v.resourcesList.forEach(i=>{
-             if(i.resourcesName==='发布企业招聘信息'){
-               this.isInvite=true
-             }else if(i.resourcesName==='发布宣传'){
-                this.isPublicity=true
-             }else if(i.resourcesName==='同事列表'){
-                this.isColleague=true
-             }else if(i.resourcesName==='编辑企业信息'){
-                this.isEnterprise=true
-             }else if(i.resourcesName==='员工列表'){
-                this.isStaff =true
-             }
-           })
+  created() {
+    this.getParkList();
 
+  },
+  mounted() {
+    this.getUserExtension()
+    let initArr = JSON.parse(sessionStorage.menuItems);
+    initArr.forEach(v => {
+      if (v.label === "我的企业") {
+        v.resourcesList.forEach(i => {
+          if (i.resourcesName === "发布企业招聘信息") {
+            this.isInvite = true;
+          } else if (i.resourcesName === "发布宣传") {
+            this.isPublicity = true;
+          } else if (i.resourcesName === "同事列表") {
+            this.isColleague = true;
+          } else if (i.resourcesName === "编辑企业信息") {
+            this.isEnterprise = true;
+          } else if (i.resourcesName === "员工列表") {
+            this.isStaff = true;
+          }
+        });
       }
-    })
-    this.init();
+    });
+
   },
   methods: {
+       //获取我的所属企业编码
+  getUserExtension(){
+      this.api.get({
+        url: "getUserExtension",
+        data: {},
+        callback: (res)=> {
+          if (res.code == "0000") {
+           this.companyCode=res.data.companyCode
+            this.init();
+          } else {
+            this.$message.error(res.result);
+          }
+        }
+      });
+  },
+    //所属园区
+    getParkList() {
+      let _this = this;
+      this.api.get({
+        url: "getParkList",
+        data: {},
+        callback: function(res) {
+          if (res.code == "0000") {
+            _this.parkList = res.data;
+          } else {
+            _this.$message.error(res.result);
+          }
+        }
+      });
+    },
     init() {
       let _this = this;
       _this.api.get({
-        url: "getMyBusiness",
+        url: "getCompanyDetailByAccountOrCompanyId",
+        data: { accountOrCompanyId: this.companyCode },
         callback: function(res) {
+          _this.loading = false;
           if (res.code == "0000") {
+            if (sessionStorage.account === res.data.comAdmin) {
+              _this.isFooter = false;
+            } else {
+              _this.isFooter = true;
+            }
             _this.comName = res.data.comName;
             _this.comNameShort = res.data.comNameShort;
             _this.induTypeName = res.data.induTypeName;
+            _this.comPropertyName = res.data.comPropertyName;
             _this.ownerLaw = res.data.ownerLaw;
             _this.comTele = res.data.comTele;
             _this.runTime = res.data.runTime;
@@ -176,12 +222,19 @@ export default {
             _this.regCapital = res.data.regCapital;
             _this.comScale = res.data.comScale;
             _this.comType = res.data.comType;
-            _this.parkBuildName = res.data.parkBuildName;
+            // _this.parkBuildName = res.data.parkBuildName;
             _this.foundingTime = res.data.foundingTime;
             _this.comWeb = res.data.comWeb;
             _this.avatar = res.data.avatar;
             _this.businessLicense = res.data.businessLicense;
             _this.proImgs = res.data.propagandaPicture;
+            _this.parkList.forEach(v => {
+              if (v.id === res.data.affiliatedPark) {
+                _this.affiliatedName = v.parkName;
+              }
+            });
+          } else {
+            _this.$message.error(res.result);
           }
         }
       });
@@ -199,10 +252,26 @@ export default {
       this.$router.push({ name: "staffManagement" });
     },
     toUserCenter() {
-      this.$router.push({ path: "/home" });
+      this.api.post({
+        url: "leaveCompany",
+        data: {},
+        callback: (res) =>{
+          console.log(res);
+          if (res.code == "0000") {
+            this.$message({
+              message: "操作成功",
+              type: "success"
+            });
+            this.$router.push({ path: "/home" });
+          } else {
+            this.$message.error(res.result);
+          }
+        }
+      });
+      // this.$router.push({ path: "/home" });
     },
     toEditBusiness() {
-      this.$router.push({ name: "editBusiness" });
+      this.$router.push({ name: "editBusiness",query:{accountOrCompanyId: this.companyCode } });
     }
   }
 };
@@ -214,11 +283,11 @@ export default {
     // .inline {
     //   display: inline-block;
     // }
-    .borb{
+    .borb {
       border-bottom: 1px solid #ccc;
     }
-    .borr{
-         border-right: 1px solid #ccc;
+    .borr {
+      border-right: 1px solid #ccc;
     }
     .el-form-item__label {
       width: 133px;
@@ -236,8 +305,8 @@ export default {
     .el-form-item {
       margin-bottom: 0px;
       flex: 1;
-      border-top:1px solid #ccc;
-      border-left:1px solid #ccc;
+      border-top: 1px solid #ccc;
+      border-left: 1px solid #ccc;
       display: flex;
     }
     .el-form-item__content {
@@ -327,6 +396,11 @@ export default {
       font-size: 13px;
       padding: 0px 15px;
     }
+    .publicity {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 20px;
+    }
     .enterprise_bottom {
       .el-form-item {
         margin-top: 36px;
@@ -335,7 +409,9 @@ export default {
       }
 
       .enterprise_img {
-        width: 115px;
+        width: 85px;
+        height: 85px;
+        border-radius: 6px;
         // height: 69px;
       }
     }

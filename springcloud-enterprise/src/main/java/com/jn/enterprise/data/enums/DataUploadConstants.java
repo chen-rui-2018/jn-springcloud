@@ -169,5 +169,13 @@ public class DataUploadConstants {
      * 是否为‘纳税人名称’
      */
     public final static String IS_TAXI_PERSON_COLUMN="纳税人名称";
+    /**
+     * park系統标识
+     */
+    public final static String PARK_ID="springcloud-park";
 
+    /**
+     *
+     */
+    public final static String METHOD_ID="/api/hatch/incubator/updateRevenue";
 }

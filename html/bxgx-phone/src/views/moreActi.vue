@@ -1,56 +1,60 @@
 <template>
-    <div class="approvalGuide">
-        <div class="approvalGuide_search">
-            <search v-model="keyWord" ref="search" @keyup.enter.native="searchFun"></search>
-        </div>
-        <div class="approvalGuide_main">
-            <div class="approvalGuide_tab">
-                <tab>
-                    <tab-item :selected="active===''">
-                        <span :class="{active:active===''}" @click="toggle('','')">全部</span>
-                    </tab-item>
-                    <tab-item v-for="(item,$index) in actiTypeList" :key="$index" :selected="$index===active">
-                        <span :class="{active:$index===active}" @click="toggle($index,item.typeId)">{{item.typeName}}</span>
-                    </tab-item>
-                </tab>
-            </div>
-            <div class="approvalGuide_cont">
-                <ul>
-                    <li class="actiLi" v-for="(i,k) in actiListSlim" :key="k">
-                        <div class="imgItem">
-                            <img :src="i.actiPosterUrl" alt="">
-                        </div>
-                        <div class="contentLi">
-                            <div class="tit">{{i.actiName}}</div>
-                            <div class="acinfo">
-                                <div class="info1">
-                                    <img src="@/./assets/images/zhiyuandidian1.png" alt="">
-                                    <span>{{i.actiAddress}}</span>
-                                </div>
-                                <div class="info2">
-                                    <img src="@/./assets/images/shijian00.png" alt="">
-                                    <span>{{i.actiStartTime}}-{{i.actiEndTime}}</span>
-                                </div>
-                            </div>
-                            <div class="apply">
-                                <div class="apply1">
-                                    <ul>
-                                        <li v-for="(item,index) in i.avatarList" :key="index"><img :src="item" alt=""></li>
-                                        <!-- <li><img src="@/./assets/images/tuceng.png" alt=""></li> -->
-                                    </ul>
-                                    <span>{{i.applyNum}}/{{i.actiNumber}}</span>
-                                </div>
-                                <div class="apply2">
-                                    <img src="@/./assets/images/xin.png" alt="">
-                                    <span>{{i.actiLike}}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
+  <div class="moreActi">
+    <!-- <div class="approvalGuide_search">
+      <search v-model="keyWord" ref="search" @keyup.enter.native="searchFun"></search>
+    </div> -->
+    <div class="declarationCenter_search">
+      <i class="weui-icon-search" v-if="keyWord===''"></i>
+      <input type="text" placeholder="搜索" v-model="keyWord" @change="searchFun">
     </div>
+    <div class="approvalGuide_main">
+      <div class="approvalGuide_tab">
+        <tab>
+          <tab-item :selected="active===''">
+            <span :class="{active:active===''}" @click="toggle('','')">全部</span>
+          </tab-item>
+          <tab-item v-for="(item,$index) in actiTypeList" :key="$index" :selected="$index===active">
+            <span :class="{active:$index===active}" @click="toggle($index,item.typeId)">{{item.typeName}}</span>
+          </tab-item>
+        </tab>
+      </div>
+      <div class="approvalGuide_cont">
+        <ul>
+          <li class="actiLi" v-for="(i,k) in actiListSlim" :key="k">
+            <div class="imgItem" @click="$router.push({path:'/actiDetail',query:{activityId:i.id}})">
+              <img :src="i.actiPosterUrl" alt="">
+            </div>
+            <div class="contentLi">
+              <div class="tit">{{i.actiName}}</div>
+              <div class="acinfo">
+                <div class="info1">
+                  <img src="@/./assets/images/zhiyuandidian1.png" alt="">
+                  <span>{{i.actiAddress}}</span>
+                </div>
+                <div class="info2">
+                  <img src="@/./assets/images/shijian00.png" alt="">
+                  <span>{{i.actiStartTime}}-{{i.actiEndTime}}</span>
+                </div>
+              </div>
+              <div class="apply">
+                <div class="apply1">
+                  <ul>
+                    <li v-for="(item,index) in i.avatarList" :key="index"><img :src="item" alt=""></li>
+                    <!-- <li><img src="@/./assets/images/tuceng.png" alt=""></li> -->
+                  </ul>
+                  <span>{{i.applyNum}}/{{i.actiNumber}}</span>
+                </div>
+                <div class="apply2">
+                  <img src="@/./assets/images/xin.png" alt="">
+                  <span>{{i.actiLike}}</span>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
 import {
@@ -106,7 +110,7 @@ export default {
     },
     // tab栏
     scrollBottom () {
-    //   let _this = this
+      //   let _this = this
       window.onscroll = () => {
         var scrollHeight = Math.max(
           document.documentElement.scrollHeight,
@@ -122,7 +126,7 @@ export default {
             document.documentElement.clientHeight,
             document.body.clientHeight
           )
-        if (clientHeight + scrollTop >= scrollHeight - document.getElementsByClassName('adniministrativeHeader')[0].clientHeight) {
+        if (clientHeight + scrollTop >= scrollHeight) {
           if (this.page < Math.ceil(this.total / this.rows)) {
             this.page++
             this.api.post({
@@ -146,6 +150,7 @@ export default {
     },
     // 获取活动数据
     initList () {
+      this.page = 1
       let _this = this
       this.api.post({
         url: 'activityListSlim',
@@ -159,6 +164,8 @@ export default {
           if (res.code === '0000') {
             _this.actiListSlim = res.data.rows
             _this.total = res.data.total
+          } else {
+            _this.$vux.toast.text(res.result)
           }
         }
       })
@@ -172,6 +179,8 @@ export default {
         callback: function (res) {
           if (res.code === '0000') {
             _this.actiTypeList = res.data.rows
+          } else {
+            _this.$vux.toast.text(res.result)
           }
         }
       })
@@ -181,51 +190,74 @@ export default {
 </script>
 
 <style lang="scss">
-.approvalGuide {
+.moreActi {
   overflow: scroll;
-
-  .approvalGuide_search {
+  .declarationCenter_search {
     position: fixed;
     z-index: 10;
-    top: 105px;
     width: 100%;
-    .weui-search-bar {
-      padding: 28px 32px;
+    background-color: #f5f5f5;
+    padding: 0 35px;
+    display: flex;
+    input::placeholder {
+      text-align: center;
+      font-size: 21px;
     }
-    .vux-search-box {
-      position: fixed;
-      top: 105px !important;
+    input {
+      height: 60px;
+      width: 100%;
+      margin: 22px 0;
+      border-radius: 30px;
+      padding: 0 40px;
     }
-    .weui-search-bar__input {
-      height: 63px;
-      line-height: 63px;
-      // border-radius: 30px;
-    }
-    .weui-icon-search {
-      line-height: 63px;
-    }
-    .weui-icon-clear {
-      line-height: 0.8rem;
-    }
-    .weui-search-bar.weui-search-bar_focusing .weui-search-bar__cancel-btn {
-      display: flex;
-      align-items: center;
-    }
-    .weui-search-bar__box {
-      padding: 0 70px;
-      .weui-icon-search {
-        left: 20px;
-      }
-      .weui-search-bar__input {
-        padding: 0;
-      }
+    i {
+      position: absolute;
+      top: 37%;
+      right: 54%;
     }
   }
+  // .approvalGuide_search {
+  //   position: fixed;
+  //   z-index: 10;
+  //   // top: 105px;
+  //   width: 100%;
+  //   .weui-search-bar {
+  //     padding: 28px 32px;
+  //   }
+  //   .vux-search-box {
+  //     position: fixed;
+  //     // top: 105px !important;
+  //   }
+  //   .weui-search-bar__input {
+  //     height: 63px;
+  //     line-height: 63px;
+  //     // border-radius: 30px;
+  //   }
+  //   .weui-icon-search {
+  //     line-height: 63px;
+  //   }
+  //   .weui-icon-clear {
+  //     line-height: 0.8rem;
+  //   }
+  //   .weui-search-bar.weui-search-bar_focusing .weui-search-bar__cancel-btn {
+  //     display: flex;
+  //     align-items: center;
+  //   }
+  //   .weui-search-bar__box {
+  //     padding: 0 70px;
+  //     .weui-icon-search {
+  //       left: 20px;
+  //     }
+  //     .weui-search-bar__input {
+  //       padding: 0;
+  //     }
+  //   }
+  // }
   .approvalGuide_main {
     .approvalGuide_tab {
-      margin-top: 110px;
+      // margin-top: 110px;
       position: fixed;
-      top: 113px;
+      top: 103px;
       width: 100%;
       z-index: 20;
       background-color: #fff;
@@ -265,8 +297,8 @@ export default {
     }
     .approvalGuide_cont {
       margin: 30px;
-    //   margin-top: 44%;
-      margin-top: 350px;
+      //   margin-top: 44%;
+      margin-top: 230px;
       height: 100%;
       overflow: auto;
       .weui-cells {
@@ -350,13 +382,30 @@ export default {
         align-items: center;
         margin: 20px 0;
       }
+      .info1 {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        width: 48%;
+      }
       .info1,
       .info2 {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
         img {
+          display: inline-block;
           vertical-align: middle;
           width: 18px;
           //   height: 20px;
         }
+        span {
+          display: inline-block;
+          vertical-align: middle;
+        }
+      }
+      .info2 {
+        width: 40%;
       }
       .apply {
         display: flex;

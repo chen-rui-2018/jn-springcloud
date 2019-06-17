@@ -27,7 +27,7 @@ public class RoomOrdersModel implements Serializable {
     private String roomId;
 
     @ApiModelProperty(value = "房间名称",example = "101")
-    private String roomName;
+    private String name;
 
     @ApiModelProperty(value = "楼层",example = "1")
     private String floor;
@@ -128,12 +128,12 @@ public class RoomOrdersModel implements Serializable {
         this.roomId = roomId;
     }
 
-    public String getRoomName() {
-        return roomName;
+    public String getName() {
+        return name;
     }
 
-    public void setRoomName(String roomName) {
-        this.roomName = roomName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getFloor() {
@@ -342,7 +342,7 @@ public class RoomOrdersModel implements Serializable {
                 "id='" + id + '\'' +
                 ", orderId='" + orderId + '\'' +
                 ", roomId='" + roomId + '\'' +
-                ", roomName='" + roomName + '\'' +
+                ", name='" + name + '\'' +
                 ", floor='" + floor + '\'' +
                 ", towerId='" + towerId + '\'' +
                 ", towerName='" + towerName + '\'' +

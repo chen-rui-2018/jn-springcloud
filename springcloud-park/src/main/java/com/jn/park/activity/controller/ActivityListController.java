@@ -7,8 +7,10 @@ import com.jn.park.activity.service.ActivityService;
 import com.jn.park.activity.service.ActivityTypeService;
 import com.jn.park.activity.model.*;
 import com.jn.system.log.annotation.ControllerLog;
+import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,9 +44,10 @@ public class ActivityListController extends BaseController {
 
     @ControllerLog(doAction = "获取前台活动列表")
     @ApiOperation(value = "获取前台活动列表")
-    @RequestMapping(value = "/guest/activity/activityListSlim",method = RequestMethod.POST)
+    @RequestMapping(value = "/guest/activity/",method = RequestMethod.POST)
     public Result<PaginationData<List<ActivitySlim> >> activityListSlim(@RequestBody ActivitySlimQuery activitySlimQuery) {
-        PaginationData paginationData = activityService.activityListSlim(activitySlimQuery);
+        User user = (User)SecurityUtils.getSubject().getPrincipal();
+        PaginationData paginationData = activityService.activityListSlim(activitySlimQuery,user==null?"":user.getAccount());
         return new Result(paginationData);
     }
 

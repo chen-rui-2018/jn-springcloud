@@ -15,12 +15,10 @@
  */
 package com.jn.reconciliation;
 
-import com.jn.reconciliation.biz.ReconciliationCheckBiz;
-import com.jn.reconciliation.biz.ReconciliationFileDownBiz;
-import com.jn.reconciliation.biz.ReconciliationFileParserBiz;
-import com.jn.reconciliation.biz.ReconciliationValidateBiz;
+import com.jn.reconciliation.biz.*;
 import com.jn.reconciliation.enums.BatchStatusEnum;
 import com.jn.reconciliation.service.PayReconciliationCheckBatchService;
+import com.jn.reconciliation.service.ReconciliationInterfaceService;
 import com.jn.reconciliation.service.impl.ReconciliationInterface;
 import com.jn.reconciliation.utils.DateUtil;
 import com.jn.reconciliation.vo.ReconciliationEntityVo;
@@ -31,6 +29,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.xxpay.common.util.MySeq;
 import org.xxpay.dal.dao.entity.reconciliation.TbPayReconciliationCheckBatch;
+import org.xxpay.dal.dao.entity.reconciliation.TbPayReconciliationInterface;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -60,29 +59,36 @@ public class ReconciliationTask {
 	private ReconciliationValidateBiz validateBiz;
 	@Autowired
 	private PayReconciliationCheckBatchService batchService;
+	@Autowired
+	private ReconciliationNoticeBiz reconciliationNoticeBiz;
+	@Autowired
+	private ReconciliationInterfaceService reconciliationInterfaceService;
+
 
 	@Scheduled(cron = "0 15 10 * * ?")
 	public void taskRun() {
-
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-
+		//日期格式
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		// 获取需要对账的对账单时间(前一天时间)
+		Date billDate = DateUtil.addDay(new Date(), -1);
+		//是否发送对账通知
+		boolean sendMsg = false;
 		try {
 
 
 			@SuppressWarnings("rawtypes")
-			// 获取全部有效的对账接口(目前是写死了，可以做持久化到数据库，再查出来)
-			List reconciliationInterList = ReconciliationInterface.getInterface();
+			// 获取全部有效的对账接口
+			List<TbPayReconciliationInterface> reconciliationInterList  = reconciliationInterfaceService.getEffectiveList();
 
 			// 根据不同的渠道发起对账
 			for (int num = 0; num < reconciliationInterList.size(); num++) {
 				// 判断接口是否正确
-				ReconciliationInterface reconciliationInter = (ReconciliationInterface) reconciliationInterList.get(num);
+				TbPayReconciliationInterface reconciliationInter = (TbPayReconciliationInterface) reconciliationInterList.get(num);
 				if (reconciliationInter == null) {
 					logger.info("对账接口信息" + reconciliationInter + "为空");
 					continue;
 				}
-				// 获取需要对账的对账单时间
-				Date billDate = DateUtil.addDay(new Date(), -reconciliationInter.getBillDay());
+
 				// 获取对账渠道
 				String interfaceCode = reconciliationInter.getInterfaceCode();
 
@@ -104,14 +110,14 @@ public class ReconciliationTask {
 				File file = null;
 				try {
 					logger.info("ReconciliationFileDownBiz,对账文件下载开始");
-					file = fileDownBiz.downReconciliationFile(interfaceCode, billDate);
+					file = fileDownBiz.downReconciliationFile(reconciliationInter, billDate);
 					if (file == null) {
 						continue;
 					}
 					logger.info("对账文件下载结束");
 				} catch (Exception e) {
 					logger.error("对账文件下载异常:", e);
-					batch.setStatus(BatchStatusEnum.FAIL.name());
+					batch.setStatus(BatchStatusEnum.FAIL.getCode());
 					batch.setRemark("对账文件下载异常");
 					batchService.saveData(batch);
 					continue;
@@ -125,13 +131,13 @@ public class ReconciliationTask {
 					// 解析文件
 					bankList = parserBiz.parser(batch, file, billDate, interfaceCode);
 					// 如果下载文件异常，退出
-					if (BatchStatusEnum.ERROR.name().equals(batch.getStatus())) {
+					if (BatchStatusEnum.ERROR.getCode().equals(batch.getStatus())) {
 						continue;
 					}
 					logger.info("对账文件解析结束");
 				} catch (Exception e) {
 					logger.error("对账文件解析异常:", e);
-					batch.setStatus(BatchStatusEnum.FAIL.name());
+					batch.setStatus(BatchStatusEnum.FAIL.getCode());
 					batch.setRemark("对账文件解析异常");
 					batchService.saveData(batch);
 					continue;
@@ -142,19 +148,28 @@ public class ReconciliationTask {
 					checkBiz.check(bankList, interfaceCode, batch);
 				} catch (Exception e) {
 					logger.error("对账异常:", e);
-					batch.setStatus(BatchStatusEnum.FAIL.name());
+					batch.setStatus(BatchStatusEnum.FAIL.getCode());
 					batch.setRemark("对账异常");
 					batchService.saveData(batch);
 					continue;
 				}
 
+				//只要有一次 对账渠道流程没异常则发送短信,邮箱通知
+				sendMsg = true;
 			}
 
 			/** step5:清理缓冲池 **/
 			// 如果缓冲池中有三天前的数据就清理掉并记录差错
 			validateBiz.validateScratchPool();
+
+			/** step6:发送短信通知 **/
+			if(sendMsg){
+				reconciliationNoticeBiz.messageNotice(sdf.format(billDate));
+			}
+
+
 		} catch (Exception e) {
-			logger.error("xxpay-reconciliation error:", e);
+			logger.error("对账流程异常  error:", e);
 		}
 
 	}

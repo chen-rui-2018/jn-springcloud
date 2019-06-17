@@ -1,72 +1,79 @@
 <template>
-  <div class="declarationCenter">
-        <div class="banner"><img src="@/assets/image/declarationCenter-baner.png" alt=""></div>
-        <!-- 常年申报 -->
-        <div class="perennial">
-          <div class="perennial_titile">
-            <div>常年申报</div>
-            <div>MORE <span class="iconfont icon-jiantou "></span></div>
-          </div>
-          <div class="perennial_list">
-            <ul>
-              <li v-for="(item,index) in perennialList" :key="index">
-                <div class="list_cont">
-                  <p><img src="@/assets/image/perennial.png" alt=""> </p>
-                  <p>{{item.title}}</p>
-                  <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
-                  <p>收益：<span>{{item.profit}}</span> </p>
-                  <p>价格：{{item.price}}</p>
-                </div>
-                <div class="list_view"><span>查看详情</span> </div>
-              </li>
-            </ul>
-          </div>
+<div>
+    <div class="declarationCenter_search" v-if="isShow!=1">
+      <i class="weui-icon-search" v-if="sendData.titleName===''"></i>
+      <input type="text" placeholder="搜索" @change="gosearch" v-model="sendData.titleName" >
+    </div>
+    <!-- v-if="isShow!=1" gosearch-->
+  <div class="declarationCenter" :class="{'padding':isShow!=1} ">
+    <div class="banner" v-if="isShow===1"><img src="@/assets/image/declarationCenter-baner.png" alt=""></div>
+    <!-- 常年申报 -->
+    <div class="perennial" v-if="isShow===1">
+      <div class="perennial_titile">
+        <div>常年申报</div>
+        <div>MORE <span class="iconfont icon-jiantou "></span></div>
+      </div>
+      <div class="perennial_list">
+        <ul>
+          <li v-for="(item,index) in perennialList" :key="index">
+            <div class="list_cont">
+              <p><img src="@/assets/image/perennial.png" alt=""> </p>
+              <p>{{item.title}}</p>
+              <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
+              <p>收益：<span>{{item.profit}}</span> </p>
+              <p>价格：{{item.price}}</p>
+            </div>
+            <div class="list_view"><span>查看详情</span> </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- 申报平台 -->
+    <div class="declaration_platform" v-if="isShow===1">
+      <div class="platform_titile">
+        <div>申报平台</div>
+        <div @click="$router.push({path:'/guest/pd/declarationPlatform'})">MORE <span class="iconfont icon-jiantou"></span></div>
+      </div>
+      <div class="platform_cont" @click="$router.push({path:'/guest/pd/declarationPlatform'})">
+        <p>
+          <span class="iconfont icon-deng"> </span>
+            汇集常用申报平台，便于企业快速查阅和进入。包含了各类科技项目、企业资质、产品认定、人才计划申报、资金兑现、技术合同登记等业务申报系统。
+          <span @touchstart="goplatform">查看详情>><span class="el-icon-d-arrow-right"></span> </span>
+        </p>
+        <div>
+          <img src="@/assets/image/platform.png" alt="">
         </div>
-        <!-- 申报平台 -->
-        <div class="declaration_platform">
-          <div class="platform_titile">
-            <div>申报平台</div>
-            <div >MORE <span class="iconfont icon-jiantou"></span></div>
-          </div>
-          <div class="platform_cont" @click="$router.push({path:'/guest/pd/declarationPlatform'})">
-            <p>
-              <span class="iconfont icon-deng"> </span>
-                汇集常用申报平台，便于企业快速查阅和进入。包含了各类科技项目、企业资质、产品认定、人才计划申报、资金兑现、技术合同登记等业务申报系统。
-              <span @touchstart="goplatform">查看详情>><span class="el-icon-d-arrow-right"></span> </span>
-            </p>
-            <div>
-              <img src="@/assets/image/platform.png" alt="">
+      </div>
+    </div>
+    <div class="before" v-if="isShow===1"></div>
+    <!-- 申报中心列表 -->
+    <div class="declaration_list">
+      <div class="declaration_list_tab">
+        <ul >
+          <li :class="{'active':sendData.rangeId===''}" @touchstart="changetype('') ">全部</li>
+          <li :class="{'active':typeitem.id===sendData.rangeId}" @touchstart="changetype(typeitem.id) " v-for="(typeitem,typeindex) in  typeList" :key="typeindex">{{typeitem.name}} </li>
+        </ul>
+      </div>
+      <div class="declaration_list_filter">
+        <span @touchstart="filter('1')" :class="{'greenColor':sendData.sortType==='1'}"><i class="iconfont icon-clock-"></i>发布时间排序 </span>
+        <span @touchstart="filter('2')" :class="{'greenColor':sendData.sortType==='2'}"><i class="iconfont icon-tiaozheng"></i>时间节点排序 </span>
+        <span @touchstart="filter('3')" :class="{'greenColor':sendData.sortType==='3'}"><i class="iconfont icon-hot"></i>热度排序</span>
+      </div>
+      <div class="declaration_cont_box">
+        <div class="declaration_cont" v-for="(item,index) in declarationList " :key="index" @click="goDetail(item.id)">
+          <div class="declaration_cont_left">
+            <div class="cont_title"><span class="greenColor">[{{item.rangeId|type}}] </span>{{item.titleName}} </div>
+            <div class="cont_detail">
+              <div><span>开始 {{item.createdTime|time}}</span><span>截止 {{item.deadline|time}}</span></div>
+              <span class="greenColor">{{item.isRoofPlacement===1?'置顶':'不置顶'}}</span>
             </div>
           </div>
+          <div class="declaration_cont_right"><span class="iconfont icon-jiantou"></span> </div>
         </div>
-        <div class="before"></div>
-        <!-- 申报中心列表 -->
-        <div class="declaration_list">
-          <div class="declaration_list_tab">
-            <ul >
-              <li :class="{'active':sendData.rangeId===''}" @touchstart="changetype('') ">全部</li>
-              <li :class="{'active':typeitem.id===sendData.rangeId}" @touchstart="changetype(typeitem.id) " v-for="(typeitem,typeindex) in  typeList" :key="typeindex">{{typeitem.name}} </li>
-            </ul>
-          </div>
-          <div class="declaration_list_filter">
-            <span @touchstart="filter('1')" :class="{'greenColor':sendData.sortType==='1'}"><i class="iconfont icon-clock-"></i>发布时间排序 </span>
-            <span @touchstart="filter('2')" :class="{'greenColor':sendData.sortType==='2'}"><i class="iconfont icon-tiaozheng"></i>时间节点排序 </span>
-            <span @touchstart="filter('3')" :class="{'greenColor':sendData.sortType==='3'}"><i class="iconfont icon-hot"></i>热度排序</span>
-          </div>
-          <div class="declaration_cont_box">
-            <div class="declaration_cont" v-for="(item,index) in declarationList " :key="index" @click="$router.push({path:'/guest/pd/declarationDetail',query:{id:item.id}}) ">
-              <div class="declaration_cont_left">
-                <div class="cont_title"><span class="greenColor">[{{item.rangeId|type}}] </span>{{item.titleName}} </div>
-                <div class="cont_detail">
-                  <div><span>开始 {{item.createdTime|time}}</span><span>截止 {{item.deadline|time}}</span></div>
-                  <span class="greenColor">{{item.isRoofPlacement===1?'置顶':'不置顶'}}</span>
-                </div>
-              </div>
-              <div class="declaration_cont_right"><span class="iconfont icon-jiantou"></span> </div>
-            </div>
-          </div>
-        </div>
+      </div>
+    </div>
   </div>
+</div>
 </template>
 <script>
 import { Scroller, LoadMore } from 'vux'
@@ -83,9 +90,11 @@ export default {
       sendData: {
         page: 1,
         rangeId: '',
-        rows: 2,
-        sortType: '1'
-      }
+        rows: 20,
+        sortType: '1',
+        titleName: ''
+      },
+      isShow: 1
     }
   },
   filters: {
@@ -109,19 +118,31 @@ export default {
     }
   },
   mounted () {
+    if (this.$route.query.isShow) {
+      this.isShow = this.$route.query.isShow
+    }
     this.getperennialList()// 常年申报
     this.getTypeList()
     this.getdeclarationList()
     this.scrollBottom()
   },
   methods: {
+    goDetail (id) {
+      if (this.isShow === 1) {
+        this.$router.push({path: '/guest/pd/declarationDetail', query: {id: id}})
+      } else {
+        this.$router.push({path: '/guest/pd/declarationDetail', query: {id: id, isShow: '0'}})
+      }
+    },
+    gosearch () {
+      this.getdeclarationList()
+    },
     scrollBottom () {
       // let _this = this
       window.onscroll = () => {
         var scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight)
         var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
         var clientHeight = window.innerHeight || Math.min(document.documentElement.clientHeight, document.body.clientHeight)
-        console.log()
         if (clientHeight + scrollTop >= scrollHeight) {
           if (this.sendData.page < Math.ceil(this.total / this.sendData.rows)) {
             this.sendData.page++
@@ -187,17 +208,55 @@ export default {
     filter (sortType) {
       this.sendData.sortType = sortType
       this.getdeclarationList()
+    },
+    getQueryString (name) {
+      var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i')
+      var r = window.location.search.substr(1).match(reg)
+      if (r != null) {
+        return decodeURIComponent(r[2])
+      }
+      return null
     }
   }
 }
 </script>
 
 <style lang="scss">
+  .declarationCenter_search{
+    position: fixed;
+    z-index: 10;
+    width: 100%;
+    background-color: #F5F5F5;
+    padding: 0 35px;
+    display: flex;
+    input::placeholder{
+      text-align: center;
+      font-size: 21px;
+    }
+    input{
+      height: 60px;
+      width:100%;
+      margin: 22px 0;
+      border-radius: 30px;
+      padding: 0 40px;
+    }
+    i{
+      position: absolute;
+      top: 42%;
+      right: 54%;
+      font-size: 21px;
+    }
+  }
+  .padding{
+    padding-top: 95px;
+  }
   .declarationCenter{
+
     // 常年申报
     .perennial{
       background-color: #fff;
       margin:0 23px;
+      margin-top: 31px;
       .perennial_titile{
         display: flex;
         justify-content: space-between;
@@ -236,14 +295,14 @@ export default {
                   margin-top: 9px;
                 }
                 p:nth-child(1){
-                  width:100%;
-                  height: 107px;
+                  // width:100%;
+                  // height: 107px;
                   border-bottom: 1px solid #eeeeee;
                   padding: 13px 0;
                   margin-top: 0;
                   img{
                     width: 51%;
-                    height: 100%;
+                    // height: 100%;
                     display: block;
                     margin: auto;
                   }
@@ -286,7 +345,6 @@ export default {
     }
     // 大图
     .banner{
-      padding-top: 105px;
       img{
         width:100%;
       }

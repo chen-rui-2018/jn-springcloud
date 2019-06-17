@@ -20,7 +20,7 @@
       </el-form-item>
     </el-form>
     <!-- 表格 -->
-    <el-form :rules="model.rules" :model="model" :ref="assessmentSubListForm">
+    <el-form ref="assessmentSubListForm" :rules="model.rules" :model="model">
       <el-table ref="table" :data="model.assessmentSubList" tooltip-effect="dark" border stripe style="width: 95%" @selection-change="selectRow">
         <el-table-column type="selection" width="45" align="center"/>
         <el-table-column label="目标类别" align="center">
@@ -240,39 +240,25 @@ export default {
       let commitObj = {}
       commitObj = this.prePageRow
       commitObj.templateDetailList = this.model.assessmentSubList
-      // this.model.assessmentSubList.forEach(val => {
-      let flag = true
-      debugger
-      for (let i = 0; i < this.model.assessmentSubList.length; i++) {
-        if (this.model.assessmentSubList[i].assessmentScore === '' || this.model.assessmentSubList[i].assessmentScore === null) {
-          alert('考核得分必填')
-          this.isDisabled = false
-          flag = false
-          break
-        }
-        if (this.model.assessmentSubList[i].causeDeduction === '' || this.model.assessmentSubList[i].causeDeduction === null) {
-          alert('扣分原因必填')
-          this.isDisabled = false
-          flag = false
-          break
-        }
-      }
-      if (!flag) {
-        return false
-      }
-      api('hr/AssessmentManagement/saveStartAssessmentPage', commitObj).then(res => {
-        if (res.data.code === '0000') {
-          this.$message({
-            message: '添加成功',
-            type: 'success'
+      this.$refs['assessmentSubListForm'].validate(valid => {
+        if (valid) {
+          api('hr/AssessmentManagement/saveStartAssessmentPage', commitObj).then(res => {
+            if (res.data.code === '0000') {
+              this.$message({
+                message: '添加成功',
+                type: 'success'
+              })
+              this.commitRows = []
+              // this.goBack(this.$route)
+            } else {
+              this.$message.error(res.data.result)
+              this.commitRows = []
+            }
+            this.isDisabled = false
           })
-          this.commitRows = []
-          // this.goBack(this.$route)
         } else {
-          this.$message.error(res.data.result)
-          this.commitRows = []
+          this.isDisabled = false
         }
-        this.isDisabled = false
       })
     }
   }

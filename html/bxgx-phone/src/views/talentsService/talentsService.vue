@@ -26,7 +26,7 @@
         <div class="talentsService_platform">
           <div class="platform_titile">
             <div>申报平台</div>
-            <div >MORE <span class="iconfont icon-jiantou"></span></div>
+            <div @click="$router.push({path:'/guest/pd/talentNotice/talentsServicePlatform'})">MORE <span class="iconfont icon-jiantou"></span></div>
           </div>
           <div class="platform_cont" @click="$router.push({path:'/guest/pd/talentNotice/talentsServicePlatform'})">
             <p>
@@ -249,14 +249,14 @@ export default {
                   margin-top: 9px;
                 }
                 p:nth-child(1){
-                  width:100%;
-                  height: 107px;
+                  // width:100%;
+                  // height: 107px;
                   border-bottom: 1px solid #eeeeee;
                   padding: 13px 0;
                   margin-top: 0;
                   img{
                     width: 51%;
-                    height: 100%;
+                    // height: 100%;
                     display: block;
                     margin: auto;
                   }
@@ -301,7 +301,7 @@ export default {
     }
     // 大图
     .banner{
-      padding-top: 105px;
+      // padding-top: 105px;
       img{
         width:100%;
       }

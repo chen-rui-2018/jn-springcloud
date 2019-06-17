@@ -25,6 +25,8 @@ public class CompanyInfoShow  implements Serializable {
 
     @ApiModelProperty(value = "企业官网地址")
     private String comWeb;
+    @ApiModelProperty(value = "企业管理员账号")
+    private String comAdmin;
 
     @ApiModelProperty(value = "所属园区ID")
     private String affiliatedId;
@@ -41,10 +43,11 @@ public class CompanyInfoShow  implements Serializable {
     @ApiModelProperty(value = "成立时间")
     private String foundingTime;
 
-    @ApiModelProperty(value = "企业类型Id")
-    private String comType;
-    @ApiModelProperty(value = "企业类型名称")
-    private String comTypeName;
+    @ApiModelProperty(value = "企业性质ID")
+    private String comProperty;
+
+    @ApiModelProperty(value = "企业性质名称")
+    private String comPropertyName;
 
     @ApiModelProperty(value = "企业人数")
     private String comPerSonNumber;
@@ -82,17 +85,123 @@ public class CompanyInfoShow  implements Serializable {
     private String ownerPhone;
     @ApiModelProperty(value = "企业产品")
     private String  products;
+    @ApiModelProperty(value = "主要产品")
+    private String  mainProducts;
     @ApiModelProperty(value = "信用积分")
     private String creditPoints;
     @ApiModelProperty(value = "信用积分更新时间")
     private String creditUpdateTime;
 
-    public String getIsCare() {
-        return isCare;
+    public String getMainProducts() {
+        return mainProducts;
     }
 
-    public void setIsCare(String isCare) {
-        this.isCare = isCare;
+    public void setMainProducts(String mainProducts) {
+        this.mainProducts = mainProducts;
+    }
+
+    public String getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId;
+    }
+
+    public String getComName() {
+        return comName;
+    }
+
+    public void setComName(String comName) {
+        this.comName = comName;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public String getComWeb() {
+        return comWeb;
+    }
+
+    public void setComWeb(String comWeb) {
+        this.comWeb = comWeb;
+    }
+
+    public String getComAdmin() {
+        return comAdmin;
+    }
+
+    public void setComAdmin(String comAdmin) {
+        this.comAdmin = comAdmin;
+    }
+
+    public String getAffiliatedId() {
+        return affiliatedId;
+    }
+
+    public void setAffiliatedId(String affiliatedId) {
+        this.affiliatedId = affiliatedId;
+    }
+
+    public String getAffiliatedName() {
+        return affiliatedName;
+    }
+
+    public void setAffiliatedName(String affiliatedName) {
+        this.affiliatedName = affiliatedName;
+    }
+
+    public String getComServer() {
+        return comServer;
+    }
+
+    public void setComServer(String comServer) {
+        this.comServer = comServer;
+    }
+
+    public String getComDemand() {
+        return comDemand;
+    }
+
+    public void setComDemand(String comDemand) {
+        this.comDemand = comDemand;
+    }
+
+    public String getFoundingTime() {
+        return foundingTime;
+    }
+
+    public void setFoundingTime(String foundingTime) {
+        this.foundingTime = foundingTime;
+    }
+
+    public String getComProperty() {
+        return comProperty;
+    }
+
+    public void setComProperty(String comProperty) {
+        this.comProperty = comProperty;
+    }
+
+    public String getComPropertyName() {
+        return comPropertyName;
+    }
+
+    public void setComPropertyName(String comPropertyName) {
+        this.comPropertyName = comPropertyName;
+    }
+
+    public String getComPerSonNumber() {
+        return comPerSonNumber;
+    }
+
+    public void setComPerSonNumber(String comPerSonNumber) {
+        this.comPerSonNumber = comPerSonNumber;
     }
 
     public String getComScale() {
@@ -103,36 +212,60 @@ public class CompanyInfoShow  implements Serializable {
         this.comScale = comScale;
     }
 
-    public String getComTypeName() {
-        return comTypeName;
-    }
-
-    public void setComTypeName(String comTypeName) {
-        this.comTypeName = comTypeName;
-    }
-
-    public String getCreditPoints() {
-        return creditPoints;
-    }
-
-    public void setCreditPoints(String creditPoints) {
-        this.creditPoints = creditPoints;
-    }
-
-    public String getCreditUpdateTime() {
-        return creditUpdateTime;
-    }
-
-    public void setCreditUpdateTime(String creditUpdateTime) {
-        this.creditUpdateTime = creditUpdateTime;
-    }
-
     public List<String> getPersonAvatar() {
         return personAvatar;
     }
 
     public void setPersonAvatar(List<String> personAvatar) {
         this.personAvatar = personAvatar;
+    }
+
+    public String getComAddress() {
+        return comAddress;
+    }
+
+    public void setComAddress(String comAddress) {
+        this.comAddress = comAddress;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getBrowseNumber() {
+        return browseNumber;
+    }
+
+    public void setBrowseNumber(String browseNumber) {
+        this.browseNumber = browseNumber;
+    }
+
+    public String getCommentNumber() {
+        return commentNumber;
+    }
+
+    public void setCommentNumber(String commentNumber) {
+        this.commentNumber = commentNumber;
+    }
+
+    public String getCareNumber() {
+        return careNumber;
+    }
+
+    public void setCareNumber(String careNumber) {
+        this.careNumber = careNumber;
+    }
+
+    public String getIsCare() {
+        return isCare;
+    }
+
+    public void setIsCare(String isCare) {
+        this.isCare = isCare;
     }
 
     public String getComSynopsis() {
@@ -183,131 +316,54 @@ public class CompanyInfoShow  implements Serializable {
         this.products = products;
     }
 
-    public String getCompanyId() {
-        return companyId;
+    public String getCreditPoints() {
+        return creditPoints;
     }
 
-    public void setCompanyId(String companyId) {
-        this.companyId = companyId;
+    public void setCreditPoints(String creditPoints) {
+        this.creditPoints = creditPoints;
     }
 
-    public String getComName() {
-        return comName;
+    public String getCreditUpdateTime() {
+        return creditUpdateTime;
     }
 
-    public void setComName(String comName) {
-        this.comName = comName;
+    public void setCreditUpdateTime(String creditUpdateTime) {
+        this.creditUpdateTime = creditUpdateTime;
     }
 
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
-
-    public String getComWeb() {
-        return comWeb;
-    }
-
-    public void setComWeb(String comWeb) {
-        this.comWeb = comWeb;
-    }
-
-    public String getAffiliatedId() {
-        return affiliatedId;
-    }
-
-    public void setAffiliatedId(String affiliatedId) {
-        this.affiliatedId = affiliatedId;
-    }
-
-    public String getAffiliatedName() {
-        return affiliatedName;
-    }
-
-    public void setAffiliatedName(String affiliatedName) {
-        this.affiliatedName = affiliatedName;
-    }
-
-    public String getComServer() {
-        return comServer;
-    }
-
-    public void setComServer(String comServer) {
-        this.comServer = comServer;
-    }
-
-    public String getComDemand() {
-        return comDemand;
-    }
-
-    public void setComDemand(String comDemand) {
-        this.comDemand = comDemand;
-    }
-
-    public String getFoundingTime() {
-        return foundingTime;
-    }
-
-    public void setFoundingTime(String foundingTime) {
-        this.foundingTime = foundingTime;
-    }
-
-    public String getComType() {
-        return comType;
-    }
-
-    public void setComType(String comType) {
-        this.comType = comType;
-    }
-
-    public String getComPerSonNumber() {
-        return comPerSonNumber;
-    }
-
-    public void setComPerSonNumber(String comPerSonNumber) {
-        this.comPerSonNumber = comPerSonNumber;
-    }
-
-    public String getComAddress() {
-        return comAddress;
-    }
-
-    public void setComAddress(String comAddress) {
-        this.comAddress = comAddress;
-    }
-
-    public String getBrowseNumber() {
-        return browseNumber;
-    }
-
-    public void setBrowseNumber(String browseNumber) {
-        this.browseNumber = browseNumber;
-    }
-
-    public String getCommentNumber() {
-        return commentNumber;
-    }
-
-    public void setCommentNumber(String commentNumber) {
-        this.commentNumber = commentNumber;
-    }
-
-    public String getCareNumber() {
-        return careNumber;
-    }
-
-    public void setCareNumber(String careNumber) {
-        this.careNumber = careNumber;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
+    @Override
+    public String toString() {
+        return "CompanyInfoShow{" +
+                "companyId='" + companyId + '\'' +
+                ", comName='" + comName + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", comWeb='" + comWeb + '\'' +
+                ", comAdmin='" + comAdmin + '\'' +
+                ", affiliatedId='" + affiliatedId + '\'' +
+                ", affiliatedName='" + affiliatedName + '\'' +
+                ", comServer='" + comServer + '\'' +
+                ", comDemand='" + comDemand + '\'' +
+                ", foundingTime='" + foundingTime + '\'' +
+                ", comProperty='" + comProperty + '\'' +
+                ", comPropertyName='" + comPropertyName + '\'' +
+                ", comPerSonNumber='" + comPerSonNumber + '\'' +
+                ", comScale='" + comScale + '\'' +
+                ", personAvatar=" + personAvatar +
+                ", comAddress='" + comAddress + '\'' +
+                ", city='" + city + '\'' +
+                ", browseNumber='" + browseNumber + '\'' +
+                ", commentNumber='" + commentNumber + '\'' +
+                ", careNumber='" + careNumber + '\'' +
+                ", isCare='" + isCare + '\'' +
+                ", comSynopsis='" + comSynopsis + '\'' +
+                ", addrPark='" + addrPark + '\'' +
+                ", conTele='" + conTele + '\'' +
+                ", ownerLaw='" + ownerLaw + '\'' +
+                ", ownerPhone='" + ownerPhone + '\'' +
+                ", products='" + products + '\'' +
+                ", creditPoints='" + creditPoints + '\'' +
+                ", creditUpdateTime='" + creditUpdateTime + '\'' +
+                '}';
     }
 }

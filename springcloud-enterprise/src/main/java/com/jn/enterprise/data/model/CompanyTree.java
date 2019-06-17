@@ -39,7 +39,6 @@ public class CompanyTree {
     @ApiModelProperty(value = "指标值")
     private String DATA;
 
-
     @ApiModelProperty(value = "合计")
     private String sumval;
 
@@ -149,5 +148,24 @@ public class CompanyTree {
 
     public void setChildren(List<CompanyTree> children) {
         this.children = children;
+    }
+
+    @Override
+    public String toString() {
+        return "CompanyTree{" +
+                "taskbatch='" + taskbatch + '\'' +
+                ", modelid='" + modelid + '\'' +
+                ", tabid='" + tabid + '\'' +
+                ", tabname='" + tabname + '\'' +
+                ", targetid='" + targetid + '\'' +
+                ", targetname='" + targetname + '\'' +
+                ", parentid='" + parentid + '\'' +
+                ", formid='" + formid + '\'' +
+                ", formname='" + formname + '\'' +
+                ", unit='" + unit + '\'' +
+                ", DATA='" + DATA + '\'' +
+                ", sumval='" + sumval + '\'' +
+                ", children=" + children +
+                '}';
     }
 }

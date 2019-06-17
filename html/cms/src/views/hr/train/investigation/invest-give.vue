@@ -174,8 +174,9 @@
         </div>
       </div>
       <el-row type="flex" justify="center">
-        <el-col :span="1">
+        <el-col :span="8">
           <el-button type="primary" @click="save">保存</el-button>
+          <el-button type="primary" @click="goBack($route)">返回</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -196,7 +197,7 @@ export default {
       activeName: 'second',
       // 二维码
       appSrc:
-          'http://localhost:9527/#/hr/train/investigation/invest-page?projectId=' +
+          window.location.host + '/#/hr/train/investigation/invest-page?projectId=' +
           this.$route.query.id,
       // 提交数据
       formData: {
@@ -216,7 +217,7 @@ export default {
         researchProject: this.$route.query.researchProject,
         surveyDimensional: 'static/QrCode/qr.jpg',
         surveyUrl:
-            'http://localhost:9527/#/hr/train/investigation/invest-page?projectId=' +
+             window.location.host + '/#/hr/train/investigation/invest-page?projectId=' +
             this.$route.query.id
       }
     }
@@ -293,6 +294,12 @@ export default {
     },
     // 保存
     save() {
+      if (this.formData.researchMethod === 1) {
+        // 匿名时
+        this.formData.isShowJobNumber = 2
+        this.formData.isShowName = 2
+        this.formData.isShowPhone = 2
+      }
       api('hr/train/sendInvestiage', this.formData).then(res => {
         if (res.data.code === '0000') {
           this.$message.success('保存成功！')
@@ -300,6 +307,23 @@ export default {
           this.$message.error(res.data.result)
         }
       })
+    },
+    // 返回
+    goBack(view) {
+      this.$store.dispatch('delView', view).then(({ visitedViews }) => {
+        if (this.isActive(view)) {
+          const latestView = visitedViews.slice(-1)[0]
+          if (latestView) {
+            this.$router.push('invest-analysis')
+          } else {
+            // this.$router.push('/')
+            this.$router.push('invest-analysis')
+          }
+        }
+      })
+    },
+    isActive(route) {
+      return route.path === this.$route.path
     }
   }
 }

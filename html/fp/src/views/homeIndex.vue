@@ -1,5 +1,7 @@
 <template>
-  <div class="portalIndex">
+  <div
+    :class="{'h-100': $store.state.isMobile}"
+    class="portalIndex">
     <div class="portalIndexImg" v-if="$store.state.hiddenNav">
       <div class="header" id="header" :class="{'headerw':isCenter||showFF}">
         <div class="headerContainer clearfix">
@@ -12,9 +14,9 @@
               <i class="el-icon-bell" style="font-size:20px"></i>
             </router-link> -->
             <!-- <span v-if="isLogin" style="margin-right:10px">您好！{{accoutInfo}}</span> -->
-            <div class="search pointer" v-if="luyouString.indexOf($route.name) == -1">
+            <!-- <div class="search pointer" v-if="luyouString.indexOf($route.name) == -1">
               <i class="el-icon-search" @click="show4=true" style="font-size:20px"></i>
-            </div>
+            </div> -->
             <user-info></user-info>
             <!-- <div class="navlogin">
               <router-link to="/parkNotice" class="" v-if="isLogin">
@@ -33,9 +35,6 @@
               </li>
               <li>
                 <router-link to="/investment" class="router-link" :class="{'ru-active':$route.path == '/investment'}">招商引资</router-link>
-              </li>
-              <li>
-                <router-link to="" class="router-link" :class="{'ru-active':$route.path == ''}">智慧党建</router-link>
               </li>
               <li>
                 <router-link to="/enterpriseservice" class="router-link" :class="{'ru-active':$route.path == '/enterpriseservice'}">企业服务</router-link>
@@ -71,7 +70,9 @@
     </div>
 
     <!--    主体内容开始-->
-    <div style="position:relative;z-index: 0">
+    <div
+      :class="{'h-100': $store.state.isMobile}"
+      style="position:relative;z-index: 0">
       <router-view></router-view>
     </div>
 
@@ -82,12 +83,12 @@
   import swiper from "swiper";
   import userInfo from './common/userInfoData'
   export default {
-     components: {
+    components: {
       userInfo
     },
     data() {
       return {
-        luyouString:'portalIndex,enterpriseservice,investment',
+        luyouString:'portalIndex,enterpriseservice,investment,home,messageCenter',
         showMes:false,
         // sousuo: false,
         show1: false,
@@ -328,8 +329,8 @@
           }
         }
         .ru-active{
-            color: #00a041;
-          }
+          color: #00a041;
+        }
       }
       .search_box {
         background: rgba(0, 0, 0, 0.3);
@@ -387,4 +388,3 @@
     }
   }
 </style>
-

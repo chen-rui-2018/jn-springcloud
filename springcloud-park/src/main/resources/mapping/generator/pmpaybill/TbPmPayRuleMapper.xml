@@ -3,6 +3,8 @@
 <mapper namespace="com.jn.park.pmpaybill.dao.TbPmPayRuleMapper">
   <resultMap id="BaseResultMap" type="com.jn.park.pmpaybill.entity.TbPmPayRule">
     <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="company_id" jdbcType="VARCHAR" property="companyId" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="calc_mode" jdbcType="TINYINT" property="calcMode" />
     <result column="share_percentage" jdbcType="INTEGER" property="sharePercentage" />
@@ -10,6 +12,11 @@
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="price" jdbcType="DECIMAL" property="price" />
     <result column="pay_type" jdbcType="VARCHAR" property="payType" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -70,7 +77,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, calc_mode, share_percentage, status, remark, price, pay_type
+    id, company_id, company_name, name, calc_mode, share_percentage, status, remark, 
+    price, pay_type, record_status, creator_account, created_time, modifier_account, 
+    modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.pmpaybill.entity.TbPmPayRuleCriteria" resultMap="BaseResultMap">
     select
@@ -103,18 +112,30 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.park.pmpaybill.entity.TbPmPayRule">
-    insert into tb_pm_pay_rule (id, name, calc_mode, 
-      share_percentage, status, remark, 
-      price, pay_type)
-    values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{calcMode,jdbcType=TINYINT}, 
-      #{sharePercentage,jdbcType=INTEGER}, #{status,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR}, 
-      #{price,jdbcType=DECIMAL}, #{payType,jdbcType=VARCHAR})
+    insert into tb_pm_pay_rule (id, company_id, company_name, 
+      name, calc_mode, share_percentage, 
+      status, remark, price, 
+      pay_type, record_status, creator_account, 
+      created_time, modifier_account, modified_time
+      )
+    values (#{id,jdbcType=VARCHAR}, #{companyId,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{calcMode,jdbcType=TINYINT}, #{sharePercentage,jdbcType=INTEGER}, 
+      #{status,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, 
+      #{payType,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.pmpaybill.entity.TbPmPayRule">
     insert into tb_pm_pay_rule
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
+      </if>
+      <if test="companyId != null">
+        company_id,
+      </if>
+      <if test="companyName != null">
+        company_name,
       </if>
       <if test="name != null">
         name,
@@ -137,10 +158,31 @@
       <if test="payType != null">
         pay_type,
       </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        #{companyName,jdbcType=VARCHAR},
       </if>
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
@@ -163,6 +205,21 @@
       <if test="payType != null">
         #{payType,jdbcType=VARCHAR},
       </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.park.pmpaybill.entity.TbPmPayRuleCriteria" resultType="java.lang.Long">
@@ -176,6 +233,12 @@
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyId != null">
+        company_id = #{record.companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyName != null">
+        company_name = #{record.companyName,jdbcType=VARCHAR},
       </if>
       <if test="record.name != null">
         name = #{record.name,jdbcType=VARCHAR},
@@ -198,6 +261,21 @@
       <if test="record.payType != null">
         pay_type = #{record.payType,jdbcType=VARCHAR},
       </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -206,13 +284,20 @@
   <update id="updateByExample" parameterType="map">
     update tb_pm_pay_rule
     set id = #{record.id,jdbcType=VARCHAR},
+      company_id = #{record.companyId,jdbcType=VARCHAR},
+      company_name = #{record.companyName,jdbcType=VARCHAR},
       name = #{record.name,jdbcType=VARCHAR},
       calc_mode = #{record.calcMode,jdbcType=TINYINT},
       share_percentage = #{record.sharePercentage,jdbcType=INTEGER},
       status = #{record.status,jdbcType=TINYINT},
       remark = #{record.remark,jdbcType=VARCHAR},
       price = #{record.price,jdbcType=DECIMAL},
-      pay_type = #{record.payType,jdbcType=VARCHAR}
+      pay_type = #{record.payType,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -220,6 +305,12 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.pmpaybill.entity.TbPmPayRule">
     update tb_pm_pay_rule
     <set>
+      <if test="companyId != null">
+        company_id = #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
       </if>
@@ -241,18 +332,40 @@
       <if test="payType != null">
         pay_type = #{payType,jdbcType=VARCHAR},
       </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.park.pmpaybill.entity.TbPmPayRule">
     update tb_pm_pay_rule
-    set name = #{name,jdbcType=VARCHAR},
+    set company_id = #{companyId,jdbcType=VARCHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
       calc_mode = #{calcMode,jdbcType=TINYINT},
       share_percentage = #{sharePercentage,jdbcType=INTEGER},
       status = #{status,jdbcType=TINYINT},
       remark = #{remark,jdbcType=VARCHAR},
       price = #{price,jdbcType=DECIMAL},
-      pay_type = #{payType,jdbcType=VARCHAR}
+      pay_type = #{payType,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * 企业详情Bean
@@ -51,10 +50,10 @@ public class ServiceCompany implements Serializable {
     private String material;
     @ApiModelProperty(value = "企业性质ID")
     private String comProperty;
-    @ApiModelProperty(value = "企业性质名称[数组]")
+    @ApiModelProperty(value = "企业性质名称")
     private String comPropertyName;
     @ApiModelProperty(value = "注册资本 万元")
-    private Long regCapital;
+    private BigDecimal regCapital;
     @ApiModelProperty(value = "增资情况")
     private String addCapital;
     @ApiModelProperty(value = "企业规模")
@@ -115,6 +114,8 @@ public class ServiceCompany implements Serializable {
     private String parkBuildName;
     @ApiModelProperty(value = "信用积分")
     private BigDecimal creditPoints;
+    @ApiModelProperty(value = "信用积分更新时间")
+    private String creditUpdateTime;
     @ApiModelProperty(value = "企业类型")
     private String comType;
     @ApiModelProperty(value = "是否参加园区获取【0否1是】")
@@ -125,6 +126,8 @@ public class ServiceCompany implements Serializable {
     private String checkTime;
     @ApiModelProperty(value = "企业来源 1人才企业2招商企业")
     private String comSource;
+    @ApiModelProperty(value = "所属园区ID")
+    private String affiliatedPark;
     @ApiModelProperty(value = "创建人")
     private String creatorAccount;
     @ApiModelProperty(value = "修改人")
@@ -282,11 +285,11 @@ public class ServiceCompany implements Serializable {
         this.comPropertyName = comPropertyName;
     }
 
-    public Long getRegCapital() {
+    public BigDecimal getRegCapital() {
         return regCapital;
     }
 
-    public void setRegCapital(Long regCapital) {
+    public void setRegCapital(BigDecimal regCapital) {
         this.regCapital = regCapital;
     }
 
@@ -530,6 +533,14 @@ public class ServiceCompany implements Serializable {
         this.creditPoints = creditPoints;
     }
 
+    public String getCreditUpdateTime() {
+        return creditUpdateTime;
+    }
+
+    public void setCreditUpdateTime(String creditUpdateTime) {
+        this.creditUpdateTime = creditUpdateTime;
+    }
+
     public String getComType() {
         return comType;
     }
@@ -568,6 +579,14 @@ public class ServiceCompany implements Serializable {
 
     public void setComSource(String comSource) {
         this.comSource = comSource;
+    }
+
+    public String getAffiliatedPark() {
+        return affiliatedPark;
+    }
+
+    public void setAffiliatedPark(String affiliatedPark) {
+        this.affiliatedPark = affiliatedPark;
     }
 
     public String getCreatorAccount() {
@@ -641,7 +660,7 @@ public class ServiceCompany implements Serializable {
                 ", comPropertyName='" + comPropertyName + '\'' +
                 ", regCapital=" + regCapital +
                 ", addCapital='" + addCapital + '\'' +
-                ", comScale=" + comScale +
+                ", comScale='" + comScale + '\'' +
                 ", foundingTime='" + foundingTime + '\'' +
                 ", runTime='" + runTime + '\'' +
                 ", induType='" + induType + '\'' +
@@ -670,11 +689,13 @@ public class ServiceCompany implements Serializable {
                 ", parkBuildId='" + parkBuildId + '\'' +
                 ", parkBuildName='" + parkBuildName + '\'' +
                 ", creditPoints=" + creditPoints +
+                ", creditUpdateTime='" + creditUpdateTime + '\'' +
                 ", comType='" + comType + '\'' +
                 ", isJoinActivity='" + isJoinActivity + '\'' +
                 ", checkStatus='" + checkStatus + '\'' +
                 ", checkTime='" + checkTime + '\'' +
                 ", comSource='" + comSource + '\'' +
+                ", affiliatedPark='" + affiliatedPark + '\'' +
                 ", creatorAccount='" + creatorAccount + '\'' +
                 ", modifierAccount='" + modifierAccount + '\'' +
                 ", createdTime='" + createdTime + '\'' +

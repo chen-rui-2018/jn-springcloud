@@ -17,6 +17,8 @@ public enum PaymentBillExceptionEnum implements CodeAndMsg {
     BILL_ID_IS_NOT_NULL("6020505","账单标识不能为空"),
     BILL_STATUS_IS_NOT_NULL("60205014","账单状态不能为空"),
     BILL_IS_NOT_EXIT("6020506","账单不存在"),
+    BILL_IS_EXIT("6020541","账单已存在"),
+    BILL_ACCOUNT_EXIT("6020507","账户已存在"),
     BILL_ORDER_IS_NOT_EXIT("6020508","支付账单创建异常，请稍后重试"),
     COMMIT_AMOUNT_NOT_EQUAL_BILL_AMOUNT("6020509","提交金额不等于账单金额"),
     PAYMENT_STATUS_IS_PAY("6020516","账单已支付，无需再次支付。"),
@@ -38,6 +40,9 @@ public enum PaymentBillExceptionEnum implements CodeAndMsg {
     BILL_ACCOUNT_NOT_EXIT("6020538","当前登录用户与账单所属用户不一致"),
     PAYMENT_STATUS_IS_PAY_REMIND("6020539","账单已支付，无需核对提醒"),
     PAYMENT_REMIND_IS_SEND_OUT("6020540","已发送核对提醒，无需重复发送"),
+    PAYMENT_STATUS_IS_PAY_CONFIRM("6020541","账单已支付，无需缴费确认"),
+    PAYMENT_OFFLINE_CONFIRM_FAIL("6020542","线下缴费确认失败"),
+    PAYMENT_EMAIL_CONTEXT("6020543","【白下高新区】您名下有待缴账单，请及时处理，以免影响您的园区信用分。"),
     ;
     /**
      * 编码

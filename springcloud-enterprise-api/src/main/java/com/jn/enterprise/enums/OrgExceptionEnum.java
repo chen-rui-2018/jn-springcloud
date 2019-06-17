@@ -31,6 +31,10 @@ public enum OrgExceptionEnum  implements CodeAndMsg {
     LOGIN_ACCOUNT_NOT_ORG_MANAGE("5020519","当前登录用户不是机构管理员，不能把顾问设为联系人"),
     ACCOUNT_NOT_ORG_ADVISOR("5020519","设为联系人的账号不是机构顾问"),
     ACCOUNT_NOT_ORG_CONTACT("5020520","取消联系人的账号不是机构联系人"),
+    ORG_APPLY_PARAM_NOT_NULL("5020521","机构认证流程后置处理入参不能为空"),
+    ORG_INFO_NOT_EXIST("5020522","机构信息在系统中不存在或已失效"),
+    ORG_INFO_HAS_EXIST("5020523","当前用户信息已存在，请不要重复进行机构认证"),
+    ORG_HONOR_NAME_NOT_NULL("5020524","机构荣誉资质名称不能为空"),
     ;
 
     /**

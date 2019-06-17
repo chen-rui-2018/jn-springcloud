@@ -6,11 +6,14 @@
     </div>
     <div class="receivedEvaluate_main">
       <div class="searh_tab">
+        <span>需求人：</span>
         <el-input placeholder="请输入需求人" v-model="sendData.issueAccount" class="input-with-select" clearable>
         </el-input>
-        <el-input placeholder="请输入服务产品" v-model="sendData.advisorName" class="input-with-select" clearable>
+        <span>服务产品：</span>
+        <el-input placeholder="请输入服务产品" v-model="sendData.productName" class="input-with-select" clearable>
         </el-input>
-        <el-input placeholder="请输入服务顾问" v-model="sendData.advisorId" class="input-with-select" clearable>
+        <span>服务专员：</span>
+        <el-input placeholder="请输入服务专员" v-model="sendData.advisorName" class="input-with-select" clearable>
         </el-input>
         <span class="confirm" @click="confirm">确定</span>
         <span class="reset" @click="reset">重置</span>
@@ -21,7 +24,7 @@
           <el-table-column prop="orgName" label="服务机构" align="center"> </el-table-column>
           <el-table-column prop="orgTelephone" label="机构电话" align="center"> </el-table-column>
           <el-table-column prop="productName" label="服务产品" align="center"> </el-table-column>
-          <el-table-column prop="advisorName" label="服务顾问" align="center"> </el-table-column>
+          <el-table-column prop="advisorName" label="服务专员" align="center"> </el-table-column>
           <el-table-column prop="issueTime" label="提需求日期" align="center" width="160"> </el-table-column>
           <el-table-column prop="handleTime" label="处理日期" align="center" width="160"> </el-table-column>
           <el-table-column prop="commentTime" label="评价日期" align="center" width="160"> </el-table-column>
@@ -88,7 +91,7 @@ export default {
       this.getReceivedValuate()
     },
     reset(){
-      this.sendData.advisorId=''
+      this.sendData.advisorName=''
       this.sendData.issueAccount=''
       this.sendData.productName=''
     },
@@ -133,7 +136,7 @@ export default {
           border-color: #00a041;
         }
         .el-input{
-          width: 25%;
+          width: 17%;
         }
         .el-select>.el-input{
           width:100%;

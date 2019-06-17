@@ -1,12 +1,12 @@
 <template>
   <div class="attendanceDetails">
-    <div class="title">考勤明细</div>
+    <!-- <div class="title">考勤明细</div> -->
     <div v-show="isAdministrator" class="isAdministrator"><span :class="isPersonage===1?'selectedAcitive':''" @click="cutPersonage">个人</span><span
         :class="isPersonage===0?'selectedAcitive':''" @click="cutStatus">部门</span></div>
     <div class="dateTime">
       <div>
         <group>
-          <datetime v-model="currentDate" format="YYYY-MM"></datetime>
+          <datetime v-model="currentDate" format="YYYY-MM" @on-change="getData"></datetime>
         </group>
       </div>
       <div v-show="isPersonage===1" class="useInfo">
@@ -21,47 +21,34 @@
     <!-- 个人考勤结构 -->
     <div v-for="(item, index) in attendanceArr" :key="index">
       <div class="clockDetails ">
-        <div class="pd30" v-show="item.attendanceType==='0'&&isPersonage===1">
+        <div v-show="isPersonage===1">
+          <div class="pd30">
+            <span v-show="item.attendanceType==='0'">正常</span>
+            <span v-show="item.attendanceType==='1'">迟到</span>
+            <span v-show="item.attendanceType==='2'">早退</span>
+            <span v-show="item.attendanceType==='3'">缺卡</span>
+            <span v-show="item.attendanceType==='4'">加班</span>
+            <span v-show="item.attendanceType==='5'">旷工</span>
+            <span v-show="item.attendanceType==='6'">请假</span>
+            <span v-show="item.attendanceType==='0'||item.attendanceType==='3'||item.attendanceType==='5'">{{item.frequency}}次
+              <i v-show="item.isfold" class="iconfont" @click="item.isfold=!item.isfold">&#xe669;</i> <i v-show="!item.isfold"
+                class="iconfont" @click="item.isfold=!item.isfold">&#xe638;</i></span>
+            <span v-show="item.attendanceType==='1'||item.attendanceType==='2'||item.attendanceType==='4'||item.attendanceType==='6'">{{item.frequency}}次,共{{item.totalTime}}
+              <i v-show="item.isfold" class="iconfont" @click="item.isfold=!item.isfold">&#xe669;</i> <i v-show="!item.isfold"
+                class="iconfont" @click="item.isfold=!item.isfold">&#xe638;</i></span>
+          </div>
+          <div v-show="item.isfold">
+            <ul class="recordInfo">
+              <li v-for="(i, index1) in item.statusDetailedList" :key="index1">
+                <div>{{i.timeKey}}</div><span>{{i.value}}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- <div class="pd30" v-show="isPersonage===0&&item.attendanceType==='0'">
           <span>正常</span>
-          <span>{{item.frequency}}次
-            <i v-show="iconStatus" class="iconfont" @click="cutIcon">&#xe669;</i> <i v-show="!iconStatus" class="iconfont"
-              @click="cutIcon">&#xe638;</i></span>
-
-        </div>
-
-        <div class="pd30" v-show="item.attendanceType==='1'&&isPersonage===1"> <span>迟到</span> <span>{{item.frequency}}次,共{{item.totalTime}}
-            <i v-show="iconStatus" class="iconfont" @click="cutIcon">&#xe669;</i> <i v-show="!iconStatus" class="iconfont"
-              @click="cutIcon">&#xe638;</i></span>
-
-        </div>
-         <div v-show="item.attendanceType==='2'&&isPersonage===1" class="pd30"> <span>早退</span> <span>{{item.frequency}}次,共{{item.totalTime}}
-            <i v-show="iconStatus" class="iconfont" @click="cutIcon">&#xe669;</i> <i v-show="!iconStatus" class="iconfont"
-              @click="cutIcon">&#xe638;</i></span>
-
-        </div>
-        <div v-show="item.attendanceType==='3'&&isPersonage===1" class="pd30"> <span>缺卡</span> <span>{{item.frequency}}次
-            <i v-show="iconStatus" class="iconfont" @click="cutIcon">&#xe669;</i> <i v-show="!iconStatus" class="iconfont"
-              @click="cutIcon">&#xe638;</i></span>
-
-        </div>
-        <div v-show="item.attendanceType==='4'&&isPersonage===1" class="pd30"> <span>加班</span> <span>{{item.frequency}}次,共{{item.totalTime}}
-            <i v-show="iconStatus" class="iconfont" @click="cutIcon">&#xe669;</i> <i v-show="!iconStatus" class="iconfont"
-              @click="cutIcon">&#xe638;</i></span>
-
-        </div>
-         <div class="pd30" v-show="item.attendanceType==='5'&&isPersonage===1"> <span>旷工</span> <span>{{item.frequency}}次
-            <i v-show="iconStatus" class="iconfont" @click="cutIcon">&#xe669;</i> <i v-show="!iconStatus" class="iconfont"
-              @click="cutIcon">&#xe638;</i></span>
-
-        </div>
-         <div class="pd30" v-show="item.attendanceType==='6'&&isPersonage===1"> <span>请假</span> <span>{{item.frequency}}次,共{{item.totalTime}}
-            <i v-show="iconStatus" class="iconfont" @click="cutIcon">&#xe669;</i> <i v-show="!iconStatus" class="iconfont"
-              @click="cutIcon">&#xe638;</i></span>
-
-        </div>
-          <div class="pd30" v-show="isPersonage===0&&item.attendanceType==='0'">
-          <span>正常</span>
-         <span>{{item.number}}人
+          <span>{{item.number}}人
             <i v-show="iconStatus" class="iconfont" @click="cutIcon">&#xe669;</i> <i v-show="!iconStatus" class="iconfont"
               @click="cutIcon">&#xe638;</i></span>
         </div>
@@ -74,7 +61,7 @@
             <i v-show="iconStatus" class="iconfont" @click="cutIcon">&#xe669;</i> <i v-show="!iconStatus" class="iconfont"
               @click="cutIcon">&#xe638;</i></span>
         </div>
-         <div class="pd30" v-show="item.attendanceType=='3'&&isPersonage===0"> <span>缺卡</span> <span>{{item.number}}人
+        <div class="pd30" v-show="item.attendanceType=='3'&&isPersonage===0"> <span>缺卡</span> <span>{{item.number}}人
             <i v-show="iconStatus" class="iconfont" @click="cutIcon">&#xe669;</i> <i v-show="!iconStatus" class="iconfont"
               @click="cutIcon">&#xe638;</i></span>
 
@@ -92,76 +79,110 @@
             <i v-show="iconStatus" class="iconfont" @click="cutIcon">&#xe669;</i> <i v-show="!iconStatus" class="iconfont"
               @click="cutIcon">&#xe638;</i></span>
 
-        </div>
-        <div v-show="iconStatus&&isPersonage===1">
+        </div> -->
+        <!-- <div v-show="iconStatus0&&isPersonage===1">
           <ul class="recordInfo">
             <li v-for="(i, index1) in item.statusDetailedList" :key="index1">
               <div>{{i.timeKey}}</div><span>{{i.value}}</span>
             </li>
           </ul>
-        </div>
-        <div v-show="iconStatus&&isPersonage===0">
+        </div> -->
+        <!-- <div v-show="iconStatus&&isPersonage===0">
           <ul class="departmentRecord">
-            <li v-for="(i, index1) in item.statusAttendanceObject"  :key="index1">
-              <div> <span>{{i.department}}</span>   <span>{{i.name}}</span> <span v-show="i.attendanceType==='5'">旷工{{i.frequency}}次</span></div>
+            <li v-for="(i, index1) in item.statusAttendanceObject" :key="index1">
+              <div> <span>{{i.department}}</span> <span>{{i.name}}</span> <span v-show="i.attendanceType==='5'">旷工{{i.frequency}}次</span></div>
 
               <ul class="recordInfo">
-                 <li v-for="(v, idx) in i.statusDetailedList"  :key="idx"><div>{{v.timeKey}}</div><span>{{v.value}}</span></li>
+                <li v-for="(v, idx) in i.statusDetailedList" :key="idx">
+                  <div>{{v.timeKey}}</div><span>{{v.value}}</span>
+                </li>
               </ul>
 
             </li>
           </ul>
-        </div>
+        </div> -->
       </div>
     </div>
     <!-- 部门考勤结构 -->
-    <!-- <div v-show="isPersonage===0" v-for="v in departmentList" :key="v.attendanceType"> -->
-      <!-- <div  class="clockDetails">
-        <div class="pd30" v-if="v.attendanceType=='0'">
+    <div v-if="isPersonage===0">
+      <div class="clockDetails" v-for="v in departmentList" :key="v.attendanceType">
+        <div>
+          <div class="pd30">
+            <span v-show="v.attendanceType==='0'">正常</span>
+            <span v-show="v.attendanceType==='1'">迟到</span>
+            <span v-show="v.attendanceType==='2'">早退</span>
+            <span v-show="v.attendanceType==='3'">缺卡</span>
+            <span v-show="v.attendanceType==='4'">加班</span>
+            <span v-show="v.attendanceType==='5'">旷工</span>
+            <span v-show="v.attendanceType==='6'">请假</span>
+            <span>{{v.number}}人
+              <i v-show="v.isfold" class="iconfont" @click="v.isfold=!v.isfold">&#xe669;</i> <i v-show="!v.isfold"
+                class="iconfont" @click="v.isfold=!v.isfold">&#xe638;</i></span>
+            <!-- <span v-show="v.attendanceType==='1'||v.attendanceType==='2'||v.attendanceType==='4'||v.attendanceType==='6'">{{v.frequency}}次,共{{v.totalTime}}
+              <i v-show="v.isfold" class="iconfont" @click="v.isfold=!v.isfold">&#xe669;</i> <i v-show="!v.isfold"
+                class="iconfont" @click="v.isfold=!v.isfold">&#xe638;</i></span> -->
+          </div>
+          <div v-show="v.isfold">
+            <ul class="departmentRecord">
+              <li v-for="(i, index1) in v.statusAttendanceObject" :key="index1">
+                <div> <span>{{i.department}}</span> <span class="text-green">{{i.name}}</span> <span class="mr" v-show="i.attendanceType==='5'||i.attendanceType==='0'||i.attendanceType==='3'">{{i.frequency}}次</span><span class="mr" v-show="i.attendanceType==='1'||i.attendanceType==='2'||i.attendanceType==='4'||i.attendanceType==='6'">{{i.frequency}}次,共{{i.totalTime}}</span>
+                </div>
+
+                <ul class="recordInfo">
+                  <li v-for="(v, idx) in i.statusDetailedList" :key="idx">
+                    <div>{{v.timeKey}}</div><span>{{v.value}}</span>
+                  </li>
+                </ul>
+                <!-- <div>{{i.timeKey}}</div><span>{{i.value}}</span> -->
+              </li>
+            </ul>
+          </div>
+          <!-- <div class="pd30" v-if="v.attendanceType=='0'">
           <span>正常</span>
           <span>{{v.number}}人
             <i v-show="iconStatus" class="iconfont" @click="cutIcon">&#xe669;</i> <i v-show="!iconStatus" class="iconfont"
               @click="cutIcon">&#xe638;</i></span>
-        </div> -->
-          <!-- <div class="pd30" v-if="v.attendanceType=='1'"> <span>迟到</span> <span>{{v.number}}人
+        </div>
+        <div class="pd30" v-if="v.attendanceType=='1'"> <span>迟到</span> <span>{{v.number}}人
             <i v-show="iconStatus" class="iconfont" @click="cutIcon">&#xe669;</i> <i v-show="!iconStatus" class="iconfont"
               @click="cutIcon">&#xe638;</i></span>
 
-        </div> -->
-         <!-- <div class="pd30" v-show="v.attendanceType=='2 '"> <span>早退</span> <span>{{v.number}}人
+        </div>
+        <div class="pd30" v-show="v.attendanceType=='2 '"> <span>早退</span> <span>{{v.number}}人
             <i v-show="iconStatus" class="iconfont" @click="cutIcon">&#xe669;</i> <i v-show="!iconStatus" class="iconfont"
               @click="cutIcon">&#xe638;</i></span>
 
-        </div> -->
-         <!-- <div class="pd30" v-show="v.attendanceType=='3'"> <span>缺卡</span> <span>{{v.number}}人
+        </div>
+        <div class="pd30" v-show="v.attendanceType=='3'"> <span>缺卡</span> <span>{{v.number}}人
             <i v-show="iconStatus" class="iconfont" @click="cutIcon">&#xe669;</i> <i v-show="!iconStatus" class="iconfont"
               @click="cutIcon">&#xe638;</i></span>
 
-        </div> -->
-        <!-- <div class="pd30" v-show="v.attendanceType=='4'"> <span>加班</span> <span>{{v.number}}人
+        </div>
+        <div class="pd30" v-show="v.attendanceType=='4'"> <span>加班</span> <span>{{v.number}}人
             <i v-show="iconStatus" class="iconfont" @click="cutIcon">&#xe669;</i> <i v-show="!iconStatus" class="iconfont"
               @click="cutIcon">&#xe638;</i></span>
 
-        </div> -->
-        <!-- <div class="pd30" v-show="v.attendanceType=='5'"> <span>旷工</span> <span>{{v.number}}人
+        </div>
+        <div class="pd30" v-show="v.attendanceType=='5'"> <span>旷工</span> <span>{{v.number}}人
             <i v-show="iconStatus" class="iconfont" @click="cutIcon">&#xe669;</i> <i v-show="!iconStatus" class="iconfont"
               @click="cutIcon">&#xe638;</i></span>
 
-        </div> -->
-        <!-- <div class="pd30" v-show="v.attendanceType=='6'"> <span>请假</span> <span>{{v.number}}人
+        </div>
+        <div class="pd30" v-show="v.attendanceType=='6'"> <span>请假</span> <span>{{v.number}}人
             <i v-show="iconStatus" class="iconfont" @click="cutIcon">&#xe669;</i> <i v-show="!iconStatus" class="iconfont"
               @click="cutIcon">&#xe638;</i></span>
 
-        </div> -->
-        <!-- <div v-show="iconStatus">
+        </div>
+        <div v-show="iconStatus">
           <ul class="recordInfo">
             <li v-for="(i, index3) in v.statusDetailedList" :key="index3">
               <div>{{i.timeKey}}</div><span>{{i.value}}</span>
             </li>
           </ul>
         </div> -->
-      <!-- </div> -->
-    <!-- </div> -->
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -170,7 +191,6 @@ export default {
   data () {
     return {
       num: 0,
-      iconStatus: true,
       department: '',
       userName: '',
       currentDate: '',
@@ -192,6 +212,13 @@ export default {
     this.currentDate = year + '-' + month
   },
   methods: {
+    getData () {
+      if (this.isPersonage === 1) {
+        this.init()
+      } else {
+        this.getDepartmentInfo()
+      }
+    },
     // 查询用户个人考勤明细
     init () {
       // 获取完整的日期
@@ -205,9 +232,12 @@ export default {
           if (res.code === '0000') {
             if (res.data) {
               this.attendanceArr = res.data
+              this.attendanceArr.forEach(ele => {
+                this.$set(ele, 'isfold', true)
+              })
             }
           } else {
-            this.$vux.toast.text(res.result, 'top')
+            this.$vux.toast.text(res.result)
           }
         }
       })
@@ -224,25 +254,33 @@ export default {
           console.log(res)
           if (res.code === '0000') {
             if (res.data) {
-              this.attendanceArr = res.data.attendanceList
+              this.departmentList = res.data.attendanceList
+              this.departmentList.forEach(ele => {
+                this.$set(ele, 'isfold', true)
+              })
               this.num = res.data.totalNumber
             }
           } else {
-            this.$vux.toast.text(res.result, 'top')
+            this.$vux.toast.text(res.result)
           }
         }
       })
     },
-    cutIcon () {
-      this.iconStatus = !this.iconStatus
-    },
+    // cutIcon1 (v) {
+    //   console.log(item)
+    //   if (item.attendanceType === '0') {
+    //     this.iconStatus0 = !this.iconStatus0
+    //   }
+    // },
+    // cutIcon (item) {
+    //   console.log(item)
+    //   this.iconStatus = !this.iconStatus
+    // },
     cutPersonage () {
-      console.log(this.currentDate)
       this.isPersonage = 1
       this.init()
     },
     cutStatus () {
-      console.log(this.currentDate)
       this.isPersonage = 0
       this.getDepartmentInfo()
     }
@@ -252,6 +290,7 @@ export default {
 
 <style lang="scss" scoped>
 .attendanceDetails {
+  padding-top: 1rem;
   font-size: 32px;
   .attendanceNum {
     display: flex;
@@ -261,11 +300,11 @@ export default {
   .pd30 {
     padding: 30px;
   }
-  .departmentRecord{
-          width: 100%;
-          padding: 20px;
-          background:  rgb(242, 242, 242);
-          font-size: 34px;
+  .departmentRecord {
+    width: 100%;
+    padding: 20px;
+    background: rgb(242, 242, 242);
+    font-size: 34px;
   }
   .recordInfo {
     padding: 10px 30px;
@@ -288,14 +327,11 @@ export default {
       }
     }
   }
-
-  .title {
-    font-size: 50px;
-    padding: 30px;
-    text-align: center;
-    color: #333;
-    font-weight: 800;
-    border-bottom: 1px solid black;
+  .text-green{
+    color:#00a041;
+  }
+  .mr{
+    margin-left:40px;
   }
   .isAdministrator {
     // padding: 30px;
@@ -309,7 +345,7 @@ export default {
     }
   }
   .selectedAcitive {
-    border-bottom: 1px solid green;
+    border-bottom: 2px solid green;
     color: green;
   }
   .dateTime {
@@ -357,7 +393,7 @@ export default {
     }
   }
   .clockDetails {
-    > div {
+    > div > div:nth-child(1) {
       display: flex;
       justify-content: space-between;
     }

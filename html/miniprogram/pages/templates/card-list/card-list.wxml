@@ -1,7 +1,10 @@
 <view class="card-list">
-    <cover-image class="card-list-poster" src="{{ url }}"></cover-image>
-    <view class="card-list-content">
-        <view class="card-list-title">{{ title }}</view>
-        <slot/>
-    </view>
+  <cover-image wx:if="{{ url }}" class="card-list-poster" src="{{ url }}"></cover-image>
+  <view wx:else class="no-image-bg">
+    <cover-image class="no-image" src="{{ imgBaseUrl + 'default.png' }}"></cover-image>
+  </view>
+  <view class="card-list-content">
+    <view class="card-list-title">{{ title }}</view>
+    <slot/>
+  </view>
 </view>

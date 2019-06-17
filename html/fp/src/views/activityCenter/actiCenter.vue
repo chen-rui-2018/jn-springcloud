@@ -30,8 +30,8 @@
               <span>热度排序</span>
             </li>
             <li class="showListLi">
-              <i class="iconfont icon-menu1" @click="handleCrosswise('icon-menu1')" :class="{'active0':showListFlag == 'icon-menu1'}"></i>
-              <i class="iconfont icon-menu" @click="handleVertical('icon-menu')" :class="{'active0':showListFlag == 'icon-menu'}"></i>
+              <i class="iconfont icon-menu" @click="handleCrosswise('icon-menu')" :class="{'active0':showListFlag == 'icon-menu'}"></i>
+              <i class="iconfont icon-menu1" @click="handleVertical('icon-menu1')" :class="{'active0':showListFlag == 'icon-menu1'}"></i>
             </li>
           </ul>
         </div>
@@ -39,12 +39,12 @@
       <div class="allActi clearfix">
         <ul class="actiFilterUl fl clearfix">
           <li :class="{'active0':actiFilflag == ''}" @click="handleFil('')">全部活动</li>
-          <li v-if="i<5" v-for="(v,i) in actiTypeList" :key="i" :class="{'active0':actiFilflag == v.typeName}" @click="handleFil(v.typeName)">{{v.typeName}}</li>
+          <li v-if="i<5" v-for="(v,i) in actiTypeList" :key="i" :class="{'active0':actiFilflag == v.typeId}" @click="handleFil(v.typeId)">{{v.typeName}}</li>
           <li v-if="this.actiTypeList.length>4" class="bottomLi pr">
             <i class="iconfont icon-bottom" @click.stop="handleTypeList"></i>
             <el-card class="box-card" v-if="showList" style="overflow:auto">
               <ul class="listUl clearfix">
-                <li v-if="k>4" v-for="(i,k) in actiTypeList" :key='k' :class="{'active0':actiFilflag == i.typeName}" @click.stop="handleFil(i.typeName)">
+                <li v-if="k>4" v-for="(i,k) in actiTypeList" :key='k' :class="{'active0':actiFilflag == i.typeId}" @click.stop="handleFil(i.typeId)">
                   <i class="iconfont icon-yuandian"></i>{{i.typeName}}</li>
               </ul>
             </el-card>
@@ -58,8 +58,8 @@
       <div class="actiTab">
         <ul class="allActiUl clearfix" v-if="flag">
           <li v-for="(item,index) in actiListSlim" :key='index'>
-            <div class="postImgItem pointer">
-              <img :src="item.actiPosterUrl" class="postImg" alt="活动海报图片" @click="handleRout(item.id)">
+            <div class="postImgItem pointer" @click="handleRout(item.id)">
+              <img :src="item.actiPosterUrl" class="postImg" alt="活动海报图片" >
             </div>
             <div class="actiInfo">
               <p class="actiNameItem">{{item.actiName}}</p>
@@ -69,7 +69,7 @@
                 <!-- <span>{{item.actiStartTime}}-{{item.actiEndTime.split(' ')[1]}}</span> -->
                 <!-- <span>周日14：00-17：00</span> -->
               </p>
-              <p>
+              <p class="actiAddress">
                 <i class="el-icon-location-outline"></i>
                 <span>{{item.actiAddress}}</span>
               </p>
@@ -117,10 +117,12 @@
               </div>
             </div>
             <div class="verticalRight fr">
-              <el-button type="success" v-if="item.showApplyNum==1" plain @click="nowApply(item.id)" style="width:112px;border:1px solid #00a042;background:#ebfdf1;color:#00a042">立即报名</el-button>
+              <!-- <el-button type="success" v-if="item.showApplyNum==1" plain @click="nowApply(item.id)" style="width:112px;border:1px solid #00a041;background:#ebfdf1;color:#00a041">立即报名</el-button>
               <el-button type="success" v-else-if="item.showApplyNum==0" style="background:#00a042;color:#fff" plain>活动已结束</el-button>
-              <el-button type="success" v-else style="width:112px;background:#00a042;color:#fff">报名成功</el-button>
-
+              <el-button type="success" v-else style="width:112px;background:#00a042;color:#fff">报名成功</el-button> -->
+              <el-button type="success" v-if="item.actiStatus=='3'" style="background:#00a041;height:38px;width:110px" >活动已结束</el-button>
+              <el-button type="success" v-if="item.actiStatus=='4'" style="background:#00a041;height:38px;width:110px" >活动已取消</el-button>
+              <el-button type="success" v-if="item.actiStatus=='2'" style="background:#ecfcf2;height:38px;width:110px;border:1px solid #00a041;color:#00a041;" >报名中</el-button>
             </div>
           </li>
         </ul>
@@ -140,7 +142,7 @@ export default {
       headFlag: true,
       sousuo: false,
       flag: true,
-      showListFlag: "",
+      showListFlag: "icon-menu",
       currentPage4: 1,
       actiFilflag: "",
       colorFlag: "",
@@ -154,7 +156,8 @@ export default {
       timeIndexFlag: "",
       startTime: "",
       endTime: "",
-      showList: false
+      showList: false,
+      typeId:''
     };
   },
   mounted() {
@@ -188,19 +191,19 @@ export default {
     },
     handleFil(v) {
       //筛选
-      this.keyWord = v;
+      this.typeId = v;
       this.actiFilflag = v;
       this.initList();
     },
     handleCrosswise(v) {
       //横向显示
       this.flag = true;
-      this.showListFlag = "icon-menu1";
+      this.showListFlag = "icon-menu";
     },
     handleVertical() {
       //竖向显示
       this.flag = false;
-      this.showListFlag = "icon-menu";
+      this.showListFlag = "icon-menu1";
     },
     handleSizeChange(val) {
       //改变每页显示多少条的回调函数
@@ -231,8 +234,8 @@ export default {
         this.startTime = "";
         this.endTime = "";
       } else {
-        this.startTime = this.api.AddMinTime(new Date(), "day", s);
-        this.endTime = this.api.AddMinTime(new Date(), "day", i);
+        this.startTime = this.api.AddMinTime(new Date(), "day", i);
+        this.endTime = this.api.AddMinTime(new Date(), "day", s);
       }
       this.initList();
     },
@@ -255,7 +258,7 @@ export default {
           page: this.page,
           rows: this.row,
           startTime: this.startTime,
-          typeId: ""
+          typeId: this.typeId
         },
         dataFlag: false,
         callback: function(res) {

@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.pmpaybill.dao.TbPmPriceRuleDeatilsMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.pmpaybill.entity.TbPmPriceRuleDeatils">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="rule_id" jdbcType="VARCHAR" property="ruleId" />
+    <result column="room_id" jdbcType="VARCHAR" property="roomId" />
+    <result column="room_name" jdbcType="VARCHAR" property="roomName" />
+    <result column="room_area" jdbcType="DECIMAL" property="roomArea" />
+    <result column="tower_id" jdbcType="VARCHAR" property="towerId" />
+    <result column="tower_name" jdbcType="VARCHAR" property="towerName" />
+    <result column="pm_unit_price" jdbcType="DECIMAL" property="pmUnitPrice" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, rule_id, room_id, room_name, room_area, tower_id, tower_name, pm_unit_price, 
+    record_status, creator_account, created_time, modifier_account, modified_time, remark
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.park.pmpaybill.entity.TbPmPriceRuleDeatilsCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_pm_price_rule_deatils
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_pm_price_rule_deatils
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_pm_price_rule_deatils
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.park.pmpaybill.entity.TbPmPriceRuleDeatilsCriteria">
+    delete from tb_pm_price_rule_deatils
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.park.pmpaybill.entity.TbPmPriceRuleDeatils">
+    insert into tb_pm_price_rule_deatils (id, rule_id, room_id, 
+      room_name, room_area, tower_id, 
+      tower_name, pm_unit_price, record_status, 
+      creator_account, created_time, modifier_account, 
+      modified_time, remark)
+    values (#{id,jdbcType=VARCHAR}, #{ruleId,jdbcType=VARCHAR}, #{roomId,jdbcType=VARCHAR}, 
+      #{roomName,jdbcType=VARCHAR}, #{roomArea,jdbcType=DECIMAL}, #{towerId,jdbcType=VARCHAR}, 
+      #{towerName,jdbcType=VARCHAR}, #{pmUnitPrice,jdbcType=DECIMAL}, #{recordStatus,jdbcType=TINYINT}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.park.pmpaybill.entity.TbPmPriceRuleDeatils">
+    insert into tb_pm_price_rule_deatils
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="ruleId != null">
+        rule_id,
+      </if>
+      <if test="roomId != null">
+        room_id,
+      </if>
+      <if test="roomName != null">
+        room_name,
+      </if>
+      <if test="roomArea != null">
+        room_area,
+      </if>
+      <if test="towerId != null">
+        tower_id,
+      </if>
+      <if test="towerName != null">
+        tower_name,
+      </if>
+      <if test="pmUnitPrice != null">
+        pm_unit_price,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleId != null">
+        #{ruleId,jdbcType=VARCHAR},
+      </if>
+      <if test="roomId != null">
+        #{roomId,jdbcType=VARCHAR},
+      </if>
+      <if test="roomName != null">
+        #{roomName,jdbcType=VARCHAR},
+      </if>
+      <if test="roomArea != null">
+        #{roomArea,jdbcType=DECIMAL},
+      </if>
+      <if test="towerId != null">
+        #{towerId,jdbcType=VARCHAR},
+      </if>
+      <if test="towerName != null">
+        #{towerName,jdbcType=VARCHAR},
+      </if>
+      <if test="pmUnitPrice != null">
+        #{pmUnitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.park.pmpaybill.entity.TbPmPriceRuleDeatilsCriteria" resultType="java.lang.Long">
+    select count(*) from tb_pm_price_rule_deatils
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_pm_price_rule_deatils
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ruleId != null">
+        rule_id = #{record.ruleId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.roomId != null">
+        room_id = #{record.roomId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.roomName != null">
+        room_name = #{record.roomName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.roomArea != null">
+        room_area = #{record.roomArea,jdbcType=DECIMAL},
+      </if>
+      <if test="record.towerId != null">
+        tower_id = #{record.towerId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.towerName != null">
+        tower_name = #{record.towerName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pmUnitPrice != null">
+        pm_unit_price = #{record.pmUnitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_pm_price_rule_deatils
+    set id = #{record.id,jdbcType=VARCHAR},
+      rule_id = #{record.ruleId,jdbcType=VARCHAR},
+      room_id = #{record.roomId,jdbcType=VARCHAR},
+      room_name = #{record.roomName,jdbcType=VARCHAR},
+      room_area = #{record.roomArea,jdbcType=DECIMAL},
+      tower_id = #{record.towerId,jdbcType=VARCHAR},
+      tower_name = #{record.towerName,jdbcType=VARCHAR},
+      pm_unit_price = #{record.pmUnitPrice,jdbcType=DECIMAL},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      remark = #{record.remark,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.pmpaybill.entity.TbPmPriceRuleDeatils">
+    update tb_pm_price_rule_deatils
+    <set>
+      <if test="ruleId != null">
+        rule_id = #{ruleId,jdbcType=VARCHAR},
+      </if>
+      <if test="roomId != null">
+        room_id = #{roomId,jdbcType=VARCHAR},
+      </if>
+      <if test="roomName != null">
+        room_name = #{roomName,jdbcType=VARCHAR},
+      </if>
+      <if test="roomArea != null">
+        room_area = #{roomArea,jdbcType=DECIMAL},
+      </if>
+      <if test="towerId != null">
+        tower_id = #{towerId,jdbcType=VARCHAR},
+      </if>
+      <if test="towerName != null">
+        tower_name = #{towerName,jdbcType=VARCHAR},
+      </if>
+      <if test="pmUnitPrice != null">
+        pm_unit_price = #{pmUnitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.pmpaybill.entity.TbPmPriceRuleDeatils">
+    update tb_pm_price_rule_deatils
+    set rule_id = #{ruleId,jdbcType=VARCHAR},
+      room_id = #{roomId,jdbcType=VARCHAR},
+      room_name = #{roomName,jdbcType=VARCHAR},
+      room_area = #{roomArea,jdbcType=DECIMAL},
+      tower_id = #{towerId,jdbcType=VARCHAR},
+      tower_name = #{towerName,jdbcType=VARCHAR},
+      pm_unit_price = #{pmUnitPrice,jdbcType=DECIMAL},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

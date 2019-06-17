@@ -21,7 +21,7 @@ public class PmPayBillServiceTest {
 
     @Test
     public void autoGeneratePmPayBillDeatils(){
-        pmPayBillService.autoGeneratePmPayBillDeatils();
+        pmPayBillService.createPmPayBillByQuarter();
     }
 
     @Test
@@ -30,16 +30,16 @@ public class PmPayBillServiceTest {
     }
 
     @Test
-    public void generatePmBill(){
-        pmPayBillService.generatePmBill();
-    }
-
-    @Test
     public void pmPayBillCallBack(){
         PayCallBackNotify payCallBackNotify = new PayCallBackNotify();
         payCallBackNotify.setBillId("1affb666-64d9-4c6d-9a55-bd702d5b47ce");
         payCallBackNotify.setPaymentState(PaymentBillEnum.BILL_ORDER_IS_PAY.getCode());
         pmPayBillService.pmPayBillCallBack(payCallBackNotify);
+    }
+
+    @Test
+    public void createPmPayBillByQuarter(){
+        pmPayBillService.createPmPayBillByQuarter();
     }
 
 }

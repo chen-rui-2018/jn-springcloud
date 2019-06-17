@@ -85,5 +85,16 @@ public class FinanceIncomePeriodVo implements Serializable {
         this.sumLastYearPercent = sumLastYearPercent;
     }
 
-
+    @Override
+    public String toString() {
+        return "FinanceIncomePeriodVo{" +
+                "incomeMonth='" + incomeMonth + '\'' +
+                ", month='" + month + '\'' +
+                ", income='" + income + '\'' +
+                ", lastYearIncome='" + lastYearIncome + '\'' +
+                ", lastYearPercent='" + lastYearPercent + '\'' +
+                ", sumIncome='" + sumIncome + '\'' +
+                ", sumLastYearPercent='" + sumLastYearPercent + '\'' +
+                '}';
+    }
 }

@@ -112,8 +112,9 @@
 </template>
 <script>
 import {
-  api, downloadTempExcel, apiGet, exportExcelByObj, systemApi
+  api, downloadTempExcel, exportExcelByObj, systemApi
 } from '@/api/hr/common'
+import { setChild } from '@/api/hr/util'
 import { getToken } from '@/utils/auth'
 
 import UE from '@/components/ue.vue'
@@ -186,19 +187,13 @@ export default {
       systemApi('system/sysDepartment/findDepartmentAllByLevel').then(res => {
         if (res.data.code === '0000') {
           this.departmentList = res.data.data
+          const nodes = []
+          setChild(nodes, res.data.data)
+          console.log(JSON.stringify(nodes))
         } else {
           this.$message.error(res.data.result)
         }
         this.departmentListLoading = false
-      })
-    },
-    getDepartmentList() {
-      apiGet('hr/employeeDepartment/getEmployeeDepartments').then(res => {
-        if (res.data.code === '0000') {
-          this.departmentList = res.data.data
-        } else {
-          this.$message.error(res.data.result)
-        }
       })
     },
     handlePreview(file) {
@@ -324,4 +319,33 @@ export default {
       overflow: auto;
     }
 }
+</style>
+<style scoped>
+  .hide-dialog {
+    display: none;
+  }
+
+  .download-template {
+    margin-top: 20px;
+  }
+  .download-template a:hover{
+    color:red
+  }
+  .failure-reason h4{
+    margin: 10px 0;
+    line-height:20px;
+    font-size:14px;
+    color:red;
+
+  }
+  .failure-reason ul{
+    padding:0 0;
+    margin: 0 0;
+  }
+
+  .failure-reason ul li {
+    color: red;
+    line-height:20px;
+  }
+
 </style>

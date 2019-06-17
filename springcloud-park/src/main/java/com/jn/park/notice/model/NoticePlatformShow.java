@@ -33,4 +33,12 @@ public class NoticePlatformShow implements Serializable {
     public void setPlatformName(String platformName) {
         this.platformName = platformName;
     }
+
+    @Override
+    public String toString() {
+        return "NoticePlatformShow{" +
+                "platformType='" + platformType + '\'' +
+                ", platformName='" + platformName + '\'' +
+                '}';
+    }
 }

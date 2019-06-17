@@ -15,27 +15,32 @@
  */
 package com.jn.reconciliation.fileDown.service;
 
+import org.xxpay.dal.dao.entity.reconciliation.TbPayReconciliationInterface;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 
+
 /**
- * 对账文件下载
- * 
- * 龙果学院：www.roncoo.com
- * 
- * @author：shenjialong
+ * @ClassName：对账文件下载
+ * @Descript：
+ * @Author： hey
+ * @Date： Created on 2019/5/20 15:54
+ * @Version： v1.0
+ * @Modified By:
  */
 public interface FileDown {
 
 	/**
 	 * 对帐文件下载，获得文件输出
-	 * 
+	 * @param reconciliationInter
+	 * 			支付接口信息
 	 * @param fileDate
 	 *            账单日
 	 * @return
 	 * @throws Exception
 	 */
-	File fileDown(Date fileDate) throws IOException, Exception;
+	File fileDown(TbPayReconciliationInterface reconciliationInter, Date fileDate) throws IOException, Exception;
 
 }

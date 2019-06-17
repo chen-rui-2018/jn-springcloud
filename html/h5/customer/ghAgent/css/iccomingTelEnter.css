@@ -73,7 +73,11 @@ textarea{
 }
 .top-bar{
     list-style: none;
-    overflow: hidden;
+}
+.top-bar:after{
+    content: "";
+    clear: both;
+    display: table;
 }
 .input,.btn, textarea, select{
     outline: 0;
@@ -98,6 +102,33 @@ textarea{
     float: left;
     width: 25%;
     text-align: center;
+}
+
+.searchInput{
+    width: 200px;
+    height: 30px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+
+}
+
+.searchDesc{
+    width:170px;
+    height: 30px;
+    padding-left: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.searchButtons{
+    width:100px;
+    height: 30px;
+    margin-left: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
 }
 
 .info-box{
@@ -264,4 +295,31 @@ textarea{
 }
 .popLayer .form-box li input{
     width: calc(100% - 85px);
+}
+
+.select-box{
+    display: inline-block;
+    position: relative;
+}
+.select-box .select-item{
+    position: absolute;
+    top: 33px;
+    left: 0;
+    right: 0;
+    background: #fff;
+    display: none;
+}
+.select-box .select-item li{
+    width: 100%;
+    margin-left: 0;
+    padding: 0 8px;
+    line-height: 30px;
+    border-bottom: 1px solid #d1d1d1;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+.select-box .select-item li:hover{
+    cursor: pointer;
+    background: #ebebeb;
 }

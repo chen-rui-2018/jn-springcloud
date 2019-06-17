@@ -24,9 +24,9 @@ public class PmPayBillServiceController implements PmPayBillServiceClient {
     private PmPayBillService pmPayBillService;
 
     @Override
-    @ControllerLog(doAction = "每月初1号凌晨两点生成物业费缴费单")
-    public Result<Boolean> autoGeneratePmPayBillDeatils() {
-        pmPayBillService.autoGeneratePmPayBillDeatils();
+    @ControllerLog(doAction = "每季度第一天凌晨,为企业生成物业费账单")
+    public Result<Boolean> createPmPayBillByQuarter() {
+        pmPayBillService.createPmPayBillByQuarter();
         return new Result<>(true);
     }
 
@@ -39,18 +39,6 @@ public class PmPayBillServiceController implements PmPayBillServiceClient {
     @ControllerLog(doAction = "每月16号凌晨更新缴费单条目是否逾期状态")
     public Result<Boolean> updatePmPayBillItemExpireStatus() {
         pmPayBillService.updatePmPayBillItemExpireStatus();
-        return new Result<>(true);
-    }
-
-    /**
-     * 每半小时执行一次,为企业发送物业费账单
-     *
-     * @return
-     */
-    @Override
-    @ControllerLog(doAction = "每半小时执行一次,为企业发送物业费账单")
-    public Result<Boolean> generatePmBill() {
-        pmPayBillService.generatePmBill();
         return new Result<>(true);
     }
 

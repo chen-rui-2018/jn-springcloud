@@ -6,7 +6,7 @@
   justify-content: flex-end;
   align-items:center;
   padding: 0 20rpx;
-  margin-bottom: 20rpx;
+  margin: 20rpx 0;
 }
 .card-list-row {
   margin-top: 2rpx;
@@ -43,4 +43,8 @@
   height:60rpx;
   text-align:center;
   line-height:60rpx;
+}
+.row-tc {
+  text-align: center;
+  padding: 20rpx;
 }

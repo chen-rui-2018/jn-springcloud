@@ -16,6 +16,8 @@ import java.io.Serializable;
 public class PolicyDiagramDetailsVo implements Serializable {
     @ApiModelProperty(value = "政策原文")
     private PolicyDetailsShow policyDetailsShow;
+    @ApiModelProperty(value = "是否绑定原文政策")
+    private String isPolicyDiagram;
     @ApiModelProperty(value = "政策id")
     private String policyId;
     @ApiModelProperty(value = "图解政策url")
@@ -26,6 +28,14 @@ public class PolicyDiagramDetailsVo implements Serializable {
     private Integer readNum;
     @ApiModelProperty(value = "发布日期")
     private String releaseDate;
+
+    public String getIsPolicyDiagram() {
+        return isPolicyDiagram;
+    }
+
+    public void setIsPolicyDiagram(String isPolicyDiagram) {
+        this.isPolicyDiagram = isPolicyDiagram;
+    }
 
     public PolicyDetailsShow getPolicyDetailsShow() {
         return policyDetailsShow;

@@ -1,10 +1,12 @@
 package com.jn.park.asset.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.google.common.collect.Lists;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.common.util.GlobalConstants;
 import com.jn.common.util.StringUtils;
 import com.jn.company.api.CompanyClient;
 import com.jn.company.model.ServiceCompany;
@@ -13,10 +15,16 @@ import com.jn.park.asset.entity.*;
 import com.jn.park.asset.enums.*;
 import com.jn.park.asset.model.*;
 import com.jn.park.asset.service.RoomInformationService;
+import com.jn.park.electricmeter.enums.MeterConstants;
+import com.jn.park.property.model.PayCallBackNotify;
+import com.jn.pay.api.PayClient;
 import com.jn.pay.api.PayOrderClient;
 import com.jn.pay.enums.MchIdEnum;
 import com.jn.pay.model.*;
+import com.jn.pay.vo.PayBillCreateParamVo;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.user.api.UserExtensionClient;
+import com.jn.user.model.UserExtensionInfo;
 import org.apache.poi.ss.formula.functions.T;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -34,10 +42,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
 * 房间信息impl
@@ -65,6 +70,12 @@ public class RoomInformationServiceImpl implements RoomInformationService {
     private TbRoomOrdersPayMapper tbRoomOrdersPayMapper;
     @Autowired
     private PayOrderClient payOrderClient;
+    @Autowired
+    private TbRoomOrdersBillMapper tbRoomOrdersBillMapper;
+    @Autowired
+    private UserExtensionClient userExtensionClient;
+    @Autowired
+    private PayClient payClient;
 
     /**
      * 返回房间信息
@@ -73,10 +84,16 @@ public class RoomInformationServiceImpl implements RoomInformationService {
      */
     @Override
     @ServiceLog(doAction = "返回房间信息")
-    public RoomInformationModel getRoomInformation(String id) {
+    public RoomInformationModel getRoomInformation(String id,String account) {
+        //获取当前用户的信息
+        UserExtensionInfo data = getUserExtension(account);
         TbRoomInformation tbRoomInformation= tbRoomInformationMapper.selectByPrimaryKey(id);
         RoomInformationModel roomInformationModel=new RoomInformationModel();
         BeanUtils.copyProperties(tbRoomInformation,roomInformationModel);
+        //设置租借企业人资料
+        roomInformationModel.setLeaseEnterprise(data.getCompanyName());
+        roomInformationModel.setContactName(data.getName());
+        roomInformationModel.setContactPhone(data.getPhone());
         //设置图片集合
         List<String> imgUrlList = getImgUrlList(roomInformationModel.getImgUrl());
         //添加户型图
@@ -101,6 +118,10 @@ public class RoomInformationServiceImpl implements RoomInformationService {
             //添加流程平面图
             imgList.add(roomInformationModel.getFloorPlan());
             target.setImage(imgUrlList);
+            //设置租借企业人资料
+            target.setLeaseEnterprise(data.getCompanyName());
+            target.setContactName(data.getName());
+            target.setContactPhone(data.getPhone());
             roomInformationModelList.add(target);
         }
         roomInformationModel.setGroupRoomList(roomInformationModelList);
@@ -110,9 +131,13 @@ public class RoomInformationServiceImpl implements RoomInformationService {
 
     @Override
     @ServiceLog(doAction ="新增房间订单")
-    public Result addRoomOrders(String roomId,  String contactName, String contactPhone, Date leaseStartTime, String month,String userAccount) {
-
-        TbRoomInformation tbRoomInformation= tbRoomInformationMapper.selectByPrimaryKey(roomId);
+    public Result addRoomOrders(String roomIds,  String contactName, String contactPhone, Date leaseStartTime, String month,String userAccount) {
+        if (roomIds.isEmpty()){
+            throw new JnSpringCloudException(new Result("-1","房间id不能为空"));
+        }
+        //获取房间集合
+        String[] rooms = roomIds.split(",");
+        TbRoomInformation tbRoomInformation= tbRoomInformationMapper.selectByPrimaryKey(rooms[0]);
         //通过用户account查询企业
         Result<ServiceCompany> companyDetailByAccountOrCompanyId = companyClient.getCompanyDetailByAccountOrCompanyId(userAccount);
         ServiceCompany data = companyDetailByAccountOrCompanyId.getData();
@@ -130,21 +155,37 @@ public class RoomInformationServiceImpl implements RoomInformationService {
         //判断租借用户是否是企业用户
         this.checkIsCompanyUser(userAccount);
 
+        //获取所有要出租的房间
+        Set<String> roomSet = new HashSet<>();
+        //循环取出房间id进行查询分组
+        for (int i = 0 ; i < rooms.length; i++){
+            TbRoomInformation information = tbRoomInformationMapper.selectByPrimaryKey(rooms[i]);
+            List<TbRoomInformation> roomGroupId = this.getRoomGroupId(information.getGroupId());
+            //判断是否有同属分组
+            if (roomGroupId != null && !roomGroupId.isEmpty()) {
+                for (TbRoomInformation roomInformation : roomGroupId) {
+                    roomSet.add(roomInformation.getId());
+                }
+            } else {
+                roomSet.add(rooms[i]);
+            }
+        }
         //拿到要出租的所有房间
-        List<TbRoomInformation> tbRoomInformationList=this.getRoomGroupId(tbRoomInformation.getGroupId());
-        if(tbRoomInformationList==null){
-            tbRoomInformationList.add(tbRoomInformation);
+        List<TbRoomInformation> tbRoomInformationList= new ArrayList<>();
+        for (String roomId : roomSet) {
+            TbRoomInformation roomInformation = tbRoomInformationMapper.selectByPrimaryKey(roomId);
+            tbRoomInformationList.add(roomInformation);
         }
 
         //生成订单号
-        String orderId=UUID.randomUUID().toString();
+        String orderId=getOrderIdByTime();
         //订单总金额
-        BigDecimal orderPaySum=new BigDecimal(0);
+        BigDecimal orderPaySum=new BigDecimal("0");
 
         //生成订单明细
         for(TbRoomInformation e:tbRoomInformationList){
             TbRoomOrdersItem item=new TbRoomOrdersItem();
-            item.setId(UUID.randomUUID().toString());
+            item.setId(getOrderIdByTime());
             item.setOrderId(orderId);
             item.setRoomId(e.getId());
             item.setRoomName(e.getName());
@@ -161,10 +202,17 @@ public class RoomInformationServiceImpl implements RoomInformationService {
             item.setPaySum(this.calPrice(e));
             item.setCreatorAccount(userAccount);
             item.setCreateTime(new java.util.Date());
+            //房间状态为租借中
+            item.setRoomStatus(Byte.parseByte(RoomLeaseStatusEnums.DELIVERY.getValue()));
+            //租赁申请状态为申请成功
+            item.setLeaseApplyStatus(Byte.parseByte(RoomApplyStatusEnums.SUCCEED.getCode()));
             //加到订单总金额里面
             orderPaySum = orderPaySum.add(item.getPaySum());
             logger.info("插入订单明细数据，{}",item);
-            tbRoomOrdersItemMapper.insertSelective(item);
+            int count = tbRoomOrdersItemMapper.insertSelective(item);
+            if (count != 1){
+                throw  new JnSpringCloudException(new Result("-1","生成子订单失败"));
+            }
         }
 
         //生成总订单
@@ -190,6 +238,29 @@ public class RoomInformationServiceImpl implements RoomInformationService {
         tbRoomOrdersMapper.insert(orders);
 
         return new Result(orderId);
+    }
+
+    @ServiceLog(doAction = "根据订单生成缴费单")
+    @Override
+    public Result createRoomOrderBillByOrder(String orderId){
+        TbRoomOrders tbRoomOrders=tbRoomOrdersMapper.selectByPrimaryKey(orderId);
+        if (tbRoomOrders==null){
+            return new Result("-1","订单不存在");
+        }
+        if(!(new Byte("0")).equals(tbRoomOrders.getPayState())){
+            return new Result("-1","订单不是未支付状态，无法创建缴费单");
+        }
+        List<TbRoomOrders>tbRoomOrdersList=new ArrayList<>();
+        tbRoomOrdersList.add(tbRoomOrders);
+
+        List<TbRoomOrdersBill> tbRoomOrdersBillList=this.createOrderBillByOrder(tbRoomOrdersList);
+
+        if (tbRoomOrdersBillList!=null&&tbRoomOrdersBillList.size()==1){
+            return new Result(tbRoomOrdersBillList.get(0).getId());
+        }else{
+            return new Result("-1","根据房间订单生成缴费单失败");
+        }
+
     }
 
     @Override
@@ -274,7 +345,7 @@ public class RoomInformationServiceImpl implements RoomInformationService {
      */
     private List<TbRoomInformation>getRoomGroupId(String groupId){
         if(StringUtils.isBlank(groupId)){
-            return null;
+            return new ArrayList<>();
         }
         TbRoomGroup tbRoomGroup=tbRoomGroupMapper.selectByPrimaryKey(groupId);
         if(null!=tbRoomGroup){
@@ -288,7 +359,7 @@ public class RoomInformationServiceImpl implements RoomInformationService {
             List<TbRoomInformation>  tbRoomInformationList=tbRoomInformationMapper.selectByExample(roomInformationCriteria);
             return tbRoomInformationList;
         }
-        return null;
+        return new ArrayList<>();
     }
 
      @Override
@@ -412,9 +483,17 @@ public class RoomInformationServiceImpl implements RoomInformationService {
             List<TbRoomOrdersItem> tbRoomOrdersItemList = tbRoomOrdersItemMapper.selectByExample(tbRoomOrdersItemCriteria);
             if (tbRoomOrdersItemList != null && tbRoomOrdersItemList.size() > 0){
                 for (TbRoomOrdersItem roomOrdersItem : tbRoomOrdersItemList) {
+                    //更新子订单房间状态(租借申请中)
+                    roomOrdersItem.setRoomStatus(Byte.parseByte(RoomLeaseStatusEnums.DELIVERY.getValue()));
+                    logger.info("更新子订单房间租借状态: 租借中,{}",roomOrdersItem);
+                     updateCount = tbRoomOrdersItemMapper.updateByPrimaryKeySelective(roomOrdersItem);
+                    if(updateCount!=1){
+                        throw new JnSpringCloudException(new Result("-1","房间信息表tb_room_orders_item更新失败"));
+                    }
+                    //更新房间信息房间状态
                     TbRoomInformation roomInformation = tbRoomInformationMapper.selectByPrimaryKey(roomOrdersItem.getRoomId());
-                    roomInformation.setRecordStatus(Byte.parseByte(RoomLeaseStatusEnums.APPLY.getValue()));
-                    logger.info("更新房间租借状态: 租借申请中,{}",roomInformation);
+                    roomInformation.setRecordStatus(Byte.parseByte(RoomLeaseStatusEnums.DELIVERY.getValue()));
+                    logger.info("更新房间租借状态: 租借中,{}",roomInformation);
                     updateCount = tbRoomInformationMapper.updateByPrimaryKeySelective(roomInformation);
                     if(updateCount!=1){
                         throw new JnSpringCloudException(new Result("-1","房间信息表tb_room_information更新失败"));
@@ -459,6 +538,7 @@ public class RoomInformationServiceImpl implements RoomInformationService {
                 java.sql.Date leaseEndTime = new java.sql.Date(tbRoomOrders.getLeaseEndTime().getTime());
                 //获取订单集合
                 TbRoomOrdersItemCriteria tbRoomOrdersItemCriteria = new TbRoomOrdersItemCriteria();
+                tbRoomOrdersItemCriteria.setOrderByClause("create_time DESC");
                 tbRoomOrdersItemCriteria.createCriteria().andOrderIdEqualTo(orderId);
                 List<TbRoomOrdersItem> tbRoomOrdersItems = tbRoomOrdersItemMapper.selectByExample(tbRoomOrdersItemCriteria);
                 if (tbRoomOrders != null) {
@@ -476,12 +556,14 @@ public class RoomInformationServiceImpl implements RoomInformationService {
                         roomPayOrdersModel.setLeaseEndTime(leaseEndTime);
                         roomPayOrdersModel.setPaySum(tbRoomOrders.getPaySum());
                         BeanUtils.copyProperties(tbRoomOrdersItem, roomPayOrdersModel);
+                        roomPayOrdersModel.setName(roomPayOrdersModel.getRoomName());
                         result.getRoomPayOrdersModelList().add(roomPayOrdersModel);
                     }
                 }
                 TbRoomOrdersItem model = tbRoomOrdersItems.get(0);
                 BeanUtils.copyProperties(model, result);
                 result.setId(tbRoomOrders.getId());
+                result.setName(result.getRoomName());
                 result.setPaySum(tbRoomOrders.getPaySum());
                 result.setLastPayTime(lastTime);
                 result.setLeaseStartTime(leaseStartTime);
@@ -495,77 +577,6 @@ public class RoomInformationServiceImpl implements RoomInformationService {
             e.printStackTrace();
         }
         return null;
-    }
-
-
-    /**
-     * 分页返回房间租借历史列表
-     * @param account
-     * @param page
-     * @return
-     */
-    @Override
-    @ServiceLog(doAction = "分页返回房间租借历史列表")
-    public PaginationData<List<RoomPayOrdersModel>> getRoomOrdersList(String account,Page page) {
-       /* List<RoomPayOrdersModel>result=new ArrayList<>();
-
-        TbRoomOrdersCriteria tbRoomOrdersCriteria =new TbRoomOrdersCriteria();
-        tbRoomOrdersCriteria.createCriteria().andCreatorAccountEqualTo(account).andRecordStatusEqualTo(new Byte("1"));
-        tbRoomOrdersCriteria.setOrderByClause("create_time DESC");
-        //开始分页
-        com.github.pagehelper.Page<Object> objects = PageHelper.startPage(page.getPage(), page.getRows());
-        List<TbRoomOrders>tbRoomOrdersList=tbRoomOrdersMapper.selectByExample(tbRoomOrdersCriteria);
-        for(TbRoomOrders e:tbRoomOrdersList){
-            RoomPayOrdersModel roomPayOrdersModel=new RoomPayOrdersModel();
-            BeanUtils.copyProperties(e,roomPayOrdersModel);
-            //创建订单集合
-            List<RoomPayOrdersItemModel> roomPayOrdersItemModelList = new ArrayList<>();
-            //设置查询条件
-            TbRoomOrdersItemCriteria tbRoomOrdersItemCriteria = new TbRoomOrdersItemCriteria();
-            //设置用户
-            tbRoomOrdersItemCriteria.createCriteria().andOrderIdEqualTo(e.getId());
-            //按照创建时间倒序排序
-            tbRoomOrdersItemCriteria.setOrderByClause("create_time DESC");
-            List<TbRoomOrdersItem> tbRoomOrdersItems = tbRoomOrdersItemMapper.selectByExample(tbRoomOrdersItemCriteria);
-            for (TbRoomOrdersItem tbRoomOrdersItem : tbRoomOrdersItems) {
-                RoomPayOrdersItemModel roomPayOrdersItemModel = new RoomPayOrdersItemModel();
-                BeanUtils.copyProperties(tbRoomOrdersItem,roomPayOrdersItemModel);
-                roomPayOrdersItemModelList.add(roomPayOrdersItemModel);
-            }
-            roomPayOrdersModel.setRoomPayOrdersItemModels(roomPayOrdersItemModelList);
-            result.add(roomPayOrdersModel);
-        }
-
-        return new PaginationData(result,objects.getTotal());*/
-       return null;
-    }
-
-    /**
-     * 获取房间租借详情信息
-     * @param orderId
-     * @return
-     */
-    @Override
-    @ServiceLog(doAction ="获取房间租借详情信息")
-    public RoomPayOrdersModel getRoomOrders(String orderId,String userAccount) {
-       /* RoomPayOrdersModel result=new RoomPayOrdersModel();
-        TbRoomOrders tbRoomOrders=tbRoomOrdersMapper.selectByPrimaryKey(orderId);
-        if(tbRoomOrders==null||!StringUtils.equals(tbRoomOrders.getCreatorAccount(),userAccount)){
-            throw new JnSpringCloudException(new Result("-1","订单不存在"));
-        }
-        BeanUtils.copyProperties(tbRoomOrders,result);
-
-        TbRoomOrdersItemCriteria criteria=new TbRoomOrdersItemCriteria();
-        criteria.createCriteria().andOrderIdEqualTo(orderId);
-        List<TbRoomOrdersItem> tbRoomOrdersItemList = tbRoomOrdersItemMapper.selectByExample(criteria);
-        result.setRoomPayOrdersItemModels(new ArrayList<>());
-        for(TbRoomOrdersItem e:tbRoomOrdersItemList){
-            RoomPayOrdersItemModel roomPayOrdersItemModel = new RoomPayOrdersItemModel();
-            BeanUtils.copyProperties(e,roomPayOrdersItemModel);
-            result.getRoomPayOrdersItemModels().add(roomPayOrdersItemModel);
-        }
-        return result;*/
-       return null;
     }
 
     /**
@@ -657,114 +668,215 @@ public class RoomInformationServiceImpl implements RoomInformationService {
     }
 
     /**
-     * 取消订单
-     * @param orderId
-     */
-    @Override
-    @ServiceLog(doAction = "取消订单")
-    public void cancelOrder(String orderId) {
-      /*  //更新总订单支付状态(更新为已取消)
-        TbRoomOrders tbRoomOrders = tbRoomOrdersMapper.selectByPrimaryKey(orderId);
-        if (tbRoomOrders == null){
-            throw new JnSpringCloudException(new Result("-1","订单不存在"));
-        }
-        tbRoomOrders.setPayState(Byte.parseByte(PayStatusEnums.CANCEL.getCode()));
-        TbRoomOrdersCriteria tbRoomOrdersCriteria = new TbRoomOrdersCriteria();
-        tbRoomOrdersCriteria.createCriteria().andIdEqualTo(orderId);
-        tbRoomOrdersMapper.updateByExampleSelective(tbRoomOrders,tbRoomOrdersCriteria);
-        logger.info("更新总订单支付状态,{}",tbRoomOrders);
-        //更新房间订单(支付中心关系表)存在则更新为已取消
-        TbRoomOrdersPayCriteria tbRoomOrdersPayCriteria = new TbRoomOrdersPayCriteria();
-        TbRoomOrdersPayCriteria.Criteria criteria = tbRoomOrdersPayCriteria.createCriteria();
-        criteria.andOrderIdEqualTo(tbRoomOrders.getId());
-        List<TbRoomOrdersPay> tbRoomOrdersPays = tbRoomOrdersPayMapper.selectByExample(tbRoomOrdersPayCriteria);
-        if (tbRoomOrdersPays != null){
-            for (TbRoomOrdersPay tbRoomOrdersPay : tbRoomOrdersPays) {
-                tbRoomOrdersPay.setPayState(Byte.parseByte(PayStatusEnums.CANCEL.getCode()));
-                tbRoomOrdersPayMapper.updateByPrimaryKeySelective(tbRoomOrdersPay);
-                logger.info("更新房间订单(支付中心关系表),{}",tbRoomOrdersPay);
-            }
-        }
-        //更新房间租借状态(更新为空闲)
-        TbRoomOrdersItemCriteria tbRoomOrdersItemCriteria = new TbRoomOrdersItemCriteria();
-        tbRoomOrdersItemCriteria.createCriteria().andOrderIdEqualTo(orderId);
-        List<TbRoomOrdersItem> tbRoomOrdersItems = tbRoomOrdersItemMapper.selectByExample(tbRoomOrdersItemCriteria);
-        if (tbRoomOrdersItems != null){
-            for (TbRoomOrdersItem tbRoomOrdersItem : tbRoomOrdersItems) {
-                TbRoomInformation tbRoomInformation = tbRoomInformationMapper.selectByPrimaryKey(tbRoomOrdersItem.getRoomId());
-                tbRoomInformation.setRecordStatus(Byte.parseByte(RoomLeaseStatusEnums.UNUSED.getValue()));
-                tbRoomInformationMapper.updateByPrimaryKeySelective(tbRoomInformation);
-                logger.info("更新房间租借状态,{}",tbRoomInformation);
-            }
-        }*/
-    }
-
-    /**
-     * 定时任务,是否支付,未支付取消订单
-     */
-    @Override
-    @ServiceLog(doAction = "定时任务,是否支付,未支付取消订单")
-    public void updateRoomPayStatus() {
-        /*TbRoomOrdersCriteria tbRoomOrdersCriteria = new TbRoomOrdersCriteria();
-        //计算当前时间之前的半小时
-        java.util.Date date = new java.util.Date();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        cal.add(Calendar.MINUTE,-30);
-        java.util.Date time = cal.getTime();
-        //支付订单创建时间大于等于当前时间减去半小时,支付状态为(0未付款),并且有效的订单
-        tbRoomOrdersCriteria.createCriteria().andCreateTimeGreaterThanOrEqualTo(time).andPayStateEqualTo(Byte.parseByte(PayStatusEnums.NONPAYMENT.getCode())).andRecordStatusEqualTo(Byte.parseByte(AssetStatusEnums.EFFECTIVE.getCode()));
-        List<TbRoomOrders> tbRoomOrdersList = tbRoomOrdersMapper.selectByExample(tbRoomOrdersCriteria);
-        if (tbRoomOrdersList != null && tbRoomOrdersList.size() > 0){
-            for (TbRoomOrders tbRoomOrders : tbRoomOrdersList) {
-                //更改订单支付状态(更改为订单已取消)
-                tbRoomOrders.setPayState(Byte.parseByte(PayStatusEnums.CANCEL.getCode()));
-                logger.info("订单表的支付状态更新为:订单已取消,参数:{}",tbRoomOrders);
-                int updateCount = tbRoomOrdersMapper.updateByPrimaryKeySelective(tbRoomOrders);
-                if (updateCount != 1){
-                    throw new JnSpringCloudException(new Result("-1","更新订单表tb_room_orders失败"));
-                }
-                //更改房间订单支付中心关系表支付状态(更改为订单已取消)
-                TbRoomOrdersPayCriteria tbRoomOrdersPayCriteria = new TbRoomOrdersPayCriteria();
-                tbRoomOrdersPayCriteria.createCriteria().andOrderIdEqualTo(tbRoomOrders.getId());
-                List<TbRoomOrdersPay> tbRoomOrdersPayList = tbRoomOrdersPayMapper.selectByExample(tbRoomOrdersPayCriteria);
-                if (tbRoomOrdersPayList != null && tbRoomOrdersPayList.size() > 0){
-                    for (TbRoomOrdersPay tbRoomOrdersPay : tbRoomOrdersPayList) {
-                        tbRoomOrdersPay.setPayState(Byte.parseByte(PayStatusEnums.CANCEL.getCode()));
-                        logger.info("支付中心关系表的支付状态更新为:订单已取消,参数:{}",tbRoomOrdersPay);
-                        int payUpdateCount = tbRoomOrdersPayMapper.updateByPrimaryKeySelective(tbRoomOrdersPay);
-                        if (payUpdateCount != 1){
-                            throw new JnSpringCloudException(new Result("-1","更新订单表tb_room_orders失败"));
-                        }
-                    }
-                }
-                //通过子订单查询相对应的房间,更新房间租借状态
-                TbRoomOrdersItemCriteria tbRoomOrdersItemCriteria = new TbRoomOrdersItemCriteria();
-                tbRoomOrdersItemCriteria.createCriteria().andOrderIdEqualTo(tbRoomOrders.getId());
-                List<TbRoomOrdersItem> tbRoomOrdersItemList = tbRoomOrdersItemMapper.selectByExample(tbRoomOrdersItemCriteria);
-                if(tbRoomOrdersItemList != null && tbRoomOrdersItemList.size() > 0){
-                    for (TbRoomOrdersItem tbRoomOrdersItem : tbRoomOrdersItemList) {
-                        TbRoomInformation tbRoomInformation = tbRoomInformationMapper.selectByPrimaryKey(tbRoomOrdersItem.getRoomId());
-                        tbRoomInformation.setState(Byte.parseByte(RoomLeaseStatusEnums.UNUSED.getValue()));
-                        logger.info(",更新房间租借状态:空闲,参数:{}",tbRoomInformation);
-                        int roomUpdateCount = tbRoomInformationMapper.updateByPrimaryKeySelective(tbRoomInformation);
-                        if (roomUpdateCount != 1){
-                            throw new JnSpringCloudException(new Result("-1","更新房间信息表tb_room_information失败"));
-                        }
-                    }
-                }
-
-            }
-        }*/
-    }
-
-    /**
      * 生成房间缴费单
      */
     @Override
-    @ServiceLog(doAction = "生成房间缴费单")
+    @ServiceLog(doAction = "生成房间缴费单(定时生成)")
     public void createOrderBill() {
-        
+        TbRoomOrdersCriteria tbRoomOrdersCriteria = new TbRoomOrdersCriteria();
+        java.util.Date date = new java.util.Date();
+
+        //已支付的订单,并且在租借有效期内的订单
+        tbRoomOrdersCriteria.createCriteria().andPayStateEqualTo(Byte.parseByte(PayStatusEnums.PAYMENT.getCode())).andLeaseEndTimeGreaterThanOrEqualTo(date).andLeaseStartTimeLessThanOrEqualTo(date);
+        //获取订单集合
+        List<TbRoomOrders> tbRoomOrdersList = tbRoomOrdersMapper.selectByExample(tbRoomOrdersCriteria);
+        if (tbRoomOrdersList != null){
+            this.createOrderBillByOrder(tbRoomOrdersList);
+        }
+    }
+
+    /**
+     * 根据房间订单生成缴费单
+     * @param tbRoomOrdersList
+     */
+    @ServiceLog(doAction = "根据房间订单生成缴费单")
+    private List<TbRoomOrdersBill> createOrderBillByOrder( List<TbRoomOrders> tbRoomOrdersList){
+        List<TbRoomOrdersBill>result=new ArrayList<>();
+        for (TbRoomOrders tbR : tbRoomOrdersList) {
+            TbRoomOrdersBill tbRoomOrdersBill = new TbRoomOrdersBill();
+            tbRoomOrdersBill.setId(getOrderIdByTime());
+            //订单id
+            tbRoomOrdersBill.setOrderId(tbR.getId());
+            //缴费企业
+            tbRoomOrdersBill.setLeaseEnterprise(tbR.getLeaseEnterprise());
+            //企业联系人
+            tbRoomOrdersBill.setContactName(tbR.getContactName());
+            tbRoomOrdersBill.setContactPhone(tbR.getContactPhone());
+            //账单生成时间
+            tbRoomOrdersBill.setBillCreateTime(new java.util.Date());
+            //账单初始金额
+            tbRoomOrdersBill.setBillInitSum(tbR.getPaySum());
+            //缴费单生成状态(默认未生成)
+            tbRoomOrdersBill.setBillStatus(Byte.parseByte("0"));
+            //缴费单金额
+            BigDecimal billSum = new BigDecimal("0");
+            //开始时间
+            tbRoomOrdersBill.setStartTime(tbR.getLeaseStartTime());
+            //结束时间
+            tbRoomOrdersBill.setEndTime(tbR.getLeaseEndTime());
+
+            //计算相差月份
+            Calendar leaseStartTime = Calendar.getInstance();
+            leaseStartTime.setTime(tbR.getLeaseStartTime());
+            Calendar leaseEndTime = Calendar.getInstance();
+            leaseEndTime.setTime(tbR.getLeaseEndTime());
+            int year = (leaseEndTime.get(Calendar.YEAR)) - (leaseStartTime.get(Calendar.YEAR)) * 12 ;
+            int month = (leaseEndTime.get(Calendar.YEAR)) - (leaseStartTime.get(Calendar.YEAR)) + year;
+
+
+            //缴费状态(默认未缴费)
+            tbRoomOrdersBill.setPaySum(Byte.parseByte("0"));
+
+            //账单周期(待定)
+            // TODO
+
+            //创建时间
+            tbRoomOrdersBill.setCreateTime(new java.util.Date());
+
+            TbRoomOrdersItemCriteria tbRoomOrdersItemCriteria = new TbRoomOrdersItemCriteria();
+            //通过总订单id获取子订单,房间状态为租借中,并且租赁申请成功的
+            tbRoomOrdersItemCriteria.createCriteria().andOrderIdEqualTo(tbR.getId()).andLeaseApplyStatusEqualTo(Byte.parseByte(RoomApplyStatusEnums.SUCCEED.getCode())).andRoomStatusEqualTo(Byte.parseByte(RoomLeaseStatusEnums.DELIVERY.getValue()));
+            //获取子订单集合
+            List<TbRoomOrdersItem> tbRoomOrdersItemList = tbRoomOrdersItemMapper.selectByExample(tbRoomOrdersItemCriteria);
+            //账单详情实体类集合
+            List<PayBillDetails> payBillDetailsList = new ArrayList<>();
+            if (tbRoomOrdersItemList != null && tbRoomOrdersItemList.size() > 0){
+                String rooms = "";
+                for (TbRoomOrdersItem roomOrdersItem : tbRoomOrdersItemList) {
+                    String roomName = roomOrdersItem.getRoomName();
+                    rooms += roomName + ",";
+
+                    //获取房间
+                    TbRoomInformation tbRoomInformation = tbRoomInformationMapper.selectByPrimaryKey(roomOrdersItem.getRoomId());
+                    Integer pay = tbRoomInformation.getPay();
+                    billSum = billSum.add(roomOrdersItem.getLeaseSum().multiply(new BigDecimal(pay)));
+                }
+                //房间
+                tbRoomOrdersBill.setRooms(rooms.substring(0,rooms.length()-1));
+                //缴费单金额
+                tbRoomOrdersBill.setBillSum(billSum);
+            }
+            logger.info("创建房间缴费单:参数{}",tbRoomOrdersBill);
+            int insert = tbRoomOrdersBillMapper.insert(tbRoomOrdersBill);
+            if (insert != 1){
+                throw new JnSpringCloudException(new Result("-1","房间缴费单创建失败,插入tb_room_orders_bill表失败"));
+            }
+            result.add(tbRoomOrdersBill);
+        }
+        return result;
+    }
+
+
+    /**
+     * 创建缴费单
+     * @param billId
+     * @param billSum
+     * @return
+     */
+    @Override
+    @ServiceLog(doAction = "调用生成缴费单接口")
+    public Result createBill(String billId,String billSum){
+            TbRoomOrdersBill tbRoomOrdersBill = tbRoomOrdersBillMapper.selectByPrimaryKey(billId);
+            if (tbRoomOrdersBill == null){
+                throw new JnSpringCloudException(new Result("-1","缴费单不存在"));
+            }
+            TbRoomOrders tbR = tbRoomOrdersMapper.selectByPrimaryKey(tbRoomOrdersBill.getOrderId());
+            if(tbR == null){
+                throw new JnSpringCloudException(new Result("-1","订单不存在"));
+            }
+            TbRoomOrdersItemCriteria roomOrdersItemCriteria = new TbRoomOrdersItemCriteria();
+            //通过总订单id获取子订单,房间状态为租借中,并且租赁申请成功的
+            TbRoomOrdersItemCriteria.Criteria criteria = roomOrdersItemCriteria.createCriteria();
+            criteria.andOrderIdEqualTo(tbR.getId()).andLeaseApplyStatusEqualTo(Byte.parseByte(RoomApplyStatusEnums.SUCCEED.getCode())).andRoomStatusEqualTo(Byte.parseByte(RoomLeaseStatusEnums.DELIVERY.getValue()));
+            List<TbRoomOrdersItem> tbRoomOrdersItemList = tbRoomOrdersItemMapper.selectByExample(roomOrdersItemCriteria);
+            //账单详情实体类集合
+            List<PayBillDetails> payBillDetailsList = new ArrayList<>();
+            int i = 0;
+            if (tbRoomOrdersItemList != null){
+                for (TbRoomOrdersItem roomOrdersItem : tbRoomOrdersItemList) {
+                    //获取房间 押金月数
+                    TbRoomInformation tbRoomInformation = tbRoomInformationMapper.selectByPrimaryKey(roomOrdersItem.getRoomId());
+                    Integer pay = tbRoomInformation.getPay();
+                    //设置账单详情实体类
+                    PayBillDetails payBillDetails = new PayBillDetails();
+                    payBillDetails.setCostName(roomOrdersItem.getRoomName());
+                    payBillDetails.setCostValue(roomOrdersItem.getLeaseSum().multiply(new BigDecimal(pay)).toString());
+                    payBillDetails.setSort(i++);
+                    payBillDetailsList.add(payBillDetails);
+                }
+            }
+            logger.info("开始调用接口创建缴费账单");
+            PayBillCreateParamVo payBillCreateParamVo = new PayBillCreateParamVo();
+            payBillCreateParamVo.setBillId(tbRoomOrdersBill.getId());
+            //账单名称
+            payBillCreateParamVo.setBillName(tbR.getLeaseEnterprise()+"房租账单");
+            //账单来源
+            payBillCreateParamVo.setBillSource("房间缴费");
+            //账单费用
+            payBillCreateParamVo.setBillExpense(new BigDecimal(billSum));
+            //对象类型【1：企业，2：个人】
+            payBillCreateParamVo.setObjType("1");
+            //对象Id（传企业ID或用户ID）
+            payBillCreateParamVo.setObjId(tbR.getEnterpriseId());
+            //对象名称（传企业名称或用户名称）
+            payBillCreateParamVo.setObjName(tbR.getLeaseEnterprise());
+            //账本类型ID【1：电费，2：物业费】
+            payBillCreateParamVo.setAcBookType("ROOM_LEASE");
+            //回调ID
+            payBillCreateParamVo.setCallbackId("springcloud-park");
+            //回调URL
+            payBillCreateParamVo.setCallbackUrl("/api/order/updateBill");
+            //创建时间
+            payBillCreateParamVo.setCreatedTime(new java.util.Date());
+            //创建人
+            payBillCreateParamVo.setCreatorAccount(tbR.getCreatorAccount());
+
+            //设置账单最迟支付时间为创建长单后，一周内
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.DAY_OF_MONTH,calendar.get(Calendar.DAY_OF_MONTH)+7);
+            java.util.Date latePaymentDate=calendar.getTime();
+
+            //最迟缴费时间
+            payBillCreateParamVo.setLatePayment(latePaymentDate);
+            //缴费详情【存list对象集合】
+            payBillCreateParamVo.setPayBillDetails(payBillDetailsList);
+            Result billCreateResult = payClient.billCreate(payBillCreateParamVo);
+            logger.info("结束调用接口创建账单");
+            if(StringUtils.equals(billCreateResult.getCode(),GlobalConstants.SUCCESS_CODE)){
+                tbRoomOrdersBill.setBillStatus(Byte.parseByte("1"));
+                tbRoomOrdersBill.setBillConfirmTime(new java.util.Date());
+                logger.info("更新账单生成状态为:已生成,参数{}",tbRoomOrdersBill);
+                int updateCount = tbRoomOrdersBillMapper.updateByPrimaryKeySelective(tbRoomOrdersBill);
+                if (updateCount != 1){
+                    throw new JnSpringCloudException(new Result("-1","更新tb_room_orders_bill状态失败"));
+                }
+            }else {
+                throw new JnSpringCloudException(new Result("-1","创建缴费单失败"));
+            }
+        logger.info("生成缴费单成功");
+        return new Result("0000","生成缴费单成功");
+    }
+
+    @Override
+    @ServiceLog(doAction = "缴费单回调")
+    public Result updateBill(PayCallBackNotify payCallBackNotify) {
+        logger.info("开始缴费单回调");
+        String billId=payCallBackNotify.getBillId();
+        PayBill payBill =payClient.getBillBasicInfo(billId);
+        //账单支付成功
+        if (payBill.getPaymentState().equals(PayStatusEnums.PAYMENT.getCode())){
+            TbRoomOrdersBill tbRoomOrdersBill = tbRoomOrdersBillMapper.selectByPrimaryKey(payBill.getBillId());
+            tbRoomOrdersBill.setPaySum(Byte.parseByte(PayStatusEnums.PAYMENT.getCode()));
+            tbRoomOrdersBill.setPayTime(payBill.getCreatedTime());
+            logger.info("更新缴费单支付状态,参数{}",tbRoomOrdersBill);
+            int updateCount = tbRoomOrdersBillMapper.updateByPrimaryKeySelective(tbRoomOrdersBill);
+            if (updateCount != 1){
+                throw new JnSpringCloudException(new Result("-1","更新缴费单tb_room_orders_bill失败"));
+            }
+            logger.info("回调成功，支付状态更新为：已支付");
+            return new Result("回调成功，支付状态更新为：已支付");
+        }
+        return new Result();
     }
 
     /**
@@ -813,6 +925,7 @@ public class RoomInformationServiceImpl implements RoomInformationService {
         return roomEnterpriseModelList;
     }
 
+
     /**
      * 获取图片集合
      * @param imgUrl
@@ -828,4 +941,35 @@ public class RoomInformationServiceImpl implements RoomInformationService {
         }
         return imageList;
     }
+
+    /**
+     * 获取用户企业信息
+     * @param account
+     * @return
+     */
+    public UserExtensionInfo getUserExtension(String account){
+        //获取当前用户的信息
+        Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(account);
+        UserExtensionInfo data = userExtension.getData();
+        if (data == null){
+            throw new JnSpringCloudException(new Result("-1","获取用户企业信息失败"));
+        }
+        return data;
+    }
+
+    /**
+     * 生成订单编号
+     * @return
+     */
+    public static String getOrderIdByTime(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        String newDate = sdf.format(new java.util.Date());
+        String result = "";
+        Random random = new Random();
+        for (int i = 0; i < 5; i++) {
+            result += random.nextInt(10);
+        }
+        return newDate + result;
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.jn.hr.archives.controller;
 
+import cn.hutool.core.io.FileUtil;
 import com.alibaba.excel.support.ExcelTypeEnum;
 import com.jn.common.controller.BaseController;
 import com.jn.common.exception.JnSpringCloudException;
@@ -19,6 +20,7 @@ import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.io.FileUtils;
+import org.apache.poi.util.IOUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
@@ -37,6 +39,9 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.util.Date;
 import java.util.List;
 
@@ -194,5 +199,29 @@ public class EmployeeFileController extends BaseController {
                                                                         FileAttachment fileAttachment) {
         employeeFileService.updateEmployeeFileAttachmentById(fileAttachment);
         return new Result();
+    }
+
+    @ControllerLog(doAction = "下载员工档案附件")
+    @RequiresPermissions("/hr/employeeFile/downloadEmployeeFileAttachment")
+    @ApiOperation(value = "下载员工档案附件", notes = "导入员工档案")
+    @PostMapping(value = "/downloadEmployeeFileAttachment")
+    public ResponseEntity<byte[]> importEmployeeFile(@RequestBody FileAttachment fileAttachment) {
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        String fileName = null;
+        InputStream is=null;
+        try {
+            fileName = new String(fileAttachment.getFileName().getBytes(), "ISO-8859-1");
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Content-Type", "application/octet-stream");
+            headers.add("Content-Disposition", "attachment;filename=" + fileName);
+            is=new URL(fileAttachment.getFilePath()).openStream();
+            return new ResponseEntity<byte[]>(IOUtils.toByteArray(is), headers, HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("[员工档案] ,员工档案附件下载失败，"+e.getMessage(), e);
+            throw new JnSpringCloudException(EmployeeExceptionEnums.DOWNLOAD_EMPLOYEEFILE_ATTACHMENT);
+        }finally {
+            IOUtils.closeQuietly(is);
+        }
+
     }
 }

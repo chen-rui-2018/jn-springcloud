@@ -1,18 +1,19 @@
 <template>
 <div>
-  <div class="declarationDetailHeader">
-    <x-header :left-options="{backText: ''}">{{this.$route.meta.title}} <span slot="right" @click="$router.push({path: '/guest/pd/consult'})">咨询</span></x-header>
-  </div>
+  <!-- <div class="declarationDetailHeader" v-if="isShow===1">
+    <x-header :left-options="{backText: ''}">{{this.$route.meta.title}} <span slot="right" @click="$router.push({path: '/guest/pd/consult'})"></span></x-header>
+  </div> -->
   <div class="declarationDetail">
     <div class="declarationDetail_main">
       <div class="declarationDetail_top">
         <div class="declarationDetail_title">
-          <p>{{detailData.rangeName}} </p>
+          <p>{{detailData.titleName}}</p>
           <p><span>{{detailData.browseTimes}}次阅读 </span><span>{{detailData.createdTime|time}}</span></p>
         </div>
         <div class="time_node">
           <div>时间节点</div>
-          <p><i class="iconfont icon-clock-"></i>{{detailData.deadline|time}}  反馈表递交截止</p>
+          <p v-if="detailData.deadline!=null"><i class="iconfont icon-clock-"></i>{{detailData.deadline|time}}反馈表递交截止</p>
+          <p v-else>暂无</p>
         </div>
       </div>
       <div class="declarationDetail_middle">
@@ -21,21 +22,33 @@
       <div class="declarationDetail_downLoad">
         <div class="downLoad_title">附件下载</div>
         <!-- fileUrl字段可能是多个 -->
-        <div class="accessory" >
-          <span>附件</span>
-          <span>下载<i class="iconfont icon-jiantou"></i></span>
+        <div class="accessory" v-if="fileList.length===0">
+          <a href="javascript:;">
+            <span>附件: 暂无</span>
+          </a>
+        </div>
+        <div v-else  class="accessory" v-for="(item,index) in fileList" :key="index" @click="download(item.filePath)">
+          <!-- <a :href="item.filePath"> {{item.fileName}}-->
+            <span>附件：{{item.fileName}}</span>
+            <span>下载<i class="iconfont icon-jiantou"></i></span>
+          <!-- </a> -->
         </div>
       </div>
+
+      <div class="declaration_consult" @click="$router.push({path: '/guest/pd/consult',query:{id:id}})">预约申报</div>
     </div>
   </div>
 </div>
 </template>
 <script>
+import axios from 'axios'
 export default {
   data () {
     return {
       id: '',
-      detailData: {}
+      detailData: {},
+      isShow: 1,
+      fileList: []
     }
   },
   filters: {
@@ -47,10 +60,15 @@ export default {
       }
     }
   },
+  created () {
+    this.addView()
+  },
   mounted () {
     this.id = this.$route.query.id
+    if (this.$route.query.isShow === '0') {
+      this.isShow = this.$route.query.isShow
+    }
     this.getDetail()
-    this.addView()
   },
   methods: {
     getDetail () {
@@ -60,6 +78,9 @@ export default {
         callback: res => {
           if (res.code === '0000') {
             this.detailData = res.data
+            if (res.data.fileUrl !== '') {
+              this.fileList = JSON.parse(res.data.fileUrl)
+            }
           }
         }
       })
@@ -74,8 +95,21 @@ export default {
           }
         }
       })
+    },
+    download (item) {
+      axios.get(`${this.api.host}${this.api.apiURL.downLoadAttachment}`, {
+        params: {
+          title: item.title,
+          url: item.url
+        },
+        headers: {
+          token: sessionStorage.token
+        }
+      })
+        .then(res => {
+          window.location.href = res.request.responseURL
+        })
     }
-
   }
 }
 </script>
@@ -106,10 +140,13 @@ export default {
       }
     }
 }
+.margin_top{
+  margin-top: 110px;
+}
   .declarationDetail{
+    color:#333333;
     height: 100vh;
     background-color: #f5f5f5;
-    margin-top: 110px;
     .declarationDetail_main{
       padding-top:26px;
       .declarationDetail_top{
@@ -168,21 +205,41 @@ export default {
           padding-bottom: 10px;
         }
         .accessory{
-          display: flex;
-          justify-content: space-between;
-          font-size: 26px;
-          border-bottom: 2px solid #efefef;
+            display: flex;
+            justify-content: space-between;
+            font-size: 26px;
+            border-bottom: 2px solid #efefef;
+            color:#333333;
           &:last-child{
             border-bottom: none;
           }
           span{
             padding:35px 0;
+            font-size: 36px;
           }
           span:nth-child(2){
             color:#999999;
             font-size: 22px;
           }
+          span:nth-child(1){
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            width: 77%;
+          }
         }
+      }
+      .declaration_consult{
+        display: flex;
+        justify-content: center;
+        margin:30px;
+        align-items: center;
+        background-color: #ecfcf2;
+        border-radius: 41px;
+        border: solid 1.5px #009966;
+        color:#07ab50;
+        font-size: 30px;
+        padding: 26px 30px;
       }
     }
   }

@@ -4,6 +4,9 @@ import com.github.pagehelper.PageHelper;
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.common.util.StringUtils;
+import com.jn.enterprise.api.CompanyClient;
+import com.jn.enterprise.model.CompanyInfoModel;
 import com.jn.park.care.model.ServiceEnterpriseCompany;
 import com.jn.park.gamtopic.dao.CareDao;
 import com.jn.park.gamtopic.dao.DynamicDao;
@@ -14,6 +17,7 @@ import com.jn.park.gamtopic.model.*;
 import com.jn.park.gamtopic.service.CareService;
 import com.jn.park.gamtopic.service.DynamicService;
 import com.jn.park.gamtopic.vo.CareDetailsVo;
+import com.jn.system.config.ShiroConfig;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
@@ -50,6 +54,9 @@ public class CareServiceImpl implements CareService {
     private UserExtensionClient userExtensionClient;
      @Autowired
     private DynamicService dynamicService;
+     @Autowired
+     private CompanyClient companyClient;
+
 
 
 
@@ -145,7 +152,7 @@ public class CareServiceImpl implements CareService {
 
     @Override
     @ServiceLog(doAction = "企业简介")
-    public List<ServiceEnterpriseCompany> getCompanyNewList(List<ServiceEnterpriseCompany> serviceEnterpriseCompany) {
+    public List<ServiceEnterpriseCompany> getCompanyNewList(List<ServiceEnterpriseCompany> serviceEnterpriseCompany,String account) {
         List<ServiceEnterpriseCompany> getCompanyNewList=new ArrayList<>();
         //循环去通过企业ID查询相关联的评论及关注
         for(int i=0;i<serviceEnterpriseCompany.size();i++){
@@ -160,14 +167,34 @@ public class CareServiceImpl implements CareService {
             serviceEnterpriseCompany1.setCommentNumber(commentModel.getCommentNumber());
             //关注用户数
             serviceEnterpriseCompany1.setCareUser(commentModel.getCareUser());
+            //先将关注状态设置为0,未关注
+            serviceEnterpriseCompany1.setAttentionStatus("0");
             //处理完成之后保存数据,返回
             getCompanyNewList.add(serviceEnterpriseCompany1);
         }
-
+        //根据当前操作用户查询关注的企业
+        List<String> careCompanyList = this.findCareCompanyList(account);
+        //循环去对比ID,如果相同的就将那一条企业记录设置为 1,已关注  的状态
+        for (int i=0;i<getCompanyNewList.size();i++){
+            for (int j=0;j<careCompanyList.size();j++){
+                if (StringUtils.equals( getCompanyNewList.get(i).getId() , careCompanyList.get(j))){
+                    getCompanyNewList.get(i).setAttentionStatus("1");
+                    //break;
+                }
+            }
+        }
         return getCompanyNewList;
     }
-
-
+    @ServiceLog(doAction = "获取用户关注的企业信息列表")
+    @Override
+    public PaginationData<List<CareUserShow>> findCompanyCareList(Page page, String account) {
+        int pageNum = page.getPage();
+        int pageSize = page.getRows()==0?15:page.getRows();
+        com.github.pagehelper.Page<Object> objects = PageHelper.startPage(pageNum,pageSize,true);
+        List<CareUserShow> showList =  careDao.findCompanyCareList(account);
+        showList =perfectCompanyInfo(showList);
+        return  new PaginationData<>(showList,objects==null?0:objects.getTotal());
+    }
 
 
     /**
@@ -196,5 +223,23 @@ public class CareServiceImpl implements CareService {
         return showList;
     }
 
+    /**
+     * 完善企业信息
+     * @param showList
+     * @return
+     */
+    private  List<CareUserShow> perfectCompanyInfo( List<CareUserShow> showList){
+        if(showList != null && !showList.isEmpty()){
+          for(CareUserShow show : showList){
+             CompanyInfoModel infoModel =  companyClient.getCompanyInfo(show.getAccount());
+             if(infoModel != null){
+                 show.setCompanyName(infoModel.getCompanyName());
+                 show.setAvatar(infoModel.getCompanyAvatar());
+             }
+          }
+        }
+        return showList;
+
+    }
 
 }

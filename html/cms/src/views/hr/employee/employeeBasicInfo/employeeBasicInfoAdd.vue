@@ -241,6 +241,8 @@
                 <el-option label="请选择" value=""/>
                 <el-option label="在职" value="1"/>
                 <el-option label="医疗期" value="2"/>
+                <el-option label="退休" value="3"/>
+                <el-option label="离职" value="4"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -249,7 +251,7 @@
             <el-form-item label="用户账号：" prop="userAccount">
               <el-input
                 v-model.trim="addForm.userAccount"
-                :disabled="addForm.userId!=''"
+                :disabled="true"
                 style="width: 200px"
                 placeholder="请输入用户账号"
                 clearable/>
@@ -1110,7 +1112,6 @@ export default {
         contractId: [{ required: true, message: '请选择合同类型', trigger: 'change' }],
         employeeType: [{ required: true, message: '请选择员工类型', trigger: 'change' }],
         entryDate: [{ required: true, message: '请输入入职日期', trigger: 'blur' }],
-        userAccount: [{ required: true, message: '请输入用户账号', trigger: 'blur' }],
         sex: [{ required: true, message: '请选择性别', trigger: 'change' }],
         birthDate: [{ required: true, message: '请输入出生日期', trigger: 'blur' }],
         nationalityId: [{ required: true, message: '请选择国籍', trigger: 'change' }],
@@ -1289,7 +1290,6 @@ export default {
       }
     },
     initCheckZjhm() {
-      debugger
       const reg = /^\w{5,18}$/i
       if (this.addForm.certificateType === '身份证') {
         this.checkZjhm = (rule, value, callback) => {

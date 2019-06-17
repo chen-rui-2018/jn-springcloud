@@ -7,10 +7,10 @@ import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.common.util.StringUtils;
 import com.jn.common.util.excel.ExcelUtil;
+import com.jn.park.activity.model.*;
 import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.activity.service.ActivityService;
 import com.jn.park.enums.ActivityExceptionEnum;
-import com.jn.park.activity.model.*;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
@@ -169,6 +169,17 @@ public class ActivityController extends BaseController {
         PaginationData<List<ActivityApplyDetail>> paginationData = activityApplyService.applyActivityList(activityApplyParam,true);
         return new Result<>(paginationData);
     }
+
+    @ControllerLog(doAction = "根据报名状态查询活动报名列表")
+    @ApiOperation(value = "根据报名状态查询活动报名列表")
+    @RequestMapping(value = "/applyActivityListByApplyStatus",method = RequestMethod.GET)
+    @RequiresPermissions("/activity/applyActivityListByApplyStatus")
+    public Result<PaginationData<List<ActivityApplyDetail>>> applyActivityListByApplyStatus(ActivityApplyListEasyParam  activityApplyParam) {
+        PaginationData<List<ActivityApplyDetail>> paginationData = activityApplyService.applyActivityListByApplyStatus(activityApplyParam);
+        return new Result<>(paginationData);
+    }
+
+
 
     @ControllerLog(doAction = "下载签到二维码")
     @ApiOperation(value = "下载签到二维码", httpMethod = "GET")

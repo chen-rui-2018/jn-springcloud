@@ -1,5 +1,7 @@
 package com.jn.enterprise.workflow.task.controller;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.jn.common.controller.BaseController;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
@@ -8,6 +10,7 @@ import com.jn.enterprise.company.enums.CompanyExceptionEnum;
 import com.jn.enterprise.workflow.task.model.CommonTaskPage;
 import com.jn.enterprise.workflow.task.model.TaskPage;
 import com.jn.enterprise.workflow.task.model.TaskType;
+import com.jn.enterprise.workflow.task.model.TimelinessTaskParam;
 import com.jn.enterprise.workflow.task.service.TaskService;
 import com.jn.enterprise.workflow.task.vo.*;
 import com.jn.system.log.annotation.ControllerLog;
@@ -69,6 +72,17 @@ public class TaskController extends BaseController {
         taskPage.setUserId(user.getId());
         PaginationData data = taskService.searchWorkflowTaskListByPage(taskPage);
         return new Result(data);
+    }
+
+    @ControllerLog(doAction = "查询时效性待办列表")
+    @ApiOperation(value = "查询时效性待办列表（百分比）", notes = "查询时效性待办列表")
+    @PostMapping(value = "/getWorkflowTaskList")
+    @RequiresPermissions("/enterprise/workflow/task/getWorkflowTaskList")
+    public Result<List<TaskListVO>> getWorkflowTaskList(@Validated @RequestBody TimelinessTaskParam taskParam) {
+        User user = checkUserValid();
+        taskParam.setUserId(user.getId());
+        List<TaskListVO> workflowTaskList = taskService.getWorkflowTaskList(taskParam);
+        return new Result(workflowTaskList);
     }
 
     @ControllerLog(doAction = "查询常规待办事项")

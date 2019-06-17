@@ -302,7 +302,7 @@
             </foreach>
 
         </if>
-         group by department_name
+         group by department_name order by value desc
     </select>
     
     <select id="selectByJobNumber" parameterType="java.lang.String"
@@ -508,6 +508,10 @@
         `tb_manpower_employee_basic_info`
         WHERE record_status=1
          and date_format(entry_date, '%m-%d')=#{entryDate}
+    </select>
+
+    <select id="selectCountByName" resultType="java.lang.Integer">
+        select count(1) from tb_manpower_employee_basic_info where `name`=#{name}
     </select>
 
 </mapper>

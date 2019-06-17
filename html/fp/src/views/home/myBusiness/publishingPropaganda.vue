@@ -1,45 +1,18 @@
 <template>
-  <div class="publishingProduct">
+  <div class="publishingProduct" v-loading="loading">
     <div class="ordinary_title font16">
       <div>发布宣传</div>
       <div @click="toEnterprisePropaganda">返回</div>
     </div>
     <div class="ordinary_content">
-      <el-form
-        :model="publicityForm"
-        :rules="rules"
-        ref="publicityForm"
-        label-width="124px"
-        class="postJobInfo"
-      >
-        <el-form-item
-          label="发布平台:"
-          prop="issuePlatform"
-        >
-          <el-select
-            v-model="publicityForm.issuePlatform"
-            placeholder="请选择发布平台"
-            clearable
-            class="filter-item"
-          >
-            <el-option
-              v-for="item in statusOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
+      <el-form :model="publicityForm" :rules="rules" ref="publicityForm" label-width="124px" class="postJobInfo">
+        <el-form-item label="发布平台:" prop="issuePlatform">
+          <el-select v-model="publicityForm.issuePlatform" placeholder="请选择发布平台" clearable class="filter-item">
+            <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
-        <el-form-item
-          label="生效日期:"
-          prop="effectiveDate"
-        >
-          <el-date-picker
-            v-model="publicityForm.effectiveDate"
-            value-format="yyyy-MM-dd"
-            type="date"
-            placeholder="选择日期"
-          >
+        <el-form-item label="生效日期:" prop="effectiveDate">
+          <el-date-picker v-model="publicityForm.effectiveDate" value-format="yyyy-MM-dd" type="date" placeholder="选择日期">
           </el-date-picker>
         </el-form-item>
         <!-- <el-form-item label="失效日期:" prop="invalidDate">
@@ -50,51 +23,22 @@
       placeholder="选择日期">
     </el-date-picker>
   </el-form-item> -->
-        <el-form-item
-          label="宣传产品:"
-          prop="propagandaTitle"
-        >
+        <el-form-item label="宣传产品:" prop="propagandaTitle">
           <el-input v-model="publicityForm.propagandaTitle"></el-input>
         </el-form-item>
-        <el-form-item
-          label="宣传类型:"
-          prop="propagandaType"
-        >
-          <el-select
-            v-model="publicityForm.propagandaType"
-            placeholder="请选择宣传类型"
-            clearable
-            class="filter-item"
-          >
-            <el-option
-              v-for="item in propagandaTypeOptions"
-              :key="item.propagandaTypeCode"
-              :label="item.propagandaTypeName"
-              :value="item.propagandaTypeCode"
-              @click.native="selecteStatus(item)"
-            />
+        <el-form-item label="宣传类型:" prop="propagandaType">
+          <el-select v-model="publicityForm.propagandaType" placeholder="请选择宣传类型" clearable class="filter-item">
+            <el-option v-for="item in propagandaTypeOptions" :key="item.propagandaTypeCode" :label="item.propagandaTypeName"
+              :value="item.propagandaTypeCode" @click.native="selecteStatus(item)" />
           </el-select>
         </el-form-item>
-        <el-form-item
-          label="宣传详情:"
-          prop="propagandaDetails"
-        >
-          <el-input
-            type="textarea"
-            v-model="publicityForm.propagandaDetails"
-            placeholder="宣传详情宣传详情"
-          ></el-input>
+        <el-form-item label="宣传详情:" prop="propagandaDetails">
+          <el-input type="textarea" v-model="publicityForm.propagandaDetails" placeholder="宣传详情宣传详情"></el-input>
         </el-form-item>
         <el-form-item label="宣传海报:">
-          <el-upload
-            action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
-            :headers="headers"
- :show-file-list="false"
-            :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload"
-
-          >
-           <img v-if="publicityForm.posterUrl" :src="publicityForm.posterUrl" alt="宣传图片">
+          <el-upload :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'" :headers="headers" :show-file-list="false"
+            :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+            <img v-if="publicityForm.posterUrl" :src="publicityForm.posterUrl" alt="宣传图片">
             <i v-else class="el-icon-plus "></i>
           </el-upload>
           <!-- <el-dialog :visible.sync="dialogVisible">
@@ -105,44 +49,31 @@
             >
           </el-dialog> -->
         </el-form-item>
-        <el-form-item
-          label="宣传区域:"
-          class="propagandaAreaUrl"
-          prop="propagandaAreaUrl"
-        >
+        <el-form-item label="宣传区域:" class="propagandaAreaUrl" prop="propagandaAreaUrl">
           <!-- <el-radio-group v-model="publicityForm.propagandaAreaUrl">
     <el-radio label="top">顶部</el-radio>
     <el-radio label="central">中部</el-radio>
     <el-radio label="bottom">底部</el-radio> -->
           <!-- </el-radio-group> -->
-          <div
-            :class="{'propagandaAreaActive':idx==index}"
-            v-for="(item ,idx) in propagandaAreaArr"
-            :key="idx"
-            @click="getPropagandaAreaUrl(item,idx)"
-          > <img
-              :src="item.propagandaAreaUrl"
-              alt="宣传区域图片"
-            ></div>
+          <div :class="{'propagandaAreaActive':idx==index}" v-for="(item ,idx) in propagandaAreaArr" :key="idx" @click="getPropagandaAreaUrl(item,idx)">
+            <img :src="item.propagandaAreaUrl" alt="宣传区域图片">
+            <el-radio-group v-model="radio">
+              <el-radio :label=0 v-show="item.propagandaArea==='top'">顶部</el-radio>
+              <el-radio :label=1 v-show="item.propagandaArea==='central'">中部</el-radio>
+              <el-radio :label=2 v-show="item.propagandaArea==='bottom'">底部</el-radio>
+            </el-radio-group>
+          </div>
         </el-form-item>
         <el-form-item label="宣传费用（元）:" class="propaganda">
-          <div
-            class="price ct smallSize"
-            :class="{'propagandaTimeActive':inx==priceIndex}"
-               @click="getPropagandaTime(item,inx)"
-            v-for="(item ,inx) in propagandaFeeArr"
-            :key="inx"> <div :class="{'redColor':inx==priceIndex}">￥{{item.propagandaFee}} </div> <div>{{item.date}}</div></div>
+          <div class="price ct smallSize" :class="{'propagandaTimeActive':inx==priceIndex}" @click="getPropagandaTime(item,inx)"
+            v-for="(item ,inx) in propagandaFeeArr" :key="inx">
+            <div :class="{'redColor':inx==priceIndex}">￥{{Number(item.propagandaFee).toFixed(2)}} </div>
+            <div>{{item.date}}</div>
+          </div>
           <!-- <span class="propagandaFeeStyle">{{publicityForm.propagandaFee}}</span> -->
-          <div style="margin-top:10px;"
-            @click="toPublicityExpense"
-            class="mainColor smallSize pointer"
-          >宣传费用规则</div>
+          <div style="margin-top:10px;" @click="toPublicityExpense" class="mainColor smallSize pointer">宣传费用规则</div>
         </el-form-item>
-        <div
-          class="business_footer"
-          :disabled="isDisabled"
-          @click="submitForm('publicityForm')"
-        >
+        <div class="business_footer" :disabled="isDisabled" @click="submitForm('publicityForm')">
           提交申请
         </div>
       </el-form>
@@ -150,13 +81,17 @@
   </div>
 </template>
 <script>
+import { getToken, removeToken } from '@/util/auth'
 export default {
   data() {
     return {
+      radio:undefined,
+      loading: false,
+      baseUrl: this.api.host,
       priceIndex: undefined,
       index: undefined,
       headers: {
-        token: sessionStorage.token
+        token: getToken()
       },
       currentItem: "",
       isDisabled: false,
@@ -193,8 +128,8 @@ export default {
         areaAmount: "",
         id: "",
         posterUrl: "",
-        propagandaTime:'',
-        propagandaFee:''
+        propagandaTime: "",
+        propagandaFee: ""
       },
       propagandaFeeArr: [
         { propagandaFee: "", date: "宣传一个月", num: 1 },
@@ -254,34 +189,34 @@ export default {
       this.publicityForm.propagandaAreaUrl = item.propagandaAreaUrl;
       this.publicityForm.areaAmount = item.areaAmount;
       this.index = idx;
+      this.radio=idx
       this.calcPrice();
     },
     // 选择宣传时间
-    getPropagandaTime(item, inx){
-
-      if(item.date=='宣传一个月'){
-        this.publicityForm.propagandaTime=1
-      }else if(item.date=='宣传三个月'){
- this.publicityForm.propagandaTime=3
-      }else if(item.date=='宣传六个月'){
- this.publicityForm.propagandaTime=6
-      }else if(item.date=='宣传一年'){
- this.publicityForm.propagandaTime=12
+    getPropagandaTime(item, inx) {
+      if (item.date == "宣传一个月") {
+        this.publicityForm.propagandaTime = 1;
+      } else if (item.date == "宣传三个月") {
+        this.publicityForm.propagandaTime = 3;
+      } else if (item.date == "宣传六个月") {
+        this.publicityForm.propagandaTime = 6;
+      } else if (item.date == "宣传一年") {
+        this.publicityForm.propagandaTime = 12;
       }
-      this.publicityForm.propagandaFee=item.propagandaFee
-      this.priceIndex=inx
+      this.publicityForm.propagandaFee = item.propagandaFee;
+      this.priceIndex = inx;
     },
     // 获取选中的宣传类型
     selecteStatus(item) {
-      console.log(item)
+      console.log(item);
       this.currentItem = item;
-      this.propagandaFeeOptions.forEach(v=>{
-        if(item.propagandaTypeCode==v.proFeeRuleCode){
-          this.proFeeRuleDetails=v.proFeeRuleDetails
-          this.publicityForm.proFeeRuleCode=v.proFeeRuleCode
+      this.propagandaFeeOptions.forEach(v => {
+        if (item.propagandaTypeCode == v.proFeeRuleCode) {
+          this.proFeeRuleDetails = v.proFeeRuleDetails;
+          this.publicityForm.proFeeRuleCode = v.proFeeRuleCode;
         }
-      })
-      console.log(this.proFeeRuleDetails)
+      });
+      console.log(this.proFeeRuleDetails);
       // console.dir(this.publicityForm);
       this.calcPrice();
       // for (let i = 0; i < this.propagandaFeeOptions.length; i++) {
@@ -348,8 +283,8 @@ export default {
         });
       });
     },
-    toEnterprisePropaganda(){
-         this.$router.push({ name: "enterprisePropaganda" });
+    toEnterprisePropaganda() {
+      this.$router.push({ name: "enterprisePropaganda" });
     },
     handleExceed(files, fileList) {
       this.$message.warning(`只能上传一张海报图片`);
@@ -365,10 +300,10 @@ export default {
       this.publicityForm.posterUrl = res.data;
     },
     beforeAvatarUpload(file) {
-      const isLt2M = file.size / 1024 / 1024 < 5;
+      const isLt2M = file.size / 1024 / 1024 < 1;
       const isJPG = file.type === "image/jpeg" || file.type === "image/png";
       if (!isLt2M) {
-        this.$message.error("上传图片大小不能超过 5MB!");
+        this.$message.error("上传图片大小不能超过 1MB!");
       }
       if (!isJPG) {
         this.$message.error("上传图片只能是 JPG、png 格式!");
@@ -388,7 +323,7 @@ export default {
     },
     submitForm(publicityForm) {
       this.isDisabled = true;
-       console.log(this.publicityForm.posterUrl)
+      console.log(this.publicityForm.posterUrl);
       this.$refs[publicityForm].validate(valid => {
         if (valid) {
           console.log(this.publicityForm);
@@ -416,29 +351,29 @@ export default {
             return;
           }
           if (!this.publicityForm.propagandaTime) {
-            this.$message.error("请选择宣传时间");
+            this.$message.error("请选择宣传费用");
             this.isDisabled = false;
             return;
           }
+          this.loading = true;
           this.api.post({
             url: "saveBusinessPromotion",
             data: this.publicityForm,
             callback: res => {
-              console.log(res);
+              this.loading = false;
               if (res.code === "0000") {
                 this.$message({
-                  message: "申请成功",
+                  message: "操作成功,请等待审核",
                   type: "success"
                 });
                 this.$router.push({ name: "enterprisePropaganda" });
-                 this.$refs[publicityForm].resetFields();
-                 this.publicityForm.posterUrl=''
-                 this.priceIndex=undefined
-                 this.index=undefined
-                this.propagandaFeeArr.forEach(val=>{
-                  val.propagandaFee=''
-                })
-                console.log(this.propagandaFeeArr)
+                this.$refs[publicityForm].resetFields();
+                this.publicityForm.posterUrl = "";
+                this.priceIndex = undefined;
+                this.index = undefined;
+                this.propagandaFeeArr.forEach(val => {
+                  val.propagandaFee = "";
+                });
               } else {
                 this.$message.error(res.result);
               }
@@ -456,29 +391,29 @@ export default {
   border: 2px solid green;
 }
 
-.propaganda{
-  .el-form-item__content{
+.propaganda {
+  .el-form-item__content {
     line-height: unset;
   }
 }
 .price {
   display: inline-block;
-  margin-right: 46px;
+  margin-right: 40px;
   width: 85px;
   height: 85px;
   cursor: pointer;
-  color:#999;
+  color: #999;
   background: rgba(245, 245, 245, 1);
   border: 1px solid rgba(232, 232, 232, 1);
   border-radius: 4px;
-  >div:nth-child(1){
-    padding:18px;
+  > div:nth-child(1) {
+    padding: 18px;
   }
 }
-.propagandaTimeActive{
-  background:rgba(236,252,242,1);
-  color:#00a041;
-border:1px solid rgba(65,215,135,1);
+.propagandaTimeActive {
+  background: rgba(236, 252, 242, 1);
+  color: #00a041;
+  border: 1px solid rgba(65, 215, 135, 1);
 }
 .propagandaAreaUrl {
   div {
@@ -493,6 +428,14 @@ border:1px solid rgba(65,215,135,1);
         width: 100%;
       }
     }
+    .el-radio-group{
+      width: 100%;
+      height: 20px;
+       text-align: center;
+      .el-radio{
+        width: 100%;
+      }
+    }
   }
 }
 .propagandaFeeStyle {
@@ -500,41 +443,58 @@ border:1px solid rgba(65,215,135,1);
 }
 .publishingProduct {
   width: 100%;
-   .el-upload{
-     width: 85px;
+  .el-upload {
+    width: 85px;
     height: 85px;
     line-height: 85px;
     border: 1px dashed #c0ccda;
     border-radius: 6px;
-    >i{
+    > i {
       font-size: 28px;
-    color: #8c939d;
+      color: #8c939d;
     }
-    >img{
+    > img {
+      border-radius: 6px;
       width: 85px;
       height: 85px;
+      vertical-align: initial;
     }
   }
+  //  .el-upload{
+  //    width: 85px;
+  //   height: 85px;
+  //   line-height: 85px;
+  //   border: 1px dashed #c0ccda;
+  //   border-radius: 6px;
+  //   >i{
+  //     font-size: 28px;
+  //   color: #8c939d;
+  //   }
+  //   >img{
+  //     width: 86px;
+  //     height: 86px;
+  //   }
+  // }
   .ordinary_title {
-       background-color: #fff;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding:17px;
-      // font-size: 13px;
-      border-radius: 5px;
-      div:nth-child(2){
-        width:50px;
-height:26px;
-background:rgba(236,252,242,1);
-border:1px solid rgba(65,215,135,1);
-border-radius:4px;
-text-align: center;
-line-height: 26px;
-        font-size: 12px;
-        color:#00A041;
-        cursor: pointer;
-      }
+    background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 17px;
+    // font-size: 13px;
+    border-radius: 5px;
+    div:nth-child(2) {
+      width: 50px;
+      height: 26px;
+      background: rgba(236, 252, 242, 1);
+      border: 1px solid rgba(65, 215, 135, 1);
+      border-radius: 4px;
+      text-align: center;
+      line-height: 26px;
+      font-size: 12px;
+      color: #00a041;
+      cursor: pointer;
+    }
   }
   .el-upload-list--picture-card .el-upload-list__item {
     width: 85px;

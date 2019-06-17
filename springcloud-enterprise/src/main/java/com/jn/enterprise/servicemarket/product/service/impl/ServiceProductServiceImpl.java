@@ -76,8 +76,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public String addServiceProduct(ServiceContent content, String account,String templateId) {
-
-        if(ProductConstantEnum.PRODUCT_FEATURE_TYPE.getCode().equals(content.getProductType())){
+        if(ProductConstantEnum.PRODUCT_FEATURE_TYPE.getCode().equals(content.getProductType()) && StringUtils.isBlank(content.getProductId())){
             TbServiceProductCriteria criteria = new TbServiceProductCriteria();
             criteria.createCriteria().andProductNameEqualTo(content.getProductName()).andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue())
                     .andStatusNotEqualTo(ProductConstantEnum.PRODUCT_STATUS_APPROVAL_NOT_PASS.getCode());
@@ -242,9 +241,9 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     public void productShelf(ProductShelfOperation operation , String account) {
         //如果进行上架操作,则需要进行审核,修改状态为待审核
         String productStatus = operation.getStatus();
-        if(ProductConstantEnum.PRODUCT_STATUS_EFFECTIVE.getCode().equals(productStatus)){
-            productStatus = ProductConstantEnum.PRODUCT_STATUS_APPROVAL.getCode();
-        }
+//        if(ProductConstantEnum.PRODUCT_STATUS_EFFECTIVE.getCode().equals(productStatus)){
+//            productStatus = ProductConstantEnum.PRODUCT_STATUS_APPROVAL.getCode();
+//        }
         productDao.productShelf(operation.getProductId(),productStatus,account);
     }
 
@@ -309,6 +308,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         for(HotProducts product : products){
             product.setPictureUrl(IBPSFileUtils.getFilePath(product.getPictureUrl()));
         }
+        products = addProductBrief(products);
         return new PaginationData(products,object==null?0:object.getTotal());
     }
     @ServiceLog(doAction = "web前台服务产品详情")
@@ -670,5 +670,25 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         } else {
             throw new JnSpringCloudException(ServiceProductExceptionEnum.PRODUCT_SEND_ERROR);
         }
+    }
+
+    /**
+     * 热门产品添加简介
+     * @param productList
+     * @return
+     */
+  private  List<HotProducts> addProductBrief(List<HotProducts> productList){
+        for (HotProducts show : productList) {
+            String briefContent = show.getProductDetails();
+            if(StringUtils.isNotBlank(briefContent)){
+                briefContent = briefContent.replaceAll("</?[^>]+>", "");
+                if (StringUtils.isNotBlank(briefContent)) {
+                    String briefSummaries = briefContent.substring(0, briefContent.length() > 100 ? 100 : briefContent.length());
+                    briefSummaries = briefContent.length() > 100 ? briefSummaries + "......" : briefSummaries;
+                    show.setProductBrief(briefSummaries);
+                }
+            }
+        }
+        return  productList;
     }
 }

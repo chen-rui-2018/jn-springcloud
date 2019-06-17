@@ -15,15 +15,15 @@
                         </div>
                     </div>
                     <!-- 如果需要分页器 -->
-                    <div class="swiper-pagination"></div>
+                    <!-- <div class="swiper-pagination"></div> -->
 
                     <!-- 如果需要导航按钮 -->
-                    <div class="swiper-button-prev">
+                    <!-- <div class="swiper-button-prev">
                         <i class="iconfont icon-leftarrow pointer"></i>
                     </div>
                     <div class="swiper-button-next">
                         <i class="iconfont icon-rightarrow pointer"></i>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -179,6 +179,7 @@ export default {
   .incubatorNav {
     padding: 15px 0;
     font-size: 13px;
+    font-weight: bold;
   }
   .incubatorCon {
     margin-bottom: 50px;

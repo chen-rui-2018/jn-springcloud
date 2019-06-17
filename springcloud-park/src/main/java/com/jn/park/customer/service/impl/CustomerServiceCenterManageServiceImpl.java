@@ -336,7 +336,7 @@ public class CustomerServiceCenterManageServiceImpl implements CustomerServiceCe
                 return addCustomerExecuteImgInfo(customerParam, loginAccount);
             }
         }else{
-            logger.warn("获取获取流程表单失败，{}",ibpsResult.getMessage());
+            logger.warn("处理任务失败，{}",ibpsResult.getMessage());
             throw new JnSpringCloudException(CustomerCenterExceptionEnum.NETWORK_ANOMALY);
         }
     }
@@ -531,7 +531,13 @@ public class CustomerServiceCenterManageServiceImpl implements CustomerServiceCe
         //是否删除
         ibpsParam.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
         //当前来电
-        ibpsParam.setCurrentCaller(param.getContactWay());
+        if(StringUtils.isNotBlank(param.getCalledPhone())){
+            ibpsParam.setCurrentCaller(param.getCalledPhone());
+        }else{
+            //没有当前来电，表示是客服重新录入，默认来电就是联系方式
+            ibpsParam.setCurrentCaller(param.getContactWay());
+        }
+
         //获取用户信息
         Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(param.getContactWay());
         if(userExtension!=null && userExtension.getData()!=null){

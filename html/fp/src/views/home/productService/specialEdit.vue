@@ -13,7 +13,7 @@
             </el-form-item>
           </div>
           <div class="finance_data_container">
-            <el-form-item label="服务顾问：" >
+            <el-form-item label="服务专员：" >
               <el-select v-model="specialEditData.advisorAccount" placeholder="请选择">
                 <el-option :label="counseloritem.advisorName" :value="counseloritem.advisorAccount" v-for="(counseloritem,counselorindex) in counselorList" :key="counselorindex">
                 </el-option>
@@ -31,13 +31,14 @@
           <div class="product_img">
             <el-form-item label="产品图片：" >
               <el-upload
-                action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
+                :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
                 list-type="picture-card"
                 :on-success="uploadsuccess"
                 :headers="headers"
                 :file-list="fileList"
                 >
-                <i class="el-icon-plus"></i>
+                <img v-if="imageUrl" :src="imageUrl" class="avatar"> 
+                <i v-else class="el-icon-plus"></i>
               </el-upload>
             </el-form-item>
           </div>
@@ -147,14 +148,24 @@
           </div>
           <div class="product_img">
             <el-form-item label="产品图片：" >
-              <el-upload
-                action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
+              <!-- <el-upload
+                :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
                 list-type="picture-card"
                 :on-success="uploadsuccess"
                 :headers="headers"
                 :file-list="fileList"
                 >
-                <i class="el-icon-plus"></i>
+                <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                <i v-else class="el-icon-plus"></i>
+              </el-upload> -->
+              <el-upload
+                :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
+                list-type="picture-card"
+                :on-success="uploadsuccess"
+                :headers="headers"
+                :file-list="fileList">
+                <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
             </el-form-item>
           </div>
@@ -176,9 +187,11 @@
   </div>
 </template>
 <script>
+import { getToken } from '@/util/auth'
 export default {
   data () {
     return {
+      baseUrl: this.api.host,
       specialEditData:{
         advisorAccount:'',
         orgId:"",
@@ -193,11 +206,12 @@ export default {
         signoryId:"",
         signoryName:""
       },
+      imageUrl:"",
       orgId:'',
       signoryId:'',
       signoryName:'',
       counselorList:[],
-      headers:{token: sessionStorage.token},
+      headers:{token: getToken()},
       fileList:[],
       businessType:'',
       productId:"b1c22cd7bc794ea6ba11fc869e17101e",
@@ -304,6 +318,7 @@ export default {
           }
           _this.specialEditData.signoryId=_this.signoryId
           _this.specialEditData.signoryName=_this.signoryName
+          _this.imageUrl=res.data.info.pictureUrl
           }
         }
       })
@@ -327,6 +342,7 @@ export default {
           }
           // _this.addFinancialProduct= res.data
           _this.addFinancialProduct.signoryId=_this.signoryId
+          _this.imageUrl=res.data.pictureUrl
           }
         }
       })
@@ -359,7 +375,7 @@ export default {
         }
       })
     },
-    //顾问列表获取
+    //专员列表获取
     getServiceConsultantList(){
       let _this = this;
       this.api.get({
@@ -384,8 +400,12 @@ export default {
     uploadsuccess(file, fileList){
       if(this.businessType==='technology_finance'){
         this.addFinancialProduct.pictureUrl=file.data
+        debugger
+        this.imageUrl=file.data
       }else{
         this.specialEditData.pictureUrl=file.data
+        debugger
+        this.imageUrl=file.data
       }
     },
     //提交编辑
@@ -477,6 +497,19 @@ export default {
           width:100px;
           height: 100px;
         }
+          .avatar-uploader-icon {
+            font-size: 28px;
+            color: #8c939d;
+           width:100px;
+          height: 100px;
+            line-height: 100px;
+            text-align: center;
+          }
+          .avatar {
+            width:100px;
+          height: 100px;
+            display: block;
+          }
         }
         .content_textarea{
           textarea{

@@ -46,15 +46,12 @@ public class OrgController extends BaseController {
     private OrgService orgService;
     @Autowired
     private ServiceProductService productService;
-    @Autowired
-    private UserExtensionClient userExtensionClient;
-
 
     @ControllerLog(doAction = "获取服务机构列表")
     @ApiOperation(value = "获取服务机构列表,(pc/app机构列表)")
     @RequestMapping(value = "/selectServiceOrgList",method = RequestMethod.GET)
     public Result<PaginationData<List<ServiceOrg>>> selectServiceOrgList(@Validated OrgParameter orgParameter){
-        PaginationData<List<ServiceOrg>> paginationData = orgService.selectServiceOrgList(orgParameter);
+        PaginationData<List<ServiceOrg>> paginationData = orgService.selectServiceOrgList(orgParameter,false);
         return new Result<>(paginationData);
     }
 
@@ -84,7 +81,6 @@ public class OrgController extends BaseController {
     @ControllerLog(doAction = "我的机构")
     @ApiOperation(value = "获取我的服机构信息(app我的机构)",notes = "根据用户账号查询其所属机构信息")
     @RequestMapping(value = "/getMyOrgInfo",method = RequestMethod.GET)
-    @RequiresPermissions("/serviceMarket/org/getMyOrgInfo")
     public Result<MyOrgInfoVo>  getMyOrgInfo(@ApiParam(name="account",value = "用户账号",required = true,example = "wangsong" )@RequestParam(value = "account")  String account){
         Assert.notNull(account, OrgExceptionEnum.ORG_ID_IS_NOT_NULL.getMessage());
         MyOrgInfoVo vo = orgService.getMyOrgInfo(account);

@@ -5,10 +5,8 @@ import com.jn.common.model.PaginationData;
 import com.jn.enterprise.workflow.task.model.CommonTaskPage;
 import com.jn.enterprise.workflow.task.model.TaskPage;
 import com.jn.enterprise.workflow.task.model.TaskType;
-import com.jn.enterprise.workflow.task.vo.CommonTaskListVO;
-import com.jn.enterprise.workflow.task.vo.CommonTaskVO;
-import com.jn.enterprise.workflow.task.vo.TaskStatisticsVO;
-import com.jn.enterprise.workflow.task.vo.TaskTypeVo;
+import com.jn.enterprise.workflow.task.model.TimelinessTaskParam;
+import com.jn.enterprise.workflow.task.vo.*;
 import com.jn.task.model.WorkflowTaskAdd;
 
 import java.util.List;
@@ -61,6 +59,13 @@ public interface TaskService {
      * @param ids
      */
     void deleteWorkflowTask(String[] ids,String userAccount);
+
+    /**
+     * 获取时效性待办列表
+     * @param timelinessTaskParam 入参
+     * @return
+     */
+    List<TaskListVO> getWorkflowTaskList(TimelinessTaskParam timelinessTaskParam);
 
     /**
      * 查询常规待办事项

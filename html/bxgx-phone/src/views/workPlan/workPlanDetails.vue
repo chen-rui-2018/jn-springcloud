@@ -130,18 +130,18 @@ export default {
     },
     submitRemark () {
       if (!this.workForm.remark) {
-        this.$vux.toast.text('请先填写备注信息', 'top')
+        this.$vux.toast.text('请先填写备注信息')
       }
       this.api.post({
         url: 'addRemark',
         data: { id: this.workForm.id, remark: this.workForm.remark },
         callback: res => {
           if (res.code === '0000') {
-            this.$vux.toast.text('操作成功', 'top')
+            this.$vux.toast.text('操作成功')
             this.init()
             this.isShowRemark = false
           } else {
-            this.$vux.toast.text(res.result, 'top')
+            this.$vux.toast.text(res.result)
           }
         }
       })
@@ -193,10 +193,10 @@ export default {
         data: { workPlanId: this.workForm.id },
         callback: res => {
           if (res.code === '0000') {
-            this.$vux.toast.text('操作成功', 'top')
+            this.$vux.toast.text('操作成功')
             this.$router.push({ path: '/workPlan/workPlan' })
           } else {
-            this.$vux.toast.text(res.result, 'top')
+            this.$vux.toast.text(res.result)
           }
         }
       })
@@ -241,7 +241,7 @@ export default {
             // console.log(this.workForm.workPlanStatus)
             this.workForm.totalConsumeTime = res.data.totalConsumeTime
           } else {
-            this.$vux.toast.text(res.result, 'top')
+            this.$vux.toast.text(res.result)
           }
         }
       })

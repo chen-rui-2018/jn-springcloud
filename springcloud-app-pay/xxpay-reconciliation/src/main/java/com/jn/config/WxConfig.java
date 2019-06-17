@@ -1,13 +1,15 @@
 package com.jn.config;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 /**
- * TODO：未添加类描述
  *
- * @Author： cm
+ * @Author： hey
  * @Date： Created on 2019/1/7 11:08
  * @Version： v1.0
  * @Modified By:
@@ -18,18 +20,6 @@ import org.springframework.stereotype.Component;
 @RefreshScope
 public class WxConfig {
 
-    /**
-     * 公众账号ID
-     */
-    private String appId;
-    /**
-     * 微信商户号
-     */
-    private String mchId;
-    /**
-     * 微信支付密钥
-     */
-    private String partnerKey;
     /**
      * 文件存放路径
      */
@@ -51,6 +41,35 @@ public class WxConfig {
      *  REFUND，返回当日退款订单
     * */
     private String billType ;
+    /**
+     * 公众账号ID
+     */
+    private String appId;
+    /**
+     * 微信商户号
+     */
+    private String channelMchId;
+    /**
+     * 微信支付密钥
+     */
+    private String partnerKey;
+
+
+    /**
+     * 初始化微信配置
+     * @param configParam
+     * @param channelMchId 微信商户号
+     * @return
+     */
+    public WxConfig init(String configParam,String channelMchId) {
+        Assert.notNull(configParam, "init WX config error");
+        JSONObject paramObj = JSON.parseObject(configParam);
+        this.setAppId(paramObj.getString("appId"));
+        this.setChannelMchId(channelMchId);
+        this.setPartnerKey(paramObj.getString("key"));
+
+        return this;
+    }
 
 
     public String getAppId() {
@@ -61,12 +80,12 @@ public class WxConfig {
         this.appId = appId;
     }
 
-    public String getMchId() {
-        return mchId;
+    public String getChannelMchId() {
+        return channelMchId;
     }
 
-    public void setMchId(String mchId) {
-        this.mchId = mchId;
+    public void setChannelMchId(String channelMchId) {
+        this.channelMchId = channelMchId;
     }
 
     public String getPartnerKey() {

@@ -1,6 +1,7 @@
 
 import axios from 'axios'
 export default {
+  // host: 'http://172.16.160.19:6063/',
   host: 'http://112.94.22.222:8000/',
   apiURL: {
     departList: 'springcloud-park/guest/portal/sp/power/departList', // 实施部门列表
@@ -20,6 +21,7 @@ export default {
     sameTypeProductList: 'springcloud-enterprise/guest/servicemarket/product/web/sameTypeProductList', // 同类型产品
     activityLike: 'springcloud-park/activity/activityLike/activityLike', // 活动点赞
     CancelLike: 'springcloud-park/activity/activityLike/cancelLike', // 取消点赞
+    quickApply: 'springcloud-park/activity/activityApply/quickApply', // 快速报名
 
     trafficVolume: 'springcloud-enterprise/guest/pd/declarationNotice/trafficVolume', // 申报中心访问量
     onlineBooking: 'springcloud-enterprise/pd/online/onlineBooking', // 申报中心预约申报
@@ -56,7 +58,28 @@ export default {
     activityListSlim: 'springcloud-park/guest/activity/activityListSlim', // 获取前台活动列表
     getPolicyClassList: 'springcloud-park/guest/policy/policyCenterController/getPolicyClassList', // 政策分类列表
     getPolicyCenterList: 'springcloud-park/guest/policy/policyCenterController/getPolicyCenterList', // 政策中心首页列表
-    getPolicyDetails: 'springcloud-park/guest/policy/policyCenterController/getPolicyDetails' // 政策指南详情
+    getPolicyDetails: 'springcloud-park/guest/policy/policyCenterController/getPolicyDetails', // 政策指南详情
+    getPromotionDetails: 'springcloud-enterprise/guest/businessHomePageController/getBusinessPromotionDetails', // (门户各首页企业宣传详情)
+    // 招商引资
+    getPromotionList: 'springcloud-enterprise/guest/businessHomePageController/getBusinessPromotionList', // (门户各首页企业宣传列表查询)
+    basic: 'springcloud-park/guest/portal/park/basic', // 获取园区概况
+    getBusinessAdDynamic: 'springcloud-park/guest/portal/businessAd/getBusinessAdDynamic', // 获取招商动态信息
+    getBusinessAdDynamicInfo: 'springcloud-park/guest/portal/businessAd/getBusinessAdDynamicInfo', // 获取招商动态信息详情
+    getBusinessAdPolicy: 'springcloud-park/guest/portal/businessAd/getBusinessAdPolicy', // 招商政策
+    getBusinessAdPolicyInfo: 'springcloud-park/guest/portal/businessAd/getBusinessAdPolicyInfo', // 获取招商政策信息详情
+    getBusinessAdContentInfo: 'springcloud-park/guest/portal/businessAd/getBusinessAdContentInfo', // 获取招商信息详情
+    parkList: 'springcloud-park/guest/portal/park/list', // 一区多园
+    getBusinessAdContent: 'springcloud-park/guest/portal/businessAd/getBusinessAdContent', // 获取招商信息
+    getParkDetails: 'springcloud-park/guest/portal/park/get', // 根据ID获取对应园区详情
+    // 能耗统计App
+    todayelectro: 'springcloud-park/meter/todayElectric', // 今日用电情况
+    monthelectro: 'springcloud-park/meter/monthElectric', // 本月用电情况
+    yearelectro: 'springcloud-park/meter/yearElectric', // 今年用电情况
+    getCompanyDetailByNowAccount: 'springcloud-enterprise/guest/company/getCompanyDetailByNowAccount', // 获取用户企业信息
+    addOrEditMemorandum: 'springcloud-enterprise/pd/declaration/addOrEditMemorandum', // 申报平台备忘录
+    fastUpload: 'springcloud-app-fastdfs/upload/fastUpload', // 上传文件
+    queryOnlineInfo: 'springcloud-enterprise/pd/online/queryOnlineInfo', // 通过公告ID和登录人查询预约信息
+    getUserExtension: 'springcloud-user/user/userInfo/getUserExtension'
 
   },
   setToken: function (obj) {

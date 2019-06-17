@@ -35,6 +35,14 @@ public class OrgColleagueInfo implements Serializable {
     private String avatar;
     @ApiModelProperty(value = "从业年限")
     private String workingYears;
+    @ApiModelProperty(value = "操作--设为联系人(true:显示设为联系人，false:不显示设为联系人)")
+    private boolean  setContact=false;
+    @ApiModelProperty(value = "操作--取消联系人(true:显示取消联系人，false:不显示设为联系人)")
+    private boolean  cancelContact=false;
+    @ApiModelProperty(value = "操作--删除(true:显示删除，false:不显示删除)")
+    private boolean  delOrgAdvisor=false;
+    @ApiModelProperty(value = "操作--详情(true:显示详情，false:不显示详情)")
+    private boolean  orgDetail=false;
 
     public String getAccount() {
         return account;
@@ -124,10 +132,43 @@ public class OrgColleagueInfo implements Serializable {
         this.workingYears = workingYears;
     }
 
+    public boolean isSetContact() {
+        return setContact;
+    }
+
+    public void setSetContact(boolean setContact) {
+        this.setContact = setContact;
+    }
+
+    public boolean isCancelContact() {
+        return cancelContact;
+    }
+
+    public void setCancelContact(boolean cancelContact) {
+        this.cancelContact = cancelContact;
+    }
+
+    public boolean isDelOrgAdvisor() {
+        return delOrgAdvisor;
+    }
+
+    public void setDelOrgAdvisor(boolean delOrgAdvisor) {
+        this.delOrgAdvisor = delOrgAdvisor;
+    }
+
+    public boolean isOrgDetail() {
+        return orgDetail;
+    }
+
+    public void setOrgDetail(boolean orgDetail) {
+        this.orgDetail = orgDetail;
+    }
+
     @Override
     public String toString() {
         return "OrgColleagueInfo{" +
                 "account='" + account + '\'' +
+                ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
                 ", graduatedSchool='" + graduatedSchool + '\'' +
@@ -137,6 +178,10 @@ public class OrgColleagueInfo implements Serializable {
                 ", entryDate='" + entryDate + '\'' +
                 ", avatar='" + avatar + '\'' +
                 ", workingYears='" + workingYears + '\'' +
+                ", setContact=" + setContact +
+                ", cancelContact=" + cancelContact +
+                ", delOrgAdvisor=" + delOrgAdvisor +
+                ", orgDetail=" + orgDetail +
                 '}';
     }
 }

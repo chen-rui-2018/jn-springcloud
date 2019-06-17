@@ -50,11 +50,12 @@ public class DeclarationPlatformServiceImpl implements DeclarationPlatformServic
 
 
     @Override
-    public PaginationData<List<DeclarationPlatformModel>> selectByDeclarationPlatformList(String subordinatePlatformName, String platformTitle, int page, int rows) {
+    public PaginationData<List<DeclarationPlatformModel>> selectByDeclarationPlatformList(String subordinatePlatformName, String platformTitle, int page, int rows,User user) {
         DeclarationPlatformModel pm = new DeclarationPlatformModel();
         Page<Object> objects = PageHelper.startPage(page, rows);
         pm.setPlatformTitle(platformTitle);
         pm.setSubordinatePlatformName(subordinatePlatformName);
+        pm.setCreatorAccount(user.getAccount());
         return new PaginationData(tbPdDeclarationPlatformManageDao.selectByExample(pm), objects.getTotal());
     }
 

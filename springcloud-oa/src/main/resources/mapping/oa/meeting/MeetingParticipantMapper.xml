@@ -15,8 +15,8 @@
         <id column="id" jdbcType="VARCHAR" property="id" />
         <result column="meeting_id" jdbcType="VARCHAR" property="meetingId" />
         <result column="meeting_user_id" jdbcType="VARCHAR" property="meetingUserId" />
-        <result column="sign_in_time" jdbcType="TIMESTAMP" property="signInTime" />
-        <result column="sign_back_time" jdbcType="TIMESTAMP" property="signBackTime" />
+        <result column="sign_in_time" jdbcType="VARCHAR" property="signInTime" />
+        <result column="sign_back_time" jdbcType="VARCHAR" property="signBackTime" />
         <result column="departmentName" jdbcType="VARCHAR" property="departmentName" />
         <result column="account" jdbcType="VARCHAR" property="account" />
         <result column="userName" jdbcType="VARCHAR" property="userName" />
@@ -143,8 +143,8 @@
             mp.id,
             mp.meeting_id ,
             mp.meeting_user_id ,
-            mp.sign_in_time,
-            mp.sign_back_time,
+            date_format( mp.sign_in_time, '%Y/%m/%d %k:%i:%s' ) sign_in_time ,
+            date_format( mp.sign_back_time, '%Y/%m/%d %k:%i:%s' ) sign_back_time ,
             mp.creator_account,
             mp.created_time,
             mp.modifier_account,
@@ -213,7 +213,7 @@
             and mp.meeting_user_id=#{meetingUserId,jdbcType=VARCHAR}
         </if>
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(userName)">
-            and meeting.name like CONCAT('%', trim(#{userName,jdbcType=VARCHAR}), '%')
+            and o.name like CONCAT('%', trim(#{userName,jdbcType=VARCHAR}), '%')
         </if>
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(meetingTitle)">
             and meeting.title like CONCAT('%', trim(#{meetingTitle,jdbcType=VARCHAR}), '%')

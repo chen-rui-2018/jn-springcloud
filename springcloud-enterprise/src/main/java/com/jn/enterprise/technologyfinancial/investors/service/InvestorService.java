@@ -1,9 +1,12 @@
 package com.jn.enterprise.technologyfinancial.investors.service;
 
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.company.model.IBPSResult;
 import com.jn.enterprise.technologyfinancial.investors.model.*;
 import com.jn.enterprise.technologyfinancial.investors.vo.InvestorInfoDetailsVo;
+import com.jn.system.model.SysRole;
+import com.jn.system.model.User;
 
 import java.util.List;
 
@@ -62,4 +65,13 @@ public interface InvestorService {
      * @return
      */
     int addInvestorRole(String investorAccount);
+
+    /**
+     * 更新用户角色
+     * @param user
+     * @param addSysRoleResult
+     * @param delSysRoleResult
+     * @return
+     */
+    Result<Boolean> updateUserRoleInfo(User user, Result<SysRole> addSysRoleResult,Result<SysRole> delSysRoleResult);
 }

@@ -131,5 +131,20 @@ public class PayConstant {
 	 * 支付订单最小有效时长为：1分钟
 	 * */
 	public static final Integer PAY_ORDER_MIN_DURATION = 1;
+
+	/**
+	 * 对账通知状态为有效的用户
+	 * */
+	public static final Integer RECONCILIATION_NOTICE_EFFECTIVE_STATUS_USER = 1;
+
+	/**
+	 * 对账标识为有效状态
+	 * */
+	public static final Integer RECONCILIATION_IDENT_EFFECTIVE_STATUS = 1;
+
+	/**
+	 * 对账接口为有效状态
+	 * */
+	public static final Integer RECONCILIATION_INTERFACE_EFFECTIVE_STATUS = 1;
 	
 }

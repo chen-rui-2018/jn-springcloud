@@ -32,6 +32,8 @@ public class TbBusinessAdContent implements Serializable {
 
     private String park;
 
+    private String parkName;
+
     private String modAccoun;
 
     private String modTime;
@@ -152,6 +154,14 @@ public class TbBusinessAdContent implements Serializable {
         this.park = park == null ? null : park.trim();
     }
 
+    public String getParkName() {
+        return parkName;
+    }
+
+    public void setParkName(String parkName) {
+        this.parkName = parkName == null ? null : parkName.trim();
+    }
+
     public String getModAccoun() {
         return modAccoun;
     }
@@ -202,6 +212,7 @@ public class TbBusinessAdContent implements Serializable {
             && (this.getSubTitle() == null ? other.getSubTitle() == null : this.getSubTitle().equals(other.getSubTitle()))
             && (this.getAdFlag() == null ? other.getAdFlag() == null : this.getAdFlag().equals(other.getAdFlag()))
             && (this.getPark() == null ? other.getPark() == null : this.getPark().equals(other.getPark()))
+            && (this.getParkName() == null ? other.getParkName() == null : this.getParkName().equals(other.getParkName()))
             && (this.getModAccoun() == null ? other.getModAccoun() == null : this.getModAccoun().equals(other.getModAccoun()))
             && (this.getModTime() == null ? other.getModTime() == null : this.getModTime().equals(other.getModTime()))
             && (this.getContent() == null ? other.getContent() == null : this.getContent().equals(other.getContent()));
@@ -225,6 +236,7 @@ public class TbBusinessAdContent implements Serializable {
         result = prime * result + ((getSubTitle() == null) ? 0 : getSubTitle().hashCode());
         result = prime * result + ((getAdFlag() == null) ? 0 : getAdFlag().hashCode());
         result = prime * result + ((getPark() == null) ? 0 : getPark().hashCode());
+        result = prime * result + ((getParkName() == null) ? 0 : getParkName().hashCode());
         result = prime * result + ((getModAccoun() == null) ? 0 : getModAccoun().hashCode());
         result = prime * result + ((getModTime() == null) ? 0 : getModTime().hashCode());
         result = prime * result + ((getContent() == null) ? 0 : getContent().hashCode());
@@ -251,6 +263,7 @@ public class TbBusinessAdContent implements Serializable {
         sb.append(", subTitle=").append(subTitle);
         sb.append(", adFlag=").append(adFlag);
         sb.append(", park=").append(park);
+        sb.append(", parkName=").append(parkName);
         sb.append(", modAccoun=").append(modAccoun);
         sb.append(", modTime=").append(modTime);
         sb.append(", content=").append(content);

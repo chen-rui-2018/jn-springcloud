@@ -57,4 +57,14 @@ public class OrgProductQuery extends Page implements Serializable {
     public void setProductStatus(String productStatus) {
         this.productStatus = productStatus;
     }
+
+    @Override
+    public String toString() {
+        return "OrgProductQuery{" +
+                "orgId='" + orgId + '\'' +
+                ", productType='" + productType + '\'' +
+                ", keyWords='" + keyWords + '\'' +
+                ", productStatus='" + productStatus + '\'' +
+                '}';
+    }
 }

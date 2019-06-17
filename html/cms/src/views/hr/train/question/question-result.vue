@@ -2,13 +2,13 @@
   <div class="invest-result">
     <el-card>
       <!-- 标题 -->
-      <el-tabs v-model="activeName">
+      <el-tabs v-model="activeName" @tab-click="tabsCLick">
         <el-tab-pane label="编辑问卷" name="first"/>
         <el-tab-pane label="发放问卷" name="second"/>
         <el-tab-pane label="问卷结果" name="third"/>
       </el-tabs>
       <!-- Tab -->
-      <el-tabs v-model="tabName" type="border-card">
+      <el-tabs v-model="tabName" type="border-card" @tab-click="handleTab">
         <el-tab-pane class="total" label="汇总统计" name="total">
           <!-- 汇总统计 -->
           <div v-for="(item,index) in examList" :key="index" class="examList">
@@ -271,6 +271,22 @@ export default {
           this.$message.error(res.data.result)
         }
       })
+    },
+    tabsCLick(item) {
+      if (this.activeName === 'first') {
+        this.$router.push({ path: 'question-edit', query: { id: this.$route.query.id }})
+      }
+      if (this.activeName === 'second') {
+        this.$router.push({ path: 'question-give', query: { id: this.$route.query.id }})
+      }
+      if (this.activeName === 'third') {
+        this.$router.push({ path: 'question-result', query: { id: this.$route.query.id }})
+      }
+    },
+    handleTab() {
+      if (this.tabName === 'single') {
+        this.isDetail = false
+      }
     }
   }
 }

@@ -10,22 +10,23 @@
                 <el-breadcrumb-item class="mainColor">报名情况</el-breadcrumb-item>
             </el-breadcrumb> -->
       <span class="pointer" @click="$router.push({ path: '/enterpriseservice'})">企业服务/</span>
-      <span class="pointer" @click="$router.push({ path: '/actiDetail'})">活动详情/</span>
+      <span class="pointer" @click="$router.push({path:'actiCenter'})">活动中心/</span>
+      <span class="pointer" @click="$router.push({ path: '/actiDetail',query:{activityId:$route.query.activityId}})">活动详情/</span>
       <span class="mainColor">报名情况</span>
     </div>
     <el-card>
       <div class="regContent">
         <ul class="clearfix">
-          <li v-for="(i,k) in statusList" :key="k" @click="handleInfo(i.account)">
-            <img :src="i.avatar" alt="">
-            <p>{{i.name}}
-              <i v-if="i.sex==2" class="iconfont icon-xingbienv"></i>
+          <li class="pointer" v-for="(i,k) in statusList" :key="k" @click="handleInfo(i.account)">
+            <div class="imgItem"><img :src="i.avatar" alt=""></div>
+            <p class="p1">{{i.name}}
+              <i v-if="i.sex==0" class="iconfont icon-xingbienv"></i>
               <i v-if="i.sex==1" class="iconfont icon-xingbienan"></i>
             </p>
-            <p>{{i.post}}</p>
-            <p v-if="i.signStatus==0">未签到</p>
-            <p v-if="i.signStatus==1">已签到</p>
-            <p>{{i.company}}</p>
+            <p class="p2 color2">{{i.post}}</p>
+            <p class="p3" v-if="i.signStatus==0">未签到</p>
+            <p class="p4" v-if="i.signStatus==1">已签到</p>
+            <p class="p5 color3">{{i.company}}</p>
           </li>
         </ul>
       </div>
@@ -63,7 +64,10 @@ export default {
       this.init();
     },
     handleInfo(account) {
-      this.$router.push({ path: "regData", query: { account: account } });
+      this.$router.push({
+        path: "regData",
+        query: { account: account, activityId: this.$route.query.activityId }
+      });
     },
     init() {
       let _this = this;
@@ -74,7 +78,6 @@ export default {
           page: _this.page,
           rows: _this.row
         },
-        dataFlag: false,
         callback: function(res) {
           if (res.code == "0000") {
           }
@@ -99,6 +102,7 @@ export default {
   .regNav {
     margin: 20px 0;
     font-size: 13px;
+    font-weight: bold;
   }
   .regContent {
     text-align: center;
@@ -109,10 +113,46 @@ export default {
         margin-right: 30px;
         margin-bottom: 20px;
         float: left;
+        text-align: center;
+        font-size: 13px;
+        .imgItem {
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          margin: 0 auto;
+          margin-bottom: 10px;
+          img {
+            width: 100%;
+            height: 100%;
+            vertical-align: middle;
+            border-radius: 50%;
+            box-shadow: 0 5px 5px 2px #eee;
+          }
+        }
       }
       > li:nth-child(7n) {
         margin-right: 0;
       }
+    }
+    .icon-xingbienv {
+      color: #E72E60;
+    }
+    .icon-xingbienan {
+      color: #7c90f6;
+    }
+    p{
+      font-size: 12px;
+      line-height: 20px;
+    }
+    .p1{
+      font-size: 15px;
+      color:#333;
+    }
+    .p3{
+      color:#fe6464
+    }
+    .p4{
+      color:#00a041
     }
   }
   > .pagination-container {
@@ -121,4 +161,3 @@ export default {
   }
 }
 </style>
-

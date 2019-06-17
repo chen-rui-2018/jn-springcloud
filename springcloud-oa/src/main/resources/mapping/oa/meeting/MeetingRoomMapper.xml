@@ -74,6 +74,7 @@
         <result column="meeting_start_time" jdbcType="TIMESTAMP" property="startTime" />
         <result column="meeting_end_time" jdbcType="TIMESTAMP" property="endTime" />
         <result column="meeting_title" jdbcType="VARCHAR" property="title" />
+        <result column="meeting_status" jdbcType="VARCHAR" property="meetingStatus" />
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -203,6 +204,7 @@
         date_format(m.start_time,'%Y-%m-%d') AS meeting_start_date,
         date_format(m.start_time,'%k:%i')  AS meeting_start_time,
         date_format(m.end_time,'%k:%i') AS meeting_end_time,
+        m.meeting_status,
         t.name as organizationalUser
 
         FROM

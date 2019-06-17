@@ -43,10 +43,10 @@
           <el-form-item :style="{margin: 0}" prop="groupId">
             <el-select v-model="formData.groupId" placeholder="请选择">
               <el-option
-                v-for="item in groupOptions"
+                v-for="(item, groupOptionsIndex) in groupOptions"
                 :label="item.label"
                 :value="item.value"
-                :key="item.value"
+                :key="groupOptionsIndex"
               />
             </el-select>
           </el-form-item>
@@ -220,7 +220,7 @@
                 <div class="target-form-body">
                   <el-tag
                     v-for="(tag, tagIndex) in form.targetList"
-                    :key="tag.id"
+                    :key="tagIndex"
                     :closable="true"
                     class="target-tags"
                     @close="tagClose(index, tagIndex)"
@@ -312,7 +312,7 @@
         <target-row class="target-row" title="预警提醒人（企业完成所有，填报后接受信息人）">
           <el-form-item :style="{margin: 0}" prop="reminder">
             <el-select v-model="formData.reminder" placeholder="请选择">
-              <el-option v-for="item in warnerOptions" :label="item.label" :key="item.id" :value="item.id"/>
+              <el-option v-for="(item, warnerOptionsIndex) in warnerOptions" :label="item.label" :key="warnerOptionsIndex" :value="item.id"/>
             </el-select>
           </el-form-item>
         </target-row>
@@ -335,7 +335,7 @@ import targetRow from '../common/target-row'
 import targetFrame from '../common/target-frame'
 import targetForm from '../common/target-form'
 import treeTable from '../common/tree-table/index'
-import { deepClone } from '../../../utils'
+import { deepClone, fnSetTreeData } from '../../../utils'
 
 export default {
   name: 'TargetManagement',
@@ -597,23 +597,6 @@ export default {
         }
         resolve()
       })
-    },
-    partDeepClone(source, arr) {
-      // 因为formData.tabs存在循getNode环引用的树节点，不能直接提交或者克隆，这里先跳过tabs属性克隆，后面再克隆tabs属性
-      if (!source && typeof source !== 'object') {
-        throw new Error('error arguments', 'shallowClone')
-      }
-      const targetObj = source.constructor === Array ? [] : {}
-      Object.keys(source).forEach(keys => {
-        if (arr.indexOf(keys) === -1) {
-          if (source[keys] && typeof source[keys] === 'object') {
-            targetObj[keys] = deepClone(source[keys], arr)
-          } else {
-            targetObj[keys] = source[keys]
-          }
-        }
-      })
-      return targetObj
     },
     submitTarget() {
       this.$refs['formData'].validate((valid) => {
@@ -1068,7 +1051,6 @@ export default {
               const targetIdList = nodeList.map(list => list.id)
               this.getInputFormat(targetIdList)
                 .then(data => {
-                  // "66383ef743624c69b8f8f9e44b980119"
                   tab.inputList = deepClone(data.data)
                   const formModels = tab.inputList
                   formModels.sort((a, b) => {
@@ -1079,7 +1061,7 @@ export default {
                   })
                   this.treeMerge(formModels, nodeList)
                   // 一维的结构指标转成树结构
-                  const list = this.toTree(nodeList)
+                  const list = fnSetTreeData(nodeList)
 
                   // 勾选的树结构指标挂载到tree-table
                   this.sortTree(list, 'orderNumber')
@@ -1091,6 +1073,7 @@ export default {
             } else {
               //  科技园模板表头
               tab.columns = nodeList.map(node => ({ text: node.text, value: node.text }))
+              listResolve()
             }
           })
           promiseList.push(p)
@@ -1101,17 +1084,6 @@ export default {
             resolve()
           })
       })
-    },
-    toTree(arr) {
-      const ids = arr.map(a => a.id)
-      const arrNotParent = arr.filter(({ pid }) => pid && !ids.includes(pid))
-      const _ = (arr, pID) =>
-        arr.filter(({ pid }) => pid === pID)
-          .map(a => ({
-            ...a,
-            children: _(arr.filter(({ pid }) => pid !== pID), a.id)
-          }))
-      return _(arr).concat(arrNotParent)
     },
     getInputFormat(list) {
       // 根据选中的指标，获取它们对应的填报格式

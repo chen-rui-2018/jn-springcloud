@@ -29,21 +29,16 @@
             <ul class="fir">
               <li class="list-row" v-for="(i,k) in policyCenterListSearchResult" :key="k">
                 <div class="list-row-l">
-                  <img class="list-adcover list-row-cell" :src="i.adCover" alt="">
-                  <div class="fir1 list-row-cell pointer" @click="$router.push({path:'/policyGuide',query:{policyId:i.policyId}})">
+                  <div class="list-adcover list-row-cell" :style="{backgroundImage: 'url(' + i.adCover + ')'}"></div>
+                  <div class="list-row-cell pointer" @click="$router.push({path:'/investmentDynamicDetail',query:{id:i.id}})">
                     <h3 class="color4">{{i.title}}</h3>
                     <p class="p1">
-                    <span class="tag-list">阅读次数：
-                      <i class="mainColor">{{i.readNum}}</i>次</span>
                       <span class="tag-list">发布日期：{{i.startTime}}</span>
                       <span class="tag-list">
                         <span>状态：</span>
                         <span v-if="isValid(i.endTime)" class="mainColor">有效</span>
                         <span v-else="isValid(i.endTime)">无效</span>
                       </span>
-                    </p>
-                    <p class="p2">
-                      <span class="tag-list">内容：{{ i.content || '暂无'}}</span>
                     </p>
                     <div class="firInfo">{{i.briefContent}}</div>
                   </div>
@@ -137,7 +132,7 @@
         }
       },
       isValid(str) {
-        return new Date(str) > new Date()
+        return new Date(str) >= new Date(new Date().toLocaleDateString()).getTime()
       },
       getScrollTop() {
         var scroll_top = 0;
@@ -166,7 +161,7 @@
       getPolicyLevelList() {
         let _this = this;
         this.api.get({
-          url: "getPolicyLevelList",
+          url: "getBusinessAdDynamic",
           data: {},
           callback: function(res) {
             if (res.code == "0000") {
@@ -218,7 +213,9 @@
     }
     .list-adcover {
       width: 162px;
+      height: 110px;
       margin-right: 13px;
+      background-size: cover;
     }
     #lastLi {
       float: right;

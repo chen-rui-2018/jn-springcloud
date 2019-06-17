@@ -68,7 +68,7 @@
           width="250"
           align="center">
           <template slot-scope="scope">
-            <div v-html="scope.row.noticeDetails"/>
+            <div>{{ scope.row.innerText | formatText }}</div>
           </template>
         </el-table-column>
         <el-table-column
@@ -147,6 +147,18 @@
 <script>
 export default {
   name: 'NoticeIndex',
+  filters: {
+    formatText(str) {
+      if (!str) {
+        return ''
+      }
+      if (str.length > 100) {
+        return str.substring(0, 70) + '...'
+      } else {
+        return str
+      }
+    }
+  },
   data() {
     return {
       loading: false,
@@ -259,8 +271,10 @@ export default {
       tableData: []
     }
   },
-  created() {
-    this.init()
+  mounted() {
+    this.$nextTick(() => {
+      this.init()
+    })
   },
   methods: {
     init() {
@@ -315,11 +329,15 @@ export default {
       this.$_get(`${this.GLOBAL.parkUrl}park/notice/findNoticeList`, this.query)
         .then(data => {
           if (data.code === '0000') {
+            const dom = document.createElement('div')
             this.tableData = data.data.rows.map((item, index) => {
+              dom.innerHTML = item.noticeDetails
+              this.$set(item, 'innerText', dom.innerText)
               this.$set(item, 'index', index + 1)
               this.total = data.data.total
               return item
             })
+            dom.remove()
           } else {
             this.$message.error(data.result)
           }

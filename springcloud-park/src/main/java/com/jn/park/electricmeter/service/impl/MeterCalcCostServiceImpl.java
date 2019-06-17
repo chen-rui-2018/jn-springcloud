@@ -34,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -134,16 +135,11 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
                     meterDayLogs.add(meterDayLog);
                 }else{
                     logger.info("开始记录错误日志-原因：当前企业的电表的读数数据不完整,{}",companyId);
-                    throw new ErrorLogException(getErr(account, "没有找到计价规则的内容", meterCode, companyId, companyName,dealDate));
+                    throw new ErrorLogException(getErr(account, "当前企业的电表的读数数据不完整", meterCode, companyId, companyName,dealDate));
                 }
             }
 
-            //保存
-            if(groupLogs !=null && groupLogs.size()>0){
-                logger.info("开始保存一个企业的电费的分段费用记录");
-                meterDao.saveGroupLogs(groupLogs);
-                logger.info("结束保存一个企业的电费的分段费用记录");
-            }
+
             logger.info("结束处理企业每块电表的用电量及费用");
 
             //电表的个数和每日电表的对象数是一样的，才是一个企业完整的一天的用电量
@@ -153,26 +149,36 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
                 List<PayBillDetails> payBillDetails = new ArrayList<>();
                 PayBillDetails billDetails=null;
                 int sort=0;
+                String ten ="10";
+                BigDecimal tenDivisor = new BigDecimal(ten);
                 for(TbElectricMeterDayLog  meterDayLog : meterDayLogs ){
                     billDetails = new PayBillDetails();
                     allPrice = allPrice.add(meterDayLog.getPrice());
                     allDegree = allDegree.add(meterDayLog.getDegree());
                     String name = "[电表编号]:"+meterDayLog.getMeterId();
                     billDetails.setCostName(name);
-                    billDetails.setCostValue(meterDayLog.getPrice().toString());
+                    billDetails.setCostValue(meterDayLog.getPrice().divide(tenDivisor,2, RoundingMode.HALF_UP).toString());
                     sort++;
                     billDetails.setSort(sort);
                     payBillDetails.add(billDetails);
+                    meterDayLog.setPrice(meterDayLog.getPrice().divide(tenDivisor,2, RoundingMode.HALF_UP));
                 }
                 // 创建账单和保存
                 //计价规则那边是角，此处要除10，才得出元
-                String ten ="10";
-                BigDecimal tenDivisor = new BigDecimal(ten);
                 allPrice = allPrice.divide(tenDivisor,2, RoundingMode.HALF_UP);
                 boolean success = createBill(allPrice,companyId,companyName,account,  payBillDetails);
                 if(! success){
                     throw new ErrorLogException(getErr(account, "创建账单失败", null, companyId, companyName,dealDate));
                 }
+
+                //保存
+                if(groupLogs !=null && groupLogs.size()>0){
+                    logger.info("开始保存一个企业的电费的分段费用记录");
+                    meterDao.saveGroupLogs(groupLogs);
+                    logger.info("结束保存一个企业的电费的分段费用记录");
+                }
+
+
                 TbElectricEnergyDayLog energyDayLog = new TbElectricEnergyDayLog();
                 energyDayLog.setCompanyId(companyId);
                 energyDayLog.setCompanyName(companyName);
@@ -295,7 +301,11 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
         //Result<ServiceCompany> ressult =  companyClient.getCompanyDetailByAccountOrCompanyId(companyId);
         //companyId = ressult.getData().getComAdmin();
         PayBillCreateParamVo payBillCreateParamVo = new PayBillCreateParamVo();
-        payBillCreateParamVo.setBillId(UUID.randomUUID().toString().replaceAll("-",""));
+        Date date =new Date();
+        SimpleDateFormat sdf =new SimpleDateFormat("yyyyMMddHHmmss");
+        String time =sdf.format(date);
+        String billId =time+new Random().nextInt(1000000);
+        payBillCreateParamVo.setBillId(billId);
         //账单名称
         payBillCreateParamVo.setBillName("电费账单");
         //账单来源
@@ -343,7 +353,7 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
         bill.setPayStatus(new Byte(MeterConstants.NOT_PAY));
         bill.setRecordStatus(new Byte(MeterConstants.VALID));
         bill.setCallTimes(0);
-        bill.setId(UUID.randomUUID().toString().replaceAll("-",""));
+        bill.setId(payBill.getBillId());
         energyBillMapper.insertSelective(bill);
         //保存明细
         List<TbElectricEnergyBillDetail> saveDetails = new ArrayList<>();

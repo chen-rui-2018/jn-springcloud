@@ -90,6 +90,10 @@ public class SalaryManagementServiceImpl implements SalaryManagementService {
             return "没有数据，导入失败";
         }
 		
+		TbManpowerEmployeeBasicInfo tbManpowerEmployeeBasicInfo = new TbManpowerEmployeeBasicInfo();
+		Map<String,TbManpowerEmployeeBasicInfo> basicMap = employeeBasicInfoMapper.map(tbManpowerEmployeeBasicInfo);
+		SalaryInfoPage salaryInfoPage = new SalaryInfoPage();
+		Map<String,SalaryInfo> salaryMap = salaryInfoMapper.getMap(salaryInfoPage);
 		int i = 0;
 		StringBuffer sb=new StringBuffer();
 		List<SalaryInfo> salaryInfoList = new ArrayList<SalaryInfo>();
@@ -101,17 +105,17 @@ public class SalaryManagementServiceImpl implements SalaryManagementService {
 				sb.append("第"+i+"行:"+str+";");
                 continue;
 			}
-			TbManpowerEmployeeBasicInfo tbManpowerEmployeeBasicInfo = employeeBasicInfoMapper.selectByJobNumber(salary.getJobNumber());
-			if(tbManpowerEmployeeBasicInfo == null){
+			TbManpowerEmployeeBasicInfo basic = basicMap.get(salary.getJobNumber());
+			if(basic == null){
 				logger.info("[员工花名册]没有该员工，工号：" + salary.getJobNumber());
-				sb.append("员工信息不存在"+"工号:" + salary.getJobNumber() + ";");
+				sb.append("第"+i+"行" + "|员工信息不存在,工号:" + salary.getJobNumber() + ";");
 				continue;
 			}
 			
-			SalaryInfo info = salaryInfoMapper.selectByJobNumber(salary.getJobNumber());
+			SalaryInfo info = salaryMap.get(salary.getJobNumber());
 			if(info != null){
 				logger.info("[薪资表]员工记录已存在，工号：" + salary.getJobNumber());
-				sb.append("员工薪资已存在" + "工号:" + salary.getJobNumber() + ";");
+				sb.append("第"+i+"行" + "|员工薪资已存在,工号:" + salary.getJobNumber() + ";");
 				continue;
 			}
 			salary.setRecordStatus(Byte.parseByte(HrStatusEnums.NOTDELETED.getCode()));
@@ -123,14 +127,14 @@ public class SalaryManagementServiceImpl implements SalaryManagementService {
 			salaryInfoList.add(salary);			
 		}
 		
-		if(!CollectionUtils.isEmpty(salaryInfoList)){
-            logger.info("[薪资管理] 成功导入{}条数据",salaryInfoList.size());
-            salaryInfoMapper.insertBatch(salaryInfoList);
-        }
         if(sb.length()>0){
             logger.warn("[薪资管理] 导入失败:{}",sb.toString());
             return sb.toString();
         }else{
+        	if(!CollectionUtils.isEmpty(salaryInfoList)){
+                logger.info("[薪资管理] 成功导入{}条数据",salaryInfoList.size());
+                salaryInfoMapper.insertBatch(salaryInfoList);
+            }
             return "导入成功";
         }
 	}
@@ -150,7 +154,32 @@ public class SalaryManagementServiceImpl implements SalaryManagementService {
 		for(TbManpowerEmployeeBasicInfo basic : basicInfoList){
 			SalaryInfo salaryInfo = salaryMap.get(basic.getJobNumber());
 			if(salaryInfo == null){
-				continue;
+				salaryInfo = new SalaryInfo();
+				salaryInfo.setProbationBasicWage(0.0);
+				salaryInfo.setProbationDutyAllowance(0.0);
+				salaryInfo.setProbationProfessionalTitleAllowance(0.0);
+				salaryInfo.setProbationSeniorityWage(0.0);
+				salaryInfo.setProbationEducationAllowance(0.0);
+				salaryInfo.setProbationWorkSubsidy(0.0);
+				salaryInfo.setProbationAchievementBonus(0.0);
+				salaryInfo.setProbationSingleReward(0.0);
+				salaryInfo.setConversionBasicWage(0.0);
+				salaryInfo.setConversionDutyAllowance(0.0);
+				salaryInfo.setConversionProfessionalTitleAllowance(0.0);
+				salaryInfo.setConversionSeniorityWage(0.0);
+				salaryInfo.setConversionEducationAllowance(0.0);
+				salaryInfo.setConversionWorkSubsidy(0.0);
+				salaryInfo.setConversionAchievementBonus(0.0);
+				salaryInfo.setConversionSingleReward(0.0);
+				salaryInfo.setCurrentBasicWage("0");
+				salaryInfo.setCurrentDutyAllowance("0");
+				salaryInfo.setCurrentProfessionalTitleAllowance("0");
+				salaryInfo.setCurrentSeniorityWage("0");
+				salaryInfo.setCurrentEducationAllowance("0");
+				salaryInfo.setCurrentWorkSubsidy("0");
+				salaryInfo.setCurrentAchievementBonus("0");
+				salaryInfo.setCurrentSingleReward("0");
+				salaryInfo.setJobNumber(basic.getJobNumber());
 			}
 			salaryInfo.setName(basic.getName());
 			list.add(salaryInfo);
@@ -330,7 +359,7 @@ public class SalaryManagementServiceImpl implements SalaryManagementService {
 			//排序
 			attendanceSort(salarySevenList);
 			for(int i = 0; i < 7; i++){
-				salarySevenList.add(salarySevenList.get(i));
+				salaryList.add(salarySevenList.get(i));
 			}
 		}else{
 			salaryList.addAll(salarySevenList);
@@ -349,7 +378,7 @@ public class SalaryManagementServiceImpl implements SalaryManagementService {
 					Integer i = Integer.valueOf(key.getValue());
 					if(keyValue.getName().equals(key.getName())){
 						Double wage = Double.valueOf(keyValue.getValue());
-						keyValue.setValue(String.valueOf(wage/(1000 * i)));
+						keyValue.setValue(String.format("%.2f",wage/(1000 * i)));
 					}
 				}
 			}
@@ -428,7 +457,7 @@ public class SalaryManagementServiceImpl implements SalaryManagementService {
 	private void attendanceSort(List<SalaryKeyValue> list){
 		Collections.sort(list,new Comparator<SalaryKeyValue>(){
 			public int compare(SalaryKeyValue value1,SalaryKeyValue value2){
-				int flag = value1.getValue().compareTo(value2.getValue());
+				int flag = value2.getValue().compareTo(value1.getValue());
 				if(flag > 0){
 					return flag;
 				}else{
@@ -581,32 +610,47 @@ public class SalaryManagementServiceImpl implements SalaryManagementService {
         }
 		TbManpowerEmployeeBasicInfo tbManpowerEmployeeBasicInfo = new TbManpowerEmployeeBasicInfo();
 		Map<String,TbManpowerEmployeeBasicInfo> map = employeeBasicInfoMapper.map(tbManpowerEmployeeBasicInfo);
+		
 		int i = 0;
 		StringBuffer sb=new StringBuffer();
 		List<SalaryPayrollAdd> salaryPayrollAddList = new ArrayList<SalaryPayrollAdd>();
 		for(Object result : resultList){
+			i++;
 			SalaryPayrollAdd payrall = (SalaryPayrollAdd)result;
 			String str = checkPayrall(payrall);
 			if(!StringUtils.isBlank(str)){
-				sb.append("第i行:"+str+";");
-				i++;
+				sb.append("第"+i+"行:"+str+";");
                 continue;
 			}
+			
 			TbManpowerEmployeeBasicInfo basic = map.get(payrall.getJobNumber());
+			if(basic == null){
+				logger.info("[员工花名册]没有该员工，工号：" + payrall.getJobNumber());
+				sb.append("第"+i+"行" + "|员工信息不存在,工号:" + payrall.getJobNumber() + ";");
+				continue;
+			}
+			
+			SalaryPayrollVo payrallVo = salaryPayrollMapper.selectByJobNumberAndMonth(payrall);
+			if(payrallVo != null){
+				logger.info("[工资表]该用户当月的工资条已存在,工号：" + payrall.getJobNumber() + ",月份：" + payrallVo.getAccountEntryTime());
+				sb.append("第"+i+"行" + "|该员工当月工资信息已存在，工号：" + payrall.getJobNumber() + ",月份：" + payrallVo.getAccountEntryTime() + ";");
+				continue;	
+			}
+			
 			payrall.setDepartment(basic.getDepartmentName());
 			payrall.setId(UUID.randomUUID().toString());
 			salaryPayrollAddList.add(payrall);
 			i++;
 		}
 		
-		if(!CollectionUtils.isEmpty(salaryPayrollAddList)){
-            logger.info("[工资条] 成功导入{}条数据",salaryPayrollAddList.size());
-            salaryPayrollMapper.insertBatch(salaryPayrollAddList);
-        }
         if(sb.length()>0){
             logger.warn("[工资条] 导入失败:{}",sb.toString());
             return sb.toString();
         }else{
+        	if(!CollectionUtils.isEmpty(salaryPayrollAddList)){
+                logger.info("[工资条] 成功导入{}条数据",salaryPayrollAddList.size());
+                salaryPayrollMapper.insertBatch(salaryPayrollAddList);
+            }
             return "导入成功";
         }
 	}

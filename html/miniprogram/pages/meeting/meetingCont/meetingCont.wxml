@@ -1,5 +1,5 @@
 <!--pages/meeting/meetingPerson/meetingPerson.wxml-->
-<nav-bar navbar-data='{{nvabarData}}'></nav-bar>
+<!-- <nav-bar navbar-data='{{nvabarData}}'></nav-bar> -->
 <view class="meetingCont" hover-class="none" hover-stop-propagation="false">
   <view class="title" hover-class="none" hover-stop-propagation="false">
     会议内容    

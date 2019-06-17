@@ -10,8 +10,8 @@
           <div><span>行驶层级</span> <span>{{powerDetail.level}}</span> </div>
           <div>
             <span>实施依据</span>
-            <span class="hidden do_base ">{{powerDetail.settingBasis}} </span>
-            <span>查看
+            <span v-html="powerDetail.settingBasis" class="hidden do_base "></span>
+            <span @click="$router.push({path:'/guest/portal/sp/power/text',query:{text:powerDetail.settingBasis}})">查看
               <i class="iconfont icon-jiantou"></i>
             </span>
             </div>
@@ -77,7 +77,7 @@ export default {
   .powerDetail{
     height: 100vh;
     background-color: #f5f5f5;
-    margin-top: 110px;
+    // margin-top: 110px;
     .powerDetail_main{
         padding-top:26px;
         .hidden{
@@ -95,11 +95,12 @@ export default {
         background-color: #fff;
         padding: 0 31px;
         .baseInfo_detail{
-          div{
+          >div{
             border-bottom: 2px solid #efefef;
             padding:28px 0;
             font-size: 26px;
             display: flex;
+            align-items: center;
             &:last-child{
               border:none;
             }
@@ -110,6 +111,9 @@ export default {
           }
            .do_base{
             width:60%;
+            p{
+              height: 0;
+            }
           }
         }
       }

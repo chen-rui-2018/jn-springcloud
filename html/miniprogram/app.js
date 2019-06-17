@@ -1,6 +1,6 @@
 const openIdUrl = require('./config').openIdUrl
 import wxHttp from './utils/http.js'
-import { baseUrl, wechatPath } from './utils/http.js'
+import { baseUrl, wechatPath, imgBaseUrl } from './utils/http.js'
 import util from './utils/util.js'
 App({
   onLaunch(opts) {
@@ -80,7 +80,7 @@ App({
     })
   },
   onShow(opts) {
-   
+
   },
   onHide() {
     // console.log('App Hide')
@@ -123,6 +123,7 @@ App({
     openid: null,
     wechatPath,
     wxHttp,
+    imgBaseUrl,
     baseUrl,
     ...util
   }

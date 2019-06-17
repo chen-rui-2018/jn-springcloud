@@ -16,12 +16,13 @@ import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.SysRole;
 import com.jn.system.model.User;
 import com.jn.user.config.UserServiceConfig;
+import com.jn.user.enums.HomeRoleEnum;
+import com.jn.user.enums.RecordStatusEnum;
 import com.jn.user.enums.UserExtensionExceptionEnum;
 import com.jn.user.model.*;
 import com.jn.user.userinfo.dao.TbUserPersonMapper;
 import com.jn.user.userinfo.entity.TbUserPerson;
 import com.jn.user.userinfo.entity.TbUserPersonCriteria;
-import com.jn.user.userinfo.enums.HomeRoleEnum;
 import com.jn.user.userinfo.model.UserDeviceParam;
 import com.jn.user.userinfo.model.UserInfoParam;
 import com.jn.user.userinfo.service.UserInfoService;
@@ -125,32 +126,8 @@ public class UserInfoServiceImpl implements UserInfoService {
             BeanUtils.copyProperties(tbUserPerson, userExtensionInfo);
             getUserHobbyAndJobs(userExtensionInfo);
 
-            // 获取用户角色
-            User user = new User();
-            user.setAccount(account);
-            Result<User> systemClientUser = systemClient.getUser(user);
-            if (systemClientUser == null || systemClientUser.getData() == null) {
-                logger.warn("调用system服务查询用户不存在，account：{}", account);
-            } else {
-                // 门户首页可展示的角色串
-                String homeRoleStr = userServiceConfig.getHomeRoleStr();
+            userExtensionInfo = setUserExtensionRoleInfo(userExtensionInfo);
 
-                User curUser = systemClientUser.getData();
-                List<SysRole> sysRoleList = curUser.getSysRole();
-                for (SysRole sysRole : sysRoleList) {
-                    if (sysRole != null) {
-                        if (homeRoleStr.contains(sysRole.getRoleName())) {
-                            userExtensionInfo.setRoleName(sysRole.getRoleName());
-                            HomeRoleEnum homeRole = EnumUtil.getByCode(sysRole.getRoleName(), HomeRoleEnum.class);
-                            if (homeRole != null) {
-                                userExtensionInfo.setRoleCode(homeRole.getMessage());
-                            }
-                            break;
-                        }
-                    }
-                }
-
-            }
             //把用户拓展信息写入redis中
             cache.put(account, userExtensionInfo);
             return userExtensionInfo;
@@ -226,6 +203,8 @@ public class UserInfoServiceImpl implements UserInfoService {
             //用户兴趣爱好和工作信息
             getUserHobbyAndJobs(user);
             userList.add(user);
+
+            user = setUserExtensionRoleInfo(user);
             //把用户拓展信息写入redis中
             cache.put(user.getAccount(), user);
         }
@@ -249,6 +228,14 @@ public class UserInfoServiceImpl implements UserInfoService {
         tbUserPerson.setAffiliateCode(userAffiliateInfo.getAffiliateCode());
         tbUserPerson.setAffiliateName(userAffiliateInfo.getAffiliateName());
         int i = tbUserPersonMapper.updateByExampleSelective(tbUserPerson, example);
+        
+        if (userAffiliateInfo.getAccountList() != null && !userAffiliateInfo.getAccountList().isEmpty()) {
+            for (String account : userAffiliateInfo.getAccountList()) {
+                logger.info("[更新用户所属机构信息] 删除redis缓存成功，account:{}", account);
+                updateRedisUserInfo(account);
+            }
+        }
+
         //修改成功 i==1
         return i==1;
     }
@@ -267,6 +254,14 @@ public class UserInfoServiceImpl implements UserInfoService {
         tbUserPerson.setCompanyCode(userCompanyInfo.getCompanyCode());
         tbUserPerson.setCompanyName(userCompanyInfo.getCompanyName());
         int i = tbUserPersonMapper.updateByExampleSelective(tbUserPerson, example);
+
+        if (userCompanyInfo.getAccountList() != null && !userCompanyInfo.getAccountList().isEmpty()) {
+            for (String account : userCompanyInfo.getAccountList()) {
+                logger.info("[更新用户所属企业信息] 删除redis缓存成功，account:{}", account);
+                updateRedisUserInfo(account);
+            }
+        }
+
         //修改成功 i==1
         return i==1;
     }
@@ -365,15 +360,17 @@ public class UserInfoServiceImpl implements UserInfoService {
             objects = PageHelper.startPage(affiliateParam.getPage(),
                     affiliateParam.getRows() == 0 ? 15 : affiliateParam.getRows(), true);
         }
-        //数据状态正常  0:删除  1：正常
-        byte recordStatus=1;
         TbUserPersonCriteria example=new TbUserPersonCriteria();
-        example.createCriteria().andAffiliateCodeEqualTo(affiliateParam.getAffiliateCode())
-                .andRecordStatusEqualTo(recordStatus);
+        if(StringUtils.isNotBlank(affiliateParam.getName())){
+            example.createCriteria().andAffiliateCodeEqualTo(affiliateParam.getAffiliateCode())
+                    .andNameLike("%"+affiliateParam.getName()+"%")
+                    .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        }else{
+            example.createCriteria().andAffiliateCodeEqualTo(affiliateParam.getAffiliateCode())
+                    .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        }
         List<TbUserPerson> userPersonList = tbUserPersonMapper.selectByExample(example);
         return getPaginationData(objects, userPersonList);
-
-
     }
 
 
@@ -404,30 +401,18 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     /**
-     * 更新redis中的用户信息
+     * 删除redis中的用户信息
      * @param account 用户账号
      * @return
      */
-    @ServiceLog(doAction = "更新redis中的用户信息")
     @Override
+    @ServiceLog(doAction = "删除redis中的用户信息")
     public boolean updateRedisUserInfo(String account) {
         Assert.notNull(account,UserExtensionExceptionEnum.USER_ACCOUNT_NOT_NULL.getMessage());
-        //从数据库中获取用户信息
-        List<TbUserPerson> tbUserPeople = getTbUserPeople(account);
-        if (tbUserPeople.isEmpty()) {
-            logger.warn("用户[{}]扩展信息不存在或已被删除",account);
-            throw new JnSpringCloudException(UserExtensionExceptionEnum.USER_EXTENSION_NOT_EXISTS);
-        }else{
-            TbUserPerson tbUserPerson = tbUserPeople.get(0);
-            UserExtensionInfo userExtensionInfo=new UserExtensionInfo();
-            BeanUtils.copyProperties(tbUserPerson, userExtensionInfo);
-            //用户兴趣爱好和工作信息
-            getUserHobbyAndJobs(userExtensionInfo);
-            //把用户拓展信息写入redis中
-            Cache<Object> cache = redisCacheFactory.getCache(USER_EXTENSION_INFO, expire);
-            cache.put(account, userExtensionInfo);
-            return true;
-        }
+        Cache<Object> cache = redisCacheFactory.getCache(USER_EXTENSION_INFO, expire);
+        cache.remove(account);
+        logger.info("[删除redis中的用户信息] 缓存已删除，account：{}", account);
+        return true;
     }
 
     /**
@@ -626,6 +611,41 @@ public class UserInfoServiceImpl implements UserInfoService {
         }else{
             return false;
         }
+    }
+
+    /**
+     * 设置用户角色信息
+     * @param userExtensionInfo
+     * @return
+     */
+    @ServiceLog(doAction = "设置用户角色信息")
+    private UserExtensionInfo setUserExtensionRoleInfo (UserExtensionInfo userExtensionInfo) {
+        // 获取用户角色
+        User user = new User();
+        user.setAccount(userExtensionInfo.getAccount());
+        Result<User> systemClientUser = systemClient.getUser(user);
+        if (systemClientUser == null || systemClientUser.getData() == null) {
+            logger.warn("调用system服务查询用户不存在，account：{}", userExtensionInfo.getAccount());
+        } else {
+            // 门户首页可展示的角色串
+            String homeRoleStr = userServiceConfig.getHomeRoleStr();
+
+            User curUser = systemClientUser.getData();
+            List<SysRole> sysRoleList = curUser.getSysRole();
+            for (SysRole sysRole : sysRoleList) {
+                if (sysRole != null) {
+                    if (homeRoleStr.contains(sysRole.getRoleName())) {
+                        userExtensionInfo.setRoleName(sysRole.getRoleName());
+                        HomeRoleEnum homeRole = EnumUtil.getByCode(sysRole.getRoleName(), HomeRoleEnum.class);
+                        if (homeRole != null) {
+                            userExtensionInfo.setRoleCode(homeRole.getMessage());
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        return userExtensionInfo;
     }
 
 }

@@ -84,7 +84,7 @@
                                 <div>面向专业服务机构开放，具体要求详见
                                     <a class="mainColor pointer">《秦淮区“1+X”公共服务中心商务服务领域》</a>
                                 </div>
-                                <div>面向专业服务顾问开放。</div>
+                                <div>面向专业服务专员开放。</div>
                                 <div>面向政府与相关行业主管部门开放。</div>
                                 <div>面向所有企业开放。</div>
                             </div>
@@ -93,7 +93,7 @@
                     <div class="item enterpriSever" id="item3">
                         <div class="title mainColor">服务功能</div>
                         <p class="color2" style="width:850px">
-                            多渠道采集服务机构、服务人员信息，健全机构及顾问服务档案，建立属于口碑服务的服务供需匹配及服务质量等管理体系； 整合上下游服务链，实现供需精准对接、评价评优、政策兑现、活动培训、行业分析、咨询服务等功能； 基于服务大数据，为企业提供更专业的平台化服务，为区域高端服务业产业分析提供基础数据。
+                            多渠道采集服务机构、服务人员信息，健全机构及专员服务档案，建立属于口碑服务的服务供需匹配及服务质量等管理体系； 整合上下游服务链，实现供需精准对接、评价评优、政策兑现、活动培训、行业分析、咨询服务等功能； 基于服务大数据，为企业提供更专业的平台化服务，为区域高端服务业产业分析提供基础数据。
                         </p>
                     </div>
                     <div class="item enterpriSever dataLoad" id="item4">
@@ -106,7 +106,7 @@
                             </li>
                             <li>
                                 <div class="enclosure">附件2</div>
-                                <a href="javascript:;">企业服务超市用户使用手册【顾问版】</a>
+                                <a href="javascript:;">企业服务超市用户使用手册【专员版】</a>
                             </li>
                             <li>
                                 <div class="enclosure">附件3</div>
@@ -154,7 +154,7 @@
                             </div>
                         </div>
                     </div>
-                    <iframe src="/static/map.html" frameborder="0" height="300" width="700"></iframe>
+                    <iframe src="/static/map11.html" frameborder="0" height="300" width="700"></iframe>
                     <!-- <div id="allmap" style="height:300px"></div> -->
                 </el-main>
             </el-container>

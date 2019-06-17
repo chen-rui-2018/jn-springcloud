@@ -214,7 +214,7 @@ public class EmployeeFileServiceImpl implements EmployeeFileService {
 
         //2.使用工具类,解析导入文件
         EmployeeFile employeeFile = new EmployeeFile();
-        List<Object> resultList= ExcelUtil.readExcel(file, employeeFile, 1, 1);
+        List<Object> resultList= ExcelUtil.readExcel(file, employeeFile, 1, 2);
         if(CollectionUtils.isEmpty(resultList)){
             return "没有数据，导入失败";
         }
@@ -239,8 +239,8 @@ public class EmployeeFileServiceImpl implements EmployeeFileService {
             tbFile.setCreatorAccount(user.getAccount());
             tbFile.setModifierAccount(user.getAccount());
             tbFile.setModifiedTime(new Date());
+            tbFile.setPersonLiable(user.getName());
             batchResult.add(tbFile);
-
         }
 
         if(sb.length()>0){
@@ -270,9 +270,6 @@ public class EmployeeFileServiceImpl implements EmployeeFileService {
         }
         if(StringUtils.isBlank(database.getRemark())){
             return "备注不能为空";
-        }
-        if(StringUtils.isBlank(database.getPersonLiable())){
-            return "责任人不能为空";
         }
         if(StringUtils.isBlank(database.getRegDepartment())){
             return "登记部门不能为空";

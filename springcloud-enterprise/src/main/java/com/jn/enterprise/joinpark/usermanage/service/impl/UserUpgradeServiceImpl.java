@@ -76,6 +76,17 @@ public class UserUpgradeServiceImpl implements UserUpgradeService {
             throw new JnSpringCloudException(JoinParkExceptionEnum.MESSAGE_CODE_IS_WRONG);
         }
 
+        // 判断用户是否已经升级企业
+        TbServiceCompanyCriteria isCompanyCriteria = new TbServiceCompanyCriteria();
+        isCompanyCriteria.createCriteria().andCheckStatusNotEqualTo(CompanyDataEnum.STAFF_CHECK_STATUS_NOT_PASS.getCode())
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue()).andComAdminEqualTo(account);
+        List<TbServiceCompany> upgradeCompanyList = tbServiceCompanyMapper.selectByExample(isCompanyCriteria);
+        if(null != upgradeCompanyList && upgradeCompanyList.size() > 0){
+            logger.warn("[升级企业] 该用户已升级企业，请勿重复提交。account:{}", account);
+            throw new JnSpringCloudException(JoinParkExceptionEnum.USER_IS_UPGRADE_COMPANY);
+        }
+
+        // 判断企业名称是否重复
         TbServiceCompanyCriteria companyCriteria = new TbServiceCompanyCriteria();
         companyCriteria.createCriteria().andCheckStatusNotEqualTo(CompanyDataEnum.STAFF_CHECK_STATUS_NOT_PASS.getCode())
                 .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue()).andComNameEqualTo(companyCheckParam.getComName());

@@ -18,6 +18,7 @@ public enum JoinParkExceptionEnum implements CodeAndMsg {
     USER_UPGRADE_COMPANY_READY("3020516","该账号已升级企业，请勿升级员工"),
     USER_UPGRADE_STAFF_READY("3020517","该账号已升级员工，请勿升级企业"),
     COMPANY_NOT_EXIST("3020518","企业信息不存在"),
+    USER_IS_UPGRADE_COMPANY("3020519","该账号已升级企业，请勿重复提交"),
     ;
 
     /**

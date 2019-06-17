@@ -525,76 +525,6 @@ public class TbSpPowerCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andSettingBasisIsNull() {
-            addCriterion("setting_basis is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andSettingBasisIsNotNull() {
-            addCriterion("setting_basis is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andSettingBasisEqualTo(String value) {
-            addCriterion("setting_basis =", value, "settingBasis");
-            return (Criteria) this;
-        }
-
-        public Criteria andSettingBasisNotEqualTo(String value) {
-            addCriterion("setting_basis <>", value, "settingBasis");
-            return (Criteria) this;
-        }
-
-        public Criteria andSettingBasisGreaterThan(String value) {
-            addCriterion("setting_basis >", value, "settingBasis");
-            return (Criteria) this;
-        }
-
-        public Criteria andSettingBasisGreaterThanOrEqualTo(String value) {
-            addCriterion("setting_basis >=", value, "settingBasis");
-            return (Criteria) this;
-        }
-
-        public Criteria andSettingBasisLessThan(String value) {
-            addCriterion("setting_basis <", value, "settingBasis");
-            return (Criteria) this;
-        }
-
-        public Criteria andSettingBasisLessThanOrEqualTo(String value) {
-            addCriterion("setting_basis <=", value, "settingBasis");
-            return (Criteria) this;
-        }
-
-        public Criteria andSettingBasisLike(String value) {
-            addCriterion("setting_basis like", value, "settingBasis");
-            return (Criteria) this;
-        }
-
-        public Criteria andSettingBasisNotLike(String value) {
-            addCriterion("setting_basis not like", value, "settingBasis");
-            return (Criteria) this;
-        }
-
-        public Criteria andSettingBasisIn(List<String> values) {
-            addCriterion("setting_basis in", values, "settingBasis");
-            return (Criteria) this;
-        }
-
-        public Criteria andSettingBasisNotIn(List<String> values) {
-            addCriterion("setting_basis not in", values, "settingBasis");
-            return (Criteria) this;
-        }
-
-        public Criteria andSettingBasisBetween(String value1, String value2) {
-            addCriterion("setting_basis between", value1, value2, "settingBasis");
-            return (Criteria) this;
-        }
-
-        public Criteria andSettingBasisNotBetween(String value1, String value2) {
-            addCriterion("setting_basis not between", value1, value2, "settingBasis");
-            return (Criteria) this;
-        }
-
         public Criteria andTypeIsNull() {
             addCriterion("type is null");
             return (Criteria) this;
@@ -1182,6 +1112,126 @@ public class TbSpPowerCriteria {
 
         public Criteria andNotesNotBetween(String value1, String value2) {
             addCriterion("notes not between", value1, value2, "notes");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndexOrderIsNull() {
+            addCriterion("index_order is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndexOrderIsNotNull() {
+            addCriterion("index_order is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndexOrderEqualTo(Integer value) {
+            addCriterion("index_order =", value, "indexOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndexOrderNotEqualTo(Integer value) {
+            addCriterion("index_order <>", value, "indexOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndexOrderGreaterThan(Integer value) {
+            addCriterion("index_order >", value, "indexOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndexOrderGreaterThanOrEqualTo(Integer value) {
+            addCriterion("index_order >=", value, "indexOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndexOrderLessThan(Integer value) {
+            addCriterion("index_order <", value, "indexOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndexOrderLessThanOrEqualTo(Integer value) {
+            addCriterion("index_order <=", value, "indexOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndexOrderIn(List<Integer> values) {
+            addCriterion("index_order in", values, "indexOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndexOrderNotIn(List<Integer> values) {
+            addCriterion("index_order not in", values, "indexOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndexOrderBetween(Integer value1, Integer value2) {
+            addCriterion("index_order between", value1, value2, "indexOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndexOrderNotBetween(Integer value1, Integer value2) {
+            addCriterion("index_order not between", value1, value2, "indexOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andHotOrderIsNull() {
+            addCriterion("hot_order is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHotOrderIsNotNull() {
+            addCriterion("hot_order is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHotOrderEqualTo(Integer value) {
+            addCriterion("hot_order =", value, "hotOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andHotOrderNotEqualTo(Integer value) {
+            addCriterion("hot_order <>", value, "hotOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andHotOrderGreaterThan(Integer value) {
+            addCriterion("hot_order >", value, "hotOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andHotOrderGreaterThanOrEqualTo(Integer value) {
+            addCriterion("hot_order >=", value, "hotOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andHotOrderLessThan(Integer value) {
+            addCriterion("hot_order <", value, "hotOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andHotOrderLessThanOrEqualTo(Integer value) {
+            addCriterion("hot_order <=", value, "hotOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andHotOrderIn(List<Integer> values) {
+            addCriterion("hot_order in", values, "hotOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andHotOrderNotIn(List<Integer> values) {
+            addCriterion("hot_order not in", values, "hotOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andHotOrderBetween(Integer value1, Integer value2) {
+            addCriterion("hot_order between", value1, value2, "hotOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andHotOrderNotBetween(Integer value1, Integer value2) {
+            addCriterion("hot_order not between", value1, value2, "hotOrder");
             return (Criteria) this;
         }
 

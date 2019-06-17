@@ -12,7 +12,8 @@ import com.jn.common.api.CodeAndMsg;
 public enum SmsExceptionEnum implements CodeAndMsg {
 
     SMS_NOT_TEMPLATE_ID("1311301","根据短信模板ID找不到短信模板信息."),
-    SMS_MISSING_FORMAT_ARGUMENT("1311302","短信模板缺少格式参数.")
+    SMS_MISSING_FORMAT_ARGUMENT("1311302","短信模板缺少格式参数."),
+    SMS_SWITCH_NOTNULL_MOBILES("1311303","短信推送关闭状态,配置中心springcloud-news文件jn.news.switch.mobiles参数不能为空.")
     ;
 
     private String code;

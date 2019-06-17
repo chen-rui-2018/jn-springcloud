@@ -38,7 +38,7 @@ public class UpdateCommonProductShow implements Serializable {
     @ApiModelProperty(value = "顾问名称")
     private String advisorName ;
     @ApiModelProperty(value = "服务产品的详情存入数据库时,后台转换使用")
-    private byte[] serviceDetails;
+    private String serviceDetails;
     @ApiModelProperty(value = "服务产品详情(描述)")
     private String productDetails;
 
@@ -117,11 +117,11 @@ public class UpdateCommonProductShow implements Serializable {
     }
 
 
-    public byte[] getServiceDetails() {
+    public String getServiceDetails() {
         return serviceDetails;
     }
 
-    public void setServiceDetails(byte[] serviceDetails) {
+    public void setServiceDetails(String serviceDetails) {
         this.serviceDetails = serviceDetails;
     }
 
@@ -147,5 +147,24 @@ public class UpdateCommonProductShow implements Serializable {
 
     public void setAdvisorName(String advisorName) {
         this.advisorName = advisorName;
+    }
+
+    @Override
+    public String toString() {
+        return "UpdateCommonProductShow{" +
+                "productId='" + productId + '\'' +
+                ", serialNumber='" + serialNumber + '\'' +
+                ", productType='" + productType + '\'' +
+                ", productName='" + productName + '\'' +
+                ", signoryId='" + signoryId + '\'' +
+                ", signoryName='" + signoryName + '\'' +
+                ", referPrice='" + referPrice + '\'' +
+                ", serviceCycle='" + serviceCycle + '\'' +
+                ", orgName='" + orgName + '\'' +
+                ", pictureUrl='" + pictureUrl + '\'' +
+                ", advisorName='" + advisorName + '\'' +
+                ", serviceDetails='" + serviceDetails + '\'' +
+                ", productDetails='" + productDetails + '\'' +
+                '}';
     }
 }

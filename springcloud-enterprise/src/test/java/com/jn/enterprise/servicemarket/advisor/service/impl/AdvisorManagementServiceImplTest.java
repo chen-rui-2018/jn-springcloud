@@ -48,8 +48,8 @@ public class AdvisorManagementServiceImplTest {
     @Before
     public void setUp() throws Exception {
         //顾问邀请
-        loginAccount="123";
-        registerAccount="wangsong11";
+        loginAccount="18073856620";
+        registerAccount="18674398739";
 
         //顾问管理  审批状态(rejected：已拒绝    noFeedBack：未反馈   pending：待审批   approvalNotPassed：审批不通过)
         advisorManagementParam.setApprovalStatus("pending");
@@ -57,9 +57,9 @@ public class AdvisorManagementServiceImplTest {
         advisorManagementParam.setNeedPage("0");
 
         //顾问审批
-        approvalParam.setAdvisorAccount("wangsong");
+        approvalParam.setAdvisorAccount(registerAccount);
         //审批结果(approved:审批通过   approvalNotPassed:审批不通过)
-        approvalParam.setApprovalResults("approvalNotPassed");
+        approvalParam.setApprovalResults("approved");
         //审批说明
         approvalParam.setApprovalDesc("审批通过");
 
@@ -80,7 +80,8 @@ public class AdvisorManagementServiceImplTest {
                     Matchers.anyOf(
                             Matchers.containsString(AdvisorExceptionEnum.SERVICE_ORG_NOT_EXIST.getCode()),
                             Matchers.containsString(AdvisorExceptionEnum.GET_ADVISOR_INFO_FAIL.getCode()),
-                            Matchers.containsString(AdvisorExceptionEnum.ADVISOR_IS_EXIT.getCode())
+                            Matchers.containsString(AdvisorExceptionEnum.ADVISOR_IS_EXIT.getCode()),
+                            Matchers.containsString(AdvisorExceptionEnum.ACCOUNT_NOT_ORG_MANAGE.getCode())
                     )
             );
         }
@@ -94,11 +95,11 @@ public class AdvisorManagementServiceImplTest {
     @Test
     public void getAdvisorManagementInfo() {
         try {
-            PaginationData paginationData = advisorManagementService.getAdvisorManagementInfo(advisorManagementParam);
+            PaginationData paginationData = advisorManagementService.getAdvisorManagementInfo(advisorManagementParam,"wangsong");
             List<TbServiceAdvisor> list= (List<TbServiceAdvisor>)paginationData.getRows();
             if(list!=null){
                 for(TbServiceAdvisor advisor:list){
-                    logger.info(advisor.toString());
+                    logger.info("顾问管理{}",advisor.toString());
                 }
                 assertThat(list.size(),greaterThanOrEqualTo(0));
             }else{
@@ -133,6 +134,27 @@ public class AdvisorManagementServiceImplTest {
             );
         }
 
+    }
+
+    /**
+     * 再次邀请
+     */
+    @Test
+    public void inviteAgain(){
+        try {
+            advisorManagementService.inviteAgain(registerAccount,loginAccount);
+            assertThat(anything(),anything());
+        } catch (JnSpringCloudException e) {
+            logger.warn("再次邀请顾问失败");
+            assertThat(e.getCode(),
+                    Matchers.anyOf(
+                            Matchers.containsString(AdvisorExceptionEnum.SERVICE_ORG_NOT_EXIST.getCode()),
+                            Matchers.containsString(AdvisorExceptionEnum.GET_ADVISOR_INFO_FAIL.getCode()),
+                            Matchers.containsString(AdvisorExceptionEnum.ACCOUNT_STATUS_NOT_REJECTED.getCode()),
+                            Matchers.containsString(AdvisorExceptionEnum.ACCOUNT_NOT_ORG_MANAGE.getCode())
+                    )
+            );
+        }
     }
 
 }

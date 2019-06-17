@@ -1,7 +1,7 @@
 package com.jn.park.activity.vo;
 
 
-import com.jn.park.model.ActivityDetail;
+import com.jn.park.activity.model.ActivityDetail;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -34,6 +34,8 @@ public class ActivityDetailVO implements Serializable {
     private Boolean applySuccess;
     @ApiModelProperty(value = "当前用户是否已点赞，已点赞：true，未点赞：false")
     private Boolean accountIsLike;
+    @ApiModelProperty(value = "活动显示状态(0:停止报名  1：快速报名  2：取消报名)")
+    private String activityApplyShow;
 
     private static final long serialVersionUID = 1L;
 
@@ -101,6 +103,14 @@ public class ActivityDetailVO implements Serializable {
         this.accountIsLike = accountIsLike;
     }
 
+    public String getActivityApplyShow() {
+        return activityApplyShow;
+    }
+
+    public void setActivityApplyShow(String activityApplyShow) {
+        this.activityApplyShow = activityApplyShow;
+    }
+
     @Override
     public String toString() {
         return "ActivityDetailVO{" +
@@ -112,6 +122,7 @@ public class ActivityDetailVO implements Serializable {
                 ", sysTemTime='" + sysTemTime + '\'' +
                 ", applySuccess=" + applySuccess +
                 ", accountIsLike=" + accountIsLike +
+                ", activityApplyShow='" + activityApplyShow + '\'' +
                 '}';
     }
 }

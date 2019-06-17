@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.connect.dao.ServiceConnectDao">
+
+
+    <!--获取图片及链接-->
+    <select id="getImgAndAddress" parameterType="java.lang.String" resultType="com.jn.park.connect.model.ServiceConnectModel">
+
+        SELECT
+        t.entrance_name as "entranceName",
+        t.connect_address as "connectAddress",
+        t.show_img as "showImg"
+        FROM tb_service_connect_manage t
+        WHERE
+        t.record_status = 1
+        AND t.is_valid = 1
+        AND t.entrance_name_code = #{entranceNameCode}
+
+    </select>
+</mapper>

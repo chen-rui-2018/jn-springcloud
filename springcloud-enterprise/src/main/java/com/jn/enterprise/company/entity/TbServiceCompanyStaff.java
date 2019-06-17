@@ -18,6 +18,14 @@ public class TbServiceCompanyStaff implements Serializable {
 
     private Date checkTime;
 
+    private String inviteStatus;
+
+    private String inviterAccount;
+
+    private Date inviteTime;
+
+    private String joinPattern;
+
     private Date createdTime;
 
     private String creatorAccount;
@@ -86,6 +94,38 @@ public class TbServiceCompanyStaff implements Serializable {
         this.checkTime = checkTime;
     }
 
+    public String getInviteStatus() {
+        return inviteStatus;
+    }
+
+    public void setInviteStatus(String inviteStatus) {
+        this.inviteStatus = inviteStatus == null ? null : inviteStatus.trim();
+    }
+
+    public String getInviterAccount() {
+        return inviterAccount;
+    }
+
+    public void setInviterAccount(String inviterAccount) {
+        this.inviterAccount = inviterAccount == null ? null : inviterAccount.trim();
+    }
+
+    public Date getInviteTime() {
+        return inviteTime;
+    }
+
+    public void setInviteTime(Date inviteTime) {
+        this.inviteTime = inviteTime;
+    }
+
+    public String getJoinPattern() {
+        return joinPattern;
+    }
+
+    public void setJoinPattern(String joinPattern) {
+        this.joinPattern = joinPattern == null ? null : joinPattern.trim();
+    }
+
     public Date getCreatedTime() {
         return createdTime;
     }
@@ -145,6 +185,10 @@ public class TbServiceCompanyStaff implements Serializable {
             && (this.getCheckStatus() == null ? other.getCheckStatus() == null : this.getCheckStatus().equals(other.getCheckStatus()))
             && (this.getCheckAccount() == null ? other.getCheckAccount() == null : this.getCheckAccount().equals(other.getCheckAccount()))
             && (this.getCheckTime() == null ? other.getCheckTime() == null : this.getCheckTime().equals(other.getCheckTime()))
+            && (this.getInviteStatus() == null ? other.getInviteStatus() == null : this.getInviteStatus().equals(other.getInviteStatus()))
+            && (this.getInviterAccount() == null ? other.getInviterAccount() == null : this.getInviterAccount().equals(other.getInviterAccount()))
+            && (this.getInviteTime() == null ? other.getInviteTime() == null : this.getInviteTime().equals(other.getInviteTime()))
+            && (this.getJoinPattern() == null ? other.getJoinPattern() == null : this.getJoinPattern().equals(other.getJoinPattern()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
@@ -163,6 +207,10 @@ public class TbServiceCompanyStaff implements Serializable {
         result = prime * result + ((getCheckStatus() == null) ? 0 : getCheckStatus().hashCode());
         result = prime * result + ((getCheckAccount() == null) ? 0 : getCheckAccount().hashCode());
         result = prime * result + ((getCheckTime() == null) ? 0 : getCheckTime().hashCode());
+        result = prime * result + ((getInviteStatus() == null) ? 0 : getInviteStatus().hashCode());
+        result = prime * result + ((getInviterAccount() == null) ? 0 : getInviterAccount().hashCode());
+        result = prime * result + ((getInviteTime() == null) ? 0 : getInviteTime().hashCode());
+        result = prime * result + ((getJoinPattern() == null) ? 0 : getJoinPattern().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
@@ -184,6 +232,10 @@ public class TbServiceCompanyStaff implements Serializable {
         sb.append(", checkStatus=").append(checkStatus);
         sb.append(", checkAccount=").append(checkAccount);
         sb.append(", checkTime=").append(checkTime);
+        sb.append(", inviteStatus=").append(inviteStatus);
+        sb.append(", inviterAccount=").append(inviterAccount);
+        sb.append(", inviteTime=").append(inviteTime);
+        sb.append(", joinPattern=").append(joinPattern);
         sb.append(", createdTime=").append(createdTime);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", modifiedTime=").append(modifiedTime);

@@ -26,7 +26,7 @@
       <!-- 表格第二列  姓名 -->
       <el-table-column label="岗位名称" align="center" prop="postName" />
       <el-table-column label="岗位类型" align="center" prop="postTypeName" />
-      <el-table-column label="创建时间" align="center" min-width="200" prop="createdTime"/>
+      <el-table-column label="创建时间" align="center" min-width="120" prop="createdTime"/>
       <el-table-column label="状态" align="center" prop="recordStatus">
         <template slot-scope="scope">
           <span :class="scope.row.recordStatus==1 ? 'text-green' : 'text-red'">{{ scope.row.recordStatus | statusFilter }}</span>
@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import { api, paramApi } from '@/api/Permission-model/userManagement'
+import { api, paramApi } from '@/api/axios'
 export default {
   filters: {
     statusFilter(recordStatus) {
@@ -89,8 +89,8 @@ export default {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
         if (this.dialogStatus === '新增岗位') {
-          paramApi('system/sysPost/checkPostName', this.postform.postName, 'postName').then(res => {
-            if (res.data.code === '0000') {
+          paramApi(`${this.GLOBAL.systemUrl}system/sysPost/checkPostName`, this.postform.postName, 'postName').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               if (res.data.data === 'success') {
                 callback()
               } else {
@@ -100,8 +100,8 @@ export default {
           })
         } else {
           if (this.oldPostName !== this.postform.postName) {
-            paramApi('system/sysPost/checkPostName', this.postform.postName, 'postName').then(res => {
-              if (res.data.code === '0000') {
+            paramApi(`${this.GLOBAL.systemUrl}system/sysPost/checkPostName`, this.postform.postName, 'postName').then(res => {
+              if (res.data.code === this.GLOBAL.code) {
                 if (res.data.data === 'success') {
                   callback()
                 } else {
@@ -161,8 +161,8 @@ export default {
   methods: {
     // 获取岗位类型
     getPostType() {
-      api('system/sysPostType/getPostTypeAll').then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.systemUrl}system/sysPostType/getPostTypeAll`, '', 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           res.data.data.forEach(val => {
             this.postTypeNameOptions.push({
               value: val.id,
@@ -182,8 +182,8 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          paramApi('system/sysPost/delete', id, 'postIds').then(res => {
-            if (res.data.code === '0000') {
+          paramApi(`${this.GLOBAL.systemUrl}system/sysPost/delete`, id, 'postIds').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '删除成功',
                 type: 'success'
@@ -222,8 +222,8 @@ export default {
           // 避免重复点击提交
           this.isDisabled = true
           // // 调用接口发送请求
-          api('system/sysPost/update', this.postform).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.systemUrl}system/sysPost/update`, this.postform, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '编辑成功',
                 type: 'success'
@@ -254,8 +254,8 @@ export default {
       this.$refs['postform'].validate(valid => {
         if (valid) {
           // 调用接口发送请求
-          api('system/sysPost/add', this.postform).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.systemUrl}system/sysPost/add`, this.postform, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '添加成功',
                 type: 'success'
@@ -288,18 +288,11 @@ export default {
         this.$refs['postform'].clearValidate()
       })
     },
-    // 清空信息
-    // resetuserGroupform() {
-    //   this.postform = {
-    //     postName: undefined,
-    //     status: undefined
-    //   }
-    // },
     // 项目初始化
     initList() {
       this.listLoading = true
-      api('system/sysPost/list', this.listQuery).then(response => {
-        if (response.data.code === '0000') {
+      api(`${this.GLOBAL.systemUrl}system/sysPost/list`, this.listQuery, 'post').then(response => {
+        if (response.data.code === this.GLOBAL.code) {
           this.postList = response.data.data.rows
           this.total = response.data.data.total
           if (this.postList.length === 0 && this.total > 0) {

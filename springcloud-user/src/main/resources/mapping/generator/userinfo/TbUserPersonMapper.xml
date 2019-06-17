@@ -17,12 +17,14 @@
     <result column="ID_card" jdbcType="VARCHAR" property="idCard" />
     <result column="signature" jdbcType="VARCHAR" property="signature" />
     <result column="company" jdbcType="VARCHAR" property="company" />
-    <result column="post" jdbcType="VARCHAR" property="post" />
+    <result column="graduated_school" jdbcType="VARCHAR" property="graduatedSchool" />
     <result column="education" jdbcType="VARCHAR" property="education" />
     <result column="avatar" jdbcType="VARCHAR" property="avatar" />
+    <result column="position" jdbcType="VARCHAR" property="position" />
     <result column="user_type" jdbcType="VARCHAR" property="userType" />
     <result column="point" jdbcType="DOUBLE" property="point" />
     <result column="birthday" jdbcType="TIMESTAMP" property="birthday" />
+    <result column="registration_id" jdbcType="VARCHAR" property="registrationId" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
@@ -89,9 +91,9 @@
   </sql>
   <sql id="Base_Column_List">
     id, affiliate_code, affiliate_name, company_code, company_name, account, phone, email, 
-    name, nick_name, sex, age, ID_card, signature, company, post, education, avatar, 
-    user_type, point, birthday, creator_account, modifier_account, created_time, modified_time, 
-    record_status
+    name, nick_name, sex, age, ID_card, signature, company, graduated_school, education, 
+    avatar, position, user_type, point, birthday, registration_id, creator_account, modifier_account, 
+    created_time, modified_time, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.user.userinfo.entity.TbUserPersonCriteria" resultMap="BaseResultMap">
     select
@@ -129,19 +131,21 @@
       phone, email, name, 
       nick_name, sex, age, 
       ID_card, signature, company, 
-      post, education, avatar, 
-      user_type, point, birthday, 
-      creator_account, modifier_account, created_time, 
-      modified_time, record_status)
+      graduated_school, education, avatar, 
+      position, user_type, point, 
+      birthday, registration_id, creator_account, 
+      modifier_account, created_time, modified_time, 
+      record_status)
     values (#{id,jdbcType=VARCHAR}, #{affiliateCode,jdbcType=VARCHAR}, #{affiliateName,jdbcType=VARCHAR}, 
       #{companyCode,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, 
       #{phone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
       #{nickName,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, 
       #{idCard,jdbcType=VARCHAR}, #{signature,jdbcType=VARCHAR}, #{company,jdbcType=VARCHAR}, 
-      #{post,jdbcType=VARCHAR}, #{education,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}, 
-      #{userType,jdbcType=VARCHAR}, #{point,jdbcType=DOUBLE}, #{birthday,jdbcType=TIMESTAMP}, 
-      #{creatorAccount,jdbcType=VARCHAR}, #{modifierAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{modifiedTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=TINYINT})
+      #{graduatedSchool,jdbcType=VARCHAR}, #{education,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}, 
+      #{position,jdbcType=VARCHAR}, #{userType,jdbcType=VARCHAR}, #{point,jdbcType=DOUBLE}, 
+      #{birthday,jdbcType=TIMESTAMP}, #{registrationId,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{recordStatus,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.user.userinfo.entity.TbUserPerson">
     insert into tb_user_person
@@ -191,14 +195,17 @@
       <if test="company != null">
         company,
       </if>
-      <if test="post != null">
-        post,
+      <if test="graduatedSchool != null">
+        graduated_school,
       </if>
       <if test="education != null">
         education,
       </if>
       <if test="avatar != null">
         avatar,
+      </if>
+      <if test="position != null">
+        position,
       </if>
       <if test="userType != null">
         user_type,
@@ -208,6 +215,9 @@
       </if>
       <if test="birthday != null">
         birthday,
+      </if>
+      <if test="registrationId != null">
+        registration_id,
       </if>
       <if test="creatorAccount != null">
         creator_account,
@@ -271,14 +281,17 @@
       <if test="company != null">
         #{company,jdbcType=VARCHAR},
       </if>
-      <if test="post != null">
-        #{post,jdbcType=VARCHAR},
+      <if test="graduatedSchool != null">
+        #{graduatedSchool,jdbcType=VARCHAR},
       </if>
       <if test="education != null">
         #{education,jdbcType=VARCHAR},
       </if>
       <if test="avatar != null">
         #{avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null">
+        #{position,jdbcType=VARCHAR},
       </if>
       <if test="userType != null">
         #{userType,jdbcType=VARCHAR},
@@ -288,6 +301,9 @@
       </if>
       <if test="birthday != null">
         #{birthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="registrationId != null">
+        #{registrationId,jdbcType=VARCHAR},
       </if>
       <if test="creatorAccount != null">
         #{creatorAccount,jdbcType=VARCHAR},
@@ -360,14 +376,17 @@
       <if test="record.company != null">
         company = #{record.company,jdbcType=VARCHAR},
       </if>
-      <if test="record.post != null">
-        post = #{record.post,jdbcType=VARCHAR},
+      <if test="record.graduatedSchool != null">
+        graduated_school = #{record.graduatedSchool,jdbcType=VARCHAR},
       </if>
       <if test="record.education != null">
         education = #{record.education,jdbcType=VARCHAR},
       </if>
       <if test="record.avatar != null">
         avatar = #{record.avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="record.position != null">
+        position = #{record.position,jdbcType=VARCHAR},
       </if>
       <if test="record.userType != null">
         user_type = #{record.userType,jdbcType=VARCHAR},
@@ -377,6 +396,9 @@
       </if>
       <if test="record.birthday != null">
         birthday = #{record.birthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.registrationId != null">
+        registration_id = #{record.registrationId,jdbcType=VARCHAR},
       </if>
       <if test="record.creatorAccount != null">
         creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
@@ -415,12 +437,14 @@
       ID_card = #{record.idCard,jdbcType=VARCHAR},
       signature = #{record.signature,jdbcType=VARCHAR},
       company = #{record.company,jdbcType=VARCHAR},
-      post = #{record.post,jdbcType=VARCHAR},
+      graduated_school = #{record.graduatedSchool,jdbcType=VARCHAR},
       education = #{record.education,jdbcType=VARCHAR},
       avatar = #{record.avatar,jdbcType=VARCHAR},
+      position = #{record.position,jdbcType=VARCHAR},
       user_type = #{record.userType,jdbcType=VARCHAR},
       point = #{record.point,jdbcType=DOUBLE},
       birthday = #{record.birthday,jdbcType=TIMESTAMP},
+      registration_id = #{record.registrationId,jdbcType=VARCHAR},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
@@ -475,14 +499,17 @@
       <if test="company != null">
         company = #{company,jdbcType=VARCHAR},
       </if>
-      <if test="post != null">
-        post = #{post,jdbcType=VARCHAR},
+      <if test="graduatedSchool != null">
+        graduated_school = #{graduatedSchool,jdbcType=VARCHAR},
       </if>
       <if test="education != null">
         education = #{education,jdbcType=VARCHAR},
       </if>
       <if test="avatar != null">
         avatar = #{avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null">
+        position = #{position,jdbcType=VARCHAR},
       </if>
       <if test="userType != null">
         user_type = #{userType,jdbcType=VARCHAR},
@@ -492,6 +519,9 @@
       </if>
       <if test="birthday != null">
         birthday = #{birthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="registrationId != null">
+        registration_id = #{registrationId,jdbcType=VARCHAR},
       </if>
       <if test="creatorAccount != null">
         creator_account = #{creatorAccount,jdbcType=VARCHAR},
@@ -527,12 +557,14 @@
       ID_card = #{idCard,jdbcType=VARCHAR},
       signature = #{signature,jdbcType=VARCHAR},
       company = #{company,jdbcType=VARCHAR},
-      post = #{post,jdbcType=VARCHAR},
+      graduated_school = #{graduatedSchool,jdbcType=VARCHAR},
       education = #{education,jdbcType=VARCHAR},
       avatar = #{avatar,jdbcType=VARCHAR},
+      position = #{position,jdbcType=VARCHAR},
       user_type = #{userType,jdbcType=VARCHAR},
       point = #{point,jdbcType=DOUBLE},
       birthday = #{birthday,jdbcType=TIMESTAMP},
+      registration_id = #{registrationId,jdbcType=VARCHAR},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},

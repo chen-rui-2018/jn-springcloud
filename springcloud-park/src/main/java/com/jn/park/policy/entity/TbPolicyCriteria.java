@@ -805,6 +805,76 @@ public class TbPolicyCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andPolicyIssuNumIsNull() {
+            addCriterion("policy_issu_num is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyIssuNumIsNotNull() {
+            addCriterion("policy_issu_num is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyIssuNumEqualTo(String value) {
+            addCriterion("policy_issu_num =", value, "policyIssuNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyIssuNumNotEqualTo(String value) {
+            addCriterion("policy_issu_num <>", value, "policyIssuNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyIssuNumGreaterThan(String value) {
+            addCriterion("policy_issu_num >", value, "policyIssuNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyIssuNumGreaterThanOrEqualTo(String value) {
+            addCriterion("policy_issu_num >=", value, "policyIssuNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyIssuNumLessThan(String value) {
+            addCriterion("policy_issu_num <", value, "policyIssuNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyIssuNumLessThanOrEqualTo(String value) {
+            addCriterion("policy_issu_num <=", value, "policyIssuNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyIssuNumLike(String value) {
+            addCriterion("policy_issu_num like", value, "policyIssuNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyIssuNumNotLike(String value) {
+            addCriterion("policy_issu_num not like", value, "policyIssuNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyIssuNumIn(List<String> values) {
+            addCriterion("policy_issu_num in", values, "policyIssuNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyIssuNumNotIn(List<String> values) {
+            addCriterion("policy_issu_num not in", values, "policyIssuNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyIssuNumBetween(String value1, String value2) {
+            addCriterion("policy_issu_num between", value1, value2, "policyIssuNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyIssuNumNotBetween(String value1, String value2) {
+            addCriterion("policy_issu_num not between", value1, value2, "policyIssuNum");
+            return (Criteria) this;
+        }
+
         public Criteria andReadNumIsNull() {
             addCriterion("read_num is null");
             return (Criteria) this;

@@ -5,11 +5,9 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
-import com.jn.park.enums.PolicyCenterExceptionEnum;
-import com.jn.park.policy.dao.PolicyCenterMapper;
-import com.jn.park.policy.dao.TbPolicyClassMapper;
-import com.jn.park.policy.dao.TbPolicyLevelMapper;
-import com.jn.park.policy.dao.TbPolicyMapper;
+import com.jn.enterprise.utils.IBPSFileUtils;
+import com.jn.park.enums.PolicyInfoExceptionEnum;
+import com.jn.park.policy.dao.*;
 import com.jn.park.policy.entity.*;
 import com.jn.park.policy.enums.PolicyTableTypeEnum;
 import com.jn.park.policy.model.*;
@@ -71,7 +69,7 @@ public class PolicyCenterServiceImpl implements PolicyCenterService {
         List<TbPolicyLevel> tbPolicyLevelList = tbPolicyLevelMapper.selectByExample(example);
         if(tbPolicyLevelList.isEmpty()){
             logger.warn("政策级别列表获取数据失败，系统中没有政策级别的数据");
-            throw new JnSpringCloudException(PolicyCenterExceptionEnum.POLICY_LEVEL_NOT_EXIST);
+            throw new JnSpringCloudException(PolicyInfoExceptionEnum.POLICY_LEVEL_NOT_EXIST);
         }
         List<PolicyLevelShow> resultList=new ArrayList<>(16);
         for (TbPolicyLevel tbPolicyLevel : tbPolicyLevelList) {
@@ -95,7 +93,7 @@ public class PolicyCenterServiceImpl implements PolicyCenterService {
         List<TbPolicyClass> tbPolicyClassList = tbPolicyClassMapper.selectByExample(example);
         if(tbPolicyClassList.isEmpty()){
             logger.warn("政策分类列表获取数据失败，系统中没有政策分类的数据");
-            throw new JnSpringCloudException(PolicyCenterExceptionEnum.POLICY_CLASS_NOT_EXIST);
+            throw new JnSpringCloudException(PolicyInfoExceptionEnum.POLICY_CLASS_NOT_EXIST);
         }
         List<PolicyClassShow> resultList=new ArrayList<>(16);
         for (TbPolicyClass tbPolicyClass : tbPolicyClassList) {
@@ -121,7 +119,7 @@ public class PolicyCenterServiceImpl implements PolicyCenterService {
         if(PolicyTableTypeEnum.ALL_POLICY.getCode().equals(policyCenterHomeParam.getTableType())){
             if(StringUtils.isBlank(policyCenterHomeParam.getPolicyType())){
                 logger.warn("政策中心首页，政策一览table页政策类型不能为空");
-                throw new JnSpringCloudException(PolicyCenterExceptionEnum.POLICY_TYPE_NOT_NULL);
+                throw new JnSpringCloudException(PolicyInfoExceptionEnum.POLICY_TYPE_NOT_NULL);
             }
         }else if(PolicyTableTypeEnum.DIAGRAM_POLICY.getCode().equals(policyCenterHomeParam.getTableType())){
             //图解政策 政策类型为图解政策（"1"）
@@ -134,7 +132,7 @@ public class PolicyCenterServiceImpl implements PolicyCenterService {
             thematicType="1";
         }else{
             logger.warn("政策中心首页的table类型在系统中不存在");
-            throw new JnSpringCloudException(PolicyCenterExceptionEnum.TABLE_TYPE_IS_NOT_EXIST);
+            throw new JnSpringCloudException(PolicyInfoExceptionEnum.TABLE_TYPE_IS_NOT_EXIST);
         }
         //非政策一览table页，政策级别，政策分类，发布时间，政策检索等查询条件全部清空
         if(!PolicyTableTypeEnum.ALL_POLICY.getCode().equals(policyCenterHomeParam.getTableType())){
@@ -165,6 +163,25 @@ public class PolicyCenterServiceImpl implements PolicyCenterService {
                     policyCenterHomeParam.getRows() == 0 ? 15 : policyCenterHomeParam.getRows(), true);
         }
         List<PolicyCenterHomeShow> investorInfoList = policyCenterMapper.getPolicyCenterList(policyCenterHomeParam,thematicType);
+
+        // 处理图片格式和简要内容
+        if (!investorInfoList.isEmpty()) {
+            for (PolicyCenterHomeShow policy : investorInfoList){
+                //处理图片
+                if (StringUtils.isNotBlank(policy.getPolicyDiagramUrl())) {
+                    policy.setPolicyDiagramUrl(IBPSFileUtils.getFilePath(policy.getPolicyDiagramUrl()));
+                }
+                //设置简要内容
+                String briefContent=policy.getPolicyContent().replaceAll("</?[^>]+>","");
+                if(StringUtils.isNotBlank(briefContent)){
+                    String briefSummaries=briefContent.substring(0,briefContent.length()>100?100:briefContent.length());
+                    briefSummaries=briefContent.length()>100?briefSummaries+"......":briefSummaries;
+                    policy.setBriefContent(briefSummaries);
+                    //清空详情
+                    policy.setPolicyContent("");
+                }
+            }
+        }
         return new PaginationData(investorInfoList, objects == null ? 0 : objects.getTotal());
     }
 
@@ -183,11 +200,11 @@ public class PolicyCenterServiceImpl implements PolicyCenterService {
         //没有数据
         if(tbPolicyList.isEmpty()){
             logger.warn("政策id为[{}的政策在系统中不存在或当前政策类型不是普通政策]");
-            throw new JnSpringCloudException(PolicyCenterExceptionEnum.POLICY_DETAILS_NOT_EXIST);
+            throw new JnSpringCloudException(PolicyInfoExceptionEnum.POLICY_DETAILS_NOT_EXIST);
         }
         //根据政策id查询详情
         PolicyDetailsShow policyDetails = policyCenterMapper.getPolicyDetails(policyId);
-        updatePolicyReadNum(example, tbPolicyList.get(0).getReadNum());
+        updatePolicyReadNum(example, tbPolicyList.get(0).getReadNum()==null?0:tbPolicyList.get(0).getReadNum());
         return policyDetails;
     }
 
@@ -234,7 +251,7 @@ public class PolicyCenterServiceImpl implements PolicyCenterService {
         //没有数据
         if(tbPolicyList.isEmpty()){
             logger.warn("政策id为[{}的政策在系统中不存在或当前政策类型不是图解政策]");
-            throw new JnSpringCloudException(PolicyCenterExceptionEnum.POLICY_DIAGRAM_DETAILS_NOT_EXIST);
+            throw new JnSpringCloudException(PolicyInfoExceptionEnum.POLICY_DIAGRAM_DETAILS_NOT_EXIST);
         }
         TbPolicy tbPolicy = tbPolicyList.get(0);
         //设置图解政策前端展示字段的值
@@ -243,18 +260,27 @@ public class PolicyCenterServiceImpl implements PolicyCenterService {
         //发布日期
         policyDiagramDetailsVo.setReleaseDate(DateUtils.formatDate(tbPolicyList.get(0).getReleaseDate(),PATTERN));
         //更新阅读次数
-        updatePolicyReadNum(example,tbPolicy.getReadNum());
+        updatePolicyReadNum(example,tbPolicy.getReadNum()==null?0:tbPolicy.getReadNum());
         //有无关联政策原文  0：无  1：有
         String isPolicyOriginal="1";
-        if(isPolicyOriginal.equals(tbPolicy.getIsPolicyOriginal())){
-            //设置政策原文
+        if(isPolicyOriginal.equals(tbPolicy.getIsPolicyDiagram())){
+            //设置政策原文  获取绑定的普通政策的id
             String relationPolicyOriginalId = tbPolicy.getRelationPolicyOriginalId();
             policyType="0";
-            example = getTbPolicyCriteria(policyId, policyType);
+            //查询政策原文的名称
+            //PolicyDetailsShow policyDetails = policyCenterMapper.getPolicyDetails(relationPolicyOriginalId);
+            //获取普通政策的名称
+            //String policyTitle=policyDetails.getPolicyTitle();
+            example = getTbPolicyCriteria(relationPolicyOriginalId, policyType);
             long existNum = tbPolicyMapper.countByExample(example);
             if(existNum>0){
                 policyDiagramDetailsVo.setPolicyDetailsShow(getPolicyDetails(relationPolicyOriginalId));
             }
+        }
+
+        // 处理图片格式
+        if (StringUtils.isNotBlank(policyDiagramDetailsVo.getPolicyDiagramUrl())) {
+            policyDiagramDetailsVo.setPolicyDiagramUrl(IBPSFileUtils.getFilePath(policyDiagramDetailsVo.getPolicyDiagramUrl()));
         }
         return policyDiagramDetailsVo;
     }

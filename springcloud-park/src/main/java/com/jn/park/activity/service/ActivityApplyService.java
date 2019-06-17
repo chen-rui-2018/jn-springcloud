@@ -1,9 +1,11 @@
 package com.jn.park.activity.service;
 
+import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
-import com.jn.park.model.ActivityApplyDetail;
-import com.jn.park.model.ActivityApplyParam;
-import com.jn.park.model.ActivityPagingParam;
+import com.jn.park.activity.model.ActivityApplyDetail;
+import com.jn.park.activity.model.ActivityApplyListEasyParam;
+import com.jn.park.activity.model.ActivityApplyParam;
+import com.jn.park.activity.model.ActivityPagingParam;
 import com.jn.user.model.UserExtensionInfo;
 
 import java.io.IOException;
@@ -42,6 +44,14 @@ public interface ActivityApplyService {
      * @return
      */
     PaginationData<List<ActivityApplyDetail>> applyActivityList(ActivityApplyParam activityApplyParam, Boolean needPage);
+
+    /**
+     * 根据报名状态查询活动报名列表
+     * @param param
+     * @return
+     */
+    PaginationData<List<ActivityApplyDetail>> applyActivityListByApplyStatus(ActivityApplyListEasyParam param);
+
 
     /**
      * 生成二维码

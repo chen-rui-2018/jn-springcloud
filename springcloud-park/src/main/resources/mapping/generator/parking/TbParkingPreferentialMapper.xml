@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.parking.dao.TbParkingPreferentialMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.parking.entity.TbParkingPreferential">
+    <id column="policy_id_" jdbcType="VARCHAR" property="policyId" />
+    <result column="policy_type" jdbcType="VARCHAR" property="policyType" />
+    <result column="policy_user_type" jdbcType="VARCHAR" property="policyUserType" />
+    <result column="policy_code" jdbcType="VARCHAR" property="policyCode" />
+    <result column="policy_comments" jdbcType="VARCHAR" property="policyComments" />
+    <result column="offer_price" jdbcType="DOUBLE" property="offerPrice" />
+    <result column="offer_ratio" jdbcType="DOUBLE" property="offerRatio" />
+    <result column="policy_status" jdbcType="VARCHAR" property="policyStatus" />
+    <result column="day_conditions" jdbcType="INTEGER" property="dayConditions" />
+    <result column="taxt_basis" jdbcType="DECIMAL" property="taxtBasis" />
+    <result column="policy_car_num" jdbcType="INTEGER" property="policyCarNum" />
+    <result column="policy_car_max" jdbcType="INTEGER" property="policyCarMax" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    policy_id_, policy_type, policy_user_type, policy_code, policy_comments, offer_price, 
+    offer_ratio, policy_status, day_conditions, taxt_basis, policy_car_num, policy_car_max, 
+    creator_account, created_time, modifier_account, modified_time, record_status
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.park.parking.entity.TbParkingPreferentialCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_parking_preferential
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_parking_preferential
+    where policy_id_ = #{policyId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_parking_preferential
+    where policy_id_ = #{policyId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.park.parking.entity.TbParkingPreferentialCriteria">
+    delete from tb_parking_preferential
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.park.parking.entity.TbParkingPreferential">
+    insert into tb_parking_preferential (policy_id_, policy_type, policy_user_type, 
+      policy_code, policy_comments, offer_price, 
+      offer_ratio, policy_status, day_conditions, 
+      taxt_basis, policy_car_num, policy_car_max, 
+      creator_account, created_time, modifier_account, 
+      modified_time, record_status)
+    values (#{policyId,jdbcType=VARCHAR}, #{policyType,jdbcType=VARCHAR}, #{policyUserType,jdbcType=VARCHAR}, 
+      #{policyCode,jdbcType=VARCHAR}, #{policyComments,jdbcType=VARCHAR}, #{offerPrice,jdbcType=DOUBLE}, 
+      #{offerRatio,jdbcType=DOUBLE}, #{policyStatus,jdbcType=VARCHAR}, #{dayConditions,jdbcType=INTEGER}, 
+      #{taxtBasis,jdbcType=DECIMAL}, #{policyCarNum,jdbcType=INTEGER}, #{policyCarMax,jdbcType=INTEGER}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.park.parking.entity.TbParkingPreferential">
+    insert into tb_parking_preferential
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="policyId != null">
+        policy_id_,
+      </if>
+      <if test="policyType != null">
+        policy_type,
+      </if>
+      <if test="policyUserType != null">
+        policy_user_type,
+      </if>
+      <if test="policyCode != null">
+        policy_code,
+      </if>
+      <if test="policyComments != null">
+        policy_comments,
+      </if>
+      <if test="offerPrice != null">
+        offer_price,
+      </if>
+      <if test="offerRatio != null">
+        offer_ratio,
+      </if>
+      <if test="policyStatus != null">
+        policy_status,
+      </if>
+      <if test="dayConditions != null">
+        day_conditions,
+      </if>
+      <if test="taxtBasis != null">
+        taxt_basis,
+      </if>
+      <if test="policyCarNum != null">
+        policy_car_num,
+      </if>
+      <if test="policyCarMax != null">
+        policy_car_max,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="policyId != null">
+        #{policyId,jdbcType=VARCHAR},
+      </if>
+      <if test="policyType != null">
+        #{policyType,jdbcType=VARCHAR},
+      </if>
+      <if test="policyUserType != null">
+        #{policyUserType,jdbcType=VARCHAR},
+      </if>
+      <if test="policyCode != null">
+        #{policyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="policyComments != null">
+        #{policyComments,jdbcType=VARCHAR},
+      </if>
+      <if test="offerPrice != null">
+        #{offerPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="offerRatio != null">
+        #{offerRatio,jdbcType=DOUBLE},
+      </if>
+      <if test="policyStatus != null">
+        #{policyStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="dayConditions != null">
+        #{dayConditions,jdbcType=INTEGER},
+      </if>
+      <if test="taxtBasis != null">
+        #{taxtBasis,jdbcType=DECIMAL},
+      </if>
+      <if test="policyCarNum != null">
+        #{policyCarNum,jdbcType=INTEGER},
+      </if>
+      <if test="policyCarMax != null">
+        #{policyCarMax,jdbcType=INTEGER},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.park.parking.entity.TbParkingPreferentialCriteria" resultType="java.lang.Long">
+    select count(*) from tb_parking_preferential
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_parking_preferential
+    <set>
+      <if test="record.policyId != null">
+        policy_id_ = #{record.policyId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.policyType != null">
+        policy_type = #{record.policyType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.policyUserType != null">
+        policy_user_type = #{record.policyUserType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.policyCode != null">
+        policy_code = #{record.policyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.policyComments != null">
+        policy_comments = #{record.policyComments,jdbcType=VARCHAR},
+      </if>
+      <if test="record.offerPrice != null">
+        offer_price = #{record.offerPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="record.offerRatio != null">
+        offer_ratio = #{record.offerRatio,jdbcType=DOUBLE},
+      </if>
+      <if test="record.policyStatus != null">
+        policy_status = #{record.policyStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dayConditions != null">
+        day_conditions = #{record.dayConditions,jdbcType=INTEGER},
+      </if>
+      <if test="record.taxtBasis != null">
+        taxt_basis = #{record.taxtBasis,jdbcType=DECIMAL},
+      </if>
+      <if test="record.policyCarNum != null">
+        policy_car_num = #{record.policyCarNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.policyCarMax != null">
+        policy_car_max = #{record.policyCarMax,jdbcType=INTEGER},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_parking_preferential
+    set policy_id_ = #{record.policyId,jdbcType=VARCHAR},
+      policy_type = #{record.policyType,jdbcType=VARCHAR},
+      policy_user_type = #{record.policyUserType,jdbcType=VARCHAR},
+      policy_code = #{record.policyCode,jdbcType=VARCHAR},
+      policy_comments = #{record.policyComments,jdbcType=VARCHAR},
+      offer_price = #{record.offerPrice,jdbcType=DOUBLE},
+      offer_ratio = #{record.offerRatio,jdbcType=DOUBLE},
+      policy_status = #{record.policyStatus,jdbcType=VARCHAR},
+      day_conditions = #{record.dayConditions,jdbcType=INTEGER},
+      taxt_basis = #{record.taxtBasis,jdbcType=DECIMAL},
+      policy_car_num = #{record.policyCarNum,jdbcType=INTEGER},
+      policy_car_max = #{record.policyCarMax,jdbcType=INTEGER},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      record_status = #{record.recordStatus,jdbcType=TINYINT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.parking.entity.TbParkingPreferential">
+    update tb_parking_preferential
+    <set>
+      <if test="policyType != null">
+        policy_type = #{policyType,jdbcType=VARCHAR},
+      </if>
+      <if test="policyUserType != null">
+        policy_user_type = #{policyUserType,jdbcType=VARCHAR},
+      </if>
+      <if test="policyCode != null">
+        policy_code = #{policyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="policyComments != null">
+        policy_comments = #{policyComments,jdbcType=VARCHAR},
+      </if>
+      <if test="offerPrice != null">
+        offer_price = #{offerPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="offerRatio != null">
+        offer_ratio = #{offerRatio,jdbcType=DOUBLE},
+      </if>
+      <if test="policyStatus != null">
+        policy_status = #{policyStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="dayConditions != null">
+        day_conditions = #{dayConditions,jdbcType=INTEGER},
+      </if>
+      <if test="taxtBasis != null">
+        taxt_basis = #{taxtBasis,jdbcType=DECIMAL},
+      </if>
+      <if test="policyCarNum != null">
+        policy_car_num = #{policyCarNum,jdbcType=INTEGER},
+      </if>
+      <if test="policyCarMax != null">
+        policy_car_max = #{policyCarMax,jdbcType=INTEGER},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+    </set>
+    where policy_id_ = #{policyId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.parking.entity.TbParkingPreferential">
+    update tb_parking_preferential
+    set policy_type = #{policyType,jdbcType=VARCHAR},
+      policy_user_type = #{policyUserType,jdbcType=VARCHAR},
+      policy_code = #{policyCode,jdbcType=VARCHAR},
+      policy_comments = #{policyComments,jdbcType=VARCHAR},
+      offer_price = #{offerPrice,jdbcType=DOUBLE},
+      offer_ratio = #{offerRatio,jdbcType=DOUBLE},
+      policy_status = #{policyStatus,jdbcType=VARCHAR},
+      day_conditions = #{dayConditions,jdbcType=INTEGER},
+      taxt_basis = #{taxtBasis,jdbcType=DECIMAL},
+      policy_car_num = #{policyCarNum,jdbcType=INTEGER},
+      policy_car_max = #{policyCarMax,jdbcType=INTEGER},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      record_status = #{recordStatus,jdbcType=TINYINT}
+    where policy_id_ = #{policyId,jdbcType=VARCHAR}
+  </update>
+</mapper>

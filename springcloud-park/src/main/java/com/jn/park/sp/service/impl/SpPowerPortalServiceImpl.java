@@ -1,32 +1,46 @@
 package com.jn.park.sp.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.jn.common.channel.MessageSource;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.common.util.StringUtils;
 import com.jn.company.api.CompanyClient;
 import com.jn.company.model.ServiceCompany;
+import com.jn.company.model.ServiceCompanyParam;
+import com.jn.news.vo.EmailVo;
+import com.jn.news.vo.SmsTemplateVo;
 import com.jn.park.finance.service.impl.FinanceTypeServiceImpl;
 import com.jn.park.sp.dao.*;
 import com.jn.park.sp.entity.*;
 import com.jn.park.sp.enums.SpStatusEnums;
-import com.jn.park.sp.model.SpDictDepartModel;
-import com.jn.park.sp.model.SpMessageModel;
-import com.jn.park.sp.model.SpPowerBusiMaterialsModel;
-import com.jn.park.sp.model.SpPowerBusiModel;
+import com.jn.park.sp.model.*;
 import com.jn.park.sp.service.SpPowerPortalService;
 import com.jn.park.sp.vo.SpPowerBusiDetailVo;
 import com.jn.park.sp.vo.SpPowerDetailVo;
 import com.jn.park.sp.vo.SpPowerVo;
+import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.SysDictInvoke;
 import com.jn.system.model.User;
+import com.jn.system.vo.SysDictKeyValue;
+import org.checkerframework.checker.units.qual.A;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.stream.annotation.EnableBinding;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -38,6 +52,7 @@ import java.util.*;
  * @modified By:
  */
 @Service
+@EnableBinding(value = MessageSource.class)
 public class SpPowerPortalServiceImpl implements SpPowerPortalService {
 
     private static Logger logger = LoggerFactory.getLogger(FinanceTypeServiceImpl.class);
@@ -51,11 +66,18 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
     @Autowired
     private SpPowerDao spPowerDao;
     @Autowired
-    private SpPowerBusiDao spPowerBusiDao;
-    @Autowired
     private TbSpMessageMapper tbSpMessageMapper;
     @Autowired
     private CompanyClient companyClient;
+    @Autowired
+    private SpAdDao spAdDao;
+    @Autowired(required = false)
+    private MessageSource messageSource;
+    @Autowired
+    private SystemClient systemClient;
+
+    @Value("${ibps.url}")
+    private String ibpsUrl;
 
     /**
      *通过业务id查询业务明细内容
@@ -67,11 +89,16 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
     public SpPowerBusiDetailVo getBusi(String id) {
         SpPowerBusiDetailVo spPowerBusiDetailVo = new SpPowerBusiDetailVo();
         //通过业务id查询业务内容
-        TbSpPowerBusiWithBLOBs tbSpPowerBusiWithBLOBs = spPowerBusiDao.selectBusiByKey(id);
+        TbSpPowerBusiWithBLOBs tbSpPowerBusiWithBLOBs = tbSpPowerBusiMapper.selectByPrimaryKey(id);
         if (tbSpPowerBusiWithBLOBs == null){
             return null;
         }
         BeanUtils.copyProperties(tbSpPowerBusiWithBLOBs,spPowerBusiDetailVo);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String format = simpleDateFormat.format(tbSpPowerBusiWithBLOBs.getCreatedTime());
+        spPowerBusiDetailVo.setTime(format);
+
+        spPowerBusiDetailVo.setFlowPic(spPowerBusiDetailVo.getFlowPic().replace("/ibps/components/upload/ueditor/preview.htm",ibpsUrl+"/ibps/components/upload/ueditor/preview.htm"));
         //通过业务id查询业务对象的办理材料集合
         TbSpPowerBusiMaterialsCriteria tbSpPowerBusiMaterialsCriteria = new TbSpPowerBusiMaterialsCriteria();
         TbSpPowerBusiMaterialsCriteria.Criteria criteria = tbSpPowerBusiMaterialsCriteria.createCriteria();
@@ -86,6 +113,17 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
             for (TbSpPowerBusiMaterials tbSpPowerBusiMaterial : tbSpPowerBusiMaterials) {
                 SpPowerBusiMaterialsModel spPowerBusiMaterialsModel = new SpPowerBusiMaterialsModel();
                 BeanUtils.copyProperties(tbSpPowerBusiMaterial,spPowerBusiMaterialsModel);
+                String sample = spPowerBusiMaterialsModel.getSample();
+                if(StringUtils.isNotEmpty(sample)){
+                    //附件下载链接
+                    Object parse = JSONValue.parse(sample);
+                    JSONArray array=(JSONArray)parse;
+                    JSONObject obj2=(JSONObject)array.get(0);
+                    String filePath =(String) obj2.get("filePath");
+                    String fileName =  (String)obj2.get("fileName");
+                    spPowerBusiMaterialsModel.setSampleName(fileName);
+                    spPowerBusiMaterialsModel.setSample(filePath);
+                }
                 spPowerBusiMaterialsModelList.add(spPowerBusiMaterialsModel);
             }
             spPowerBusiDetailVo.setMaterialsModelList(spPowerBusiMaterialsModelList);
@@ -93,6 +131,12 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
         return spPowerBusiDetailVo;
     }
 
+    /**
+     *通过权力id查询权力的明细内容
+     *
+     * @param id
+     * @return
+     */
     @Override
     @ServiceLog(doAction = "通过权力id查询权力的明细内容")
     public List<SpPowerDetailVo> get(String id) {
@@ -113,7 +157,7 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
         List<TbSpPowerBusi> tbSpPowerBusis = tbSpPowerBusiMapper.selectByExample(tbSpPowerBusiCriteria);
         //封装业务列表
         List<SpPowerBusiModel> spPowerBusiModelList = new ArrayList<SpPowerBusiModel>();
-        if (spPowerBusiModelList != null){
+        if (tbSpPowerBusis != null){
             for (TbSpPowerBusi tbSpPowerBusi : tbSpPowerBusis) {
                 SpPowerBusiModel spPowerBusiModel = new SpPowerBusiModel();
                 BeanUtils.copyProperties(tbSpPowerBusi,spPowerBusiModel);
@@ -125,29 +169,17 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
         return spPowerDetailVoList;
     }
 
-    @Override
-    @ServiceLog(doAction = "通过部门名称获取全部的实施部门(模糊查询)")
-    public List<SpDictDepartModel> departList(String name) {
-       List<SpDictDepartModel> spDictDepartModelList = new ArrayList<SpDictDepartModel>();
-       //根据名称模糊查询出全部的实施部门
-       TbSpDictDepartCriteria tbSpDictDepartCriteria = new TbSpDictDepartCriteria();
-       TbSpDictDepartCriteria.Criteria criteria = tbSpDictDepartCriteria.createCriteria();
-       //模糊查询实施部门
-       criteria.andNameLike("%"+name+"%");
-       //只查询有效的部门
-        Byte recordStatus = Byte.parseByte(SpStatusEnums.EFFECTIVE.getCode());
-        criteria.andRecordStatusEqualTo(recordStatus);
-        List<TbSpDictDepart> tbSpDictDeparts = tbSpDictDepartMapper.selectByExample(tbSpDictDepartCriteria);
-        if (tbSpDictDeparts != null && tbSpDictDeparts.size() > 0){
-            for (TbSpDictDepart tbSpDictDepart : tbSpDictDeparts) {
-                SpDictDepartModel spDictDepartModel = new SpDictDepartModel();
-                BeanUtils.copyProperties(tbSpDictDepart,spDictDepartModel);
-                spDictDepartModelList.add(spDictDepartModel);
-            }
-        }
-        return spDictDepartModelList;
-    }
 
+    /**
+     * 返回全部的权力清单(包含孩子)
+     * @param name
+     * @param parentId
+     * @param departId
+     * @param type
+     * @param code
+     * @param page
+     * @return
+     */
     @Override
     @ServiceLog(doAction = "返回全部的权力清单(包含孩子)")
     public PaginationData findByPage(String name, String parentId, String departId, String type, String code, Page page) {
@@ -156,6 +188,7 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
         Map<String,Object> map = new HashMap<>(16);
         map.put("name",name);
         map.put("parentId",parentId);
+        map.put("departId",departId);
         map.put("type",type);
         map.put("code",code);
         List<SpPowerVo> spPowerVoList = spPowerDao.findByPage(map);
@@ -171,6 +204,12 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
         return data;
     }
 
+    /**
+     * 我要留言
+     * @param spMessageModel
+     * @param user
+     * @return
+     */
     @Override
     @ServiceLog(doAction="我要留言")
     @Transactional(rollbackFor = Exception.class)
@@ -183,15 +222,15 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
         //判断企业信息是否为空
         if(data != null){
             //判断企业名称是否为空
-            if (tbSpMessage.getCompanyName() == null || tbSpMessage.getCompanyName() == ""){
+            if(StringUtils.isEmpty(tbSpMessage.getCompanyName())){
                 tbSpMessage.setCompanyName(data.getComName());
             }
             //判断联系人名称是否为空
-            if (tbSpMessage.getConcatName() == null || tbSpMessage.getConcatName() == ""){
+            if (StringUtils.isEmpty(tbSpMessage.getConcatName())){
                 tbSpMessage.setConcatName(data.getContact());
             }
             //判断联系人电话是否为空
-            if (tbSpMessage.getConcatPhone() == null || tbSpMessage.getConcatPhone() == ""){
+            if (StringUtils.isEmpty(tbSpMessage.getConcatPhone())){
                 tbSpMessage.setConcatPhone(data.getConPhone());
             }
         }
@@ -200,5 +239,140 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
         int insert = tbSpMessageMapper.insert(tbSpMessage);
         logger.info("【添加】添加留言成功,对应ID为{}",tbSpMessage.getId());
         return insert;
+    }
+
+    /**
+     * 获取最新的5例广告图
+     *
+     * @return
+     */
+    @Override
+    @ServiceLog(doAction="轮播广告")
+    public List<SpAdModel> getAdvertising() {
+        List<SpAdModel> spAdModelList = spAdDao.getAdvertising();
+        return spAdModelList;
+    }
+
+    /**
+     * 获取在线受理地址
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    @ServiceLog(doAction = "获取在线受理地址")
+    public String getDealUrl(String id) {
+        TbSpPowerBusiWithBLOBs tbSpPowerBusiWithBLOBs =tbSpPowerBusiMapper.selectByPrimaryKey(id);
+        if((new Byte("1").equals(tbSpPowerBusiWithBLOBs.getRecordStatus()))){
+            return tbSpPowerBusiWithBLOBs.getDealUrl();
+        }
+        return null;
+    }
+
+    private Integer pushPowerBusi(String powerBusiId,ServiceCompanyParam serviceCompanyParam,String userId){
+        TbSpPowerBusiWithBLOBs tbSpPowerBusiWithBLOBs=tbSpPowerBusiMapper.selectByPrimaryKey(powerBusiId);
+        if(tbSpPowerBusiWithBLOBs==null||!tbSpPowerBusiWithBLOBs.getRecordStatus().equals(new Byte("1"))){
+            throw new JnSpringCloudException(new Result("-1","审批指南内容不存在"));
+        }
+        //所有企业
+        serviceCompanyParam.setRows(99999999);//不分页
+        Result<PaginationData<List<ServiceCompany>>> serviceCompany= companyClient.getCompanyList(serviceCompanyParam);
+        int count=0;
+        for(ServiceCompany e:serviceCompany.getData().getRows()){
+            if(StringUtils.isBlank(e.getComAdmin())){
+                logger.info("企业【{}】还未指定管理员",e.getComName());
+                continue;
+            }
+            EmailVo emailVo = new EmailVo();
+            User user=new User();
+            user.setAccount(e.getComAdmin());
+            Result<User> userResult=systemClient.getUser(user);
+            if(userResult.getData()==null||StringUtils.isBlank(userResult.getData().getEmail())){
+                logger.info("未找到管理员【{}】邮箱",e.getComAdmin());
+                continue;
+            }
+            emailVo.setEmail(userResult.getData().getEmail());
+            emailVo.setEmailSubject(tbSpPowerBusiWithBLOBs.getName());
+            String url=getPortalUrl()+"serviceDetail?id="+tbSpPowerBusiWithBLOBs.getId();
+            emailVo.setEmailContent(String.format("%s，您好，审批指南明细内容请点击 <a href='%s'>%s</a>",e.getContact(),url,tbSpPowerBusiWithBLOBs.getName()));
+            logger.info("推送成功：接收邮箱：{},用户ID:{},邮件主题：{}，邮件内容：{}",emailVo.getEmail(),user.getId(),emailVo.getEmailSubject(),emailVo.getEmailContent());
+            boolean sendStatus = messageSource.outputEmail().send(MessageBuilder.withPayload(emailVo).build());
+            count++;
+        }
+        logger.info("成功向{}个企业推送了【{}】",serviceCompany.getData().getRows().size(),tbSpPowerBusiWithBLOBs.getName());
+        return count;
+    }
+
+    @Override
+    public Integer pushPowerBusiBatch(String powerBusiIds,ServiceCompanyParam serviceCompanyParam,String userId){
+        String[] powerBusiIdArr=powerBusiIds.split(",");
+        int count=0;
+        for(int i=0;i<powerBusiIdArr.length;i++){
+            count+=this.pushPowerBusi(powerBusiIdArr[i],serviceCompanyParam,userId);
+        }
+        return count;
+    }
+
+    /**
+     * (新)实施部门列表
+     * @return
+     */
+    @Override
+    public List<List<SpDictDepartModel>> departList() {
+        List<List<SpDictDepartModel>> list = new ArrayList<>();
+        //查询省级并排序
+        TbSpDictDepartCriteria  province = new TbSpDictDepartCriteria();
+        province.createCriteria().andLevelEqualTo(Byte.parseByte("1"));
+        province.setOrderByClause("sort ASC");
+        List<TbSpDictDepart> provinceList = tbSpDictDepartMapper.selectByExample(province);
+        List<SpDictDepartModel> provinceModelList = copyBean(provinceList);
+        list.add(provinceModelList);
+        //查询市级并排序
+        TbSpDictDepartCriteria  city = new TbSpDictDepartCriteria();
+        city.createCriteria().andLevelEqualTo(Byte.parseByte("2"));
+        city.setOrderByClause("sort ASC");
+        List<TbSpDictDepart> cityList = tbSpDictDepartMapper.selectByExample(city);
+        List<SpDictDepartModel> cityModelList = copyBean(cityList);
+        list.add(cityModelList);
+        //查询区级并排序
+        TbSpDictDepartCriteria  district = new TbSpDictDepartCriteria();
+        district.createCriteria().andLevelEqualTo(Byte.parseByte("3"));
+        district.setOrderByClause("sort ASC");
+        List<TbSpDictDepart> districtList = tbSpDictDepartMapper.selectByExample(district);
+        List<SpDictDepartModel> districtModelList = copyBean(districtList);
+        list.add(districtModelList);
+        return list;
+    }
+
+    /**
+     * 使用BeanUtils复制Bean
+     * @param tbSpDictDepartList
+     * @return
+     */
+    public static List<SpDictDepartModel> copyBean(List<TbSpDictDepart> tbSpDictDepartList){
+        List<SpDictDepartModel> spDictDepartModelList = new ArrayList<>();
+        if (tbSpDictDepartList != null && tbSpDictDepartList.size() > 0){
+            for (TbSpDictDepart tbSpDictDepart : tbSpDictDepartList) {
+                SpDictDepartModel spDictDepartModel = new SpDictDepartModel();
+                BeanUtils.copyProperties(tbSpDictDepart,spDictDepartModel);
+                spDictDepartModelList.add(spDictDepartModel);
+            }
+        }
+        return spDictDepartModelList;
+    }
+
+    /**
+     * 获取门户URL
+     * @return
+     */
+    private String getPortalUrl(){
+        SysDictInvoke sysDictInvoke=new SysDictInvoke();
+        sysDictInvoke.setKey("portal_url");
+        sysDictInvoke.setGroupCode("portal_url");
+        Result<List<SysDictKeyValue>> sysDictKeyValueList= systemClient.getDict(new SysDictInvoke("common","portal_url","portal_url","portal_url"));
+        if(sysDictKeyValueList.getData()!=null&&sysDictKeyValueList.getData().size()==1){
+            return sysDictKeyValueList.getData().get(0).getLable();
+        }
+        throw new JnSpringCloudException(new Result("-1","portal_url未配置"));
     }
 }

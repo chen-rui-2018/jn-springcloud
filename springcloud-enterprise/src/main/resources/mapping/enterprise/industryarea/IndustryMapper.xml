@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.enterprise.servicemarket.industryarea.dao.IndustryMapper">
+    <resultMap id="getIndustryDetailMap" type="com.jn.enterprise.servicemarket.industryarea.model.IndustryDictionaryProduct">
+        <id column="p_id" jdbcType="VARCHAR" property="id" javaType="java.lang.String"/>
+        <result column="p_preValue" jdbcType="VARCHAR" property="preValue" javaType="java.lang.String"/>
+        <collection property="products" javaType="java.util.List"
+                    ofType="com.jn.enterprise.servicemarket.industryarea.model.IndustryProduct">
+            <id column="pr_productId" property="productId" jdbcType="VARCHAR"/>
+            <result column="pr_productName" property="productName" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+
     <select id="selectIndustryList" parameterType="com.jn.enterprise.servicemarket.industryarea.model.IndustryParameter"
             resultType="com.jn.enterprise.servicemarket.industryarea.model.Industry">
         select p.id as "id"
@@ -24,8 +34,37 @@
         ,p.creator_account as "creatorAccount"
         ,(select count(1) from tb_service_org o where o.business_type = p.id) as "orgNum"
         from tb_service_prefer p where p.record_status = '1' and p.id =  #{id}
+    </select>
+
+
+    <select id="selectIndustryProductList" resultMap="getIndustryDetailMap">
+
+SELECT
+           p.id AS "p_id"
+          ,p.pre_value AS "p_preValue"
+          ,pr.product_id_ AS "pr_productId"
+          ,pr.product_name AS "pr_productName"
+        FROM
+          (SELECT
+            r.id,
+            r.pre_value
+          FROM
+            tb_service_prefer r
+          WHERE r.pre_type = '0' AND r.id != 'technology_finance' AND r.record_status = '1') p
+          LEFT JOIN tb_service_product pr
+            ON p.id = pr.signory_id
+            AND (
+              pr.template_id IS NULL
+              OR pr.template_id = ''
+            )
+            AND pr.status = '1'
+            AND pr.product_type = '0'
+            AND pr.record_status = '1'
 
     </select>
+
+
+
 
 
 </mapper>

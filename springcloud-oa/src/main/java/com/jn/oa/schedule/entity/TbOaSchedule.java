@@ -16,15 +16,19 @@ public class TbOaSchedule implements Serializable {
 
     private Date remindTime;
 
+    private String allDay;
+
+    private String remindWay;
+
     private String isRemind;
 
     private String wechatRemind;
 
     private String messageRemind;
 
-    private String pcRemind;
-
     private String appRemind;
+
+    private String pcRemind;
 
     private String remark;
 
@@ -88,6 +92,22 @@ public class TbOaSchedule implements Serializable {
         this.remindTime = remindTime;
     }
 
+    public String getAllDay() {
+        return allDay;
+    }
+
+    public void setAllDay(String allDay) {
+        this.allDay = allDay == null ? null : allDay.trim();
+    }
+
+    public String getRemindWay() {
+        return remindWay;
+    }
+
+    public void setRemindWay(String remindWay) {
+        this.remindWay = remindWay == null ? null : remindWay.trim();
+    }
+
     public String getIsRemind() {
         return isRemind;
     }
@@ -112,20 +132,20 @@ public class TbOaSchedule implements Serializable {
         this.messageRemind = messageRemind == null ? null : messageRemind.trim();
     }
 
-    public String getPcRemind() {
-        return pcRemind;
-    }
-
-    public void setPcRemind(String pcRemind) {
-        this.pcRemind = pcRemind == null ? null : pcRemind.trim();
-    }
-
     public String getAppRemind() {
         return appRemind;
     }
 
     public void setAppRemind(String appRemind) {
         this.appRemind = appRemind == null ? null : appRemind.trim();
+    }
+
+    public String getPcRemind() {
+        return pcRemind;
+    }
+
+    public void setPcRemind(String pcRemind) {
+        this.pcRemind = pcRemind == null ? null : pcRemind.trim();
     }
 
     public String getRemark() {
@@ -194,11 +214,13 @@ public class TbOaSchedule implements Serializable {
             && (this.getStartTime() == null ? other.getStartTime() == null : this.getStartTime().equals(other.getStartTime()))
             && (this.getEndTime() == null ? other.getEndTime() == null : this.getEndTime().equals(other.getEndTime()))
             && (this.getRemindTime() == null ? other.getRemindTime() == null : this.getRemindTime().equals(other.getRemindTime()))
+            && (this.getAllDay() == null ? other.getAllDay() == null : this.getAllDay().equals(other.getAllDay()))
+            && (this.getRemindWay() == null ? other.getRemindWay() == null : this.getRemindWay().equals(other.getRemindWay()))
             && (this.getIsRemind() == null ? other.getIsRemind() == null : this.getIsRemind().equals(other.getIsRemind()))
             && (this.getWechatRemind() == null ? other.getWechatRemind() == null : this.getWechatRemind().equals(other.getWechatRemind()))
             && (this.getMessageRemind() == null ? other.getMessageRemind() == null : this.getMessageRemind().equals(other.getMessageRemind()))
-            && (this.getPcRemind() == null ? other.getPcRemind() == null : this.getPcRemind().equals(other.getPcRemind()))
             && (this.getAppRemind() == null ? other.getAppRemind() == null : this.getAppRemind().equals(other.getAppRemind()))
+            && (this.getPcRemind() == null ? other.getPcRemind() == null : this.getPcRemind().equals(other.getPcRemind()))
             && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
@@ -217,11 +239,13 @@ public class TbOaSchedule implements Serializable {
         result = prime * result + ((getStartTime() == null) ? 0 : getStartTime().hashCode());
         result = prime * result + ((getEndTime() == null) ? 0 : getEndTime().hashCode());
         result = prime * result + ((getRemindTime() == null) ? 0 : getRemindTime().hashCode());
+        result = prime * result + ((getAllDay() == null) ? 0 : getAllDay().hashCode());
+        result = prime * result + ((getRemindWay() == null) ? 0 : getRemindWay().hashCode());
         result = prime * result + ((getIsRemind() == null) ? 0 : getIsRemind().hashCode());
         result = prime * result + ((getWechatRemind() == null) ? 0 : getWechatRemind().hashCode());
         result = prime * result + ((getMessageRemind() == null) ? 0 : getMessageRemind().hashCode());
-        result = prime * result + ((getPcRemind() == null) ? 0 : getPcRemind().hashCode());
         result = prime * result + ((getAppRemind() == null) ? 0 : getAppRemind().hashCode());
+        result = prime * result + ((getPcRemind() == null) ? 0 : getPcRemind().hashCode());
         result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
@@ -243,11 +267,13 @@ public class TbOaSchedule implements Serializable {
         sb.append(", startTime=").append(startTime);
         sb.append(", endTime=").append(endTime);
         sb.append(", remindTime=").append(remindTime);
+        sb.append(", allDay=").append(allDay);
+        sb.append(", remindWay=").append(remindWay);
         sb.append(", isRemind=").append(isRemind);
         sb.append(", wechatRemind=").append(wechatRemind);
         sb.append(", messageRemind=").append(messageRemind);
-        sb.append(", pcRemind=").append(pcRemind);
         sb.append(", appRemind=").append(appRemind);
+        sb.append(", pcRemind=").append(pcRemind);
         sb.append(", remark=").append(remark);
         sb.append(", recordStatus=").append(recordStatus);
         sb.append(", creatorAccount=").append(creatorAccount);

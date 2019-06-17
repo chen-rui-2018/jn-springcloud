@@ -4,14 +4,14 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
+import com.jn.pay.model.PayOrderNotify;
+import com.jn.pay.model.PayOrderRsp;
 import com.jn.paybill.enums.PayBillExceptionEnum;
 import com.jn.paybill.model.*;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import com.jn.unionpay.paybill.service.PayBillService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,12 +43,13 @@ public class PayBillController extends BaseController {
         return new Result<>(paymentBillList);
     }
 
-    @ControllerLog(doAction = "创建账单")
-    @ApiOperation(value = "创建账单【只供内部API调用，这里只用于测试】",notes = "【只供内部API调用，这里只用于测试】")
-    @RequestMapping(value = "/createBill",method = RequestMethod.POST)
-    public Result<String> createBill(@RequestBody PaymentBillModel paymentBillModel){
-        String bill = payBillService.createBill(paymentBillModel);
-        return new Result<>(bill);
+    @ControllerLog(doAction = "根据账单IDs获取账单列表内容")
+    @ApiOperation(value = "根据账单IDs获取账单列表内容",notes = "根据账单IDs获取账单列表内容[不分页查询]")
+    @RequestMapping(value = "/getPaymentBillListByBillIds",method = RequestMethod.GET)
+    public Result<List<PaymentBill>> getPaymentBillListByBillIds(@ApiParam(name="billIds",value = "账单ID或编号",required = true,example = "{'123**','235***'}")
+                                                                        @RequestParam(value = "billIds") String[] billIds){
+        List<PaymentBill> paymentBillList = payBillService.getPaymentBillListByIds(billIds);
+        return new Result<>(paymentBillList);
     }
 
     @ControllerLog(doAction = "获取账单详情")
@@ -69,28 +70,13 @@ public class PayBillController extends BaseController {
         return new Result<>(payBillCountVO);
     }
 
-    /**
-     * 支付发起接口
-     * @param payInitiateParam
-     * @return
-     */
-    @ControllerLog(doAction = "统一缴费--发起支付")
-    @ApiOperation(value = "统一缴费--发起支付")
-    @RequestMapping(value = "/startPayment",method = RequestMethod.POST)
-    public Result<PayResponseVO> startPayment(@RequestBody PayInitiateParam payInitiateParam){
-        User user=(User) SecurityUtils.getSubject().getPrincipal();
-        return new Result<>(payBillService.startPayment(payInitiateParam,user));
-    }
-
 
     @ControllerLog(doAction = "支付回调接口")
     @ApiOperation(value = "统一缴费--支付回调接口", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/payCallBack")
-    public Result<PayCallBackVO> payCallBack(@RequestBody PayCallBackParam callBackParam){
-        return new Result<>(payBillService.payCallBack(callBackParam));
+    public Result payCallBack(@RequestBody PayOrderNotify payOrderNotify){
+        return payBillService.payCallBack(payOrderNotify);
     }
-
-
 
 
 }

@@ -3,6 +3,7 @@ package com.jn.system.user.dao;
 import com.jn.system.dept.entity.TbSysUserDepartmentPost;
 import com.jn.system.model.User;
 import com.jn.system.model.UserPage;
+import com.jn.system.user.model.SysTUser;
 import com.jn.system.user.model.SysUser;
 import com.jn.system.user.vo.SysUserDepartmentPostVO;
 import com.jn.system.user.vo.SysUserVO;
@@ -89,4 +90,12 @@ public interface SysUserMapper {
      * @return
      */
     List<User> getUserInfoByAccount(@Param("accountList") List<String> accountList);
+
+    /**
+     * 根据ids查询用户信息
+     *
+     * @param ids
+     * @return
+     */
+    List<User> selectUserByIds(@Param("ids") String[] ids);
 }

@@ -36,16 +36,20 @@
       <div style="display:flex">
         <el-form-item label="会议室图片" prop="attachmentPaths" lass="inline">
           <el-upload
+            ref="upload"
             :limit="3"
             :disabled="lookMeetingroom"
             :on-exceed="handleExceed"
+            :before-upload="beforeUpload"
+            :on-error="imgUploadError"
+            :on-preview="handlePictureCardPreview"
             :on-success="uploadDone"
             :headers="getToken()"
-            :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove"
-            :on-error="imgUploadError"
             :file-list="fileList"
-            action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
+            :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
+
+            accept="image/png, image/jpeg"
             list-type="picture-card">
             <div v-if="showImg" class="showImg"><img v-for="(item,index) in fileList" :key="index" :src="item" alt="会议室图片"></div>
 
@@ -53,14 +57,14 @@
           </el-upload>
           <!-- <img v-for="(item,index) in meetingroomForm.attachmentPaths" :src="item.photoUrl" :key="index" alt="会议室图片"> -->
           <el-dialog :visible.sync="dialogVisible">
-            <img :src="dialogImageUrl" width="100%" alt="会议室图片">
+            <img :src="dialogImageUrl" style="width:100%;height:200px;" alt="会议室图片">
           </el-dialog>
         </el-form-item>
       </div>
       <div class="primaryList">
         <el-button v-if="!lookMeetingroom" :disabled="isDisabled" type="primary" @click="title==='新增会议室'?submitForm('meetingroomForm'):updateData()">提交</el-button>
         <!-- <el-button v-if="!lookMeetingroom" :disabled="isDisabled" type="primary" @click="submitForm('meetingroomForm')">提交</el-button> -->
-        <el-button v-if="!lookMeetingroom" @click="cancel" >取消</el-button>
+        <el-button v-if="!lookMeetingroom" @click="cancel" >重置</el-button>
         <el-button @click="goBack($route)" >返回</el-button>
 
       </div>
@@ -72,7 +76,7 @@
 import store from '@/store'
 import {
   api, paramApi
-} from '@/api/oa/meetingManagement'
+} from '@/api/axios'
 export default {
   data() {
     var checkmeetingroomName = (rule, value, callback) => {
@@ -81,8 +85,8 @@ export default {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
         if (this.title === '新增会议室') {
-          paramApi('oa/oaMeetingRoom/checkName', this.meetingroomForm.name, 'meetingRoomName').then(res => {
-            if (res.data.code === '0000') {
+          paramApi(`${this.GLOBAL.oaUrl}oa/oaMeetingRoom/checkName`, this.meetingroomForm.name, 'meetingRoomName').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               if (res.data.data === 'success') {
                 callback()
               } else {
@@ -104,6 +108,7 @@ export default {
       }
     }
     return {
+      baseUrl: process.env.BASE_API,
       showImg: false,
       fileList: [],
       lookMeetingroom: false,
@@ -121,6 +126,7 @@ export default {
           label: '不可用'
         }
       ],
+      uploadComplete: false, // 图片上传完成状态
       title: '',
       attachmentList: [],
       meetingroomForm: {
@@ -171,21 +177,54 @@ export default {
       }
       this.initList()
     },
+    // 文件上传之前的函数
+    beforeUpload(file) {
+      if ((file.name.substr(file.name.lastIndexOf('.')).toLowerCase()) !== '.png' && (file.name.substr(file.name.lastIndexOf('.')).toLowerCase()) !== '.jpg' && (file.name.substr(file.name.lastIndexOf('.')).toLowerCase()) !== '.gif') {
+        this.$message({
+          message: '文件格式错误,请选择png、jpg、gif等格式',
+          type: 'error'
+        })
+        return false
+      }
+    },
+    // urlChange(file, fileList) {
+    //   console.log(file)
+    //   console.log(fileList)
+    //   // console.log(file.name)
+    //   // if (file.response.code !== '0000') {
+    //   //   this.$message.error(file.response.result)
+    //   // }
+    // },
     // 图片上传成功时的函数
     uploadDone(res, file, fileList) {
+      if (res.code !== '0000') {
+        this.$message.error(res.result)
+        this.$refs.upload.uploadFiles.splice(this.$refs.upload.uploadFiles.length - 1, 1)
+        // this.uploadComplete = false
+      }
       this.meetingroomForm.attachmentPaths.push(res.data)
+      this.dialogImageUrl = res.data
+      // this.uploadComplete = true
+      // console.log(this.meetingroomForm.attachmentPaths)
+      // console.log(file)
+      // console.log(fileList)
     },
     imgUploadError() {
       this.$message.error('上传图片失败!')
     },
+    // 上传图片时调用
+    // uploadProgress(event, file, fileList) {
+    //   console.log(event, file, fileList)
+    //   this.uploadComplete = false
+    // },
     // 新增提交表单
     submitForm() {
       this.isDisabled = true
       this.$refs['meetingroomForm'].validate(valid => {
         if (valid) {
           // 调用接口发送请求
-          api('oa/oaMeetingRoom/add', this.meetingroomForm).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.oaUrl}oa/oaMeetingRoom/add`, this.meetingroomForm, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '添加成功',
                 type: 'success'
@@ -209,12 +248,12 @@ export default {
     goBack(view) {
       this.$store.dispatch('delView', view).then(({ visitedViews }) => {
         if (this.isActive(view)) {
-          const latestView = visitedViews.slice(-1)[0]
-          if (latestView) {
-            this.$router.push('meetingroomManagement')
-          } else {
-            this.$router.push('/')
-          }
+          // const latestView = visitedViews.slice(-1)[0]
+          // if (latestView) {
+          this.$router.push('meetingroomManagement')
+          // } else {
+          //   this.$router.push('/')
+          // }
         }
       })
     },
@@ -224,8 +263,8 @@ export default {
       this.$refs['meetingroomForm'].validate(valid => {
         if (valid) {
           // 调用接口发送请求
-          api('oa/oaMeetingRoom/update', this.meetingroomForm).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.oaUrl}oa/oaMeetingRoom/update`, this.meetingroomForm, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '编辑成功',
                 type: 'success'
@@ -257,7 +296,7 @@ export default {
     },
     // 预览图片
     handlePictureCardPreview(file) {
-      if (this.title === '编辑会议室') {
+      if (this.title === '编辑会议室' || this.title === '查看会议室') {
         this.dialogImageUrl = file.url
       }
       this.dialogVisible = true
@@ -289,8 +328,8 @@ export default {
       this.title = query.title
       if (query.id) {
         this.meetingroomForm.id = query.id
-        paramApi('oa/oaMeetingRoom/selectById', query.id, 'id').then(res => {
-          if (res.data.code === '0000') {
+        paramApi(`${this.GLOBAL.oaUrl}oa/oaMeetingRoom/selectById`, query.id, 'id').then(res => {
+          if (res.data.code === this.GLOBAL.code) {
             var data = res.data.data
             this.meetingroomForm.name = data.name
             this.meetingroomForm.building = data.building

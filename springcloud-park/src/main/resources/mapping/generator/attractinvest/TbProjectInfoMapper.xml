@@ -1,0 +1,983 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.attractinvest.dao.TbProjectInfoMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.attractinvest.entity.TbProjectInfo">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="project_name" jdbcType="VARCHAR" property="projectName" />
+    <result column="source" jdbcType="VARCHAR" property="source" />
+    <result column="size" jdbcType="CHAR" property="size" />
+    <result column="introducer" jdbcType="VARCHAR" property="introducer" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="industry_assessment" jdbcType="VARCHAR" property="industryAssessment" />
+    <result column="department_id" jdbcType="VARCHAR" property="departmentId" />
+    <result column="department_name" jdbcType="VARCHAR" property="departmentName" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="project_process" jdbcType="VARCHAR" property="projectProcess" />
+    <result column="compact_status" jdbcType="VARCHAR" property="compactStatus" />
+    <result column="compact_start_time" jdbcType="TIMESTAMP" property="compactStartTime" />
+    <result column="compact_end_time" jdbcType="TIMESTAMP" property="compactEndTime" />
+    <result column="Investment_approver" jdbcType="VARCHAR" property="investmentApprover" />
+    <result column="Investment_approver_time" jdbcType="TIMESTAMP" property="investmentApproverTime" />
+    <result column="property_approver" jdbcType="VARCHAR" property="propertyApprover" />
+    <result column="property_approver_time" jdbcType="TIMESTAMP" property="propertyApproverTime" />
+    <result column="pm_approver" jdbcType="VARCHAR" property="pmApprover" />
+    <result column="pm_approver_time" jdbcType="TIMESTAMP" property="pmApproverTime" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="company_id" jdbcType="VARCHAR" property="companyId" />
+    <result column="rent_info" jdbcType="VARCHAR" property="rentInfo" />
+    <result column="expect_enter_time" jdbcType="TIMESTAMP" property="expectEnterTime" />
+    <result column="sure_time" jdbcType="TIMESTAMP" property="sureTime" />
+    <result column="approval_opioion" jdbcType="VARCHAR" property="approvalOpioion" />
+    <result column="legal_personer" jdbcType="VARCHAR" property="legalPersoner" />
+    <result column="legal_phone" jdbcType="VARCHAR" property="legalPhone" />
+    <result column="com_admin" jdbcType="VARCHAR" property="comAdmin" />
+    <result column="linker" jdbcType="VARCHAR" property="linker" />
+    <result column="linker_phone" jdbcType="VARCHAR" property="linkerPhone" />
+    <result column="enterprise_property" jdbcType="VARCHAR" property="enterpriseProperty" />
+    <result column="industry_type_name" jdbcType="VARCHAR" property="industryTypeName" />
+    <result column="industry_type" jdbcType="VARCHAR" property="industryType" />
+    <result column="rent_start_time" jdbcType="TIMESTAMP" property="rentStartTime" />
+    <result column="com_ent_time" jdbcType="TIMESTAMP" property="comEntTime" />
+    <result column="rent_month_num" jdbcType="INTEGER" property="rentMonthNum" />
+    <result column="remerk" jdbcType="VARCHAR" property="remerk" />
+    <result column="actual_total_account" jdbcType="DECIMAL" property="actualTotalAccount" />
+    <result column="room_bill_id" jdbcType="VARCHAR" property="roomBillId" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.jn.park.attractinvest.entity.TbProjectInfoWithBLOBs">
+    <result column="project_introduce" jdbcType="LONGVARCHAR" property="projectIntroduce" />
+    <result column="company_require" jdbcType="LONGVARCHAR" property="companyRequire" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, project_name, source, size, introducer, record_status, creator_account, created_time, 
+    modifier_account, modified_time, industry_assessment, department_id, department_name, 
+    status, project_process, compact_status, compact_start_time, compact_end_time, Investment_approver, 
+    Investment_approver_time, property_approver, property_approver_time, pm_approver, 
+    pm_approver_time, company_name, company_id, rent_info, expect_enter_time, sure_time, 
+    approval_opioion, legal_personer, legal_phone, com_admin, linker, linker_phone, enterprise_property, 
+    industry_type_name, industry_type, rent_start_time, com_ent_time, rent_month_num, 
+    remerk, actual_total_account, room_bill_id
+  </sql>
+  <sql id="Blob_Column_List">
+    project_introduce, company_require
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.jn.park.attractinvest.entity.TbProjectInfoCriteria" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tb_project_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.jn.park.attractinvest.entity.TbProjectInfoCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_project_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tb_project_info
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_project_info
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.park.attractinvest.entity.TbProjectInfoCriteria">
+    delete from tb_project_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.park.attractinvest.entity.TbProjectInfoWithBLOBs">
+    insert into tb_project_info (id, project_name, source, 
+      size, introducer, record_status, 
+      creator_account, created_time, modifier_account, 
+      modified_time, industry_assessment, department_id, 
+      department_name, status, project_process, 
+      compact_status, compact_start_time, compact_end_time, 
+      Investment_approver, Investment_approver_time, 
+      property_approver, property_approver_time, 
+      pm_approver, pm_approver_time, company_name, 
+      company_id, rent_info, expect_enter_time, 
+      sure_time, approval_opioion, legal_personer, 
+      legal_phone, com_admin, linker, 
+      linker_phone, enterprise_property, industry_type_name, 
+      industry_type, rent_start_time, com_ent_time, 
+      rent_month_num, remerk, actual_total_account, 
+      room_bill_id, project_introduce, company_require
+      )
+    values (#{id,jdbcType=VARCHAR}, #{projectName,jdbcType=VARCHAR}, #{source,jdbcType=VARCHAR}, 
+      #{size,jdbcType=CHAR}, #{introducer,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{industryAssessment,jdbcType=VARCHAR}, #{departmentId,jdbcType=VARCHAR}, 
+      #{departmentName,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{projectProcess,jdbcType=VARCHAR}, 
+      #{compactStatus,jdbcType=VARCHAR}, #{compactStartTime,jdbcType=TIMESTAMP}, #{compactEndTime,jdbcType=TIMESTAMP}, 
+      #{investmentApprover,jdbcType=VARCHAR}, #{investmentApproverTime,jdbcType=TIMESTAMP}, 
+      #{propertyApprover,jdbcType=VARCHAR}, #{propertyApproverTime,jdbcType=TIMESTAMP}, 
+      #{pmApprover,jdbcType=VARCHAR}, #{pmApproverTime,jdbcType=TIMESTAMP}, #{companyName,jdbcType=VARCHAR}, 
+      #{companyId,jdbcType=VARCHAR}, #{rentInfo,jdbcType=VARCHAR}, #{expectEnterTime,jdbcType=TIMESTAMP}, 
+      #{sureTime,jdbcType=TIMESTAMP}, #{approvalOpioion,jdbcType=VARCHAR}, #{legalPersoner,jdbcType=VARCHAR}, 
+      #{legalPhone,jdbcType=VARCHAR}, #{comAdmin,jdbcType=VARCHAR}, #{linker,jdbcType=VARCHAR}, 
+      #{linkerPhone,jdbcType=VARCHAR}, #{enterpriseProperty,jdbcType=VARCHAR}, #{industryTypeName,jdbcType=VARCHAR}, 
+      #{industryType,jdbcType=VARCHAR}, #{rentStartTime,jdbcType=TIMESTAMP}, #{comEntTime,jdbcType=TIMESTAMP}, 
+      #{rentMonthNum,jdbcType=INTEGER}, #{remerk,jdbcType=VARCHAR}, #{actualTotalAccount,jdbcType=DECIMAL}, 
+      #{roomBillId,jdbcType=VARCHAR}, #{projectIntroduce,jdbcType=LONGVARCHAR}, #{companyRequire,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.park.attractinvest.entity.TbProjectInfoWithBLOBs">
+    insert into tb_project_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="projectName != null">
+        project_name,
+      </if>
+      <if test="source != null">
+        source,
+      </if>
+      <if test="size != null">
+        size,
+      </if>
+      <if test="introducer != null">
+        introducer,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="industryAssessment != null">
+        industry_assessment,
+      </if>
+      <if test="departmentId != null">
+        department_id,
+      </if>
+      <if test="departmentName != null">
+        department_name,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="projectProcess != null">
+        project_process,
+      </if>
+      <if test="compactStatus != null">
+        compact_status,
+      </if>
+      <if test="compactStartTime != null">
+        compact_start_time,
+      </if>
+      <if test="compactEndTime != null">
+        compact_end_time,
+      </if>
+      <if test="investmentApprover != null">
+        Investment_approver,
+      </if>
+      <if test="investmentApproverTime != null">
+        Investment_approver_time,
+      </if>
+      <if test="propertyApprover != null">
+        property_approver,
+      </if>
+      <if test="propertyApproverTime != null">
+        property_approver_time,
+      </if>
+      <if test="pmApprover != null">
+        pm_approver,
+      </if>
+      <if test="pmApproverTime != null">
+        pm_approver_time,
+      </if>
+      <if test="companyName != null">
+        company_name,
+      </if>
+      <if test="companyId != null">
+        company_id,
+      </if>
+      <if test="rentInfo != null">
+        rent_info,
+      </if>
+      <if test="expectEnterTime != null">
+        expect_enter_time,
+      </if>
+      <if test="sureTime != null">
+        sure_time,
+      </if>
+      <if test="approvalOpioion != null">
+        approval_opioion,
+      </if>
+      <if test="legalPersoner != null">
+        legal_personer,
+      </if>
+      <if test="legalPhone != null">
+        legal_phone,
+      </if>
+      <if test="comAdmin != null">
+        com_admin,
+      </if>
+      <if test="linker != null">
+        linker,
+      </if>
+      <if test="linkerPhone != null">
+        linker_phone,
+      </if>
+      <if test="enterpriseProperty != null">
+        enterprise_property,
+      </if>
+      <if test="industryTypeName != null">
+        industry_type_name,
+      </if>
+      <if test="industryType != null">
+        industry_type,
+      </if>
+      <if test="rentStartTime != null">
+        rent_start_time,
+      </if>
+      <if test="comEntTime != null">
+        com_ent_time,
+      </if>
+      <if test="rentMonthNum != null">
+        rent_month_num,
+      </if>
+      <if test="remerk != null">
+        remerk,
+      </if>
+      <if test="actualTotalAccount != null">
+        actual_total_account,
+      </if>
+      <if test="roomBillId != null">
+        room_bill_id,
+      </if>
+      <if test="projectIntroduce != null">
+        project_introduce,
+      </if>
+      <if test="companyRequire != null">
+        company_require,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null">
+        #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null">
+        #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="size != null">
+        #{size,jdbcType=CHAR},
+      </if>
+      <if test="introducer != null">
+        #{introducer,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="industryAssessment != null">
+        #{industryAssessment,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentId != null">
+        #{departmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentName != null">
+        #{departmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="projectProcess != null">
+        #{projectProcess,jdbcType=VARCHAR},
+      </if>
+      <if test="compactStatus != null">
+        #{compactStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="compactStartTime != null">
+        #{compactStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="compactEndTime != null">
+        #{compactEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="investmentApprover != null">
+        #{investmentApprover,jdbcType=VARCHAR},
+      </if>
+      <if test="investmentApproverTime != null">
+        #{investmentApproverTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="propertyApprover != null">
+        #{propertyApprover,jdbcType=VARCHAR},
+      </if>
+      <if test="propertyApproverTime != null">
+        #{propertyApproverTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pmApprover != null">
+        #{pmApprover,jdbcType=VARCHAR},
+      </if>
+      <if test="pmApproverTime != null">
+        #{pmApproverTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="companyName != null">
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="rentInfo != null">
+        #{rentInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="expectEnterTime != null">
+        #{expectEnterTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sureTime != null">
+        #{sureTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="approvalOpioion != null">
+        #{approvalOpioion,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPersoner != null">
+        #{legalPersoner,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPhone != null">
+        #{legalPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="comAdmin != null">
+        #{comAdmin,jdbcType=VARCHAR},
+      </if>
+      <if test="linker != null">
+        #{linker,jdbcType=VARCHAR},
+      </if>
+      <if test="linkerPhone != null">
+        #{linkerPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="enterpriseProperty != null">
+        #{enterpriseProperty,jdbcType=VARCHAR},
+      </if>
+      <if test="industryTypeName != null">
+        #{industryTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="industryType != null">
+        #{industryType,jdbcType=VARCHAR},
+      </if>
+      <if test="rentStartTime != null">
+        #{rentStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="comEntTime != null">
+        #{comEntTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rentMonthNum != null">
+        #{rentMonthNum,jdbcType=INTEGER},
+      </if>
+      <if test="remerk != null">
+        #{remerk,jdbcType=VARCHAR},
+      </if>
+      <if test="actualTotalAccount != null">
+        #{actualTotalAccount,jdbcType=DECIMAL},
+      </if>
+      <if test="roomBillId != null">
+        #{roomBillId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectIntroduce != null">
+        #{projectIntroduce,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="companyRequire != null">
+        #{companyRequire,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.park.attractinvest.entity.TbProjectInfoCriteria" resultType="java.lang.Long">
+    select count(*) from tb_project_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_project_info
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.projectName != null">
+        project_name = #{record.projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.source != null">
+        source = #{record.source,jdbcType=VARCHAR},
+      </if>
+      <if test="record.size != null">
+        size = #{record.size,jdbcType=CHAR},
+      </if>
+      <if test="record.introducer != null">
+        introducer = #{record.introducer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.industryAssessment != null">
+        industry_assessment = #{record.industryAssessment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.departmentId != null">
+        department_id = #{record.departmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.departmentName != null">
+        department_name = #{record.departmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=TINYINT},
+      </if>
+      <if test="record.projectProcess != null">
+        project_process = #{record.projectProcess,jdbcType=VARCHAR},
+      </if>
+      <if test="record.compactStatus != null">
+        compact_status = #{record.compactStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.compactStartTime != null">
+        compact_start_time = #{record.compactStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.compactEndTime != null">
+        compact_end_time = #{record.compactEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.investmentApprover != null">
+        Investment_approver = #{record.investmentApprover,jdbcType=VARCHAR},
+      </if>
+      <if test="record.investmentApproverTime != null">
+        Investment_approver_time = #{record.investmentApproverTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.propertyApprover != null">
+        property_approver = #{record.propertyApprover,jdbcType=VARCHAR},
+      </if>
+      <if test="record.propertyApproverTime != null">
+        property_approver_time = #{record.propertyApproverTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.pmApprover != null">
+        pm_approver = #{record.pmApprover,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pmApproverTime != null">
+        pm_approver_time = #{record.pmApproverTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.companyName != null">
+        company_name = #{record.companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyId != null">
+        company_id = #{record.companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rentInfo != null">
+        rent_info = #{record.rentInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.expectEnterTime != null">
+        expect_enter_time = #{record.expectEnterTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.sureTime != null">
+        sure_time = #{record.sureTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.approvalOpioion != null">
+        approval_opioion = #{record.approvalOpioion,jdbcType=VARCHAR},
+      </if>
+      <if test="record.legalPersoner != null">
+        legal_personer = #{record.legalPersoner,jdbcType=VARCHAR},
+      </if>
+      <if test="record.legalPhone != null">
+        legal_phone = #{record.legalPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.comAdmin != null">
+        com_admin = #{record.comAdmin,jdbcType=VARCHAR},
+      </if>
+      <if test="record.linker != null">
+        linker = #{record.linker,jdbcType=VARCHAR},
+      </if>
+      <if test="record.linkerPhone != null">
+        linker_phone = #{record.linkerPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.enterpriseProperty != null">
+        enterprise_property = #{record.enterpriseProperty,jdbcType=VARCHAR},
+      </if>
+      <if test="record.industryTypeName != null">
+        industry_type_name = #{record.industryTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.industryType != null">
+        industry_type = #{record.industryType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rentStartTime != null">
+        rent_start_time = #{record.rentStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.comEntTime != null">
+        com_ent_time = #{record.comEntTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.rentMonthNum != null">
+        rent_month_num = #{record.rentMonthNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.remerk != null">
+        remerk = #{record.remerk,jdbcType=VARCHAR},
+      </if>
+      <if test="record.actualTotalAccount != null">
+        actual_total_account = #{record.actualTotalAccount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.roomBillId != null">
+        room_bill_id = #{record.roomBillId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.projectIntroduce != null">
+        project_introduce = #{record.projectIntroduce,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.companyRequire != null">
+        company_require = #{record.companyRequire,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update tb_project_info
+    set id = #{record.id,jdbcType=VARCHAR},
+      project_name = #{record.projectName,jdbcType=VARCHAR},
+      source = #{record.source,jdbcType=VARCHAR},
+      size = #{record.size,jdbcType=CHAR},
+      introducer = #{record.introducer,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      industry_assessment = #{record.industryAssessment,jdbcType=VARCHAR},
+      department_id = #{record.departmentId,jdbcType=VARCHAR},
+      department_name = #{record.departmentName,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=TINYINT},
+      project_process = #{record.projectProcess,jdbcType=VARCHAR},
+      compact_status = #{record.compactStatus,jdbcType=VARCHAR},
+      compact_start_time = #{record.compactStartTime,jdbcType=TIMESTAMP},
+      compact_end_time = #{record.compactEndTime,jdbcType=TIMESTAMP},
+      Investment_approver = #{record.investmentApprover,jdbcType=VARCHAR},
+      Investment_approver_time = #{record.investmentApproverTime,jdbcType=TIMESTAMP},
+      property_approver = #{record.propertyApprover,jdbcType=VARCHAR},
+      property_approver_time = #{record.propertyApproverTime,jdbcType=TIMESTAMP},
+      pm_approver = #{record.pmApprover,jdbcType=VARCHAR},
+      pm_approver_time = #{record.pmApproverTime,jdbcType=TIMESTAMP},
+      company_name = #{record.companyName,jdbcType=VARCHAR},
+      company_id = #{record.companyId,jdbcType=VARCHAR},
+      rent_info = #{record.rentInfo,jdbcType=VARCHAR},
+      expect_enter_time = #{record.expectEnterTime,jdbcType=TIMESTAMP},
+      sure_time = #{record.sureTime,jdbcType=TIMESTAMP},
+      approval_opioion = #{record.approvalOpioion,jdbcType=VARCHAR},
+      legal_personer = #{record.legalPersoner,jdbcType=VARCHAR},
+      legal_phone = #{record.legalPhone,jdbcType=VARCHAR},
+      com_admin = #{record.comAdmin,jdbcType=VARCHAR},
+      linker = #{record.linker,jdbcType=VARCHAR},
+      linker_phone = #{record.linkerPhone,jdbcType=VARCHAR},
+      enterprise_property = #{record.enterpriseProperty,jdbcType=VARCHAR},
+      industry_type_name = #{record.industryTypeName,jdbcType=VARCHAR},
+      industry_type = #{record.industryType,jdbcType=VARCHAR},
+      rent_start_time = #{record.rentStartTime,jdbcType=TIMESTAMP},
+      com_ent_time = #{record.comEntTime,jdbcType=TIMESTAMP},
+      rent_month_num = #{record.rentMonthNum,jdbcType=INTEGER},
+      remerk = #{record.remerk,jdbcType=VARCHAR},
+      actual_total_account = #{record.actualTotalAccount,jdbcType=DECIMAL},
+      room_bill_id = #{record.roomBillId,jdbcType=VARCHAR},
+      project_introduce = #{record.projectIntroduce,jdbcType=LONGVARCHAR},
+      company_require = #{record.companyRequire,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_project_info
+    set id = #{record.id,jdbcType=VARCHAR},
+      project_name = #{record.projectName,jdbcType=VARCHAR},
+      source = #{record.source,jdbcType=VARCHAR},
+      size = #{record.size,jdbcType=CHAR},
+      introducer = #{record.introducer,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      industry_assessment = #{record.industryAssessment,jdbcType=VARCHAR},
+      department_id = #{record.departmentId,jdbcType=VARCHAR},
+      department_name = #{record.departmentName,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=TINYINT},
+      project_process = #{record.projectProcess,jdbcType=VARCHAR},
+      compact_status = #{record.compactStatus,jdbcType=VARCHAR},
+      compact_start_time = #{record.compactStartTime,jdbcType=TIMESTAMP},
+      compact_end_time = #{record.compactEndTime,jdbcType=TIMESTAMP},
+      Investment_approver = #{record.investmentApprover,jdbcType=VARCHAR},
+      Investment_approver_time = #{record.investmentApproverTime,jdbcType=TIMESTAMP},
+      property_approver = #{record.propertyApprover,jdbcType=VARCHAR},
+      property_approver_time = #{record.propertyApproverTime,jdbcType=TIMESTAMP},
+      pm_approver = #{record.pmApprover,jdbcType=VARCHAR},
+      pm_approver_time = #{record.pmApproverTime,jdbcType=TIMESTAMP},
+      company_name = #{record.companyName,jdbcType=VARCHAR},
+      company_id = #{record.companyId,jdbcType=VARCHAR},
+      rent_info = #{record.rentInfo,jdbcType=VARCHAR},
+      expect_enter_time = #{record.expectEnterTime,jdbcType=TIMESTAMP},
+      sure_time = #{record.sureTime,jdbcType=TIMESTAMP},
+      approval_opioion = #{record.approvalOpioion,jdbcType=VARCHAR},
+      legal_personer = #{record.legalPersoner,jdbcType=VARCHAR},
+      legal_phone = #{record.legalPhone,jdbcType=VARCHAR},
+      com_admin = #{record.comAdmin,jdbcType=VARCHAR},
+      linker = #{record.linker,jdbcType=VARCHAR},
+      linker_phone = #{record.linkerPhone,jdbcType=VARCHAR},
+      enterprise_property = #{record.enterpriseProperty,jdbcType=VARCHAR},
+      industry_type_name = #{record.industryTypeName,jdbcType=VARCHAR},
+      industry_type = #{record.industryType,jdbcType=VARCHAR},
+      rent_start_time = #{record.rentStartTime,jdbcType=TIMESTAMP},
+      com_ent_time = #{record.comEntTime,jdbcType=TIMESTAMP},
+      rent_month_num = #{record.rentMonthNum,jdbcType=INTEGER},
+      remerk = #{record.remerk,jdbcType=VARCHAR},
+      actual_total_account = #{record.actualTotalAccount,jdbcType=DECIMAL},
+      room_bill_id = #{record.roomBillId,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.attractinvest.entity.TbProjectInfoWithBLOBs">
+    update tb_project_info
+    <set>
+      <if test="projectName != null">
+        project_name = #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null">
+        source = #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="size != null">
+        size = #{size,jdbcType=CHAR},
+      </if>
+      <if test="introducer != null">
+        introducer = #{introducer,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="industryAssessment != null">
+        industry_assessment = #{industryAssessment,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentId != null">
+        department_id = #{departmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentName != null">
+        department_name = #{departmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="projectProcess != null">
+        project_process = #{projectProcess,jdbcType=VARCHAR},
+      </if>
+      <if test="compactStatus != null">
+        compact_status = #{compactStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="compactStartTime != null">
+        compact_start_time = #{compactStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="compactEndTime != null">
+        compact_end_time = #{compactEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="investmentApprover != null">
+        Investment_approver = #{investmentApprover,jdbcType=VARCHAR},
+      </if>
+      <if test="investmentApproverTime != null">
+        Investment_approver_time = #{investmentApproverTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="propertyApprover != null">
+        property_approver = #{propertyApprover,jdbcType=VARCHAR},
+      </if>
+      <if test="propertyApproverTime != null">
+        property_approver_time = #{propertyApproverTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pmApprover != null">
+        pm_approver = #{pmApprover,jdbcType=VARCHAR},
+      </if>
+      <if test="pmApproverTime != null">
+        pm_approver_time = #{pmApproverTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="companyName != null">
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        company_id = #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="rentInfo != null">
+        rent_info = #{rentInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="expectEnterTime != null">
+        expect_enter_time = #{expectEnterTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sureTime != null">
+        sure_time = #{sureTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="approvalOpioion != null">
+        approval_opioion = #{approvalOpioion,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPersoner != null">
+        legal_personer = #{legalPersoner,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPhone != null">
+        legal_phone = #{legalPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="comAdmin != null">
+        com_admin = #{comAdmin,jdbcType=VARCHAR},
+      </if>
+      <if test="linker != null">
+        linker = #{linker,jdbcType=VARCHAR},
+      </if>
+      <if test="linkerPhone != null">
+        linker_phone = #{linkerPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="enterpriseProperty != null">
+        enterprise_property = #{enterpriseProperty,jdbcType=VARCHAR},
+      </if>
+      <if test="industryTypeName != null">
+        industry_type_name = #{industryTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="industryType != null">
+        industry_type = #{industryType,jdbcType=VARCHAR},
+      </if>
+      <if test="rentStartTime != null">
+        rent_start_time = #{rentStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="comEntTime != null">
+        com_ent_time = #{comEntTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rentMonthNum != null">
+        rent_month_num = #{rentMonthNum,jdbcType=INTEGER},
+      </if>
+      <if test="remerk != null">
+        remerk = #{remerk,jdbcType=VARCHAR},
+      </if>
+      <if test="actualTotalAccount != null">
+        actual_total_account = #{actualTotalAccount,jdbcType=DECIMAL},
+      </if>
+      <if test="roomBillId != null">
+        room_bill_id = #{roomBillId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectIntroduce != null">
+        project_introduce = #{projectIntroduce,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="companyRequire != null">
+        company_require = #{companyRequire,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.jn.park.attractinvest.entity.TbProjectInfoWithBLOBs">
+    update tb_project_info
+    set project_name = #{projectName,jdbcType=VARCHAR},
+      source = #{source,jdbcType=VARCHAR},
+      size = #{size,jdbcType=CHAR},
+      introducer = #{introducer,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      industry_assessment = #{industryAssessment,jdbcType=VARCHAR},
+      department_id = #{departmentId,jdbcType=VARCHAR},
+      department_name = #{departmentName,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      project_process = #{projectProcess,jdbcType=VARCHAR},
+      compact_status = #{compactStatus,jdbcType=VARCHAR},
+      compact_start_time = #{compactStartTime,jdbcType=TIMESTAMP},
+      compact_end_time = #{compactEndTime,jdbcType=TIMESTAMP},
+      Investment_approver = #{investmentApprover,jdbcType=VARCHAR},
+      Investment_approver_time = #{investmentApproverTime,jdbcType=TIMESTAMP},
+      property_approver = #{propertyApprover,jdbcType=VARCHAR},
+      property_approver_time = #{propertyApproverTime,jdbcType=TIMESTAMP},
+      pm_approver = #{pmApprover,jdbcType=VARCHAR},
+      pm_approver_time = #{pmApproverTime,jdbcType=TIMESTAMP},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      company_id = #{companyId,jdbcType=VARCHAR},
+      rent_info = #{rentInfo,jdbcType=VARCHAR},
+      expect_enter_time = #{expectEnterTime,jdbcType=TIMESTAMP},
+      sure_time = #{sureTime,jdbcType=TIMESTAMP},
+      approval_opioion = #{approvalOpioion,jdbcType=VARCHAR},
+      legal_personer = #{legalPersoner,jdbcType=VARCHAR},
+      legal_phone = #{legalPhone,jdbcType=VARCHAR},
+      com_admin = #{comAdmin,jdbcType=VARCHAR},
+      linker = #{linker,jdbcType=VARCHAR},
+      linker_phone = #{linkerPhone,jdbcType=VARCHAR},
+      enterprise_property = #{enterpriseProperty,jdbcType=VARCHAR},
+      industry_type_name = #{industryTypeName,jdbcType=VARCHAR},
+      industry_type = #{industryType,jdbcType=VARCHAR},
+      rent_start_time = #{rentStartTime,jdbcType=TIMESTAMP},
+      com_ent_time = #{comEntTime,jdbcType=TIMESTAMP},
+      rent_month_num = #{rentMonthNum,jdbcType=INTEGER},
+      remerk = #{remerk,jdbcType=VARCHAR},
+      actual_total_account = #{actualTotalAccount,jdbcType=DECIMAL},
+      room_bill_id = #{roomBillId,jdbcType=VARCHAR},
+      project_introduce = #{projectIntroduce,jdbcType=LONGVARCHAR},
+      company_require = #{companyRequire,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.attractinvest.entity.TbProjectInfo">
+    update tb_project_info
+    set project_name = #{projectName,jdbcType=VARCHAR},
+      source = #{source,jdbcType=VARCHAR},
+      size = #{size,jdbcType=CHAR},
+      introducer = #{introducer,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      industry_assessment = #{industryAssessment,jdbcType=VARCHAR},
+      department_id = #{departmentId,jdbcType=VARCHAR},
+      department_name = #{departmentName,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      project_process = #{projectProcess,jdbcType=VARCHAR},
+      compact_status = #{compactStatus,jdbcType=VARCHAR},
+      compact_start_time = #{compactStartTime,jdbcType=TIMESTAMP},
+      compact_end_time = #{compactEndTime,jdbcType=TIMESTAMP},
+      Investment_approver = #{investmentApprover,jdbcType=VARCHAR},
+      Investment_approver_time = #{investmentApproverTime,jdbcType=TIMESTAMP},
+      property_approver = #{propertyApprover,jdbcType=VARCHAR},
+      property_approver_time = #{propertyApproverTime,jdbcType=TIMESTAMP},
+      pm_approver = #{pmApprover,jdbcType=VARCHAR},
+      pm_approver_time = #{pmApproverTime,jdbcType=TIMESTAMP},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      company_id = #{companyId,jdbcType=VARCHAR},
+      rent_info = #{rentInfo,jdbcType=VARCHAR},
+      expect_enter_time = #{expectEnterTime,jdbcType=TIMESTAMP},
+      sure_time = #{sureTime,jdbcType=TIMESTAMP},
+      approval_opioion = #{approvalOpioion,jdbcType=VARCHAR},
+      legal_personer = #{legalPersoner,jdbcType=VARCHAR},
+      legal_phone = #{legalPhone,jdbcType=VARCHAR},
+      com_admin = #{comAdmin,jdbcType=VARCHAR},
+      linker = #{linker,jdbcType=VARCHAR},
+      linker_phone = #{linkerPhone,jdbcType=VARCHAR},
+      enterprise_property = #{enterpriseProperty,jdbcType=VARCHAR},
+      industry_type_name = #{industryTypeName,jdbcType=VARCHAR},
+      industry_type = #{industryType,jdbcType=VARCHAR},
+      rent_start_time = #{rentStartTime,jdbcType=TIMESTAMP},
+      com_ent_time = #{comEntTime,jdbcType=TIMESTAMP},
+      rent_month_num = #{rentMonthNum,jdbcType=INTEGER},
+      remerk = #{remerk,jdbcType=VARCHAR},
+      actual_total_account = #{actualTotalAccount,jdbcType=DECIMAL},
+      room_bill_id = #{roomBillId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

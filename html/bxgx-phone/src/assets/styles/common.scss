@@ -1,0 +1,114 @@
+$color1: #333;
+$color2: #666;
+$color3: #999;
+$color4: #00a041;
+$color4:#222;
+$color5:red;
+$border:1px solid #eee;
+$--color-primary: #00a041;
+//mixin
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin flex ($h:center, $v:center, $d:colum) {
+  display: flex;
+  justify-content: $h;
+  align-items: $v;
+  flex-direction: $d;
+}
+
+@mixin image ($url, $bg:transparent, $size:100%, $l:0, $r:0, $re:no-repeat) {
+  background-image: url($url);
+  background-size: $size;
+  background-position: $l $r;
+  background-repeat: $re;
+  background-color: $bg;
+}
+
+@mixin full-page ($w:100%, $h:100%) {
+  width: $w;
+  height: $h;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 0 auto;
+}
+
+@mixin overlay ($bg:rgba(0, 0, 0, .7)) {
+  width: 100%;
+  height: 100%;
+  background-color: $bg;
+  @include flex-center;
+}
+
+@mixin clamp ($row: 3) {
+  display:-webkit-box;
+  -webkit-line-clamp: $row;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+@mixin title ($size:16px, $color:#000, $weight:600, $align:center) {
+  text-align: $align;
+  font-size: $size;
+  color: $color;
+  font-weight: $weight;
+}
+
+@mixin button ($size:.18rem, $width:90%, $height:.44rem, $rad:.05rem, $color:#fff, $bg:#09BB07, $bw:.5px, $bc:#09BB07) {
+  margin: 0 auto;
+  font-size: $size;
+  width: $width;
+  height: $height;
+  border-radius: $rad;
+  background-color: $bg;
+  color: $color;
+  border: $bw solid $bc;
+  @include flex-center;
+}
+
+// 字号
+.fs-12 {
+  font-size: 12px;
+}
+
+// 字体加粗
+.fw-600 {
+  font-weight: 600;
+}
+
+// 对齐
+.tc {
+  text-align: center;
+}
+
+.tl {
+  text-align: left;
+}
+
+.tr {
+  text-align: right;
+}
+
+//布局排列
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+.flex-center {
+  @include  flex-center;
+}
+// 背景
+.bg-gray {
+  background-color: #ebebeb;
+}
+
+// 边距
+.mg-v-20 {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}

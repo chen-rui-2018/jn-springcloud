@@ -2,6 +2,8 @@ package com.jn.system.api;
 
 import com.jn.common.model.Result;
 import com.jn.system.model.*;
+import com.jn.system.vo.SysDictKeyValue;
+import com.jn.system.vo.SysUserRoleVO;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -158,19 +160,89 @@ public interface SystemClient {
      * @param accountList 账号集合
      * @return
      */
-    @RequestMapping(value = "/api/system/getUserInfoByAccount", method = RequestMethod.GET)
-    Result<List<User>> getUserInfoByAccount(@RequestParam("accountList") List<String> accountList);
+    @RequestMapping(value = "/api/system/getUserInfoByAccount", method = RequestMethod.POST)
+    Result<List<User>> getUserInfoByAccount(@RequestBody List<String> accountList);
+
+    /**
+     * 通过用户id获取用户信息,传多id,返回多个用户信息
+     *
+     * @param ids
+     * @return
+     */
+    @RequestMapping(value = "/api/system/getUserInfoByIds", method = RequestMethod.POST)
+    Result<List<User>> getUserInfoByIds(@RequestBody List<String> ids);
 
     /**
      * 修改用户角色信息
      *
-     * @param user        用户对象,传账号id都可以,都传,优先使用id操作
-     * @param deleRoleIds 删除的角色id集合,不删除集合传空集合
-     * @param addRoleIds  新增的角色id集合,不新增集合传空集合
+     * @param sysUserRoleVO
      * @return
      */
     @RequestMapping(value = "/api/system/updateUserRole", method = RequestMethod.POST)
-    Result<Boolean> updateUserRole(@RequestParam("account") User user,
-                                   @RequestParam("groupId") Set<String> deleRoleIds,
-                                   @RequestParam("roleIds") Set<String> addRoleIds);
+    Result<Boolean> updateUserRole(@RequestBody SysUserRoleVO sysUserRoleVO);
+
+    /**
+     * 根据角色名称获取角色信息
+     *
+     * @param roleName 角色名称
+     * @return
+     */
+    @RequestMapping(value = "/api/system/getRoleByName", method = RequestMethod.GET)
+    Result<SysRole> getRoleByName(@RequestParam("roleName") String roleName);
+
+
+    /**
+     * 新增文件明细
+     *
+     * @param sysFile
+     * @return
+     */
+    @RequestMapping(value = "/api/system/insertSysFile", method = RequestMethod.POST)
+    Result insertSysFile(@RequestBody SysFile sysFile);
+
+    /**
+     * 根据条件查询数据字典的值
+     *
+     * @param sysDictInvoke
+     * @return
+     */
+    @RequestMapping(value = "/api/system/selectDictValueByCondition", method = RequestMethod.POST)
+    Result<String> selectDictValueByCondition(@RequestBody SysDictInvoke sysDictInvoke);
+
+    /**
+     * 调用数据字典
+     *
+     * @return
+     */
+    @RequestMapping(value = "/api/system/getDict", method = RequestMethod.POST)
+    Result<List<SysDictKeyValue>> getDict(@RequestBody SysDictInvoke sysDictInvoke);
+
+    /**
+     * 根据角色id或角色名称获取角色拥有的用户信息
+     * 当id和角色名称同时存在时,优先使用id信息
+     *
+     * @param role
+     * @return
+     */
+    @RequestMapping(value = "/api/system/getUserByRole", method = RequestMethod.POST)
+    Result<List<User>> getUserByRole(@RequestBody SysRole role);
+
+    /**
+     * 获取所有岗位信息
+     *
+     * @return
+     */
+    @RequestMapping(value = "/api/system/getPostAll", method = RequestMethod.POST)
+    Result<List<SysPost>> getPostAll();
+
+
+    /**
+     * 校验用户账号是否存在
+     *
+     * @param account 用户账号
+     * @return success:账号不存在; fail:账号存在
+     */
+    @RequestMapping(value = "/api/system/checkUserAccount", method = RequestMethod.POST)
+    Result<String> checkUserAccount(@RequestParam("account") String account);
+
 }

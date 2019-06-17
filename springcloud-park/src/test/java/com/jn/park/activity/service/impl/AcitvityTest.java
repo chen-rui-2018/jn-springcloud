@@ -8,7 +8,7 @@ import com.jn.park.activity.dao.TbActivityMapper;
 import com.jn.park.activity.entity.TbActivityCriteria;
 import com.jn.park.activity.service.ActivityService;
 import com.jn.park.enums.ActivityExceptionEnum;
-import com.jn.park.model.*;
+import com.jn.park.activity.model.*;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -255,7 +255,7 @@ public class AcitvityTest {
             activitySlimQuery.setTypeId("");
             activitySlimQuery.setKeyWord("");
             activitySlimQuery.setOrderBy("apply_num");
-            PaginationData data = activityService.activityListSlim(activitySlimQuery);
+            PaginationData data = activityService.activityListSlim(activitySlimQuery,userAccount);
             assertThat((int) data.getTotal(), greaterThanOrEqualTo(0));
         }catch(Exception e) {
             logger.info("活动列表查询失败。失败原因{}", e.getMessage(), e);

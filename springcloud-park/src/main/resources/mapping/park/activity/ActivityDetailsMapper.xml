@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.park.activity.dao.ActivityDetailsMapper">
     <!--获取活动详情-->
-    <select id="getActivityDetails" resultType="com.jn.park.model.ActivityDetail">
+    <select id="getActivityDetails" resultType="com.jn.park.activity.model.ActivityDetail">
         select
         t1.id as "id"                                                                    <!--活动id-->
         ,t1.acti_type  as "actiType"                                                         <!--活动类型-->
@@ -16,6 +16,9 @@
         ,t1.acti_address as "actiAddress"                                                     <!--活动地址-->
         ,t1.acti_cost as "actiCost"                                                              <!--活动费用-->
         ,t1.acti_organizer as "actiOrganizer"                                                <!--活动主办方-->
+        ,t1.acti_guide_organizer as "actiGuideOrganizer"                                                <!--活动主办方-->
+        ,t1.acti_undertake_organizer as "actiUndertakeOrganizer"                                                <!--活动主办方-->
+        ,t1.acti_co_organizer as "actiCoOrganizer"                                                <!--活动主办方-->
         ,t1.acti_number as "actiNumber"                                                      <!--活动人数-->
         ,t1.acti_poster_url as "actiPosterUrl"                                               <!--活动主海报-->
         ,t1.acti_views as "actiViews"                                                        <!--阅读人数-->
@@ -47,7 +50,7 @@
     </select>
 
     <!--获取点评信息-->
-    <select id="getCommentInfo" resultType="com.jn.park.model.Comment">
+    <select id="getCommentInfo" resultType="com.jn.park.activity.model.Comment">
         select
         t1.id as "id"                                                     <!--点评id-->
         ,t1.root_id as "rootId"                                           <!--根节点id(活动id/服务id)-->
@@ -59,15 +62,19 @@
         ,t1.com_status as "comStatus"                                     <!--点评状态-->
         ,t1.com_type as "comType"                                         <!--类型-->
         ,t1.com_content as "comContent"                                   <!--点评内容-->
-        ,case
-        when  t5.creator_account = #{loginAccount} and t5.like_status='1' then 'true'
-        else 'false'
-        end as 'isCommentLike'
+        <if test="loginAccount!=null and loginAccount!=''">
+            ,case
+            when  t5.creator_account = #{loginAccount} and t5.like_status='1' then 'true'
+            else 'false'
+            end as 'isCommentLike'
+        </if>
         from tb_comment t1
         left join tb_comment t4
         on t1.id=t4.p_id
+        <if test="loginAccount!=null and loginAccount!=''">
         left join tb_park_like t5
         on t1.id=t5.like_parent_id
+        </if>
         where  1=1
         and t1.root_id=#{activityId}
         and t1.p_id in
@@ -75,11 +82,11 @@
             #{id}
         </foreach>
         and t1.com_status='1'                                                 <!--有效点评-->
-        order by t1.created_time
+        order by t1.created_time desc
     </select>
 
     <!--获取活动报名信息-->
-    <select id="getActivityApplyInfo" resultType="com.jn.park.model.ActivityApply">
+    <select id="getActivityApplyInfo" resultType="com.jn.park.activity.model.ActivityApply">
         select
         t1.id as "id"                                                     <!--活动报名id-->
         ,t1.activity_id as "activityId"                                   <!--活动ID-->
@@ -92,7 +99,7 @@
         from tb_activity_apply t1
         where  1=1
         and t1.activity_id=#{activityId}
-        and t1.creator_account=#{account}
         and t1.apply_status='1'
+        and t1.record_status='1'
     </select>
 </mapper>

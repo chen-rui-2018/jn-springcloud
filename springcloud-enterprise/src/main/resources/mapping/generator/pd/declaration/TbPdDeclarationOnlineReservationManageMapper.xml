@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.pd.declaration.dao.TbPdDeclarationOnlineReservationManageMapper">
+  <resultMap id="BaseResultMap" type="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationOnlineReservationManage">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="appointment_item_id" jdbcType="VARCHAR" property="appointmentItemId" />
+    <result column="appointment_item_name" jdbcType="VARCHAR" property="appointmentItemName" />
+    <result column="contact_name" jdbcType="VARCHAR" property="contactName" />
+    <result column="contact_phone" jdbcType="VARCHAR" property="contactPhone" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="time_appointment" jdbcType="TIMESTAMP" property="timeAppointment" />
+    <result column="declare_enterprise" jdbcType="VARCHAR" property="declareEnterprise" />
+    <result column="declare_item" jdbcType="VARCHAR" property="declareItem" />
+    <result column="reply_status" jdbcType="TINYINT" property="replyStatus" />
+    <result column="reply_content" jdbcType="VARCHAR" property="replyContent" />
+    <result column="print_status" jdbcType="TINYINT" property="printStatus" />
+    <result column="print_code" jdbcType="VARCHAR" property="printCode" />
+    <result column="audit_department" jdbcType="VARCHAR" property="auditDepartment" />
+    <result column="declare_type" jdbcType="VARCHAR" property="declareType" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, appointment_item_id, appointment_item_name, contact_name, contact_phone, email, 
+    file_url, remark, time_appointment, declare_enterprise, declare_item, reply_status, 
+    reply_content, print_status, print_code, audit_department, declare_type, record_status, 
+    creator_account, created_time, modifier_account, modified_time
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationOnlineReservationManageCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_pd_declaration_online_reservation_manage
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_pd_declaration_online_reservation_manage
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_pd_declaration_online_reservation_manage
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationOnlineReservationManageCriteria">
+    delete from tb_pd_declaration_online_reservation_manage
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationOnlineReservationManage">
+    insert into tb_pd_declaration_online_reservation_manage (id, appointment_item_id, appointment_item_name, 
+      contact_name, contact_phone, email, 
+      file_url, remark, time_appointment, 
+      declare_enterprise, declare_item, reply_status, 
+      reply_content, print_status, print_code, 
+      audit_department, declare_type, record_status, 
+      creator_account, created_time, modifier_account, 
+      modified_time)
+    values (#{id,jdbcType=VARCHAR}, #{appointmentItemId,jdbcType=VARCHAR}, #{appointmentItemName,jdbcType=VARCHAR}, 
+      #{contactName,jdbcType=VARCHAR}, #{contactPhone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{fileUrl,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{timeAppointment,jdbcType=TIMESTAMP}, 
+      #{declareEnterprise,jdbcType=VARCHAR}, #{declareItem,jdbcType=VARCHAR}, #{replyStatus,jdbcType=TINYINT}, 
+      #{replyContent,jdbcType=VARCHAR}, #{printStatus,jdbcType=TINYINT}, #{printCode,jdbcType=VARCHAR}, 
+      #{auditDepartment,jdbcType=VARCHAR}, #{declareType,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationOnlineReservationManage">
+    insert into tb_pd_declaration_online_reservation_manage
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="appointmentItemId != null">
+        appointment_item_id,
+      </if>
+      <if test="appointmentItemName != null">
+        appointment_item_name,
+      </if>
+      <if test="contactName != null">
+        contact_name,
+      </if>
+      <if test="contactPhone != null">
+        contact_phone,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="fileUrl != null">
+        file_url,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="timeAppointment != null">
+        time_appointment,
+      </if>
+      <if test="declareEnterprise != null">
+        declare_enterprise,
+      </if>
+      <if test="declareItem != null">
+        declare_item,
+      </if>
+      <if test="replyStatus != null">
+        reply_status,
+      </if>
+      <if test="replyContent != null">
+        reply_content,
+      </if>
+      <if test="printStatus != null">
+        print_status,
+      </if>
+      <if test="printCode != null">
+        print_code,
+      </if>
+      <if test="auditDepartment != null">
+        audit_department,
+      </if>
+      <if test="declareType != null">
+        declare_type,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="appointmentItemId != null">
+        #{appointmentItemId,jdbcType=VARCHAR},
+      </if>
+      <if test="appointmentItemName != null">
+        #{appointmentItemName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactName != null">
+        #{contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactPhone != null">
+        #{contactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="fileUrl != null">
+        #{fileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="timeAppointment != null">
+        #{timeAppointment,jdbcType=TIMESTAMP},
+      </if>
+      <if test="declareEnterprise != null">
+        #{declareEnterprise,jdbcType=VARCHAR},
+      </if>
+      <if test="declareItem != null">
+        #{declareItem,jdbcType=VARCHAR},
+      </if>
+      <if test="replyStatus != null">
+        #{replyStatus,jdbcType=TINYINT},
+      </if>
+      <if test="replyContent != null">
+        #{replyContent,jdbcType=VARCHAR},
+      </if>
+      <if test="printStatus != null">
+        #{printStatus,jdbcType=TINYINT},
+      </if>
+      <if test="printCode != null">
+        #{printCode,jdbcType=VARCHAR},
+      </if>
+      <if test="auditDepartment != null">
+        #{auditDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="declareType != null">
+        #{declareType,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationOnlineReservationManageCriteria" resultType="java.lang.Long">
+    select count(*) from tb_pd_declaration_online_reservation_manage
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_pd_declaration_online_reservation_manage
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.appointmentItemId != null">
+        appointment_item_id = #{record.appointmentItemId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.appointmentItemName != null">
+        appointment_item_name = #{record.appointmentItemName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactName != null">
+        contact_name = #{record.contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactPhone != null">
+        contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.email != null">
+        email = #{record.email,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fileUrl != null">
+        file_url = #{record.fileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.timeAppointment != null">
+        time_appointment = #{record.timeAppointment,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.declareEnterprise != null">
+        declare_enterprise = #{record.declareEnterprise,jdbcType=VARCHAR},
+      </if>
+      <if test="record.declareItem != null">
+        declare_item = #{record.declareItem,jdbcType=VARCHAR},
+      </if>
+      <if test="record.replyStatus != null">
+        reply_status = #{record.replyStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.replyContent != null">
+        reply_content = #{record.replyContent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.printStatus != null">
+        print_status = #{record.printStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.printCode != null">
+        print_code = #{record.printCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.auditDepartment != null">
+        audit_department = #{record.auditDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.declareType != null">
+        declare_type = #{record.declareType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_pd_declaration_online_reservation_manage
+    set id = #{record.id,jdbcType=VARCHAR},
+      appointment_item_id = #{record.appointmentItemId,jdbcType=VARCHAR},
+      appointment_item_name = #{record.appointmentItemName,jdbcType=VARCHAR},
+      contact_name = #{record.contactName,jdbcType=VARCHAR},
+      contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
+      email = #{record.email,jdbcType=VARCHAR},
+      file_url = #{record.fileUrl,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      time_appointment = #{record.timeAppointment,jdbcType=TIMESTAMP},
+      declare_enterprise = #{record.declareEnterprise,jdbcType=VARCHAR},
+      declare_item = #{record.declareItem,jdbcType=VARCHAR},
+      reply_status = #{record.replyStatus,jdbcType=TINYINT},
+      reply_content = #{record.replyContent,jdbcType=VARCHAR},
+      print_status = #{record.printStatus,jdbcType=TINYINT},
+      print_code = #{record.printCode,jdbcType=VARCHAR},
+      audit_department = #{record.auditDepartment,jdbcType=VARCHAR},
+      declare_type = #{record.declareType,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationOnlineReservationManage">
+    update tb_pd_declaration_online_reservation_manage
+    <set>
+      <if test="appointmentItemId != null">
+        appointment_item_id = #{appointmentItemId,jdbcType=VARCHAR},
+      </if>
+      <if test="appointmentItemName != null">
+        appointment_item_name = #{appointmentItemName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactName != null">
+        contact_name = #{contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactPhone != null">
+        contact_phone = #{contactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="fileUrl != null">
+        file_url = #{fileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="timeAppointment != null">
+        time_appointment = #{timeAppointment,jdbcType=TIMESTAMP},
+      </if>
+      <if test="declareEnterprise != null">
+        declare_enterprise = #{declareEnterprise,jdbcType=VARCHAR},
+      </if>
+      <if test="declareItem != null">
+        declare_item = #{declareItem,jdbcType=VARCHAR},
+      </if>
+      <if test="replyStatus != null">
+        reply_status = #{replyStatus,jdbcType=TINYINT},
+      </if>
+      <if test="replyContent != null">
+        reply_content = #{replyContent,jdbcType=VARCHAR},
+      </if>
+      <if test="printStatus != null">
+        print_status = #{printStatus,jdbcType=TINYINT},
+      </if>
+      <if test="printCode != null">
+        print_code = #{printCode,jdbcType=VARCHAR},
+      </if>
+      <if test="auditDepartment != null">
+        audit_department = #{auditDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="declareType != null">
+        declare_type = #{declareType,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationOnlineReservationManage">
+    update tb_pd_declaration_online_reservation_manage
+    set appointment_item_id = #{appointmentItemId,jdbcType=VARCHAR},
+      appointment_item_name = #{appointmentItemName,jdbcType=VARCHAR},
+      contact_name = #{contactName,jdbcType=VARCHAR},
+      contact_phone = #{contactPhone,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      file_url = #{fileUrl,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      time_appointment = #{timeAppointment,jdbcType=TIMESTAMP},
+      declare_enterprise = #{declareEnterprise,jdbcType=VARCHAR},
+      declare_item = #{declareItem,jdbcType=VARCHAR},
+      reply_status = #{replyStatus,jdbcType=TINYINT},
+      reply_content = #{replyContent,jdbcType=VARCHAR},
+      print_status = #{printStatus,jdbcType=TINYINT},
+      print_code = #{printCode,jdbcType=VARCHAR},
+      audit_department = #{auditDepartment,jdbcType=VARCHAR},
+      declare_type = #{declareType,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

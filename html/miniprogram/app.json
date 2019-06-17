@@ -1,18 +1,35 @@
 {
-  "pages":[
+  "pages": [
+    "pages/index/index",
+    "pages/index/maintenance/maintenance",
+    "pages/index/maintenance-detail/maintenance-detail",
+    "pages/index/maintenance-register/maintenance-register",
+    "pages/index/parkPay/parkPay",
+    "pages/index/payComplete/payComplete",
+    "pages/index/declarationNotice/declarationNotice",
+    "pages/index/policyGuide/policyGuide",
+    "pages/index/hotAct/hotAct",
+    "pages/index/actiDetail/actiDetail",
+    "pages/index/parkDetais/parkDetais",
+    "pages/home/home",
+    "pages/home/payRecord/payRecord",
+    "pages/home/maCar/maCar",
+    "pages/home/aboutUs/aboutUs",
+    "pages/home/addCar/addCar",
+    "pages/meeting/meeting",
+    "pages/meeting/meetingRoomDetail/meetingRoomDetail",
+    "pages/meeting/makeMeeting/makeMeeting",
+    "pages/meeting/meetingPerson/meetingPerson",
+    "pages/meeting/meetingCont/meetingCont",
+    "pages/meeting/meetingtitle/meetingtitle",
+    "pages/meeting/meetingAttendance/meetingAttendance",
+    "pages/meeting/orgDepartment/orgDepartment",
+    "pages/meeting/orgPerson/orgPerson",
     "pages/start/start",
     "pages/authorize/authorize",
-    "pages/index/index",
-    "pages/home/home",
     "pages/register/register"
   ],
-  "window":{
-    "backgroundTextStyle":"light",
-    "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "ColorUI",
-    "navigationStyle": "custom",
-    "navigationBarTextStyle": "white"
-  },
+  "window": {},
   "tabBar": {
     "color": "#aaa",
     "selectedColor": "#39b54a",
@@ -21,14 +38,20 @@
     "list": [
       {
         "pagePath": "pages/index/index",
-        "iconPath": "/images/tabbar/basics.png",
-        "selectedIconPath": "/images/tabbar/basics_cur.png",
+        "iconPath": "/images/meeting/index_white.png",
+        "selectedIconPath": "/images/meeting/index_green.png",
         "text": "首页"
       },
       {
+        "pagePath": "pages/meeting/meeting",
+        "iconPath": "/images/meeting/meeting_white.png",
+        "selectedIconPath": "/images/meeting/meeting_green.png",
+        "text": "会议室"
+      },
+      {
         "pagePath": "pages/home/home",
-        "iconPath": "/images/tabbar/about.png",
-        "selectedIconPath": "/images/tabbar/about_cur.png",
+        "iconPath": "/images/meeting/main_white.png",
+        "selectedIconPath": "/images/meeting/main_green.png",
         "text": "我的"
       }
     ]
@@ -42,5 +65,6 @@
   "navigateToMiniProgramAppIdList": [
     "wx4f1b24bdc99fa23b"
   ],
-  "debug": false
+  "debug": false,
+  "sitemapLocation": "sitemap.json"
 }

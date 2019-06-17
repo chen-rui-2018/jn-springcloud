@@ -106,72 +106,72 @@ public class TbServiceInvestorCriteria {
         }
 
         public Criteria andIdIsNull() {
-            addCriterion("id is null");
+            addCriterion("id_ is null");
             return (Criteria) this;
         }
 
         public Criteria andIdIsNotNull() {
-            addCriterion("id is not null");
+            addCriterion("id_ is not null");
             return (Criteria) this;
         }
 
         public Criteria andIdEqualTo(String value) {
-            addCriterion("id =", value, "id");
+            addCriterion("id_ =", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdNotEqualTo(String value) {
-            addCriterion("id <>", value, "id");
+            addCriterion("id_ <>", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdGreaterThan(String value) {
-            addCriterion("id >", value, "id");
+            addCriterion("id_ >", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdGreaterThanOrEqualTo(String value) {
-            addCriterion("id >=", value, "id");
+            addCriterion("id_ >=", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdLessThan(String value) {
-            addCriterion("id <", value, "id");
+            addCriterion("id_ <", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdLessThanOrEqualTo(String value) {
-            addCriterion("id <=", value, "id");
+            addCriterion("id_ <=", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdLike(String value) {
-            addCriterion("id like", value, "id");
+            addCriterion("id_ like", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdNotLike(String value) {
-            addCriterion("id not like", value, "id");
+            addCriterion("id_ not like", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdIn(List<String> values) {
-            addCriterion("id in", values, "id");
+            addCriterion("id_ in", values, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdNotIn(List<String> values) {
-            addCriterion("id not in", values, "id");
+            addCriterion("id_ not in", values, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdBetween(String value1, String value2) {
-            addCriterion("id between", value1, value2, "id");
+            addCriterion("id_ between", value1, value2, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdNotBetween(String value1, String value2) {
-            addCriterion("id not between", value1, value2, "id");
+            addCriterion("id_ not between", value1, value2, "id");
             return (Criteria) this;
         }
 
@@ -526,72 +526,72 @@ public class TbServiceInvestorCriteria {
         }
 
         public Criteria andOrgIdIsNull() {
-            addCriterion("org_id is null");
+            addCriterion("org_id_ is null");
             return (Criteria) this;
         }
 
         public Criteria andOrgIdIsNotNull() {
-            addCriterion("org_id is not null");
+            addCriterion("org_id_ is not null");
             return (Criteria) this;
         }
 
         public Criteria andOrgIdEqualTo(String value) {
-            addCriterion("org_id =", value, "orgId");
+            addCriterion("org_id_ =", value, "orgId");
             return (Criteria) this;
         }
 
         public Criteria andOrgIdNotEqualTo(String value) {
-            addCriterion("org_id <>", value, "orgId");
+            addCriterion("org_id_ <>", value, "orgId");
             return (Criteria) this;
         }
 
         public Criteria andOrgIdGreaterThan(String value) {
-            addCriterion("org_id >", value, "orgId");
+            addCriterion("org_id_ >", value, "orgId");
             return (Criteria) this;
         }
 
         public Criteria andOrgIdGreaterThanOrEqualTo(String value) {
-            addCriterion("org_id >=", value, "orgId");
+            addCriterion("org_id_ >=", value, "orgId");
             return (Criteria) this;
         }
 
         public Criteria andOrgIdLessThan(String value) {
-            addCriterion("org_id <", value, "orgId");
+            addCriterion("org_id_ <", value, "orgId");
             return (Criteria) this;
         }
 
         public Criteria andOrgIdLessThanOrEqualTo(String value) {
-            addCriterion("org_id <=", value, "orgId");
+            addCriterion("org_id_ <=", value, "orgId");
             return (Criteria) this;
         }
 
         public Criteria andOrgIdLike(String value) {
-            addCriterion("org_id like", value, "orgId");
+            addCriterion("org_id_ like", value, "orgId");
             return (Criteria) this;
         }
 
         public Criteria andOrgIdNotLike(String value) {
-            addCriterion("org_id not like", value, "orgId");
+            addCriterion("org_id_ not like", value, "orgId");
             return (Criteria) this;
         }
 
         public Criteria andOrgIdIn(List<String> values) {
-            addCriterion("org_id in", values, "orgId");
+            addCriterion("org_id_ in", values, "orgId");
             return (Criteria) this;
         }
 
         public Criteria andOrgIdNotIn(List<String> values) {
-            addCriterion("org_id not in", values, "orgId");
+            addCriterion("org_id_ not in", values, "orgId");
             return (Criteria) this;
         }
 
         public Criteria andOrgIdBetween(String value1, String value2) {
-            addCriterion("org_id between", value1, value2, "orgId");
+            addCriterion("org_id_ between", value1, value2, "orgId");
             return (Criteria) this;
         }
 
         public Criteria andOrgIdNotBetween(String value1, String value2) {
-            addCriterion("org_id not between", value1, value2, "orgId");
+            addCriterion("org_id_ not between", value1, value2, "orgId");
             return (Criteria) this;
         }
 
@@ -1152,6 +1152,76 @@ public class TbServiceInvestorCriteria {
 
         public Criteria andPersonalProfileNotBetween(String value1, String value2) {
             addCriterion("personal_profile not between", value1, value2, "personalProfile");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvesFinanExperIsNull() {
+            addCriterion("inves_finan_exper is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvesFinanExperIsNotNull() {
+            addCriterion("inves_finan_exper is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvesFinanExperEqualTo(String value) {
+            addCriterion("inves_finan_exper =", value, "invesFinanExper");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvesFinanExperNotEqualTo(String value) {
+            addCriterion("inves_finan_exper <>", value, "invesFinanExper");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvesFinanExperGreaterThan(String value) {
+            addCriterion("inves_finan_exper >", value, "invesFinanExper");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvesFinanExperGreaterThanOrEqualTo(String value) {
+            addCriterion("inves_finan_exper >=", value, "invesFinanExper");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvesFinanExperLessThan(String value) {
+            addCriterion("inves_finan_exper <", value, "invesFinanExper");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvesFinanExperLessThanOrEqualTo(String value) {
+            addCriterion("inves_finan_exper <=", value, "invesFinanExper");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvesFinanExperLike(String value) {
+            addCriterion("inves_finan_exper like", value, "invesFinanExper");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvesFinanExperNotLike(String value) {
+            addCriterion("inves_finan_exper not like", value, "invesFinanExper");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvesFinanExperIn(List<String> values) {
+            addCriterion("inves_finan_exper in", values, "invesFinanExper");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvesFinanExperNotIn(List<String> values) {
+            addCriterion("inves_finan_exper not in", values, "invesFinanExper");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvesFinanExperBetween(String value1, String value2) {
+            addCriterion("inves_finan_exper between", value1, value2, "invesFinanExper");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvesFinanExperNotBetween(String value1, String value2) {
+            addCriterion("inves_finan_exper not between", value1, value2, "invesFinanExper");
             return (Criteria) this;
         }
 

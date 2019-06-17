@@ -26,6 +26,7 @@ public enum InvestorExceptionEnum implements CodeAndMsg {
     CURRENT_INVESTOR_HAVE_UP("5020533","当前投资人已上架,请勿重复操作"),
     CURRENT_INVESTOR_HAVE_DOWN("5020534","当前投资人已下架,请勿重复操作"),
     INVESTOR_ACCOUNT_NOT_EXIST("5020535","当前投资人账号在系统中不存在或已失效"),
+    INVESTOR_PARAM_NOT_NULL("5020536","投资人认证流程后置处理入参不能为空"),
     ;
 
     /**

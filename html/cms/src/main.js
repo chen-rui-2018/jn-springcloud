@@ -3,6 +3,9 @@ import Vue from 'vue'
 import Cookies from 'js-cookie'
 import ECharts from 'vue-echarts'
 Vue.component('chart', ECharts)
+// 级联多选
+// import elCascaderMulti from 'el-cascader-multi'
+// Vue.use(elCascaderMulti)
 
 import echarts from 'echarts'
 Vue.prototype.$echarts = echarts
@@ -10,11 +13,11 @@ import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 import 'babel-polyfill'
 import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-
 import '@/styles/index.scss' // global css
 // 引入字体图标
 import '@/assets/icon/css/font-awesome.min.css'
 import '@/assets/iconfont/iconfont.css'
+import '@/assets/iconfont/iconfont.js'
 import '../static/UE/ueditor.config'
 import '../static/UE/ueditor.all'
 import '../static/UE/lang/zh-cn/zh-cn'
@@ -34,6 +37,11 @@ import './mock' // simulation data
 import * as filters from './filters' // global filters
 // 挂载全局变量
 Vue.prototype.GLOBAL = global
+
+// 引入http
+import { get, post } from '@/api/axios'
+Vue.prototype.$_get = get
+Vue.prototype.$_post = post
 Vue.use(Element, {
   size: Cookies.get('size') || 'medium' // set element-ui default size
   // i18n: (key, value) => i18n.t(key, value)

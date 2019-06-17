@@ -29,7 +29,7 @@ public class FinanceMatterController extends BaseController {
     @PostMapping(value = "/findMatter")
     @RequiresPermissions("/finance/matter/findMatter")
     public Result findMatter(){
-        //todo
+
         return new Result(new PaginationData<FinanceTotalBudgetVo>());
     }
 
@@ -38,7 +38,7 @@ public class FinanceMatterController extends BaseController {
     @PostMapping(value = "/startWork")
     @RequiresPermissions("/finance/matter/startWork")
     public Result startWork(){
-        //todo
+
         return new Result(new PaginationData<FinanceTotalBudgetVo>());
     }
 
@@ -47,7 +47,7 @@ public class FinanceMatterController extends BaseController {
     @PostMapping(value = "/workApprove")
     @RequiresPermissions("/finance/matter/workApprove")
     public Result workApprove(){
-        //todo
+
         return new Result(new PaginationData<FinanceTotalBudgetVo>());
     }
 

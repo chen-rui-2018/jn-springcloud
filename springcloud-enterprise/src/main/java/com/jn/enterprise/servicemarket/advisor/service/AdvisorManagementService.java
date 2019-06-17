@@ -23,13 +23,22 @@ public interface AdvisorManagementService {
     /**
      * 顾问管理
      * @param advisorManagementParam  顾问管理查询页面入参（顾问姓名，审批状态）
+     * @param loginAccount 当前登录用户账号
      * @return
      */
-    PaginationData getAdvisorManagementInfo(AdvisorManagementParam advisorManagementParam);
+    PaginationData getAdvisorManagementInfo(AdvisorManagementParam advisorManagementParam,String loginAccount);
 
     /**
      * 审批顾问填写信息
      * @param approvalParam  审批顾问信息入参(顾问账号，审批结果，审批说明)
      */
     int approvalAdvisorInfo(ApprovalParam approvalParam);
+
+    /**
+     * 再次邀请
+     * @param advisorAccount 顾问账号
+     * @param loginAccount  当前登录用户
+     * @return
+     */
+    int inviteAgain(String advisorAccount,String loginAccount);
 }

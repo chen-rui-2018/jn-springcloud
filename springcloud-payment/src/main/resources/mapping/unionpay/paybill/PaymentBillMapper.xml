@@ -117,13 +117,19 @@
             END AS  "payType",
         o.pay_remark as "payRemark"
       from tb_payment_bill b left join tb_payment_order o on b.order_id = o.id left join  tb_payment_code c on  c.id = b.bill_type
-      where b.record_status = 1
+      where b.record_status = 1 and b.bill_status != '9'
         <if test="searchCode !=null and searchCode !='' ">
             and ( b.bill_name like CONCAT('%', #{searchCode,jdbcType=VARCHAR}, '%') or b.bill_obj_name like CONCAT('%', #{searchCode,jdbcType=VARCHAR}, '%')
                   or b.bill_remark like CONCAT('%', #{searchCode,jdbcType=VARCHAR}, '%') )
         </if>
         <if test="billId !=null and billId !='' ">
             and b.bill_id = #{billId,jdbcType=VARCHAR}
+        </if>
+        <if test="billIds !=null and billIds !='[]' and billIds.length > 0 ">
+            and b.bill_id in
+            <foreach item="item" index="index" collection="billIds" open="("  close=")" separator=",">
+              #{item,jdbcType=VARCHAR}
+            </foreach>
         </if>
         <if test="billNum !=null and billNum !='' ">
             and b.bill_num = #{billNum,jdbcType=VARCHAR}

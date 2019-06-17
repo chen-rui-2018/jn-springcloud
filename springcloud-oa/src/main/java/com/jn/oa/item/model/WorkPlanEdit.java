@@ -39,15 +39,15 @@ public class WorkPlanEdit implements Serializable {
     @ApiModelProperty(value = "需求描述", example = "工作计划需求描述测试")
     private String demandDescribe;
 
-    @ApiModelProperty(value = "计划开始时间", required = true, example = "2019-12-12 12:12:12")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty(value = "计划开始时间", required = true, example = "2019-12-12")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     @NotNull(message = "计划开始时间不能为空")
     private Date planStartTime;
 
-    @ApiModelProperty(value = "计划结束时间", required = true, example = "2019-12-13 12:13:13")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty(value = "计划结束时间", required = true, example = "2019-12-13")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     @NotNull(message = "计划结束时间不能为空")
     private Date planEndTime;
 

@@ -24,7 +24,7 @@ public class AddCommonProduct implements Serializable {
     @ApiModelProperty(value = "服务产品参考价格范围",required = true, example = "100-1000")
     @NotBlank(message = "服务产品参考价格范围不能为空")
     private String referPrice;
-    @ApiModelProperty(value = "服务产品领域ID,所选领域的id",required = true,example = "jrywdljz012345689999999999999999")
+    @ApiModelProperty(value = "服务产品领域ID,所选领域的id",required = true,example = "human_resources")
     @NotBlank(message = "服务产品领域ID不能为空")
     private String signoryId;
     @ApiModelProperty(value = "服务产品领域名称,所选领域的名称",required = true,example = "人力资源")
@@ -121,5 +121,21 @@ public class AddCommonProduct implements Serializable {
 
     public void setProductDetails(String productDetails) {
         this.productDetails = productDetails;
+    }
+
+    @Override
+    public String toString() {
+        return "AddCommonProduct{" +
+                "serialNumber='" + serialNumber + '\'' +
+                ", productName='" + productName + '\'' +
+                ", referPrice='" + referPrice + '\'' +
+                ", signoryId='" + signoryId + '\'' +
+                ", signoryName='" + signoryName + '\'' +
+                ", serviceCycle='" + serviceCycle + '\'' +
+                ", pictureUrl='" + pictureUrl + '\'' +
+                ", productType='" + productType + '\'' +
+                ", advisorAccount='" + advisorAccount + '\'' +
+                ", productDetails='" + productDetails + '\'' +
+                '}';
     }
 }

@@ -1,0 +1,87 @@
+<wxs module="filter" src="../../../utils/common.wxs"></wxs>
+<view class="row-block">
+  <!-- <view class="cell-row">
+    <cell>
+      <image slot="left" class="common-cell-avatar" src="http://i7.hexunimg.cn/2014-10-21/169543879.jpg"></image>
+      <text slot="right" class="icon-right"></text>
+    </cell>
+  </view> -->
+  <view class="row-block-title">设备信息</view>
+  <view class="cell-row">
+    <cell content="设备编号" tips="{{ mainTainData.assetNumber }}"></cell>
+  </view>
+  <view class="cell-row">
+    <cell content="设备名称" tips="{{ mainTainData.name }}"></cell>
+  </view>
+  <view class="cell-row">
+    <cell content="设备类型" tips="{{ mainTainData.assetType }}"></cell>
+  </view>
+  <view class="cell-row">
+    <cell content="维保时间" tips="{{ mainTainData.maintenancePeriod }}"></cell>
+  </view>
+  <view class="cell-row">
+    <cell content="位置信息" tips="{{ mainTainData.position }}"></cell>
+  </view>
+  <view class="cell-row">
+    <cell content="图片">
+      <view slot="right" class="pic-row">
+        <view
+          wx:for="{{ mainTainData.assetUrl.split(',') }}"
+          wx:for-index="index"
+          wx:key="index"
+          wx:for-item="item"
+          class="cell-pic-bg">
+          <image class="cell-pic" src="{{ item }}"/>
+        </view>
+      </view>
+    </cell>
+  </view>
+</view>
+<view class="row-block">
+  <view class="row-block-title">维保信息</view>
+  <view class="cell-row">
+    <cell content="维保期限" tips="{{ mainTainData.maintenancePeriod }}"></cell>
+  </view>
+  <view class="cell-row">
+    <cell content="本次维保时间" tips="{{ filter.formatEmpty(mainTainData.maintenanceTime) }}"></cell>
+  </view>
+</view>
+<view class="row-block">
+  <view class="row-block-title">厂家信息</view>
+  <view class="cell-row">
+    <cell content="厂家名称" tips="{{ mainTainData.assetMaintainCompanyModel.name }}"></cell>
+  </view>
+  <view class="cell-row">
+    <cell content="联系人姓名" tips="{{ mainTainData.assetMaintainCompanyModel.contactName }}"></cell>
+  </view>
+  <view class="cell-row">
+    <cell content="联系人电话" tips="{{ mainTainData.assetMaintainCompanyModel.contactPhone	 }}"></cell>
+  </view>
+  <view class="cell-row">
+    <cell content="联系人邮箱" tips="{{ mainTainData.assetMaintainCompanyModel.contactEmail }}"></cell>
+  </view>
+</view>
+<view class="row-block">
+  <view class="row-block-title">维保记录</view>
+  <view wx:if="{{ mainTainData.assetMaintainRecordModels && mainTainData.assetMaintainRecordModels.length > 0}}">
+    <view
+      wx:for="{{ mainTainData.assetMaintainRecordModels }}"
+      wx:for-index="recordIndex"
+      wx:key="recordIndex"
+      wx:for-item="record"
+      class="cell-row block-info">
+      <view class="block-title">{{ record.maintenanceTime }}</view>
+      <view class="block-content">{{ record.message }}</view>
+    </view>
+  </view>
+  <view wx:else class="no-record">暂无记录</view>
+</view>
+<view class="sub-button-bg">
+<navigator
+  url="/pages/index/maintenance-register/maintenance-register?assetNumber={{ mainTainData.assetNumber }}"
+  hover-class="navigator-hover"
+>
+  <sub-button title="维保登记"/>
+</navigator>
+</view>
+

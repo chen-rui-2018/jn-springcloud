@@ -3,7 +3,7 @@ package com.jn.park.comment.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
-import com.jn.park.comment.model.CommentAddParam;
+import com.jn.park.activity.model.CommentAddParam;
 import com.jn.park.comment.service.CommentService;
 import com.jn.park.enums.CommentExceptionEnum;
 import com.jn.system.log.annotation.ControllerLog;
@@ -41,9 +41,9 @@ public class CommentController extends BaseController {
     private CommentService commentService;
 
     @ControllerLog(doAction = "评论/回复")
-    @ApiOperation(value = "评论/回复", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "评论/回复", httpMethod = "POST",notes = "返回数据响应条数，正常返回1")
     @RequestMapping(value = "/commentActivity")
-    public Result commentActivity(@Validated @RequestBody CommentAddParam commentAddParam){
+    public Result<Integer> commentActivity(@Validated @RequestBody CommentAddParam commentAddParam){
         Assert.notNull(commentAddParam.getRootId(),CommentExceptionEnum.APPLY_ROOT_ID_NOT_NULL.getMessage());
         Assert.notNull(commentAddParam.getpId(),CommentExceptionEnum.APPLY_P_ID_NOT_NULL.getMessage());
         Assert.notNull(commentAddParam.getComContent(),CommentExceptionEnum.APPLY_CONTENT_NOT_EMPTY.getMessage());
@@ -51,11 +51,12 @@ public class CommentController extends BaseController {
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         if(user==null || user.getAccount()==null){
             logger.info("评论获取用户账号失败");
-            result.setCode(CommentExceptionEnum.NETWORK_ANOMALY.getCode());
-            result.setResult(CommentExceptionEnum.NETWORK_ANOMALY.getMessage());
-            return result;
+            return new Result(CommentExceptionEnum.NETWORK_ANOMALY.getCode(),CommentExceptionEnum.NETWORK_ANOMALY.getMessage());
         }
-        commentService.commentActivity(commentAddParam,user.getAccount());
+        commentAddParam.getAccount();
+        int resNum = commentService.commentActivity(commentAddParam);
+        logger.info("-------------评论/回复添加成功，数据响应条数：{}---------------",resNum);
+        result.setData(resNum);
         return result;
     }
 
@@ -68,9 +69,7 @@ public class CommentController extends BaseController {
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         if(user==null || user.getAccount()==null){
             logger.info("评论点赞获取用户账号失败");
-            result.setCode(CommentExceptionEnum.NETWORK_ANOMALY.getCode());
-            result.setResult(CommentExceptionEnum.NETWORK_ANOMALY.getMessage());
-            return result;
+            return new Result(CommentExceptionEnum.NETWORK_ANOMALY.getCode(),CommentExceptionEnum.NETWORK_ANOMALY.getMessage());
         }
         commentService.commentActivityLike(id,user.getAccount());
         return result;
@@ -85,9 +84,7 @@ public class CommentController extends BaseController {
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         if(user==null || user.getAccount()==null){
             logger.info("评论取消点赞获取用户账号失败");
-            result.setCode(CommentExceptionEnum.NETWORK_ANOMALY.getCode());
-            result.setResult(CommentExceptionEnum.NETWORK_ANOMALY.getMessage());
-            return result;
+            return new Result(CommentExceptionEnum.NETWORK_ANOMALY.getCode(),CommentExceptionEnum.NETWORK_ANOMALY.getMessage());
         }
         commentService.commentActivityCancelLike(id,user.getAccount());
         return result;

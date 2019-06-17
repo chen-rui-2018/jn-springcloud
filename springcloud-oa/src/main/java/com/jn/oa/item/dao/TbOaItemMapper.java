@@ -16,15 +16,21 @@ public interface TbOaItemMapper {
 
     int insertSelective(TbOaItem record);
 
+    List<TbOaItem> selectByExampleWithBLOBs(TbOaItemCriteria example);
+
     List<TbOaItem> selectByExample(TbOaItemCriteria example);
 
     TbOaItem selectByPrimaryKey(String id);
 
     int updateByExampleSelective(@Param("record") TbOaItem record, @Param("example") TbOaItemCriteria example);
 
+    int updateByExampleWithBLOBs(@Param("record") TbOaItem record, @Param("example") TbOaItemCriteria example);
+
     int updateByExample(@Param("record") TbOaItem record, @Param("example") TbOaItemCriteria example);
 
     int updateByPrimaryKeySelective(TbOaItem record);
+
+    int updateByPrimaryKeyWithBLOBs(TbOaItem record);
 
     int updateByPrimaryKey(TbOaItem record);
 }

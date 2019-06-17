@@ -1,10 +1,11 @@
 <template>
   <div class="actiList">
     <el-row type="flex" justify="space-between">
-      <el-col :span="16"/>
-      <el-col :span="8">
+      <el-col :span="15"/>
+      <el-col :span="9">
         <div class="grid-content bg-purple-light">
-          <el-button class="filter-item" type="primary" round>审批报名人</el-button>
+          <!-- <el-button class="filter-item" type="primary" round @click="ApproveApplicant">审批报名人</el-button> -->
+          <el-button v-if="$route.query.applyCheck == '1'" class="filter-item" type="primary" round @click="ApproveApplicant">审批报名人</el-button>
           <el-button class="filter-item" type="primary" round @click="handleRegistration">下载签到二维码</el-button>
           <el-button class="filter-item" type="primary" round @click="handleExport">导出Excel</el-button>
           <el-button class="filter-item" type="primary" round @click="handleReturn">返回</el-button>
@@ -59,12 +60,12 @@
           </template>
         </tr>
       </thead>
-      <tbody>
+      <tbody class="write">
         <template v-for="(i,ky) in actiListData">
           <tr :key="ky">
             <td>{{ ky+1 }}</td>
             <td>{{ i.name }}</td>
-            <td>{{ i.sex }}</td>
+            <td><span v-if="i.sex=='0'">女</span><span v-if="i.sex=='1'">男</span></td>
             <td>{{ i.age }}</td>
             <td>{{ i.company }}</td>
             <td>{{ i.post }}</td>
@@ -81,12 +82,8 @@
                   v-if="i.signStatus==='0'"
                   type="text"
                   class="operation"
-                  @click="handleSign(i)">签到
+                  @click="handleSign(i.id)">签到
                 </el-button>
-                <!-- <el-button
-                  v-if="i.signStatus==='1'"
-                  type="text"
-                  class="operation"/> -->
               </template>
             </td>
           </tr>
@@ -105,15 +102,19 @@
   </div>
 </template>
 <script>
+// import {
+//   getApplyActivityList,
+//   // downloadSignCodeImg,
+//   signInActivityBackend,
+//   exportDataExcel
+// } from '@/api/portalManagement/activity'
 import {
-  getApplyActivityList,
-  // downloadSignCodeImg,
-  signInActivityBackend,
-  exportDataExcel
-} from '@/api/portalManagement/activity'
+  api
+} from '@/api/axios'
 export default {
   data() {
     return {
+      baseUrl: process.env.BASE_API,
       total: 0,
       signincodeDialogVisible: false,
       src: '',
@@ -124,7 +125,8 @@ export default {
         exportColName: [],
         exportTitle: [],
         page: 1,
-        rows: 10
+        rows: 10,
+        applyStatus: '1'
       },
       tableHeadArr: [
         {
@@ -179,24 +181,31 @@ export default {
     this.getApplyActivityList()
   },
   methods: {
+    ApproveApplicant() {
+      this.$router.push({ path: `registrationChecklist`, query: { activityId: this.$route.query.id }})
+    },
     getApplyActivityList() {
-      this.actiList.activityId = this.$route.params.id
-      getApplyActivityList(this.actiList).then(res => {
-        if (res.data.code === '0000') {
+      this.actiList.activityId = this.$route.query.id
+      api(`${this.GLOBAL.parkUrl}activity/applyActivityList`, this.actiList, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.actiListData = res.data.data.rows
           this.total = res.data.data.total
         }
       })
     },
+    // 分页数更改
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`)
+      this.actiList.rows = val
+      this.getApplyActivityList()
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`)
+      this.actiList.page = val
+      this.getApplyActivityList()
     },
     handleRegistration() {
       this.signincodeDialogVisible = true
-      this.src = `http://192.168.10.31:1101/springcloud-park/activity/downloadSignCodeImg?activityId=${this.$route.params.id}`
+      // console.log(`${this.baseUrl}${this.GLOBAL.parkUrl}activity/downloadSignCodeImg?activityId=${this.$route.params.id}`)
+      this.src = `${this.baseUrl}${this.GLOBAL.parkUrl}activity/downloadSignCodeImg?activityId=${this.$route.params.id}`
     },
     handleExport() {
       const exportColName = []
@@ -214,23 +223,23 @@ export default {
         exportColName: [exportColName.join(',')],
         exportTitle: [exportTitle.join(',')],
         page: this.actiList.page,
-        rows: this.total
+        rows: this.actiList.rows
       }
-      exportDataExcel(data).then(res => {
+      api(`${this.GLOBAL.parkUrl}activity/exportDataExcel?activityId=${data.activityId}&exportColName=${data.exportColName}&exportTitle=${data.exportTitle}&page=${data.page}&rows=${data.rows}`, '', 'get').then(res => {
         window.location.href = res.request.responseURL
       })
     },
     handleReturn() {
       this.$router.push({ name: 'activityManagement', params: { id: this.$route.params.id }})
     },
-    handleSign(i) {
+    handleSign(id) {
       const data = {
-        applyId: i.id
+        applyId: id
       }
-      signInActivityBackend(data).then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.parkUrl}activity/activityApply/signInActivityBackend?applyId=${id}`, data, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.getApplyActivityList()
-          this.$message(res.data.result)
+          this.$message.success('签到成功')
         } else {
           this.$message(res.data.result)
         }

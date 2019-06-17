@@ -1,170 +1,80 @@
 <template>
-  <div class="userHome" @click="menuFlag = false">
-    <div class="header clearfix">
-      <div class="titleImg fl"><img src="@/../static/img/login-logo.png" alt=""></div>
-      <div class="headerRight fr pr">
-        <i class="el-icon-search" v-if="!sousuo" @click="handleChange" style="vertical-align: middle;font-size:18px;color:#666;"></i>
-        <i class="el-icon-bell" style="vertical-align: middle;margin-left:20px;font-size:18px;color:#666;"></i>
-        <span class="line" style="vertical-align: middle;"></span>
-        <div class="imgU" :class="{'active':menuFlag}" alt="" @click.stop="menuFlag=!menuFlag">
-          <img v-if="userData.avatar" :src="userData.avatar" style="vertical-align: middle;padding:20px">
-          <img v-else src="@/../static/img/smaImg.png" style="vertical-align: middle;padding:20px">
+  <div class="homePage" :class="{pd: $store.state.hiddenNav}">
+    <div class="homePage_content" :class="{'w': $store.state.hiddenNav}">
+      <div class="homePage_typearea">
+        <!-- 面包屑 -->
+        <div class="homePage_breadcrumb" v-if="$store.state.hiddenNav">
+          <el-breadcrumb separator="/">
+            <el-breadcrumb-item :to="{ path: '/home' }">用户中心</el-breadcrumb-item>
+            <el-breadcrumb-item>
+              <a href="javascript:;">{{this.$route.meta.title}}</a>
+            </el-breadcrumb-item>
+          </el-breadcrumb>
         </div>
-
-        <div class="avaMenu" v-if="menuFlag">
-          <el-card class="box-card bxcard">
-            <ul class="avaUL">
-              <li style="border-bottom:1px solid #eee;">您好，{{userData.account}}</li>
-              <!-- <li :class="{'liActi':$route.name == i.pathName}" v-for="(i,k) in dataLeft" :key="k" @click="dianji(i)">{{i.name}}</li> -->
-              <li :class="{'liActi':$route.name == i.pathName}" v-for="(i,k) in dataTop" :key="k" @click="dianji(i)">{{i.name}}</li>
-              <li style="border-top:1px solid #eee;" @click="loginOut">退出</li>
-            </ul>
-          </el-card>
-        </div>
-      </div>
-
-      <div class="nav">
-        <transition name="fade">
-          <div class="sousuo posA" v-if="sousuo">
-            <i class="el-icon-close" style="vertical-align: middle;" @click="sousuo=false"></i>
-            <input type="text" v-focus @keyup.enter="handleSearch">
-            <i class="el-icon-search" style="vertical-align: middle;" @click="sousuo=false"></i>
-          </div>
-
-          <ul class="clearfix posA" v-else>
-            <li>
-              <a href="javascript:void(0);">首页</a>
-            </li>
-            <li>
-              <a href="javascript:void(0);">招商引资</a>
-            </li>
-            <li>
-              <a href="javascript:void(0);">智慧党建</a>
-            </li>
-            <li>
-              <a href="javascript:void(0);">企业服务</a>
-            </li>
-          </ul>
-        </transition>
-        <iframe id="kskfpt" ref="iframe" src="" width="0" height="0" frameborder="0" scrolling="auto" style="visibility: hidden;"/>
-      </div>
-    </div>
-    <div class="userContent">
-      <div class="honcontent w">
-        <div class="bread">
-          <span style="color:#666">用户中心</span>
-          <span>/</span>
-          <span style="color:#009f41" v-for="(i,k) in dataLeft" :key='k' v-if="$route.name == i.pathName">{{i.name}}</span>
-          <!-- <el-breadcrumb separator="/">
-            <el-breadcrumb-item :to="{ path: i.path }" v-for="(i,k) in dataLeft" :key='k'>{{i.name}}</el-breadcrumb-item>
-            <el-breadcrumb-item></el-breadcrumb-item>
-          </el-breadcrumb> -->
-        </div>
-        <div class="userCon">
-          <!-- <div class="navList"></div>
-          <div class="navContent"></div> -->
-          <el-container>
-            <el-aside style="width:150px">
-              <ul class="yijiUl">
-                <li :class="{'lick':showNum == i.id,'lihover':i.flag&&!i.hasChildren}" v-for="(i,k) in dataLeft" :key='k' @mouseenter='i.flag=true' @mouseleave='i.flag=false' @click="liCk(i)">
-                  <span class="line" v-if="showNum == i.id"></span>
-                  <!-- <span class="line" v-if="i.flag || $route.name == i.pathName"></span> -->
-                  <span>{{i.name}}</span>
-                  <i class="el-icon-arrow-down" v-if="i.hasChildren&&i.childrenShow==false" style="margin-left:25px"></i>
-                  <i class="el-icon-arrow-up" v-if="i.hasChildren&&i.childrenShow==true" style="margin-left:25px"></i>
-                  <ul class="zhedieUl" v-if="i.childrenShow">
-                    <li :class="{'lick':showNum == item.id,'lihover':item.flag}" v-for="item in i.children" :key="item.id" @mouseenter='item.flag=true' @mouseleave='item.flag=false' @click.stop="ifs(item)">
-                      <span class="line" v-if="showNum == item.id"></span>
-                      <span>{{item.name}}</span>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
+        <!-- 主体内容 -->
+        <el-container style="min-height: 500px">
+          <!-- 侧边栏 -->
+          <div class="slider" v-if="$store.state.hiddenNav">
+            <el-aside width="150px">
+              <el-menu :default-active="this.$route.path" class="el-menu-vertical-demo" @open="handleOpen"
+                @close="handleClose" @select="handleSelect">
+                <sidebar-item v-for="(item,index,key) in menuItems" :key="key" :item="item" :index="item.id" />
+              </el-menu>
             </el-aside>
-            <user-home v-if="showNum == 0" :userData='userData'></user-home>
-            <el-container v-if="iframeShow" style="background:#fff;">
-              <iframe id="live" :src="iframePath" width="100%" height="100%" frameborder="0"></iframe>
-              <!-- <iframe id="live" :src="iframePath" width="100%" height="100%" scrolling="no" frameborder="0" onload="setIframeHeight(this)"></iframe> -->
-            </el-container>
-            <!-- <router-view :userData='userData' /> -->
-          </el-container>
-        </div>
+          </div>
+          <!-- 主体 -->
+          <div class="homePage_main userHome">
+            <el-main :class="{'isMobile': isMobile}">
+              <keep-alive>
+                <router-view v-if="$route.meta.keepAlive" :userData="userData"></router-view>
+              </keep-alive>
+              <router-view v-if="!$route.meta.keepAlive" :userData="userData"></router-view>
+            </el-main>
+          </div>
+        </el-container>
       </div>
     </div>
   </div>
 </template>
 <script>
-import $ from 'jquery'
-import bus from "@/util/bus";
-import UserHome from '@/components/userHome'
+import $ from "jquery";
+import api from '@/util/api'
+import SidebarItem from './common/SidebarItem'
+import { isMobile } from "@/util"
+import bus from "@/util/bus"
+import UserHome from "@/components/userHome"
+import ElementUI from 'element-ui'
+import { getToken, removeToken } from '@/util/auth'
 export default {
-  components:{UserHome},
+  components: { UserHome ,SidebarItem},
+  //  components: { SidebarItem },
   data() {
     return {
+      businessArea:'',
+      menuItems:[],
+      isMobile: isMobile(),
+      orgArr: [],
+      organizationForm: {
+        orgName: "",
+        orgId: ""
+      },
+      centerDialogVisible: false,
       sousuo: false,
       menuFlag: false,
-      zhedieFlag:false,
-      imgUrl: "",
-      userData: {},
-      showNum:0,
-      iframeShow:false,
-      iframePath:'',
-      dataTop:[
+      userData: {
+        avatar: ""
+      },
+      dataTop: [
         {
           name: "用户资料",
           flag: false,
-          path:'/user',
+          path: "/user",
           pathName: "user",
-          id: 0,
-        }
-      ],
-      dataLeft: [
-        {
-          name: "用户资料",
-          flag: false,
-          hasChildren:false,
-          path: "@/../components/userHome",
-          pathName: "userHome",
-          id: 0,
-          childrenShow:false,
-        },
-        {
-          name: "人才申报",
-          flag: false,
-          // path: "@/../components/userHome",
-          // path: "/user/userData",
-          hasChildren:true,
-          pathName: "userData",
-          id: 1,
-          childrenShow:false,
-          children: [
-            {
-              name: "待办事务处理",
-              flag: false,
-              // path: "http://112.94.22.222:2381/platform/office/bpmReceivedProcess/pending.htm",
-              path: "https://www.baidu.com/",
-              id: 10,
-            },
-            {
-              name: "发起人才申报",
-              flag: false,
-              path: "http://112.94.22.222:2381/platform/bpmn/instance/bpmInst/toStart.htm?defId=559018228462911488&proInstId=",
-              id: 11,
-            },
-            {
-              name: "我发起的流程",
-              flag: false,
-              path: "112.94.22.222:2381/platform/office/bpmInitiatedProcess/myRequest.htm",
-              id: 12,
-            }
-          ]
+          id: 0
         }
       ]
     };
   },
-  mounted() {
-    // 预先登录模式
-    $('#kskfpt').attr('src', `http://112.94.22.222:2381/noPasswordLogin.htm?username=${this.$route.query.account}&password=123`)
   directives: {
     focus: {
       // 指令的定义
@@ -173,23 +83,114 @@ export default {
       }
     }
   },
-  created() {
-    bus.$on("getUserinfoF", res => {
-      this.getUserExtension();
+  // watch: {
+  //   centerDialogVisible(val) {
+  //     !val &&
+  //       setTimeout(() => {
+  //         this.$refs["organizationForm"].resetFields();
+  //       }, 0);
+  //   }
+  // },
+  beforeRouteEnter(to, from, next) {
+
+    let token = getToken()
+    api.post({
+      url: "getDynamicMenu",
+      headers: { token: token },
+      callback: res => {
+        if (res.code === "0000") {
+          res.data.forEach(val=>{
+            if(val.label==='门户'){
+              let menuItems = val.children[0].children
+              sessionStorage.menuItems= JSON.stringify(menuItems)
+              next(vm => {
+                vm.menuItems = menuItems
+                }
+              )
+            }
+          })
+        }
+        // else {
+        //   ElementUI.Message.error('请登录后再访问个人中心');
+        //   setTimeout(() => {
+        //     next('/login')
+        //   }, 1000)
+        // }
+      }
     });
   },
   mounted() {
+    let _this = this
+    bus.$on("getUserinfoF", res => {
+      _this.getUserExtension();
+    });
     this.getUserExtension();
   },
+  updated() {
+    try {
+      var iframe = document.getElementById("live");
+      iframe.onload = function() {};
+      iframe.onreadystatechange = function() {
+        if (iframe.readyState == "complete") {
+          // alert("Local iframe is now loaded.")
+        }
+      };
+    } catch (e) {}
+  },
   methods: {
-    ifs(i){
-      this.iframeShow = true;
-      this.showNum = i.id;
-      this.iframePath = i.path;
+    getBusinessArea(value){
+        this.orgArr.forEach(v=>{
+          if(value===v.orgId){
+         this.businessArea=v.businessArea
+          }
+        }
+        )
+    },
+    // 前往填写页面
+    toAdvisoryInformation() {
+      this.$refs["organizationForm"].validate(valid => {
+        if (valid) {
+          this.centerDialogVisible = false;
+          this.$router.push({
+            name: "advisoryInformation",
+            query: {
+              orgId: this.organizationForm.orgId,
+              businessArea:this.businessArea
+            }
+          });
+        } else {
+          return false;
+        }
+      });
+    },
+    //获取机构列表
+    query() {
+      this.api.get({
+        url: "selectOrgInfo",
+        data: { orgName: "" },
+        callback: res => {
+          if (res.code == "0000") {
+            if (res.data != null) {
+              this.orgArr = res.data;
+            }
+          } else {
+            this.$message.error(res.result);
+          }
+        }
+      });
+    },
+
+    // 弹出选择机构对话框
+    checkOrganization() {
+      this.orgArr = [];
+      this.organizationForm.orgName = "";
+      this.organizationForm.orgId = "";
+      this.centerDialogVisible = true;
+      this.query();
     },
     handleSearch() {},
     loginOut() {
-      window.sessionStorage.removeItem("token");
+      removeToken()
       this.$router.push({ path: "/" });
     },
     dianji(i) {
@@ -197,18 +198,6 @@ export default {
         return;
       }
       this.$router.push(`${i.path}?account=${this.$route.query.account}`);
-    },
-    liCk(i) {
-      if (i.id == this.showNum) {
-        return;
-      }
-      if(i.hasChildren){
-        i.childrenShow = !i.childrenShow
-        return
-      }
-      this.iframeShow = false;
-      this.showNum = i.id
-      // this.$router.push(`${i.path}?account=${this.$route.query.account}`);
     },
     handleChange() {
       // this.sousuo = true;
@@ -220,15 +209,313 @@ export default {
         data: {},
         callback: function(res) {
           if (res.code == "0000") {
-            _this.userData = res.data;
+            if (res.data != null) {
+              _this.userData = res.data;
+            }
           } else {
             _this.$message.error(res.result);
           }
         }
       });
+    },
+    // 导航栏两个
+    handleOpen(key, keyPath) {
+      console.log(key, keyPath);
+    },
+    handleClose(key, keyPath) {
+      console.log(key, keyPath);
+    },
+    handleSelect(key, keyPath) {
+      console.log(keyPath);
+      if(keyPath=='/roleCertifications/advisoryInformation'){
+        console.log(123)
+        this.checkOrganization()
+      }
     }
   }
 };
 </script>
 <style lang="scss">
+ .el-main {
+            padding: 0 20px;
+          }
+  .header.user-center {
+    background-color: #fff;
+    .router-link {
+      color: #333;
+    }
+  }
+.homePage {
+  .el-main {
+    padding: 0 20px;
+    &.isMobile {
+      padding: 0;
+    }
+  }
+  &.pd {
+    padding-top: 66px;
+  }
+  background: #f3f3f3;
+  .btn {
+    text-align: center;
+    background: rgba(236, 252, 242, 1);
+    border: 1px solid rgba(65, 215, 135, 1);
+    border-radius: 4px;
+    color: #00a041;
+    font-size: 12px;
+    padding: 9px 13px;
+  }
+  .demo-dynamic {
+    display: inline-block;
+    .el-form-item__content {
+      height: 33px;
+      line-height: 33px;
+      // width: 266px;
+    }
+    .el-input-group__append {
+      background-color: #00a041;
+      color: #fff;
+      border: none;
+      font-size: 13px;
+      // border-bottom: 1px solid #fff;
+    }
+    .el-form-item {
+      display: inline-block;
+    }
+    .el-input__inner {
+      height: 33px;
+      line-height: 33px;
+      width: 266px;
+    }
+    .el-input {
+      width: 266px;
+    }
+    .el-form-item__label {
+      height: 33px;
+      line-height: 33px;
+    }
+    .orgStyle {
+      border: 1px solid rgba(65, 215, 135, 1);
+      text-align: left;
+      margin-bottom: 20px;
+      max-height: 150px;
+      overflow: auto;
+      li {
+        margin-left: 10px;
+        cursor: pointer;
+      }
+    }
+  }
+  .el-dialog--center .el-dialog__body {
+    padding: 10px 20px 0px 20px;
+    text-align: center;
+  }
+.header {
+    padding: 0px 160px;
+    box-shadow: 0px 12px 12px #e6e6e6;
+    background-color: #fff;
+    color: black;
+    .titleImg {
+      width: 155px;
+      height: 38px;
+      padding: 18px 0;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .nav {
+      width: 600px;
+      height: 37.6px;
+      margin: 0 auto;
+      > ul {
+        > li {
+          float: left;
+          color: black;
+          font-size: 14px;
+          text-align: center;
+          line-height: 38px;
+          margin: 0 50px;
+          padding: 19px 0;
+        }
+      }
+      .sousuo {
+        font-size: 18px;
+        // height: 38px;
+        line-height: 38px;
+        // width: 397px;
+        > input {
+          border: none;
+          width: 350px;
+          height: 38px;
+          font-size: 14px;
+        }
+        > input::-webkit-input-placeholder {
+          color: #b7b7b7;
+          font-size: 12px;
+        }
+      }
+    }
+    .headerRight {
+      line-height: 38px;
+      .imgU {
+        width: 74px;
+        height: 74px;
+        display: inline-block;
+        > img {
+          width: 34px;
+          height: 34px;
+          border-radius: 50%;
+        }
+      }
+      .imgU.active {
+        background: #00a040;
+      }
+      .line {
+        height: 10px;
+        display: inline-block;
+        background: #ccc;
+        width: 1px;
+        // margin: 0 10px;
+        margin-left: 10px;
+      }
+      .avaMenu {
+        position: absolute;
+        box-shadow: 2px 2px 5px #eee;
+        background: #fff;
+        z-index: 4;
+        left: 5px;
+        // .avaUL{
+        //   width: 150px;
+        //   >li{
+        //     padding:5px 15px;
+        //     font-size: 13px;
+        //     color:#333;
+        //     cursor: pointer;
+        //   }
+        // }
+        ul {
+          width: 150px;
+          > li {
+            padding: 5px 15px;
+            font-size: 13px;
+            color: #333;
+            cursor: pointer;
+          }
+          > li.liActi {
+            background: #00a040;
+            color: #fff;
+          }
+        }
+        .bxcard .el-card__body {
+          padding: 0;
+        }
+      }
+    }
+  }
+  .homePage_content {
+    font-size: 13px;
+    color: #333;
+    padding-bottom: 50px;
+    .homePage_typearea {
+      // 面包屑
+      .homePage_breadcrumb {
+        padding: 15px 0;
+        font-size: 12px;
+        .el-breadcrumb__item:last-child .el-breadcrumb__inner a {
+          color: #00a041;
+        }
+      }
+      // 侧边栏
+      .slider {
+        .el-submenu__title {
+          border-top: 1px solid #eee;
+          // border-bottom: 1px solid #eee;
+        }
+         .el-aside{
+            border-radius: 5px;
+          }
+          .el-menu{
+            border-right: none;
+          }
+
+        .el-menu-item.is-active {
+          color: #00a042;
+          background-color: #f7f7f7;
+          border-left: 2px solid #00a042;
+          &:hover {
+            color: #fff;
+            background-color: #00a042;
+            border-left: 2px solid #00a042;
+          }
+        }
+        .el-menu-item,
+        .el-submenu__title {
+          height: 52px;
+          line-height: 52px;
+          margin-bottom: 9px;
+        }
+        .el-submenu__title:hover {
+          background-color: #00a042;
+          color: #fff;
+        }
+        .el-submenu .el-menu-item {
+          padding: 0;
+          min-width: 0;
+          background-color: #f7f7f7;
+        }
+       .el-submenu .el-menu-item.is-active{
+         border-left:none;
+       }
+        .el-submenu.is-active .el-submenu__title {
+          border-left: 2px solid #00a042;
+        }
+         .el-menu-item {
+            //
+            margin: 0;
+          }
+        .el-menu-item:hover {
+          color: #fff;
+          background-color: #00a042;
+        }
+        .el-menu-item-group {
+          background-color: #f7f7f7;
+          .el-menu-item.is-active {
+            border-left: none;
+          }
+          .el-menu-item {
+            background-color: #f7f7f7;
+            margin: 0;
+          }
+        }
+        .homePage_main{
+          flex: 1;
+          .el-main {
+            padding: 0 20px;
+          }
+        .el-menu-item:hover {
+          color: #fff;
+          background-color: #00a042;
+
+          .el-main.isMobile{
+            padding: 0;
+          }
+
+        }
+      }
+
+    .isMobile {
+      .el-tabs--border-card > .el-tabs__content {
+        padding: 0;
+      }
+    }
+  }
+  .homePage_main {
+    flex: 1;
+    width: 100%;
+  }
+    }
+  }
+}
+
 </style>

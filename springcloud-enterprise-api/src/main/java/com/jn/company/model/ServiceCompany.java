@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Arrays;
 
 /**
  * 企业详情Bean
@@ -48,31 +48,24 @@ public class ServiceCompany implements Serializable {
     private String products;
     @ApiModelProperty(value = "主要原材料")
     private String material;
-    @ApiModelProperty(value = "企业性质ID 多个,分隔")
+    @ApiModelProperty(value = "企业性质ID")
     private String comProperty;
-
-    @ApiModelProperty(value = "企业性质ID[数组]")
-    private String[] comPropertys;
-
-    @ApiModelProperty(value = "企业性质名称[数组]")
-    private String[] comPropertyNames;
-
+    @ApiModelProperty(value = "企业性质名称")
+    private String comPropertyName;
     @ApiModelProperty(value = "注册资本 万元")
-    private Long regCapital;
+    private BigDecimal regCapital;
     @ApiModelProperty(value = "增资情况")
     private String addCapital;
-    @ApiModelProperty(value = "企业规模 万元")
-    private Long comScale;
+    @ApiModelProperty(value = "企业规模")
+    private String comScale;
     @ApiModelProperty(value = "成立时间")
     private String foundingTime;
     @ApiModelProperty(value = "落地时间")
     private String runTime;
     @ApiModelProperty(value = "行业分类ID(产业领域、所属行业)")
     private String induType;
-
     @ApiModelProperty(value = "行业分类(产业领域、所属行业)名称")
     private String induTypeName;
-
     @ApiModelProperty(value = "行业代码")
     private String induCode;
     @ApiModelProperty(value = "营业执照")
@@ -121,6 +114,8 @@ public class ServiceCompany implements Serializable {
     private String parkBuildName;
     @ApiModelProperty(value = "信用积分")
     private BigDecimal creditPoints;
+    @ApiModelProperty(value = "信用积分更新时间")
+    private String creditUpdateTime;
     @ApiModelProperty(value = "企业类型")
     private String comType;
     @ApiModelProperty(value = "是否参加园区获取【0否1是】")
@@ -131,6 +126,8 @@ public class ServiceCompany implements Serializable {
     private String checkTime;
     @ApiModelProperty(value = "企业来源 1人才企业2招商企业")
     private String comSource;
+    @ApiModelProperty(value = "所属园区ID")
+    private String affiliatedPark;
     @ApiModelProperty(value = "创建人")
     private String creatorAccount;
     @ApiModelProperty(value = "修改人")
@@ -140,8 +137,9 @@ public class ServiceCompany implements Serializable {
     @ApiModelProperty(value = "修改时间")
     private String modifiedTime;
     @ApiModelProperty(value = "企业宣传图片")
-    private List<CompanyProImg> proImgs;
-
+    private String[] propagandaPicture;
+    @ApiModelProperty(value = "关注用户数及当前用户关注状态")
+    private CareUserDetails careUserDetails;
 
     public String getId() {
         return id;
@@ -279,11 +277,19 @@ public class ServiceCompany implements Serializable {
         this.comProperty = comProperty;
     }
 
-    public Long getRegCapital() {
+    public String getComPropertyName() {
+        return comPropertyName;
+    }
+
+    public void setComPropertyName(String comPropertyName) {
+        this.comPropertyName = comPropertyName;
+    }
+
+    public BigDecimal getRegCapital() {
         return regCapital;
     }
 
-    public void setRegCapital(Long regCapital) {
+    public void setRegCapital(BigDecimal regCapital) {
         this.regCapital = regCapital;
     }
 
@@ -295,11 +301,11 @@ public class ServiceCompany implements Serializable {
         this.addCapital = addCapital;
     }
 
-    public Long getComScale() {
+    public String getComScale() {
         return comScale;
     }
 
-    public void setComScale(Long comScale) {
+    public void setComScale(String comScale) {
         this.comScale = comScale;
     }
 
@@ -325,6 +331,14 @@ public class ServiceCompany implements Serializable {
 
     public void setInduType(String induType) {
         this.induType = induType;
+    }
+
+    public String getInduTypeName() {
+        return induTypeName;
+    }
+
+    public void setInduTypeName(String induTypeName) {
+        this.induTypeName = induTypeName;
     }
 
     public String getInduCode() {
@@ -519,6 +533,14 @@ public class ServiceCompany implements Serializable {
         this.creditPoints = creditPoints;
     }
 
+    public String getCreditUpdateTime() {
+        return creditUpdateTime;
+    }
+
+    public void setCreditUpdateTime(String creditUpdateTime) {
+        this.creditUpdateTime = creditUpdateTime;
+    }
+
     public String getComType() {
         return comType;
     }
@@ -559,6 +581,14 @@ public class ServiceCompany implements Serializable {
         this.comSource = comSource;
     }
 
+    public String getAffiliatedPark() {
+        return affiliatedPark;
+    }
+
+    public void setAffiliatedPark(String affiliatedPark) {
+        this.affiliatedPark = affiliatedPark;
+    }
+
     public String getCreatorAccount() {
         return creatorAccount;
     }
@@ -591,35 +621,87 @@ public class ServiceCompany implements Serializable {
         this.modifiedTime = modifiedTime;
     }
 
-    public List<CompanyProImg> getProImgs() {
-        return proImgs;
+    public String[] getPropagandaPicture() {
+        return propagandaPicture;
     }
 
-    public void setProImgs(List<CompanyProImg> proImgs) {
-        this.proImgs = proImgs;
+    public void setPropagandaPicture(String[] propagandaPicture) {
+        this.propagandaPicture = propagandaPicture;
     }
 
-    public String[] getComPropertys() {
-        return comPropertys;
+    public CareUserDetails getCareUserDetails() {
+        return careUserDetails;
     }
 
-    public void setComPropertys(String[] comPropertys) {
-        this.comPropertys = comPropertys;
+    public void setCareUserDetails(CareUserDetails careUserDetails) {
+        this.careUserDetails = careUserDetails;
     }
 
-    public String[] getComPropertyNames() {
-        return comPropertyNames;
-    }
-
-    public void setComPropertyNames(String[] comPropertyNames) {
-        this.comPropertyNames = comPropertyNames;
-    }
-
-    public String getInduTypeName() {
-        return induTypeName;
-    }
-
-    public void setInduTypeName(String induTypeName) {
-        this.induTypeName = induTypeName;
+    @Override
+    public String toString() {
+        return "ServiceCompany{" +
+                "id='" + id + '\'' +
+                ", comName='" + comName + '\'' +
+                ", comNameShort='" + comNameShort + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", comAdmin='" + comAdmin + '\'' +
+                ", unifyCode='" + unifyCode + '\'' +
+                ", owners='" + owners + '\'' +
+                ", ownerLaw='" + ownerLaw + '\'' +
+                ", ownerId='" + ownerId + '\'' +
+                ", ownerPhone='" + ownerPhone + '\'' +
+                ", ownerWechat='" + ownerWechat + '\'' +
+                ", ownerQq='" + ownerQq + '\'' +
+                ", bankName='" + bankName + '\'' +
+                ", bankAccount='" + bankAccount + '\'' +
+                ", products='" + products + '\'' +
+                ", material='" + material + '\'' +
+                ", comProperty='" + comProperty + '\'' +
+                ", comPropertyName='" + comPropertyName + '\'' +
+                ", regCapital=" + regCapital +
+                ", addCapital='" + addCapital + '\'' +
+                ", comScale='" + comScale + '\'' +
+                ", foundingTime='" + foundingTime + '\'' +
+                ", runTime='" + runTime + '\'' +
+                ", induType='" + induType + '\'' +
+                ", induTypeName='" + induTypeName + '\'' +
+                ", induCode='" + induCode + '\'' +
+                ", businessLicense='" + businessLicense + '\'' +
+                ", licStarttime='" + licStarttime + '\'' +
+                ", licEndtime='" + licEndtime + '\'' +
+                ", registerType='" + registerType + '\'' +
+                ", orgCode='" + orgCode + '\'' +
+                ", mainProducts='" + mainProducts + '\'' +
+                ", businessScope='" + businessScope + '\'' +
+                ", contact='" + contact + '\'' +
+                ", conPhone='" + conPhone + '\'' +
+                ", conWechat='" + conWechat + '\'' +
+                ", conQq='" + conQq + '\'' +
+                ", conAddress='" + conAddress + '\'' +
+                ", postcode='" + postcode + '\'' +
+                ", comAddress='" + comAddress + '\'' +
+                ", comTele='" + comTele + '\'' +
+                ", comWeb='" + comWeb + '\'' +
+                ", comServer='" + comServer + '\'' +
+                ", comDemand='" + comDemand + '\'' +
+                ", addrPark='" + addrPark + '\'' +
+                ", comSynopsis='" + comSynopsis + '\'' +
+                ", parkBuildId='" + parkBuildId + '\'' +
+                ", parkBuildName='" + parkBuildName + '\'' +
+                ", creditPoints=" + creditPoints +
+                ", creditUpdateTime='" + creditUpdateTime + '\'' +
+                ", comType='" + comType + '\'' +
+                ", isJoinActivity='" + isJoinActivity + '\'' +
+                ", checkStatus='" + checkStatus + '\'' +
+                ", checkTime='" + checkTime + '\'' +
+                ", comSource='" + comSource + '\'' +
+                ", affiliatedPark='" + affiliatedPark + '\'' +
+                ", creatorAccount='" + creatorAccount + '\'' +
+                ", modifierAccount='" + modifierAccount + '\'' +
+                ", createdTime='" + createdTime + '\'' +
+                ", modifiedTime='" + modifiedTime + '\'' +
+                ", propagandaPicture=" + Arrays.toString(propagandaPicture) +
+                ", careUserDetails=" + careUserDetails +
+                '}';
     }
 }

@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.index.dao.TbAchievementMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.index.entity.TbAchievement">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="serial_no" jdbcType="VARCHAR" property="serialNo" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="details" jdbcType="VARCHAR" property="details" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="view_count" jdbcType="INTEGER" property="viewCount" />
+    <result column="sort" jdbcType="VARCHAR" property="sort" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, serial_no, title, details, type, status, view_count, sort, creator_account, created_time, 
+    modifier_account, modified_time, record_status
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.park.index.entity.TbAchievementCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_achievement
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_achievement
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_achievement
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.park.index.entity.TbAchievementCriteria">
+    delete from tb_achievement
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.park.index.entity.TbAchievement">
+    insert into tb_achievement (id, serial_no, title, 
+      details, type, status, 
+      view_count, sort, creator_account, 
+      created_time, modifier_account, modified_time, 
+      record_status)
+    values (#{id,jdbcType=VARCHAR}, #{serialNo,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
+      #{details,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{viewCount,jdbcType=INTEGER}, #{sort,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{recordStatus,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.park.index.entity.TbAchievement">
+    insert into tb_achievement
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="serialNo != null">
+        serial_no,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="details != null">
+        details,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="viewCount != null">
+        view_count,
+      </if>
+      <if test="sort != null">
+        sort,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNo != null">
+        #{serialNo,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="details != null">
+        #{details,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="viewCount != null">
+        #{viewCount,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.park.index.entity.TbAchievementCriteria" resultType="java.lang.Long">
+    select count(*) from tb_achievement
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_achievement
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serialNo != null">
+        serial_no = #{record.serialNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.title != null">
+        title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.details != null">
+        details = #{record.details,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.viewCount != null">
+        view_count = #{record.viewCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.sort != null">
+        sort = #{record.sort,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_achievement
+    set id = #{record.id,jdbcType=VARCHAR},
+      serial_no = #{record.serialNo,jdbcType=VARCHAR},
+      title = #{record.title,jdbcType=VARCHAR},
+      details = #{record.details,jdbcType=VARCHAR},
+      type = #{record.type,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
+      view_count = #{record.viewCount,jdbcType=INTEGER},
+      sort = #{record.sort,jdbcType=VARCHAR},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      record_status = #{record.recordStatus,jdbcType=TINYINT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.index.entity.TbAchievement">
+    update tb_achievement
+    <set>
+      <if test="serialNo != null">
+        serial_no = #{serialNo,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="details != null">
+        details = #{details,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="viewCount != null">
+        view_count = #{viewCount,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null">
+        sort = #{sort,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.index.entity.TbAchievement">
+    update tb_achievement
+    set serial_no = #{serialNo,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      details = #{details,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      view_count = #{viewCount,jdbcType=INTEGER},
+      sort = #{sort,jdbcType=VARCHAR},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      record_status = #{recordStatus,jdbcType=TINYINT}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

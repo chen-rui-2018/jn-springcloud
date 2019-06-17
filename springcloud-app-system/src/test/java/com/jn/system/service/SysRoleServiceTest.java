@@ -4,6 +4,7 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
+import com.jn.system.model.SysRole;
 import com.jn.system.model.User;
 import com.jn.system.permission.entity.TbSysRole;
 import com.jn.system.permission.model.*;
@@ -23,6 +24,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -136,6 +138,19 @@ public class SysRoleServiceTest {
     }
 
     @Test
+    public void getUserByRole(){
+        //1.测试值有角色名称时
+        SysRole role = new SysRole();
+        role.setRoleName("超级管理者");
+        List<User> userList1 = sysRoleService.getUserByRole(role);
+        Assert.assertThat(userList1, Matchers.anything());
+
+        role.setId("10000");
+        List<User> userList2= sysRoleService.getUserByRole(role);
+        Assert.assertThat(userList2, Matchers.anything());
+    }
+
+    @Test
     public void roleAuthoredGroup() {
         //为角色添加用户组信息
         SysUserGroupRoleAdd sysUserGroupRoleAdd = new SysUserGroupRoleAdd();
@@ -183,6 +198,12 @@ public class SysRoleServiceTest {
         String result = sysRoleService.checkRoleName(roleName);
         Assert.assertThat(result, Matchers.anyOf(Matchers.equalTo(SysReturnMessageEnum.FAIL.getMessage()),
                 Matchers.equalTo(SysReturnMessageEnum.SUCCESS.getMessage())));
+    }
+
+    @Test
+    public void getRoleByName(){
+        SysRole sysRole = sysRoleService.getRoleByName(roleName);
+        Assert.assertThat(sysRole, Matchers.anything());
     }
 
     /**

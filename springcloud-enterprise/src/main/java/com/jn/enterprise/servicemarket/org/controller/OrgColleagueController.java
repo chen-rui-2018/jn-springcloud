@@ -12,7 +12,6 @@ import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
@@ -30,7 +29,7 @@ import java.util.List;
  * @Version v1.0
  * @modified By:
  */
-@Api(tags = "服务超市-机构同事")
+@Api(tags = "用户中心--我的机构--机构同事")
 @RestController
 @RequestMapping(value = "/serviceMarket/orgColleagueController")
 public class OrgColleagueController extends BaseController {
@@ -58,40 +57,52 @@ public class OrgColleagueController extends BaseController {
     }
 
     @ControllerLog(doAction = "设置为联系人")
-    @ApiOperation(value = "设置为联系人",notes = "返回数据响应条数，正常情况为1")
+    @ApiOperation(value = "设置为联系人",notes = "account：设置为联系人的账号，返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/setAsContact",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/orgColleagueController/setAsContact")
-    public Result setAsContact(@ApiParam(value = "设置为联系人的账号" ,required = true,example = "wangsong")String account){
+    public Result setAsContact(String account){
         Assert.notNull(account, OrgExceptionEnum.ACCOUNT_NOT_NULL.getMessage());
-        int responseNum = orgColleagueService.setAsContact(account);
+        //获取当前登录用户基本信息
+        User user = (User)SecurityUtils.getSubject().getPrincipal();
+        if(user==null){
+            logger.warn("设置为联系人获取当前登录用户信息失败");
+            return new Result(OrgExceptionEnum.NETWORK_ANOMALY.getCode(),OrgExceptionEnum.NETWORK_ANOMALY.getMessage());
+        }
+        int responseNum = orgColleagueService.setAsContact(user.getAccount(),account);
         logger.info("------设置为联系人成功，数据响应条数：{}-------",responseNum);
         return  new Result(responseNum);
     }
 
     @ControllerLog(doAction = "取消联系人")
-    @ApiOperation(value = "取消联系人",notes = "返回数据响应条数，正常情况为1")
+    @ApiOperation(value = "取消联系人",notes = "account：取消联系人的账号，返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/cancelAsContact",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/orgColleagueController/cancelAsContact")
-    public Result cancelAsContact(@ApiParam(value = "取消联系人的账号" ,required = true,example = "wangsong")String account){
+    public Result cancelAsContact(String account){
         Assert.notNull(account, OrgExceptionEnum.ACCOUNT_NOT_NULL.getMessage());
-        int responseNum = orgColleagueService.cancelAsContact(account);
+        //获取当前登录用户基本信息
+        User user = (User)SecurityUtils.getSubject().getPrincipal();
+        if(user==null){
+            logger.warn("取消联系人获取当前登录用户信息失败");
+            return new Result(OrgExceptionEnum.NETWORK_ANOMALY.getCode(),OrgExceptionEnum.NETWORK_ANOMALY.getMessage());
+        }
+        int responseNum = orgColleagueService.cancelAsContact(user.getAccount(),account);
         logger.info("------取消联系人成功，数据响应条数：{}-------",responseNum);
         return  new Result(responseNum);
     }
 
     @ControllerLog(doAction = "删除联系人或顾问")
-    @ApiOperation(value = "删除联系人或顾问(pc/app删除顾问操作)",notes = "返回数据响应条数，正常情况为1")
+    @ApiOperation(value = "删除联系人或顾问(pc/app删除顾问操作)",notes = "accountList：删除联系人或顾问的账号，支持多个，返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/deleteContactOrAdvisor",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/orgColleagueController/deleteContactOrAdvisor")
-    public Result deleteContactOrAdvisor(@ApiParam(value = "删除联系人或顾问的账号" ,required = true,example = "wangsong")String account){
-        Assert.notNull(account, OrgExceptionEnum.ACCOUNT_NOT_NULL.getMessage());
+    public Result deleteContactOrAdvisor(String[] accountList){
+        Assert.notNull(accountList, OrgExceptionEnum.ACCOUNT_NOT_NULL.getMessage());
         //获取当前登录用户基本信息
         User user = (User)SecurityUtils.getSubject().getPrincipal();
         if(user==null){
             logger.warn("机构同事查询获取当前登录用户信息失败");
             return new Result(OrgExceptionEnum.NETWORK_ANOMALY.getCode(),OrgExceptionEnum.NETWORK_ANOMALY.getMessage());
         }
-        int responseNum = orgColleagueService.deleteContactOrAdvisor(user.getAccount(), account);
+        int responseNum = orgColleagueService.deleteContactOrAdvisor(user.getAccount(), accountList);
         logger.info("------删除联系人或顾问成功，数据响应条数：{}-------",responseNum);
         return  new Result(responseNum);
     }

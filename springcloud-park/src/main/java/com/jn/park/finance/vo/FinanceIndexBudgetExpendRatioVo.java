@@ -45,4 +45,14 @@ public class FinanceIndexBudgetExpendRatioVo implements Serializable {
     public void setRatio(String ratio) {
         this.ratio = ratio;
     }
+
+
+    @Override
+    public String toString() {
+        return "FinanceIndexBudgetExpendRatioVo{" +
+                "departmentId='" + departmentId + '\'' +
+                ", departmentName='" + departmentName + '\'' +
+                ", ratio='" + ratio + '\'' +
+                '}';
+    }
 }

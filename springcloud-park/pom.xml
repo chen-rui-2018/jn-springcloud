@@ -42,7 +42,23 @@
             <groupId>com.jn</groupId>
             <artifactId>springcloud-enterprise-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-news-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-payment-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-hardware-api</artifactId>
+        </dependency>
 
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>xxpay-web-api</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -73,9 +89,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        finance
+                        activity
                     </contexts>
                     <tableNames>
+                        tb_activity
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

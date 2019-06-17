@@ -64,4 +64,16 @@ public class FinanceIndexDownTypeVo implements Serializable {
     public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName;
     }
+
+
+    @Override
+    public String toString() {
+        return "FinanceIndexDownTypeVo{" +
+                "costHappendRtime='" + costHappendRtime + '\'' +
+                ", cost='" + cost + '\'' +
+                ", costAfterTypeName='" + costAfterTypeName + '\'' +
+                ", modifiedTime='" + modifiedTime + '\'' +
+                ", departmentName='" + departmentName + '\'' +
+                '}';
+    }
 }

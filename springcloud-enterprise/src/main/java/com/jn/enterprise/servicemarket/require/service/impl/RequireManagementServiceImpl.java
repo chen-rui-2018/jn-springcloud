@@ -7,7 +7,11 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
+import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.enums.RequireExceptionEnum;
+import com.jn.enterprise.servicemarket.comment.dao.TbServiceRatingMapper;
+import com.jn.enterprise.servicemarket.comment.entity.TbServiceRating;
+import com.jn.enterprise.servicemarket.comment.entity.TbServiceRatingCriteria;
 import com.jn.enterprise.servicemarket.org.dao.TbServiceOrgInfoMapper;
 import com.jn.enterprise.servicemarket.org.entity.TbServiceOrgInfo;
 import com.jn.enterprise.servicemarket.org.entity.TbServiceOrgInfoCriteria;
@@ -26,15 +30,15 @@ import com.jn.enterprise.servicemarket.require.service.RequireManagementService;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
-import org.apache.commons.lang.math.RandomUtils;
-import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.xxpay.common.util.DateUtil;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.locks.ReentrantLock;
@@ -65,6 +69,9 @@ public class RequireManagementServiceImpl implements RequireManagementService {
     private TbServiceAndAdvisorMapper tbServiceAndAdvisorMapper;
 
     @Autowired
+    private  TbServiceRatingMapper tbServiceRatingMapper;
+
+    @Autowired
     private RequireManagementMapper requireManagementMapper;
 
     @Autowired
@@ -73,6 +80,8 @@ public class RequireManagementServiceImpl implements RequireManagementService {
     private final ReentrantLock lock = new ReentrantLock();
 
     private static final String PATTERN="yyyy-MM-dd HH:mm:ss";
+
+    private static final String TECHNOLOGY_FINANCE="technology_finance";
 
     /**
      * 用户提需求(非科技金融)
@@ -83,10 +92,12 @@ public class RequireManagementServiceImpl implements RequireManagementService {
     @Override
     public int userDemand(RequireParam requireParam, String account) {
         //根据产品id,用户账号，需求说明，需求状态，对接结果，查询数据库是否已存在数据，若存在，提示用户重复提需求
-        long num =getTbServiceRequireNum(requireParam.getProductId(),requireParam.getRequireDetail(), account);
-        if(num!=0){
-            logger.warn("用户提需求(非科技金融),系统已存在当前需求，请勿重复提需求");
-            throw new JnSpringCloudException(RequireExceptionEnum.REQUIRE_REPEATED_SUBMIT);
+        if(StringUtils.isNotBlank(requireParam.getRequireDetail())) {
+            long num = getTbServiceRequireNum(requireParam.getProductId(), requireParam.getRequireDetail(), account);
+            if (num != 0) {
+                logger.warn("用户提需求(非科技金融),系统已存在当前需求，请勿重复提需求");
+                throw new JnSpringCloudException(RequireExceptionEnum.REQUIRE_REPEATED_SUBMIT);
+            }
         }
         //根据产品id查询服务产品表（tb_service_product），获得机构id和机构名称,领域id和领域名称,设置意向机构信息和领域信息
         List<TbServiceProduct> tbServiceProductList = getTbServiceProducts(requireParam.getProductId());
@@ -162,10 +173,12 @@ public class RequireManagementServiceImpl implements RequireManagementService {
     @ServiceLog(doAction = "用户提需求(科技金融)")
     public int userDemandTechnology(RequireTechnologyParam requireTechnologyParam, String account) {
         //根据产品id,用户账号，需求说明，需求状态，对接结果，查询数据库是否已存在数据，若存在，提示用户重复提需求
-        long num =getTbServiceRequireNum(requireTechnologyParam.getProductId(),requireTechnologyParam.getRequireDetail(), account);
-        if(num!=0){
-            logger.warn("用户提需求(科技金融),系统已存在当前需求，请勿重复提需求");
-            throw new JnSpringCloudException(RequireExceptionEnum.REQUIRE_REPEATED_SUBMIT);
+        if(StringUtils.isNotBlank(requireTechnologyParam.getRequireDetail())){
+            long num =getTbServiceRequireNum(requireTechnologyParam.getProductId(),requireTechnologyParam.getRequireDetail(), account);
+            if(num!=0){
+                logger.warn("用户提需求(科技金融),系统已存在当前需求，请勿重复提需求");
+                throw new JnSpringCloudException(RequireExceptionEnum.REQUIRE_REPEATED_SUBMIT);
+            }
         }
         //根据产品id查询服务产品表（tb_service_product），获得机构id和机构名称,领域id和领域名称,设置意向机构信息和领域信息
         List<TbServiceProduct> tbServiceProductList = getTbServiceProducts(requireTechnologyParam.getProductId());
@@ -192,8 +205,26 @@ public class RequireManagementServiceImpl implements RequireManagementService {
         tbServiceRequire.setFinancingAmount(requireTechnologyParam.getFinancingAmount());
         //实际贷款金额
         tbServiceRequire.setActualLoanAmount(requireTechnologyParam.getActualLoanAmount());
+        //融资期限没有传值判断标志，默认没有传值
+        boolean flag=true;
         //融资期限
-        tbServiceRequire.setFinancingPeriod(requireTechnologyParam.getFinancingPeriod());
+        if(StringUtils.isNotBlank(requireTechnologyParam.getFinancingPeriodMax())
+                && StringUtils.isNotBlank(requireTechnologyParam.getFinancingPeriodMin())){
+            logger.warn("用户提需求(科技金融),融资期限最大最小值不能都有值");
+            throw new JnSpringCloudException(RequireExceptionEnum.FINANCING_PERIOD_NOT_ALL_ALLOWED);
+        }
+        if(StringUtils.isNotBlank(requireTechnologyParam.getFinancingPeriodMax())){
+            tbServiceRequire.setFinancingPeriodMax(Integer.parseInt(requireTechnologyParam.getFinancingPeriodMax()));
+            flag=false;
+        }
+        if(StringUtils.isNotBlank(requireTechnologyParam.getFinancingPeriodMin())){
+            tbServiceRequire.setFinancingPeriodMin(Integer.parseInt(requireTechnologyParam.getFinancingPeriodMin()));
+            flag=false;
+        }
+        if(flag){
+            logger.warn("用户提需求(科技金融),融资期限不能为空");
+            throw new JnSpringCloudException(RequireExceptionEnum.FINANCING_PERIOD);
+        }
         //资金需求说明
         tbServiceRequire.setFundsReqDesc(requireTechnologyParam.getFundsReqDesc());
         //资金需求日期
@@ -264,7 +295,7 @@ public class RequireManagementServiceImpl implements RequireManagementService {
         tbServiceRequire.setReqDetail(requireDetail);
         //需求用户姓名，职务，手机号，邮箱
         tbServiceRequire.setReqName(user.getName());
-        tbServiceRequire.setReqPost(user.getPost());
+        tbServiceRequire.setReqPost(user.getPosition());
         tbServiceRequire.setReqPhone(user.getPhone());
         tbServiceRequire.setReqEmail(user.getEmail());
         //发布日期，发布人
@@ -306,10 +337,8 @@ public class RequireManagementServiceImpl implements RequireManagementService {
      */
     @ServiceLog(doAction = "根据机构id获取机构地址信息")
     private List<TbServiceOrgInfo> getTbServiceOrgInfoList(String orgId) {
-        //数据状态  0：删除  1：有效
-        byte recordStatus=1;
         TbServiceOrgInfoCriteria example=new TbServiceOrgInfoCriteria();
-        example.createCriteria().andOrgIdEqualTo(orgId).andRecordStatusEqualTo(recordStatus);
+        example.createCriteria().andOrgIdEqualTo(orgId).andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         return tbServiceOrgInfoMapper.selectByExample(example);
     }
 
@@ -391,18 +420,20 @@ public class RequireManagementServiceImpl implements RequireManagementService {
     @ServiceLog(doAction = "需求详情（对他人需求）")
     @Override
     public RequireOtherDetails getOtherRequireDetails(String reqNum) {
-        TbServiceRequireCriteria  example=new TbServiceRequireCriteria();
-        //数据状态  0：删除  1：有效
-        byte recordStatus=1;
-        example.createCriteria().andReqNumEqualTo(reqNum).andRecordStatusEqualTo(recordStatus);
-        List<TbServiceRequire> tbServiceRequireList = tbServiceRequireMapper.selectByExample(example);
-        if(tbServiceRequireList.isEmpty()){
-            logger.warn("需求单号为：{}的需求在系统中不存在或已失效",reqNum);
-            throw new JnSpringCloudException(RequireExceptionEnum.REQUIRE_INFO_NOT_EXIST);
-        }
-        TbServiceRequire tbServiceRequire = tbServiceRequireList.get(0);
+        TbServiceRequire tbServiceRequire = getTbServiceRequire(reqNum);
         RequireOtherDetails requireOtherDetails=new RequireOtherDetails();
         BeanUtils.copyProperties(tbServiceRequire, requireOtherDetails);
+        //融资期限
+        if(StringUtils.isNotBlank(tbServiceRequire.getFinancingPeriodMax()+"")){
+            logger.info("需求详情（对他人需求）,融资期限：{}",tbServiceRequire.getFinancingPeriodMax()+"");
+            requireOtherDetails.setFinancingPeriod(tbServiceRequire.getFinancingPeriodMax()+"");
+        }else if(StringUtils.isNotBlank(tbServiceRequire.getFinancingPeriodMin()+"")){
+            logger.info("需求详情（对他人需求）,融资期限：{}",tbServiceRequire.getFinancingPeriodMin()+"");
+            requireOtherDetails.setFinancingPeriod(tbServiceRequire.getFinancingPeriodMin()+"");
+        }
+        if(tbServiceRequire.getExpectedDate()!=null){
+            requireOtherDetails.setExpectedDate(DateUtils.formatDate(tbServiceRequire.getExpectedDate(),"yyyy-MM-dd"));
+        }
         //根据企业账号获取企业名称
         Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(tbServiceRequire.getIssueAccount());
         if(userExtension==null || userExtension.getData()==null){
@@ -411,8 +442,48 @@ public class RequireManagementServiceImpl implements RequireManagementService {
         }
         //设置企业名称
         requireOtherDetails.setCompanyName(userExtension.getData().getCompanyName());
-
+        //根据需求id获取评价信息
+        TbServiceRating ratingInfo = getRatingInfo(tbServiceRequire.getId());
+        if(ratingInfo!=null){
+            requireOtherDetails.setRatingScore(ratingInfo.getAttitudeScore());
+            requireOtherDetails.setEvaluationDesc(ratingInfo.getEvaluationDesc());
+        }
         return requireOtherDetails;
+    }
+
+    /**
+     * 根据需求单号获取需求信息
+     * @param reqNum
+     * @return
+     */
+    @ServiceLog(doAction = "根据需求单号获取需求信息")
+    private TbServiceRequire getTbServiceRequire(String reqNum) {
+        TbServiceRequireCriteria example = new TbServiceRequireCriteria();
+        example.createCriteria().andReqNumEqualTo(reqNum).andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        List<TbServiceRequire> tbServiceRequireList = tbServiceRequireMapper.selectByExample(example);
+        if (tbServiceRequireList.isEmpty()) {
+            logger.warn("需求单号为：{}的需求在系统中不存在或已失效", reqNum);
+            throw new JnSpringCloudException(RequireExceptionEnum.REQUIRE_INFO_NOT_EXIST);
+        }
+        return tbServiceRequireList.get(0);
+    }
+
+    /**
+     * 根据需求id获取需求点评信息
+     * @param reqId
+     * @return
+     */
+    private TbServiceRating getRatingInfo(String reqId) {
+        TbServiceRatingCriteria example=new TbServiceRatingCriteria();
+        example.createCriteria().andRequireIdEqualTo(reqId)
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        List<TbServiceRating> tbServiceRatingList = tbServiceRatingMapper.selectByExample(example);
+        if(tbServiceRatingList.isEmpty()){
+            return null;
+        }else{
+            return tbServiceRatingList.get(0);
+        }
+
     }
 
     /**
@@ -496,18 +567,20 @@ public class RequireManagementServiceImpl implements RequireManagementService {
     @ServiceLog(doAction = "需求详情（我收到的需求）")
     @Override
     public RequireReceivedDetails getReceivedRequireDetails(String reqNum) {
-        TbServiceRequireCriteria  example=new TbServiceRequireCriteria();
-        //数据状态  0：删除  1：有效
-        byte recordStatus=1;
-        example.createCriteria().andReqNumEqualTo(reqNum).andRecordStatusEqualTo(recordStatus);
-        List<TbServiceRequire> tbServiceRequireList = tbServiceRequireMapper.selectByExample(example);
-        if(tbServiceRequireList.isEmpty()){
-            logger.warn("需求单号为：{}的需求在系统中不存在或已失效",reqNum);
-            throw new JnSpringCloudException(RequireExceptionEnum.REQUIRE_INFO_NOT_EXIST);
-        }
-        TbServiceRequire tbServiceRequire = tbServiceRequireList.get(0);
+        TbServiceRequire tbServiceRequire = getTbServiceRequire(reqNum);
         RequireReceivedDetails requireReceivedDetails=new RequireReceivedDetails();
         BeanUtils.copyProperties(tbServiceRequire, requireReceivedDetails);
+        //融资期限设置
+        if(StringUtils.isNotBlank(tbServiceRequire.getFinancingPeriodMax()+"")){
+            logger.info("需求详情（我收到的需求）,融资期限：{}",tbServiceRequire.getFinancingPeriodMax()+"");
+            requireReceivedDetails.setFinancingPeriod(tbServiceRequire.getFinancingPeriodMax()+"");
+        }else if(StringUtils.isNotBlank(tbServiceRequire.getFinancingPeriodMin()+"")){
+            logger.info("需求详情（我收到的需求）,融资期限：{}",tbServiceRequire.getFinancingPeriodMin()+"");
+            requireReceivedDetails.setFinancingPeriod(tbServiceRequire.getFinancingPeriodMin()+"");
+        }
+        if(tbServiceRequire.getExpectedDate()!=null){
+            requireReceivedDetails.setExpectedDate(DateUtils.formatDate(tbServiceRequire.getExpectedDate(),"yyyy-MM-dd"));
+        }
         //根据企业账号获取企业名称
         Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(tbServiceRequire.getIssueAccount());
         if(userExtension==null || userExtension.getData()==null){
@@ -516,6 +589,13 @@ public class RequireManagementServiceImpl implements RequireManagementService {
         }
         //设置企业名称
         requireReceivedDetails.setCompanyName(userExtension.getData().getCompanyName());
+        //根据需求id获取评价信息
+        TbServiceRating ratingInfo = getRatingInfo(tbServiceRequire.getId());
+        if(ratingInfo!=null){
+            requireReceivedDetails.setEvaluationDesc(ratingInfo.getEvaluationDesc());
+            requireReceivedDetails.setRatingScore(ratingInfo.getAttitudeScore());
+
+        }
         return requireReceivedDetails;
     }
 
@@ -528,26 +608,26 @@ public class RequireManagementServiceImpl implements RequireManagementService {
     @Override
     public int handleRequire(HandleRequireParam handleRequireParam) {
         TbServiceRequireCriteria example=new TbServiceRequireCriteria();
-        byte recordStatus=1;
-        example.createCriteria().andReqNumEqualTo(handleRequireParam.getReqNum()).andStatusEqualTo("1").andRecordStatusEqualTo(recordStatus);
+        example.createCriteria().andReqNumEqualTo(handleRequireParam.getReqNum()).andStatusEqualTo("1")
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         List<TbServiceRequire> tbServiceRequireList = tbServiceRequireMapper.selectByExample(example);
-        if(tbServiceRequireList.isEmpty()){
+        if(tbServiceRequireList==null || tbServiceRequireList.isEmpty()){
             logger.warn("需求单号为：{},状态为“待处理”的需求在系统中不存在或已失效",handleRequireParam.getReqNum());
             throw new JnSpringCloudException(RequireExceptionEnum.REQUIRE_INFO_NOT_EXIST);
         }
-
-        TbServiceRequire tbServiceRequire=new TbServiceRequire();
         //是否科技金融类 0:非科技金融   1：科技金融
         String isTechnology="0";
-        if(tbServiceRequireList.get(0).getExpectedDate()!=null
-                && isTechnology.equals(handleRequireParam.getIsTechnology())){
+        if(StringUtils.equals(tbServiceRequireList.get(0).getBusinessId(), TECHNOLOGY_FINANCE)
+                && isTechnology.equals(handleRequireParam.getIsTechnology()) ){
             logger.warn("需求单号为：{}的需求是科技金融类型，与传递的是否科技金融isTechnology:[0:否]不匹配",handleRequireParam.getReqNum());
             throw new JnSpringCloudException(RequireExceptionEnum.IS_TECHNOLOGY_NOT_MATCH);
-        }else if(tbServiceRequireList.get(0).getExpectedDate()!=null
-                && !isTechnology.equals(handleRequireParam.getIsTechnology())){
+        }else if(!StringUtils.equals(tbServiceRequireList.get(0).getBusinessId(), TECHNOLOGY_FINANCE)
+              && !isTechnology.equals(handleRequireParam.getIsTechnology())){
             logger.warn("需求单号为：{}的需求是非科技金融类型，与传递的是否科技金融isTechnology:[1:是]不匹配",handleRequireParam.getReqNum());
             throw new JnSpringCloudException(RequireExceptionEnum.IS_NOT_TECHNOLOGY_NOT_MATCH);
         }
+
+        TbServiceRequire tbServiceRequire=new TbServiceRequire();
         if(isTechnology.equals(handleRequireParam.getIsTechnology())){
             //非科技金融，合同总金额（万元）
             tbServiceRequire.setContractAmount(handleRequireParam.getContractAmount());
@@ -555,6 +635,8 @@ public class RequireManagementServiceImpl implements RequireManagementService {
             //科技金融，实际贷款金额（万元）
             tbServiceRequire.setActualLoanAmount(handleRequireParam.getActualLoanAmount());
         }
+        //需求状态 (-1:已撤销 1：待处理，2：已处理)
+        tbServiceRequire.setStatus("2");
         //对接结果
         tbServiceRequire.setHandleResult(handleRequireParam.getHandleResult());
         //结果描述

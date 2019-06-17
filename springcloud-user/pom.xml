@@ -15,16 +15,21 @@
     <dependencies>
         <dependency>
             <groupId>com.jn</groupId>
-            <artifactId>springcloud-app-common</artifactId>
+            <artifactId>springcloud-app-system-api</artifactId>
         </dependency>
         <dependency>
             <groupId>com.jn</groupId>
-            <artifactId>springcloud-app-system-api</artifactId>
+            <artifactId>springcloud-payment-api</artifactId>
         </dependency>
         <dependency>
             <groupId>com.jn</groupId>
             <artifactId>springcloud-user-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-news-api</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -33,12 +38,6 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.5</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.jn</groupId>
-            <artifactId>springcloud-news-api</artifactId>
         </dependency>
     </dependencies>
     <build>
@@ -63,10 +62,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        address
+                        userExtension
                     </contexts>
                     <tableNames>
-                        tb_user_address
+                        tb_user_person
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

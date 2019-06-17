@@ -1,5 +1,6 @@
 package com.jn.user.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -46,34 +47,69 @@ public class UserExtensionInfo implements Serializable {
     private String signature;
     @ApiModelProperty(value = "公司")
     private String company;
-    @ApiModelProperty(value = "岗位")
-    private String post;
     @ApiModelProperty(value = "学历")
     private String education;
+    @ApiModelProperty(value = "毕业学校")
+    private String graduatedSchool;
     @ApiModelProperty(value = "头像")
     private String avatar;
+    @ApiModelProperty(value = "职位")
+    private String position;
     @ApiModelProperty(value = "用户类型")
     private String userType;
     @ApiModelProperty(value = "积分")
     private Double point;
     @ApiModelProperty(value = "生日")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     private Date birthday;
+    @ApiModelProperty(value = "极光推送注册ID")
+    private String registrationId;
+    @ApiModelProperty(value = "角色名称")
+    private String roleName;
+    @ApiModelProperty(value = "角色编码")
+    private String roleCode;
     @ApiModelProperty(value = "创建人")
     private String creatorAccount;
     @ApiModelProperty(value = "创建时间")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdTime;
     @ApiModelProperty(value = "最新更新者账号")
     private String modifierAccount;
     @ApiModelProperty(value = "最新更新时间")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date modifiedTime;
     @ApiModelProperty(value = "是否删除（0标记删除，1正常）")
     private Byte recordStatus;
     @ApiModelProperty(value = "兴趣爱好")
-    private List<String>hobbys;
+    private List<String> hobbys;
     @ApiModelProperty(value = "职业")
     private List<String>jobs;
 
     private static final long serialVersionUID = 1L;
+
+    public String getRoleCode() {
+        return roleCode;
+    }
+
+    public void setRoleCode(String roleCode) {
+        this.roleCode = roleCode;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
+    public String getRegistrationId() {
+        return registrationId;
+    }
+
+    public void setRegistrationId(String registrationId) {
+        this.registrationId = registrationId;
+    }
 
     public String getId() {
         return id;
@@ -195,20 +231,28 @@ public class UserExtensionInfo implements Serializable {
         this.company = company;
     }
 
-    public String getPost() {
-        return post;
-    }
-
-    public void setPost(String post) {
-        this.post = post;
-    }
-
     public String getEducation() {
         return education;
     }
 
     public void setEducation(String education) {
         this.education = education;
+    }
+
+    public String getGraduatedSchool() {
+        return graduatedSchool;
+    }
+
+    public void setGraduatedSchool(String graduatedSchool) {
+        this.graduatedSchool = graduatedSchool;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
     }
 
     public String getAvatar() {
@@ -317,12 +361,16 @@ public class UserExtensionInfo implements Serializable {
                 ", idCard='" + idCard + '\'' +
                 ", signature='" + signature + '\'' +
                 ", company='" + company + '\'' +
-                ", post='" + post + '\'' +
                 ", education='" + education + '\'' +
+                ", graduatedSchool='" + graduatedSchool + '\'' +
                 ", avatar='" + avatar + '\'' +
+                ", position='" + position + '\'' +
                 ", userType='" + userType + '\'' +
                 ", point=" + point +
                 ", birthday=" + birthday +
+                ", registrationId='" + registrationId + '\'' +
+                ", roleName='" + roleName + '\'' +
+                ", roleCode='" + roleCode + '\'' +
                 ", creatorAccount='" + creatorAccount + '\'' +
                 ", createdTime=" + createdTime +
                 ", modifierAccount='" + modifierAccount + '\'' +

@@ -4,11 +4,11 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
+import com.jn.park.activity.model.ActivityPagingParam;
+import com.jn.park.activity.model.Comment;
 import com.jn.park.activity.service.ActivityDetailsService;
 import com.jn.park.activity.vo.ActivityDetailVO;
 import com.jn.park.enums.ActivityExceptionEnum;
-import com.jn.park.model.ActivityPagingParam;
-import com.jn.park.model.Comment;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
@@ -46,14 +46,11 @@ public class ActivityDetailsController extends BaseController {
     public Result<ActivityDetailVO> getActivityDetails(@ApiParam(value ="活动id",required = true,example = "f32w8***") @RequestParam(value = "activityId") String activityId){
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
-        if(user==null || user.getAccount()==null){
-            Result result=new Result();
-            result.setResult(ActivityExceptionEnum.NETWORK_ANOMALY.getMessage());
-            result.setCode(ActivityExceptionEnum.NETWORK_ANOMALY.getCode());
-            logger.warn("获取活动详情接口获取当前登录用户失败");
-            return result;
+        String account="";
+        if(user!=null && user.getAccount()!=null){
+            account=user.getAccount();
         }
-        ActivityDetailVO activityDetailVO=activityDetailsService.findActivityDetails(activityId,user.getAccount());
+        ActivityDetailVO activityDetailVO=activityDetailsService.findActivityDetails(activityId,account);
         return new Result<>(activityDetailVO);
     }
 
@@ -61,16 +58,16 @@ public class ActivityDetailsController extends BaseController {
     @ApiOperation(value = "获取评论信息")
     @RequestMapping(value = "/guest/getCommentInfo",method = RequestMethod.POST)
     public Result<PaginationData<List<Comment>>> getCommentInfo(@RequestBody ActivityPagingParam activityPagingParam){
+        logger.info("进入获取评论信息API,入参：{}",activityPagingParam.toString());
         //获取当前登录用户
         User loginUser=(User) SecurityUtils.getSubject().getPrincipal();
+        String account="";
         if(loginUser==null || loginUser.getAccount()==null){
-            Result result=new Result();
-            result.setResult(ActivityExceptionEnum.NETWORK_ANOMALY.getMessage());
-            result.setCode(ActivityExceptionEnum.NETWORK_ANOMALY.getCode());
-            logger.warn("获取评论信息接口获取当前登录用户失败");
-            return result;
+            //ignore
+        }else{
+            account= loginUser.getAccount();
         }
-        PaginationData<List<Comment>> commentInfo = activityDetailsService.getCommentInfo(activityPagingParam,loginUser.getAccount(),Boolean.TRUE);
+        PaginationData<List<Comment>> commentInfo = activityDetailsService.getCommentInfo(activityPagingParam,account,true);
         return new Result<>(commentInfo);
     }
 }

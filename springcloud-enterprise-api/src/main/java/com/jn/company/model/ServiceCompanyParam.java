@@ -14,7 +14,7 @@ import java.io.Serializable;
  */
 @ApiModel(value = "ServiceCompanyParam", description = "企业查询入参")
 public class ServiceCompanyParam extends Page implements Serializable {
-    @ApiModelProperty(value = "企业名称[模糊搜索]",example = "君南")
+    @ApiModelProperty(value = "企业名称[模糊搜索]",example = "南京")
     private String comName;
     @ApiModelProperty(value = "楼宇ID[模糊搜索]",example = "e23i****22j")
     private String parkBuildId;
@@ -26,9 +26,11 @@ public class ServiceCompanyParam extends Page implements Serializable {
     private String comSource;
     @ApiModelProperty(value = "审核状态 1:通过 0:审核中 -1:不通过",example = "0")
     private String checkStatus;
+    @ApiModelProperty(value = "所属园区(传园区的id)",example = "12486")
+    private String affiliatedPark;
     @ApiModelProperty(value = "企业管理员账号Account",example = "wangsong")
     private String comAdmin;
-    @ApiModelProperty(value = "企业类型",notes = "企业字典表type=3的，即企业类型。数据从【机构字典】接口获取",example = "guoyouqiye")
+    @ApiModelProperty(value = "企业类型 企业字典表type=1的，即企业类型。数据从【服务超市-机构字典】接口获取(id)",notes = "",example = "guoyouqiye")
     private String comType;
 
     public String getComName() {
@@ -93,5 +95,13 @@ public class ServiceCompanyParam extends Page implements Serializable {
 
     public void setComType(String comType) {
         this.comType = comType;
+    }
+
+    public String getAffiliatedPark() {
+        return affiliatedPark;
+    }
+
+    public void setAffiliatedPark(String affiliatedPark) {
+        this.affiliatedPark = affiliatedPark;
     }
 }

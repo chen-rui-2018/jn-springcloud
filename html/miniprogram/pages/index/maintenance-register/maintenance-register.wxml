@@ -1,0 +1,112 @@
+<view class="row-block">
+  <!-- <view class="cell-row">
+    <cell>
+      <image slot="left" class="common-cell-avatar" src="http://i7.hexunimg.cn/2014-10-21/169543879.jpg"></image>
+      <text slot="right" class="icon-right"></text>
+    </cell>
+  </view> -->
+  
+  <view class="row-block-title">资产信息</view>
+   <view class="cell-row">
+    <cell
+      wx:if="{{ mainTainData.assetNumber }}"
+      content="资产编号"
+      tips="{{ mainTainData.assetNumber }}">
+    </cell>
+    <cell
+      wx:else
+      content="设备编号"
+    >
+      <text bindtap="scan" slot="right">
+        <text>扫描设备</text>
+        <text class="right-icon icon-saoyisao"></text>
+      </text>
+    </cell>
+  </view>
+  <view class="cell-row">
+    <cell content="设备名称" tips="{{ mainTainData.name }}"></cell>
+  </view>
+  <view class="cell-row">
+    <cell content="设备类型" tips="{{ mainTainData.assetType }}"></cell>
+  </view>
+  <view class="cell-row">
+    <cell content="维保时间" tips="{{ mainTainData.maintenancePeriod }}"></cell>
+  </view>
+  <view class="cell-row">
+    <cell content="位置信息" tips="{{ mainTainData.position }}"></cell>
+  </view>
+  <view class="cell-row">
+    <cell content="图片">
+      <view slot="right" class="pic-row">
+        <view
+          wx:for="{{ mainTainData.assetUrl.split(',') }}"
+          wx:for-index="index"
+          wx:key="index"
+          wx:for-item="item"
+          class="cell-pic-bg">
+          <image class="cell-pic" src="{{ item }}"/>
+        </view>
+      </view>
+    </cell>
+  </view>
+</view>
+<view class="row-block">
+  <view class="row-block-title">维保信息</view>
+  <view class="cell-row">
+    <cell content="维保期限" tips="{{ mainTainData.maintenancePeriod }}"></cell>
+  </view>
+  <view class="cell-row">
+    <cell content="本次维保时间" tips="{{ mainTainData.maintenanceTime }}"></cell>
+  </view>
+</view>
+<view class="row-block">
+  <view class="row-block-title">厂家信息</view>
+  <view class="cell-row">
+    <cell content="厂家名称" tips="{{ mainTainData.assetMaintainCompanyModel.name }}"></cell>
+  </view>
+  <view class="cell-row">
+    <cell content="联系人姓名" tips="{{ mainTainData.assetMaintainCompanyModel.contactName }}"></cell>
+  </view>
+  <view class="cell-row">
+    <cell content="联系人电话" tips="{{ mainTainData.assetMaintainCompanyModel.contactPhone	 }}"></cell>
+  </view>
+  <view class="cell-row">
+    <cell content="联系人邮箱" tips="{{ mainTainData.assetMaintainCompanyModel.contactEmail }}"></cell>
+  </view>
+</view>
+<view class="row-block">
+  <view class="row-block-title">登记信息</view>
+  <view class="cell-form-row">
+    <text class="form-label">备注</text>
+    <input
+      bindinput="bindKeyInput"
+      type="text"
+      class="cell-row-input"
+      placeholder="请输入" />
+  </view>
+  <view class="cell-form-row">
+    <view class="cell-form-row-l">
+      <text class="form-label">照片</text>
+    </view>
+    <view class="cell-form-row-r">
+      <uploader class="upload-file-btn" bindclick="uploadFile"></uploader>
+      <view
+        wx:for="{{ formData.imgUrl }}"
+        wx:for-index="index"
+        wx:key="index"
+        wx:for-item="item"
+        class="cell-pic-bg">
+        <view data-index="{{ index }}" bindtap="picRemove" class="pic-remove">
+          <text class="icon-close"></text>
+        </view>
+        <image
+        class="cell-pic"
+        src="{{ item }}"/>
+      </view>
+    </view>
+  </view>
+</view>
+<view class="sub-button-bg">
+  <sub-button bindclick="submit"/>
+</view>
+

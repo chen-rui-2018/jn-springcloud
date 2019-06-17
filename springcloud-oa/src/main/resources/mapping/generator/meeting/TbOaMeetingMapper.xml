@@ -23,6 +23,7 @@
     <result column="is_remind" jdbcType="VARCHAR" property="isRemind" />
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="organizational_user" jdbcType="VARCHAR" property="organizationalUser" />
+    <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -86,7 +87,7 @@
     id, start_time, end_time, meeting_room_id, meeting_status, record_status, creator_account, 
     created_time, modifier_account, modified_time, participants_str, applicant, application_time, 
     sign_in_QR, wechat_remind, message_remind, pc_remind, app_remind, is_remind, title, 
-    organizational_user
+    organizational_user, file_url
   </sql>
   <select id="selectByExample" parameterType="com.jn.oa.meeting.entity.TbOaMeetingCriteria" resultMap="BaseResultMap">
     select
@@ -125,16 +126,16 @@
       modified_time, participants_str, applicant, 
       application_time, sign_in_QR, wechat_remind, 
       message_remind, pc_remind, app_remind, 
-      is_remind, title, organizational_user
-      )
+      is_remind, title, organizational_user, 
+      file_url)
     values (#{id,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
       #{meetingRoomId,jdbcType=VARCHAR}, #{meetingStatus,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
       #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
       #{modifiedTime,jdbcType=TIMESTAMP}, #{participantsStr,jdbcType=VARCHAR}, #{applicant,jdbcType=VARCHAR}, 
       #{applicationTime,jdbcType=TIMESTAMP}, #{signInQr,jdbcType=VARCHAR}, #{wechatRemind,jdbcType=VARCHAR}, 
       #{messageRemind,jdbcType=VARCHAR}, #{pcRemind,jdbcType=VARCHAR}, #{appRemind,jdbcType=VARCHAR}, 
-      #{isRemind,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{organizationalUser,jdbcType=VARCHAR}
-      )
+      #{isRemind,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{organizationalUser,jdbcType=VARCHAR}, 
+      #{fileUrl,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.oa.meeting.entity.TbOaMeeting">
     insert into tb_oa_meeting
@@ -202,6 +203,9 @@
       <if test="organizationalUser != null">
         organizational_user,
       </if>
+      <if test="fileUrl != null">
+        file_url,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -266,6 +270,9 @@
       </if>
       <if test="organizationalUser != null">
         #{organizationalUser,jdbcType=VARCHAR},
+      </if>
+      <if test="fileUrl != null">
+        #{fileUrl,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -341,6 +348,9 @@
       <if test="record.organizationalUser != null">
         organizational_user = #{record.organizationalUser,jdbcType=VARCHAR},
       </if>
+      <if test="record.fileUrl != null">
+        file_url = #{record.fileUrl,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -368,7 +378,8 @@
       app_remind = #{record.appRemind,jdbcType=VARCHAR},
       is_remind = #{record.isRemind,jdbcType=VARCHAR},
       title = #{record.title,jdbcType=VARCHAR},
-      organizational_user = #{record.organizationalUser,jdbcType=VARCHAR}
+      organizational_user = #{record.organizationalUser,jdbcType=VARCHAR},
+      file_url = #{record.fileUrl,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -436,6 +447,9 @@
       <if test="organizationalUser != null">
         organizational_user = #{organizationalUser,jdbcType=VARCHAR},
       </if>
+      <if test="fileUrl != null">
+        file_url = #{fileUrl,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -460,7 +474,8 @@
       app_remind = #{appRemind,jdbcType=VARCHAR},
       is_remind = #{isRemind,jdbcType=VARCHAR},
       title = #{title,jdbcType=VARCHAR},
-      organizational_user = #{organizationalUser,jdbcType=VARCHAR}
+      organizational_user = #{organizationalUser,jdbcType=VARCHAR},
+      file_url = #{fileUrl,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

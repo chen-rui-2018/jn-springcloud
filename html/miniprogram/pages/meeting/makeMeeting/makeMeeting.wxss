@@ -1,0 +1,74 @@
+/* pages/meeting/makeMeeting/makeMeeting.wxss */
+.roomForm{
+  margin-top: 26rpx;
+}
+.section{
+  display: flex;
+  background-color: #fff;
+  border-bottom: 2px solid #efefef;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 26rpx;
+  padding:28rpx 30rpx;
+}
+.section input{
+  flex:1;
+  color:#999999;
+}
+.section__title{
+  width:24%;
+}
+.sumbmit{
+  padding: 29rpx 33rpx;
+  background-color: #fff;
+  position: fixed;
+  bottom: 0;
+  width:100%;
+}
+.sumbmit view{
+  background-color: #ecfcf2;
+	border-radius: 41px;
+  border: solid 1px #009966;
+  padding:28rpx 0;
+  text-align:center;
+  font-size: 30rpx;
+  color:#07ab50;
+}
+.commodity_screen {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: #000;
+  opacity: 0.2;
+  overflow: hidden;
+  z-index: 1000;
+  color: #fff;
+ }
+  
+ .commodity_attr_box {
+  width: 100%;
+  overflow: hidden;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 2000;
+  background: #fff;
+  padding-top: 20rpx;
+ }
+ picker-view-column{
+   text-align: center;
+ }
+ .sure {
+  padding: 27rpx 33rpx;
+ }
+ .sure view{   
+  background-color: #ecfcf2;
+	border-radius: 41px;
+  border: solid 1px #009966;
+  font-size: 30rpx;
+  color:#07ab50;
+  padding:28rpx 0;
+  text-align: center;
+ }

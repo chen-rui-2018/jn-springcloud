@@ -1,6 +1,8 @@
 package com.jn.park.activity.dao;
 
-import com.jn.park.model.ActivityApplyDetail;
+import com.jn.park.activity.model.ActivityApplyDetail;
+import com.jn.park.activity.model.CompanyActivityApplyParam;
+import com.jn.park.activity.model.CompanyActivityApplyShow;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
 /**
@@ -26,4 +28,12 @@ public interface ActivityApplyMapper {
      * @return
      */
   List<ActivityApplyDetail> findApplyAccountList(List<String> activityIdList);
+
+    /**
+     * 获取企业报报名活动信息
+     * @param param
+     * @param accountList
+     * @return
+     */
+    List<CompanyActivityApplyShow> getCompanyActivityApplyInfo(@Param("param")CompanyActivityApplyParam param,@Param("accountList")List<String> accountList);
 }

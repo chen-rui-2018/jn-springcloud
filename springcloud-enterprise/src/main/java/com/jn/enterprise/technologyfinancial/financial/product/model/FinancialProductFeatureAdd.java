@@ -15,18 +15,18 @@ import java.io.Serializable;
  */
 @ApiModel(value = "FinancialProductFeatureAdd",description = "科技金融上架特色服务产品入参")
 public class FinancialProductFeatureAdd implements Serializable {
-    @ApiModelProperty(value = "产品类型,(0:常规-1:特色)",example = "1",required = true)
-    @NotBlank(message = "产品类型不能为空")
+    @ApiModelProperty(value = "产品类型,(0:常规-1:特色)",example = "1",hidden = true)
+//    @NotBlank(message = "产品类型不能为空")
     @Pattern(regexp = "^[0-1]$",message = "产品类型,只能为0或1")
     private String productType;
     @ApiModelProperty(value="产品编号",required = true,example = "CG000131226.0570718997558")
     @NotBlank(message = "产品编号不能为空")
     private String serialNumber;
-    @ApiModelProperty(value = "业务领域id",required = true,example = "technology_finance")
-    @NotBlank(message = "领域id不能为空")
+    @ApiModelProperty(value = "业务领域id",hidden = true,example = "technology_finance")
+//    @NotBlank(message = "领域id不能为空")
     private String signoryId;
-    @ApiModelProperty(value = "业务领域名称",required = true,example = "科技金融")
-    @NotBlank(message = "领域名称不能为空")
+    @ApiModelProperty(value = "业务领域名称",hidden = true,example = "科技金融")
+//    @NotBlank(message = "领域名称不能为空")
     private String signoryName;
     @ApiModelProperty(value = "产品名称",required = true,example = "无忧贷款")
     @NotBlank(message = "产品名称不能为空")
@@ -55,8 +55,8 @@ public class FinancialProductFeatureAdd implements Serializable {
     @Pattern(regexp = "^[0-1]$",message = "是否人民币,只能为0或1")
     @NotBlank(message = "是否人民币不能为空")
     private String isRmb;
-    @ApiModelProperty(value="贷款类表编码",required=true,example = "A11123...")
-    @NotBlank(message = "贷款类表编码不能为空")
+    @ApiModelProperty(value="贷款类别编码",required=true,example = "A11123...")
+    @NotBlank(message = "贷款类别编码不能为空")
     private String loanCategoryCode;
     @ApiModelProperty(value="贷款类别名称",required=true,example = "抵押贷款")
     @NotBlank(message = "贷款类别名称不能为空")
@@ -93,11 +93,11 @@ public class FinancialProductFeatureAdd implements Serializable {
     private String submitMaterial;
     @ApiModelProperty(value = "适用客户",example ="所有人")
     private String applicableCust;
-    @ApiModelProperty(value = "服务机构id,", required =  true, example = "00000000000000001111111111111111")
-    @NotBlank(message = "服务机构id不能为空")
+    @ApiModelProperty(value = "服务机构id,", hidden =  true, example = "00000000000000001111111111111111")
+//    @NotBlank(message = "服务机构id不能为空")
     private String orgId;
-    @ApiModelProperty(value = "服务机构名称",required = true,example = "北京快手")
-    @NotBlank(message = "服务机构名称不能为空")
+    @ApiModelProperty(value = "服务机构名称",hidden = true,example = "北京快手")
+//    @NotBlank(message = "服务机构名称不能为空")
     private String orgName;
 
     public String getProductType() {

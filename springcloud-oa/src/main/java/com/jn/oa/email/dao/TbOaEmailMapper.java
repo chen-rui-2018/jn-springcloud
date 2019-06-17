@@ -16,15 +16,21 @@ public interface TbOaEmailMapper {
 
     int insertSelective(TbOaEmail record);
 
+    List<TbOaEmail> selectByExampleWithBLOBs(TbOaEmailCriteria example);
+
     List<TbOaEmail> selectByExample(TbOaEmailCriteria example);
 
     TbOaEmail selectByPrimaryKey(String id);
 
     int updateByExampleSelective(@Param("record") TbOaEmail record, @Param("example") TbOaEmailCriteria example);
 
+    int updateByExampleWithBLOBs(@Param("record") TbOaEmail record, @Param("example") TbOaEmailCriteria example);
+
     int updateByExample(@Param("record") TbOaEmail record, @Param("example") TbOaEmailCriteria example);
 
     int updateByPrimaryKeySelective(TbOaEmail record);
+
+    int updateByPrimaryKeyWithBLOBs(TbOaEmail record);
 
     int updateByPrimaryKey(TbOaEmail record);
 }

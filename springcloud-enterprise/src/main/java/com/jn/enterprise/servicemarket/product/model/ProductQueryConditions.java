@@ -31,6 +31,17 @@ public class ProductQueryConditions implements Serializable {
     private String keyWords;
     @ApiModelProperty(value = "产品类型")
     private String productType;
+    @ApiModelProperty(value = "常规产品id")
+    private String commentProductId;
+
+    public String getCommentProductId() {
+        return commentProductId;
+    }
+
+    public void setCommentProductId(String commentProductId) {
+        this.commentProductId = commentProductId;
+    }
+
     public Float getPopularityWeight() {
         return popularityWeight;
     }
@@ -101,5 +112,21 @@ public class ProductQueryConditions implements Serializable {
 
     public void setOrgId(String orgId) {
         this.orgId = orgId;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductQueryConditions{" +
+                "popularityWeight=" + popularityWeight +
+                ", praiseWeight=" + praiseWeight +
+                ", serviceWeight=" + serviceWeight +
+                ", otherFactorScore=" + otherFactorScore +
+                ", signoryId='" + signoryId + '\'' +
+                ", orgId='" + orgId + '\'' +
+                ", sortTypes='" + sortTypes + '\'' +
+                ", keyWords='" + keyWords + '\'' +
+                ", productType='" + productType + '\'' +
+                ", commentProductId='" + commentProductId + '\'' +
+                '}';
     }
 }

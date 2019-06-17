@@ -16,7 +16,7 @@ import java.io.Serializable;
  */
 @ApiModel(value = "AdvisorManagementParam",description = "顾问管理入参")
 public class AdvisorManagementParam extends Page implements Serializable {
-    @ApiModelProperty(value = "顾问姓名",example = "wangsong")
+    @ApiModelProperty(value = "顾问姓名",example = "王松")
     private String advisorName;
     @ApiModelProperty(value = "审批状态（pending:待审批   approvalNotPassed:审批不通过  noFeedBack:未反馈   rejected:已拒绝)",example = "pending")
     private String approvalStatus;

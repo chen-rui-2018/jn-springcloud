@@ -17,7 +17,7 @@ import java.io.Serializable;
  */
 @ApiModel(value = "InvestorManagementListParam", description = "科技金融管理投资人管理列表查询入参")
 public class InvestorManagementListParam extends Page implements Serializable {
-    @ApiModelProperty(value = "状态(0：无效   1：有效)",example = "1")
+    @ApiModelProperty(value = "状态(0：无效   1：有效，不传则返回全部)",example = "1")
     @Pattern(regexp="^[01]$",message="{status:'状态值只允许为0,1'}")
     private String status;
     @ApiModelProperty(value = "姓名",example = "王松")
@@ -30,11 +30,11 @@ public class InvestorManagementListParam extends Page implements Serializable {
     @Size(max=11,message = "手机号码最多为11位")
     private String phone;
     @ApiModelProperty(value = "申请日期开始时间",example = "201903")
-    @Pattern(regexp = "((19[2-9][0-9])|(20[0-3][0-9]))((0?[1-9])|(1[0-2]))",
+    @Pattern(regexp = "((19[2-9][0-9])|(20[0-3][0-9]))((0[1-9])|(1[0-2]))",
             message = "{applyStartTime:'申请日期开始时间格式错误'}")
     private String applyStartTime;
     @ApiModelProperty(value = "申请日期结束时间",example = "201904")
-    @Pattern(regexp = "((19[2-9][0-9])|(20[0-3][0-9]))((0?[1-9])|(1[0-2]))",
+    @Pattern(regexp = "((19[2-9][0-9])|(20[0-3][0-9]))((0[1-9])|(1[0-2]))",
             message = "{applyEndTime:'申请日期结束时间格式错误'}")
     private String applyEndTime;
     @ApiModelProperty(value = "职务",example = "xxx职务")

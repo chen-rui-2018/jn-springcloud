@@ -4,9 +4,10 @@
     <!--后台产品管理产品列表查询-->
     <select id="findServiceList" parameterType="hashmap" resultType = "com.jn.enterprise.servicemarket.product.model.ServiceProductManage">
         select
-           t1.product_id as "productId",      <!--产品Id-->
+           t1.product_id_ as "productId",     <!--产品Id-->
            t1.product_name as "productName",  <!--产品名称-->
            t1.product_type as "productType",  <!--产品类型-->
+            t1.signory_id as "signoryId",     <!--领域id-->
            t1.signory_name as "signoryName",  <!--领域名称-->
            date_format(t1.release_time,"%Y-%m-%d %H:%i:%s") as "releaseTime", <!--发布时间-->
            t1.status as "status",             <!--状态-->
@@ -14,8 +15,8 @@
            t3.con_phone as "conPhone",        <!--联系电话-->
            t3.con_name as "conName"           <!--联系人名称-->
         from tb_service_product t1
-        left join tb_service_org t2 on t1.org_id = t2.org_id
-        left join  tb_service_org_info  t3 on t1.org_id = t3.org_id
+        left join tb_service_org t2 on t1.org_id_ = t2.org_id_
+        left join  tb_service_org_info  t3 on t1.org_id_ = t3.org_id_
         where  t1.record_status = '1'
         <if test = "productName != null and productName!=''">
             and t1.product_name like concat("%",#{productName},"%")
@@ -45,7 +46,7 @@
     <!--后台特色服务产品发布-->
     <select id="featuredProductRelease" parameterType="hashmap" resultType = "com.jn.enterprise.servicemarket.product.model.ServiceProductManage">
         select
-        t1.product_id as "productId",      <!--产品Id-->
+        t1.product_id_ as "productId",      <!--产品Id-->
         t1.product_name as "productName",  <!--产品名称-->
         t1.signory_name as "signoryName",  <!--领域名称-->
         date_format(t1.release_time,"%y-%m-%d %H:%i:%s") as "releaseTime",  <!--发布时间-->
@@ -54,8 +55,8 @@
         t3.con_phone as "conPhone",        <!--联系电话-->
         t3.con_name as "conName"           <!--联系人名称-->
         from tb_service_product t1
-        left join tb_service_org t2 on t1.org_id = t2.org_id
-        left join  tb_service_org_info  t3 on t1.org_id = t3.org_id
+        left join tb_service_org t2 on t1.org_id_ = t2.org_id_
+        left join  tb_service_org_info  t3 on t1.org_id_ = t3.org_id_
         where t1.product_type = '1'
           and t1.record_status = '1'
         <if test = "productName != null and productName!=''">
@@ -86,7 +87,7 @@
     <!--产品详情查询-->
     <select id ="findServiceDetail" resultMap="serviceDetial">
       select
-           t1.product_id as "productId",      <!--产品Id-->
+           t1.product_id_ as "productId",      <!--产品Id-->
            t1.serial_number as serialNumber,  <!--产品编号-->
            t1.product_name as "productName",  <!--产品名称-->
            t1.product_type as "productType",  <!--产品类型-->
@@ -98,19 +99,18 @@
            t1.picture_url as "pictureUrl",    <!--产品图片-->
            t1.status as "status",             <!--状态-->
            t1.approval_comments as "approvalComments", <!--审批意见-->
-           t2.org_id as "orgId",              <!--机构id-->
+           t2.org_id_ as "orgId",              <!--机构id-->
            t2.org_name as "orgName",          <!--机构名称-->
            t3.con_phone as "conPhone",        <!--联系电话-->
            t3.con_name as "conName",          <!--联系人名称-->
-           t4.service_details as "serviceDetails", <!--服务详情-->
+           t1.product_details as "serviceDetails", <!--服务详情-->
           (select GROUP_CONCAT(advisor_name) from tb_service_advisor  where advisor_account in(
-           select advisor_account from tb_service_and_advisor tsa where  tsa.product_id = t1.product_id
+           select advisor_account from tb_service_and_advisor tsa where  tsa.product_id_ = t1.product_id_
            )) as "advisorName"                 <!--顾问名称-->
         from tb_service_product t1
-        left join tb_service_org t2 on t1.org_id = t2.org_id
-        left join  tb_service_org_info  t3 on t1.org_id = t3.org_id
-        left join tb_service_details t4 on t1.product_id = t4.product_id
-        where t1.record_status = '1' and  t1.product_id = #{productId,jdbcType=VARCHAR}
+        left join tb_service_org t2 on t1.org_id_ = t2.org_id_
+        left join  tb_service_org_info  t3 on t1.org_id_ = t3.org_id_
+        where t1.record_status = '1' and  t1.product_id_ = #{productId,jdbcType=VARCHAR}
     </select>
     <resultMap id="serviceDetial" type="com.jn.enterprise.servicemarket.product.model.ServiceProductDetail">
         <result column="conPhone" property="conPhone"/>
@@ -141,29 +141,36 @@
         <if test = "approvalComments != null and approvalComments!=''">
         ,approval_comments = #{approvalComments}
         </if>
-         where t1.product_id = #{productId}
+         where t1.product_id_ = #{productId}
     </update>
     <!--产品上下架-->
     <update id="productShelf">
         update tb_service_product t1 set t1.status = #{status},
         t1.modifier_account = #{account},
         t1.modified_time = now()
-        where t1.product_id = #{productId}
+        where t1.product_id_ = #{productId}
     </update>
 
     <!--服务超市首页,热门产品-->
     <select id = "findHotProducts" resultType = "com.jn.enterprise.servicemarket.product.model.HotProducts">
          select
+          t1.product_id_ as "productId",    <!--产品id-->
           t1.product_name as "productName", <!--产品名称-->
+          t1.signory_id as "signoryId",     <!--领域id-->
           t1.picture_url as "pictureUrl",   <!--产品图片-->
-          (select count(tp.org_id) from tb_service_product tp where tp.org_id is not null  and  tp.template_id = t1.template_id group by tp.template_id) as "orgCount", <!--机构数-->
+          (select count(tp.org_id_) from tb_service_product tp where tp.org_id_ is not null and tp.org_id_ != '' and tp.record_status = '1' and  tp.template_id = t1.template_id group by tp.template_id) as "orgCount", <!--机构数-->
           count(t2.advisor_account) as "advisorCount", <!--顾问数-->
-          count(t3.product_id) as "ratingCount"        <!--评论数-->
+          count(t3.product_id_) as "ratingCount",        <!--评论数-->
+          t1.product_details as productDetails      <!--产品详情-->
           from tb_service_product t1
-          left join tb_service_and_advisor t2 on t1.product_id = t2.product_id
-          left join tb_service_rating t3 on  t1.product_id = t3.product_id
-          where t1.org_id  is not null
-          group by t1.template_id order by 'orgCount','advisorCount','ratingCount'
+          left join tb_service_and_advisor t2 on t1.product_id_ = t2.product_id_
+          left join tb_service_rating t3 on  t1.product_id_ = t3.product_id_
+          where t1.org_id_  is not null
+          and t1.org_id_ != ''
+          and t1.template_id != ''
+          and t1.record_status = '1'
+          and t1.signory_id != 'technology_finance'
+          group by t1.template_id order by 'orgCount','advisorCount','ratingCount' desc
     </select>
 
     <!--web前台服务产品详情-->
@@ -173,39 +180,43 @@
            tt.serialNumber,     <!--产品编号-->
            tt.advisorName,      <!--符文名称-->
            tt.orgName,          <!--机构名称-->
+           tt.orgId,          <!--机构名称-->
            tt.productName,      <!--产品名称-->
            tt.referPrice,       <!--参考价格-->
            tt.serviceCycle,     <!--服务周期-->
            tt.pictureUrl,       <!--产品图片-->
            tt.serviceDetails,   <!--服务详情-->
-           tt.viewCount,        <!--浏览次数-->
+           ifnull((select count(1)  from tb_service_product tp1 where tp1.signory_id = tt.signory_id  and tp1.org_id_ is not null and tp1.org_id_ !=""  and tp1.status = '1' and tp1.record_status = 1 ),0) as "sameTypeNum",  <!--同类型产品数-->
+           ifnull((select count(1)  from tb_service_product tp2 where tp2.signory_id = tt.signory_id  and tp2.product_type = '0' and tp2.org_id_ is not null  and tp2.org_id_ !="" and tp2.status = '1' and tp2.record_status = 1),0) as "commentNum", <!--同类型常规产品数-->
+           ifnull((select count(1)  from tb_service_product tp3 where tp3.signory_id = tt.signory_id  and tp3.product_type = '1' and  tp3.org_id_ !="" and tp3.org_id_ is  not null and tp3.status = '1' and tp3.record_status = 1),0) as "featureNum",         <!--同类型特色产品数-->
+           tt.viewCount,          <!--浏览次数-->
            tt.transactionsNumber, <!--交易次数-->
            round(tt.attitudeScore,1 )AS "evaluationScore" <!--综合评分-->
         from (
             select
-                t1.product_id as "productId",
+                t1.product_id_ as "productId",
                 t1.product_name as "productName",
                 t1.serial_number as "serialNumber",
+                t1.signory_id as "signory_id",
                 t1.refer_price as "referPrice",
                 t1.service_cycle as "serviceCycle",
                 t1.view_count as "viewCount",
-        t1.picture_url as "pictureUrl",
+                t1.picture_url as "pictureUrl",
                 t2.org_name as "orgName",
+                t2.org_id_ as "orgId",
                 (select GROUP_CONCAT(advisor_name) from tb_service_advisor  where advisor_account in(
-                select advisor_account from tb_service_and_advisor tsa where  tsa.product_id = #{productId}
+                select advisor_account from tb_service_and_advisor tsa where  tsa.product_id_ = #{productId}
                 )) as "advisorName",
-                t3.service_details as "serviceDetails",
-                count(t4.product_id) as "transactionsNumber",
+                t1.product_details as "serviceDetails",
+                count(t4.product_id_) as "transactionsNumber",
                 IFNULL(AVG(t5.`attitude_score`),0) AS "attitudeScore"
                 from tb_service_product t1
-                left join  tb_service_org t2 on  t2.org_id= t1.org_id
-                left join  tb_service_details t3 on t1.product_id = t3.product_id
-                left join  tb_service_require t4 on t1.product_id = t4.product_id
-                left join  tb_service_rating t5 on t5.product_id = t1.product_id
-                where t1.record_status = '1' and  t1.product_id = #{productId} group by t1.product_id,t4.product_id,t5.product_id
-        )tt;
+                left join  tb_service_org t2 on  t2.org_id_= t1.org_id_
+                left join  tb_service_require t4 on t1.product_id_ = t4.product_id_
+                left join  tb_service_rating t5 on t5.product_id_ = t1.product_id_
+                where t1.record_status = '1' and  t1.product_id_ = #{productId} group by t1.product_id_,t4.product_id_,t5.product_id_
+        )tt
     </select>
-
     <!--web 服务产品列表-->
     <select id = "findWebProductList"  parameterType= "com.jn.enterprise.servicemarket.product.model.ProductQueryConditions" resultType = "com.jn.enterprise.servicemarket.product.model.WebServiceProductInfo">
                 select
@@ -220,13 +231,14 @@
                tt.serviceCycle,  <!--服务周期-->
                tt.viewCount,     <!--访问数量-->
                tt.orgName,       <!--机构名称-->
+               tt.orgId,         <!--机构id-->
                tt.serviceDetails,  <!--服务详情-->
                tt.transactionsNumber,  <!--交易数量-->
                tt.evaluationNumber,    <!--评价数量-->
                round(tt.evaluationScore* #{praiseWeight}+tt.viewCount* #{popularityWeight} +tt.transactionsNumber* #{serviceWeight} + #{otherFactorScore},1)AS "evaluationScore" <!--综合排序结果值-->
         from (
         select
-               t1.product_id as "productId",
+               t1.product_id_ as "productId",
                t1.signory_id as "signoryId",
                t1.signory_name as "signoryName",
                t1.product_name as "productName",
@@ -237,32 +249,36 @@
                t1.view_count as "viewCount",
                t1.picture_url as "pictureUrl",
                t2.org_name as "orgName",
+               t2.org_id_ as "orgId",
                (select GROUP_CONCAT(advisor_name) from tb_service_advisor  where advisor_account in(
-                 select advisor_account from tb_service_and_advisor tsa where  tsa.product_id = t1.product_id
+                 select advisor_account from tb_service_and_advisor tsa where  tsa.product_id_ = t1.product_id_
                    )) as "advisorName",
-               t3.service_details as "serviceDetails",
-               count(t4.product_id) as "transactionsNumber",
-               count(t5.product_id) as "evaluationNumber",
+               t1.product_details as "serviceDetails",
+               count(t4.product_id_) as "transactionsNumber",
+               count(t5.product_id_) as "evaluationNumber",
                IFNULL(AVG(t5.`attitude_score`),0) AS "evaluationScore"
         from tb_service_product t1
-               left join  tb_service_org t2 on  t2.org_id= t1.org_id
-               left join  tb_service_details t3 on t1.product_id = t3.product_id
-               left join  tb_service_require t4 on t1.product_id = t4.product_id
-               left join  tb_service_rating t5 on t5.product_id = t1.product_id
-               where  t1.record_status = '1' and t1.status = '1'
+               left join  tb_service_org t2 on  t2.org_id_= t1.org_id_
+               left join  tb_service_require t4 on t1.product_id_ = t4.product_id_
+               left join  tb_service_rating t5 on t5.product_id_ = t1.product_id_
+               where  t1.record_status = '1' and t1.status = '1' and  t1.signory_id !="technology_finance" and t1.org_id_ is not null and t1.org_id_ !=""
+               <if test="commentProductId != null and  commentProductId !=''">
+                    and  t1.template_id = #{commentProductId}
+               </if>
                <if test="productType != null and  productType !=''">
                    and  t1.product_type = #{productType}
                </if>
                 <if test="orgId != null and  orgId !=''">
-                    and  t1.org_id = #{orgId}
+                    and  t1.org_id_ = #{orgId}
                 </if>
               <if test = "signoryId != null and  signoryId !=''">
                   and t1.signory_id = #{signoryId}
               </if>
               <if test ="keyWords != null and keyWords != ''">
-                  and ( t1.product_name like concat('%',#{keyWords},'%') or t3.service_details like concat('%',#{keyWords},'%'))
+                  and ( t1.product_name like concat('%',#{keyWords},'%') or
+                  t1.product_details like concat('%',#{keyWords},'%'))
               </if>
-               group by t1.product_id,t4.product_id,t5.product_id
+               group by t1.product_id_,t4.product_id_,t5.product_id_
         )tt
         <if test="sortTypes =='integrate'">
         ORDER BY <!-- 综合排序-->
@@ -285,21 +301,23 @@
     <select id="findOrgProductList" resultType="com.jn.enterprise.servicemarket.product.model.ServiceProductManage">
 
 select
-       t1.product_id as "productId",       <!--产品Id-->
+       t1.product_id_ as "productId",      <!--产品Id-->
+       t1.picture_url as "pictureUrl",     <!--产品图片路径-->
        t1.product_name as "productName",   <!--产品名称-->
+       t1.signory_id as "signoryId",       <!--领域名称-->
        t1.signory_name as "signoryName",   <!--领域名称-->
        t1.product_type as "productType",   <!--产品类型-->
        t2.org_name as "orgName",           <!--机构名称-->
        (select GROUP_CONCAT(advisor_name) from tb_service_advisor  where advisor_account in(
-         select advisor_account from tb_service_and_advisor tsa where  tsa.product_id = t1.product_id
+         select advisor_account from tb_service_and_advisor tsa where  tsa.product_id_ = t1.product_id_
            )) as "advisorName",            <!--顾问名称-->
        t1.status as "status",              <!--状态-->
-       t1.release_time as "releaseTime",   <!--发布时间-->
+       date_format(t1.release_time,'%Y-%m-%d %H:%i:%s') as "releaseTime",   <!--发布时间-->
        t1.refer_price as "referPrice"     <!--参考价格-->
 from tb_service_product t1
-       left join  tb_service_org t2 on  t2.org_id= t1.org_id
-       where  1=1
-       and t1.org_id = #{orgId}
+       left join  tb_service_org t2 on  t2.org_id_= t1.org_id_
+       where  t1.record_status = 1
+       and t1.org_id_ = #{orgId}
         <if test = "productType != null and productType != ''">
           and  t1.product_type = #{productType}
         </if>
@@ -314,22 +332,24 @@ from tb_service_product t1
     <!--常规产品上架时,选择框的产品列表-->
     <select id="findShelfProductList" resultType = "com.jn.enterprise.servicemarket.product.model.ProductShelf">
          select
-       t1.product_id as "productId"
+       t1.product_id_ as "productId"
        ,t1.product_name as "productName"
        from tb_service_product t1
        where
-       t1.product_id not  in(
+       t1.product_id_ not  in(
            select t2.template_id from tb_service_product t2 where  t2.signory_id =
-              ( select t3.business_type from tb_service_org t3 where t3.org_id=#{orgId}) and t2.template_id is not null
+              ( select t3.business_type from tb_service_org t3 where t3.org_id_=#{orgId}) and t2.template_id is not null AND t2.org_id_ = #{orgId} and t2.template_id !="" AND t2.record_status = 1 AND t2.status != 2
            )
-         and t1.template_id is null
+         and (t1.template_id is null or t1.template_id = "")
          and t1.status='1' and t1.record_status='1'and t1.signory_id =
-              ( select t3.business_type from tb_service_org t3 where t3.org_id=#{orgId})
+              ( select t3.business_type from tb_service_org t3 where t3.org_id_=#{orgId})
+        and t1.product_type = 0
+        and t1.record_status = 1
     </select>
     <!--服务产品列表,只包含服务Id和服务名称,用于评价的筛选条件-->
     <select  id="productQueryList" resultType = "com.jn.enterprise.servicemarket.product.model.CommonServiceShelf">
         select
-        t1.product_id as "productId"
+        t1.product_id_ as "productId"
         ,t1.product_name as "productName"
         from tb_service_product t1
         where 1=1
@@ -339,7 +359,7 @@ from tb_service_product t1
     </select>
     <select id="findShelfProductInfo" resultType="com.jn.enterprise.servicemarket.product.model.WebServiceProductInfo" >
         select
-            t1.product_id as "productId"
+            t1.product_id_ as "productId"
             ,t1.signory_id as "signory"
             ,t1.signory_name as "signoryName"
             ,t1.product_name as "productName"
@@ -347,15 +367,14 @@ from tb_service_product t1
             ,t1.refer_price as "referPrice"
             ,t1.picture_url as "pictureUrl"
             ,t1.service_cycle as "serviceCycle"
-            ,t2.service_details as "serviceDetails"
+            ,t1.product_details as "serviceDetails"
             ,(select count(*) from  tb_service_product tp where tp.template_id = #{productId}) as "upShelfOrgNumber"
             from tb_service_product t1
-            left join tb_service_details t2 on t1.product_id  = t2.product_id
-            where  t1.product_id =#{productId}
+            where  t1.product_id_ =#{productId}
     </select>
     <select id="findServiceStatistics" resultType="com.jn.enterprise.servicemarket.product.model.ServiceStatistics">
      select
-        tt.featureCount+tt.commentCount as "productCount"
+        tt.productCount as "productCount"
         ,tt.orgCount as "orgCount"
         ,tt.advisorCount as "advisorCount"
         ,tt.requireCount as "requireCount"
@@ -363,18 +382,17 @@ from tb_service_product t1
         from
             (
         select
-        count(tp.product_id) as "featureCount"
-        ,(select count(ta.id) from tb_service_advisor ta where ta.approval_status ="2" and ta.record_status= 1)  as "advisorCount"
+          count(tp.product_id_) as "productCount"
+        ,(select count(ta.id_) from tb_service_advisor ta where ta.approval_status ="2" and ta.record_status= 1)  as "advisorCount"
         ,(select count(tr.id) from tb_service_require tr where tr.record_status=1) as "requireCount"
         ,(select count(tra.id)  from tb_service_rating tra where tra.record_status = 1  ) as "commentCount"
-        ,(select count(tso.org_id) from tb_service_org tso where tso.record_status=1 and tso.org_status="1")   as "orgCount"
-        ,(select count(tp2.product_id) from tb_service_product tp2 where tp.template_id is null and tp2.record_status=1 and tp2.status="1")   as "commentsCount"
-        from tb_service_product tp where product_type = "1" and tp.record_status=1 and tp.status="1" )tt;
+        ,(select count(tso.org_id_) from tb_service_org tso where tso.record_status=1 and tso.org_status="1")   as "orgCount"
+        from tb_service_product tp where  tp.record_status=1 and tp.status="1" and tp.org_id_ is not null and tp.org_id_!="" and signory_id != 'technology_finance')tt;
     </select>
 
     <select id="modifyCommonServiceShow"  resultType="com.jn.enterprise.servicemarket.product.model.UpdateCommonProductShow">
         select
-        t1.product_id as "productId",      <!--产品Id-->
+        t1.product_id_ as "productId",      <!--产品Id-->
         t1.serial_number as serialNumber,  <!--产品编号-->
         t1.product_name as "productName",  <!--产品名称-->
         t1.product_type as "productType",  <!--产品类型-->
@@ -383,16 +401,15 @@ from tb_service_product t1
         t1.refer_price as "referPrice",     <!--参考价格-->
         t1.service_cycle as "serviceCycle",  <!--服务周期-->
         t1.picture_url as "pictureUrl",     <!--产品图片-->
-        t4.service_details as "serviceDetails",  <!--服务详情-->
+        t1.product_details as "serviceDetails",  <!--服务详情-->
         (select  GROUP_CONCAT(tt.org_name) from tb_service_product tt where tt.template_id = #{productId})  as "orgName",            <!--机构名称-->
         (select GROUP_CONCAT(advisor_name) from tb_service_advisor  where advisor_account in(
-        select advisor_account from tb_service_and_advisor tsa where  tsa.product_id in (
-        select t2.product_id from tb_service_product t2 where t2.template_id=#{productId}
+        select advisor_account from tb_service_and_advisor tsa where  tsa.product_id_ in (
+        select t2.product_id_ from tb_service_product t2 where t2.template_id=#{productId}
         )
         )) as "advisorName"                   <!--顾问名称-->
         from tb_service_product t1
-        left join tb_service_details t4 on t1.product_id = t4.product_id
-        where t1.record_status = '1' and  t1.product_id = #{productId}
+        where t1.record_status = '1' and  t1.product_id_ = #{productId}
     </select>
 
 

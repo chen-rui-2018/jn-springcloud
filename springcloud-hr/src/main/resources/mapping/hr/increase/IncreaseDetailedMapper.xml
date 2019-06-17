@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.increase.dao.IncreaseDetailedMapper">
+    <select id="selectByMonth" parameterType="com.jn.hr.increase.model.IncreaseDetailed"
+		resultType="com.jn.hr.increase.model.IncreaseDetailed">
+		select t1.insured_month,count(distinct(t1.insured_month)) as number from tb_manpower_increase_detailed t1
+	</select>
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into tb_manpower_increase_detailed
+        ( id, insured_month, job_number, 
+      project_id, default_cardinal_number, corporate_contribution_ratio, 
+      individual_contribution_ratio, project_type
+        ) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id}, #{item.insuredMonth}, #{item.jobNumber}, 
+      #{item.projectId}, #{item.defaultCardinalNumber}, #{item.corporateContributionRatio}, 
+      #{item.individualContributionRatio}, #{item.projectType}
+            )
+        </foreach>
+    </insert>
+</mapper>
+

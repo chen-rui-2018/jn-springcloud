@@ -7,7 +7,6 @@ import com.jn.enterprise.servicemarket.advisor.model.*;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorEditService;
 import org.hamcrest.Matchers;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -65,21 +64,25 @@ public class AdvisorEditServiceImplTest {
 
     private String advisorAccount;
 
+    private String[]businessAreaArry={"technology_finance","ogistics"};
+
 
     @Before
     public void setUp() throws Exception {
-        advisorAccount="qianqi";
+        advisorAccount="18565007009";
         //基本信息保存
+        //机构id
+        advisorBaseInfoParam.setOrgId("cbe0d8ba94844a3a8f7b44822cfc7382");
         //账号
         advisorBaseInfoParam.setAdvisorAccount(advisorAccount);
         //从业年限
-        advisorBaseInfoParam.setWorkingYears(11d);
+        advisorBaseInfoParam.setWorkingYears("11");
         //毕业学校
         advisorBaseInfoParam.setGraduatedSchool("中南大学");
         //学历
         advisorBaseInfoParam.setEducation("硕士");
         //联系手机
-        advisorBaseInfoParam.setPhone("18674398739");
+        advisorBaseInfoParam.setPhone("18565007009");
         //联系邮箱
         advisorBaseInfoParam.setContactEmail("123.qq.com");
         //执业资质
@@ -88,6 +91,8 @@ public class AdvisorEditServiceImplTest {
         advisorBaseInfoParam.setGoodAtBusiness("打官司，谈判");
         //个人简介
         advisorBaseInfoParam.setPersonalProfile("从事行业十余年，未尝一败，高处不胜寒，朕寂寞啊，孤独啊");
+        //业务领域
+        advisorBaseInfoParam.setBusinessAreas(businessAreaArry);
 
         //荣誉资质信息保存并更新
         //主键id
@@ -141,7 +146,6 @@ public class AdvisorEditServiceImplTest {
      * 基本信息保存并更新
      */
     @Test
-    @Ignore
     public void saveOrUpdateAdvisorBaseInfo() {
         try {
             advisorEditService.saveOrUpdateAdvisorBaseInfo(advisorBaseInfoParam);
@@ -152,7 +156,9 @@ public class AdvisorEditServiceImplTest {
                     Matchers.anyOf(
                             Matchers.containsString(AdvisorExceptionEnum.SERVICE_ORG_NOT_EXIST.getCode()),
                             Matchers.containsString(AdvisorExceptionEnum.ORG_INFO_NOT_NULL.getCode()),
-                            Matchers.containsString(AdvisorExceptionEnum.GET_ADVISOR_INFO_FAIL.getCode())
+                            Matchers.containsString(AdvisorExceptionEnum.GET_ADVISOR_INFO_FAIL.getCode()),
+                            Matchers.containsString(AdvisorExceptionEnum.BUSINESS_AREA_NOT_EXIT.getCode()),
+                            Matchers.containsString(AdvisorExceptionEnum.ORG_ID_NOT_EXIT.getCode())
                     )
             );
         }

@@ -30,6 +30,7 @@
         <result column="content" jdbcType="VARCHAR" property="content" />
         <result column="meetingRoomName" jdbcType="VARCHAR" property="meetingRoomName" />
         <result column="meetingStatusMessage" jdbcType="VARCHAR" property="meetingStatusMessage" />
+        <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
 
 
 
@@ -85,6 +86,7 @@
         <result column="meeting_title" jdbcType="VARCHAR" property="title" />
         <result column="meeting_meeting_status" jdbcType="VARCHAR" property="meetingStatus" />
         <result column="meeting_organizational_user" jdbcType="VARCHAR" property="organizationalUser" />
+        <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
     </resultMap>
 
 
@@ -111,9 +113,14 @@
         <result column="meeting_title" jdbcType="VARCHAR" property="title" />
         <result column="meeting_meeting_status" jdbcType="VARCHAR" property="meetingStatus" />
         <result column="userName" jdbcType="VARCHAR" property="userName" />
+        <result column="departmentName" jdbcType="VARCHAR" property="departmentName" />
         <result column="content" jdbcType="VARCHAR" property="content" />
         <result column="organizationalUserName" jdbcType="VARCHAR" property="organizationalUserName" />
         <result column="organizationalDepartmentName" jdbcType="VARCHAR" property="organizationalDepartmentName" />
+        <result column="organizationalId" jdbcType="VARCHAR" property="organizationalId" />
+        <result column="organizationalUserId" jdbcType="VARCHAR" property="organizationalUserId" />
+
+        <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
 
         <collection property="tbOaMeetingRoom" ofType="com.jn.oa.meeting.entity.TbOaMeetingRoom">
             <id column="meetingroom_id" jdbcType="VARCHAR" property="id" />
@@ -145,7 +152,7 @@
     meeting.wechat_remind as meeting_wechat_remind, meeting.message_remind as meeting_message_remind,
     meeting.pc_remind as meeting_pc_remind, meeting.app_remind as meeting_app_remind,
     meeting.is_remind as meeting_is_remind, meeting.title as meeting_title,
-    meeting.meeting_status as meeting_meeting_status,meeting.organizational_user as meeting_organizational_user
+    meeting.meeting_status as meeting_meeting_status,meeting.organizational_user as meeting_organizational_user,meeting.file_url
   </sql>
     <sql id="Base_Column_List">
     	meeting.id AS meeting_id,
@@ -187,6 +194,7 @@
      WHEN 2 THEN '已完成'
       WHEN 3 THEN '已取消'
        END)meetingStatusMessage
+       ,meeting.file_url
   </sql>
     <update id="deleteBranchByIds" parameterType="java.util.Map">
         update tb_oa_meeting
@@ -306,7 +314,7 @@
             and meeting.id =#{id,jdbcType=VARCHAR}
         </if>
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(title)">
-            and meeting.title like CONCAT('%', #{title,jdbcType=VARCHAR}, '%')
+            and meeting.title like CONCAT('%', trim(#{title,jdbcType=VARCHAR}), '%')
         </if>
 
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(meetingStatus)">
@@ -317,10 +325,10 @@
         </if>
 
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(meetingRoomName)">
-            and meetingroom.name like CONCAT('%', #{meetingRoomName,jdbcType=VARCHAR}, '%')
+            and meetingroom.name like CONCAT('%', trim(#{meetingRoomName,jdbcType=VARCHAR}), '%')
         </if>
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentName)">
-            and  u.department_name like CONCAT('%', #{departmentName,jdbcType=VARCHAR}, '%')
+            and  o.department_name like CONCAT('%', trim(#{departmentName,jdbcType=VARCHAR}), '%')
         </if>
 
         <if test="startTime != null">AND  Date(meeting.start_time) &gt;= #{startTime}</if>
@@ -341,88 +349,116 @@
         meeting.id DESC
     </select>
     <select id="selectMeetingById" resultMap="SelectBaseResultMap"  parameterType="java.lang.String">
-                     SELECT
-                meeting.id AS meeting_id,
-                meeting.start_time AS meeting_start_date,
-                meeting.start_time AS meeting_start_time,
-                meeting.end_time AS meeting_end_time,
-                meeting.meeting_room_id AS meeting_meeting_room_id,
-                meeting.record_status AS meeting_record_status,
-                meeting.creator_account AS meeting_creator_account,
-                meeting.created_time AS meeting_created_time,
-                meeting.modifier_account AS meeting_modifier_account,
-                meeting.modified_time AS meeting_modified_time,
-                meeting.participants_str AS meeting_participants_str,
-                meeting.applicant AS meeting_applicant,
-                meeting.application_time AS meeting_application_time,
-                meeting.sign_in_QR AS meeting_sign_in_QR,
-                meeting.wechat_remind AS meeting_wechat_remind,
-                meeting.message_remind AS meeting_message_remind,
-                meeting.pc_remind AS meeting_pc_remind,
-                meeting.app_remind AS meeting_app_remind,
-                meeting.is_remind AS meeting_is_remind,
-                meeting.title AS meeting_title,
-                meeting.meeting_status AS meeting_meeting_status,
-                o.NAME AS organizationalUserName,
-                o.department_name AS organizationalDepartmentName,
-                u.`NAME` as userName,
-                meetingroom.meetingroom_id,
-                meetingroom.NAME AS meetingroom_name,
-                meetingroom.building AS meetingroom_building,
-                meetingroom.floor AS meetingroom_floor,
-                meetingroom.room_number AS meetingroom_room_number,
-                meetingroom.position AS meetingroom_position,
-                tc.content AS content
-            FROM
-                tb_oa_meeting meeting
-                LEFT JOIN ( SELECT c.meeting_id, c.content FROM tb_oa_meeting_content c WHERE c.record_status != 0 ) tc ON tc.meeting_id = meeting.id
-
-                LEFT JOIN (
             SELECT
-                m.id AS meetingroom_id,
-                m.NAME,
-                m.building,
-                m.floor,
-                m.room_number,
-                m.position
-            FROM
-                tb_oa_meeting_room m
-            WHERE
-                m.record_status != 0
-                ) meetingroom ON meetingroom.meetingroom_id = meeting.meeting_room_id
-                LEFT JOIN (
-            SELECT
-                t.id,
-                t.NAME,
-                t.account,
-                tt.department_name
-            FROM
-                tb_sys_user t
-                LEFT JOIN (
-            SELECT
-                t1.user_id,
-                t2.department_name
-            FROM
-                tb_sys_user_department_post t1
-                INNER JOIN tb_sys_department t2 ON t1.department_id = t2.id
-            WHERE
-                t1.is_default = 1
-                AND t1.record_status = 1
-                AND t2.record_status = 1
-                ) tt ON t.id = tt.user_id
-            WHERE
-                t.record_status = 1
-                ) o ON meeting.organizational_user = o.id
-                    LEFT JOIN (
-            SELECT
-                tu.id,
-                tu.NAME,
-                tu.account
-            FROM
-                tb_sys_user tu
-            WHERE
-                tu.record_status = 1
-                ) u ON meeting.applicant = u.id
+                            meeting.id AS meeting_id,
+                            meeting.start_time AS meeting_start_date,
+                            meeting.start_time AS meeting_start_time,
+                            meeting.end_time AS meeting_end_time,
+                            meeting.meeting_room_id AS meeting_meeting_room_id,
+                            meeting.record_status AS meeting_record_status,
+                            meeting.creator_account AS meeting_creator_account,
+                            meeting.created_time AS meeting_created_time,
+                            meeting.modifier_account AS meeting_modifier_account,
+                            meeting.modified_time AS meeting_modified_time,
+                            meeting.participants_str AS meeting_participants_str,
+                            meeting.applicant AS meeting_applicant,
+                            meeting.application_time AS meeting_application_time,
+                            meeting.sign_in_QR AS meeting_sign_in_QR,
+                            meeting.wechat_remind AS meeting_wechat_remind,
+                            meeting.message_remind AS meeting_message_remind,
+                            meeting.pc_remind AS meeting_pc_remind,
+                            meeting.app_remind AS meeting_app_remind,
+                            meeting.is_remind AS meeting_is_remind,
+                            meeting.title AS meeting_title,
+                            meeting.meeting_status AS meeting_meeting_status,
+                            o. NAME AS organizationalUserName,
+                            o.department_name AS organizationalDepartmentName,
+                            o.departmentId AS organizationalId,
+                            o.id AS organizationalUserId,
+                            u.`NAME` AS userName,
+                          u.department_name as departmentName ,
+                            meetingroom.meetingroom_id,
+                            meetingroom. NAME AS meetingroom_name,
+                            meetingroom.building AS meetingroom_building,
+                            meetingroom.floor AS meetingroom_floor,
+                            meetingroom.room_number AS meetingroom_room_number,
+                            meetingroom.position AS meetingroom_position,
+                            tc.content AS content,
+                            meeting.file_url
+                        FROM
+                            tb_oa_meeting meeting
+                        LEFT JOIN (
+                            SELECT
+                                c.meeting_id,
+                                c.content
+                            FROM
+                                tb_oa_meeting_content c
+                            WHERE
+                                c.record_status != 0
+                        ) tc ON tc.meeting_id = meeting.id
+                        LEFT JOIN (
+                            SELECT
+                                m.id AS meetingroom_id,
+                                m. NAME,
+                                m.building,
+                                m.floor,
+                                m.room_number,
+                                m.position
+                            FROM
+                                tb_oa_meeting_room m
+                            WHERE
+                                m.record_status != 0
+                        ) meetingroom ON meetingroom.meetingroom_id = meeting.meeting_room_id
+                        LEFT JOIN (
+                            SELECT
+                                t.id,
+                                t. NAME,
+                                t.account,
+                                tt.department_name,
+                                tt.id AS departmentId
+                            FROM
+                                tb_sys_user t
+                            LEFT JOIN (
+                                SELECT
+                                    t1.user_id,
+                                    t2.department_name,
+                                    t2.id
+                                FROM
+                                    tb_sys_user_department_post t1
+                                INNER JOIN tb_sys_department t2 ON t1.department_id = t2.id
+                                WHERE
+                                    t1.is_default = 1
+                                AND t1.record_status = 1
+                                AND t2.record_status = 1
+                            ) tt ON t.id = tt.user_id
+                            WHERE
+                                t.record_status = 1
+                        ) o ON meeting.organizational_user = o.id
+                        LEFT JOIN (
+                            SELECT
+                                t.id,
+                                t. NAME,
+                                t.account,
+                                tt.department_name,
+                                tt.id AS departmentId
+                            FROM
+                                tb_sys_user t
+                            LEFT JOIN (
+                                SELECT
+                                    t1.user_id,
+                                    t2.department_name,
+                                    t2.id
+                                FROM
+                                    tb_sys_user_department_post t1
+                                INNER JOIN tb_sys_department t2 ON t1.department_id = t2.id
+                                WHERE
+                                    t1.is_default = 1
+                                AND t1.record_status = 1
+                                AND t2.record_status = 1
+                            ) tt ON t.id = tt.user_id
+                            WHERE
+                                t.record_status = 1
+                        ) u ON meeting.applicant = u.id
                     WHERE
                     1=1
                      and meeting.id=#{id,jdbcType=VARCHAR}
@@ -435,7 +471,6 @@
         meetingparticipants.id AS id,
         meetingparticipants.meeting_id AS meetingId,
         meetingparticipants.meeting_user_id AS meetingUserId,
-        meetingparticipants.attendance_status AS attendanceStatus,
 				u.name as userName,
 				u.account
         FROM

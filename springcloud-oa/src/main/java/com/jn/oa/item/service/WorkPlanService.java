@@ -1,6 +1,7 @@
 package com.jn.oa.item.service;
 
 import com.jn.common.model.PaginationData;
+import com.jn.oa.item.entity.TbOaItem;
 import com.jn.oa.item.model.*;
 import com.jn.oa.item.vo.WorkPlanVO;
 import com.jn.system.model.User;
@@ -102,5 +103,12 @@ public interface WorkPlanService {
      * @param file 报表文件
      * @param user 当前用户
      */
-    String importExcelWorkPlanInfo(MultipartFile file, User user);
+    void importExcelWorkPlanInfo(MultipartFile file, User user);
+
+    /**
+     * 获取所有项目信息
+     *
+     * @return
+     */
+    List<TbOaItem> getItemAll();
 }

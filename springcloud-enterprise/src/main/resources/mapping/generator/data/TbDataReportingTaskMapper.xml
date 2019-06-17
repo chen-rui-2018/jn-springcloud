@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.data.dao.TbDataReportingTaskMapper">
+  <resultMap id="BaseResultMap" type="com.jn.enterprise.data.entity.TbDataReportingTask">
+    <id column="fill_id" jdbcType="VARCHAR" property="fillId" />
+    <result column="file_type" jdbcType="TINYINT" property="fileType" />
+    <result column="model_id" jdbcType="VARCHAR" property="modelId" />
+    <result column="task_batch" jdbcType="VARCHAR" property="taskBatch" />
+    <result column="fill_in_form_id" jdbcType="VARCHAR" property="fillInFormId" />
+    <result column="fill_in_form_name" jdbcType="VARCHAR" property="fillInFormName" />
+    <result column="form_time" jdbcType="CHAR" property="formTime" />
+    <result column="fill_in_form_deadline" jdbcType="DATE" property="fillInFormDeadline" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="garden_examine_stauts" jdbcType="TINYINT" property="gardenExamineStauts" />
+    <result column="calling_time" jdbcType="TIMESTAMP" property="callingTime" />
+    <result column="calling_times" jdbcType="INTEGER" property="callingTimes" />
+    <result column="filler" jdbcType="VARCHAR" property="filler" />
+    <result column="up_time" jdbcType="TIMESTAMP" property="upTime" />
+    <result column="filler_tel" jdbcType="VARCHAR" property="fillerTel" />
+    <result column="is_overdue" jdbcType="TINYINT" property="isOverdue" />
+    <result column="overdue_days" jdbcType="INTEGER" property="overdueDays" />
+    <result column="examine_comment" jdbcType="VARCHAR" property="examineComment" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="modified_account" jdbcType="VARCHAR" property="modifiedAccount" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    fill_id, file_type, model_id, task_batch, fill_in_form_id, fill_in_form_name, form_time, 
+    fill_in_form_deadline, status, garden_examine_stauts, calling_time, calling_times, 
+    filler, up_time, filler_tel, is_overdue, overdue_days, examine_comment, create_time, 
+    record_status, modified_time, modified_account
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingTaskCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_data_reporting_task
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_data_reporting_task
+    where fill_id = #{fillId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_data_reporting_task
+    where fill_id = #{fillId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingTaskCriteria">
+    delete from tb_data_reporting_task
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.enterprise.data.entity.TbDataReportingTask">
+    insert into tb_data_reporting_task (fill_id, file_type, model_id, 
+      task_batch, fill_in_form_id, fill_in_form_name, 
+      form_time, fill_in_form_deadline, status, 
+      garden_examine_stauts, calling_time, calling_times, 
+      filler, up_time, filler_tel, 
+      is_overdue, overdue_days, examine_comment, 
+      create_time, record_status, modified_time, 
+      modified_account)
+    values (#{fillId,jdbcType=VARCHAR}, #{fileType,jdbcType=TINYINT}, #{modelId,jdbcType=VARCHAR}, 
+      #{taskBatch,jdbcType=VARCHAR}, #{fillInFormId,jdbcType=VARCHAR}, #{fillInFormName,jdbcType=VARCHAR}, 
+      #{formTime,jdbcType=CHAR}, #{fillInFormDeadline,jdbcType=DATE}, #{status,jdbcType=TINYINT}, 
+      #{gardenExamineStauts,jdbcType=TINYINT}, #{callingTime,jdbcType=TIMESTAMP}, #{callingTimes,jdbcType=INTEGER}, 
+      #{filler,jdbcType=VARCHAR}, #{upTime,jdbcType=TIMESTAMP}, #{fillerTel,jdbcType=VARCHAR}, 
+      #{isOverdue,jdbcType=TINYINT}, #{overdueDays,jdbcType=INTEGER}, #{examineComment,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=TINYINT}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{modifiedAccount,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingTask">
+    insert into tb_data_reporting_task
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="fillId != null">
+        fill_id,
+      </if>
+      <if test="fileType != null">
+        file_type,
+      </if>
+      <if test="modelId != null">
+        model_id,
+      </if>
+      <if test="taskBatch != null">
+        task_batch,
+      </if>
+      <if test="fillInFormId != null">
+        fill_in_form_id,
+      </if>
+      <if test="fillInFormName != null">
+        fill_in_form_name,
+      </if>
+      <if test="formTime != null">
+        form_time,
+      </if>
+      <if test="fillInFormDeadline != null">
+        fill_in_form_deadline,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="gardenExamineStauts != null">
+        garden_examine_stauts,
+      </if>
+      <if test="callingTime != null">
+        calling_time,
+      </if>
+      <if test="callingTimes != null">
+        calling_times,
+      </if>
+      <if test="filler != null">
+        filler,
+      </if>
+      <if test="upTime != null">
+        up_time,
+      </if>
+      <if test="fillerTel != null">
+        filler_tel,
+      </if>
+      <if test="isOverdue != null">
+        is_overdue,
+      </if>
+      <if test="overdueDays != null">
+        overdue_days,
+      </if>
+      <if test="examineComment != null">
+        examine_comment,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="modifiedAccount != null">
+        modified_account,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="fillId != null">
+        #{fillId,jdbcType=VARCHAR},
+      </if>
+      <if test="fileType != null">
+        #{fileType,jdbcType=TINYINT},
+      </if>
+      <if test="modelId != null">
+        #{modelId,jdbcType=VARCHAR},
+      </if>
+      <if test="taskBatch != null">
+        #{taskBatch,jdbcType=VARCHAR},
+      </if>
+      <if test="fillInFormId != null">
+        #{fillInFormId,jdbcType=VARCHAR},
+      </if>
+      <if test="fillInFormName != null">
+        #{fillInFormName,jdbcType=VARCHAR},
+      </if>
+      <if test="formTime != null">
+        #{formTime,jdbcType=CHAR},
+      </if>
+      <if test="fillInFormDeadline != null">
+        #{fillInFormDeadline,jdbcType=DATE},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="gardenExamineStauts != null">
+        #{gardenExamineStauts,jdbcType=TINYINT},
+      </if>
+      <if test="callingTime != null">
+        #{callingTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="callingTimes != null">
+        #{callingTimes,jdbcType=INTEGER},
+      </if>
+      <if test="filler != null">
+        #{filler,jdbcType=VARCHAR},
+      </if>
+      <if test="upTime != null">
+        #{upTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fillerTel != null">
+        #{fillerTel,jdbcType=VARCHAR},
+      </if>
+      <if test="isOverdue != null">
+        #{isOverdue,jdbcType=TINYINT},
+      </if>
+      <if test="overdueDays != null">
+        #{overdueDays,jdbcType=INTEGER},
+      </if>
+      <if test="examineComment != null">
+        #{examineComment,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedAccount != null">
+        #{modifiedAccount,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingTaskCriteria" resultType="java.lang.Long">
+    select count(*) from tb_data_reporting_task
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_data_reporting_task
+    <set>
+      <if test="record.fillId != null">
+        fill_id = #{record.fillId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fileType != null">
+        file_type = #{record.fileType,jdbcType=TINYINT},
+      </if>
+      <if test="record.modelId != null">
+        model_id = #{record.modelId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.taskBatch != null">
+        task_batch = #{record.taskBatch,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fillInFormId != null">
+        fill_in_form_id = #{record.fillInFormId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fillInFormName != null">
+        fill_in_form_name = #{record.fillInFormName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.formTime != null">
+        form_time = #{record.formTime,jdbcType=CHAR},
+      </if>
+      <if test="record.fillInFormDeadline != null">
+        fill_in_form_deadline = #{record.fillInFormDeadline,jdbcType=DATE},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=TINYINT},
+      </if>
+      <if test="record.gardenExamineStauts != null">
+        garden_examine_stauts = #{record.gardenExamineStauts,jdbcType=TINYINT},
+      </if>
+      <if test="record.callingTime != null">
+        calling_time = #{record.callingTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.callingTimes != null">
+        calling_times = #{record.callingTimes,jdbcType=INTEGER},
+      </if>
+      <if test="record.filler != null">
+        filler = #{record.filler,jdbcType=VARCHAR},
+      </if>
+      <if test="record.upTime != null">
+        up_time = #{record.upTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.fillerTel != null">
+        filler_tel = #{record.fillerTel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isOverdue != null">
+        is_overdue = #{record.isOverdue,jdbcType=TINYINT},
+      </if>
+      <if test="record.overdueDays != null">
+        overdue_days = #{record.overdueDays,jdbcType=INTEGER},
+      </if>
+      <if test="record.examineComment != null">
+        examine_comment = #{record.examineComment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifiedAccount != null">
+        modified_account = #{record.modifiedAccount,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_data_reporting_task
+    set fill_id = #{record.fillId,jdbcType=VARCHAR},
+      file_type = #{record.fileType,jdbcType=TINYINT},
+      model_id = #{record.modelId,jdbcType=VARCHAR},
+      task_batch = #{record.taskBatch,jdbcType=VARCHAR},
+      fill_in_form_id = #{record.fillInFormId,jdbcType=VARCHAR},
+      fill_in_form_name = #{record.fillInFormName,jdbcType=VARCHAR},
+      form_time = #{record.formTime,jdbcType=CHAR},
+      fill_in_form_deadline = #{record.fillInFormDeadline,jdbcType=DATE},
+      status = #{record.status,jdbcType=TINYINT},
+      garden_examine_stauts = #{record.gardenExamineStauts,jdbcType=TINYINT},
+      calling_time = #{record.callingTime,jdbcType=TIMESTAMP},
+      calling_times = #{record.callingTimes,jdbcType=INTEGER},
+      filler = #{record.filler,jdbcType=VARCHAR},
+      up_time = #{record.upTime,jdbcType=TIMESTAMP},
+      filler_tel = #{record.fillerTel,jdbcType=VARCHAR},
+      is_overdue = #{record.isOverdue,jdbcType=TINYINT},
+      overdue_days = #{record.overdueDays,jdbcType=INTEGER},
+      examine_comment = #{record.examineComment,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      modified_account = #{record.modifiedAccount,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingTask">
+    update tb_data_reporting_task
+    <set>
+      <if test="fileType != null">
+        file_type = #{fileType,jdbcType=TINYINT},
+      </if>
+      <if test="modelId != null">
+        model_id = #{modelId,jdbcType=VARCHAR},
+      </if>
+      <if test="taskBatch != null">
+        task_batch = #{taskBatch,jdbcType=VARCHAR},
+      </if>
+      <if test="fillInFormId != null">
+        fill_in_form_id = #{fillInFormId,jdbcType=VARCHAR},
+      </if>
+      <if test="fillInFormName != null">
+        fill_in_form_name = #{fillInFormName,jdbcType=VARCHAR},
+      </if>
+      <if test="formTime != null">
+        form_time = #{formTime,jdbcType=CHAR},
+      </if>
+      <if test="fillInFormDeadline != null">
+        fill_in_form_deadline = #{fillInFormDeadline,jdbcType=DATE},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="gardenExamineStauts != null">
+        garden_examine_stauts = #{gardenExamineStauts,jdbcType=TINYINT},
+      </if>
+      <if test="callingTime != null">
+        calling_time = #{callingTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="callingTimes != null">
+        calling_times = #{callingTimes,jdbcType=INTEGER},
+      </if>
+      <if test="filler != null">
+        filler = #{filler,jdbcType=VARCHAR},
+      </if>
+      <if test="upTime != null">
+        up_time = #{upTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fillerTel != null">
+        filler_tel = #{fillerTel,jdbcType=VARCHAR},
+      </if>
+      <if test="isOverdue != null">
+        is_overdue = #{isOverdue,jdbcType=TINYINT},
+      </if>
+      <if test="overdueDays != null">
+        overdue_days = #{overdueDays,jdbcType=INTEGER},
+      </if>
+      <if test="examineComment != null">
+        examine_comment = #{examineComment,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedAccount != null">
+        modified_account = #{modifiedAccount,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where fill_id = #{fillId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.data.entity.TbDataReportingTask">
+    update tb_data_reporting_task
+    set file_type = #{fileType,jdbcType=TINYINT},
+      model_id = #{modelId,jdbcType=VARCHAR},
+      task_batch = #{taskBatch,jdbcType=VARCHAR},
+      fill_in_form_id = #{fillInFormId,jdbcType=VARCHAR},
+      fill_in_form_name = #{fillInFormName,jdbcType=VARCHAR},
+      form_time = #{formTime,jdbcType=CHAR},
+      fill_in_form_deadline = #{fillInFormDeadline,jdbcType=DATE},
+      status = #{status,jdbcType=TINYINT},
+      garden_examine_stauts = #{gardenExamineStauts,jdbcType=TINYINT},
+      calling_time = #{callingTime,jdbcType=TIMESTAMP},
+      calling_times = #{callingTimes,jdbcType=INTEGER},
+      filler = #{filler,jdbcType=VARCHAR},
+      up_time = #{upTime,jdbcType=TIMESTAMP},
+      filler_tel = #{fillerTel,jdbcType=VARCHAR},
+      is_overdue = #{isOverdue,jdbcType=TINYINT},
+      overdue_days = #{overdueDays,jdbcType=INTEGER},
+      examine_comment = #{examineComment,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      modified_account = #{modifiedAccount,jdbcType=VARCHAR}
+    where fill_id = #{fillId,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -6,19 +6,26 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
+import com.jn.common.util.encryption.EncryptUtil;
 import com.jn.system.api.SystemClient;
 import com.jn.system.common.enums.SysExceptionEnums;
+import com.jn.system.common.enums.SysStatusEnums;
 import com.jn.system.dept.entity.TbSysDepartment;
 import com.jn.system.dept.service.SysDepartmentService;
+import com.jn.system.dept.service.SysPostService;
+import com.jn.system.dict.service.SysDictService;
 import com.jn.system.file.entity.TbSysFileGroup;
 import com.jn.system.file.service.SysFileGroupService;
+import com.jn.system.file.service.SysFileService;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.menu.service.SysResourcesService;
 import com.jn.system.model.*;
+import com.jn.system.permission.service.SysRoleService;
 import com.jn.system.user.model.SysUser;
 import com.jn.system.user.model.SysUserAdd;
 import com.jn.system.user.service.SysUserService;
-import org.apache.commons.codec.digest.DigestUtils;
+import com.jn.system.vo.SysDictKeyValue;
+import com.jn.system.vo.SysUserRoleVO;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +35,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.schema.Collections;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -60,6 +69,18 @@ public class SystemController extends BaseController implements SystemClient {
 
     @Autowired
     private SysDepartmentService sysDepartmentService;
+
+    @Autowired
+    private SysRoleService sysRoleService;
+
+    @Autowired
+    private SysFileService sysFileService;
+
+    @Autowired
+    private SysDictService sysDictService;
+
+    @Autowired
+    private SysPostService sysPostService;
 
     @Override
     @ControllerLog(doAction = "用户登录")
@@ -126,14 +147,14 @@ public class SystemController extends BaseController implements SystemClient {
 
     @Override
     @ControllerLog(doAction = "添加用户")
-    public Result addSysUser(@Validated @RequestBody User user) {
+    public Result<User> addSysUser(@Validated @RequestBody User user) {
         user.setId(UUID.randomUUID().toString());
-        user.setPassword(DigestUtils.md5Hex(user.getPassword()));
-        user.setRecordStatus((byte) 1);
+        user.setPassword(EncryptUtil.encryptSha256(user.getPassword()));
+        user.setRecordStatus(Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode()));
         SysUserAdd SysUserAdd = new SysUserAdd();
         BeanUtils.copyProperties(user, SysUserAdd);
         sysUserService.addSysUser(SysUserAdd, new User());
-        return new Result();
+        return new Result(user);
     }
 
     @Override
@@ -173,25 +194,93 @@ public class SystemController extends BaseController implements SystemClient {
      */
     @Override
     @ControllerLog(doAction = "通过用户账号,获取用户信息")
-    public Result<List<User>> getUserInfoByAccount(List<String> accountList) {
+    public Result<List<User>> getUserInfoByAccount(@RequestBody List<String> accountList) {
         List<User> userList = sysUserService.getUserInfoByAccount(accountList);
+        return new Result<>(userList);
+    }
+
+    /**
+     * 通过用户id获取用户信息,传多id,返回多个用户信息
+     *
+     * @param ids 用户id集合
+     * @return
+     */
+    @Override
+    @ControllerLog(doAction = "通过用户id获取用户信息,传多id,返回多个用户信息")
+    public Result<List<User>> getUserInfoByIds(@RequestBody List<String> ids) {
+        List<User> userList = sysUserService.selectUserByIds(ids.toArray(new String[ids.size()]));
         return new Result<>(userList);
     }
 
     /**
      * 修改用户角色信息
      *
-     * @param user        用户对象,传账号id都可以,都传,优先使用id操作
-     * @param deleRoleIds 删除的角色id集合,不删除集合传空集合
-     * @param addRoleIds  新增的角色id集合,不新增集合传空集合
+     * @param sysUserRoleVO
      * @return
      */
     @Override
-    public Result<Boolean> updateUserRole(@RequestParam("account") User user,
-                                          @RequestParam("groupId") Set<String> deleRoleIds,
-                                          @RequestParam("roleIds") Set<String> addRoleIds) {
-        Boolean result = sysUserService.updateUserRole(user,deleRoleIds,addRoleIds);
+    @ControllerLog(doAction = "修改用户角色信息")
+    public Result<Boolean> updateUserRole(@RequestBody SysUserRoleVO sysUserRoleVO) {
+        User user = sysUserRoleVO.getUser();
+        Set<String> deleRoleIds = sysUserRoleVO.getDeleRoleIds();
+        Set<String> addRoleId = sysUserRoleVO.getAddRoleId();
+        Boolean result = sysUserService.updateUserRole(user, deleRoleIds, addRoleId);
         return new Result(result);
+    }
+
+    /**
+     * 根据角色名称,获取角色信息
+     *
+     * @param roleName 角色名称
+     * @return
+     */
+    @Override
+    @ControllerLog(doAction = "根据角色名称,获取角色信息")
+    public Result<SysRole> getRoleByName(@RequestParam("roleName") String roleName) {
+        SysRole sysRole = sysRoleService.getRoleByName(roleName);
+        return new Result<SysRole>(sysRole);
+    }
+
+    /**
+     * 新增文件明细
+     *
+     * @param sysFile
+     * @return
+     */
+    @Override
+    @ControllerLog(doAction = "更新用户")
+    public Result insertSysFile(@RequestBody SysFile sysFile) {
+        sysFile.setId(UUID.randomUUID().toString());
+        sysFileService.insertSysFile(sysFile);
+        return new Result();
+    }
+
+    @Override
+    @ControllerLog(doAction = "调用数据字典")
+    public Result<List<SysDictKeyValue>> getDict(@RequestBody SysDictInvoke sysDictInvoke) {
+        List<SysDictKeyValue> dictList = sysDictService.getDict(sysDictInvoke);
+        return new Result(dictList);
+    }
+
+    @Override
+    @ControllerLog(doAction = "根据角色id或角色名称获取角色拥有的用户信息")
+    public Result<List<User>> getUserByRole(@RequestBody SysRole role) {
+        List<User> userList = sysRoleService.getUserByRole(role);
+        return new Result<List<User>>(userList);
+    }
+
+    @Override
+    @ControllerLog(doAction = "获取所有岗位信息")
+    public Result<List<SysPost>> getPostAll() {
+        List<SysPost> sysPostAll = sysPostService.findSysPostAll();
+        return new Result<>(sysPostAll);
+    }
+
+    @Override
+    @ControllerLog(doAction = "校验用户账号是否存在")
+    public Result<String> checkUserAccount(@RequestParam("account") String account) {
+        String result = sysUserService.checkUserName(account);
+        return new Result<>(result);
     }
 
     @Override
@@ -209,5 +298,19 @@ public class SystemController extends BaseController implements SystemClient {
         sysUserService.updateSysUser(sysUser, new User());
         return new Result();
     }
+
+    /**
+     * 根据条件查询数据字典的值
+     *
+     * @param sysDictInvoke
+     * @return
+     */
+    @Override
+    @ControllerLog(doAction = "根据条件查询数据字典的值")
+    public Result<String> selectDictValueByCondition(@RequestBody SysDictInvoke sysDictInvoke) {
+        String data = sysDictService.selectDictValueByCondition(sysDictInvoke);
+        return new Result(data);
+    }
+
 
 }

@@ -1,6 +1,5 @@
 package com.jn.enterprise.servicemarket.require.model;
 
-import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -13,7 +12,7 @@ import java.io.Serializable;
  * @modified By:
  */
 @ApiModel(value = "RequirePortalDetails", description = "后台门户管理需求详情")
-public class RequirePortalDetails extends Page implements Serializable {
+public class RequirePortalDetails implements Serializable {
     @ApiModelProperty(value = "需求单号")
     private String reqNum;
     @ApiModelProperty(value = "企业名称")
@@ -59,6 +58,11 @@ public class RequirePortalDetails extends Page implements Serializable {
     private String fundsReqDesc;
     @ApiModelProperty(value = "[科技金融]资金需求日期")
     private String expectedDate;
+
+    @ApiModelProperty(value = "评价分数")
+    private String ratingScore;
+    @ApiModelProperty(value = "评价描述")
+    private String evaluationDesc;
 
 
     public String getReqNum() {
@@ -235,6 +239,22 @@ public class RequirePortalDetails extends Page implements Serializable {
 
     public void setExpectedDate(String expectedDate) {
         this.expectedDate = expectedDate;
+    }
+
+    public String getRatingScore() {
+        return ratingScore;
+    }
+
+    public void setRatingScore(String ratingScore) {
+        this.ratingScore = ratingScore;
+    }
+
+    public String getEvaluationDesc() {
+        return evaluationDesc;
+    }
+
+    public void setEvaluationDesc(String evaluationDesc) {
+        this.evaluationDesc = evaluationDesc;
     }
 
     @Override

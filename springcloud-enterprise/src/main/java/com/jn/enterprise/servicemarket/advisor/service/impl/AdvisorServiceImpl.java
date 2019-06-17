@@ -1,22 +1,30 @@
 package com.jn.enterprise.servicemarket.advisor.service.impl;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
+import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.servicemarket.advisor.dao.*;
 import com.jn.enterprise.servicemarket.advisor.entity.*;
-import com.jn.enterprise.servicemarket.advisor.enums.ServiceRatingTypeEnum;
 import com.jn.enterprise.servicemarket.advisor.enums.ServiceSortTypeEnum;
 import com.jn.enterprise.servicemarket.advisor.model.*;
+import com.jn.enterprise.servicemarket.advisor.service.AdvisorEditService;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorService;
 import com.jn.enterprise.servicemarket.advisor.vo.AdvisorDetailsVo;
 import com.jn.enterprise.servicemarket.comment.model.ServiceRating;
+import com.jn.enterprise.servicemarket.industryarea.model.IndustryDictParameter;
+import com.jn.enterprise.servicemarket.industryarea.model.IndustryDictionary;
+import com.jn.enterprise.servicemarket.industryarea.service.IndustryService;
 import com.jn.enterprise.servicemarket.product.model.AdvisorProductInfo;
 import com.jn.enterprise.servicemarket.product.model.AdvisorProductQuery;
 import com.jn.enterprise.servicemarket.product.service.ServiceProductService;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.user.api.UserExtensionClient;
+import com.jn.user.model.UserExtensionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -24,6 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -58,6 +67,15 @@ public class AdvisorServiceImpl implements AdvisorService {
     @Autowired
     private ServiceProductService serviceProductService;
 
+    @Autowired
+    private UserExtensionClient userExtensionClient;
+
+    @Autowired
+    private IndustryService industryService;
+
+    @Autowired
+    private AdvisorEditService advisorEditService;
+
     /**
      * 服务顾问列表查询
      * @param advisorListParam 查询条件
@@ -70,6 +88,8 @@ public class AdvisorServiceImpl implements AdvisorService {
         com.github.pagehelper.Page<Object> objects = null;
         if(needPage){
             objects = PageHelper.startPage(advisorListParam.getPage(), advisorListParam.getRows() == 0 ? 15 : advisorListParam.getRows(), true);
+        }else{
+            objects = PageHelper.startPage(1, 100, true);
         }
         AdvisorQueryConditions queryConditions=new AdvisorQueryConditions();
         BeanUtils.copyProperties(advisorListParam, queryConditions);
@@ -78,7 +98,7 @@ public class AdvisorServiceImpl implements AdvisorService {
             queryConditions.setSortTypes(ServiceSortTypeEnum.INTEGRATE.getCode());
         }
         if(ServiceSortTypeEnum.INTEGRATE.getCode().equals(queryConditions.getSortTypes())) {
-            //todo：从数据字典表获取综合排序各个因素的权重并给相应元素赋值  yangph
+            //
         }
         List<AdvisorListInfo> advisorListInfoList=advisorMapper.getServiceConsultantList(queryConditions);
         return new PaginationData(advisorListInfoList, objects == null ? 0 : objects.getTotal());
@@ -87,21 +107,23 @@ public class AdvisorServiceImpl implements AdvisorService {
     /**
      * 根据顾问账号获取顾问详情
      * @param advisorAccount 顾问账号
+     * @param approvalStatus 审批状态 ( - 1：已拒绝    0：未反馈   1：待审批     2：审批通过    3：审批不通过    4：已解除)
      * @return
      */
     @ServiceLog(doAction = "根据顾问账号获取顾问详情")
     @Override
-    public AdvisorDetailsVo getServiceAdvisorInfo(String advisorAccount) {
+    public AdvisorDetailsVo getServiceAdvisorInfo(String advisorAccount,String approvalStatus) {
         AdvisorDetailsVo advisorDetailsVo=new AdvisorDetailsVo();
         //1.获取用户基本信息
-        TbServiceAdvisor tbServiceAdvisor = getAdvisorInfoByAccount(advisorAccount);
-        AdvisorServiceInfo advisorServiceInfo=new AdvisorServiceInfo();
-        BeanUtils.copyProperties(tbServiceAdvisor, advisorServiceInfo);
+        AdvisorServiceInfo advisorServiceInfo= getAdvisorInfoByAccount(advisorAccount,approvalStatus);
+        if(advisorServiceInfo==null){
+            return null;
+        }
         //设置顾问基础信息
         advisorDetailsVo.setAdvisorServiceInfo(advisorServiceInfo);
         //创建顾问详情简介对象
         AdvisorIntroduction advisorIntroduction=new AdvisorIntroduction();
-        BeanUtils.copyProperties(tbServiceAdvisor, advisorIntroduction);
+        BeanUtils.copyProperties(advisorServiceInfo, advisorIntroduction);
         //设置顾问简介信息
         advisorDetailsVo.setAdvisorIntroduction(advisorIntroduction);
         //2.获取顾问荣誉资质
@@ -145,10 +167,10 @@ public class AdvisorServiceImpl implements AdvisorService {
      * 设置顾问详情中服务评价的评价数量
      * @param advisorDetailsVo      顾问详情返回前端对象
      * @param advisorIntroduction   顾问详情简介对象
-     * @param servcieRatingInfoList 服务评价查询结果集
+     * @param serviceRatingInfoList 服务评价查询结果集
      */
     @ServiceLog(doAction = "设置顾问详情中服务评价的评价数量")
-    private void setRatingNum(AdvisorDetailsVo advisorDetailsVo, AdvisorIntroduction advisorIntroduction, List<ServiceRating> servcieRatingInfoList) {
+    private void setRatingNum(AdvisorDetailsVo advisorDetailsVo, AdvisorIntroduction advisorIntroduction, List<ServiceRating> serviceRatingInfoList) {
         //好评得分
         int praiseScore=5;
         //中评最低分
@@ -157,7 +179,7 @@ public class AdvisorServiceImpl implements AdvisorService {
         int badReviewScore=1;
         //服务评分
         float evaluationScore=0f;
-        for(ServiceRating serviceRating:servcieRatingInfoList){
+        for(ServiceRating serviceRating:serviceRatingInfoList){
             if(serviceRating.getEvaluationScore()==null){
                 continue;
             }
@@ -178,7 +200,7 @@ public class AdvisorServiceImpl implements AdvisorService {
         advisorDetailsVo.setEvaluationTotal(advisorDetailsVo.getPraiseNum()+advisorDetailsVo.getAverageNum()+advisorDetailsVo.getBadReviewNum());
 
         //计算顾问最终服务评分
-        evaluationScore=evaluationScore/servcieRatingInfoList.size();
+        evaluationScore=evaluationScore/serviceRatingInfoList.size();
         if(evaluationScore>0){
             //顾问详情简介设置服务评分
             advisorIntroduction.setEvaluationScore(evaluationScore+"");
@@ -193,29 +215,67 @@ public class AdvisorServiceImpl implements AdvisorService {
     @ServiceLog(doAction = "根据查询条件获取服务评价信息")
     @Override
     public PaginationData getServiceRatingInfo(ServiceEvaluationParam serviceEvaluationParam) {
-        com.github.pagehelper.Page<Object> objects = null;
+        //是否公共页面  1：是  0：否
+        Page<Object> objects = evaluationDataProcessing(serviceEvaluationParam);
+        List<ServiceRating> serviceRatingInfo = advisorMapper.getServiceRatingInfo(serviceEvaluationParam);
+        return getEvaluationPaginationData(objects, serviceRatingInfo);
+    }
+
+    /**
+     * 服务评价入参数据处理
+     * @param serviceEvaluationParam
+     * @return
+     */
+    @ServiceLog(doAction = "服务评价入参数据处理")
+    private Page<Object> evaluationDataProcessing(ServiceEvaluationParam serviceEvaluationParam) {
+        String isPublicPage="0";
+        if(isPublicPage.equals(serviceEvaluationParam.getIsPublicPage()) && StringUtils.isBlank(serviceEvaluationParam.getOrgId())
+                && StringUtils.isBlank(serviceEvaluationParam.getProductId()) && StringUtils.isBlank(serviceEvaluationParam.getAdvisorAccount())){
+            logger.warn("根据查询条件获取服务评价信息的机构id,产品id,顾问账号不能都为空");
+            throw new JnSpringCloudException(AdvisorExceptionEnum.EVALUATION_ID_NOT_NULL);
+        }
+        Page<Object> objects = null;
         //需要分页标识
         String isPage="1";
         if(isPage.equals(serviceEvaluationParam.getNeedPage())){
             objects = PageHelper.startPage(serviceEvaluationParam.getPage(),
                     serviceEvaluationParam.getRows() == 0 ? 15 : serviceEvaluationParam.getRows(), true);
         }
-        String ratingType= serviceEvaluationParam.getRatingType();
-        if(ServiceRatingTypeEnum.PRAISE.getMessage().equals(ratingType)){
-            //好评
-            ratingType=ServiceRatingTypeEnum.PRAISE.getCode();
-        }else if(ServiceRatingTypeEnum.AVERAGE.getMessage().equals(ratingType)){
-            //中评
-            ratingType=ServiceRatingTypeEnum.AVERAGE.getCode();
-        }else if(ServiceRatingTypeEnum.BAD_REVIEW.getMessage().equals(ratingType)){
-            //差评
-            ratingType=ServiceRatingTypeEnum.BAD_REVIEW.getCode();
-        }else{
-            //全部
-            ratingType="";
+        return objects;
+    }
+
+    /**
+     * 封装处理评价信息
+     * @param objects
+     * @param serviceRatingInfo
+     * @return
+     */
+    @ServiceLog(doAction = "封装处理评价信息")
+    private PaginationData getEvaluationPaginationData(Page<Object> objects, List<ServiceRating> serviceRatingInfo) {
+        if(serviceRatingInfo.isEmpty()){
+            return new PaginationData(serviceRatingInfo, objects == null ? 0 : objects.getTotal());
         }
-        List<ServiceRating> servcieRatingInfo = advisorMapper.getServcieRatingInfo(serviceEvaluationParam.getAdvisorAccount(), ratingType);
-        return new PaginationData(servcieRatingInfo, objects == null ? 0 : objects.getTotal());
+        List<String> accountList=new ArrayList<>(16);
+        //获取评价人姓名，头像
+        for(ServiceRating serviceRating:serviceRatingInfo){
+            accountList.add(serviceRating.getEvaluationAccount());
+        }
+        Result<List<UserExtensionInfo>> moreUserExtension = userExtensionClient.getMoreUserExtension(accountList);
+        if(moreUserExtension!=null &&  moreUserExtension.getData()!=null){
+            List<UserExtensionInfo>userExtensionInfoList= moreUserExtension.getData();
+            for(ServiceRating serviceRating:serviceRatingInfo){
+                for(UserExtensionInfo userExtensionInfo:userExtensionInfoList){
+                    if(StringUtils.equals(serviceRating.getEvaluationAccount(),userExtensionInfo.getAccount())){
+                        //头像
+                        serviceRating.setEvaluationAvatar(userExtensionInfo.getAvatar());
+                        //姓名
+                        serviceRating.setEvaluationName(userExtensionInfo.getName());
+                        break;
+                    }
+                }
+            }
+        }
+        return new PaginationData(serviceRatingInfo, objects == null ? 0 : objects.getTotal());
     }
 
     /**
@@ -233,7 +293,8 @@ public class AdvisorServiceImpl implements AdvisorService {
         }
         TbServiceAdvisor advisorInfo=new TbServiceAdvisor();
         //浏览量加1
-        advisorInfo.setPageViews(tbServiceAdvisors.get(0).getPageViews()+1);
+        int num = tbServiceAdvisors.get(0).getPageViews() == null ? 0 : tbServiceAdvisors.get(0).getPageViews();
+        advisorInfo.setPageViews(num+1);
         tbServiceAdvisorMapper.updateByExampleSelective(advisorInfo,example);
     }
 
@@ -260,6 +321,18 @@ public class AdvisorServiceImpl implements AdvisorService {
             serviceExperienceList.add(serviceExperience);
         }
         return serviceExperienceList;
+    }
+
+    /**
+     * 服务评价统计信息
+     * @param serviceEvaluationParam
+     * @return
+     */
+    @ServiceLog(doAction = "服务评价统计信息")
+    @Override
+    public EvaluationCountInfo getEvaluationCountInfo(ServiceEvaluationParam serviceEvaluationParam) {
+        evaluationDataProcessing(serviceEvaluationParam);
+        return advisorMapper.getEvaluationInfo(serviceEvaluationParam);
     }
 
     /**
@@ -301,9 +374,17 @@ public class AdvisorServiceImpl implements AdvisorService {
         if(tbServiceHonorList.isEmpty()){
             return serviceHonorList;
         }
+        List<AdvisorCertificateTypeShow> certificateTypeList = advisorEditService.getCertificateTypeList("");
+        List<AdvisorCertificateTypeShow>resultList=certificateTypeList==null? Collections.EMPTY_LIST:certificateTypeList;
         for(TbServiceHonor tbServiceHonor:tbServiceHonorList){
             ServiceHonor serviceHonor=new ServiceHonor();
             BeanUtils.copyProperties(tbServiceHonor, serviceHonor);
+            for(AdvisorCertificateTypeShow act:resultList){
+                if(StringUtils.equals(tbServiceHonor.getCertificateType(),act.getCertificateCode())){
+                    serviceHonor.setCertificateTypeName(act.getCertificateName());
+                    break;
+                }
+            }
             serviceHonorList.add(serviceHonor);
         }
         return serviceHonorList;
@@ -312,23 +393,44 @@ public class AdvisorServiceImpl implements AdvisorService {
     /**
      * 根据顾问账号获取顾问基本信息
      * @param advisorAccount 顾问账号
+     * @param approvalStatus 审批状态 ( - 1：已拒绝    0：未反馈   1：待审批     2：审批通过    3：审批不通过    4：已解除)
      */
     @ServiceLog(doAction = "根据顾问账号获取顾问基本信息")
     @Override
-    public TbServiceAdvisor getAdvisorInfoByAccount(String advisorAccount) {
+    public AdvisorServiceInfo getAdvisorInfoByAccount(String advisorAccount,String approvalStatus) {
         TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
-        //审批状态  “2”：审批通过
-        String approvalStatus="2";
-        //数据删除状态  0；删除   1：有效
-        byte recordStatus=1;
-        example.createCriteria().andAdvisorAccountEqualTo(advisorAccount)
-                .andApprovalStatusEqualTo(approvalStatus)
-                .andRecordStatusEqualTo(recordStatus);
+        if(StringUtils.isBlank(approvalStatus)){
+            example.createCriteria().andAdvisorAccountEqualTo(advisorAccount)
+                    .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        }else{
+            example.createCriteria().andAdvisorAccountEqualTo(advisorAccount).andApprovalStatusEqualTo(approvalStatus)
+                    .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        }
         List<TbServiceAdvisor> tbServiceAdvisors = tbServiceAdvisorMapper.selectByExample(example);
         if(tbServiceAdvisors.isEmpty()){
-            logger.warn("当前顾问[{}]信息不存在",advisorAccount);
-            throw new JnSpringCloudException(AdvisorExceptionEnum.ADVISOR_INFO_NOT_EXIST);
+          return null;
         }
-        return tbServiceAdvisors.get(0);
+        TbServiceAdvisor tbServiceAdvisor = tbServiceAdvisors.get(0);
+        //获取系统所有业务领域
+        IndustryDictParameter industryDictParameter=new IndustryDictParameter();
+        //领域类型[0业务领域1行业领域2发展阶段3企业性质]
+        industryDictParameter.setPreType("0");
+        List<IndustryDictionary> industryDictionaryList = industryService.getIndustryDictionary(industryDictParameter);
+        AdvisorServiceInfo advisorServiceInfo=new AdvisorServiceInfo();
+        BeanUtils.copyProperties(tbServiceAdvisor, advisorServiceInfo);
+        if(StringUtils.isNotBlank(tbServiceAdvisor.getBusinessArea())){
+            String []businessAreaArray=tbServiceAdvisor.getBusinessArea().split(",");
+            List<String> businessAreaBul=new ArrayList<>();
+            for(IndustryDictionary industryDictionary:industryDictionaryList){
+                for(String businessArea:businessAreaArray){
+                    if(StringUtils.equals(industryDictionary.getId(), businessArea)){
+                        businessAreaBul.add(industryDictionary.getPreValue());
+                        break;
+                    }
+                }
+            }
+            advisorServiceInfo.setBusinessAreaName(StringUtils.join(businessAreaBul,","));
+        }
+        return advisorServiceInfo;
     }
 }

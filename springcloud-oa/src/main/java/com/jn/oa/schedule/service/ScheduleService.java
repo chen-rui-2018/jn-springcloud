@@ -41,4 +41,12 @@ public interface ScheduleService {
      * @return
      */
     List<Schedule> list(ScheduleQuery shceduleQuery);
+
+    /**
+     * 根据日程id获取日程信息详情
+     *
+     * @param id
+     * @return
+     */
+    Schedule getScheduleById(String id);
 }

@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * 服务机构认证基本信息
@@ -39,30 +40,38 @@ public class OrgBasicData implements Serializable {
     @NotNull(message = "主营业务不能为空")
     private String orgBusiness;
 
-    @ApiModelProperty(value = "业务擅长[数组][企业字典表type=0的，即业务领域类型。数据从【机构字典】接口获取]",required = true,
-            notes = "企业字典表type=0的，即业务领域类型。数据从【机构字典】接口获取"
-            ,example = "['ogistics','technology_finance']")
+    @ApiModelProperty(value = "业务擅长",required = true ,example = "金融贷款")
     @NotNull(message = "业务擅长不能为空")
-    private String[] orgSpeciality;
+    private String orgSpeciality;
 
     @ApiModelProperty(value = "机构LOGO",required = true,example = "***/***/**.jpg")
     @NotNull(message = "机构LOGO不能为空")
     private String orgLogo;
 
     @NotNull(message = "行业领域不能为空")
-    @ApiModelProperty(value = "行业领域[数组][企业字典表type=1的，即行业领域类型。数据从【机构字典】接口获取]",example = "['shengwuyiyao','xinnengyuan']"
-            ,notes = "企业字典表type=1的，即行业领域类型。数据从【机构字典】接口获取")
+    @ApiModelProperty(value = "客户偏好-行业领域[数组][企业字典表type=1的，即行业领域类型。数据从【服务超市-机构字典】接口获取(id)]",example = "['shengwuyiyao','xinnengyuan']"
+            ,notes = "企业字典表type=1的，即行业领域类型。数据从【服务超市-机构字典】接口获取(id)")
     private String[] industrySector;
 
     @NotNull(message = "发展阶段不能为空")
-    @ApiModelProperty(value = "发展阶段[数组][企业字典表type=2的，即发展阶段领域类型。数据从【机构字典】接口获取]",example = "['gufenqiye','fazhanqi']"
-            ,notes = "企业字典表type=2的，即发展阶段领域类型。数据从【机构字典】接口获取")
+    @ApiModelProperty(value = "客户偏好-发展阶段[数组][企业字典表type=2的，即发展阶段领域类型。数据从【服务超市-机构字典】接口获取(id)]",example = "['gufenqiye','fazhanqi']"
+            ,notes = "企业字典表type=2的，即发展阶段领域类型。数据从【服务超市-机构字典】接口获取(id)")
     private String[] developmentStage;
 
-    @NotNull(message = "企业性质不能为空")
-    @ApiModelProperty(value = "企业性质[数组][企业字典表type=3的，即企业性质类型。数据从【机构字典】接口获取]",example = "['guoyouqiye','minyingqiye']"
-            ,notes = "企业字典表type=3的，即企业性质类型。数据从【机构字典】接口获取")
-    private String[] companyNature;
+    @ApiModelProperty(value = "业务领域",example = "technology_finance")
+    private String businessType;
+
+    @ApiModelProperty(value = "法人/负责人",example = "王松")
+    private String orgPrincipal;
+
+    @ApiModelProperty(value = "企业工商类型",example = "民营企业/有限责任公司")
+    private String orgBusinType;
+
+    @ApiModelProperty(value = "企业工商经营场所",example = "江苏南京xxx")
+    private String orgBusinAddresse;
+
+    @ApiModelProperty(value = "企业工商经营范围",example = "计算机销售、软件开发及出售、计算机....")
+    private String orgBusinScope;
 
     public String getOrgId() {
         return orgId;
@@ -112,11 +121,11 @@ public class OrgBasicData implements Serializable {
         this.orgBusiness = orgBusiness;
     }
 
-    public String[] getOrgSpeciality() {
+    public String getOrgSpeciality() {
         return orgSpeciality;
     }
 
-    public void setOrgSpeciality(String[] orgSpeciality) {
+    public void setOrgSpeciality(String orgSpeciality) {
         this.orgSpeciality = orgSpeciality;
     }
 
@@ -144,11 +153,64 @@ public class OrgBasicData implements Serializable {
         this.developmentStage = developmentStage;
     }
 
-    public String[] getCompanyNature() {
-        return companyNature;
+    public String getBusinessType() {
+        return businessType;
     }
 
-    public void setCompanyNature(String[] companyNature) {
-        this.companyNature = companyNature;
+    public void setBusinessType(String businessType) {
+        this.businessType = businessType;
+    }
+
+    public String getOrgPrincipal() {
+        return orgPrincipal;
+    }
+
+    public void setOrgPrincipal(String orgPrincipal) {
+        this.orgPrincipal = orgPrincipal;
+    }
+
+    public String getOrgBusinType() {
+        return orgBusinType;
+    }
+
+    public void setOrgBusinType(String orgBusinType) {
+        this.orgBusinType = orgBusinType;
+    }
+
+    public String getOrgBusinAddresse() {
+        return orgBusinAddresse;
+    }
+
+    public void setOrgBusinAddresse(String orgBusinAddresse) {
+        this.orgBusinAddresse = orgBusinAddresse;
+    }
+
+    public String getOrgBusinScope() {
+        return orgBusinScope;
+    }
+
+    public void setOrgBusinScope(String orgBusinScope) {
+        this.orgBusinScope = orgBusinScope;
+    }
+
+    @Override
+    public String toString() {
+        return "OrgBasicData{" +
+                "orgId='" + orgId + '\'' +
+                ", orgName='" + orgName + '\'' +
+                ", orgCode='" + orgCode + '\'' +
+                ", orgRegisterTime='" + orgRegisterTime + '\'' +
+                ", orgSynopsis='" + orgSynopsis + '\'' +
+                ", orgBusiness='" + orgBusiness + '\'' +
+                ", orgSpeciality='" + orgSpeciality + '\'' +
+                ", orgLogo='" + orgLogo + '\'' +
+                ", industrySector=" + Arrays.toString(industrySector) +
+                ", developmentStage=" + Arrays.toString(developmentStage) +
+                ", businessType='" + businessType + '\'' +
+                ", orgPrincipal='" + orgPrincipal + '\'' +
+                ", orgBusinType='" + orgBusinType + '\'' +
+                ", orgBusinAddresse='" + orgBusinAddresse + '\'' +
+                ", orgBusinScope='" + orgBusinScope + '\'' +
+                '}';
     }
 }

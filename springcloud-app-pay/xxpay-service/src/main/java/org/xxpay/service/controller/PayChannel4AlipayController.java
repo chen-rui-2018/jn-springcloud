@@ -282,7 +282,7 @@ public class PayChannel4AlipayController {
         _log.info(" 请求支付宝参数 支付网关url = {} ，notifyUrl(回调异步通知地址) = {} ,",alipayConfig.getUrl(),alipay_request.getNotifyUrl());
         String payParams = null;
         try {
-            payParams = client.pageExecute(alipay_request).getBody();
+            payParams = client.sdkExecute(alipay_request).getBody();
         } catch (AlipayApiException e) {
             _log.error("订单号：{} 支付下单报错 ",payOrderId,e);
             _log.info("###### 结束创建" + logPrefix + "请求  ######");
@@ -375,7 +375,7 @@ public class PayChannel4AlipayController {
         _log.info(" 请求支付宝参数 支付网关url = {} ，notifyUrl(回调异步通知地址) = {} ,",alipayConfig.getUrl(),alipay_request.getNotifyUrl());
         String payUrl = null;
         try {
-            payUrl = client.pageExecute(alipay_request).getBody();
+            payUrl = client.execute(alipay_request).getBody();
         } catch (AlipayApiException e) {
             _log.error("订单号：{} 支付下单报错 ",payOrderId,e);
             _log.info("###### 结束创建" + logPrefix + "请求  ######");

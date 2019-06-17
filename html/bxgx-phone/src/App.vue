@@ -16,7 +16,7 @@ export default {
     // this.init()
   },
   created () {
-    // this.init()
+    this.init()
   },
   methods: {
     init () {
@@ -28,7 +28,7 @@ export default {
       this.api.post({
         url: 'loginURL',
         data: {
-          account: '17300000050',
+          account: 'wangsong',
           password: '123456'
         },
         dataFlag: false,

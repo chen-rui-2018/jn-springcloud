@@ -180,17 +180,19 @@
         if (!this.isMobile) {
           if (tab.otherColumn) {
             for (const key in tab.otherColumn) {
-              let text
-              if (key.length === 6) {
-                text = key.substring(0, 4) + '年' + key.substring(4, 6) + '月'
-              } else {
-                text = key + '年'
+              if (key) {
+                let text
+                if (key.length === 6) {
+                  text = key.substring(0, 4) + '年' + key.substring(4, 6) + '月'
+                } else {
+                  text = key + '年'
+                }
+                tab.columns.push({
+                  text: text,
+                  value: key,
+                  width: 160
+                })
               }
-              tab.columns.push({
-                text: text,
-                value: key,
-                width: 160
-              })
             }
           }
         }
@@ -236,14 +238,16 @@
         // 其他表格列的值（上期值比对）挂载到树形指标，跟着指标循环的时候显示
         for (const target of treeData) {
           for (const key in otherColumn) {
-            this.$set(target, key, [])
-            if (otherColumn[key]) {
-              for (const column of otherColumn[key]) {
-                if (target.id === column.targetId) {
-                  target[key].push({
-                    value: column.value || '-',
-                    label: column.formName
-                  })
+            if (key) {
+              this.$set(target, key, [])
+              if (otherColumn[key]) {
+                for (const column of otherColumn[key]) {
+                  if (target.id === column.targetId) {
+                    target[key].push({
+                      value: column.value || '-',
+                      label: column.formName
+                    })
+                  }
                 }
               }
             }

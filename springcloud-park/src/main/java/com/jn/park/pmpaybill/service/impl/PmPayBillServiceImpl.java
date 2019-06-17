@@ -127,6 +127,9 @@ public class PmPayBillServiceImpl implements PmPayBillService {
             if (StringUtils.equals(GenerateStatusEnums.EXPIRED.getCode(), generateStatus.toString())) {
                 //如果是已生成状态,则直接跳过
                 continue;
+            }else if (tbPmPayBillItem.getTotalAmount().compareTo(BigDecimal.ZERO) == 0){
+                //如果缴费单的实缴金额为0,则也会直接跳过
+                continue;
             }
 
             //调用支付接口,创建账单
@@ -281,7 +284,7 @@ public class PmPayBillServiceImpl implements PmPayBillService {
         //设置实际金额
         tbPmPayBillItem.setTotalAmount(tbPmPayBillItem.getBillAcount());
         //判断物业费实际金额,若为零,则设置没已缴
-        if (tbPmPayBillItem.getBillAcount().equals(BigDecimal.ZERO)) {
+        if (tbPmPayBillItem.getBillAcount().compareTo(BigDecimal.ZERO) == 0) {
             //设置状态
             setStatus(tbPmPayBillItem, PayStatusEnums.PAYED, GenerateStatusEnums.EXPIRED, DerateStateEnums.NOT_RELIEF, SendPayBillEnums.SENTED);
         } else {

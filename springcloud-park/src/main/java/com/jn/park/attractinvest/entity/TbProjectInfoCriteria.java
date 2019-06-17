@@ -3035,6 +3035,66 @@ public class TbProjectInfoCriteria {
             addCriterion("room_bill_id not between", value1, value2, "roomBillId");
             return (Criteria) this;
         }
+
+        public Criteria andEnterTimeIsNull() {
+            addCriterion("enter_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnterTimeIsNotNull() {
+            addCriterion("enter_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnterTimeEqualTo(Date value) {
+            addCriterion("enter_time =", value, "enterTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnterTimeNotEqualTo(Date value) {
+            addCriterion("enter_time <>", value, "enterTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnterTimeGreaterThan(Date value) {
+            addCriterion("enter_time >", value, "enterTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnterTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("enter_time >=", value, "enterTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnterTimeLessThan(Date value) {
+            addCriterion("enter_time <", value, "enterTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnterTimeLessThanOrEqualTo(Date value) {
+            addCriterion("enter_time <=", value, "enterTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnterTimeIn(List<Date> values) {
+            addCriterion("enter_time in", values, "enterTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnterTimeNotIn(List<Date> values) {
+            addCriterion("enter_time not in", values, "enterTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnterTimeBetween(Date value1, Date value2) {
+            addCriterion("enter_time between", value1, value2, "enterTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnterTimeNotBetween(Date value1, Date value2) {
+            addCriterion("enter_time not between", value1, value2, "enterTime");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

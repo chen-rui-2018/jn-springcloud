@@ -62,7 +62,7 @@
 </template>
 <script>
 import bus from "@/util/bus";
-import { removeToken, removeUserInfo, getUserInfo, setUserInfo } from '@/util/auth'
+// import { removeToken, removeUserInfo, getUserInfo, setUserInfo } from '@/util/auth'
 export default {
   data() {
     return {
@@ -128,7 +128,7 @@ export default {
       }
     },
     islogin() {
-      let userInfo = getUserInfo();
+      let userInfo = this.getUserInfo();
       if (userInfo) {
         this.isLogin = true;
         this.userInfoData = JSON.parse(userInfo);

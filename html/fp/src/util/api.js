@@ -273,6 +273,7 @@ export default {
         cancelCareOperate:"springcloud-park/park/manage/care/cancelCareOperate",//用户取消关注操作
         getDataStatistics:"springcloud-enterprise/guest/MarketIndexController/getDataStatistics",//获取企业，机构，活动，服务专员数量
         queryOnlineInfo:"springcloud-enterprise/pd/online/queryOnlineInfo",//通过公告ID和登录人查询预约信息
+        integrationList:"springcloud-park/guest/park/notice/web/integrationList",//PC端整合接口
     },
     setToken: function (obj) {   //设置token在请求头上面
         // axios.interceptors.request.use(function (config) {

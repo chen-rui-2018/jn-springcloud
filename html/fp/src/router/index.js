@@ -60,6 +60,14 @@ const router= new Router({
           name: 'portalIndex',
         },
         {
+          path: '/parkIntroduction',
+          component: resolve => require(['@/views/parkIntroduction'], resolve),
+          meta: {
+            title: '园区介绍'
+          },
+          name: 'parkIntroduction'
+        },
+        {
           path: '/investment',
           component: resolve => require(['@/views/investment'], resolve),
           meta: {
@@ -813,8 +821,16 @@ const router= new Router({
           name: 'incubatorEnterprises'
         },
         {
+          path: '/noticeList',
+          component: resolve => require(['@/views/noticeList'], resolve),
+          meta: {
+            title: '公告列表'
+          },
+          name: 'noticeList'
+        },
+        {
           path: '/announcementDetails',
-          component: resolve => require(['@/views/announcementDetails'], resolve),
+          component: resolve => require(['@/views/noticeList/announcementDetails'], resolve),
           meta: {
             title: '公告详情'
           },

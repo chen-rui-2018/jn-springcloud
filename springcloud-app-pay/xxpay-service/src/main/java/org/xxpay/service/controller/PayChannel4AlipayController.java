@@ -65,22 +65,32 @@ public class PayChannel4AlipayController {
     @RequestMapping(value = "/pay/channel/ali_wap")
     public String doAliPayWapReq(@RequestParam String jsonParam) {
         String logPrefix = "【支付宝WAP支付下单】";
-        JSONObject paramObj = JSON.parseObject(new String(MyBase64.decode(jsonParam)));
+        _log.info("###### 开始接收创建" + logPrefix + "请求  ######");
+
+        _log.info("创建订单请求参数  jsonParam(加密) = {}", jsonParam);
+        jsonParam = new String(MyBase64.decode(jsonParam));
+        _log.info(" 请求参数解密后   jsonParam(解密后) = {}", jsonParam);
+        JSONObject paramObj = JSON.parseObject(jsonParam);
         PayOrder payOrder = paramObj.getObject("payOrder", PayOrder.class);
         String payOrderId = payOrder.getPayOrderId();
         String mchId = payOrder.getMchId();
         String channelId = payOrder.getChannelId();
         MchInfo mchInfo = mchInfoService.selectMchInfo(mchId);
-        String resKey = mchInfo == null ? "" : mchInfo.getResKey();
-        if("".equals(resKey)) {
-            return XXPayUtil.makeRetFail(XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_FAIL, "", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0001));
+        String resKey = mchInfo.getResKey();
+        if(StringUtils.isBlank(resKey)) {
+            _log.info(" 运营平台的商户响应密钥为空！ 商户ID ： {}",mchId);
+            _log.info("###### 结束创建" + logPrefix + "请求  ######");
+            return XXPayUtil.makeRetFail(XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_FAIL, "商户的响应密钥为空", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0001));
         }
+        //获取支付渠道信息
         PayChannel payChannel = payChannelService.selectPayChannel(channelId, mchId);
+        _log.info(" 根据channelId(支付渠道ID) = {}，mchId(商户ID) = {}   获取支付渠道信息： {}",channelId,mchId,payChannel.toString());
+        //获取支付宝配置信息
         alipayConfig.init(payChannel.getParam());
         AlipayClient client = new DefaultAlipayClient(alipayConfig.getUrl(), alipayConfig.getApp_id(), alipayConfig.getRsa_private_key(), AlipayConfig.FORMAT, AlipayConfig.CHARSET, alipayConfig.getAlipay_public_key(), AlipayConfig.SIGNTYPE);
         AlipayTradeWapPayRequest alipay_request = new AlipayTradeWapPayRequest();
         // 封装请求支付信息
-        AlipayTradeWapPayModel model=new AlipayTradeWapPayModel();
+        AlipayTradeWapPayModel model = new AlipayTradeWapPayModel();
         model.setOutTradeNo(payOrderId);
         model.setSubject(payOrder.getSubject());
         model.setTotalAmount(AmountUtil.convertCent2Dollar(payOrder.getAmount().toString()));
@@ -105,18 +115,18 @@ public class PayChannel4AlipayController {
         alipay_request.setNotifyUrl(alipayConfig.getNotify_url());
         // 设置同步地址
         alipay_request.setReturnUrl(payOrder.getAliPayReturnUrl());
+        _log.info(" 请求支付宝参数 支付网关url = {} ，notifyUrl(回调异步通知地址) = {} ,",alipayConfig.getUrl(),alipay_request.getNotifyUrl());
         String payUrl = null;
         try {
             payUrl = client.pageExecute(alipay_request).getBody();
         } catch (AlipayApiException e) {
             _log.error("订单号：{} 支付下单报错 ",payOrderId,e);
+            _log.info("###### 结束创建" + logPrefix + "请求  ######");
             Map<String, Object> map = XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_SUCCESS, "", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0019);
             return XXPayUtil.makeRetData(map, resKey);
         }
         _log.info("{}生成跳转路径：payUrl={}", logPrefix, payUrl);
         payOrderService.updateStatus4Ing(payOrderId, null);
-        _log.info("{}生成请求支付宝数据,req={}", logPrefix, alipay_request.getBizModel());
-        _log.info("###### 商户统一下单处理完成 ######");
 
         //----------------------封装返回参数----------------------------------------
         Map<String, Object> map = XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_SUCCESS, "", PayConstant.RETURN_VALUE_SUCCESS, null);
@@ -128,7 +138,7 @@ public class PayChannel4AlipayController {
         JSONObject orderInfo = new JSONObject();
         orderInfo.put("payUrl",payUrl);
         map.put("orderInfo",orderInfo.toJSONString());
-
+        _log.info("###### 创建" + logPrefix + "请求处理完成  ######");
         return XXPayUtil.makeRetData(map, resKey);
     }
 
@@ -141,17 +151,27 @@ public class PayChannel4AlipayController {
     @RequestMapping(value = "/pay/channel/ali_pc")
     public String doAliPayPcReq(@RequestParam String jsonParam) {
         String logPrefix = "【支付宝PC支付下单】";
-        JSONObject paramObj = JSON.parseObject(new String(MyBase64.decode(jsonParam)));
+        _log.info("###### 开始接收创建" + logPrefix + "请求  ######");
+
+        _log.info("创建订单请求参数  jsonParam(加密) = {}", jsonParam);
+        jsonParam = new String(MyBase64.decode(jsonParam));
+        _log.info(" 请求参数解密后   jsonParam(解密后) = {}", jsonParam);
+        JSONObject paramObj = JSON.parseObject(jsonParam);
         PayOrder payOrder = paramObj.getObject("payOrder", PayOrder.class);
         String payOrderId = payOrder.getPayOrderId();
         String mchId = payOrder.getMchId();
         String channelId = payOrder.getChannelId();
         MchInfo mchInfo = mchInfoService.selectMchInfo(mchId);
-        String resKey = mchInfo == null ? "" : mchInfo.getResKey();
-        if("".equals(resKey)) {
-            return XXPayUtil.makeRetFail(XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_FAIL, "", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0001));
+        String resKey = mchInfo.getResKey();
+        if(StringUtils.isBlank(resKey)) {
+            _log.info(" 运营平台的商户响应密钥为空！ 商户ID ： {}",mchId);
+            _log.info("###### 结束创建" + logPrefix + "请求  ######");
+            return XXPayUtil.makeRetFail(XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_FAIL, "商户的响应密钥为空", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0001));
         }
+        //获取支付渠道信息
         PayChannel payChannel = payChannelService.selectPayChannel(channelId, mchId);
+        _log.info(" 根据channelId(支付渠道ID) = {}，mchId(商户ID) = {}   获取支付渠道信息： {}",channelId,mchId,payChannel.toString());
+        //获取支付宝配置信息
         alipayConfig.init(payChannel.getParam());
         AlipayClient client = new DefaultAlipayClient(alipayConfig.getUrl(), alipayConfig.getApp_id(), alipayConfig.getRsa_private_key(), AlipayConfig.FORMAT, AlipayConfig.CHARSET, alipayConfig.getAlipay_public_key(), AlipayConfig.SIGNTYPE);
         AlipayTradePagePayRequest alipay_request = new AlipayTradePagePayRequest();
@@ -184,18 +204,19 @@ public class PayChannel4AlipayController {
         alipay_request.setNotifyUrl(alipayConfig.getNotify_url());
         // 设置同步地址
         alipay_request.setReturnUrl(payOrder.getAliPayReturnUrl());
+        _log.info(" 请求支付宝参数 支付网关url = {} ，notifyUrl(回调异步通知地址) = {} ,",alipayConfig.getUrl(),alipay_request.getNotifyUrl());
         String payUrl = null;
         try {
             payUrl = client.pageExecute(alipay_request).getBody();
         } catch (AlipayApiException e) {
             _log.error("订单号：{} 支付下单报错 ",payOrderId,e);
             Map<String, Object> map = XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_SUCCESS, "", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0019);
+            _log.info("###### 结束创建" + logPrefix + "请求  ######");
             return XXPayUtil.makeRetData(map, resKey);
         }
         _log.info("{}生成跳转路径：payUrl={}", logPrefix, payUrl);
         payOrderService.updateStatus4Ing(payOrderId, null);
-        _log.info("{}生成请求支付宝数据,req={}", logPrefix, alipay_request.getBizModel());
-        _log.info("###### 商户统一下单处理完成 ######");
+
 
         //----------------------封装返回参数----------------------------------------
         Map<String, Object> map = XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_SUCCESS, "", PayConstant.RETURN_VALUE_SUCCESS, null);
@@ -207,7 +228,7 @@ public class PayChannel4AlipayController {
         JSONObject orderInfo = new JSONObject();
         orderInfo.put("payUrl",payUrl);
         map.put("orderInfo",orderInfo.toJSONString());
-
+        _log.info("###### 创建" + logPrefix + "请求处理完成  ######");
         return XXPayUtil.makeRetData(map, resKey);
     }
 
@@ -220,17 +241,27 @@ public class PayChannel4AlipayController {
     @RequestMapping(value = "/pay/channel/ali_mobile")
     public String doAliPayMobileReq(@RequestParam String jsonParam) {
         String logPrefix = "【支付宝APP支付下单】";
-        JSONObject paramObj = JSON.parseObject(new String(MyBase64.decode(jsonParam)));
+        _log.info("###### 开始接收创建" + logPrefix + "请求  ######");
+
+        _log.info("创建订单请求参数  jsonParam(加密) = {}", jsonParam);
+        jsonParam = new String(MyBase64.decode(jsonParam));
+        _log.info(" 请求参数解密后   jsonParam(解密后) = {}", jsonParam);
+        JSONObject paramObj = JSON.parseObject(jsonParam);
         PayOrder payOrder = paramObj.getObject("payOrder", PayOrder.class);
         String payOrderId = payOrder.getPayOrderId();
         String mchId = payOrder.getMchId();
         String channelId = payOrder.getChannelId();
         MchInfo mchInfo = mchInfoService.selectMchInfo(mchId);
-        String resKey = mchInfo == null ? "" : mchInfo.getResKey();
-        if("".equals(resKey)) {
-            return XXPayUtil.makeRetFail(XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_FAIL, "", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0001));
+        String resKey = mchInfo.getResKey();
+        if(StringUtils.isBlank(resKey)) {
+            _log.info(" 运营平台的商户响应密钥为空！ 商户ID ： {}",mchId);
+            _log.info("###### 结束创建" + logPrefix + "请求  ######");
+            return XXPayUtil.makeRetFail(XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_FAIL, "商户的响应密钥为空", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0001));
         }
+        //获取支付渠道信息
         PayChannel payChannel = payChannelService.selectPayChannel(channelId, mchId);
+        _log.info(" 根据channelId(支付渠道ID) = {}，mchId(商户ID) = {}   获取支付渠道信息： {}",channelId,mchId,payChannel.toString());
+        //获取支付宝配置信息
         alipayConfig.init(payChannel.getParam());
         AlipayClient client = new DefaultAlipayClient(alipayConfig.getUrl(), alipayConfig.getApp_id(), alipayConfig.getRsa_private_key(), AlipayConfig.FORMAT, AlipayConfig.CHARSET, alipayConfig.getAlipay_public_key(), AlipayConfig.SIGNTYPE);
         AlipayTradeAppPayRequest alipay_request = new AlipayTradeAppPayRequest();
@@ -248,17 +279,19 @@ public class PayChannel4AlipayController {
         alipay_request.setNotifyUrl(alipayConfig.getNotify_url());
         // 设置同步地址
         alipay_request.setReturnUrl(payOrder.getAliPayReturnUrl());
+        _log.info(" 请求支付宝参数 支付网关url = {} ，notifyUrl(回调异步通知地址) = {} ,",alipayConfig.getUrl(),alipay_request.getNotifyUrl());
         String payParams = null;
         try {
-            payParams = client.sdkExecute(alipay_request).getBody();
+            payParams = client.pageExecute(alipay_request).getBody();
         } catch (AlipayApiException e) {
             _log.error("订单号：{} 支付下单报错 ",payOrderId,e);
+            _log.info("###### 结束创建" + logPrefix + "请求  ######");
             Map<String, Object> map = XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_SUCCESS, "", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0019);
             return XXPayUtil.makeRetData(map, resKey);
         }
         payOrderService.updateStatus4Ing(payOrderId, null);
         _log.info("{}生成请求支付宝数据,payParams={}", logPrefix, payParams);
-        _log.info("###### 商户统一下单处理完成 ######");
+
 
         //----------------------封装返回参数----------------------------------------
         Map<String, Object> map = XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_SUCCESS, "", PayConstant.RETURN_VALUE_SUCCESS, null);
@@ -270,7 +303,7 @@ public class PayChannel4AlipayController {
         JSONObject orderInfo = new JSONObject();
         orderInfo.put("payParams",payParams);
         map.put("orderInfo",orderInfo.toJSONString());
-
+        _log.info("###### 创建" + logPrefix + "请求处理完成  ######");
         return XXPayUtil.makeRetData(map, resKey);
 
 
@@ -285,17 +318,27 @@ public class PayChannel4AlipayController {
     @RequestMapping(value = "/pay/channel/ali_qr")
     public String doAliPayQrReq(@RequestParam String jsonParam) {
         String logPrefix = "【支付宝当面付之扫码支付下单】";
-        JSONObject paramObj = JSON.parseObject(new String(MyBase64.decode(jsonParam)));
+        _log.info("###### 开始接收创建" + logPrefix + "请求  ######");
+
+        _log.info("创建订单请求参数  jsonParam(加密) = {}", jsonParam);
+        jsonParam = new String(MyBase64.decode(jsonParam));
+        _log.info(" 请求参数解密后   jsonParam(解密后) = {}", jsonParam);
+        JSONObject paramObj = JSON.parseObject(jsonParam);
         PayOrder payOrder = paramObj.getObject("payOrder", PayOrder.class);
         String payOrderId = payOrder.getPayOrderId();
         String mchId = payOrder.getMchId();
         String channelId = payOrder.getChannelId();
         MchInfo mchInfo = mchInfoService.selectMchInfo(mchId);
-        String resKey = mchInfo == null ? "" : mchInfo.getResKey();
-        if("".equals(resKey)) {
-            return XXPayUtil.makeRetFail(XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_FAIL, "", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0001));
+        String resKey = mchInfo.getResKey();
+        if(StringUtils.isBlank(resKey)) {
+            _log.info(" 运营平台的商户响应密钥为空！ 商户ID ： {}",mchId);
+            _log.info("###### 结束创建" + logPrefix + "请求  ######");
+            return XXPayUtil.makeRetFail(XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_FAIL, "商户的响应密钥为空", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0001));
         }
+        //获取支付渠道信息
         PayChannel payChannel = payChannelService.selectPayChannel(channelId, mchId);
+        _log.info(" 根据channelId(支付渠道ID) = {}，mchId(商户ID) = {}   获取支付渠道信息： {}",channelId,mchId,payChannel.toString());
+        //获取支付宝配置信息
         alipayConfig.init(payChannel.getParam());
         AlipayClient client = new DefaultAlipayClient(alipayConfig.getUrl(), alipayConfig.getApp_id(), alipayConfig.getRsa_private_key(), AlipayConfig.FORMAT, AlipayConfig.CHARSET, alipayConfig.getAlipay_public_key(), AlipayConfig.SIGNTYPE);
         AlipayTradePrecreateRequest alipay_request = new AlipayTradePrecreateRequest();
@@ -329,11 +372,13 @@ public class PayChannel4AlipayController {
         alipay_request.setNotifyUrl(alipayConfig.getNotify_url());
         // 设置同步地址
         alipay_request.setReturnUrl(payOrder.getAliPayReturnUrl());
+        _log.info(" 请求支付宝参数 支付网关url = {} ，notifyUrl(回调异步通知地址) = {} ,",alipayConfig.getUrl(),alipay_request.getNotifyUrl());
         String payUrl = null;
         try {
-            payUrl = client.execute(alipay_request).getBody();
+            payUrl = client.pageExecute(alipay_request).getBody();
         } catch (AlipayApiException e) {
             _log.error("订单号：{} 支付下单报错 ",payOrderId,e);
+            _log.info("###### 结束创建" + logPrefix + "请求  ######");
             Map<String, Object> map = XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_SUCCESS, "", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0019);
             return XXPayUtil.makeRetData(map, resKey);
         }
@@ -349,8 +394,10 @@ public class PayChannel4AlipayController {
         //渠道ID
         map.put("channelId",payOrder.getChannelId());
         //封装orderInfo(发起支付需要的参数JSON格式)
-        map.put("orderInfo",payUrl);
-
+        JSONObject orderInfo = new JSONObject();
+        orderInfo.put("payUrl",payUrl);
+        map.put("orderInfo",orderInfo.toJSONString());
+        _log.info("###### 创建" + logPrefix + "请求处理完成  ######");
         return XXPayUtil.makeRetData(map, resKey);
 
     }

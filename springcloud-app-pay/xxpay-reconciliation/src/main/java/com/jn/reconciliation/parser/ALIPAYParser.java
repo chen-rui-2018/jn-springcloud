@@ -21,6 +21,7 @@ import com.jn.reconciliation.fileDown.service.impl.AlipayFileDown;
 import com.jn.reconciliation.vo.ReconciliationEntityVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.xxpay.common.constant.AlipayConstant;
 import org.xxpay.common.util.MyLog;
 import org.xxpay.dal.dao.entity.reconciliation.TbPayReconciliationCheckBatch;
 
@@ -145,10 +146,11 @@ public class ALIPAYParser implements ParserInterface {
 			,TbPayReconciliationCheckBatch batch
 			,String billDateStr
 	){
+		logger.info("解析支付宝账单开始 path：{} ，fileName：{} ，batch ：{}，billDateStr ： {}",path,fileName,batch.toString(),billDateStr) ;
 
 		/** 由于商户号有可能被其他平台使用 ，所以总值只能通过订单计算 **/
 		// 总交易单数
-		BigDecimal totalCount = BigDecimal.ZERO;
+		int totalCount = 0;
 		// 总交易额
 		BigDecimal totalAmount = BigDecimal.ZERO;
 		// 手续费总金额
@@ -177,45 +179,41 @@ public class ALIPAYParser implements ParserInterface {
 
 		//暂时存放每一行的数据
 		String rowRecord = "";
-		//标记读取明细行数
-		int redNum = 0;
 		try {
 			//文件流对象
 			fiStream = new FileInputStream(excel);
 			inputStreamReader = new InputStreamReader(fiStream, Charset.forName("GBK"));
 			br = new BufferedReader(inputStreamReader);
 			while ((rowRecord = br.readLine()) != null) {
-				String[] lineList = rowRecord.split("\\,");
-				if (lineList.length > 4) {
-					//第一个为标题,不加载
-					if(redNum > 0) {
-						ReconciliationEntityVo entityVo = new ReconciliationEntityVo();
-						// 设置支付宝流水号
-						entityVo.setBankTrxNo(lineList[0]);
-						// 设置平台订单号
-						entityVo.setBankOrderNo(lineList[1]);
+				String[] lineList = rowRecord.replaceAll("\t|\n|\r", "").split("\\,");
+				//列数大于4列  并且 门店编号为南京白下标识的
+				if (lineList.length > 4 && AlipayConstant.ALIPAY_STORE_ID.equalsIgnoreCase(lineList[6]) ) {
 
-						// 设置账单金额:(单位是元)  并计算 总金订单金额
-						entityVo.setBankAmount(new BigDecimal(lineList[11]));
-						totalAmount = totalAmount.add(entityVo.getBankAmount());
+					ReconciliationEntityVo entityVo = new ReconciliationEntityVo();
+					// 设置支付宝流水号
+					entityVo.setBankTrxNo(lineList[0]);
+					// 设置平台订单号
+					entityVo.setBankOrderNo(lineList[1]);
 
-						// 设置手续费 并计算总手续费金额
-						entityVo.setBankFee(new BigDecimal(lineList[22]));
-						feeAmount = feeAmount.add(entityVo.getBankFee());
+					// 设置账单金额:(单位是元)  并计算 总金订单金额
+					entityVo.setBankAmount(new BigDecimal(lineList[11]));
+					totalAmount = totalAmount.add(entityVo.getBankAmount());
 
-						//计算出订单总数
-						totalCount = totalCount.add(new BigDecimal("1"));
+					// 设置手续费 并计算总手续费金额
+					entityVo.setBankFee(new BigDecimal(lineList[22]));
+					feeAmount = feeAmount.add(entityVo.getBankFee());
 
-						//存入对账集合中
-						entityVoList.add(entityVo);
-					}
-					redNum ++;
+					//计算出订单总数
+					totalCount ++;
+
+					//存入对账集合中
+					entityVoList.add(entityVo);
 				}
 			}
 
 			/** 批次实体设置值 **/
 			try {
-				batch.setBankTradeCount(totalCount.intValue());
+				batch.setBankTradeCount(totalCount);
 				// 微信账单金额单位是元
 				batch.setBankTradeAmount(totalAmount);
 				batch.setBankFee(feeAmount);
@@ -239,10 +237,9 @@ public class ALIPAYParser implements ParserInterface {
 		} finally {
 			closeStream(br, inputStreamReader, fiStream);
 		}
-
+		logger.info("解析支付宝账单完成 共{}条数据 ", entityVoList.size());
 	return entityVoList;
 	}
-
 
 
 	/**

@@ -123,14 +123,18 @@ export default {
       }
     },
     getdepartList () {
-      let _this = this
       this.api.get({
         url: 'departList',
         data: this.sendData,
-        callback: function (res) {
+        callback: (res) => {
           if (res.code === '0000') {
             // console.log(res)
-            _this.departList = res.data
+            this.departList.push(...res.data[0])
+            this.departList.push(...res.data[1])
+            this.departList.push(...res.data[2])
+            //  res.data.forEach(ele => {
+
+            // })
           }
         }
       })
@@ -157,42 +161,13 @@ export default {
     },
     // 去详情
     goPower (id) {
-      // console.log(id)
       this.$router.push({path: '/guest/portal/sp/power/powerDetail', query: {id: id}})
     },
     toggle (index, id) {
-      // console.log(index)
       this.active = index
       this.sendData.departId = id
       this.getPoweList()
     }
-    /* onScrollBottom () {
-      if (this.onFetching === false) {
-        if (this.sendData.page < Math.ceil(this.total / this.sendData.rows)) {
-          this.onFetching = true
-          setTimeout(() => {
-            this.sendData.page++
-            this.api.get({
-              url: 'powerList',
-              data: this.sendData,
-              callback: res => {
-                if (res.code === '0000') {
-                  this.poweList.push(...res.data.rows)
-                  // this.poweList = res.data.rows
-                  this.total = res.data.total
-                  this.poweList.forEach(ele => {
-                    this.$set(ele, 'isfold', false)
-                  })
-                  this.isSlider = false
-                  this.onFetching = false
-                }
-              }
-            })
-          }, 1000)
-        } else {
-        }
-      }
-    } */
   }
 }
 </script>

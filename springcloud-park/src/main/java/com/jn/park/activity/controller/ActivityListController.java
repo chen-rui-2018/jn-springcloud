@@ -44,7 +44,7 @@ public class ActivityListController extends BaseController {
 
     @ControllerLog(doAction = "获取前台活动列表")
     @ApiOperation(value = "获取前台活动列表")
-    @RequestMapping(value = "/guest/activity/",method = RequestMethod.POST)
+    @RequestMapping(value = "/guest/activity/activityListSlim",method = RequestMethod.POST)
     public Result<PaginationData<List<ActivitySlim> >> activityListSlim(@RequestBody ActivitySlimQuery activitySlimQuery) {
         User user = (User)SecurityUtils.getSubject().getPrincipal();
         PaginationData paginationData = activityService.activityListSlim(activitySlimQuery,user==null?"":user.getAccount());

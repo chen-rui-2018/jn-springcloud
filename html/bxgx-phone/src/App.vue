@@ -15,9 +15,6 @@ export default {
   mounted () {
     // this.init()
   },
-  created () {
-    this.init()
-  },
   methods: {
     init () {
       // this.token = this.$route.query.token

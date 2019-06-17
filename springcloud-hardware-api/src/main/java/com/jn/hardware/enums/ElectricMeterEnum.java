@@ -18,8 +18,8 @@ public enum ElectricMeterEnum  implements CodeAndMsg {
     ELECTRIC_GET_TOKEN_TIME("100","access_token的获取间隔时间"),
     ELECTRIC_GET_TOKEN_DEFEAT("100","仪表平台access_token获取失败! 网络异常"),
     ELECTRIC_METER_DATA_COLLECTION("1001","电表数据采集接口仪表类型只能为电表deviceType='1'"),
-    WATER_METER_DATA_COLLECTION("1002","电表数据采集接口仪表类型只能为电表deviceType='2'"),
-    AIR_METER_DATA_COLLECTION("1003","电表数据采集接口仪表类型只能为电表deviceType='3'"),
+    WATER_METER_DATA_COLLECTION("1002","水表数据采集接口仪表类型只能为水表deviceType='2'"),
+    AIR_METER_DATA_COLLECTION("1003","空调表数据采集接口仪表类型只能为空调表deviceType='3'"),
     ;
     private String code;
     private String message;

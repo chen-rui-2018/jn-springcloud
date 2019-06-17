@@ -50,10 +50,9 @@ public interface ElectricMeterService {
 
     /**
      * 获取电表平台access_token接口
-     * @param electricAccessTokenParam
      * @return
      */
-    Result<ElectricAccessTokenShow> getElectricMeterAccessToken(ElectricAccessTokenParam electricAccessTokenParam);
+    Result<ElectricAccessTokenShow> getElectricMeterAccessToken();
 
     /**
      * 获取物业下的所有建筑信息

@@ -68,6 +68,14 @@ const router= new Router({
           name: 'investment'
         },
         {
+          path: '/parkIntroductionChild',
+          component: resolve => require(['@/views/parkIntroductionChild'], resolve),
+          meta: {
+            title: '子园区介绍'
+          },
+          name: 'parkIntroductionChild'
+        },
+        {
           path: '/enterpriseservice',
           component: resolve => require(['@/views/enterpriseservice'], resolve),
           meta: {

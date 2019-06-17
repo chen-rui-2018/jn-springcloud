@@ -731,9 +731,9 @@ export default {
         callback: function(res) {
           _this.RatingList = res.data.rows;
           if(_this.RatingList.length>0){
-            // _this.$nextTick(()=>{
+            _this.$nextTick(()=>{
                _this.scrollList()
-            //  })
+             }) 
           }
         }
       });

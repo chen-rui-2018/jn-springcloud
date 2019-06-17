@@ -1,53 +1,35 @@
-package com.jn.channel;
+package com.jn.utils;
 
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.send.enums.DelayStreamExceptionEnum;
 import com.jn.send.model.Delay;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.util.Date;
 
 /**
- * delay的发送
+ * 时间转化类
  *
  * @author： fengxh
- * @date： Created on 2019/1/3 18:13
+ * @date： Created on 2019/6/15 16:04
  * @version： v1.0
  * @modified By:
  */
-@Service
-public class DefaultDelayMessageSend implements DelayMessageSend{
+public  class ChangeDate {
 
-    private static Logger log = LoggerFactory.getLogger(DefaultDelayMessageSend.class);
     /**
      * 日期转化规则
      */
-    private final static String PATTERN = "yyyy-MM-dd HH:mm:ss";
-
-    @Autowired
-    private RabbitTemplate rabbitTemplate;
-
-    @Override
-    public void send(Delay delay)  {
-        Long ttl = this.handleDate(delay);
-        log.info("开始发送，延迟：{}",ttl);
-        rabbitTemplate.convertAndSend(QueueConfig.DELAY_QUEUE_PER_MESSAGE_TTL_NAME, delay, new ExpirationMessagePostProcessor(ttl));
-    }
-
+    public final static String PATTERN = "yyyy-MM-dd HH:mm:ss";
 
     /**
      * 处理延迟消息的ttl
      * @param delay
      * @return
      */
-    private Long handleDate(Delay delay) {
+    public static Long handleDate(Delay delay) {
         if(StringUtils.isBlank(delay.getDateString()) && StringUtils.isBlank(delay.getTtl())){
             throw new JnSpringCloudException(DelayStreamExceptionEnum.DATE_NOT_NULL);
         }

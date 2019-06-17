@@ -14,7 +14,7 @@ public enum ProjectStatusEnums implements CodeAndMsg {
     NOT_APPLY("1", "未申请"),
     PEEDING_APPLY("2", "待申请入驻"),
     APPLYING("3", "申请中"),
-    PAYING("3", "企业缴费中"),
+    PAYING("4", "企业缴费中"),
     ENTERED("5", "入驻成功"),
     ENTER_FAIL("6", "申请失败"),
     ;

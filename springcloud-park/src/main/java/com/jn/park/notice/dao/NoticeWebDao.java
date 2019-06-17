@@ -1,6 +1,7 @@
 package com.jn.park.notice.dao;
 
 import com.jn.park.notice.model.NoticeDetailShow;
+import com.jn.park.notice.vo.IntegrationListVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -12,6 +13,13 @@ import java.util.List;
  * @modified By:
  */
 public interface NoticeWebDao {
+
+    /**
+     * PC端整合接口
+     * @return
+     */
+    List<IntegrationListVo> integrationList();
+
     /**
      * app首页弹出公告列表
      * @return

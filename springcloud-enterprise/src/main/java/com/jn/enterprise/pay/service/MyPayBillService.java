@@ -11,6 +11,7 @@ import com.jn.pay.vo.PayRecordVo;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletResponse;
@@ -112,4 +113,11 @@ public interface MyPayBillService {
      * @return
      */
     Result insertRecord(PayAccountBookMoneyRecord payAccountBookMoneyRecord);
+
+    /**
+     * 我的账单-线下缴费确认回调各业务侧接口
+     * @param payCallbackServiceSideParam
+     * @return
+     */
+    Result callbackServiceSide(PayCallbackServiceSideParam payCallbackServiceSideParam,User user);
 }

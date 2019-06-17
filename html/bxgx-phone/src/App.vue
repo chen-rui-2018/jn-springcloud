@@ -13,10 +13,10 @@ export default {
   name: 'App',
   components: {administrativeHeader},
   mounted () {
-    this.init()
+    // this.init()
   },
   created () {
-    this.init()
+    // this.init()
   },
   methods: {
     init () {
@@ -28,7 +28,7 @@ export default {
       this.api.post({
         url: 'loginURL',
         data: {
-          account: 'wangsong',
+          account: '17300000050',
           password: '123456'
         },
         dataFlag: false,

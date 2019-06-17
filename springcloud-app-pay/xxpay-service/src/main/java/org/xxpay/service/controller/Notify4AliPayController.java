@@ -125,6 +125,7 @@ public class Notify4AliPayController extends Notify4BasePay {
 				if (updatePayOrderRows != 1) {
 					_log.error("{}更新支付状态失败,将payOrderId={},更新payStatus={}失败", logPrefix, payOrder.getPayOrderId(), PayConstant.PAY_STATUS_SUCCESS);
 					_log.info("{}响应给支付宝结果：{}", logPrefix, PayConstant.RETURN_ALIPAY_VALUE_FAIL);
+					_log.info("====== 结束接收支付宝支付回调通知 ======");
 					return PayConstant.RETURN_ALIPAY_VALUE_FAIL;
 				}
 				_log.info("{}更新支付状态成功,将payOrderId={},更新payStatus={}成功", logPrefix, payOrder.getPayOrderId(), PayConstant.PAY_STATUS_SUCCESS);
@@ -134,10 +135,12 @@ public class Notify4AliPayController extends Notify4BasePay {
 			// 其他状态
 			_log.info("{}支付状态trade_status={},不做业务处理", logPrefix, trade_status);
 			_log.info("{}响应给支付宝结果：{}", logPrefix, PayConstant.RETURN_ALIPAY_VALUE_SUCCESS);
+			_log.info("====== 结束接收支付宝支付回调通知 ======");
 			return PayConstant.RETURN_ALIPAY_VALUE_SUCCESS;
 		}
 		//发送通知
 		doNotify(payOrder,true);
+		_log.info("{}响应给支付宝结果：{}", logPrefix, PayConstant.RETURN_ALIPAY_VALUE_SUCCESS);
 		_log.info("====== 完成接收支付宝支付回调通知 ======");
 		return PayConstant.RETURN_ALIPAY_VALUE_SUCCESS;
 	}

@@ -259,7 +259,6 @@ export default {
         fd.append('file', e.raw, e.raw.name)
       })
       uploadAttachment(fd).then((res) => {
-        debugger
         if (res.data.code === '0000') {
           this.$message.success('文件上传成功')
           this.dialogImportVisible = false

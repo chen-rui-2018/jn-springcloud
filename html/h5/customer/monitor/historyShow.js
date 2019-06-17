@@ -3,7 +3,8 @@ var service_url="http://112.94.22.222:8000/springcloud-park/";
 //var service_url="http://localhost/springcloud-park/";
 //获取token的Url
 var token_Url="http://112.94.22.222:8000/springcloud-app-system";
-
+//设置token作用域的url
+var scope_url="";
 
 //定义token
 var token="";
@@ -35,7 +36,7 @@ function getServiceToken(){
 			if (data.code === '0000') {
 				if (data.data !== null) {
 					console.log('================>authLogin请求返回：' + data.data)
-					$.cookie('Admin-Token',data.data,{path: '/' });
+					$.cookie('Admin-Token',data.data,{domain:scope_url,path: '/' });
 				}
 			}
 		},
@@ -54,6 +55,7 @@ function searchHistory(){
 
 //获取来电用户历史信息
 function getCalledHistory(obj){
+	$("#detailLoad").show();
 	$.ajax({
 		type: 'get',
 		url: service_url + '/customer/customerCalledInfoEnterController/getUserCalledHistory',
@@ -67,6 +69,7 @@ function getCalledHistory(obj){
 			"token":token
 		},
 		success: function (data) {
+			$("#detailLoad").hide();
 			var table=""
 			if(data==undefined ||data==null ||data.data==null ||data.data.rows.length==0){
 				table=table+"<tr><td colspan='7'>暂无数据</td></tr>";
@@ -80,13 +83,17 @@ function getCalledHistory(obj){
 					else if(info.status=='1'){showStatus="处理中"}
 					else if(info.status=='2'){showStatus="已处理"}
 					else if(info.status=='3'){showStatus="无法处理"}
-					table=table+"<tr><td>"+info.userAccount+"</td><td>"+info.quesCode+"</td><td >"+info.serviceModuleName+"</td>" +
+					table=table+"<tr><td>"+(i+1)+"</td><td>"+info.userAccount+"</td><td>"+info.quesCode+"</td><td >"+info.serviceModuleName+"</td>" +
 						"<td>"+showStatus+"</td><td>"+info.quesTitle+"</td>" +
 						"<td>"+info.createdTime+"</td>" +
 						"<td><a href='javascript:void(0)' class='btn mini' onclick='getHistoryDetails(this)' value='"+info.processInsId+"'>详情</a></td></tr>";
 				}
 			}
 			$("#history").html(table);
+		},
+		error:function () {
+			alert("网络异常，请稍后重试");
+			$("#detailLoad").hide();
 		}
 	});
 }

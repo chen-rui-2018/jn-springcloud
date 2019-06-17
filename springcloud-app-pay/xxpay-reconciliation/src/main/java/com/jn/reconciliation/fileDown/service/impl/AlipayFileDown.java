@@ -1,8 +1,6 @@
 
 package com.jn.reconciliation.fileDown.service.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
@@ -66,30 +64,43 @@ public class AlipayFileDown implements FileDown {
 		//账单日期
 		String billDateStr = billDateSdf.format(billDate);
 
-
-		/**加载支付宝配置参数**/
+		/** step 1  加载参数 **/
+		//加载支付宝配置参数
 		PayChannel payChannel = payChannelService.selectPayChannel(reconciliationInter.getChannelId(),reconciliationInter.getMchId());
 		alipayConfig.init(payChannel.getParam());
 
-        /**拼装文件存放路径(防止多个商户对账时解压在同一文件夹)**/
+        //拼装文件存放路径(防止多个商户对账时解压在同一文件夹)
         //通过  账期 + appid方式生成文件夹
-        JSONObject paramObj = JSON.parseObject( payChannel.getParam());
-        String appId =  paramObj.getString("appid");
-        StringBuffer filePathSb = new  StringBuffer();
+        StringBuilder filePathSb = new  StringBuilder();
         filePathSb.append(alipayConfig.getDir());
-        filePathSb.append("/");
         filePathSb.append(billDateStr);
         filePathSb.append("_");
-        filePathSb.append(appId);
-        filePathSb.append("alipay_bill_");
-        filePathSb.append(billDateStr);
-        filePathSb.append(".zip");
+        filePathSb.append(alipayConfig.getAppId());
+		File pathFile = new File(filePathSb.toString());
+		int index = 1;
+		// 判断文件夹是否已经存在，如果已经存在则加上下标
+		while (pathFile.exists()) {
+			pathFile = new File(filePathSb.toString() + "(" + index + ")");
+			index++;
+		}
+		//创建文件夹
+		pathFile.mkdir();
 
-		//获取支付宝账单下载的URL
+
+		//创建文件(文件夹路径 + alipay_bill_ +  "账期" + ".zip")
+		StringBuilder fileSb = new  StringBuilder();
+		fileSb.append(pathFile.getPath());
+		fileSb.append("/alipay_bill_");
+		fileSb.append(billDateStr);
+		fileSb.append(".zip");
+		file = new File(fileSb.toString());
+
+		/** step 2  获取支付宝账单下载的URL **/
 		String url = getAlipayBillUrl(alipayConfig,billDateStr);
-		//下载账单文件
+
+		/** step 3  下载账单文件 **/
 		if(StringUtils.isNotBlank(url)){
-			file = getBillFile(url,filePathSb.toString());
+			file = getBillFile(url,file);
 		}
 
 		return file;
@@ -137,13 +148,13 @@ public class AlipayFileDown implements FileDown {
 	/**
 	 * 根据账单URL下载文件
 	 * @parma urlStr   账单下载路径
-	 * @param filePath 文件保存路径
+	 * @param file 需要被写入的文件
 	* */
 	File getBillFile(String urlStr
-			,String filePath
+			,File file
 	){
 
-		File file = null  ;
+
 		
 		URL url = null;
 		HttpURLConnection httpUrlConnection = null;
@@ -162,7 +173,6 @@ public class AlipayFileDown implements FileDown {
 			fis = httpUrlConnection.getInputStream();
 			byte[] temp = new byte[1024];
 			int b;
-			file = new File(filePath);
 			fos = new FileOutputStream(file);
 			while ((b = fis.read(temp)) != -1) {
 				fos.write(temp, 0, b);

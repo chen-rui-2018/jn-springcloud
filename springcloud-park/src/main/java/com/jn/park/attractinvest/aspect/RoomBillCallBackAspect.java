@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -79,6 +80,8 @@ public class RoomBillCallBackAspect {
                     String projectId = tbProjectInfoWithBLOBs1.getId();
                     //1.更新项目入驻状态为项目入驻
                     tbProjectInfoWithBLOBs1.setStatus(new Byte(ProjectStatusEnums.ENTERED.getCode()));
+                    //更新企业入驻时间为当前时间
+                    tbProjectInfoWithBLOBs1.setEnterTime(new Date());
                     tbProjectInfoMapper.updateByPrimaryKeyWithBLOBs(tbProjectInfoWithBLOBs1);
                     logger.info("[房间订单] 更新项目管理,企业入驻状态为入驻成功状态,项目id:{}", projectId);
 

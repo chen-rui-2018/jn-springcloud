@@ -90,6 +90,7 @@ public class ParkServiceImpl implements ParkService {
             parkName.setId(vo.getId());
             parkName.setParkName(vo.getParkName());
             parkName.setMainPicture(vo.getMainPicture());
+            parkName.setShortIntroduce(vo.getShortIntroduce());
             parkList.add(parkName);
         }
         return parkList;
@@ -111,6 +112,7 @@ public class ParkServiceImpl implements ParkService {
         for (TbPark general:list) {
             parkGeneral.setParkIntroduce(general.getParkIntroduce());
             parkGeneral.setMainPicture(general.getMainPicture());
+            parkGeneral.setShortIntroduce(general.getShortIntroduce());
         }
         return parkGeneral;
     }

@@ -152,6 +152,8 @@ public class OrgServiceImpl implements OrgService {
      */
     private final static String REQUIRE_HANDLE_RESULT_SUCCESS = "1";
     private final static String ORG_APPLY_IS_CHECKING = "0";
+    private final static String TECHNOLOGY_FINANCE = "technology_finance";
+
 
     @ServiceLog(doAction = "查询服务机构列表")
     @Override
@@ -467,6 +469,10 @@ public class OrgServiceImpl implements OrgService {
             if (orgLicense.getAwardTime() != null) {
                 tbServiceOrgLicense.setAwardTime(DateUtils.parseDate(orgLicense.getAwardTime()));
              }
+            if(tbServiceOrgLicense.getCertName()==null){
+                logger.warn("保存服务机构资质信息失败，机构荣誉资质名称不能为空");
+                throw new JnSpringCloudException(OrgExceptionEnum.ORG_HONOR_NAME_NOT_NULL);
+            }
             String certName="营业执照";
             if(tbServiceOrgLicense.getCertName().contains(certName)){
                 //证书类型：1：营业执照    2：执业资质  3：其他
@@ -818,7 +824,8 @@ public class OrgServiceImpl implements OrgService {
         String productId = businessStatisticalParam.getProductId();
 
         TbServiceProductCriteria productCriteria = new TbServiceProductCriteria();
-        TbServiceProductCriteria.Criteria productCriteriac = productCriteria.createCriteria().andStatusEqualTo(STATUS_EFFECTIVE).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
+        TbServiceProductCriteria.Criteria productCriteriac = productCriteria.createCriteria().andStatusEqualTo(STATUS_EFFECTIVE).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID))
+                .andSignoryIdNotEqualTo(TECHNOLOGY_FINANCE).andOrgIdIsNotNull().andOrgIdNotEqualTo("");
 
         if(StringUtils.isNotEmpty(businessType)){
 

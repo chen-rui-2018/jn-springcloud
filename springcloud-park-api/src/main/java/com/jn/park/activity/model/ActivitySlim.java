@@ -19,7 +19,7 @@ public class ActivitySlim implements Serializable {
     private String id;
     @ApiModelProperty(value = "活动名称")
     private String actiName;
-    @ApiModelProperty(value = "活动状态  2报名中 3活动结束4活动取消")
+    @ApiModelProperty(value = "活动状态  2报名中 3活动结束 4活动取消")
     private String actiStatus;
     @ApiModelProperty(value = "活动地址")
     private String actiAddress;
@@ -47,6 +47,18 @@ public class ActivitySlim implements Serializable {
     private String actiViews;
     @ApiModelProperty(value = "活动发布时间")
     private String issueTime;
+    @ApiModelProperty(value = "活动详情")
+    private String actiDetails;
+    @ApiModelProperty(value = "活动简介")
+    private String actibrief;
+
+    public String getActibrief() {
+        return actibrief;
+    }
+
+    public void setActibrief(String actibrief) {
+        this.actibrief = actibrief;
+    }
 
     public String getActiViews() {
         return actiViews;
@@ -174,5 +186,37 @@ public class ActivitySlim implements Serializable {
 
     public void setAvatarList(List<String> avatarList) {
         this.avatarList = avatarList;
+    }
+
+    public String getActiDetails() {
+        return actiDetails;
+    }
+
+    public void setActiDetails(String actiDetails) {
+        this.actiDetails = actiDetails;
+    }
+
+    @Override
+    public String toString() {
+        return "ActivitySlim{" +
+                "id='" + id + '\'' +
+                ", actiName='" + actiName + '\'' +
+                ", actiStatus='" + actiStatus + '\'' +
+                ", actiAddress='" + actiAddress + '\'' +
+                ", actiStartTime='" + actiStartTime + '\'' +
+                ", actiEndTime='" + actiEndTime + '\'' +
+                ", actiNumber=" + actiNumber +
+                ", actiPosterUrl='" + actiPosterUrl + '\'' +
+                ", actiLike=" + actiLike +
+                ", applyNum=" + applyNum +
+                ", avatar='" + avatar + '\'' +
+                ", avatarList=" + avatarList +
+                ", showApplyNum='" + showApplyNum + '\'' +
+                ", applyStatus='" + applyStatus + '\'' +
+                ", actiViews='" + actiViews + '\'' +
+                ", issueTime='" + issueTime + '\'' +
+                ", actiDetails='" + actiDetails + '\'' +
+                ", actibrief='" + actibrief + '\'' +
+                '}';
     }
 }

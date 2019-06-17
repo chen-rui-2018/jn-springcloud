@@ -1,6 +1,7 @@
 package com.jn.park.customer.service;
 
 import com.jn.common.model.PaginationData;
+import com.jn.park.customer.model.CalledPhoneHistoryParam;
 import com.jn.park.customer.model.ConsultationCustomerListParam;
 import com.jn.park.customer.model.OnlineCustomerParam;
 import com.jn.park.customer.model.ServiceModuleShow;
@@ -60,4 +61,11 @@ public interface CustomerServiceCenterService {
      * @return
      */
     int updateProcessInstanceId(String loginAccount, String quesCode, String processInstanceId);
+
+    /**
+     *查询用户来电历史信息
+     * @param calledPhoneHistoryParam
+     * @return
+     */
+    PaginationData getUserCalledHistory(CalledPhoneHistoryParam calledPhoneHistoryParam);
 }

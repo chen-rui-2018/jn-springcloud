@@ -34,4 +34,12 @@ public class FinanceIncomeSummarizingProportionVo implements Serializable {
     public void setIncome(String income) {
         this.income = income;
     }
+
+    @Override
+    public String toString() {
+        return "FinanceIncomeSummarizingProportionVo{" +
+                "incomeTypeName='" + incomeTypeName + '\'' +
+                ", income='" + income + '\'' +
+                '}';
+    }
 }

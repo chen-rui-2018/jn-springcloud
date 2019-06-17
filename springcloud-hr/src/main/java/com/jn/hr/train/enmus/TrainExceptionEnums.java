@@ -19,6 +19,7 @@ public enum TrainExceptionEnums implements CodeAndMsg {
 	JOIN_MANAGEMENT_ERROR("7000806","参加调研/调查失败"),
 	NOT_NULL_ERROR("7000807","当前参数不能为空"),
 	EXIST_RESULT_INFO("7000808","当前用户已完成考试"),
+	INTERFACE_NOT_EXIT("7000809","当前界面不存在"),
 
     ;
 

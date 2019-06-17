@@ -1,6 +1,6 @@
 package com.jn.news.app.service;
 
-import com.jn.news.app.model.JPushResult;
+import cn.jpush.api.push.PushResult;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ public interface AppSinkService {
      * @param noticeType 推送通知类型（ALL：全部 NOTICE：通知 MESSAGE：透传消息）
      * @param message 透传消息内容（用户APP处理业务）
      */
-    JPushResult pushMessage( String title, String content,List<String> ids, String pushType, String platFromType,
-                            String noticeType, String message);
+    PushResult pushMessage(String title, String content, List<String> ids, String pushType, String platFromType,
+                           String noticeType, String message);
 
 }

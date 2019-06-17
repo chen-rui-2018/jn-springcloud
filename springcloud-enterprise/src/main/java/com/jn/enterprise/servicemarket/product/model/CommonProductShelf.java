@@ -36,4 +36,12 @@ public class CommonProductShelf implements Serializable{
     public void setAdvisorAccount(String advisorAccount) {
         this.advisorAccount = advisorAccount;
     }
+
+    @Override
+    public String toString() {
+        return "CommonProductShelf{" +
+                "templateId='" + templateId + '\'' +
+                ", advisorAccount='" + advisorAccount + '\'' +
+                '}';
+    }
 }

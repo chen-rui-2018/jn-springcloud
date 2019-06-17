@@ -92,9 +92,10 @@ public class InvestorServiceImpl implements InvestorService {
      */
     private static final String PATTERN="yyyy-MM-dd HH:mm:ss";
     /**
-     * 数据状态  0：已删除   1：有效
+     * 科技金融
      */
-    private static final byte RECORD_STATUS=1;
+    private static final String TECHNOLOGY_BUSINESS="technology_finance";
+
 
     /**
      * 投资人列表查询
@@ -177,7 +178,7 @@ public class InvestorServiceImpl implements InvestorService {
     @ServiceLog(doAction = "根据投资人账号获取投资人教育经历")
     private List<InvestorEduExperienceShow> getEduExpList(String investorAccount) {
         TbServiceInvestorEduExpCriteria example=new TbServiceInvestorEduExpCriteria();
-        example.createCriteria().andInvestorAccountEqualTo(investorAccount).andRecordStatusEqualTo(RECORD_STATUS);
+        example.createCriteria().andInvestorAccountEqualTo(investorAccount).andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         List<TbServiceInvestorEduExp> tbServiceInvestorEduExpList = tbServiceInvestorEduExpMapper.selectByExample(example);
         if(tbServiceInvestorEduExpList.isEmpty()){
             return Collections.emptyList();
@@ -199,7 +200,7 @@ public class InvestorServiceImpl implements InvestorService {
     @ServiceLog(doAction = "根据投资人账号获取投资人工作经历")
     private List<InvestorWorkExperienceShow> getWorkExpList(String investorAccount) {
         TbServiceInvestorWorkExpCriteria example=new TbServiceInvestorWorkExpCriteria();
-        example.createCriteria().andInvestorAccountEqualTo(investorAccount).andRecordStatusEqualTo(RECORD_STATUS);
+        example.createCriteria().andInvestorAccountEqualTo(investorAccount).andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         List<TbServiceInvestorWorkExp> workExpList = tbServiceInvestorWorkExpMapper.selectByExample(example);
         if(workExpList.isEmpty()){
             return Collections.emptyList();
@@ -221,7 +222,7 @@ public class InvestorServiceImpl implements InvestorService {
     @ServiceLog(doAction = "根据投资人账号获取投资人主投轮次")
     private List<InvestorMainRound> getMainRoundList(String investorAccount) {
         TbServiceInvestorMainRoundCriteria example=new TbServiceInvestorMainRoundCriteria();
-        example.createCriteria().andInvestorAccountEqualTo(investorAccount).andRecordStatusEqualTo(RECORD_STATUS);
+        example.createCriteria().andInvestorAccountEqualTo(investorAccount).andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         List<TbServiceInvestorMainRound> investorMainRoundList = tbServiceInvestorMainRoundMapper.selectByExample(example);
         if(investorMainRoundList.isEmpty()){
             return Collections.emptyList();
@@ -245,7 +246,7 @@ public class InvestorServiceImpl implements InvestorService {
     @ServiceLog(doAction = "根据投资人账号获取投资人主投领域")
     private List<InvestorMainArea> getMainAreaList(String investorAccount) {
         TbServiceInvestorMainAreaCriteria example=new TbServiceInvestorMainAreaCriteria();
-        example.createCriteria().andInvestorAccountEqualTo(investorAccount).andRecordStatusEqualTo(RECORD_STATUS);
+        example.createCriteria().andInvestorAccountEqualTo(investorAccount).andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         List<TbServiceInvestorMainArea> tbServiceInvestorMainAreaList = tbServiceInvestorMainAreaMapper.selectByExample(example);
         if(tbServiceInvestorMainAreaList.isEmpty()){
             return Collections.emptyList();
@@ -268,7 +269,7 @@ public class InvestorServiceImpl implements InvestorService {
     @ServiceLog(doAction = "根据投资人账号获取投资人信息")
     private List<TbServiceInvestor> getTbServiceInvestors(String investorAccount) {
         TbServiceInvestorCriteria example=new TbServiceInvestorCriteria();
-        example.createCriteria().andInvestorAccountEqualTo(investorAccount).andRecordStatusEqualTo(RECORD_STATUS);
+        example.createCriteria().andInvestorAccountEqualTo(investorAccount).andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         return tbServiceInvestorMapper.selectByExample(example);
     }
 
@@ -331,12 +332,14 @@ public class InvestorServiceImpl implements InvestorService {
     private List<TbServiceOrg> getTbServiceOrgList(String orgName) {
         //根据单位名称，从机构信息表（tb_service_org）中模糊查询所有机构
         TbServiceOrgCriteria example=new TbServiceOrgCriteria();
-        //审核通过
+        //审核通过，投资人只能选择科技金融机构
         String status="1";
         if(StringUtils.isBlank(orgName)){
-            example.createCriteria().andOrgStatusEqualTo(status).andRecordStatusEqualTo(RECORD_STATUS);
+            example.createCriteria().andOrgStatusEqualTo(status)
+                    .andBusinessTypeEqualTo(TECHNOLOGY_BUSINESS)
+                    .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         }else{
-            example.createCriteria().andOrgNameLike("%"+orgName+"%").andOrgStatusEqualTo(status).andRecordStatusEqualTo(RECORD_STATUS);
+            example.createCriteria().andOrgNameLike("%"+orgName+"%").andOrgStatusEqualTo(status).andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         }
         return tbServiceOrgMapper.selectByExample(example);
     }
@@ -432,7 +435,7 @@ public class InvestorServiceImpl implements InvestorService {
                 //创建人
                 eduExp.setCreatorAccount(investorAccount);
                 //数据状态
-                eduExp.setRecordStatus(RECORD_STATUS);
+                eduExp.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
                 eduExpList.add(eduExp);
             }
         }
@@ -468,7 +471,7 @@ public class InvestorServiceImpl implements InvestorService {
                 //创建人
                 workExp.setCreatorAccount(investorAccount);
                 //数据状态
-                workExp.setRecordStatus(RECORD_STATUS);
+                workExp.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
                 workExpList.add(workExp);
             }
         }
@@ -517,7 +520,7 @@ public class InvestorServiceImpl implements InvestorService {
             //创建人
             mainRound.setCreatorAccount(investorAccount);
             //数据状态
-            mainRound.setRecordStatus(RECORD_STATUS);
+            mainRound.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
             mainRoundList.add(mainRound);
         }
         return mainRoundList;
@@ -620,7 +623,7 @@ public class InvestorServiceImpl implements InvestorService {
                 //创建人
                 eduExp.setCreatorAccount(investorAccount);
                 //数据状态
-                eduExp.setRecordStatus(RECORD_STATUS);
+                eduExp.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
                 eduExpList.add(eduExp);
             }
             investorMapper.insertInvestorEduExperienceBatch(eduExpList);
@@ -657,7 +660,7 @@ public class InvestorServiceImpl implements InvestorService {
                 //创建人
                 workExp.setCreatorAccount(investorAccount);
                 //数据状态
-                workExp.setRecordStatus(RECORD_STATUS);
+                workExp.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
                 workExpList.add(workExp);
             }
             investorMapper.insertInvestorWorkExperienceBatch(workExpList);
@@ -687,7 +690,7 @@ public class InvestorServiceImpl implements InvestorService {
             //创建人
             mainRound.setCreatorAccount(investorAccount);
             //数据状态
-            mainRound.setRecordStatus(RECORD_STATUS);
+            mainRound.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
             mainRoundList.add(mainRound);
         }
         investorMapper.insertInvestorMainRoundBatch(mainRoundList);
@@ -716,7 +719,7 @@ public class InvestorServiceImpl implements InvestorService {
             //创建人
             mainArea.setCreatorAccount(investorAccount);
             //数据状态
-            mainArea.setRecordStatus(RECORD_STATUS);
+            mainArea.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
             mainAreaList.add(mainArea);
         }
         investorMapper.insertInvestorMainAreaBatch(mainAreaList);
@@ -743,7 +746,7 @@ public class InvestorServiceImpl implements InvestorService {
         //创建时间
         tbServiceInvestor.setCreatedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
         //数据状态
-        tbServiceInvestor.setRecordStatus(RECORD_STATUS);
+        tbServiceInvestor.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
         return tbServiceInvestorMapper.insertSelective(tbServiceInvestor);
     }
 
@@ -755,7 +758,7 @@ public class InvestorServiceImpl implements InvestorService {
     @Override
     public List<InvestorMainArea> getInvestorMainArea() {
         TbServiceMainAreaCriteria example=new TbServiceMainAreaCriteria();
-        example.createCriteria().andMainCodeIsNotNull().andRecordStatusEqualTo(RECORD_STATUS);
+        example.createCriteria().andMainCodeIsNotNull().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         List<TbServiceMainArea> tbServiceMainAreaList = tbServiceMainAreaMapper.selectByExample(example);
         if(tbServiceMainAreaList.isEmpty()){
             logger.warn("系统中主投领域信息不存在");
@@ -779,7 +782,7 @@ public class InvestorServiceImpl implements InvestorService {
     @Override
     public List<InvestorMainRound> getInvestorMainRound() {
         TbServiceMainRoundCriteria example=new TbServiceMainRoundCriteria();
-        example.createCriteria().andMainRoundCodeIsNotNull().andRecordStatusEqualTo(RECORD_STATUS);
+        example.createCriteria().andMainRoundCodeIsNotNull().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         List<TbServiceMainRound> tbServiceMainRoundList = tbServiceMainRoundMapper.selectByExample(example);
         if(tbServiceMainRoundList.isEmpty()){
             logger.warn("系统中主投轮次信息不存在");

@@ -13,7 +13,9 @@ import java.io.Serializable;
  * @version： v1.0
  * @modified By:
  */
-public class Delay implements Serializable {
+public class Delay  implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     /**
      * 系统ID
      */
@@ -27,7 +29,7 @@ public class Delay implements Serializable {
     private String serviceUrl;
     /**
      * 触发call back的间隔，单位是毫秒，与下面的dateString二选一
-     * 同时填写，那么ttl为第一优先级。
+     * 同时填写，那么ttl为第一优先级。，如果2个都不填写，默认为马上进入队列发送
      */
     private String ttl;
     /**
@@ -38,7 +40,18 @@ public class Delay implements Serializable {
      * call back 的实体，需要转成jsong的字符
      */
     private String dataString;
+    /**
+     * 创建时间
+     */
+    private String createTime;
 
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
 
     public String getServiceId() {
         return serviceId;
@@ -89,6 +102,7 @@ public class Delay implements Serializable {
                 ", ttl='" + ttl + '\'' +
                 ", dateString='" + dateString + '\'' +
                 ", dataString='" + dataString + '\'' +
+                ", createTime='" + createTime + '\'' +
                 '}';
     }
 }

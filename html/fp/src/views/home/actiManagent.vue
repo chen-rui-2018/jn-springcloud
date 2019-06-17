@@ -40,6 +40,8 @@
               </el-button>
               <el-button v-if="scope.row.actiStatus==='4'" type="text" class="operation">活动取消
               </el-button>
+              <el-button v-if="scope.row.actiStatus==='6'" type="text" class="operation">报名已结束
+              </el-button>
             </template>
           </el-table-column>
           <!-- <el-table-column fit label="操作" align="center" width="auto" min-width="200"> -->

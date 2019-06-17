@@ -49,4 +49,6 @@ public interface EmployeeBasicInfoMapper {
     
     TbManpowerEmployeeBasicInfo selectByUserId(@Param("userId")String userId);
 
+    int selectCountByName(@Param("name")String name);
+
 }

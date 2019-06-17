@@ -638,7 +638,7 @@
         t.is_overdue=1,
         t.overdue_days=ceiling(
         datediff(SYSDATE(),t.fill_in_form_deadline)- (select warning_before_days from tb_data_reporting_snapshot_model p where p.task_batch = t.task_batch)
-        )
+        )+1
         where t.status !=0
         and t.fill_in_form_deadline &lt; SYSDATE()
 
@@ -1057,18 +1057,18 @@
 
     <select id="getExcel" resultType="com.jn.enterprise.data.model.CompanyTree">
         select
-        task_batch taskbatch,
-        model_id modelid,
-        tab_id tabid,
-        tab_name tabname,
-        target_id targetid,
-        target_name targetname,
-        parent_id parentid,
-        form_id formid,
-        form_name formname,
-        unit unit,
-        DATA DATA,
-        sum_val sumval
+        task_batch as taskbatch,
+        model_id as modelid,
+        tab_id as tabid,
+        tab_name as tabname,
+        target_id as targetid,
+        target_name as targetname,
+        parent_id as parentid,
+        form_id as formid,
+        form_name as formname,
+        unit as unit,
+        DATA as DATA,
+        sum_val as sumval
          from view_data_model_data_sum
         where task_batch=#{taskbatch} and model_id=#{modelid}
     </select>

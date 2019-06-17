@@ -1,4 +1,5 @@
 package com.jn.hr.employee.service.impl;
+import java.util.Date;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -14,14 +15,9 @@ import com.jn.hr.common.util.DepartMentUtil;
 import com.jn.hr.common.util.IDCardUtil;
 import com.jn.hr.common.util.SysDictKeyValueUtil;
 import com.jn.hr.common.util.ValidateUtil;
-import com.jn.hr.employee.dao.ResumeDatabaseMapper;
-import com.jn.hr.employee.dao.TbManpowerBackgroundInvestMapper;
-import com.jn.hr.employee.dao.TbManpowerDepartmentMapper;
-import com.jn.hr.employee.dao.TbManpowerResumeDatabaseMapper;
+import com.jn.hr.employee.dao.*;
 import com.jn.hr.employee.entity.*;
-import com.jn.hr.employee.enums.ApplicationResultEnum;
-import com.jn.hr.employee.enums.BackgroundInvestEnum;
-import com.jn.hr.employee.enums.EmployeeExceptionEnums;
+import com.jn.hr.employee.enums.*;
 import com.jn.hr.employee.model.*;
 import com.jn.hr.employee.service.ResumeDatabaseService;
 import com.jn.system.api.SystemClient;
@@ -61,6 +57,8 @@ public class ResumeDatabaseServiceImpl implements ResumeDatabaseService {
     private TbManpowerDepartmentMapper tbManpowerDepartmentMapper;
     @Autowired
     private CommonService commonService;
+    @Autowired
+    private TbManpowerEntryManagementMapper tbManpowerEntryManagementMapper;
 
 
     @Override
@@ -178,6 +176,37 @@ public class ResumeDatabaseServiceImpl implements ResumeDatabaseService {
         database.setModifierAccount(user.getAccount());
         database.setApplicationResult(new Byte(ApplicationResultEnum.PASS.getCode()));
         tbManpowerResumeDatabaseMapper.updateByPrimaryKeySelective(database);
+        TbManpowerResumeDatabase resumeDatabase=tbManpowerResumeDatabaseMapper.selectByPrimaryKey(id);
+        //新增入职登记表
+        TbManpowerEntryManagement record=new TbManpowerEntryManagement();
+        record.setId(UUID.randomUUID().toString());
+        record.setJobNumber("");
+        record.setName(resumeDatabase.getName());
+        record.setExpectedEntryDate(null);
+        record.setConfirmEntryDate(null);
+        record.setIsEntryRegistration(Byte.parseByte(EntryRegistrationEnum.SEND.getCode()));
+        record.setStatus(Byte.parseByte(EntryStatusEnum.NOT_ENTRY.getCode()));
+        record.setRecordStatus(Byte.parseByte(HrStatusEnums.EFFECTIVE.getCode()));
+        record.setCreatorAccount(user.getAccount());
+        record.setCreatedTime(new Date());
+        record.setModifierAccount(user.getAccount());
+        record.setModifiedTime(new Date());
+        record.setSex(resumeDatabase.getSex());
+        record.setPhone(resumeDatabase.getPhone());
+        record.setMailbox(resumeDatabase.getMailbox());
+        record.setDepartmentId(resumeDatabase.getDepartmentId());
+        record.setDepartmentName(resumeDatabase.getDepartmentName());
+        record.setJobId("");
+        record.setJobName("");
+        record.setPostId(resumeDatabase.getJobId());
+        record.setPostName(resumeDatabase.getJobName());
+        record.setContractId("");
+        record.setContractName("");
+        record.setEmployeeType("");
+        record.setCertificateId(resumeDatabase.getCertificateId());
+        record.setCertificateType(resumeDatabase.getCertificateType());
+        record.setCertificateNumber(resumeDatabase.getCertificateNumber());
+        tbManpowerEntryManagementMapper.insert(record);
         logger.info("[简历库管理] 通过简历,id:{}", id);
     }
 

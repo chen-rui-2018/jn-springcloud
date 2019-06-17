@@ -20,6 +20,11 @@
     <result column="generate_status" jdbcType="TINYINT" property="generateStatus" />
     <result column="derate_state" jdbcType="TINYINT" property="derateState" />
     <result column="send_pay_bill" jdbcType="TINYINT" property="sendPayBill" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -82,7 +87,8 @@
   <sql id="Base_Column_List">
     id, bill_id, company_id, company_name, company_address, calc_mode, pay_period, bill_acount, 
     fee_amount, fee_reason, total_amount, last_pay_time, pay_status, is_expire, pay_type, 
-    generate_status, derate_state, send_pay_bill
+    generate_status, derate_state, send_pay_bill, record_status, creator_account, created_time, 
+    modifier_account, modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.pmpaybill.entity.TbPmPayBillItemCriteria" resultMap="BaseResultMap">
     select
@@ -120,15 +126,17 @@
       pay_period, bill_acount, fee_amount, 
       fee_reason, total_amount, last_pay_time, 
       pay_status, is_expire, pay_type, 
-      generate_status, derate_state, send_pay_bill
-      )
+      generate_status, derate_state, send_pay_bill, 
+      record_status, creator_account, created_time, 
+      modifier_account, modified_time)
     values (#{id,jdbcType=VARCHAR}, #{billId,jdbcType=VARCHAR}, #{companyId,jdbcType=VARCHAR}, 
       #{companyName,jdbcType=VARCHAR}, #{companyAddress,jdbcType=VARCHAR}, #{calcMode,jdbcType=TINYINT}, 
       #{payPeriod,jdbcType=VARCHAR}, #{billAcount,jdbcType=DECIMAL}, #{feeAmount,jdbcType=DECIMAL}, 
       #{feeReason,jdbcType=VARCHAR}, #{totalAmount,jdbcType=DECIMAL}, #{lastPayTime,jdbcType=TIMESTAMP}, 
       #{payStatus,jdbcType=TINYINT}, #{isExpire,jdbcType=TINYINT}, #{payType,jdbcType=TINYINT}, 
-      #{generateStatus,jdbcType=TINYINT}, #{derateState,jdbcType=TINYINT}, #{sendPayBill,jdbcType=TINYINT}
-      )
+      #{generateStatus,jdbcType=TINYINT}, #{derateState,jdbcType=TINYINT}, #{sendPayBill,jdbcType=TINYINT}, 
+      #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.pmpaybill.entity.TbPmPayBillItem">
     insert into tb_pm_pay_bill_item
@@ -187,6 +195,21 @@
       <if test="sendPayBill != null">
         send_pay_bill,
       </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -242,6 +265,21 @@
       </if>
       <if test="sendPayBill != null">
         #{sendPayBill,jdbcType=TINYINT},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -308,6 +346,21 @@
       <if test="record.sendPayBill != null">
         send_pay_bill = #{record.sendPayBill,jdbcType=TINYINT},
       </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -332,7 +385,12 @@
       pay_type = #{record.payType,jdbcType=TINYINT},
       generate_status = #{record.generateStatus,jdbcType=TINYINT},
       derate_state = #{record.derateState,jdbcType=TINYINT},
-      send_pay_bill = #{record.sendPayBill,jdbcType=TINYINT}
+      send_pay_bill = #{record.sendPayBill,jdbcType=TINYINT},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -391,6 +449,21 @@
       <if test="sendPayBill != null">
         send_pay_bill = #{sendPayBill,jdbcType=TINYINT},
       </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -412,7 +485,12 @@
       pay_type = #{payType,jdbcType=TINYINT},
       generate_status = #{generateStatus,jdbcType=TINYINT},
       derate_state = #{derateState,jdbcType=TINYINT},
-      send_pay_bill = #{sendPayBill,jdbcType=TINYINT}
+      send_pay_bill = #{sendPayBill,jdbcType=TINYINT},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

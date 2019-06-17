@@ -21,7 +21,8 @@
             `pay_type`,
             `generate_status`,
             `derate_state`,
-            `send_pay_bill`
+            `send_pay_bill`,
+            `created_time`
         )
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
@@ -43,7 +44,8 @@
             #{item.payType,jdbcType=TINYINT},
             #{item.generateStatus,jdbcType=TINYINT},
             #{item.derateState,jdbcType=TINYINT},
-            #{item.sendPayBill,jdbcType=TINYINT}
+            #{item.sendPayBill,jdbcType=TINYINT},
+            now()
             )
         </foreach>
     </insert>

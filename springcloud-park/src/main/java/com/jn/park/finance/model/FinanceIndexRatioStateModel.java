@@ -36,4 +36,12 @@ public class FinanceIndexRatioStateModel implements Serializable {
     public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
+
+    @Override
+    public String toString() {
+        return "FinanceIndexRatioStateModel{" +
+                "beginTime='" + beginTime + '\'' +
+                ", endTime='" + endTime + '\'' +
+                '}';
+    }
 }

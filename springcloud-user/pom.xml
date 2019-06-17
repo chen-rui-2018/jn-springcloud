@@ -62,10 +62,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        userExtension
+                        weChatPublicInfo
                     </contexts>
                     <tableNames>
-                        tb_user_person
+                        tb_wechat_public_user_info
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

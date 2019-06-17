@@ -163,9 +163,9 @@ public class EmployeeBasicInfo extends BaseRowModel implements Serializable {
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date modifiedTime;
 
-    @ApiModelProperty(value = "员工状态(1在职，2医疗期)")
+    @ApiModelProperty(value = "员工状态(1在职，2医疗期,3退休,4离职)")
     private Byte employStatus;
-    @ApiModelProperty(value = "员工状态(1在职，2医疗期)")
+    @ApiModelProperty(value = "员工状态(1在职，2医疗期,3退休,4离职)")
     @ExcelProperty(value = "员工状态", index = 19)
     private String employStatusStr;
 

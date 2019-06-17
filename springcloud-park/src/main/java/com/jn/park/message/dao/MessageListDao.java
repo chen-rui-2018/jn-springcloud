@@ -40,7 +40,7 @@ public interface MessageListDao {
      * 添加消息
      * @param addMessageModel
      */
-    void addMessage(AddMessageModel addMessageModel);
+    int addMessage(AddMessageModel addMessageModel);
 
 
     /**

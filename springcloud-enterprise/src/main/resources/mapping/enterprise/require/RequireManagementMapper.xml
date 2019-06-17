@@ -61,7 +61,7 @@
             and sr.handle_result='1'  <!--对接成功-->
             and sr.is_comment='1' <!--已点评-->
         </if>
-        order by sr.issue_account desc
+        order by sr.`created_time` desc, sr.issue_account desc
     </select>
 
     <!--我收到的需求列表查询-->
@@ -144,7 +144,7 @@
             and sr.handle_result='1'  <!--对接成功-->
             and sr.is_comment='1' <!--已点评-->
         </if>
-        order by sr.issue_account desc
+        order by sr.`created_time` desc ,sr.issue_account desc
     </select>
 
     <!--需求管理列表查询（后台门户管理）-->

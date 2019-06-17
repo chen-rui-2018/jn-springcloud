@@ -136,7 +136,7 @@
 
 <script>
 import {
-  getEmployeeFileAttachmentById, uploadAttachment, deleteAttachment, updateEmployeeFileAttachment
+  getEmployeeFileAttachmentById, uploadAttachment, deleteAttachment, updateEmployeeFileAttachment, downloadEmployeeFileAttachment
 } from '@/api/hr/employeeFile'
 import { getToken } from '@/utils/auth'
 import {
@@ -209,14 +209,9 @@ export default {
       })
     },
     downloadAttachment(row) {
-      const fileName = row.filePath.substring(row.filePath.lastIndexOf('.') + 1)
-      const link = document.createElement('a')
-      link.setAttribute('href', row.filePath)
-      link.setAttribute('download', fileName)
-      link.style.visibility = 'hidden'
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
+      downloadEmployeeFileAttachment(row).then(res => {
+        window.location.href = res.request.responseURL
+      })
     },
     updateAttachment(row) {
       this.attachForm.id = row.id

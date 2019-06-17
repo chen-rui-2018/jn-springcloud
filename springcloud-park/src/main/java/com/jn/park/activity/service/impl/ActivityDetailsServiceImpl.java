@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.xxpay.common.util.DateUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -196,9 +197,10 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
      */
     @ServiceLog(doAction = "报名截止倒计时信息")
     private void applyCountdown(String activityId, String account, ActivityDetailVO activityDetailVO) {
-        //根据用户账号和活动id查询当前登录用户是否已报名当前活动
+        //根据用户账号和活动id查询当前登录用户是否已报名当前活动,报名成功和报名待审批都认为报名成功
         TbActivityApplyCriteria example=new TbActivityApplyCriteria();
-        example.createCriteria().andActivityIdEqualTo(activityId).andCreatorAccountEqualTo(account);
+        example.createCriteria().andActivityIdEqualTo(activityId).andCreatorAccountEqualTo(account)
+        .andApplyStatusNotEqualTo("0");
         long applyNum = tbActivityApplyMapper.countByExample(example);
         //默认报名成功
         activityDetailVO.setApplySuccess(true);

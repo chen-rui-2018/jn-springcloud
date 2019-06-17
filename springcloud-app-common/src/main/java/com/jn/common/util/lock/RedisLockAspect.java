@@ -60,13 +60,13 @@ public class RedisLockAspect {
             throw new JnSpringCloudLockException(CommonLockExceptionEnum.LOCK_INTO_ERROR);
         }
         //获取注解数据
-        if (!nameAndArgs.containsKey(lock.lockPrefix()) || !(nameAndArgs.get(lock.lockPrefix()) instanceof String)) {
+        if (nameAndArgs.containsKey(lock.lockPrefix()) && !(nameAndArgs.get(lock.lockPrefix()) instanceof String)) {
             throw new JnSpringCloudLockException(CommonLockExceptionEnum.LOCK_INTO_ERROR);
         }
         if (nameAndArgs.containsKey(lock.account()) && !(nameAndArgs.get(lock.account()) instanceof String)) {
             throw new JnSpringCloudLockException(CommonLockExceptionEnum.LOCK_INTO_ERROR);
         }
-        String lockKey = nameAndArgs.get(lock.lockPrefix()).toString() ;
+        String lockKey = nameAndArgs.get(lock.lockPrefix())==null?lock.lockPrefix():nameAndArgs.get(lock.lockPrefix()).toString() ;
         String account = nameAndArgs.get(lock.account())==null?lock.account():nameAndArgs.get(lock.account()).toString();
         int timeOut = lock.timeOut();
         int tryCount = lock.tryCount();
@@ -76,7 +76,7 @@ public class RedisLockAspect {
         Boolean var = Boolean.FALSE;
         int var2 = 1;
         while (System.currentTimeMillis() <= end) {
-            logger.info("用户【{}】,第【{}】次获取锁",account,var2++);
+         //   logger.info("用户【{}】,第【{}】次获取锁",account,var2++);
             var = redisLock.getLock(account,lockKey,timeOut);
             if (var) {
                break;
@@ -90,7 +90,7 @@ public class RedisLockAspect {
         if (!var) {
             throw new JnSpringCloudLockException(CommonLockExceptionEnum.LOCK_FAIL);
         }
-        logger.info("用户【{}】,获取锁成功，key值为:【{}】",account,lockKey);
+    //    logger.info("用户【{}】,获取锁成功，key值为:【{}】",account,lockKey);
         Object result ;
         try {
             result = joinPoint.proceed();
@@ -98,7 +98,7 @@ public class RedisLockAspect {
             throw e;
         }finally {
             boolean release = redisLock.releaseLock(account,lockKey);
-            logger.info("用户【{}】,释放锁，key值为:【{}】,结果是:【{}】",account,lockKey,release);
+      //      logger.info("用户【{}】,释放锁，key值为:【{}】,结果是:【{}】",account,lockKey,release);
         }
         return result;
     }

@@ -12,6 +12,8 @@ public class ParkGeneral {
     @ApiModelProperty("园区宣传图片（主要 一张）")
     private String mainPicture;
 
+    @ApiModelProperty(value = "园区简短介绍（列表页显示）")
+    private String shortIntroduce;
 
     public String getParkIntroduce() {
         return parkIntroduce;
@@ -29,11 +31,20 @@ public class ParkGeneral {
         this.mainPicture = mainPicture;
     }
 
+    public String getShortIntroduce() {
+        return shortIntroduce;
+    }
+
+    public void setShortIntroduce(String shortIntroduce) {
+        this.shortIntroduce = shortIntroduce;
+    }
+
     @Override
     public String toString() {
         return "ParkGeneral{" +
                 "parkIntroduce='" + parkIntroduce + '\'' +
                 ", mainPicture='" + mainPicture + '\'' +
+                ", shortIntroduce='" + shortIntroduce + '\'' +
                 '}';
     }
 }

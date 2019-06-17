@@ -43,6 +43,9 @@ public class TbPark implements Serializable {
     /*@ApiModelProperty("园区介绍")*/
     private String parkIntroduce;
 
+    /*@ApiModelProperty("园区简短介绍（列表页显示）")*/
+    private String shortIntroduce;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -117,6 +120,14 @@ public class TbPark implements Serializable {
         this.creatorAccount = creatorAccount == null ? null : creatorAccount.trim();
     }
 
+    public String getShortIntroduce() {
+        return shortIntroduce;
+    }
+
+    public void setShortIntroduce(String shortIntroduce) {
+        this.shortIntroduce = shortIntroduce;
+    }
+
     public Date getCreatedTime() {
         return createdTime;
     }
@@ -173,7 +184,8 @@ public class TbPark implements Serializable {
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
             && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
-            && (this.getParkIntroduce() == null ? other.getParkIntroduce() == null : this.getParkIntroduce().equals(other.getParkIntroduce()));
+            && (this.getParkIntroduce() == null ? other.getParkIntroduce() == null : this.getParkIntroduce().equals(other.getParkIntroduce()))
+            && (this.getShortIntroduce() == null ? other.getShortIntroduce() == null : this.getShortIntroduce().equals(other.getShortIntroduce()));
     }
 
     @Override
@@ -193,6 +205,7 @@ public class TbPark implements Serializable {
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
         result = prime * result + ((getParkIntroduce() == null) ? 0 : getParkIntroduce().hashCode());
+        result = prime * result + ((getShortIntroduce() == null) ? 0 : getShortIntroduce().hashCode());
         return result;
     }
 
@@ -215,6 +228,7 @@ public class TbPark implements Serializable {
         sb.append(", modifierAccount=").append(modifierAccount);
         sb.append(", modifiedTime=").append(modifiedTime);
         sb.append(", parkIntroduce=").append(parkIntroduce);
+        sb.append(", shortIntroduce=").append(shortIntroduce);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

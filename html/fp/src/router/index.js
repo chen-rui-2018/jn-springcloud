@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from '../store'
 import { urlSearch } from '@/util/index'
 import { setToken, getToken, setLastToken, getLastToken } from '@/util/auth'
 import api from '@/util/api'
@@ -1123,6 +1124,13 @@ router.beforeEach((to, from, next) => {
   const token = urlSearch.token
   if (token) {
     setToken(token)
+  }
+  // 路由iframe字段等于1的时候，去掉导航栏和侧边栏给别的页面嵌入
+  const iframe = urlSearch.iframe
+  if (Number(iframe) === 1 || this.isMobile) {
+    store.commit('setHiddenNav', false)
+  } else {
+    store.commit('setHiddenNav', true)
   }
   next()
 })

@@ -121,24 +121,7 @@ export default {
         }
     }
   },
-  watch: {
-    '$route'() {
-      this.setEnvironment()
-    }
-  },
   methods:{
-    setEnvironment() {
-      const token = this.$route.query.token
-      if (token) {
-        setToken(token)
-      }
-      const iframe = this.$route.query.iframe
-      if (iframe === '1' || this.isMobile) {
-        this.$store.commit('setHiddenNav', false)
-      } else {
-        this.$store.commit('setHiddenNav', true)
-      }
-    },
     toTop(){
       timer = setInterval(function () {
         let osTop = document.documentElement.scrollTop || document.body.scrollTop

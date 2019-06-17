@@ -2,6 +2,7 @@
 import { BASE_URL } from './url'
 import { getToken, setToken, removeToken, removeUserInfo, getIbpsToken } from '@/util/auth'
 
+axios.defaults.withCredentials = true // 让ajax携带cookie
 const verifyToken = () => {
   return new Promise((resolve, reject) => {
     const token = getToken()
@@ -259,14 +260,11 @@ export default {
         getIncubatorList:"springcloud-park/guest/hatch/incubator/list",//众创空间-首页信息查询
         SpAdvertising:"springcloud-park/guest/portal/sp/power/SpAdvertising",//行政审批轮播广告
 
-        SpAdvertising:"springcloud-park/guest/portal/sp/power/SpAdvertising",//行政审批轮播广告
-
         showNoticeList:"springcloud-park/guest/park/notice/web/showNoticeListForPortal",//门户首页展示(轮播)公告列表
         findNoticeDetails:"springcloud-park/guest/park/notice/web/findNoticeDetailsByNoticeId",//公告详情
         getAchievementList:"springcloud-park/guest/IndexController/getAchievementList",//门户首页-成果展览
         achievementDetails:"springcloud-park/guest/IndexController/getAchievementDetails",//成果详情
         getParkDetails:"springcloud-park/guest/portal/park/get",// 根据ID获取对应园区详情
-        getCompanyDetailByAccountOrCompanyId:"springcloud-enterprise/guest/company/getCompanyDetailByAccountOrCompanyId",//根据用户账号查询企业信息
         getCompanyDetails:"springcloud-enterprise/guest/company/getCompanyDetails",//查询企业详情-新版
         getComCommentInfo:"springcloud-enterprise/guest/company/getCommentInfo",//获取评论/留言信息
         getcommentActivity:"springcloud-enterprise/guest/company/commentActivity",//企业留言/留言回复

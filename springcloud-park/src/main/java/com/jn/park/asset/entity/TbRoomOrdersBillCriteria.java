@@ -273,6 +273,76 @@ public class TbRoomOrdersBillCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andEnterpriseIdIsNull() {
+            addCriterion("enterprise_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnterpriseIdIsNotNull() {
+            addCriterion("enterprise_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnterpriseIdEqualTo(String value) {
+            addCriterion("enterprise_id =", value, "enterpriseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnterpriseIdNotEqualTo(String value) {
+            addCriterion("enterprise_id <>", value, "enterpriseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnterpriseIdGreaterThan(String value) {
+            addCriterion("enterprise_id >", value, "enterpriseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnterpriseIdGreaterThanOrEqualTo(String value) {
+            addCriterion("enterprise_id >=", value, "enterpriseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnterpriseIdLessThan(String value) {
+            addCriterion("enterprise_id <", value, "enterpriseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnterpriseIdLessThanOrEqualTo(String value) {
+            addCriterion("enterprise_id <=", value, "enterpriseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnterpriseIdLike(String value) {
+            addCriterion("enterprise_id like", value, "enterpriseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnterpriseIdNotLike(String value) {
+            addCriterion("enterprise_id not like", value, "enterpriseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnterpriseIdIn(List<String> values) {
+            addCriterion("enterprise_id in", values, "enterpriseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnterpriseIdNotIn(List<String> values) {
+            addCriterion("enterprise_id not in", values, "enterpriseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnterpriseIdBetween(String value1, String value2) {
+            addCriterion("enterprise_id between", value1, value2, "enterpriseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnterpriseIdNotBetween(String value1, String value2) {
+            addCriterion("enterprise_id not between", value1, value2, "enterpriseId");
+            return (Criteria) this;
+        }
+
         public Criteria andLeaseEnterpriseIsNull() {
             addCriterion("lease_enterprise is null");
             return (Criteria) this;

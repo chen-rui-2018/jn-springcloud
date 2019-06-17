@@ -88,20 +88,16 @@
      b.record_status AS recordStatus,
      b.modified_time AS modifiedTime,
      b.modifier_account AS modifierAccount,
-     CASE t.payment_state
-    WHEN '1' THEN
-        '已支付'
-    WHEN '2' THEN
-        '待支付'
-    ELSE
-        '支付异常'
-    END paymentState
+     CASE  WHEN  t.payment_state = '1' or  T.BILL_ID IS NULL THEN '已支付'
+               WHEN  t.payment_state = '2' THEN '待支付'
+				 ELSE
+            '支付异常'
+     END paymentState
     FROM
-        tb_pay_account_book_money_record b,
-        tb_pay_bill t
+        tb_pay_account_book_money_record b LEFT JOIN
+        tb_pay_bill t ON  b.bill_id = t.bill_id
     WHERE 1 =1
     and b.record_status = 1
-    AND b.bill_id = t.bill_id
     and b.deduction_id = #{deductionId,jdbcType=VARCHAR}
 
   </select>
@@ -151,21 +147,17 @@
          b.record_status AS recordStatus,
          b.modified_time AS modifiedTime,
          b.modifier_account AS modifierAccount,
-         CASE t.payment_state
-        WHEN '1' THEN
-            '已支付'
-        WHEN '2' THEN
-            '待支付'
-        ELSE
+         CASE  WHEN  t.payment_state = '1' or  T.BILL_ID IS NULL THEN '已支付'
+               WHEN  t.payment_state = '2' THEN '待支付'
+				 ELSE
             '支付异常'
         END paymentState,
         t.AC_BOOK_TYPE as acBookType
     FROM
-        tb_pay_account_book_money_record b,
-        tb_pay_bill t
+        tb_pay_account_book_money_record b LEFT JOIN
+        tb_pay_bill t ON  b.bill_id = t.bill_id
     WHERE 1 =1
     and b.record_status = 1
-    AND b.bill_id = t.bill_id
     and b.ac_book_id = #{acBookId,jdbcType=VARCHAR}
     order by b.created_time desc
   </select>

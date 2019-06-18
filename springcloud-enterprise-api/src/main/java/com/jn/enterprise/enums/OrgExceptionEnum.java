@@ -37,6 +37,7 @@ public enum OrgExceptionEnum  implements CodeAndMsg {
     ORG_HONOR_NAME_NOT_NULL("5020524","机构荣誉资质名称不能为空"),
     ORG_NAME_NOT_NULL("5020525","机构名称不能为空"),
     SEARCH_TYPE_NOT_ALLOW("5020526","机构名称查询类型在系统中不存在"),
+    ORG_ID_IS_NOT_EXIST("5020527","机构id在系统中不存在"),
     ;
 
     /**

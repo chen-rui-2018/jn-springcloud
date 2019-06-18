@@ -1,32 +1,31 @@
 package com.jn.enterprise.joinpark.org.service.impl;
 
 import com.jn.common.exception.JnSpringCloudException;
-import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.enterprise.enums.OrgExceptionEnum;
 import com.jn.enterprise.enums.RecordStatusEnum;
+import com.jn.enterprise.joinpark.org.dao.ServiceOrgMapper;
+import com.jn.enterprise.joinpark.org.dao.ServiceOrgTempMapper;
 import com.jn.enterprise.joinpark.org.service.OrgJoinService;
 import com.jn.enterprise.propaganda.enums.ApprovalStatusEnum;
 import com.jn.enterprise.servicemarket.advisor.enums.OrgNameIsExistEnum;
 import com.jn.enterprise.servicemarket.advisor.enums.OrgNameSearchTypeEnum;
 import com.jn.enterprise.servicemarket.advisor.model.OrgNameIsExistParam;
 import com.jn.enterprise.servicemarket.org.dao.TbServiceOrgMapper;
-import com.jn.enterprise.servicemarket.org.entity.TbServiceOrg;
 import com.jn.enterprise.servicemarket.org.entity.TbServiceOrgCriteria;
+import com.jn.enterprise.servicemarket.org.entity.TbServiceOrgTemp;
+import com.jn.enterprise.servicemarket.org.entity.TbServiceOrgTempCriteria;
 import com.jn.enterprise.servicemarket.org.model.*;
 import com.jn.enterprise.servicemarket.org.service.OrgService;
 import com.jn.enterprise.utils.IBPSFileUtils;
 import com.jn.system.log.annotation.ServiceLog;
-import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -45,6 +44,12 @@ public class OrgJoinServiceImpl implements OrgJoinService {
 
     @Autowired
     private TbServiceOrgMapper tbServiceOrgMapper;
+
+    @Autowired
+    private ServiceOrgMapper serviceOrgMapper;
+
+    @Autowired
+    private ServiceOrgTempMapper serviceOrgTempMapper;
 
     @ServiceLog(doAction = "机构认证保存/更新")
     @Override
@@ -120,20 +125,44 @@ public class OrgJoinServiceImpl implements OrgJoinService {
             logger.warn("判断机构名称是否已存在异常，异常原因：查询类型：[{}]系统中不存在",orgParam.getSearchType());
             throw new JnSpringCloudException(OrgExceptionEnum.SEARCH_TYPE_NOT_ALLOW);
         }
+        //正式表
         TbServiceOrgCriteria example=new TbServiceOrgCriteria();
+        //临时表
+        TbServiceOrgTempCriteria exampleTemp=new TbServiceOrgTempCriteria();
         if(StringUtils.equals(OrgNameSearchTypeEnum.SEARCH_type_ADD.getCode(),orgParam.getSearchType())){
-            //待审批，审批通过 ，审批不通过的状态对应机构名称都查询
+            //待审批，审批通过 ，审批不通过的状态对应机构名称都查询   审批状态(0：未审核[审核中] 1：审核通过  2：审核不通过)
+            //正式表
             example.createCriteria().andOrgNameEqualTo(orgParam.getOrgName())
+                    .andOrgStatusEqualTo("1")
+                    .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+            //临时表
+            exampleTemp.createCriteria().andOrgNameEqualTo(orgParam.getOrgName())
                     .andOrgStatusIn(Arrays.asList("0","1","2"))
                     .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
-        }else{
-            //待审批，审批不通过的状态对应机构名称都查询
-            example.createCriteria().andOrgNameEqualTo(orgParam.getOrgName())
-                    .andOrgStatusIn(Arrays.asList("0","2"))
-                    .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+            long existNum = tbServiceOrgMapper.countByExample(example);
+            return existNum>0? OrgNameIsExistEnum.ORG_NAME_EXIST.getCode():OrgNameIsExistEnum.ORG_NAME_NOT_EXIST.getCode();
+        }else if(StringUtils.equals(OrgNameSearchTypeEnum.SEARCH_TYPE_UPDATE.getCode(), orgParam.getSearchType())){
+            //机构id不能为空
+            if(StringUtils.isBlank(orgParam.getOrgId())){
+                logger.warn("判断机构名称是否已存在异常，异常原因：修改页面，机构id为空");
+                throw new JnSpringCloudException(OrgExceptionEnum.ORG_ID_IS_NOT_NULL);
+            }
+            //机构id是否存在修改页面只需判断正式表
+            example.createCriteria().andOrgIdEqualTo(orgParam.getOrgId()).andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+            long existNum = tbServiceOrgMapper.countByExample(example);
+            if(existNum==0){
+                logger.warn("判断机构名称是否已存在异常，异常原因：机构id在系统中不存在");
+                throw new JnSpringCloudException(OrgExceptionEnum.ORG_ID_IS_NOT_EXIST);
+            }
+            existNum= serviceOrgMapper.orgNameIsExist(orgParam.getOrgId(), orgParam.getOrgName());
+            if(existNum==0){
+                existNum= serviceOrgTempMapper.orgNameIsExist(orgParam.getOrgId(), orgParam.getOrgName());
+            }
+            return existNum>0?OrgNameIsExistEnum.ORG_NAME_EXIST.getCode():OrgNameIsExistEnum.ORG_NAME_NOT_EXIST.getCode();
+
+        }else {
+            return "";
         }
-        long existNum = tbServiceOrgMapper.countByExample(example);
-        return existNum>0? OrgNameIsExistEnum.ORG_NAME_EXIST.getCode():OrgNameIsExistEnum.ORG_NAME_NOT_EXIST.getCode();
     }
 
 }

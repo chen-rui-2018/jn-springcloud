@@ -1,4 +1,4 @@
-package com.jn.schedule.eletric;
+package com.jn.schedule.hardware.eletric;
 
 import com.jn.hardware.api.ElectricMeterClient;
 import org.springframework.beans.factory.annotation.Autowired;

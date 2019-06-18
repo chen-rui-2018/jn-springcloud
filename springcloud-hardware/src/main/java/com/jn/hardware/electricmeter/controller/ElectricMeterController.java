@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -38,8 +39,8 @@ public class ElectricMeterController extends BaseController {
 
     @ApiOperation(value = "获取电表平台access_token接口",notes = "根据平台数据(user/password)获取token")
     @RequestMapping(value = "/getElectricMeterAccessToken",method = RequestMethod.GET)
-    public Result<ElectricAccessTokenShow> getElectricMeterAccessToken( ElectricAccessTokenParam electricAccessTokenParam) {
-        Result result = electricMeterService.getElectricMeterAccessToken(electricAccessTokenParam);
+    public Result<ElectricAccessTokenShow> getElectricMeterAccessToken() {
+        Result result = electricMeterService.getElectricMeterAccessToken();
         return result;
     }
 
@@ -62,7 +63,7 @@ public class ElectricMeterController extends BaseController {
 
     @ApiOperation(value = "获取当前仪表的状态",notes = "根据仪表的编号(code),查看当前仪表的状态")
     @RequestMapping(value = "/getElectricMeterStatus",method = RequestMethod.GET)
-    public Result<ElectricMeterStatusShow> getElectricMeterStatus(@ApiParam(name = "code",value = "仪表编号",example = "10086",required = true) String code) {
+    public Result<ElectricMeterStatusShow> getElectricMeterStatus(@ApiParam(name = "code",value = "仪表编号",example = "10086",required = true) @RequestParam("code") String code) {
         return electricMeterService.getElectricMeterStatus(code);
     }
 

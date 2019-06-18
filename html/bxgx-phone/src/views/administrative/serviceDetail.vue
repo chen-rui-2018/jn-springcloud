@@ -19,7 +19,7 @@
             <div><span>联系电话</span> <span>{{serviceDetail.linkPhone}}</span> </div>
             <div><span>承诺办理时限方式</span> <span>{{serviceDetail.dealLimitDays}}个工作日</span> </div>
             <div class="online_addr"><span>在线办理</span>
-            <span><a :href="serviceDetail.dealUrl" target="_blank">请点击这里</a></span>
+            <span><a :href="serviceDetail.dealUrl">请点击这里</a></span>
             </div>
           </div>
         </div>

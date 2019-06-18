@@ -31,7 +31,8 @@
           </div>
           <div class="parkEnterpriseDetail">
             <ul>
-              <li v-for="(item,index) in parkEnterprise" :key="index">
+              <li class="none" v-if="parkEnterprise.length===0">暂无</li>
+              <li class="parkLogo" v-for="(item,index) in parkEnterprise" :key="index" v-else>
                 <div><img :src="item.avatar" alt=""></div>
                 <div>{{item.comName}}</div>
               </li>
@@ -155,7 +156,7 @@ export default {
       ul{
         display: flex;
         flex-wrap: wrap;
-        li{
+        .parkLogo{
           background-color: #fff;
           width: 224px;
           height: 141px;
@@ -192,6 +193,9 @@ export default {
             text-align: center;
             width: 100%;
           }
+        }
+        .none{
+          padding-bottom:30px ;
         }
       }
     }

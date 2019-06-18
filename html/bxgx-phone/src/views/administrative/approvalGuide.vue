@@ -6,7 +6,7 @@
       ref="search"></search>
     </div>
         <div class="approvalGuide_main">
-          <div class="approvalGuide_tab">
+          <div class="approvalGuide_tab1">
             <span class="slider_btn" @click="isSlider=true"><i class="iconfont icon-icon-"></i> </span>
             <tab>
               <tab-item :selected="active===''" ><span :class="{active:active===''}" @click="toggle('','')">全部</span></tab-item>
@@ -26,7 +26,7 @@
           </popup>
            <!-- <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" style="height:569px">
               <div class="box2"> -->
-                <div class="approvalGuide_cont">
+                <div class="approvalGuide_cont1">
                   <group v-for="(powerItem,powerIndex) in poweList" :key="powerIndex">
                     <div class="approvalGuide_box" >
                       <cell
@@ -214,7 +214,7 @@ export default {
       }
     }
     .approvalGuide_main{
-      .approvalGuide_tab{
+      .approvalGuide_tab1{
         // margin-top: 110px;
         position: fixed;
         top:113px;
@@ -272,7 +272,7 @@ export default {
            }
         }
       }
-      .approvalGuide_cont{
+      .approvalGuide_cont1{
         margin:30px;
         margin-top: 27%;
         height: 100% ;

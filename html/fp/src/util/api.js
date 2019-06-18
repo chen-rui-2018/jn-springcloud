@@ -182,6 +182,7 @@ export default {
         updateCompanyInfo:"springcloud-enterprise/enterprise/company/updateCompanyInfo",//编辑企业
         //我的机构
         inviteAdvisor:"springcloud-enterprise/serviceMarket/advisorManagementController/inviteAdvisor",//邀请专员
+        orgNameIsExist:"springcloud-enterprise/orgJoinPark/orgNameIsExist",//判断机构名称是否已存在
         advisorDetails:"springcloud-enterprise/serviceMarket/advisorManagementController/advisorDetails",//获取邀请专员的资料
         getAdvisorManagementInfo:"springcloud-enterprise/serviceMarket/advisorManagementController/getAdvisorManagementInfo",//获取专员管理列表
         inviteAgain:"springcloud-enterprise/serviceMarket/advisorManagementController/inviteAgain",//再次邀请专员

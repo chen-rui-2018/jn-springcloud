@@ -334,6 +334,35 @@ export default {
         callback();
       }
     };
+     var checkOrgName = (rule, value, callback) => {
+        if (this.title === '编辑机构') {
+           this.api.get({
+              url: "orgNameIsExist",
+              data: {orgName :this.OrgBasicForm.orgName,searchType:'update',orgId:this.OrgBasicForm.orgId},
+              callback: res => {
+                console.log(res)
+                if (res.data == "orgNameExist") {
+                    callback('机构名称已存在,请重新输入');
+                } else {
+                  callback();
+                }
+
+              }
+            });
+        } else {
+           this.api.get({
+              url: "orgNameIsExist",
+              data: {orgName :this.OrgBasicForm.orgName,searchType:'add',orgId:''},
+              callback: res => {
+              if (res.data == "orgNameExist") {
+                    callback('机构名称已存在,请重新输入');
+                } else {
+                  callback();
+                }
+              }
+            });
+      }
+    }
     return {
       title: "服务机构认证",
       loading: false,
@@ -482,7 +511,8 @@ export default {
         //   { required: true, message: "请选择企业性质", trigger: "change" }
         // ],
         orgName: [
-          { required: true, message: "请填写机构名称", trigger: "blur" }
+          { required: true, message: "请填写机构名称", trigger: "blur" },
+          { validator: checkOrgName, trigger: "blur" }
         ]
       },
       // licensesRules: {

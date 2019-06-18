@@ -885,6 +885,8 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         }
         /**更新账单为线下缴费*/
         tbPayBill.setPaymentAffirm(PaymentBillEnum.BILL_AC_BOOK_CHECK_1.getCode());
+        tbPayBill.setPaymentState(PaymentBillEnum.BILL_ORDER_IS_PAY.getCode());
+        tbPayBill.setPaymentType(PaymentBillEnum.PAY_METHOD_OFFLINE.getCode());
         tbPayBill.setAffirmPart(user.getAccount());
         tbPayBill.setAffirmTime(new Date());
         logger.info("进入【我的账单-线下缴费确认回调各业务侧接口】方法,更新账单为线下缴费入參【{}】",JsonUtil.object2Json(tbPayBill));

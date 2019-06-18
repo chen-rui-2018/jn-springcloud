@@ -191,6 +191,7 @@ export default {
     },
     init () {
       let that = this
+      alert('123')
       initJsBridge(function () {
         // 此处调用api
         /// ///

@@ -24,11 +24,13 @@ function initJsBridge (readyCallback) {
   function connectWebViewJavascriptBridge (callback) {
     if (isAndroid) {
       if (window.WebViewJavascriptBridge) {
+        alert('isAndroid')
         callback(window.WebViewJavascriptBridge)
       } else {
         document.addEventListener(
           'WebViewJavascriptBridgeReady'
           , function () {
+            alert('isAndroid123')
             alert('WebViewJavascriptBridge')
             callback(window.WebViewJavascriptBridge)
           },

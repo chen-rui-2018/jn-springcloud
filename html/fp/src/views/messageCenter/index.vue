@@ -106,7 +106,7 @@ $bg-gray: #f3f3f3;
           overflow: auto;
           position: absolute;
           -webkit-overflow-scrolling: touch;
-          padding: 50px 10px 50px;
+          padding: 16px 16px 50px;
           box-sizing: border-box;
           background-color: #fff;
         }
@@ -125,7 +125,7 @@ $bg-gray: #f3f3f3;
           box-sizing: border-box;
         }
         .app-chat-footer {
-          position: fixed;
+          position: absolute;
         }
       }
     }

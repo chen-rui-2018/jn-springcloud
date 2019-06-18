@@ -62,7 +62,7 @@
 </template>
 <script>
 import bus from "@/util/bus";
-// import { removeToken, removeUserInfo, getUserInfo, setUserInfo } from '@/util/auth'
+import { removeToken, removeUserInfo, getUserInfo, setUserInfo } from '@/util/auth'
 export default {
   data() {
     return {

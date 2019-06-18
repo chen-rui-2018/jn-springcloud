@@ -2,7 +2,7 @@
   <div class="message-chat">
     <div class="chat-win">
       <div v-if="$route.query.toUser" class="chat-win-cell">
-        <div class="chat-header">
+        <div class="chat-header" v-if="$store.state.hiddenNav">
           <div class="chat-back">
             <i class="el-icon-arrow-left"></i>
           </div>
@@ -56,6 +56,8 @@
             type="textarea"
             :rows="1"
             :autosize="{ minRows: 1, maxRows: 4 }"
+            @focus="scrollToBottom"
+            @blur="scrollToTop"
             placeholder="请输入内容"
             class="app-input"
           />
@@ -148,7 +150,7 @@
     },
     destroyed() {
       if (this.$store.state.isMobile) {
-        this.html.classList.remove('h-100')
+        this.html.classList.remove('h-app-100')
         this.body.classList.remove('h-100')
       }
     },
@@ -214,8 +216,16 @@
          *  2.pc端路由参数可以只有发送人账号fromUser, 因为pc端有联系人列表
          */
         this.setWindowHeight()
-        const userInfo = JSON.parse(getUserInfo())
-        this.userListParam.fromUser = this.param.fromUser = this.$route.query.fromUser || userInfo.account
+
+        if (this.$route.query.fromUser) {
+          this.userListParam.fromUser = this.param.fromUser = this.$route.query.fromUser
+        } else {
+          const userInfoString = getUserInfo()
+          if (userInfoString) {
+            const userInfo = JSON.parse(userInfoString)
+            this.userListParam.fromUser = this.param.fromUser = userInfo.account
+          }
+        }
         if (!this.param.fromUser) {
           this.$message.error('缺少发送人账号')
           return
@@ -235,15 +245,24 @@
             ])
           // 注册滚动加载历史消息事件
           this.checkHistoryMessage()
-          this.resetWindowScrollTop()
-
+          // this.resetWindowScrollTop()
         }
+      },
+      scrollToBottom() {
+        setTimeout(() => {
+          document.body.scrollTop = document.documentElement.scrollHeight * 2
+        },300)
+      },
+      scrollToTop() {
+        setTimeout(() => {
+          document.body.scrollTop = 0
+        }, 4)
       },
       setWindowHeight() {
         if (this.$store.state.isMobile) {
           this.html = document.getElementsByTagName('html')[0]
           this.body = document.getElementsByTagName('body')[0]
-          this.html.classList.add('h-100')
+          this.html.classList.add('h-app-100')
           this.body.classList.add('h-100')
         }
       },

@@ -30,7 +30,7 @@
         </div>
         <div class="investment-block-content investment-park">
           <div v-if="!showMore" class="park-profile-desc">{{  parkDesc | formatParkDesc}}</div>
-          <div v-else>{{ parkDesc }}</div>
+          <div v-else class="park-profile-desc">{{ parkDesc }}</div>
           <more-btn v-if="!showMore" class="more-desc" @click.native="showMore = true"></more-btn>
         </div>
       </div>
@@ -409,13 +409,13 @@ export default {
       }
     }
     .investment-header {
-      padding: 0 40px;
+      padding: 0 30px;
     }
     .card-list {
       margin: 4px auto;
       display: flex;
       align-items: center;
-      padding: 31px 40px;
+      padding: 15px 30px;
       background-color: #fff;
       cursor: pointer;
     }

@@ -11,7 +11,7 @@
   //初始化websocket
 	ghWS.prototype.initSock = function( serverIp, serverPort ){
 		var self = this;
-		var wsUri = "wss://" + serverIp + ":" + serverPort + "/";
+		var wsUri = "ws://" + serverIp + ":" + serverPort + "/";
     this.websocket = new WebSocket(wsUri); 
     //连接事件
     this.websocket.onopen = function(evt) { 

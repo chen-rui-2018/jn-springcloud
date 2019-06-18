@@ -61,7 +61,10 @@
                     <div class="month color3">{{i.createdTime.slice(5,10)}}</div>
                   </div>
                   <div class="noticeCon">
-                    <h5>{{i.title}}</h5>
+                    <div class="clearfix">
+                      <h5 class="fl">{{i.title}}</h5>
+                      <span class="fr mainColor" v-if="i.isStick=='1'">置顶</span>
+                    </div>
                     <p class="color3">{{i.noticeBiref}}</p>
                   </div>
                 </li>
@@ -77,7 +80,10 @@
                     <div class="month color3">{{i.createdTime.slice(5,10)}}</div>
                   </div>
                   <div class="noticeCon">
-                    <h5>{{i.title}}</h5>
+                    <div class="clearfix">
+                      <h5 class="fl">{{i.title}}</h5>
+                      <span class="fr mainColor" v-if="i.isStick=='1'">置顶</span>
+                    </div>
                     <p class="color3">{{i.noticeBiref}}</p>
                   </div>
                 </li>
@@ -93,7 +99,10 @@
                     <div class="month color3">{{i.createdTime.slice(5,10)}}</div>
                   </div>
                   <div class="noticeCon">
-                    <h5>{{i.title}}</h5>
+                    <div class="clearfix">
+                      <h5 class="fl">{{i.title}}</h5>
+                      <span class="fr mainColor" v-if="i.isStick=='1'">置顶</span>
+                    </div>
                     <p class="color3">{{i.noticeBiref}}</p>
                   </div>
                 </li>
@@ -116,7 +125,7 @@
             <div class="swiper-wrapper">
               <div class="swiper-slide" style="width:100%" v-for="(item,index) in enterpriseList" :key="index">
                 <ul class="parkUl w clearfix">
-                  <li class="fl pointer" v-for="(i,k) in item" :key="k" @click="$router.push({path:'/parkIntroductionChild',query:{id:i.id}})"> 
+                  <li class="fl pointer" v-for="(i,k) in item" :key="k" @click="$router.push({path:'/parkIntroductionChild',query:{id:i.id}})">
                     <div class="imgItem">
                       <img :src="i.mainPicture" alt="">
                     </div>
@@ -286,6 +295,10 @@ export default {
     this.$router.afterEach((to, from, next) => {
       window.scrollTo(0, 0);
     });
+    const calrousel = document.getElementsByClassName("el-carousel")[0];
+    // const calrousel = document.querySelector(".el-carousel")
+    calrousel.style.height = calrousel.scrollHeight;
+    console.log(calrousel.scrollHeight)
   },
   methods: {
     swiperinit() {
@@ -523,7 +536,7 @@ export default {
     // align-items: center;
     justify-content: space-between;
     .el-carousel {
-      height: 391px;
+      // height: 391px;
       // overflow: hidden;
     }
     .el-carousel__container {
@@ -639,6 +652,9 @@ export default {
         }
         .noticeCon {
           width: 87%;
+          > div {
+            font-size: 15px;
+          }
           h5 {
             color: #333;
             font-size: 15px;
@@ -712,7 +728,7 @@ export default {
         li:hover {
           box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.06);
           transform: translateY(-6px);
-          transition: all .5s;
+          transition: all 0.5s;
           .liDetail {
             background: rgba(0, 160, 65, 1);
             border-radius: 20px;
@@ -782,7 +798,7 @@ export default {
           text-align: center;
           cursor: pointer;
           background: #fff;
-          transition: all .5s;
+          transition: all 0.5s;
           p {
             margin-top: 10px;
           }
@@ -844,7 +860,7 @@ export default {
           border-radius: 4px;
           font-size: 15px;
           color: #fff;
-          transition: all .5s;
+          transition: all 0.5s;
           p {
             margin-top: 20px;
           }
@@ -853,7 +869,7 @@ export default {
           // animation: topa .5s;
           box-shadow: 2px 5px 5px rgba(0, 0, 0, 0.1);
           transform: translateY(-6px);
-          transition: all .5s;
+          transition: all 0.5s;
         }
         li p:hover {
           animation: qfyfadeInLeft 1s ease-out;
@@ -938,12 +954,12 @@ export default {
           margin-right: 30px;
           border: 1px solid #eee;
           background: #fff;
-          transition: all .5s;
+          transition: all 0.5s;
         }
         li:hover {
           box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.06);
           transform: translateY(-6px);
-          transition: all .5s;
+          transition: all 0.5s;
           .liDetail {
             background: rgba(0, 160, 65, 1);
             border-radius: 20px;

@@ -223,8 +223,8 @@ export default {
         getProductSerialNumber:"springcloud-enterprise/servicemarket/product/manage/getProductSerialNumber",//产品编号获取
         updateCommonProduct:"springcloud-enterprise/servicemarket/product/web/updateCommonProduct",
         upShelfFeatureProduct:"springcloud-enterprise/technologyFinancial/financialProductController/upShelfFeatureProduct",//特色科技金融产品添加
-        getFinancialProductAssureType:"springcloud-enterprise/technologyFinancial/financialProductController/getFinancialProductAssureType",//金融产品担保方式
-        getFinancialProductLoanType:"springcloud-enterprise/technologyFinancial/financialProductController/getFinancialProductLoanType",//金融产品贷款类别
+        getFinancialProductAssureType:"springcloud-enterprise/guest/technologyFinancial/financialProductController/getFinancialProductAssureType",//金融产品担保方式
+        getFinancialProductLoanType:"springcloud-enterprise/guest/technologyFinancial/financialProductController/getFinancialProductLoanType",//金融产品贷款类别
         addFeatureService:"springcloud-enterprise/servicemarket/product/web/addFeatureService",//添加特色服务产品(非科技金融)
         modifyFeatureProduct:"springcloud-enterprise/technologyFinancial/financialProductController/modifyFeatureProduct",//编辑特色产品科技金融
         updateFeatureProduct:"springcloud-enterprise/servicemarket/product/web/updateFeatureProduct",//编辑特色产品非科技

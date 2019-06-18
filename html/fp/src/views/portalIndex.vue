@@ -116,7 +116,7 @@
             <div class="swiper-wrapper">
               <div class="swiper-slide" style="width:100%" v-for="(item,index) in enterpriseList" :key="index">
                 <ul class="parkUl w clearfix">
-                  <li class="fl" v-for="(i,k) in item" :key="k">
+                  <li class="fl pointer" v-for="(i,k) in item" :key="k" @click="$router.push({path:'/parkIntroductionChild',query:{id:i.id}})"> 
                     <div class="imgItem">
                       <img :src="i.mainPicture" alt="">
                     </div>
@@ -216,7 +216,7 @@
         </div>
         <div class="proList">
           <ul class="proUl">
-            <li v-for="(i,k) in hotActiveList" :key="k">
+            <li v-for="(i,k) in hotActiveList" class="pointer" :key="k" @click="$router.push({path:'/serverProDetail',query:{productId:i.productId,signoryId:i.signoryId}})">
               <div class="imgItem">
                 <img :src="i.pictureUrl" alt="">
               </div>
@@ -493,7 +493,7 @@ export default {
       transform: translateX(0);
     }
     to {
-       transform: translateX(5%);
+      transform: translateX(5%);
     }
   }
   .el-tabs__nav-wrap::after {
@@ -707,9 +707,12 @@ export default {
           width: 23%;
           // margin: 0 auto;
           margin-right: 29px;
+          transition: all 0.5s;
         }
         li:hover {
           box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.06);
+          transform: translateY(-6px);
+          transition: all .5s;
           .liDetail {
             background: rgba(0, 160, 65, 1);
             border-radius: 20px;
@@ -741,6 +744,12 @@ export default {
           .liBerif {
             margin: 20px 0;
             height: 35px;
+            // display: -webkit-box;
+            // -webkit-box-orient: vertical;
+            // -webkit-line-clamp: 2;
+            // overflow: hidden;
+            // width: 100%;
+            text-overflow: ellipsis;
             display: -webkit-box;
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 2;
@@ -771,14 +780,16 @@ export default {
           width: 24%;
           margin-right: 30px;
           text-align: center;
+          cursor: pointer;
           background: #fff;
+          transition: all .5s;
           p {
             margin-top: 10px;
           }
         }
         li:hover {
           box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.06);
-          animation: topa .5s;
+          animation: topa 0.5s;
         }
       }
       .infoMes {
@@ -833,6 +844,7 @@ export default {
           border-radius: 4px;
           font-size: 15px;
           color: #fff;
+          transition: all .5s;
           p {
             margin-top: 20px;
           }
@@ -840,9 +852,11 @@ export default {
         li:hover {
           // animation: topa .5s;
           box-shadow: 2px 5px 5px rgba(0, 0, 0, 0.1);
+          transform: translateY(-6px);
+          transition: all .5s;
         }
         li p:hover {
-          animation: qfyfadeInLeft  1s ease-out;
+          animation: qfyfadeInLeft 1s ease-out;
         }
         li:nth-child(2) {
           background: linear-gradient(
@@ -924,9 +938,12 @@ export default {
           margin-right: 30px;
           border: 1px solid #eee;
           background: #fff;
+          transition: all .5s;
         }
         li:hover {
           box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.06);
+          transform: translateY(-6px);
+          transition: all .5s;
           .liDetail {
             background: rgba(0, 160, 65, 1);
             border-radius: 20px;
@@ -955,6 +972,11 @@ export default {
           .liBerif {
             margin: 20px 0;
             height: 35px;
+            // display: -webkit-box;
+            // -webkit-box-orient: vertical;
+            // -webkit-line-clamp: 2;
+            // overflow: hidden;
+            text-overflow: ellipsis;
             display: -webkit-box;
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 2;

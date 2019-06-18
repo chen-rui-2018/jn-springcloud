@@ -12,7 +12,7 @@
             白下高新区重点发展软件和信息技术服务、智能制造产业。截至2018年11月，招商载体面积128万平方米，拥有企业1200余家，其中，高新技术企业63家，主板上市企业1家，新三板挂牌企业9家，省级以上研发机构79家。截至目前，集聚科技创业人才274人，其中“两院”院士、国家“千人计划”专家14人。核心区2006年被认定为省级开发区，2015年纳入省级高新区管理，是南京主城区第一个省级高新区。 白下高新区将坚持“一区引领、多园发力、平台支持”的工作原则，按照市委工作要求，重点围绕“两落地一融合”，依托原有秦淮实践，注入秦淮元素，勇作秦淮标杆，全力打造“活力彰显、动力强劲、生态优化”的创新名园区，建设全国有知名度的高新技术产业集聚区。
           </p> -->
           <p class="color3">
-           {{basicInfo.shortIntroduce}}
+            {{basicInfo.shortIntroduce}}
           </p>
         </div>
       </div>
@@ -56,7 +56,7 @@
             <div class="swiper-wrapper">
               <div class="swiper-slide" style="width:100%" v-for="(item,index) in enterpriseList" :key="index">
                 <ul class="parkUl w clearfix">
-                  <li class="fl" v-for="(i,k) in item" :key="k">
+                  <li class="fl pointer" v-for="(i,k) in item" :key="k" @click="$router.push({path:'/parkIntroductionChild',query:{id:i.id}})">
                     <div class="imgItem">
                       <img :src="i.mainPicture" alt="">
                     </div>
@@ -207,10 +207,15 @@ export default {
         font-size: 14px;
         line-height: 25px;
         height: 280px;
-         display: -webkit-box;
-            -webkit-box-orient: vertical;
-            -webkit-line-clamp: 11;
-            overflow: hidden;
+        //  display: -webkit-box;
+        //     -webkit-box-orient: vertical;
+        //     -webkit-line-clamp: 11;
+        //     overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 11;
+        overflow: hidden;
       }
     }
   }
@@ -267,10 +272,13 @@ export default {
           margin-right: 29px;
           border: 1px solid #eee;
           background: #fff;
+          transition: all 0.5s;
           // height: 410px;
         }
         li:hover {
           box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.06);
+          transform: translateY(-6px);
+          transition: all 0.5s;
           .liDetail {
             background: rgba(0, 160, 65, 1);
             border-radius: 20px;
@@ -302,6 +310,12 @@ export default {
           .liBerif {
             margin: 20px 0;
             height: 35px;
+            // display: -webkit-box;
+            // -webkit-box-orient: vertical;
+            // -webkit-line-clamp: 2;
+            // overflow: hidden;
+
+            text-overflow: ellipsis;
             display: -webkit-box;
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 2;

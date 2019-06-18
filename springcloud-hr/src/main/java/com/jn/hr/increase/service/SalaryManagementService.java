@@ -24,7 +24,7 @@ public interface SalaryManagementService {
 	//发放工资的分页查询/刷新
 	public PaginationData<List<SalaryPayrollVo>> paginationInquirePayroll(SalaryPayrollPage salaryPayrollPage);
 	//修改工资条
-	public String updatePayroll(SalaryPayrollPage salaryPayrollPage);
+	public String updatePayroll(SalaryPayrollPage salaryPayrollPage,User user);
 	//导出工资条
 	public PaginationData<List<SalaryPayrollVo>> exportPayroll(SalaryPayrollPage salaryPayrollPage);
 	//导入工资条

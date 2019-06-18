@@ -9,7 +9,8 @@ public enum SalaryManagementExceptionEnums implements CodeAndMsg{
 	DOWNLOAD_EXCEL_TEMPLATE_FAIL("900007","导入薪资表模块异常"),
 	SCHEME_USING("900004","方案有人使用"),
 	INSURED_RECORD_EXISTS("900003","参保记录已存在"),
-	SCHEME_DETAILD_NOT_EXIST("900006","方案明细不存在")
+	SCHEME_DETAILD_NOT_EXIST("900006","方案明细不存在"),
+	SCHEME_NAME_EXISTS("900008","方案名称已存在")
 	;
 	
 	private String code;

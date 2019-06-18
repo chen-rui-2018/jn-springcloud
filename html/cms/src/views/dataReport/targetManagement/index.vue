@@ -355,13 +355,13 @@ export default {
           this.$_post(`${this.GLOBAL.enterpriseUrl}data/target/updateTarget`, this.formData).then(data => {
             if (data.code === '0000') {
               this.getData()
-              this.submitting = false
               this.resetForm('formData')
               this.formData = deepClone(this.originFormData)
               this.$message.success('保存成功')
             } else {
               this.$message.error('提交失败')
             }
+            this.submitting = false
           })
         } else {
           console.log('error submit!!')

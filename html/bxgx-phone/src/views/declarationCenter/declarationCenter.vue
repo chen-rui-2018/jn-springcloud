@@ -312,12 +312,10 @@ export default {
                   font-size: 16px;
                   padding-top: 18px;
                   line-height: 29px;
-                  display: -webkit-box;
-                  -webkit-box-orient: vertical;
-                  -webkit-line-clamp: 2;
                   overflow: hidden;
+                  white-space: nowrap;
+                  text-overflow: ellipsis;
                   height: 46px;
-
                 }
                 p:nth-child(4){
                  span{
@@ -440,10 +438,9 @@ export default {
           .declaration_cont_left{
             width: 92%;
             .cont_title{
-              display: -webkit-box;
-              -webkit-box-orient: vertical;
-              -webkit-line-clamp: 1;
-              overflow: hidden;
+             overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
               font-size: 26px;
               padding-top: 37px;
               line-height: 28px;

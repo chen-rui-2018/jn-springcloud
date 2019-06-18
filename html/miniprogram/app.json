@@ -43,12 +43,6 @@
         "text": "首页"
       },
       {
-        "pagePath": "pages/meeting/meeting",
-        "iconPath": "/images/meeting/meeting_white.png",
-        "selectedIconPath": "/images/meeting/meeting_green.png",
-        "text": "会议室"
-      },
-      {
         "pagePath": "pages/home/home",
         "iconPath": "/images/meeting/main_white.png",
         "selectedIconPath": "/images/meeting/main_green.png",

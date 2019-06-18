@@ -217,18 +217,40 @@ const router = new Router({
       meta: {title: '政策详情'}
     },
     {
+      path: '/enterpriseInformationList',
+      name: 'enterpriseInformationList',
+      component: () => import('@/views/enterpriseInformation/index'),
+      meta: {title: '企业资讯'}
+    },
+    {
       path: '/enterpriseInformation',
       name: 'enterpriseInformation',
-      component: () => import('@/views/enterpriseInformation'),
-      meta: {title: '企业资讯'}
+      component: () => import('@/views/enterpriseInformation/detail'),
+      meta: {title: '企业资讯详情'}
+    },
+    {
+      path: '/parkNotice',
+      name: 'parkNotice',
+      component: () => import('@/views/parkNotice/index'),
+      meta: {title: '园区公告'}
+    },
+    {
+      path: '/parkNoticeDetail',
+      name: 'parkNoticeDetail',
+      component: () => import('@/views/parkNotice/detail'),
+      meta: {title: '园区公告详情'}
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: () => import('@/views/register'),
+      meta: {title: '注册'}
     }
-
   ]
 })
 
 router.beforeEach((to, from, next) => {
   const token = urlSearch.token
-  console.log(token)
   if (token) {
     sessionStorage.setItem('token', token)
   }

@@ -202,7 +202,7 @@
         when v.total > 0  then '逾期未上报'
         when r.total > 0 then '待上报'
         when y.total > 0 then '逾期上报'
-        when (r.total=0 or r.total is null)  and (y.total=0 or y.total is null) and (u.total  = 0 or u.total is null) then '已完成'
+        when u.total = o.total then '已完成'
         else '未知状态' end
         ) as status
         from tb_data_reporting_snapshot_model t

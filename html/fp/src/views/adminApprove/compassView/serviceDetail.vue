@@ -89,8 +89,8 @@
                   </div>
                   <div class="baseIfor_table_item">
                     <el-form-item label="在线受理地址：">
-                      <a :href="dealUrl" target="_blank">
-                        <div class="onlineaddr" @click="handleview">点击查看</div>
+                      <a :href="seviceDetail.dealUrl" target="_blank">
+                        <div class="onlineaddr">点击查看</div>
                       </a>
                     </el-form-item>
                   </div>
@@ -315,9 +315,9 @@ export default {
       });
     },
     // 获取在线办理地址
-    handleview(){
-      this.dealUrl=`${this.api.host}springcloud-park/guest/portal/sp/power/getDealUrl?id=${this.messageform.id}`
-    },
+    // handleview(){
+    //   this.dealUrl=`${this.api.host}springcloud-park/guest/portal/sp/power/getDealUrl?id=${this.messageform.id}`
+    // },
     counselnum(){
       this.residuenum=500-this.messageform.content.length
     },

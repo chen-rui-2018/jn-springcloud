@@ -15,42 +15,43 @@
         </el-button>
       </div>
     </div>
-
-    <!-- <div class="gantt_ot" style="width:800px; margin:100px auto;">
+    <div class="details-top">
+      <!-- <div class="gantt_ot" style="width:800px; margin:100px auto;">
       <div id="gant" class="gantt"/>
     </div> -->
-    <!-- <div id ="GanttChartDIV" style ="position:relative;" class="gantt"/> -->
-    <el-table :data="detailData" style="width: 100%;margin-bottom:40px;">
-      <el-table-column prop="taskName" label="任务" width="150" align="center">
-        <template slot-scope="scope">
-          <span class="text-blue">{{ scope.row.taskName }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column prop="nowadaysProgress" label="进度" width="80" align="center">
-        <template slot-scope="scope">
-          <span :class="scope.row.nowadaysProgress==='100%'?'text-green':''">{{ scope.row.nowadaysProgress }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="状态" align="center">
-        <el-table-column prop="taskState" label="时间" width="120" align="center">
+      <!-- <div id ="GanttChartDIV" style ="position:relative;" class="gantt"/> -->
+      <el-table :data="detailData" style="width: 100%;margin-bottom:40px;">
+        <el-table-column prop="taskName" label="任务" min-width="150" align="center">
           <template slot-scope="scope">
-            <span v-show="scope.row.taskState==='延期'" class="text-red">{{ scope.row.taskState }}</span>
-            <span v-show="scope.row.taskState==='提前'||scope.row.taskState==='准时'" class="text-green">{{
-            scope.row.taskState }}</span>
-            <span v-show="scope.row.taskState==='未到期'">{{ scope.row.taskState }}</span>
+            <span class="text-blue">{{ scope.row.taskName }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="appraise" label="评价" width="50" align="center" />
-      </el-table-column>
-      <el-table-column label="计划时间" align="center">
-        <el-table-column prop="planStartTime" label="开始" width="120" align="center" />
-        <el-table-column prop="planStopTime" label="结束" width="120" align="center" />
-      </el-table-column>
-      <el-table-column />
-    </el-table>
-    <!-- <div class="container">
-      <gantt :tasks="tasks" style="height:300px;" />
-    </div> -->
+        <el-table-column prop="nowadaysProgress" label="进度" min-width="80" align="center">
+          <template slot-scope="scope">
+            <span :class="scope.row.nowadaysProgress==='100%'?'text-green':''">{{ scope.row.nowadaysProgress }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="状态" align="center">
+          <el-table-column prop="taskState" label="时间" min-width="120" align="center">
+            <template slot-scope="scope">
+              <span v-show="scope.row.taskState==='延期'" class="text-red">{{ scope.row.taskState }}</span>
+              <span v-show="scope.row.taskState==='提前'||scope.row.taskState==='准时'" class="text-green">{{
+              scope.row.taskState }}</span>
+              <span v-show="scope.row.taskState==='未到期'">{{ scope.row.taskState }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="appraise" label="评价" min-width="50" align="center" />
+        </el-table-column>
+        <el-table-column label="计划时间" align="center">
+          <el-table-column prop="planStartTime" label="开始" min-width="120" align="center" />
+          <el-table-column prop="planStopTime" label="结束" min-width="120" align="center" />
+        </el-table-column>
+        <!-- <el-table-column /> -->
+      </el-table>
+      <div class="container">
+        <gantt :tasks="tasks" style="height:100%;" />
+      </div>
+    </div>
     <el-row :gutter="15">
       <el-col :span="8">
         <el-card class="box-card">
@@ -99,21 +100,31 @@ export default {
       barData: {},
       tasks: {
         data: [
-          {
-            id: 1,
-            text: 'Task #1',
-            start_date: '19-04-2019',
-            duration: 2,
-            progress: 0.6,
-            planned_end: '19-04-2019',
-            planned_start: '10-05-2019',
-            show: false,
-            open: true // 默认是否打开
-          }
+          // {
+          //   id: 1,
+          //   text: '1',
+          //   start_date: '15-05-2019',
+          //   duration: 5,
+          //   progress: 0
+          // },
+          // {
+          //   id: 2,
+          //   text: '2',
+          //   start_date: '15-05-2019',
+          //   duration: 5,
+          //   progress: 1
+          // },
+          // {
+          //   id: 3,
+          //   text: '3',
+          //   start_date: '15-05-2019',
+          //   duration: 4,
+          //   progress: 0.66
+          // }
+        ],
+        links: [
+          // { id: 1, source: 1, target: 2, type: '0' }
         ]
-        // links: [
-        //   { id: 1, source: 1, target: 2, type: '0' }
-        // ]
       }
     }
   },
@@ -121,6 +132,11 @@ export default {
     this.init()
   },
   methods: {
+    // 反转字符串
+    reverseString(str) {
+      return str.split('/').reverse().join('-')
+    },
+    //  reverseString("hello"); // => olleh
     init() {
       // this.ganttInit()
       // console.log(this.$route.query.projectNo)
@@ -162,9 +178,30 @@ export default {
         '',
         'get'
       ).then(res => {
-        // console.log(res)
+        console.log(res)
+        // const date = new Date()
         if (res.data.code === this.GLOBAL.code) {
           this.detailData = res.data.data
+          if (res.data.data) {
+            res.data.data.forEach((v, i) => {
+              this.tasks.data.push({
+                // $index: 0,
+                // $level: 0,
+                // $no_end: false,
+                // $no_start: false,
+                // $rendered_type: 'task',
+                // $source: [],
+                // $target: [],
+                text: v.taskName,
+                id: i + 1,
+                // start_date: this.reverseString(v.planStartTime),
+                start_date: new Date(v.planStartTime),
+                duration: (new Date(v.planStopTime).getTime() - new Date(v.planStartTime).getTime()) / 3600 / 1000 / 24,
+                progress: Number(v.nowadaysProgress.split('%')[0]) / 100
+              })
+            })
+          }
+          console.log(this.tasks.data)
         } else {
           this.$message.error(res.data.result)
         }
@@ -342,31 +379,11 @@ export default {
               type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
             },
             formatter: function(params) {
-              var res = `${params[0].axisValue}进度及时率月统计<br />\
-                	<span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color: rgb(215, 215, 215)"></span>\
-               	任务量：${
-  data.completeRatioModels.plan[params[0].dataIndex]
-}<br />\
+              var res = `${params[0].axisValue}进度及时率月统计<br />\<span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color: rgb(215, 215, 215)"></span>\ 	任务量：${data.completeRatioModels.plan[params[0].dataIndex]}<br />\
                 	<span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#11a0f8"></span>\
-               	已完成任务：&nbsp;${
-  data.completeRatioModels.autual[params[0].dataIndex]
-}<br />\
+               	已完成任务：&nbsp;${data.completeRatioModels.autual[params[0].dataIndex]}<br />\
                	<span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:rgb(255, 192, 0)"></span>\
-                	超出完成：&nbsp; ${
-  data.completeRatioModels.completeRatio[
-    params[0].dataIndex
-  ] > 0
-    ? (
-      (data.completeRatioModels.completeRatio[
-        params[0].dataIndex
-      ] /
-                            data.completeRatioModels.plan[
-                              params[0].dataIndex
-                            ]) *
-                          100
-    ).toFixed(2) + '%'
-    : '0'
-}<br />`
+                	超出完成：&nbsp; ${data.completeRatioModels.completeRatio[params[0].dataIndex] > 0 ? ((data.completeRatioModels.completeRatio[ params[0].dataIndex ] / data.completeRatioModels.plan[ params[0].dataIndex]) * 100).toFixed(2) + '%' : '0'}<br />`
               return res
               // var res = `<div style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#11a0f8">任务量：${data.completeRatioModels.plan[params[0].dataIndex]}<div></br><div style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:rgb(215, 215, 215)">已完成任务：${data.completeRatioModels.autual[params[0].dataIndex]}<div></br><div style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:rgb(255, 192, 0)">超出完成:${(data.completeRatioModels.completeRatio[params[0].dataIndex] / data.completeRatioModels.plan[params[0].dataIndex] * 100) + '%'}<div>`
               // return res
@@ -484,6 +501,9 @@ export default {
 
 <style lang="scss">
 .projectDetails {
+  .el-table--medium td, .el-table--medium th{
+    padding:6px 0;
+  }
   .projectDetails-title {
     display: flex;
     padding: 10px 20px;
@@ -502,5 +522,101 @@ export default {
   //     padding:10px 20px;
   //     font-size: 14px;
   // }
+  .details-top{
+    display: flex;
+    >div:nth-child(1){
+      flex:6;
+    }
+     >div:nth-child(2){
+      flex:4;
+      width: 40%;
+      >div:nth-child(1){
+        height: 100%;
+        >div:nth-child(1){
+          height: 100%!important;
+          >div:nth-child(1){
+            >div:nth-child(1){
+               display: none;
+            }
+            >div:nth-child(2){
+              width: 100%!important;
+              .gantt_task_scale{
+                height: 74px!important;
+                >div:nth-child(1){
+                  div{
+                     width: 100%!important;
+                  }
+                }
+              }
+              .gantt_scale_line {
+                height: 37px!important;
+                line-height: 37px !important;
+                background: #e0f1fc;
+                >div{
+                  height: 37px!important;
+                line-height: 37px !important;
+
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    // .gantt_task_row{
+    //   height: 45px!important;
+    // }
+  .gantt_task_content{
+    display: none;
+  }
+  .gantt_task_progress{
+    margin-top: 7px;
+    height: 15px;
+    background: #67c23a;
+  }
+  }
+  .gantt_task .gantt_task_scale .gantt_scale_cell{
+        color: black;
+    border-right: 1px solid #a3d9f4;
+  }
+  .gantt_grid_scale, .gantt_task_scale{
+        border-bottom: 1px solid #a3d9f4;
+  }
+  .gantt_scale_line{
+        border-top: 1px solid #a3d9f4
+  }
+  .gantt_layout_cell_border_bottom{
+    border-bottom: 1px solid #a3d9f4;
+  }
+  .gantt_layout_cell_border_top{
+    border-top: unset;
+  }
+  .gantt_layout_cell_border_right{
+    border-right: 1px solid #a3d9f4;
+  }
+   .gantt_layout_cell_border_left{
+    border-left: 1px solid #a3d9f4;
+  }
+.gantt_data_area{
+  height: unset !important;
+  width: 100%!important;
+  >div{
+    width: 100%!important;
+  }
+}
+.gantt_task_line{
+  background: rgb(255, 255, 105);
+  border:none;
+}
+.gantt_task_scale{
+  width: 100% !important;
+}
+.gantt_bars_area{
+  >div{
+    // height: 44px !important;
+    // line-height: 44px !important;
+    // top:0px !important;
+  }
+}
 }
 </style>

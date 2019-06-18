@@ -36,7 +36,7 @@
       <navigator url="/pages/index/declarationNotice/declarationNotice">
         <image wx:if="{{imgBaseUrl}}" class="" src="{{imgBaseUrl}}index_nav2.png" > </image>
       </navigator>
-        <text class=""> 申告公告 </text>
+        <text class=""> 申报公告 </text>
     </view>
     <view class="nav_item"> 
       <navigator class="" target="" url="/pages/index/parkPay/parkPay">

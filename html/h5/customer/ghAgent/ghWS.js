@@ -6,7 +6,7 @@
 	
   var initSock = function( serverIp, serverPort ){
     var self = this;
-		var wsUri = "ws://" + serverIp + ":" + serverPort + "/";
+		var wsUri = "wss://" + serverIp + ":" + serverPort + "/";
     this.websocket = new WebSocket(wsUri); 
 
     //连接事件

@@ -61,6 +61,11 @@ public class EmailServiceImpl implements EmailService {
     @Value("${spring.mail.username}")
     private String sender;
 
+    //文本分割设置为false，否则文件名称过长，附件会异常
+    static {
+        System.setProperty("mail.mime.splitlongparameters", "false");
+    }
+
     /**
      * 邮件发送（非模板邮件，支持纯文本、html类型邮件）
      * @param emailVo

@@ -419,8 +419,9 @@ export default {
   #enterMenu{
     background: #fff;
     margin-top:1px;
+    margin-bottom: 2px;
     //  box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.06);
-     box-shadow:2px 2px 3px rgba(0, 0, 0, 0.06);
+     box-shadow:0px 0px 10px rgba(0, 0, 0, 0.2);
     p{
       height: 40px;
       line-height: 40px;

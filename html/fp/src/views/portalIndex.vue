@@ -71,14 +71,14 @@
           <el-tab-pane label="政策指南" name="second">
             <div class="noticeList">
               <ul>
-                <li class="noticeLi pointer" v-for="(i,k) in policyCenterList" :key="k" @click="$router.push({path:'/policyGuide',query:{policyId:i.policyId}})">
-                  <div class="date" v-if="i.releaseDate">
-                    <div class="year">{{i.releaseDate.slice(0,4)}}</div>
-                    <div class="month color3">{{i.releaseDate.slice(5)}}</div>
+                <li class="noticeLi pointer" v-for="(i,k) in policyCenterList" :key="k" @click="$router.push({path:'/policyGuide',query:{policyId:i.id}})">
+                  <div class="date" v-if="i.createdTime">
+                    <div class="year">{{i.createdTime.slice(0,4)}}</div>
+                    <div class="month color3">{{i.createdTime.slice(5,10)}}</div>
                   </div>
                   <div class="noticeCon">
-                    <h5>{{i.policyTitle}}</h5>
-                    <p class="color3">{{i.briefContent}}</p>
+                    <h5>{{i.title}}</h5>
+                    <p class="color3">{{i.noticeBiref}}</p>
                   </div>
                 </li>
               </ul>
@@ -88,13 +88,13 @@
             <div class="noticeList">
               <ul>
                 <li class="noticeLi pointer" v-for="(i,k) in actiListSlim" :key="k" @click="$router.push({ path: '/actiDetail', query: { activityId: i.id } })">
-                  <div class="date" v-if="i.issueTime">
-                    <div class="year">{{i.issueTime.slice(0,4)}}</div>
-                    <div class="month color3">{{i.issueTime.slice(5,10)}}</div>
+                  <div class="date" v-if="i.createdTime">
+                    <div class="year">{{i.createdTime.slice(0,4)}}</div>
+                    <div class="month color3">{{i.createdTime.slice(5,10)}}</div>
                   </div>
                   <div class="noticeCon">
-                    <h5>{{i.actiName}}</h5>
-                    <p class="color3">{{i.actibrief}}</p>
+                    <h5>{{i.title}}</h5>
+                    <p class="color3">{{i.noticeBiref}}</p>
                   </div>
                 </li>
               </ul>
@@ -280,8 +280,8 @@ export default {
     this.getBusinessAdContent();
     this.showNoticeList();
     this.getBannerList();
-    this.getPolicyCenterList();
-    this.getActiList();
+    // this.getPolicyCenterList();
+    // this.getActiList();
     this.getHotActive();
     this.$router.afterEach((to, from, next) => {
       window.scrollTo(0, 0);
@@ -368,7 +368,7 @@ export default {
         noSwiping: true,
         autoplay: true,
         autoplay: {
-          delay: 2000
+          delay: 5000
         },
         // 如果需要分页器
         pagination: {
@@ -420,49 +420,20 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-            _this.noticeList = res.data;
+              for (let it in res.data) {
+              if (res.data[it].type == "1") {
+                _this.noticeList.push(res.data[it]);
+              } else if (res.data[it].type == "2") {
+                _this.policyCenterList.push(res.data[it]);
+              } else if (res.data[it].type == "3") {
+                _this.actiListSlim.push(res.data[it]);
+              } else {
+                // _this.enterpriseNature.push(res.data[it]);
+              }
+            }
+            // _this.noticeList = res.data;
           } else {
             _this.$message.error(res.result);
-          }
-        }
-      });
-    },
-    //政策指南
-    getPolicyCenterList() {
-      // return new Promise((resolve, reject) => {
-      let _this = this;
-      this.api.get({
-        url: "getPolicyCenterList",
-        data: {
-          needPage: 1,
-          page: 1,
-          rows: 4,
-          tableType: "allPolicy",
-          policyType: "0"
-        },
-        callback: function(res) {
-          if (res.code == "0000") {
-            // let aaa = res.data.rows.concat(res.data.rows)
-            _this.policyCenterList = res.data.rows;
-          } else {
-            _this.$message.error(res.result);
-          }
-        }
-      });
-      // });
-    },
-    //热门活动
-    getActiList() {
-      let _this = this;
-      this.api.post({
-        url: "activityListSlim",
-        data: {
-          page: 1,
-          rows: 4
-        },
-        callback: function(res) {
-          if (res.code == "0000") {
-            _this.actiListSlim = res.data.rows;
           }
         }
       });
@@ -486,27 +457,6 @@ export default {
         }
       });
     },
-    // 园内企业--服务超市-机构字典
-    // getCompanyList() {
-    //   let _this = this;
-    //   this.api.get({
-    //     url: "selectTeamList",
-    //     data: {
-    //       preType: 1
-    //     },
-    //     callback: function(res) {
-    //       if (res.code == "0000") {
-    //         // for (let it in res.data) {
-    //         //   res.data[it].flag = false;
-    //         // }
-    //         _this.companyList = res.data;
-    //         // _this.comFlag = true;
-    //       } else {
-    //         _this.$message.error(res.result);
-    //       }
-    //     }
-    //   });
-    // },
     //热门产品
     getHotActive() {
       let _this = this;
@@ -535,6 +485,9 @@ export default {
   //   width: 30px !important;
   //   transform: translateX(14px) !important;
   // }
+  .el-tabs__header{
+    margin:0;
+  }
   .el-tabs__item {
     color: #999;
   }
@@ -553,6 +506,10 @@ export default {
     justify-content: space-between;
     .el-carousel {
       height: 391px;
+      // overflow: hidden;
+    }
+    .el-carousel__container{
+      height: 350px;
     }
     .el-carousel__indicator {
       padding: 14px 4px;
@@ -637,19 +594,29 @@ export default {
           justify-content: space-between;
           border-bottom: 1px solid #eee;
           padding: 20px 0;
+          transition: all .5s;
+        }
+        .noticeLi:hover{
+          // background: #f5f5f5;
+          h5{
+            color:#00a041;
+            font-weight: bold;
+          }
         }
         .noticeLi:nth-child(1) {
-          padding-top: 0;
+          // padding-top: 0;
         }
         .date {
           width: 10%;
           border-right: 1px solid #eee;
+          text-align: left;
           .year {
-            font-size: 15px;
+            font-size: 20px;
             color: #666;
           }
           .month {
             font-size: 13px;
+            // text-align: center;
           }
         }
         .noticeCon {
@@ -782,7 +749,7 @@ export default {
         li {
           box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.02);
           border-radius: 4px;
-          padding: 10px 0;
+          padding: 15px 0;
           width: 24%;
           margin-right: 30px;
           text-align: center;

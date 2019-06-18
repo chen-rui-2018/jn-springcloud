@@ -47,7 +47,7 @@
       <el-form-item label="活动费用" prop="actiCost">
         <el-input v-model="activityForm.actiCost" style="width: 205px;" />
       </el-form-item>
-      <el-form-item label="主办方" prop="actiOrganizer">
+      <el-form-item label="主办单位" prop="actiOrganizer">
         <el-input v-model="activityForm.actiOrganizer" style="width: 205px;" />
       </el-form-item>
       <el-form-item label="是否展示报名人数" prop="showApplyNum" class="setHeight">

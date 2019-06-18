@@ -1153,66 +1153,6 @@ public class TbRoomOrdersItemCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andRoomStatusIsNull() {
-            addCriterion("room_status is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andRoomStatusIsNotNull() {
-            addCriterion("room_status is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andRoomStatusEqualTo(Byte value) {
-            addCriterion("room_status =", value, "roomStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andRoomStatusNotEqualTo(Byte value) {
-            addCriterion("room_status <>", value, "roomStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andRoomStatusGreaterThan(Byte value) {
-            addCriterion("room_status >", value, "roomStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andRoomStatusGreaterThanOrEqualTo(Byte value) {
-            addCriterion("room_status >=", value, "roomStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andRoomStatusLessThan(Byte value) {
-            addCriterion("room_status <", value, "roomStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andRoomStatusLessThanOrEqualTo(Byte value) {
-            addCriterion("room_status <=", value, "roomStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andRoomStatusIn(List<Byte> values) {
-            addCriterion("room_status in", values, "roomStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andRoomStatusNotIn(List<Byte> values) {
-            addCriterion("room_status not in", values, "roomStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andRoomStatusBetween(Byte value1, Byte value2) {
-            addCriterion("room_status between", value1, value2, "roomStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andRoomStatusNotBetween(Byte value1, Byte value2) {
-            addCriterion("room_status not between", value1, value2, "roomStatus");
-            return (Criteria) this;
-        }
-
         public Criteria andQuitPenalSumIsNull() {
             addCriterion("quit_penal_sum is null");
             return (Criteria) this;

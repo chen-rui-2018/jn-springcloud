@@ -161,6 +161,14 @@ public class FinanceExpensesServiceImpl implements FinanceExpensesService {
         if(flag){
             for (int i=0;i<feList.size();i++){
                 FinanceExpendFindImportDataVo data=feList.get(i);
+                //首先获取到流水号,判断是否已经存在,若存在,提示失败
+                String costId = data.getCostId();
+                int isExist=financeExpensesDao.isExist(costId);
+                if(isExist > 0){
+                    int j=i+1;
+                    throw new JnSpringCloudException(FinanceExceptionEnums.UN_KNOW,"第"+j+"条数据信息中【费用流水号】已存在,请确认之后重新操作");
+                }
+                //再判断其他数据是否为空
                 if(data.getCostHappendTime()==null || data.getCostHappendTime()==""){
                     flag=false;
                     row.add(i);
@@ -212,7 +220,8 @@ public class FinanceExpensesServiceImpl implements FinanceExpensesService {
             return new Result("操作完成");
         }else{
             //提示错误信息
-            return new Result("第"+row+"条数据不完整,请重新操作");
+            //return new Result("第"+row+"条数据不完整,请重新操作");
+            throw new JnSpringCloudException(FinanceExceptionEnums.UN_KNOW,"第"+row+"条数据信息不完整,请确认之后重新操作");
         }
 
     }

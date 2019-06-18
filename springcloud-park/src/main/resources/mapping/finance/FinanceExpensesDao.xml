@@ -277,6 +277,14 @@
         </foreach>
     </insert>
 
+    <!--判断流水号是否存在-->
+    <select id="isExist" resultType="java.lang.Integer" >
+        SELECT
+        COUNT(t.id)
+        FROM tb_finance_expenses t
+        WHERE t.record_status = 1
+        AND t.cost_id = #{costId}
+    </select>
 
     <!--保存 到支出记录表-->
     <insert id="saveMarkData" parameterType="java.util.Map">

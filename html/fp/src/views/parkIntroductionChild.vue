@@ -13,11 +13,11 @@
             </el-breadcrumb-item>
           </el-breadcrumb>
         </div>
-        <div class="park_main">
-            <div class="imgItm">
+        <div class="park_main clearfix">
+            <div class="imgItm fl">
                 <img :src="parkDetail.mainPicture" alt="">
             </div>
-            <div class="parkInfo">
+            <div class="parkInfo fl">
               <div class="tit color1">{{parkDetail.parkName}}</div>
               <div class="color3" v-html="parkDetail.parkIntroduce">
               </div>
@@ -77,7 +77,7 @@ export default {
       this.api.get({
         url: "getCompanyNewList",
         data: {
-          id:this.id
+          affiliatedPark:this.id
         },
         callback: (res)=> {
           if (res.code == "0000") {
@@ -109,15 +109,18 @@ export default {
       box-shadow: 0px 1px 11px 0px rgba(4, 0, 0, 0.05);
       border-radius: 7px;
       padding: 30px;
-      display: flex;
+      // display: flex;
       .imgItm{
-        width: 51%;
+          height: 316px;
+          width: 316px;
         img{
+          height: 100%;
           width: 100%;
         }
       }
       .parkInfo {
         margin-left: 36px;
+        width: 67%;
         .tit {
           font-size: 20px;
           margin-bottom: 20px;
@@ -162,6 +165,11 @@ export default {
           flex-wrap: wrap;
           justify-content: center;
           border-radius: 6px;
+          transition: all 0.5s;
+          &:hover{
+            box-shadow: 0px 0px 12px 1px rgba(0, 0, 0, 0.07);
+            transform: translateY(-6px);
+          }
           &:nth-child(5n){
             margin-right: 0;
           }

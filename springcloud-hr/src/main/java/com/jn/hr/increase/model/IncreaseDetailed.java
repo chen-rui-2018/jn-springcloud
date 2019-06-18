@@ -28,6 +28,12 @@ public class IncreaseDetailed implements Serializable{
 
 	@ApiModelProperty(value = "项目id")
     private String projectId;
+	
+	@ApiModelProperty(value = "方案Id")
+    private String schemeId;
+	
+	@ApiModelProperty(value = "方案名称")
+    private String schemeName;
 
 	@ApiModelProperty(value = "默认基数")
     private Integer defaultCardinalNumber;
@@ -44,9 +50,21 @@ public class IncreaseDetailed implements Serializable{
 	@ApiModelProperty(value = "参保人数")
 	private Integer number;
 
-	private String schemeId;
+	public String getSchemeId() {
+		return schemeId;
+	}
 
-	private String schemeName;
+	public void setSchemeId(String schemeId) {
+		this.schemeId = schemeId;
+	}
+
+	public String getSchemeName() {
+		return schemeName;
+	}
+
+	public void setSchemeName(String schemeName) {
+		this.schemeName = schemeName;
+	}
 
 	public Integer getNumber() {
 		return number;
@@ -119,20 +137,5 @@ public class IncreaseDetailed implements Serializable{
 	public void setProjectType(Byte projectType) {
 		this.projectType = projectType;
 	}
-
-	public String getSchemeId() {
-		return schemeId;
-	}
-
-	public void setSchemeId(String schemeId) {
-		this.schemeId = schemeId;
-	}
-
-	public String getSchemeName() {
-		return schemeName;
-	}
-
-	public void setSchemeName(String schemeName) {
-		this.schemeName = schemeName;
-	}
+    
 }

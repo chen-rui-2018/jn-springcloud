@@ -314,6 +314,146 @@ public class TbManpowerIncreaseDetailedCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andSchemeIdIsNull() {
+            addCriterion("scheme_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeIdIsNotNull() {
+            addCriterion("scheme_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeIdEqualTo(String value) {
+            addCriterion("scheme_id =", value, "schemeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeIdNotEqualTo(String value) {
+            addCriterion("scheme_id <>", value, "schemeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeIdGreaterThan(String value) {
+            addCriterion("scheme_id >", value, "schemeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeIdGreaterThanOrEqualTo(String value) {
+            addCriterion("scheme_id >=", value, "schemeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeIdLessThan(String value) {
+            addCriterion("scheme_id <", value, "schemeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeIdLessThanOrEqualTo(String value) {
+            addCriterion("scheme_id <=", value, "schemeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeIdLike(String value) {
+            addCriterion("scheme_id like", value, "schemeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeIdNotLike(String value) {
+            addCriterion("scheme_id not like", value, "schemeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeIdIn(List<String> values) {
+            addCriterion("scheme_id in", values, "schemeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeIdNotIn(List<String> values) {
+            addCriterion("scheme_id not in", values, "schemeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeIdBetween(String value1, String value2) {
+            addCriterion("scheme_id between", value1, value2, "schemeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeIdNotBetween(String value1, String value2) {
+            addCriterion("scheme_id not between", value1, value2, "schemeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeNameIsNull() {
+            addCriterion("scheme_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeNameIsNotNull() {
+            addCriterion("scheme_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeNameEqualTo(String value) {
+            addCriterion("scheme_name =", value, "schemeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeNameNotEqualTo(String value) {
+            addCriterion("scheme_name <>", value, "schemeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeNameGreaterThan(String value) {
+            addCriterion("scheme_name >", value, "schemeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeNameGreaterThanOrEqualTo(String value) {
+            addCriterion("scheme_name >=", value, "schemeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeNameLessThan(String value) {
+            addCriterion("scheme_name <", value, "schemeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeNameLessThanOrEqualTo(String value) {
+            addCriterion("scheme_name <=", value, "schemeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeNameLike(String value) {
+            addCriterion("scheme_name like", value, "schemeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeNameNotLike(String value) {
+            addCriterion("scheme_name not like", value, "schemeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeNameIn(List<String> values) {
+            addCriterion("scheme_name in", values, "schemeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeNameNotIn(List<String> values) {
+            addCriterion("scheme_name not in", values, "schemeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeNameBetween(String value1, String value2) {
+            addCriterion("scheme_name between", value1, value2, "schemeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeNameNotBetween(String value1, String value2) {
+            addCriterion("scheme_name not between", value1, value2, "schemeName");
+            return (Criteria) this;
+        }
+
         public Criteria andProjectIdIsNull() {
             addCriterion("project_id is null");
             return (Criteria) this;

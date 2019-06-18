@@ -271,7 +271,7 @@ export default {
       imgIndex: 0,
       ulTopNum: 0,
       hastrFlag: true,
-      tabFlag:"first"
+      tabFlag: "first"
     };
   },
   mounted() {
@@ -360,7 +360,7 @@ export default {
       this.ulTopNum = i * -20;
     },
     handleClick(tab) {
-      this.tabFlag=tab.name
+      this.tabFlag = tab.name;
     },
     swiperInit() {
       new swiper(".swiper-container", {
@@ -420,7 +420,7 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-              for (let it in res.data) {
+            for (let it in res.data) {
               if (res.data[it].type == "1") {
                 _this.noticeList.push(res.data[it]);
               } else if (res.data[it].type == "2") {
@@ -478,6 +478,24 @@ export default {
 </script>
 <style lang="scss">
 .portalIndex1 {
+  @keyframes qfyfadeInLeft {
+    0% {
+      opacity: 0;
+      transform: translateY(0);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(10%);
+    }
+  }
+  @keyframes topa {
+    from {
+      transform: translateX(0);
+    }
+    to {
+       transform: translateX(5%);
+    }
+  }
   .el-tabs__nav-wrap::after {
     height: 1px;
   }
@@ -485,8 +503,8 @@ export default {
   //   width: 30px !important;
   //   transform: translateX(14px) !important;
   // }
-  .el-tabs__header{
-    margin:0;
+  .el-tabs__header {
+    margin: 0;
   }
   .el-tabs__item {
     color: #999;
@@ -508,7 +526,7 @@ export default {
       height: 391px;
       // overflow: hidden;
     }
-    .el-carousel__container{
+    .el-carousel__container {
       height: 350px;
     }
     .el-carousel__indicator {
@@ -594,12 +612,12 @@ export default {
           justify-content: space-between;
           border-bottom: 1px solid #eee;
           padding: 20px 0;
-          transition: all .5s;
+          transition: all 0.5s;
         }
-        .noticeLi:hover{
+        .noticeLi:hover {
           // background: #f5f5f5;
-          h5{
-            color:#00a041;
+          h5 {
+            color: #00a041;
             font-weight: bold;
           }
         }
@@ -758,6 +776,10 @@ export default {
             margin-top: 10px;
           }
         }
+        li:hover {
+          box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.06);
+          animation: topa .5s;
+        }
       }
       .infoMes {
         width: 23%;
@@ -814,6 +836,13 @@ export default {
           p {
             margin-top: 20px;
           }
+        }
+        li:hover {
+          // animation: topa .5s;
+          box-shadow: 2px 5px 5px rgba(0, 0, 0, 0.1);
+        }
+        li p:hover {
+          animation: qfyfadeInLeft  1s ease-out;
         }
         li:nth-child(2) {
           background: linear-gradient(

@@ -79,8 +79,6 @@
               <div class="friend-name">{{ item.content.nickName }}</div>
               <div class="chat-time">
                 {{ item.createTime | formatTime }}
-                <!--                  <span>星期二</span>-->
-                <!--                  <span>10:32</span>-->
               </div>
             </div>
             <div class="message-content">
@@ -101,7 +99,6 @@
   import messageRow from './common/messageRow'
   import sockHttp from '@/util/sockHttp'
   import { WS_URL } from '@/util/url'
-  // import { RemoveClass, AddClass } from '@/util/func'
   export default {
     name: "Chat",
     components: {
@@ -148,7 +145,7 @@
     },
     destroyed() {
       if (this.$store.state.isMobile) {
-        this.html.classList.remove('h-app-100')
+        this.html.classList.remove('h-100')
         this.body.classList.remove('h-100')
       }
     },
@@ -261,7 +258,7 @@
         if (this.$store.state.isMobile) {
           this.html = document.getElementsByTagName('html')[0]
           this.body = document.getElementsByTagName('body')[0]
-          this.html.classList.add('h-app-100')
+          this.html.classList.add('h-100')
           this.body.classList.add('h-100')
         }
       },
@@ -562,7 +559,6 @@
 
       .chat-main {
         height: 400px;
-        padding: 20px;
         margin-top: 2px;
         background-color: #fff;
         padding: 16px 16px 54px;

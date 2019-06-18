@@ -60,6 +60,7 @@ import com.jn.hr.increase.model.InsuredSchemeDetailed;
 import com.jn.hr.increase.model.InsuredSchemePage;
 import com.jn.hr.increase.model.SalaryKeyValue;
 import com.jn.hr.increase.service.WelfareManagrmentService;
+import com.jn.hr.model.AttendanceKeyValue;
 import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
@@ -128,12 +129,29 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 			insureManagementList.add(insureManagement);
 		}
 
+		insureSort(insureManagementList);
 		logger.info("[参保管理]数据查询成功!");
 		PaginationData<List<InsureManagement>> data = new PaginationData(insureManagementList, objects.getTotal());
 
 		return data;
 	}
 
+	/**
+	 * 根据月份排序
+	 *
+	 */
+	private void insureSort(List<InsureManagement> list){
+		Collections.sort(list,new Comparator<InsureManagement>(){
+			public int compare(InsureManagement value1,InsureManagement value2){
+				int flag = value2.getInsuredMonth().compareTo(value1.getInsuredMonth());
+				if(flag < 0){
+					return flag;
+				}else{
+					return flag;
+				}
+			}
+		});
+	}
 	@Override
 	@ServiceLog(doAction = "添加次月账单")
 	public void addNextMonthBill() {
@@ -152,11 +170,13 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 		}
 
 		InsuredDetaild insuredDetaild = new InsuredDetaild();
-		List<Object> resultList = ExcelUtil.readExcel(file, insuredDetaild, 1, 1);
+		List<Object> resultList = ExcelUtil.readExcel(file, insuredDetaild, 1, 2);
 		if (CollectionUtils.isEmpty(resultList)) {
 			return "没有数据，导入失败";
 		}
 
+		InsuredSchemePage insuredSchemePage = new InsuredSchemePage();
+		Map<String,InsuredScheme> schemeMap = insuredSchemeMapper.getInsuredSchemeMap(insuredSchemePage);
 		TbManpowerEmployeeBasicInfo tbManpowerEmployeeBasicInfo = new TbManpowerEmployeeBasicInfo();
 		Map<String, TbManpowerEmployeeBasicInfo> map = employeeBasicInfoMapper.map(tbManpowerEmployeeBasicInfo);
 		int i = 0;
@@ -191,8 +211,43 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 				continue;
 			}
 
+			Double personalSocialSecurity = 0.0;
+			Double companySocialSecurity = 0.0;
+			Double personalAccumulationFund = 0.0;
+			Double companyAccumulationFund = 0.0;
+			InsuredScheme insuredScheme = schemeMap.get(insured.getSchemeName());
+			if(insuredScheme == null){
+				logger.info("[参保方案表]参保方案不存在!");
+				sb.append("第" + i + "行" + "|参保方案信息不存在,工号：" + insured.getJobNumber() + ",参保方案：" + insured.getSchemeName() + ";");
+				continue;
+			}
+			List<InsuredSchemeDetailed>  detailedList =  insuredSchemeDetailedMapper.selectBySchemeId(insuredScheme.getSchemeId());
+			
+			for(InsuredSchemeDetailed detailed: detailedList){
+				if (detailed.getProjectType() == 1) {
+					personalSocialSecurity += Double.valueOf(
+							detailed.getDefaultCardinalNumber() * detailed.getIndividualContributionRatio())
+							/ 100;
+					companySocialSecurity += Double.valueOf(
+							detailed.getDefaultCardinalNumber() * detailed.getCorporateContributionRatio())
+							/ 100;
+				} else {
+					personalAccumulationFund += Double.valueOf(
+							detailed.getDefaultCardinalNumber() * detailed.getIndividualContributionRatio())
+							/ 100;
+					companyAccumulationFund += Double.valueOf(
+							detailed.getDefaultCardinalNumber() * detailed.getCorporateContributionRatio())
+							/ 100;
+				}
+				
+			}
+			
+			insured.setSchemeId(detailedList.get(0).getSchemeId());
+			insured.setPersonalSocialSecurity(personalSocialSecurity);
+			insured.setCompanySocialSecurity(companySocialSecurity);
+			insured.setPersonalAccumulationFund(personalAccumulationFund);
+			insured.setCompanyAccumulationFund(companyAccumulationFund);
 			conversionString(insured);
-			insured.setDepartmentId(basic.getDepartmentId());
 			insured.setName(basic.getName());
 			insured.setId(UUID.randomUUID().toString());
 			insured.setDepartmentId(basic.getDepartmentId());
@@ -280,6 +335,8 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 			      IncreaseDetailed.setId(UUID.randomUUID().toString());
 			      IncreaseDetailed.setInsuredMonth(DateUtils.formatDate(increaseStaffAdd.getInsuredMonth(), "yyyy-MM"));
 			      IncreaseDetailed.setJobNumber(jobNumber);
+			      IncreaseDetailed.setSchemeId(tbManpowerInsuredScheme.getSchemeId());
+			      IncreaseDetailed.setSchemeName(tbManpowerInsuredScheme.getSchemeName());
 			      IncreaseDetailed.setProjectId(detailed.getProjectId());
 			      IncreaseDetailed.setDefaultCardinalNumber(detailed.getDefaultCardinalNumber());
 			      IncreaseDetailed.setCorporateContributionRatio(detailed.getCorporateContributionRatio());
@@ -794,6 +851,12 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 	@Transactional(rollbackFor = Exception.class)
 	public String addInsurancescheme(InsuredSchemeAdd insuredSchemeAdd, User user) {
 		// TODO Auto-generated method stub
+		int i = insuredSchemeMapper.selectBySchemeName(insuredSchemeAdd.getSchemeName());
+		if(i != 0){
+			logger.info("[参保方案表]方案名称已存在!");
+			throw new JnSpringCloudException(SalaryManagementExceptionEnums.SCHEME_NAME_EXISTS);
+		}
+		
 		TbManpowerInsuredScheme InsuredScheme = new TbManpowerInsuredScheme();
 		BeanUtils.copyProperties(insuredSchemeAdd, InsuredScheme);
 		InsuredScheme.setSchemeId(UUID.randomUUID().toString());
@@ -839,24 +902,16 @@ public class WelfareManagementServiceImpl implements WelfareManagrmentService {
 			return "参保城市不能为空";
 		}
 
-		if (StringUtils.isBlank(insured.getSchemeId())) {
-			return "方案Id不能为空";
+		if (StringUtils.isBlank(insured.getSchemeName())) {
+			return "方案名称不能为空";
 		}
 
-		if (insured.getPersonalAccumulationFund() == null) {
-			return "个人公积金不能为空";
+		if (StringUtils.isBlank(insured.getInsuredMonth())) {
+			return "参保月份不能为空";
 		}
-
-		if (insured.getPersonalSocialSecurity() == null) {
-			return "个人社保费不能为空";
-		}
-
-		if (insured.getCompanyAccumulationFund() == null) {
-			return "公司公积金不能为空";
-		}
-
-		if (insured.getCompanySocialSecurity() == null) {
-			return "公司社保费不能为空";
+		
+		if (StringUtils.isBlank(insured.getDepartment())) {
+			return "部门不能为空";
 		}
 		return "";
 	}

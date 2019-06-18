@@ -15,9 +15,6 @@ export default {
   mounted () {
     // this.init()
   },
-  created () {
-    // this.init()
-  },
   methods: {
     init () {
       // this.token = this.$route.query.token
@@ -28,7 +25,7 @@ export default {
       this.api.post({
         url: 'loginURL',
         data: {
-          account: '17300000050',
+          account: 'wangsong',
           password: '123456'
         },
         dataFlag: false,

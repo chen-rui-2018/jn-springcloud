@@ -2660,7 +2660,7 @@ img {
 
 .portalIndex .header .headerContainer .nav,
 .enterpriseservice .header .headerContainer .nav {
-  width: 600px;
+  width: 700px;
   height: 37.6px;
   margin: 0 auto;
 }
@@ -2675,7 +2675,7 @@ img {
   float: left;
   font-size: 14px;
   text-align: center;
-  width: 100px;
+  width: 84px;
 }
 
 .portalIndex .header .headerContainer .nav > ul > li:hover,

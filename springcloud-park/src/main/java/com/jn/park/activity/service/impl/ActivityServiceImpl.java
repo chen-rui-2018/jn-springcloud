@@ -20,6 +20,7 @@ import com.jn.park.enums.ActivityEnum;
 import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.park.message.model.AddMessageModel;
 import com.jn.park.parkcode.service.ParkCodeService;
+import com.jn.park.utils.HtmlUtils;
 import com.jn.send.api.DelaySendMessageClient;
 import com.jn.send.model.Delay;
 import com.jn.system.log.annotation.ServiceLog;
@@ -722,7 +723,7 @@ public class ActivityServiceImpl implements ActivityService {
         for (ActivitySlim show : activitySlimList) {
             String briefContent = show.getActiDetails();
             if(StringUtils.isNotBlank(briefContent)){
-                briefContent = briefContent.replaceAll("</?[^>]+>", "");
+                briefContent = HtmlUtils.getBriefIntroduction(briefContent);
                 if (StringUtils.isNotBlank(briefContent)) {
                     String briefSummaries = briefContent.substring(0, briefContent.length() > 100 ? 100 : briefContent.length()-1);
                     briefSummaries = briefContent.length() > 100 ? briefSummaries + "......" : briefSummaries;

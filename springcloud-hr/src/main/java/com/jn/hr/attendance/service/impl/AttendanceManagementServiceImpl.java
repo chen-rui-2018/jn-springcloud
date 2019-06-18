@@ -755,6 +755,10 @@ public class AttendanceManagementServiceImpl implements AttendanceManagementServ
 		}
 		// 获取工号
 		TbManpowerEmployeeBasicInfo basic = employeeBasicInfoMapper.selectByUserId(attendanceManagement.getUserId());
+		if(basic == null){
+			throw new JnSpringCloudException(EmployeeExceptionEnums.EmployeeBasicInfo_NOT_EXISTS);
+		}
+		
 		AttendanceSchedulPage attendanceSchedulPage = new AttendanceSchedulPage();
 		attendanceSchedulPage.setJobNumber(basic.getJobNumber());
 		String schedulMonth = attendanceManagement.getAttendanceMonth().replace("-", "");

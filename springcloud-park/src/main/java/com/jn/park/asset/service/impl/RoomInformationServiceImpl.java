@@ -6,6 +6,7 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.common.util.DateUtils;
 import com.jn.common.util.GlobalConstants;
 import com.jn.common.util.StringUtils;
 import com.jn.company.api.CompanyClient;
@@ -220,6 +221,10 @@ public class RoomInformationServiceImpl implements RoomInformationService {
         orders.setId(orderId);
         orders.setPaySum(orderPaySum);
 
+        //申请时间
+        orders.setApplyTime(new java.util.Date());
+        //租赁申请状态(申请成功)
+        orders.setLeaseApplyStatus(Byte.parseByte(RoomApplyStatusEnums.SUCCEED.getCode()));
         //未付款
         orders.setPayState(Byte.parseByte(PayStatusEnums.NONPAYMENT.getCode()));
         //是否是续租订单(否)
@@ -697,6 +702,8 @@ public class RoomInformationServiceImpl implements RoomInformationService {
             tbRoomOrdersBill.setId(getOrderIdByTime());
             //订单id
             tbRoomOrdersBill.setOrderId(tbR.getId());
+            //企业id
+            tbRoomOrdersBill.setEnterpriseId(tbR.getEnterpriseId());
             //缴费企业
             tbRoomOrdersBill.setLeaseEnterprise(tbR.getLeaseEnterprise());
             //企业联系人
@@ -727,8 +734,18 @@ public class RoomInformationServiceImpl implements RoomInformationService {
             //缴费状态(默认未缴费)
             tbRoomOrdersBill.setPaySum(Byte.parseByte("0"));
 
-            //账单周期(待定)
-            // TODO
+            //账单周期
+            //获取前一个月第一天
+            Calendar calendar1 = Calendar.getInstance();
+            calendar1.add(Calendar.MONTH, -1);
+            calendar1.set(Calendar.DAY_OF_MONTH, 1);
+            String firstDay = DateUtils.formatDate(calendar1.getTime(), "yyyy-MM-dd");
+            //获取前一个月最后一天
+            Calendar calendar2 = Calendar.getInstance();
+            calendar2.set(Calendar.DAY_OF_MONTH, 0);
+            String lastDay = DateUtils.formatDate(calendar2.getTime(), "yyyy-MM-dd");
+            //设置账期
+            tbRoomOrdersBill.setBillCycle(firstDay + "~" + lastDay);
 
             //创建时间
             tbRoomOrdersBill.setCreateTime(new java.util.Date());
@@ -866,6 +883,24 @@ public class RoomInformationServiceImpl implements RoomInformationService {
         //账单支付成功
         if (payBill.getPaymentState().equals(PayStatusEnums.PAYMENT.getCode())){
             TbRoomOrdersBill tbRoomOrdersBill = tbRoomOrdersBillMapper.selectByPrimaryKey(payBill.getBillId());
+            //更新房间租借企业信息
+            TbRoomOrdersItemCriteria tbRoomOrdersItemCriteria = new TbRoomOrdersItemCriteria();
+            tbRoomOrdersItemCriteria.createCriteria().andOrderIdEqualTo(tbRoomOrdersBill.getOrderId());
+            List<TbRoomOrdersItem> tbRoomOrdersItems = tbRoomOrdersItemMapper.selectByExample(tbRoomOrdersItemCriteria);
+            if (tbRoomOrdersItems != null && tbRoomOrdersItems.size() > 0){
+                for (TbRoomOrdersItem tbRoomOrdersItem : tbRoomOrdersItems) {
+                    TbRoomInformation roomInformation = tbRoomInformationMapper.selectByPrimaryKey(tbRoomOrdersItem.getRoomId());
+                    //设置房间租借企业信息
+                    roomInformation.setEnterpriseId(tbRoomOrdersBill.getEnterpriseId());
+                    roomInformation.setLeaseEnterprise(tbRoomOrdersBill.getLeaseEnterprise());
+                    roomInformation.setContactName(tbRoomOrdersBill.getContactName());
+                    roomInformation.setContactPhone(tbRoomOrdersBill.getContactPhone());
+                    int updateCount = tbRoomInformationMapper.updateByPrimaryKeySelective(roomInformation);
+                    if (updateCount != 1){
+                        throw new JnSpringCloudException(new Result("-1","更新房间信息tb_room_information失败"));
+                    }
+                }
+            }
             tbRoomOrdersBill.setPaySum(Byte.parseByte(PayStatusEnums.PAYMENT.getCode()));
             tbRoomOrdersBill.setPayTime(payBill.getCreatedTime());
             logger.info("更新缴费单支付状态,参数{}",tbRoomOrdersBill);

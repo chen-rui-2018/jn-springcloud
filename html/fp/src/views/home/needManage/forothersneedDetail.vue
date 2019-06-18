@@ -84,7 +84,7 @@
           </div>
           <div>
             <el-form-item label="融资期限：">
-              <span>{{othersDetail.financingPeriod|time}}</span>
+              <span>{{othersDetail.financingPeriod}}个月</span>
             </el-form-item>
           </div>
           <div class="">

@@ -170,8 +170,10 @@ export default {
       data: this.sendData,
       callback: function(res) {
         if (res.code == "0000") {
-            _this.$message.success("对接成功")
+            _this.$message.success("操作成功")
             _this.$router.go(-1)
+          }else{
+            _this.$message.error(res.result)
           }
         }
       })

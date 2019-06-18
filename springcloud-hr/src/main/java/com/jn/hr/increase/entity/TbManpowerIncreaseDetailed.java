@@ -9,6 +9,10 @@ public class TbManpowerIncreaseDetailed implements Serializable {
 
     private String jobNumber;
 
+    private String schemeId;
+
+    private String schemeName;
+
     private String projectId;
 
     private Integer defaultCardinalNumber;
@@ -43,6 +47,22 @@ public class TbManpowerIncreaseDetailed implements Serializable {
 
     public void setJobNumber(String jobNumber) {
         this.jobNumber = jobNumber == null ? null : jobNumber.trim();
+    }
+
+    public String getSchemeId() {
+        return schemeId;
+    }
+
+    public void setSchemeId(String schemeId) {
+        this.schemeId = schemeId == null ? null : schemeId.trim();
+    }
+
+    public String getSchemeName() {
+        return schemeName;
+    }
+
+    public void setSchemeName(String schemeName) {
+        this.schemeName = schemeName == null ? null : schemeName.trim();
     }
 
     public String getProjectId() {
@@ -100,6 +120,8 @@ public class TbManpowerIncreaseDetailed implements Serializable {
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getInsuredMonth() == null ? other.getInsuredMonth() == null : this.getInsuredMonth().equals(other.getInsuredMonth()))
             && (this.getJobNumber() == null ? other.getJobNumber() == null : this.getJobNumber().equals(other.getJobNumber()))
+            && (this.getSchemeId() == null ? other.getSchemeId() == null : this.getSchemeId().equals(other.getSchemeId()))
+            && (this.getSchemeName() == null ? other.getSchemeName() == null : this.getSchemeName().equals(other.getSchemeName()))
             && (this.getProjectId() == null ? other.getProjectId() == null : this.getProjectId().equals(other.getProjectId()))
             && (this.getDefaultCardinalNumber() == null ? other.getDefaultCardinalNumber() == null : this.getDefaultCardinalNumber().equals(other.getDefaultCardinalNumber()))
             && (this.getCorporateContributionRatio() == null ? other.getCorporateContributionRatio() == null : this.getCorporateContributionRatio().equals(other.getCorporateContributionRatio()))
@@ -114,6 +136,8 @@ public class TbManpowerIncreaseDetailed implements Serializable {
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getInsuredMonth() == null) ? 0 : getInsuredMonth().hashCode());
         result = prime * result + ((getJobNumber() == null) ? 0 : getJobNumber().hashCode());
+        result = prime * result + ((getSchemeId() == null) ? 0 : getSchemeId().hashCode());
+        result = prime * result + ((getSchemeName() == null) ? 0 : getSchemeName().hashCode());
         result = prime * result + ((getProjectId() == null) ? 0 : getProjectId().hashCode());
         result = prime * result + ((getDefaultCardinalNumber() == null) ? 0 : getDefaultCardinalNumber().hashCode());
         result = prime * result + ((getCorporateContributionRatio() == null) ? 0 : getCorporateContributionRatio().hashCode());
@@ -131,6 +155,8 @@ public class TbManpowerIncreaseDetailed implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", insuredMonth=").append(insuredMonth);
         sb.append(", jobNumber=").append(jobNumber);
+        sb.append(", schemeId=").append(schemeId);
+        sb.append(", schemeName=").append(schemeName);
         sb.append(", projectId=").append(projectId);
         sb.append(", defaultCardinalNumber=").append(defaultCardinalNumber);
         sb.append(", corporateContributionRatio=").append(corporateContributionRatio);

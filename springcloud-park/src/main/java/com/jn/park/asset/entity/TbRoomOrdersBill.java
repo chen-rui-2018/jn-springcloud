@@ -11,6 +11,9 @@ public class TbRoomOrdersBill implements Serializable {
     /*@ApiModelProperty("订单id")*/
     private String orderId;
 
+    /*@ApiModelProperty("企业id")*/
+    private String enterpriseId;
+
     /*@ApiModelProperty("缴费企业")*/
     private String leaseEnterprise;
 
@@ -87,6 +90,14 @@ public class TbRoomOrdersBill implements Serializable {
 
     public void setOrderId(String orderId) {
         this.orderId = orderId == null ? null : orderId.trim();
+    }
+
+    public String getEnterpriseId() {
+        return enterpriseId;
+    }
+
+    public void setEnterpriseId(String enterpriseId) {
+        this.enterpriseId = enterpriseId == null ? null : enterpriseId.trim();
     }
 
     public String getLeaseEnterprise() {
@@ -263,6 +274,7 @@ public class TbRoomOrdersBill implements Serializable {
         TbRoomOrdersBill other = (TbRoomOrdersBill) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getOrderId() == null ? other.getOrderId() == null : this.getOrderId().equals(other.getOrderId()))
+            && (this.getEnterpriseId() == null ? other.getEnterpriseId() == null : this.getEnterpriseId().equals(other.getEnterpriseId()))
             && (this.getLeaseEnterprise() == null ? other.getLeaseEnterprise() == null : this.getLeaseEnterprise().equals(other.getLeaseEnterprise()))
             && (this.getContactName() == null ? other.getContactName() == null : this.getContactName().equals(other.getContactName()))
             && (this.getContactPhone() == null ? other.getContactPhone() == null : this.getContactPhone().equals(other.getContactPhone()))
@@ -291,6 +303,7 @@ public class TbRoomOrdersBill implements Serializable {
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getOrderId() == null) ? 0 : getOrderId().hashCode());
+        result = prime * result + ((getEnterpriseId() == null) ? 0 : getEnterpriseId().hashCode());
         result = prime * result + ((getLeaseEnterprise() == null) ? 0 : getLeaseEnterprise().hashCode());
         result = prime * result + ((getContactName() == null) ? 0 : getContactName().hashCode());
         result = prime * result + ((getContactPhone() == null) ? 0 : getContactPhone().hashCode());
@@ -322,6 +335,7 @@ public class TbRoomOrdersBill implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", orderId=").append(orderId);
+        sb.append(", enterpriseId=").append(enterpriseId);
         sb.append(", leaseEnterprise=").append(leaseEnterprise);
         sb.append(", contactName=").append(contactName);
         sb.append(", contactPhone=").append(contactPhone);

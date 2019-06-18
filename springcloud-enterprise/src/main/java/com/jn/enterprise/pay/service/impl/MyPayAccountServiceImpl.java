@@ -95,7 +95,7 @@ public class MyPayAccountServiceImpl implements MyPayAccountService {
             for (PayAccountBookRecordVo tbPayBill : voList) {
                 tbPayBill.setMonth(sdf.format(tbPayBill.getCreatedTime()));
                 for (TbPayAccountBookType tb : list) {
-                    if (tbPayBill.getAcBookType().equals(tb.getAcBookType())) {
+                    if (StringUtils.isNotBlank(tbPayBill.getAcBookType()) && tbPayBill.getAcBookType().equals(tb.getAcBookType())) {
                         tbPayBill.setAcBookType(tb.getAcBookDesc());
                     }
                 }

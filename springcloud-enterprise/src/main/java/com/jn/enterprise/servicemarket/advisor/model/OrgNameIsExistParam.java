@@ -17,6 +17,8 @@ public class OrgNameIsExistParam implements Serializable {
     @ApiModelProperty(value = "查询类型：add:机构认证（新增页面传值），update:机构认证（修改页面传值）",required = true,example = "add")
     @NotNull(message = "查询类型不能为空")
     private String searchType;
+    @ApiModelProperty(value = "机构id(新增页面传空，修改页面必传)",example = "xxx123")
+    private String orgId;
     @ApiModelProperty(value = "机构名称",required = true,example = "xxx机构")
     @NotNull(message = "机构名称不能为空")
     private String orgName;
@@ -27,6 +29,14 @@ public class OrgNameIsExistParam implements Serializable {
 
     public void setSearchType(String searchType) {
         this.searchType = searchType;
+    }
+
+    public String getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
     }
 
     public String getOrgName() {
@@ -41,6 +51,7 @@ public class OrgNameIsExistParam implements Serializable {
     public String toString() {
         return "OrgNameIsExistParam{" +
                 "searchType='" + searchType + '\'' +
+                ", orgId='" + orgId + '\'' +
                 ", orgName='" + orgName + '\'' +
                 '}';
     }

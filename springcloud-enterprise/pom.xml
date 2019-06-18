@@ -89,10 +89,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        pay
+                        service_org
                     </contexts>
                     <tableNames>
-                        tb_pay_account_book
+                        tb_service_org_temp
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

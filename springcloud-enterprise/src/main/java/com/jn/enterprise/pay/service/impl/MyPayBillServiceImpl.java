@@ -1037,7 +1037,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         if (sendStatus) {
             logger.info("[白下智慧园区]发送邮件成功");
         } else {
-            logger.error("[白下智慧园区]发送you'jin'a失败");
+            logger.error("[白下智慧园区]发送邮件失败");
         }
     }
 }

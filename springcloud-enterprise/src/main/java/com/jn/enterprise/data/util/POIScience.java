@@ -1,8 +1,8 @@
 package com.jn.enterprise.data.util;
 
-
 import com.jn.enterprise.data.model.CompanyTree;
 import com.jn.enterprise.data.tool.GetCompanyTree;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  *
@@ -26,10 +25,8 @@ import java.util.Map;
  */
 public class POIScience {
 
-
-
-    public  void getScienceTable(List<CompanyTree> list,  HttpServletRequest req,
-                                       HttpServletResponse resp)throws IOException {
+    public  void getScienceTable(List<CompanyTree> list, HttpServletRequest req,
+                                 HttpServletResponse resp)throws IOException{
 
         String fileName = DateFormatUtils.format(new Date(),"yyyyMMddHHmm") +".xls"; //设置文件名
         resp.setHeader("Content-disposition", "attachment;filename=" + new String(fileName.getBytes("gb2312"), "ISO8859-1"));//设置文件头编码格式
@@ -37,9 +34,8 @@ public class POIScience {
         resp.setDateHeader("Expires", 0);//设置日期头
 
         GetCompanyTree getCompanyTree = new GetCompanyTree();
-        List<CompanyTree> treeList = getCompanyTree.bulidscience(list);
-        List<Map> treeList2 = getCompanyTree.bulid(list);
-        List<CompanyTree> companyTreeslist = getCompanyTree.bulidlist(treeList);
+        List<CompanyTree> treeList = getCompanyTree.listToTree(list);
+        List<CompanyTree> companyTreeslist = getCompanyTree.treeToList(treeList);
         //构建HSSFWorkBook
         HSSFWorkbook wb = new HSSFWorkbook();
         // 生成一个样式
@@ -54,10 +50,12 @@ public class POIScience {
         for (CompanyTree tree:companyTreeslist
              ) {
             String d1 = tree.getDATA();
-            String[] d2 = d1.split(";");
-            int nlen = d2.length;
-            if(nlen>length){
-                length=nlen;
+            if(StringUtils.isNotBlank(d1)){
+                String[] d2 = d1.split(";");
+                int nlen = d2.length;
+                if(nlen>length){
+                    length=nlen;
+            }
             }
         }
         int lent = 0;
@@ -72,15 +70,22 @@ public class POIScience {
         for(int i=0;i<companyTreeslist.size();i++) {
             //得到指标值的长度
             String fa = companyTreeslist.get(i).getDATA();
-            String[] fa2 = fa.split(";");
-            int len = fa2.length;
-            //指标名称
-            Cell cell = headrow1.createCell(i);
-            cell.setCellStyle(headstyle);
-            cell.setCellValue(companyTreeslist.get(i).getTargetname());
-            //填充值
-            for (int k=0;k<len;k++){
-                row[k].createCell(lent).setCellValue(fa2[k]);
+            if(StringUtils.isNotBlank(fa)){
+                String[] fa2 = fa.split(";");
+                int len = fa2.length;
+                //指标名称
+                Cell cell = headrow1.createCell(i);
+                cell.setCellStyle(headstyle);
+                cell.setCellValue(companyTreeslist.get(i).getTargetname());
+                //填充值
+                for (int k=0;k<len;k++){
+                    row[k].createCell(lent).setCellValue(fa2[k]);
+                }
+            }else{
+                //指标名称
+                Cell cell = headrow1.createCell(i);
+                cell.setCellStyle(headstyle);
+                cell.setCellValue(companyTreeslist.get(i).getTargetname());
             }
             lent++;
         }
@@ -89,9 +94,5 @@ public class POIScience {
         resp.getOutputStream().close();
         wb.close();
     }
-
-
-
-
 
 }

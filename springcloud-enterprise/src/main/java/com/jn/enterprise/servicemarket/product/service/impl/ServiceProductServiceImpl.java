@@ -494,7 +494,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         //产品编号
         String serialNumber = "";
         String commentsType = ProductConstantEnum.PRODUCT_COMMENT_TYPE.getCode();
-        String featureType = ProductConstantEnum.PRODUCT_FEATURE_TYPE.getMessage();
+        String featureType = ProductConstantEnum.PRODUCT_FEATURE_TYPE.getCode();
         Date date = new Date();
         String dataStr = DateUtils.formatDate(date,"yyyyMMddHHmmss");
         if(productType.equals(featureType)){

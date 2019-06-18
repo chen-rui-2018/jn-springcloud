@@ -7,6 +7,7 @@
     <result column="park_name" jdbcType="VARCHAR" property="parkName" />
     <result column="main_picture" jdbcType="VARCHAR" property="mainPicture" />
     <result column="minor_picture" jdbcType="VARCHAR" property="minorPicture" />
+    <result column="short_introduce" jdbcType="VARCHAR" property="shortIntroduce" />
     <result column="park_state" jdbcType="VARCHAR" property="parkState" />
     <result column="is_enter" jdbcType="VARCHAR" property="isEnter" />
     <result column="record_status" jdbcType="VARCHAR" property="recordStatus" />
@@ -77,7 +78,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id_, parent_id, park_name, main_picture, minor_picture, park_state, is_enter, record_status, 
+    id_, parent_id, park_name, main_picture, minor_picture, park_state,short_introduce,is_enter, record_status,
     creator_account, created_time, modifier_account, modified_time
   </sql>
   <sql id="Blob_Column_List">
@@ -133,12 +134,12 @@
   </delete>
   <insert id="insert" parameterType="com.jn.park.park.entity.TbPark">
     insert into tb_park (id_, parent_id, park_name, 
-      main_picture, minor_picture, park_state, 
+      main_picture, minor_picture, park_state,short_introduce,
       is_enter, record_status, creator_account, 
       created_time, modifier_account, modified_time, 
       park_introduce)
     values (#{id,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, #{parkName,jdbcType=VARCHAR}, 
-      #{mainPicture,jdbcType=VARCHAR}, #{minorPicture,jdbcType=VARCHAR}, #{parkState,jdbcType=VARCHAR}, 
+      #{mainPicture,jdbcType=VARCHAR}, #{minorPicture,jdbcType=VARCHAR}, #{parkState,jdbcType=VARCHAR},#{shortIntroduce,jdbcType=VARCHAR},
       #{isEnter,jdbcType=VARCHAR}, #{recordStatus,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, 
       #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
       #{parkIntroduce,jdbcType=LONGVARCHAR})
@@ -160,6 +161,9 @@
       </if>
       <if test="minorPicture != null">
         minor_picture,
+      </if>
+      <if test="shortIntroduce != null">
+        short_introduce,
       </if>
       <if test="parkState != null">
         park_state,
@@ -201,6 +205,9 @@
       </if>
       <if test="minorPicture != null">
         #{minorPicture,jdbcType=VARCHAR},
+      </if>
+      <if test="shortIntroduce != null">
+        #{shortIntroduce,jdbcType=VARCHAR},
       </if>
       <if test="parkState != null">
         #{parkState,jdbcType=VARCHAR},
@@ -252,6 +259,9 @@
       <if test="record.minorPicture != null">
         minor_picture = #{record.minorPicture,jdbcType=VARCHAR},
       </if>
+      <if test="record.shortIntroduce != null">
+        short_introduce = #{record.shortIntroduce,jdbcType=VARCHAR},
+      </if>
       <if test="record.parkState != null">
         park_state = #{record.parkState,jdbcType=VARCHAR},
       </if>
@@ -288,6 +298,7 @@
       park_name = #{record.parkName,jdbcType=VARCHAR},
       main_picture = #{record.mainPicture,jdbcType=VARCHAR},
       minor_picture = #{record.minorPicture,jdbcType=VARCHAR},
+      short_introduce = #{shortIntroduce,jdbcType=TIMESTAMP},
       park_state = #{record.parkState,jdbcType=VARCHAR},
       is_enter = #{record.isEnter,jdbcType=VARCHAR},
       record_status = #{record.recordStatus,jdbcType=VARCHAR},
@@ -307,6 +318,7 @@
       park_name = #{record.parkName,jdbcType=VARCHAR},
       main_picture = #{record.mainPicture,jdbcType=VARCHAR},
       minor_picture = #{record.minorPicture,jdbcType=VARCHAR},
+      short_introduce = #{shortIntroduce,jdbcType=TIMESTAMP},
       park_state = #{record.parkState,jdbcType=VARCHAR},
       is_enter = #{record.isEnter,jdbcType=VARCHAR},
       record_status = #{record.recordStatus,jdbcType=VARCHAR},
@@ -329,6 +341,9 @@
       </if>
       <if test="mainPicture != null">
         main_picture = #{mainPicture,jdbcType=VARCHAR},
+      </if>
+      <if test="shortIntroduce != null">
+        short_introduce = #{shortIntroduce,jdbcType=VARCHAR},
       </if>
       <if test="minorPicture != null">
         minor_picture = #{minorPicture,jdbcType=VARCHAR},
@@ -366,6 +381,7 @@
       park_name = #{parkName,jdbcType=VARCHAR},
       main_picture = #{mainPicture,jdbcType=VARCHAR},
       minor_picture = #{minorPicture,jdbcType=VARCHAR},
+      short_introduce = #{shortIntroduce,jdbcType=TIMESTAMP},
       park_state = #{parkState,jdbcType=VARCHAR},
       is_enter = #{isEnter,jdbcType=VARCHAR},
       record_status = #{recordStatus,jdbcType=VARCHAR},
@@ -388,7 +404,8 @@
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
-      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      short_introduce = #{shortIntroduce,jdbcType=TIMESTAMP}
     where id_ = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

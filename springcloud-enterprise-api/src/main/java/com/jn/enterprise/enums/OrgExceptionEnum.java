@@ -35,6 +35,8 @@ public enum OrgExceptionEnum  implements CodeAndMsg {
     ORG_INFO_NOT_EXIST("5020522","机构信息在系统中不存在或已失效"),
     ORG_INFO_HAS_EXIST("5020523","当前用户信息已存在，请不要重复进行机构认证"),
     ORG_HONOR_NAME_NOT_NULL("5020524","机构荣誉资质名称不能为空"),
+    ORG_NAME_NOT_NULL("5020525","机构名称不能为空"),
+    SEARCH_TYPE_NOT_ALLOW("5020526","机构名称查询类型在系统中不存在"),
     ;
 
     /**

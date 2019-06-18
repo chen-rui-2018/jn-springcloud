@@ -2,10 +2,8 @@ package com.jn.park.notice.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.apache.poi.ss.formula.functions.T;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * @Author: tangry
@@ -32,15 +30,14 @@ public class IntegrationListVo implements Serializable {
     @ApiModelProperty("是否置顶")
     private String isStick;
 
+    @ApiModelProperty("类型（1：园区公告 2：政策指南 3：热门活动）")
+    private String type;
+
     @ApiModelProperty("创建时间")
     private String createdTime;
 
     @ApiModelProperty("最新更新时间")
     private String modifiedTime;
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
 
     public String getId() {
         return id;
@@ -82,6 +79,14 @@ public class IntegrationListVo implements Serializable {
         this.isStick = isStick;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public String getCreatedTime() {
         return createdTime;
     }
@@ -106,6 +111,7 @@ public class IntegrationListVo implements Serializable {
                 ", intro='" + intro + '\'' +
                 ", noticeBiref='" + noticeBiref + '\'' +
                 ", isStick='" + isStick + '\'' +
+                ", type='" + type + '\'' +
                 ", createdTime='" + createdTime + '\'' +
                 ", modifiedTime='" + modifiedTime + '\'' +
                 '}';

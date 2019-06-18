@@ -245,7 +245,6 @@
             ])
           // 注册滚动加载历史消息事件
           this.checkHistoryMessage()
-          // this.resetWindowScrollTop()
         }
       },
       scrollToBottom() {
@@ -266,8 +265,29 @@
           this.body.classList.add('h-100')
         }
       },
-      resetWindowScrollTop() {
+      androidInputBugFix(){
+        // .container 设置了 overflow 属性, 导致 Android 手机下输入框获取焦点时, 输入法挡住输入框的 bug
+        // 解决方法:
+        // 0. .container 去掉 overflow 属性, 但此 demo 下会引发别的问题
+        // 1. 参考 http://stackoverflow.com/questions/23757345/android-does-not-correctly-scroll-on-input-focus-if-not-body-element
+        //    Android 手机下, input 或 textarea 元素聚焦时, 主动滚一把
+        if (/Android/gi.test(navigator.userAgent)) {
+          window.addEventListener('resize', function () {
+            // alert('触发了resize')
+            if (document.activeElement.tagName == 'INPUT' || document.activeElement.tagName == 'TEXTAREA') {
+              window.setTimeout(function () {
+                document.activeElement.scrollIntoViewIfNeeded();
+              }, 200);
+            }
+          })
+        }
+      },
+      iosInputBugFix() {
+        /**
+         * 修复页面在ios下被键盘定期后的错位bug
+         */
         window.addEventListener('blur', () => {
+          // alert('blur');
           setTimeout(() => {
             if (document.hasFocus()) {
               let activeElName = document.activeElement.tagName.toLowerCase();
@@ -276,19 +296,9 @@
               }
             }
             window.scrollTo(0, document.documentElement.clientHeight);
-          }, 20)
-        }, true)
+          }, 250)
 
-        // 输入文字的时候，安卓浏览键盘默认不会把聚焦的输入框顶起，这里把输入框滚上去
-        if(/Android 4\.[0-3]/.test(navigator.appVersion)){
-          window.addEventListener("resize", function(){
-            if(document.activeElement.tagName=="INPUT"){
-              window.setTimeout(function(){
-                document.activeElement.scrollIntoViewIfNeeded();
-              },0);
-            }
-          })
-        }
+        }, true);
       },
       getFromUserInfo() {
         return new Promise(resolve => {

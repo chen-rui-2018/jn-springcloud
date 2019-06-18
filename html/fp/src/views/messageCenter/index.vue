@@ -106,7 +106,7 @@ $bg-gray: #f3f3f3;
           overflow: auto;
           position: absolute;
           -webkit-overflow-scrolling: touch;
-          padding: 16px 16px 50px;
+          padding: 16px 16px 54px;
           box-sizing: border-box;
           background-color: #fff;
         }

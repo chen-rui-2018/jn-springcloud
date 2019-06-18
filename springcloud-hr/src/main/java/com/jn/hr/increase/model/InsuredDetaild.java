@@ -58,24 +58,27 @@ public class InsuredDetaild extends BaseRowModel implements Serializable{
     private String cityName;
 
 	@ApiModelProperty(value = "个人社保费")
-	@ExcelProperty(value = "个人社保费", index = 4)
     private Double personalSocialSecurity;
 
 	@ApiModelProperty(value = "公司社保费")
-	@ExcelProperty(value = "公司社保费", index = 5)
     private Double companySocialSecurity;
 
 	@ApiModelProperty(value = "个人公积金费")
-	@ExcelProperty(value = "个人公积金费", index = 6)
     private Double personalAccumulationFund;
 
 	@ApiModelProperty(value = "公司公积金费")
-	@ExcelProperty(value = "公司公积金费", index = 7)
     private Double companyAccumulationFund;
 
 	@ApiModelProperty(value = "方案id")
-	@ExcelProperty(value = "方案id", index = 8)
     private String schemeId;
+	
+	@ApiModelProperty(value = "方案名称")
+	@ExcelProperty(value = "方案名称", index = 4)
+    private String schemeName;
+	
+	@ApiModelProperty(value = "默认基数")
+	@ExcelProperty(value = "默认基数", index = 5)
+    private Integer defaultCardinalNumber;
 
 	@ApiModelProperty(value = "是否有效（1：有效，2：无效）")
     private Byte isEffective;
@@ -122,7 +125,22 @@ public class InsuredDetaild extends BaseRowModel implements Serializable{
 	//部门人数
 	List<SalaryKeyValue> departmentNumber;
 	
-	
+	public Integer getDefaultCardinalNumber() {
+		return defaultCardinalNumber;
+	}
+
+	public void setDefaultCardinalNumber(Integer defaultCardinalNumber) {
+		this.defaultCardinalNumber = defaultCardinalNumber;
+	}
+
+	public String getSchemeName() {
+		return schemeName;
+	}
+
+	public void setSchemeName(String schemeName) {
+		this.schemeName = schemeName;
+	}
+
 	public Date getYearMonth() {
 		return yearMonth;
 	}

@@ -89,11 +89,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        hatch
+                        activity
                     </contexts>
                     <tableNames>
-                        tb_parking_space_rental,
-                        tb_parking_preferential
+                        tb_activity
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

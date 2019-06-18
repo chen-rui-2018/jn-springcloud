@@ -58,6 +58,13 @@ public interface FinanceExpensesDao {
      */
     void saveMarkData(Map<String,Object> map);
 
+    /**
+     * 判断流水号是否存在
+     * @param costId
+     * @return
+     */
+    int isExist(@Param("costId") String costId);
+
 
     /**
      * 查询需要保存到月表中的数据

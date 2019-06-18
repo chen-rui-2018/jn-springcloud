@@ -61,18 +61,35 @@
       </el-col>
     </el-row>
     <el-row :gutter="32" style="margin-top: 20px;">
-      <el-col :xs="40" :sm="40" :lg="11">
+      <el-col :xs="24" :sm="24" :lg="8">
         <div class="chart-wrapper">
-          <pie-chart :list-data="salaryCompositionList" title="企业工资组成占比图"/>
+          <pie-chart :list-data="baseSalaryCompositionList" title="园区员工基础工资占比图"/>
         </div>
       </el-col>
-      <el-col :xs="40" :sm="40" :lg="11">
+      <el-col :xs="24" :sm="24" :lg="8">
+        <div class="chart-wrapper">
+          <pie-chart :list-data="subsidySalaryCompositionList" title="园区员工各项补贴占比图"/>
+        </div>
+      </el-col>
+      <el-col :xs="24" :sm="24" :lg="8">
+        <div class="chart-wrapper">
+          <pie-chart :list-data="socialSecurityAccumulationFundCompositionList" title="园区员工社保公积金缴纳占比图"/>
+        </div>
+      </el-col>
+    </el-row>
+    <el-row :gutter="32" style="margin-top: 20px;">
+      <el-col :xs="24" :sm="24" :lg="8">
+        <div class="chart-wrapper">
+          <pie-chart :list-data="deductMoneyCompositionList" title="园区员工各项扣款占比图"/>
+        </div>
+      </el-col>
+      <el-col :xs="24" :sm="24" :lg="8">
         <div class="chart-wrapper">
           <pie-chart :list-data="laborCostsList" title="部门人力成本TOP7比图"/>
         </div>
       </el-col>
     </el-row>
-    <el-col :xs="40" :sm="40" :lg="24">
+    <el-col :xs="24" :sm="24" :lg="24">
       <div class="chart-wrapper">
         <bar-chart :list-data="percapitaWagePeopleList " title="部门人均工资TOP9统计图"/>
       </div>
@@ -96,12 +113,16 @@ export default {
   },
   data() {
     return {
-      salaryCompositionList: [],
+      baseSalaryCompositionList: [],
+      subsidySalaryCompositionList: [],
+      socialSecurityAccumulationFundCompositionList: [],
+      deductMoneyCompositionList: [],
       laborCostsList: [],
       percapitaWagePeopleList: {
         percapitaWage: [],
         peopleNo: []
       },
+      color: ['#f9a84f', '#e2d859', '#b5dd66', '#aaf7b8', '#8fdcff', '#7b97ff', '#9473ff', '#BA55D3', '#DDA0DD', '#AB82FF', '#87CEEB', '#B0E2FF'],
       salaryAnalysis: {
         number: 0,
         realWage: 0,
@@ -148,8 +169,46 @@ export default {
     initList() {
       api('hr/SalaryWelfareManagement/salaryAnalysis', this.listQuery).then(res => {
         if (res.data.code === '0000') {
-          this.salaryCompositionList = res.data.data.salaryComposition
-          this.laborCostsList = res.data.data.laborCosts
+          this.baseSalaryCompositionList = []
+          this.subsidySalaryCompositionList = []
+          this.socialSecurityAccumulationFundCompositionList = []
+          this.deductMoneyCompositionList = []
+          this.laborCostsList = []
+          const baseSalaryCompositionListD = res.data.data.basicWageProportion // 基础工资占比
+          for (let i = 0; i < baseSalaryCompositionListD.length; i++) {
+            const item = baseSalaryCompositionListD[i]
+            item.itemStyle = { 'normal': { 'color': this.color[i] }}
+            this.baseSalaryCompositionList.push(item)
+          }
+          const subsidySalaryCompositionListD = res.data.data.subsidyProportion // 各项补贴占比
+          for (let i = 0; i < subsidySalaryCompositionListD.length; i++) {
+            const item = subsidySalaryCompositionListD[i]
+            item.itemStyle = { 'normal': { 'color': this.color[i] }}
+            this.subsidySalaryCompositionList.push(item)
+          }
+
+          const socialSecurityAccumulationFundCompositionListD = res.data.data.socialSecurityProportion // 社保公积金缴纳占比
+          for (let i = 0; i < socialSecurityAccumulationFundCompositionListD.length; i++) {
+            const item = socialSecurityAccumulationFundCompositionListD[i]
+            item.itemStyle = { 'normal': { 'color': this.color[i] }}
+            this.socialSecurityAccumulationFundCompositionList.push(item)
+          }
+
+          const deductMoneyCompositionListD = res.data.data.deductionProportion // 各项扣款
+          for (let i = 0; i < deductMoneyCompositionListD.length; i++) {
+            const item = deductMoneyCompositionListD[i]
+            item.itemStyle = { 'normal': { 'color': this.color[i] }}
+            this.deductMoneyCompositionList.push(item)
+          }
+
+          const laborCostsListD = res.data.data.laborCosts
+
+          for (let i = 0; i < laborCostsListD.length; i++) {
+            const item = laborCostsListD[i]
+            item.itemStyle = { 'normal': { 'color': this.color[i] }}
+            this.laborCostsList.push(item)
+          }
+
           this.percapitaWagePeopleList.percapitaWage = res.data.data.perpleCapita
           this.percapitaWagePeopleList.peopleNo = res.data.data.departmentNumber
           this.salaryAnalysis.number = res.data.data.number

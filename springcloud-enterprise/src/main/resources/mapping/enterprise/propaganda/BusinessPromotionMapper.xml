@@ -80,7 +80,7 @@
         <if test="bpp.approvalStatus!=7"><!--不是已撤销-->
             and sp.record_status=1
         </if>
-        order by sp.sort,sp.created_time desc
+        order by sp.created_time desc,sp.sort
     </select>
 
     <!--企业宣传详情-->

@@ -32,7 +32,7 @@
           <img v-if="imgs.insuredNumberDownPng" src="@/assets/images/down.png" style="height: 20px;width: 10px;" alt="图片">
         </span>
       </div></el-col>
-      <el-col :span="6"><div class="grid-content bg-purple-light">
+      <el-col v-show="socialSecurityFlag" :span="6"><div class="grid-content bg-purple-light">
         <span style="float: left;height: 100%;line-height: 15px;display:  inline-block;">
           <p style="color: #666666">社保费用</p>
           <p>{{ statisticalInfo.socialSecurityCost }}元</p>
@@ -43,7 +43,7 @@
           <img v-if="imgs.socialSecurityDownPng" src="@/assets/images/down.png" style="height: 20px;width: 10px;" alt="图片">
         </span>
       </div></el-col>
-      <el-col :span="6"><div class="grid-content bg-purple">
+      <el-col v-show="accumulationFundFlag" :span="6"><div class="grid-content bg-purple">
         <span style="float: left;height: 100%;line-height: 15px;display:  inline-block;">
           <p style="color: #666666">公积金</p>
           <p>{{ statisticalInfo.accumulationFund }}元</p>

@@ -44,6 +44,10 @@ public class IncreaseDetailed implements Serializable{
 	@ApiModelProperty(value = "参保人数")
 	private Integer number;
 
+	private String schemeId;
+
+	private String schemeName;
+
 	public Integer getNumber() {
 		return number;
 	}
@@ -115,5 +119,20 @@ public class IncreaseDetailed implements Serializable{
 	public void setProjectType(Byte projectType) {
 		this.projectType = projectType;
 	}
-    
+
+	public String getSchemeId() {
+		return schemeId;
+	}
+
+	public void setSchemeId(String schemeId) {
+		this.schemeId = schemeId;
+	}
+
+	public String getSchemeName() {
+		return schemeName;
+	}
+
+	public void setSchemeName(String schemeName) {
+		this.schemeName = schemeName;
+	}
 }

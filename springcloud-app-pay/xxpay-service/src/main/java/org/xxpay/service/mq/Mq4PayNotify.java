@@ -100,8 +100,9 @@ public class Mq4PayNotify extends BaseMq{
     @RabbitListener(queues = MqConfig.PAY_NOTIFY_QUEUE_NAME)
     @RabbitHandler
     public void receive(String msg) {
+        _log.info("<==开始MQ支付结果通知业务系统==>");
         String logPrefix = "【商户支付通知】";
-        _log.info("do notify task, msg={}", msg);
+        _log.info("通知参数 msg={}", msg);
         JSONObject msgObj = JSON.parseObject(msg);
         String orderId = msgObj.getString("orderId");
         //http回调通知地址
@@ -114,6 +115,7 @@ public class Mq4PayNotify extends BaseMq{
 
         if(StringUtils.isEmpty(respUrl) && (StringUtils.isEmpty(serviceId) || StringUtils.isEmpty(serviceUrl))) {
             _log.warn("{}商户通知httpURL 或者 springCloud回调 serviceId 和 serviceUrl 为空,respUrl={},serviceId={},serviceUrl={}", logPrefix, respUrl,serviceId,serviceUrl);
+            _log.info("<==MQ支付结果通知业务系统结束==>");
             return;
         }
 
@@ -121,7 +123,7 @@ public class Mq4PayNotify extends BaseMq{
             _log.info("==>MQ支付结果通知业务系统开始[orderId：{}][count：{}][time：{}]", orderId, count, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
             //回调通知接收的结果（success 成功 ，非success 如：fail 则会继续隔段时间回调）
             //根据回调地址进行通知业务系统，如果存在http方式回调 则不用springCloud方式
-            _log.info("{}前参数respUrl={},serviceId={},serviceUrl={}",logPrefix,respUrl,serviceId,serviceUrl);
+            _log.info("{}参数respUrl={},serviceId={},serviceUrl={}",logPrefix,respUrl,serviceId,serviceUrl);
             String noticeResult = callbackNotice(msgObj);
             _log.info("<==MQ支付结果通知业务系统结束[orderId：{}][count：{}][time：{}]   通知结果：{}", orderId, count, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()),noticeResult);
 
@@ -149,6 +151,7 @@ public class Mq4PayNotify extends BaseMq{
                 }catch (Exception e) {
                     _log.error(e, "修改通知次数异常");
                 }
+                _log.info("<==MQ支付结果通知业务系统处理完成==>");
                 return ; // 通知成功结束
             }else {
                 // 通知失败，延时再通知
@@ -166,15 +169,18 @@ public class Mq4PayNotify extends BaseMq{
                 //通知次数大于6次则不再通知
                 if (cnt > 5) {
                     _log.info("notify count>5 stop. url={},serviceId={},serviceUrl={}", respUrl,serviceId,serviceUrl);
+                    _log.info("<==MQ支付结果通知业务系统结束==>");
                     return ;
                 }
                 msgObj.put("count", cnt);
                 this.send(msgObj.toJSONString(), cnt * 60 * 1000);
             }
             _log.warn("notify failed. url={},serviceId={},serviceUrl={} response body:{}", respUrl,serviceId,serviceUrl, noticeResult);
+
         } catch(Exception e) {
             _log.info("<==MQ通知业务系统结束[orderId：{}][count：{}][time：{}]", orderId, count, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
             _log.error(e, "notify exception. url={} ,serviceId={},serviceUrl={}", respUrl,serviceId,serviceUrl);
+            _log.info("<==MQ支付结果通知业务系统结束==>");
         }
     }
 }

@@ -32,6 +32,10 @@ public class ParkDetailsVo implements Serializable {
     @ApiModelProperty(value = "创建者账号")
     private String creatorAccount;
 
+    @ApiModelProperty(value = "园区简短介绍（列表页显示）")
+    private String shortIntroduce;
+
+
     @ApiModelProperty(value = "创建时间")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
@@ -110,5 +114,13 @@ public class ParkDetailsVo implements Serializable {
 
     public void setMinorPicture(String minorPicture) {
         this.minorPicture = minorPicture;
+    }
+
+    public String getShortIntroduce() {
+        return shortIntroduce;
+    }
+
+    public void setShortIntroduce(String shortIntroduce) {
+        this.shortIntroduce = shortIntroduce;
     }
 }

@@ -7,12 +7,16 @@ import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.enterprise.utils.IBPSFileUtils;
 import com.jn.park.enums.PolicyInfoExceptionEnum;
-import com.jn.park.policy.dao.*;
+import com.jn.park.policy.dao.PolicyCenterMapper;
+import com.jn.park.policy.dao.TbPolicyClassMapper;
+import com.jn.park.policy.dao.TbPolicyLevelMapper;
+import com.jn.park.policy.dao.TbPolicyMapper;
 import com.jn.park.policy.entity.*;
 import com.jn.park.policy.enums.PolicyTableTypeEnum;
 import com.jn.park.policy.model.*;
 import com.jn.park.policy.service.PolicyCenterService;
 import com.jn.park.policy.vo.PolicyDiagramDetailsVo;
+import com.jn.park.utils.HtmlUtils;
 import com.jn.system.log.annotation.ServiceLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -172,7 +176,7 @@ public class PolicyCenterServiceImpl implements PolicyCenterService {
                     policy.setPolicyDiagramUrl(IBPSFileUtils.getFilePath(policy.getPolicyDiagramUrl()));
                 }
                 //设置简要内容
-                String briefContent=policy.getPolicyContent().replaceAll("</?[^>]+>","");
+                String briefContent= HtmlUtils.getBriefIntroduction(policy.getPolicyContent());
                 if(StringUtils.isNotBlank(briefContent)){
                     String briefSummaries=briefContent.substring(0,briefContent.length()>100?100:briefContent.length());
                     briefSummaries=briefContent.length()>100?briefSummaries+"......":briefSummaries;

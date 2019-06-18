@@ -56,8 +56,6 @@
             type="textarea"
             :rows="1"
             :autosize="{ minRows: 1, maxRows: 4 }"
-            @focus="scrollToBottom"
-            @blur="scrollToTop"
             placeholder="请输入内容"
             class="app-input"
           />
@@ -245,6 +243,8 @@
             ])
           // 注册滚动加载历史消息事件
           this.checkHistoryMessage()
+          this.androidInputBugFix()
+          this.iosInputBugFix()
         }
       },
       scrollToBottom() {
@@ -565,8 +565,9 @@
         padding: 20px;
         margin-top: 2px;
         background-color: #fff;
+        padding: 16px 16px 54px;
         overflow: auto;
-
+        -webkit-overflow-scrolling: touch;
         .date-tips {
           display: inline-block;
           width: 90px;

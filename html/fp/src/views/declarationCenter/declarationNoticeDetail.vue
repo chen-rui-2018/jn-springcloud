@@ -48,7 +48,7 @@
       <!-- 在线预约弹窗 -->
       <div class="online_appointment">
         <el-dialog title="在线预约"
-        :append-to-body="true"
+        :modal-append-to-body="false"
         :lock-scroll="false" :visible.sync="appointmentVisible" width="616px">
           <el-form :model="appointment" label-position="left" label-width="100px" :rules="rules">
             <el-form-item label="预约项："  prop="appointmentItemName"> 

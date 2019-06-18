@@ -152,8 +152,8 @@
                   </div>
                 </div>
               </div>
-              <div v-if="park.loadMore && park.loading" class="tc-row">正在加载...</div>
-              <div v-if="park.loadMore && park.noMore" class="tc-row">已加载完所有信息</div>
+              <now-loading v-show="park.loadMore && park.loading"></now-loading>
+              <no-more v-show="park.loadMore && park.noMore"></no-more>
             </div>
             <div class="no-more-row" v-else>暂无相关信息</div>
             <div
@@ -175,11 +175,15 @@
 import Swiper from 'swiper'
 import moreBtn from './common/moreBtn'
 import tagBtn from './common/tagBtn'
+import nowLoading from '@/views/common/nowLoading'
+import noMore from '@/views/common/noMore'
 export default {
   name: 'Investment',
   components: {
     moreBtn,
-    tagBtn
+    tagBtn,
+    nowLoading,
+    noMore
   },
   data () {
     return {
@@ -413,6 +417,7 @@ export default {
       align-items: center;
       padding: 31px 40px;
       background-color: #fff;
+      cursor: pointer;
     }
     .card-list-poster {
       background-size: cover;

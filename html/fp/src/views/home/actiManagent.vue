@@ -121,7 +121,7 @@ export default {
     this.getuserAccount();
   },
   methods: {
-    cancelApply(index,row) {
+    cancelApply(index, row) {
       //取消报名
       this.$confirm("是否取消报名?", "提示", {
         confirmButtonText: "确定",
@@ -135,24 +135,21 @@ export default {
             data: {
               activityId: row.id
             },
-            dataFlag:true,
+            dataFlag: true,
             callback: function(res) {
               if (res.code == "0000") {
-                this.$message({
+                _this.$message({
                   type: "success",
                   message: "删除成功!"
                 });
-                _this.tableData.splice(index, 1)
+                _this.tableData.splice(index, 1);
+              } else {
+                _this.$message.error(res.result);
               }
             }
           });
         })
-        .catch(() => {
-          this.$message({
-            // type: "info",
-            // message: "已取消删除"
-          });
-        });
+        .catch(() => {});
     },
     handleSea() {
       //搜索

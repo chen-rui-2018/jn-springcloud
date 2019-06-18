@@ -34,7 +34,7 @@
             <i class="el-icon-arrow-up" v-else @click="flag3 = !flag3"></i>
           </div>
         </div>
-        <div class="nav1 clearfix">
+        <!-- <div class="nav1 clearfix">
           <div class="nav1Tit fl">企业性质：</div>
           <ul class="nav1Ul fl clearfix" style="width:auto">
             <li :class="{'active1':filterFlag3 == ''}" @click="handleFilter3('')">不限</li>
@@ -46,7 +46,7 @@
             <i class="el-icon-arrow-down" v-if="flag4" @click="flag4 = !flag4"></i>
             <i class="el-icon-arrow-up" v-else @click="flag4 = !flag4"></i>
           </div>
-        </div>
+        </div> -->
         <div class="nav1 nav2 mainColor pointer" style="color:#00a041" @click="showFlag=!showFlag">
           收起
           <i class="el-icon-arrow-up" style="color:#00a041"></i>
@@ -247,7 +247,7 @@ export default {
         businessType: "technology_finance",
         industrySector: _this.industrySector,
         developmentStage: _this.developmentStage,
-        companyNature: _this.companyNature,
+        // companyNature: _this.companyNature,
         page: _this.page,
         rows: _this.row,
         sortTypes: _this.sortTypes,

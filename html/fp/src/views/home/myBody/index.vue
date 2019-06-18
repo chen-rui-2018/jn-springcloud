@@ -219,14 +219,27 @@ export default {
                    url: "getMyOrgInfo",
                    data:{account :this.userAccount},
         callback: function(res) {
-          console.log(res);
           if (res.data) {
             _this.orgName = res.data.orgDetailVo.orgName;
             _this.orgCode = res.data.orgDetailVo.orgCode;
             _this.orgId = res.data.orgDetailVo.orgId;
             _this.orgRegisterTime = res.data.orgDetailVo.orgRegisterTime;
             _this.orgSpeciality = res.data.orgDetailVo.orgSpeciality;
-            _this.orgHobby = res.data.orgDetailVo.orgHobby;
+              let  orgHobby1=[]
+              let  orgHobby2=[]
+            if(res.data.orgDetailVo.developmentStage){
+               res.data.orgDetailVo.developmentStage.forEach(v=>{
+                  orgHobby1.push(v.orgTraitName)
+               })
+              orgHobby1=Array.from(new Set( orgHobby1))
+            }
+              if(res.data.orgDetailVo.industrySector){
+               res.data.orgDetailVo.industrySector.forEach(v=>{
+                  orgHobby2.push(v.orgTraitName)
+               })
+              orgHobby2=Array.from(new Set( orgHobby2))
+            }
+            _this.orgHobby=orgHobby2.join(',')+','+ orgHobby1.join(',')
             _this.orgSynopsis = res.data.orgDetailVo.orgSynopsis;
             _this.orgBusiness = res.data.orgDetailVo.orgBusiness;
             _this.staffCount = res.data.orgDetailVo.staffCount;
@@ -275,11 +288,6 @@ export default {
 
 <style lang="scss" >
 .myBody {
-  // .el-dialog{
-  //   height: 680px;
-  //   overflow: auto;
-  // }
-
   .mr {
     margin-right: 36px;
   }

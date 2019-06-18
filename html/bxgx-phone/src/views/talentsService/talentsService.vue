@@ -268,10 +268,9 @@ export default {
                   line-height: 29px;
                   margin-top: 18px;
                   line-height: 26px;
-                  display: -webkit-box;
-                  -webkit-box-orient: vertical;
-                  -webkit-line-clamp: 2;
                   overflow: hidden;
+                  white-space: nowrap;
+                  text-overflow: ellipsis;
                   height: 48px;
 
                 }
@@ -420,10 +419,9 @@ export default {
           .talentsService_cont_left{
             width: 92%;
             .cont_title{
-              display: -webkit-box;
-              -webkit-box-orient: vertical;
-              -webkit-line-clamp: 1;
               overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
               font-size: 26px;
               padding-top: 37px;
               line-height: 28px;

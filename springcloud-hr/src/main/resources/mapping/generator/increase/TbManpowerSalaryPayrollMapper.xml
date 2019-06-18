@@ -3,26 +3,66 @@
 <mapper namespace="com.jn.hr.increase.dao.TbManpowerSalaryPayrollMapper">
   <resultMap id="BaseResultMap" type="com.jn.hr.increase.entity.TbManpowerSalaryPayroll">
     <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="serial_number" jdbcType="VARCHAR" property="serialNumber" />
+    <result column="issuing_unit" jdbcType="VARCHAR" property="issuingUnit" />
     <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="job_number" jdbcType="VARCHAR" property="jobNumber" />
     <result column="department" jdbcType="VARCHAR" property="department" />
+    <result column="id_card" jdbcType="VARCHAR" property="idCard" />
+    <result column="personnel_category" jdbcType="VARCHAR" property="personnelCategory" />
+    <result column="deserve_wage" jdbcType="DOUBLE" property="deserveWage" />
     <result column="basic_wage" jdbcType="DOUBLE" property="basicWage" />
     <result column="seniority_wage" jdbcType="DOUBLE" property="seniorityWage" />
-    <result column="technical_allowance" jdbcType="DOUBLE" property="technicalAllowance" />
-    <result column="duty_allowance" jdbcType="DOUBLE" property="dutyAllowance" />
-    <result column="work_subsidy" jdbcType="DOUBLE" property="workSubsidy" />
-    <result column="education_allowance" jdbcType="DOUBLE" property="educationAllowance" />
     <result column="professional_title_allowance" jdbcType="DOUBLE" property="professionalTitleAllowance" />
+    <result column="technical_allowance" jdbcType="DOUBLE" property="technicalAllowance" />
+    <result column="education_allowance" jdbcType="DOUBLE" property="educationAllowance" />
+    <result column="work_allowance" jdbcType="DOUBLE" property="workAllowance" />
+    <result column="duty_allowance" jdbcType="DOUBLE" property="dutyAllowance" />
     <result column="special_subsidy" jdbcType="DOUBLE" property="specialSubsidy" />
-    <result column="meal_subsidy" jdbcType="DOUBLE" property="mealSubsidy" />
-    <result column="deserve_wage" jdbcType="DOUBLE" property="deserveWage" />
-    <result column="pending_socialpooling_Insurance" jdbcType="DOUBLE" property="pendingSocialpoolingInsurance" />
-    <result column="pending_providentfund" jdbcType="DOUBLE" property="pendingProvidentfund" />
-    <result column="pending_personal_tax" jdbcType="DOUBLE" property="pendingPersonalTax" />
-    <result column="canteen_meal_fee" jdbcType="DOUBLE" property="canteenMealFee" />
+    <result column="job_allowance" jdbcType="DOUBLE" property="jobAllowance" />
+    <result column="composite_subsidy" jdbcType="DOUBLE" property="compositeSubsidy" />
+    <result column="basic_wage_total" jdbcType="DOUBLE" property="basicWageTotal" />
+    <result column="season_bonus" jdbcType="DOUBLE" property="seasonBonus" />
+    <result column="year_end_bonus" jdbcType="DOUBLE" property="yearEndBonus" />
+    <result column="salary_total" jdbcType="DOUBLE" property="salaryTotal" />
+    <result column="work_excitation" jdbcType="DOUBLE" property="workExcitation" />
+    <result column="overtime_cost" jdbcType="DOUBLE" property="overtimeCost" />
+    <result column="on_duty_cost" jdbcType="DOUBLE" property="onDutyCost" />
+    <result column="overtime_total" jdbcType="DOUBLE" property="overtimeTotal" />
+    <result column="business_car_subsidy" jdbcType="DOUBLE" property="businessCarSubsidy" />
+    <result column="site_overtime_subsidy" jdbcType="DOUBLE" property="siteOvertimeSubsidy" />
+    <result column="walk_door_bouns" jdbcType="DOUBLE" property="walkDoorBouns" />
+    <result column="demolition_subsidy" jdbcType="DOUBLE" property="demolitionSubsidy" />
+    <result column="demolition_subsidy_total" jdbcType="DOUBLE" property="demolitionSubsidyTotal" />
+    <result column="delay_cost" jdbcType="DOUBLE" property="delayCost" />
+    <result column="reward_wage" jdbcType="DOUBLE" property="rewardWage" />
+    <result column="other_one_total" jdbcType="DOUBLE" property="otherOneTotal" />
+    <result column="other_wage" jdbcType="DOUBLE" property="otherWage" />
+    <result column="deserve_wage_total" jdbcType="DOUBLE" property="deserveWageTotal" />
+    <result column="pension_wage" jdbcType="DOUBLE" property="pensionWage" />
+    <result column="unemployment_wage" jdbcType="DOUBLE" property="unemploymentWage" />
+    <result column="medical_wage" jdbcType="DOUBLE" property="medicalWage" />
+    <result column="major_illness_wage" jdbcType="DOUBLE" property="majorIllnessWage" />
+    <result column="personal_social_security_wageTotal" jdbcType="DOUBLE" property="personalSocialSecurityWagetotal" />
+    <result column="unit_society_wage" jdbcType="DOUBLE" property="unitSocietyWage" />
+    <result column="provident_fund" jdbcType="DOUBLE" property="providentFund" />
+    <result column="unit_provident_fund" jdbcType="DOUBLE" property="unitProvidentFund" />
     <result column="union_fee" jdbcType="DOUBLE" property="unionFee" />
+    <result column="meal_fee" jdbcType="DOUBLE" property="mealFee" />
+    <result column="leave_fee" jdbcType="DOUBLE" property="leaveFee" />
+    <result column="sick_leave_fee" jdbcType="DOUBLE" property="sickLeaveFee" />
+    <result column="penalty_fee" jdbcType="DOUBLE" property="penaltyFee" />
+    <result column="deduction_one_wage_total" jdbcType="DOUBLE" property="deductionOneWageTotal" />
+    <result column="deduction_one" jdbcType="DOUBLE" property="deductionOne" />
+    <result column="deduction_two" jdbcType="DOUBLE" property="deductionTwo" />
+    <result column="deduction_two_wage_total" jdbcType="DOUBLE" property="deductionTwoWageTotal" />
+    <result column="pending_personal_tax" jdbcType="DOUBLE" property="pendingPersonalTax" />
     <result column="real_wage" jdbcType="DOUBLE" property="realWage" />
+    <result column="deposit_personal_account" jdbcType="DOUBLE" property="depositPersonalAccount" />
     <result column="account_entry_time" jdbcType="VARCHAR" property="accountEntryTime" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -83,10 +123,18 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, job_number, department, basic_wage, seniority_wage, technical_allowance, 
-    duty_allowance, work_subsidy, education_allowance, professional_title_allowance, 
-    special_subsidy, meal_subsidy, deserve_wage, pending_socialpooling_Insurance, pending_providentfund, 
-    pending_personal_tax, canteen_meal_fee, union_fee, real_wage, account_entry_time
+    id, serial_number, issuing_unit, name, department, id_card, personnel_category, deserve_wage, 
+    basic_wage, seniority_wage, professional_title_allowance, technical_allowance, education_allowance, 
+    work_allowance, duty_allowance, special_subsidy, job_allowance, composite_subsidy, 
+    basic_wage_total, season_bonus, year_end_bonus, salary_total, work_excitation, overtime_cost, 
+    on_duty_cost, overtime_total, business_car_subsidy, site_overtime_subsidy, walk_door_bouns, 
+    demolition_subsidy, demolition_subsidy_total, delay_cost, reward_wage, other_one_total, 
+    other_wage, deserve_wage_total, pension_wage, unemployment_wage, medical_wage, major_illness_wage, 
+    personal_social_security_wageTotal, unit_society_wage, provident_fund, unit_provident_fund, 
+    union_fee, meal_fee, leave_fee, sick_leave_fee, penalty_fee, deduction_one_wage_total, 
+    deduction_one, deduction_two, deduction_two_wage_total, pending_personal_tax, real_wage, 
+    deposit_personal_account, account_entry_time, creator_account, created_time, modifier_account, 
+    modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.hr.increase.entity.TbManpowerSalaryPayrollCriteria" resultMap="BaseResultMap">
     select
@@ -119,22 +167,50 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.hr.increase.entity.TbManpowerSalaryPayroll">
-    insert into tb_manpower_salary_payroll (id, name, job_number, 
-      department, basic_wage, seniority_wage, 
-      technical_allowance, duty_allowance, work_subsidy, 
-      education_allowance, professional_title_allowance, 
-      special_subsidy, meal_subsidy, deserve_wage, 
-      pending_socialpooling_Insurance, pending_providentfund, 
-      pending_personal_tax, canteen_meal_fee, union_fee, 
-      real_wage, account_entry_time)
-    values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{jobNumber,jdbcType=VARCHAR}, 
-      #{department,jdbcType=VARCHAR}, #{basicWage,jdbcType=DOUBLE}, #{seniorityWage,jdbcType=DOUBLE}, 
-      #{technicalAllowance,jdbcType=DOUBLE}, #{dutyAllowance,jdbcType=DOUBLE}, #{workSubsidy,jdbcType=DOUBLE}, 
-      #{educationAllowance,jdbcType=DOUBLE}, #{professionalTitleAllowance,jdbcType=DOUBLE}, 
-      #{specialSubsidy,jdbcType=DOUBLE}, #{mealSubsidy,jdbcType=DOUBLE}, #{deserveWage,jdbcType=DOUBLE}, 
-      #{pendingSocialpoolingInsurance,jdbcType=DOUBLE}, #{pendingProvidentfund,jdbcType=DOUBLE}, 
-      #{pendingPersonalTax,jdbcType=DOUBLE}, #{canteenMealFee,jdbcType=DOUBLE}, #{unionFee,jdbcType=DOUBLE}, 
-      #{realWage,jdbcType=DOUBLE}, #{accountEntryTime,jdbcType=VARCHAR})
+    insert into tb_manpower_salary_payroll (id, serial_number, issuing_unit, 
+      name, department, id_card, 
+      personnel_category, deserve_wage, basic_wage, 
+      seniority_wage, professional_title_allowance, 
+      technical_allowance, education_allowance, work_allowance, 
+      duty_allowance, special_subsidy, job_allowance, 
+      composite_subsidy, basic_wage_total, season_bonus, 
+      year_end_bonus, salary_total, work_excitation, 
+      overtime_cost, on_duty_cost, overtime_total, 
+      business_car_subsidy, site_overtime_subsidy, 
+      walk_door_bouns, demolition_subsidy, demolition_subsidy_total, 
+      delay_cost, reward_wage, other_one_total, 
+      other_wage, deserve_wage_total, pension_wage, 
+      unemployment_wage, medical_wage, major_illness_wage, 
+      personal_social_security_wageTotal, unit_society_wage, 
+      provident_fund, unit_provident_fund, union_fee, 
+      meal_fee, leave_fee, sick_leave_fee, 
+      penalty_fee, deduction_one_wage_total, deduction_one, 
+      deduction_two, deduction_two_wage_total, pending_personal_tax, 
+      real_wage, deposit_personal_account, account_entry_time, 
+      creator_account, created_time, modifier_account, 
+      modified_time)
+    values (#{id,jdbcType=VARCHAR}, #{serialNumber,jdbcType=VARCHAR}, #{issuingUnit,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, 
+      #{personnelCategory,jdbcType=VARCHAR}, #{deserveWage,jdbcType=DOUBLE}, #{basicWage,jdbcType=DOUBLE}, 
+      #{seniorityWage,jdbcType=DOUBLE}, #{professionalTitleAllowance,jdbcType=DOUBLE}, 
+      #{technicalAllowance,jdbcType=DOUBLE}, #{educationAllowance,jdbcType=DOUBLE}, #{workAllowance,jdbcType=DOUBLE}, 
+      #{dutyAllowance,jdbcType=DOUBLE}, #{specialSubsidy,jdbcType=DOUBLE}, #{jobAllowance,jdbcType=DOUBLE}, 
+      #{compositeSubsidy,jdbcType=DOUBLE}, #{basicWageTotal,jdbcType=DOUBLE}, #{seasonBonus,jdbcType=DOUBLE}, 
+      #{yearEndBonus,jdbcType=DOUBLE}, #{salaryTotal,jdbcType=DOUBLE}, #{workExcitation,jdbcType=DOUBLE}, 
+      #{overtimeCost,jdbcType=DOUBLE}, #{onDutyCost,jdbcType=DOUBLE}, #{overtimeTotal,jdbcType=DOUBLE}, 
+      #{businessCarSubsidy,jdbcType=DOUBLE}, #{siteOvertimeSubsidy,jdbcType=DOUBLE}, 
+      #{walkDoorBouns,jdbcType=DOUBLE}, #{demolitionSubsidy,jdbcType=DOUBLE}, #{demolitionSubsidyTotal,jdbcType=DOUBLE}, 
+      #{delayCost,jdbcType=DOUBLE}, #{rewardWage,jdbcType=DOUBLE}, #{otherOneTotal,jdbcType=DOUBLE}, 
+      #{otherWage,jdbcType=DOUBLE}, #{deserveWageTotal,jdbcType=DOUBLE}, #{pensionWage,jdbcType=DOUBLE}, 
+      #{unemploymentWage,jdbcType=DOUBLE}, #{medicalWage,jdbcType=DOUBLE}, #{majorIllnessWage,jdbcType=DOUBLE}, 
+      #{personalSocialSecurityWagetotal,jdbcType=DOUBLE}, #{unitSocietyWage,jdbcType=DOUBLE}, 
+      #{providentFund,jdbcType=DOUBLE}, #{unitProvidentFund,jdbcType=DOUBLE}, #{unionFee,jdbcType=DOUBLE}, 
+      #{mealFee,jdbcType=DOUBLE}, #{leaveFee,jdbcType=DOUBLE}, #{sickLeaveFee,jdbcType=DOUBLE}, 
+      #{penaltyFee,jdbcType=DOUBLE}, #{deductionOneWageTotal,jdbcType=DOUBLE}, #{deductionOne,jdbcType=DOUBLE}, 
+      #{deductionTwo,jdbcType=DOUBLE}, #{deductionTwoWageTotal,jdbcType=DOUBLE}, #{pendingPersonalTax,jdbcType=DOUBLE}, 
+      #{realWage,jdbcType=DOUBLE}, #{depositPersonalAccount,jdbcType=DOUBLE}, #{accountEntryTime,jdbcType=VARCHAR}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.hr.increase.entity.TbManpowerSalaryPayroll">
     insert into tb_manpower_salary_payroll
@@ -142,14 +218,26 @@
       <if test="id != null">
         id,
       </if>
+      <if test="serialNumber != null">
+        serial_number,
+      </if>
+      <if test="issuingUnit != null">
+        issuing_unit,
+      </if>
       <if test="name != null">
         name,
       </if>
-      <if test="jobNumber != null">
-        job_number,
-      </if>
       <if test="department != null">
         department,
+      </if>
+      <if test="idCard != null">
+        id_card,
+      </if>
+      <if test="personnelCategory != null">
+        personnel_category,
+      </if>
+      <if test="deserveWage != null">
+        deserve_wage,
       </if>
       <if test="basicWage != null">
         basic_wage,
@@ -157,64 +245,184 @@
       <if test="seniorityWage != null">
         seniority_wage,
       </if>
+      <if test="professionalTitleAllowance != null">
+        professional_title_allowance,
+      </if>
       <if test="technicalAllowance != null">
         technical_allowance,
-      </if>
-      <if test="dutyAllowance != null">
-        duty_allowance,
-      </if>
-      <if test="workSubsidy != null">
-        work_subsidy,
       </if>
       <if test="educationAllowance != null">
         education_allowance,
       </if>
-      <if test="professionalTitleAllowance != null">
-        professional_title_allowance,
+      <if test="workAllowance != null">
+        work_allowance,
+      </if>
+      <if test="dutyAllowance != null">
+        duty_allowance,
       </if>
       <if test="specialSubsidy != null">
         special_subsidy,
       </if>
-      <if test="mealSubsidy != null">
-        meal_subsidy,
+      <if test="jobAllowance != null">
+        job_allowance,
       </if>
-      <if test="deserveWage != null">
-        deserve_wage,
+      <if test="compositeSubsidy != null">
+        composite_subsidy,
       </if>
-      <if test="pendingSocialpoolingInsurance != null">
-        pending_socialpooling_Insurance,
+      <if test="basicWageTotal != null">
+        basic_wage_total,
       </if>
-      <if test="pendingProvidentfund != null">
-        pending_providentfund,
+      <if test="seasonBonus != null">
+        season_bonus,
       </if>
-      <if test="pendingPersonalTax != null">
-        pending_personal_tax,
+      <if test="yearEndBonus != null">
+        year_end_bonus,
       </if>
-      <if test="canteenMealFee != null">
-        canteen_meal_fee,
+      <if test="salaryTotal != null">
+        salary_total,
+      </if>
+      <if test="workExcitation != null">
+        work_excitation,
+      </if>
+      <if test="overtimeCost != null">
+        overtime_cost,
+      </if>
+      <if test="onDutyCost != null">
+        on_duty_cost,
+      </if>
+      <if test="overtimeTotal != null">
+        overtime_total,
+      </if>
+      <if test="businessCarSubsidy != null">
+        business_car_subsidy,
+      </if>
+      <if test="siteOvertimeSubsidy != null">
+        site_overtime_subsidy,
+      </if>
+      <if test="walkDoorBouns != null">
+        walk_door_bouns,
+      </if>
+      <if test="demolitionSubsidy != null">
+        demolition_subsidy,
+      </if>
+      <if test="demolitionSubsidyTotal != null">
+        demolition_subsidy_total,
+      </if>
+      <if test="delayCost != null">
+        delay_cost,
+      </if>
+      <if test="rewardWage != null">
+        reward_wage,
+      </if>
+      <if test="otherOneTotal != null">
+        other_one_total,
+      </if>
+      <if test="otherWage != null">
+        other_wage,
+      </if>
+      <if test="deserveWageTotal != null">
+        deserve_wage_total,
+      </if>
+      <if test="pensionWage != null">
+        pension_wage,
+      </if>
+      <if test="unemploymentWage != null">
+        unemployment_wage,
+      </if>
+      <if test="medicalWage != null">
+        medical_wage,
+      </if>
+      <if test="majorIllnessWage != null">
+        major_illness_wage,
+      </if>
+      <if test="personalSocialSecurityWagetotal != null">
+        personal_social_security_wageTotal,
+      </if>
+      <if test="unitSocietyWage != null">
+        unit_society_wage,
+      </if>
+      <if test="providentFund != null">
+        provident_fund,
+      </if>
+      <if test="unitProvidentFund != null">
+        unit_provident_fund,
       </if>
       <if test="unionFee != null">
         union_fee,
       </if>
+      <if test="mealFee != null">
+        meal_fee,
+      </if>
+      <if test="leaveFee != null">
+        leave_fee,
+      </if>
+      <if test="sickLeaveFee != null">
+        sick_leave_fee,
+      </if>
+      <if test="penaltyFee != null">
+        penalty_fee,
+      </if>
+      <if test="deductionOneWageTotal != null">
+        deduction_one_wage_total,
+      </if>
+      <if test="deductionOne != null">
+        deduction_one,
+      </if>
+      <if test="deductionTwo != null">
+        deduction_two,
+      </if>
+      <if test="deductionTwoWageTotal != null">
+        deduction_two_wage_total,
+      </if>
+      <if test="pendingPersonalTax != null">
+        pending_personal_tax,
+      </if>
       <if test="realWage != null">
         real_wage,
       </if>
+      <if test="depositPersonalAccount != null">
+        deposit_personal_account,
+      </if>
       <if test="accountEntryTime != null">
         account_entry_time,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=VARCHAR},
       </if>
+      <if test="serialNumber != null">
+        #{serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="issuingUnit != null">
+        #{issuingUnit,jdbcType=VARCHAR},
+      </if>
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
       </if>
-      <if test="jobNumber != null">
-        #{jobNumber,jdbcType=VARCHAR},
-      </if>
       <if test="department != null">
         #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null">
+        #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="personnelCategory != null">
+        #{personnelCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="deserveWage != null">
+        #{deserveWage,jdbcType=DOUBLE},
       </if>
       <if test="basicWage != null">
         #{basicWage,jdbcType=DOUBLE},
@@ -222,50 +430,158 @@
       <if test="seniorityWage != null">
         #{seniorityWage,jdbcType=DOUBLE},
       </if>
+      <if test="professionalTitleAllowance != null">
+        #{professionalTitleAllowance,jdbcType=DOUBLE},
+      </if>
       <if test="technicalAllowance != null">
         #{technicalAllowance,jdbcType=DOUBLE},
-      </if>
-      <if test="dutyAllowance != null">
-        #{dutyAllowance,jdbcType=DOUBLE},
-      </if>
-      <if test="workSubsidy != null">
-        #{workSubsidy,jdbcType=DOUBLE},
       </if>
       <if test="educationAllowance != null">
         #{educationAllowance,jdbcType=DOUBLE},
       </if>
-      <if test="professionalTitleAllowance != null">
-        #{professionalTitleAllowance,jdbcType=DOUBLE},
+      <if test="workAllowance != null">
+        #{workAllowance,jdbcType=DOUBLE},
+      </if>
+      <if test="dutyAllowance != null">
+        #{dutyAllowance,jdbcType=DOUBLE},
       </if>
       <if test="specialSubsidy != null">
         #{specialSubsidy,jdbcType=DOUBLE},
       </if>
-      <if test="mealSubsidy != null">
-        #{mealSubsidy,jdbcType=DOUBLE},
+      <if test="jobAllowance != null">
+        #{jobAllowance,jdbcType=DOUBLE},
       </if>
-      <if test="deserveWage != null">
-        #{deserveWage,jdbcType=DOUBLE},
+      <if test="compositeSubsidy != null">
+        #{compositeSubsidy,jdbcType=DOUBLE},
       </if>
-      <if test="pendingSocialpoolingInsurance != null">
-        #{pendingSocialpoolingInsurance,jdbcType=DOUBLE},
+      <if test="basicWageTotal != null">
+        #{basicWageTotal,jdbcType=DOUBLE},
       </if>
-      <if test="pendingProvidentfund != null">
-        #{pendingProvidentfund,jdbcType=DOUBLE},
+      <if test="seasonBonus != null">
+        #{seasonBonus,jdbcType=DOUBLE},
       </if>
-      <if test="pendingPersonalTax != null">
-        #{pendingPersonalTax,jdbcType=DOUBLE},
+      <if test="yearEndBonus != null">
+        #{yearEndBonus,jdbcType=DOUBLE},
       </if>
-      <if test="canteenMealFee != null">
-        #{canteenMealFee,jdbcType=DOUBLE},
+      <if test="salaryTotal != null">
+        #{salaryTotal,jdbcType=DOUBLE},
+      </if>
+      <if test="workExcitation != null">
+        #{workExcitation,jdbcType=DOUBLE},
+      </if>
+      <if test="overtimeCost != null">
+        #{overtimeCost,jdbcType=DOUBLE},
+      </if>
+      <if test="onDutyCost != null">
+        #{onDutyCost,jdbcType=DOUBLE},
+      </if>
+      <if test="overtimeTotal != null">
+        #{overtimeTotal,jdbcType=DOUBLE},
+      </if>
+      <if test="businessCarSubsidy != null">
+        #{businessCarSubsidy,jdbcType=DOUBLE},
+      </if>
+      <if test="siteOvertimeSubsidy != null">
+        #{siteOvertimeSubsidy,jdbcType=DOUBLE},
+      </if>
+      <if test="walkDoorBouns != null">
+        #{walkDoorBouns,jdbcType=DOUBLE},
+      </if>
+      <if test="demolitionSubsidy != null">
+        #{demolitionSubsidy,jdbcType=DOUBLE},
+      </if>
+      <if test="demolitionSubsidyTotal != null">
+        #{demolitionSubsidyTotal,jdbcType=DOUBLE},
+      </if>
+      <if test="delayCost != null">
+        #{delayCost,jdbcType=DOUBLE},
+      </if>
+      <if test="rewardWage != null">
+        #{rewardWage,jdbcType=DOUBLE},
+      </if>
+      <if test="otherOneTotal != null">
+        #{otherOneTotal,jdbcType=DOUBLE},
+      </if>
+      <if test="otherWage != null">
+        #{otherWage,jdbcType=DOUBLE},
+      </if>
+      <if test="deserveWageTotal != null">
+        #{deserveWageTotal,jdbcType=DOUBLE},
+      </if>
+      <if test="pensionWage != null">
+        #{pensionWage,jdbcType=DOUBLE},
+      </if>
+      <if test="unemploymentWage != null">
+        #{unemploymentWage,jdbcType=DOUBLE},
+      </if>
+      <if test="medicalWage != null">
+        #{medicalWage,jdbcType=DOUBLE},
+      </if>
+      <if test="majorIllnessWage != null">
+        #{majorIllnessWage,jdbcType=DOUBLE},
+      </if>
+      <if test="personalSocialSecurityWagetotal != null">
+        #{personalSocialSecurityWagetotal,jdbcType=DOUBLE},
+      </if>
+      <if test="unitSocietyWage != null">
+        #{unitSocietyWage,jdbcType=DOUBLE},
+      </if>
+      <if test="providentFund != null">
+        #{providentFund,jdbcType=DOUBLE},
+      </if>
+      <if test="unitProvidentFund != null">
+        #{unitProvidentFund,jdbcType=DOUBLE},
       </if>
       <if test="unionFee != null">
         #{unionFee,jdbcType=DOUBLE},
       </if>
+      <if test="mealFee != null">
+        #{mealFee,jdbcType=DOUBLE},
+      </if>
+      <if test="leaveFee != null">
+        #{leaveFee,jdbcType=DOUBLE},
+      </if>
+      <if test="sickLeaveFee != null">
+        #{sickLeaveFee,jdbcType=DOUBLE},
+      </if>
+      <if test="penaltyFee != null">
+        #{penaltyFee,jdbcType=DOUBLE},
+      </if>
+      <if test="deductionOneWageTotal != null">
+        #{deductionOneWageTotal,jdbcType=DOUBLE},
+      </if>
+      <if test="deductionOne != null">
+        #{deductionOne,jdbcType=DOUBLE},
+      </if>
+      <if test="deductionTwo != null">
+        #{deductionTwo,jdbcType=DOUBLE},
+      </if>
+      <if test="deductionTwoWageTotal != null">
+        #{deductionTwoWageTotal,jdbcType=DOUBLE},
+      </if>
+      <if test="pendingPersonalTax != null">
+        #{pendingPersonalTax,jdbcType=DOUBLE},
+      </if>
       <if test="realWage != null">
         #{realWage,jdbcType=DOUBLE},
       </if>
+      <if test="depositPersonalAccount != null">
+        #{depositPersonalAccount,jdbcType=DOUBLE},
+      </if>
       <if test="accountEntryTime != null">
         #{accountEntryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -281,14 +597,26 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=VARCHAR},
       </if>
+      <if test="record.serialNumber != null">
+        serial_number = #{record.serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.issuingUnit != null">
+        issuing_unit = #{record.issuingUnit,jdbcType=VARCHAR},
+      </if>
       <if test="record.name != null">
         name = #{record.name,jdbcType=VARCHAR},
       </if>
-      <if test="record.jobNumber != null">
-        job_number = #{record.jobNumber,jdbcType=VARCHAR},
-      </if>
       <if test="record.department != null">
         department = #{record.department,jdbcType=VARCHAR},
+      </if>
+      <if test="record.idCard != null">
+        id_card = #{record.idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="record.personnelCategory != null">
+        personnel_category = #{record.personnelCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deserveWage != null">
+        deserve_wage = #{record.deserveWage,jdbcType=DOUBLE},
       </if>
       <if test="record.basicWage != null">
         basic_wage = #{record.basicWage,jdbcType=DOUBLE},
@@ -296,50 +624,158 @@
       <if test="record.seniorityWage != null">
         seniority_wage = #{record.seniorityWage,jdbcType=DOUBLE},
       </if>
+      <if test="record.professionalTitleAllowance != null">
+        professional_title_allowance = #{record.professionalTitleAllowance,jdbcType=DOUBLE},
+      </if>
       <if test="record.technicalAllowance != null">
         technical_allowance = #{record.technicalAllowance,jdbcType=DOUBLE},
-      </if>
-      <if test="record.dutyAllowance != null">
-        duty_allowance = #{record.dutyAllowance,jdbcType=DOUBLE},
-      </if>
-      <if test="record.workSubsidy != null">
-        work_subsidy = #{record.workSubsidy,jdbcType=DOUBLE},
       </if>
       <if test="record.educationAllowance != null">
         education_allowance = #{record.educationAllowance,jdbcType=DOUBLE},
       </if>
-      <if test="record.professionalTitleAllowance != null">
-        professional_title_allowance = #{record.professionalTitleAllowance,jdbcType=DOUBLE},
+      <if test="record.workAllowance != null">
+        work_allowance = #{record.workAllowance,jdbcType=DOUBLE},
+      </if>
+      <if test="record.dutyAllowance != null">
+        duty_allowance = #{record.dutyAllowance,jdbcType=DOUBLE},
       </if>
       <if test="record.specialSubsidy != null">
         special_subsidy = #{record.specialSubsidy,jdbcType=DOUBLE},
       </if>
-      <if test="record.mealSubsidy != null">
-        meal_subsidy = #{record.mealSubsidy,jdbcType=DOUBLE},
+      <if test="record.jobAllowance != null">
+        job_allowance = #{record.jobAllowance,jdbcType=DOUBLE},
       </if>
-      <if test="record.deserveWage != null">
-        deserve_wage = #{record.deserveWage,jdbcType=DOUBLE},
+      <if test="record.compositeSubsidy != null">
+        composite_subsidy = #{record.compositeSubsidy,jdbcType=DOUBLE},
       </if>
-      <if test="record.pendingSocialpoolingInsurance != null">
-        pending_socialpooling_Insurance = #{record.pendingSocialpoolingInsurance,jdbcType=DOUBLE},
+      <if test="record.basicWageTotal != null">
+        basic_wage_total = #{record.basicWageTotal,jdbcType=DOUBLE},
       </if>
-      <if test="record.pendingProvidentfund != null">
-        pending_providentfund = #{record.pendingProvidentfund,jdbcType=DOUBLE},
+      <if test="record.seasonBonus != null">
+        season_bonus = #{record.seasonBonus,jdbcType=DOUBLE},
       </if>
-      <if test="record.pendingPersonalTax != null">
-        pending_personal_tax = #{record.pendingPersonalTax,jdbcType=DOUBLE},
+      <if test="record.yearEndBonus != null">
+        year_end_bonus = #{record.yearEndBonus,jdbcType=DOUBLE},
       </if>
-      <if test="record.canteenMealFee != null">
-        canteen_meal_fee = #{record.canteenMealFee,jdbcType=DOUBLE},
+      <if test="record.salaryTotal != null">
+        salary_total = #{record.salaryTotal,jdbcType=DOUBLE},
+      </if>
+      <if test="record.workExcitation != null">
+        work_excitation = #{record.workExcitation,jdbcType=DOUBLE},
+      </if>
+      <if test="record.overtimeCost != null">
+        overtime_cost = #{record.overtimeCost,jdbcType=DOUBLE},
+      </if>
+      <if test="record.onDutyCost != null">
+        on_duty_cost = #{record.onDutyCost,jdbcType=DOUBLE},
+      </if>
+      <if test="record.overtimeTotal != null">
+        overtime_total = #{record.overtimeTotal,jdbcType=DOUBLE},
+      </if>
+      <if test="record.businessCarSubsidy != null">
+        business_car_subsidy = #{record.businessCarSubsidy,jdbcType=DOUBLE},
+      </if>
+      <if test="record.siteOvertimeSubsidy != null">
+        site_overtime_subsidy = #{record.siteOvertimeSubsidy,jdbcType=DOUBLE},
+      </if>
+      <if test="record.walkDoorBouns != null">
+        walk_door_bouns = #{record.walkDoorBouns,jdbcType=DOUBLE},
+      </if>
+      <if test="record.demolitionSubsidy != null">
+        demolition_subsidy = #{record.demolitionSubsidy,jdbcType=DOUBLE},
+      </if>
+      <if test="record.demolitionSubsidyTotal != null">
+        demolition_subsidy_total = #{record.demolitionSubsidyTotal,jdbcType=DOUBLE},
+      </if>
+      <if test="record.delayCost != null">
+        delay_cost = #{record.delayCost,jdbcType=DOUBLE},
+      </if>
+      <if test="record.rewardWage != null">
+        reward_wage = #{record.rewardWage,jdbcType=DOUBLE},
+      </if>
+      <if test="record.otherOneTotal != null">
+        other_one_total = #{record.otherOneTotal,jdbcType=DOUBLE},
+      </if>
+      <if test="record.otherWage != null">
+        other_wage = #{record.otherWage,jdbcType=DOUBLE},
+      </if>
+      <if test="record.deserveWageTotal != null">
+        deserve_wage_total = #{record.deserveWageTotal,jdbcType=DOUBLE},
+      </if>
+      <if test="record.pensionWage != null">
+        pension_wage = #{record.pensionWage,jdbcType=DOUBLE},
+      </if>
+      <if test="record.unemploymentWage != null">
+        unemployment_wage = #{record.unemploymentWage,jdbcType=DOUBLE},
+      </if>
+      <if test="record.medicalWage != null">
+        medical_wage = #{record.medicalWage,jdbcType=DOUBLE},
+      </if>
+      <if test="record.majorIllnessWage != null">
+        major_illness_wage = #{record.majorIllnessWage,jdbcType=DOUBLE},
+      </if>
+      <if test="record.personalSocialSecurityWagetotal != null">
+        personal_social_security_wageTotal = #{record.personalSocialSecurityWagetotal,jdbcType=DOUBLE},
+      </if>
+      <if test="record.unitSocietyWage != null">
+        unit_society_wage = #{record.unitSocietyWage,jdbcType=DOUBLE},
+      </if>
+      <if test="record.providentFund != null">
+        provident_fund = #{record.providentFund,jdbcType=DOUBLE},
+      </if>
+      <if test="record.unitProvidentFund != null">
+        unit_provident_fund = #{record.unitProvidentFund,jdbcType=DOUBLE},
       </if>
       <if test="record.unionFee != null">
         union_fee = #{record.unionFee,jdbcType=DOUBLE},
       </if>
+      <if test="record.mealFee != null">
+        meal_fee = #{record.mealFee,jdbcType=DOUBLE},
+      </if>
+      <if test="record.leaveFee != null">
+        leave_fee = #{record.leaveFee,jdbcType=DOUBLE},
+      </if>
+      <if test="record.sickLeaveFee != null">
+        sick_leave_fee = #{record.sickLeaveFee,jdbcType=DOUBLE},
+      </if>
+      <if test="record.penaltyFee != null">
+        penalty_fee = #{record.penaltyFee,jdbcType=DOUBLE},
+      </if>
+      <if test="record.deductionOneWageTotal != null">
+        deduction_one_wage_total = #{record.deductionOneWageTotal,jdbcType=DOUBLE},
+      </if>
+      <if test="record.deductionOne != null">
+        deduction_one = #{record.deductionOne,jdbcType=DOUBLE},
+      </if>
+      <if test="record.deductionTwo != null">
+        deduction_two = #{record.deductionTwo,jdbcType=DOUBLE},
+      </if>
+      <if test="record.deductionTwoWageTotal != null">
+        deduction_two_wage_total = #{record.deductionTwoWageTotal,jdbcType=DOUBLE},
+      </if>
+      <if test="record.pendingPersonalTax != null">
+        pending_personal_tax = #{record.pendingPersonalTax,jdbcType=DOUBLE},
+      </if>
       <if test="record.realWage != null">
         real_wage = #{record.realWage,jdbcType=DOUBLE},
       </if>
+      <if test="record.depositPersonalAccount != null">
+        deposit_personal_account = #{record.depositPersonalAccount,jdbcType=DOUBLE},
+      </if>
       <if test="record.accountEntryTime != null">
         account_entry_time = #{record.accountEntryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -349,26 +785,66 @@
   <update id="updateByExample" parameterType="map">
     update tb_manpower_salary_payroll
     set id = #{record.id,jdbcType=VARCHAR},
+      serial_number = #{record.serialNumber,jdbcType=VARCHAR},
+      issuing_unit = #{record.issuingUnit,jdbcType=VARCHAR},
       name = #{record.name,jdbcType=VARCHAR},
-      job_number = #{record.jobNumber,jdbcType=VARCHAR},
       department = #{record.department,jdbcType=VARCHAR},
+      id_card = #{record.idCard,jdbcType=VARCHAR},
+      personnel_category = #{record.personnelCategory,jdbcType=VARCHAR},
+      deserve_wage = #{record.deserveWage,jdbcType=DOUBLE},
       basic_wage = #{record.basicWage,jdbcType=DOUBLE},
       seniority_wage = #{record.seniorityWage,jdbcType=DOUBLE},
-      technical_allowance = #{record.technicalAllowance,jdbcType=DOUBLE},
-      duty_allowance = #{record.dutyAllowance,jdbcType=DOUBLE},
-      work_subsidy = #{record.workSubsidy,jdbcType=DOUBLE},
-      education_allowance = #{record.educationAllowance,jdbcType=DOUBLE},
       professional_title_allowance = #{record.professionalTitleAllowance,jdbcType=DOUBLE},
+      technical_allowance = #{record.technicalAllowance,jdbcType=DOUBLE},
+      education_allowance = #{record.educationAllowance,jdbcType=DOUBLE},
+      work_allowance = #{record.workAllowance,jdbcType=DOUBLE},
+      duty_allowance = #{record.dutyAllowance,jdbcType=DOUBLE},
       special_subsidy = #{record.specialSubsidy,jdbcType=DOUBLE},
-      meal_subsidy = #{record.mealSubsidy,jdbcType=DOUBLE},
-      deserve_wage = #{record.deserveWage,jdbcType=DOUBLE},
-      pending_socialpooling_Insurance = #{record.pendingSocialpoolingInsurance,jdbcType=DOUBLE},
-      pending_providentfund = #{record.pendingProvidentfund,jdbcType=DOUBLE},
-      pending_personal_tax = #{record.pendingPersonalTax,jdbcType=DOUBLE},
-      canteen_meal_fee = #{record.canteenMealFee,jdbcType=DOUBLE},
+      job_allowance = #{record.jobAllowance,jdbcType=DOUBLE},
+      composite_subsidy = #{record.compositeSubsidy,jdbcType=DOUBLE},
+      basic_wage_total = #{record.basicWageTotal,jdbcType=DOUBLE},
+      season_bonus = #{record.seasonBonus,jdbcType=DOUBLE},
+      year_end_bonus = #{record.yearEndBonus,jdbcType=DOUBLE},
+      salary_total = #{record.salaryTotal,jdbcType=DOUBLE},
+      work_excitation = #{record.workExcitation,jdbcType=DOUBLE},
+      overtime_cost = #{record.overtimeCost,jdbcType=DOUBLE},
+      on_duty_cost = #{record.onDutyCost,jdbcType=DOUBLE},
+      overtime_total = #{record.overtimeTotal,jdbcType=DOUBLE},
+      business_car_subsidy = #{record.businessCarSubsidy,jdbcType=DOUBLE},
+      site_overtime_subsidy = #{record.siteOvertimeSubsidy,jdbcType=DOUBLE},
+      walk_door_bouns = #{record.walkDoorBouns,jdbcType=DOUBLE},
+      demolition_subsidy = #{record.demolitionSubsidy,jdbcType=DOUBLE},
+      demolition_subsidy_total = #{record.demolitionSubsidyTotal,jdbcType=DOUBLE},
+      delay_cost = #{record.delayCost,jdbcType=DOUBLE},
+      reward_wage = #{record.rewardWage,jdbcType=DOUBLE},
+      other_one_total = #{record.otherOneTotal,jdbcType=DOUBLE},
+      other_wage = #{record.otherWage,jdbcType=DOUBLE},
+      deserve_wage_total = #{record.deserveWageTotal,jdbcType=DOUBLE},
+      pension_wage = #{record.pensionWage,jdbcType=DOUBLE},
+      unemployment_wage = #{record.unemploymentWage,jdbcType=DOUBLE},
+      medical_wage = #{record.medicalWage,jdbcType=DOUBLE},
+      major_illness_wage = #{record.majorIllnessWage,jdbcType=DOUBLE},
+      personal_social_security_wageTotal = #{record.personalSocialSecurityWagetotal,jdbcType=DOUBLE},
+      unit_society_wage = #{record.unitSocietyWage,jdbcType=DOUBLE},
+      provident_fund = #{record.providentFund,jdbcType=DOUBLE},
+      unit_provident_fund = #{record.unitProvidentFund,jdbcType=DOUBLE},
       union_fee = #{record.unionFee,jdbcType=DOUBLE},
+      meal_fee = #{record.mealFee,jdbcType=DOUBLE},
+      leave_fee = #{record.leaveFee,jdbcType=DOUBLE},
+      sick_leave_fee = #{record.sickLeaveFee,jdbcType=DOUBLE},
+      penalty_fee = #{record.penaltyFee,jdbcType=DOUBLE},
+      deduction_one_wage_total = #{record.deductionOneWageTotal,jdbcType=DOUBLE},
+      deduction_one = #{record.deductionOne,jdbcType=DOUBLE},
+      deduction_two = #{record.deductionTwo,jdbcType=DOUBLE},
+      deduction_two_wage_total = #{record.deductionTwoWageTotal,jdbcType=DOUBLE},
+      pending_personal_tax = #{record.pendingPersonalTax,jdbcType=DOUBLE},
       real_wage = #{record.realWage,jdbcType=DOUBLE},
-      account_entry_time = #{record.accountEntryTime,jdbcType=VARCHAR}
+      deposit_personal_account = #{record.depositPersonalAccount,jdbcType=DOUBLE},
+      account_entry_time = #{record.accountEntryTime,jdbcType=VARCHAR},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -376,14 +852,26 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jn.hr.increase.entity.TbManpowerSalaryPayroll">
     update tb_manpower_salary_payroll
     <set>
+      <if test="serialNumber != null">
+        serial_number = #{serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="issuingUnit != null">
+        issuing_unit = #{issuingUnit,jdbcType=VARCHAR},
+      </if>
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
       </if>
-      <if test="jobNumber != null">
-        job_number = #{jobNumber,jdbcType=VARCHAR},
-      </if>
       <if test="department != null">
         department = #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null">
+        id_card = #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="personnelCategory != null">
+        personnel_category = #{personnelCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="deserveWage != null">
+        deserve_wage = #{deserveWage,jdbcType=DOUBLE},
       </if>
       <if test="basicWage != null">
         basic_wage = #{basicWage,jdbcType=DOUBLE},
@@ -391,76 +879,224 @@
       <if test="seniorityWage != null">
         seniority_wage = #{seniorityWage,jdbcType=DOUBLE},
       </if>
+      <if test="professionalTitleAllowance != null">
+        professional_title_allowance = #{professionalTitleAllowance,jdbcType=DOUBLE},
+      </if>
       <if test="technicalAllowance != null">
         technical_allowance = #{technicalAllowance,jdbcType=DOUBLE},
-      </if>
-      <if test="dutyAllowance != null">
-        duty_allowance = #{dutyAllowance,jdbcType=DOUBLE},
-      </if>
-      <if test="workSubsidy != null">
-        work_subsidy = #{workSubsidy,jdbcType=DOUBLE},
       </if>
       <if test="educationAllowance != null">
         education_allowance = #{educationAllowance,jdbcType=DOUBLE},
       </if>
-      <if test="professionalTitleAllowance != null">
-        professional_title_allowance = #{professionalTitleAllowance,jdbcType=DOUBLE},
+      <if test="workAllowance != null">
+        work_allowance = #{workAllowance,jdbcType=DOUBLE},
+      </if>
+      <if test="dutyAllowance != null">
+        duty_allowance = #{dutyAllowance,jdbcType=DOUBLE},
       </if>
       <if test="specialSubsidy != null">
         special_subsidy = #{specialSubsidy,jdbcType=DOUBLE},
       </if>
-      <if test="mealSubsidy != null">
-        meal_subsidy = #{mealSubsidy,jdbcType=DOUBLE},
+      <if test="jobAllowance != null">
+        job_allowance = #{jobAllowance,jdbcType=DOUBLE},
       </if>
-      <if test="deserveWage != null">
-        deserve_wage = #{deserveWage,jdbcType=DOUBLE},
+      <if test="compositeSubsidy != null">
+        composite_subsidy = #{compositeSubsidy,jdbcType=DOUBLE},
       </if>
-      <if test="pendingSocialpoolingInsurance != null">
-        pending_socialpooling_Insurance = #{pendingSocialpoolingInsurance,jdbcType=DOUBLE},
+      <if test="basicWageTotal != null">
+        basic_wage_total = #{basicWageTotal,jdbcType=DOUBLE},
       </if>
-      <if test="pendingProvidentfund != null">
-        pending_providentfund = #{pendingProvidentfund,jdbcType=DOUBLE},
+      <if test="seasonBonus != null">
+        season_bonus = #{seasonBonus,jdbcType=DOUBLE},
       </if>
-      <if test="pendingPersonalTax != null">
-        pending_personal_tax = #{pendingPersonalTax,jdbcType=DOUBLE},
+      <if test="yearEndBonus != null">
+        year_end_bonus = #{yearEndBonus,jdbcType=DOUBLE},
       </if>
-      <if test="canteenMealFee != null">
-        canteen_meal_fee = #{canteenMealFee,jdbcType=DOUBLE},
+      <if test="salaryTotal != null">
+        salary_total = #{salaryTotal,jdbcType=DOUBLE},
+      </if>
+      <if test="workExcitation != null">
+        work_excitation = #{workExcitation,jdbcType=DOUBLE},
+      </if>
+      <if test="overtimeCost != null">
+        overtime_cost = #{overtimeCost,jdbcType=DOUBLE},
+      </if>
+      <if test="onDutyCost != null">
+        on_duty_cost = #{onDutyCost,jdbcType=DOUBLE},
+      </if>
+      <if test="overtimeTotal != null">
+        overtime_total = #{overtimeTotal,jdbcType=DOUBLE},
+      </if>
+      <if test="businessCarSubsidy != null">
+        business_car_subsidy = #{businessCarSubsidy,jdbcType=DOUBLE},
+      </if>
+      <if test="siteOvertimeSubsidy != null">
+        site_overtime_subsidy = #{siteOvertimeSubsidy,jdbcType=DOUBLE},
+      </if>
+      <if test="walkDoorBouns != null">
+        walk_door_bouns = #{walkDoorBouns,jdbcType=DOUBLE},
+      </if>
+      <if test="demolitionSubsidy != null">
+        demolition_subsidy = #{demolitionSubsidy,jdbcType=DOUBLE},
+      </if>
+      <if test="demolitionSubsidyTotal != null">
+        demolition_subsidy_total = #{demolitionSubsidyTotal,jdbcType=DOUBLE},
+      </if>
+      <if test="delayCost != null">
+        delay_cost = #{delayCost,jdbcType=DOUBLE},
+      </if>
+      <if test="rewardWage != null">
+        reward_wage = #{rewardWage,jdbcType=DOUBLE},
+      </if>
+      <if test="otherOneTotal != null">
+        other_one_total = #{otherOneTotal,jdbcType=DOUBLE},
+      </if>
+      <if test="otherWage != null">
+        other_wage = #{otherWage,jdbcType=DOUBLE},
+      </if>
+      <if test="deserveWageTotal != null">
+        deserve_wage_total = #{deserveWageTotal,jdbcType=DOUBLE},
+      </if>
+      <if test="pensionWage != null">
+        pension_wage = #{pensionWage,jdbcType=DOUBLE},
+      </if>
+      <if test="unemploymentWage != null">
+        unemployment_wage = #{unemploymentWage,jdbcType=DOUBLE},
+      </if>
+      <if test="medicalWage != null">
+        medical_wage = #{medicalWage,jdbcType=DOUBLE},
+      </if>
+      <if test="majorIllnessWage != null">
+        major_illness_wage = #{majorIllnessWage,jdbcType=DOUBLE},
+      </if>
+      <if test="personalSocialSecurityWagetotal != null">
+        personal_social_security_wageTotal = #{personalSocialSecurityWagetotal,jdbcType=DOUBLE},
+      </if>
+      <if test="unitSocietyWage != null">
+        unit_society_wage = #{unitSocietyWage,jdbcType=DOUBLE},
+      </if>
+      <if test="providentFund != null">
+        provident_fund = #{providentFund,jdbcType=DOUBLE},
+      </if>
+      <if test="unitProvidentFund != null">
+        unit_provident_fund = #{unitProvidentFund,jdbcType=DOUBLE},
       </if>
       <if test="unionFee != null">
         union_fee = #{unionFee,jdbcType=DOUBLE},
       </if>
+      <if test="mealFee != null">
+        meal_fee = #{mealFee,jdbcType=DOUBLE},
+      </if>
+      <if test="leaveFee != null">
+        leave_fee = #{leaveFee,jdbcType=DOUBLE},
+      </if>
+      <if test="sickLeaveFee != null">
+        sick_leave_fee = #{sickLeaveFee,jdbcType=DOUBLE},
+      </if>
+      <if test="penaltyFee != null">
+        penalty_fee = #{penaltyFee,jdbcType=DOUBLE},
+      </if>
+      <if test="deductionOneWageTotal != null">
+        deduction_one_wage_total = #{deductionOneWageTotal,jdbcType=DOUBLE},
+      </if>
+      <if test="deductionOne != null">
+        deduction_one = #{deductionOne,jdbcType=DOUBLE},
+      </if>
+      <if test="deductionTwo != null">
+        deduction_two = #{deductionTwo,jdbcType=DOUBLE},
+      </if>
+      <if test="deductionTwoWageTotal != null">
+        deduction_two_wage_total = #{deductionTwoWageTotal,jdbcType=DOUBLE},
+      </if>
+      <if test="pendingPersonalTax != null">
+        pending_personal_tax = #{pendingPersonalTax,jdbcType=DOUBLE},
+      </if>
       <if test="realWage != null">
         real_wage = #{realWage,jdbcType=DOUBLE},
       </if>
+      <if test="depositPersonalAccount != null">
+        deposit_personal_account = #{depositPersonalAccount,jdbcType=DOUBLE},
+      </if>
       <if test="accountEntryTime != null">
         account_entry_time = #{accountEntryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.hr.increase.entity.TbManpowerSalaryPayroll">
     update tb_manpower_salary_payroll
-    set name = #{name,jdbcType=VARCHAR},
-      job_number = #{jobNumber,jdbcType=VARCHAR},
+    set serial_number = #{serialNumber,jdbcType=VARCHAR},
+      issuing_unit = #{issuingUnit,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
       department = #{department,jdbcType=VARCHAR},
+      id_card = #{idCard,jdbcType=VARCHAR},
+      personnel_category = #{personnelCategory,jdbcType=VARCHAR},
+      deserve_wage = #{deserveWage,jdbcType=DOUBLE},
       basic_wage = #{basicWage,jdbcType=DOUBLE},
       seniority_wage = #{seniorityWage,jdbcType=DOUBLE},
-      technical_allowance = #{technicalAllowance,jdbcType=DOUBLE},
-      duty_allowance = #{dutyAllowance,jdbcType=DOUBLE},
-      work_subsidy = #{workSubsidy,jdbcType=DOUBLE},
-      education_allowance = #{educationAllowance,jdbcType=DOUBLE},
       professional_title_allowance = #{professionalTitleAllowance,jdbcType=DOUBLE},
+      technical_allowance = #{technicalAllowance,jdbcType=DOUBLE},
+      education_allowance = #{educationAllowance,jdbcType=DOUBLE},
+      work_allowance = #{workAllowance,jdbcType=DOUBLE},
+      duty_allowance = #{dutyAllowance,jdbcType=DOUBLE},
       special_subsidy = #{specialSubsidy,jdbcType=DOUBLE},
-      meal_subsidy = #{mealSubsidy,jdbcType=DOUBLE},
-      deserve_wage = #{deserveWage,jdbcType=DOUBLE},
-      pending_socialpooling_Insurance = #{pendingSocialpoolingInsurance,jdbcType=DOUBLE},
-      pending_providentfund = #{pendingProvidentfund,jdbcType=DOUBLE},
-      pending_personal_tax = #{pendingPersonalTax,jdbcType=DOUBLE},
-      canteen_meal_fee = #{canteenMealFee,jdbcType=DOUBLE},
+      job_allowance = #{jobAllowance,jdbcType=DOUBLE},
+      composite_subsidy = #{compositeSubsidy,jdbcType=DOUBLE},
+      basic_wage_total = #{basicWageTotal,jdbcType=DOUBLE},
+      season_bonus = #{seasonBonus,jdbcType=DOUBLE},
+      year_end_bonus = #{yearEndBonus,jdbcType=DOUBLE},
+      salary_total = #{salaryTotal,jdbcType=DOUBLE},
+      work_excitation = #{workExcitation,jdbcType=DOUBLE},
+      overtime_cost = #{overtimeCost,jdbcType=DOUBLE},
+      on_duty_cost = #{onDutyCost,jdbcType=DOUBLE},
+      overtime_total = #{overtimeTotal,jdbcType=DOUBLE},
+      business_car_subsidy = #{businessCarSubsidy,jdbcType=DOUBLE},
+      site_overtime_subsidy = #{siteOvertimeSubsidy,jdbcType=DOUBLE},
+      walk_door_bouns = #{walkDoorBouns,jdbcType=DOUBLE},
+      demolition_subsidy = #{demolitionSubsidy,jdbcType=DOUBLE},
+      demolition_subsidy_total = #{demolitionSubsidyTotal,jdbcType=DOUBLE},
+      delay_cost = #{delayCost,jdbcType=DOUBLE},
+      reward_wage = #{rewardWage,jdbcType=DOUBLE},
+      other_one_total = #{otherOneTotal,jdbcType=DOUBLE},
+      other_wage = #{otherWage,jdbcType=DOUBLE},
+      deserve_wage_total = #{deserveWageTotal,jdbcType=DOUBLE},
+      pension_wage = #{pensionWage,jdbcType=DOUBLE},
+      unemployment_wage = #{unemploymentWage,jdbcType=DOUBLE},
+      medical_wage = #{medicalWage,jdbcType=DOUBLE},
+      major_illness_wage = #{majorIllnessWage,jdbcType=DOUBLE},
+      personal_social_security_wageTotal = #{personalSocialSecurityWagetotal,jdbcType=DOUBLE},
+      unit_society_wage = #{unitSocietyWage,jdbcType=DOUBLE},
+      provident_fund = #{providentFund,jdbcType=DOUBLE},
+      unit_provident_fund = #{unitProvidentFund,jdbcType=DOUBLE},
       union_fee = #{unionFee,jdbcType=DOUBLE},
+      meal_fee = #{mealFee,jdbcType=DOUBLE},
+      leave_fee = #{leaveFee,jdbcType=DOUBLE},
+      sick_leave_fee = #{sickLeaveFee,jdbcType=DOUBLE},
+      penalty_fee = #{penaltyFee,jdbcType=DOUBLE},
+      deduction_one_wage_total = #{deductionOneWageTotal,jdbcType=DOUBLE},
+      deduction_one = #{deductionOne,jdbcType=DOUBLE},
+      deduction_two = #{deductionTwo,jdbcType=DOUBLE},
+      deduction_two_wage_total = #{deductionTwoWageTotal,jdbcType=DOUBLE},
+      pending_personal_tax = #{pendingPersonalTax,jdbcType=DOUBLE},
       real_wage = #{realWage,jdbcType=DOUBLE},
-      account_entry_time = #{accountEntryTime,jdbcType=VARCHAR}
+      deposit_personal_account = #{depositPersonalAccount,jdbcType=DOUBLE},
+      account_entry_time = #{accountEntryTime,jdbcType=VARCHAR},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

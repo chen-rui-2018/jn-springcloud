@@ -9,6 +9,7 @@
             ,sp.picture_url as "pictureUrl"                     <!--产品图片-->
             ,sp.`org_id_` AS "orgId"					            <!--机构id-->
             ,sp.`org_name` AS "orgName"				            <!--机构名称-->
+            ,sp.`product_type` AS "productType"				            <!--产品类型-->
             ,sp.`ref_rate_min` AS "refRateMin"			        <!--参考利率最小值-->
             ,sp.`ref_rate_max` AS "refRateMax"			        <!--参考利率最大值-->
             ,sp.`loan_amount_min` AS "loanAmountMin"		    <!--贷款额度最小值-->
@@ -57,6 +58,19 @@
         <if test="financialParam.keyWord !=null and financialParam.keyWord !=''">  <!--关键词-->
             and (sp.product_name like  CONCAT('%', #{financialParam.keyWord}, '%') or sp.org_name like CONCAT('%', #{financialParam.keyWord}, '%'))
         </if>
+        <if test="financialParam.productType !=null and financialParam.productType !='' ">   <!--产品类型选择-->
+            and sp.product_type= #{financialParam.productType}
+        </if>
+        <if test="financialParam.orgId !=null and financialParam.orgId !='' ">   <!--机构id-->
+            and sp.org_id_= #{financialParam.orgId}
+        </if>
+        <if test="financialParam.refRateMin !=null and financialParam.refRateMin !='' "><!--参考利率最小值-->
+            and sp.ref_rate_min &gt; #{financialParam.refRateMin}
+        </if>
+        <if test="financialParam.refRateMax !=null and financialParam.refRateMax !='' "><!--参考利率最大值-->
+            and sp.ref_rate_max &lt; #{financialParam.refRateMax}
+        </if>
+
         GROUP BY sp.`product_id_`
             ,sp.`product_name`
             ,sp.`org_id_`

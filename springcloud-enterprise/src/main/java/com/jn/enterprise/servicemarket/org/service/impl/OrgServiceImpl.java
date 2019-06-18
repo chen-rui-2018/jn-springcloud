@@ -926,6 +926,7 @@ public class OrgServiceImpl implements OrgService {
     private void updateOrgAccountAffiliateInfo(String orgAccount) {
         TbServiceOrgCriteria example=new TbServiceOrgCriteria();
         example.createCriteria().andOrgAccountEqualTo(orgAccount)
+                .andOrgStatusEqualTo("1")
                 .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         List<TbServiceOrg> tbServiceOrgList = tbServiceOrgMapper.selectByExample(example);
         if(tbServiceOrgList.isEmpty()){

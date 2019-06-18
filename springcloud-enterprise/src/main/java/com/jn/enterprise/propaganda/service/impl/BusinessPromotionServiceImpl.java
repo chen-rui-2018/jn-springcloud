@@ -30,6 +30,7 @@ import com.jn.enterprise.servicemarket.org.model.UserRoleInfo;
 import com.jn.enterprise.servicemarket.org.service.OrgColleagueService;
 import com.jn.enterprise.utils.IBPSFileUtils;
 import com.jn.enterprise.utils.IBPSUtils;
+import com.jn.park.utils.HtmlUtils;
 import com.jn.paybill.api.PayBillClient;
 import com.jn.paybill.model.PaymentBillModel;
 import com.jn.system.log.annotation.ServiceLog;
@@ -160,7 +161,7 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
         List<BusinessPromotionListShow> resultList = businessPromotionMapper.getBusinessPromotionList(businessPromotionListParam,creator);
         for(BusinessPromotionListShow pShow:resultList){
             //设置宣传摘要
-            String replaceDetails=pShow.getPropagandaDetails().replaceAll("</?[^>]+>","");
+            String replaceDetails= HtmlUtils.getBriefIntroduction(pShow.getPropagandaDetails());
             if(StringUtils.isNotBlank(replaceDetails)){
                 String propagandaSummaries=replaceDetails.substring(0,replaceDetails.length()>100?100:replaceDetails.length());
                 propagandaSummaries=replaceDetails.length()>100?propagandaSummaries+"......":propagandaSummaries;

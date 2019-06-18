@@ -47,8 +47,17 @@
       <el-form-item label="活动费用" prop="actiCost">
         <el-input v-model="activityForm.actiCost" style="width: 205px;" />
       </el-form-item>
-      <el-form-item label="主办方" prop="actiOrganizer">
+      <el-form-item label="主办单位" prop="actiOrganizer">
         <el-input v-model="activityForm.actiOrganizer" style="width: 205px;" />
+      </el-form-item>
+      <el-form-item label="指导单位" prop="actiGuideOrganizer">
+        <el-input v-model="activityForm.actiGuideOrganizer" style="width: 205px;" />
+      </el-form-item>
+      <el-form-item label="承办单位" prop="actiUndertakeOrganizer">
+        <el-input v-model="activityForm.actiUndertakeOrganizer" style="width: 205px;" />
+      </el-form-item>
+      <el-form-item label="协办单位" prop="actiCoOrganizer">
+        <el-input v-model="activityForm.actiCoOrganizer" style="width: 205px;" />
       </el-form-item>
       <el-form-item label="是否展示报名人数" prop="showApplyNum" class="setHeight">
         <el-radio-group v-model="activityForm.showApplyNum">
@@ -176,7 +185,10 @@ export default {
         id: '',
         applyCheck: '0',
         page: 1,
-        rows: 10
+        rows: 10,
+        actiGuideOrganizer: '',
+        actiUndertakeOrganizer: '',
+        actiCoOrganizer: ''
       },
       defaultMsg: '',
       config: {

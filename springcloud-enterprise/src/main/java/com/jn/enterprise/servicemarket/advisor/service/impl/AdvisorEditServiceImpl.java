@@ -143,6 +143,7 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
             //通过账号获取到用户头像
             Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(advisorBaseInfoParam.getAdvisorAccount());
             if(userExtension==null || userExtension.getData()==null){
+                logger.warn("机构专员认证基本信息保存并更新失败，失败原因，获取用户扩展信息失败");
                 throw new JnSpringCloudException(ApprovalStatusEnum.NETWORK_ANOMALY);
             }
             return insertServiceAdvisorInfo(advisorBaseInfoParam,tbServiceOrg.getOrgName(),userExtension.getData().getAvatar());

@@ -174,6 +174,8 @@ export default {
         if (res.code == "0000") {
           _this.$message.success("评价成功")
           _this.$router.go(-1)
+          }else{
+            _this.$message.error(res.result)
           }
         }
       })

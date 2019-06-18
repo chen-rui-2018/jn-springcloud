@@ -6,19 +6,17 @@ import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.common.util.StringUtils;
 import com.jn.park.enums.NoticeExceptionEnum;
-import com.jn.park.notice.controller.NoticeManageController;
 import com.jn.park.notice.dao.NoticeWebDao;
 import com.jn.park.notice.model.NoticeDetailShow;
-import com.jn.park.notice.model.NoticeManageShow;
 import com.jn.park.notice.service.NoticeWebService;
 import com.jn.park.notice.vo.IntegrationListVo;
+import com.jn.park.utils.HtmlUtils;
 import com.jn.system.log.annotation.ServiceLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +44,7 @@ public class NoticeWebServiceImpl  implements NoticeWebService {
             IntegrationListVo integrationListVo=integrationList.get(i);
             String intro = integrationListVo.getIntro();
             //设置简要内容
-            String briefContent=integrationListVo.getIntro().replaceAll("</?[^>]+>","");
+            String briefContent= HtmlUtils.getBriefIntroduction(integrationListVo.getIntro());
             if(StringUtils.isNotBlank(briefContent)){
                 String briefSummaries=briefContent.substring(0,briefContent.length()>100?100:briefContent.length());
                 briefSummaries=briefContent.length()>100?briefSummaries+"......":briefSummaries;

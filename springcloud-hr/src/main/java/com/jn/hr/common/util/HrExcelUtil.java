@@ -1,10 +1,14 @@
 package com.jn.hr.common.util;
 
 import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.metadata.BaseRowModel;
 import com.alibaba.excel.metadata.Sheet;
 import com.alibaba.excel.support.ExcelTypeEnum;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -69,4 +73,23 @@ public class HrExcelUtil {
         writer.write1(data, sheet);
         writer.finish();
     }
+
+    /**  复杂表头导出
+     * @param data 继承BaseRowModel的实体集合
+     * @param outputFileName  输出文件全路径
+     * @param sheet1 --> Sheet sheet1 = new Sheet(1, 0, T.class);  
+     * 	      T继承BaseRowModel的实体，属性添加@ExcelProperty(value = { "表头5", "表头51", "表头52" }, index = 4)，确定属性的显示位置
+     * @throws IOException
+     */
+    public static void writeWithMultiHead(List<? extends BaseRowModel> data, String outputFileName, Sheet sheet1, String sheetName){
+        try{
+        	OutputStream out = new FileOutputStream(outputFileName);
+           ExcelWriter writer = new ExcelWriter(out, ExcelTypeEnum.XLSX);
+           sheet1.setSheetName(sheetName);
+           writer.write(data, sheet1);
+           writer.finish();
+        }catch(Exception exception){
+        	;
+        }
+     }
 }

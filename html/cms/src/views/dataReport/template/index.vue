@@ -309,7 +309,7 @@
             </el-radio-group>
           </el-form-item>
         </target-row>
-        <target-row class="target-row" title="预警提醒人（企业完成所有，填报后接受信息人）">
+        <target-row class="target-row" title="预警提醒人（企业完成所有，填报后接收信息人）">
           <el-form-item :style="{margin: 0}" prop="reminder">
             <el-select v-model="formData.reminder" placeholder="请选择">
               <el-option v-for="(item, warnerOptionsIndex) in warnerOptions" :label="item.label" :key="warnerOptionsIndex" :value="item.id"/>
@@ -671,13 +671,13 @@ export default {
               })
               this.$_post(`${this.GLOBAL.enterpriseUrl}data/dataModel/updateModel`, formData).then(data => {
                 if (data.code === '0000') {
-                  this.submitting = false
                   this.getModelTree()
-                  this.loading = false
                   this.$message.success('保存成功')
                 } else {
                   this.$message.error('提交失败')
                 }
+                this.submitting = false
+                this.loading = false
               })
             }, res => {
               // 预览函数reject状态回调

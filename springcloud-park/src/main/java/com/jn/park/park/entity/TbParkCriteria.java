@@ -455,6 +455,76 @@ public class TbParkCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andShortIntroduceIsNull() {
+            addCriterion("short_introduce is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andShortIntroduceIsNotNull() {
+            addCriterion("short_introduce is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andShortIntroduceEqualTo(String value) {
+            addCriterion("short_introduce =", value, "shortIntroduce");
+            return (Criteria) this;
+        }
+
+        public Criteria andShortIntroduceNotEqualTo(String value) {
+            addCriterion("short_introduce <>", value, "shortIntroduce");
+            return (Criteria) this;
+        }
+
+        public Criteria andShortIntroduceGreaterThan(String value) {
+            addCriterion("short_introduce >", value, "shortIntroduce");
+            return (Criteria) this;
+        }
+
+        public Criteria andShortIntroduceGreaterThanOrEqualTo(String value) {
+            addCriterion("short_introduce >=", value, "shortIntroduce");
+            return (Criteria) this;
+        }
+
+        public Criteria andShortIntroduceLessThan(String value) {
+            addCriterion("short_introduce <", value, "shortIntroduce");
+            return (Criteria) this;
+        }
+
+        public Criteria andShortIntroduceLessThanOrEqualTo(String value) {
+            addCriterion("short_introduce <=", value, "shortIntroduce");
+            return (Criteria) this;
+        }
+
+        public Criteria andShortIntroduceLike(String value) {
+            addCriterion("short_introduce like", value, "shortIntroduce");
+            return (Criteria) this;
+        }
+
+        public Criteria andShortIntroduceNotLike(String value) {
+            addCriterion("short_introduce not like", value, "shortIntroduce");
+            return (Criteria) this;
+        }
+
+        public Criteria andShortIntroduceIn(List<String> values) {
+            addCriterion("short_introduce in", values, "shortIntroduce");
+            return (Criteria) this;
+        }
+
+        public Criteria andShortIntroduceNotIn(List<String> values) {
+            addCriterion("short_introduce not in", values, "shortIntroduce");
+            return (Criteria) this;
+        }
+
+        public Criteria andShortIntroduceBetween(String value1, String value2) {
+            addCriterion("short_introduce between", value1, value2, "shortIntroduce");
+            return (Criteria) this;
+        }
+
+        public Criteria andShortIntroduceNotBetween(String value1, String value2) {
+            addCriterion("short_introduce not between", value1, value2, "shortIntroduce");
+            return (Criteria) this;
+        }
+
         public Criteria andParkStateIsNull() {
             addCriterion("park_state is null");
             return (Criteria) this;
@@ -522,6 +592,66 @@ public class TbParkCriteria {
 
         public Criteria andParkStateNotBetween(String value1, String value2) {
             addCriterion("park_state not between", value1, value2, "parkState");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowOrderIsNull() {
+            addCriterion("show_order is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowOrderIsNotNull() {
+            addCriterion("show_order is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowOrderEqualTo(Integer value) {
+            addCriterion("show_order =", value, "showOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowOrderNotEqualTo(Integer value) {
+            addCriterion("show_order <>", value, "showOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowOrderGreaterThan(Integer value) {
+            addCriterion("show_order >", value, "showOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowOrderGreaterThanOrEqualTo(Integer value) {
+            addCriterion("show_order >=", value, "showOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowOrderLessThan(Integer value) {
+            addCriterion("show_order <", value, "showOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowOrderLessThanOrEqualTo(Integer value) {
+            addCriterion("show_order <=", value, "showOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowOrderIn(List<Integer> values) {
+            addCriterion("show_order in", values, "showOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowOrderNotIn(List<Integer> values) {
+            addCriterion("show_order not in", values, "showOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowOrderBetween(Integer value1, Integer value2) {
+            addCriterion("show_order between", value1, value2, "showOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowOrderNotBetween(Integer value1, Integer value2) {
+            addCriterion("show_order not between", value1, value2, "showOrder");
             return (Criteria) this;
         }
 

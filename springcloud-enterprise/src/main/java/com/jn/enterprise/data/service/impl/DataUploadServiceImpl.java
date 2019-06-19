@@ -2125,7 +2125,7 @@ public class DataUploadServiceImpl implements DataUploadService {
             targetDao.updateCalling(taskBatch,fillId,DataUploadConstants.COMPANY_TYPE);
         }else{
             //园区
-            targetDao.updateCalling(taskBatch,fillId,DataUploadConstants.COMPANY_TYPE);
+            targetDao.updateCalling(taskBatch,fillId,DataUploadConstants.GARDEN_TYPE);
         }
 
         //调用服务发起通知 发送短信，邮件，app

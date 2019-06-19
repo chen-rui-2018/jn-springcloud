@@ -93,8 +93,10 @@ public interface OrgService {
     /**
      * 添加机构管理员角色
      * @param orgAccount
+     * @param orgId
+     * @param loginAccount
      * @return
      */
-    int addOrgRole(String orgAccount);
+    int addOrgRole(String orgAccount,String orgId,String loginAccount);
 
 }

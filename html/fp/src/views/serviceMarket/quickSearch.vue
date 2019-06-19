@@ -120,7 +120,7 @@
                 </div>
                 <!-- 左侧logo end-->
                 <!-- 中间信息 beign -->
-                <div class="list-info-middle inner-product">
+                <div class="list-info-middle inner-product pointer" @click="$router.push({path:'serverProDetail',query:{productId:i.productId,signoryId:i.signoryId}})">
                   <!-- 中间上半部分--标题和标签 begin -->
                   <div class="list-info-top-title">
                     <!-- 头部 begin -->
@@ -181,7 +181,7 @@
                   <!-- <img src="@/../static/img/ins1.png" alt=""> -->
                   <img :src="i.orgLogo" alt="">
                 </div>
-                <div class="orgCon fl">
+                <div class="orgCon fl pointer" @click="$router.push({ path: '/serverOrgDetail', query: { orgId: i.orgId } })">
                   <div class="conTil">{{i.orgName}}</div>
                   <div class="conContent clearfix color3">
                     <div class="left1 fl">
@@ -222,7 +222,7 @@
                   <!-- <img src="@/../static/img/ins1.png" alt=""> -->
                   <img :src="i.avatar" alt="">
                 </div>
-                <div class="orgCon fl">
+                <div class="orgCon fl pointer" @click="$router.push({path:'serverConDetail',query:{orgId: i.orgId,advisorAccount:i.advisorAccount}})">
                   <div class="conTil">{{i.advisorName}}</div>
                   <div class="conContent clearfix color3">
                     <div class="left1 fl" id="left1">

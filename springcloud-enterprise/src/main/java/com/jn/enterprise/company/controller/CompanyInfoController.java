@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api(tags = "企业服务")
 @RestController
-@RequestMapping("/guest/company")
+@RequestMapping("/enterprise/company")
 public class CompanyInfoController extends BaseController {
 
     @Autowired

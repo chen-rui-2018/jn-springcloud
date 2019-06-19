@@ -32,6 +32,7 @@ public enum CompanyExceptionEnum implements CodeAndMsg {
     COMPANY_ADMIN_LEAVE_ERROR("5020597","企业管理员不能离开企业"),
 
     CALL_SYSTEM_SERVICE_ERROR("5020401","调用system服务出错"),
+    CALL_USER_SERVICE_ERROR("5020402","调用user服务出错"),
     ;
     /**
      * 编码

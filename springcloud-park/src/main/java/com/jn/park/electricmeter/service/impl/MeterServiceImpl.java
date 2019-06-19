@@ -337,7 +337,7 @@ public class MeterServiceImpl implements MeterService {
             reading.setDealHour(new Byte(hour));
             //reading.setId(UUID.randomUUID().toString().replaceAll("-",""));
             //timeEnd
-            String id = DateUtils.formatDate(dealDate,"yyyy-MM-dd")+data.getDeviceId()+hour+data.getTimeEnd();
+            String id = data.getDeviceId()+data.getTimeEnd().replaceAll(":","").replaceAll(" ","").replaceAll("-","");
             reading.setId(id);
 
             reading.setMeterCode(data.getDeviceId());

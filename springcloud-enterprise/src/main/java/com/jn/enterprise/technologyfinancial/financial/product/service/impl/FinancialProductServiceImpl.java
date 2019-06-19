@@ -476,5 +476,35 @@ public class FinancialProductServiceImpl implements FinancialProductService {
         }
         return 1;
     }
+    @ServiceLog(doAction = "机构下科技金融产品列表")
+    @Override
+    public PaginationData getOrgFinancialProductList(FinancialOrgProductParam financialOrgProductParam) {
+        com.github.pagehelper.Page<Object> objects = null;
+        if(StringUtils.isBlank(financialOrgProductParam.getNeedPage())){
+            //默认查询第1页的15条数据
+            int pageNum=1;
+            int pageSize=15;
+            objects = PageHelper.startPage(pageNum,pageSize, true);
+            List<FinancialProductListInfo> financialProductList = financialProductMapper.getOrgFinancialProductList(financialOrgProductParam,BUSINESS_AREA);
+            return new PaginationData(financialProductList, objects == null ? 0 : objects.getTotal());
+        }
+        //需要分页标识
+        String isPage="1";
+        if(isPage.equals(financialOrgProductParam.getNeedPage())){
+            objects = PageHelper.startPage(financialOrgProductParam.getPage(),
+                    financialOrgProductParam.getRows() == 0 ? 15 : financialOrgProductParam.getRows(), true);
+        }
+        List<FinancialProductListInfo> financialProductList = financialProductMapper.getOrgFinancialProductList(financialOrgProductParam,BUSINESS_AREA);
+
+        // 处理图片路径
+        if (financialProductList != null && !financialProductList.isEmpty()) {
+            for (FinancialProductListInfo product : financialProductList) {
+                if (StringUtils.isNotBlank(product.getPictureUrl())) {
+                    product.setPictureUrl(IBPSFileUtils.getFilePath(product.getPictureUrl()));
+                }
+            }
+        }
+        return new PaginationData(financialProductList, objects == null ? 0 : objects.getTotal());
+    }
 
 }

@@ -6,6 +6,7 @@ import com.jn.company.model.*;
 import com.jn.enterprise.company.model.CompanyUpdateParam;
 import com.jn.enterprise.company.vo.CompanyContactVO;
 import com.jn.enterprise.company.vo.CompanyDetailsVo;
+import com.jn.enterprise.company.vo.UpgradeStatusVO;
 import com.jn.enterprise.model.CompanyInfoModel;
 import com.jn.park.activity.model.ActivityPagingParam;
 import com.jn.park.activity.model.Comment;
@@ -119,5 +120,12 @@ public interface CompanyService {
      * @return
      */
     ServiceCompany getCurCompanyInfo(String account);
+
+    /**
+     * 查询当前账号是否允许认证
+     * @param account
+     * @return
+     */
+    UpgradeStatusVO getJoinParkStatus(String account);
 
 }

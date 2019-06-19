@@ -150,6 +150,8 @@ export default {
           if (res.code === '0000') {
             // console.log(res)
             this.perennialList = res.data.rows
+          } else {
+            this.$vux.toast.text(res.result)
           }
         }
       })
@@ -161,6 +163,8 @@ export default {
         callback: res => {
           if (res.code === '0000') {
             this.typeList = res.data
+          } else {
+            this.$vux.toast.text(res.result)
           }
         }
       })
@@ -175,6 +179,8 @@ export default {
             // console.log(res)
             this.talentsList = res.data.rows
             this.total = res.data.total
+          } else {
+            this.$vux.toast.text(res.result)
           }
         }
       })

@@ -77,7 +77,7 @@
             <!-- <img src="@/../static/img/ins1.png" alt=""> -->
             <img :src="i.avatar" alt="">
           </div>
-          <div class="orgCon fl">
+          <div class="orgCon pointer fl" @click="handleOrgDel(i.id)">
             <div class="conTil">{{i.comName}}</div>
             <div class="conContent clearfix color3">
               <div class="left1 fl">

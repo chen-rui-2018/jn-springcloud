@@ -53,6 +53,7 @@ export default {
   mounted () {
     this.getTypeList()
     this.getPlatformList()
+    console.log(sessionStorage.getItem('token'))
   },
   methods: {
     // 备忘录
@@ -79,8 +80,9 @@ export default {
         data: { },
         callback: res => {
           if (res.code === '0000') {
-            // console.log(res)
             this.typeList = res.data
+          } else {
+            this.$vux.toast.text(res.result)
           }
         }
       })
@@ -94,6 +96,8 @@ export default {
           if (res.code === '0000') {
             this.platFormList = res.data.rows
             this.total = res.data.total
+          } else {
+            this.$vux.toast.text(res.result)
           }
         }
       })

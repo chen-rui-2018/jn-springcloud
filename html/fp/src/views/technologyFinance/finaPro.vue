@@ -102,7 +102,7 @@
             <img v-if="i.pictureUrl" :src="i.pictureUrl" alt="">
             <img v-else src="@/../static/img/product.png" alt="">
           </div>
-          <div class="orgCon fl">
+          <div class="orgCon fl pointer" @click="handleOrgDel(i.productId)">
             <div class="conTil">{{i.productName}}</div>
             <div class="conContent clearfix color3">
               <div class="left1 fl">

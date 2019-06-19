@@ -51,6 +51,16 @@ public class ActivitySlim implements Serializable {
     private String actiDetails;
     @ApiModelProperty(value = "活动简介")
     private String actibrief;
+    @ApiModelProperty(value = "是否置顶（0：否 1：是）")
+    private String isIndex;
+
+    public String getIsIndex() {
+        return isIndex;
+    }
+
+    public void setIsIndex(String isIndex) {
+        this.isIndex = isIndex;
+    }
 
     public String getActibrief() {
         return actibrief;
@@ -217,6 +227,7 @@ public class ActivitySlim implements Serializable {
                 ", issueTime='" + issueTime + '\'' +
                 ", actiDetails='" + actiDetails + '\'' +
                 ", actibrief='" + actibrief + '\'' +
+                ", isIndex='" + isIndex + '\'' +
                 '}';
     }
 }

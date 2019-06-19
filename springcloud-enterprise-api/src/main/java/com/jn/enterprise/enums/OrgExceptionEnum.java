@@ -38,7 +38,8 @@ public enum OrgExceptionEnum  implements CodeAndMsg {
     ORG_NAME_NOT_NULL("5020525","机构名称不能为空"),
     SEARCH_TYPE_NOT_ALLOW("5020526","机构名称查询类型在系统中不存在"),
     ORG_ID_IS_NOT_EXIST("5020527","机构id在系统中不存在"),
-    ORG_DATA_MOVE_FAIL("5020528","迁移机构数据至机构表失败")
+    ORG_DATA_MOVE_FAIL("5020528","迁移机构数据至机构表失败"),
+    UPDATE_ACCOUNT_ORG_INFO_FAIL("5020529","更新用户所属机构信息失败"),
     ;
 
     /**

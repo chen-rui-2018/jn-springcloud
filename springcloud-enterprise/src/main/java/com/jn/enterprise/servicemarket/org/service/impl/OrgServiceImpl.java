@@ -915,7 +915,7 @@ public class OrgServiceImpl implements OrgService {
         Result<User> userResult = systemClient.getUser(user);
         if(userResult==null || userResult.getData()==null){
             logger.warn("添加机构管理员角色失败，失败原因：机构账号在系统中不存在");
-            throw new JnSpringCloudException(OrgExceptionEnum.ORG_IS_NOT_EXIT);
+            throw new JnSpringCloudException(OrgExceptionEnum.ACCOUNT_NOT_NULL);
         }
         //获取临时表中机构认证信息
         TbServiceOrgTempCriteria exampleTemp=new TbServiceOrgTempCriteria();
@@ -935,12 +935,16 @@ public class OrgServiceImpl implements OrgService {
             //将临时表的信息全部插入正式表
             TbServiceOrg tbServiceOrg=new TbServiceOrg();
             BeanUtils.copyProperties(serviceOrgTempList.get(0), tbServiceOrg);
+            //审批状态  (0：未审核[审核中] 1：审核通过  2：审核不通过)
+            tbServiceOrg.setOrgStatus(ApprovalStatusEnum.APPROVAL.getValue());
             existNum=tbServiceOrgMapper.insert(tbServiceOrg);
         }else{
             //根据机构账号更新正式表数据，正式表机构id保持不变
             TbServiceOrg tbServiceOrg=new TbServiceOrg();
             BeanUtils.copyProperties(serviceOrgTempList.get(0), tbServiceOrg);
             tbServiceOrg.setOrgId(null);
+            //审批状态  (0：未审核[审核中] 1：审核通过  2：审核不通过)
+            tbServiceOrg.setOrgStatus(ApprovalStatusEnum.APPROVAL.getValue());
             existNum=tbServiceOrgMapper.updateByExampleSelective(tbServiceOrg, example);
         }
         if(existNum==0){
@@ -949,7 +953,7 @@ public class OrgServiceImpl implements OrgService {
         }else{
             //删除临时表的机构数据
             //更新机构用户的所属机构id和机构名称
-            updateOrgAccountAffiliateInfo(orgAccount);
+            updateOrgAccountAffiliateInfo(orgAccount,orgId);
             tbServiceOrgTempMapper.deleteByExample(exampleTemp);
         }
         //给用户添加"机构管理员"角色
@@ -975,15 +979,15 @@ public class OrgServiceImpl implements OrgService {
      * @param orgAccount
      */
     @ServiceLog(doAction = "更新机构用户所属机构信息")
-    private void updateOrgAccountAffiliateInfo(String orgAccount) {
+    private void updateOrgAccountAffiliateInfo(String orgAccount,String orgId) {
         TbServiceOrgTempCriteria example=new TbServiceOrgTempCriteria();
         example.createCriteria().andOrgAccountEqualTo(orgAccount)
-                .andOrgStatusEqualTo("1")
+                .andOrgIdEqualTo(orgId)
                 .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         List<TbServiceOrgTemp> tbServiceOrgList = tbServiceOrgTempMapper.selectByExample(example);
         if(tbServiceOrgList.isEmpty()){
             logger.warn("添加机构管理员角色失败，失败原因：机构用户在系统中不存在或机构用户已失效");
-            throw new JnSpringCloudException(OrgExceptionEnum.NETWORK_ANOMALY);
+            throw new JnSpringCloudException(OrgExceptionEnum.ORG_INFO_NOT_EXIST);
         }
         UserAffiliateInfo userAffiliateInfo=new UserAffiliateInfo();
         List accountList= Arrays.asList(orgAccount);
@@ -993,7 +997,7 @@ public class OrgServiceImpl implements OrgService {
         Result resultData = userExtensionClient.updateAffiliateInfo(userAffiliateInfo);
         if(resultData==null ||resultData.getData()==null || !(Boolean)resultData.getData()){
             logger.warn("添加机构管理员角色失败，失败原因：更新用户所属机构信息失败");
-            throw new JnSpringCloudException(OrgExceptionEnum.NETWORK_ANOMALY);
+            throw new JnSpringCloudException(OrgExceptionEnum.UPDATE_ACCOUNT_ORG_INFO_FAIL);
         }
     }
 }

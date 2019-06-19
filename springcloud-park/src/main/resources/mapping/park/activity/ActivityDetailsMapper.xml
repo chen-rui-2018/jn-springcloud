@@ -16,6 +16,9 @@
         ,t1.acti_address as "actiAddress"                                                     <!--活动地址-->
         ,t1.acti_cost as "actiCost"                                                              <!--活动费用-->
         ,t1.acti_organizer as "actiOrganizer"                                                <!--活动主办方-->
+        ,t1.acti_guide_organizer as "actiGuideOrganizer"                                                <!--活动主办方-->
+        ,t1.acti_undertake_organizer as "actiUndertakeOrganizer"                                                <!--活动主办方-->
+        ,t1.acti_co_organizer as "actiCoOrganizer"                                                <!--活动主办方-->
         ,t1.acti_number as "actiNumber"                                                      <!--活动人数-->
         ,t1.acti_poster_url as "actiPosterUrl"                                               <!--活动主海报-->
         ,t1.acti_views as "actiViews"                                                        <!--阅读人数-->

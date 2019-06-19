@@ -32,6 +32,9 @@ public class TbAssetArticleLeaseOrders implements Serializable {
     /*@ApiModelProperty("物品介绍")*/
     private String articleIntroduction;
 
+    /*@ApiModelProperty("租借企业ID")*/
+    private String leaseEnterpriseId;
+
     /*@ApiModelProperty("租借企业")*/
     private String leaseEnterprise;
 
@@ -59,7 +62,7 @@ public class TbAssetArticleLeaseOrders implements Serializable {
     /*@ApiModelProperty("租借状态(0标记为空闲,1申请中,2交付中,3租借中,4归还中,5已归还)")*/
     private Byte articleStatus;
 
-    /*@ApiModelProperty("付款状态(0未付款,1已付款)")*/
+    /*@ApiModelProperty("付款状态(0未付款,1已付款,2订单已取消)")*/
     private Byte paymentStatus;
 
     /*@ApiModelProperty("是否删除（0标记删除，1正常）")*/
@@ -149,6 +152,14 @@ public class TbAssetArticleLeaseOrders implements Serializable {
 
     public void setArticleIntroduction(String articleIntroduction) {
         this.articleIntroduction = articleIntroduction == null ? null : articleIntroduction.trim();
+    }
+
+    public String getLeaseEnterpriseId() {
+        return leaseEnterpriseId;
+    }
+
+    public void setLeaseEnterpriseId(String leaseEnterpriseId) {
+        this.leaseEnterpriseId = leaseEnterpriseId == null ? null : leaseEnterpriseId.trim();
     }
 
     public String getLeaseEnterprise() {
@@ -292,6 +303,7 @@ public class TbAssetArticleLeaseOrders implements Serializable {
             && (this.getArticleName() == null ? other.getArticleName() == null : this.getArticleName().equals(other.getArticleName()))
             && (this.getArticleUrl() == null ? other.getArticleUrl() == null : this.getArticleUrl().equals(other.getArticleUrl()))
             && (this.getArticleIntroduction() == null ? other.getArticleIntroduction() == null : this.getArticleIntroduction().equals(other.getArticleIntroduction()))
+            && (this.getLeaseEnterpriseId() == null ? other.getLeaseEnterpriseId() == null : this.getLeaseEnterpriseId().equals(other.getLeaseEnterpriseId()))
             && (this.getLeaseEnterprise() == null ? other.getLeaseEnterprise() == null : this.getLeaseEnterprise().equals(other.getLeaseEnterprise()))
             && (this.getContactName() == null ? other.getContactName() == null : this.getContactName().equals(other.getContactName()))
             && (this.getContactPhone() == null ? other.getContactPhone() == null : this.getContactPhone().equals(other.getContactPhone()))
@@ -322,6 +334,7 @@ public class TbAssetArticleLeaseOrders implements Serializable {
         result = prime * result + ((getArticleName() == null) ? 0 : getArticleName().hashCode());
         result = prime * result + ((getArticleUrl() == null) ? 0 : getArticleUrl().hashCode());
         result = prime * result + ((getArticleIntroduction() == null) ? 0 : getArticleIntroduction().hashCode());
+        result = prime * result + ((getLeaseEnterpriseId() == null) ? 0 : getLeaseEnterpriseId().hashCode());
         result = prime * result + ((getLeaseEnterprise() == null) ? 0 : getLeaseEnterprise().hashCode());
         result = prime * result + ((getContactName() == null) ? 0 : getContactName().hashCode());
         result = prime * result + ((getContactPhone() == null) ? 0 : getContactPhone().hashCode());
@@ -355,6 +368,7 @@ public class TbAssetArticleLeaseOrders implements Serializable {
         sb.append(", articleName=").append(articleName);
         sb.append(", articleUrl=").append(articleUrl);
         sb.append(", articleIntroduction=").append(articleIntroduction);
+        sb.append(", leaseEnterpriseId=").append(leaseEnterpriseId);
         sb.append(", leaseEnterprise=").append(leaseEnterprise);
         sb.append(", contactName=").append(contactName);
         sb.append(", contactPhone=").append(contactPhone);

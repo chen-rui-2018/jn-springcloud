@@ -21,7 +21,7 @@
                 <el-table-column prop="date" label="产品名称" align="center"> </el-table-column>
                 <el-table-column prop="date" label="服务机构" align="center"> </el-table-column>
                 <el-table-column prop="date" label="业务领域" align="center"> </el-table-column>
-                <el-table-column prop="date" label="服务顾问" align="center"> </el-table-column>
+                <el-table-column prop="date" label="服务专员" align="center"> </el-table-column>
                 <el-table-column prop="date" label="发布日期" align="center"> </el-table-column>
                 <el-table-column prop="date" label="发布状态" align="center"> </el-table-column>
                 <el-table-column prop="date" label="审批状态" align="center"> </el-table-column>

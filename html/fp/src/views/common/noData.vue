@@ -1,6 +1,6 @@
 <template>
     <div class="no-data-bg">
-      <img class="no-data-pic" src="@/../static/img/no-data.png" alt="">
+      <img class="no-data-pic" :src="url" alt="">
       <div class="no-data-desc">{{ title }}</div>
     </div>
 </template>
@@ -13,6 +13,11 @@
         type: [String, Number],
         required: false,
         default: '抱歉，没有找到相关信息'
+      },
+      url: {
+        type: [String],
+        required: false,
+        default: "@/../static/img/no-data.png"
       }
     }
   }

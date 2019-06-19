@@ -24,13 +24,6 @@ public interface ArticleOrderClient {
     Result articlePayCallBack(@RequestBody PayOrderNotify payOrderNotify);
 
     /**
-     * 是否支付,为支付取消订单
-     * @return
-     */
-    @RequestMapping(value = "/api/order/updateArticlePayStatus",method = RequestMethod.POST)
-    Result updateArticlePayStatus();
-
-    /**
      * 是否逾期,更改状态
      * @return
      */

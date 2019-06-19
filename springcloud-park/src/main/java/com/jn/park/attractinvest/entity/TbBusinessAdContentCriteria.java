@@ -1035,6 +1035,76 @@ public class TbBusinessAdContentCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andParkNameIsNull() {
+            addCriterion("park_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkNameIsNotNull() {
+            addCriterion("park_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkNameEqualTo(String value) {
+            addCriterion("park_name =", value, "parkName");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkNameNotEqualTo(String value) {
+            addCriterion("park_name <>", value, "parkName");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkNameGreaterThan(String value) {
+            addCriterion("park_name >", value, "parkName");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkNameGreaterThanOrEqualTo(String value) {
+            addCriterion("park_name >=", value, "parkName");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkNameLessThan(String value) {
+            addCriterion("park_name <", value, "parkName");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkNameLessThanOrEqualTo(String value) {
+            addCriterion("park_name <=", value, "parkName");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkNameLike(String value) {
+            addCriterion("park_name like", value, "parkName");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkNameNotLike(String value) {
+            addCriterion("park_name not like", value, "parkName");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkNameIn(List<String> values) {
+            addCriterion("park_name in", values, "parkName");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkNameNotIn(List<String> values) {
+            addCriterion("park_name not in", values, "parkName");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkNameBetween(String value1, String value2) {
+            addCriterion("park_name between", value1, value2, "parkName");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkNameNotBetween(String value1, String value2) {
+            addCriterion("park_name not between", value1, value2, "parkName");
+            return (Criteria) this;
+        }
+
         public Criteria andModAccounIsNull() {
             addCriterion("mod_accoun is null");
             return (Criteria) this;

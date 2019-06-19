@@ -40,6 +40,7 @@
   </div>
 </template>
 <script>
+import { initJsBridge } from '@/utils/index'
 export default {
   data () {
     return {
@@ -79,7 +80,7 @@ export default {
     // 点击签退
     signOut () {
       if (!this.upTime) {
-        this.$vux.toast.text('您未签到，请先签到', 'top')
+        this.$vux.toast.text('您未签到，请先签到')
         return false
       }
       this.userInfo.type = '2'
@@ -99,7 +100,7 @@ export default {
               this.downTime = res.data.attendanceTime.substr(11, 8)
             }
           } else {
-            this.$vux.toast.text(res.result, 'top')
+            this.$vux.toast.text(res.result)
           }
         }
       })
@@ -107,7 +108,7 @@ export default {
     // 点击签到
     signIn () {
       if (this.upTime) {
-        this.$vux.toast.text('签到失败，不能进行多次签到', 'top')
+        this.$vux.toast.text('签到失败，不能进行多次签到')
         return false
       }
 
@@ -129,7 +130,7 @@ export default {
               this.upTime = res.data.signInAttendanceTime.substr(11, 8)
             }
           } else {
-            this.$vux.toast.text(res.result, 'top')
+            this.$vux.toast.text(res.result)
           }
         }
       })
@@ -175,69 +176,23 @@ export default {
                     }
                   }
                 } else {
-                  this.$vux.toast.text(res.result, 'top')
+                  this.$vux.toast.text(res.result)
                 }
               }
             })
           } else {
-            this.$vux.toast.text(res.result, 'top')
+            this.$vux.toast.text(res.result)
           }
         }
       })
     },
-    // 注册jsbridge
-    connectWebViewJavascriptBridge (callback, isAndroid, isiOS) {
-      if (isAndroid) {
-        if (window.WebViewJavascriptBridge) {
-          console.log(window.WebViewJavascriptBridge)
-          callback(window.WebViewJavascriptBridge)
-        } else {
-          document.addEventListener(
-            'WebViewJavascriptBridgeReady'
-            , function () {
-              callback(window.WebViewJavascriptBridge)
-            },
-            false
-          )
-        }
-        return
-      }
-
-      if (isiOS) {
-        if (window.WebViewJavascriptBridge) {
-          return callback(window.WebViewJavascriptBridge)
-        }
-        if (window.WVJBCallbacks) {
-          return window.WVJBCallbacks.push(callback)
-        }
-        window.WVJBCallbacks = [callback]
-        var WVJBIframe = document.createElement('iframe')
-        WVJBIframe.style.display = 'none'
-        WVJBIframe.src = 'https://__bridge_loaded__'
-        document.documentElement.appendChild(WVJBIframe)
-        setTimeout(function () {
-          document.documentElement.removeChild(WVJBIframe)
-        }, 0)
-      }
-    },
-    initJsBridge (readyCallback) {
-      var u = navigator.userAgent
-      var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1 // android终端
-      var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) // ios终端
-      // this.connectWebViewJavascriptBridge(callback, isAndroid, isiOS)
-      // 调用注册方法
-      this.connectWebViewJavascriptBridge(function (bridge) {
-        if (isAndroid) {
-          bridge.init(function (message, responseCallback) {
-            console.log('JS got a message', message)
-            // responseCallback(data)
-          })
-        }
-        readyCallback()
-      }, isAndroid, isiOS)
+    showResponse (response) {
+      alert(response)
     },
     init () {
-      this.initJsBridge(function () {
+      let that = this
+      alert('123')
+      initJsBridge(function () {
         // 此处调用api
         /// ///
         /// /1、获取经纬度api
@@ -253,11 +208,21 @@ export default {
         // latitude：纬度
         // code和result 请参考swagger
         window.WebViewJavascriptBridge.callHandler('getLocation', null, function (response) {
-          console.log(response)
+          that.showResponse(response)
+          alert(response)
+          that.userInfo.longitude = JSON.parse(response.longitude)
+          that.userInfo.latitude = JSON.parse(response.latitude)
         })
+        // 地图初始化
+        var ggPoint = new window.BMap.Point(that.userInfo.longitude, that.userInfo.latitude)
+        var bm = new window.BMap.Map('dituContent')
+        bm.centerAndZoom(ggPoint, 15)
+        bm.enableScrollWheelZoom()
+        bm.addControl(new window.BMap.NavigationControl())
+        that.getLocaltion()
       })
       // var geolocation = new window.BMap.Geolocation()
-      // let that = this
+
       // geolocation.getCurrentPosition(
       //   function (r) {
       //     if (this.getStatus() === window.BMAP_STATUS_SUCCESS) {
@@ -267,27 +232,12 @@ export default {
       //       console.log(that.userInfo.latitude, that.userInfo.longitude)
       //       var ggPoint = new window.BMap.Point(that.userInfo.longitude, that.userInfo.latitude)
 
-      //       // 地图初始化
-      //       var bm = new window.BMap.Map('dituContent')
-      //       bm.centerAndZoom(ggPoint, 15)
-      //       bm.enableScrollWheelZoom()
-      //       bm.addControl(new window.BMap.NavigationControl())
-
       //       // 添加gps marker
       //       var markergg = new window.BMap.Marker(ggPoint)
       //       bm.addOverlay(markergg) // 添加GPS marker
       //       var labelgg = new window.BMap.Label('未转换的GPS坐标（错误）', {offset: new window.BMap.Size(20, -10)})
       //       markergg.setLabel(labelgg)
       //       // 坐标转换完之后的回调函数
-      //       var translateCallback = function (data) {
-      //         if (data.status === 0) {
-      //           var marker = new window.BMap.Marker(data.points[0])
-      //           bm.addOverlay(marker)
-      //           var label = new window.BMap.Label('转换后的百度坐标（正确）', {offset: new window.BMap.Size(20, -10)})
-      //           marker.setLabel(label) // 添加百度label
-      //           bm.setCenter(data.points[0])
-      //         }
-      //       }
 
       //       setTimeout(function () {
       //         var convertor = new window.BMap.Convertor()
@@ -311,7 +261,7 @@ export default {
           if (res.code === '0000') {
             this.distance = Number(res.data.distance).toFixed(0)
           } else {
-            this.$vux.toast.text(res.result, 'top')
+            this.$vux.toast.text(res.result)
           }
         }
       })

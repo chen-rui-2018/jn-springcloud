@@ -1,13 +1,13 @@
 <template>
-  <div class="inviteProduct">
+  <div class="inviteProduct" v-loading="loading">
     <div class="ordinary_title">
       <div class="font16">邀请员工</div>
     </div>
     <div class="ordinary_content">
       <el-form label-width="120px" class="postJobInfo">
         <el-form-item label="员工账号:" prop="post" class="staffAccount">
-          <el-input placeholder="请输入员工账号" v-model="searchFiled" clearable>
-            <el-button slot="append" icon="el-icon-search" @click="getStaffInfo" @keyup.native="getStaffInfo"></el-button>
+          <el-input placeholder="请输入员工账号" v-model="searchFiled" clearable @keyup.enter.native="getStaffInfo">
+            <el-button slot="append" icon="el-icon-search" @click="getStaffInfo" ></el-button>
           </el-input>
         </el-form-item>
         <el-form-item label="昵称:">
@@ -44,6 +44,7 @@
 export default {
   data() {
     return {
+      loading:false,
       hobbys: "",
       searchFiled: "",
       nickName: "",
@@ -79,23 +80,21 @@ export default {
         }
       });
     },
-    goputaway() {
-      this.$router.push({ name: "productPutaway" });
-    },
     submitForm() {
       if (!this.searchFiled) {
         this.$message.error("请输入员工账号");
         return;
       }
+      this.loading=true
       this.api.post({
         url: "inviteStaff",
         data: { inviteAccount: this.searchFiled },
         dataFlag: true,
         callback: res => {
-          console.log(res);
+          this.loading=false
           if (res.code == "0000") {
             this.$message({
-              message: "发送邀请成功",
+              message: "操作成功",
               type: "success"
             });
             this.$router.push({ name: "staffManagement" });
@@ -159,17 +158,8 @@ export default {
       border-left: 0;
     }
     .postJobInfo {
-      // width: 50%;
-      // margin: 0 auto;
-      padding-left: 140px;
-
-
-      // .hobbies {
-      //   .el-form-item__content,
-      //   .el-select {
-      //     width:100%;
-      //   }
-      // }
+      width: 50%;
+      margin: 0 auto;
       .el-textarea__inner {
         width: 348px;
         min-height: 100px !important;

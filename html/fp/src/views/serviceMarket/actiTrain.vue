@@ -3,8 +3,10 @@
         <div class="trainContent">
             <div class="actiContent">
                 <div class="actiNav">
-                    <span class="pointer" @click="$router.push({ path: '/enterpriseservice'})">企业服务/</span>
-                    <span class="pointer" @click="$router.push({ path: '/serMatHp'})">服务超市/</span>
+                    <span class="pointer" @click="$router.push({ path: '/enterpriseservice'})">企业服务</span>
+                    <span>/</span>
+                    <span class="pointer" @click="$router.push({ path: '/serMatHp'})">服务超市</span>
+                    <span>/</span>
                     <span class="mainColor">活动培训</span>
                 </div>
                 <div class="actiFilter clearfix">
@@ -50,77 +52,76 @@
                         <i class="iconfont icon-sousuo" @click="handleSearchList"></i>
                     </div>
                 </div>
-                <div class="actiTab">
-                    <ul class="allActiUl clearfix" v-if="flag">
-                        <li v-for="(item,index) in actiListSlim" :key='index'>
-                            <div style="width:100%;height:200px" class="pointer"  @click="handleRout(item.id)">
-                                <img style="width:100%;height:100%" :src="item.actiPosterUrl" alt="活动海报图片" class="posterImg">
-                            </div>
-                            <div class="actiInfo">
-                                <p class="actiNameItem">{{item.actiName}}</p>
-                                <p class="actiTimer">
-                                    <i class="el-icon-time"></i>
-                                    <span>{{item.actiStartTime}}-{{item.actiEndTime}}</span>
-                                    <!-- <span>{{item.actiStartTime}}-{{item.actiEndTime.split(' ')[1]}}</span> -->
-                                    <!-- <span>周日14：00-17：00</span> -->
-                                </p>
-                                <p>
-                                    <i class="el-icon-location-outline"></i>
-                                    <span>{{item.actiAddress}}</span>
-                                </p>
-                            </div>
-                            <div class="actiNum clearfix">
-                                <div class="avatar">
-                                    <ul>
-                                        <li v-for="(avr,key) in item.avatarList" :key="key"><img :src="avr" alt=""></li>
-                                        <!-- <li><img src="" alt=""></li>
-                                        <li><img src="" alt=""></li>
-                                        <li><img src="" alt=""></li>
-                                        <li><img src="" alt=""></li> -->
-                                    </ul>
+                <div class="actiTab" v-loading="actiloading">
+                    <div v-if="actiListSlim.length==0">
+                        <nodata></nodata>
+                    </div>
+                    <div v-else>
+                        <ul class="allActiUl clearfix" v-if="flag">
+                            <li v-for="(item,index) in actiListSlim" :key='index' class="pointer" @click="handleRout(item.id)">
+                                <div style="width:100%;height:200px" class="pointer" @click="handleRout(item.id)">
+                                    <img style="width:100%;height:100%" :src="item.actiPosterUrl" alt="活动海报图片" class="posterImg">
                                 </div>
-                                <i>{{item.applyNum}}/{{item.actiNumber}}</i>
-                                <span>
-                                    <i class="iconfont icon-xihuan"></i>{{item.actiLike}}</span>
-                            </div>
-                        </li>
-                    </ul>
-                    <ul class="verticalUl" v-else>
-                        <li class="clearfix" v-for="(item,index) in actiListSlim" :key='index'>
-                            <div class="verticalLeft fl pointer" @click="handleRout(item.id)">
-                                <img :src="item.actiPosterUrl" alt="活动海报图片">
-                            </div>
-                            <div class="verticalMiddle fl">
-                                <h3 class="verticalTit">{{item.actiName}}</h3>
-                                <div class="xihuan">
-                                    <i class="iconfont icon-xihuan"></i>
-                                    <span>{{item.actiLike}}</span>
+                                <div class="actiInfo">
+                                    <p class="actiNameItem">{{item.actiName}}</p>
+                                    <p class="actiTimer">
+                                        <i class="el-icon-time"></i>
+                                        <span>{{item.actiStartTime}}-{{item.actiEndTime}}</span>
+                                    </p>
+                                    <p class="actiAddress">
+                                        <i class="el-icon-location-outline"></i>
+                                        <span>{{item.actiAddress}}</span>
+                                    </p>
                                 </div>
-                                <p>
-                                    <i class="el-icon-time"></i>
-                                    <span>{{item.actiStartTime}}-{{item.actiEndTime}}</span>
-                                </p>
-                                <p class="location">
-                                    <i class="el-icon-location-outline"></i>
-                                    <span>{{item.actiAddress}}</span>
-                                </p>
                                 <div class="actiNum clearfix">
                                     <div class="avatar">
-                                        <ul class="clearfix">
+                                        <ul>
                                             <li v-for="(avr,key) in item.avatarList" :key="key"><img :src="avr" alt=""></li>
-                                            <!-- <li><img src="@/../static/img/heng1.png" alt=""></li> -->
                                         </ul>
                                     </div>
-                                    <i style="margin-left:10px">{{item.applyNum}}/{{item.actiNumber}}</i>
+                                    <i>{{item.applyNum}}/{{item.actiNumber}}</i>
+                                    <span>
+                                        <i class="iconfont icon-xihuan"></i>{{item.actiLike}}</span>
                                 </div>
-                            </div>
-                            <div class="verticalRight fr">
-                                <el-button type="success" v-if="item.actiStatus=='3'" style="background:#00a041;height:38px;width:110px">活动已结束</el-button>
-                                <el-button type="success" v-if="item.actiStatus=='4'" style="background:#00a041;height:38px;width:110px">活动已取消</el-button>
-                                <el-button type="success" v-if="item.actiStatus=='2'" style="background:#ecfcf2;height:38px;width:110px;border:1px solid #00a041;color:#00a041;">报名中</el-button>
-                            </div>
-                        </li>
-                    </ul>
+                            </li>
+                        </ul>
+                        <ul class="verticalUl" v-else>
+                            <li class="clearfix" v-for="(item,index) in actiListSlim" :key='index'>
+                                <div class="verticalLeft fl pointer" @click="handleRout(item.id)">
+                                    <img :src="item.actiPosterUrl" alt="活动海报图片">
+                                </div>
+                                <div class="verticalMiddle fl">
+                                    <h3 class="verticalTit">{{item.actiName}}</h3>
+                                    <div class="xihuan">
+                                        <i class="iconfont icon-xihuan"></i>
+                                        <span>{{item.actiLike}}</span>
+                                    </div>
+                                    <p>
+                                        <i class="el-icon-time"></i>
+                                        <span>{{item.actiStartTime}}-{{item.actiEndTime}}</span>
+                                    </p>
+                                    <p class="location">
+                                        <i class="el-icon-location-outline"></i>
+                                        <span>{{item.actiAddress}}</span>
+                                    </p>
+                                    <div class="actiNum clearfix">
+                                        <div class="avatar">
+                                            <ul class="clearfix">
+                                                <li v-for="(avr,key) in item.avatarList" :key="key"><img :src="avr" alt=""></li>
+                                                <!-- <li><img src="@/../static/img/heng1.png" alt=""></li> -->
+                                            </ul>
+                                        </div>
+                                        <i style="margin-left:10px">{{item.applyNum}}/{{item.actiNumber}}</i>
+                                    </div>
+                                </div>
+                                <div class="verticalRight fr">
+                                    <el-button type="success" v-if="item.actiStatus=='3'" style="background:#00a041;height:38px;width:110px">活动已结束</el-button>
+                                    <el-button type="success" v-if="item.actiStatus=='4'" style="background:#00a041;height:38px;width:110px">活动已取消</el-button>
+                                    <el-button type="success" v-if="item.actiStatus=='2'" style="background:#ecfcf2;height:38px;width:110px;border:1px solid #00a041;color:#00a041;">报名中</el-button>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             <div class="pagination-container" style="margin:50px auto;">
@@ -131,9 +132,14 @@
     </div>
 </template>
 <script>
+import nodata from "../common/noData.vue";
 export default {
+  components: {
+    nodata
+  },
   data() {
     return {
+      actiloading: false,
       currentPage4: 1,
       checkActi: "",
       flag: true,
@@ -164,27 +170,6 @@ export default {
     }
   },
   methods: {
-    //立即报名
-    immediateSign(id) {
-      if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
-        return;
-      }
-      this.api.post({
-        url: `springcloud-park/activity/activityApply/quickApply?activityId=${id}`,
-        data: {
-          activityId: id
-        },
-        // dataFlag: false,
-        urlFlag: true,
-        callback: res => {
-          if (res.code == "0000") {
-            // _this.actiTypeList = res.data.rows;
-            this.$message(res.result);
-          }
-        }
-      });
-    },
     handleTypeList() {
       this.showList = !this.showList;
     },
@@ -233,8 +218,8 @@ export default {
         this.startTime = "";
         this.endTime = "";
       } else {
-        this.startTime = this.api.AddMinTime(new Date(), "day", s);
-        this.endTime = this.api.AddMinTime(new Date(), "day", i);
+        this.startTime = this.api.AddMinTime(new Date(), "day", i);
+        this.endTime = this.api.AddMinTime(new Date(), "day", s);
       }
       this.initList();
     },
@@ -247,6 +232,7 @@ export default {
     },
     initList() {
       //请求数据
+      this.actiloading = true;
       let _this = this;
       this.api.post({
         url: "activityListSlim",
@@ -261,6 +247,7 @@ export default {
         },
         dataFlag: false,
         callback: function(res) {
+          _this.actiloading = false;
           if (res.code == "0000") {
             _this.actiListSlim = res.data.rows;
             _this.total = res.data.total;

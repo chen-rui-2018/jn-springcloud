@@ -56,7 +56,8 @@
     <div class="fenge"></div>
     <div class="actiDel">
       <div class="del1">详情</div>
-      <p>{{actiForm.actiDetail}}</p>
+      <p v-html="actiForm.actiDetail" v-if="actiForm.actiDetail"></p>
+      <p v-else>暂无内容!</p>
     </div>
     <div class="actiFooter">
       <div class="attention">
@@ -93,7 +94,10 @@ export default {
   created () {
     this.actiDel()
   },
-  mounted () {},
+  mounted () {
+    // WebSettings settings = webview.getSettings();
+    // settings.setJavaScriptEnabled(true); //允许在WebView中使用js
+  },
   destroyed () {
     clearInterval(this._interval)
   },
@@ -122,6 +126,8 @@ export default {
                 clearInterval(_this._interval)
               }
             }, 1000)
+          } else {
+            _this.$vux.toast.text(res.result)
           }
         }
       })
@@ -129,6 +135,7 @@ export default {
     handleLike (id) {
       if (!sessionStorage.token) {
         this.$vux.toast.text('请先登录')
+        return
       }
       let _this = this
       this.api.post({
@@ -139,9 +146,14 @@ export default {
         dataFlag: true,
         callback: function (res) {
           if (res.code === '0000') {
+            _this.$vux.toast.text('点赞成功')
             _this.actiForm.actiLike = _this.actiForm.actiLike * 1 + 1
             // _this.$message.success('点赞成功')
             _this.accountIsLike = true
+            window.location.href = 'protocol://android?code=toast&data=' + _this.actiForm.actiLike
+            window.location.href = 'protocol://android?code=toast&data=' + JSON.stringify(_this.actiForm.actiLike)
+          } else {
+            _this.$vux.toast.text(res.result)
           }
         }
       })
@@ -149,6 +161,7 @@ export default {
     cancelLike (id) {
       if (!sessionStorage.token) {
         this.$vux.toast.text('请先登录')
+        return
       }
       let _this = this
       this.api.post({
@@ -159,8 +172,12 @@ export default {
         dataFlag: true,
         callback: function (res) {
           if (res.code === '0000') {
+            _this.$vux.toast.text('取消点赞成功')
             _this.actiForm.actiLike -= 1
             _this.accountIsLike = false
+            window.location.href = 'protocol://android?code=toast&data=' + _this.actiForm.actiLike
+          } else {
+            _this.$vux.toast.text(res.result)
           }
         }
       })
@@ -168,6 +185,7 @@ export default {
     quickSign (id) {
       if (!sessionStorage.token) {
         this.$vux.toast.text('请先登录')
+        return
       }
       let _this = this
       this.api.post({
@@ -182,7 +200,7 @@ export default {
             _this.activityApplyShow = '2'
             // this.actiDel()
           } else {
-            alert(res.result)
+            _this.$vux.toast.text(res.result)
           }
         }
       })
@@ -191,8 +209,8 @@ export default {
     stopApply (id) {
       if (!sessionStorage.token) {
         this.$vux.toast.text('请先登录')
+        return
       }
-      this.$vux.toast.text('请先登录')
       let _this = this
       this.api.post({
         url: `springcloud-park/activity/activityApply/cancelApply?activityId=${id}`,
@@ -204,6 +222,8 @@ export default {
           if (res.code === '0000') {
             _this.activityApplyShow = '1'
             // _this.actiDel()
+          } else {
+            _this.$vux.toast.text(res.result)
           }
         }
       })
@@ -242,7 +262,7 @@ export default {
 <style lang="scss" scoped>
 .actiDetail {
   width: 100%;
-  padding-bottom:100px;
+  padding-bottom: 100px;
   // padding-top: 37px;
   .actiImg {
     // height: 357px;
@@ -284,8 +304,8 @@ export default {
       font-size: 29px;
       font-weight: 400;
     }
-    .time2{
-      margin-left:7px;
+    .time2 {
+      margin-left: 7px;
     }
     .date1 {
       font-size: 22px;
@@ -345,7 +365,7 @@ export default {
     .applyNum {
       font-size: 30px;
       color: #8c8c8c;
-      span:nth-child(2){
+      span:nth-child(2) {
         display: inline-block;
         vertical-align: middle;
       }
@@ -363,7 +383,7 @@ export default {
       font-size: 30px;
       margin-bottom: 30px;
     }
-    >p{
+    > p {
       line-height: 40px;
     }
   }
@@ -373,7 +393,7 @@ export default {
     justify-content: center;
     border-top: 1px solid #eee;
     position: fixed;
-    bottom:0;
+    bottom: 0;
     z-index: 3;
     height: 100px;
     width: 100%;

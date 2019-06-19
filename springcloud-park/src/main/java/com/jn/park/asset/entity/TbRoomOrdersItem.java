@@ -50,9 +50,6 @@ public class TbRoomOrdersItem implements Serializable {
     /*@ApiModelProperty("付款金额")*/
     private BigDecimal paySum;
 
-    /*@ApiModelProperty("房间状态(0空闲,1租借申请中,2租借中,3退租申请中,4已到期)(暂时没用)")*/
-    private Byte roomStatus;
-
     /*@ApiModelProperty("退租违约金")*/
     private BigDecimal quitPenalSum;
 
@@ -208,14 +205,6 @@ public class TbRoomOrdersItem implements Serializable {
         this.paySum = paySum;
     }
 
-    public Byte getRoomStatus() {
-        return roomStatus;
-    }
-
-    public void setRoomStatus(Byte roomStatus) {
-        this.roomStatus = roomStatus;
-    }
-
     public BigDecimal getQuitPenalSum() {
         return quitPenalSum;
     }
@@ -331,7 +320,6 @@ public class TbRoomOrdersItem implements Serializable {
             && (this.getShortestLease() == null ? other.getShortestLease() == null : this.getShortestLease().equals(other.getShortestLease()))
             && (this.getIntroduce() == null ? other.getIntroduce() == null : this.getIntroduce().equals(other.getIntroduce()))
             && (this.getPaySum() == null ? other.getPaySum() == null : this.getPaySum().equals(other.getPaySum()))
-            && (this.getRoomStatus() == null ? other.getRoomStatus() == null : this.getRoomStatus().equals(other.getRoomStatus()))
             && (this.getQuitPenalSum() == null ? other.getQuitPenalSum() == null : this.getQuitPenalSum().equals(other.getQuitPenalSum()))
             && (this.getExplain() == null ? other.getExplain() == null : this.getExplain().equals(other.getExplain()))
             && (this.getApprovalOpinion() == null ? other.getApprovalOpinion() == null : this.getApprovalOpinion().equals(other.getApprovalOpinion()))
@@ -364,7 +352,6 @@ public class TbRoomOrdersItem implements Serializable {
         result = prime * result + ((getShortestLease() == null) ? 0 : getShortestLease().hashCode());
         result = prime * result + ((getIntroduce() == null) ? 0 : getIntroduce().hashCode());
         result = prime * result + ((getPaySum() == null) ? 0 : getPaySum().hashCode());
-        result = prime * result + ((getRoomStatus() == null) ? 0 : getRoomStatus().hashCode());
         result = prime * result + ((getQuitPenalSum() == null) ? 0 : getQuitPenalSum().hashCode());
         result = prime * result + ((getExplain() == null) ? 0 : getExplain().hashCode());
         result = prime * result + ((getApprovalOpinion() == null) ? 0 : getApprovalOpinion().hashCode());
@@ -400,7 +387,6 @@ public class TbRoomOrdersItem implements Serializable {
         sb.append(", shortestLease=").append(shortestLease);
         sb.append(", introduce=").append(introduce);
         sb.append(", paySum=").append(paySum);
-        sb.append(", roomStatus=").append(roomStatus);
         sb.append(", quitPenalSum=").append(quitPenalSum);
         sb.append(", explain=").append(explain);
         sb.append(", approvalOpinion=").append(approvalOpinion);

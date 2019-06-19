@@ -2,14 +2,13 @@
   <div class="colleagueProduct">
     <div class="ordinary_title font16">
       <div>企业同事</div>
-      <!-- <div @click="toInviteEmployees">邀请员工</div> -->
     </div>
 
     <div class="ordinary_main">
       <div class="search">
         <div></div>
-        <el-input placeholder="请输入真实姓名或手机号" v-model="searchFiled" clearable>
-          <el-button slot="append" icon="el-icon-search" @click="initList()"></el-button>
+        <el-input placeholder="请输入真实姓名或手机号" v-model="searchFiled" clearable  @keyup.enter.native="initList">
+          <el-button slot="append" icon="el-icon-search" @click="initList"></el-button>
         </el-input>
       </div>
       <div class="ordinary_table">
@@ -45,6 +44,7 @@
   </div>
 </template>
 <script>
+import { getUserInfo } from '@/util/auth'
 export default {
   data() {
     return {
@@ -163,7 +163,7 @@ export default {
     },
     // 初始话页面
     initList() {
-      this.account = sessionStorage.getItem("account");
+      this.account = JSON.parse(getUserInfo()).account;
       let _this = this;
       this.api.get({
         url: "getColleagueList",

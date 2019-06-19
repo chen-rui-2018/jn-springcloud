@@ -141,7 +141,7 @@
       <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :modal-append-to-body="false" :lock-scroll="false">
         <div class="loginTip">
           你还未
-          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          <span class="mainColor pointer" @click="goLogin">登录</span>
           /
           <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
           账号
@@ -184,9 +184,13 @@ export default {
     clearInterval(this._interval);
   },
   methods: {
+    goLogin() {
+      window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
+      this.$router.push({ path: "/login" });
+    },
     //留言
     leaveMessage(id) {
-      if (!sessionStorage.userInfo) {
+      if (!this.getToken()) {
         this.concatVisible=true;
         return;
       }
@@ -213,7 +217,7 @@ export default {
       if (this.inFlag == i) {
         return;
       }
-      if (!sessionStorage.userInfo) {
+      if (!this.getToken()) {
         this.concatVisible=true;
         return;
       }
@@ -222,10 +226,6 @@ export default {
     },
     //回复评论
     replycom(item) {
-      // if (!sessionStorage.userInfo) {
-      //   this.concatVisible=true;
-      //   return;
-      // }
       this.inFlag = "";
       let _this = this;
       this.api.post({
@@ -246,7 +246,7 @@ export default {
       });
     },
     comLike(item) {
-      if (!sessionStorage.userInfo) {
+      if (!this.getToken()) {
         this.concatVisible=true;
         return;
       }
@@ -311,7 +311,7 @@ export default {
     },
     handCheck(id) {
       //跳转报名人列表
-      if (!sessionStorage.userInfo) {
+      if (!this.getToken()) {
         this.concatVisible=true;
         return;
       }
@@ -319,7 +319,7 @@ export default {
     },
     quickApply(id) {
       //立即报名
-      if (!sessionStorage.userInfo) {
+      if (!this.getToken()) {
         this.concatVisible=true;
         return;
       }
@@ -342,7 +342,7 @@ export default {
     },
     stopApply(id) {
       //停止报名
-      if (!sessionStorage.userInfo) {
+      if (!this.getToken()) {
         this.concatVisible=true;
         return;
       }
@@ -364,7 +364,7 @@ export default {
       });
     },
     handleLike(id) {
-      if (!sessionStorage.userInfo) {
+      if (!this.getToken()) {
         this.concatVisible=true;
         return;
       }

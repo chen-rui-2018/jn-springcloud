@@ -28,9 +28,9 @@ public class SmsSink {
 
     @StreamListener(MessageSink.SMS)
     public void listenSms(SmsTemplateVo smsTemplateVo) {
-        log.info("收到sms的信息:{}",smsTemplateVo.toString()) ;
+        log.info("\n短信下发接收的参数内容：【{}】",smsTemplateVo.toString());
         SmsBaseResult smsBaseResult = smsService.sendMsgByTemplate(smsTemplateVo);
-        log.info("短信下发返回状态：{},返回结果{}",smsBaseResult.getResult(),smsBaseResult.getDesc());
+        log.info("\n短信下发返回状态：{},返回结果{}",smsBaseResult.getResult(),smsBaseResult.getDesc());
     }
 
 

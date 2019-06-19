@@ -2,13 +2,11 @@ package com.jn.enterprise.company.service;
 
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
-import com.jn.company.model.CreditUpdateParam;
-import com.jn.company.model.ServiceCompany;
-import com.jn.company.model.ServiceCompanyParam;
-import com.jn.company.model.ServiceEnterpriseParam;
+import com.jn.company.model.*;
 import com.jn.enterprise.company.model.CompanyUpdateParam;
 import com.jn.enterprise.company.vo.CompanyContactVO;
 import com.jn.enterprise.company.vo.CompanyDetailsVo;
+import com.jn.enterprise.company.vo.UpgradeStatusVO;
 import com.jn.enterprise.model.CompanyInfoModel;
 import com.jn.park.activity.model.ActivityPagingParam;
 import com.jn.park.activity.model.Comment;
@@ -108,5 +106,26 @@ public interface CompanyService {
      * @return
      */
     CompanyInfoModel getCompanyInfo(String companyId,String account);
+
+    /**
+     * 企业缴费成功修改企业信息
+     * @param updateCompanyInfoParam
+     * @return
+     */
+    Boolean updateCompanyInfoAfterPay(UpdateCompanyInfoParam updateCompanyInfoParam);
+
+    /**
+     * 查询当前企业信息
+     * @param account
+     * @return
+     */
+    ServiceCompany getCurCompanyInfo(String account);
+
+    /**
+     * 查询当前账号是否允许认证
+     * @param account
+     * @return
+     */
+    UpgradeStatusVO getJoinParkStatus(String account);
 
 }

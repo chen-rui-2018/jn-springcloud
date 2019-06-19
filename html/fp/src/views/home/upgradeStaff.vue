@@ -130,9 +130,9 @@ export default {
       //   this.$message.error("请输入6位数字验证码");
       //   return;
       // }
-      this.loading=true
       this.$refs[formName].validate(valid => {
         if (valid) {
+           this.loading=true
           let _this = this;
           this.api.post({
             url: "changeToStaff",
@@ -146,8 +146,8 @@ export default {
               phone: _this.ruleForm.phone
             },
             callback: function(res) {
+              _this.loading=false
               if (res.code == "0000") {
-                _this.loading=false
                 _this.$message.success("提交成功，等待审核");
                 _this.$refs["ruleForm"].resetFields();
                 _this.ruleForm.checkCode = "";

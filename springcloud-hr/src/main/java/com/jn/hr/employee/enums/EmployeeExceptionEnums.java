@@ -18,7 +18,8 @@ public enum EmployeeExceptionEnums implements CodeAndMsg {
     EmployeeDEPARTMENT_NOT_EXISTS("7000009", "部门不存在"),
     HOLIDAY_RULE_ERROR("7000010", "假期规则不符合要求"),
     QUERYDICT_ERROR("7000011", "查询字典表错误"),
-    ADD_USER_ERROR("7000012", "新增用户接口调用错误")
+    ADD_USER_ERROR("7000012", "新增用户接口调用错误"),
+    DOWNLOAD_EMPLOYEEFILE_ATTACHMENT("7000013", "下载员工档案附件失败"),
     ;
     private String code;
 

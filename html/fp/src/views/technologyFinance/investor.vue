@@ -28,10 +28,13 @@
         <i class="iconfont icon-sousuo" @click="handleSearchList"></i>
       </div>
     </div>
-    <div class="investorContent">
-      <ul>
-        <li v-for="(i,k) in investorInfoList" :key='k'>
-          <div class="liImg pointer" @click="handleDel(i.investorAccount)">
+    <div class="investorContent" v-loading="investorLoading">
+      <div v-if="investorInfoList.length==0">
+        <nodata></nodata>
+      </div>
+      <ul v-else>
+        <li v-for="(i,k) in investorInfoList" :key='k' class="pointer" @click="handleDel(i.investorAccount)">
+          <div class="liImg pointer">
             <img v-if="i.avatar" :src="i.avatar" alt="">
             <img v-else src="@/../static/img/touxiang.png" alt="">
           </div>
@@ -56,9 +59,14 @@
   </div>
 </template>
 <script>
+import nodata from "../common/noData.vue";
 export default {
+  components: {
+    nodata
+  },
   data() {
     return {
+      investorLoading: false,
       total: 0,
       page: 1,
       row: 3,
@@ -116,6 +124,7 @@ export default {
     },
     getInvestorInfoList() {
       //投资人列表
+      this.investorLoading = true;
       let _this = this;
       this.api.get({
         url: "getInvestorInfoList",
@@ -124,7 +133,7 @@ export default {
           mainCode: _this.mainCode,
           page: _this.page,
           rows: _this.row,
-          keyWords:_this.keyWords
+          keyWords: _this.keyWords
         },
         callback: function(res) {
           if (res.code == "0000") {
@@ -133,6 +142,7 @@ export default {
           } else {
             _this.$message.error(res.result);
           }
+          _this.investorLoading = false;
         }
       });
     },
@@ -317,7 +327,7 @@ export default {
         background: #00a041;
         color: #fff;
         border-top-right-radius: 5px;
-        border-bottom-right-radius: 5px
+        border-bottom-right-radius: 5px;
       }
     }
   }

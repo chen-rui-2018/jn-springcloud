@@ -38,13 +38,6 @@ public interface SpPowerPortalService {
      */
     List<SpPowerDetailVo> get(String id);
 
-    /**
-     * 通过部门名称获取全部的实施部门(模糊查询)
-     *
-     * @param name
-     * @return
-     */
-    List<SpDictDepartModel> departList(String name);
 
     /**
      * 返回全部的权力清单(包含孩子)
@@ -87,4 +80,10 @@ public interface SpPowerPortalService {
      * @param userId
      */
     Integer pushPowerBusiBatch(String powerBusiIds, ServiceCompanyParam serviceCompanyParam, String userId);
+
+    /**
+     * 获取(新)实施部门列表
+     * @return
+     */
+    List<List<SpDictDepartModel>> departList();
 }

@@ -1,11 +1,10 @@
 <template>
 <div>
-    <div class="declarationCenter_search">
-      <search
-      v-model="sendData.titleName"
-      @on-change="gosearch"
-      ref="search" v-if="isShow!=1"></search>
+    <div class="declarationCenter_search" v-if="isShow!=1">
+      <i class="weui-icon-search" v-if="sendData.titleName===''"></i>
+      <input type="text" placeholder="搜索" @change="gosearch" v-model="sendData.titleName" >
     </div>
+    <!-- v-if="isShow!=1" gosearch-->
   <div class="declarationCenter" :class="{'padding':isShow!=1} ">
     <div class="banner" v-if="isShow===1"><img src="@/assets/image/declarationCenter-baner.png" alt=""></div>
     <!-- 常年申报 -->
@@ -33,7 +32,7 @@
     <div class="declaration_platform" v-if="isShow===1">
       <div class="platform_titile">
         <div>申报平台</div>
-        <div >MORE <span class="iconfont icon-jiantou"></span></div>
+        <div @click="$router.push({path:'/guest/pd/declarationPlatform'})">MORE <span class="iconfont icon-jiantou"></span></div>
       </div>
       <div class="platform_cont" @click="$router.push({path:'/guest/pd/declarationPlatform'})">
         <p>
@@ -48,7 +47,6 @@
     </div>
     <div class="before" v-if="isShow===1"></div>
     <!-- 申报中心列表 -->
-
     <div class="declaration_list">
       <div class="declaration_list_tab">
         <ul >
@@ -145,7 +143,6 @@ export default {
         var scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight)
         var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
         var clientHeight = window.innerHeight || Math.min(document.documentElement.clientHeight, document.body.clientHeight)
-        console.log()
         if (clientHeight + scrollTop >= scrollHeight) {
           if (this.sendData.page < Math.ceil(this.total / this.sendData.rows)) {
             this.sendData.page++
@@ -173,6 +170,8 @@ export default {
           if (res.code === '0000') {
             // console.log(res)
             this.perennialList = res.data.rows
+          } else {
+            this.$vux.toast.text(res.result)
           }
         }
       })
@@ -184,6 +183,8 @@ export default {
         callback: res => {
           if (res.code === '0000') {
             this.typeList = res.data
+          } else {
+            this.$vux.toast.text(res.result)
           }
         }
       })
@@ -198,6 +199,8 @@ export default {
             // console.log(res)
             this.declarationList = res.data.rows
             this.total = res.data.total
+          } else {
+            this.$vux.toast.text(res.result)
           }
         }
       })
@@ -229,43 +232,25 @@ export default {
     position: fixed;
     z-index: 10;
     width: 100%;
-    .weui-search-bar{
-      padding:22px 32px;
+    background-color: #F5F5F5;
+    padding: 0 35px;
+    display: flex;
+    input::placeholder{
+      text-align: center;
+      font-size: 21px;
     }
-    .vux-search-box{
-      position: fixed;
-      // top:105px !important;
-    }
-    .weui-search-bar__label span{
-      font-size: 23px;
-    }
-    .weui-search-bar__input{
-      height: 63px;
-      line-height: 63px;
+    input{
+      height: 60px;
+      width:100%;
+      margin: 22px 0;
       border-radius: 30px;
+      padding: 0 40px;
     }
-    .weui-icon-search{
-      line-height: 63px;
-      font-size: 23px;
-    }
-    .weui-search-bar__box .weui-icon-clear{
-      line-height: 63px;
-    }
-    .weui-search-bar.weui-search-bar_focusing .weui-search-bar__cancel-btn{
-      display: flex;
-      align-items: center;
-    }
-    .weui-search-bar__box{
-      padding:0 70px;
-      .weui-icon-search{
-        left:20px;
-        top:20px;
-      }
-      .weui-search-bar__input{
-        padding:0;
-        height: 63px;
-        font-size: 23px;
-      }
+    i{
+      position: absolute;
+      top: 42%;
+      right: 54%;
+      font-size: 21px;
     }
   }
   .padding{
@@ -277,6 +262,7 @@ export default {
     .perennial{
       background-color: #fff;
       margin:0 23px;
+      margin-top: 31px;
       .perennial_titile{
         display: flex;
         justify-content: space-between;
@@ -315,14 +301,14 @@ export default {
                   margin-top: 9px;
                 }
                 p:nth-child(1){
-                  width:100%;
-                  height: 107px;
+                  // width:100%;
+                  // height: 107px;
                   border-bottom: 1px solid #eeeeee;
                   padding: 13px 0;
                   margin-top: 0;
                   img{
                     width: 51%;
-                    height: 100%;
+                    // height: 100%;
                     display: block;
                     margin: auto;
                   }
@@ -332,12 +318,10 @@ export default {
                   font-size: 16px;
                   padding-top: 18px;
                   line-height: 29px;
-                  display: -webkit-box;
-                  -webkit-box-orient: vertical;
-                  -webkit-line-clamp: 2;
                   overflow: hidden;
+                  white-space: nowrap;
+                  text-overflow: ellipsis;
                   height: 46px;
-
                 }
                 p:nth-child(4){
                  span{
@@ -460,10 +444,9 @@ export default {
           .declaration_cont_left{
             width: 92%;
             .cont_title{
-              display: -webkit-box;
-              -webkit-box-orient: vertical;
-              -webkit-line-clamp: 1;
-              overflow: hidden;
+             overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
               font-size: 26px;
               padding-top: 37px;
               line-height: 28px;

@@ -14,6 +14,9 @@
     <result column="acti_address" jdbcType="VARCHAR" property="actiAddress" />
     <result column="acti_cost" jdbcType="DECIMAL" property="actiCost" />
     <result column="acti_organizer" jdbcType="VARCHAR" property="actiOrganizer" />
+    <result column="acti_guide_organizer" jdbcType="VARCHAR" property="actiGuideOrganizer" />
+    <result column="acti_undertake_organizer" jdbcType="VARCHAR" property="actiUndertakeOrganizer" />
+    <result column="acti_co_organizer" jdbcType="VARCHAR" property="actiCoOrganizer" />
     <result column="acti_number" jdbcType="INTEGER" property="actiNumber" />
     <result column="acti_poster_url" jdbcType="VARCHAR" property="actiPosterUrl" />
     <result column="acti_status" jdbcType="VARCHAR" property="actiStatus" />
@@ -94,9 +97,10 @@
   </sql>
   <sql id="Base_Column_List">
     id, acti_type, acti_name, acti_start_time, acti_end_time, apply_start_time, apply_end_time, 
-    mes_send_time, park_id, acti_address, acti_cost, acti_organizer, acti_number, acti_poster_url, 
-    acti_status, created_time, creator_account, modified_time, modifier_account, acti_views, 
-    acti_like, apply_num, partic_num, is_index, is_apply, acti_order, issue_time, issue_account, 
+    mes_send_time, park_id, acti_address, acti_cost, acti_organizer, acti_guide_organizer, 
+    acti_undertake_organizer, acti_co_organizer, acti_number, acti_poster_url, acti_status, 
+    created_time, creator_account, modified_time, modifier_account, acti_views, acti_like, 
+    apply_num, partic_num, is_index, is_apply, acti_order, issue_time, issue_account, 
     show_apply_num, apply_check, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.activity.entity.TbActivityCriteria" resultMap="BaseResultMap">
@@ -134,24 +138,26 @@
       acti_start_time, acti_end_time, apply_start_time, 
       apply_end_time, mes_send_time, park_id, 
       acti_address, acti_cost, acti_organizer, 
-      acti_number, acti_poster_url, acti_status, 
-      created_time, creator_account, modified_time, 
-      modifier_account, acti_views, acti_like, 
-      apply_num, partic_num, is_index, 
-      is_apply, acti_order, issue_time, 
-      issue_account, show_apply_num, apply_check, 
-      record_status)
+      acti_guide_organizer, acti_undertake_organizer, 
+      acti_co_organizer, acti_number, acti_poster_url, 
+      acti_status, created_time, creator_account, 
+      modified_time, modifier_account, acti_views, 
+      acti_like, apply_num, partic_num, 
+      is_index, is_apply, acti_order, 
+      issue_time, issue_account, show_apply_num, 
+      apply_check, record_status)
     values (#{id,jdbcType=VARCHAR}, #{actiType,jdbcType=VARCHAR}, #{actiName,jdbcType=VARCHAR}, 
       #{actiStartTime,jdbcType=TIMESTAMP}, #{actiEndTime,jdbcType=TIMESTAMP}, #{applyStartTime,jdbcType=TIMESTAMP}, 
       #{applyEndTime,jdbcType=TIMESTAMP}, #{mesSendTime,jdbcType=TIMESTAMP}, #{parkId,jdbcType=VARCHAR}, 
       #{actiAddress,jdbcType=VARCHAR}, #{actiCost,jdbcType=DECIMAL}, #{actiOrganizer,jdbcType=VARCHAR}, 
-      #{actiNumber,jdbcType=INTEGER}, #{actiPosterUrl,jdbcType=VARCHAR}, #{actiStatus,jdbcType=VARCHAR}, 
-      #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
-      #{modifierAccount,jdbcType=VARCHAR}, #{actiViews,jdbcType=INTEGER}, #{actiLike,jdbcType=INTEGER}, 
-      #{applyNum,jdbcType=INTEGER}, #{particNum,jdbcType=INTEGER}, #{isIndex,jdbcType=VARCHAR}, 
-      #{isApply,jdbcType=VARCHAR}, #{actiOrder,jdbcType=INTEGER}, #{issueTime,jdbcType=TIMESTAMP}, 
-      #{issueAccount,jdbcType=VARCHAR}, #{showApplyNum,jdbcType=VARCHAR}, #{applyCheck,jdbcType=VARCHAR}, 
-      #{recordStatus,jdbcType=TINYINT})
+      #{actiGuideOrganizer,jdbcType=VARCHAR}, #{actiUndertakeOrganizer,jdbcType=VARCHAR}, 
+      #{actiCoOrganizer,jdbcType=VARCHAR}, #{actiNumber,jdbcType=INTEGER}, #{actiPosterUrl,jdbcType=VARCHAR}, 
+      #{actiStatus,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{actiViews,jdbcType=INTEGER}, 
+      #{actiLike,jdbcType=INTEGER}, #{applyNum,jdbcType=INTEGER}, #{particNum,jdbcType=INTEGER}, 
+      #{isIndex,jdbcType=VARCHAR}, #{isApply,jdbcType=VARCHAR}, #{actiOrder,jdbcType=INTEGER}, 
+      #{issueTime,jdbcType=TIMESTAMP}, #{issueAccount,jdbcType=VARCHAR}, #{showApplyNum,jdbcType=VARCHAR}, 
+      #{applyCheck,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.activity.entity.TbActivity">
     insert into tb_activity
@@ -191,6 +197,15 @@
       </if>
       <if test="actiOrganizer != null">
         acti_organizer,
+      </if>
+      <if test="actiGuideOrganizer != null">
+        acti_guide_organizer,
+      </if>
+      <if test="actiUndertakeOrganizer != null">
+        acti_undertake_organizer,
+      </if>
+      <if test="actiCoOrganizer != null">
+        acti_co_organizer,
       </if>
       <if test="actiNumber != null">
         acti_number,
@@ -286,6 +301,15 @@
       </if>
       <if test="actiOrganizer != null">
         #{actiOrganizer,jdbcType=VARCHAR},
+      </if>
+      <if test="actiGuideOrganizer != null">
+        #{actiGuideOrganizer,jdbcType=VARCHAR},
+      </if>
+      <if test="actiUndertakeOrganizer != null">
+        #{actiUndertakeOrganizer,jdbcType=VARCHAR},
+      </if>
+      <if test="actiCoOrganizer != null">
+        #{actiCoOrganizer,jdbcType=VARCHAR},
       </if>
       <if test="actiNumber != null">
         #{actiNumber,jdbcType=INTEGER},
@@ -391,6 +415,15 @@
       <if test="record.actiOrganizer != null">
         acti_organizer = #{record.actiOrganizer,jdbcType=VARCHAR},
       </if>
+      <if test="record.actiGuideOrganizer != null">
+        acti_guide_organizer = #{record.actiGuideOrganizer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.actiUndertakeOrganizer != null">
+        acti_undertake_organizer = #{record.actiUndertakeOrganizer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.actiCoOrganizer != null">
+        acti_co_organizer = #{record.actiCoOrganizer,jdbcType=VARCHAR},
+      </if>
       <if test="record.actiNumber != null">
         acti_number = #{record.actiNumber,jdbcType=INTEGER},
       </if>
@@ -467,6 +500,9 @@
       acti_address = #{record.actiAddress,jdbcType=VARCHAR},
       acti_cost = #{record.actiCost,jdbcType=DECIMAL},
       acti_organizer = #{record.actiOrganizer,jdbcType=VARCHAR},
+      acti_guide_organizer = #{record.actiGuideOrganizer,jdbcType=VARCHAR},
+      acti_undertake_organizer = #{record.actiUndertakeOrganizer,jdbcType=VARCHAR},
+      acti_co_organizer = #{record.actiCoOrganizer,jdbcType=VARCHAR},
       acti_number = #{record.actiNumber,jdbcType=INTEGER},
       acti_poster_url = #{record.actiPosterUrl,jdbcType=VARCHAR},
       acti_status = #{record.actiStatus,jdbcType=VARCHAR},
@@ -525,6 +561,15 @@
       </if>
       <if test="actiOrganizer != null">
         acti_organizer = #{actiOrganizer,jdbcType=VARCHAR},
+      </if>
+      <if test="actiGuideOrganizer != null">
+        acti_guide_organizer = #{actiGuideOrganizer,jdbcType=VARCHAR},
+      </if>
+      <if test="actiUndertakeOrganizer != null">
+        acti_undertake_organizer = #{actiUndertakeOrganizer,jdbcType=VARCHAR},
+      </if>
+      <if test="actiCoOrganizer != null">
+        acti_co_organizer = #{actiCoOrganizer,jdbcType=VARCHAR},
       </if>
       <if test="actiNumber != null">
         acti_number = #{actiNumber,jdbcType=INTEGER},
@@ -599,6 +644,9 @@
       acti_address = #{actiAddress,jdbcType=VARCHAR},
       acti_cost = #{actiCost,jdbcType=DECIMAL},
       acti_organizer = #{actiOrganizer,jdbcType=VARCHAR},
+      acti_guide_organizer = #{actiGuideOrganizer,jdbcType=VARCHAR},
+      acti_undertake_organizer = #{actiUndertakeOrganizer,jdbcType=VARCHAR},
+      acti_co_organizer = #{actiCoOrganizer,jdbcType=VARCHAR},
       acti_number = #{actiNumber,jdbcType=INTEGER},
       acti_poster_url = #{actiPosterUrl,jdbcType=VARCHAR},
       acti_status = #{actiStatus,jdbcType=VARCHAR},

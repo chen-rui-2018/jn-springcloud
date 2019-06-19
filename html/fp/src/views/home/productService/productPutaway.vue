@@ -1,5 +1,5 @@
 <template>
-  <div class="productPutaway"  >
+  <div class="productPutaway" v-loading="loading">
     <div class="putaway_title">
       <div>{{this.$route.meta.title}}</div>
       <div @click="$router.go(-1)">返回列表</div>
@@ -13,7 +13,7 @@
             </el-form-item>
           </div>
           <div>
-            <el-form-item label="服务顾问：">
+            <el-form-item label="服务专员：">
               <el-select v-model="advisorAccount" multiple placeholder="请选择">
                 <el-option :label="counseloritem.advisorName" :value="counseloritem.advisorAccount" v-for="(counseloritem,counselorindex) in counselorList" :key="counselorindex">
                 </el-option>
@@ -155,7 +155,7 @@ export default {
   data () {
     return {
       productDetail:{},//产品详情
-      counselorList:[],//服务顾问列表
+      counselorList:[],//服务专员列表
       productName:'',//产品名称
       // territory:0,
       productNameList:[],//产品名称列表
@@ -163,7 +163,8 @@ export default {
       orgId:'',
       templateId:'',
       businessType:'',
-      businessTypeName:""
+      businessTypeName:"",
+      loading:false
     }
   },
   mounted () {
@@ -214,7 +215,7 @@ export default {
       })
       
     },
-    // 获取服务顾问列表（非科技金融）
+    // 获取服务专员列表（非科技金融）
     getServiceConsultantList(){
       let _this = this;
       this.api.get({
@@ -270,6 +271,7 @@ export default {
     },
     //上架
     submit(){
+      this.loading=true
       if(this.businessType=='technology_finance'){
         let _this = this
         this.api.post({
@@ -280,8 +282,12 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
+              _this.loading=false
               _this.$message.success("上架成功")
               _this.$router.back(-1)
+            }else{
+            _this.loading=false 
+             _this.$message.error(res.result)
             }
           }
         })
@@ -297,8 +303,12 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
+              _this.loading=false
               _this.$message.success("上架成功")
               _this.$router.back(-1)
+            }else{
+               _this.loading=false 
+             _this.$message.error(res.result)
             }
           }
         })

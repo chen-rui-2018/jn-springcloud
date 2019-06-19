@@ -7,10 +7,12 @@ import com.jn.company.api.CompanyClient;
 import com.jn.company.model.CreditUpdateParam;
 import com.jn.company.model.ServiceCompany;
 import com.jn.company.model.ServiceCompanyParam;
+import com.jn.company.model.UpdateCompanyInfoParam;
 import com.jn.enterprise.company.service.CompanyService;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -48,6 +50,13 @@ public class CompanyServerController extends BaseController implements CompanyCl
     @Override
     public Result<Boolean> updateCreditPoints(@RequestBody CreditUpdateParam creditUpdateParam){
         return companyService.updateCreditPoints(creditUpdateParam);
+    }
+
+
+    @Override
+    @ControllerLog(doAction = "企业缴费成功修改企业信息")
+    public Result<Boolean> updateCompanyInfoAfterPay(@Validated @RequestBody UpdateCompanyInfoParam updateCompanyInfoParam){
+        return new Result(companyService.updateCompanyInfoAfterPay(updateCompanyInfoParam));
     }
 
 }

@@ -3,80 +3,90 @@
     <div class="container">
       <div class="footer1 clearfix">
         <div class="footLeft clearfix">
+          <h5>友情链接</h5>
+          <div class="line"></div>
           <div class="help">
-            <h5>友情链接</h5>
-            <div class="line"></div>
+            <h5>国家</h5>
+            <!-- <div class="line"></div> -->
             <ul>
               <li>
-                <a href="http://www.jszwfw.gov.cn/" target="_blank">江苏政务服务网</a>
+                <a href="http://www.miit.gov.cn/n11293472/index.html" target="_blank">中华人民共和国工业和信息化部</a>
+              </li>
+              <li>
+                <a href="http://www.most.gov.cn/" target="_blank">中华人民共和国科学技术部</a>
               </li>
               <li>
                 <a href="http://www.chinatorch.gov.cn/kjb/index.shtml" target="_blank">科技技术部火炬高新技术产业开发中心</a>
               </li>
               <li>
-                <a href="http://www.jsbi.cn/" target="_blank">江苏省高新技术创业服务中心</a>
+                <a href="http://www.mofcom.gov.cn/" target="_blank">中华人民共和国商务部</a>
               </li>
               <li>
-                <a href="http://www.jstd.gov.cn/" target="_blank">江苏省科技技术厅</a>
-              </li>
-              <li>
-                <a href="http://www.jsjmrhw.org/" target="_blank">江苏省军民融合公共服务平台</a>
+                <a href="http://www.smecn.org.cn/" target="_blank">国家中小企业公共服务示范平台</a>
               </li>
             </ul>
           </div>
-          <div class="help help1">
-            <!-- <h5>帮助</h5> -->
+          <div class="help">
+            <h5>江苏省</h5>
             <!-- <div class="line"></div> -->
             <ul>
               <li>
-                <a href="http://www.njkj.gov.cn/" target="_blank">南京市科学技术委员会</a>
+                <a href="http://www.jszwfw.gov.cn/" target="_blank">江苏政务服务网</a>
               </li>
-              <li>
-                <a href="http://www.miit.gov.cn/n11293472/index.html" target="_blank">中国人民共和国工业和信息化部</a>
-              </li>
-              <li>
-                <a href="http://www.jseic.gov.cn/" target="_blank">江苏省经济和信息化委员会</a>
-              </li>
-              <li>
-                <a href="http://www.njec.gov.cn/" target="_blank">南京市经济和信息化委员会</a>
-              </li>
-              <li>
-                <a href="http://www.mofcom.gov.cn/" target="_blank">中国人民共和国商务部</a>
-              </li>
-            </ul>
-          </div>
-          <div class="help help1">
-            <ul>
               <li>
                 <a href="http://www.jiangsudoc.gov.cn/" target="_blank">江苏省商务厅</a>
-              </li>
-              <li>
-                <a href="http://www.njsmj.gov.cn/" target="_blank">南京商务信息网</a>
-              </li>
-              <li>
-                <a href="http://www.most.gov.cn/" target="_blank">中国人民共和国科学技术部</a>
-              </li>
-              <li>
-                <a href="jhttp://www.sdpc.gov.cn/" target="_blank">中华人民共和国国家发展和改革委员会</a>
-              </li>
-              <li>
-                <a href="http://www.jsdpc.gov.cn/" target="_blank">江苏省发展和改革委员会</a>
-              </li>
-            </ul>
-          </div>
-          <div class="help help1">
-            <ul>
-              <li>
-                <a href="http://www.njdpc.gov.cn/" target="_blank">南京市发展和改革委员会</a>
               </li>
               <li>
                 <a href="http://www.smejs.cn/" target="_blank">江苏省中小企业公共服务平台</a>
               </li>
               <li>
-                <a href="http://www.smecn.org.cn/" target="_blank">国家中小企业公共服务示范平台</a>
+                <a href="http://www.jsbi.cn/" target="_blank">江苏省高新技术创业服务中心</a>
               </li>
               <li>
+                <a href="http://www.jseic.gov.cn/" target="_blank">江苏省经济和信息化委员会</a>
+              </li>
+              <li>
+                <a href="http://www.jstd.gov.cn/" target="_blank">江苏省科技技术厅</a>
+              </li>
+            </ul>
+          </div>
+          <div class="help help2">
+            <!-- <h5></h5> -->
+            <ul>
+              <!-- <li>
+                <a href="http://www.jstd.gov.cn/" target="_blank">江苏省科技技术厅</a>
+              </li> -->
+              <li>
                 <a href="http://www.js-sme.org.cn/" target="_blank">江苏省中小企业发展中心</a>
+              </li>
+              <li>
+                <a href="http://www.jsjmrhw.org/" target="_blank">江苏省军民融合公共服务平台</a>
+              </li>
+              <li>
+                <a href="http://www.jsdpc.gov.cn/" target="_blank">江苏省发展和改革委员会</a>
+              </li>
+              <li>
+                <a href="https://etax.jiangsu.chinatax.gov.cn/sso/login" target="_blank">国家税务总局江苏省电子税务局</a>
+              </li>
+              <li>
+                <a href="http://218.94.38.242:10001/onlineRegNew-web/userManage/net_user_login.jsp" target="_blank">江苏工商网上登记系统</a>
+              </li>
+            </ul>
+          </div>
+          <div class="help">
+            <h5>南京市</h5>
+            <ul>
+              <li>
+                <a href="http://www.njkj.gov.cn/" target="_blank">南京市科学技术委员会</a>
+              </li>
+              <li>
+                <a href="http://www.njdpc.gov.cn/" target="_blank">南京市发展和改革委员会</a>
+              </li>
+              <li>
+                <a href="http://www.njsmj.gov.cn/" target="_blank">南京商务信息网</a>
+              </li>
+              <li>
+                <a href="http://www.njec.gov.cn/" target="_blank">南京市经济和信息化委员会</a>
               </li>
               <li>
                 <a href="http://www.njsme.org.cn/index.html" target="_blank">南京市中小企业公共服务平台</a>
@@ -111,17 +121,21 @@
         </div> -->
         <div class="footRight">
           <div class="erweima1">
-            <div><img src="@/../static/img/erweima1.jpg" alt=""></div>
-            <p>App下载二维码</p>
+            <div><img src="@/../static/img/apple.png" alt=""></div>
+            <p>ios</p>
           </div>
           <div class="erweima2">
-            <div><img src="@/../static/img/erweima2.png" alt=""></div>
-            <p>微信公众号二维码</p>
+            <div><img src="@/../static/img/andriod.png" alt=""></div>
+            <p>android</p>
+          </div>
+          <div class="erweima2">
+            <div><img src="@/../static/img/xiaocehngxu.png" alt=""></div>
+            <p>小程序</p>
           </div>
         </div>
       </div>
       <div class="footer2">
-        <div class="w">苏ICP备xxxxxx号&nbsp;&nbsp;&copy;版权所有&nbsp;&nbsp;南京白下高新技术产业园区投资发展有限责任公司</div>
+        <div class="w"><a href="http://www.beian.gov.cn/" target="_blank">苏ICP备19029289号-1</a>&nbsp;&nbsp;&copy;版权所有&nbsp;&nbsp;南京白下高新技术产业园区投资发展有限责任公司</div>
       </div>
     </div>
   </div>
@@ -146,14 +160,24 @@ export default {
   border-top: 1px solid #ccc;
   .container {
     .footer1 {
-      height: 240px;
+      height: 260px;
       width: 1190px;
       margin: 0 auto;
       .footLeft {
         margin-top: 30px;
         float: left;
+        h5 {
+          font-size: 14px;
+        }
+        .line {
+          height: 1px;
+          width: 12px;
+          background: #000;
+          font-weight: bold;
+          margin: 10px 0 15px 0;
+        }
         .help {
-          margin-right: 50px;
+          margin-right: 20px;
           // display: inline-block;
           float: left;
           h5 {
@@ -164,19 +188,22 @@ export default {
               width: 180px;
               margin-bottom: 5px;
               overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
+              text-overflow: ellipsis;
+              white-space: nowrap;
               a {
                 font-size: 12px;
-                color: #666;                
+                color: #666;
               }
-              a:hover{
+              a:hover {
                 text-decoration: underline;
               }
             }
           }
         }
-        .help1{
+        .help2{
+          margin-top:20px;
+        }
+        .help1 {
           margin-top: 45px;
         }
         .attention {
@@ -211,13 +238,13 @@ export default {
             }
           }
         }
-        .line {
-          height: 1px;
-          width: 12px;
-          background: #000;
-          font-weight: bold;
-          margin: 10px 0 15px 0;
-        }
+        // .line {
+        //   height: 1px;
+        //   width: 12px;
+        //   background: #000;
+        //   font-weight: bold;
+        //   margin: 10px 0 15px 0;
+        // }
       }
       .footRight {
         float: right;
@@ -243,7 +270,7 @@ export default {
           }
         }
         .erweima2 {
-          margin-left: 30px;
+          margin-left: 20px;
         }
         .right1 {
           color: #707070;
@@ -280,7 +307,7 @@ export default {
       line-height: 48px;
       font-size: 12px;
       background-color: #000;
-      text-align: left;
+      text-align: center;
       // padding-left: 160px;
     }
   }

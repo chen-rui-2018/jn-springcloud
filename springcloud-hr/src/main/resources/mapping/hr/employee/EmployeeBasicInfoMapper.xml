@@ -302,7 +302,7 @@
             </foreach>
 
         </if>
-         group by department_name
+         group by department_name order by value desc
     </select>
     
     <select id="selectByJobNumber" parameterType="java.lang.String"
@@ -492,6 +492,32 @@
         WHERE t1.record_status != 0
         ORDER BY t1.created_time DESC,t1.id DESC
      </select>
+     
+     <select id="selectByIdCard" parameterType="com.jn.hr.employee.entity.TbManpowerEmployeeBasicInfo"
+            resultType="com.jn.hr.employee.entity.TbManpowerEmployeeBasicInfo">
+        SELECT
+       t1.id, t1.employee_portrait, t1.`name`,
+      t1.sex, t1.phone, t1.mailbox,
+      t1.department_id, t1.department_name, t1.job_id,
+      t1.job_name, t1.certificate_id, t1.certificate_type,
+      t1.certificate_number, t1.post_id, t1.post_name,
+      t1.job_number, t1.contract_id, t1.contract_name,
+      t1.employee_type, t1.entry_date, t1.birth_date,
+      t1.nationality_id, t1.nationality_name, t1.work_address,
+      t1.contact_address, t1.certificate_name, t1.nation,
+      t1.registered_type, t1.registered_residence, t1.native_place,
+      t1.residential_address, t1.highest_academic, t1.political_outlook,
+      t1.marital_status, t1.emergency_contact_name, t1.emergency_contact_phone,
+      t1.QQ, t1.wechat, t1.start_current,
+      t1.end_current, t1.work_mailbox, t1.work_phone,
+      t1.expiration_date, t1.probation_period, t1.record_status,
+      t1.creator_account, t1.created_time, t1.modifier_account,
+      t1.modified_time,employ_status, t1.user_id, t1.user_account
+        FROM
+        `tb_manpower_employee_basic_info` t1
+        WHERE t1.record_status != 0
+        ORDER BY t1.created_time DESC,t1.id DESC
+     </select>
 
     <select id="selectByEntryDate" parameterType="map" resultType="com.jn.hr.employee.model.EmployeeBasicInfo">
         SELECT
@@ -508,6 +534,10 @@
         `tb_manpower_employee_basic_info`
         WHERE record_status=1
          and date_format(entry_date, '%m-%d')=#{entryDate}
+    </select>
+
+    <select id="selectCountByName" resultType="java.lang.Integer">
+        select count(1) from tb_manpower_employee_basic_info where `name`=#{name}
     </select>
 
 </mapper>

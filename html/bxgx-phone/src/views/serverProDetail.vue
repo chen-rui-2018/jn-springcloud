@@ -115,10 +115,10 @@
   </div>
 </template>
 <script>
-import Vue from 'vue'
+// import Vue from 'vue'
 import { Sticky, Tab, TabItem, XTable, Scroller, LoadMore } from 'vux'
-import { Loadmore } from 'mint-ui'
-Vue.component(Loadmore.name, Loadmore)
+// import { Loadmore } from 'mint-ui'
+// Vue.component(Loadmore.name, Loadmore)
 export default {
   components: {
     Sticky,
@@ -136,7 +136,7 @@ export default {
       proDelInfo: {},
       sameTypeProList: '',
       page: 1,
-      row: 1,
+      row: 3,
       total: 0,
       onFetching: false,
       allLoaded: false
@@ -147,27 +147,20 @@ export default {
     this.sameTypeProductList()
   },
   methods: {
-    loadTop () {
-      // 加载更多数据
-      this.page = 1
-      setTimeout(() => {
-        this.sameTypeProductList()
-      }, 500)
-      this.allLoaded = false // 若数据已全部获取完毕
-    },
-    loadBottom () {
-      // 加载更多数据
-      this.page++
-      setTimeout(() => {
-        this.sameTypeProductList('bottom')
-      }, 500)
-    },
     // loadTop () {
-    //   this.$refs.loadmore.onTopLoaded()
+    //   // 加载更多数据
+    //   this.page = 1
+    //   setTimeout(() => {
+    //     this.sameTypeProductList()
+    //   }, 500)
+    //   this.allLoaded = false // 若数据已全部获取完毕
     // },
     // loadBottom () {
-    //   this.allLoaded = true
-    //   this.$refs.loadmore.onBottomLoaded()
+    //   // 加载更多数据
+    //   this.page++
+    //   setTimeout(() => {
+    //     this.sameTypeProductList('bottom')
+    //   }, 500)
     // },
     findProductDetails () {
       // 服务产品详情
@@ -175,12 +168,14 @@ export default {
       this.api.get({
         url: 'findProductDetails',
         data: {
-          // productId: this.$route.query.productId
-          productId: '585516648153219072'
+          productId: this.$route.query.productId
+          // productId: '585516648153219072'
         },
         callback: function (res) {
           if (res.code === '0000') {
             _this.proDelInfo = res.data.info
+          } else {
+            _this.$vux.toast.text(res.result)
           }
         }
       })
@@ -191,8 +186,8 @@ export default {
       this.api.get({
         url: 'sameTypeProductList',
         data: {
-          // signoryId: this.$route.query.signoryId,
-          signoryId: 'industrial_tax',
+          signoryId: this.$route.query.signoryId,
+          // signoryId: 'industrial_tax',
           page: _this.page,
           rows: _this.row
         },
@@ -200,6 +195,8 @@ export default {
           if (res.code === '0000') {
             _this.sameTypeProList = res.data.rows
             _this.total = res.data.total
+          } else {
+            _this.$vux.toast.text(res.result)
           }
           // if (res.code === '0000') {
           //   if (f) {
@@ -244,7 +241,7 @@ export default {
     //         document.documentElement.clientHeight,
     //         document.body.clientHeight
     //       )
-    //     if (clientHeight + scrollTop >= scrollHeight - document.getElementsByClassName('adniministrativeHeader')[0].clientHeight) {
+    //     if (clientHeight + scrollTop >= scrollHeight) {
     //       // console.log(this)
     //       if (this.page < Math.ceil(this.total / this.row)) {
     //         this.page++
@@ -276,7 +273,8 @@ export default {
             this.api.get({
               url: 'sameTypeProductList',
               data: {
-                signoryId: 'industrial_tax',
+                signoryId: this.$route.query.signoryId,
+                // signoryId: 'industrial_tax',
                 page: this.page,
                 rows: this.row
               },

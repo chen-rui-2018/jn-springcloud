@@ -16,19 +16,30 @@ Page({
   },
 
   onLoad: function (options) {
-    this.getCarList()
+    
     this.setData({
       imgBaseUrl:app.globalData.imgBaseUrl
     })
    },
   onReady: function () { },
-  onShow: function () { },
+  onShow: function () { this.getCarList()},
   onHide: function () { },
   onPullDownRefresh: function () { },
   onReachBottom: function () {
     if(this.data.sendData.page<Math.ceil(this.data.total/this.data.sendData.rows)){
       this.data.sendData.page++
-      this.getCarList()
+      request.send({
+        url: '/springcloud-park/user/parking/carInfo/getCarInfoListByNowUser',
+        data: this.data.sendData,
+        method: 'GET',
+      }).then(res=>{
+        if(res.data.code==='0000'){
+          this.setData({
+            carList:this.data.carList.concat(res.data.data.rows),
+            total:res.data.data.total
+          })
+        }
+      })
     }else{
       wx.showToast({
         title: '已到最后一页',
@@ -79,6 +90,9 @@ Page({
     })
   },
   getCarList(){
+    this.setData({
+      "sendData.page":1
+    })
     request.send({
       url: '/springcloud-park/user/parking/carInfo/getCarInfoListByNowUser',
       data: this.data.sendData,
@@ -86,7 +100,7 @@ Page({
     }).then(res=>{
       if(res.data.code==='0000'){
         this.setData({
-          carList:this.data.carList.concat(res.data.data.rows),
+          carList:res.data.data.rows,
           total:res.data.data.total
         })
       }

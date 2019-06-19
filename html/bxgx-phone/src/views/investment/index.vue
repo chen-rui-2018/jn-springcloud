@@ -29,76 +29,76 @@
           </div>
         </div>
         <div class="investment-block-content investment-park">
-          <div v-if="!showMore">{{  parkDesc | formatParkDesc}}</div>
-          <div v-else>{{ parkDesc }}</div>
+          <div v-if="!showMore" class="park-profile-desc">{{  parkDesc | formatParkDesc}}</div>
+          <div v-else class="park-profile-desc">{{ parkDesc }}</div>
           <more-btn v-if="!showMore" class="more-desc" @click.native="showMore = true"></more-btn>
         </div>
       </div>
 
-      <div class="investment-block">
-        <div class="investment-block-title">
-          <div class="block-title">招商政策</div>
-          <div
-            class="block-more"
-            @click="$router.push({path:'/investmentPolicy'})"
-          >
-            <span>更多</span>
-            <i class="icon iconfont icon-jiantou"></i>
-          </div>
-        </div>
-        <div class="investment-block-content">
-          <div
-            v-for="(item, index) in businessAdPolicy"
-            :key="index"
-            class="card-list"
-            @click="$router.push({path:'/investmentPolicyDetail',query:{id: item.id}})"
-          >
-            <div class="card-list-poster" :style="{backgroundImage: 'url(' + item.adCover + ')'}">
-            </div>
-            <div class="card-list-content">
-              <div class="card-list-title">{{ item.title }}</div>
-              <div class="card-list-text">{{ item.subTitle }}</div>
-              <div class="card-list-tips">
-                <span>{{ item.startTime }}</span>
-                <span class="flex-center">
-                  <i class="view-icon icon iconfont icon-view"></i>
-                  <span class="card-list-warning">{{ item.viewCount }}</span>
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+<!--      <div class="investment-block">-->
+<!--        <div class="investment-block-title">-->
+<!--          <div class="block-title">招商政策</div>-->
+<!--          <div-->
+<!--            class="block-more"-->
+<!--            @click="$router.push({path:'/investmentPolicy'})"-->
+<!--          >-->
+<!--            <span>更多</span>-->
+<!--            <i class="icon iconfont icon-jiantou"></i>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="investment-block-content">-->
+<!--          <div-->
+<!--            v-for="(item, index) in businessAdPolicy"-->
+<!--            :key="index"-->
+<!--            class="card-list"-->
+<!--            @click="$router.push({path:'/investmentPolicyDetail',query:{id: item.id}})"-->
+<!--          >-->
+<!--            <div class="card-list-poster" :style="{backgroundImage: 'url(' + item.adCover + ')'}">-->
+<!--            </div>-->
+<!--            <div class="card-list-content">-->
+<!--              <div class="card-list-title">{{ item.title }}</div>-->
+<!--              <div class="card-list-text">{{ item.subTitle }}</div>-->
+<!--              <div class="card-list-tips">-->
+<!--                <span>{{ item.startTime }}</span>-->
+<!--                <span class="flex-center">-->
+<!--                  <i class="view-icon icon iconfont icon-view"></i>-->
+<!--                  <span class="card-list-warning">{{ item.viewCount }}</span>-->
+<!--                </span>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
 
-      <div class="investment-block">
-        <div class="investment-block-title">
-          <div class="block-title">招商动态</div>
-          <div
-            class="block-more"
-            @click="$router.push({path:'/investmentDynamic'})"
-          >
-            <span>更多</span>
-            <i class="icon iconfont icon-jiantou"></i>
-          </div>
-        </div>
-        <div class="investment-block-content">
-          <div
-            v-for="(item, index) in businessAdDynamic"
-            :key="index"
-            class="card-list"
-            @click="$router.push({path:'/investmentDynamicDetail',query:{id: item.id}})"
-          >
-            <div class="card-list-poster" :style="{backgroundImage: 'url(' + item.adCover + ')'}"></div>
-            <div class="card-list-content">
-              <div class="card-list-title">{{ item.title }}</div>
-              <div class="card-list-text">{{ item.content }}</div>
-              <div class="card-list-tips">
-                <span>{{ item.startTime }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+<!--      <div class="investment-block">-->
+<!--        <div class="investment-block-title">-->
+<!--          <div class="block-title">招商动态</div>-->
+<!--          <div-->
+<!--            class="block-more"-->
+<!--            @click="$router.push({path:'/investmentDynamic'})"-->
+<!--          >-->
+<!--            <span>更多</span>-->
+<!--            <i class="icon iconfont icon-jiantou"></i>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="investment-block-content">-->
+<!--          <div-->
+<!--            v-for="(item, index) in businessAdDynamic"-->
+<!--            :key="index"-->
+<!--            class="card-list"-->
+<!--            @click="$router.push({path:'/investmentDynamicDetail',query:{id: item.id}})"-->
+<!--          >-->
+<!--            <div class="card-list-poster" :style="{backgroundImage: 'url(' + item.adCover + ')'}"></div>-->
+<!--            <div class="card-list-content">-->
+<!--              <div class="card-list-title">{{ item.title }}</div>-->
+<!--              <div class="card-list-text">{{ item.content }}</div>-->
+<!--              <div class="card-list-tips">-->
+<!--                <span>{{ item.startTime }}</span>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
 
       <div class="investment-block br-n">
         <div class="investment-block-title">
@@ -152,8 +152,8 @@
                   </div>
                 </div>
               </div>
-              <div v-if="park.loadMore && park.loading" class="tc-row">正在加载...</div>
-              <div v-if="park.loadMore && park.noMore" class="tc-row">已加载完所有信息</div>
+              <now-loading v-show="park.loadMore && park.loading"></now-loading>
+              <no-more v-show="park.loadMore && park.noMore"></no-more>
             </div>
             <div class="no-more-row" v-else>暂无相关信息</div>
             <div
@@ -175,11 +175,15 @@
 import Swiper from 'swiper'
 import moreBtn from './common/moreBtn'
 import tagBtn from './common/tagBtn'
+import nowLoading from '@/views/common/nowLoading'
+import noMore from '@/views/common/noMore'
 export default {
   name: 'Investment',
   components: {
     moreBtn,
-    tagBtn
+    tagBtn,
+    nowLoading,
+    noMore
   },
   data () {
     return {
@@ -386,7 +390,7 @@ export default {
     .tc-row {
       padding: 20px;
       text-align: center;
-      font-size: 12px;
+      font-size: 28px;
     }
     .no-more-row {
       padding: 20px;
@@ -405,14 +409,15 @@ export default {
       }
     }
     .investment-header {
-      padding: 0 40px;
+      padding: 0 30px;
     }
     .card-list {
       margin: 4px auto;
       display: flex;
       align-items: center;
-      padding: 31px 40px;
+      padding: 15px 30px;
       background-color: #fff;
+      cursor: pointer;
     }
     .card-list-poster {
       background-size: cover;
@@ -467,7 +472,7 @@ export default {
 
     }
     .investment-block {
-      border-bottom: 40px solid #fafafa;
+      border-bottom: 22px solid #fafafa;
       background-color: #fff;
       &.br-n {
         border-bottom: none;
@@ -479,6 +484,10 @@ export default {
         line-height: 50px;
         letter-spacing: 4px;
         padding: 0 40px;
+        .park-profile-desc {
+          font-size: 28px;
+          text-indent: 2em;
+        }
       }
       .investment-block-title {
         padding: 20px 40px;
@@ -507,15 +516,19 @@ export default {
       }
       .tab-nav {
         padding: 0 40px;
+        .vux-tab .vux-tab-item {
+          font-size: 28px;
+        }
       }
       .more-desc {
         position: absolute;
-        right: 0;
+        right: 40px;
         bottom: 0;
+        font-size: 28px;
       }
     }
     .investment-banner {
-      margin: 40px auto;
+      margin: 40px auto 16px;
       .swiper-img {
         width: 100%;
         border-radius: 16px;

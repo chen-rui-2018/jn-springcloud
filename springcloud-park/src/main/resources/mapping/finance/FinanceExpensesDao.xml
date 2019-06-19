@@ -9,8 +9,8 @@
         SUM(t.cost) AS "cost",
         max(t.cost_after_type_name) AS "costaftertypename",
         IFNULL(
-        t.modified_time,
-        t.cost_happend_time
+        MAX(t.modified_time),
+        MAX(t.cost_happend_time)
         ) AS "modifiedtime",
         max(t.department_name) AS "departmentname"
         FROM
@@ -46,7 +46,7 @@
         SUM(t.cost) AS "cost",
         t.cost_before_type_name AS "costbeforetypename",
         t.cost_after_type_name AS "costaftertypename",
-        t.modified_time AS "modifiedTime",
+        MAX(t.modified_time) AS "modifiedTime",
         t.department_name AS "departmentname"
         FROM
         tb_finance_expenses t
@@ -277,6 +277,14 @@
         </foreach>
     </insert>
 
+    <!--判断流水号是否存在-->
+    <select id="isExist" resultType="java.lang.Integer" >
+        SELECT
+        COUNT(t.id)
+        FROM tb_finance_expenses t
+        WHERE t.record_status = 1
+        AND t.cost_id = #{costId}
+    </select>
 
     <!--保存 到支出记录表-->
     <insert id="saveMarkData" parameterType="java.util.Map">

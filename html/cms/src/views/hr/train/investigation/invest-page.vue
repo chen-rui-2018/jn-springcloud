@@ -9,7 +9,7 @@
             <p v-html="loginData.projectNote">{{ loginData.projectNote }}</p>
           </div>
           <!-- 入口 -->
-          <div v-if="isEntry&&loginData.isShowName===1" class="entry">
+          <div v-show="isEntry&&loginData.researchMethod===2" class="entry">
             <div class="form">
               <el-row type="flex" justify="center">
                 <el-col :span="10" :xs="16">
@@ -32,7 +32,7 @@
             </div>
           </div>
           <!-- 进入后内容 -->
-          <div v-if="!isEntry||loginData.isShowName===2">
+          <div v-if="!isEntry">
             <div v-for="(item,index) of examList" :key="index" class="examList">
               <p style="font-size:14px;">
                 <span>Q{{ index+1 }}</span>&nbsp;&nbsp;
@@ -146,6 +146,11 @@ export default {
       api('hr/train/loginInvestiage', data).then(res => {
         if (res.data.code === '0000') {
           this.loginData = res.data.data
+          if (this.loginData.researchMethod === 1) {
+            // 匿名时
+            this.userData = {}
+            this.save('userData')
+          }
         } else {
           this.$message.error(res.data.result)
         }

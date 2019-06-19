@@ -74,21 +74,21 @@
         ,a.leisure_number as "leisureNumber"
         ,a.rent_number as "rentNumber"
         ,a.temp_number as "tempNumber"
-
-        ,ROUND(
+        ,
+        ROUND(
         6378.138 * 2 * ASIN(
         SQRT(
         POW(
         SIN(
         (
-        CONVERT(#{latitude,jdbcType=VARCHAR},DECIMAL) * PI() / 180 - a.latitude * PI() / 180
+        #{latitude} * PI() / 180 - a.latitude * PI() / 180
         ) / 2
         ),
         2
-        ) + COS(CONVERT(#{latitude,jdbcType=VARCHAR},DECIMAL) * PI() / 180) * COS(a.latitude * PI() / 180) * POW(
+        ) + COS( #{latitude} * PI() / 180) * COS(a.latitude * PI() / 180) * POW(
         SIN(
         (
-        CONVERT(#{longitude,jdbcType=VARCHAR},DECIMAL) * PI() / 180 - a.longitude * PI() / 180
+        #{longitude} * PI() / 180 - a.longitude * PI() / 180
         ) / 2
         ),
         2

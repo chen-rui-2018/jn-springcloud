@@ -25,6 +25,7 @@ import com.jn.enterprise.servicemarket.product.service.ServiceProductService;
 import com.jn.enterprise.servicemarket.product.vo.WebServiceProductDetails;
 import com.jn.enterprise.utils.IBPSFileUtils;
 import com.jn.enterprise.utils.IBPSUtils;
+import com.jn.park.utils.HtmlUtils;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
@@ -308,6 +309,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         for(HotProducts product : products){
             product.setPictureUrl(IBPSFileUtils.getFilePath(product.getPictureUrl()));
         }
+        products = addProductBrief(products);
         return new PaginationData(products,object==null?0:object.getTotal());
     }
     @ServiceLog(doAction = "web前台服务产品详情")
@@ -493,7 +495,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         //产品编号
         String serialNumber = "";
         String commentsType = ProductConstantEnum.PRODUCT_COMMENT_TYPE.getCode();
-        String featureType = ProductConstantEnum.PRODUCT_FEATURE_TYPE.getMessage();
+        String featureType = ProductConstantEnum.PRODUCT_FEATURE_TYPE.getCode();
         Date date = new Date();
         String dataStr = DateUtils.formatDate(date,"yyyyMMddHHmmss");
         if(productType.equals(featureType)){
@@ -669,5 +671,25 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         } else {
             throw new JnSpringCloudException(ServiceProductExceptionEnum.PRODUCT_SEND_ERROR);
         }
+    }
+
+    /**
+     * 热门产品添加简介
+     * @param productList
+     * @return
+     */
+  private  List<HotProducts> addProductBrief(List<HotProducts> productList){
+        for (HotProducts show : productList) {
+            String briefContent = show.getProductDetails();
+            if(StringUtils.isNotBlank(briefContent)){
+                briefContent = HtmlUtils.getBriefIntroduction(briefContent);
+                if (StringUtils.isNotBlank(briefContent)) {
+                    String briefSummaries = briefContent.substring(0, briefContent.length() > 100 ? 100 : briefContent.length());
+                    briefSummaries = briefContent.length() > 100 ? briefSummaries + "......" : briefSummaries;
+                    show.setProductBrief(briefSummaries);
+                }
+            }
+        }
+        return  productList;
     }
 }

@@ -51,7 +51,7 @@
                     </div>
                     <div class="agent2 clearfix color2">
                         <div class="agentImg">
-                            政策原文：<span class="mainColor">《》</span>
+                            <!-- 政策原文：<span class="mainColor">《》</span> -->
                         </div>
                         <div class="agent2Info fr">
                             <p class="lastP color3">
@@ -80,7 +80,7 @@
                         </div>
                         <div class="agent2 color2" v-if="zankaiFlag">
                             <div class="agent2Con">
-                                {{getDetal.policyDiagramUrl}}
+                                <img :src="getDetal.policyDiagramUrl" alt="">
                             </div>
                             <!-- <div class="agent2Con" v-else>
                             暂无内容！
@@ -357,7 +357,7 @@ export default {
             // margin-left: 630px;
 
             > span {
-              margin-right: 20px;
+              margin-left: 20px;
             }
           }
         }
@@ -388,6 +388,9 @@ export default {
             // overflow: hidden;
             // white-space: nowrap;
             // text-overflow: ellipsis;
+            img{
+              width: 100%;
+            }
           }
           .orgBtn1 {
             font-size: 13px;

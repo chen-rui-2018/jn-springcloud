@@ -12,8 +12,8 @@
         <span>服务产品：</span>
         <el-input placeholder="请输入服务产品" v-model="sendData.productName" class="input-with-select" clearable>
         </el-input>
-        <span>服务务顾问：</span>
-        <el-input placeholder="请输入服务顾问" v-model="sendData.advisorAccount" class="input-with-select" clearable>
+        <span>服务务专员：</span>
+        <el-input placeholder="请输入服务专员" v-model="sendData.advisorAccount" class="input-with-select" clearable>
         </el-input>
         <span class="confirm" @click="confirm">确定</span>
         <span class="reset" @click="reset">重置</span>
@@ -24,7 +24,7 @@
           <el-table-column prop="orgName" label="服务机构" align="center"> </el-table-column>
           <el-table-column prop="orgTelephone" label="机构电话" align="center"> </el-table-column>
           <el-table-column prop="productName" label="服务产品" align="center"> </el-table-column>
-          <el-table-column prop="advisorName" label="服务顾问" align="center"> </el-table-column>
+          <el-table-column prop="advisorName" label="服务专员" align="center"> </el-table-column>
           <el-table-column prop="issueTime" label="提需求日期" align="center" width="160"> </el-table-column>
           <el-table-column prop="handleTime" label="处理日期" align="center" width="160"> </el-table-column>
           <el-table-column label="评价状态" align="center"> 
@@ -92,7 +92,6 @@ export default {
       data: this.sendData,
       callback: function(res) {
         if (res.code == "0000") {
-            // console.log(res)
             _this.othersValuateList=res.data.rows
             _this.total=res.data.total
           }

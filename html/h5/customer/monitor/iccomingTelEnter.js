@@ -1,8 +1,13 @@
 ﻿//服务请求url
-//var service_url="http://112.94.22.222:8000/springcloud-park/";
-var service_url="http://localhost/springcloud-park/";
+var service_url="http://112.94.22.222:8000/springcloud-park/";
+//var service_url="http://localhost/springcloud-park/";
 //获取token的Url
 var token_Url="http://112.94.22.222:8000/springcloud-app-system";
+//设置token作用域的url
+var scope_url="";
+
+
+
 //客服连接服务器ip
 var serviceIp="112.94.22.222";
 //客服连接服务器端口号
@@ -31,10 +36,10 @@ var initLevelId="1";
 var token="";
 $(function () {
 	//获取token
-	token=getCookie('Admin-Token');
+	token = $.cookie('Admin-Token');
 	if(token==undefined || token==''){
 		getServiceToken();
-		token=getCookie('Admin-Token');
+		token = $.cookie('Admin-Token');
 	}
 	//设置服务器连接ip和端口号
 	$("#serverIp").val(serviceIp);
@@ -54,19 +59,6 @@ function initLoginAccountInfo(){
 	$("#levelId").val(initLevelId);
 }
 
-//获取cookie
-function getCookie(cookieName) {
-    var strCookie = document.cookie;
-    var arrCookie = strCookie.split("; ");
-    for(var i = 0; i < arrCookie.length; i++){
-        var arr = arrCookie[i].split("=");
-        if(cookieName == arr[0]){
-            return arr[1];
-        }
-    }
-    return "";
-}
-
 //获取token
 function getServiceToken(){
 	$.ajax({
@@ -83,7 +75,7 @@ function getServiceToken(){
 			if (data.code === '0000') {
 				if (data.data !== null) {
 					console.log('================>authLogin请求返回：' + data.data)
-					document.cookie ="Admin-Token="+data.data+"; path=/";
+					$.cookie('Admin-Token',data.data,{domain:scope_url,path: '/' });
 				}
 			}
 		},
@@ -386,7 +378,7 @@ function getCalledHistory(obj){
 					else if(info.status=='1'){showStatus="处理中"}
 					else if(info.status=='2'){showStatus="已处理"}
 					else if(info.status=='3'){showStatus="无法处理"}
-					table=table+"<tr><td>"+info.quesCode+"</td><td >"+info.serviceModuleName+"</td>" +
+					table=table+"<tr><td>"+(i+1)+"</td><td>"+info.quesCode+"</td><td >"+info.serviceModuleName+"</td>" +
 						"<td>"+showStatus+"</td><td>"+info.quesTitle+"</td>" +
 						"<td>"+info.createdTime+"</td>" +
 						"<td><a href='javascript:void(0)' class='btn mini' onclick='getHistoryDetails(this)' value='"+info.processInsId+"'>详情</a></td></tr>";

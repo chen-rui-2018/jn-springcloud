@@ -20,6 +20,7 @@
     </div>
 </template>
 <script>
+import { getUserInfo } from '@/util/auth'
 export default {
   data() {
     return {
@@ -32,7 +33,7 @@ export default {
   },
   methods:{
        islogin(){
-        this.accoutInfo=sessionStorage.getItem('account')
+        this.accoutInfo=JSON.parse(getUserInfo()).account
         if(this.accoutInfo){
           this.isLogin=true
         }

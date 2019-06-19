@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * 服务机构认证基本信息
@@ -56,6 +57,9 @@ public class OrgBasicData implements Serializable {
     @ApiModelProperty(value = "客户偏好-发展阶段[数组][企业字典表type=2的，即发展阶段领域类型。数据从【服务超市-机构字典】接口获取(id)]",example = "['gufenqiye','fazhanqi']"
             ,notes = "企业字典表type=2的，即发展阶段领域类型。数据从【服务超市-机构字典】接口获取(id)")
     private String[] developmentStage;
+
+    @ApiModelProperty(value = "业务领域",example = "technology_finance")
+    private String businessType;
 
     @ApiModelProperty(value = "法人/负责人",example = "王松")
     private String orgPrincipal;
@@ -149,6 +153,14 @@ public class OrgBasicData implements Serializable {
         this.developmentStage = developmentStage;
     }
 
+    public String getBusinessType() {
+        return businessType;
+    }
+
+    public void setBusinessType(String businessType) {
+        this.businessType = businessType;
+    }
+
     public String getOrgPrincipal() {
         return orgPrincipal;
     }
@@ -179,5 +191,26 @@ public class OrgBasicData implements Serializable {
 
     public void setOrgBusinScope(String orgBusinScope) {
         this.orgBusinScope = orgBusinScope;
+    }
+
+    @Override
+    public String toString() {
+        return "OrgBasicData{" +
+                "orgId='" + orgId + '\'' +
+                ", orgName='" + orgName + '\'' +
+                ", orgCode='" + orgCode + '\'' +
+                ", orgRegisterTime='" + orgRegisterTime + '\'' +
+                ", orgSynopsis='" + orgSynopsis + '\'' +
+                ", orgBusiness='" + orgBusiness + '\'' +
+                ", orgSpeciality='" + orgSpeciality + '\'' +
+                ", orgLogo='" + orgLogo + '\'' +
+                ", industrySector=" + Arrays.toString(industrySector) +
+                ", developmentStage=" + Arrays.toString(developmentStage) +
+                ", businessType='" + businessType + '\'' +
+                ", orgPrincipal='" + orgPrincipal + '\'' +
+                ", orgBusinType='" + orgBusinType + '\'' +
+                ", orgBusinAddresse='" + orgBusinAddresse + '\'' +
+                ", orgBusinScope='" + orgBusinScope + '\'' +
+                '}';
     }
 }

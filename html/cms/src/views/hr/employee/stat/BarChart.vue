@@ -88,6 +88,15 @@ export default {
             color: '#ccc'
           }
         },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            crossStyle: {
+              color: '#999'
+            }
+          }
+        },
         toolbox: {
           right: 30,
           show: true,
@@ -122,11 +131,17 @@ export default {
         },
         xAxis: {
           type: 'category',
-          data: this.names
+          data: this.names,
+          axisPointer: {
+            type: 'shadow'
+          }
         },
         yAxis: {
           type: 'value',
-          name: '(人)'
+          name: '(人)',
+          axisLabel: {
+            formatter: '{value} 人'
+          }
         },
         series: [{
           data: this.values,

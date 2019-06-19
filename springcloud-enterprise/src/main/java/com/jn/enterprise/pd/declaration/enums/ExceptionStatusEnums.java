@@ -19,7 +19,10 @@ public enum ExceptionStatusEnums implements CodeAndMsg {
     CONTACTPHONE_NOT_NULL("5011204", "电话不能为空"),
     EMAIL_NOT_NULL("5011205", "邮箱不能为空"),
     DECLAREENTERPRISE_NOT_NULL("5011206", "申报企业不能为空"),
-    DECLAREITEM_NOT_NULL("5011207", "申报项目名称不能为空")
+    DECLAREITEM_NOT_NULL("5011207", "申报项目名称不能为空"),
+    DECLAREITEM_IS_NULL("5011208", "未查到符合条件的数据"),
+    DECLAREITEM_IS_SUM_NULL("5011209", "查询数据异常，应该查询到1条，实际查询到多条"),
+    DECLAREITEM_IS_SHEN("5011210", "您已预约申报过,请勿重复预约申报!")
 
 
     ;

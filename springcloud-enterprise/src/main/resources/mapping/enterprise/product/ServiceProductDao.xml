@@ -327,7 +327,7 @@ from tb_service_product t1
         <if test = "productName != null and productName != ''">
             and  t1.product_name like concat('%',#{productName},'%')
         </if>
-
+        order by t1.created_time desc
        </select>
     <!--常规产品上架时,选择框的产品列表-->
     <select id="findShelfProductList" resultType = "com.jn.enterprise.servicemarket.product.model.ProductShelf">

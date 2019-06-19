@@ -1,5 +1,6 @@
 package com.jn.enterprise.joinpark.org.service;
 
+import com.jn.enterprise.servicemarket.advisor.model.OrgNameIsExistParam;
 import com.jn.enterprise.servicemarket.org.model.OrgDetailParameter;
 import com.jn.enterprise.servicemarket.org.model.OrgDetailUpdateParameter;
 
@@ -19,6 +20,13 @@ public interface OrgJoinService {
      * @return
      */
     int saveOrUpdateOrgDetail(OrgDetailParameter orgDetailParameter,String account);
+
+    /**
+     * 判断机构名称是否已存在
+     * @param orgParam
+     * @return
+     */
+    String orgNameIsExist(OrgNameIsExistParam orgParam);
 
 
 }

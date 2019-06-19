@@ -81,6 +81,7 @@ public class TbProjectInfoWithBLOBs extends TbProjectInfo implements Serializabl
             && (this.getRemerk() == null ? other.getRemerk() == null : this.getRemerk().equals(other.getRemerk()))
             && (this.getActualTotalAccount() == null ? other.getActualTotalAccount() == null : this.getActualTotalAccount().equals(other.getActualTotalAccount()))
             && (this.getRoomBillId() == null ? other.getRoomBillId() == null : this.getRoomBillId().equals(other.getRoomBillId()))
+            && (this.getEnterTime() == null ? other.getEnterTime() == null : this.getEnterTime().equals(other.getEnterTime()))
             && (this.getProjectIntroduce() == null ? other.getProjectIntroduce() == null : this.getProjectIntroduce().equals(other.getProjectIntroduce()))
             && (this.getCompanyRequire() == null ? other.getCompanyRequire() == null : this.getCompanyRequire().equals(other.getCompanyRequire()));
     }
@@ -133,6 +134,7 @@ public class TbProjectInfoWithBLOBs extends TbProjectInfo implements Serializabl
         result = prime * result + ((getRemerk() == null) ? 0 : getRemerk().hashCode());
         result = prime * result + ((getActualTotalAccount() == null) ? 0 : getActualTotalAccount().hashCode());
         result = prime * result + ((getRoomBillId() == null) ? 0 : getRoomBillId().hashCode());
+        result = prime * result + ((getEnterTime() == null) ? 0 : getEnterTime().hashCode());
         result = prime * result + ((getProjectIntroduce() == null) ? 0 : getProjectIntroduce().hashCode());
         result = prime * result + ((getCompanyRequire() == null) ? 0 : getCompanyRequire().hashCode());
         return result;

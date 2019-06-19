@@ -32,40 +32,42 @@
         <i class="iconfont icon-sousuo" @click="handleSearchList"></i>
       </div>
     </div>
-    <div class="serverOrgContent">
-      <ul>
-        <!-- <li class="clearfix" v-for="(i,k) in serverAgent" :key='k'> -->
-        <li class="clearfix" v-for="(i,k) in serverConList" :key='k'>
-          <div class="conImg pointer fl" @click="handleConDel(i.orgId,i.advisorAccount)">
-            <img v-if="i.avatar" :src="i.avatar" alt="">
-            <img v-else src="@/../static/img/touxiang.png" alt="">
-          </div>
-          <div class="orgCon fl">
-            <div class="conTil">{{i.advisorName}}</div>
-            <div class="conContent clearfix color3">
-              <div class="left1 fl" id="left1">
-                <p>所属机构：{{i.orgName}}
-                </p>
-                <p>业务擅长：{{i.goodAtBusiness}}</p>
-                <p>累计
-                  <span class="mainColor">{{i.transactionNum}}</span>&nbsp;笔交易</p>
-              </div>
-              <div class="right1 fl">
-                <p>
-                  <el-rate v-model="i.evaluationScore*1" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
-                  </el-rate>
-                  <span class="mainColor">{{i.evaluationNum}}</span>条评价</p>
-                <p>{{i.evaluationScore}}分</p>
+    <div class="serverOrgContent" v-loading="conloading">
+      <div v-if="serverConList.length==0">
+        <nodata></nodata>
+      </div>
+      <!-- <div v-else> -->
+        <ul v-else>
+          <!-- <li class="clearfix" v-for="(i,k) in serverAgent" :key='k'> -->
+          <li class="clearfix" v-for="(i,k) in serverConList" :key='k'>
+            <div class="conImg pointer fl" @click="handleConDel(i.orgId,i.advisorAccount)">
+              <img v-if="i.avatar" :src="i.avatar" alt="">
+              <img v-else src="@/../static/img/touxiang.png" alt="">
+            </div>
+            <div class="orgCon pointer fl" @click="handleConDel(i.orgId,i.advisorAccount)">
+              <div class="conTil">{{i.advisorName}}</div>
+              <div class="conContent clearfix color3">
+                <div class="left1 fl" id="left1">
+                  <p>所属机构：{{i.orgName}}
+                  </p>
+                  <p>业务擅长：{{i.goodAtBusiness}}</p>
+                  <p>累计
+                    <span class="mainColor">{{i.transactionNum}}</span>&nbsp;笔交易</p>
+                </div>
+                <div class="right1 fl">
+                  <p>
+                    <el-rate v-model="i.evaluationScore*1" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
+                    </el-rate>
+                    <span class="mainColor">{{i.evaluationNum}}</span>条评价</p>
+                  <p>{{i.evaluationScore}}分</p>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="orgBtn fr mainColor" @click="onlineContact(i.advisorAccount,i.advisorName)">在线联系</div>
-        </li>
-      </ul>
+            <div class="orgBtn fr mainColor" @click="onlineContact(i.advisorAccount,i.advisorName)">在线联系</div>
+          </li>
+        </ul>
+      <!-- </div> -->
     </div>
-    <!-- <div class="serverOrgContent" v-else>
-      <nodata></nodata>
-    </div> -->
     <div class="pagination-container">
       <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
       </el-pagination>
@@ -91,6 +93,7 @@ export default {
   },
   data() {
     return {
+      conloading: false,
       concatVisible: false,
       filterFlag: "",
       colorFlag: "integrate",
@@ -121,14 +124,14 @@ export default {
       this.$router.push({ path: "/login" });
     },
     onlineContact(advisorAccount, advisorName) {
-      if (!sessionStorage.userInfo) {
+      if (!this.getUserInfo()) {
         this.concatVisible = true;
         return;
       }
       this.$router.push({
         path: "/chat",
         query: {
-          fromUser: JSON.parse(sessionStorage.userInfo).account,
+          fromUser: JSON.parse(this.getUserInfo()).account,
           toUser: advisorAccount,
           nickName: advisorName
         }
@@ -179,6 +182,7 @@ export default {
       this.initList();
     },
     initList() {
+      this.conloading = true;
       let _this = this;
       this.api.get({
         url: "getServiceConList",
@@ -201,6 +205,7 @@ export default {
           } else {
             _this.$message.error(res.result);
           }
+          _this.conloading = false;
         }
       });
     },
@@ -216,7 +221,7 @@ export default {
             //     _this.businessArea.push(res.data[it]);
             //   }
             // }
-             _this.businessArea = res.data;
+            _this.businessArea = res.data;
           } else {
             _this.$message.error(res.result);
           }

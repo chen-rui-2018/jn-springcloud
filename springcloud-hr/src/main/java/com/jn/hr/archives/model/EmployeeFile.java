@@ -35,7 +35,6 @@ public class EmployeeFile extends BaseRowModel implements Serializable {
     @ExcelProperty(value = "备注", index = 3)
     private String remark;
     @ApiModelProperty(value = "责任人")
-    @ExcelProperty(value = "责任人", index = 4)
     private String personLiable;
     @ApiModelProperty(value = "附件管理")
     private String accessoryManagement;
@@ -56,7 +55,7 @@ public class EmployeeFile extends BaseRowModel implements Serializable {
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date modifiedTime;
     @ApiModelProperty(value = "登记部门")
-    @ExcelProperty(value = "登记部门", index = 5)
+    @ExcelProperty(value = "登记部门", index = 4)
     private String regDepartment;
     @ApiModelProperty(value = "档案附件")
 

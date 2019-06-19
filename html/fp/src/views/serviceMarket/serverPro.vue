@@ -29,6 +29,7 @@
       </div>
       <div class="filMid fl">
         筛选：
+        <span :class="{'activeA':filterFlag1 == ''}" @click="handleSort('')">不限</span>
         <span :class="{'activeA':filterFlag1 == '0'}" @click="handleSort('0')">常规服务</span>
         <span :class="{'activeA':filterFlag1 == '1'}" @click="handleSort('1')">特色服务</span>
       </div>
@@ -37,15 +38,18 @@
         <i class="iconfont icon-sousuo" @click="handleSearchList"></i>
       </div>
     </div>
-    <div class="serverOrgContent">
-      <ul>
+    <div class="serverOrgContent" v-loading="proloading">
+      <div v-if="serverProList.length==0">
+        <nodata></nodata>
+      </div>
+      <ul v-else>
         <!-- <li class="clearfix" v-for="(i,k) in serverAgent" :key='k'> -->
         <li class="clearfix" v-for="(i,k) in serverProList" :key='k'>
-          <div class="orgImg fl" @click="handleProDel(i.productId,i.signoryId)">
+          <div class="orgImg fl pointer" @click="handleProDel(i.productId,i.signoryId)">
             <img v-if="i.pictureUrl" :src="i.pictureUrl" alt="">
             <img v-else src="@/../static/img/product.png" alt="">
           </div>
-          <div class="orgCon fl">
+          <div class="orgCon fl pointer" @click="handleProDel(i.productId,i.signoryId)">
             <div class="conTil">{{i.productName}}</div>
             <div class="conContent clearfix color3">
               <div class="left1 fl" id="left1">
@@ -71,9 +75,6 @@
         </li>
       </ul>
     </div>
-    <!-- <div class="serverOrgContent" v-if="serverProList.length==0">
-      <nodata></nodata>
-    </div> -->
     <div class="pagination-container">
       <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
       </el-pagination>
@@ -110,7 +111,8 @@ export default {
   },
   data() {
     return {
-      islogin:true,
+      proloading: false,
+      islogin: true,
       colorFlag: "integrate",
       bgFlag: "",
       sortTypes: "integrate",
@@ -140,18 +142,18 @@ export default {
     if (this.$route.query.searchData) {
       this.keyW = this.$route.query.searchData;
       this.initList();
-    } else{
+    } else {
       this.initList();
     }
   },
   methods: {
-      goLogin() {
+    goLogin() {
       window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
       this.$router.push({ path: "/login" });
     },
-     //判断是否登录
+    //判断是否登录
     isLogin() {
-      if (!sessionStorage.userInfo) {
+      if (!this.getToken()) {
         this.islogin = false;
       }
     },
@@ -168,11 +170,7 @@ export default {
       }
     },
     demandRaise(i) {
-      // if (!sessionStorage.userInfo) {
-      //   this.$message.error("请先登录");
-      //   return;
-      // }
-      this.isLogin()
+      this.isLogin();
       this.serverProVisible = true;
       this.serverProform.requireDetail = "";
       this.serverProform.productId = i.productId;
@@ -237,6 +235,7 @@ export default {
     },
     //服务产品列表
     initList() {
+      this.proloading = true;
       let _this = this;
       this.api.get({
         url: "findProductList",
@@ -256,6 +255,7 @@ export default {
           } else {
             _this.$message.error(res.result);
           }
+          _this.proloading = false;
         }
       });
     },

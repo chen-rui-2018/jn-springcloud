@@ -144,4 +144,23 @@ public class ServiceProductManage implements Serializable {
     public void setAdvisorName(String advisorName) {
         this.advisorName = advisorName;
     }
+
+    @Override
+    public String toString() {
+        return "ServiceProductManage{" +
+                "productId='" + productId + '\'' +
+                ", pictureUrl='" + pictureUrl + '\'' +
+                ", productName='" + productName + '\'' +
+                ", productType='" + productType + '\'' +
+                ", signoryId='" + signoryId + '\'' +
+                ", signoryName='" + signoryName + '\'' +
+                ", releaseTime='" + releaseTime + '\'' +
+                ", orgName='" + orgName + '\'' +
+                ", conName='" + conName + '\'' +
+                ", conPhone='" + conPhone + '\'' +
+                ", status='" + status + '\'' +
+                ", advisorName='" + advisorName + '\'' +
+                ", referPrice='" + referPrice + '\'' +
+                '}';
+    }
 }

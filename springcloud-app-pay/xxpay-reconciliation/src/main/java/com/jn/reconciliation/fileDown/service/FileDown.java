@@ -15,6 +15,8 @@
  */
 package com.jn.reconciliation.fileDown.service;
 
+import org.xxpay.dal.dao.entity.reconciliation.TbPayReconciliationInterface;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
@@ -32,12 +34,13 @@ public interface FileDown {
 
 	/**
 	 * 对帐文件下载，获得文件输出
-	 * 
+	 * @param reconciliationInter
+	 * 			支付接口信息
 	 * @param fileDate
 	 *            账单日
 	 * @return
 	 * @throws Exception
 	 */
-	File fileDown(Date fileDate) throws IOException, Exception;
+	File fileDown(TbPayReconciliationInterface reconciliationInter, Date fileDate) throws IOException, Exception;
 
 }

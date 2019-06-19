@@ -128,8 +128,9 @@ export default {
       }
     },
     islogin() {
-      let userInfo = getUserInfo();
-      if (userInfo) {
+      let userInfo = this.getUserInfo();
+      let token=this.getToken()
+      if (token) {
         this.isLogin = true;
         this.userInfoData = JSON.parse(userInfo);
       } else {

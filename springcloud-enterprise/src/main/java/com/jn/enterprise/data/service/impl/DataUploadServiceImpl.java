@@ -968,7 +968,7 @@ public class DataUploadServiceImpl implements DataUploadService {
     @Override
     @ServiceLog(doAction = "科技园导入")
     @Transactional(rollbackFor = Exception.class)
-    public int importData(MultipartFile multipartFile,String formTime,String fillId,String modelId){
+    public int importData(MultipartFile multipartFile,String formTime,String fillId,String modelId,User user){
         int result=0;
 
 //        String formTime=dataVO.getTaskInfo().getFormTime();
@@ -1105,6 +1105,16 @@ public class DataUploadServiceImpl implements DataUploadService {
         taskRecord.setStatus(new Byte(DataUploadConstants.FILLED));
         taskRecord.setUpTime(new Date());
         tbDataReportingTaskMapper.updateByExampleSelective(taskRecord,taskCriteria);
+
+        TbDataReportingGardenFiller gardenFiller = new TbDataReportingGardenFiller();
+        gardenFiller.setStatus(new Byte(DataUploadConstants.FILLED));
+        gardenFiller.setFiller(user.getAccount());
+        gardenFiller.setFillerTel(user.getPhone());
+        TbDataReportingGardenFillerCriteria gardenFillerCriteria =new TbDataReportingGardenFillerCriteria();
+        gardenFillerCriteria.or().andFillIdEqualTo(fillId);
+        tbDataReportingGardenFillerMapper.updateByExampleSelective(gardenFiller,gardenFillerCriteria);
+
+
         return result+1;
     }
 
@@ -1940,14 +1950,15 @@ public class DataUploadServiceImpl implements DataUploadService {
         List<String> fillInFormId = getFillId(companyInfo,user);
 
         TbDataReportingTaskCriteria task = new TbDataReportingTaskCriteria();
+
         if(getUserType(user).equals(DataUploadConstants.COMPANY_TYPE)){
             task.or().andFillIdEqualTo(fileId).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID))
                     .andFillInFormIdIn(fillInFormId).andFileTypeEqualTo(new Byte(DataUploadConstants.COMPANY_TYPE));
         }else{
-            task.or().andFillIdEqualTo(fileId).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID))
-                    .andFileTypeEqualTo(new Byte(DataUploadConstants.GARDEN_TYPE));
+            task.or().andFillIdEqualTo(fileId).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
+            //园区账号时，不校验权限问题；防止ibps中的园区账号看不见企业录入的任务
+            //.andFileTypeEqualTo(new Byte(DataUploadConstants.GARDEN_TYPE));
         }
-
 
         List<TbDataReportingTask> taskList =tbDataReportingTaskMapper.selectByExample(task);
         if(taskList ==null || taskList.size()==0){
@@ -2114,7 +2125,7 @@ public class DataUploadServiceImpl implements DataUploadService {
             targetDao.updateCalling(taskBatch,fillId,DataUploadConstants.COMPANY_TYPE);
         }else{
             //园区
-            targetDao.updateCalling(taskBatch,fillId,DataUploadConstants.COMPANY_TYPE);
+            targetDao.updateCalling(taskBatch,fillId,DataUploadConstants.GARDEN_TYPE);
         }
 
         //调用服务发起通知 发送短信，邮件，app

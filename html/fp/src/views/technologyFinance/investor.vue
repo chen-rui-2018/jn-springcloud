@@ -28,10 +28,13 @@
         <i class="iconfont icon-sousuo" @click="handleSearchList"></i>
       </div>
     </div>
-    <div class="investorContent">
-      <ul>
-        <li v-for="(i,k) in investorInfoList" :key='k'>
-          <div class="liImg pointer" @click="handleDel(i.investorAccount)">
+    <div class="investorContent" v-loading="investorLoading">
+      <div v-if="investorInfoList.length==0">
+        <nodata></nodata>
+      </div>
+      <ul v-else>
+        <li v-for="(i,k) in investorInfoList" :key='k' class="pointer" @click="handleDel(i.investorAccount)">
+          <div class="liImg pointer">
             <img v-if="i.avatar" :src="i.avatar" alt="">
             <img v-else src="@/../static/img/touxiang.png" alt="">
           </div>
@@ -49,9 +52,6 @@
         </li>
       </ul>
     </div>
-    <!-- <div class="investorContent" v-if="investorInfoList.length==0">
-      <nodata></nodata>
-    </div> -->
     <div class="pagination-container">
       <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
       </el-pagination>
@@ -66,6 +66,7 @@ export default {
   },
   data() {
     return {
+      investorLoading: false,
       total: 0,
       page: 1,
       row: 3,
@@ -123,6 +124,7 @@ export default {
     },
     getInvestorInfoList() {
       //投资人列表
+      this.investorLoading = true;
       let _this = this;
       this.api.get({
         url: "getInvestorInfoList",
@@ -140,6 +142,7 @@ export default {
           } else {
             _this.$message.error(res.result);
           }
+          _this.investorLoading = false;
         }
       });
     },

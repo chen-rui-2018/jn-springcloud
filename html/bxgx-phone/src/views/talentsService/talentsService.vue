@@ -26,7 +26,7 @@
         <div class="talentsService_platform">
           <div class="platform_titile">
             <div>申报平台</div>
-            <div >MORE <span class="iconfont icon-jiantou"></span></div>
+            <div @click="$router.push({path:'/guest/pd/talentNotice/talentsServicePlatform'})">MORE <span class="iconfont icon-jiantou"></span></div>
           </div>
           <div class="platform_cont" @click="$router.push({path:'/guest/pd/talentNotice/talentsServicePlatform'})">
             <p>
@@ -150,6 +150,8 @@ export default {
           if (res.code === '0000') {
             // console.log(res)
             this.perennialList = res.data.rows
+          } else {
+            this.$vux.toast.text(res.result)
           }
         }
       })
@@ -161,6 +163,8 @@ export default {
         callback: res => {
           if (res.code === '0000') {
             this.typeList = res.data
+          } else {
+            this.$vux.toast.text(res.result)
           }
         }
       })
@@ -175,6 +179,8 @@ export default {
             // console.log(res)
             this.talentsList = res.data.rows
             this.total = res.data.total
+          } else {
+            this.$vux.toast.text(res.result)
           }
         }
       })
@@ -249,14 +255,14 @@ export default {
                   margin-top: 9px;
                 }
                 p:nth-child(1){
-                  width:100%;
-                  height: 107px;
+                  // width:100%;
+                  // height: 107px;
                   border-bottom: 1px solid #eeeeee;
                   padding: 13px 0;
                   margin-top: 0;
                   img{
                     width: 51%;
-                    height: 100%;
+                    // height: 100%;
                     display: block;
                     margin: auto;
                   }
@@ -268,10 +274,9 @@ export default {
                   line-height: 29px;
                   margin-top: 18px;
                   line-height: 26px;
-                  display: -webkit-box;
-                  -webkit-box-orient: vertical;
-                  -webkit-line-clamp: 2;
                   overflow: hidden;
+                  white-space: nowrap;
+                  text-overflow: ellipsis;
                   height: 48px;
 
                 }
@@ -420,10 +425,9 @@ export default {
           .talentsService_cont_left{
             width: 92%;
             .cont_title{
-              display: -webkit-box;
-              -webkit-box-orient: vertical;
-              -webkit-line-clamp: 1;
               overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
               font-size: 26px;
               padding-top: 37px;
               line-height: 28px;

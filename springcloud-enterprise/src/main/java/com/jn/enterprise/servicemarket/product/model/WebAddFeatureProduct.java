@@ -404,4 +404,50 @@ public class WebAddFeatureProduct implements Serializable {
     public void setModifierAccount(String modifierAccount) {
         this.modifierAccount = modifierAccount;
     }
+
+    @Override
+    public String toString() {
+        return "WebAddFeatureProduct{" +
+                "productId='" + productId + '\'' +
+                ", serialNumber='" + serialNumber + '\'' +
+                ", productName='" + productName + '\'' +
+                ", isOnlineLoan='" + isOnlineLoan + '\'' +
+                ", referPrice='" + referPrice + '\'' +
+                ", signoryId='" + signoryId + '\'' +
+                ", signoryName='" + signoryName + '\'' +
+                ", templateId='" + templateId + '\'' +
+                ", orgId='" + orgId + '\'' +
+                ", orgName='" + orgName + '\'' +
+                ", serviceCycle='" + serviceCycle + '\'' +
+                ", pictureUrl='" + pictureUrl + '\'' +
+                ", productType='" + productType + '\'' +
+                ", status='" + status + '\'' +
+                ", viewCount='" + viewCount + '\'' +
+                ", approvalAccount='" + approvalAccount + '\'' +
+                ", approvalComments='" + approvalComments + '\'' +
+                ", refRateMin='" + refRateMin + '\'' +
+                ", refRateMax='" + refRateMax + '\'' +
+                ", isPolicyPro='" + isPolicyPro + '\'' +
+                ", isGeneralPro='" + isGeneralPro + '\'' +
+                ", isRmb='" + isRmb + '\'' +
+                ", loanCategoryCode='" + loanCategoryCode + '\'' +
+                ", loanCategoryName='" + loanCategoryName + '\'' +
+                ", loanAmountMin='" + loanAmountMin + '\'' +
+                ", loanAmountMax='" + loanAmountMax + '\'' +
+                ", loanTermMin='" + loanTermMin + '\'' +
+                ", loanTermMax='" + loanTermMax + '\'' +
+                ", assureMethodCode='" + assureMethodCode + '\'' +
+                ", assureMethodName='" + assureMethodName + '\'' +
+                ", productFeature='" + productFeature + '\'' +
+                ", applyCondition='" + applyCondition + '\'' +
+                ", submitMaterial='" + submitMaterial + '\'' +
+                ", applicableCust='" + applicableCust + '\'' +
+                ", createdTime='" + createdTime + '\'' +
+                ", creatorAccount='" + creatorAccount + '\'' +
+                ", modifiedTime='" + modifiedTime + '\'' +
+                ", modifierAccount='" + modifierAccount + '\'' +
+                ", productDetails='" + productDetails + '\'' +
+                ", recordStatus='" + recordStatus + '\'' +
+                '}';
+    }
 }

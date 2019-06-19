@@ -19,17 +19,19 @@ function initJsBridge (readyCallback) {
   var u = navigator.userAgent
   var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1 // android终端
   var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) // ios终端
-
+  // var WebViewJavascriptBridge
   // 注册jsbridge
   function connectWebViewJavascriptBridge (callback) {
     if (isAndroid) {
-      const WebViewJavascriptBridge = window.WebViewJavascriptBridge
-      if (WebViewJavascriptBridge) {
-        callback(WebViewJavascriptBridge)
+      if (window.WebViewJavascriptBridge) {
+        alert('isAndroid')
+        callback(window.WebViewJavascriptBridge)
       } else {
         document.addEventListener(
           'WebViewJavascriptBridgeReady'
           , function () {
+            alert('isAndroid123')
+            alert('WebViewJavascriptBridge')
             callback(window.WebViewJavascriptBridge)
           },
           false
@@ -39,15 +41,14 @@ function initJsBridge (readyCallback) {
     }
 
     if (isiOS) {
-      const WebViewJavascriptBridge = window.WebViewJavascriptBridge
-      if (WebViewJavascriptBridge) {
-        return callback(WebViewJavascriptBridge)
+      if (window.WebViewJavascriptBridge) {
+        return callback(window.WebViewJavascriptBridge)
       }
       if (window.WVJBCallbacks) {
         return window.WVJBCallbacks.push(callback)
       }
       window.WVJBCallbacks = [callback]
-      const WVJBIframe = document.createElement('iframe')
+      var WVJBIframe = document.createElement('iframe')
       WVJBIframe.style.display = 'none'
       WVJBIframe.src = 'https://__bridge_loaded__'
       document.documentElement.appendChild(WVJBIframe)

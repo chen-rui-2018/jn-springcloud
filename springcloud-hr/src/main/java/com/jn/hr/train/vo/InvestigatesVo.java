@@ -103,6 +103,9 @@ public class InvestigatesVo implements Serializable {
 	@Pattern(regexp = "^1[34578]\\d{9}$", message = "请正确输入手机号")
 	private String phone;
 
+	@ApiModelProperty(value = "调研方式（1：匿名调研，2：实名调研）", required = true, example = "1")
+	private Byte researchMethod;
+
 	@ApiModelProperty(value = "调研问题列表", required = true, example = "\"****@***\"")
 	private List<InvestigateQuestionAdd> questionList;
 
@@ -113,7 +116,7 @@ public class InvestigatesVo implements Serializable {
 			String effectiveTimeStartStr, Date effectiveTimeEnd, String effectiveTimeEndStr, Byte status,
 			String statusStr, String creatorAccount, String surveyDimensional, String surveyUrl, String trainer,
 			Byte isShowTrainer, Date trainDate, Byte isShowTrainDate, String projectNote, Date createdTime,
-			String modifierAccount, Date modifiedTime, String jobNumber, String name, String phone,
+			String modifierAccount, Date modifiedTime, String jobNumber, String name, String phone, Byte researchMethod,
 			List<InvestigateQuestionAdd> questionList) {
 		super();
 		this.projectId = projectId;
@@ -138,6 +141,7 @@ public class InvestigatesVo implements Serializable {
 		this.jobNumber = jobNumber;
 		this.name = name;
 		this.phone = phone;
+		this.researchMethod = researchMethod;
 		this.questionList = questionList;
 	}
 
@@ -325,6 +329,14 @@ public class InvestigatesVo implements Serializable {
 		this.phone = phone;
 	}
 
+	public Byte getResearchMethod() {
+		return researchMethod;
+	}
+
+	public void setResearchMethod(Byte researchMethod) {
+		this.researchMethod = researchMethod;
+	}
+
 	@Override
 	public String toString() {
 		return "InvestigatesVo {projectId='" + projectId + "', researchProject='" + researchProject
@@ -335,7 +347,8 @@ public class InvestigatesVo implements Serializable {
 				+ "', isShowTrainer='" + isShowTrainer + "', trainDate='" + trainDate + "', isShowTrainDate='"
 				+ isShowTrainDate + "', projectNote='" + projectNote + "', createdTime='" + createdTime
 				+ "', modifierAccount='" + modifierAccount + "', modifiedTime='" + modifiedTime + "', jobNumber='"
-				+ jobNumber + "', name='" + name + "', phone='" + phone + "', questionList='" + questionList + "'}";
+				+ jobNumber + "', name='" + name + "', phone='" + phone + "', researchMethod='" + researchMethod
+				+ "', questionList='" + questionList + "'}";
 	}
 
 }

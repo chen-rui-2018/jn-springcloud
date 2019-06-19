@@ -134,7 +134,7 @@
        ,t1.com_content as "comContent"
        ,IFNULL((SELECT SUM(1) FROM tb_comment com WHERE com.p_id is not  null and t1.id = com.p_id),0) AS "replyNum"
        ,IFNULL((SELECT SUM(1) FROM tb_park_like li WHERE li.like_parent_id = t1.id  and li.like_status = "1" and li.record_status = 1),0) AS "likeNum"
-    from tb_comment  t1 where t1.root_id = #{dynamicId} and t1.p_id = t1.root_id
+    from tb_comment  t1 where t1.root_id = #{dynamicId} and t1.p_id = t1.root_id order by t1.created_time desc
         </select>
     <!--评论信息-->
     <select id="findCommentsInfo" resultType="com.jn.park.gamtopic.model.DynamicComments">
@@ -154,7 +154,7 @@
        ,t1.id as "commentId"
        ,t1.com_content as "comContent"
        ,IFNULL((SELECT SUM(1) FROM tb_park_like li WHERE li.like_parent_id = t1.id  and li.like_status = "1" and li.record_status = 1),0) AS "likeNum"
-    from tb_comment  t1 where t1.p_id = #{commentId}
+    from tb_comment  t1 where t1.p_id = #{commentId} order by  t1.created_time
     </select>
     <!--点赞用户列表-->
     <select id="findLikedUserInfoList" resultType="com.jn.park.gamtopic.model.LikedUserInfo">
@@ -193,7 +193,7 @@
        ,date_format(t1.created_time,'%Y-%m-%d %H:%i:%s') as "createdTime"
        ,IFNULL((SELECT SUM(1) FROM tb_comment com WHERE com.p_id is not  null and t1.id = com.p_id),0) AS "replyNum"
        ,IFNULL((SELECT SUM(1) FROM tb_park_like li WHERE li.like_parent_id = t1.id  and li.like_status = "1" and li.record_status = 1),0) AS "likeNum"
-    from tb_comment  t1 where t1.root_id = #{dynamicId} and t1.p_id = t1.root_id
+    from tb_comment  t1 where t1.root_id = #{dynamicId} and t1.p_id = t1.root_id order by t1.created_time desc
     </select>
     <!--评论回复列表-->
     <select id="findReplyList"  parameterType="java.util.List" resultType="com.jn.park.gamtopic.model.DynamicComments">
@@ -214,6 +214,6 @@
         </foreach>
 
     </if>
-
+        order by t1.created_time desc
     </select>
 </mapper>

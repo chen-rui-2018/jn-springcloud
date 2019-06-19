@@ -13,10 +13,7 @@ export default {
   name: 'App',
   components: {administrativeHeader},
   mounted () {
-    this.init()
-  },
-  created () {
-    this.init()
+    // this.init()
   },
   methods: {
     init () {
@@ -29,7 +26,7 @@ export default {
         url: 'loginURL',
         data: {
           account: 'wangsong',
-          password: 'wangsong'
+          password: '123456'
         },
         dataFlag: false,
         callback: function (res) {

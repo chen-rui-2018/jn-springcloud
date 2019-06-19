@@ -9,7 +9,7 @@
         <!-- <x-input title="负责人：" placeholder="请输入内容" v-model="workForm.responsibleUserAccount" required :show-clear="false"></x-input> -->
         <datetime title="开始时间：" v-model="workForm.planStartTime" value-text-align="left" placeholder="请选择开始时间"></datetime>
         <datetime title="截止时间：" v-model="workForm.planEndTime" placeholder="请选择截止时间"  value-text-align="left"></datetime>
-        <x-input title="预计工时：" type="number" placeholder="请输入内容" class="timeStyle" required v-model="workForm.planTime" :show-clear="false"></x-input>
+        <x-input title="预计工时：" type="number"  placeholder="请输入内容" @on-blur="blurText(workForm.planTime)" class="timeStyle" v-model="workForm.planTime" :show-clear="false"></x-input>
         <x-textarea title="需求描述：" placeholder="请输入任务需求描述" :max="num" :autosize='true' :show-counter="false" :rows="3"
           v-model="workForm.demandDescribe"></x-textarea>
         <x-textarea title="任务内容：" placeholder="请输入任务内容" :max="num" :autosize='true' :show-counter="false" :rows="3"
@@ -32,6 +32,14 @@
 <script>
 export default {
   data () {
+    // var checkNumber = (rule, value, callback) => {
+    //   const reg = /^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/
+    //   if (!reg.test(value)) {
+    //     callback('请输入正数')
+    //   } else {
+    //     callback()
+    //   }
+    // }
     return {
       workPlanNameValue: function (value) {
         return {
@@ -62,6 +70,13 @@ export default {
     this.getAllUser()
   },
   methods: {
+    blurText (value) {
+      var reg = /^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/
+      if (!reg.test(value)) {
+        this.$vux.toast.text('请输入数字')
+        return false
+      }
+    },
     cancel () {
       this.workForm.workPlanName = ''
       this.workForm.attachment = ''
@@ -124,6 +139,12 @@ export default {
       if (!this.workForm.planTime) {
         this.$vux.toast.text('请输入预计工时')
         return false
+      } else {
+        var reg = /^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/
+        if (!reg.test(this.workForm.planTime)) {
+          this.$vux.toast.text('预计工时请输入数字')
+          return false
+        }
       }
       if (!this.workForm.content) {
         this.$vux.toast.text('请填写任务内容')
@@ -133,10 +154,14 @@ export default {
         this.$vux.toast.text('请填写需求描述')
         return false
       }
+      this.$vux.loading.show({
+        text: 'Loading'
+      })
       this.api.post({
         url: 'addWorkPlan',
         data: this.workForm,
         callback: res => {
+          this.$vux.loading.hide()
           if (res.code === '0000') {
             this.$vux.toast.text('添加成功')
             this.$router.push({path: '/workPlan/workPlan'})
@@ -198,6 +223,9 @@ export default {
   padding: 30px;
   .weui-cells {
     margin-top: unset;
+  }
+  .vux-popover{
+    right:1px;
   }
   .workForm {
     padding-top: 1rem;

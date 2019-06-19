@@ -4,4 +4,12 @@
   <select id="list" parameterType="com.jn.hr.increase.model.InsuredSchemePage" resultType="com.jn.hr.increase.model.InsuredScheme">
     select * from tb_manpower_insured_scheme where record_status != 0
   </select>
+  
+  <select id="getInsuredSchemeMap" parameterType="com.jn.hr.increase.model.InsuredSchemePage" resultType="com.jn.hr.increase.model.InsuredScheme">
+    select * from tb_manpower_insured_scheme where record_status != 0
+  </select>
+  
+  <select id="selectBySchemeName" parameterType="map" resultType="java.lang.Integer">
+    select count(1) from tb_manpower_insured_scheme where scheme_name = #{schemeName,jdbcType=VARCHAR}
+  </select>
 </mapper>

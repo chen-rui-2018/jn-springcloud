@@ -6,7 +6,7 @@
       ref="search"></search>
     </div>
         <div class="approvalGuide_main">
-          <div class="approvalGuide_tab">
+          <div class="approvalGuide_tab1">
             <span class="slider_btn" @click="isSlider=true"><i class="iconfont icon-icon-"></i> </span>
             <tab>
               <tab-item :selected="active===''" ><span :class="{active:active===''}" @click="toggle('','')">全部</span></tab-item>
@@ -26,7 +26,7 @@
           </popup>
            <!-- <scroller lock-x @on-scroll-bottom="onScrollBottom" ref="scrollerBottom" style="height:569px">
               <div class="box2"> -->
-                <div class="approvalGuide_cont">
+                <div class="approvalGuide_cont1">
                   <group v-for="(powerItem,powerIndex) in poweList" :key="powerIndex">
                     <div class="approvalGuide_box" >
                       <cell
@@ -123,14 +123,18 @@ export default {
       }
     },
     getdepartList () {
-      let _this = this
       this.api.get({
         url: 'departList',
         data: this.sendData,
-        callback: function (res) {
+        callback: (res) => {
           if (res.code === '0000') {
             // console.log(res)
-            _this.departList = res.data
+            this.departList.push(...res.data[0])
+            this.departList.push(...res.data[1])
+            this.departList.push(...res.data[2])
+            //  res.data.forEach(ele => {
+
+            // })
           }
         }
       })
@@ -157,42 +161,13 @@ export default {
     },
     // 去详情
     goPower (id) {
-      // console.log(id)
       this.$router.push({path: '/guest/portal/sp/power/powerDetail', query: {id: id}})
     },
     toggle (index, id) {
-      // console.log(index)
       this.active = index
       this.sendData.departId = id
       this.getPoweList()
     }
-    /* onScrollBottom () {
-      if (this.onFetching === false) {
-        if (this.sendData.page < Math.ceil(this.total / this.sendData.rows)) {
-          this.onFetching = true
-          setTimeout(() => {
-            this.sendData.page++
-            this.api.get({
-              url: 'powerList',
-              data: this.sendData,
-              callback: res => {
-                if (res.code === '0000') {
-                  this.poweList.push(...res.data.rows)
-                  // this.poweList = res.data.rows
-                  this.total = res.data.total
-                  this.poweList.forEach(ele => {
-                    this.$set(ele, 'isfold', false)
-                  })
-                  this.isSlider = false
-                  this.onFetching = false
-                }
-              }
-            })
-          }, 1000)
-        } else {
-        }
-      }
-    } */
   }
 }
 </script>
@@ -239,7 +214,7 @@ export default {
       }
     }
     .approvalGuide_main{
-      .approvalGuide_tab{
+      .approvalGuide_tab1{
         // margin-top: 110px;
         position: fixed;
         top:113px;
@@ -297,7 +272,7 @@ export default {
            }
         }
       }
-      .approvalGuide_cont{
+      .approvalGuide_cont1{
         margin:30px;
         margin-top: 27%;
         height: 100% ;

@@ -17,7 +17,7 @@ export default {
     }
   },
 
-  mounted: function() {
+  mounted() {
     gantt.config.subscales = [
       {
         unit: 'year',
@@ -25,8 +25,12 @@ export default {
         date: '%Y'
       }
     ]
-    gantt.init(this.$refs.gantt)
-    gantt.parse(this.$props.tasks)
+    this.$nextTick(() => {
+      gantt.init(this.$refs.gantt)
+      gantt.parse(this.$props.tasks)
+      gantt.config.readonly = true
+      // gantt.init('gantt_here')
+    })
   }
 }
 </script>

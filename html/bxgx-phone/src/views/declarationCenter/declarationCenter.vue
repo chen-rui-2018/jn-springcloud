@@ -32,7 +32,7 @@
     <div class="declaration_platform" v-if="isShow===1">
       <div class="platform_titile">
         <div>申报平台</div>
-        <div >MORE <span class="iconfont icon-jiantou"></span></div>
+        <div @click="$router.push({path:'/guest/pd/declarationPlatform'})">MORE <span class="iconfont icon-jiantou"></span></div>
       </div>
       <div class="platform_cont" @click="$router.push({path:'/guest/pd/declarationPlatform'})">
         <p>
@@ -170,6 +170,8 @@ export default {
           if (res.code === '0000') {
             // console.log(res)
             this.perennialList = res.data.rows
+          } else {
+            this.$vux.toast.text(res.result)
           }
         }
       })
@@ -181,6 +183,8 @@ export default {
         callback: res => {
           if (res.code === '0000') {
             this.typeList = res.data
+          } else {
+            this.$vux.toast.text(res.result)
           }
         }
       })
@@ -195,6 +199,8 @@ export default {
             // console.log(res)
             this.declarationList = res.data.rows
             this.total = res.data.total
+          } else {
+            this.$vux.toast.text(res.result)
           }
         }
       })
@@ -242,8 +248,9 @@ export default {
     }
     i{
       position: absolute;
-      top: 37%;
-      right: 54%
+      top: 42%;
+      right: 54%;
+      font-size: 21px;
     }
   }
   .padding{
@@ -255,6 +262,7 @@ export default {
     .perennial{
       background-color: #fff;
       margin:0 23px;
+      margin-top: 31px;
       .perennial_titile{
         display: flex;
         justify-content: space-between;
@@ -293,14 +301,14 @@ export default {
                   margin-top: 9px;
                 }
                 p:nth-child(1){
-                  width:100%;
-                  height: 107px;
+                  // width:100%;
+                  // height: 107px;
                   border-bottom: 1px solid #eeeeee;
                   padding: 13px 0;
                   margin-top: 0;
                   img{
                     width: 51%;
-                    height: 100%;
+                    // height: 100%;
                     display: block;
                     margin: auto;
                   }
@@ -310,12 +318,10 @@ export default {
                   font-size: 16px;
                   padding-top: 18px;
                   line-height: 29px;
-                  display: -webkit-box;
-                  -webkit-box-orient: vertical;
-                  -webkit-line-clamp: 2;
                   overflow: hidden;
+                  white-space: nowrap;
+                  text-overflow: ellipsis;
                   height: 46px;
-
                 }
                 p:nth-child(4){
                  span{
@@ -438,10 +444,9 @@ export default {
           .declaration_cont_left{
             width: 92%;
             .cont_title{
-              display: -webkit-box;
-              -webkit-box-orient: vertical;
-              -webkit-line-clamp: 1;
-              overflow: hidden;
+             overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
               font-size: 26px;
               padding-top: 37px;
               line-height: 28px;

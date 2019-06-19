@@ -248,8 +248,10 @@ export default {
 .homePage {
   .el-main {
     padding: 0 20px;
+    min-height: 500px;
     &.isMobile {
       padding: 0;
+      min-height: 0;
     }
   }
   &.pd {

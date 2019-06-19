@@ -11,10 +11,7 @@ import com.jn.park.api.RoomOrderClient;
 import com.jn.park.attractinvest.dao.ProjectInfoMapper;
 import com.jn.park.attractinvest.dao.TbProjectInfoMapper;
 import com.jn.park.attractinvest.domain.ProjectProperties;
-import com.jn.park.attractinvest.enmus.BusinessAdExceptionEnmus;
-import com.jn.park.attractinvest.enmus.CompactStatusEnums;
-import com.jn.park.attractinvest.enmus.ProjectNoticesTemplateEnums;
-import com.jn.park.attractinvest.enmus.ProjectProcessEnums;
+import com.jn.park.attractinvest.enmus.*;
 import com.jn.park.attractinvest.entity.TbProjectEnterDetails;
 import com.jn.park.attractinvest.entity.TbProjectInfo;
 import com.jn.park.attractinvest.entity.TbProjectInfoCriteria;
@@ -207,6 +204,8 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
             //将订单号保存至数据库中
             TbProjectInfoWithBLOBs tbProjectInfoWithBLOBs = tbProjectInfoMapper.selectByPrimaryKey(id);
             tbProjectInfoWithBLOBs.setRoomBillId(billId);
+            //更新企业状态为企业缴费中
+            tbProjectInfoWithBLOBs.setStatus(new Byte(ProjectStatusEnums.PAYING.getCode()));
             tbProjectInfoMapper.updateByPrimaryKeySelective(tbProjectInfoWithBLOBs);
             logger.info("[项目管理] 生成企业租赁信息生成缴费单成功,缴费单id:{},企业管理员:{}", billId, userAccount);
         } else {
@@ -276,7 +275,11 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
         tbPmPriceRuleDeatils.setCreatorAccount(user.getAccount());
         //物业费单价
         tbPmPriceRuleDeatils.setPmUnitPrice(tbProjectEnterDetails.getPmUnitPrice());
-        BigDecimal decimal = new BigDecimal(tbProjectEnterDetails.getRoomArea());
+        //设置房间面积
+        BigDecimal decimal = new BigDecimal(0);
+        if (StringUtils.isNotBlank(tbProjectEnterDetails.getRoomArea())){
+            decimal = new BigDecimal(tbProjectEnterDetails.getRoomArea());
+        }
         //房间平方
         tbPmPriceRuleDeatils.setRoomArea(decimal);
         return tbPmPriceRuleDeatils;

@@ -11,14 +11,9 @@
     <result column="contact_phone" jdbcType="VARCHAR" property="contactPhone" />
     <result column="pay_sum" jdbcType="DECIMAL" property="paySum" />
     <result column="pay_state" jdbcType="TINYINT" property="payState" />
-    <result column="room_status" jdbcType="TINYINT" property="roomStatus" />
     <result column="apply_time" jdbcType="DATE" property="applyTime" />
-    <result column="quit_penal_sum" jdbcType="DECIMAL" property="quitPenalSum" />
     <result column="explain_" jdbcType="VARCHAR" property="explain" />
     <result column="approval_opinion" jdbcType="VARCHAR" property="approvalOpinion" />
-    <result column="practical_quit_time" jdbcType="DATE" property="practicalQuitTime" />
-    <result column="lease_apply_status" jdbcType="TINYINT" property="leaseApplyStatus" />
-    <result column="quit_apply_status" jdbcType="TINYINT" property="quitApplyStatus" />
     <result column="is_relet" jdbcType="TINYINT" property="isRelet" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
@@ -86,8 +81,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, enterprise_id, lease_enterprise, lease_start_time, lease_end_time, contact_name, 
-    contact_phone, pay_sum, pay_state, room_status, apply_time, quit_penal_sum, explain_, 
-    approval_opinion, practical_quit_time, lease_apply_status, quit_apply_status, is_relet, 
+    contact_phone, pay_sum, pay_state, apply_time, explain_, approval_opinion, is_relet, 
     record_status, creator_account, create_time, modifier_account, modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.asset.entity.TbRoomOrdersCriteria" resultMap="BaseResultMap">
@@ -124,19 +118,17 @@
     insert into tb_room_orders (id, enterprise_id, lease_enterprise, 
       lease_start_time, lease_end_time, contact_name, 
       contact_phone, pay_sum, pay_state, 
-      room_status, apply_time, quit_penal_sum, 
-      explain_, approval_opinion, practical_quit_time, 
-      lease_apply_status, quit_apply_status, is_relet, 
-      record_status, creator_account, create_time, 
-      modifier_account, modified_time)
+      apply_time, explain_, approval_opinion, 
+      is_relet, record_status, creator_account, 
+      create_time, modifier_account, modified_time
+      )
     values (#{id,jdbcType=VARCHAR}, #{enterpriseId,jdbcType=VARCHAR}, #{leaseEnterprise,jdbcType=VARCHAR}, 
       #{leaseStartTime,jdbcType=DATE}, #{leaseEndTime,jdbcType=DATE}, #{contactName,jdbcType=VARCHAR}, 
       #{contactPhone,jdbcType=VARCHAR}, #{paySum,jdbcType=DECIMAL}, #{payState,jdbcType=TINYINT}, 
-      #{roomStatus,jdbcType=TINYINT}, #{applyTime,jdbcType=DATE}, #{quitPenalSum,jdbcType=DECIMAL}, 
-      #{explain,jdbcType=VARCHAR}, #{approvalOpinion,jdbcType=VARCHAR}, #{practicalQuitTime,jdbcType=DATE}, 
-      #{leaseApplyStatus,jdbcType=TINYINT}, #{quitApplyStatus,jdbcType=TINYINT}, #{isRelet,jdbcType=TINYINT}, 
-      #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
+      #{applyTime,jdbcType=DATE}, #{explain,jdbcType=VARCHAR}, #{approvalOpinion,jdbcType=VARCHAR}, 
+      #{isRelet,jdbcType=TINYINT}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.asset.entity.TbRoomOrders">
     insert into tb_room_orders
@@ -168,29 +160,14 @@
       <if test="payState != null">
         pay_state,
       </if>
-      <if test="roomStatus != null">
-        room_status,
-      </if>
       <if test="applyTime != null">
         apply_time,
-      </if>
-      <if test="quitPenalSum != null">
-        quit_penal_sum,
       </if>
       <if test="explain != null">
         explain_,
       </if>
       <if test="approvalOpinion != null">
         approval_opinion,
-      </if>
-      <if test="practicalQuitTime != null">
-        practical_quit_time,
-      </if>
-      <if test="leaseApplyStatus != null">
-        lease_apply_status,
-      </if>
-      <if test="quitApplyStatus != null">
-        quit_apply_status,
       </if>
       <if test="isRelet != null">
         is_relet,
@@ -239,29 +216,14 @@
       <if test="payState != null">
         #{payState,jdbcType=TINYINT},
       </if>
-      <if test="roomStatus != null">
-        #{roomStatus,jdbcType=TINYINT},
-      </if>
       <if test="applyTime != null">
         #{applyTime,jdbcType=DATE},
-      </if>
-      <if test="quitPenalSum != null">
-        #{quitPenalSum,jdbcType=DECIMAL},
       </if>
       <if test="explain != null">
         #{explain,jdbcType=VARCHAR},
       </if>
       <if test="approvalOpinion != null">
         #{approvalOpinion,jdbcType=VARCHAR},
-      </if>
-      <if test="practicalQuitTime != null">
-        #{practicalQuitTime,jdbcType=DATE},
-      </if>
-      <if test="leaseApplyStatus != null">
-        #{leaseApplyStatus,jdbcType=TINYINT},
-      </if>
-      <if test="quitApplyStatus != null">
-        #{quitApplyStatus,jdbcType=TINYINT},
       </if>
       <if test="isRelet != null">
         #{isRelet,jdbcType=TINYINT},
@@ -319,29 +281,14 @@
       <if test="record.payState != null">
         pay_state = #{record.payState,jdbcType=TINYINT},
       </if>
-      <if test="record.roomStatus != null">
-        room_status = #{record.roomStatus,jdbcType=TINYINT},
-      </if>
       <if test="record.applyTime != null">
         apply_time = #{record.applyTime,jdbcType=DATE},
-      </if>
-      <if test="record.quitPenalSum != null">
-        quit_penal_sum = #{record.quitPenalSum,jdbcType=DECIMAL},
       </if>
       <if test="record.explain != null">
         explain_ = #{record.explain,jdbcType=VARCHAR},
       </if>
       <if test="record.approvalOpinion != null">
         approval_opinion = #{record.approvalOpinion,jdbcType=VARCHAR},
-      </if>
-      <if test="record.practicalQuitTime != null">
-        practical_quit_time = #{record.practicalQuitTime,jdbcType=DATE},
-      </if>
-      <if test="record.leaseApplyStatus != null">
-        lease_apply_status = #{record.leaseApplyStatus,jdbcType=TINYINT},
-      </if>
-      <if test="record.quitApplyStatus != null">
-        quit_apply_status = #{record.quitApplyStatus,jdbcType=TINYINT},
       </if>
       <if test="record.isRelet != null">
         is_relet = #{record.isRelet,jdbcType=TINYINT},
@@ -377,14 +324,9 @@
       contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
       pay_sum = #{record.paySum,jdbcType=DECIMAL},
       pay_state = #{record.payState,jdbcType=TINYINT},
-      room_status = #{record.roomStatus,jdbcType=TINYINT},
       apply_time = #{record.applyTime,jdbcType=DATE},
-      quit_penal_sum = #{record.quitPenalSum,jdbcType=DECIMAL},
       explain_ = #{record.explain,jdbcType=VARCHAR},
       approval_opinion = #{record.approvalOpinion,jdbcType=VARCHAR},
-      practical_quit_time = #{record.practicalQuitTime,jdbcType=DATE},
-      lease_apply_status = #{record.leaseApplyStatus,jdbcType=TINYINT},
-      quit_apply_status = #{record.quitApplyStatus,jdbcType=TINYINT},
       is_relet = #{record.isRelet,jdbcType=TINYINT},
       record_status = #{record.recordStatus,jdbcType=TINYINT},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
@@ -422,29 +364,14 @@
       <if test="payState != null">
         pay_state = #{payState,jdbcType=TINYINT},
       </if>
-      <if test="roomStatus != null">
-        room_status = #{roomStatus,jdbcType=TINYINT},
-      </if>
       <if test="applyTime != null">
         apply_time = #{applyTime,jdbcType=DATE},
-      </if>
-      <if test="quitPenalSum != null">
-        quit_penal_sum = #{quitPenalSum,jdbcType=DECIMAL},
       </if>
       <if test="explain != null">
         explain_ = #{explain,jdbcType=VARCHAR},
       </if>
       <if test="approvalOpinion != null">
         approval_opinion = #{approvalOpinion,jdbcType=VARCHAR},
-      </if>
-      <if test="practicalQuitTime != null">
-        practical_quit_time = #{practicalQuitTime,jdbcType=DATE},
-      </if>
-      <if test="leaseApplyStatus != null">
-        lease_apply_status = #{leaseApplyStatus,jdbcType=TINYINT},
-      </if>
-      <if test="quitApplyStatus != null">
-        quit_apply_status = #{quitApplyStatus,jdbcType=TINYINT},
       </if>
       <if test="isRelet != null">
         is_relet = #{isRelet,jdbcType=TINYINT},
@@ -477,14 +404,9 @@
       contact_phone = #{contactPhone,jdbcType=VARCHAR},
       pay_sum = #{paySum,jdbcType=DECIMAL},
       pay_state = #{payState,jdbcType=TINYINT},
-      room_status = #{roomStatus,jdbcType=TINYINT},
       apply_time = #{applyTime,jdbcType=DATE},
-      quit_penal_sum = #{quitPenalSum,jdbcType=DECIMAL},
       explain_ = #{explain,jdbcType=VARCHAR},
       approval_opinion = #{approvalOpinion,jdbcType=VARCHAR},
-      practical_quit_time = #{practicalQuitTime,jdbcType=DATE},
-      lease_apply_status = #{leaseApplyStatus,jdbcType=TINYINT},
-      quit_apply_status = #{quitApplyStatus,jdbcType=TINYINT},
       is_relet = #{isRelet,jdbcType=TINYINT},
       record_status = #{recordStatus,jdbcType=TINYINT},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},

@@ -20,11 +20,20 @@ public class ParkDetailsVo implements Serializable {
     @ApiModelProperty(value = "园区主要宣传图片")
     private String mainPicture;
 
+    @ApiModelProperty(value = "园区次要宣传图片")
+    private String minorPicture;
+
+    @ApiModelProperty(value = "园区简短介绍（列表页显示）")
+    private String shortIntroduce;
+
     @ApiModelProperty(value = "园区介绍")
     private String parkIntroduce;
 
     @ApiModelProperty(value = "园区的发布状态")
     private String parkState;
+
+    @ApiModelProperty(value = "显示顺序（顺序排列）")
+    private Integer showOrder;
 
     @ApiModelProperty(value = "园区企业入驻情况")
     private String isEnter;
@@ -36,9 +45,6 @@ public class ParkDetailsVo implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     private Date createdTime;
-
-    @ApiModelProperty(value = "园区次要宣传图片")
-    private String minorPicture;
 
     public String getId() {
         return id;
@@ -64,6 +70,22 @@ public class ParkDetailsVo implements Serializable {
         this.mainPicture = mainPicture;
     }
 
+    public String getMinorPicture() {
+        return minorPicture;
+    }
+
+    public void setMinorPicture(String minorPicture) {
+        this.minorPicture = minorPicture;
+    }
+
+    public String getShortIntroduce() {
+        return shortIntroduce;
+    }
+
+    public void setShortIntroduce(String shortIntroduce) {
+        this.shortIntroduce = shortIntroduce;
+    }
+
     public String getParkIntroduce() {
         return parkIntroduce;
     }
@@ -78,6 +100,14 @@ public class ParkDetailsVo implements Serializable {
 
     public void setParkState(String parkState) {
         this.parkState = parkState;
+    }
+
+    public Integer getShowOrder() {
+        return showOrder;
+    }
+
+    public void setShowOrder(Integer showOrder) {
+        this.showOrder = showOrder;
     }
 
     public String getIsEnter() {
@@ -104,11 +134,20 @@ public class ParkDetailsVo implements Serializable {
         this.createdTime = createdTime;
     }
 
-    public String getMinorPicture() {
-        return minorPicture;
-    }
-
-    public void setMinorPicture(String minorPicture) {
-        this.minorPicture = minorPicture;
+    @Override
+    public String toString() {
+        return "ParkDetailsVo{" +
+                "id='" + id + '\'' +
+                ", parkName='" + parkName + '\'' +
+                ", mainPicture='" + mainPicture + '\'' +
+                ", minorPicture='" + minorPicture + '\'' +
+                ", shortIntroduce='" + shortIntroduce + '\'' +
+                ", parkIntroduce='" + parkIntroduce + '\'' +
+                ", parkState='" + parkState + '\'' +
+                ", showOrder=" + showOrder +
+                ", isEnter='" + isEnter + '\'' +
+                ", creatorAccount='" + creatorAccount + '\'' +
+                ", createdTime=" + createdTime +
+                '}';
     }
 }

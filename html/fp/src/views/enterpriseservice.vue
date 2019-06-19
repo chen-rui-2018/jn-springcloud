@@ -30,7 +30,7 @@
           <!-- 如果需要滚动条 -->
           <!-- <div class="swiper-scrollbar"></div> -->
         </div>
-        <div class="quickEnter">
+        <!-- <div class="quickEnter">
           <ul>
             <li @click="$router.push({path:'/talentsService'})">
               <span>人才服务</span>
@@ -53,7 +53,7 @@
               <img src="@/../static/img/right-arrow.png" alt="">
             </li>
           </ul>
-        </div>
+        </div> -->
       </div>
       <div class="declarationNotice w pr" ref="declarationNotice" data-class="bottom">
         <div ref="deNotice1" data-class="bottom" class="pointer" @click="$router.push({path:'/declarationCenter'})">
@@ -121,7 +121,7 @@
                     <div class="left1">N</div>
                     <div class="right1">
                       <div class="rightTit color1">{{item.policyTitle}}</div>
-                      <p class="color2">{{item.briefContent}}</p>
+                      <p class="color2 policyCon">{{item.briefContent}}</p>
                       <div class="liBom clearfix">
                         <p class="fl color3">
                           <i class="el-icon-view"></i>&nbsp;{{item.readNum}}</p>
@@ -133,118 +133,6 @@
 
                 </ul>
               </div>
-              <!-- <div class="swiper-slide">
-                <ul class="page1 clearfix">
-                  <li>
-                    <div class="left1">N</div>
-                    <div class="right1">
-                      <div class="rightTit color1">白下高新区金融扶持政策</div>
-                      <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
-                      <div class="liBom clearfix">
-                        <p class="fl color3">
-                          <i class="el-icon-view"></i>&nbsp;89</p>
-                        <span class="fr mainColor">南京市级</span>
-                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="left1">E</div>
-                    <div class="right1">
-                      <div class="rightTit color1">南京白下高新区税收优惠政策</div>
-                      <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
-                      <div class="liBom clearfix">
-                        <p class="fl color3">
-                          <i class="el-icon-view"></i>&nbsp;89</p>
-                        <span class="fr mainColor">南京市级</span>
-                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="left1">W</div>
-                    <div class="right1">
-                      <div class="rightTit color1">南京市人民政府人才激励政策...</div>
-                      <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
-                      <div class="liBom clearfix">
-                        <p class="fl color3">
-                          <i class="el-icon-view"></i>&nbsp;89</p>
-                        <span class="fr mainColor">南京市级</span>
-                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="left1">S</div>
-                    <div class="right1">
-                      <div class="rightTit color1">关于维护知识产权政策</div>
-                      <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上....</p>
-                      <div class="liBom clearfix">
-                        <p class="fl color3">
-                          <i class="el-icon-view"></i>&nbsp;89</p>
-                        <span class="fr mainColor">南京市级</span>
-                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-              <div class="swiper-slide">
-                <ul class="page1 clearfix">
-                  <li>
-                    <div class="left1">N</div>
-                    <div class="right1">
-                      <div class="rightTit color1">白下高新区金融扶持政策</div>
-                      <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
-                      <div class="liBom clearfix">
-                        <p class="fl color3">
-                          <i class="el-icon-view"></i>&nbsp;89</p>
-                        <span class="fr mainColor">南京市级</span>
-                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="left1">E</div>
-                    <div class="right1">
-                      <div class="rightTit color1">南京白下高新区税收优惠政策</div>
-                      <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
-                      <div class="liBom clearfix">
-                        <p class="fl color3">
-                          <i class="el-icon-view"></i>&nbsp;89</p>
-                        <span class="fr mainColor">南京市级</span>
-                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="left1">W</div>
-                    <div class="right1">
-                      <div class="rightTit color1">南京市人民政府人才激励政策...</div>
-                      <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
-                      <div class="liBom clearfix">
-                        <p class="fl color3">
-                          <i class="el-icon-view"></i>&nbsp;89</p>
-                        <span class="fr mainColor">南京市级</span>
-                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="left1">S</div>
-                    <div class="right1">
-                      <div class="rightTit color1">关于维护知识产权政策</div>
-                      <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上....</p>
-                      <div class="liBom clearfix">
-                        <p class="fl color3">
-                          <i class="el-icon-view"></i>&nbsp;89</p>
-                        <span class="fr mainColor">南京市级</span>
-                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div> -->
             </div>
 
             <div class="swiper-pagination"></div>
@@ -271,10 +159,10 @@
           <i class="iconfont icon-leftarrow pointer" @click="leftPage"></i>
           <i class="iconfont icon-rightarrow pointer" @click="rightPage"></i>
           <ul class="actiUl clearfix">
-            <li v-for="(i,k) in actiListSlim" :key="k">
+            <li v-for="(i,k) in actiListSlim" :key="k" class="pointer"  @click="$router.push({ path: '/actiDetail', query: { activityId: i.id } })">
               <div class="postImgItem" @mouseenter.stop="show1=i.id,show11=i.id" @mouseleave.stop="show1='',show11=''">
                 <img :src="i.actiPosterUrl" :class="{'poIm':show1==i.id}" class="postImg pointer" alt="活动海报图片">
-                <img src="@/../static/img/组 40.png" :class="{'poIm':show11==i.id}" class="postImg1 pointer" alt="活动海报图片" @click="$router.push({ path: '/actiDetail', query: { activityId: i.id } })">
+                <img src="@/../static/img/组 40.png" :class="{'poIm':show11==i.id}" class="postImg1 pointer" alt="活动海报图片">
               </div>
               <div class="actiInfo">
                 <p class="actiNameItem">
@@ -373,10 +261,10 @@
               <div id="conselor_info" v-if="flag44 == '0'">
                 <ul>
                   <li class="conselor_left">
-                    <div v-for="(item,index) in investorInfoList" :key="index" v-if="index<2">
+                    <div class="pointer" v-for="(item,index) in investorInfoList" :key="index" v-if="index<2" @click="$router.push({path:'investorDetail',query:{investorAccount:item.investorAccount}})">
                       <a href="javascript:;">
                         <div class="info_img">
-                          <div @click="$router.push({path:'investorDetail',query:{investorAccount:item.investorAccount}})"><img v-if="item.avatar" :src="item.avatar" alt=""> <img v-else src="@/../static/img/larImg.png" alt=""></div>
+                          <div ><img v-if="item.avatar" :src="item.avatar" alt=""> <img v-else src="@/../static/img/larImg.png" alt=""></div>
                         </div>
                         <div class="info_all">
                           <div class="info_name">
@@ -392,9 +280,9 @@
                     </div>
                   </li>
                   <li class="conselor_mid">
-                    <div v-for="(item2,index2) in investorInfoList" :key="index2" v-if="index2>1&&index2<10" class="conselor_mid_list">
+                    <div v-for="(item2,index2) in investorInfoList" :key="index2" v-if="index2>1&&index2<10" class="conselor_mid_list"  @click="$router.push({path:'investorDetail',query:{investorAccount:item2.investorAccount}})">
                       <a href="javascript:;">
-                        <div class="info_img" @click="$router.push({path:'investorDetail',query:{investorAccount:item2.investorAccount}})"><img :src="item2.avatar" alt=""></div>
+                        <div class="info_img"><img :src="item2.avatar" alt=""></div>
                         <div class="info_all">
                           <div class="info_name">
                             <span>{{item2.investorName}}</span>/
@@ -418,7 +306,7 @@
                       <img v-if="i.pictureUrl" :src="i.pictureUrl" alt="">
                       <img v-else src="@/../static/img/product.png" alt="">
                     </div>
-                    <div class="orgCon fl">
+                    <div class="orgCon fl pointer" @click="$router.push({ path: 'finaProDetail', query: { productId: i.productId } })">
                       <div class="conTil">{{i.productName}}</div>
                       <div class="conContent clearfix color3">
                         <div class="left1 fl">
@@ -458,7 +346,7 @@
                     <div class="orgImg fl pointer" @click="$router.push({ path: 'finaInsDetail', query: { orgId: i.orgId } })">
                       <img :src="i.orgLogo" alt="">
                     </div>
-                    <div class="orgCon fl">
+                    <div class="orgCon fl pointer" @click="$router.push({ path: 'finaInsDetail', query: { orgId: i.orgId } })">
                       <div class="conTil" style="margin-bottom:40px">{{i.orgName}}</div>
                       <div class="conContent clearfix color3">
                         <div class="left1 fl">
@@ -545,7 +433,7 @@
                     <img v-if="i.pictureUrl" :src="i.pictureUrl" alt="">
                     <img v-else src="@/../static/img/product.png" alt="">
                   </div>
-                  <div class="orgCon fl">
+                  <div class="orgCon fl pointer" @click="handleProDel(i.productId,i.signoryId)">
                     <div class="conTil">{{i.productName}}</div>
                     <div class="conContent clearfix color3">
                       <div class="left1 fl" id="left1">
@@ -832,26 +720,30 @@ export default {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
   },
   methods: {
-     goLogin() {
+    goLogin() {
       window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
       this.$router.push({ path: "/login" });
     },
     //判断是否登录
     isLogin() {
-      if (!sessionStorage.userInfo) {
+      const token=this.getToken()
+      console.log(token)
+      if (!token) {
         this.islogin = false;
       }
     },
     //在线联系
     onlineContat(orgAccount, orgName) {
-      if (!sessionStorage.userInfo) {
+      const userInfo=this.getUserInfo()
+      // console.log(JSON.parse(userInfo))
+      if (!userInfo) {
         this.concatVisible = true;
         return;
       }
       this.$router.push({
         path: "/chat",
         query: {
-          fromUser: JSON.parse(sessionStorage.userInfo).account,
+          fromUser: JSON.parse(userInfo).account,
           toUser: orgAccount,
           nickName: orgName
         }
@@ -859,7 +751,7 @@ export default {
     },
     //企业招聘列表在线联系
     onlineContact(id) {
-      if (!sessionStorage.userInfo) {
+      if (!this.getUserInfo()) {
         this.concatVisible = true;
         return;
       }
@@ -872,7 +764,7 @@ export default {
           if (res.code == "0000") {
             // this.typeList = res.data;
             if (
-              JSON.parse(sessionStorage.userInfo).account == res.data.account
+              JSON.parse(this.getUserInfo()).account == res.data.account
             ) {
               this.$message.error("当前登录的账号跟聊天对象一样");
               return;
@@ -880,7 +772,7 @@ export default {
             this.$router.push({
               path: "/chat",
               query: {
-                fromUser: JSON.parse(sessionStorage.userInfo).account,
+                fromUser: JSON.parse(this.getUserInfo()).account,
                 toUser: res.data.account,
                 nickName: res.data.nickName
               }
@@ -1565,6 +1457,8 @@ export default {
   .policyCenter {
     .paging {
       overflow: hidden;
+      margin-top:50px;
+      padding-bottom:20px;
       .swiper-container {
         padding: 40px 0;
       }
@@ -1631,6 +1525,13 @@ export default {
               > span {
                 margin-left: 20px;
               }
+            }
+            .policyCon {
+              height: 50px;
+              display: -webkit-box;
+              -webkit-box-orient: vertical;
+              -webkit-line-clamp: 3;
+              overflow: hidden;
             }
           }
           //   .right1:hover {

@@ -1,7 +1,5 @@
 <template>
-  <div
-    :class="{'h-100': $store.state.isMobile}"
-    class="portalIndex">
+  <div :class="{'h-100': $store.state.isMobile}" class="portalIndex">
     <div class="portalIndexImg" v-if="$store.state.hiddenNav">
       <div class="header" id="header" :class="{'headerw':isCenter||showFF}">
         <div class="headerContainer clearfix">
@@ -31,15 +29,45 @@
           <div class="nav" id="nav">
             <ul class="posA clearfix">
               <li class="">
-                <router-link to="/" class="router-link" :class="{'ru-active':$route.path == '/'}" >首页</router-link>
+                <router-link to="/" class="router-link" :class="{'ru-active':$route.path == '/'}">首页</router-link>
               </li>
               <li>
+                <router-link to="/parkIntroduction" class="router-link" :class="{'ru-active':$route.path == '/parkIntroduction'}">园区介绍</router-link>
+              </li>
+              <li>
+                <router-link to="/compassView" class="router-link" :class="{'ru-active':$route.path == '/compassView'}">行政审批</router-link>
+              </li>
+              <!-- <li>
                 <router-link to="/investment" class="router-link" :class="{'ru-active':$route.path == '/investment'}">招商引资</router-link>
+              </li> -->
+              <li @mouseenter="showMenuFlag=true" @mouseleave="showMenuFlag=false">
+                <router-link to="/enterpriseservice" class="router-link" :class="{'ru-active':$route.path == '/enterpriseservice'}">企业服务</router-link>
+                <div id="enterMenu" v-if="showMenuFlag" @mouseleave.stop.native="showMenuFlag=false">
+                  <p class="pointer" @click="$router.push({path:'/policyCenter'})">政策中心</p>
+                  <p class="pointer" @click="$router.push({path:'/actiCenter'})">活动中心</p>
+                  <p class="pointer" @click="$router.push({path:'/tfindex'})">科技金融</p>
+                  <p class="pointer" @click="$router.push({path:'/recruitmentList'})">人力资源</p>
+                </div>
               </li>
               <li>
-                <router-link to="/enterpriseservice" class="router-link" :class="{'ru-active':$route.path == '/enterpriseservice'}">企业服务</router-link>
+                <router-link to="/talentsService" class="router-link" :class="{'ru-active':$route.path == '/talentsService'}">人才服务</router-link>
+              </li>
+              <li>
+                <router-link to="/declarationCenter" class="router-link" :class="{'ru-active':$route.path == '/declarationCenter'}">申报中心</router-link>
+              </li>
+              <li>
+                <router-link to="/incubatorEnterprises" class="router-link" :class="{'ru-active':$route.path == '/incubatorEnterprises'}">孵化企业</router-link>
+              </li>
+              <li>
+                <router-link to="/serMatHp" class="router-link" :class="{'ru-active':$route.path == '/serMatHp'}">服务超市</router-link>
               </li>
             </ul>
+            <!-- <div class="enterMenu" v-if="showMenuFlag">
+              <p>政策中心</p>
+              <p>活动中心</p>
+              <p>科技金融</p>
+              <p>人力资源</p>
+            </div> -->
           </div>
         </div>
       </div>
@@ -54,7 +82,7 @@
         </el-card>
       </div> -->
       <!-- @mouseleave="show4=!show4" -->
-      <div class="search_box" id="search_box" :class="{'searchbox':showFF}" @mouseleave="show4=!show4" >
+      <div class="search_box" id="search_box" :class="{'searchbox':showFF}" @mouseleave="show4=!show4">
         <el-collapse-transition>
           <div v-show="show4" style="width:100%">
             <div class="transition-box">
@@ -70,9 +98,7 @@
     </div>
 
     <!--    主体内容开始-->
-    <div
-      :class="{'h-100': $store.state.isMobile}"
-      style="position:relative;z-index: 0">
+    <div :class="{'h-100': $store.state.isMobile}" style="position:relative;z-index: 0">
       <router-view></router-view>
     </div>
 
@@ -80,311 +106,330 @@
   </div>
 </template>
 <script>
-  import swiper from "swiper";
-  import userInfo from './common/userInfoData'
-  export default {
-    components: {
-      userInfo
-    },
-    data() {
-      return {
-        luyouString:'portalIndex,enterpriseservice,investment,home,messageCenter',
-        showMes:false,
-        // sousuo: false,
-        show1: false,
-        show11: false,
-        show22: false,
-        show33: false,
-        show2: false,
-        show3: false,
-        show4: false,
-        searchData: "",
-        showFF: false,
-        activeNames: ['first'],
-        sw:'fir',
-        showBtn:false,
-        // isLogin:false,
-        // accoutInfo:''
-      };
-    },
-    computed: {
-      isCenter() {
-        const list = 'portalIndex,enterpriseservice,investment,serMatHp,tfindex,actiCenter,incubatorEnterprises,compassView,declarationCenter,talentsService,academicExchange,policyCenter,recruitmentList,profileDetails';
-        return this.$route.matched.some(item => {
-          if(item.name){
-            return list.indexOf(item.name) == -1
-          }
-        })
-      }
-    },
-    // computed: {
-    //   isCenter() {
-    //     const list = ['portalIndex', 'enterpriseservice']
-    //     let flag
-    //     for (const item of this.$route.matched) {
-    //       for (const name of list) {
-    //         if (item.name === name) {
-    //           flag = true
-    //         }
-    //       }
-    //     }
-    //     return flag
+import swiper from "swiper";
+import userInfo from "./common/userInfoData";
+export default {
+  components: {
+    userInfo
+  },
+  data() {
+    return {
+      luyouString:
+        "portalIndex,enterpriseservice,investment,home,messageCenter",
+      showMes: false,
+      // sousuo: false,
+      show1: false,
+      show11: false,
+      show22: false,
+      show33: false,
+      show2: false,
+      show3: false,
+      show4: false,
+      searchData: "",
+      showFF: false,
+      activeNames: ["first"],
+      sw: "fir",
+      showBtn: false,
+      showMenuFlag: false
+      // isLogin:false,
+      // accoutInfo:''
+    };
+  },
+  computed: {
+    isCenter() {
+      const list =
+        "enterpriseservice,investment,serMatHp,tfindex,actiCenter,incubatorEnterprises,compassView,declarationCenter,talentsService,academicExchange,policyCenter,recruitmentList,profileDetails,noticeList";
+      return this.$route.matched.some(item => {
+        if (item.name) {
+          return list.indexOf(item.name) == -1;
+        }
+      });
+    }
+  },
+  // computed: {
+  //   isCenter() {
+  //     const list = ['portalIndex', 'enterpriseservice']
+  //     let flag
+  //     for (const item of this.$route.matched) {
+  //       for (const name of list) {
+  //         if (item.name === name) {
+  //           flag = true
+  //         }
+  //       }
+  //     }
+  //     return flag
+  //   }
+  // },
+  mounted() {
+    this.swiperinit();
+    window.addEventListener("scroll", this.handleScroll);
+    // this.islogin()
+  },
+  destroyed() {
+    window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
+  },
+  methods: {
+    // islogin(){
+    //   this.accoutInfo=sessionStorage.getItem('account')
+    //   if(this.accoutInfo){
+    //     this.isLogin=true
     //   }
     // },
-    mounted() {
-      this.swiperinit();
-      window.addEventListener("scroll", this.handleScroll);
-      // this.islogin()
+    showH() {
+      this.show1 = true;
+      // setTimeout(()=>{
+      this.show11 = true;
+      // },500)
     },
-    destroyed() {
-      window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
+    showY() {
+      this.show11 = false;
+      // setTimeout(()=>{
+      this.show1 = false;
+      // },500)
     },
-    methods: {
-      // islogin(){
-      //   this.accoutInfo=sessionStorage.getItem('account')
-      //   if(this.accoutInfo){
-      //     this.isLogin=true
-      //   }
-      // },
-      showH(){
-        this.show1 = true;
-        // setTimeout(()=>{
-        this.show11 = true;
-        // },500)
-      },
-      showY(){
-        this.show11 = false;
-        // setTimeout(()=>{
-        this.show1 = false;
-        // },500)
-      },
-      handleChangeName(val) {
-        console.log(val);
-        if(val=='two'){
-          this.sw='tw'
-        } else if(val=='three'){
-          this.sw='th'
-        } else{
-          this.sw='fir'
-        }
-      },
-      swiperinit() {
-        var mySwiper = new swiper(".swiper-container", {
-          direction: "horizontal", // 垂直切换选项
-          loop: true, // 循环模式选项
-          noSwiping: true,
-          // autoplay: true,
-          // autoplay: {
-          //   delay: 5000,
-          // },
-
-          // 如果需要分页器
-          pagination: {
-            el: ".swiper-pagination"
-          },
-          // 如果需要前进后退按钮
-          navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev"
-          },
-
-          // 如果需要滚动条
-          scrollbar: {
-            el: ".swiper-scrollbar"
-          }
-        });
-      },
-      onClick() {
-        document.body.scrollTop = document.documentElement.scrollTop = 0;
-      },
-      getElementLeft(element) {
-        var top = element.offsetTop;
-        var curEle = element.offsetParent;
-
-        while (curEle !== null) {
-          top += curEle.offsetTop;
-          curEle = curEle.offsetParent;
-        }
-        return top;
-      },
-      getScrollOffset(){
-        // 除IE8及更早版本
-        if( window.pageXOffset != null ){
-          return {
-            x : window.pageXOffset,
-            y : window.pageYOffset
-          }
-        }
-        // 标准模式下的IE
-        if( document.compatMode == "css1Compat" ){
-          return {
-            x : document.documentElement.scrollLeft,
-            y : document.documentElement.scrollTop
-          }
-        }
-        // 怪异模式下的浏览器
-        return {
-          x : document.body.scrollLeft,
-          y : document.body.scrollTop
-        }
-      },
-      handleScroll() {
-        const osTop = this.getScrollOffset().y;
-
-        // const arr = document.getElementsByClassName('.animation-dom')
-        for (const key in this.$refs) {
-          const top = this.getElementLeft(this.$refs[key]);
-
-          // console.dir(top);
-          if (osTop + innerHeight + 300 >= top + 100) {
-            const name = this.$refs[key].dataset.class;
-            this.$refs[key].classList.add(name);
-
-          }
-        }
-        if (this.getScrollTop() > document.getElementById("header").clientHeight) {
-          this.showFF = true;
-          this.show4 = false;
-        } else {
-          this.showFF = false;
-        }
-        //    if (
-        //     this.getScrollTop() > document.getElementById("search_box").clientHeight
-        //   ) {
-        //     this.show4 = false;
-        //   }
-        // console.log(this.getScrollTop())HAOhao
-        // if (
-        //   this.getScrollTop() > document.getElementById("header").clientHeight
-        // ) {
-        //   this.headFlag = true;
-        // } else {
-        //   this.headFlag = false;
-        // }
-      },
-      getScrollTop() {
-        var scroll_top = 0;
-        if (document.documentElement && document.documentElement.scrollTop) {
-          scroll_top = document.documentElement.scrollTop;
-        } else if (document.body) {
-          scroll_top = document.body.scrollTop;
-        }
-        return scroll_top;
+    handleChangeName(val) {
+      console.log(val);
+      if (val == "two") {
+        this.sw = "tw";
+      } else if (val == "three") {
+        this.sw = "th";
+      } else {
+        this.sw = "fir";
       }
+    },
+    swiperinit() {
+      var mySwiper = new swiper(".swiper-container", {
+        direction: "horizontal", // 垂直切换选项
+        loop: true, // 循环模式选项
+        noSwiping: true,
+        // autoplay: true,
+        // autoplay: {
+        //   delay: 5000,
+        // },
+
+        // 如果需要分页器
+        pagination: {
+          el: ".swiper-pagination"
+        },
+        // 如果需要前进后退按钮
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev"
+        },
+
+        // 如果需要滚动条
+        scrollbar: {
+          el: ".swiper-scrollbar"
+        }
+      });
+    },
+    onClick() {
+      document.body.scrollTop = document.documentElement.scrollTop = 0;
+    },
+    getElementLeft(element) {
+      var top = element.offsetTop;
+      var curEle = element.offsetParent;
+
+      while (curEle !== null) {
+        top += curEle.offsetTop;
+        curEle = curEle.offsetParent;
+      }
+      return top;
+    },
+    getScrollOffset() {
+      // 除IE8及更早版本
+      if (window.pageXOffset != null) {
+        return {
+          x: window.pageXOffset,
+          y: window.pageYOffset
+        };
+      }
+      // 标准模式下的IE
+      if (document.compatMode == "css1Compat") {
+        return {
+          x: document.documentElement.scrollLeft,
+          y: document.documentElement.scrollTop
+        };
+      }
+      // 怪异模式下的浏览器
+      return {
+        x: document.body.scrollLeft,
+        y: document.body.scrollTop
+      };
+    },
+    handleScroll() {
+      const osTop = this.getScrollOffset().y;
+
+      // const arr = document.getElementsByClassName('.animation-dom')
+      for (const key in this.$refs) {
+        const top = this.getElementLeft(this.$refs[key]);
+
+        // console.dir(top);
+        if (osTop + innerHeight + 300 >= top + 100) {
+          const name = this.$refs[key].dataset.class;
+          this.$refs[key].classList.add(name);
+        }
+      }
+      if (
+        this.getScrollTop() > document.getElementById("header").clientHeight
+      ) {
+        this.showFF = true;
+        this.show4 = false;
+      } else {
+        this.showFF = false;
+      }
+      //    if (
+      //     this.getScrollTop() > document.getElementById("search_box").clientHeight
+      //   ) {
+      //     this.show4 = false;
+      //   }
+      // console.log(this.getScrollTop())HAOhao
+      // if (
+      //   this.getScrollTop() > document.getElementById("header").clientHeight
+      // ) {
+      //   this.headFlag = true;
+      // } else {
+      //   this.headFlag = false;
+      // }
+    },
+    getScrollTop() {
+      var scroll_top = 0;
+      if (document.documentElement && document.documentElement.scrollTop) {
+        scroll_top = document.documentElement.scrollTop;
+      } else if (document.body) {
+        scroll_top = document.body.scrollTop;
+      }
+      return scroll_top;
     }
-  };
+  }
+};
 </script>
 <style lang="scss">
-  @keyframes qfyfadeInLeft {
-    0% {
-      opacity: 0;
-      transform: translateY(0);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(10%);
-    }
+@keyframes qfyfadeInLeft {
+  0% {
+    opacity: 0;
+    transform: translateY(0);
   }
-  .router-link {
+  100% {
+    opacity: 1;
+    transform: translateY(10%);
+  }
+}
+.router-link {
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+}
+.portalIndex {
+  .portalIndexImg {
+    position: fixed;
+    z-index: 99;
     width: 100%;
-    height: 100%;
-    display: inline-block;
-  }
-  .portalIndex {
-    .portalIndexImg {
-      position: fixed;
-      z-index: 99;
-      width: 100%;
-      // .header{
-      //   background-color: #fff;
-      //   #nav{
-      //     color:#666;
-      //   }
-      // }
-      .headerw {
-        background: #fff;
-        border-bottom:1px solid #eee;
-        box-shadow:0 10px 10px -10px #ccc;
+    // .header{
+    //   background-color: #fff;
+    //   #nav{
+    //     color:#666;
+    //   }
+    // }
+    .headerw {
+      background: #fff;
+      border-bottom: 1px solid #eee;
+      box-shadow: 0 10px 10px -10px #ccc;
+      color: #666;
+      #nav,
+      .headerRight {
         color: #666;
-        #nav,
-        .headerRight {
-          color: #666;
-          // li {
-          //   a {
-          //     color: #666;
-          //   }
-          // }
-          // li:nth-child(1) {
-          //   background: none;
-          //   border-radius: none;
-          //   a {
-          //     color: #00a041;
-          //   }
-          // }
-          li:hover {
-            background: none;
-          }
-          li:hover a{
-            color:#00a041;
-          }
+        // li {
+        //   a {
+        //     color: #666;
+        //   }
+        // }
+        // li:nth-child(1) {
+        //   background: none;
+        //   border-radius: none;
+        //   a {
+        //     color: #00a041;
+        //   }
+        // }
+        li:hover {
+          background: none;
         }
-        .ru-active{
+        li:hover a {
           color: #00a041;
         }
       }
-      .search_box {
-        background: rgba(0, 0, 0, 0.3);
-        text-align: center;
-        display: flex;
-        justify-content: center;
-        width:100%;
-        .el-input-group {
-          // position: relative;
-          // left: 50%;
-          // transform: translateX(-50%);
-          border-radius: 28px;
-          overflow: hidden;
-          width: 50%;
-          margin: 43px 0;
-          .el-input {
-            // width: 94px;
-          }
-          .el-input__inner:focus {
-            border-color: #00a041;
-          }
-          .el-input-group__append,
-          .el-input-group__prepend {
-            border-radius: 28px;
-          }
-          .el-input-group__append {
-            background: #00a041;
-            color: #fff;
-            right: 58px;
-            .el-button {
-              margin: -10px -10px;
-            }
-          }
-          .el-input-group__prepend {
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
-            background-color: #fff;
-            padding: 0px 17px 0 9px;
-            input {
-              color: #666666;
-              text-align: right;
-            }
-          }
-        }
-        .input-with-select .el-input__inner {
-          border-top-left-radius: 19px;
-          border-bottom-left-radius: 19px;
-          border: 1px solid #00a041;
-        }
-      }
-      .searchbox {
-        background: #fff;
-        box-shadow:0 10px 10px -10px #ccc;
+      .ru-active {
+        color: #00a041;
       }
     }
+    .search_box {
+      background: rgba(0, 0, 0, 0.3);
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      .el-input-group {
+        // position: relative;
+        // left: 50%;
+        // transform: translateX(-50%);
+        border-radius: 28px;
+        overflow: hidden;
+        width: 50%;
+        margin: 43px 0;
+        .el-input {
+          // width: 94px;
+        }
+        .el-input__inner:focus {
+          border-color: #00a041;
+        }
+        .el-input-group__append,
+        .el-input-group__prepend {
+          border-radius: 28px;
+        }
+        .el-input-group__append {
+          background: #00a041;
+          color: #fff;
+          right: 58px;
+          .el-button {
+            margin: -10px -10px;
+          }
+        }
+        .el-input-group__prepend {
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+          background-color: #fff;
+          padding: 0px 17px 0 9px;
+          input {
+            color: #666666;
+            text-align: right;
+          }
+        }
+      }
+      .input-with-select .el-input__inner {
+        border-top-left-radius: 19px;
+        border-bottom-left-radius: 19px;
+        border: 1px solid #00a041;
+      }
+    }
+    .searchbox {
+      background: #fff;
+      box-shadow: 0 10px 10px -10px #ccc;
+    }
   }
+  #enterMenu{
+    background: #fff;
+    margin-top:1px;
+    margin-bottom: 2px;
+    //  box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.06);
+     box-shadow:0px 0px 10px rgba(0, 0, 0, 0.2);
+    p{
+      height: 40px;
+      line-height: 40px;
+    }
+    p:hover{
+      background: #00a041;
+      color:#fff;
+    }
+  }
+}
 </style>

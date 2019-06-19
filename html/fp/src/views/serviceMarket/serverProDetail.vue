@@ -111,14 +111,14 @@
                 <!-- 上架时间 begin -->
                 <!-- <div class="list-item-date"></div> -->
                 <!-- 上架时间 end -->
-                <!-- 左侧logo begin-->"
+                <!-- 左侧logo begin-->
                 <div class="list-imgleft-container product nopic pointer fl" @click="handlePro(i.productId,i.signoryId)">
                   <img v-if="i.pictureUrl" :src="i.pictureUrl" alt="">
                   <img v-else src="@/../static/img/product.png" alt="">
                 </div>
                 <!-- 左侧logo end-->
                 <!-- 中间信息 beign -->
-                <div class="list-info-middle inner-product fl">
+                <div class="list-info-middle inner-product fl pointer" @click="handlePro(i.productId,i.signoryId)">
                   <!-- 中间上半部分--标题和标签 begin -->
                   <div class="list-info-top-title">
                     <!-- 头部 begin -->
@@ -314,12 +314,16 @@ export default {
     },
     //判断是否登录
     isLogin() {
-      if (!sessionStorage.userInfo) {
+      if (!this.getToken()) {
         this.islogin = false;
       }
     },
     //跳转详情
     handlePro(productId, signoryId) {
+      if(this.$route.query.productId==productId&&this.$route.query.signoryId==signoryId){
+        this.$message('当前点击的产品跟本页面一样')
+        return
+      }
       this.$router.push({
         path: "/serverProDetail",
         query: { productId: productId, signoryId: signoryId }
@@ -508,7 +512,7 @@ export default {
             setTimeout(() => {
               //由于组件嵌套太多，vue有可能会无法执行到数据更新视图也更新，所以就要在得到数据的时候渲染了  把对应组件执行$forceUpdate这个方法就好 你可以准确定位到这个不刷新的组件  用this.$refs也行
               this.$children[2].$children[0].$forceUpdate();
-              if (document.getElementById("agent2Con").clientHeight >= 50) {
+              if (document.getElementById("agent2Con").clientHeight >= 70) {
                 this.showMoreFlag = true;
               }
             }, 0);
@@ -563,7 +567,7 @@ export default {
           transition: 0.2s all;
         }
         .agent2Con.showMore {
-          height: 50px;
+          height: 70px;
           overflow: hidden;
         }
         .orgBtn1 {

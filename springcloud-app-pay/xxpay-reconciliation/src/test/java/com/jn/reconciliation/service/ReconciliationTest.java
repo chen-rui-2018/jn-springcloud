@@ -14,14 +14,14 @@ public class ReconciliationTest {
     @Autowired
     private ReconciliationTask  reconciliationTask;
 
+
     /**
      * 对账功能
     * */
     @Test
-    public void getSuccessPayOrder() {
+    public void reconciliationTaskTest() {
 
         reconciliationTask.taskRun();
-
 
     }
 

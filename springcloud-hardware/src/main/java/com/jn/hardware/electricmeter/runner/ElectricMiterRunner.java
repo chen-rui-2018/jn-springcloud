@@ -32,23 +32,11 @@ public class ElectricMiterRunner   implements ApplicationRunner {
     private ElectricMeterService electricMeterService;
 
 
-    @Value(value = "${electric.grant.type}")
-    private String  grant_type;
-    @Value(value = "${electric.username}")
-    private String  username;
-    @Value(value = "${electric.password}")
-    private String  password;
-    @Value(value = "${electric.scopes}")
-    private String  scopes;
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
         logger.info("仪表平台获取access_token开始");
-        ElectricAccessTokenParam electricAccessTokenParam = new ElectricAccessTokenParam();
-        electricAccessTokenParam.setGrant_type(grant_type);
-        electricAccessTokenParam.setUsername(username);
-        electricAccessTokenParam.setPassword(password);
-        electricAccessTokenParam.setScopes(scopes);
-        Result<ElectricAccessTokenShow> result = electricMeterService.getElectricMeterAccessToken(electricAccessTokenParam);
+        Result<ElectricAccessTokenShow> result = electricMeterService.getElectricMeterAccessToken();
         if(result != null ){
             if(result.getCode().equals(GlobalConstants.SUCCESS_CODE)){
                 logger.info("仪表平台获取access_token成功{}access_token:"+result.getData().getAccess_token());

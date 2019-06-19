@@ -16,6 +16,7 @@ import com.jn.enterprise.pay.entity.*;
 import com.jn.enterprise.pay.enums.*;
 import com.jn.enterprise.pay.util.AutoOrderUtil;
 import com.jn.enterprise.pay.util.MoneyUtils;
+import com.jn.news.vo.EmailVo;
 import com.jn.news.vo.SmsTemplateVo;
 import com.jn.pay.api.PayOrderClient;
 import com.jn.pay.model.*;
@@ -418,6 +419,22 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         if (null == tbs) {
             throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_IS_NOT_EXIT);
         }
+        /**判断创建的账单费用是否为0，如果为0，直接更新账单为支付成功*/
+        BigDecimal amount = new BigDecimal(0);
+        if(tbs.getBillExpense().compareTo(amount) == 0){
+            tbs.setPaymentState(PaymentBillEnum.BILL_ORDER_IS_PAY.getCode());
+            int i = tbPayBillMapper.updateByPrimaryKeySelective(tbs);
+            if (i > 0){
+                /**回调通知各业务测账单状态*/
+                if(StringUtils.isNotBlank(tbs.getCallbackId()) && StringUtils.isNotBlank(tbs.getCallbackUrl())) {
+                    PayCallBackNotify payCallBackNotify = new PayCallBackNotify();
+                    payCallBackNotify.setBillId(tbs.getBillId());
+                    payCallBackNotify.setPaymentState(tbs.getPaymentState());
+                    result = delaySend(payCallBackNotify, tbs);
+                    return result;
+                }
+            }
+        }
         /**判断是否是电费账单，如果是电费账单，则直接扣除费用*/
         TbPayAccountBookMoneyRecord tpbmr = new TbPayAccountBookMoneyRecord();
         if (tbs.getAcBookType().equals(BILL_AC_BOOK_TYPE_1.getCode())) {
@@ -456,18 +473,12 @@ public class MyPayBillServiceImpl implements MyPayBillService {
                     tbPayBillMapper.updateByPrimaryKeySelective(tbs);
                     logger.info("结束执行统一缴费更新账单状态操作");
                     /**回调通知各业务测账单状态*/
-                    PayCallBackNotify payCallBackNotify = new PayCallBackNotify();
-                    payCallBackNotify.setBillId(tbs.getBillId());
-                    payCallBackNotify.setPaymentState(tbs.getPaymentState());
-                    Delay delay = new Delay();
-                    delay.setServiceId(tbs.getCallbackId());
-                    delay.setServiceUrl(tbs.getCallbackUrl());
-                    delay.setTtl("30");
-                    delay.setDataString(JSONObject.toJSONString(payCallBackNotify));
-                    logger.info("接收到延迟消息内容：【{}】", JSONObject.toJSONString(payCallBackNotify));
-                    logger.info("开始回调");
-                    result = delaySendMessageClient.delaySend(delay);
-                    logger.info("结束回调,返回结果，【{}】", result.toString());
+                    if(StringUtils.isNotBlank(tbs.getCallbackId()) && StringUtils.isNotBlank(tbs.getCallbackUrl())) {
+                        PayCallBackNotify payCallBackNotify = new PayCallBackNotify();
+                        payCallBackNotify.setBillId(tbs.getBillId());
+                        payCallBackNotify.setPaymentState(tbs.getPaymentState());
+                        result = delaySend(payCallBackNotify, tbs);
+                    }
                 }
             } catch (Exception e) {
                 throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_DEDUCTION_FEE_ERROR);
@@ -480,14 +491,44 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         }
         if(tb3.getPaymentState().equals(PaymentBillEnum.BILL_ORDER_IS_NOT_PAY.getCode())){
             //待支付状态，发送待缴短信通知
-            sendPaymentNotice("1020","13265603090","");
+            String[] phone={"13265603090"};
+            String[] str = {};
+            sendPaymentNotice("1020",phone,str);
+            //发送待缴邮件
+            String email = "381981766@qq.com,chenmiao@op-mobile.com.cn";
+            String emailSubject=tb3.getBillName();
+            String emailContent = PaymentBillExceptionEnum.PAYMENT_EMAIL_CONTEXT.getMessage();
+            sendPaymentEmail(email ,emailSubject,emailContent);
         }else if(tb3.getPaymentState().equals(PaymentBillEnum.BILL_ORDER_IS_PAY.getCode())){
             //已支付状态，发送缴费成功短信通知
-            StringBuffer str = new StringBuffer();
-            str.append(tpbmr.getBillId()).append(",").append(PaymentBillEnum.BILL_AC_BOOK_TYPE_1.getMessage()).append(",")
-                    .append(tpbmr.getMoney()).append(",").append(tpbmr.getCreatedTime());
-            sendPaymentNotice("1021","13265603090",str.toString());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String[] phone={"13265603090"};
+            String[] str = {tpbmr.getBillId(),PaymentBillEnum.BILL_AC_BOOK_TYPE_1.getMessage(),tpbmr.getMoney().toString(),sdf.format(tpbmr.getCreatedTime())};
+            sendPaymentNotice("1021",phone,str);
+            //发送缴费成功通知邮件
+            String email = "624632473@qq.com,wangzy@op-mobile.com.cn";
+            String emailSubject=tb3.getBillName();
+            StringBuffer emailContent = new StringBuffer();
+            emailContent.append("【白下高新区】您好，您已缴费成功，账单号：").append(tpbmr.getBillId()).append(",").append("账单类型：").append(PaymentBillEnum.BILL_AC_BOOK_TYPE_1.getMessage())
+                    .append(",").append("支付金额：").append(tpbmr.getMoney().toString()).append(",").append("缴费时间：").append(sdf.format(tpbmr.getCreatedTime()));
+            sendPaymentEmail(email ,emailSubject,emailContent.toString());
         }
+        return result;
+    }
+
+    @ServiceLog(doAction = "我的账单-统一缴费回调各业务侧方法")
+    public Result<Boolean> delaySend(PayCallBackNotify payCallBackNotify,TbPayBill tbs){
+        logger.info("统一缴费回调各业务侧方法,入參：【{}】", JSONObject.toJSONString(payCallBackNotify),JSONObject.toJSONString(tbs));
+        Result<Boolean> result = new Result<>();
+        Delay delay = new Delay();
+        delay.setServiceId(tbs.getCallbackId());
+        delay.setServiceUrl(tbs.getCallbackUrl());
+        delay.setTtl("30");
+        delay.setDataString(JSONObject.toJSONString(payCallBackNotify));
+        logger.info("接收到延迟消息内容：【{}】", JSONObject.toJSONString(payCallBackNotify));
+        logger.info("开始回调");
+        result = delaySendMessageClient.delaySend(delay);
+        logger.info("结束回调,返回结果，【{}】", result.toString());
         return result;
     }
 
@@ -828,6 +869,45 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         return new Result("插入流水记录成功！");
     }
 
+    @Override
+    @ServiceLog(doAction = "我的账单-线下缴费确认回调各业务侧接口")
+    @Transactional(rollbackFor = Exception.class)
+    public Result callbackServiceSide(PayCallbackServiceSideParam payCallbackServiceSideParam, User user) {
+        logger.info("进入【我的账单-线下缴费确认回调各业务侧接口】方法,入參【{}】",JsonUtil.object2Json(payCallbackServiceSideParam));
+        TbPayBill tbPayBill = tbPayBillMapper.selectByPrimaryKey(payCallbackServiceSideParam.getBillId());
+        /**判断账单是否存在*/
+        if(tbPayBill == null){
+            throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_IS_NOT_EXIT);
+        }
+        /**判断账单是否已支付*/
+        if(PaymentBillEnum.BILL_ORDER_IS_PAY.getCode().equals(tbPayBill.getPaymentState())){
+            throw new JnSpringCloudException(PaymentBillExceptionEnum.PAYMENT_STATUS_IS_PAY_CONFIRM);
+        }
+        /**更新账单为线下缴费*/
+        tbPayBill.setPaymentAffirm(PaymentBillEnum.BILL_AC_BOOK_CHECK_1.getCode());
+        tbPayBill.setPaymentState(PaymentBillEnum.BILL_ORDER_IS_PAY.getCode());
+        tbPayBill.setPaymentType(PaymentBillEnum.PAY_METHOD_OFFLINE.getCode());
+        tbPayBill.setAffirmPart(user.getAccount());
+        tbPayBill.setAffirmTime(new Date());
+        logger.info("进入【我的账单-线下缴费确认回调各业务侧接口】方法,更新账单为线下缴费入參【{}】",JsonUtil.object2Json(tbPayBill));
+        int i = tbPayBillMapper.updateByPrimaryKey(tbPayBill);
+        if(i == 0){
+            throw new JnSpringCloudException(PaymentBillExceptionEnum.PAYMENT_OFFLINE_CONFIRM_FAIL);
+        }
+        if(StringUtils.isNotBlank(tbPayBill.getCallbackId()) && StringUtils.isNotBlank(tbPayBill.getCallbackUrl())){
+            TbPayBill tbs = tbPayBillMapper.selectByPrimaryKey(tbPayBill.getBillId());
+            /**回调通知各业务测账单状态*/
+            if(StringUtils.isNotBlank(tbs.getCallbackId()) && StringUtils.isNotBlank(tbs.getCallbackUrl())) {
+                PayCallBackNotify payCallBackNotify = new PayCallBackNotify();
+                payCallBackNotify.setBillId(tbs.getBillId());
+                payCallBackNotify.setPaymentState(tbs.getPaymentState());
+                Result<Boolean> result = delaySend(payCallBackNotify, tbs);
+                logger.info("结束回调,返回结果，【{}】", result.toString());
+            }
+        }
+        return new Result("线下缴费确认成功！");
+    }
+
     /**
      * 新增账本金额&插入流水记录
      *
@@ -866,7 +946,9 @@ public class MyPayBillServiceImpl implements MyPayBillService {
             tpbmr.setMoney(tbPayBill.getBillExpense());
             tpbmr.setBalance(totalAmount);
             tpbmr.setCreatedTime(new Date());
-            tpbmr.setCreatorAccount("wangsong");
+            if(tbPayBill.getCreatorAccount() != null){
+                tpbmr.setCreatorAccount(tbPayBill.getCreatorAccount());
+            }
             tpbmr.setRecordStatus(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
             logger.info("调用统一支付下单接口回调，插入流水表记录操作，入參【{}】", tpbmr.toString());
             tbPayAccountBookMoneyRecordMapper.insertSelective(tpbmr);
@@ -915,7 +997,9 @@ public class MyPayBillServiceImpl implements MyPayBillService {
             tpbmr.setMoney(tbPayBill.getBillExpense());
             tpbmr.setBalance(totalAmount);
             tpbmr.setCreatedTime(new Date());
-            tpbmr.setCreatorAccount("wangsong");
+            if(tbPayBill.getCreatorAccount() != null){
+                tpbmr.setCreatorAccount(tbPayBill.getCreatorAccount());
+            }
             tpbmr.setRecordStatus(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
             logger.info("调用统一支付下单接口回调，插入流水表记录操作,入參【{}】", tpbmr.toString());
             tbPayAccountBookMoneyRecordMapper.insertSelective(tpbmr);
@@ -928,20 +1012,34 @@ public class MyPayBillServiceImpl implements MyPayBillService {
 
     /**待缴通知提醒（短信，微信，APP，邮箱）*/
     @ServiceLog(doAction = "短信通知提醒")
-    public void sendPaymentNotice(String templateId ,String phone,String message){
-        logger.info("进入发送待缴通知提醒方法");
+    public void sendPaymentNotice(String templateId ,String[] phone,String[] message){
+        logger.info("进入发送短信通知提醒方法");
         SmsTemplateVo smsTemplateVo = new SmsTemplateVo();
         smsTemplateVo.setTemplateId(templateId);
-        String[] m = {phone};
-        smsTemplateVo.setMobiles(m);
-        String[] t = {message};
-        smsTemplateVo.setContents(t);
-        logger.info("短信发送成功：接收号码：{},短信内容：{}", phone, message);
+        smsTemplateVo.setMobiles(phone);
+        smsTemplateVo.setContents(message);
+        logger.info("短信发送参数：接收号码：{},短信内容：{}", phone, message);
         boolean sendStatus = messageSource.outputSms().send(MessageBuilder.withPayload(smsTemplateVo).build());
          if (sendStatus) {
             logger.info("[白下智慧园区]发送短信成功");
         } else {
             logger.error("[白下智慧园区]发送短信失败");
+        }
+    }
+
+    @ServiceLog(doAction = "邮件通知提醒")
+    public void sendPaymentEmail(String email ,String emailSubject,String emailContent){
+        logger.info("进入发送邮件通知提醒方法");
+        EmailVo emailVo = new EmailVo();
+        emailVo.setEmail(email);
+        emailVo.setEmailSubject(emailSubject);
+        emailVo.setEmailContent(emailContent);
+        logger.info("邮件发送参数：接收邮箱：{},邮件标题：{}，邮件内容：{}", email, emailSubject,emailContent);
+        boolean sendStatus = messageSource.outputEmail().send(MessageBuilder.withPayload(emailVo).build());
+        if (sendStatus) {
+            logger.info("[白下智慧园区]发送邮件成功");
+        } else {
+            logger.error("[白下智慧园区]发送邮件失败");
         }
     }
 }

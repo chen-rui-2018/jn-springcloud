@@ -208,7 +208,7 @@
             <ul class="partner_list_ul">
               <li  v-for="(item,index) in partnerLogo" :key="index" > <img :src="item.orgLogo" alt=""></li>
             </ul>
-            <ul class="partner_list_ul2" ></ul>
+            <ul class="partner_list_ul2"></ul>
           </div>
         </div>
       </div>
@@ -231,10 +231,8 @@
                   <a href="javascript:;">
                     <div class="info_img">
                       <div>
-                        <!-- <img src="../../assets/image/test2.png" alt=""> -->
                         <img :src="counselorinfoItem.avatar" alt="">
                       </div>
-                      
                     </div>
                     <div class="info_all">
                       <div class="info_name"><span>{{counselorinfoItem.advisorName}}</span>/<span>{{counselorinfoItem.position}} </span></div>
@@ -344,7 +342,7 @@ export default {
       counselorList:[],//优质专员
       page:1,
       row:4,
-      typeId:"a29e14a21352473ebf26420ddffb1c60",//类型带确认
+      typeId:"org_activity",
       total:'',
       pageNum:'',
       IndustryList:[],//专员领域列表
@@ -386,7 +384,7 @@ export default {
     this.getNewActive()
     this.getHotActive()
     //专员领域列表、
-    this.getIndustryList()
+    // this.getIndustryList()
     //专员列表
     this.getCounselorList()
     //机构业务领域
@@ -462,6 +460,7 @@ export default {
       let demo=document.querySelector('.partner_list');
       let demo2=document.querySelector('.partner_list_ul2');
       let demo1=document.querySelector('.partner_list_ul');
+      // console.log(demo2)
           demo2.innerHTML = demo1.innerHTML;
       function Marquee(){
         if(demo.scrollTop>=demo1.offsetHeight){
@@ -621,7 +620,6 @@ export default {
         url: "selectIndustryList",
         data: { },
         callback: function(res) {
-          // console.log(res)
           if (res.code == "0000") {
             _this.IndustryList = res.data.rows;
           }
@@ -709,9 +707,11 @@ export default {
         callback: function(res) {
           if(res.code==='0000'){
             _this.partnerLogo = res.data.rows;
-            _this.$nextTick(()=>{
-              _this.scrollpartner()              
-            })
+            if(_this.partnerLogo.length>18){
+              _this.$nextTick(()=>{
+                _this.scrollpartner()              
+              })
+            }
           }
         }
       });
@@ -730,9 +730,11 @@ export default {
          },
         callback: function(res) {
           _this.RatingList = res.data.rows;
-           _this.$nextTick(()=>{
-              _this.scrollList()
-            })
+          if(_this.RatingList.length>0){
+            _this.$nextTick(()=>{
+               _this.scrollList()
+             }) 
+          }
         }
       });
     },

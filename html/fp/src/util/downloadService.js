@@ -1,15 +1,13 @@
 import axios from 'axios'
+import { BASE_URL } from './url'
 const downloadService = axios.create({
-  baseURL: 'http://112.94.22.222:8000/',
+  baseURL: BASE_URL,
   timeout: 10000, // 请求超时时间
 })
 downloadService.interceptors.response.use(
   response => {
     // 导出
-    const headers = response.headers
-    if (headers['content-type'] === 'application/vnd.ms-excel;charset=UTF-8') {
-      return response.data
-    }
+    return response
   },
   error => {
     return Promise.reject(error)
@@ -19,10 +17,10 @@ downloadService.interceptors.response.use(
 const download = (data, name) => {
   return new Promise(resolve => {
     const blob = new Blob([data])
-    // const fileName = name
+    const fileName = name || 'download'
     if ('download' in document.createElement('a')) { // 非IE下载
       const elink = document.createElement('a')
-      elink.setAttribute('download', name + '.xlsx')
+      elink.setAttribute('download', fileName + '.xlsx')
       elink.style.display = 'none'
       elink.href = URL.createObjectURL(blob)
       document.body.appendChild(elink)

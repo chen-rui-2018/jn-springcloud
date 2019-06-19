@@ -250,4 +250,33 @@ public class ServiceContent  implements Serializable {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "ServiceContent{" +
+                "productId='" + productId + '\'' +
+                ", serialNumber='" + serialNumber + '\'' +
+                ", productName='" + productName + '\'' +
+                ", referPrice='" + referPrice + '\'' +
+                ", signoryId='" + signoryId + '\'' +
+                ", signoryName='" + signoryName + '\'' +
+                ", orgId='" + orgId + '\'' +
+                ", orgName='" + orgName + '\'' +
+                ", serviceCycle='" + serviceCycle + '\'' +
+                ", pictureUrl='" + pictureUrl + '\'' +
+                ", productType='" + productType + '\'' +
+                ", status='" + status + '\'' +
+                ", advisorAccount='" + advisorAccount + '\'' +
+                ", serviceDetails='" + serviceDetails + '\'' +
+                ", productDetails='" + productDetails + '\'' +
+                ", templateId='" + templateId + '\'' +
+                ", recordStatus='" + recordStatus + '\'' +
+                ", createdTime='" + createdTime + '\'' +
+                ", creatorAccount='" + creatorAccount + '\'' +
+                ", modifiedTime='" + modifiedTime + '\'' +
+                ", modifierAccount='" + modifierAccount + '\'' +
+                ", viewCount='" + viewCount + '\'' +
+                ", tb_service_and_advisor=" + tb_service_and_advisor +
+                '}';
+    }
 }

@@ -29,10 +29,10 @@ public class DeclarationOnlineModel implements Serializable {
     @ApiModelProperty("预约项名称")
     private String appointmentItemName;
 
-    @ApiModelProperty("联系人姓名")
+    @ApiModelProperty("企业联系人")
     private String contactName;
 
-    @ApiModelProperty("联系人电话")
+    @ApiModelProperty("联系电话")
     private String contactPhone;
 
     @ApiModelProperty("电子邮箱")
@@ -52,7 +52,7 @@ public class DeclarationOnlineModel implements Serializable {
     @ApiModelProperty("申报企业")
     private String declareEnterprise;
 
-    @ApiModelProperty("申报项目名称")
+    @ApiModelProperty("申报项目")
     private String declareItem;
 
     @ApiModelProperty("回复状态（1：已回复，2：未回复）")

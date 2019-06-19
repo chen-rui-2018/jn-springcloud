@@ -28,16 +28,16 @@ public class DeclarationOnlineReservationManageModel extends Page implements Ser
     @ApiModelProperty(value = "预约项名称",required = true,example = "关联的公告标题名称，自动回显填充")
     private String appointmentItemName;
 
-    @ApiModelProperty(value = "联系人姓名",required = true,example = "马云")
+    @ApiModelProperty(value = "企业联系人",required = true,example = "测试")
     private String contactName;
 
-    @ApiModelProperty(value = "联系人电话",required = true,example = "13212344321")
+    @ApiModelProperty(value = "联系电话",required = true,example = "13212344321")
     private String contactPhone;
 
     @ApiModelProperty(value = "电子邮箱",required = true,example = "123@qq.com")
     private String email;
 
-    @ApiModelProperty(value = "附件")
+    @ApiModelProperty(value = "附件，需有附件说明")
     private String fileUrl;
 
     @ApiModelProperty(value = "备注")
@@ -46,7 +46,7 @@ public class DeclarationOnlineReservationManageModel extends Page implements Ser
     @ApiModelProperty(value = "申报企业", required = true, example = "敏捷科技公司")
     private String declareEnterprise;
 
-    @ApiModelProperty(value = "申报项目名称", required = true, example = "高企意向申报")
+    @ApiModelProperty(value = "申报项目", required = true, example = "高企意向申报")
     private String declareItem;
 
     public static long getSerialVersionUID() {

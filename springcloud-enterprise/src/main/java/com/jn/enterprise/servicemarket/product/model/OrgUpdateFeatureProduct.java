@@ -24,4 +24,11 @@ public class OrgUpdateFeatureProduct extends AddFeatureProduct implements Serial
     public void setProductId(String productId) {
         this.productId = productId;
     }
+
+    @Override
+    public String toString() {
+        return "OrgUpdateFeatureProduct{" +
+                "productId='" + productId + '\'' +
+                '}';
+    }
 }

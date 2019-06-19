@@ -18,6 +18,7 @@ package com.jn.reconciliation.fileDown.service.impl;
 import com.alibaba.druid.util.StringUtils;
 import com.jn.config.WxConfig;
 import com.jn.reconciliation.fileDown.service.FileDown;
+import com.jn.reconciliation.service.PayChannelService;
 import com.jn.reconciliation.utils.FileUtils;
 import com.jn.reconciliation.utils.https.HttpClientUtil;
 import com.jn.reconciliation.utils.https.HttpResponse;
@@ -27,6 +28,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.xxpay.dal.dao.entity.reconciliation.TbPayReconciliationInterface;
+import org.xxpay.dal.dao.model.PayChannel;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,6 +56,8 @@ public class WeiXinFileDown implements FileDown {
 
 	@Autowired
 	private WxConfig wxConfig;
+	@Autowired
+	private PayChannelService payChannelService;
 
 	// 对账单日期 格式：20140603
 	private String bill_date;
@@ -67,19 +72,22 @@ public class WeiXinFileDown implements FileDown {
 	 * 
 	 */
 	@Override
-	public File fileDown(Date billDate) throws IOException {
+	public File fileDown(TbPayReconciliationInterface reconciliationInter, Date billDate) throws IOException {
+
+		/**加载支付宝配置参数**/
+		PayChannel payChannel = payChannelService.selectPayChannel(reconciliationInter.getChannelId(),reconciliationInter.getMchId());
+		wxConfig.init(payChannel.getParam(),payChannel.getChannelMchId());
+
 		// 时间格式转换
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 		bill_date = sdf.format(billDate);
 		HttpResponse response = null;
 		try {
 			// 生成xml文件
-			String xml = this.generateXml();
+			String xml = this.generateXml(wxConfig);
 			LOG.info(xml);
 
 			response = HttpClientUtil.httpsRequest(wxConfig.getUrl(), "POST", xml);
-
-			// String dir = "/home/roncoo/app/accountcheck/billfile/weixin";
 
 			File file = new File(wxConfig.getDir(), bill_date + "_" + wxConfig.getBillType().toLowerCase() + ".txt");
 			int index = 1;
@@ -106,12 +114,13 @@ public class WeiXinFileDown implements FileDown {
 
 	/**
 	 * 根据微信接口要求，生成xml文件
+	 * @param wxConfig 微信配置参数
 	 * @return
 	 */
-	public String generateXml() {
+	public String generateXml(WxConfig wxConfig) {
 		HashMap<String, String> params = new HashMap<String, String>();
 		params.put("appid", wxConfig.getAppId());
-		params.put("mch_id", wxConfig.getMchId());
+		params.put("mch_id", wxConfig.getChannelMchId());
 		params.put("bill_date", bill_date);
 		params.put("bill_type", wxConfig.getBillType());
 		// 随机字符串，不长于32，调用随机数函数生成，将得到的值转换为字符串

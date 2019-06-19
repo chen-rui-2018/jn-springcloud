@@ -70,7 +70,7 @@ public class ElectricMeterServiceImplTest {
 
     @Test
     public void getElectricMeterAccessToken() {
-        Result<ElectricAccessTokenShow>   result =  electricMeterClient.getElectricMeterAccessToken(electricAccessTokenParam);
+        Result<ElectricAccessTokenShow>   result =  electricMeterClient.getElectricMeterAccessToken();
         logger.info("\naccess_token 获取结果说明：{}",result.getResult());
         assertThat(anything(),anything());
 

@@ -511,12 +511,12 @@ export default {
     },
     //判断是否登录
     isLogin() {
-      if (!sessionStorage.userInfo) {
+      if (!this.getToken()) {
         this.islogin = false;
       }
     },
     handleInvertor() {
-      if (!sessionStorage.userInfo) {
+      if (!this.getToken()) {
         this.concatVisible = true;
         return;
       }
@@ -640,10 +640,6 @@ export default {
     },
     //提需求
     raiseDemand(i) {
-      // if (!sessionStorage.userInfo) {
-      //   this.$message.error("请先登录");
-      //   return;
-      // }
       this.isLogin();
       this.financialProVisible = true;
       this.financialProform.expectedDate = "";

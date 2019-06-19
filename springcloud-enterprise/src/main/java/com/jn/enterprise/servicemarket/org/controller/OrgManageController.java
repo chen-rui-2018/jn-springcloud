@@ -121,7 +121,8 @@ public class OrgManageController extends BaseController {
     public Result<Integer> addOrgRole(String orgAccount,String orgId){
         Assert.notNull(orgAccount, OrgExceptionEnum.ACCOUNT_NOT_NULL.getMessage());
         Assert.notNull(orgId,OrgExceptionEnum.ORG_ID_IS_NOT_NULL.getMessage());
-        int resNum = orgService.addOrgRole(orgAccount,orgId);
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        int resNum = orgService.addOrgRole(orgAccount,orgId,user.getAccount());
         logger.info("-----------添加机构管理员角色成功，数据响应条数：{}----------",resNum);
         return  new Result(resNum);
     }
@@ -135,7 +136,8 @@ public class OrgManageController extends BaseController {
         logger.info("机构认证流程后置处理API,入参：{}",tbServiceOrgCopy.toString());
         Assert.notNull(tbServiceOrgCopy,OrgExceptionEnum.ORG_APPLY_PARAM_NOT_NULL.getMessage());
         Assert.notNull(tbServiceOrgCopy.getOrgAccount(),OrgExceptionEnum.ACCOUNT_NOT_NULL.getMessage());
-        int resNum = orgService.addOrgRole(tbServiceOrgCopy.getOrgAccount(),tbServiceOrgCopy.getOrgId());
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        int resNum = orgService.addOrgRole(tbServiceOrgCopy.getOrgAccount(),tbServiceOrgCopy.getOrgId(),user.getAccount());
         logger.info("-----------添加机构管理员角色成功，数据响应条数：{}----------",resNum);
         return  new Result(resNum);
     }

@@ -142,8 +142,8 @@ public class RoomInformationServiceImpl implements RoomInformationService {
         String[] rooms = roomIds.split(",");
         TbRoomInformation tbRoomInformation = tbRoomInformationMapper.selectByPrimaryKey(rooms[0]);
         //通过用户account查询企业
-        //Result<ServiceCompany> companyDetailByAccountOrCompanyId = companyClient.getCompanyDetailByAccountOrCompanyId(userAccount);
-        //ServiceCompany data = companyDetailByAccountOrCompanyId.getData();
+        Result<ServiceCompany> companyDetailByAccountOrCompanyId = companyClient.getCompanyDetailByAccountOrCompanyId(userAccount);
+        ServiceCompany data = companyDetailByAccountOrCompanyId.getData();
 
         //计算结束时间
         Calendar cal = Calendar.getInstance();
@@ -156,7 +156,7 @@ public class RoomInformationServiceImpl implements RoomInformationService {
         this.validShortestLease(leaseStartTime, leaseEndTime, tbRoomInformation);
 
         //判断租借用户是否是企业用户
-        //this.checkIsCompanyUser(userAccount);
+        this.checkIsCompanyUser(userAccount);
 
         //获取所有要出租的房间
         Set<String> roomSet = new HashSet<>();
@@ -229,8 +229,8 @@ public class RoomInformationServiceImpl implements RoomInformationService {
         orders.setIsRelet(Byte.parseByte(RoomReletStatusEnums.NO.getCode()));
         //有效
         orders.setRecordStatus(Byte.parseByte(AssetStatusEnums.EFFECTIVE.getCode()));
-        //orders.setEnterpriseId(data.getId());
-        //orders.setLeaseEnterprise(data.getComName());
+        orders.setEnterpriseId(data.getId());
+        orders.setLeaseEnterprise(data.getComName());
         orders.setLeaseStartTime(leaseStartTime);
         orders.setLeaseEndTime(leaseEndTime);
         orders.setContactName(contactName);
@@ -596,7 +596,7 @@ public class RoomInformationServiceImpl implements RoomInformationService {
     public RoomPayOrdersItemModel quitApply(String orderItemId) {
         //更新订单房间状态
         TbRoomOrdersItem tbRoomOrdersItem = tbRoomOrdersItemMapper.selectByPrimaryKey(orderItemId);
-        tbRoomOrdersItem.setRecordStatus(Byte.parseByte(RoomLeaseStatusEnums.QUIT.getValue()));
+        tbRoomOrdersItem.setQuitApplyStatus(Byte.parseByte(RoomApplyStatusEnums.APPLY.getCode()));
         TbRoomOrdersItemCriteria tbRoomOrdersItemCriteria = new TbRoomOrdersItemCriteria();
         tbRoomOrdersItemCriteria.createCriteria().andIdEqualTo(orderItemId);
         logger.info("更新订单房间状态,{}", tbRoomOrdersItem);
@@ -740,23 +740,15 @@ public class RoomInformationServiceImpl implements RoomInformationService {
             tbRoomOrdersBill.setPaySum(Byte.parseByte("0"));
 
             //账单周期
-            //获取前一个月第一天
-            Calendar calendar1 = Calendar.getInstance();
-            calendar1.add(Calendar.MONTH, -1);
-            calendar1.set(Calendar.DAY_OF_MONTH, 1);
-            String firstDay = DateUtils.formatDate(calendar1.getTime(), "yyyy-MM-dd");
-            //获取前一个月最后一天
-            Calendar calendar2 = Calendar.getInstance();
-            calendar2.set(Calendar.DAY_OF_MONTH, 0);
-            String lastDay = DateUtils.formatDate(calendar2.getTime(), "yyyy-MM-dd");
+            String billCycle = getBillCycle(new java.util.Date());
             //设置账期
-            tbRoomOrdersBill.setBillCycle(firstDay + "~" + lastDay);
+            tbRoomOrdersBill.setBillCycle(billCycle);
 
             //创建时间
             tbRoomOrdersBill.setCreateTime(new java.util.Date());
 
             TbRoomOrdersItemCriteria tbRoomOrdersItemCriteria = new TbRoomOrdersItemCriteria();
-            //通过总订单id获取子订单,房间状态为租借中,并且租赁申请成功的
+            //通过总订单id获取子订单,并且租赁申请成功的
             tbRoomOrdersItemCriteria.createCriteria().andOrderIdEqualTo(tbR.getId()).andLeaseApplyStatusEqualTo(Byte.parseByte(RoomApplyStatusEnums.SUCCEED.getCode()));
             //获取子订单集合
             List<TbRoomOrdersItem> tbRoomOrdersItemList = tbRoomOrdersItemMapper.selectByExample(tbRoomOrdersItemCriteria);
@@ -808,7 +800,7 @@ public class RoomInformationServiceImpl implements RoomInformationService {
             throw new JnSpringCloudException(new Result("-1", "订单不存在"));
         }
         TbRoomOrdersItemCriteria roomOrdersItemCriteria = new TbRoomOrdersItemCriteria();
-        //通过总订单id获取子订单,房间状态为租借中,并且租赁申请成功的
+        //通过总订单id获取子订单,并且租赁申请成功的
         TbRoomOrdersItemCriteria.Criteria criteria = roomOrdersItemCriteria.createCriteria();
         criteria.andOrderIdEqualTo(tbR.getId()).andLeaseApplyStatusEqualTo(Byte.parseByte(RoomApplyStatusEnums.SUCCEED.getCode()));
         List<TbRoomOrdersItem> tbRoomOrdersItemList = tbRoomOrdersItemMapper.selectByExample(roomOrdersItemCriteria);
@@ -901,6 +893,8 @@ public class RoomInformationServiceImpl implements RoomInformationService {
                     roomInformation.setLeaseEnterprise(tbRoomOrdersBill.getLeaseEnterprise());
                     roomInformation.setContactName(tbRoomOrdersBill.getContactName());
                     roomInformation.setContactPhone(tbRoomOrdersBill.getContactPhone());
+                    //房间租借状态更改为:租借中
+                    roomInformation.setState(Byte.parseByte(RoomLeaseStatusEnums.DELIVERY.getValue()));
                     int updateCount = tbRoomInformationMapper.updateByPrimaryKeySelective(roomInformation);
                     if (updateCount != 1) {
                         throw new JnSpringCloudException(new Result("-1", "更新房间信息tb_room_information失败"));
@@ -946,7 +940,7 @@ public class RoomInformationServiceImpl implements RoomInformationService {
                         roomEnter.setEnterpriseId(tbRoomOrders.getLeaseEnterprise());
                         //查询子订单房间租借信息
                         TbRoomOrdersItemCriteria tbRoomOrdersItemCriteria = new TbRoomOrdersItemCriteria();
-                        //通过订单id查询子订单,并且房间状态为租借中,
+                        //通过订单id查询子订单
                         tbRoomOrdersItemCriteria.createCriteria().andOrderIdEqualTo(tbRoomOrders.getId()).andLeaseApplyStatusEqualTo(Byte.parseByte(RoomApplyStatusEnums.SUCCEED.getCode()));
                         List<TbRoomOrdersItem> tbRoomOrdersItemList = tbRoomOrdersItemMapper.selectByExample(tbRoomOrdersItemCriteria);
                         if (tbRoomOrdersItemList != null) {
@@ -1015,6 +1009,36 @@ public class RoomInformationServiceImpl implements RoomInformationService {
             result += random.nextInt(10);
         }
         return newDate + result;
+    }
+
+    /**
+     * 获取账单周期
+     * @param startTime
+     * @return
+     */
+    private String getBillCycle(java.util.Date startTime){
+        //获取当前时间
+        String currTime = DateUtils.formatDate(startTime, "yyyy-MM-dd");
+        //判断当前季度及季度结束时间
+        Calendar c = Calendar.getInstance();
+        c.setTime(startTime);
+        int currentMonth = c.get(Calendar.MONTH) + 1;
+
+        if(currentMonth >=1 && currentMonth <= 3){
+            c.set(Calendar.MONTH,2);
+            c.set(Calendar.DATE,31);
+        }else if (currentMonth >=4 && currentMonth <= 6){
+            c.set(Calendar.MONTH,5);
+            c.set(Calendar.DATE,30);
+        }else if (currentMonth >=7 && currentMonth <= 9){
+            c.set(Calendar.MONTH,8);
+            c.set(Calendar.DATE,30);
+        }else if (currentMonth >=10 && currentMonth <= 12){
+            c.set(Calendar.MONTH,11);
+            c.set(Calendar.DATE,31);
+        }
+        String endTime = DateUtils.formatDate(c.getTime(), "yyyy-MM-dd");
+        return currTime + "~" + endTime;
     }
 
 }

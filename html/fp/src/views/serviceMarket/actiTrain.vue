@@ -58,7 +58,7 @@
                     </div>
                     <div v-else>
                         <ul class="allActiUl clearfix" v-if="flag">
-                            <li v-for="(item,index) in actiListSlim" :key='index'>
+                            <li v-for="(item,index) in actiListSlim" :key='index' class="pointer" @click="handleRout(item.id)">
                                 <div style="width:100%;height:200px" class="pointer" @click="handleRout(item.id)">
                                     <img style="width:100%;height:100%" :src="item.actiPosterUrl" alt="活动海报图片" class="posterImg">
                                 </div>

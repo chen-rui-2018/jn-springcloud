@@ -94,7 +94,10 @@ export default {
   created () {
     this.actiDel()
   },
-  mounted () {},
+  mounted () {
+    // WebSettings settings = webview.getSettings();
+    // settings.setJavaScriptEnabled(true); //允许在WebView中使用js
+  },
   destroyed () {
     clearInterval(this._interval)
   },
@@ -148,6 +151,7 @@ export default {
             // _this.$message.success('点赞成功')
             _this.accountIsLike = true
             window.location.href = 'protocol://android?code=toast&data=' + _this.actiForm.actiLike
+            window.location.href = 'protocol://android?code=toast&data=' + JSON.stringify(_this.actiForm.actiLike)
           } else {
             _this.$vux.toast.text(res.result)
           }
@@ -258,7 +262,7 @@ export default {
 <style lang="scss" scoped>
 .actiDetail {
   width: 100%;
-  padding-bottom:100px;
+  padding-bottom: 100px;
   // padding-top: 37px;
   .actiImg {
     // height: 357px;
@@ -300,8 +304,8 @@ export default {
       font-size: 29px;
       font-weight: 400;
     }
-    .time2{
-      margin-left:7px;
+    .time2 {
+      margin-left: 7px;
     }
     .date1 {
       font-size: 22px;
@@ -361,7 +365,7 @@ export default {
     .applyNum {
       font-size: 30px;
       color: #8c8c8c;
-      span:nth-child(2){
+      span:nth-child(2) {
         display: inline-block;
         vertical-align: middle;
       }
@@ -379,7 +383,7 @@ export default {
       font-size: 30px;
       margin-bottom: 30px;
     }
-    >p{
+    > p {
       line-height: 40px;
     }
   }
@@ -389,7 +393,7 @@ export default {
     justify-content: center;
     border-top: 1px solid #eee;
     position: fixed;
-    bottom:0;
+    bottom: 0;
     z-index: 3;
     height: 100px;
     width: 100%;

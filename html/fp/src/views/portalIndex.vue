@@ -298,7 +298,6 @@ export default {
     const calrousel = document.getElementsByClassName("el-carousel")[0];
     // const calrousel = document.querySelector(".el-carousel")
     calrousel.style.height = calrousel.scrollHeight;
-    console.log(calrousel.scrollHeight)
   },
   methods: {
     swiperinit() {

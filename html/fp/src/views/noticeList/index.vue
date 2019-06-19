@@ -14,7 +14,7 @@
                         <h5>{{i.noticeTitle}}</h5>
                         <p class="color3">{{i.noticeBiref}}</p>
                     </div>
-                    <div class="buttonDetail fr mainBorder pointer" @click="$router.push({path:'/announcementDetails',query:{noticeId:i.noticeId}})">
+                    <div class="buttonDetail fr mainBorder pointer">
                         了解详情
                     </div>
                 </li>

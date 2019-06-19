@@ -17,11 +17,10 @@ import java.io.Serializable;
  */
 @ApiModel(value = "FinancialOrgProductParam", description = "机构金融产品列表查询入参")
 public class FinancialOrgProductParam extends Page implements Serializable {
-    @ApiModelProperty(value = "机构id",required = true)
-    @NotBlank(message = "机构id不能为空")
+    @ApiModelProperty(value = "机构id", required = true,example = "orgId123456")
+    @NotBlank(message="机构id不能为空")
     private String orgId;
-    @ApiModelProperty(value = "产品类型 0-常规产品,1-特色产品",example = "1")
-    @NotBlank(message = "产品类型不能为空")
+    @ApiModelProperty(value = "产品类型 0-常规产品,1-特色产品 不传则返回全部",example = "1")
     private String productType;
     @ApiModelProperty(value = "关键词-服务产品名称",example = "代理理财")
     private String keyWords;
@@ -29,7 +28,7 @@ public class FinancialOrgProductParam extends Page implements Serializable {
     private String productStatus;
     @ApiModelProperty(value = "是否需要分页  1:分页   0:不分页",required = true,example = "1")
     @Pattern(regexp = "^[01]$", message = "{needPage:'默认值只允许为0,1'}")
-    @NotNull(message="是否需要分页不能为空")
+    @NotBlank(message="是否需要分页不能为空")
     private String needPage;
     public String getOrgId() {
         return orgId;

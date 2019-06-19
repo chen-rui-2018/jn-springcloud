@@ -9,7 +9,7 @@
           </el-breadcrumb-item>
         </el-breadcrumb>
       </div>
-      <el-container :class="{'h-100': $store.state.isMobile}">
+      <el-container :class="{'h-100': $store.state.isMobile, 'min-height': !$store.state.isMobile}">
         <el-aside style="width: 200px;margin-right: 20px;" v-if="$store.state.hiddenNav">
           <div class="userImg">
             <div class="imgItem">
@@ -129,10 +129,10 @@ $bg-gray: #f3f3f3;
 .message-center {
   &.pc {
     width: 1190px;
+    min-height: 500px;
   }
   margin: 0 auto;
-  min-height: 500px;
-  .el-container {
+  .el-container.min-height {
     min-height: 500px;
   }
   .nav-tips {

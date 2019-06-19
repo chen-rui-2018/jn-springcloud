@@ -159,7 +159,7 @@
             </li>
           </ul> -->
         </div>
-        <div class="parkInfo w">
+        <!-- <div class="parkInfo w">
           <ul class="infoUl">
             <li>
               <img src="@/../static/img1/diqiu.png" alt="">
@@ -196,7 +196,7 @@
               </span>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="enterpriseList w">
@@ -541,6 +541,9 @@ export default {
     }
     .el-carousel__container {
       height: 350px;
+    }
+    .el-carousel__indicators--outside{
+      height: 41px;
     }
     .el-carousel__indicator {
       padding: 14px 4px;

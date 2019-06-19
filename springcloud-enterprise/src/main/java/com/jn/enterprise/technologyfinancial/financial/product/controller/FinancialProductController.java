@@ -51,6 +51,14 @@ public class FinancialProductController extends BaseController {
         PaginationData investorInfoList = financialProductService.getFinancialProductList(financialProductListParam);
         return  new Result(investorInfoList);
     }
+    @ControllerLog(doAction = "机构下金融产品列表查询")
+    @ApiOperation(value = "机构下金融产品列表查询")
+    @RequestMapping(value = "/guest/technologyFinancial/financialProductController/getOrgFinancialProductList",method = RequestMethod.GET)
+    public Result<PaginationData<List<FinancialProductListInfo>>> getOrgFinancialProductList(@Validated FinancialOrgProductParam financialOrgProductParam){
+        PaginationData investorInfoList = financialProductService.getOrgFinancialProductList(financialOrgProductParam);
+        return  new Result(investorInfoList);
+    }
+
 
     @ControllerLog(doAction = "金融产品详情")
     @ApiOperation(value = "金融产品详情")

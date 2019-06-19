@@ -12,8 +12,8 @@ import com.jn.enterprise.servicemarket.advisor.enums.OrgNameIsExistEnum;
 import com.jn.enterprise.servicemarket.advisor.enums.OrgNameSearchTypeEnum;
 import com.jn.enterprise.servicemarket.advisor.model.OrgNameIsExistParam;
 import com.jn.enterprise.servicemarket.org.dao.TbServiceOrgMapper;
+import com.jn.enterprise.servicemarket.org.dao.TbServiceOrgTempMapper;
 import com.jn.enterprise.servicemarket.org.entity.TbServiceOrgCriteria;
-import com.jn.enterprise.servicemarket.org.entity.TbServiceOrgTemp;
 import com.jn.enterprise.servicemarket.org.entity.TbServiceOrgTempCriteria;
 import com.jn.enterprise.servicemarket.org.model.*;
 import com.jn.enterprise.servicemarket.org.service.OrgService;
@@ -46,6 +46,9 @@ public class OrgJoinServiceImpl implements OrgJoinService {
     private TbServiceOrgMapper tbServiceOrgMapper;
 
     @Autowired
+    private TbServiceOrgTempMapper tbServiceOrgTempMapper;
+
+    @Autowired
     private ServiceOrgMapper serviceOrgMapper;
 
     @Autowired
@@ -57,15 +60,7 @@ public class OrgJoinServiceImpl implements OrgJoinService {
         //机构id为空
         if(StringUtils.isBlank(orgDetailParameter.getOrgId())){
             //校验当前用户是否已认证机构认证
-            TbServiceOrgCriteria example=new TbServiceOrgCriteria();
-            example.createCriteria().andOrgAccountEqualTo(account)
-                    .andOrgStatusIn(Arrays.asList(ApprovalStatusEnum.NOT_APPROVED.getValue(),ApprovalStatusEnum.APPROVAL.getValue()))
-                    .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
-            long existNum = tbServiceOrgMapper.countByExample(example);
-            if(existNum>0){
-                logger.warn("当前用户[{}]信息已存在，请不要重复进行机构认证",account);
-                throw new JnSpringCloudException(OrgExceptionEnum.ORG_INFO_HAS_EXIST);
-            }
+            checkLoginAccountIsExist(account);
         }
         OrgBasicData orgBasicData = new OrgBasicData();
         //机构logo处理
@@ -112,6 +107,30 @@ public class OrgJoinServiceImpl implements OrgJoinService {
     }
 
     /**
+     * 校验当前用户是否已认证机构认证
+     * @param account
+     */
+    @ServiceLog(doAction = "校验当前用户是否已认证机构认证")
+    private void checkLoginAccountIsExist(String account) {
+        TbServiceOrgTempCriteria exampleTemp=new TbServiceOrgTempCriteria();
+        exampleTemp.createCriteria().andOrgAccountEqualTo(account)
+                .andOrgStatusIn(Arrays.asList(ApprovalStatusEnum.NOT_APPROVED.getValue(),ApprovalStatusEnum.APPROVAL.getValue()))
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        long existNum = tbServiceOrgTempMapper.countByExample(exampleTemp);
+        if(existNum==0){
+            TbServiceOrgCriteria example=new TbServiceOrgCriteria();
+            example.createCriteria().andOrgAccountEqualTo(account)
+                    .andOrgStatusIn(Arrays.asList(ApprovalStatusEnum.NOT_APPROVED.getValue(),ApprovalStatusEnum.APPROVAL.getValue()))
+                    .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+            existNum=tbServiceOrgMapper.countByExample(example);
+        }
+        if(existNum>0){
+            logger.warn("当前用户[{}]信息已存在，请不要重复进行机构认证",account);
+            throw new JnSpringCloudException(OrgExceptionEnum.ORG_INFO_HAS_EXIST);
+        }
+    }
+
+    /**
      * 判断机构名称是否已存在
      * @param orgParam
      * @return
@@ -130,14 +149,14 @@ public class OrgJoinServiceImpl implements OrgJoinService {
         //临时表
         TbServiceOrgTempCriteria exampleTemp=new TbServiceOrgTempCriteria();
         if(StringUtils.equals(OrgNameSearchTypeEnum.SEARCH_type_ADD.getCode(),orgParam.getSearchType())){
-            //待审批，审批通过 ，审批不通过的状态对应机构名称都查询   审批状态(0：未审核[审核中] 1：审核通过  2：审核不通过)
+            //审批状态(0：未审核[审核中] 1：审核通过  2：审核不通过)
             //正式表
             example.createCriteria().andOrgNameEqualTo(orgParam.getOrgName())
                     .andOrgStatusEqualTo("1")
                     .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
-            //临时表
+            //临时表 待审批，审批通过的状态对应机构名称都查询
             exampleTemp.createCriteria().andOrgNameEqualTo(orgParam.getOrgName())
-                    .andOrgStatusIn(Arrays.asList("0","1","2"))
+                    .andOrgStatusIn(Arrays.asList("0","1"))
                     .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
             long existNum = tbServiceOrgMapper.countByExample(example);
             return existNum>0? OrgNameIsExistEnum.ORG_NAME_EXIST.getCode():OrgNameIsExistEnum.ORG_NAME_NOT_EXIST.getCode();

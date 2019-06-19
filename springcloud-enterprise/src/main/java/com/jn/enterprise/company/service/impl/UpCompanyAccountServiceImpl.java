@@ -1,9 +1,11 @@
 package com.jn.enterprise.company.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
 import com.jn.enterprise.company.enums.CompanyDataEnum;
+import com.jn.enterprise.company.enums.CompanyExceptionEnum;
 import com.jn.enterprise.company.model.ServiceCompany;
 import com.jn.enterprise.company.service.UpCompanyAccountService;
 import com.jn.pay.model.PayAccountBookCreateParam;
@@ -76,27 +78,34 @@ public class UpCompanyAccountServiceImpl implements UpCompanyAccountService {
         if (StringUtils.isNotBlank(comAdmin)) {
             Result<SysRole> result = systemClient.getRoleByName(CompanyDataEnum.COMPANY_ADMIN.getCode());
             Result<SysRole> normalResult = systemClient.getRoleByName(HomeRoleEnum.NORMAL_USER.getCode());
-            logger.info("[升级企业账号] 调用系统服务 根据角色名称获取角色信息 接口 返回结果:{}", result);
-            if (result != null && result.getData() != null && normalResult != null && normalResult.getData() != null) {
-                String roleId = result.getData().getId();
-                String normalRoleId = normalResult.getData().getId();
-
-                //2.为用户赋权,增加企业管理员角色，删除普通用户
-                SysUserRoleVO sysUserRoleVO = new SysUserRoleVO();
-                User user = new User();
-                user.setAccount(comAdmin);
-
-                Set<String> addRoleSet = new HashSet<String>();
-                Set<String> removeRoleSet = new HashSet<String>();
-                addRoleSet.add(roleId);
-                removeRoleSet.add(normalRoleId);
-                sysUserRoleVO.setUser(user);
-                sysUserRoleVO.setAddRoleId(addRoleSet);
-                sysUserRoleVO.setDeleRoleIds(removeRoleSet);
-
-                systemClient.updateUserRole(sysUserRoleVO);
-                logger.info("[升级企业账号] 调用系统服务 修改用户角色 接口 用户账号:{},角色id:{}", comAdmin, roleId);
+            if (result == null || result.getData() == null || normalResult == null || normalResult.getData() == null) {
+                logger.warn("[升级企业账号] 根据角色名称获取角色信息失败");
+                throw new JnSpringCloudException(CompanyExceptionEnum.CALL_SYSTEM_SERVICE_ERROR);
             }
+            logger.info("[升级企业账号] 调用系统服务 根据角色名称获取角色信息 接口 返回结果:{}", result);
+
+            String roleId = result.getData().getId();
+            String normalRoleId = normalResult.getData().getId();
+
+            //2.为用户赋权,增加企业管理员角色，删除普通用户
+            SysUserRoleVO sysUserRoleVO = new SysUserRoleVO();
+            User user = new User();
+            user.setAccount(comAdmin);
+
+            Set<String> addRoleSet = new HashSet<String>();
+            Set<String> removeRoleSet = new HashSet<String>();
+            addRoleSet.add(roleId);
+            removeRoleSet.add(normalRoleId);
+            sysUserRoleVO.setUser(user);
+            sysUserRoleVO.setAddRoleId(addRoleSet);
+            sysUserRoleVO.setDeleRoleIds(removeRoleSet);
+
+            Result<Boolean> booleanResult = systemClient.updateUserRole(sysUserRoleVO);
+            if (booleanResult == null || !booleanResult.getData()) {
+                logger.warn("[升级企业账号] 修改用户角色失败，用户账号:{}", comAdmin);
+                throw new JnSpringCloudException(CompanyExceptionEnum.CALL_SYSTEM_SERVICE_ERROR);
+            }
+            logger.info("[升级企业账号] 调用系统服务 修改用户角色 接口 用户账号:{},角色id:{}", comAdmin, roleId);
 
             //3.更新用户企业信息
             UserCompanyInfo userCompanyInfo = new UserCompanyInfo();
@@ -105,7 +114,11 @@ public class UpCompanyAccountServiceImpl implements UpCompanyAccountService {
             userCompanyInfo.setAccountList(accountList);
             userCompanyInfo.setCompanyCode(companyId);
             userCompanyInfo.setCompanyName(comName);
-            userExtensionClient.updateCompanyInfo(userCompanyInfo);
+            Result userExtension = userExtensionClient.updateCompanyInfo(userCompanyInfo);
+            if (userExtension == null || userExtension.getData() == null) {
+                logger.warn("[升级企业账号] 修改用户所属企业失败 用户账号:{}", comAdmin);
+                throw new JnSpringCloudException(CompanyExceptionEnum.CALL_USER_SERVICE_ERROR);
+            }
             logger.info("[升级企业账号] 调用用户服务 修改用户所属企业 接口 用户账号:{}", comAdmin);
 
             //4.创建企业的账本信息-延迟调度

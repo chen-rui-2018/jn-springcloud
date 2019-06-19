@@ -60,6 +60,7 @@
             ,ta.acti_number as "actiNumber"                                                               <!--活动人数-->
             ,ta.acti_poster_url as "actiPosterUrl"                                                        <!--活动海报路径-->
             ,ta.show_apply_num as "showApplyNum"                                                          <!--活动报名人数-->
+            ,ta.is_index as "isIndex"                                                                     <!--是否置顶-->
             ,ifnull(ta.acti_views,0) as "actiViews"                                                       <!--活动浏览人数-->
             ,date_format(ta.issue_time,'%Y-%m-%d %H:%i:%s') as "issueTime"                                <!--活动发布时间-->
             ,td.acti_detail AS "actiDetails"

@@ -45,6 +45,16 @@ public class FinancialProductListInfo implements Serializable {
     private String transactionNum;
     @ApiModelProperty(value = "产品类型,0 常规 1 特色")
     private String productType;
+    @ApiModelProperty(value = "服务产品状态,(-1无效0待审核1有效2审核不通过)")
+    private String productStatus;
+
+    public String getProductStatus() {
+        return productStatus;
+    }
+
+    public void setProductStatus(String productStatus) {
+        this.productStatus = productStatus;
+    }
 
     public String getProductType() {
         return productType;
@@ -193,6 +203,7 @@ public class FinancialProductListInfo implements Serializable {
                 ", ratingScore='" + ratingScore + '\'' +
                 ", transactionNum='" + transactionNum + '\'' +
                 ", productType='" + productType + '\'' +
+                ", productStatus='" + productStatus + '\'' +
                 '}';
     }
 }

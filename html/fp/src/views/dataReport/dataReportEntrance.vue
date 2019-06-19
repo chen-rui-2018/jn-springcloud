@@ -230,7 +230,7 @@
       },
       formatTreeOtherColumnData(tab) {
         // 递归选中的指标树节点和获取到的累计列对象数组比对，寻找对应的累计列数据，并挂载到指标节点中
-        if (tab.otherColumn) {
+        if (tab.hasOwnProperty('otherColumn')) {
           this.treeOtherColumnMerge(tab.targetList, tab.otherColumn)
         }
       },
@@ -358,7 +358,7 @@
         for (const target of tree) {
           for (const list of target.inputFormatModel) {
             for (const input of list) {
-              if ((target.hasJurisdiction && Number(input.required) && !input.value && input.formType !== '2') || (target.hasJurisdiction && Number(input.required) && input.value.length === 0)) {
+              if ((target.hasOwnProperty('hasJurisdiction') && target.hasJurisdiction && Number(input.required) && !input.value && input.formType !== '2') || (target.hasJurisdiction && Number(input.required) && input.value.length === 0)) {
                 reject({target, input})
               }
             }

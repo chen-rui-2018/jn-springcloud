@@ -162,7 +162,7 @@ export default {
   // },
   mounted() {
     this.swiperinit();
-    // window.addEventListener("scroll", this.handleScroll);
+    window.addEventListener("scroll", this.handleScroll);
     // this.islogin()
   },
   destroyed() {

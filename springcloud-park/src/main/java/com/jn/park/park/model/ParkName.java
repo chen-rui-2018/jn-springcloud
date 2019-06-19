@@ -19,6 +19,10 @@ public class ParkName {
     @ApiModelProperty(value = "园区简短介绍（列表页显示）")
     private String shortIntroduce;
 
+    @ApiModelProperty(value = "显示顺序（顺序排列）")
+    private Integer showOrder;
+
+
     public String getParkName() {
         return parkName;
     }
@@ -51,6 +55,14 @@ public class ParkName {
         this.shortIntroduce = shortIntroduce;
     }
 
+    public Integer getShowOrder() {
+        return showOrder;
+    }
+
+    public void setShowOrder(Integer showOrder) {
+        this.showOrder = showOrder;
+    }
+
     @Override
     public String toString() {
         return "ParkName{" +
@@ -58,6 +70,7 @@ public class ParkName {
                 ", id='" + id + '\'' +
                 ", mainPicture='" + mainPicture + '\'' +
                 ", shortIntroduce='" + shortIntroduce + '\'' +
+                ", showOrder=" + showOrder +
                 '}';
     }
 }

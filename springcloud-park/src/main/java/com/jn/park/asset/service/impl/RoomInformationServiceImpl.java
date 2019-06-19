@@ -881,6 +881,14 @@ public class RoomInformationServiceImpl implements RoomInformationService {
         //账单支付成功
         if (payBill.getPaymentState().equals(PayStatusEnums.PAYMENT.getCode())) {
             TbRoomOrdersBill tbRoomOrdersBill = tbRoomOrdersBillMapper.selectByPrimaryKey(payBill.getBillId());
+            //更新房间订单支付状态 已支付
+            TbRoomOrders tbRoomOrders = tbRoomOrdersMapper.selectByPrimaryKey(tbRoomOrdersBill.getOrderId());
+            tbRoomOrders.setPayState(Byte.parseByte(PayStatusEnums.PAYMENT.getCode()));
+            logger.info("更新房间订单支付状态:已支付,参数{}", tbRoomOrders);
+            int updateCount = tbRoomOrdersMapper.updateByPrimaryKeySelective(tbRoomOrders);
+            if (updateCount != 1) {
+                throw new JnSpringCloudException(new Result("-1", "更新房间订单tb_room_orders失败"));
+            }
             //更新房间租借企业信息
             TbRoomOrdersItemCriteria tbRoomOrdersItemCriteria = new TbRoomOrdersItemCriteria();
             tbRoomOrdersItemCriteria.createCriteria().andOrderIdEqualTo(tbRoomOrdersBill.getOrderId());
@@ -895,7 +903,8 @@ public class RoomInformationServiceImpl implements RoomInformationService {
                     roomInformation.setContactPhone(tbRoomOrdersBill.getContactPhone());
                     //房间租借状态更改为:租借中
                     roomInformation.setState(Byte.parseByte(RoomLeaseStatusEnums.DELIVERY.getValue()));
-                    int updateCount = tbRoomInformationMapper.updateByPrimaryKeySelective(roomInformation);
+                    updateCount = tbRoomInformationMapper.updateByPrimaryKeySelective(roomInformation);
+                    logger.info("更新房间租借状态更改为:租借中,参数{}", roomInformation);
                     if (updateCount != 1) {
                         throw new JnSpringCloudException(new Result("-1", "更新房间信息tb_room_information失败"));
                     }
@@ -904,7 +913,7 @@ public class RoomInformationServiceImpl implements RoomInformationService {
             tbRoomOrdersBill.setPaySum(Byte.parseByte(PayStatusEnums.PAYMENT.getCode()));
             tbRoomOrdersBill.setPayTime(payBill.getCreatedTime());
             logger.info("更新缴费单支付状态,参数{}", tbRoomOrdersBill);
-            int updateCount = tbRoomOrdersBillMapper.updateByPrimaryKeySelective(tbRoomOrdersBill);
+            updateCount = tbRoomOrdersBillMapper.updateByPrimaryKeySelective(tbRoomOrdersBill);
             if (updateCount != 1) {
                 throw new JnSpringCloudException(new Result("-1", "更新缴费单tb_room_orders_bill失败"));
             }

@@ -98,7 +98,7 @@
               <!-- <img src="@/../static/img/ins1.png" alt=""> -->
               <img :src="i.orgLogo" alt="">
             </div>
-            <div class="orgCon fl">
+            <div class="orgCon fl pointer" @click="handleOrgDel(i.orgId)">
               <div class="conTil">{{i.orgName}}</div>
               <div class="conContent clearfix color3">
                 <div class="left1 fl">

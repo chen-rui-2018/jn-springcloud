@@ -33,8 +33,8 @@
         <nodata></nodata>
       </div>
       <ul v-else>
-        <li v-for="(i,k) in investorInfoList" :key='k'>
-          <div class="liImg pointer" @click="handleDel(i.investorAccount)">
+        <li v-for="(i,k) in investorInfoList" :key='k' class="pointer" @click="handleDel(i.investorAccount)">
+          <div class="liImg pointer">
             <img v-if="i.avatar" :src="i.avatar" alt="">
             <img v-else src="@/../static/img/touxiang.png" alt="">
           </div>

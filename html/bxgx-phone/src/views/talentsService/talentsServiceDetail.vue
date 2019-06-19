@@ -61,6 +61,8 @@ export default {
             this.detailData = res.data
             if (res.data.fileUrl !== '') {
               this.fileList = JSON.parse(res.data.fileUrl)
+            } else {
+              this.$vux.toast.text(res.result)
             }
           }
         }
@@ -73,6 +75,8 @@ export default {
         callback: res => {
           if (res.code === '0000') {
             // this.detailData = res.data
+          } else {
+            this.$vux.toast.text(res.result)
           }
         }
       })

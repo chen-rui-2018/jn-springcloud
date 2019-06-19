@@ -77,11 +77,11 @@
       </div>
       <ul v-else>
         <li class="clearfix" v-for="(i,k) in serverAgent" :key='k'>
-          <div class="orgImg fl" @click="handleOrgDel(i.orgId)">
+          <div class="orgImg fl pointer" @click="handleOrgDel(i.orgId)">
             <img :src="i.orgLogo" alt="">
             <!-- <img v-else src="@/../static/img/product.png" alt=""> -->
           </div>
-          <div class="orgCon fl">
+          <div class="orgCon pointer fl" @click="handleOrgDel(i.orgId)">
             <div class="conTil">{{i.orgName}}</div>
             <div class="conContent clearfix color3">
               <div class="left1 fl">

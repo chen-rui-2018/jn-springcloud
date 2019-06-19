@@ -13,8 +13,8 @@
       </div>
       <div class="actiTab">
         <ul class="allActiUl clearfix" v-if="flag">
-          <li v-for="(item,index) in recruitmentTable" :key='index'>
-            <div class="postImgItem pointer" @click="handleRout(item.id)">
+          <li v-for="(item,index) in recruitmentTable" class="pointer" :key='index'  @click="handleRout(item.id)">
+            <div class="postImgItem pointer">
               <img :src="item.posterUrl" class="postImg" alt="企业图片">
             </div>
             <div class="actiInfo">
@@ -40,7 +40,7 @@
             <div class="verticalLeft fl pointer" @click="handleRout(item.id)">
               <img :src="item.posterUrl" alt="企业图片">
             </div>
-            <div class="verticalMiddle fl">
+            <div class="verticalMiddle fl pointer" @click="handleRout(item.id)">
               <h3 class="verticalTit">{{item.propagandaTitle}}</h3>
               <div class="xihuan mainColor">
                 <i class="el-icon-view"></i>&nbsp;111

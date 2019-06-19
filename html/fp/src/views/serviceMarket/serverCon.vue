@@ -44,7 +44,7 @@
               <img v-if="i.avatar" :src="i.avatar" alt="">
               <img v-else src="@/../static/img/touxiang.png" alt="">
             </div>
-            <div class="orgCon fl">
+            <div class="orgCon pointer fl" @click="handleConDel(i.orgId,i.advisorAccount)">
               <div class="conTil">{{i.advisorName}}</div>
               <div class="conContent clearfix color3">
                 <div class="left1 fl" id="left1">

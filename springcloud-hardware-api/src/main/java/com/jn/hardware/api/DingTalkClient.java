@@ -1,11 +1,11 @@
 package com.jn.hardware.api;
 
 import com.jn.common.model.Result;
+import com.jn.hardware.model.dingtalk.attendance.*;
 import com.jn.hardware.model.dingtalk.user.DepartmentListParam;
 import com.jn.hardware.model.dingtalk.user.DepartmentListResult;
 import com.jn.hardware.model.dingtalk.user.DepartmentUserInfoParam;
 import com.jn.hardware.model.dingtalk.user.DepartmentUserInfoResult;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,4 +45,27 @@ public interface DingTalkClient {
     @RequestMapping(value = "/api/hardware/dingTalk/getDepartmentList")
     Result<DepartmentListResult> getDepartmentList(@RequestBody @Validated DepartmentListParam departmentListParam);
 
+    /**
+     * 获取打卡结果列表
+     * @param clockInListParam
+     * @return
+     */
+    @RequestMapping(value = "/api/hardware/dingTalk/getClockInResultList")
+    Result<ClockInListResult> getClockInResultList(@RequestBody @Validated ClockInListParam clockInListParam);
+
+    /**
+     * 获取请假状态列表
+     * @param leaveStatusListParam
+     * @return
+     */
+    @RequestMapping(value = "/api/hardware/dingTalk/getLeaveStatusList")
+    Result<LeaveStatusListResult> getLeaveStatusList(@RequestBody @Validated LeaveStatusListParam leaveStatusListParam);
+
+    /**
+     * 获取请假时长
+     * @param leaveApproveduRationParam
+     * @return
+     */
+    @RequestMapping(value = "/api/hardware/dingTalk/getLeaveApproveDuration")
+    Result<LeaveApproveDurationResult> getLeaveApproveDuration(@RequestBody @Validated LeaveApproveDurationParam leaveApproveduRationParam);
 }

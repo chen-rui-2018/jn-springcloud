@@ -98,10 +98,12 @@ import $ from 'jquery'
 import bus from "@/util/bus";
 import UserHome from '@/components/userHome'
 import { getToken, removeToken } from '@/util/auth'
+import { IBPS_URL } from '@/util/url'
 export default {
   components:{UserHome},
   data() {
     return {
+      ibpsUrl:IBPS_URL,
       sousuo: false,
       menuFlag: false,
       zhedieFlag:false,
@@ -170,7 +172,7 @@ export default {
   },
   mounted() {
     // 预先登录模式
-    $('#kskfpt').attr('src', `http://112.94.22.222:2381/ibps/noPasswordLogin.htm?username=${this.$route.query.account}&password=123`)
+    $('#kskfpt').attr('src', `${ibpsUrl}+ibps/noPasswordLogin.htm?username=${this.$route.query.account}&password=123`)
     this.getUserExtension();
   },
   updated(){

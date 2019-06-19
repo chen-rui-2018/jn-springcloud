@@ -118,7 +118,7 @@
                 </div>
                 <!-- 左侧logo end-->
                 <!-- 中间信息 beign -->
-                <div class="list-info-middle inner-product fl">
+                <div class="list-info-middle inner-product fl pointer" @click="handlePro(i.productId,i.signoryId)">
                   <!-- 中间上半部分--标题和标签 begin -->
                   <div class="list-info-top-title">
                     <!-- 头部 begin -->
@@ -320,6 +320,10 @@ export default {
     },
     //跳转详情
     handlePro(productId, signoryId) {
+      if(this.$route.query.productId==productId&&this.$route.query.signoryId==signoryId){
+        this.$message('当前点击的产品跟本页面一样')
+        return
+      }
       this.$router.push({
         path: "/serverProDetail",
         query: { productId: productId, signoryId: signoryId }

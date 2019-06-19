@@ -29,13 +29,13 @@
                 <a href="javascript:void(0);">首页</a>
               </li>
               <li>
-                <a href="javascript:void(0);" @click="$router.push({path:'/investor'})">投资人</a>
-              </li>
-              <li>
                 <a href="javascript:void(0);" @click="$router.push({path:'/finaPro'})">金融产品</a>
               </li>
               <li>
                 <a href="javascript:void(0);" @click="$router.push({path:'/finaInstitution'})">金融机构</a>
+              </li>
+              <li>
+                <a href="javascript:void(0);" @click="$router.push({path:'/investor'})">投资人</a>
               </li>
             </ul>
           </div>
@@ -95,15 +95,6 @@
           <el-card>
             <ul class="techUl">
               <li>
-                <img src="@/../static/img/tech1.png" alt="" style="width:126px;height:95px">
-                <div class="liInfo">
-                  <span>投资人</span>
-                  <p class="mainColor">{{investorsNum}}
-                    <span>名</span>
-                  </p>
-                </div>
-              </li>
-              <li>
                 <img src="@/../static/img/tech2.png" alt="" style="width:137px;height:101px">
                 <div class="liInfo">
                   <span>金融产品</span>
@@ -120,6 +111,15 @@
                   <p class="mainColor">
                     {{financialOrgNum}}
                     <span>个</span>
+                  </p>
+                </div>
+              </li>
+              <li>
+                <img src="@/../static/img/tech1.png" alt="" style="width:126px;height:95px">
+                <div class="liInfo">
+                  <span>投资人</span>
+                  <p class="mainColor">{{investorsNum}}
+                    <span>名</span>
                   </p>
                 </div>
               </li>

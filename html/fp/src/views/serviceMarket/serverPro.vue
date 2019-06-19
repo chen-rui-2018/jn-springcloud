@@ -29,6 +29,7 @@
       </div>
       <div class="filMid fl">
         筛选：
+        <span :class="{'activeA':filterFlag1 == ''}" @click="handleSort('')">不限</span>
         <span :class="{'activeA':filterFlag1 == '0'}" @click="handleSort('0')">常规服务</span>
         <span :class="{'activeA':filterFlag1 == '1'}" @click="handleSort('1')">特色服务</span>
       </div>
@@ -44,11 +45,11 @@
       <ul v-else>
         <!-- <li class="clearfix" v-for="(i,k) in serverAgent" :key='k'> -->
         <li class="clearfix" v-for="(i,k) in serverProList" :key='k'>
-          <div class="orgImg fl" @click="handleProDel(i.productId,i.signoryId)">
+          <div class="orgImg fl pointer" @click="handleProDel(i.productId,i.signoryId)">
             <img v-if="i.pictureUrl" :src="i.pictureUrl" alt="">
             <img v-else src="@/../static/img/product.png" alt="">
           </div>
-          <div class="orgCon fl">
+          <div class="orgCon fl pointer" @click="handleProDel(i.productId,i.signoryId)">
             <div class="conTil">{{i.productName}}</div>
             <div class="conContent clearfix color3">
               <div class="left1 fl" id="left1">

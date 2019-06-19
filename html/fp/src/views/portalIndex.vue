@@ -159,7 +159,7 @@
             </li>
           </ul> -->
         </div>
-        <div class="parkInfo w">
+        <!-- <div class="parkInfo w">
           <ul class="infoUl">
             <li>
               <img src="@/../static/img1/diqiu.png" alt="">
@@ -196,7 +196,7 @@
               </span>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="enterpriseList w">
@@ -298,7 +298,6 @@ export default {
     const calrousel = document.getElementsByClassName("el-carousel")[0];
     // const calrousel = document.querySelector(".el-carousel")
     calrousel.style.height = calrousel.scrollHeight;
-    console.log(calrousel.scrollHeight)
   },
   methods: {
     swiperinit() {
@@ -541,6 +540,9 @@ export default {
     }
     .el-carousel__container {
       height: 350px;
+    }
+    .el-carousel__indicators--outside{
+      height: 41px;
     }
     .el-carousel__indicator {
       padding: 14px 4px;

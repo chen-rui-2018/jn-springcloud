@@ -95,6 +95,6 @@ public interface OrgService {
      * @param orgAccount
      * @return
      */
-    int addOrgRole(String orgAccount);
+    int addOrgRole(String orgAccount,String orgId);
 
 }

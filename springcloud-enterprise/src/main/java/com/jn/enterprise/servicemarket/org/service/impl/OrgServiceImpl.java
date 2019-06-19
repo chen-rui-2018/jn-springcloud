@@ -900,9 +900,13 @@ public class OrgServiceImpl implements OrgService {
     @ServiceLog(doAction = "添加机构管理员角色")
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int addOrgRole(String orgAccount) {
+    public int addOrgRole(String orgAccount,String orgId) {
         if(StringUtils.isBlank(orgAccount)){
             logger.warn("添加机构管理员角色失败，失败原因：机构账号不能为空");
+            throw new JnSpringCloudException(OrgExceptionEnum.ACCOUNT_NOT_NULL);
+        }
+        if(StringUtils.isBlank(orgId)){
+            logger.warn("添加机构管理员角色失败，失败原因：机构id不能为空");
             throw new JnSpringCloudException(OrgExceptionEnum.ORG_ID_IS_NOT_NULL);
         }
         //判断当前账号在系统中是否存在
@@ -913,10 +917,10 @@ public class OrgServiceImpl implements OrgService {
             logger.warn("添加机构管理员角色失败，失败原因：机构账号在系统中不存在");
             throw new JnSpringCloudException(OrgExceptionEnum.ORG_IS_NOT_EXIT);
         }
-        //获取临时表中已经审批通过的机构认证信息
+        //获取临时表中机构认证信息
         TbServiceOrgTempCriteria exampleTemp=new TbServiceOrgTempCriteria();
         exampleTemp.createCriteria().andOrgAccountEqualTo(orgAccount)
-                .andOrgStatusEqualTo("1")
+                .andOrgIdEqualTo(orgId)
                 .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         List<TbServiceOrgTemp> serviceOrgTempList = tbServiceOrgTempMapper.selectByExample(exampleTemp);
         if(serviceOrgTempList.isEmpty()){

@@ -39,6 +39,7 @@
         :label="column.text"
         :key="column.value"
         :prop="column.value"
+        :min-width="column.width"
       >
       </el-table-column>
     </el-table>
@@ -177,9 +178,14 @@
                 } else {
                   text = target.text
                 }
+                let length = 120
+                if (text) {
+                  length = (text.length + 1) * 16
+                }
                 this.columns.push({
                   text,
-                  value
+                  value,
+                  width: length <= 300 ? length : 300
                 })
               }
             }

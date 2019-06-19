@@ -178,9 +178,9 @@
           width: !this.isMobile ? 600 : ''
         })
         if (!this.isMobile) {
-          if (tab.otherColumn) {
+          if (tab.hasOwnProperty('otherColumn')) {
             for (const key in tab.otherColumn) {
-              if (key) {
+              if (tab.otherColumn.hasOwnProperty(key) && key) {
                 let text
                 if (key.length === 6) {
                   text = key.substring(0, 4) + '年' + key.substring(4, 6) + '月'
@@ -238,7 +238,7 @@
         // 其他表格列的值（上期值比对）挂载到树形指标，跟着指标循环的时候显示
         for (const target of treeData) {
           for (const key in otherColumn) {
-            if (key) {
+            if (otherColumn.hasOwnProperty(key) && key) {
               this.$set(target, key, [])
               if (otherColumn[key]) {
                 for (const column of otherColumn[key]) {

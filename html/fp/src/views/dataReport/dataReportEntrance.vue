@@ -64,7 +64,7 @@
         if (this.formData.modelType === 1 && !this.formData.departmentId) {
           return true
         }
-        if (this.departmentStatus === 0) {
+        if (this.formData.modelType === 1 && this.departmentStatus === 0) {
           return true
         }
       }

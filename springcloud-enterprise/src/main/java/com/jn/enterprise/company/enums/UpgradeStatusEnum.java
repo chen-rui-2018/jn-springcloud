@@ -12,11 +12,11 @@ import com.jn.common.api.CodeAndMsg;
 public enum UpgradeStatusEnum implements CodeAndMsg {
 
     UPGRADE_OK("0","允许认证"),
-    UPGRADE_COMPANY("1","已认证企业"),
-    UPGRADE_STAFF("2","已认证员工"),
-    UPGRADE_ORG("3","已认证机构"),
-    UPGRADE_INVESTOR("4","已认证投资人"),
-    UPGRADE_ADVISOR("5","已认证专员"),
+    UPGRADE_COMPANY("1","您的账号已认证企业"),
+    UPGRADE_STAFF("2","您的账号已认证员工"),
+    UPGRADE_ORG("3","您的账号已认证机构"),
+    UPGRADE_INVESTOR("4","您的账号已认证投资人"),
+    UPGRADE_ADVISOR("5","您的账号已认证专员"),
     ;
 
     /**

@@ -323,7 +323,7 @@
         </target-row>
       </el-form>
       <div class="submit-row">
-        <el-button type="primary" @click="submitTarget">保存</el-button>
+        <el-button :disabled="submitting" :loading="submitting" type="primary" @click="submitTarget">保存</el-button>
         <el-button :disabled="submitting" type="primary">取消</el-button>
       </div>
     </div>
@@ -605,39 +605,50 @@ export default {
           // 保存的时候再预览一遍, 获取选中指标树的填报格式
           this.previewForm()
             .then(() => {
-              let cache = []
-              const passList = ['treeData', 'treeTableData', 'columns', 'targetList']
-              let formData = JSON.stringify(this.formData, function(key, value) {
-                if (passList.indexOf(key) !== -1) {
-                  return ''
-                } else {
-                  if (typeof value === 'object' && value !== null) {
-                    if (cache.indexOf(value) !== -1) {
-                      // Duplicate reference found
-                      try {
-                        // If this value does not reference a parent it can be deduped
-                        return JSON.parse(JSON.stringify(value))
-                      } catch (error) {
-                        // discard key if value cannot be deduped
-                        return
-                      }
-                    }
-                    // Store value in our collection
-                    cache.push(value)
-                  }
-                  return value
+              const formData = {
+                ...this.formData
+              }
+              formData.tabs = []
+              this.formData.tabs.forEach((tab, index) => {
+                formData.tabs[index] = {
+                  ...tab
                 }
-              })
-              // Enable garbage collection
-              cache = null
-              formData = JSON.parse(formData)
-              formData.tabs.forEach((item, index) => {
+                delete formData.tabs[index].treeData
+                delete formData.tabs[index].treeTableData
+                delete formData.tabs[index].columns
+                delete formData.tabs[index].inputList
                 // tab增加排序
-                item.orderNumber = index.toString()
+                formData.tabs[index].orderNumber = index.toString()
                 // 多选值转字符串 1.表类型（0：上月填报值；1：上年同期值；2：上月上年同期值；3增幅)
-                item.tabClumnTargetShow = item.tabClumnTargetShow.join(',')
+                formData.tabs[index].tabClumnTargetShow = formData.tabs[index].tabClumnTargetShow.join(',')
               })
 
+              formData.tabs.forEach(tab => {
+                const targetListCopy = []
+                tab.targetList.forEach(target => {
+                  const targetCopy = {
+                    children: null,
+                    createdTime: target.createdTime,
+                    creatorAccount: target.creatorAccount,
+                    departmentId: target.departmentId,
+                    departmentName: target.departmentName,
+                    id: target.id,
+                    isMuiltRow: target.isMuiltRow,
+                    modifiedTime: target.modifiedTime,
+                    modifierAccount: target.modifierAccount,
+                    orderNumber: target.orderNumber,
+                    pid: target.pid,
+                    recordStatus: target.recordStatus,
+                    state: target.state,
+                    targetCommon: target.targetCommon,
+                    targetType: target.targetType,
+                    text: target.text,
+                    unit: target.unit
+                  }
+                  targetListCopy.push(targetCopy)
+                })
+                tab.targetList = targetListCopy
+              })
               if (formData.modelCycle === 0) {
                 // 如果填报周期是月
                 const filllInFormDeadline = this.formData.filllInFormDeadline < 10 ? '0' + this.formData.filllInFormDeadline : this.formData.filllInFormDeadline
@@ -654,14 +665,6 @@ export default {
               formData.pcAd = this.tempPcUrl ? this.tempPcUrl : formData.pcAd
               formData.appAd = this.tempAppUrl ? this.tempAppUrl : formData.appAd
               formData.otherData = this.otherDataUrl ? this.otherDataUrl : formData.otherData
-              // 把填报格式是多选的value把数组转成字符串
-              formData.tabs.forEach((item, index) => {
-                for (const list of item.inputList) {
-                  if (list.formType === '4') {
-                    list.value = ''
-                  }
-                }
-              })
               this.$_post(`${this.GLOBAL.enterpriseUrl}data/dataModel/updateModel`, formData).then(data => {
                 if (data.code === '0000') {
                   this.getModelTree()
@@ -1045,7 +1048,7 @@ export default {
               const targetIdList = nodeList.map(list => list.id)
               this.getInputFormat(targetIdList)
                 .then(data => {
-                  tab.inputList = deepClone(data.data)
+                  tab.inputList = data.data
                   const formModels = tab.inputList
                   formModels.sort((a, b) => {
                     return a['rowNum'] - b['rowNum']

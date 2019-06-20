@@ -103,6 +103,12 @@ const router = new Router({
       component: () => import('@/views/declarationCenter/declarationCenter')
     },
     {
+      path: '/guest/pd/DeclarationItems',
+      name: 'declarationItems',
+      meta: {title: '即时申报项目'},
+      component: () => import('@/views/declarationCenter/DeclarationItems')
+    },
+    {
       path: '/guest/pd/declarationPlatform',
       name: 'declarationPlatform',
       meta: {title: '申报平台'},
@@ -251,6 +257,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   const token = urlSearch.token
+  alert(token)
   if (token) {
     sessionStorage.setItem('token', token)
   }

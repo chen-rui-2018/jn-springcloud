@@ -163,7 +163,7 @@
           </el-tab-pane>
           <el-tab-pane label="图解政策" name="second">
             <ul class="finaUl clearfix">
-              <li class="mainBorder pointer" v-for="(i,k) in policyCenterList" :key="k" @click="$router.push({path:'/graphicPolicy',query:{policyId:i.policyId}})">
+              <li class="mainBorder pointer" v-for="(i,k) in policyCenterList" :key="k" @click="$router.push({path:'/graphicPolicy',query:{policyId:i.policyId,isPolicyOriginal:i.isPolicyOriginal}})">
                 <!-- <img src="@/../static/img/midBan.png" alt=""> -->
                 <div class="finaProItem pointer">
                   <img :src="i.policyDiagramUrl" alt="">
@@ -190,8 +190,8 @@
                   <img :src="i.policyDiagramUrl" alt="">
                 </div>
                 <div class="finaDiv1">
-                  <div class="finaContent">
-                    <p>图解：
+                  <div class="finaContent color4">
+                    <p>图解：{{i.policyTitle}}
                     </p>
                   </div>
                 </div>
@@ -867,9 +867,14 @@ export default {
           > .finaDiv1 {
             padding: 10px 20px;
             > .finaTit {
-              font-size: 18px;
+              font-size: 16px;
               color: #222;
               margin-bottom: 15px;
+              display: -webkit-box;
+              -webkit-box-orient: vertical;
+              -webkit-line-clamp: 2;
+              overflow: hidden;
+              height: 42px;
             }
             .finaContent {
               // margin: 10px 0;

@@ -23,8 +23,10 @@
             <span slot="label" class="flex-center">
               {{ tab.tabName }}
             </span>
-            <tree-table :isReported="formData.taskInfo.status" :modelType="formData.modelType" :data="tab.targetList"
-                        :columns="tab.columns" border expand-all/>
+            <tree-table
+              :isReported="isReported"
+              :modelType="formData.modelType" :data="tab.targetList"
+              :columns="tab.columns" border expand-all/>
           </el-tab-pane>
         </el-tabs>
       </el-tab-pane>
@@ -56,6 +58,9 @@
     computed: {
       canFill() {
         if (this.submitting) {
+          return true
+        }
+        if (this.isReported === 0) {
           return true
         }
         if (this.formData.taskInfo && this.formData.taskInfo.status === 0) {
@@ -95,6 +100,7 @@
             width: 120
           },
         ],
+        isReported: 1,
         appColumns: [ // 表头
           {
             text: '指标名称',
@@ -113,7 +119,7 @@
     methods: {
       init() {
         // 获取表单原始数据
-        this.getData()
+        this.getInitData()
           .then(() => {
             // 格式化树形指标、表头和otherColumns
             return this.formatFormData()
@@ -121,13 +127,13 @@
           .then(() => {
             this.loadingTab = false
           })
-        this.getPcAd()
-          .then(() => {
-            // new Swiper('#advertisement', {
-            //   autoplay:true,
-            //   loop:true
-            // })
-          })
+        // this.getPcAd()
+        //   .then(() => {
+        //     new Swiper('#advertisement', {
+        //       autoplay:true,
+        //       loop:true
+        //     })
+        //   })
       },
       formatFormData() {
         return new Promise(resolve => {
@@ -301,7 +307,6 @@
       },
       submitForDone() {
         // 点击提交按钮
-        const _this = this
         // 验证表格
         this.submit()
           .then(formData => {
@@ -314,13 +319,14 @@
               this.api.post({
                 url: 'enterpriseSaveCompanyFormData',
                 data: formData,
-                callback(res) {
+                callback: res => {
                   if (res.code === "0000") {
-                    _this.$message.success('保存成功')
+                    this.isReported = 0
+                    this.$message.success('保存成功')
                   } else {
-                    _this.$message.error('保存失败')
+                    this.$message.error(res.result)
                   }
-                  _this.submitting = false
+                  this.submitting = false
                 }
               })
             }).catch(() => {
@@ -335,20 +341,19 @@
       },
       submitForDraft() {
         // 提交草稿
-        const _this = this
         // 验证表格
         this.submit()
           .then(formData => {
             this.api.post({
               url: 'enterpriseSaveCompanyFormDataIsDraft',
               data: formData,
-              callback(res) {
+              callback: res => {
                 if (res.code === "0000") {
-                  _this.$message.success('保存成功')
+                  this.$message.success('保存成功')
                 } else {
-                  _this.$message.error('保存失败')
+                  this.$message.error('保存失败')
                 }
-                _this.submitting = false
+                this.submitting = false
               }
             })
           })
@@ -438,48 +443,51 @@
           resolve()
         })
       },
-      getData() {
+      getInitData() {
+        const type = this.$route.query.type
+        let url
+        if (type === 'form') {
+          url = 'enterpriseGetFormStruct'
+        } else if (type === 'formed') {
+          url = 'enterpriseGetCompanyFormedStruct'
+        }
+        return this.getData(url)
+      },
+      getData(url) {
         return new Promise((resolve, reject) => {
           this.loadingFormData = true
           this.loadingTab = true
-          const _this = this
-          const type = this.$route.query.type
-          let url
-          if (type === 'form') {
-            url = 'enterpriseGetFormStruct'
-          } else if (type === 'formed') {
-            url = 'enterpriseGetCompanyFormedStruct'
-          }
           this.api.get({
             url: url,
             data: {
-              fileId: _this.$route.query.fileId
+              fileId: this.$route.query.fileId
             },
-            callback(res) {
+            callback: res => {
               if (res.code === "0000") {
-                _this.formData = res.data
-                _this.formData.tabs.sort((a, b) => {
+                this.formData = res.data
+                this.isReported = this.formData.taskInfo.status
+                this.formData.tabs.sort((a, b) => {
                   return a['orderNumber'] - b['orderNumber']
                 })
-                const departmentId = _this.formDataListTitle[0].departmentId
-                _this.departmentStatus = _this.formDataListTitle[0].status
-                _this.formData.departmentId = departmentId
-                if (_this.formData.modelType === 1) {
-                  const gardenFiller = _this.formData.gardenFiller
+                const departmentId = this.formDataListTitle[0].departmentId
+                this.departmentStatus = this.formDataListTitle[0].status
+                this.formData.departmentId = departmentId
+                if (this.formData.modelType === 1) {
+                  const gardenFiller = this.formData.gardenFiller
                   if (gardenFiller) {
-                    _this.formDataListTitle = _this.formDataListTitle.concat(gardenFiller)
+                    this.formDataListTitle = this.formDataListTitle.concat(gardenFiller)
                   }
-                  for (const tab of  _this.formData.tabs) {
-                    _this.formatTreeJurisdiction(tab.targetList, departmentId)
+                  for (const tab of  this.formData.tabs) {
+                    this.formatTreeJurisdiction(tab.targetList, departmentId)
                   }
                 }
                 resolve()
               } else {
-                _this.$message.error(res.result)
+                this.$message.error(res.result)
                 reject(res.result)
               }
-              _this.loadingTab = false
-              _this.loadingFormData = false
+              this.loadingTab = false
+              this.loadingFormData = false
             }
           })
         })

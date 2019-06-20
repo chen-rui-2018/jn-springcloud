@@ -5,6 +5,7 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
+import com.jn.enterprise.model.IBPSFile;
 import com.jn.enterprise.utils.IBPSFileUtils;
 import com.jn.park.enums.PolicyInfoExceptionEnum;
 import com.jn.park.policy.dao.PolicyCenterMapper;
@@ -200,7 +201,7 @@ public class PolicyCenterServiceImpl implements PolicyCenterService {
         //判断当前政策id在系统中是否存在，且政策类型是普通政策
         String policyType="0";
         TbPolicyCriteria example = getTbPolicyCriteria(policyId, policyType);
-        List<TbPolicy> tbPolicyList = tbPolicyMapper.selectByExample(example);
+        List<TbPolicy> tbPolicyList = tbPolicyMapper.selectByExampleWithBLOBs(example);
         //没有数据
         if(tbPolicyList.isEmpty()){
             logger.warn("政策id为[{}的政策在系统中不存在或当前政策类型不是普通政策]");
@@ -208,6 +209,10 @@ public class PolicyCenterServiceImpl implements PolicyCenterService {
         }
         //根据政策id查询详情
         PolicyDetailsShow policyDetails = policyCenterMapper.getPolicyDetails(policyId);
+        //处理附件
+        if(StringUtils.isNotBlank(policyDetails.getFileUrl())){
+            policyDetails.setFileUrls(IBPSFileUtils.getFileAllInfo(policyDetails.getFileUrl()));
+        }
         updatePolicyReadNum(example, tbPolicyList.get(0).getReadNum()==null?0:tbPolicyList.get(0).getReadNum());
         return policyDetails;
     }
@@ -251,7 +256,7 @@ public class PolicyCenterServiceImpl implements PolicyCenterService {
         //判断当前政策id在系统中是否存在，且政策类型是图解政策
         String policyType="1";
         TbPolicyCriteria example = getTbPolicyCriteria(policyId, policyType);
-        List<TbPolicy> tbPolicyList = tbPolicyMapper.selectByExample(example);
+        List<TbPolicy> tbPolicyList = tbPolicyMapper.selectByExampleWithBLOBs(example);
         //没有数据
         if(tbPolicyList.isEmpty()){
             logger.warn("政策id为[{}的政策在系统中不存在或当前政策类型不是图解政策]");
@@ -285,6 +290,10 @@ public class PolicyCenterServiceImpl implements PolicyCenterService {
         // 处理图片格式
         if (StringUtils.isNotBlank(policyDiagramDetailsVo.getPolicyDiagramUrl())) {
             policyDiagramDetailsVo.setPolicyDiagramUrl(IBPSFileUtils.getFilePath(policyDiagramDetailsVo.getPolicyDiagramUrl()));
+        }
+        //处理附件
+        if(StringUtils.isNotBlank(policyDiagramDetailsVo.getFileUrl())){
+            policyDiagramDetailsVo.setFileUrls(IBPSFileUtils.getFileAllInfo(policyDiagramDetailsVo.getFileUrl()));
         }
         return policyDiagramDetailsVo;
     }

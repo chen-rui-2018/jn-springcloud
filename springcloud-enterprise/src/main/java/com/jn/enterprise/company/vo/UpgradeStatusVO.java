@@ -1,5 +1,6 @@
 package com.jn.enterprise.company.vo;
 
+import com.jn.enterprise.company.enums.UpgradeStatusEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -37,9 +38,9 @@ public class UpgradeStatusVO implements Serializable {
         this.message = message;
     }
 
-    public UpgradeStatusVO(String code, String message) {
-        this.code = code;
-        this.message = message;
+    public UpgradeStatusVO(UpgradeStatusEnum upgradeStatusEnum) {
+        this.code = upgradeStatusEnum.getCode();
+        this.message = upgradeStatusEnum.getMessage();
     }
 
     @Override

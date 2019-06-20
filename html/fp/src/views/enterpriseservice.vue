@@ -30,9 +30,9 @@
           <!-- 如果需要滚动条 -->
           <!-- <div class="swiper-scrollbar"></div> -->
         </div>
-        <!-- <div class="quickEnter">
+        <div class="quickEnter">
           <ul>
-            <li @click="$router.push({path:'/talentsService'})">
+            <!-- <li @click="$router.push({path:'/talentsService'})">
               <span>人才服务</span>
               <p>THE&nbsp;TALENT&nbsp;SERVICE</p>
               <img src="@/../static/img/right-arrow.png" alt="">
@@ -51,9 +51,44 @@
               <span>行政审批</span>
               <p>ADMINISTRATIVE&nbsp;EXAMINATIO</p>
               <img src="@/../static/img/right-arrow.png" alt="">
+            </li> -->
+             <li @click="$router.push({path:'/declarationCenter'})">
+              <span>申报中心</span>
+              <p>DECLARE&nbsp;CENTER</p>
+              <img src="@/../static/img/right-arrow.png" alt="">
+            </li>
+             <li @click="$router.push({path:'/policyCenter'})">
+              <span>政策中心</span>
+              <p>POLICY&nbsp;CENTERE</p>
+              <img src="@/../static/img/right-arrow.png" alt="">
+            </li>
+             <li @click="$router.push({path:'/actiCenter'})">
+              <span>活动中心</span>
+              <p>ACTIVITY&nbsp;CENTERE</p>
+              <img src="@/../static/img/right-arrow.png" alt="">
+            </li>
+            <li @click="$router.push({path:'/compassView'})">
+              <span>行政审批</span>
+              <p>ADMINISTRATIVE&nbsp;EXAMINATIO</p>
+              <img src="@/../static/img/right-arrow.png" alt="">
+            </li>
+            <li @click="$router.push({path:'/tfindex'})">
+              <span>科技金融</span>
+              <p>SCIENCE&nbsp;FINACIAL</p>
+              <img src="@/../static/img/right-arrow.png" alt="">
+            </li>
+            <li @click="$router.push({path:'/recruitmentList'})">
+              <span>人力资源</span>
+              <p>HUMEN&nbsp;RESOURCES</p>
+              <img src="@/../static/img/right-arrow.png" alt="">
+            </li>
+            <li @click="$router.push({path:'/serMatHp'})">
+              <span>服务超市</span>
+              <p>SERVICE&nbsp;SUPERMARKET</p>
+              <img src="@/../static/img/right-arrow.png" alt="">
             </li>
           </ul>
-        </div> -->
+        </div>
       </div>
       <div class="declarationNotice w pr" ref="declarationNotice" data-class="bottom">
         <div ref="deNotice1" data-class="bottom" class="pointer" @click="$router.push({path:'/declarationCenter'})">

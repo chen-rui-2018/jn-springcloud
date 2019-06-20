@@ -35,7 +35,7 @@
               value-format="yyyyMM"
               placeholder="结束月份"/>
           </el-form-item>
-          <el-form-item v-show="status==='2'" label="录入类型:" style="margin-left:100px">
+          <el-form-item v-show="status==='2'" label="录入类型:" style="margin-left:321px;">
             <el-select v-model="listQuery.budgetType" placeholder="请选择" clearable >
               <el-option v-for="item in budgetTypeOptions" :key="item.id" :label="item.value" :value="item.id" />
             </el-select>

@@ -24,7 +24,6 @@
             <el-button type="primary">
               <router-link :to="{name:'income'}">收入情况</router-link>
             </el-button>
-            <el-button type="primary">返回主页</el-button>
           </div>
         </el-col>
       </el-row>

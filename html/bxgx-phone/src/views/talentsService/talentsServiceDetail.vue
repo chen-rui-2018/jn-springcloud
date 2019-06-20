@@ -64,6 +64,8 @@ export default {
             } else {
               this.$vux.toast.text(res.result)
             }
+          } else {
+            this.$vux.toast.text(res.result, 'middle')
           }
         }
       })

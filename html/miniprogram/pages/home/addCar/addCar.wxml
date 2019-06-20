@@ -1,6 +1,6 @@
 <!-- <nav-bar navbar-data='{{nvabarData}}'></nav-bar> -->
 <view class="editCar paddihng_side">
-   <image class="" src="./../../../images/my_love_car.png" > </image>
+   <image class="" wx:if="{{imgBaseUrl}}" src="{{imgBaseUrl}}my_love_car.png" > </image>
    <input bindinput="changeInput" value='{{carLicense}}' placeholder="请输入车牌号" auto-focus/>
 </view>
   <view class="bth" bindtap="add">

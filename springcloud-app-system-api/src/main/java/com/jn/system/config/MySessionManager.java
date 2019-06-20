@@ -1,11 +1,11 @@
 package com.jn.system.config;
 
+import com.jn.common.util.StringUtils;
 import org.apache.shiro.web.servlet.ShiroHttpServletRequest;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.apache.shiro.web.util.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -32,10 +32,11 @@ public class MySessionManager extends DefaultWebSessionManager {
         if (StringUtils.isEmpty(id)) {
             String token = AccessContext.getTokenContext();
             ///logger.info("【oauth】 autoLogin getSessionId,token:{},id:{}", token, id);
-            if (!StringUtils.isEmpty(token)) {
+            if (StringUtils.isNotBlank(token)) {
                 request.setAttribute(ShiroHttpServletRequest.REFERENCED_SESSION_ID_SOURCE, REFERENCED_SESSION_ID_SOURCE);
                 request.setAttribute(ShiroHttpServletRequest.REFERENCED_SESSION_ID, token);
                 request.setAttribute(ShiroHttpServletRequest.REFERENCED_SESSION_ID_IS_VALID, Boolean.TRUE);
+                AccessContext.remove();
                 return token;
             }
             return super.getSessionId(request, response);

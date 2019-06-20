@@ -45,7 +45,7 @@
       <el-card>
         <ul>
           <li class="clearfix moreLi" v-for="(i,k) in recruitmentTable" :key="k">
-            <div class="fl">
+            <div class="fl pointer" @click="$router.push({ path: 'enterpriseInfoDetails', query: { propagandaId : i.id } })">
               <i></i>
               <span class="color1" style="text-align:left">{{i.propagandaTitle}}</span>
               <p>

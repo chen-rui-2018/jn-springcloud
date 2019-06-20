@@ -644,6 +644,7 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
                                                     message.append(",已经逾期").append(taskBean.getOutLine()) .append("天！请尽快填报!");
                                                 }
                                                 sendEmail(email, message.toString(),title);
+                                                targetDao.updateCalling("",fillId,DataUploadConstants.GARDEN_TYPE);
                                             }
 
                                         }
@@ -677,6 +678,7 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
                                             message.append(",已经逾期").append(taskBean.getOutLine()) .append("天！请尽快填报!");
                                         }
                                         sendEmail(email, message.toString(),title);
+                                        targetDao.updateCalling("",fillId,DataUploadConstants.COMPANY_TYPE);
                                     }
                                 }
                             }
@@ -719,6 +721,7 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
                                                     message.append(",已经逾期").append(taskBean.getOutLine()) .append("天！请尽快填报!");
                                                 }
                                                 sendSMS(phone,message.toString());
+                                                targetDao.updateCalling("",fillId,DataUploadConstants.GARDEN_TYPE);
                                             }
 
                                         }
@@ -743,6 +746,8 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
                                             message.append(",已经逾期").append(taskBean.getOutLine()) .append("天！请尽快填报!");
                                         }
                                         sendSMS(phone,message.toString());
+                                        targetDao.updateCalling("",fillId,DataUploadConstants.COMPANY_TYPE);
+
                                     }
                                 }
                             }

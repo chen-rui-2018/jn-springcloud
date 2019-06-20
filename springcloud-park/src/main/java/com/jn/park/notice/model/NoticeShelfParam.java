@@ -38,4 +38,12 @@ public class NoticeShelfParam implements Serializable {
     public void setNoticeStatus(String noticeStatus) {
         this.noticeStatus = noticeStatus;
     }
+
+    @Override
+    public String toString() {
+        return "NoticeShelfParam{" +
+                "noticeId='" + noticeId + '\'' +
+                ", noticeStatus='" + noticeStatus + '\'' +
+                '}';
+    }
 }

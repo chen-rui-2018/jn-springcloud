@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "InvestorEducationExperienceParam", description = "科技金融投资人教育经历工作流传参")
+@ApiModel(value = "InvestorEducationExperienceWorkFlow", description = "科技金融投资人教育经历工作流传参")
 public class InvestorEducationExperienceWorkFlow implements Serializable {
     @ApiModelProperty(value = "投资人账号")
     private String investorAccount;
@@ -112,5 +112,21 @@ public class InvestorEducationExperienceWorkFlow implements Serializable {
 
     public void setRecordStatus(byte recordStatus) {
         this.recordStatus = recordStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "InvestorEducationExperienceWorkFlow{" +
+                "investorAccount='" + investorAccount + '\'' +
+                ", startTime='" + startTime + '\'' +
+                ", endTime='" + endTime + '\'' +
+                ", schoolName='" + schoolName + '\'' +
+                ", professionTitle='" + professionTitle + '\'' +
+                ", createdTime='" + createdTime + '\'' +
+                ", creatorAccount='" + creatorAccount + '\'' +
+                ", modifiedTime='" + modifiedTime + '\'' +
+                ", modifierAccount='" + modifierAccount + '\'' +
+                ", recordStatus=" + recordStatus +
+                '}';
     }
 }

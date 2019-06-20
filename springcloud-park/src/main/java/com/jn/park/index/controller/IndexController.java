@@ -39,54 +39,6 @@ public class IndexController extends BaseController {
     @Autowired
     private IndexService indexService;
 
-//    @ControllerLog(doAction = "推荐-服务搜索")
-//    @ApiOperation(value = "推荐-服务搜索（APP）", notes = "根据活动名称，政策服务，商务服务名称[模糊搜索]", hidden = true)
-//    @RequestMapping(value = "/serviceSearch", method = RequestMethod.GET)
-//    public Result<PaginationData> serviceSearch(@Validated ServiceSearchParam serviceSearchParam){
-//        // 检索关键字
-//        String searchFiledStr = serviceSearchParam.getSearchFiled();
-//        PaginationData paginationData = new PaginationData();
-//
-//        // 判断搜索类型
-//        if (serviceSearchParam.getServiceType().equals(IndexDataEnum.SERVICE_TYPE_ACTIVITY.getCode())) {
-//            ActivitySlimQuery activitySlimQuery = new ActivitySlimQuery();
-//            BeanUtils.copyProperties(serviceSearchParam, activitySlimQuery);
-//            activitySlimQuery.setKeyWord(searchFiledStr);
-//            paginationData = activityService.activityListSlim(activitySlimQuery);
-//        } else if (serviceSearchParam.getServiceType().equals(IndexDataEnum.SERVICE_TYPE_POLICY.getCode())) {
-//            PolicyCenterHomeParam policyCenterHomeParam = new PolicyCenterHomeParam();
-//            BeanUtils.copyProperties(serviceSearchParam, policyCenterHomeParam);
-//            policyCenterHomeParam.setPolicySearch(searchFiledStr);
-//
-//            // 如果未传table类型，默认查询政策一览
-//            String tableTypeCode = StringUtils.isEmpty(serviceSearchParam.getTableType())
-//                    ? IndexDataEnum.ALL_POLICY.getCode() : serviceSearchParam.getTableType();
-//            String tableTypeName = "";
-//
-//            if (tableTypeCode.equals(IndexDataEnum.ALL_POLICY.getCode())) {
-//                tableTypeName = IndexDataEnum.ALL_POLICY.getMessage();
-//
-//                // 设置政策类型，不传默认普通政策
-//                policyCenterHomeParam.setPolicyType(StringUtils.isEmpty(serviceSearchParam.getPolicyType()) ? "0" : serviceSearchParam.getPolicyType());
-//            } else if (tableTypeCode.equals(IndexDataEnum.DIAGRAM_POLICY.getCode())) {
-//                tableTypeName = IndexDataEnum.DIAGRAM_POLICY.getMessage();
-//            } else if (tableTypeCode.equals(IndexDataEnum.FIRST_TOPIC.getCode())) {
-//                tableTypeName = IndexDataEnum.FIRST_TOPIC.getMessage();
-//            } else if (tableTypeCode.equals(IndexDataEnum.PRIVATE_TOPIC.getCode())) {
-//                tableTypeName = IndexDataEnum.PRIVATE_TOPIC.getMessage();
-//            } else {
-//                throw new JnSpringCloudException(IndexExceptionEnum.POLICY_TYPE_NOT_VALID);
-//            }
-//
-//            policyCenterHomeParam.setTableType(tableTypeName);
-//            paginationData = policyCenterService.getPolicyCenterList(policyCenterHomeParam);
-//        }  else {
-//            throw new JnSpringCloudException(IndexExceptionEnum.PARAM_IS_NULL);
-//        }
-//
-//        return new Result<>(paginationData);
-//    }
-
     @ControllerLog(doAction = "重要消息列表")
     @ApiOperation(value = "重要消息列表", notes = "获取重要消息列表")
     @RequestMapping(value = "/getImportantNewsList",method = RequestMethod.GET)

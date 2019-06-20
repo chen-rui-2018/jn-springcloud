@@ -157,8 +157,11 @@
         ,
         t.calling_time = SYSDATE()
         where
-        t.task_batch=#{taskBatch}
-        <if test="fillId !=null">
+        1=1
+        <if test="taskBatch !=null and taskBatch !=''">
+            and t.task_batch=#{taskBatch}
+        </if>
+        <if test="fillId !=null and fillId !=''">
             and w.fill_id = #{fillId}
         </if>
         and t.file_type =#{fileType}
@@ -202,7 +205,7 @@
         when v.total > 0  then '逾期未上报'
         when r.total > 0 then '待上报'
         when y.total > 0 then '逾期上报'
-        when (r.total=0 or r.total is null)  and (y.total=0 or y.total is null) and (u.total  = 0 or u.total is null) then '已完成'
+        when u.total = o.total then '已完成'
         else '未知状态' end
         ) as status
         from tb_data_reporting_snapshot_model t
@@ -638,7 +641,7 @@
         t.is_overdue=1,
         t.overdue_days=ceiling(
         datediff(SYSDATE(),t.fill_in_form_deadline)- (select warning_before_days from tb_data_reporting_snapshot_model p where p.task_batch = t.task_batch)
-        )
+        )+1
         where t.status !=0
         and t.fill_in_form_deadline &lt; SYSDATE()
 
@@ -1057,18 +1060,18 @@
 
     <select id="getExcel" resultType="com.jn.enterprise.data.model.CompanyTree">
         select
-        task_batch taskbatch,
-        model_id modelid,
-        tab_id tabid,
-        tab_name tabname,
-        target_id targetid,
-        target_name targetname,
-        parent_id parentid,
-        form_id formid,
-        form_name formname,
-        unit unit,
-        DATA DATA,
-        sum_val sumval
+        task_batch as taskbatch,
+        model_id as modelid,
+        tab_id as tabid,
+        tab_name as tabname,
+        target_id as targetid,
+        target_name as targetname,
+        parent_id as parentid,
+        form_id as formid,
+        form_name as formname,
+        unit as unit,
+        DATA as DATA,
+        sum_val as sumval
          from view_data_model_data_sum
         where task_batch=#{taskbatch} and model_id=#{modelid}
     </select>

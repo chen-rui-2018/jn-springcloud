@@ -29,7 +29,7 @@
             </el-form-item>
           </div>
           <div>
-            <el-form-item label="意向顾问：">
+            <el-form-item label="意向专员：">
               <span>{{othersDetail.advisorName}} </span>
             </el-form-item>
           </div>
@@ -74,32 +74,32 @@
           </div>
           <div>
             <el-form-item label="发布时间：">
-              <span>{{othersDetail.issueTime}}</span>
+              <span>{{othersDetail.issueTime|time}}</span>
             </el-form-item>
           </div>
           <div class="">
             <el-form-item label="融资金额：">
-              <span >{{othersDetail.financingAmount}}</span>
+              <span >{{othersDetail.financingAmount}}万元</span>
             </el-form-item>
           </div>
           <div>
             <el-form-item label="融资期限：">
-              <span>{{othersDetail.financingPeriod}}</span>
+              <span>{{othersDetail.financingPeriod}}个月</span>
             </el-form-item>
           </div>
           <div class="">
             <el-form-item label="资金需求日期：">
-              <span>{{othersDetail.expectedDate}}</span>
+              <span>{{othersDetail.expectedDate|time}}</span>
             </el-form-item>
           </div>
           <div class="">
             <el-form-item label="意向机构：">
-              <span>{{othersDetail.serviceCycle}}</span>
+              <span>{{othersDetail.orgName}}</span>
             </el-form-item>
           </div>
           <div class="">
             <el-form-item label="意向产品：">
-              <div>{{othersDetail.orgName}}</div>
+              <div>{{othersDetail.productName}}</div>
             </el-form-item>
           </div>
           <div class="">

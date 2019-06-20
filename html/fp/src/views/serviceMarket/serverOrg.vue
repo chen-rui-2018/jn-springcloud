@@ -50,7 +50,7 @@
             <i class="el-icon-arrow-up" v-else @click="flag3 = !flag3"></i>
           </div>
         </div>
-        <div class="nav1 clearfix">
+        <!-- <div class="nav1 clearfix">
           <div class="nav1Tit fl">企业性质：</div>
           <ul class="nav1Ul fl clearfix" style="width:auto">
             <li :class="{'active1':filterFlag3 == ''}" @click="handleFilter3('')">不限</li>
@@ -62,7 +62,7 @@
             <i class="el-icon-arrow-down" v-if="flag4" @click="flag4 = !flag4"></i>
             <i class="el-icon-arrow-up" v-else @click="flag4 = !flag4"></i>
           </div>
-        </div>
+        </div> -->
         <div class="nav1 nav2 mainColor pointer" style="color:#00a041" @click="showFlag=!showFlag">
           收起
           <i class="el-icon-arrow-up" style="color:#00a041"></i>
@@ -79,7 +79,7 @@
       <div class="filLeft fl">排序：
         <span @click="handleFil('')" :class="{'active2':colorFlag == ''}">综合</span>
         <span @click="handleFil('popularity')" :class="{'active2':colorFlag == 'popularity'}">人气</span>
-        <!-- <span>好评</span> -->
+        <span @click="handleFil('attitudeScore')" :class="{'active2':colorFlag == 'popularity'}">好评</span>
         <span @click="handleFil('serviceNum')" :class="{'active2':colorFlag == 'serviceNum'}">服务量</span>
       </div>
       <div class="filRight fr">
@@ -87,51 +87,74 @@
         <i class="iconfont icon-sousuo" @click="handleSearchList"></i>
       </div>
     </div>
-    <div class="serverOrgContent">
-      <ul>
-        <li class="clearfix" v-for="(i,k) in serverAgent" :key='k'>
-          <div class="orgImg fl" @click="handleOrgDel(i.orgId)">
-            <!-- <img src="@/../static/img/ins1.png" alt=""> -->
-            <img :src="i.orgLogo" alt="">
-          </div>
-          <div class="orgCon fl">
-            <div class="conTil">{{i.orgName}}</div>
-            <div class="conContent clearfix color3">
-              <div class="left1 fl">
-                <p>电话：
-                  <span class="mainColor">{{i.orgPhone}}</span>
-                </p>
-                <p>地址：{{i.orgAddress}}</p>
-                <p>累计
-                  <span class="mainColor">{{i.transactionNum}}</span>笔交易</p>
-              </div>
-              <div class="right1 fl">
-                <p>
-                  <el-rate v-model="i.attitudeScore*1" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
-                  </el-rate>
-                  <span class="mainColor">{{i.evaluationNum}}</span>条评价</p>
-                <p>
-                  {{i.attitudeScore}}分
-                </p>
+    <div class="serverOrgContent" v-loading="loading">
+      <div v-if="serverAgent.length==0">
+        <nodata></nodata>
+      </div>
+      <!-- <div v-else> -->
+        <ul v-else>
+          <li class="clearfix" v-for="(i,k) in serverAgent" :key='k'>
+            <div class="orgImg fl pointer" @click="handleOrgDel(i.orgId)">
+              <!-- <img src="@/../static/img/ins1.png" alt=""> -->
+              <img :src="i.orgLogo" alt="">
+            </div>
+            <div class="orgCon fl pointer" @click="handleOrgDel(i.orgId)">
+              <div class="conTil">{{i.orgName}}</div>
+              <div class="conContent clearfix color3">
+                <div class="left1 fl">
+                  <p>电话：
+                    <span class="mainColor">{{i.orgPhone}}</span>
+                  </p>
+                  <p>地址：{{i.orgAddress}}</p>
+                  <p>累计
+                    <span class="mainColor">{{i.transactionNum}}</span>&nbsp;笔交易</p>
+                </div>
+                <div class="right1 fl">
+                  <p>
+                    <el-rate v-model="i.attitudeScore*1" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
+                    </el-rate>
+                    <span class="mainColor">{{i.evaluationNum}}</span>条评价</p>
+                  <p>
+                    {{i.attitudeScore}}分
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="orgBtn fr mainColor pointer" @click="onlineContat(i.orgAccount,i.orgName)">
-            <a href="javascript:;">在线联系</a>
-          </div>
-        </li>
-      </ul>
+            <div class="orgBtn fr mainColor pointer" @click="onlineContat(i.orgAccount,i.orgName)">
+              <a href="javascript:;">在线联系</a>
+            </div>
+          </li>
+        </ul>
+      <!-- </div> -->
     </div>
     <div class="pagination-container">
       <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
       </el-pagination>
     </div>
+    <!-- 在线联系弹框 -->
+    <template v-if="concatVisible">
+      <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :append-to-body="true" :lock-scroll="false">
+        <div class="loginTip" style="text-align:center;padding-bottom:20px">
+          你还未
+          <span class="mainColor pointer" @click="goLogin">登录</span>
+          /
+          <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+          账号
+        </div>
+      </el-dialog>
+    </template>
   </div>
 </template>
 <script>
+import nodata from "../common/noData.vue";
 export default {
+  components: {
+    nodata
+  },
   data() {
     return {
+      loading: false,
+      concatVisible: false,
       total: 0,
       currentPage1: 1,
       row: 3,
@@ -160,24 +183,30 @@ export default {
     };
   },
   mounted() {
-    this.initList();
     this.selectIndustryList();
+    this.businessAreaList();
     if (this.$route.query.searchData) {
       this.keyW = this.$route.query.searchData;
+      this.initList();
+    } else {
       this.initList();
     }
   },
   methods: {
+    goLogin() {
+      window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
+      this.$router.push({ path: "/login" });
+    },
     //在线联系
     onlineContat(orgAccount, orgName) {
-      if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
+      if (!this.getUserInfo()) {
+        this.concatVisible = true;
         return;
       }
       this.$router.push({
         path: "/chat",
         query: {
-          fromUser: JSON.parse(sessionStorage.userInfo).account,
+          fromUser: JSON.parse(this.getUserInfo()).account,
           toUser: orgAccount,
           nickName: orgName
         }
@@ -249,6 +278,7 @@ export default {
     },
     //服务机构列表
     initList() {
+      this.loading = true;
       let _this = this;
       let data = {
         businessType: _this.businessType,
@@ -275,6 +305,7 @@ export default {
           } else {
             _this.$message.error(res.result);
           }
+          _this.loading = false;
         }
       });
     },
@@ -292,7 +323,7 @@ export default {
           if (res.code == "0000") {
             for (let it in res.data) {
               if (res.data[it].preType == "0") {
-                _this.businessArea.push(res.data[it]);
+                // _this.businessArea.push(res.data[it]);
               } else if (res.data[it].preType == "1") {
                 _this.industryField.push(res.data[it]);
               } else if (res.data[it].preType == "2") {
@@ -301,6 +332,26 @@ export default {
                 _this.enterpriseNature.push(res.data[it]);
               }
             }
+          } else {
+            _this.$message.error(res.result);
+          }
+        }
+      });
+    },
+    //业务领域
+    businessAreaList() {
+      let _this = this;
+      this.api.get({
+        url: "selectIndustryProductList",
+        data: {},
+        callback: function(res) {
+          if (res.code == "0000") {
+            // for (let it in res.data) {
+            //   if (res.data[it].preType == "0") {
+            //     _this.businessArea.push(res.data[it]);
+            //   }
+            // }
+            _this.businessArea = res.data;
           } else {
             _this.$message.error(res.result);
           }

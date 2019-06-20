@@ -24,12 +24,12 @@ Page({
     this.getParkDetail()
   },
   goPay(e){
+    wx.showToast({title: '加载中', icon: 'loading', duration: 10000})
     request.send({
       url: '/springcloud-park/guest/parking/temporary/createCarParkingBill?parkingId='+e.currentTarget.dataset.parkingid,
       data: {},
       method: 'POST',
     }).then(res=>{
-      // console.log(res)
       if(res.data.code==='0000'&&res.data.data.createStatus==="1"){
         this.setData({
           orderId:res.data.data.billId
@@ -44,11 +44,11 @@ Page({
           },
           method: 'POST',
         }).then(res=>{
-          console.log(res)
           if(res.data.code==='0000'){
             this.setData({
               paySend:JSON.parse(res.data.data.orderInfo)
             })
+            wx.hideToast()
             wx.requestPayment({
               timeStamp: this.data.paySend.timeStamp,
               nonceStr: this.data.paySend.nonceStr,
@@ -64,12 +64,17 @@ Page({
                 wx.navigateTo({
                   url: '../payComplete/payComplete?isSuccess=0'
                 })
-               },
-               complete(res){
-                console.log(res)
                }
+               
             })
-          } 
+          } else{
+            wx.showToast({
+              title: res.data.result,
+              icon:'none',
+              duration: 1000,
+              mask:true
+            })
+          }
         })
       }
     })

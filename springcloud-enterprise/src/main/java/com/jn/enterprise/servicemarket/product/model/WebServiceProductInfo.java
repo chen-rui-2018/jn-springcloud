@@ -215,4 +215,30 @@ public class WebServiceProductInfo implements Serializable {
     public void setEvaluationNumber(String evaluationNumber) {
         this.evaluationNumber = evaluationNumber;
     }
+
+    @Override
+    public String toString() {
+        return "WebServiceProductInfo{" +
+                "productId='" + productId + '\'' +
+                ", serialNumber='" + serialNumber + '\'' +
+                ", signoryId='" + signoryId + '\'' +
+                ", productName='" + productName + '\'' +
+                ", orgId='" + orgId + '\'' +
+                ", orgName='" + orgName + '\'' +
+                ", advisorName='" + advisorName + '\'' +
+                ", referPrice='" + referPrice + '\'' +
+                ", serviceCycle='" + serviceCycle + '\'' +
+                ", pictureUrl='" + pictureUrl + '\'' +
+                ", productDetails='" + productDetails + '\'' +
+                ", serviceDetails='" + serviceDetails + '\'' +
+                ", transactionsNumber=" + transactionsNumber +
+                ", viewCount=" + viewCount +
+                ", evaluationScore='" + evaluationScore + '\'' +
+                ", evaluationNumber='" + evaluationNumber + '\'' +
+                ", upShelfOrgNumber='" + upShelfOrgNumber + '\'' +
+                ", sameTypeNum='" + sameTypeNum + '\'' +
+                ", commentNum='" + commentNum + '\'' +
+                ", featureNum='" + featureNum + '\'' +
+                '}';
+    }
 }

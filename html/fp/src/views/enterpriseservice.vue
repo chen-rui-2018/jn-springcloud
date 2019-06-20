@@ -4,7 +4,7 @@
       <div class="banner pr">
         <div class="swiper-container">
           <div class="swiper-wrapper">
-            <div class="swiper-slide" style="width:100%" v-for="(banner, index) in bannerList" :key="index">
+            <div class="swiper-slide pointer" style="width:100%" v-for="(banner, index) in bannerList" :key="index">
               <img :src="banner.posterUrl" :data-path="'/serMatHp'" alt="">
             </div>
             <!-- <div class="swiper-slide" style="width:100%">
@@ -30,7 +30,7 @@
           <!-- 如果需要滚动条 -->
           <!-- <div class="swiper-scrollbar"></div> -->
         </div>
-        <div class="quickEnter">
+        <!-- <div class="quickEnter">
           <ul>
             <li @click="$router.push({path:'/talentsService'})">
               <span>人才服务</span>
@@ -53,7 +53,7 @@
               <img src="@/../static/img/right-arrow.png" alt="">
             </li>
           </ul>
-        </div>
+        </div> -->
       </div>
       <div class="declarationNotice w pr" ref="declarationNotice" data-class="bottom">
         <div ref="deNotice1" data-class="bottom" class="pointer" @click="$router.push({path:'/declarationCenter'})">
@@ -121,7 +121,7 @@
                     <div class="left1">N</div>
                     <div class="right1">
                       <div class="rightTit color1">{{item.policyTitle}}</div>
-                      <p class="color2">{{item.briefContent}}</p>
+                      <p class="color2 policyCon">{{item.briefContent}}</p>
                       <div class="liBom clearfix">
                         <p class="fl color3">
                           <i class="el-icon-view"></i>&nbsp;{{item.readNum}}</p>
@@ -133,118 +133,6 @@
 
                 </ul>
               </div>
-              <!-- <div class="swiper-slide">
-                <ul class="page1 clearfix">
-                  <li>
-                    <div class="left1">N</div>
-                    <div class="right1">
-                      <div class="rightTit color1">白下高新区金融扶持政策</div>
-                      <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
-                      <div class="liBom clearfix">
-                        <p class="fl color3">
-                          <i class="el-icon-view"></i>&nbsp;89</p>
-                        <span class="fr mainColor">南京市级</span>
-                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="left1">E</div>
-                    <div class="right1">
-                      <div class="rightTit color1">南京白下高新区税收优惠政策</div>
-                      <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
-                      <div class="liBom clearfix">
-                        <p class="fl color3">
-                          <i class="el-icon-view"></i>&nbsp;89</p>
-                        <span class="fr mainColor">南京市级</span>
-                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="left1">W</div>
-                    <div class="right1">
-                      <div class="rightTit color1">南京市人民政府人才激励政策...</div>
-                      <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
-                      <div class="liBom clearfix">
-                        <p class="fl color3">
-                          <i class="el-icon-view"></i>&nbsp;89</p>
-                        <span class="fr mainColor">南京市级</span>
-                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="left1">S</div>
-                    <div class="right1">
-                      <div class="rightTit color1">关于维护知识产权政策</div>
-                      <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上....</p>
-                      <div class="liBom clearfix">
-                        <p class="fl color3">
-                          <i class="el-icon-view"></i>&nbsp;89</p>
-                        <span class="fr mainColor">南京市级</span>
-                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-              <div class="swiper-slide">
-                <ul class="page1 clearfix">
-                  <li>
-                    <div class="left1">N</div>
-                    <div class="right1">
-                      <div class="rightTit color1">白下高新区金融扶持政策</div>
-                      <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
-                      <div class="liBom clearfix">
-                        <p class="fl color3">
-                          <i class="el-icon-view"></i>&nbsp;89</p>
-                        <span class="fr mainColor">南京市级</span>
-                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="left1">E</div>
-                    <div class="right1">
-                      <div class="rightTit color1">南京白下高新区税收优惠政策</div>
-                      <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
-                      <div class="liBom clearfix">
-                        <p class="fl color3">
-                          <i class="el-icon-view"></i>&nbsp;89</p>
-                        <span class="fr mainColor">南京市级</span>
-                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="left1">W</div>
-                    <div class="right1">
-                      <div class="rightTit color1">南京市人民政府人才激励政策...</div>
-                      <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
-                      <div class="liBom clearfix">
-                        <p class="fl color3">
-                          <i class="el-icon-view"></i>&nbsp;89</p>
-                        <span class="fr mainColor">南京市级</span>
-                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="left1">S</div>
-                    <div class="right1">
-                      <div class="rightTit color1">关于维护知识产权政策</div>
-                      <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上....</p>
-                      <div class="liBom clearfix">
-                        <p class="fl color3">
-                          <i class="el-icon-view"></i>&nbsp;89</p>
-                        <span class="fr mainColor">南京市级</span>
-                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div> -->
             </div>
 
             <div class="swiper-pagination"></div>
@@ -271,10 +159,10 @@
           <i class="iconfont icon-leftarrow pointer" @click="leftPage"></i>
           <i class="iconfont icon-rightarrow pointer" @click="rightPage"></i>
           <ul class="actiUl clearfix">
-            <li v-for="(i,k) in actiListSlim" :key="k">
+            <li v-for="(i,k) in actiListSlim" :key="k" class="pointer"  @click="$router.push({ path: '/actiDetail', query: { activityId: i.id } })">
               <div class="postImgItem" @mouseenter.stop="show1=i.id,show11=i.id" @mouseleave.stop="show1='',show11=''">
                 <img :src="i.actiPosterUrl" :class="{'poIm':show1==i.id}" class="postImg pointer" alt="活动海报图片">
-                <img src="@/../static/img/组 40.png" :class="{'poIm':show11==i.id}" class="postImg1 pointer" alt="活动海报图片" @click="$router.push({ path: '/actiDetail', query: { activityId: i.id } })">
+                <img src="@/../static/img/组 40.png" :class="{'poIm':show11==i.id}" class="postImg1 pointer" alt="活动海报图片">
               </div>
               <div class="actiInfo">
                 <p class="actiNameItem">
@@ -284,7 +172,7 @@
                   <i class="el-icon-time"></i>
                   <span>{{i.actiStartTime}}-{{i.actiEndTime}}</span>
                 </p>
-                <p>
+                <p class="actiAddress">
                   <i class="el-icon-location-outline"></i>
                   <span>{{i.actiAddress}}</span>
                 </p>
@@ -373,10 +261,10 @@
               <div id="conselor_info" v-if="flag44 == '0'">
                 <ul>
                   <li class="conselor_left">
-                    <div v-for="(item,index) in investorInfoList" :key="index" v-if="index<2">
+                    <div class="pointer" v-for="(item,index) in investorInfoList" :key="index" v-if="index<2" @click="$router.push({path:'investorDetail',query:{investorAccount:item.investorAccount}})">
                       <a href="javascript:;">
                         <div class="info_img">
-                          <div @click="$router.push({path:'investorDetail',query:{investorAccount:item.investorAccount}})"><img :src="item.avatar" alt=""></div>
+                          <div ><img v-if="item.avatar" :src="item.avatar" alt=""> <img v-else src="@/../static/img/larImg.png" alt=""></div>
                         </div>
                         <div class="info_all">
                           <div class="info_name">
@@ -392,9 +280,9 @@
                     </div>
                   </li>
                   <li class="conselor_mid">
-                    <div v-for="(item2,index2) in investorInfoList" :key="index2" v-if="index2>1&&index2<10" class="conselor_mid_list">
+                    <div v-for="(item2,index2) in investorInfoList" :key="index2" v-if="index2>1&&index2<10" class="conselor_mid_list"  @click="$router.push({path:'investorDetail',query:{investorAccount:item2.investorAccount}})">
                       <a href="javascript:;">
-                        <div class="info_img" @click="$router.push({path:'investorDetail',query:{investorAccount:item2.investorAccount}})"><img :src="item2.avatar" alt=""></div>
+                        <div class="info_img"><img :src="item2.avatar" alt=""></div>
                         <div class="info_all">
                           <div class="info_name">
                             <span>{{item2.investorName}}</span>/
@@ -415,9 +303,10 @@
                 <ul>
                   <li class="clearfix" v-for="(i,k) in finaProList" :key='k' v-if="k<3">
                     <div class="orgImg fl pointer" @click="$router.push({ path: 'finaProDetail', query: { productId: i.productId } })">
-                      <img :src="i.pictureUrl" alt="">
+                      <img v-if="i.pictureUrl" :src="i.pictureUrl" alt="">
+                      <img v-else src="@/../static/img/product.png" alt="">
                     </div>
-                    <div class="orgCon fl">
+                    <div class="orgCon fl pointer" @click="$router.push({ path: 'finaProDetail', query: { productId: i.productId } })">
                       <div class="conTil">{{i.productName}}</div>
                       <div class="conContent clearfix color3">
                         <div class="left1 fl">
@@ -457,7 +346,7 @@
                     <div class="orgImg fl pointer" @click="$router.push({ path: 'finaInsDetail', query: { orgId: i.orgId } })">
                       <img :src="i.orgLogo" alt="">
                     </div>
-                    <div class="orgCon fl">
+                    <div class="orgCon fl pointer" @click="$router.push({ path: 'finaInsDetail', query: { orgId: i.orgId } })">
                       <div class="conTil" style="margin-bottom:40px">{{i.orgName}}</div>
                       <div class="conContent clearfix color3">
                         <div class="left1 fl">
@@ -527,13 +416,13 @@
                 </div>
                 <!-- 详情弹框 -->
                 <div class="detailRes" v-if="detailFlag==i.id">
-                  <el-card>
-                    <div class="detail">招聘详情</div>
-                    <p class="p1">企业名称：{{humanDetail.comName}}</p>
-                    <p class="p1">发布时间：{{humanDetail.createdTime}}</p>
-                    <p class="p1">岗位详情：</p>
-                    <span v-html="humanDetail.details"></span>
-                  </el-card>
+                  <!-- <el-card> -->
+                  <div class="detail">招聘详情</div>
+                  <p class="p1">企业名称：{{humanDetail.comName}}</p>
+                  <p class="p1">发布时间：{{humanDetail.createdTime}}</p>
+                  <p class="p1">岗位详情：</p>
+                  <span v-html="humanDetail.details"></span>
+                  <!-- </el-card> -->
                 </div>
               </li>
             </ul>
@@ -541,9 +430,10 @@
               <ul>
                 <li class="clearfix" v-for="(i,k) in serverProList" :key='k'>
                   <div class="orgImg fl pointer" @click="handleProDel(i.productId,i.signoryId)">
-                    <img :src="i.pictureUrl" alt="">
+                    <img v-if="i.pictureUrl" :src="i.pictureUrl" alt="">
+                    <img v-else src="@/../static/img/product.png" alt="">
                   </div>
-                  <div class="orgCon fl">
+                  <div class="orgCon fl pointer" @click="handleProDel(i.productId,i.signoryId)">
                     <div class="conTil">{{i.productName}}</div>
                     <div class="conContent clearfix color3">
                       <div class="left1 fl" id="left1">
@@ -574,39 +464,89 @@
     </div>
     <!-- 金融提需求弹框 -->
     <template v-if="financialProVisible">
-      <el-dialog :visible.sync="financialProVisible" width="600px" :modal-append-to-body=false>
-        <el-form ref="financialProform" :rules="rules" :model="financialProform" label-position="right" label-width="150px" style="max-width:500px;">
-          <el-form-item label="融资金额(万元):" prop="financingAmount">
-            <el-input v-model.trim="financialProform.financingAmount" placeholder="请输入融资金额" maxlength="100" clearable/>
-          </el-form-item>
-          <el-form-item label="融资期限(月):" prop="financingPeriod">
-            <el-select v-model="financialProform.financingPeriod" placeholder="请选择" style="width:100%">
-              <el-option v-for="(item,index) in options" :key="index" :label="item.label" :value="item.value" />
-            </el-select>
-          </el-form-item>
+      <el-dialog :visible.sync="financialProVisible" width="600px" :append-to-body="true" :lock-scroll="false">
+        <div v-if="islogin">
+          <el-form ref="financialProform" :rules="rules" :model="financialProform" label-position="right" label-width="150px" style="max-width:500px;">
+            <el-form-item label="融资金额(万元):" prop="financingAmount">
+              <el-input v-model.trim="financialProform.financingAmount" placeholder="请输入融资金额" maxlength="100" clearable/>
+            </el-form-item>
+            <el-form-item label="融资期限(月):" prop="financingPeriod">
+              <el-select v-model="financialProform.financingPeriod" placeholder="请选择" style="width:100%">
+                <el-option v-for="(item,index) in options" :key="index" :label="item.label" :value="item.value" />
+              </el-select>
+            </el-form-item>
 
-          <el-form-item label="资金需求日期:" prop="expectedDate">
-            <el-input v-model.trim="financialProform.expectedDate" placeholder="请输入需求日期，如2019-04-10" maxlength="100" clearable/>
-          </el-form-item>
-          <el-form-item label="资金需求说明:" prop="fundsReqDesc">
-            <el-input v-model.trim="financialProform.fundsReqDesc" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
-          </el-form-item>
-        </el-form>
-        <div class="demandLine"></div>
-        <div class="demandDia1" @click="demandDia()">提交需求</div>
+            <el-form-item label="资金需求日期:" prop="expectedDate">
+              <!-- <el-input v-model.trim="financialProform.expectedDate" placeholder="请输入需求日期，如2019-04-10" maxlength="100" clearable/> -->
+              <el-date-picker v-model="financialProform.expectedDate" type="date" placeholder="选择日期" style="width:100%" value-format="yyyy-MM-dd">
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item label="资金需求说明:" prop="fundsReqDesc">
+              <el-input v-model.trim="financialProform.fundsReqDesc" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
+            </el-form-item>
+          </el-form>
+          <div class="demandLine"></div>
+          <div class="demandDia1" @click="demandDia()" style="background: #ecfcf2;
+    padding: 8px 10px;
+    width: 80px;
+    margin: 0 auto;
+    border: 1px solid #00a041;
+    border-radius: 4px;
+    text-align: center;
+    cursor: pointer;
+    color: #00a041;">提交需求</div>
+        </div>
+        <div v-else class="loginTip" style="text-align:center;padding-bottom:20px">
+          你还未
+          <span class="mainColor pointer" @click="goLogin">登录</span>
+          /
+          <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+          企业账号
+        </div>
       </el-dialog>
     </template>
     <!-- 服务产品提需求弹框 -->
     <template v-if="serverProVisible">
-      <el-dialog :visible.sync="serverProVisible" width="530px" top="30vh" :modal-append-to-body=false>
-        <el-form ref="financialProform" :model="serverProform" label-position="right" label-width="100px" style="max-width:436px;">
-          <el-form-item label="需求描述:" prop="requireDetail" style="font-size:13px">
-            <el-input v-model.trim="serverProform.requireDetail" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
-          </el-form-item>
-        </el-form>
-        <div class="demandLine"></div>
-        <div class="serverTip mainColor">市场提醒：请务必在线订购，线下交易无法享受市场交易安全保障</div>
-        <div class="demandDia" @click="demandDia1()">提交需求</div>
+      <el-dialog :visible.sync="serverProVisible" width="530px" :append-to-body="true" :lock-scroll="false">
+        <div v-if="islogin">
+          <el-form ref="financialProform" :model="serverProform" label-position="right" label-width="100px" style="max-width:436px;">
+            <el-form-item label="需求描述:" prop="requireDetail" style="font-size:13px">
+              <el-input v-model.trim="serverProform.requireDetail" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
+            </el-form-item>
+          </el-form>
+          <div class="demandLine"></div>
+          <div class="serverTip mainColor">市场提醒：请务必在线订购，线下交易无法享受市场交易安全保障</div>
+          <div class="demandDia" @click="demandDia1()" style="   display: inline-block;
+    background: #ecfcf2;
+    padding: 8px 10px;
+    width: 80px;
+        margin-left: 200px;
+    margin-top: 20px;
+    border: 1px solid #00a041;
+    border-radius: 4px;
+    text-align: center;
+    cursor: pointer;
+    color: #00a041;
+    font-size: 12px;">提交需求</div>
+        </div>
+        <div v-else class="loginTip" style="text-align:center;padding-bottom:20px">
+          你还未
+          <span class="mainColor pointer" @click="goLogin">登录</span>
+          /
+          <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+          企业账号
+        </div>
+      </el-dialog>
+    </template>
+    <template v-if="concatVisible">
+      <el-dialog :visible.sync="concatVisible" width="530px" :append-to-body="true" :lock-scroll="false">
+        <div class="loginTip" style="text-align:center;padding-bottom:20px">
+          你还未
+          <span class="mainColor pointer" @click="goLogin">登录</span>
+          /
+          <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+          账号
+        </div>
       </el-dialog>
     </template>
   </div>
@@ -734,7 +674,9 @@ export default {
       rows8: 3,
       total8: 0,
       serverProList: [],
-      humanDetail: {}
+      humanDetail: {},
+      islogin: true,
+      concatVisible: false
     };
   },
   filters: {
@@ -778,16 +720,29 @@ export default {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
   },
   methods: {
+    goLogin() {
+      window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
+      this.$router.push({ path: "/login" });
+    },
+    //判断是否登录
+    isLogin() {
+      const token=this.getToken()
+      if (!token) {
+        this.islogin = false;
+      }
+    },
     //在线联系
     onlineContat(orgAccount, orgName) {
-      if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
+      const userInfo=this.getUserInfo()
+      // console.log(JSON.parse(userInfo))
+      if (!userInfo) {
+        this.concatVisible = true;
         return;
       }
       this.$router.push({
         path: "/chat",
         query: {
-          fromUser: JSON.parse(sessionStorage.userInfo).account,
+          fromUser: JSON.parse(userInfo).account,
           toUser: orgAccount,
           nickName: orgName
         }
@@ -795,8 +750,8 @@ export default {
     },
     //企业招聘列表在线联系
     onlineContact(id) {
-      if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
+      if (!this.getUserInfo()) {
+        this.concatVisible = true;
         return;
       }
       this.api.get({
@@ -807,14 +762,16 @@ export default {
         callback: res => {
           if (res.code == "0000") {
             // this.typeList = res.data;
-            if (JSON.parse(sessionStorage.userInfo).account == res.data.account) {
+            if (
+              JSON.parse(this.getUserInfo()).account == res.data.account
+            ) {
               this.$message.error("当前登录的账号跟聊天对象一样");
               return;
             }
             this.$router.push({
               path: "/chat",
               query: {
-                fromUser: JSON.parse(sessionStorage.userInfo).account,
+                fromUser: JSON.parse(this.getUserInfo()).account,
                 toUser: res.data.account,
                 nickName: res.data.nickName
               }
@@ -827,10 +784,11 @@ export default {
     },
     //金融产品提需求
     raiseDemand(i) {
-      if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
-        return;
-      }
+      // if (!sessionStorage.userInfo) {
+      //   this.$message.error("请先登录");
+      //   return;
+      // }
+      this.isLogin();
       this.financialProVisible = true;
       this.financialProform.expectedDate = "";
       this.financialProform.financingAmount = "";
@@ -843,6 +801,9 @@ export default {
     },
     //用户提交需求
     demandDia() {
+      // if(!this.financialProform.financingPeriod){
+      //   return
+      // }
       let _this = this;
       let max = this.arr[this.financialProform.financingPeriod].loanTermMax;
       let min = this.arr[this.financialProform.financingPeriod].loanTermMin;
@@ -870,10 +831,11 @@ export default {
     },
     //服务产品提需求
     demandRaise(i) {
-      if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
-        return;
-      }
+      // if (!sessionStorage.userInfo) {
+      //   this.$message.error("请先登录");
+      //   return;
+      // }
+      this.isLogin();
       this.serverProVisible = true;
       this.serverProform.requireDetail = "";
       this.serverProform.productId = i.productId;
@@ -1225,7 +1187,7 @@ export default {
     // 企业宣传列表查询
     getBanner() {
       // return new Promise((resolve, reject) => {
-        let _this = this;
+      let _this = this;
       this.api.get({
         url: "getPromotionList",
         data: {
@@ -1236,21 +1198,21 @@ export default {
         },
         callback: res => {
           if (res.code === "0000") {
-            this.bannerList = res.data.rows
+            this.bannerList = res.data.rows;
             // resolve();
             let obj = {
               direction: "horizontal", // 垂直切换选项
               loop: true, // 循环模式选项
               noSwiping: true,
               // autoplay: true,
-              observer:false,
+              observer: false,
               // autoplay: {
               //   delay: 2000
               // },
-              on:{
-                click: function(e){
-                 let path = e.path[0].getAttribute("data-path");
-                 _this.$router.push(path)
+              on: {
+                click: function(e) {
+                  let path = e.path[0].getAttribute("data-path");
+                  _this.$router.push(path);
                 }
               },
               // 如果需要分页器
@@ -1261,7 +1223,7 @@ export default {
               navigation: {
                 nextEl: ".swiper-button-next",
                 prevEl: ".swiper-button-prev"
-              },
+              }
             };
             setTimeout(() => {
               this.swiperinit(".swiper-container", obj);
@@ -1485,10 +1447,17 @@ export default {
       top: 440px;
       top: 42%;
     }
+    .actiAddress {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
   }
   .policyCenter {
     .paging {
       overflow: hidden;
+      margin-top:50px;
+      padding-bottom:20px;
       .swiper-container {
         padding: 40px 0;
       }
@@ -1555,6 +1524,13 @@ export default {
               > span {
                 margin-left: 20px;
               }
+            }
+            .policyCon {
+              height: 50px;
+              display: -webkit-box;
+              -webkit-box-orient: vertical;
+              -webkit-line-clamp: 3;
+              overflow: hidden;
             }
           }
           //   .right1:hover {
@@ -1675,12 +1651,13 @@ export default {
           border-bottom: 1px solid #eee;
 
           .orgImg {
-            width: 200px;
-            height: 130px;
+            width: 198px;
+            height: 128px;
 
             > img {
               width: 100%;
               height: 100%;
+              border-radius: 7px;
             }
           }
 
@@ -1862,10 +1839,10 @@ export default {
       background: #fff;
     }
     .humanResInfo {
-      margin-top: 50px;
       .el-card {
         width: 80%;
         margin: 0 auto;
+        overflow: visible;
       }
       .el-card__body {
         padding: 20px 30px;
@@ -1968,9 +1945,15 @@ export default {
         .detailRes {
           width: 500px;
           position: absolute;
-          right: 38px;
-          top: 66px;
+          right: 85px;
+          top: 68px;
           text-align: left;
+          z-index: 3;
+          // height: 300px;
+          // overflow: auto;
+          box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.5);
+          padding: 20px 30px;
+          background: #fff;
           .detail {
             margin-bottom: 10px;
             color: #333;
@@ -1978,10 +1961,10 @@ export default {
           p {
             font-size: 13px;
           }
-          .el-card__body {
-            padding: 20px 30px;
-            // width: 300px;
-          }
+          // .el-card__body {
+          //   padding: 20px 30px;
+          //   // width: 300px;
+          // }
         }
       }
       .serverOrgContent {

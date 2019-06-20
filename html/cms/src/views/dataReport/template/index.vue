@@ -43,10 +43,10 @@
           <el-form-item :style="{margin: 0}" prop="groupId">
             <el-select v-model="formData.groupId" placeholder="请选择">
               <el-option
-                v-for="item in groupOptions"
+                v-for="(item, groupOptionsIndex) in groupOptions"
                 :label="item.label"
                 :value="item.value"
-                :key="item.value"
+                :key="groupOptionsIndex"
               />
             </el-select>
           </el-form-item>
@@ -220,7 +220,7 @@
                 <div class="target-form-body">
                   <el-tag
                     v-for="(tag, tagIndex) in form.targetList"
-                    :key="tag.id"
+                    :key="tagIndex"
                     :closable="true"
                     class="target-tags"
                     @close="tagClose(index, tagIndex)"
@@ -309,10 +309,10 @@
             </el-radio-group>
           </el-form-item>
         </target-row>
-        <target-row class="target-row" title="预警提醒人（企业完成所有，填报后接受信息人）">
+        <target-row class="target-row" title="预警提醒人（企业完成所有，填报后接收信息人）">
           <el-form-item :style="{margin: 0}" prop="reminder">
             <el-select v-model="formData.reminder" placeholder="请选择">
-              <el-option v-for="item in warnerOptions" :label="item.label" :key="item.id" :value="item.id"/>
+              <el-option v-for="(item, warnerOptionsIndex) in warnerOptions" :label="item.label" :key="warnerOptionsIndex" :value="item.id"/>
             </el-select>
           </el-form-item>
         </target-row>
@@ -335,7 +335,7 @@ import targetRow from '../common/target-row'
 import targetFrame from '../common/target-frame'
 import targetForm from '../common/target-form'
 import treeTable from '../common/tree-table/index'
-import { deepClone } from '../../../utils'
+import { deepClone, fnSetTreeData } from '../../../utils'
 
 export default {
   name: 'TargetManagement',
@@ -575,12 +575,11 @@ export default {
       })
     },
     modelTypeChange(modelType) {
-      const treeData = this.originTab.treeData
-      this.deepSetData(treeData, modelType)
       const tab = deepClone(this.originTab)
-      tab.treeData = deepClone(treeData)
+      const treeData = deepClone(this.originTab.treeData)
+      this.deepSetData(treeData, modelType)
+      tab.treeData = treeData
       this.formData.tabs = [tab]
-      // console.dir(this.formData)
     },
     deepSetData(arr, modelType) {
       // 根据填报类型：企业/园区 禁用与填报类型不一样的指标树
@@ -598,23 +597,6 @@ export default {
         resolve()
       })
     },
-    partDeepClone(source, arr) {
-      // 因为formData.tabs存在循getNode环引用的树节点，不能直接提交或者克隆，这里先跳过tabs属性克隆，后面再克隆tabs属性
-      if (!source && typeof source !== 'object') {
-        throw new Error('error arguments', 'shallowClone')
-      }
-      const targetObj = source.constructor === Array ? [] : {}
-      Object.keys(source).forEach(keys => {
-        if (arr.indexOf(keys) === -1) {
-          if (source[keys] && typeof source[keys] === 'object') {
-            targetObj[keys] = deepClone(source[keys], arr)
-          } else {
-            targetObj[keys] = source[keys]
-          }
-        }
-      })
-      return targetObj
-    },
     submitTarget() {
       this.$refs['formData'].validate((valid) => {
         if (valid) {
@@ -624,40 +606,36 @@ export default {
           this.previewForm()
             .then(() => {
               let cache = []
+              const passList = ['treeData', 'treeTableData', 'columns', 'targetList']
               let formData = JSON.stringify(this.formData, function(key, value) {
-                if (typeof value === 'object' && value !== null) {
-                  if (cache.indexOf(value) !== -1) {
-                    // Duplicate reference found
-                    try {
-                      // If this value does not reference a parent it can be deduped
-                      return JSON.parse(JSON.stringify(value))
-                    } catch (error) {
-                      // discard key if value cannot be deduped
-                      return
+                if (passList.indexOf(key) !== -1) {
+                  return ''
+                } else {
+                  if (typeof value === 'object' && value !== null) {
+                    if (cache.indexOf(value) !== -1) {
+                      // Duplicate reference found
+                      try {
+                        // If this value does not reference a parent it can be deduped
+                        return JSON.parse(JSON.stringify(value))
+                      } catch (error) {
+                        // discard key if value cannot be deduped
+                        return
+                      }
                     }
+                    // Store value in our collection
+                    cache.push(value)
                   }
-                  // Store value in our collection
-                  cache.push(value)
+                  return value
                 }
-                return value
               })
               // Enable garbage collection
               cache = null
               formData = JSON.parse(formData)
-
               formData.tabs.forEach((item, index) => {
-                delete item.treeData
-                delete item.treeTableData
-                delete item.columns
                 // tab增加排序
                 item.orderNumber = index.toString()
                 // 多选值转字符串 1.表类型（0：上月填报值；1：上年同期值；2：上月上年同期值；3增幅)
                 item.tabClumnTargetShow = item.tabClumnTargetShow.join(',')
-                for (const list of item.inputList) {
-                  if (list.formType === '4') {
-                    list.value = ''
-                  }
-                }
               })
 
               if (formData.modelCycle === 0) {
@@ -677,8 +655,6 @@ export default {
               formData.appAd = this.tempAppUrl ? this.tempAppUrl : formData.appAd
               formData.otherData = this.otherDataUrl ? this.otherDataUrl : formData.otherData
               // 把填报格式是多选的value把数组转成字符串
-              // console.dir(formData)
-              // return
               formData.tabs.forEach((item, index) => {
                 for (const list of item.inputList) {
                   if (list.formType === '4') {
@@ -688,13 +664,13 @@ export default {
               })
               this.$_post(`${this.GLOBAL.enterpriseUrl}data/dataModel/updateModel`, formData).then(data => {
                 if (data.code === '0000') {
-                  this.submitting = false
                   this.getModelTree()
-                  this.loading = false
                   this.$message.success('保存成功')
                 } else {
                   this.$message.error('提交失败')
                 }
+                this.submitting = false
+                this.loading = false
               })
             }, res => {
               // 预览函数reject状态回调
@@ -870,8 +846,8 @@ export default {
       this.appFileList = []
       this.otherFileList = []
       // 要及时关掉监听，不关掉的是一个坑，加一个alert就知道了
-      document.removeEventListener('click', this.addModel)
       this.$message.success(this.formData.modelType === '0' ? '你新建了一个企业模板' : '你新建了一个园区模板')
+      document.removeEventListener('click', this.addModel)
     },
     cancelAddModel() {
       // 隐藏菜单栏
@@ -995,7 +971,7 @@ export default {
         // 循环表格生成预览数据
         const promiseList = []
         this.formData.tabs.map((tab, tabIndex) => {
-          const p = new Promise((listResolve, listReject) => {
+          const p = new Promise(listResolve => {
             // 预览时清空一下表头和表格树数据
             tab.columns = []
             tab.treeTableData = []
@@ -1007,8 +983,7 @@ export default {
             }
 
             // 判断是普通模板或科技园模板，生成对应的报表
-            const isCommonType = tab.tabCreateType === '0'
-            if (isCommonType) {
+            if (tab.tabCreateType === '0') {
               // 普通模板时
               // 填报数据列 表填报列类型（0：累计值；1：本期值）
               if (tab.tabClumnType === '') {
@@ -1051,9 +1026,11 @@ export default {
                 }
               }
               const tabClumnTargetShowList = []
-              tabClumnTargetShow && tabClumnTargetShow.sort((a, b) => {
-                return Number(a) - Number(b)
-              })
+              if (tabClumnTargetShow) {
+                tabClumnTargetShow.sort((a, b) => {
+                  return Number(a) - Number(b)
+                })
+              }
               for (const item of tabClumnTargetShow) {
                 tabClumnTargetShowList.push(tabClumnTargetShowOption[item])
               }
@@ -1068,7 +1045,6 @@ export default {
               const targetIdList = nodeList.map(list => list.id)
               this.getInputFormat(targetIdList)
                 .then(data => {
-                  // "66383ef743624c69b8f8f9e44b980119"
                   tab.inputList = deepClone(data.data)
                   const formModels = tab.inputList
                   formModels.sort((a, b) => {
@@ -1077,11 +1053,11 @@ export default {
                   nodeList.sort((a, b) => {
                     return a.orderNumber - b.orderNumber
                   })
+                  // 填报格式挂载到指标上
                   this.treeMerge(formModels, nodeList)
                   // 一维的结构指标转成树结构
-                  const list = this.toTree(nodeList)
+                  const list = fnSetTreeData(nodeList)
 
-                  // 勾选的树结构指标挂载到tree-table
                   this.sortTree(list, 'orderNumber')
                   this.$nextTick(() => {
                     this.$set(tab, 'treeTableData', list)
@@ -1102,17 +1078,6 @@ export default {
             resolve()
           })
       })
-    },
-    toTree(arr) {
-      const ids = arr.map(a => a.id)
-      const arrNotParent = arr.filter(({ pid }) => pid && !ids.includes(pid))
-      const _ = (arr, pID) =>
-        arr.filter(({ pid }) => pid === pID)
-          .map(a => ({
-            ...a,
-            children: _(arr.filter(({ pid }) => pid !== pID), a.id)
-          }))
-      return _(arr).concat(arrNotParent)
     },
     getInputFormat(list) {
       // 根据选中的指标，获取它们对应的填报格式

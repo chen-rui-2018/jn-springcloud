@@ -36,4 +36,12 @@ public class OrgUpdateCommonProduct implements Serializable {
     public void setAdvisorAccount(String advisorAccount) {
         this.advisorAccount = advisorAccount;
     }
+
+    @Override
+    public String toString() {
+        return "OrgUpdateCommonProduct{" +
+                "productId='" + productId + '\'' +
+                ", advisorAccount='" + advisorAccount + '\'' +
+                '}';
+    }
 }

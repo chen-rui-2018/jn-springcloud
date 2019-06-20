@@ -7,14 +7,14 @@
       </div>
       <div class="changeIcon clearfix">
         <div class="fr">
-          <i class="iconfont icon-menu1 pointer" @click="handleCrosswise('icon-menu1')" :class="{'active0':showListFlag == 'icon-menu1'}"></i>
-          <i class="iconfont icon-menu pointer" @click="handleVertical('icon-menu')" :class="{'active0':showListFlag == 'icon-menu'}"></i>
+          <i class="iconfont icon-menu pointer" @click="handleCrosswise('icon-menu')" :class="{'active0':showListFlag == 'icon-menu'}"></i>
+          <i class="iconfont icon-menu1 pointer" @click="handleVertical('icon-menu1')" :class="{'active0':showListFlag == 'icon-menu1'}"></i>
         </div>
       </div>
       <div class="actiTab">
         <ul class="allActiUl clearfix" v-if="flag">
-          <li v-for="(item,index) in recruitmentTable" :key='index'>
-            <div class="postImgItem pointer" @click="handleRout(item.id)">
+          <li v-for="(item,index) in recruitmentTable" class="pointer" :key='index'  @click="handleRout(item.id)">
+            <div class="postImgItem pointer">
               <img :src="item.posterUrl" class="postImg" alt="企业图片">
             </div>
             <div class="actiInfo">
@@ -40,7 +40,7 @@
             <div class="verticalLeft fl pointer" @click="handleRout(item.id)">
               <img :src="item.posterUrl" alt="企业图片">
             </div>
-            <div class="verticalMiddle fl">
+            <div class="verticalMiddle fl pointer" @click="handleRout(item.id)">
               <h3 class="verticalTit">{{item.propagandaTitle}}</h3>
               <div class="xihuan mainColor">
                 <i class="el-icon-view"></i>&nbsp;111
@@ -75,7 +75,7 @@ export default {
   data() {
     return {
       flag: true,
-      showListFlag: "icon-menu1",
+      showListFlag: "icon-menu",
       currentPage4: 1,
       actiFilflag: "",
       colorFlag: "",
@@ -94,12 +94,12 @@ export default {
     handleCrosswise(v) {
       //横向显示
       this.flag = true;
-      this.showListFlag = "icon-menu1";
+      this.showListFlag = "icon-menu";
     },
     handleVertical() {
       //竖向显示
       this.flag = false;
-      this.showListFlag = "icon-menu";
+      this.showListFlag = "icon-menu1";
     },
     handleSizeChange(val) {
       //改变每页显示多少条的回调函数
@@ -148,6 +148,9 @@ export default {
 .enterpriseInformation {
   margin-bottom: 100px;
   padding-top: 65px;
+  .icon-menu,.icon-menu1{
+    font-size: 18px;
+  }
   .actiNav {
     margin: 20px 0;
     font-size: 13px;

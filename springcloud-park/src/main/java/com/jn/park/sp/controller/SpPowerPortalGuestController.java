@@ -37,15 +37,11 @@ public class SpPowerPortalGuestController extends BaseController {
     @Autowired
     private SpPowerPortalService spPowerPortalService;
 
-
-    @ControllerLog(doAction = "实施部门列表")
-    @ApiOperation(value = "实施部门列表",notes = "返回全部的实施部门")
+    @ControllerLog(doAction = "(新)实施部门列表")
+    @ApiOperation(value = "(新)实施部门列表",notes = "(新)实施部门列表")
     @GetMapping(value = "/departList")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "name",value = "部门名称",example = "秦淮区")
-    })
-    public Result<List<SpDictDepartModel>> departList(String name){
-        List<SpDictDepartModel> spDictDepartModelList = spPowerPortalService.departList(name);
+    public Result<List<List<SpDictDepartModel>>> departList(){
+        List<List<SpDictDepartModel>> spDictDepartModelList = spPowerPortalService.departList();
         return new Result<>(spDictDepartModelList);
     }
 

@@ -7,6 +7,10 @@
     "pages/index/parkPay/parkPay",
     "pages/index/payComplete/payComplete",
     "pages/index/declarationNotice/declarationNotice",
+    "pages/index/policyGuide/policyGuide",
+    "pages/index/hotAct/hotAct",
+    "pages/index/actiDetail/actiDetail",
+    "pages/index/parkDetais/parkDetais",
     "pages/home/home",
     "pages/home/payRecord/payRecord",
     "pages/home/maCar/maCar",
@@ -37,12 +41,6 @@
         "iconPath": "/images/meeting/index_white.png",
         "selectedIconPath": "/images/meeting/index_green.png",
         "text": "首页"
-      },
-      {
-        "pagePath": "pages/meeting/meeting",
-        "iconPath": "/images/meeting/meeting_white.png",
-        "selectedIconPath": "/images/meeting/meeting_green.png",
-        "text": "会议室"
       },
       {
         "pagePath": "pages/home/home",

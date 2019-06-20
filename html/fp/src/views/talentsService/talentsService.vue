@@ -106,6 +106,7 @@
   </div>
 </template>
 <script>
+import { getToken, removeToken } from '@/util/auth'
 export default {
    data () {
       return {
@@ -115,7 +116,7 @@ export default {
         rangeId:'',//所属类型
         sortType:'1',//排序
         page:1,
-        rows:5,
+        rows:6,
         perennialList:[],
         // centerDialogVisible:false
       }
@@ -231,7 +232,7 @@ export default {
       },
       //跳转页面
       gotalentplatform(){
-        if(sessionStorage.token){
+        if(getToken()){
           this.$router.push({name:'talentPlatform'})
         }else{
           this.$confirm('亲，您需要登录后才能访问以下界面哦！', '提示', {

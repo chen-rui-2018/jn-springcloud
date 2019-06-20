@@ -286,22 +286,8 @@ public class StaffServiceImpl implements StaffService {
         }
 
         // 判断邀请账号不是企业员工
-        TbServiceCompanyStaffCriteria staffCriteria = new TbServiceCompanyStaffCriteria();
-        TbServiceCompanyStaffCriteria companyStaffCriteria = new TbServiceCompanyStaffCriteria();
-        TbServiceCompanyStaffCriteria.Criteria criteria = companyStaffCriteria.createCriteria();
-
-        staffCriteria.createCriteria().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue())
-                .andCheckStatusNotEqualTo(CompanyDataEnum.STAFF_CHECK_STATUS_NOT_PASS.getCode())
-                .andInviteStatusNotEqualTo(CompanyDataEnum.STAFF_INVITE_STATUS_REFUSE.getCode())
-                .andAccountEqualTo(inviteAccount);
-
-        criteria.andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue()).andAccountEqualTo(inviteAccount)
-                .andInviteStatusNotEqualTo(CompanyDataEnum.STAFF_INVITE_STATUS_REFUSE.getCode())
-                .andCheckStatusIsNull();
-        staffCriteria.or(criteria);
-
-        List<TbServiceCompanyStaff> staffList = tbServiceCompanyStaffMapper.selectByExample(staffCriteria);
-        if(staffList != null && !staffList.isEmpty()) {
+        if(!checkUserIsCompanyStaff(inviteAccount)) {
+            logger.warn("[邀请员工] {} 已是其他企业员工或有未处理的企业邀请", inviteAccount);
             throw new JnSpringCloudException(CompanyExceptionEnum.USER_IS_COMPANY_EXIST);
         }
 
@@ -340,7 +326,7 @@ public class StaffServiceImpl implements StaffService {
             addMessageModel.setMessageConnect("{\"comId\":\"" + company.getId() + "\",\"comName\":\"" + company.getComName() + "\"}");
             addMessageModel.setMessageConnectName("企业邀请");
             addMessageModel.setMessageTitle("企业邀请待处理通知");
-            addMessageModel.setMessageContent(company.getComName());
+            addMessageModel.setMessageContent(company.getComName() + "邀请您加入他们的企业");
             messageClient.addMessage(addMessageModel);
 
             logger.info("[企业邀请] 邀请员工成功,account:{}", inviteAccount);
@@ -564,8 +550,6 @@ public class StaffServiceImpl implements StaffService {
     @ServiceLog(doAction = "企业成员-批量删除成员")
     @Transactional(rollbackFor = Exception.class)
     public Integer delMoreStaffs(String[] accountList, String curAccount) {
-        // 只有企业管理员能删除
-        String comId = checkAccountIsCompanyAdmin(curAccount).getId();
         if (accountList.length == 0) {
             throw new JnSpringCloudException(CompanyExceptionEnum.ACCOUNT_LIST_IS_NULL);
         }
@@ -647,6 +631,36 @@ public class StaffServiceImpl implements StaffService {
             logger.info("[企业同事] " + (isSet ? "设为" : "取消") +"{}为企业联系人成功", account);
         }
         return setOrCancelRoleResult ? 1 : 0;
+    }
+
+    /**
+     * 判断账号是否有权限升级企业员工
+     * @param account
+     * @return
+     */
+    @Override
+    @ServiceLog(doAction = "判断账号是否有权限升级企业员工")
+    public boolean checkUserIsCompanyStaff(String account) {
+        TbServiceCompanyStaffCriteria staffCriteria = new TbServiceCompanyStaffCriteria();
+        TbServiceCompanyStaffCriteria companyStaffCriteria = new TbServiceCompanyStaffCriteria();
+        TbServiceCompanyStaffCriteria.Criteria criteria = companyStaffCriteria.createCriteria();
+
+        staffCriteria.createCriteria().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue())
+                .andCheckStatusNotEqualTo(CompanyDataEnum.STAFF_CHECK_STATUS_NOT_PASS.getCode())
+                .andInviteStatusNotEqualTo(CompanyDataEnum.STAFF_INVITE_STATUS_REFUSE.getCode())
+                .andAccountEqualTo(account);
+
+        criteria.andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue()).andAccountEqualTo(account)
+                .andInviteStatusNotEqualTo(CompanyDataEnum.STAFF_INVITE_STATUS_REFUSE.getCode())
+                .andCheckStatusIsNull();
+        staffCriteria.or(criteria);
+
+        List<TbServiceCompanyStaff> staffList = tbServiceCompanyStaffMapper.selectByExample(staffCriteria);
+        if(staffList != null && !staffList.isEmpty()) {
+            logger.info("[判断账号是否有权限升级企业员工] {} 已是企业员工或有未处理的企业邀请", account);
+            return false;
+        }
+        return true;
     }
 
     /**

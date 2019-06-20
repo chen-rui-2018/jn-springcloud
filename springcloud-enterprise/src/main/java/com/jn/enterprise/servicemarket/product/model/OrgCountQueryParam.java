@@ -46,4 +46,13 @@ public class OrgCountQueryParam  extends Page implements Serializable {
     public void setPraise(String praise) {
         this.praise = praise;
     }
+
+    @Override
+    public String toString() {
+        return "OrgCountQueryParam{" +
+                "orgd='" + orgd + '\'' +
+                ", productType='" + productType + '\'' +
+                ", praise='" + praise + '\'' +
+                '}';
+    }
 }

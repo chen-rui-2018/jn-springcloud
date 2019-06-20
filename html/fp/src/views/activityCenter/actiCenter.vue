@@ -57,9 +57,9 @@
       </div>
       <div class="actiTab">
         <ul class="allActiUl clearfix" v-if="flag">
-          <li v-for="(item,index) in actiListSlim" :key='index'>
+          <li v-for="(item,index) in actiListSlim" class="pointer" :key='index' @click="handleRout(item.id)">
             <div class="postImgItem pointer">
-              <img :src="item.actiPosterUrl" class="postImg" alt="活动海报图片" @click="handleRout(item.id)">
+              <img :src="item.actiPosterUrl" class="postImg" alt="活动海报图片" >
             </div>
             <div class="actiInfo">
               <p class="actiNameItem">{{item.actiName}}</p>
@@ -69,7 +69,7 @@
                 <!-- <span>{{item.actiStartTime}}-{{item.actiEndTime.split(' ')[1]}}</span> -->
                 <!-- <span>周日14：00-17：00</span> -->
               </p>
-              <p>
+              <p class="actiAddress">
                 <i class="el-icon-location-outline"></i>
                 <span>{{item.actiAddress}}</span>
               </p>
@@ -87,8 +87,8 @@
           </li>
         </ul>
         <ul class="verticalUl" v-else>
-          <li class="clearfix" v-for="(item,index) in actiListSlim" :key='index'>
-            <div class="verticalLeft fl pointer" @click="handleRout(item.id)">
+          <li class="clearfix pointer" v-for="(item,index) in actiListSlim" :key='index'  @click="handleRout(item.id)">
+            <div class="verticalLeft fl pointer">
               <img :src="item.actiPosterUrl" alt="活动海报图片">
             </div>
             <div class="verticalMiddle fl">
@@ -234,8 +234,8 @@ export default {
         this.startTime = "";
         this.endTime = "";
       } else {
-        this.startTime = this.api.AddMinTime(new Date(), "day", s);
-        this.endTime = this.api.AddMinTime(new Date(), "day", i);
+        this.startTime = this.api.AddMinTime(new Date(), "day", i);
+        this.endTime = this.api.AddMinTime(new Date(), "day", s);
       }
       this.initList();
     },

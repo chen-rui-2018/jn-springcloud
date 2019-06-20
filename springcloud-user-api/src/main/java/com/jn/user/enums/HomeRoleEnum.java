@@ -16,7 +16,7 @@ public enum HomeRoleEnum implements CodeAndMsg {
 
     ORG_ADMIN("机构管理员","ORG_ADMIN"),
     ORG_CONTACTS("机构联系人","ORG_CONTACTS"),
-    ORG_ADVISER("机构顾问","ORG_ADVISER"),
+    ORG_ADVISER("机构专员","ORG_ADVISER"),
 
     COM_ADMIN("企业管理员","COM_ADMIN"),
     COM_CONTACTS("企业联系人","COM_CONTACTS"),

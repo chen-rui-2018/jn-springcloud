@@ -1,7 +1,7 @@
 <template>
   <div class="basicInformation" v-loading="loading">
     <div class="investorCertification-header font16">
-      <div>服务机构认证</div>
+      <div>{{title}}</div>
     </div>
     <el-main style="padding:0 25px;text-align:left;background:#fff;">
       <div class="investorCertification-content">
@@ -40,25 +40,33 @@
                 <el-date-picker v-model="OrgBasicForm.orgRegisterTime" value-format="yyyy-MM-dd" type="date"
                   placeholder="选择日期"></el-date-picker>
               </el-form-item>
-              <el-form-item label="机构简介:" prop="orgSynopsis" class="myPersonalProfile">
-                <el-input v-model="OrgBasicForm.orgSynopsis" type="textarea"  maxlength="500"
-  show-word-limit autosize placeholder="请填写机构简介,限500字"
-                  clearable></el-input>
-              </el-form-item>
-              <el-form-item label="主营业务:" prop="orgBusiness" class="myPersonalProfile">
-                <el-input v-model="OrgBasicForm.orgBusiness" type="textarea"  maxlength="500"
-  show-word-limit autosize placeholder="请填写主营业务,限500字"
-                  clearable></el-input>
-              </el-form-item>
-              <el-form-item label="业务擅长:" prop="orgSpeciality" class="investorMainAreaList">
-                <el-select v-model="OrgBasicForm.orgSpeciality" multiple :multiple-limit='num1' placeholder="请选择业务擅长">
+              <el-form-item label="业务领域:" prop="businessType" class=" maxWidth">
+                <el-select v-model="OrgBasicForm.businessType" placeholder="请选择业务领域">
                   <el-option v-for="(val,index) in orgSpecialityOptions" :key="index" :label="val.preValue" :value="val.id"></el-option>
                 </el-select>
+              </el-form-item>
+              <el-form-item label="机构简介:" prop="orgSynopsis" class="myPersonalProfile">
+                <el-input v-model="OrgBasicForm.orgSynopsis" type="textarea" maxlength="1000" show-word-limit autosize
+                  placeholder="请填写机构简介,限1000字" clearable></el-input>
+              </el-form-item>
+              <el-form-item label="核心服务:" prop="orgBusiness" class="myPersonalProfile">
+                <el-input v-model="OrgBasicForm.orgBusiness" type="textarea" maxlength="500" show-word-limit autosize
+                  placeholder="请填写核心服务,限500字" clearable></el-input>
+              </el-form-item>
+              <el-form-item label="业务擅长:" prop="orgSpeciality" class="investorMainAreaList">
+                <el-input v-model="OrgBasicForm.orgSpeciality" placeholder="请输入业务擅长" clearable></el-input>
+                <!-- <el-select v-model="OrgBasicForm.orgSpeciality" multiple :multiple-limit='num1' placeholder="请选择业务擅长">
+                  <el-option v-for="(val,index) in orgSpecialityOptions" :key="index" :label="val.preValue" :value="val.id"></el-option>
+                </el-select> -->
               </el-form-item>
               <el-form-item label="客户偏好:" prop="position">
                 <!-- <el-input v-model="OrgBasicForm.orgBusiness" placeholder="请选择您主要客户群体的以下特征,最多分别选3项" clearable></el-input> -->
                 <span class="curtomer">请选择您主要客户群体的以下特征,最多分别选3项</span>
               </el-form-item>
+              <div class="xian">
+                <hr>
+              </div>
+
               <el-form-item label="行业领域:" prop="industrySector" class="investorMainAreaList">
                 <el-select v-model="OrgBasicForm.industrySector" multiple :multiple-limit='num' placeholder="请选择行业领域">
                   <el-option v-for="(val,index) in industrySectorOptions" :key="index" :label="val.preValue" :value="val.id"></el-option>
@@ -69,22 +77,17 @@
                   <el-option v-for="item in developmentStageOptions" :key="item.id" :label="item.preValue" :value="item.id"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="企业性质:" prop="companyNature" class="investorMainAreaList">
+              <!-- <el-form-item label="企业性质:" prop="companyNature" class="investorMainAreaList">
                 <el-select v-model="OrgBasicForm.companyNature" :multiple-limit='num' multiple placeholder="请选择企业性质">
                   <el-option v-for="item in companyNatureOptions" :key="item.id" :label="item.preValue" :value="item.id"></el-option>
                 </el-select>
-              </el-form-item>
+              </el-form-item> -->
             </el-form>
           </div>
         </div>
         <div v-show="status==1">
           <div class="licensesInfo pr">
-            <el-form :rules="licensesRules" :model="licensesForm" label-width="110px" ref="licensesForm">
-              <el-form-item label="业务领域:" prop="businessType" class="businessType">
-                <el-select v-model="licensesForm.businessType" placeholder="请选择业务领域">
-                  <el-option v-for="(val,index) in orgSpecialityOptions" :key="index" :label="val.preValue" :value="val.id"></el-option>
-                </el-select>
-              </el-form-item>
+            <el-form :model="licensesForm"   label-width="110px" ref="licensesForm">
               <el-form-item label="营业执照:">
                 <span class="curtomer">请填写营业执照信息。附件请上传证书照片，单个文件不超过1M</span>
               </el-form-item>
@@ -92,18 +95,6 @@
                 <el-table-column label="证书名称" align="center">
                   <template>
                     <span>企业营业执照</span>
-                  </template>
-                </el-table-column>
-                <el-table-column align="center" label="颁发时间">
-                  <template slot-scope="scope">
-                    <el-date-picker v-model="licenseList[scope.$index].awardTime" type="date" value-format="yyyy-MM-dd"
-                      placeholder="请选择颁发时间"></el-date-picker>
-                  </template>
-                </el-table-column>
-                <el-table-column align="center" label="主管部门">
-                  <template slot-scope="scope">
-                    <el-input v-model="licenseList[scope.$index].awardDepart" placeholder="请输入主管部门" maxlength='20'
-                      clearable></el-input>
                   </template>
                 </el-table-column>
                 <el-table-column align="center" label="上传附件">
@@ -118,7 +109,7 @@
                 </el-table-column>
               </el-table>
               <el-form-item label="其它资质/荣誉:" class="otherInfo">
-                <span class="curtomer">附件请上传相关资质荣誉证书照片，单个文件不超过1M</span> <span class="otherOperation mainColor pr smailSize cancel"
+                <span class="curtomer">附件请上传相关资质荣誉证书照片，单个文件不超过1M</span> <span class="otherOperation mainColor cur smailSize cancel"
                   @click="cancelOtherList" v-if="isShowOtherList">取&nbsp;消</span>
                 <span class="otherOperation mainColor cur smailSize" @click="addOtherList('otherForm')">
                   <i class="el-icon-plus"></i>
@@ -134,7 +125,7 @@
                     </template>
                   </el-table-column>
                   <el-table-column prop="awardTime" align="center" label="颁发时间"></el-table-column>
-                  <el-table-column prop="awardDepart" align="center" label="主管部门"></el-table-column>
+                  <el-table-column prop="awardDepart" align="center" label="颁发部门"></el-table-column>
                   <el-table-column align="center" label="附件">
                     <template slot-scope="scope">
                       <span v-if="scope.row.fileUrl" class="themeColor smallSize cur" @click="lookPoster(scope.row)">点击查看</span>
@@ -155,11 +146,11 @@
                   <el-form-item label="资质荣誉名称:" prop="certName">
                     <el-input v-model="otherForm.certName" placeholder="请输入资质荣誉名称" clearable></el-input>
                   </el-form-item>
-                  <el-form-item label="颁发时间:">
+                  <el-form-item label="颁发时间:" prop="awardTime" >
                     <el-date-picker v-model="otherForm.awardTime" type="date" value-format="yyyy-MM-dd" placeholder="请选择颁发时间"></el-date-picker>
                   </el-form-item>
-                  <el-form-item label="主管部门:">
-                    <el-input v-model="otherForm.awardDepart" placeholder="请输入主管部门" maxlength='20' clearable></el-input>
+                  <el-form-item label="颁发部门:" prop="awardDepart">
+                    <el-input v-model="otherForm.awardDepart" placeholder="请输入颁发部门" maxlength='20' clearable></el-input>
                   </el-form-item>
                   <el-form-item label="附件:" class="otherAccessory">
                     <label slot="label">附&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;件:</label>
@@ -212,13 +203,13 @@
                 </el-form-item>
                 <span>占总人数比&nbsp;<i class="mainColor">{{teamForm.doctorNum?((teamForm.doctorNum/teamForm.staffCount)*100).toFixed(2):''}}</i>&nbsp;</span>%
               </div>
-              <div>
+              <!-- <div>
                 <el-form-item label="海归人员人数：" class="orientation dis" prop="returneeNum">
                   <el-input v-model="teamForm.returneeNum" @blur="BlurText($event)" placeholder="请填写人数"></el-input><span
                     class="person">人</span>
                 </el-form-item>
                 <span>占总人数比&nbsp;<i class="mainColor">{{teamForm.returneeNum?((teamForm.returneeNum/teamForm.staffCount)*100).toFixed(2):''}}</i>&nbsp;</span>%
-              </div>
+              </div> -->
             </el-form>
           </div>
           <div class="kernelInfo">
@@ -282,15 +273,15 @@
             <el-form :rules="contactRules" :model="contactForm" label-width="100px" class="otherForm" ref="contactForm">
               <el-form-item label="办公地址:" class="address" prop="orgProvince">
                 <el-select v-model="contactForm.orgProvince" @change="choseProvince" placeholder="省级地区">
-                  <el-option v-for="item in province" :key="item.id" :label="item.value" :value="item.id">
+                  <el-option v-for="item in province" :key="item.id" :label="item.value" :value="item.value">
                   </el-option>
                 </el-select>
                 <el-select v-model="contactForm.orgCity" @change="choseCity" placeholder="市级地区">
-                  <el-option v-for="item in shi1" :key="item.id" :label="item.value" :value="item.id">
+                  <el-option v-for="item in shi1" :key="item.id" :label="item.value" :value="item.value">
                   </el-option>
                 </el-select>
                 <el-select v-model="contactForm.orgArea" @change="choseBlock" placeholder="区级地区">
-                  <el-option v-for="item in qu1" :key="item.id" :label="item.value" :value="item.id">
+                  <el-option v-for="item in qu1" :key="item.id" :label="item.value" :value="item.value">
                   </el-option>
                 </el-select>
               </el-form-item>
@@ -323,7 +314,7 @@
       </div>
     </el-main>
     <el-dialog :visible.sync="dialogVisible" width="50%" :modal-append-to-body="false">
-      <img :src="otherPhoto" alt="图片" style="width:100%">
+      <img :src="otherPhoto" alt="图片" style="width:100%;height:200px;">
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">返 回</el-button>
       </span>
@@ -331,6 +322,7 @@
   </div>
 </template>
 <script>
+import { getToken } from '@/util/auth'
 import axios from "axios";
 export default {
   data() {
@@ -342,25 +334,37 @@ export default {
         callback();
       }
     };
-    //  var checkTel = (rule, value, callback) => {
-    //   // const reg = /^0\\d{2,3}-[1-9]\\d{6,7}$/;
-    //    const reg = /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/;
-    //   if (!reg.test(value)) {
-    //     callback("请输入正确的电话格式");
-    //   } else {
-    //     callback();
-    //   }
-    // };
-    //   var checkWeb = (rule, value, callback) => {
-    //   const reg = /^(http|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?$/;
-    //   if (!reg.test(value)) {
-    //     callback("请输入正确的网址");
-    //   } else {
-    //     callback();
-    //   }
-    // };
+     var checkOrgName = (rule, value, callback) => {
+        if (this.title === '编辑机构') {
+           this.api.get({
+              url: "orgNameIsExist",
+              data: {orgName :this.OrgBasicForm.orgName,searchType:'update',orgId:this.OrgBasicForm.orgId},
+              callback: res => {
+                console.log(res)
+                if (res.data == "orgNameExist") {
+                    callback('机构名称已存在,请重新输入');
+                } else {
+                  callback();
+                }
 
+              }
+            });
+        } else {
+           this.api.get({
+              url: "orgNameIsExist",
+              data: {orgName :this.OrgBasicForm.orgName,searchType:'add',orgId:''},
+              callback: res => {
+              if (res.data == "orgNameExist") {
+                    callback('机构名称已存在,请重新输入');
+                } else {
+                  callback();
+                }
+              }
+            });
+      }
+    }
     return {
+      title: "服务机构认证",
       loading: false,
       baseUrl: this.api.host,
       num1: 1,
@@ -374,7 +378,7 @@ export default {
       isShowOtherList: false,
       // fileUrl: "",
       licensesForm: {
-        businessType: ""
+        // businessType: ""
       },
       kernelText: "添加核心服务团队人员",
       otherText: "添加其它资质/荣誉",
@@ -384,13 +388,13 @@ export default {
       orgSpecialityOptions: [],
       industrySectorOptions: [],
       developmentStageOptions: [],
-      companyNatureOptions: [],
+      // companyNatureOptions: [],
       disabled: false,
       orgOptions: [],
       licenseList: [
         {
-          awardTime: "",
-          awardDepart: "",
+          // awardTime: "",
+          // awardDepart: "",
           fileUrl: ""
         }
       ],
@@ -413,7 +417,7 @@ export default {
       },
       teamForm: {
         staffCount: "", //员工总人数
-        returneeNum: "", //海归员工人数
+        // returneeNum: "", //海归员工人数
         professionNum: "", //执业人员人数
         masterNum: "", //硕士学历人数
         doctorNum: "", //博士学历人数
@@ -433,7 +437,7 @@ export default {
       OrgBasicForm: {
         businessType: "",
         licenses: [], //机构资质集合
-        companyNature: [], //客户偏好-企业性质
+        // companyNature: [], //客户偏好-企业性质
         developmentStage: [], //客户偏好-发展阶段
         industrySector: [], //客户偏好-行业领域
         orgBusiness: "", //主营业务
@@ -441,10 +445,10 @@ export default {
         orgLogo: "", //机构LOGO
         orgName: "", //..机构名称
         orgRegisterTime: "", //注册时间
-        orgSpeciality: [], //业务擅长
+        orgSpeciality: '', //业务擅长
         orgSynopsis: "", //机构简介
         staffCount: "", //员工总人数
-        returneeNum: "", //海归员工人数
+        // returneeNum: "", //海归员工人数
         professionNum: "", //执业人员人数
         masterNum: "", //硕士学历人数
         doctorNum: "", //博士学历人数
@@ -472,11 +476,11 @@ export default {
       block: "",
       // avarUrl: "",
       headers: {
-        token: sessionStorage.token
+        token: getToken()
       },
       rules: {
         orgSpeciality: [
-          { required: true, message: "请选择业务擅长", trigger: "change" }
+          { required: true, message: "请输入业务擅长", trigger: "blur" }
         ],
         orgCode: [
           {
@@ -491,28 +495,40 @@ export default {
         orgSynopsis: [
           { required: true, message: "请填写机构简介", trigger: "blur" }
         ],
-        orgBusiness: [{ required: true, message: "主营业务", trigger: "blur" }],
+        orgBusiness: [
+          { required: true, message: "请填写核心服务", trigger: "blur" }
+        ],
         industrySector: [
           { required: true, message: "请选择行业领域", trigger: "change" }
         ],
         developmentStage: [
           { required: true, message: "请选择发展阶段", trigger: "change" }
         ],
-        companyNature: [
-          { required: true, message: "请选择企业性质", trigger: "change" }
-        ],
-        orgName: [
-          { required: true, message: "请填写机构名称", trigger: "blur" }
-        ]
-      },
-      licensesRules: {
-        businessType: [
+         businessType: [
           { required: true, message: "请选择业务领域", trigger: "change" }
+        ],
+        // companyNature: [
+        //   { required: true, message: "请选择企业性质", trigger: "change" }
+        // ],
+        orgName: [
+          { required: true, message: "请填写机构名称", trigger: "blur" },
+          { validator: checkOrgName, trigger: "blur" }
         ]
       },
+      // licensesRules: {
+      //   businessType: [
+      //     { required: true, message: "请选择业务领域", trigger: "change" }
+      //   ]
+      // },
       otherFormRules: {
         certName: [
           { required: true, message: "请填写资质荣誉名称", trigger: "blur" }
+        ],
+        awardTime: [
+          { required: true, message: "请选择颁发时间", trigger: "change" }
+        ],
+        awardDepart: [
+          { required: true, message: "请填写颁发部门", trigger: "blur" }
         ]
       },
       kernelRules: {
@@ -544,9 +560,9 @@ export default {
         professionNum: [
           { required: true, message: "请填写执业人员人数", trigger: "blur" }
         ],
-        returneeNum: [
-          { required: true, message: "请填写海归人员人数", trigger: "blur" }
-        ],
+        // returneeNum: [
+        //   { required: true, message: "请填写海归人员人数", trigger: "blur" }
+        // ],
         staffCount: [
           { required: true, message: "请填写员工总人数", trigger: "blur" }
         ]
@@ -601,7 +617,72 @@ export default {
     this.getCityData();
     this.selectIndustryList();
   },
+  mounted() {
+    this.init();
+  },
   methods: {
+    init() {
+      if (this.$route.query.title) {
+        this.title = this.$route.query.title;
+        this.OrgBasicForm.orgId=this.$route.query.orgId
+        // this.btnText="保存修改"
+
+      this.api.get({
+        url: "getActivityDetailsFm",
+        data: { orgId: this.$route.query.orgId },
+        callback: (res)=> {
+          console.log(res);
+          if (res.data) {
+              this.OrgBasicForm.orgName=res.data.orgName
+              this.OrgBasicForm.orgCode=res.data.orgCode
+              this.OrgBasicForm.orgRegisterTime=res.data.orgRegisterTime
+              this.OrgBasicForm.orgSynopsis=res.data.orgSynopsis
+              this.OrgBasicForm.orgBusiness=res.data.orgBusiness
+              this.OrgBasicForm.orgSpeciality=res.data.orgSpeciality
+              this.OrgBasicForm.businessType=res.data.businessType
+              this.teamForm.staffCount=res.data.staffCount
+              this.teamForm.professionNum=res.data.professionNum
+              this.teamForm.masterNum=res.data.masterNum
+              this.teamForm.doctorNum=res.data.doctorNum
+              this.teamForm.bachelorNum=res.data.bachelorNum
+              this.contactForm.orgProvince=res.data.orgProvince
+              this.contactForm.orgCity=res.data.orgCity
+              this.contactForm.orgArea=res.data.orgArea
+              this.contactForm.orgAddress=res.data.orgAddressDetail
+              this.contactForm.orgPhone=res.data.orgPhone
+              this.contactForm.orgWeb=res.data.orgWeb
+              this.contactForm.conName=res.data.conName
+              this.contactForm.conPhone=res.data.conPhone
+              this.contactForm.conEmail=res.data.conEmail
+              if(res.data.developmentStage){
+                res.data.developmentStage.forEach(v=>{
+                    this.OrgBasicForm.developmentStage.push(v.orgTraitId)
+                })
+                 this.OrgBasicForm.developmentStage=Array.from(new Set( this.OrgBasicForm.developmentStage))
+              }
+             if(res.data.industrySector){
+               res.data.industrySector.forEach(r=>{
+                    this.OrgBasicForm.industrySector.push(r.orgTraitId)
+                })
+                 this.OrgBasicForm.industrySector=Array.from(new Set( this.OrgBasicForm.industrySector))
+             }
+              this.OrgBasicForm.orgLogo=res.data.orgLogo
+              this.licenseList[0].fileUrl=res.data.orgLicensesUrl
+              if(res.data.honorLicense){
+                this.otherList=res.data.honorLicense
+              }
+              if(res.data.orgTeams){
+                this.kernelList=res.data.orgTeams
+              }
+              this.choseProvince(this.contactForm.orgProvince)
+              this.choseCity(this.contactForm.orgCity)
+          }
+        }
+      });
+      }
+
+
+    },
     // 禁止输入小数和负数
     BlurText(e) {
       let boolean = new RegExp("^[1-9][0-9]*$").test(e.target.value);
@@ -641,15 +722,15 @@ export default {
           }
         });
       } else if (this.investorCertificationTitle == "机构资质") {
-        this.$refs["licensesForm"].validate(valid => {
-          if (valid) {
-            if (!this.licenseList[0].fileUrl) {
-              this.$message.error("请上传企业营业执照照片");
-              return;
-            }
-            this.status = 2;
+
+
+        if (!this.licenseList[0].fileUrl) {
+          this.$message.error("请上传企业营业执照照片");
+          return;
+        }
+        this.status = 2;
             this.investorCertificationTitle = "团队信息";
-            this.OrgBasicForm.businessType = this.licensesForm.businessType;
+            // this.OrgBasicForm.businessType = this.licensesForm.businessType;
             // this.licenseList = this.licenseList.map(item =>
             //   item.fileUrl
             //     ? item
@@ -670,10 +751,7 @@ export default {
               this.otherList
             );
             console.log(this.OrgBasicForm);
-          } else {
-            return false;
-          }
-        });
+
       } else if (this.investorCertificationTitle == "团队信息") {
         this.$refs["teamForm"].validate(valid => {
           if (valid) {
@@ -682,7 +760,7 @@ export default {
               return;
             }
             this.OrgBasicForm.staffCount = this.teamForm.staffCount;
-            this.OrgBasicForm.returneeNum = this.teamForm.returneeNum;
+            // this.OrgBasicForm.returneeNum = this.teamForm.returneeNum;
             this.OrgBasicForm.professionNum = this.teamForm.professionNum;
             this.OrgBasicForm.masterNum = this.teamForm.masterNum;
             this.OrgBasicForm.doctorNum = this.teamForm.doctorNum;
@@ -690,7 +768,11 @@ export default {
             this.OrgBasicForm.orgTeams = this.kernelList;
             this.status = 3;
             this.investorCertificationTitle = "联系方式";
-            this.btnText = "保存并认证";
+            if(this.title==='编辑机构'){
+              this.btnText = "保存修改";
+            }else{
+               this.btnText = "保存并认证";
+            }
           } else {
             return false;
           }
@@ -712,6 +794,7 @@ export default {
               url: "saveOrUpdateOrgDetail",
               data: this.OrgBasicForm,
               callback: res => {
+                 this.loading = false;
                 if (res.code == "0000") {
                   this.$message({
                     message: "操作成功,请等待后台审核",
@@ -722,8 +805,9 @@ export default {
                   });
                 } else {
                   this.$message.error(res.result);
+                  return false
                 }
-                this.loading=false
+
               }
             });
           } else {
@@ -746,8 +830,6 @@ export default {
                 this.industrySectorOptions.push(res.data[it]);
               } else if (res.data[it].preType == "2") {
                 this.developmentStageOptions.push(res.data[it]);
-              } else {
-                this.companyNatureOptions.push(res.data[it]);
               }
             }
           } else {
@@ -847,6 +929,7 @@ export default {
       this.otherForm.id = row.id;
       this.otherForm.fileUrl = row.fileUrl;
       this.isShowOtherList = true;
+      this.showBtn=true
       this.otherText = "保存并更新";
     },
     // 删除其它资质/荣誉
@@ -871,6 +954,15 @@ export default {
     cancelOtherList() {
       this.isShowOtherList = false;
       this.otherText = "添加其它资质/荣誉";
+       this.showBtn = false
+        this.otherForm.fileUrl = "";
+        this.otherForm.certName = "";
+        this.otherForm.awardDepart = "";
+        this.otherForm.id = 0;
+        this.otherForm.awardTime = "";
+        // this.isShowOtherList = true;
+        // this.showBtn = true;
+        // this.otherText = "保存并更新";
     },
     // // 添加其它荣誉资质表单
     addOtherList(otherForm) {
@@ -881,10 +973,15 @@ export default {
         this.otherForm.id = 0;
         this.otherForm.awardTime = "";
         this.isShowOtherList = true;
+        this.showBtn = true;
         this.otherText = "保存并更新";
       } else {
-        this.$refs[otherForm].validate(valid => {
+        this.$refs['otherForm'].validate(valid => {
           if (valid) {
+            if(!this.otherForm.fileUrl){
+               this.$message.error("请上传附件");
+          return;
+            }
             if (this.otherForm.id != 0) {
               let otherFormObj = this.otherForm.id;
               this.otherList[otherFormObj - 1] = {
@@ -905,6 +1002,7 @@ export default {
             }
             this.isShowOtherList = false;
             this.otherText = "添加其它资质/荣誉";
+            this.showBtn = false
           } else {
             return false;
           }
@@ -969,7 +1067,7 @@ export default {
     // 选省
     choseProvince: function(e) {
       for (var index2 in this.province) {
-        if (e === this.province[index2].id) {
+        if (e === this.province[index2].value) {
           this.contactForm.orgProvince = this.province[index2].value;
           this.shi1 = this.province[index2].children;
           this.contactForm.orgCity = this.province[index2].children[0].value;
@@ -984,7 +1082,7 @@ export default {
     // 选市
     choseCity: function(e) {
       for (var index3 in this.city) {
-        if (e === this.city[index3].id) {
+        if (e === this.city[index3].value) {
           this.contactForm.orgCity = this.city[index3].value;
           this.qu1 = this.city[index3].children;
           this.contactForm.orgArea = this.city[index3].children[0].value;
@@ -995,7 +1093,7 @@ export default {
     // // 选区
     choseBlock: function(e) {
       for (var index4 in this.qu1) {
-        if (e === this.qu1[index4].id) {
+        if (e === this.qu1[index4].value) {
           this.contactForm.orgArea = this.qu1[index4].value;
         }
       }
@@ -1030,7 +1128,6 @@ export default {
       }
     },
     handlelicense(file) {
-      console.log(file);
       this.licenseList[0].fileUrl = file.data;
       // console.log(this.fileUrl)
     },
@@ -1045,6 +1142,15 @@ export default {
   max-width: 260px;
 }
 .basicInformation {
+  .xian {
+    margin-left: 65px;
+    margin-bottom: 20px;
+    hr {
+      height: 1px;
+      border: none;
+      background: #dcdfe6;
+    }
+  }
   .orgAddressInfo {
     .el-input {
       width: 460px !important;

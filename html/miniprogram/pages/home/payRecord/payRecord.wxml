@@ -10,8 +10,8 @@
           <picker bindchange="selectcarLicense" value="{{detailSend.carLicense}}" range="{{carLicenseList}}" range-key="{{'carLicense'}}">
             <text class="select green">{{detailSend.carLicense}} </text>
           </picker>
-          <text class="icon-triangleupfill" wx:if="{{isShow}}"></text>
-          <text class="icon-triangledownfill" wx:else></text>
+          <!-- <text class="icon-triangleupfill" wx:if="{{isShow}}"></text>
+          <text class="icon-triangledownfill" wx:else></text> -->
         </view>
       </view>
     </view>
@@ -42,7 +42,7 @@
     <block wx:for="{{parkDetail}}" wx:key>
       <view class="li" >
         <view class="title">
-          <view>{{detailSend.carLicense}} </view>
+          <view>{{item.carLicense}} </view>
         </view>
         <view class="detail paddihng_side">
           <view>车场名称：</view>

@@ -6,26 +6,26 @@
     <div class="ordinary_main">
       <div class="formData">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-          <el-form-item label="昵称" prop="name">
+          <el-form-item label="昵称" prop="nickName">
             <label slot="label">昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称</label>
-            <el-input v-model.trim="ruleForm.name" clearable></el-input>
+            <el-input v-model.trim="ruleForm.nickName" clearable></el-input>
           </el-form-item>
-          <el-form-item label="出生年月" prop="date1">
-            <el-date-picker v-model="ruleForm.date1" type="month" placeholder="请选择出生年月">
+          <el-form-item label="出生年月" prop="birthday">
+            <el-date-picker v-model="ruleForm.birthday" type="date" placeholder="请选择出生年月" format="yyyy-MM-dd" value-format="yyyy-MM-dd">
             </el-date-picker>
           </el-form-item>
           <el-form-item label="联系手机" prop="phone">
-            <el-input v-model="ruleForm.phone" maxlength="11" minlenght="11" clearable></el-input>
+            <el-input v-model="ruleForm.phone" maxlength="11" minlenght="11" clearable :disabled="disabled"></el-input>
           </el-form-item>
-          <el-form-item label="真实姓名" prop="realname">
-            <el-input v-model.trim="ruleForm.realname" clearable></el-input>
+          <el-form-item label="真实姓名" prop="name">
+            <el-input v-model.trim="ruleForm.name" clearable></el-input>
           </el-form-item>
-          <el-form-item label="加入公司" prop="joinCom">
-            <el-select v-model="ruleForm.joinCom" placeholder="请选择公司名" value-key='id' @change="change" clearable>
+          <el-form-item label="加入公司" prop="comName">
+            <el-select v-model="ruleForm.comName" placeholder="请选择公司名" value-key='id' @change="change" clearable>
               <el-option :label="i.comName" :value="i" v-for="i in companyList" :key="i.id"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item prop="code">
+          <el-form-item prop="checkCode">
             <el-input v-model="ruleForm.checkCode" class="input1" placeholder="请输入验证码" style="width:150px" clearable></el-input>
             <span class="getCode" v-if="sendAuthCode" @click="getCode">获取验证码</span>
             <span class="getCode" v-else style="padding: 0px 15px;">
@@ -46,12 +46,21 @@ export default {
     var checkPhoneNumber = (rule, value, callback) => {
       const reg = /^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\d{8}$/;
       if (!reg.test(value)) {
-        callback(new Error("请输入正确的手机号码"));
+        callback("请输入正确的手机号码");
+      } else {
+        callback();
+      }
+    };
+    var checknickName = (rule, value, callback) => {
+      const reg = /^(?:(?!([\-\/\%])).)*$/;
+      if (!reg.test(value)) {
+        callback("昵称不能包含特殊字符‘%/-’");
       } else {
         callback();
       }
     };
     return {
+      disabled:false,
       loading: false,
       sendAuthCode: true,
       auth_time: 0,
@@ -69,19 +78,21 @@ export default {
       ruleForm: {
         name: "",
         phone: "",
-        date1: "",
-        realname: "",
-        joinCom: "",
-        checkCode: "",
+        birthday: "",
+        nickName: "",
+        comName: "",
+        comId: "",
+        checkCode: ""
       },
       rules: {
-        name: [{ required: true, message: "请输入名号", trigger: "blur" }],
-        age: [{ required: true, message: "请选择出生年月", trigger: "change" }],
-        date1: [
+        nickName: [
+          { required: true, message: "请输入昵称", trigger: "blur" },
+          { validator: checknickName, trigger: "blur" }
+        ],
+        birthday: [
           {
-            // type: "month",
             required: true,
-            message: "请选择日期",
+            message: "请选择出生年月",
             trigger: "change"
           }
         ],
@@ -89,13 +100,12 @@ export default {
           { required: true, message: "请输入手机号码", trigger: "blur" },
           { validator: checkPhoneNumber, trigger: "blur" }
         ],
-        realname: [
-          { required: true, message: "请输入真实姓名", trigger: "blur" }
-        ],
-        joinCom: [
+        name: [{ required: true, message: "请输入真实姓名", trigger: "blur" }],
+        comName: [
           { required: true, message: "请选择公司名字", trigger: "change" }
         ]
-      }
+      },
+      getUserInfo:{}
     };
   },
   mounted() {
@@ -122,19 +132,25 @@ export default {
       // }
       this.$refs[formName].validate(valid => {
         if (valid) {
+           this.loading=true
           let _this = this;
           this.api.post({
             url: "changeToStaff",
             data: {
               checkCode: _this.ruleForm.checkCode,
               comName: _this.comName,
-              comId: _this.comId
+              comId: _this.comId,
+              birthday: _this.ruleForm.birthday,
+              name: _this.ruleForm.name,
+              nickName: _this.ruleForm.nickName,
+              phone: _this.ruleForm.phone
             },
             callback: function(res) {
+              _this.loading=false
               if (res.code == "0000") {
-                _this.$message.success('提交成功，等待审核');
-                 _this.$refs['ruleForm'].resetFields();
-                 _this.ruleForm.checkCode=''
+                _this.$message.success("提交成功，等待审核");
+                _this.$refs["ruleForm"].resetFields();
+                _this.ruleForm.checkCode = "";
               } else {
                 _this.$message.error(res.result);
                 return false;
@@ -186,6 +202,13 @@ export default {
         data: {},
         callback: function(res) {
           if (res.code == "0000") {
+            _this.ruleForm.nickName=res.data.nickName
+            _this.ruleForm.birthday=res.data.birthday
+            _this.ruleForm.phone=res.data.phone
+            _this.ruleForm.name=res.data.name
+            if(_this.ruleForm.phone){
+              _this.disabled=true
+            }
             // _this.sendData.orgId = res.data.id;
             _this.$nextTick(() => {
               _this.selectCompany();
@@ -208,7 +231,22 @@ export default {
           }
         }
       });
-    }
+    },
+    //获取当前用户资料
+    // getUserExtension() {
+    //   this.api.get({
+    //     url: "getUserExtension",
+    //     data: {},
+    //     callback: (res)=> {
+    //       if (res.code == "0000") {
+    //         this.getUserInfo = res.data;
+    //         this.ruleForm. = res.data;
+    //       } else {
+    //         _this.$message.error(res.result);
+    //       }
+    //     }
+    //   });
+    // }
   }
 };
 </script>
@@ -229,7 +267,7 @@ export default {
     .el-form-item__content {
       line-height: 33px;
     }
-    .el-input{
+    .el-input {
       width: 266px;
     }
     .el-input__inner {

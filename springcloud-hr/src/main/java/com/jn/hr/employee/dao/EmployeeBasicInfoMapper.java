@@ -44,9 +44,14 @@ public interface EmployeeBasicInfoMapper {
 
     @MapKey("jobNumber")
     Map<String,TbManpowerEmployeeBasicInfo> map(TbManpowerEmployeeBasicInfo tbManpowerEmployeeBasicInfo);
+    
+    @MapKey("certificateNumber")
+    Map<String,TbManpowerEmployeeBasicInfo> selectByIdCard(TbManpowerEmployeeBasicInfo tbManpowerEmployeeBasicInfo);
 
     List<EmployeeBasicInfo> selectByEntryDate(@Param("entryDate") String entryDate);
     
     TbManpowerEmployeeBasicInfo selectByUserId(@Param("userId")String userId);
+
+    int selectCountByName(@Param("name")String name);
 
 }

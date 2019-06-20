@@ -46,4 +46,14 @@ public class FinanceIncomeLastYearContrastVo implements Serializable {
     public void setFinanceIncomeLastYearContrastModels(List<FinanceIncomeLastYearContrastModel> financeIncomeLastYearContrastModels) {
         this.financeIncomeLastYearContrastModels = financeIncomeLastYearContrastModels;
     }
+
+
+    @Override
+    public String toString() {
+        return "FinanceIncomeLastYearContrastVo{" +
+                "incomeType=" + incomeType +
+                ", incomeTypeName='" + incomeTypeName + '\'' +
+                ", financeIncomeLastYearContrastModels=" + financeIncomeLastYearContrastModels +
+                '}';
+    }
 }

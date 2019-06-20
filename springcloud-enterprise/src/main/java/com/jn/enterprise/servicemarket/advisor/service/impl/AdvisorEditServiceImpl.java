@@ -127,7 +127,7 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
     @Override
     public int saveOrUpdateAdvisorBaseInfo(AdvisorBaseInfoParam advisorBaseInfoParam) {
         //校验操作是否允许
-        checkOptionIsAllow(advisorBaseInfoParam.getAdvisorAccount());
+        checkOptionIsAllow(advisorBaseInfoParam.getAdvisorAccount(),false);
         //校验业务领域
         checkBusinessArea(advisorBaseInfoParam.getBusinessAreas());
         //校验机构id并获取机构信息
@@ -143,6 +143,7 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
             //通过账号获取到用户头像
             Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(advisorBaseInfoParam.getAdvisorAccount());
             if(userExtension==null || userExtension.getData()==null){
+                logger.warn("机构专员认证基本信息保存并更新失败，失败原因，获取用户扩展信息失败");
                 throw new JnSpringCloudException(ApprovalStatusEnum.NETWORK_ANOMALY);
             }
             return insertServiceAdvisorInfo(advisorBaseInfoParam,tbServiceOrg.getOrgName(),userExtension.getData().getAvatar());
@@ -270,7 +271,7 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
     @Override
     public int saveOrUpdateAdvisorHonor(ServiceHonorParam serviceHonorParam) {
         //校验操作是否允许
-        checkOptionIsAllow(serviceHonorParam.getAdvisorAccount());
+        checkOptionIsAllow(serviceHonorParam.getAdvisorAccount(),true);
         //判断证书类型是否在系统中
         boolean isExist=false;
         //证件类型分类 荣誉资质：honor
@@ -379,7 +380,7 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
      */
     @Override
     public int sendApproval(String loginAccount) {
-        checkOptionIsAllow(loginAccount);
+        checkOptionIsAllow(loginAccount,true);
         TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
         example.createCriteria().andAdvisorAccountEqualTo(loginAccount);
         TbServiceAdvisor tbServiceAdvisor=new TbServiceAdvisor();
@@ -392,18 +393,22 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
     /**
      * 校验当前操作是否允许
      * @param loginAccount
+     * @param emptyAllow 是否允许基本信息为空（基本信息保存时值为false,其他为true）
      */
     @ServiceLog(doAction = "校验当前操作是否允许")
-    private void checkOptionIsAllow(String loginAccount) {
+    private void checkOptionIsAllow(String loginAccount,boolean emptyAllow) {
         TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
         example.createCriteria().andAdvisorAccountEqualTo(loginAccount)
                 .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         List<TbServiceAdvisor> advisorList = tbServiceAdvisorMapper.selectByExample(example);
         if(advisorList.isEmpty()){
-            //ignore
+            if(emptyAllow){
+                logger.warn("当前用户基本信息在系统中不存在，请添加专员基本信息");
+                throw new JnSpringCloudException(AdvisorExceptionEnum.ADVISOR_BASE_INFO_NOT_EXIST);
+            }
         }else if(StringUtils.equals(advisorList.get(0).getApprovalStatus(), ApprovalStatusEnum.APPROVED.getValue())
                 || StringUtils.equals(advisorList.get(0).getApprovalStatus(), ApprovalStatusEnum.APPROVAL.getValue())){
-            logger.warn("顾问认证发送申请异常，当前顾问审批状态为认证中或认证通过,不允许编辑");
+            logger.warn("机构专员认证发送申请异常，当前专员审批状态为认证中或认证通过,不允许编辑");
             throw new JnSpringCloudException(AdvisorExceptionEnum.ADVISOR_HAS_EXIST);
         }
     }
@@ -416,7 +421,7 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
     @Override
     public int saveOrUpdateAdvisorExperience(ServiceExperienceParam serviceExperienceParam) {
         //校验操作是否允许
-        checkOptionIsAllow(serviceExperienceParam.getAdvisorAccount());
+        checkOptionIsAllow(serviceExperienceParam.getAdvisorAccount(),true);
         //有主键id,更据主键id和账号更新服务经历
         if(StringUtils.isNotBlank(serviceExperienceParam.getId()) && !PARAM_EXAMPLE.equals(serviceExperienceParam.getId())){
             byte recordStatus=1;
@@ -460,7 +465,7 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
     @Override
     public int saveOrUpdateAdvisorProjectExperience(ServiceProjectExperienceParam serviceProjectExperienceParam) {
         //校验操作是否允许
-        checkOptionIsAllow(serviceProjectExperienceParam.getAdvisorAccount());
+        checkOptionIsAllow(serviceProjectExperienceParam.getAdvisorAccount(),true);
         //有主键id,更据主键id和账号更新服务经历
         if(StringUtils.isNotBlank(serviceProjectExperienceParam.getId())&& !PARAM_EXAMPLE.equals(serviceProjectExperienceParam.getId())){
             TbServiceProExperCriteria example=new TbServiceProExperCriteria();

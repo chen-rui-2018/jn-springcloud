@@ -238,6 +238,24 @@ export function getTime(type) {
   }
 }
 
+export function fnSetTreeData(arr) {
+  const data = [...arr]
+  let tree = data.filter((father) => {
+    const branchArr = data.filter((child) => {
+      if (father.id === child.pid) child._hasParent = true
+      return father.id === child.pid
+    })
+    if (branchArr.length > 0) {
+      father.children = branchArr
+    }
+    return !father._hasParent
+  })
+  tree = tree.filter((item) => {
+    return !item._hasParent
+  })
+  return tree
+}
+
 export function debounce(func, wait, immediate) {
   let timeout, args, context, timestamp, result
 
@@ -257,7 +275,6 @@ export function debounce(func, wait, immediate) {
       }
     }
   }
-
   return function(...args) {
     context = this
     timestamp = +new Date()

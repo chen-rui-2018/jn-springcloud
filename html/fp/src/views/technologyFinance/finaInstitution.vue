@@ -34,7 +34,7 @@
             <i class="el-icon-arrow-up" v-else @click="flag3 = !flag3"></i>
           </div>
         </div>
-        <div class="nav1 clearfix">
+        <!-- <div class="nav1 clearfix">
           <div class="nav1Tit fl">企业性质：</div>
           <ul class="nav1Ul fl clearfix" style="width:auto">
             <li :class="{'active1':filterFlag3 == ''}" @click="handleFilter3('')">不限</li>
@@ -46,7 +46,7 @@
             <i class="el-icon-arrow-down" v-if="flag4" @click="flag4 = !flag4"></i>
             <i class="el-icon-arrow-up" v-else @click="flag4 = !flag4"></i>
           </div>
-        </div>
+        </div> -->
         <div class="nav1 nav2 mainColor pointer" style="color:#00a041" @click="showFlag=!showFlag">
           收起
           <i class="el-icon-arrow-up" style="color:#00a041"></i>
@@ -71,14 +71,17 @@
         <i class="iconfont icon-sousuo" @click="handleSearchList"></i>
       </div>
     </div>
-    <div class="serverOrgContent">
-      <ul>
+    <div class="serverOrgContent" v-loading="finaloading">
+      <div v-if="serverAgent.length==0">
+        <nodata></nodata>
+      </div>
+      <ul v-else>
         <li class="clearfix" v-for="(i,k) in serverAgent" :key='k'>
-          <div class="orgImg fl" @click="handleOrgDel(i.orgId)">
+          <div class="orgImg fl pointer" @click="handleOrgDel(i.orgId)">
             <img :src="i.orgLogo" alt="">
             <!-- <img v-else src="@/../static/img/product.png" alt=""> -->
           </div>
-          <div class="orgCon fl">
+          <div class="orgCon pointer fl" @click="handleOrgDel(i.orgId)">
             <div class="conTil">{{i.orgName}}</div>
             <div class="conContent clearfix color3">
               <div class="left1 fl">
@@ -110,12 +113,29 @@
       <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
       </el-pagination>
     </div>
+    <template v-if="concatVisible">
+      <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :modal-append-to-body=false :lock-scroll="false">
+        <div class="loginTip">
+          你还未
+          <span class="mainColor pointer" @click="goLogin">登录</span>
+          /
+          <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+          账号
+        </div>
+      </el-dialog>
+    </template>
   </div>
 </template>
 <script>
+import nodata from "../common/noData.vue";
 export default {
+  components: {
+    nodata
+  },
   data() {
     return {
+      finaloading: false,
+      concatVisible: false,
       total: 0,
       currentPage1: 1,
       row: 3,
@@ -123,9 +143,9 @@ export default {
       serverAgent: [],
       sortTypes: "",
       keyW: "",
-      industrySector:"",
-      developmentStage:"",
-      companyNature:"",
+      industrySector: "",
+      developmentStage: "",
+      companyNature: "",
       colorFlag: "",
       filterFlag1: "",
       filterFlag2: "",
@@ -147,13 +167,24 @@ export default {
     this.selectIndustryList();
   },
   methods: {
-      //在线联系
-    onlineContat(orgAccount,orgName){
-       if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
+    goLogin() {
+      window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
+      this.$router.push({ path: "/login" });
+    },
+    //在线联系
+    onlineContat(orgAccount, orgName) {
+      if (!this.getUserInfo()) {
+        this.concatVisible = true;
         return;
       }
-      this.$router.push({path:'/chat',query:{fromUser: JSON.parse(sessionStorage.userInfo).account,fromUser:sessionStorage.userInfo.account,toUser:orgAccount,nickName:orgName}})
+      this.$router.push({
+        path: "/chat",
+        query: {
+          fromUser: JSON.parse(this.getUserInfo()).account,
+          toUser: orgAccount,
+          nickName: orgName
+        }
+      });
     },
     widFun(i) {
       let doc = document.getElementsByClassName(i);
@@ -176,17 +207,15 @@ export default {
       this.initList();
     },
     handleFilter1(i) {
-      this.industrySector=`${i}`,
-      this.filterFlag1 = i;
+      (this.industrySector = `${i}`), (this.filterFlag1 = i);
       this.initList();
     },
     handleFilter2(i) {
-      this.developmentStage=`${i}`,
-      this.filterFlag2 = i;
+      (this.developmentStage = `${i}`), (this.filterFlag2 = i);
       this.initList();
     },
     handleFilter3(i) {
-      this.companyNature=`${i}`
+      this.companyNature = `${i}`;
       this.filterFlag3 = i;
       this.initList();
     },
@@ -212,22 +241,23 @@ export default {
     },
     //服务机构列表
     initList() {
+      this.finaloading = true;
       let _this = this;
       let data = {
-          businessType: "technology_finance",
-          industrySector: _this.industrySector,
-          developmentStage: _this.developmentStage,
-          companyNature: _this.companyNature,
-          page: _this.page,
-          rows: _this.row,
-          sortTypes: _this.sortTypes,
-          orgName: _this.keyW
-        }
-        console.log(data)
+        businessType: "technology_finance",
+        industrySector: _this.industrySector,
+        developmentStage: _this.developmentStage,
+        // companyNature: _this.companyNature,
+        page: _this.page,
+        rows: _this.row,
+        sortTypes: _this.sortTypes,
+        orgName: _this.keyW
+      };
+      // console.log(data)
       this.api.get({
         url: "selectServiceOrgList",
         data: data,
-        dataFlag:true,
+        dataFlag: true,
         callback: function(res) {
           if (res.code == "0000") {
             _this.serverAgent = res.data.rows;
@@ -239,6 +269,7 @@ export default {
           } else {
             _this.$message.error(res.result);
           }
+          _this.finaloading = false;
         }
       });
     },
@@ -275,7 +306,7 @@ export default {
 };
 </script>
 <style lang="scss">
-.finaInstitution{
-  padding-top:65px;
+.finaInstitution {
+  padding-top: 65px;
 }
 </style>

@@ -18,7 +18,9 @@
               </div>
             <div><span>联系电话</span> <span>{{serviceDetail.linkPhone}}</span> </div>
             <div><span>承诺办理时限方式</span> <span>{{serviceDetail.dealLimitDays}}个工作日</span> </div>
-            <div class="online_addr"><span>在线办理</span><span @touchstart="goOnline"><a :href="dealUrl" target="_blank">请点击这里</a></span> </div>
+            <div class="online_addr"><span>在线办理</span>
+            <span><a :href="serviceDetail.dealUrl">请点击这里</a></span>
+            </div>
           </div>
         </div>
         <!-- 办理材料 -->
@@ -28,14 +30,15 @@
             <div>
               <span class="hidden">{{item.name}}</span>
               <span >
-                <a :href="item.sample">下载</a>
+                <a :href="item.sample" v-if="item.sample">下载</a>
+                <span v-else>下载</span>
                 <i class="iconfont icon-jiantou"></i>
               </span>
             </div>
             <div>
-              <span>{{item.isRequired==='0'?'非必要':'必要'}} </span>
+              <span>{{item.isRequired===1?'必要':'非必要'}} </span>
               <span>{{item.paperQuantity}} 份纸质</span>
-              <span>{{item.isNeedElectronic==='1'?"需电子档":'不需电子档'}} </span>
+              <span>{{item.isNeedElectronic===1?"需电子档":'不需电子档'}} </span>
             </div>
           </div>
 
@@ -102,9 +105,9 @@ export default {
         }
       })
     },
-    goOnline () {
-      this.dealUrl = `http://192.168.10.31:1101/springcloud-park/guest/portal/sp/power/getDealUrl?id=${this.id}`
-    },
+    // goOnline () {
+    //   this.dealUrl = `http://192.168.10.31:1101/springcloud-park/guest/portal/sp/power/getDealUrl?id=${this.id}`
+    // },
     goConsult () {
       // console.log(1)
       this.$router.push({path: '/guest/portal/sp/power/consult', query: {id: this.id}})

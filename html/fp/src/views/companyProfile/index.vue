@@ -77,7 +77,7 @@
             <!-- <img src="@/../static/img/ins1.png" alt=""> -->
             <img :src="i.avatar" alt="">
           </div>
-          <div class="orgCon fl">
+          <div class="orgCon pointer fl" @click="handleOrgDel(i.id)">
             <div class="conTil">{{i.comName}}</div>
             <div class="conContent clearfix color3">
               <div class="left1 fl">
@@ -115,12 +115,25 @@
       <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
       </el-pagination>
     </div>
+      <template v-if="concatVisible">
+      <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :append-to-body="true" :lock-scroll="false">
+        <div class="loginTip" style="text-align:center;padding-bottom:20px">
+          你还未
+          <span class="mainColor pointer" @click="goLogin">登录</span>
+          /
+          <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+          账号
+        </div>
+      </el-dialog>
+    </template>
   </div>
 </template>
 <script>
+import { getToken } from '@/util/auth'
 export default {
   data() {
     return {
+      concatVisible:false,
       attentionStatus: "0",
       total: 0,
       currentPage1: 1,
@@ -158,31 +171,43 @@ export default {
     };
   },
   created() {
-    this.token = sessionStorage.getItem("token");
+    this.token = getToken();
   },
   mounted() {
     this.getParkList();
     this.selectIndustryList();
-    this.getCompanyList();
+    // this.getCompanyList();
     if (this.$route.query.id) {
       this.induType = this.$route.query.id;
       this.filterFlag1 = this.$route.query.id;
+    //   this.getParkList();
+    // this.selectIndustryList();
+    this.getCompanyList();
+    } else {
+    //   this.getParkList();
+    // this.selectIndustryList();
+    this.getCompanyList();
     }
   },
   methods: {
+    goLogin() {
+      window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
+      this.$router.push({ path: "/login" });
+    },
     //关注
     handleAttention(id) {
-      if (sessionStorage.token) {
+      if (getToken()) {
         this.api.post({
           url: "addCareOperate",
           data: {
             account: id,
-            receiveType: -2
+            receiveType: 2
           },
           // dataFlag:true,
           callback: res => {
             if (res.code == "0000") {
               // _this.parkList = res.data;
+              this.$message.success('关注成功');
               this.getCompanyList()
             } else {
               this.$message.error(res.result);
@@ -190,13 +215,13 @@ export default {
           }
         });
       } else {
-        this.$message.error("你还未登录");
+        this.concatVisible=true;
         return;
       }
     },
     //取消关注
     cancelAttention(id) {
-      if (sessionStorage.token) {
+      if (getToken()) {
         this.api.post({
           url: "cancelCareOperate",
           data: {
@@ -205,6 +230,7 @@ export default {
           dataFlag: true,
           callback: res => {
             if (res.code == "0000") {
+              this.$message.success('取消关注成功');
               // _this.parkList = res.data;
               this.getCompanyList()
             } else {
@@ -213,23 +239,31 @@ export default {
           }
         });
       } else {
-        this.$message.error("你还未登录");
+        this.concatVisible=true;
         return;
       }
     },
     widFun(i) {
+      
       let doc = document.getElementsByClassName(i);
       let num = 0;
       for (let it of doc) {
-        num += it.offsetWidth * 1;
+        num += it.offsetWidth * 1 + this.getStyle(it,'marginLeft');
       }
-      // console.log(num);
       if (num >= 860) {
         return true;
       } else {
         return false;
       }
     },
+    getStyle(obj,attr){   
+      if(obj.currentStyle){   	
+        return obj.currentStyle[attr].split('px')[0] * 1;   
+      }   
+      else{   	
+        return document.defaultView.getComputedStyle(obj,null)[attr].split('px')[0] * 1;   	
+      }   
+    },     
     //排序
     handleFil(i) {
       this.colorFlag = i;
@@ -366,6 +400,11 @@ export default {
 <style lang="scss" scoped>
 .companyProfile {
   padding-top: 65px;
+  .loginTip{
+    text-align: center;
+    margin-bottom:20px;
+    font-size: 15px;
+  }
   .serverOrgContent {
     .orgBtn1 {
       p {

@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 import java.util.List;
 
 /**
@@ -121,5 +122,14 @@ public class CustomerCalledInfoEnterController extends BaseController {
             return new Result(CustomerCenterExceptionEnum.NETWORK_ANOMALY.getCode(),CustomerCenterExceptionEnum.NETWORK_ANOMALY.getMessage());
         }
         return new Result<>(customerServiceCenterService.customerQuesDetail(user.getAccount(), processInsId));
+    }
+
+    @ControllerLog(doAction = "查询用户来电历史信息")
+    @ApiOperation(value = "查询用户来电历史信息")
+    //@RequiresPermissions("/customer/customerCalledInfoEnterController/getUserCalledHistory")
+    @RequestMapping(value = "/getUserCalledHistory",method = RequestMethod.GET)
+    public Result<PaginationData<List<ConsultationCustomerListShow>>> getUserCalledHistory(CalledPhoneHistoryParam calledPhoneHistoryParam) {
+        PaginationData result=customerServiceCenterService.getUserCalledHistory(calledPhoneHistoryParam);
+        return new Result<>(result);
     }
 }

@@ -90,6 +90,41 @@ public class MyPayBillController extends BaseController {
         return new Result(myPayBillService.billCheckReminder(payCheckReminder,user));
     }
 
+    @ControllerLog(doAction = "我的账单-创建账单")
+    @ApiOperation(value = "我的账单-创建账单",notes = "我的账单-创建账单")
+    @RequestMapping(value = "/billCreate",method = RequestMethod.POST)
+    @RequiresPermissions("/payment/payBill/billCreate")
+    public Result billCreate(@RequestBody PayBillCreateParamVo payBillCreateParamVo) {
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        Assert.notNull(payBillCreateParamVo.getAcBookType(),"账本类型ID不能为空");
+        Assert.notNull(payBillCreateParamVo.getObjName(),"对象名称不能为空");
+        Assert.notNull(payBillCreateParamVo.getBillExpense(),"账本费用不能为空");
+        Assert.notNull(payBillCreateParamVo.getBillId(),"账本编号不能为空");
+        Assert.notNull(payBillCreateParamVo.getLatePayment(),"最迟缴费时间不能为空");
+        Assert.notNull(payBillCreateParamVo.getObjType(),"对象类型不能为空");
+        Result result=myPayBillService.billCreate(payBillCreateParamVo);
+        return result;
+    }
 
+    @ControllerLog(doAction = "我的账单-插入流水记录")
+    @ApiOperation(value = "我的账单-插入流水记录",notes = "我的账单-插入流水记录")
+    @RequestMapping(value = "/insertRecord",method = RequestMethod.POST)
+    @RequiresPermissions("/payment/payBill/insertRecord")
+    public Result insertRecord(@RequestBody PayAccountBookMoneyRecord payAccountBookMoneyRecord) {
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        Result result=myPayBillService.insertRecord(payAccountBookMoneyRecord);
+        return result;
+    }
+
+    @ControllerLog(doAction = "我的账单-线下缴费确认回调各业务侧接口")
+    @ApiOperation(value = "我的账单-线下缴费确认回调各业务侧接口",notes = "我的账单-线下缴费确认回调各业务侧接口")
+    @RequestMapping(value = "/callbackServiceSide",method = RequestMethod.POST)
+    @RequiresPermissions("/payment/payAccount/callbackServiceSide")
+    public Result callbackServiceSide(@RequestBody @Validated PayCallbackServiceSideParam payCallbackServiceSideParam){
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        Assert.notNull(payCallbackServiceSideParam.getBillId(),"账单编号不能为空");
+        return myPayBillService.callbackServiceSide(payCallbackServiceSideParam,user);
+    }
 
 }

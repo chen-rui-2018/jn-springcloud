@@ -5,13 +5,6 @@
           <div class="swiper-wrapper">
               <div class="swiper-slide"> <img src="@/assets/image/declaration.png" alt=""> </div>
           </div>
-          <!-- <div class="swiper-pagination"></div> -->
-         <!--  <div class="swiper-button-prev">
-            <i class="el-icon-arrow-left"></i>
-          </div>
-          <div class="swiper-button-next">
-            <i class="el-icon-arrow-right"></i>
-          </div> -->
       </div>
     </div>
     <div class="declarationCenter_content"><!-- 版心 -->
@@ -23,6 +16,54 @@
             <a href="javascript:;">申报中心</a>
           </el-breadcrumb-item>
         </el-breadcrumb>
+      </div>
+      <!-- 申报中心列表 -->
+      <div class="declaration_centerList">
+        <!-- <div class="declaration_titile">申报中心列表</div> -->
+        <div class="declaration_titile">
+          <div>申报中心列表</div>
+          <div @click="isPage=!isPage">MORE <span class="el-icon-arrow-right"></span></div>
+        </div>
+        <div class="declaration_list">
+          <!-- 筛选 -->
+          <div class="filter">
+            <div>
+              <span @click="filter('1')" :class="{'fontcolor':sortType==='1'}"><i class="iconfont icon-clock-"></i>发布时间排序 </span>
+              <span @click="filter('2')" :class="{'fontcolor':sortType==='2'}"><i class="iconfont icon-tiaozheng"></i>时间节点排序 </span>
+              <span @click="filter('3')" :class="{'fontcolor':sortType==='3'}"><i class="iconfont icon-hot"></i>热度排序</span>
+            </div>
+          </div>
+          <!-- 内容 -->
+          <div class="list_cont">
+            <el-tabs v-model="rangeId" @tab-click="switchto">
+              <el-tab-pane  v-for="(typeitem,typeindex) in typeList" :key="typeindex">
+                <div slot="label" :name="typeitem.id">{{typeitem.name}}</div>
+                <div class="lists" v-for="(centeritem,centerindex) in centerList" :key="centerindex" >
+                  <div class="list_cont_left">
+                    <p>【{{centeritem.rangeId|type}}】{{centeritem.titleName}}</p> 
+                    <p><span>发布日期：{{centeritem.createdTime|time}}</span><!-- <span>状态：<span class="fontcolor">{{centeritem.isRoofPlacement|isRoof}}</span> --></span></p>
+                    <p>申报部门：{{centeritem.timeNode}}</p>
+                    <p>截止时间：<span class="fontcolor">{{centeritem.deadline|time}}</span></p>
+                  </div>
+                  <div class="list_cont_check" @click="gonoticedetail(centeritem.id)"> <span>查看详情</span> </div>
+                </div>
+              </el-tab-pane>
+            </el-tabs>
+          </div>
+          
+        </div>
+      </div>
+      <!-- 分页 -->
+      <div class="paging" v-if="isPage">
+        <el-pagination
+          background
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :page-sizes="[6, 12, 18, 24]"
+          :page-size="100"
+          layout="total,prev, pager, next,sizes"
+          :total="total">
+        </el-pagination>
       </div>
       <!-- 申报平台 -->
       <div class="declaration_platform">
@@ -62,54 +103,12 @@
           </ul>
         </div>
       </div>
-      <!-- 申报中心列表 -->
-      <div class="declaration_centerList">
-        <div class="declaration_titile">申报中心列表</div>
-        <div class="declaration_list">
-          <!-- 筛选 -->
-          <div class="filter">
-            <div>
-              <span @click="filter('1')" :class="{'fontcolor':sortType==='1'}"><i class="iconfont icon-clock-"></i>发布时间排序 </span>
-              <span @click="filter('2')" :class="{'fontcolor':sortType==='2'}"><i class="iconfont icon-tiaozheng"></i>时间节点排序 </span>
-              <span @click="filter('3')" :class="{'fontcolor':sortType==='3'}"><i class="iconfont icon-hot"></i>热度排序</span>
-            </div>
-          </div>
-          <!-- 内容 -->
-          <div class="list_cont">
-            <el-tabs v-model="rangeId" @tab-click="switchto">
-              <el-tab-pane  v-for="(typeitem,typeindex) in typeList" :key="typeindex">
-                <div slot="label" :name="typeitem.id">{{typeitem.name}}</div>
-                <div class="lists" v-for="(centeritem,centerindex) in centerList" :key="centerindex" >
-                  <div class="list_cont_left">
-                    <p>【{{centeritem.rangeId|type}}】{{centeritem.titleName}}</p> 
-                    <p><span>发布日期：{{centeritem.createdTime|time}}</span><span>状态：<span class="fontcolor">{{centeritem.isRoofPlacement|isRoof}}</span></span></p>
-                    <p>最近要求：{{centeritem.timeNode}}</p>
-                    <p>截止时间：<span class="fontcolor">{{centeritem.deadline|time}}</span></p>
-                  </div>
-                  <div class="list_cont_check" @click="gonoticedetail(centeritem.id)"> <span>查看详情</span> </div>
-                </div>
-              </el-tab-pane>
-            </el-tabs>
-          </div>
-          
-        </div>
-      </div>
-      <!-- 分页 -->
-      <div class="paging">
-        <el-pagination
-          background
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :page-sizes="[6, 12, 18, 24]"
-          :page-size="100"
-          layout="total,prev, pager, next,sizes"
-          :total="total">
-        </el-pagination>
-      </div>
+      
     </div><!-- 版心 -->
   </div>
 </template>
 <script>
+import { getToken } from '@/util/auth'
 export default {
     data () {
       return {
@@ -119,8 +118,9 @@ export default {
         rangeId:'',//所属类型
         sortType:'1',//排序
         page:1,
-        rows:4,
+        rows:6,
         perennialList:[],
+        isPage:false
       }
     },
     filters: {
@@ -231,7 +231,7 @@ export default {
         this.getdeclarationcenterList()
       },
       goplatform(){
-        if(sessionStorage.token){
+        if(getToken()){
           this.$router.push({name:'declarationPlatform'})
         }else{
           this.$confirm('亲，您需要登录后才能访问以下界面哦！', '提示', {
@@ -240,7 +240,8 @@ export default {
             type: 'warning',
             center: true
           }).then(() => {
-             this.$router.push({path:"/login"})
+            window.sessionStorage.setItem("PresetRoute", this.$route.fullPath)
+            this.$router.push({ path: "/login" })
           }).catch(() => {
           })
         }
@@ -359,6 +360,7 @@ export default {
       }
       // 申报平台
       .declaration_platform{
+        margin-top: 31px;
         .platform_titile{
           display: flex;
           justify-content: space-between;
@@ -408,6 +410,7 @@ export default {
       // 常年申报
       .perennial_declare{
         margin-top: 29px;
+        margin-bottom: 54px;
         .perennial_titile{
           display: flex;
           justify-content: space-between;
@@ -492,13 +495,20 @@ export default {
       }
       // 申报中心列表
       .declaration_centerList{
-        margin-top: 54px;
+        // margin-top: 54px;
         .declaration_titile{
           display: flex;
           justify-content: space-between;
-          padding-left: 10px;
-          border-left: 4px solid #00a041;
-          line-height: 1;
+          div:nth-child(1){
+            padding-left: 10px;
+            border-left: 4px solid #00a041;
+            line-height: 1;
+          }
+          div:nth-child(2){
+            font-size: 12px;
+            color:#00a041;
+            cursor: pointer;
+          }
         }
         .declaration_list{
           // margin-top: 21px;
@@ -508,8 +518,7 @@ export default {
             justify-content: flex-end;
             color:#797979;
             font-size: 13px;
-            // border: solid 1px #eeeeee;
-            // padding: 21px 14px;
+            margin-top: 10px;
             div{
               font-size: 13px;
               span{
@@ -585,7 +594,7 @@ export default {
       //分页
       .paging{
         text-align: center;
-        margin: 51px 0 76px 0;
+        margin: 31px 0 0px 0;
         .el-pagination.is-background .btn-prev,.el-pagination.is-background .btn-next{
           border: 1px solid #eee;
           background-color: #fff;

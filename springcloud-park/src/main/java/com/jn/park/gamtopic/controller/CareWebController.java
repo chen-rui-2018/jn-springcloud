@@ -57,12 +57,20 @@ public class CareWebController extends BaseController {
         int i = careService.cancelCareOperate(account,user==null?"":user.getAccount());
         return new Result(i);
     }
-    @ControllerLog(doAction = "用户关注列表")
-    @ApiOperation(value = "用户关注列表",notes = "查看用户的关注者列表信息")
+    @ControllerLog(doAction = "用户关注列表(对象为个人账号/企业管理员账号)")
+    @ApiOperation(value = "用户关注列表(对象为个人账号/企业管理员账号)",notes = "查看用户的关注者列表信息")
     @RequestMapping(value = "/park/manage/care/findCareList",method = RequestMethod.GET)
     public Result<PaginationData<List<CareUserShow>>>  findCareList(Page page ){
         User user =(User) SecurityUtils.getSubject().getPrincipal();
         PaginationData<List<CareUserShow>> list  = careService.findCareList(page,user==null?"":user.getAccount());
+        return new Result(list);
+    }
+    @ControllerLog(doAction = "用户关注列表(对象为企业id)")
+    @ApiOperation(value = "用户关注列表(对象为企业id)",notes = "查看用户的关注者列表信息")
+    @RequestMapping(value = "/park/manage/care/findCompanyCareList",method = RequestMethod.GET)
+    public Result<PaginationData<List<CareUserShow>>>  findCompanyCareList(Page page ){
+        User user =(User) SecurityUtils.getSubject().getPrincipal();
+        PaginationData<List<CareUserShow>> list  = careService.findCompanyCareList(page,user==null?"":user.getAccount());
         return new Result(list);
     }
     @ControllerLog(doAction = "用户粉丝列表")

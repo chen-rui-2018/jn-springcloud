@@ -19,19 +19,20 @@ function initJsBridge (readyCallback) {
   var u = navigator.userAgent
   var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1 // android终端
   var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) // ios终端
-
+  // var WebViewJavascriptBridge
   // 注册jsbridge
   function connectWebViewJavascriptBridge (callback) {
     if (isAndroid) {
-      // const WebViewJavascriptBridge = window.WebViewJavascriptBridge
-      if (WebViewJavascriptBridge) {
-        callback(WebViewJavascriptBridge)
+      if (window.WebViewJavascriptBridge) {
+        alert('isAndroid')
+        callback(window.WebViewJavascriptBridge)
       } else {
-        // alert(2)
         document.addEventListener(
           'WebViewJavascriptBridgeReady'
           , function () {
-            callback(WebViewJavascriptBridge)
+            alert('isAndroid123')
+            alert('WebViewJavascriptBridge')
+            callback(window.WebViewJavascriptBridge)
           },
           false
         )
@@ -41,7 +42,7 @@ function initJsBridge (readyCallback) {
 
     if (isiOS) {
       if (window.WebViewJavascriptBridge) {
-        return callback(WebViewJavascriptBridge)
+        return callback(window.WebViewJavascriptBridge)
       }
       if (window.WVJBCallbacks) {
         return window.WVJBCallbacks.push(callback)

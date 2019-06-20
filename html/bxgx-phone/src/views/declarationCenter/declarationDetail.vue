@@ -27,19 +27,21 @@
             <span>附件: 暂无</span>
           </a>
         </div>
-        <div v-else  class="accessory" v-for="(item,index) in fileList" :key="index">
-          <a :href="item.filePath">
-            <span>附件{{item.fileName}}</span>
+        <div v-else  class="accessory" v-for="(item,index) in fileList" :key="index" @click="download(item.filePath)">
+          <!-- <a :href="item.filePath"> {{item.fileName}}-->
+            <span>附件：{{item.fileName}}</span>
             <span>下载<i class="iconfont icon-jiantou"></i></span>
-          </a>
+          <!-- </a> -->
         </div>
       </div>
-      <div class="declaration_consult" @click="$router.push({path: '/guest/pd/consult'})"> 咨询 </div>
+
+      <div class="declaration_consult" @click="$router.push({path: '/guest/pd/consult',query:{id:id}})">预约申报</div>
     </div>
   </div>
 </div>
 </template>
 <script>
+import axios from 'axios'
 export default {
   data () {
     return {
@@ -58,13 +60,15 @@ export default {
       }
     }
   },
+  created () {
+    this.addView()
+  },
   mounted () {
     this.id = this.$route.query.id
     if (this.$route.query.isShow === '0') {
       this.isShow = this.$route.query.isShow
     }
     this.getDetail()
-    this.addView()
   },
   methods: {
     getDetail () {
@@ -76,6 +80,8 @@ export default {
             this.detailData = res.data
             if (res.data.fileUrl !== '') {
               this.fileList = JSON.parse(res.data.fileUrl)
+            } else {
+              this.$vux.toast.text(res.result)
             }
           }
         }
@@ -88,11 +94,26 @@ export default {
         callback: res => {
           if (res.code === '0000') {
             // this.detailData = res.data
+          } else {
+            this.$vux.toast.text(res.result)
           }
         }
       })
+    },
+    download (item) {
+      axios.get(`${this.api.host}${this.api.apiURL.downLoadAttachment}`, {
+        params: {
+          title: item.title,
+          url: item.url
+        },
+        headers: {
+          token: sessionStorage.token
+        }
+      })
+        .then(res => {
+          window.location.href = res.request.responseURL
+        })
     }
-
   }
 }
 </script>
@@ -188,17 +209,11 @@ export default {
           padding-bottom: 10px;
         }
         .accessory{
-          a{
             display: flex;
             justify-content: space-between;
             font-size: 26px;
             border-bottom: 2px solid #efefef;
             color:#333333;
-          }
-          a:visited{
-            text-decoration: none;
-            color:#333333;
-          }
           &:last-child{
             border-bottom: none;
           }
@@ -209,6 +224,12 @@ export default {
           span:nth-child(2){
             color:#999999;
             font-size: 22px;
+          }
+          span:nth-child(1){
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            width: 77%;
           }
         }
       }

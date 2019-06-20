@@ -1,0 +1,529 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.attractinvest.dao.TbProjectEnterDetailsMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.attractinvest.entity.TbProjectEnterDetails">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="project_id" jdbcType="VARCHAR" property="projectId" />
+    <result column="enter_tower" jdbcType="VARCHAR" property="enterTower" />
+    <result column="tower_id" jdbcType="VARCHAR" property="towerId" />
+    <result column="room_id" jdbcType="VARCHAR" property="roomId" />
+    <result column="room_name" jdbcType="VARCHAR" property="roomName" />
+    <result column="room_area" jdbcType="VARCHAR" property="roomArea" />
+    <result column="compact_period" jdbcType="VARCHAR" property="compactPeriod" />
+    <result column="room_unit_price" jdbcType="DECIMAL" property="roomUnitPrice" />
+    <result column="lease_sum" jdbcType="DECIMAL" property="leaseSum" />
+    <result column="according_area_accout" jdbcType="DECIMAL" property="accordingAreaAccout" />
+    <result column="according_comp_accout" jdbcType="DECIMAL" property="accordingCompAccout" />
+    <result column="free_account" jdbcType="DECIMAL" property="freeAccount" />
+    <result column="actual_account" jdbcType="DECIMAL" property="actualAccount" />
+    <result column="pm_unit_price" jdbcType="DECIMAL" property="pmUnitPrice" />
+    <result column="electricity_consumption" jdbcType="DECIMAL" property="electricityConsumption" />
+    <result column="deposit_cash" jdbcType="DECIMAL" property="depositCash" />
+    <result column="tax_promise" jdbcType="VARCHAR" property="taxPromise" />
+    <result column="free_clause" jdbcType="VARCHAR" property="freeClause" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, project_id, enter_tower, tower_id, room_id, room_name, room_area, compact_period, 
+    room_unit_price, lease_sum, according_area_accout, according_comp_accout, free_account, 
+    actual_account, pm_unit_price, electricity_consumption, deposit_cash, tax_promise, 
+    free_clause, remark, record_status, creator_account, created_time, modifier_account, 
+    modified_time
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.park.attractinvest.entity.TbProjectEnterDetailsCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_project_enter_details
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_project_enter_details
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_project_enter_details
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.park.attractinvest.entity.TbProjectEnterDetailsCriteria">
+    delete from tb_project_enter_details
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.park.attractinvest.entity.TbProjectEnterDetails">
+    insert into tb_project_enter_details (id, project_id, enter_tower, 
+      tower_id, room_id, room_name, 
+      room_area, compact_period, room_unit_price, 
+      lease_sum, according_area_accout, according_comp_accout, 
+      free_account, actual_account, pm_unit_price, 
+      electricity_consumption, deposit_cash, tax_promise, 
+      free_clause, remark, record_status, 
+      creator_account, created_time, modifier_account, 
+      modified_time)
+    values (#{id,jdbcType=VARCHAR}, #{projectId,jdbcType=VARCHAR}, #{enterTower,jdbcType=VARCHAR}, 
+      #{towerId,jdbcType=VARCHAR}, #{roomId,jdbcType=VARCHAR}, #{roomName,jdbcType=VARCHAR}, 
+      #{roomArea,jdbcType=VARCHAR}, #{compactPeriod,jdbcType=VARCHAR}, #{roomUnitPrice,jdbcType=DECIMAL}, 
+      #{leaseSum,jdbcType=DECIMAL}, #{accordingAreaAccout,jdbcType=DECIMAL}, #{accordingCompAccout,jdbcType=DECIMAL}, 
+      #{freeAccount,jdbcType=DECIMAL}, #{actualAccount,jdbcType=DECIMAL}, #{pmUnitPrice,jdbcType=DECIMAL}, 
+      #{electricityConsumption,jdbcType=DECIMAL}, #{depositCash,jdbcType=DECIMAL}, #{taxPromise,jdbcType=VARCHAR}, 
+      #{freeClause,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.park.attractinvest.entity.TbProjectEnterDetails">
+    insert into tb_project_enter_details
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="projectId != null">
+        project_id,
+      </if>
+      <if test="enterTower != null">
+        enter_tower,
+      </if>
+      <if test="towerId != null">
+        tower_id,
+      </if>
+      <if test="roomId != null">
+        room_id,
+      </if>
+      <if test="roomName != null">
+        room_name,
+      </if>
+      <if test="roomArea != null">
+        room_area,
+      </if>
+      <if test="compactPeriod != null">
+        compact_period,
+      </if>
+      <if test="roomUnitPrice != null">
+        room_unit_price,
+      </if>
+      <if test="leaseSum != null">
+        lease_sum,
+      </if>
+      <if test="accordingAreaAccout != null">
+        according_area_accout,
+      </if>
+      <if test="accordingCompAccout != null">
+        according_comp_accout,
+      </if>
+      <if test="freeAccount != null">
+        free_account,
+      </if>
+      <if test="actualAccount != null">
+        actual_account,
+      </if>
+      <if test="pmUnitPrice != null">
+        pm_unit_price,
+      </if>
+      <if test="electricityConsumption != null">
+        electricity_consumption,
+      </if>
+      <if test="depositCash != null">
+        deposit_cash,
+      </if>
+      <if test="taxPromise != null">
+        tax_promise,
+      </if>
+      <if test="freeClause != null">
+        free_clause,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="projectId != null">
+        #{projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="enterTower != null">
+        #{enterTower,jdbcType=VARCHAR},
+      </if>
+      <if test="towerId != null">
+        #{towerId,jdbcType=VARCHAR},
+      </if>
+      <if test="roomId != null">
+        #{roomId,jdbcType=VARCHAR},
+      </if>
+      <if test="roomName != null">
+        #{roomName,jdbcType=VARCHAR},
+      </if>
+      <if test="roomArea != null">
+        #{roomArea,jdbcType=VARCHAR},
+      </if>
+      <if test="compactPeriod != null">
+        #{compactPeriod,jdbcType=VARCHAR},
+      </if>
+      <if test="roomUnitPrice != null">
+        #{roomUnitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="leaseSum != null">
+        #{leaseSum,jdbcType=DECIMAL},
+      </if>
+      <if test="accordingAreaAccout != null">
+        #{accordingAreaAccout,jdbcType=DECIMAL},
+      </if>
+      <if test="accordingCompAccout != null">
+        #{accordingCompAccout,jdbcType=DECIMAL},
+      </if>
+      <if test="freeAccount != null">
+        #{freeAccount,jdbcType=DECIMAL},
+      </if>
+      <if test="actualAccount != null">
+        #{actualAccount,jdbcType=DECIMAL},
+      </if>
+      <if test="pmUnitPrice != null">
+        #{pmUnitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="electricityConsumption != null">
+        #{electricityConsumption,jdbcType=DECIMAL},
+      </if>
+      <if test="depositCash != null">
+        #{depositCash,jdbcType=DECIMAL},
+      </if>
+      <if test="taxPromise != null">
+        #{taxPromise,jdbcType=VARCHAR},
+      </if>
+      <if test="freeClause != null">
+        #{freeClause,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.park.attractinvest.entity.TbProjectEnterDetailsCriteria" resultType="java.lang.Long">
+    select count(*) from tb_project_enter_details
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_project_enter_details
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.projectId != null">
+        project_id = #{record.projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.enterTower != null">
+        enter_tower = #{record.enterTower,jdbcType=VARCHAR},
+      </if>
+      <if test="record.towerId != null">
+        tower_id = #{record.towerId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.roomId != null">
+        room_id = #{record.roomId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.roomName != null">
+        room_name = #{record.roomName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.roomArea != null">
+        room_area = #{record.roomArea,jdbcType=VARCHAR},
+      </if>
+      <if test="record.compactPeriod != null">
+        compact_period = #{record.compactPeriod,jdbcType=VARCHAR},
+      </if>
+      <if test="record.roomUnitPrice != null">
+        room_unit_price = #{record.roomUnitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.leaseSum != null">
+        lease_sum = #{record.leaseSum,jdbcType=DECIMAL},
+      </if>
+      <if test="record.accordingAreaAccout != null">
+        according_area_accout = #{record.accordingAreaAccout,jdbcType=DECIMAL},
+      </if>
+      <if test="record.accordingCompAccout != null">
+        according_comp_accout = #{record.accordingCompAccout,jdbcType=DECIMAL},
+      </if>
+      <if test="record.freeAccount != null">
+        free_account = #{record.freeAccount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.actualAccount != null">
+        actual_account = #{record.actualAccount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.pmUnitPrice != null">
+        pm_unit_price = #{record.pmUnitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.electricityConsumption != null">
+        electricity_consumption = #{record.electricityConsumption,jdbcType=DECIMAL},
+      </if>
+      <if test="record.depositCash != null">
+        deposit_cash = #{record.depositCash,jdbcType=DECIMAL},
+      </if>
+      <if test="record.taxPromise != null">
+        tax_promise = #{record.taxPromise,jdbcType=VARCHAR},
+      </if>
+      <if test="record.freeClause != null">
+        free_clause = #{record.freeClause,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_project_enter_details
+    set id = #{record.id,jdbcType=VARCHAR},
+      project_id = #{record.projectId,jdbcType=VARCHAR},
+      enter_tower = #{record.enterTower,jdbcType=VARCHAR},
+      tower_id = #{record.towerId,jdbcType=VARCHAR},
+      room_id = #{record.roomId,jdbcType=VARCHAR},
+      room_name = #{record.roomName,jdbcType=VARCHAR},
+      room_area = #{record.roomArea,jdbcType=VARCHAR},
+      compact_period = #{record.compactPeriod,jdbcType=VARCHAR},
+      room_unit_price = #{record.roomUnitPrice,jdbcType=DECIMAL},
+      lease_sum = #{record.leaseSum,jdbcType=DECIMAL},
+      according_area_accout = #{record.accordingAreaAccout,jdbcType=DECIMAL},
+      according_comp_accout = #{record.accordingCompAccout,jdbcType=DECIMAL},
+      free_account = #{record.freeAccount,jdbcType=DECIMAL},
+      actual_account = #{record.actualAccount,jdbcType=DECIMAL},
+      pm_unit_price = #{record.pmUnitPrice,jdbcType=DECIMAL},
+      electricity_consumption = #{record.electricityConsumption,jdbcType=DECIMAL},
+      deposit_cash = #{record.depositCash,jdbcType=DECIMAL},
+      tax_promise = #{record.taxPromise,jdbcType=VARCHAR},
+      free_clause = #{record.freeClause,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.attractinvest.entity.TbProjectEnterDetails">
+    update tb_project_enter_details
+    <set>
+      <if test="projectId != null">
+        project_id = #{projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="enterTower != null">
+        enter_tower = #{enterTower,jdbcType=VARCHAR},
+      </if>
+      <if test="towerId != null">
+        tower_id = #{towerId,jdbcType=VARCHAR},
+      </if>
+      <if test="roomId != null">
+        room_id = #{roomId,jdbcType=VARCHAR},
+      </if>
+      <if test="roomName != null">
+        room_name = #{roomName,jdbcType=VARCHAR},
+      </if>
+      <if test="roomArea != null">
+        room_area = #{roomArea,jdbcType=VARCHAR},
+      </if>
+      <if test="compactPeriod != null">
+        compact_period = #{compactPeriod,jdbcType=VARCHAR},
+      </if>
+      <if test="roomUnitPrice != null">
+        room_unit_price = #{roomUnitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="leaseSum != null">
+        lease_sum = #{leaseSum,jdbcType=DECIMAL},
+      </if>
+      <if test="accordingAreaAccout != null">
+        according_area_accout = #{accordingAreaAccout,jdbcType=DECIMAL},
+      </if>
+      <if test="accordingCompAccout != null">
+        according_comp_accout = #{accordingCompAccout,jdbcType=DECIMAL},
+      </if>
+      <if test="freeAccount != null">
+        free_account = #{freeAccount,jdbcType=DECIMAL},
+      </if>
+      <if test="actualAccount != null">
+        actual_account = #{actualAccount,jdbcType=DECIMAL},
+      </if>
+      <if test="pmUnitPrice != null">
+        pm_unit_price = #{pmUnitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="electricityConsumption != null">
+        electricity_consumption = #{electricityConsumption,jdbcType=DECIMAL},
+      </if>
+      <if test="depositCash != null">
+        deposit_cash = #{depositCash,jdbcType=DECIMAL},
+      </if>
+      <if test="taxPromise != null">
+        tax_promise = #{taxPromise,jdbcType=VARCHAR},
+      </if>
+      <if test="freeClause != null">
+        free_clause = #{freeClause,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.attractinvest.entity.TbProjectEnterDetails">
+    update tb_project_enter_details
+    set project_id = #{projectId,jdbcType=VARCHAR},
+      enter_tower = #{enterTower,jdbcType=VARCHAR},
+      tower_id = #{towerId,jdbcType=VARCHAR},
+      room_id = #{roomId,jdbcType=VARCHAR},
+      room_name = #{roomName,jdbcType=VARCHAR},
+      room_area = #{roomArea,jdbcType=VARCHAR},
+      compact_period = #{compactPeriod,jdbcType=VARCHAR},
+      room_unit_price = #{roomUnitPrice,jdbcType=DECIMAL},
+      lease_sum = #{leaseSum,jdbcType=DECIMAL},
+      according_area_accout = #{accordingAreaAccout,jdbcType=DECIMAL},
+      according_comp_accout = #{accordingCompAccout,jdbcType=DECIMAL},
+      free_account = #{freeAccount,jdbcType=DECIMAL},
+      actual_account = #{actualAccount,jdbcType=DECIMAL},
+      pm_unit_price = #{pmUnitPrice,jdbcType=DECIMAL},
+      electricity_consumption = #{electricityConsumption,jdbcType=DECIMAL},
+      deposit_cash = #{depositCash,jdbcType=DECIMAL},
+      tax_promise = #{taxPromise,jdbcType=VARCHAR},
+      free_clause = #{freeClause,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -131,12 +131,11 @@ export default {
       if (row && row.projectId) {
         this.$router.push({
           name: 'question-edit',
-          query: { id: row.projectId, title: '编辑问卷' }
+          query: { id: row.projectId }
         })
       } else {
         this.$router.push({
-          name: 'question-add',
-          query: { title: '新建问卷' }
+          name: 'question-add'
         })
       }
     },
@@ -147,8 +146,7 @@ export default {
         query: {
           id: row.projectId,
           researchProject: row.researchProject,
-          status: row.status,
-          title: '发放问卷'
+          status: row.status
         }
       })
     },
@@ -156,7 +154,7 @@ export default {
     handleResult(row) {
       this.$router.push({
         name: 'question-result',
-        query: { id: row.projectId, title: '问卷结果' }
+        query: { id: row.projectId }
       })
     },
     // 删除

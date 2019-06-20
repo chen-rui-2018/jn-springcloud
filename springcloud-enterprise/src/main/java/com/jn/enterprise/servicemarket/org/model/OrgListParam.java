@@ -32,8 +32,6 @@ public class OrgListParam extends Page implements Serializable {
     private String[] industrySector;
     @ApiModelProperty(value = "客户偏好-发展阶段[数组][企业字典表type=2的，即发展阶段领域类型。数据从【服务超市-机构字典】接口获取(id)]")
     private String[] developmentStage;
-    @ApiModelProperty(value = "客户偏好-企业性质[数组][企业字典表type=3的，即企业性质类型。数据从【服务超市-机构字典】接口获取(id)]")
-    private String[] companyNature;
     @ApiModelProperty(value = "参数集合[前端无需理会该字段]")
     private List<String> companyList;
     @ApiModelProperty(value = "人气权重")
@@ -44,6 +42,8 @@ public class OrgListParam extends Page implements Serializable {
     private Float serviceWeight=0.1f;
     @ApiModelProperty(value = "其他因素分值")
     private Float otherFactorScore=0.0f;
+    @ApiModelProperty(value = "允许展示科技金融")
+    private String allowTechnology;
 
     public String[] getBusinessType() {
         return businessType;
@@ -109,14 +109,6 @@ public class OrgListParam extends Page implements Serializable {
         this.developmentStage = developmentStage;
     }
 
-    public String[] getCompanyNature() {
-        return companyNature;
-    }
-
-    public void setCompanyNature(String[] companyNature) {
-        this.companyNature = companyNature;
-    }
-
     public List<String> getCompanyList() {
         return companyList;
     }
@@ -157,6 +149,14 @@ public class OrgListParam extends Page implements Serializable {
         this.otherFactorScore = otherFactorScore;
     }
 
+    public String getAllowTechnology() {
+        return allowTechnology;
+    }
+
+    public void setAllowTechnology(String allowTechnology) {
+        this.allowTechnology = allowTechnology;
+    }
+
     @Override
     public String toString() {
         return "OrgListParam{" +
@@ -168,12 +168,12 @@ public class OrgListParam extends Page implements Serializable {
                 ", sortTypes='" + sortTypes + '\'' +
                 ", industrySector=" + Arrays.toString(industrySector) +
                 ", developmentStage=" + Arrays.toString(developmentStage) +
-                ", companyNature=" + Arrays.toString(companyNature) +
                 ", companyList=" + companyList +
                 ", popularityWeight=" + popularityWeight +
                 ", praiseWeight=" + praiseWeight +
                 ", serviceWeight=" + serviceWeight +
                 ", otherFactorScore=" + otherFactorScore +
+                ", allowTechnology='" + allowTechnology + '\'' +
                 '}';
     }
 }

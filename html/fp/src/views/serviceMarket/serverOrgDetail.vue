@@ -12,18 +12,21 @@
           <div class="agentTil fl color1">{{serverOrgDetailList.orgName}}</div>
           <div class="orgBtn fr mainColor pointer" @click="onlineContat(serverOrgDetailList.orgAccount,serverOrgDetailList.orgName)">在线联系</div>
         </div>
-        <div class="agent2 clearfix color2">
+        <div class="agent2 clearfix pr color2">
           <div class="agentImg fl">
             <!-- <img src="@/../static/img/ins1.png" alt=""> -->
             <img :src="serverOrgDetailList.orgLogo" alt="">
           </div>
-          <div class="agent2Info fl color2">
-            <p>客户偏好：{{serverOrgDetailList.orgHobby}}</p>
+          <div class="agent2Info fl color2" style="width:80%">
+            <p>客户偏好：
+              <span v-for="(item1,k1) in serverOrgDetailList.developmentStage" :key="k1">{{item1.orgTraitName}},</span>
+              <span v-for="(item2,k2) in serverOrgDetailList.industrySector" :key="k2">{{item2.orgTraitName}}</span>
+            </p>
             <p>业务擅长：{{serverOrgDetailList.orgSpeciality}}</p>
             <p>咨询电话：
               <span class="mainColor">{{serverOrgDetailList.orgPhone}}</span>
             </p>
-            <p>公司地址：{{serverOrgDetailList.orgAddress}}</p>
+            <p>公司地址：{{serverOrgDetailList.orgAddressDetail}}</p>
             <p class="lastP color3">
               <span>交易量：{{serverOrgDetailList.transactionCount}}</span>
               <span>浏览：{{serverOrgDetailList.orgShow}}</span>
@@ -41,6 +44,7 @@
           <i class="el-icon-arrow-up"></i>
         </div>
         <div class="mainColor shouqi zhankai pointer" v-else @click='handleZk'>
+          展开
           <i class="el-icon-arrow-down"></i>
         </div>
         <el-card>
@@ -51,12 +55,12 @@
                   <tr>
                     <td class="table-orgspace-title">业务领域：</td>
                     <td class="table-orgspace-detail" width="300px" colspan="2">
-                      <div>{{serverOrgDetailList.businessType}}</div>
+                      <div>{{serverOrgDetailList.businessTypeName}}</div>
                     </td>
                     <td class="table-orgspace-title">公司网址：</td>
                     <td class="table-orgspace-detail" style="width:322px;word-break: break-all;">
                       <div>
-                        <a :href="serverOrgDetailList.orgWeb" target="_blank">{{serverOrgDetailList.orgWeb}}</a>
+                        <a :href="serverOrgDetailList.orgWeb" target="_blank" class="mainColor">{{serverOrgDetailList.orgWeb}}</a>
                       </div>
                     </td>
                   </tr>
@@ -78,15 +82,14 @@
             <el-tab-pane label="工商信息" name="businessinfo">
               <div class="businessinfo" v-if="zankaiFlag">
                 <table class="table-orgspace mainBorder">
-                  <tr>
-                    <td class="table-orgspace-title">组织代码机构:{{serverOrgDetailList.orgCode}}</td>
+                  <!-- <tr>
+                    <td class="table-orgspace-title">组织代码机构:</td>
                     <td class="table-orgspace-detail" width="300px" colspan="2">
                       <div>{{serverOrgDetailList.orgCode}}</div>
                     </td>
-                    <td class="table-orgspace-title">类型：{{serverOrgDetailList.orgCode}}</td>
+                    <td class="table-orgspace-title">类型：</td>
                     <td class="table-orgspace-detail" style="width:322px;word-break: break-all;">
                       <div>
-                        <!-- <a href="http://www.szzhonghe.com/" target="_blank">http://www.szzhonghe.com/</a> -->
                         {{serverOrgDetailList.orgBusinType}}
                       </div>
                     </td>
@@ -115,11 +118,11 @@
                     <td class="table-orgspace-detail" colspan="4">
                       <div class="table-orgspace-col">{{serverOrgDetailList.orgBusinAddresse}}</div>
                     </td>
-                  </tr>
+                  </tr> -->
                   <tr>
-                    <td class="table-orgspace-title">经营范围：</td>
-                    <td class="table-orgspace-detail" colspan="4">
-                      <div class="table-orgspace-col">{{serverOrgDetailList.orgBusinScope}}</div>
+                    <td class="table-orgspace-title">营业执照：</td>
+                    <td class="table-orgspace-detail" colspan="6">
+                      <div class="table-orgspace-col businessImg"><img :src="serverOrgDetailList.orgLicensesUrl" alt=""></div>
                     </td>
                   </tr>
                 </table>
@@ -151,25 +154,31 @@
                         <td class="table-orgspace-title" width="120px;">员工人数：</td>
                         <td class="table-orgspace-detail" width="300px">{{serverOrgDetailList.staffCount}}</td>
                         <td class="table-orgspace-title" width="120px;">执业人员人数：</td>
-                        <td class="table-orgspace-detail" style="width:322px;">{{serverOrgDetailList.professionNum}}（占比{{(Number(serverOrgDetailList.professionNum/serverOrgDetailList.staffCount)*100).toFixed(2)}}%）
+                        <td class="table-orgspace-detail" style="width:322px;">{{serverOrgDetailList.professionNum}}（占比{{(Number(serverOrgDetailList.professionNum/serverOrgDetailList.staffCount)*100).toFixed(0)}}%）
                         </td>
                       </tr>
                       <tr>
                         <td class="table-orgspace-title">本科：</td>
-                        <td class="table-orgspace-detail">{{serverOrgDetailList.bachelorNum}}（占比{{(Number(serverOrgDetailList.bachelorNum/serverOrgDetailList.staffCount)*100).toFixed(2)}}%）
+                        <td class="table-orgspace-detail">{{serverOrgDetailList.bachelorNum}}（占比{{(Number(serverOrgDetailList.bachelorNum/serverOrgDetailList.staffCount)*100).toFixed(0)}}%）
                         </td>
                         <td class="table-orgspace-title">硕士：</td>
-                        <td class="table-orgspace-detail">{{serverOrgDetailList.masterNum}}（占比{{(Number(serverOrgDetailList.masterNum/serverOrgDetailList.staffCount)*100).toFixed(2)}}%）
+                        <td class="table-orgspace-detail">{{serverOrgDetailList.masterNum}}（占比{{(Number(serverOrgDetailList.masterNum/serverOrgDetailList.staffCount)*100).toFixed(0)}}%）
                         </td>
                       </tr>
-                      <tr>
+                      <!-- <tr>
                         <td class="table-orgspace-title">博士：</td>
                         <td class="table-orgspace-detail">
-                          <font>{{serverOrgDetailList.doctorNum}}（占比{{(Number(serverOrgDetailList.doctorNum/serverOrgDetailList.staffCount)*100).toFixed(2)}}%）</font>
+                          <font>{{serverOrgDetailList.doctorNum}}（占比{{(Number(serverOrgDetailList.doctorNum/serverOrgDetailList.staffCount)*100).toFixed(0)}}%）</font>
                         </td>
                         <td class="table-orgspace-title">海归：</td>
                         <td class="table-orgspace-detail">
-                          <font>{{serverOrgDetailList.returneeNum}}（占比{{(Number(serverOrgDetailList.returneeNum/serverOrgDetailList.staffCount)*100).toFixed(2)}}%）</font>
+                          <font>{{serverOrgDetailList.returneeNum}}（占比{{(Number(serverOrgDetailList.returneeNum/serverOrgDetailList.staffCount)*100).toFixed(0)}}%）</font>
+                        </td>
+                      </tr> -->
+                      <tr>
+                        <td class="table-orgspace-title">博士：</td>
+                        <td class="table-orgspace-detail" colspan="4">
+                          <div class="table-orgspace-col">{{serverOrgDetailList.doctorNum}}（占比{{(Number(serverOrgDetailList.doctorNum/serverOrgDetailList.staffCount)*100).toFixed(0)}}%）</div>
                         </td>
                       </tr>
                     </tbody>
@@ -327,31 +336,31 @@
           </li>
         </ul>
       </div>
-      <el-tabs v-model="activeName1" @tab-click="handleSerpro">
+      <el-tabs v-model="activeName1" @tab-click="handleSerpro" ref="tabL">
         <el-tab-pane name="serverPro">
-          <span slot="label" v-if="serverPro.length>0">服务产品({{serverPro[0].serviceTotal}})</span>
+          <span slot="label" v-if="serverPro.length>0">服务产品({{total1}})</span>
           <span slot="label" v-else>服务产品(0)</span>
           <div class="serverPro">
             <ul class="list-imgleft">
-              <li class="list-item pr" v-for="(i,k) in serverPro" :key='k'>
+              <li class="list-item pr clearfix" v-for="(i,k) in serverPro" :key='k'>
                 <!-- 上架时间 begin -->
-                <div class="list-item-date"></div>
+                <!-- <div class="list-item-date"></div> -->
                 <!-- 上架时间 end -->
                 <!-- 左侧logo begin-->
-                <div class="list-imgleft-container product nopic" @click="$router.push({path: '/serverProDetail',query: { productId: i.productId, signoryId: i.signoryId }})">
+                <div class="list-imgleft-container product nopic fl pointer" @click="$router.push({path: '/serverProDetail',query: { productId: i.productId, signoryId: i.signoryId }})">
                   <img v-if="i.pictureUrl" :src="i.pictureUrl" alt="">
                   <img v-else src="@/../static/img/product.png" alt="">
                 </div>
                 <!-- 左侧logo end-->
                 <!-- 中间信息 beign -->
-                <div class="list-info-middle inner-product">
+                <div class="list-info-middle inner-product fl pointer" @click="$router.push({path: '/serverProDetail',query: { productId: i.productId, signoryId: i.signoryId }})">
                   <!-- 中间上半部分--标题和标签 begin -->
                   <div class="list-info-top-title">
                     <!-- 头部 begin -->
                     <div class="info-top">
                       <div class="top-title inner-product">
                         <span>{{i.productName}}</span>
-                        <div class="clear"></div>
+                        <!-- <div class="clear"></div> -->
                       </div>
                     </div>
                   </div>
@@ -361,9 +370,11 @@
                     <!-- 参考信息、交易均价 begin -->
                     <div class="detail-contact inner-product">
                       <div class="search_area text-of" title="王振英 , 包美芬 , 高凤清">顾&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;问：{{i.advisorName}}</div>
-                      <div class="text-of mt5">参考价格：{{i.referPrice}}</div>
+                      <div class="text-of mt5">参考价格：
+                        <span class="mainColor">{{i.referPrice}}</span>&nbsp;元
+                      </div>
                       <div>累计
-                        <span class="mainColor">{{i.transactionsNumber}}</span>笔交易</div>
+                        <span class="mainColor">{{i.transactionsNumber}}</span>&nbsp;笔交易</div>
                     </div>
                     <!-- 参考信息、交易均价 end -->
                     <!-- 评价 begin -->
@@ -382,17 +393,18 @@
                     </div>
                     <!-- 评价 end -->
                     <!-- 交易量 begin -->
-                    <div class="detail-count">
-                      <!-- <span>累计
-                        <span class="c_default ml5 mr5">40</span>笔交易</span> -->
+                    <!-- <div class="detail-count">
                       <div class="orgBtn fr mainColor" @click="demandRaise(i)">提需求</div>
-                    </div>
+                    </div> -->
                     <!-- 交易量 end -->
                   </div>
                   <!-- 中间上半部分--参考信息、交易均价和交易 end -->
                 </div>
                 <!-- 中间信息 end -->
-                <div class="clear"></div>
+                <!-- <div class="clear"></div> -->
+                <div class="detail-count fr">
+                  <div class="orgBtn mainColor" @click="demandRaise(i)">提需求</div>
+                </div>
               </li>
             </ul>
             <div class="pagination-container">
@@ -402,23 +414,23 @@
           </div>
         </el-tab-pane>
         <el-tab-pane name="serConsultant">
-          <span slot="label">服务顾问({{total2}})</span>
+          <span slot="label">服务专员({{total2}})</span>
           <div class="serConsultant">
             <ul class="list-imgleft adviser">
               <li class="list-item" v-for="(i,k) in serviceConsultant" :key='k'>
                 <!-- 左侧logo begin-->
-                <div class="list-imgleft-container noconsultant" @click="$router.push({path: 'serverConDetail',query: { orgId: i.orgId,advisorAccount:i.advisorAccount }})">
+                <div class="list-imgleft-container noconsultant pointer" @click="$router.push({path: 'serverConDetail',query: { orgId: i.orgId,advisorAccount:i.advisorAccount }})">
                   <img v-if="i.avatar" :src="i.avatar" alt="">
-                  <img v-else src="@/../static/img/product.png" alt="">
+                  <img v-else src="@/../static/img/touxiang.png" alt="">
                 </div>
                 <!-- 左侧logo end-->
                 <!-- 中间信息 beign -->
-                <div class="list-info-middle inner-consultant">
+                <div class="list-info-middle inner-consultant pointer" @click="$router.push({path: 'serverConDetail',query: { orgId: i.orgId,advisorAccount:i.advisorAccount }})">
                   <!-- 中间上半部分--标题和标签 begin -->
                   <div class="list-info-top-title">
                     <!-- 头部 begin -->
                     <div class="info-top">
-                      <div class="top-title inner-consultant" onclick="window.open('/epservice/techsub/Apps/epssm/index.php?s=/Home/ConsultantSpace/space/id/86c91e1d-b3ce-11e7-9663-000c29881ee3')">
+                      <div class="top-title">
                         <span>{{i.advisorName}}/{{i.position}}</span>
                         <div class="icons">
                           <!-- 是否认证标签 -->
@@ -433,11 +445,12 @@
                     <!-- 所属机构、电话 begin -->
                     <div class="detail-contact inner-consultant">
                       <div class="text-of">从业年限：
-                        <font style="color:#ccc;">{{i.workingYears}}</font>
+                        <span>{{i.workingYears}}</span>
+                        <!-- <font style="color:#ccc;">{{i.workingYears}}</font> -->
                       </div>
                       <div class="search_area pt5 text-of" title="">业务擅长：{{i.goodAtBusiness}}</div>
-                      <div>累计
-                        <span class="mainColor">{{i.transactionNum}}</span>笔交易</div>
+                      <div class="color3">累计
+                        <span class="mainColor">{{i.transactionNum}}</span>&nbsp;笔交易</div>
                     </div>
                     <!-- 地址、电话 end -->
                     <!-- 评价 begin -->
@@ -504,7 +517,7 @@
                   <div class="list-info-bottom-detail clearfix">
                     <!-- 参考信息、交易均价 begin -->
                     <div class="detail-contact inner-product">
-                      <div class="search_area text-of" title="王振英 , 包美芬 , 高凤清">服务顾问：{{i.advisorName}}</div>
+                      <div class="search_area text-of" title="王振英 , 包美芬 , 高凤清">服务专员：{{i.advisorName}}</div>
                       <!-- <div class="text-of mt5">参考价格：1000-10000元</div> -->
                       <span class="evaluate-container">
                         <span class="arrow-container">{{i.evaluationDesc}}</span>
@@ -553,8 +566,8 @@
           <span slot="label">活动资讯({{total3}})</span>
           <div class="actiConsultation">
             <ul class="allActiUl clearfix">
-              <li v-for="(i,k) in serverActiList" :key='k'>
-                <div class="postImgItem" @click="$router.push({path: 'actiTrainDetail',query: { activityId: i.id }})">
+              <li v-for="(i,k) in serverActiList" :key='k' class="pointer" @click="$router.push({path: 'actiTrainDetail',query: { activityId: i.id }})">
+                <div class="postImgItem pointer">
                   <img :src="i.actiPosterUrl" class="postImg" alt="活动海报图片">
                 </div>
                 <div class="actiInfo">
@@ -565,7 +578,7 @@
                     <!-- <span>{{item.actiStartTime}}-{{item.actiEndTime.split(' ')[1]}}</span> -->
                     <!-- <span>周日14：00-17：00</span> -->
                   </p>
-                  <p>
+                  <p class="actiAddress">
                     <i class="el-icon-location-outline"></i>
                     <span>{{i.actiAddress}}</span>
                   </p>
@@ -593,8 +606,8 @@
     </div>
     <!-- 提需求弹框 -->
     <template v-if="serverOrgVisible">
-      <el-dialog :visible.sync="serverOrgVisible" width="530px" top="30vh" :modal-append-to-body=false>
-        <div>
+      <el-dialog :visible.sync="serverOrgVisible" width="530px" top="30vh" :modal-append-to-body="false" :lock-scroll="false">
+        <div v-if="islogin">
           <el-form ref="financialProform" :model="serverProform" label-position="right" label-width="100px" style="max-width:436px;">
             <el-form-item label="需求描述:" prop="requireDetail" style="font-size:13px">
               <el-input v-model.trim="serverProform.requireDetail" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
@@ -604,13 +617,24 @@
           <div class="serverTip mainColor">市场提醒：请务必在线订购，线下交易无法享受市场交易安全保障</div>
           <div class="demandDia" @click="demandDia()">提交需求</div>
         </div>
-        <!-- <div v-else>
-                 你还未
-                 <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
-                 /
-                 <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
-                 企业账号
-                </div>  -->
+        <div v-else class="loginTip">
+          你还未
+          <span class="mainColor pointer" @click="goLogin">登录</span>
+          /
+          <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+          企业账号
+        </div>
+      </el-dialog>
+    </template>
+    <template v-if="concatVisible">
+      <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :append-to-body="true" :lock-scroll="false">
+        <div class="loginTip" style="text-align:center;padding-bottom:20px">
+          你还未
+          <span class="mainColor pointer" @click="goLogin">登录</span>
+          /
+          <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+          账号
+        </div>
       </el-dialog>
     </template>
   </div>
@@ -620,7 +644,8 @@ export default {
   data() {
     return {
       islogin: true,
-      zankaiFlag: false,
+      concatVisible: false,
+      zankaiFlag: true,
       activeName: "baseInfo",
       activeName1: "serverPro",
       serverOrgDetailList: {},
@@ -631,7 +656,7 @@ export default {
         productName: ""
       },
       flag1: "",
-      flag2: "",
+      flag2: "integrate",
       flag3: "",
       flag4: "0",
       showFlag1: true,
@@ -656,14 +681,13 @@ export default {
       page4: 1,
       total4: 0,
       evaCount: {},
-      sortTypes: "",
+      sortTypes: "integrate",
       ratingType: "",
       timeInterval: "0",
       token1: ""
     };
   },
   created() {
-    this.isLogin();
     this.initList();
     this.findOrgCountProductList();
     this.getServiceConList();
@@ -672,16 +696,20 @@ export default {
     this.getEvaluationCountInfo();
   },
   methods: {
+    goLogin() {
+      window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
+      this.$router.push({ path: "/login" });
+    },
     //在线联系
     onlineContat(orgAccount, ogeName) {
-      if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
+      if (!this.getUserInfo()) {
+        this.concatVisible = true;
         return;
       }
       this.$router.push({
         path: "/chat",
         query: {
-          fromUser: JSON.parse(sessionStorage.userInfo).account,
+          fromUser: JSON.parse(this.getUserInfo()).account,
           toUser: orgAccount,
           nickName: ogeName
         }
@@ -689,21 +717,13 @@ export default {
     },
     //判断是否登录
     isLogin() {
-      if (!sessionStorage.userInfo) {
+      if (!this.getToken()) {
         this.islogin = false;
       }
     },
     demandRaise(i) {
       //提需求
-      // this.accout=sessionStorage.getItem('account')
-      // if(!this.accout){
-      //   debugger
-      //   this.islogin=false
-      // }
-      if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
-        return;
-      }
+      this.isLogin();
       this.serverOrgVisible = true;
       this.serverProform.requireDetail = "";
       this.serverProform.productId = i.productId;
@@ -736,7 +756,7 @@ export default {
         this.findOrgCountProductList();
     },
     screenSerCon(i) {
-      //筛选服务顾问
+      //筛选服务专员
       (this.sortTypes = i),
         (this.flag2 = i),
         (this.page2 = 1),
@@ -905,7 +925,7 @@ export default {
       });
     },
     getServiceConList() {
-      //服务顾问
+      //服务专员
       let _this = this;
       this.api.get({
         url: "getServiceConList",
@@ -941,6 +961,9 @@ export default {
           if (res.code == "0000") {
             _this.serverPro = res.data.rows;
             _this.total1 = res.data.total;
+            setTimeout(() => {
+              _this.$refs["tabL"].$children[0].$forceUpdate();
+            }, 0);
           } else {
             _this.$message.error(res.result);
           }
@@ -975,6 +998,23 @@ export default {
     .pagination-container {
       margin-top: 30px;
     }
+  }
+  .businessinfo {
+    .businessImg {
+      width: 130px;
+      height: 80px;
+      display: inline-block;
+      vertical-align: middle;
+
+      > img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+  .el-tabs__item {
+    height: 50px !important;
+    line-height: 50px !important;
   }
   .el-textarea__inner:focus {
     outline: 0;

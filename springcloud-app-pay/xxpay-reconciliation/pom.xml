@@ -53,6 +53,18 @@
 			<artifactId>commons-httpclient</artifactId>
 			<version>3.1</version>
 		</dependency>
+		<dependency>
+			<groupId>com.jn</groupId>
+			<artifactId>springcloud-app-system-api</artifactId>
+		</dependency>
+		<!--ali_pay-->
+		<dependency>
+			<groupId>com.alipay</groupId>
+			<artifactId>sdk</artifactId>
+			<version>1.5</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/alipay-sdk-java20170818173712.jar</systemPath>
+		</dependency>
 	</dependencies>
 
 	<build>

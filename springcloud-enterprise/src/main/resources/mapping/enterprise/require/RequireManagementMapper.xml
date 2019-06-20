@@ -17,6 +17,7 @@
             ,CASE sr.`status`
             WHEN '1' THEN "待处理"
             WHEN '2' THEN "已处理"
+            when '-1' then "已撤销"
             ELSE '--'
             END AS  "status"				      <!--需求状态-->
             ,CASE sr.handle_result
@@ -80,6 +81,7 @@
         ,CASE sr.`status`
         WHEN '1' THEN "待处理"
         WHEN '2' THEN "已处理"
+        when '-1' then "已撤销"
         ELSE '--'
         END AS  "status"				              <!--需求状态-->
         ,CASE sr.handle_result

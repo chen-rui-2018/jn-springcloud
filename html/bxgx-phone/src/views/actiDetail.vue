@@ -158,9 +158,9 @@ export default {
             _this.$vux.toast.text('点赞成功')
             _this.actiForm.actiLike = _this.actiForm.actiLike * 1 + 1
             // _this.$message.success('点赞成功')
-            // _this.accountIsLike = true
+            _this.accountIsLike = true
             // window.location.href = 'protocol://android?code=toast&data=' + _this.actiForm.actiLike
-            if (this.$route.query.isMini) {
+            if (_this.$route.query.isMini) {
 
             } else {
               _this.dispatch(document.queryselector('.attention'), 'click')
@@ -189,8 +189,14 @@ export default {
             _this.$vux.toast.text('取消点赞成功')
             _this.actiForm.actiLike -= 1
             _this.accountIsLike = false
-            window.location.href =
-              'protocol://android?code=toast&data=' + _this.actiForm.actiLike
+            // window.location.href =
+            //   'protocol://android?code=toast&data=' + _this.actiForm.actiLike
+            if (_this.$route.query.isMini) {
+
+            } else {
+              _this.dispatch(document.queryselector('.attention'), 'click')
+              document.queryselector('.attention').click(_this.actiForm.actiLike)
+            }
           } else {
             _this.$vux.toast.text(res.result)
           }

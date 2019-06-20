@@ -16,6 +16,7 @@ import com.jn.enterprise.company.dao.TbServiceCompanyMapper;
 import com.jn.enterprise.company.dao.TbServiceCompanyStaffMapper;
 import com.jn.enterprise.company.entity.*;
 import com.jn.enterprise.company.enums.CompanyDataEnum;
+import com.jn.enterprise.company.enums.UpgradeStatusEnum;
 import com.jn.enterprise.company.model.CompanyInfoShow;
 import com.jn.enterprise.company.model.CompanyUpdateParam;
 import com.jn.enterprise.company.model.StaffListParam;
@@ -547,19 +548,19 @@ public class CompanyServiceImpl implements CompanyService {
         }
 
         // 判断是否已认证企业
-        UpgradeStatusVO upgradeStatusVO = new UpgradeStatusVO("0", "允许认证");
+        UpgradeStatusVO upgradeStatusVO = new UpgradeStatusVO(UpgradeStatusEnum.UPGRADE_OK);
         TbServiceCompanyCriteria companyCriteria = new TbServiceCompanyCriteria();
         companyCriteria.createCriteria().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue())
                 .andCheckStatusNotEqualTo(CompanyDataEnum.STAFF_CHECK_STATUS_NOT_PASS.getCode())
                 .andComAdminEqualTo(account);
         List<TbServiceCompany> tbServiceCompanies = tbServiceCompanyMapper.selectByExample(companyCriteria);
         if (tbServiceCompanies != null && !tbServiceCompanies.isEmpty()) {
-            upgradeStatusVO = new UpgradeStatusVO("1", "已认证企业");
+            upgradeStatusVO = new UpgradeStatusVO(UpgradeStatusEnum.UPGRADE_COMPANY);
         }
 
         // 判断是否已认证员工
         if (!staffService.checkUserIsCompanyStaff(account)) {
-            upgradeStatusVO = new UpgradeStatusVO("2", "已认证员工");
+            upgradeStatusVO = new UpgradeStatusVO(UpgradeStatusEnum.UPGRADE_STAFF);
         }
 
         // 判断是否已认证机构
@@ -569,7 +570,7 @@ public class CompanyServiceImpl implements CompanyService {
                 .andOrgAccountEqualTo(account);
         List<TbServiceOrg> tbServiceOrgs = tbServiceOrgMapper.selectByExample(orgCriteria);
         if (tbServiceOrgs != null && !tbServiceOrgs.isEmpty()) {
-            upgradeStatusVO = new UpgradeStatusVO("3", "已认证机构");
+            upgradeStatusVO = new UpgradeStatusVO(UpgradeStatusEnum.UPGRADE_ORG);
         }
 
         // 判断是否已认证投资人
@@ -579,7 +580,7 @@ public class CompanyServiceImpl implements CompanyService {
                 .andInvestorAccountEqualTo(account);
         List<TbServiceInvestor> tbServiceInvestors = tbServiceInvestorMapper.selectByExample(investorCriteria);
         if (tbServiceInvestors != null && !tbServiceInvestors.isEmpty()) {
-            upgradeStatusVO = new UpgradeStatusVO("4", "已认证投资人");
+            upgradeStatusVO = new UpgradeStatusVO(UpgradeStatusEnum.UPGRADE_INVESTOR);
         }
 
         // 判断是否已认证专员
@@ -592,9 +593,8 @@ public class CompanyServiceImpl implements CompanyService {
                 .andAdvisorAccountEqualTo(account);
         List<TbServiceAdvisor> tbServiceAdvisors = tbServiceAdvisorMapper.selectByExample(advisorCriteria);
         if (tbServiceAdvisors != null && !tbServiceAdvisors.isEmpty()) {
-            upgradeStatusVO = new UpgradeStatusVO("5", "已认证专员");
+            upgradeStatusVO = new UpgradeStatusVO(UpgradeStatusEnum.UPGRADE_ADVISOR);
         }
-
         return upgradeStatusVO;
     }
 

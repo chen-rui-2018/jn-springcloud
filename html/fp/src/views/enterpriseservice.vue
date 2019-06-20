@@ -727,7 +727,6 @@ export default {
     //判断是否登录
     isLogin() {
       const token=this.getToken()
-      console.log(token)
       if (!token) {
         this.islogin = false;
       }

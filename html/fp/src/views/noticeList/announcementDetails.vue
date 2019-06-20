@@ -87,12 +87,13 @@ export default {
     }
   }
   .announcement2 {
-      color: #333;
+     
       margin-bottom:50px;
     .title {
       border-left: 5px solid #00a041;
       margin: 10px 0;
       padding-left: 3px;
+       color: #333;
     }
   }
 }

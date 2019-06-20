@@ -101,7 +101,7 @@ export default {
     }
   }
   .announcement2 {
-      color: #333;
+      // color: #333;
       margin-bottom:50px;
     .title {
       margin: 10px 0;

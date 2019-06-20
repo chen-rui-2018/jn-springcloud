@@ -5,12 +5,12 @@
         <div class="declartionConsult_title">在线预约</div>
         <div class="declartionConsult_form" >
           <group label-align="left" label-width="6em" label-margin-right="1em">
-            <x-input title="* 预约项：" placeholder="请输入内容" v-model="appointment.appointmentItemName" ></x-input>
-            <x-input title="* 预约人：" placeholder="请输入内容" v-model="appointment.contactName"></x-input>
-            <x-input title="* 联系电话：" placeholder="请输入内容" v-model="appointment.contactPhone"></x-input>
-            <x-input title="* 电子邮箱：" placeholder="请输入内容" v-model="appointment.email"></x-input>
+            <!-- <x-input title="* 预约项：" placeholder="请输入内容" v-model="appointment.appointmentItemName" ></x-input> -->
+            <x-input title="* 申报项目：" placeholder="请输入内容" v-model="appointment.declareItem"></x-input>
             <x-input title="* 申报企业：" placeholder="请输入内容" v-model="appointment.declareEnterprise"></x-input>
-            <x-input title="* 申报名称：" placeholder="请输入内容" v-model="appointment.declareItem"></x-input>
+            <x-input title="* 企业联系人：" placeholder="请输入内容" v-model="appointment.contactName"></x-input>
+            <x-input title="* 联系电话：" placeholder="请输入内容" v-model="appointment.contactPhone"></x-input>
+            <!-- <x-input title="* 电子邮箱：" placeholder="请输入内容" v-model="appointment.email"></x-input> -->
             <div class="upload">
               <div>* 附件：</div>
               <input type="file" @change="fileChange($event)" v-if="appointment.fileUrl===''">
@@ -94,6 +94,7 @@ export default {
         callback: (res) => {
           if (res.code === '0000') {
             this.appointment = res.data
+            this.appointment.declareItem = res.data.appointmentItemName
             this.isSumbmitShow = false
             this.$vux.toast.text('亲！您已经预约过了', 'middle')
           } else if (res.code === '5011208') {
@@ -102,14 +103,18 @@ export default {
               data: { },
               callback: (res) => {
                 if (res.code === '0000') {
+                  this.appointment.declareItem = this.detailList.titleName
                   this.appointment.contactName = res.data.nickName
                   this.appointment.contactPhone = res.data.phone
                   this.appointment.email = res.data.email
                   this.appointment.declareEnterprise = res.data.companyName
+                } else {
+                  this.$vux.toast.text(res.result, 'middle')
                 }
               }
             })
           } else {
+            this.$vux.toast.text(res.result, 'middle')
           }
         }
       })
@@ -132,6 +137,8 @@ export default {
           callback: res => {
             if (res.code === '0000') {
               this.appointment.fileUrl = res.data
+            } else {
+              this.$vux.toast.text(res.result, 'middle')
             }
           }
         })

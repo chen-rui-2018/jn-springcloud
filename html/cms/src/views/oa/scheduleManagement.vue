@@ -85,7 +85,7 @@
           <el-checkbox-group v-model="scheduleForm.remindWay">
             <el-checkbox label="1">微信</el-checkbox>
             <el-checkbox label="2">短信</el-checkbox>
-            <el-checkbox label="3">pc端</el-checkbox>
+            <!-- <el-checkbox label="3">pc端</el-checkbox> -->
             <el-checkbox label="4">app端</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
@@ -402,6 +402,8 @@ export default {
               }
             }
             this.scheduleForm.remindWay = this.scheduleForm.remindWay.toString()
+          } else {
+            this.scheduleForm.remindWay = ''
           }
           if (this.scheduleForm.allDay === '1') {
             this.scheduleForm.endTime = this.scheduleForm.dateTime + ' 23:59'
@@ -414,6 +416,8 @@ export default {
             'post'
           ).then(res => {
             if (res.data.code === this.GLOBAL.code) {
+              console.log(this)
+              this.reload()
               if (this.titleText === '新增日程') {
                 this.$message({
                   message: '添加成功',
@@ -425,11 +429,13 @@ export default {
                   type: 'success'
                 })
               }
-              this.reload()
+
               this.isDisabled = false
               this.addDialogVisible = false
             } else {
-              this.scheduleForm.remindWay = this.scheduleForm.remindWay.split(',')
+              // if (this.scheduleForm.remindWay) {
+              //   this.scheduleForm.remindWay = this.scheduleForm.remindWay.split(',')
+              // }
               this.$message.error(res.data.result)
               this.isDisabled = false
               return false

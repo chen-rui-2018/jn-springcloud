@@ -196,7 +196,9 @@ export default {
                 id: i + 1,
                 // start_date: this.reverseString(v.planStartTime),
                 start_date: new Date(v.planStartTime),
-                duration: (new Date(v.planStopTime).getTime() - new Date(v.planStartTime).getTime()) / 3600 / 1000 / 24,
+                // end_date: this.reverseString(v.planStopTime),
+                duration: ((new Date(v.planStopTime).getTime() - new Date(v.planStartTime).getTime()) / 3600 / 1000 / 24) + 1,
+                // duration: 20,
                 progress: Number(v.nowadaysProgress.split('%')[0]) / 100
               })
             })
@@ -525,21 +527,26 @@ export default {
   .details-top{
     display: flex;
     >div:nth-child(1){
-      flex:6;
+      // flex:6;
     }
      >div:nth-child(2){
-      flex:4;
-      width: 40%;
+      // flex:4;
+      width:54%;
       >div:nth-child(1){
         height: 100%;
         >div:nth-child(1){
-          height: 100%!important;
+          height: unset!important;
           >div:nth-child(1){
+            height: unset!important;
             >div:nth-child(1){
                display: none;
             }
             >div:nth-child(2){
+              height: unset!important;
               width: 100%!important;
+              >div:nth-child(1){
+                height: unset!important;
+              }
               .gantt_task_scale{
                 height: 74px!important;
                 >div:nth-child(1){

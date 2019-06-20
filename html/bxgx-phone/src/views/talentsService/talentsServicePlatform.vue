@@ -71,6 +71,8 @@ export default {
         callback: (res) => {
           // console.log(res);
           if (res.code === '0000') {
+          } else {
+            this.$vux.toast.text(res.result, 'middle')
           }
         }
       })
@@ -91,6 +93,8 @@ export default {
                 if (res.code === '0000') {
                   this.platFormList.push(...res.data.rows)
                   // console.log(...res.data.rows)
+                } else {
+                  this.$vux.toast.text(res.result, 'middle')
                 }
               }
             })

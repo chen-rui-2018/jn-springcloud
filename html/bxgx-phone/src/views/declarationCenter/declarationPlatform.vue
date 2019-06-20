@@ -13,7 +13,7 @@
       <div class="declarationPlatform_cont">
         <ul>
           <li v-for="(item,index) in platFormList " :key="index" >
-            <p>{{item.platformTitle}}</p>
+            <p><a :href="item.linkAddress">{{item.platformTitle}}</a> </p>
             <p>
               <span>业务咨询：</span>
               <span v-html="item.businessConsult"></span>
@@ -70,6 +70,8 @@ export default {
         callback: (res) => {
           // console.log(res);
           if (res.code === '0000') {
+          } else {
+            this.$vux.toast.text(res.result, 'middle')
           }
         }
       })
@@ -116,6 +118,8 @@ export default {
                   this.onFetching = false
                   this.platFormList.push(...res.data.rows)
                   // console.log(...res.data.rows)
+                } else {
+                  this.$vux.toast.text(res.result, 'middle')
                 }
               }
             })
@@ -192,6 +196,8 @@ export default {
             p:nth-child(1){
               font-size: 34px;
               color:#538aef;
+              a:visited{color:#538aef;}
+              a:active{color:#538aef;}
             }
             p:nth-child(2){
               padding-top: 32px;

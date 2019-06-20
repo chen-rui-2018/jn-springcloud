@@ -2,10 +2,12 @@ package com.jn.hardware.server;
 
 import com.jn.common.model.Result;
 import com.jn.hardware.api.DingTalkClient;
+import com.jn.hardware.ding.service.DingTalkAttendanceService;
 import com.jn.hardware.ding.service.DingTalkBaseService;
 import com.jn.hardware.ding.service.DingTalkDepartmentService;
 import com.jn.hardware.ding.service.DingTalkUserService;
 import com.jn.hardware.model.dingtalk.BaseResult;
+import com.jn.hardware.model.dingtalk.attendance.*;
 import com.jn.hardware.model.dingtalk.user.DepartmentListParam;
 import com.jn.hardware.model.dingtalk.user.DepartmentListResult;
 import com.jn.hardware.model.dingtalk.user.DepartmentUserInfoParam;
@@ -31,6 +33,10 @@ public class DingTalkController implements DingTalkClient {
     private DingTalkUserService dingTalkUserService;
     @Autowired
     private DingTalkDepartmentService dingTalkDepartmentService;
+    @Autowired
+    private DingTalkAttendanceService dingTalkAttendanceService;
+
+
     /**
      * 强制获取access_token
      * @return
@@ -63,4 +69,61 @@ public class DingTalkController implements DingTalkClient {
         result.setData(departmentListResult);
         return result;
     }
+
+    /**
+     * 获取打卡结果列表
+     * @param clockInInfoParam
+     * @return
+     */
+    @Override
+    public Result<ClockInListResult> getClockInResultList(@RequestBody ClockInListParam clockInInfoParam) {
+        Result<ClockInListResult> result = new Result<>();
+        ClockInListResult clockInInfoResult = dingTalkAttendanceService.getClockInResultList(clockInInfoParam);
+
+        if(!BaseResult.SUCCESS_CODE.equals(clockInInfoResult.getErrcode())) {
+            result.setCode(clockInInfoResult.getErrcode());
+            result.setResult(clockInInfoResult.getErrmsg());
+        }
+        result.setData(clockInInfoResult);
+        return result;
+    }
+
+    /**
+     * 获取请假状态
+     * @param leaveStatusListParam
+     * @return
+     */
+    @Override
+    public Result<LeaveStatusListResult> getLeaveStatusList(@RequestBody LeaveStatusListParam leaveStatusListParam) {
+        Result<LeaveStatusListResult> result = new Result<>();
+        LeaveStatusListResult leaveStatusListResult = dingTalkAttendanceService.getLeaveStatusList(leaveStatusListParam);
+
+        if(!BaseResult.SUCCESS_CODE.equals(leaveStatusListResult.getErrcode())) {
+            result.setCode(leaveStatusListResult.getErrcode());
+            result.setResult(leaveStatusListResult.getErrmsg());
+        }
+        result.setData(leaveStatusListResult);
+        return result;
+
+    }
+
+    /**
+     * 获取请假时长
+     * @param leaveApproveduRationParam
+     * @return
+     */
+    @Override
+    public Result<LeaveApproveDurationResult> getLeaveApproveDuration(@RequestBody LeaveApproveDurationParam leaveApproveduRationParam) {
+        Result<LeaveApproveDurationResult> result = new Result<>();
+        LeaveApproveDurationResult leaveApproveduRationResult = dingTalkAttendanceService.getLeaveApproveDuration(leaveApproveduRationParam);
+
+        if(!BaseResult.SUCCESS_CODE.equals(leaveApproveduRationResult.getErrcode())) {
+            result.setCode(leaveApproveduRationResult.getErrcode());
+            result.setResult(leaveApproveduRationResult.getErrmsg());
+        }
+        result.setData(leaveApproveduRationResult);
+        return result;
+    }
+
+
 }

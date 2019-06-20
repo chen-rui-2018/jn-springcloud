@@ -19,7 +19,7 @@
             </div>
             <div class="parkInfo fl">
               <div class="tit color1">{{parkDetail.parkName}}</div>
-              <div class="color3" v-html="parkDetail.parkIntroduce">
+              <div v-html="parkDetail.parkIntroduce">
               </div>
             </div>
         </div>

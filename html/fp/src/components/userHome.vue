@@ -22,7 +22,7 @@
           <div class="setdistance">
             <span class="textRight mg">头&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;像：</span>
             <img v-if="userData.avatar" :src="userData.avatar" class="imageItem" alt="">
-            <img v-else src="@/../static/img/头像.png" class="imageItem" alt="">
+            <img v-else src="@/../static/img/touxiang.png" class="imageItem" alt="">
           </div>
           <div class="setdistance">
             <span class="textRight mg">昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称：</span>
@@ -66,7 +66,7 @@
         <div class="setphone pr">
           <div class="setdistance uploadImgItem">
             <span class="textRight mg">选择文件：</span>
-            <el-upload class="avatar-uploader avatarImg" :show-file-list="false" action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload" :on-success="handleAvaSuccess" :headers="headers" :before-upload="beforeAvaUpload" style="display:inline-block">
+            <el-upload class="avatar-uploader avatarImg" :show-file-list="false" :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'" :on-success="handleAvaSuccess" :headers="headers" :before-upload="beforeAvaUpload" style="display:inline-block">
               <img v-if="avarUrl" :src="avarUrl" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
@@ -150,10 +150,12 @@
 </template>
 <script>
 import bus from '@/util/bus'
+import { getToken } from '@/util/auth'
 export default {
   props:['userData'],
   data() {
     return {
+      baseUrl:this.api.host,
       signature: "",
       oldPassword: "",
       newPassword: "",
@@ -168,7 +170,7 @@ export default {
       value5: [],
       value11: [],
       headers: {
-        token: sessionStorage.token
+        token: getToken()
       }
     };
   },
@@ -188,17 +190,17 @@ export default {
       this.signature = this.userData.signature;
       this.value11 = [];
       this.value5 = [];
-      for(let it of this.userData.hobbys){
+      for(let it in this.userData.hobbys){
         for(let it1 in this.options){
-          if(it == this.options[it1].tagVaule){
+          if(this.userData.hobbys[it] == this.options[it1].tagVaule){
             this.options[it1].flag = true;
             this.value11.push(this.options[it1].tagId)
           }
         }
       }
-      for(let it of this.userData.jobs){
+      for(let it in this.userData.jobs){
         for(let it1 in this.options1){
-          if(it == this.options1[it1].tagVaule){
+          if(this.userData.jobs[it] == this.options1[it1].tagVaule){
             this.value5.push(this.options1[it1].tagId)
           }
         }

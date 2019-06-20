@@ -1,12 +1,15 @@
 <template>
-  <div :class="className" :id="id" :style="{height:height,width:width}"/>
+  <div>
+    <!-- <div>{{ chartopts }}</div> -->
+    <div :class="className" :id="id" :style="{height:height,width:width}"/>
+  </div>
 </template>
 <script>
 import $ from 'jquery'
 import echarts from 'echarts'
-import resize from '@/components/Charts/resize'
+// import resize from '@/components/Charts/resize'
 export default {
-  mixins: [resize],
+  // mixins: [resize],
   props: {
     className: {
       type: String,
@@ -34,6 +37,11 @@ export default {
       chart: null
     }
   },
+  // watch: {
+  //   chartopts() {
+  //     console.log(this.chartopts)
+  //   }
+  // },
   mounted() {
     this.initChart()
   },
@@ -47,12 +55,6 @@ export default {
   methods: {
     initChart() {
       const opts = this.chartopts // 图表参数
-      const mLength = opts.currentMonth // 当前月份
-      const dateData = opts.cycle // 项目月份周期数组  ;
-      let pData = opts.uncompletedArr // 项目月份未完成比例数组,开始默认100%
-      pData = pData.map(function(n) {
-        return parseInt(n)
-      })
       function inArray(value, arr) {
         for (var k in arr) {
           if (arr[k] === value) {
@@ -63,29 +65,51 @@ export default {
           }
         }
       }
-      const mIndex = parseInt(inArray(mLength, dateData))
-      const dateDateLength = dateData.length
-      const unfinishedData = []
-      const doneData = []
-      const c = 100 / (dateDateLength - 1)
-      for (let i = 0; i < dateDateLength; i++) {
-        const j = dateDateLength - i - 1
-        if (i < mIndex) {
-          doneData.push(c * j)
-          unfinishedData.push('')
-        } else if (i === mIndex) {
-          doneData.push(c * j)
-          unfinishedData.push(c * j)
-        } else {
-          doneData.push('')
-          unfinishedData.push(c * j)
+      if (opts.arrayModel) {
+        var dateData = opts.arrayModel.createdTime // 项目月份周期数组  ;
+        var mLength = dateData[dateData.length - 1]// 当前月份
+        if (opts.planStartTime !== opts.arrayModel.createdTime[0]) {
+          dateData.unshift(opts.planStartTime)
+        }
+        dateData.push(opts.planStopTime)
+        var pData = []// 项目月份未完成比例数组,开始默认100%
+        opts.arrayModel.progress.forEach(v => {
+          pData.push(100 - v)
+        })
+
+        var mIndex = parseInt(inArray(mLength, dateData))
+        // console.log(mIndex, mLength, dateData)
+        var dateDateLength = dateData.length
+        var unfinishedData = []
+        var doneData = []
+        // const unfinishedData = dateData.slice(dateData.length - 1)
+        // const doneData = dateData.slice(0, dateData.length - 1)
+        // console.log(unfinishedData, doneData)
+        var c = 100 / (dateDateLength - 1)
+        for (let i = 0; i < dateDateLength; i++) {
+          const j = dateDateLength - i - 1
+          if (i < mIndex) {
+            doneData.push(c * j)
+            unfinishedData.push('')
+          } else if (i === mIndex) {
+            doneData.push(c * j)
+            unfinishedData.push(c * j)
+          } else {
+            doneData.push('')
+            unfinishedData.push(c * j)
+          }
         }
       }
+      // pData = pData.map(function(n) {
+      //   return parseInt(n)
+      // })
+
+      // console.log(unfinishedData, doneData)
       this.chart = echarts.init(document.getElementById(this.id))
-      let option = {
-        markLine: {
-          show: false
-        },
+      var option = {
+        // markLine: {
+        //   show: false
+        // },
         tooltip: {
           trigger: 'axis',
           axisPointer: {
@@ -112,14 +136,17 @@ export default {
           }
         },
         grid: {
-          left: '-20px',
-          right: '3%',
+          left: '-15px',
+          right: '20%',
           bottom: '0%',
           top: '10px',
           containLabel: true
         },
         xAxis: [
           {
+            show: true,
+            name: '工\n期',
+            nameLocation: 'end',
             type: 'category',
             boundaryGap: false,
             axisTick: {
@@ -128,14 +155,20 @@ export default {
             splitLine: {
               show: false
             },
+
             axisLabel: {
+              rotate: '45',
               textStyle: {
-                color: '#999'
+                color: '#777'
               }
             },
             axisLine: {
+              show: true, // 是否显示
+              symbol: ['none', 'arrow'], // 是否显示轴线箭头
+              symbolSize: [8, 10], // 箭头大小
+              symbolOffset: [0, 10], // 箭头位置
               lineStyle: {
-                color: '#dfe0e0'
+                color: '#999'
               }
             },
             data: dateData
@@ -143,7 +176,10 @@ export default {
         ],
         yAxis: [
           {
+            show: true,
             type: 'value',
+            name: '剩余任务量',
+            nameLocation: 'end',
             boundaryGap: false,
             splitLine: {
               show: false
@@ -152,9 +188,12 @@ export default {
               show: false
             },
             axisLine: {
-              // show:false,
+              // show: true, // 是否显示
+              // symbol: ['none', 'arrow'], // 是否显示轴线箭头
+              // symbolSize: [8, 10], // 箭头大小
+              // symbolOffset: [0, 15], // 箭头位置
               lineStyle: {
-                color: '#dfe0e0'
+                color: '#999'
               }
             },
             axisLabel: {
@@ -204,6 +243,7 @@ export default {
               }
             },
             data: unfinishedData
+            // data: ''
           },
           {
             name: '已完成进度',
@@ -223,6 +263,7 @@ export default {
               }
             },
             data: doneData
+            // data: ''
           }
         ]
       }

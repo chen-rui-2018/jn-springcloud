@@ -32,16 +32,18 @@ public interface DynamicDao {
     /**
      * 查询前台动态列表
      * @param accountList
+     * @param currentAccount 当前登录用户账号
      * @return
      */
-    List<DynamicWebShow> findDynamicWebList( @Param("accountList") List<String> accountList);
+    List<DynamicWebShow> findDynamicWebList( @Param("accountList") List<String> accountList,@Param("currentAccount") String currentAccount);
 
     /**
      * 获取动态详情
      * @param dynamicId
+     * @param currentAccount
      * @return
      */
-    DynamicWebShow  findDynamicWebDetails(@Param("dynamicId") String dynamicId);
+    DynamicWebShow  findDynamicWebDetails(@Param("dynamicId") String dynamicId,@Param("currentAccount") String currentAccount);
 
     /**
      * 获取评论列表
@@ -70,5 +72,34 @@ public interface DynamicDao {
      * @return
      */
     List<LikedUserInfo> findLikedUserInfoList(@Param("parentId")String parentId);
+
+    /**
+     * 目标动态列表
+     * @param account
+     * @param currentAccount
+     *  @return
+     */
+    List<DynamicWebShow> findDynamicByAccount(@Param("account") String account, @Param("currentAccount") String currentAccount);
+
+    /**
+     * 用户关注的动态列表
+     * @param account
+     * @return
+     */
+    List<DynamicWebShow> findCareDynamicList(@Param("account") String account);
+
+    /**
+     * 动态评论 和动态 评论回复列表
+     * @param dynamicId
+     * @return
+     */
+    List<DynamicCommentReplyShow> findDynamicCommentAndReplyList(@Param("dynamicId") String dynamicId);
+
+    /**
+     * 动态评论回复列表
+     * @param parentIdList
+     * @return
+     */
+    List<DynamicComments> findReplyList(@Param("parentIdList") List<String> parentIdList);
 
 }

@@ -1,0 +1,19 @@
+.common-cell {
+    padding: 20rpx;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+}
+.common-cell-l,
+.common-cell-r{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.common-cell-content {
+  flex: none;
+}
+.common-cell-tips {
+    
+}

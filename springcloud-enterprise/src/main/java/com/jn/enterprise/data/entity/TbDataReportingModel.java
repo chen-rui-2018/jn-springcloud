@@ -7,9 +7,6 @@ public class TbDataReportingModel implements Serializable {
     /*@ApiModelProperty("模板ID")*/
     private String modelId;
 
-    /*@ApiModelProperty("")*/
-    private String id;
-
     /*@ApiModelProperty("模板名称")*/
     private String modelName;
 
@@ -20,7 +17,7 @@ public class TbDataReportingModel implements Serializable {
     private String modelFormTargetId;
 
     /*@ApiModelProperty("填报周期（1：年，0：月）")*/
-    private String modelCycle;
+    private Byte modelCycle;
 
     /*@ApiModelProperty("提前预警天数")*/
     private String warningBeforeDays;
@@ -61,7 +58,7 @@ public class TbDataReportingModel implements Serializable {
     private String departmentName;
 
     /*@ApiModelProperty("模板序号")*/
-    private String order;
+    private Integer orderNumber;
 
     /*@ApiModelProperty("任务全部填写完后的提醒人")*/
     private String reminder;
@@ -91,14 +88,6 @@ public class TbDataReportingModel implements Serializable {
         this.modelId = modelId == null ? null : modelId.trim();
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
-    }
-
     public String getModelName() {
         return modelName;
     }
@@ -123,12 +112,12 @@ public class TbDataReportingModel implements Serializable {
         this.modelFormTargetId = modelFormTargetId == null ? null : modelFormTargetId.trim();
     }
 
-    public String getModelCycle() {
+    public Byte getModelCycle() {
         return modelCycle;
     }
 
-    public void setModelCycle(String modelCycle) {
-        this.modelCycle = modelCycle == null ? null : modelCycle.trim();
+    public void setModelCycle(Byte modelCycle) {
+        this.modelCycle = modelCycle;
     }
 
     public String getWarningBeforeDays() {
@@ -227,12 +216,12 @@ public class TbDataReportingModel implements Serializable {
         this.departmentName = departmentName == null ? null : departmentName.trim();
     }
 
-    public String getOrder() {
-        return order;
+    public Integer getOrderNumber() {
+        return orderNumber;
     }
 
-    public void setOrder(String order) {
-        this.order = order == null ? null : order.trim();
+    public void setOrderNumber(Integer orderNumber) {
+        this.orderNumber = orderNumber;
     }
 
     public String getReminder() {
@@ -296,7 +285,6 @@ public class TbDataReportingModel implements Serializable {
         }
         TbDataReportingModel other = (TbDataReportingModel) that;
         return (this.getModelId() == null ? other.getModelId() == null : this.getModelId().equals(other.getModelId()))
-            && (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getModelName() == null ? other.getModelName() == null : this.getModelName().equals(other.getModelName()))
             && (this.getModelType() == null ? other.getModelType() == null : this.getModelType().equals(other.getModelType()))
             && (this.getModelFormTargetId() == null ? other.getModelFormTargetId() == null : this.getModelFormTargetId().equals(other.getModelFormTargetId()))
@@ -313,7 +301,7 @@ public class TbDataReportingModel implements Serializable {
             && (this.getFilllInFormDeadline() == null ? other.getFilllInFormDeadline() == null : this.getFilllInFormDeadline().equals(other.getFilllInFormDeadline()))
             && (this.getDepartmentId() == null ? other.getDepartmentId() == null : this.getDepartmentId().equals(other.getDepartmentId()))
             && (this.getDepartmentName() == null ? other.getDepartmentName() == null : this.getDepartmentName().equals(other.getDepartmentName()))
-            && (this.getOrder() == null ? other.getOrder() == null : this.getOrder().equals(other.getOrder()))
+            && (this.getOrderNumber() == null ? other.getOrderNumber() == null : this.getOrderNumber().equals(other.getOrderNumber()))
             && (this.getReminder() == null ? other.getReminder() == null : this.getReminder().equals(other.getReminder()))
             && (this.getRemindStatus() == null ? other.getRemindStatus() == null : this.getRemindStatus().equals(other.getRemindStatus()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
@@ -327,7 +315,6 @@ public class TbDataReportingModel implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getModelId() == null) ? 0 : getModelId().hashCode());
-        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getModelName() == null) ? 0 : getModelName().hashCode());
         result = prime * result + ((getModelType() == null) ? 0 : getModelType().hashCode());
         result = prime * result + ((getModelFormTargetId() == null) ? 0 : getModelFormTargetId().hashCode());
@@ -344,7 +331,7 @@ public class TbDataReportingModel implements Serializable {
         result = prime * result + ((getFilllInFormDeadline() == null) ? 0 : getFilllInFormDeadline().hashCode());
         result = prime * result + ((getDepartmentId() == null) ? 0 : getDepartmentId().hashCode());
         result = prime * result + ((getDepartmentName() == null) ? 0 : getDepartmentName().hashCode());
-        result = prime * result + ((getOrder() == null) ? 0 : getOrder().hashCode());
+        result = prime * result + ((getOrderNumber() == null) ? 0 : getOrderNumber().hashCode());
         result = prime * result + ((getReminder() == null) ? 0 : getReminder().hashCode());
         result = prime * result + ((getRemindStatus() == null) ? 0 : getRemindStatus().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
@@ -361,7 +348,6 @@ public class TbDataReportingModel implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", modelId=").append(modelId);
-        sb.append(", id=").append(id);
         sb.append(", modelName=").append(modelName);
         sb.append(", modelType=").append(modelType);
         sb.append(", modelFormTargetId=").append(modelFormTargetId);
@@ -378,7 +364,7 @@ public class TbDataReportingModel implements Serializable {
         sb.append(", filllInFormDeadline=").append(filllInFormDeadline);
         sb.append(", departmentId=").append(departmentId);
         sb.append(", departmentName=").append(departmentName);
-        sb.append(", order=").append(order);
+        sb.append(", orderNumber=").append(orderNumber);
         sb.append(", reminder=").append(reminder);
         sb.append(", remindStatus=").append(remindStatus);
         sb.append(", creatorAccount=").append(creatorAccount);

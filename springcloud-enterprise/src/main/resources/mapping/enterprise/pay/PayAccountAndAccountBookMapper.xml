@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.pay.dao.PayAccountAndAccountBookDao">
+
+  <select id="selectPayAccountId" parameterType="java.lang.String" resultType="com.jn.pay.vo.PayAccountAndAccountBookVo">
+   SELECT
+	t.ACCOUNT_ID AS accountId,
+	t.user_id AS userId,
+    SUM(b.BALANCE)AS balance
+  FROM
+	tb_pay_account t ,tb_pay_account_book b
+  WHERE
+	1 = 1
+  AND t.record_status = 1
+  and b.is_show = 2
+  and b.ACCOUNT_ID = t.ACCOUNT_ID
+  and t.user_id = #{userId,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectPayAccountBookList" parameterType="java.lang.String" resultType="com.jn.pay.vo.PayAccountBookVo">
+    select
+      b.account_id as accountId,
+      b.ac_book_id as acBookId,
+      b.ac_book_name as acBookName,
+      b.ac_book_type as acBookType,
+      b.balance as balance,
+      b.automatic_deductions as automaticDeductions,
+      b.can_recharge as canRecharge,
+      b.is_show as isShow,
+      b.created_time as createdTime,
+      b.creator_account as creatorAccount,
+      b.modified_time as modifiedTime,
+      b.modifier_account as modifierAccount,
+      b.record_status as recordStatus,
+      t.ac_book_desc as acBookDesc,
+      t.ac_book_scope as acBookScope
+    from tb_pay_account_book b,
+    tb_pay_account_book_type t
+    WHERE 1=1
+    and b.ac_book_type = t.ac_book_type
+    and b.record_status = 1
+    and b.is_show = 2
+    and account_id = #{accountId,jdbcType=VARCHAR}
+  </select>
+
+  <select id="queryPayAccountDetails" parameterType="com.jn.pay.model.PayAccountBookMoneyRecordParam" resultType="com.jn.pay.vo.PayAccountBookMoneyRecordVo">
+           SELECT
+        b.deduction_id AS deductionId,
+        b.bill_id AS billId,
+        b.ac_book_id AS acBookId,
+        b.remark AS remark,
+        CASE b.payment_method
+        WHEN '1' THEN
+            '钱包'
+        WHEN '2' THEN
+            '微信'
+        WHEN '3' THEN
+            '支付宝'
+        WHEN '4' THEN
+            '银联'
+        WHEN '5' THEN
+            '线下支付'
+        ELSE
+            '支付方式异常'
+        END paymentMethod,
+         CASE b.payment_action
+        WHEN '1' THEN
+            '手动支付'
+        WHEN '2' THEN
+            '自动付款'
+        ELSE
+            '支付动作异常'
+        END paymentAction,
+         CASE b.nature_code
+        WHEN '1' THEN
+            '充值'
+        WHEN '2' THEN
+            '扣费'
+        WHEN '3' THEN
+            '冲正'
+        ELSE
+            '支付类型异常'
+        END natureCode,
+     b.money AS money,
+     b.balance AS balance,
+     b.created_time AS createdTime,
+     b.creator_account AS creatorAccount,
+     b.record_status AS recordStatus,
+     b.modified_time AS modifiedTime,
+     b.modifier_account AS modifierAccount,
+     CASE  WHEN  t.payment_state = '1' or  T.BILL_ID IS NULL THEN '已支付'
+               WHEN  t.payment_state = '2' THEN '待支付'
+				 ELSE
+            '支付异常'
+     END paymentState
+    FROM
+        tb_pay_account_book_money_record b LEFT JOIN
+        tb_pay_bill t ON  b.bill_id = t.bill_id
+    WHERE 1 =1
+    and b.record_status = 1
+    and b.deduction_id = #{deductionId,jdbcType=VARCHAR}
+
+  </select>
+
+    <select id="queryPayAccountBookInfo" parameterType="com.jn.pay.model.PayAccountBookParam" resultType="com.jn.pay.vo.PayAccountBookRecordVo">
+        SELECT
+        b.deduction_id AS deductionId,
+        b.bill_id AS billId,
+        b.ac_book_id AS acBookId,
+        b.remark AS remark,
+        CASE b.payment_method
+        WHEN '1' THEN
+            '钱包'
+        WHEN '2' THEN
+            '微信'
+        WHEN '3' THEN
+            '支付宝'
+        WHEN '4' THEN
+            '银联'
+        WHEN '5' THEN
+            '线下支付'
+        ELSE
+            '支付方式异常'
+        END paymentMethod,
+         CASE b.payment_action
+        WHEN '1' THEN
+            '手动支付'
+        WHEN '2' THEN
+            '自动付款'
+        ELSE
+            '支付动作异常'
+        END paymentAction,
+         CASE b.nature_code
+        WHEN '1' THEN
+            '充值'
+        WHEN '2' THEN
+            '扣费'
+         WHEN '3' THEN
+            '冲正'
+        ELSE
+            '支付类型异常'
+        END natureCode,
+         b.money AS money,
+         b.balance AS balance,
+         b.created_time AS createdTime,
+         b.creator_account AS creatorAccount,
+         b.record_status AS recordStatus,
+         b.modified_time AS modifiedTime,
+         b.modifier_account AS modifierAccount,
+         CASE  WHEN  t.payment_state = '1' or  T.BILL_ID IS NULL THEN '已支付'
+               WHEN  t.payment_state = '2' THEN '待支付'
+				 ELSE
+            '支付异常'
+        END paymentState,
+        t.AC_BOOK_TYPE as acBookType
+    FROM
+        tb_pay_account_book_money_record b LEFT JOIN
+        tb_pay_bill t ON  b.bill_id = t.bill_id
+    WHERE 1 =1
+    and b.record_status = 1
+    and b.ac_book_id = #{acBookId,jdbcType=VARCHAR}
+    order by b.created_time desc
+  </select>
+
+</mapper>

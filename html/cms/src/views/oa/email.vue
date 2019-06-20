@@ -1,7 +1,7 @@
 <template>
   <div v-loading="listLoading" class="email">
     <el-form :inline="true" :model="listQuery" class="filter-bar">
-      <el-radio-group v-model="listQuery.sendStatus">
+      <el-radio-group v-model="listQuery.sendStatus" @change="handleFilter">
         <el-radio-button label="">全部</el-radio-button>
         <el-radio-button label= "1">未发送</el-radio-button>
         <el-radio-button label="2">发送成功</el-radio-button>
@@ -42,7 +42,7 @@
       <el-table-column label="状态" prop="sendStatus" align="center" >
         <template slot-scope="scope">
           <span v-if="scope.row.sendStatus==='2'" class="text-green">发送成功</span>
-          <span v-if="scope.row.sendStatus==='1'" class="text-green" >未发送</span>
+          <span v-if="scope.row.sendStatus==='1'" class="text-blue" >未发送</span>
           <span v-if="scope.row.sendStatus==='3'" class="text-red">发送失败</span>
         </template>
       </el-table-column>
@@ -71,7 +71,7 @@
       @current-change="handleCurrentChange"/>
     <!-- 预览的弹框 -->
     <template v-if="deDialogVisible">
-      <el-dialog :visible.sync="deDialogVisible" title="邮件预览" width="800px">
+      <el-dialog :visible.sync="deDialogVisible" title="邮件预览" width="1000px">
         <strong>{{ emailName }}</strong>
         <div class="userNames">收件人 :{{ userNames }}</div>
         <div class="editor-container">

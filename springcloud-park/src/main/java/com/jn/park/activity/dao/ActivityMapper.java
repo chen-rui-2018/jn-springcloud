@@ -37,16 +37,18 @@ public interface ActivityMapper {
      * 查询用户已报名的活动列表
      * @param account
      * @param applyStatus
+     * @param actiName
      * @return
      */
-    List<ActivityListApply> findActivitySuccessfulRegistration(@Param("account") String account , @Param("applyStatus") String applyStatus);
+    List<ActivityListApply> findActivitySuccessfulRegistration(@Param("account") String account , @Param("applyStatus") String applyStatus,@Param("actiName") String actiName);
 
     /**
      *查看机构下的活动列表
      * @param startTime
      * @param endTime
      * @param activityType
+     * @param timeInterval
      * @return
      */
-    List<OrgActivityShow> findOrgActivityList(@Param("startTime") String startTime, @Param("endTime") String endTime,@Param("activityType") String activityType);
+    List<OrgActivityShow> findOrgActivityList(@Param("startTime") String startTime, @Param("endTime") String endTime,@Param("activityType") String activityType,@Param("timeInterval") String timeInterval);
 }

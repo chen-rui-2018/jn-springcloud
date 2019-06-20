@@ -4,11 +4,10 @@ import com.jn.SpringCloudEnterpriseApplication;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
-import com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor;
 import com.jn.enterprise.servicemarket.advisor.model.*;
-import com.jn.enterprise.servicemarket.comment.model.ServiceRating;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorService;
 import com.jn.enterprise.servicemarket.advisor.vo.AdvisorDetailsVo;
+import com.jn.enterprise.servicemarket.comment.model.ServiceRating;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -56,8 +55,9 @@ public class AdvisorServiceImplTest {
         advisorListParam.setDomain(domain);
         advisorListParam.setKeyWords(keyWords);
         advisorListParam.setSortTypes(sortTypes);
-        advisorListParam.setOrgId("1001211");
-        advisorAccount="wangsong";
+        advisorListParam.setTemplateId("6fda8a513cd64070925625521fa6a53a");
+        //advisorListParam.setOrgId("1001211");
+        //advisorAccount="wangsong";
 
         serviceEvaluationParam.setIsPublicPage("0");
         serviceEvaluationParam.setAdvisorAccount(advisorAccount);
@@ -74,7 +74,7 @@ public class AdvisorServiceImplTest {
         List<AdvisorListInfo> list= (List<AdvisorListInfo>)paginationData.getRows();
         if(list!=null){
             for(AdvisorListInfo advisorListInfo:list){
-                logger.info(advisorListInfo.toString());
+                logger.info("服务顾问列表查询{}",advisorListInfo.toString());
             }
             assertThat(list.size(),greaterThanOrEqualTo(0));
         }else{
@@ -88,7 +88,7 @@ public class AdvisorServiceImplTest {
     @Test
     public void getServiceAdvisorInfo(){
         try {
-            AdvisorDetailsVo advisorDetailsVo = advisorService.getServiceAdvisorInfo(advisorAccount);
+            AdvisorDetailsVo advisorDetailsVo = advisorService.getServiceAdvisorInfo(advisorAccount,"2");
             if(advisorDetailsVo!=null){
                 logger.info(advisorDetailsVo.getAdvisorServiceInfo().toString());
                 logger.info("总评价数{}",advisorDetailsVo.getEvaluationTotal()+"");
@@ -191,7 +191,7 @@ public class AdvisorServiceImplTest {
     @Test
     public void getAdvisorInfoByAccount(){
         try {
-            TbServiceAdvisor advisorInfoByAccount = advisorService.getAdvisorInfoByAccount(advisorAccount);
+            AdvisorServiceInfo advisorInfoByAccount = advisorService.getAdvisorInfoByAccount(advisorAccount,"2");
             assertThat(advisorInfoByAccount, notNullValue());
         } catch (JnSpringCloudException e) {
             logger.info("根据顾问账号获取顾问基本信息失败");

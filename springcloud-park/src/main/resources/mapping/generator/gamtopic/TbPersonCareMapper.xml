@@ -5,6 +5,12 @@
     <id column="care_id" jdbcType="VARCHAR" property="careId" />
     <result column="care_account" jdbcType="VARCHAR" property="careAccount" />
     <result column="receive_account" jdbcType="VARCHAR" property="receiveAccount" />
+    <result column="receive_type" jdbcType="VARCHAR" property="receiveType" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -65,7 +71,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    care_id, care_account, receive_account
+    care_id, care_account, receive_account, receive_type, created_time, creator_account, 
+    modified_time, modifier_account, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.gamtopic.entity.TbPersonCareCriteria" resultMap="BaseResultMap">
     select
@@ -98,9 +105,13 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.park.gamtopic.entity.TbPersonCare">
-    insert into tb_person_care (care_id, care_account, receive_account
+    insert into tb_person_care (care_id, care_account, receive_account, 
+      receive_type, created_time, creator_account, 
+      modified_time, modifier_account, record_status
       )
-    values (#{careId,jdbcType=VARCHAR}, #{careAccount,jdbcType=VARCHAR}, #{receiveAccount,jdbcType=VARCHAR}
+    values (#{careId,jdbcType=VARCHAR}, #{careAccount,jdbcType=VARCHAR}, #{receiveAccount,jdbcType=VARCHAR}, 
+      #{receiveType,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.gamtopic.entity.TbPersonCare">
@@ -115,6 +126,24 @@
       <if test="receiveAccount != null">
         receive_account,
       </if>
+      <if test="receiveType != null">
+        receive_type,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="careId != null">
@@ -125,6 +154,24 @@
       </if>
       <if test="receiveAccount != null">
         #{receiveAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveType != null">
+        #{receiveType,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
@@ -146,6 +193,24 @@
       <if test="record.receiveAccount != null">
         receive_account = #{record.receiveAccount,jdbcType=VARCHAR},
       </if>
+      <if test="record.receiveType != null">
+        receive_type = #{record.receiveType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -155,7 +220,13 @@
     update tb_person_care
     set care_id = #{record.careId,jdbcType=VARCHAR},
       care_account = #{record.careAccount,jdbcType=VARCHAR},
-      receive_account = #{record.receiveAccount,jdbcType=VARCHAR}
+      receive_account = #{record.receiveAccount,jdbcType=VARCHAR},
+      receive_type = #{record.receiveType,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=TINYINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -169,13 +240,37 @@
       <if test="receiveAccount != null">
         receive_account = #{receiveAccount,jdbcType=VARCHAR},
       </if>
+      <if test="receiveType != null">
+        receive_type = #{receiveType,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
     </set>
     where care_id = #{careId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.park.gamtopic.entity.TbPersonCare">
     update tb_person_care
     set care_account = #{careAccount,jdbcType=VARCHAR},
-      receive_account = #{receiveAccount,jdbcType=VARCHAR}
+      receive_account = #{receiveAccount,jdbcType=VARCHAR},
+      receive_type = #{receiveType,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=TINYINT}
     where care_id = #{careId,jdbcType=VARCHAR}
   </update>
 </mapper>

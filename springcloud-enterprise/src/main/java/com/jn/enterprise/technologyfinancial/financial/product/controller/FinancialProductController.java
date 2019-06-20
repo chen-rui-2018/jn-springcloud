@@ -51,11 +51,18 @@ public class FinancialProductController extends BaseController {
         PaginationData investorInfoList = financialProductService.getFinancialProductList(financialProductListParam);
         return  new Result(investorInfoList);
     }
+    @ControllerLog(doAction = "机构下金融产品列表查询")
+    @ApiOperation(value = "机构下金融产品列表查询")
+    @RequestMapping(value = "/guest/technologyFinancial/financialProductController/getOrgFinancialProductList",method = RequestMethod.GET)
+    public Result<PaginationData<List<FinancialProductListInfo>>> getOrgFinancialProductList(@Validated FinancialOrgProductParam financialOrgProductParam){
+        PaginationData investorInfoList = financialProductService.getOrgFinancialProductList(financialOrgProductParam);
+        return  new Result(investorInfoList);
+    }
+
 
     @ControllerLog(doAction = "金融产品详情")
     @ApiOperation(value = "金融产品详情")
-    @RequiresPermissions("/technologyFinancial/financialProductController/getFinancialProductDetails")
-    @RequestMapping(value = "/technologyFinancial/financialProductController/getFinancialProductDetails",method = RequestMethod.GET)
+    @RequestMapping(value = "/guest/technologyFinancial/financialProductController/getFinancialProductDetails",method = RequestMethod.GET)
     public Result<FinancialProductDetails> getFinancialProductDetails(@ApiParam(value = "产品id" ,required = true,example = "1234") @RequestParam("productId") String productId){
         Assert.notNull(productId, FinancialProductExceptionEnum.PRODUCT_ID_NOT_NULL.getMessage());
         FinancialProductDetails financialProductDetails = financialProductService.getFinancialProductDetails(productId);
@@ -64,8 +71,7 @@ public class FinancialProductController extends BaseController {
 
     @ControllerLog(doAction = "金融产品贷款类别")
     @ApiOperation(value = "金融产品贷款类别")
-    @RequiresPermissions("/technologyFinancial/financialProductController/getFinancialProductLoanType")
-    @RequestMapping(value = "/technologyFinancial/financialProductController/getFinancialProductLoanType",method = RequestMethod.GET)
+    @RequestMapping(value = "/guest/technologyFinancial/financialProductController/getFinancialProductLoanType",method = RequestMethod.GET)
     public Result<List<FinancialProductLoanType>> getFinancialProductLoanType(){
         List<FinancialProductLoanType> financialProductLoanTypeList = financialProductService.getFinancialProductLoanType();
         return  new Result(financialProductLoanTypeList);
@@ -73,8 +79,7 @@ public class FinancialProductController extends BaseController {
 
     @ControllerLog(doAction = "金融产品担保方式")
     @ApiOperation(value = "金融产品担保方式")
-    @RequiresPermissions("/technologyFinancial/financialProductController/getFinancialProductAssureType")
-    @RequestMapping(value = "/technologyFinancial/financialProductController/getFinancialProductAssureType",method = RequestMethod.GET)
+    @RequestMapping(value = "/guest/technologyFinancial/financialProductController/getFinancialProductAssureType",method = RequestMethod.GET)
     public Result<List<FinancialProductAssureType>> getFinancialProductAssureType(){
         List<FinancialProductAssureType> financialProductAssureTypeList = financialProductService.getFinancialProductAssureType();
         return  new Result(financialProductAssureTypeList);
@@ -107,13 +112,13 @@ public class FinancialProductController extends BaseController {
     @RequestMapping(value = "/technologyFinancial/financialProductController/upShelfCommonProduct",method = RequestMethod.POST)
     public Result upShelfCommonProduct(@RequestBody @Validated CommonProductShelf commonService ){
         Assert.notNull(commonService.getTemplateId(), ServiceProductExceptionEnum.SERVICE_PRODUCT_TEMPLE_ID_EMPTY.getMessage());
-        Assert.notNull(commonService.getOrgId(), ServiceProductExceptionEnum.SERVICE_PRODUCT_ORG_ID_EMPTY.getMessage());
+//        Assert.notNull(commonService.getOrgId(), ServiceProductExceptionEnum.SERVICE_PRODUCT_ORG_ID_EMPTY.getMessage());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         //服务产品主键Id
-        String productId = UUID.randomUUID().toString().replaceAll("-", "");
+        //String productId = UUID.randomUUID().toString().replaceAll("-", "");
         CommonServiceShelf serviceShelf = new CommonServiceShelf();
         BeanUtils.copyProperties(commonService,serviceShelf);
-        serviceShelf.setProductId(productId);
+        serviceShelf.setProductId("");
         financialProductService.upShelfCommonProduct(serviceShelf,user != null?user.getAccount():"");
         return new Result();
     }
@@ -122,13 +127,12 @@ public class FinancialProductController extends BaseController {
     @RequiresPermissions("/technologyFinancial/financialProductController/upShelfFeatureProduct")
     @RequestMapping(value = "/technologyFinancial/financialProductController/upShelfFeatureProduct",method = RequestMethod.POST)
     public Result upShelfFeatureProduct(@RequestBody @Validated  FinancialProductFeatureAdd featureProduct){
-        Assert.notNull(featureProduct.getOrgId(), ServiceProductExceptionEnum.SERVICE_PRODUCT_ORG_ID_EMPTY.getMessage());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         //服务产品主键Id
-        String productId = UUID.randomUUID().toString().replaceAll("-", "");
+        //String productId = UUID.randomUUID().toString().replaceAll("-", "");
         FinancialProductAddInfo info = new FinancialProductAddInfo();
         BeanUtils.copyProperties(featureProduct,info);
-        info.setProductId(productId);
+        info.setProductId("");
         financialProductService.upShelfFeatureProduct(info,user != null?user.getAccount():"");
         return new Result();
     }

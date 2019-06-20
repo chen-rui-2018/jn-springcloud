@@ -1,9 +1,11 @@
 package com.jn.park.policy.model;
 
+import com.jn.enterprise.model.IBPSFile;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @Author: yangph
@@ -21,6 +23,8 @@ public class PolicyDetailsShow implements Serializable {
     private String policyClassName;
     @ApiModelProperty(value = "政策标题")
     private String policyTitle;
+    @ApiModelProperty(value = "政策颁发编号")
+    private String policyIssuNum;
     @ApiModelProperty(value = "阅读次数")
     private Integer readNum;
     @ApiModelProperty(value = "发布日期")
@@ -33,6 +37,10 @@ public class PolicyDetailsShow implements Serializable {
     private String issueUnit;
     @ApiModelProperty(value = "政策内容")
     private String policyContent;
+    @ApiModelProperty(value = "附件url(未格式化处理)")
+    private String fileUrl;
+    @ApiModelProperty(value = "附件url(已格式化处理)")
+    private List<IBPSFile> fileUrls;
 
     public String getPolicyId() {
         return policyId;
@@ -64,6 +72,14 @@ public class PolicyDetailsShow implements Serializable {
 
     public void setPolicyTitle(String policyTitle) {
         this.policyTitle = policyTitle;
+    }
+
+    public String getPolicyIssuNum() {
+        return policyIssuNum;
+    }
+
+    public void setPolicyIssuNum(String policyIssuNum) {
+        this.policyIssuNum = policyIssuNum;
     }
 
     public Integer getReadNum() {
@@ -114,6 +130,22 @@ public class PolicyDetailsShow implements Serializable {
         this.policyContent = policyContent;
     }
 
+    public String getFileUrl() {
+        return fileUrl;
+    }
+
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl;
+    }
+
+    public List<IBPSFile> getFileUrls() {
+        return fileUrls;
+    }
+
+    public void setFileUrls(List<IBPSFile> fileUrls) {
+        this.fileUrls = fileUrls;
+    }
+
     @Override
     public String toString() {
         return "PolicyDetailsShow{" +
@@ -121,12 +153,15 @@ public class PolicyDetailsShow implements Serializable {
                 ", policyLevelName='" + policyLevelName + '\'' +
                 ", policyClassName='" + policyClassName + '\'' +
                 ", policyTitle='" + policyTitle + '\'' +
+                ", policyIssuNum='" + policyIssuNum + '\'' +
                 ", readNum=" + readNum +
                 ", releaseDate='" + releaseDate + '\'' +
                 ", supportMethod='" + supportMethod + '\'' +
                 ", supportIndustry='" + supportIndustry + '\'' +
                 ", issueUnit='" + issueUnit + '\'' +
                 ", policyContent='" + policyContent + '\'' +
+                ", fileUrl='" + fileUrl + '\'' +
+                ", fileUrls=" + fileUrls +
                 '}';
     }
 }

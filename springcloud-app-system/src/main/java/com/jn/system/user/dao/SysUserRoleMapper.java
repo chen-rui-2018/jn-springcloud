@@ -2,8 +2,8 @@ package com.jn.system.user.dao;
 
 
 import com.jn.system.model.SysRole;
+import com.jn.system.model.User;
 import com.jn.system.permission.model.SysRoleUserPage;
-import com.jn.system.user.model.SysTUser;
 import com.jn.system.user.model.SysUserRole;
 import com.jn.system.user.model.SysUserRolePage;
 import org.apache.ibatis.annotations.Param;
@@ -65,7 +65,7 @@ public interface SysUserRoleMapper {
      * @param roleId
      * @return
      */
-    List<SysTUser> findUserByRoleId(String roleId);
+    List<User> findUserByRoleId(String roleId);
 
     /**
      * 条件分页获取角色未拥有用户信息
@@ -73,7 +73,7 @@ public interface SysUserRoleMapper {
      * @param sysRoleUserPage
      * @return
      */
-    List<SysTUser> findOtherUser(SysRoleUserPage sysRoleUserPage);
+    List<User> findOtherUser(SysRoleUserPage sysRoleUserPage);
 
     /**
      * 条件分页获取用户未拥有的角色信息

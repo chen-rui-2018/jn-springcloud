@@ -65,4 +65,15 @@ public class CommonServiceShelf implements Serializable {
     public void setOrgId(String orgId) {
         this.orgId = orgId;
     }
+
+    @Override
+    public String toString() {
+        return "CommonServiceShelf{" +
+                "templateId='" + templateId + '\'' +
+                ", productId='" + productId + '\'' +
+                ", productName='" + productName + '\'' +
+                ", advisorAccount='" + advisorAccount + '\'' +
+                ", orgId='" + orgId + '\'' +
+                '}';
+    }
 }

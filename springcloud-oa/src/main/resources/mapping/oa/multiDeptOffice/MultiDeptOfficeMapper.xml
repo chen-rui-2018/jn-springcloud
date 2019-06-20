@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.oa.multiDeptOffice.dao.MultiDeptOfficeMapper">
+
+    <sql id="Base_Column_List">
+    id_,
+    title,
+    importance_degree,
+    classify,
+    period,
+    remind_time,
+    remind_weekday,
+    remind_month_day,
+    remind_hour,
+    remind_minute,
+    start_time,
+    endt_time,
+    `status`,
+    content,
+    dept_id,
+    dept_ids,
+    timed_task,
+    remind_way,
+    REPLACE (user_ids, 'user', '') AS userIds
+  </sql>
+
+  <update id="updateMultiDeptOfficeStatus">
+    UPDATE tb_oa_multi_dept_office
+    SET `status` = '2'
+    WHERE
+    `status` != '2'
+    AND endt_time <![CDATA[ < ]]> CURRENT_DATE();
+  </update>
+
+    <resultMap id="BaseResultMap" type="com.jn.oa.multiDeptOffice.model.MultiDeptOffice">
+        <id column="id_" jdbcType="VARCHAR" property="id" />
+        <result column="title" jdbcType="VARCHAR" property="title" />
+        <result column="importance_degree" jdbcType="VARCHAR" property="importanceDegree" />
+        <result column="classify" jdbcType="VARCHAR" property="classify" />
+        <result column="period" jdbcType="VARCHAR" property="period" />
+        <result column="remind_time" jdbcType="TIMESTAMP" property="remindTime" />
+        <result column="remind_weekday" jdbcType="VARCHAR" property="remindWeekday" />
+        <result column="remind_month_day" jdbcType="VARCHAR" property="remindMonthDay" />
+        <result column="remind_hour" jdbcType="VARCHAR" property="remindHour" />
+        <result column="remind_minute" jdbcType="VARCHAR" property="remindMinute" />
+        <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+        <result column="endt_time" jdbcType="TIMESTAMP" property="endtTime" />
+        <result column="status" jdbcType="VARCHAR" property="status" />
+        <result column="content" jdbcType="VARCHAR" property="content" />
+        <result column="dept_id" jdbcType="VARCHAR" property="deptId" />
+        <result column="dept_ids" jdbcType="VARCHAR" property="deptIds" />
+        <result column="timed_task" jdbcType="VARCHAR" property="timedTask" />
+        <result column="remind_way" jdbcType="VARCHAR" property="remindWay" />
+        <result column="userIds" jdbcType="VARCHAR" property="userIds" />
+    </resultMap>
+
+  <select id="getMultiDeptOfficeByStatus" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM
+    tb_oa_multi_dept_office
+    WHERE
+    `status` = '1'
+    AND start_time <![CDATA[ < ]]> CURRENT_DATE ()
+    AND period = '1'
+    AND remind_time = CURRENT_DATE ()
+    AND remind_hour = date_format(now(), '%k')
+    AND remind_minute = date_format(now(), '%i')
+    UNION ALL
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM
+    tb_oa_multi_dept_office
+    WHERE
+    `status` = '1'
+    AND start_time <![CDATA[ < ]]> CURRENT_DATE ()
+    AND period = '2'
+    AND remind_hour = date_format(now(), '%k')
+    AND remind_minute = date_format(now(), '%i')
+    UNION ALL
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM
+    tb_oa_multi_dept_office
+    WHERE
+    `status` = '1'
+    AND start_time <![CDATA[ < ]]> CURRENT_DATE ()
+    AND period = '3'
+    AND remind_weekday = date_format(now(), '%a')
+    AND remind_hour = date_format(now(), '%k')
+    AND remind_minute = date_format(now(), '%i')
+    UNION ALL
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM
+    tb_oa_multi_dept_office
+    WHERE
+    `status` = '1'
+    AND start_time <![CDATA[ < ]]> CURRENT_DATE ()
+    AND period = '4'
+    AND remind_month_day = date_format(now(), '%e')
+    AND remind_hour = date_format(now(), '%k')
+    AND remind_minute = date_format(now(), '%i')
+  </select>
+
+    <select id="getUser" resultType="com.jn.system.model.User">
+    SELECT
+        id,
+        account,
+        `name`,
+        phone,
+        email,
+        wechat_account
+    FROM
+        tb_sys_user
+    WHERE
+        id IN
+        <foreach item="id" collection="userIds" open="(" separator="," close=")">
+            #{id,jdbcType=VARCHAR}
+        </foreach>
+    </select>
+
+</mapper>

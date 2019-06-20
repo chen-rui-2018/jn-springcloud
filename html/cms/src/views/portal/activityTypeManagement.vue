@@ -44,7 +44,7 @@
     <!-- 弹出的新增活动类型对话框 -->
     <template v-if="activityTypedialogFormVisible">
       <el-dialog :visible.sync="activityTypedialogFormVisible" :title="dialogStatus" width="650px">
-        <el-form ref="activityTypeForm" :model="activityTypeForm" label-position="right" label-width="80px">
+        <el-form ref="activityTypeForm" :model="activityTypeForm" :rules="rules" label-position="right" label-width="100px">
           <el-form-item label="类型名称:" prop="typeName">
             <el-input v-model.trim="activityTypeForm.typeName" maxlength="20" clearable style="width:350px"/>
           </el-form-item>
@@ -127,6 +127,17 @@ import { getToken } from '@/utils/auth'
 export default {
   data() {
     return {
+      rules: {
+        typeName: [
+          { required: true, message: '请输入类型名称', trigger: 'blur' }
+        ],
+        typeStatus: [
+          { required: true, message: '请选择状态', trigger: 'change' }
+        ],
+        templateList: [
+          { required: true, message: '请选择海报图片', trigger: 'blur' }
+        ]
+      },
       baseUrl: process.env.BASE_API,
       loadingUpFlag: false,
       headers: {

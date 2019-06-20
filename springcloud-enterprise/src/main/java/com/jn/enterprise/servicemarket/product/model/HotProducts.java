@@ -14,8 +14,13 @@ import java.io.Serializable;
  */
 @ApiModel(value = "HotProducts" ,description = "热门产品")
 public class HotProducts  implements Serializable {
+
+    @ApiModelProperty(value = "产品id")
+    private String  productId;
     @ApiModelProperty(value = "产品名称")
     private String  productName;
+    @ApiModelProperty(value = "领域Id")
+    private String  signoryId;
     @ApiModelProperty(value = "产品图片路径")
     private String  pictureUrl;
     @ApiModelProperty(value = "服务产品参考价格范围")
@@ -26,6 +31,26 @@ public class HotProducts  implements Serializable {
     private Integer advisorCount;
     @ApiModelProperty(value = "评论次数")
     private Integer ratingCount;
+    @ApiModelProperty(value = "产品详情")
+    private String productDetails;
+    @ApiModelProperty(value = "产品简介")
+    private String productBrief;
+
+    public String getProductBrief() {
+        return productBrief;
+    }
+
+    public void setProductBrief(String productBrief) {
+        this.productBrief = productBrief;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
 
     public String getProductName() {
         return productName;
@@ -73,5 +98,37 @@ public class HotProducts  implements Serializable {
 
     public void setReferPrice(String referPrice) {
         this.referPrice = referPrice;
+    }
+
+    public String getSignoryId() {
+        return signoryId;
+    }
+
+    public void setSignoryId(String signoryId) {
+        this.signoryId = signoryId;
+    }
+
+    public String getProductDetails() {
+        return productDetails;
+    }
+
+    public void setProductDetails(String productDetails) {
+        this.productDetails = productDetails;
+    }
+
+    @Override
+    public String toString() {
+        return "HotProducts{" +
+                "productId='" + productId + '\'' +
+                ", productName='" + productName + '\'' +
+                ", signoryId='" + signoryId + '\'' +
+                ", pictureUrl='" + pictureUrl + '\'' +
+                ", referPrice='" + referPrice + '\'' +
+                ", orgCount=" + orgCount +
+                ", advisorCount=" + advisorCount +
+                ", ratingCount=" + ratingCount +
+                ", productDetails='" + productDetails + '\'' +
+                ", productBrief='" + productBrief + '\'' +
+                '}';
     }
 }

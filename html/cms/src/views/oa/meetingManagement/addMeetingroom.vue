@@ -36,17 +36,20 @@
       <div style="display:flex">
         <el-form-item label="会议室图片" prop="attachmentPaths" lass="inline">
           <el-upload
+            ref="upload"
             :limit="3"
             :disabled="lookMeetingroom"
             :on-exceed="handleExceed"
+            :before-upload="beforeUpload"
+            :on-error="imgUploadError"
+            :on-preview="handlePictureCardPreview"
             :on-success="uploadDone"
             :headers="getToken()"
-            :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove"
-            :on-error="imgUploadError"
             :file-list="fileList"
-            :before-upload="beforeUpload"
             :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
+
+            accept="image/png, image/jpeg"
             list-type="picture-card">
             <div v-if="showImg" class="showImg"><img v-for="(item,index) in fileList" :key="index" :src="item" alt="会议室图片"></div>
 
@@ -54,14 +57,14 @@
           </el-upload>
           <!-- <img v-for="(item,index) in meetingroomForm.attachmentPaths" :src="item.photoUrl" :key="index" alt="会议室图片"> -->
           <el-dialog :visible.sync="dialogVisible">
-            <img :src="dialogImageUrl" width="100%" alt="会议室图片">
+            <img :src="dialogImageUrl" style="width:100%;height:200px;" alt="会议室图片">
           </el-dialog>
         </el-form-item>
       </div>
       <div class="primaryList">
         <el-button v-if="!lookMeetingroom" :disabled="isDisabled" type="primary" @click="title==='新增会议室'?submitForm('meetingroomForm'):updateData()">提交</el-button>
         <!-- <el-button v-if="!lookMeetingroom" :disabled="isDisabled" type="primary" @click="submitForm('meetingroomForm')">提交</el-button> -->
-        <el-button v-if="!lookMeetingroom" @click="cancel" >取消</el-button>
+        <el-button v-if="!lookMeetingroom" @click="cancel" >重置</el-button>
         <el-button @click="goBack($route)" >返回</el-button>
 
       </div>
@@ -123,6 +126,7 @@ export default {
           label: '不可用'
         }
       ],
+      uploadComplete: false, // 图片上传完成状态
       title: '',
       attachmentList: [],
       meetingroomForm: {
@@ -183,9 +187,25 @@ export default {
         return false
       }
     },
+    // urlChange(file, fileList) {
+    //   console.log(file)
+    //   console.log(fileList)
+    //   // console.log(file.name)
+    //   // if (file.response.code !== '0000') {
+    //   //   this.$message.error(file.response.result)
+    //   // }
+    // },
     // 图片上传成功时的函数
     uploadDone(res, file, fileList) {
+      if (res.code !== '0000') {
+        this.$message.error('上传图片失败')
+        this.$refs.upload.uploadFiles.splice(this.$refs.upload.uploadFiles.length - 1, 1)
+        return false
+        // this.uploadComplete = false
+      }
       this.meetingroomForm.attachmentPaths.push(res.data)
+      this.dialogImageUrl = res.data
+      // this.uploadComplete = true
       // console.log(this.meetingroomForm.attachmentPaths)
       // console.log(file)
       // console.log(fileList)
@@ -193,6 +213,11 @@ export default {
     imgUploadError() {
       this.$message.error('上传图片失败!')
     },
+    // 上传图片时调用
+    // uploadProgress(event, file, fileList) {
+    //   console.log(event, file, fileList)
+    //   this.uploadComplete = false
+    // },
     // 新增提交表单
     submitForm() {
       this.isDisabled = true
@@ -272,7 +297,7 @@ export default {
     },
     // 预览图片
     handlePictureCardPreview(file) {
-      if (this.title === '编辑会议室') {
+      if (this.title === '编辑会议室' || this.title === '查看会议室') {
         this.dialogImageUrl = file.url
       }
       this.dialogVisible = true

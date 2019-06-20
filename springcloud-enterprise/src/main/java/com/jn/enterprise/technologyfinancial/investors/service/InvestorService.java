@@ -1,8 +1,12 @@
 package com.jn.enterprise.technologyfinancial.investors.service;
 
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
+import com.jn.company.model.IBPSResult;
 import com.jn.enterprise.technologyfinancial.investors.model.*;
 import com.jn.enterprise.technologyfinancial.investors.vo.InvestorInfoDetailsVo;
+import com.jn.system.model.SysRole;
+import com.jn.system.model.User;
 
 import java.util.List;
 
@@ -41,7 +45,7 @@ public interface InvestorService {
      * @param investorAccount           投资人账号
      * @return
      */
-    int addInvestorInfo(InvestorAuthenticateParam investorAuthenticateParam,String investorAccount);
+    IBPSResult addInvestorInfo(InvestorAuthenticateParam investorAuthenticateParam, String investorAccount);
 
     /**
      * 查询投资人主投领域
@@ -54,4 +58,20 @@ public interface InvestorService {
      * @return
      */
     List<InvestorMainRound> getInvestorMainRound();
+
+    /**
+     * 添加投资人角色
+     * @param investorAccount
+     * @return
+     */
+    int addInvestorRole(String investorAccount);
+
+    /**
+     * 更新用户角色
+     * @param user
+     * @param addSysRoleResult
+     * @param delSysRoleResult
+     * @return
+     */
+    Result<Boolean> updateUserRoleInfo(User user, Result<SysRole> addSysRoleResult,Result<SysRole> delSysRoleResult);
 }

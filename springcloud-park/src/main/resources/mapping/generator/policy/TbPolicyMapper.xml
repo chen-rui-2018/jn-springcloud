@@ -12,11 +12,13 @@
     <result column="policy_diagram_url" jdbcType="VARCHAR" property="policyDiagramUrl" />
     <result column="thematic_type" jdbcType="VARCHAR" property="thematicType" />
     <result column="policy_title" jdbcType="VARCHAR" property="policyTitle" />
+    <result column="policy_issu_num" jdbcType="VARCHAR" property="policyIssuNum" />
     <result column="read_num" jdbcType="INTEGER" property="readNum" />
     <result column="release_date" jdbcType="TIMESTAMP" property="releaseDate" />
     <result column="status" jdbcType="VARCHAR" property="status" />
     <result column="support_method" jdbcType="VARCHAR" property="supportMethod" />
     <result column="support_industry" jdbcType="VARCHAR" property="supportIndustry" />
+    <result column="is_stick" jdbcType="TINYINT" property="isStick" />
     <result column="issue_unit" jdbcType="VARCHAR" property="issueUnit" />
     <result column="is_policy_diagram" jdbcType="VARCHAR" property="isPolicyDiagram" />
     <result column="relation_policy_diagram_id" jdbcType="VARCHAR" property="relationPolicyDiagramId" />
@@ -27,6 +29,10 @@
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.jn.park.policy.entity.TbPolicy">
+    <result column="policy_content" jdbcType="LONGVARCHAR" property="policyContent" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -89,10 +95,30 @@
   <sql id="Base_Column_List">
     policy_id, policy_code, policy_level_code, policy_level_name, policy_class_code, 
     policy_class_name, policy_type, policy_diagram_url, thematic_type, policy_title, 
-    read_num, release_date, status, support_method, support_industry, issue_unit, is_policy_diagram, 
-    relation_policy_diagram_id, is_policy_original, relation_policy_original_id, created_time, 
-    creator_account, modified_time, modifier_account, record_status
+    policy_issu_num, read_num, release_date, status, support_method, support_industry, 
+    is_stick, issue_unit, is_policy_diagram, relation_policy_diagram_id, is_policy_original, 
+    relation_policy_original_id, created_time, creator_account, modified_time, modifier_account, 
+    record_status, file_url
   </sql>
+  <sql id="Blob_Column_List">
+    policy_content
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.jn.park.policy.entity.TbPolicyCriteria" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tb_policy
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
   <select id="selectByExample" parameterType="com.jn.park.policy.entity.TbPolicyCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
@@ -107,9 +133,11 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
     select 
     <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
     from tb_policy
     where policy_id = #{policyId,jdbcType=VARCHAR}
   </select>
@@ -127,21 +155,25 @@
     insert into tb_policy (policy_id, policy_code, policy_level_code, 
       policy_level_name, policy_class_code, policy_class_name, 
       policy_type, policy_diagram_url, thematic_type, 
-      policy_title, read_num, release_date, 
-      status, support_method, support_industry, 
-      issue_unit, is_policy_diagram, relation_policy_diagram_id, 
+      policy_title, policy_issu_num, read_num, 
+      release_date, status, support_method, 
+      support_industry, is_stick, issue_unit, 
+      is_policy_diagram, relation_policy_diagram_id, 
       is_policy_original, relation_policy_original_id, 
       created_time, creator_account, modified_time, 
-      modifier_account, record_status)
+      modifier_account, record_status, file_url, 
+      policy_content)
     values (#{policyId,jdbcType=VARCHAR}, #{policyCode,jdbcType=VARCHAR}, #{policyLevelCode,jdbcType=VARCHAR}, 
       #{policyLevelName,jdbcType=VARCHAR}, #{policyClassCode,jdbcType=VARCHAR}, #{policyClassName,jdbcType=VARCHAR}, 
       #{policyType,jdbcType=VARCHAR}, #{policyDiagramUrl,jdbcType=VARCHAR}, #{thematicType,jdbcType=VARCHAR}, 
-      #{policyTitle,jdbcType=VARCHAR}, #{readNum,jdbcType=INTEGER}, #{releaseDate,jdbcType=TIMESTAMP}, 
-      #{status,jdbcType=VARCHAR}, #{supportMethod,jdbcType=VARCHAR}, #{supportIndustry,jdbcType=VARCHAR}, 
-      #{issueUnit,jdbcType=VARCHAR}, #{isPolicyDiagram,jdbcType=VARCHAR}, #{relationPolicyDiagramId,jdbcType=VARCHAR}, 
+      #{policyTitle,jdbcType=VARCHAR}, #{policyIssuNum,jdbcType=VARCHAR}, #{readNum,jdbcType=INTEGER}, 
+      #{releaseDate,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}, #{supportMethod,jdbcType=VARCHAR}, 
+      #{supportIndustry,jdbcType=VARCHAR}, #{isStick,jdbcType=TINYINT}, #{issueUnit,jdbcType=VARCHAR}, 
+      #{isPolicyDiagram,jdbcType=VARCHAR}, #{relationPolicyDiagramId,jdbcType=VARCHAR}, 
       #{isPolicyOriginal,jdbcType=VARCHAR}, #{relationPolicyOriginalId,jdbcType=VARCHAR}, 
       #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
-      #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT})
+      #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, #{fileUrl,jdbcType=VARCHAR}, 
+      #{policyContent,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.policy.entity.TbPolicy">
     insert into tb_policy
@@ -176,6 +208,9 @@
       <if test="policyTitle != null">
         policy_title,
       </if>
+      <if test="policyIssuNum != null">
+        policy_issu_num,
+      </if>
       <if test="readNum != null">
         read_num,
       </if>
@@ -190,6 +225,9 @@
       </if>
       <if test="supportIndustry != null">
         support_industry,
+      </if>
+      <if test="isStick != null">
+        is_stick,
       </if>
       <if test="issueUnit != null">
         issue_unit,
@@ -220,6 +258,12 @@
       </if>
       <if test="recordStatus != null">
         record_status,
+      </if>
+      <if test="fileUrl != null">
+        file_url,
+      </if>
+      <if test="policyContent != null">
+        policy_content,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -253,6 +297,9 @@
       <if test="policyTitle != null">
         #{policyTitle,jdbcType=VARCHAR},
       </if>
+      <if test="policyIssuNum != null">
+        #{policyIssuNum,jdbcType=VARCHAR},
+      </if>
       <if test="readNum != null">
         #{readNum,jdbcType=INTEGER},
       </if>
@@ -267,6 +314,9 @@
       </if>
       <if test="supportIndustry != null">
         #{supportIndustry,jdbcType=VARCHAR},
+      </if>
+      <if test="isStick != null">
+        #{isStick,jdbcType=TINYINT},
       </if>
       <if test="issueUnit != null">
         #{issueUnit,jdbcType=VARCHAR},
@@ -297,6 +347,12 @@
       </if>
       <if test="recordStatus != null">
         #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="fileUrl != null">
+        #{fileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="policyContent != null">
+        #{policyContent,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -339,6 +395,9 @@
       <if test="record.policyTitle != null">
         policy_title = #{record.policyTitle,jdbcType=VARCHAR},
       </if>
+      <if test="record.policyIssuNum != null">
+        policy_issu_num = #{record.policyIssuNum,jdbcType=VARCHAR},
+      </if>
       <if test="record.readNum != null">
         read_num = #{record.readNum,jdbcType=INTEGER},
       </if>
@@ -353,6 +412,9 @@
       </if>
       <if test="record.supportIndustry != null">
         support_industry = #{record.supportIndustry,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isStick != null">
+        is_stick = #{record.isStick,jdbcType=TINYINT},
       </if>
       <if test="record.issueUnit != null">
         issue_unit = #{record.issueUnit,jdbcType=VARCHAR},
@@ -384,7 +446,48 @@
       <if test="record.recordStatus != null">
         record_status = #{record.recordStatus,jdbcType=TINYINT},
       </if>
+      <if test="record.fileUrl != null">
+        file_url = #{record.fileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.policyContent != null">
+        policy_content = #{record.policyContent,jdbcType=LONGVARCHAR},
+      </if>
     </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update tb_policy
+    set policy_id = #{record.policyId,jdbcType=VARCHAR},
+      policy_code = #{record.policyCode,jdbcType=VARCHAR},
+      policy_level_code = #{record.policyLevelCode,jdbcType=VARCHAR},
+      policy_level_name = #{record.policyLevelName,jdbcType=VARCHAR},
+      policy_class_code = #{record.policyClassCode,jdbcType=VARCHAR},
+      policy_class_name = #{record.policyClassName,jdbcType=VARCHAR},
+      policy_type = #{record.policyType,jdbcType=VARCHAR},
+      policy_diagram_url = #{record.policyDiagramUrl,jdbcType=VARCHAR},
+      thematic_type = #{record.thematicType,jdbcType=VARCHAR},
+      policy_title = #{record.policyTitle,jdbcType=VARCHAR},
+      policy_issu_num = #{record.policyIssuNum,jdbcType=VARCHAR},
+      read_num = #{record.readNum,jdbcType=INTEGER},
+      release_date = #{record.releaseDate,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=VARCHAR},
+      support_method = #{record.supportMethod,jdbcType=VARCHAR},
+      support_industry = #{record.supportIndustry,jdbcType=VARCHAR},
+      is_stick = #{record.isStick,jdbcType=TINYINT},
+      issue_unit = #{record.issueUnit,jdbcType=VARCHAR},
+      is_policy_diagram = #{record.isPolicyDiagram,jdbcType=VARCHAR},
+      relation_policy_diagram_id = #{record.relationPolicyDiagramId,jdbcType=VARCHAR},
+      is_policy_original = #{record.isPolicyOriginal,jdbcType=VARCHAR},
+      relation_policy_original_id = #{record.relationPolicyOriginalId,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      file_url = #{record.fileUrl,jdbcType=VARCHAR},
+      policy_content = #{record.policyContent,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -401,11 +504,13 @@
       policy_diagram_url = #{record.policyDiagramUrl,jdbcType=VARCHAR},
       thematic_type = #{record.thematicType,jdbcType=VARCHAR},
       policy_title = #{record.policyTitle,jdbcType=VARCHAR},
+      policy_issu_num = #{record.policyIssuNum,jdbcType=VARCHAR},
       read_num = #{record.readNum,jdbcType=INTEGER},
       release_date = #{record.releaseDate,jdbcType=TIMESTAMP},
       status = #{record.status,jdbcType=VARCHAR},
       support_method = #{record.supportMethod,jdbcType=VARCHAR},
       support_industry = #{record.supportIndustry,jdbcType=VARCHAR},
+      is_stick = #{record.isStick,jdbcType=TINYINT},
       issue_unit = #{record.issueUnit,jdbcType=VARCHAR},
       is_policy_diagram = #{record.isPolicyDiagram,jdbcType=VARCHAR},
       relation_policy_diagram_id = #{record.relationPolicyDiagramId,jdbcType=VARCHAR},
@@ -415,7 +520,8 @@
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      record_status = #{record.recordStatus,jdbcType=TINYINT}
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      file_url = #{record.fileUrl,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -450,6 +556,9 @@
       <if test="policyTitle != null">
         policy_title = #{policyTitle,jdbcType=VARCHAR},
       </if>
+      <if test="policyIssuNum != null">
+        policy_issu_num = #{policyIssuNum,jdbcType=VARCHAR},
+      </if>
       <if test="readNum != null">
         read_num = #{readNum,jdbcType=INTEGER},
       </if>
@@ -464,6 +573,9 @@
       </if>
       <if test="supportIndustry != null">
         support_industry = #{supportIndustry,jdbcType=VARCHAR},
+      </if>
+      <if test="isStick != null">
+        is_stick = #{isStick,jdbcType=TINYINT},
       </if>
       <if test="issueUnit != null">
         issue_unit = #{issueUnit,jdbcType=VARCHAR},
@@ -495,7 +607,45 @@
       <if test="recordStatus != null">
         record_status = #{recordStatus,jdbcType=TINYINT},
       </if>
+      <if test="fileUrl != null">
+        file_url = #{fileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="policyContent != null">
+        policy_content = #{policyContent,jdbcType=LONGVARCHAR},
+      </if>
     </set>
+    where policy_id = #{policyId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.jn.park.policy.entity.TbPolicy">
+    update tb_policy
+    set policy_code = #{policyCode,jdbcType=VARCHAR},
+      policy_level_code = #{policyLevelCode,jdbcType=VARCHAR},
+      policy_level_name = #{policyLevelName,jdbcType=VARCHAR},
+      policy_class_code = #{policyClassCode,jdbcType=VARCHAR},
+      policy_class_name = #{policyClassName,jdbcType=VARCHAR},
+      policy_type = #{policyType,jdbcType=VARCHAR},
+      policy_diagram_url = #{policyDiagramUrl,jdbcType=VARCHAR},
+      thematic_type = #{thematicType,jdbcType=VARCHAR},
+      policy_title = #{policyTitle,jdbcType=VARCHAR},
+      policy_issu_num = #{policyIssuNum,jdbcType=VARCHAR},
+      read_num = #{readNum,jdbcType=INTEGER},
+      release_date = #{releaseDate,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=VARCHAR},
+      support_method = #{supportMethod,jdbcType=VARCHAR},
+      support_industry = #{supportIndustry,jdbcType=VARCHAR},
+      is_stick = #{isStick,jdbcType=TINYINT},
+      issue_unit = #{issueUnit,jdbcType=VARCHAR},
+      is_policy_diagram = #{isPolicyDiagram,jdbcType=VARCHAR},
+      relation_policy_diagram_id = #{relationPolicyDiagramId,jdbcType=VARCHAR},
+      is_policy_original = #{isPolicyOriginal,jdbcType=VARCHAR},
+      relation_policy_original_id = #{relationPolicyOriginalId,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      file_url = #{fileUrl,jdbcType=VARCHAR},
+      policy_content = #{policyContent,jdbcType=LONGVARCHAR}
     where policy_id = #{policyId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.park.policy.entity.TbPolicy">
@@ -509,11 +659,13 @@
       policy_diagram_url = #{policyDiagramUrl,jdbcType=VARCHAR},
       thematic_type = #{thematicType,jdbcType=VARCHAR},
       policy_title = #{policyTitle,jdbcType=VARCHAR},
+      policy_issu_num = #{policyIssuNum,jdbcType=VARCHAR},
       read_num = #{readNum,jdbcType=INTEGER},
       release_date = #{releaseDate,jdbcType=TIMESTAMP},
       status = #{status,jdbcType=VARCHAR},
       support_method = #{supportMethod,jdbcType=VARCHAR},
       support_industry = #{supportIndustry,jdbcType=VARCHAR},
+      is_stick = #{isStick,jdbcType=TINYINT},
       issue_unit = #{issueUnit,jdbcType=VARCHAR},
       is_policy_diagram = #{isPolicyDiagram,jdbcType=VARCHAR},
       relation_policy_diagram_id = #{relationPolicyDiagramId,jdbcType=VARCHAR},
@@ -523,7 +675,8 @@
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
-      record_status = #{recordStatus,jdbcType=TINYINT}
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      file_url = #{fileUrl,jdbcType=VARCHAR}
     where policy_id = #{policyId,jdbcType=VARCHAR}
   </update>
 </mapper>

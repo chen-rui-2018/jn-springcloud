@@ -6,6 +6,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.park.notice.model.NoticeDetailShow;
 import com.jn.park.notice.service.NoticeWebService;
+import com.jn.park.notice.vo.IntegrationListVo;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,7 +29,7 @@ import java.util.List;
  */
 @Api(tags = "对外公告-前端展示(app/门户)")
 @RestController
-@RequestMapping(value = "park/notice/web")
+@RequestMapping(value = "guest/park/notice/web")
 public class NoticeWebController extends BaseController {
     /**
      * 日志组件
@@ -36,6 +37,14 @@ public class NoticeWebController extends BaseController {
     private static Logger logger = LoggerFactory.getLogger(NoticeWebController.class);
     @Autowired
     private NoticeWebService noticeWebService;
+
+    @ControllerLog(doAction = "PC端整合接口")
+    @ApiOperation(value = "PC端整合接口",notes = "整合园区公告,政策指南,热门活动接口,新PC端首页使用")
+    @RequestMapping(value = "/integrationList",method = RequestMethod.GET)
+    public Result<List<IntegrationListVo>> integrationList(){
+        List<IntegrationListVo> integrationList =noticeWebService.integrationList();
+        return new Result(integrationList);
+    }
 
     @ControllerLog(doAction = "app首页弹出公告列表")
     @ApiOperation(value = "app首页弹出公告列表",notes = "首页弹出不超过三条,且当前时间处于生效时间和失效时间内,状态为有效")

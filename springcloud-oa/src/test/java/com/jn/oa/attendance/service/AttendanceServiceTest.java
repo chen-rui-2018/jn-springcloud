@@ -4,6 +4,7 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.oa.attendance.enmus.AttendancePlatformEnums;
 import com.jn.oa.attendance.enmus.AttendanceTypeEnums;
 import com.jn.oa.attendance.model.AttendanceAdd;
+import com.jn.oa.model.Attendance;
 import com.jn.system.model.User;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -16,6 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -43,6 +47,8 @@ public class AttendanceServiceTest {
 
     private static AttendanceAdd attendanceAdd;
 
+    private static Attendance attendance;
+
 
 
     @BeforeClass
@@ -50,7 +56,7 @@ public class AttendanceServiceTest {
         //初始化添加用户
         user = new User();
         user.setAccount("wangsong");
-        user.setId("10001");
+        user.setId("10000");
 
 
         //初始化部门部门id及部门名称
@@ -60,6 +66,18 @@ public class AttendanceServiceTest {
         attendanceAdd = new AttendanceAdd();
         attendanceAdd.setId(attendanceId);
         attendanceAdd.setAttendancePlatform(AttendancePlatformEnums .PLATFORM_PC.getCode());
+
+        //初始化添加用户
+        attendance = new Attendance();
+        // leave.setUserId("10000");
+
+
+        //初始化部门部门id及部门名称
+        //attendance.setDepartmentId("116");
+
+
+        //结束时间
+        attendance.setEndTime(new Date());
 
     }
 
@@ -103,7 +121,17 @@ public class AttendanceServiceTest {
         }
     }
 
-
+    /**
+     * oa-api根据条件查询考勤信息
+     */
+    @Test
+    public void selectApiAttendanceListByCondition() {
+        try {
+            attendanceService.selectApiAttendanceListByCondition(attendance);
+        } catch (JnSpringCloudException e) {
+            Assert.assertThat(e, Matchers.anything());
+        }
+    }
 
 
 

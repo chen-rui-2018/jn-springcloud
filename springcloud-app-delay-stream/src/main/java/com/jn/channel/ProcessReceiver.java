@@ -42,14 +42,16 @@ public class ProcessReceiver implements ChannelAwareMessageListener {
 
     @Override
     public void onMessage(Message message, Channel channel) {
+        log.info("监听到需要消费的信息，信息体：【{}】",message.toString());
         Delay delay = null;
         try {
             Jackson2JsonMessageConverter jackson2JsonMessageConverter = new Jackson2JsonMessageConverter();
             delay = (Delay) jackson2JsonMessageConverter.fromMessage(message);
+            log.info("信息体,转成对象：【{}】",delay);
             processMessage(delay);
         }
         catch (Exception e) {
-            log.error("失败了",e);
+            log.error("消费消息失败了",e);
             Map<String,Object> errorMap = new HashMap();
             errorMap.put("delay",delay);
             errorMap.put("exception", ExceptionUtils.getStackTrace(e));
@@ -77,6 +79,5 @@ public class ProcessReceiver implements ChannelAwareMessageListener {
         if(!StringUtils.equals(GlobalConstants.SUCCESS_CODE,result.getCode())){
             throw new RuntimeException(result.getResult()) ;
         }
-        throw new RuntimeException(result.getResult()) ;
     }
 }

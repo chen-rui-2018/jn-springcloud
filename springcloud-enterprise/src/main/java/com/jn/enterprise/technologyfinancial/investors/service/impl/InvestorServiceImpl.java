@@ -3,10 +3,14 @@ package com.jn.enterprise.technologyfinancial.investors.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
+import com.jn.company.model.IBPSResult;
 import com.jn.enterprise.enums.InvestorExceptionEnum;
+import com.jn.enterprise.enums.RecordStatusEnum;
+import com.jn.enterprise.propaganda.enums.ApprovalStatusEnum;
 import com.jn.enterprise.servicemarket.org.dao.TbServiceOrgMapper;
 import com.jn.enterprise.servicemarket.org.entity.TbServiceOrg;
 import com.jn.enterprise.servicemarket.org.entity.TbServiceOrgCriteria;
@@ -15,17 +19,23 @@ import com.jn.enterprise.technologyfinancial.investors.entity.*;
 import com.jn.enterprise.technologyfinancial.investors.model.*;
 import com.jn.enterprise.technologyfinancial.investors.service.InvestorService;
 import com.jn.enterprise.technologyfinancial.investors.vo.InvestorInfoDetailsVo;
+import com.jn.enterprise.utils.IBPSFileUtils;
+import com.jn.enterprise.utils.IBPSUtils;
+import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.SysRole;
+import com.jn.system.model.User;
+import com.jn.system.vo.SysUserRoleVO;
+import com.jn.user.enums.HomeRoleEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * 科技金融投资人
@@ -68,14 +78,24 @@ public class InvestorServiceImpl implements InvestorService {
     @Autowired
     private TbServiceMainRoundMapper tbServiceMainRoundMapper;
 
+    @Autowired
+    private SystemClient systemClient;
+
+    /**
+     * 投资人认证流程id
+     */
+    @Value(value = "${investorProcessId}")
+    private String investorProcessId;
+
     /**
      * 时间格式
      */
     private static final String PATTERN="yyyy-MM-dd HH:mm:ss";
     /**
-     * 数据状态  0：已删除   1：有效
+     * 科技金融
      */
-    private static final byte RECORD_STATUS=1;
+    private static final String TECHNOLOGY_BUSINESS="technology_finance";
+
 
     /**
      * 投资人列表查询
@@ -101,6 +121,13 @@ public class InvestorServiceImpl implements InvestorService {
                     investorInfoListParam.getRows() == 0 ? 15 : investorInfoListParam.getRows(), true);
         }
         List<InvestorInfoListShow> investorInfoList = investorMapper.getInvestorInfoList(investorInfoListParam.getMainCode(), investorInfoListParam.getKeyWords());
+
+        // 处理图片格式
+        if (investorInfoList != null && !investorInfoList.isEmpty()) {
+            for (InvestorInfoListShow infoListShow : investorInfoList) {
+                infoListShow.setAvatar(IBPSFileUtils.getFilePath(infoListShow.getAvatar()));
+            }
+        }
         return new PaginationData(investorInfoList, objects == null ? 0 : objects.getTotal());
     }
 
@@ -120,7 +147,12 @@ public class InvestorServiceImpl implements InvestorService {
             throw new JnSpringCloudException(InvestorExceptionEnum.INVESTOR_INFO_NOT_EXIST);
         }
         InvestorBaseInfoShow investorBaseInfoShow=new InvestorBaseInfoShow();
-        BeanUtils.copyProperties(tbServiceInvestorList.get(0), investorBaseInfoShow);
+
+        // 处理图片格式
+        TbServiceInvestor tbServiceInvestor = tbServiceInvestorList.get(0);
+        tbServiceInvestor.setAvatar(IBPSFileUtils.getFilePath(tbServiceInvestor.getAvatar()));
+        BeanUtils.copyProperties(tbServiceInvestor, investorBaseInfoShow);
+
         //设置投资人基本信息
         investorInfoDetailsVo.setInvestorBaseInfoShow(investorBaseInfoShow);
         //投资人主投领域
@@ -146,10 +178,10 @@ public class InvestorServiceImpl implements InvestorService {
     @ServiceLog(doAction = "根据投资人账号获取投资人教育经历")
     private List<InvestorEduExperienceShow> getEduExpList(String investorAccount) {
         TbServiceInvestorEduExpCriteria example=new TbServiceInvestorEduExpCriteria();
-        example.createCriteria().andInvestorAccountEqualTo(investorAccount).andRecordStatusEqualTo(RECORD_STATUS);
+        example.createCriteria().andInvestorAccountEqualTo(investorAccount).andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         List<TbServiceInvestorEduExp> tbServiceInvestorEduExpList = tbServiceInvestorEduExpMapper.selectByExample(example);
         if(tbServiceInvestorEduExpList.isEmpty()){
-            return null;
+            return Collections.emptyList();
         }
         List<InvestorEduExperienceShow> resultList=new ArrayList<>(16);
         for(TbServiceInvestorEduExp tbServiceInvestorEduExp:tbServiceInvestorEduExpList){
@@ -168,10 +200,10 @@ public class InvestorServiceImpl implements InvestorService {
     @ServiceLog(doAction = "根据投资人账号获取投资人工作经历")
     private List<InvestorWorkExperienceShow> getWorkExpList(String investorAccount) {
         TbServiceInvestorWorkExpCriteria example=new TbServiceInvestorWorkExpCriteria();
-        example.createCriteria().andInvestorAccountEqualTo(investorAccount).andRecordStatusEqualTo(RECORD_STATUS);
+        example.createCriteria().andInvestorAccountEqualTo(investorAccount).andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         List<TbServiceInvestorWorkExp> workExpList = tbServiceInvestorWorkExpMapper.selectByExample(example);
         if(workExpList.isEmpty()){
-            return null;
+            return Collections.emptyList();
         }
         List<InvestorWorkExperienceShow> resultList=new ArrayList<>();
         for(TbServiceInvestorWorkExp tbServiceInvestorWorkExp:workExpList){
@@ -190,10 +222,10 @@ public class InvestorServiceImpl implements InvestorService {
     @ServiceLog(doAction = "根据投资人账号获取投资人主投轮次")
     private List<InvestorMainRound> getMainRoundList(String investorAccount) {
         TbServiceInvestorMainRoundCriteria example=new TbServiceInvestorMainRoundCriteria();
-        example.createCriteria().andInvestorAccountEqualTo(investorAccount).andRecordStatusEqualTo(RECORD_STATUS);
+        example.createCriteria().andInvestorAccountEqualTo(investorAccount).andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         List<TbServiceInvestorMainRound> investorMainRoundList = tbServiceInvestorMainRoundMapper.selectByExample(example);
         if(investorMainRoundList.isEmpty()){
-            return null;
+            return Collections.emptyList();
         }
         List<InvestorMainRound> resultList=new ArrayList<>(16);
         for(TbServiceInvestorMainRound tbServiceInvestorMainRound:investorMainRoundList){
@@ -214,10 +246,10 @@ public class InvestorServiceImpl implements InvestorService {
     @ServiceLog(doAction = "根据投资人账号获取投资人主投领域")
     private List<InvestorMainArea> getMainAreaList(String investorAccount) {
         TbServiceInvestorMainAreaCriteria example=new TbServiceInvestorMainAreaCriteria();
-        example.createCriteria().andInvestorAccountEqualTo(investorAccount).andRecordStatusEqualTo(RECORD_STATUS);
+        example.createCriteria().andInvestorAccountEqualTo(investorAccount).andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         List<TbServiceInvestorMainArea> tbServiceInvestorMainAreaList = tbServiceInvestorMainAreaMapper.selectByExample(example);
         if(tbServiceInvestorMainAreaList.isEmpty()){
-            return null;
+            return Collections.emptyList();
         }
         List<InvestorMainArea> investorMainAreaList=new ArrayList<>(16);
         for(TbServiceInvestorMainArea tbServiceInvestorMainArea:tbServiceInvestorMainAreaList){
@@ -237,7 +269,7 @@ public class InvestorServiceImpl implements InvestorService {
     @ServiceLog(doAction = "根据投资人账号获取投资人信息")
     private List<TbServiceInvestor> getTbServiceInvestors(String investorAccount) {
         TbServiceInvestorCriteria example=new TbServiceInvestorCriteria();
-        example.createCriteria().andInvestorAccountEqualTo(investorAccount).andRecordStatusEqualTo(RECORD_STATUS);
+        example.createCriteria().andInvestorAccountEqualTo(investorAccount).andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         return tbServiceInvestorMapper.selectByExample(example);
     }
 
@@ -300,12 +332,14 @@ public class InvestorServiceImpl implements InvestorService {
     private List<TbServiceOrg> getTbServiceOrgList(String orgName) {
         //根据单位名称，从机构信息表（tb_service_org）中模糊查询所有机构
         TbServiceOrgCriteria example=new TbServiceOrgCriteria();
-        //审核通过
+        //审核通过，投资人只能选择科技金融机构
         String status="1";
         if(StringUtils.isBlank(orgName)){
-            example.createCriteria().andOrgStatusEqualTo(status).andRecordStatusEqualTo(RECORD_STATUS);
+            example.createCriteria().andOrgStatusEqualTo(status)
+                    .andBusinessTypeEqualTo(TECHNOLOGY_BUSINESS)
+                    .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         }else{
-            example.createCriteria().andOrgNameLike("%"+orgName+"%").andOrgStatusEqualTo(status).andRecordStatusEqualTo(RECORD_STATUS);
+            example.createCriteria().andOrgNameLike("%"+orgName+"%").andOrgStatusEqualTo(status).andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         }
         return tbServiceOrgMapper.selectByExample(example);
     }
@@ -319,45 +353,244 @@ public class InvestorServiceImpl implements InvestorService {
     @ServiceLog(doAction = "新增投资人认证信息")
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int addInvestorInfo(InvestorAuthenticateParam investorAuthenticateParam, String investorAccount) {
+    public IBPSResult addInvestorInfo(InvestorAuthenticateParam investorAuthenticateParam, String investorAccount) {
         Assert.notNull(investorAccount, InvestorExceptionEnum.INVESTOR_ACCOUNT_NOT_NULL.getMessage());
         Assert.notNull(investorAuthenticateParam, InvestorExceptionEnum.INVESTOR_INFO_NOT_NULL.getMessage());
         Assert.notNull(investorAuthenticateParam.getInvestorMainAreaList(), InvestorExceptionEnum.INVESTOR_MAIN_AREA_NOT_NULL.getMessage());
         Assert.notNull(investorAuthenticateParam.getInvestorMainRoundList(), InvestorExceptionEnum.INVESTOR_MAIN_ROUND_NOT_NULL.getMessage());
 
-        //判断条件  状态是有效(1)  审批状态不包含审批不通过（-1）
-        String status="1";
-        String approvalStatus="-1";
+        //判断条件  审批状态不包含审批不通过（-1）
         //判断投资人是否已存在
         TbServiceInvestorCriteria example=new TbServiceInvestorCriteria();
-        example.createCriteria().andInvestorAccountEqualTo(investorAccount).andStatusEqualTo(status).andApprovalStatusNotEqualTo(approvalStatus);
+        example.createCriteria().andInvestorAccountEqualTo(investorAccount).andApprovalStatusNotEqualTo(ApprovalStatusEnum.APPROVAL_NOT_PASSED.getValue());
         long isExists = tbServiceInvestorMapper.countByExample(example);
         if(isExists>0){
             logger.warn("当前投资人[{}]认证信息已存在",investorAccount);
             throw new JnSpringCloudException(InvestorExceptionEnum.INVESTOR_INFO_EXIST);
         }
-
-        //投资人基本信息
-        TbServiceInvestor tbServiceInvestor=new TbServiceInvestor();
-        BeanUtils.copyProperties(investorAuthenticateParam, tbServiceInvestor);
-        int responseNum = addInvestorBaseInfo(investorAccount, tbServiceInvestor);
-        //主投领域
-        List<InvestorMainArea> investorMainAreaList = investorAuthenticateParam.getInvestorMainAreaList();
-        addInvestorMainAreaBatch(investorAccount, investorMainAreaList);
-        //主投轮次
-        List<InvestorMainRound> investorMainRoundList = investorAuthenticateParam.getInvestorMainRoundList();
-        addInvestorMainRoundBatch(investorAccount, investorMainRoundList);
-        //工作经历
+        //设置投资人基本信息
+        InvestorInfoWorkFlow investorInfoWorkFlow=new InvestorInfoWorkFlow();
+        setAdvisorBaseInfo(investorAuthenticateParam, investorAccount, investorInfoWorkFlow);
+        //设置投资人主投领域信息
+        List<InvestorMainAreaWorkFlow> mainAreaList = setMainAreaInfo(investorAuthenticateParam, investorAccount);
+        investorInfoWorkFlow.setTb_service_investor_main_area(mainAreaList);
+        //设置投资人主投轮次信息
+        List<InvestorMainRoundWorkFlow> mainRoundList = setMainRoundInfo(investorAuthenticateParam, investorAccount);
+        investorInfoWorkFlow.setTb_service_investor_main_round(mainRoundList);
+        //设置投资人工作经历信息
         List<InvestorWorkExperienceParam> investorWorkExperienceParamList = investorAuthenticateParam.getInvestorWorkExperienceParamList();
         if(investorWorkExperienceParamList !=null && !investorWorkExperienceParamList.isEmpty()){
-            addInvestorWorkExperienceBatch(investorAccount, investorWorkExperienceParamList);
+            List<InvestorWorkExperienceWorkFlow> workExpList = setWorkExperienceInfo(investorAccount, investorWorkExperienceParamList);
+            investorInfoWorkFlow.setTb_service_investor_work_exp(workExpList);
         }
-        //教育经历
+        //设置投资人教育经历信息
         List<InvestorEducationExperienceParam> investorEduExperienceParamList = investorAuthenticateParam.getInvestorEducationExperienceParamList();
         if(investorEduExperienceParamList !=null && !investorEduExperienceParamList.isEmpty()){
-            addInvestorEduExperienceBatch(investorAccount, investorEduExperienceParamList);
+            List<InvestorEducationExperienceWorkFlow> eduExpList = setEducationExperienceInfo(investorAccount, investorEduExperienceParamList);
+            investorInfoWorkFlow.setTb_service_investor_edu_exp(eduExpList);
         }
-        return responseNum;
+        logger.info("投资人认证信息：{}",investorInfoWorkFlow.toString());
+
+        // 处理图片格式
+        investorInfoWorkFlow.setAvatar(IBPSFileUtils.uploadFile2Json(investorAccount, investorInfoWorkFlow.getAvatar()));
+
+        //启动工作流
+        IBPSResult ibpsResult = IBPSUtils.startWorkFlow(investorProcessId, investorAccount, investorInfoWorkFlow);
+        String okStatus="200";
+        //启动工作流成功
+        if(okStatus.equals(ibpsResult.getState())){
+            logger.info("投资人认证信提交成功，审批流程启动成功,流程实例id为：[{}]",ibpsResult.getData());
+        }else{
+            logger.info("投资人认证信提交成功，审批流程启动失败");
+        }
+        return ibpsResult;
+    }
+
+    /**
+     * 设置投资人教育经历信息
+     * @param investorAccount
+     * @param investorEduExperienceParamList
+     * @return
+     */
+    @ServiceLog(doAction = "设置投资人教育经历信息")
+    private List<InvestorEducationExperienceWorkFlow> setEducationExperienceInfo(String investorAccount, List<InvestorEducationExperienceParam> investorEduExperienceParamList) {
+        List<InvestorEducationExperienceWorkFlow> eduExpList=new ArrayList<>(16);
+        if(!investorEduExperienceParamList.isEmpty()){
+            String message="投资人认证教育经历中数据开始时间:[{}]晚于结束时间:[{}]";
+            for(InvestorEducationExperienceParam investorEduExperienceParam : investorEduExperienceParamList){
+                checkStartTimeAndEndTime(investorEduExperienceParam.getStartTime(), investorEduExperienceParam.getEndTime(), message, InvestorExceptionEnum.INVESTOR_EDU_START_TIME_LATER_END_TIME);
+                InvestorEducationExperienceWorkFlow eduExp=new InvestorEducationExperienceWorkFlow();
+                //投资人账号
+                eduExp.setInvestorAccount(investorAccount);
+                //开始时间
+                eduExp.setStartTime(investorEduExperienceParam.getStartTime());
+                //结束时间
+                eduExp.setEndTime(investorEduExperienceParam.getEndTime());
+                //学校名称
+                eduExp.setSchoolName(investorEduExperienceParam.getSchoolName());
+                //专业名称
+                eduExp.setProfessionTitle(investorEduExperienceParam.getProfessionTitle());
+                //创建时间
+                eduExp.setCreatedTime(DateUtils.getDate(PATTERN));
+                //创建人
+                eduExp.setCreatorAccount(investorAccount);
+                //数据状态
+                eduExp.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
+                eduExpList.add(eduExp);
+            }
+        }
+        return eduExpList;
+    }
+
+    /**
+     * 设置投资人工作经历信息
+     * @param investorAccount
+     * @param investorWorkExperienceParamList
+     * @return
+     */
+    @ServiceLog(doAction = "设置投资人工作经历信息")
+    private List<InvestorWorkExperienceWorkFlow> setWorkExperienceInfo(String investorAccount, List<InvestorWorkExperienceParam> investorWorkExperienceParamList) {
+        List<InvestorWorkExperienceWorkFlow> workExpList=new ArrayList<>(16);
+        if(!investorWorkExperienceParamList.isEmpty()){
+            String message="投资人认证工作经历中数据开始时间:[{}]晚于结束时间:[{}]";
+            for(InvestorWorkExperienceParam investorWorkExperienceParam : investorWorkExperienceParamList){
+                checkStartTimeAndEndTime(investorWorkExperienceParam.getStartTime(), investorWorkExperienceParam.getEndTime(), message, InvestorExceptionEnum.INVESTOR_WORK_START_TIME_LATER_END_TIME);
+                InvestorWorkExperienceWorkFlow workExp=new InvestorWorkExperienceWorkFlow();
+                //投资人账号
+                workExp.setInvestorAccount(investorAccount);
+                //开始时间
+                workExp.setStartTime(investorWorkExperienceParam.getStartTime());
+                //结束时间
+                workExp.setEndTime(investorWorkExperienceParam.getEndTime());
+                //单位名称
+                workExp.setCompanyName(investorWorkExperienceParam.getCompanyName());
+                //职务
+                workExp.setPosition(investorWorkExperienceParam.getPosition());
+                //创建时间
+                workExp.setCreatedTime(DateUtils.getDate(PATTERN));
+                //创建人
+                workExp.setCreatorAccount(investorAccount);
+                //数据状态
+                workExp.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
+                workExpList.add(workExp);
+            }
+        }
+        return workExpList;
+    }
+
+    /**
+     * 校验开始时间和结束时间
+     * @param startDate
+     * @param endDate
+     * @param message
+     * @param investorWorkStartTimeLaterEndTime
+     */
+    @ServiceLog(doAction = "校验开始时间和结束时间")
+    private void checkStartTimeAndEndTime(String startDate, String endDate, String message, InvestorExceptionEnum investorWorkStartTimeLaterEndTime) {
+        if (StringUtils.isNotBlank(startDate) && StringUtils.isNotBlank(endDate)) {
+            int startTime = Integer.parseInt(startDate.replaceAll("-", ""));
+            int endTime = Integer.parseInt(endDate.replaceAll("-", ""));
+            if (startTime > endTime) {
+                logger.warn(message, startTime, endDate);
+                throw new JnSpringCloudException(InvestorExceptionEnum.INVESTOR_WORK_START_TIME_LATER_END_TIME);
+            }
+        }
+    }
+
+    /**
+     * 设置投资人主投轮次信息
+     * @param investorAuthenticateParam
+     * @param investorAccount
+     * @return
+     */
+    @ServiceLog(doAction = "设置投资人主投轮次信息")
+    private List<InvestorMainRoundWorkFlow> setMainRoundInfo(InvestorAuthenticateParam investorAuthenticateParam, String investorAccount) {
+        List<InvestorMainRound> investorMainRoundList = investorAuthenticateParam.getInvestorMainRoundList();
+        List<InvestorMainRoundWorkFlow> mainRoundList=new ArrayList<>(16);
+        for(InvestorMainRound investorMainRound:investorMainRoundList){
+            InvestorMainRoundWorkFlow mainRound=new InvestorMainRoundWorkFlow();
+            //投资人账号
+            mainRound.setInvestorAccount(investorAccount);
+            //主投轮次编码
+            mainRound.setMainRoundCode(investorMainRound.getMainRoundCode());
+            //主投轮次名称
+            mainRound.setMainRoundName(investorMainRound.getMainRoundName());
+            //创建时间
+            mainRound.setCreatedTime(DateUtils.getDate(PATTERN));
+            //创建人
+            mainRound.setCreatorAccount(investorAccount);
+            //数据状态
+            mainRound.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
+            mainRoundList.add(mainRound);
+        }
+        return mainRoundList;
+    }
+
+    /**
+     * 设置投资人主投领域信息
+     * @param investorAuthenticateParam
+     * @param investorAccount
+     * @return
+     */
+    @ServiceLog(doAction = "设置投资人主投领域信息")
+    private List<InvestorMainAreaWorkFlow> setMainAreaInfo(InvestorAuthenticateParam investorAuthenticateParam, String investorAccount) {
+        List<InvestorMainArea> investorMainAreaList = investorAuthenticateParam.getInvestorMainAreaList();
+        List<InvestorMainAreaWorkFlow> mainAreaList=new ArrayList<>(16);
+        for(InvestorMainArea investorMainArea:investorMainAreaList){
+            InvestorMainAreaWorkFlow mainArea=new InvestorMainAreaWorkFlow();
+            //投资人账号
+            mainArea.setInvestorAccount(investorAccount);
+            //主投领域编码
+            mainArea.setMainCode(investorMainArea.getMainCode());
+            //主投领域名称
+            mainArea.setMainName(investorMainArea.getMainName());
+            //创建时间
+            mainArea.setCreatedTime(DateUtils.getDate(PATTERN));
+            //创建人
+            mainArea.setCreatorAccount(investorAccount);
+            //数据状态
+            mainArea.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
+            mainAreaList.add(mainArea);
+        }
+        return mainAreaList;
+    }
+
+    /**
+     * 设置投资人基本信息
+     * @param investorParam
+     * @param investorAccount
+     * @param investorInfoWorkFlow
+     */
+    @ServiceLog(doAction = "设置投资人基本信息")
+    private void setAdvisorBaseInfo(InvestorAuthenticateParam investorParam, String investorAccount, InvestorInfoWorkFlow investorInfoWorkFlow) {
+        BeanUtils.copyProperties(investorParam, investorInfoWorkFlow);
+        //设置投资人头像
+        if(StringUtils.isNotBlank(investorParam.getAvatar())){
+            IBPSFileUtils.uploadFile2Json(investorAccount,investorParam.getAvatar());
+        }
+        //投资人编号
+        investorInfoWorkFlow.setInvestorCode(getInvestorCode());
+        //投资人账号
+        investorInfoWorkFlow.setInvestorAccount(investorAccount);
+        //状态 0:无效   1：有效
+        investorInfoWorkFlow.setStatus("1");
+        //审批状态( 0：待审批   1：审批中  2: 审批通过 3：审批不通过)
+        investorInfoWorkFlow.setApprovalStatus("0");
+        //创建时间
+        investorInfoWorkFlow.setCreatedTime(DateUtils.getDate(PATTERN));
+        //创建人
+        investorInfoWorkFlow.setCreatorAccount(investorAccount);
+        //是否删除
+        investorInfoWorkFlow.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
+    }
+
+    /**
+     * 创建投资人编号
+     * @return
+     */
+    @ServiceLog(doAction = "创建投资人编号")
+    private String getInvestorCode() {
+        return "TZ-"+DateUtils.getDate("yyyyMMddHHmmss");
     }
 
     /**
@@ -369,15 +602,9 @@ public class InvestorServiceImpl implements InvestorService {
     private void addInvestorEduExperienceBatch(String investorAccount, List<InvestorEducationExperienceParam> investorEduExperienceParamList) {
         List<TbServiceInvestorEduExp> eduExpList=new ArrayList<>(16);
         if(!investorEduExperienceParamList.isEmpty()){
+            String message="投资人认证教育经历中数据开始时间:[{}]晚于结束时间:[{}]";
             for(InvestorEducationExperienceParam investorEduExperienceParam : investorEduExperienceParamList){
-                if(StringUtils.isNotBlank(investorEduExperienceParam.getStartTime()) && StringUtils.isNotBlank(investorEduExperienceParam.getEndTime())){
-                    int startTime = Integer.parseInt(investorEduExperienceParam.getStartTime().replaceAll("-", ""));
-                    int endTime = Integer.parseInt(investorEduExperienceParam.getEndTime().replaceAll("-", ""));
-                    if(startTime>endTime){
-                        logger.warn("投资人认证教育经历中数据开始时间:[{}]晚于结束时间:[{}]", investorEduExperienceParam.getStartTime(), investorEduExperienceParam.getEndTime());
-                        throw new JnSpringCloudException(InvestorExceptionEnum.INVESTOR_EDU_START_TIME_LATER_END_TIME);
-                    }
-                }
+                checkStartTimeAndEndTime(investorEduExperienceParam.getStartTime(), investorEduExperienceParam.getEndTime(), message, InvestorExceptionEnum.INVESTOR_EDU_START_TIME_LATER_END_TIME);
                 TbServiceInvestorEduExp eduExp=new TbServiceInvestorEduExp();
                 //主键id
                 eduExp.setId(UUID.randomUUID().toString().replaceAll("-", ""));
@@ -396,7 +623,7 @@ public class InvestorServiceImpl implements InvestorService {
                 //创建人
                 eduExp.setCreatorAccount(investorAccount);
                 //数据状态
-                eduExp.setRecordStatus(RECORD_STATUS);
+                eduExp.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
                 eduExpList.add(eduExp);
             }
             investorMapper.insertInvestorEduExperienceBatch(eduExpList);
@@ -412,15 +639,9 @@ public class InvestorServiceImpl implements InvestorService {
     private void addInvestorWorkExperienceBatch(String investorAccount, List<InvestorWorkExperienceParam> investorWorkExperienceParamList) {
         List<TbServiceInvestorWorkExp> workExpList=new ArrayList<>(16);
         if(!investorWorkExperienceParamList.isEmpty()){
+            String message="投资人认证工作经历中数据开始时间:[{}]晚于结束时间:[{}]";
             for(InvestorWorkExperienceParam investorWorkExperienceParam : investorWorkExperienceParamList){
-                if(StringUtils.isNotBlank(investorWorkExperienceParam.getStartTime()) && StringUtils.isNotBlank(investorWorkExperienceParam.getEndTime())){
-                    int startTime = Integer.parseInt(investorWorkExperienceParam.getStartTime().replaceAll("-", ""));
-                    int endTime = Integer.parseInt(investorWorkExperienceParam.getEndTime().replaceAll("-", ""));
-                    if(startTime>endTime){
-                        logger.warn("投资人认证工作经历中数据开始时间:[{}]晚于结束时间:[{}]", investorWorkExperienceParam.getStartTime(), investorWorkExperienceParam.getEndTime());
-                        throw new JnSpringCloudException(InvestorExceptionEnum.INVESTOR_WORK_START_TIME_LATER_END_TIME);
-                    }
-                }
+                checkStartTimeAndEndTime(investorWorkExperienceParam.getStartTime(), investorWorkExperienceParam.getEndTime(), message, InvestorExceptionEnum.INVESTOR_WORK_START_TIME_LATER_END_TIME);
                 TbServiceInvestorWorkExp workExp=new TbServiceInvestorWorkExp();
                 //主键id
                 workExp.setId(UUID.randomUUID().toString().replaceAll("-", ""));
@@ -439,7 +660,7 @@ public class InvestorServiceImpl implements InvestorService {
                 //创建人
                 workExp.setCreatorAccount(investorAccount);
                 //数据状态
-                workExp.setRecordStatus(RECORD_STATUS);
+                workExp.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
                 workExpList.add(workExp);
             }
             investorMapper.insertInvestorWorkExperienceBatch(workExpList);
@@ -469,7 +690,7 @@ public class InvestorServiceImpl implements InvestorService {
             //创建人
             mainRound.setCreatorAccount(investorAccount);
             //数据状态
-            mainRound.setRecordStatus(RECORD_STATUS);
+            mainRound.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
             mainRoundList.add(mainRound);
         }
         investorMapper.insertInvestorMainRoundBatch(mainRoundList);
@@ -498,7 +719,7 @@ public class InvestorServiceImpl implements InvestorService {
             //创建人
             mainArea.setCreatorAccount(investorAccount);
             //数据状态
-            mainArea.setRecordStatus(RECORD_STATUS);
+            mainArea.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
             mainAreaList.add(mainArea);
         }
         investorMapper.insertInvestorMainAreaBatch(mainAreaList);
@@ -525,7 +746,7 @@ public class InvestorServiceImpl implements InvestorService {
         //创建时间
         tbServiceInvestor.setCreatedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
         //数据状态
-        tbServiceInvestor.setRecordStatus(RECORD_STATUS);
+        tbServiceInvestor.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
         return tbServiceInvestorMapper.insertSelective(tbServiceInvestor);
     }
 
@@ -537,7 +758,7 @@ public class InvestorServiceImpl implements InvestorService {
     @Override
     public List<InvestorMainArea> getInvestorMainArea() {
         TbServiceMainAreaCriteria example=new TbServiceMainAreaCriteria();
-        example.createCriteria().andMainCodeIsNotNull().andRecordStatusEqualTo(RECORD_STATUS);
+        example.createCriteria().andMainCodeIsNotNull().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         List<TbServiceMainArea> tbServiceMainAreaList = tbServiceMainAreaMapper.selectByExample(example);
         if(tbServiceMainAreaList.isEmpty()){
             logger.warn("系统中主投领域信息不存在");
@@ -561,7 +782,7 @@ public class InvestorServiceImpl implements InvestorService {
     @Override
     public List<InvestorMainRound> getInvestorMainRound() {
         TbServiceMainRoundCriteria example=new TbServiceMainRoundCriteria();
-        example.createCriteria().andMainRoundCodeIsNotNull().andRecordStatusEqualTo(RECORD_STATUS);
+        example.createCriteria().andMainRoundCodeIsNotNull().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         List<TbServiceMainRound> tbServiceMainRoundList = tbServiceMainRoundMapper.selectByExample(example);
         if(tbServiceMainRoundList.isEmpty()){
             logger.warn("系统中主投轮次信息不存在");
@@ -575,5 +796,69 @@ public class InvestorServiceImpl implements InvestorService {
             resultList.add(investorMainRound);
         }
         return resultList;
+    }
+
+    /**
+     * 添加投资人角色
+     * @param investorAccount
+     * @return
+     */
+    @ServiceLog(doAction = "添加投资人角色")
+    @Override
+    public int addInvestorRole(String investorAccount) {
+        if(StringUtils.isBlank(investorAccount)){
+            logger.warn("添加投资人角色失败，失败原因：投资人账号不能为空");
+            throw new JnSpringCloudException(InvestorExceptionEnum.NETWORK_ANOMALY);
+        }
+        //判断当前账号在系统中是否存在
+        User user=new User();
+        user.setAccount(investorAccount);
+        Result<User> userResult = systemClient.getUser(user);
+        if(userResult==null || userResult.getData()==null){
+            logger.warn("添加投资人角色失败，失败原因：投资人账号在系统中不存在");
+            throw new JnSpringCloudException(InvestorExceptionEnum.NETWORK_ANOMALY);
+        }
+        Result<SysRole> addSysRoleResult = systemClient.getRoleByName(HomeRoleEnum.INVESTOR_USER.getCode());
+        Result<SysRole> delSysRoleResult = systemClient.getRoleByName(HomeRoleEnum.NORMAL_USER.getCode());
+        if(addSysRoleResult==null ||addSysRoleResult.getData()==null
+                ||delSysRoleResult==null || delSysRoleResult.getData()==null){
+            logger.warn("添加投资人角色失败，失败原因：无法获取“投资人”、“普通用户”角色信息，请确认系统服务是否正常，且“投资人”、“普通用户”角色在系统中存在");
+            throw new JnSpringCloudException(InvestorExceptionEnum.NETWORK_ANOMALY);
+        }
+        //更新用户角色
+        Result<Boolean> booleanResult = updateUserRoleInfo(user, addSysRoleResult,delSysRoleResult);
+        if(booleanResult.getData()==true){
+            return 1;
+        }else{
+            logger.warn("添加投资人角色失败，失败原因：更新用户角色为“投资人”失败");
+            throw new JnSpringCloudException(InvestorExceptionEnum.NETWORK_ANOMALY);
+        }
+    }
+
+    /**
+     * 更新用户角色
+     * @param user
+     * @param addSysRoleResult
+     * @param delSysRoleResult
+     * @return
+     */
+    @ServiceLog(doAction = "更新用户角色")
+    @Override
+    public Result<Boolean> updateUserRoleInfo(User user, Result<SysRole> addSysRoleResult,Result<SysRole> delSysRoleResult) {
+        SysUserRoleVO sysUserRoleVO=new SysUserRoleVO();
+        //新增角色
+        Set<String> addRoleId=new HashSet<>();
+        if(addSysRoleResult!=null){
+            addRoleId.add(addSysRoleResult.getData().getId());
+        }
+        //修改角色
+        Set<String>delRoleId=new HashSet<>();
+        if(delSysRoleResult!=null){
+            delRoleId.add(delSysRoleResult.getData().getId());
+        }
+        sysUserRoleVO.setAddRoleId(addRoleId);
+        sysUserRoleVO.setDeleRoleIds(delRoleId);
+        sysUserRoleVO.setUser(user);
+        return systemClient.updateUserRole(sysUserRoleVO);
     }
 }

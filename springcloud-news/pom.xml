@@ -19,6 +19,11 @@
             <artifactId>springcloud-news-api</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-app-common</artifactId>
+        </dependency>
+
         <!-- 邮件 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -35,6 +40,16 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <!-- 极光推送 -->
+        <dependency>
+            <groupId>cn.jpush.api</groupId>
+            <artifactId>jpush-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.jpush.api</groupId>
+            <artifactId>jiguang-common</artifactId>
         </dependency>
 
     </dependencies>

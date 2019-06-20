@@ -16,10 +16,14 @@ import java.io.Serializable;
 public class ServiceProductManage implements Serializable {
     @ApiModelProperty(value = "服务产品ID")
     private String productId;
+    @ApiModelProperty(value = "服务产品图片路径")
+    private String pictureUrl;
     @ApiModelProperty(value = "服务产品名称")
     private String productName;
     @ApiModelProperty(value = "服务产品类型")
     private String productType;
+    @ApiModelProperty(value = "服务产品领域id")
+    private String signoryId;
     @ApiModelProperty(value = "服务产品领域名称")
     private String signoryName;
     @ApiModelProperty(value = "服务产品发布日期")
@@ -36,6 +40,22 @@ public class ServiceProductManage implements Serializable {
     private String advisorName;
     @ApiModelProperty(value="参考价格")
     private String  referPrice;
+
+    public String getSignoryId() {
+        return signoryId;
+    }
+
+    public void setSignoryId(String signoryId) {
+        this.signoryId = signoryId;
+    }
+
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
+    }
 
     public String getReferPrice() {
         return referPrice;
@@ -123,5 +143,24 @@ public class ServiceProductManage implements Serializable {
 
     public void setAdvisorName(String advisorName) {
         this.advisorName = advisorName;
+    }
+
+    @Override
+    public String toString() {
+        return "ServiceProductManage{" +
+                "productId='" + productId + '\'' +
+                ", pictureUrl='" + pictureUrl + '\'' +
+                ", productName='" + productName + '\'' +
+                ", productType='" + productType + '\'' +
+                ", signoryId='" + signoryId + '\'' +
+                ", signoryName='" + signoryName + '\'' +
+                ", releaseTime='" + releaseTime + '\'' +
+                ", orgName='" + orgName + '\'' +
+                ", conName='" + conName + '\'' +
+                ", conPhone='" + conPhone + '\'' +
+                ", status='" + status + '\'' +
+                ", advisorName='" + advisorName + '\'' +
+                ", referPrice='" + referPrice + '\'' +
+                '}';
     }
 }

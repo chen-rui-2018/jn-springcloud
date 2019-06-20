@@ -33,6 +33,36 @@ public class OrgActivityShow  implements Serializable {
     private Integer applyNum;
     @ApiModelProperty(value = "活动状态（1草稿 2报名中 3活动结束4活动取消）")
     private String actiStatus;
+    @ApiModelProperty(value = "活动总数")
+    private String actiNum;
+    @ApiModelProperty(value = "最近一月活动数")
+    private String monthNum;
+    @ApiModelProperty(value = "最近一周活动数")
+    private String weekNum;
+
+    public String getActiNum() {
+        return actiNum;
+    }
+
+    public void setActiNum(String actiNum) {
+        this.actiNum = actiNum;
+    }
+
+    public String getMonthNum() {
+        return monthNum;
+    }
+
+    public void setMonthNum(String monthNum) {
+        this.monthNum = monthNum;
+    }
+
+    public String getWeekNum() {
+        return weekNum;
+    }
+
+    public void setWeekNum(String weekNum) {
+        this.weekNum = weekNum;
+    }
 
     public String getId() {
         return id;
@@ -112,5 +142,24 @@ public class OrgActivityShow  implements Serializable {
 
     public void setActiStatus(String actiStatus) {
         this.actiStatus = actiStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "OrgActivityShow{" +
+                "id='" + id + '\'' +
+                ", actiName='" + actiName + '\'' +
+                ", actiAddress='" + actiAddress + '\'' +
+                ", actiStartTime='" + actiStartTime + '\'' +
+                ", actiEndTime='" + actiEndTime + '\'' +
+                ", actiNumber=" + actiNumber +
+                ", actiPosterUrl='" + actiPosterUrl + '\'' +
+                ", actiLike=" + actiLike +
+                ", applyNum=" + applyNum +
+                ", actiStatus='" + actiStatus + '\'' +
+                ", actiNum='" + actiNum + '\'' +
+                ", monthNum='" + monthNum + '\'' +
+                ", weekNum='" + weekNum + '\'' +
+                '}';
     }
 }

@@ -74,12 +74,14 @@ public class UserInfoServiceImplTest {
         accountList.add("account01");
 
         //更新用户所属机构信息
-        userAffiliateInfo.setAccountList((String[])accountList.toArray());
+        userAffiliateInfo.setAccountList(accountList);
         userAffiliateInfo.setAffiliateCode("011111");
         userAffiliateInfo.setAffiliateName("江苏工业园");
 
         //更新用户所属企业信息
-        userCompanyInfo.setAccount(account);
+        accountList.clear();
+        accountList.add(account);
+        userCompanyInfo.setAccountList(accountList);
         userCompanyInfo.setCompanyCode("032222");
         userCompanyInfo.setCompanyName("江苏工业园企业");
 

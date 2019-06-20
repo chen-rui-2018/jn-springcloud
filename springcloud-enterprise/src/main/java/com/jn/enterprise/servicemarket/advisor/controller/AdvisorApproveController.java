@@ -2,8 +2,6 @@ package com.jn.enterprise.servicemarket.advisor.controller;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
-import com.jn.common.util.Assert;
-import com.jn.enterprise.enums.AdvisorExceptionEnum;
 import com.jn.enterprise.servicemarket.advisor.model.OrgInfoShow;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorApproveService;
 import com.jn.system.log.annotation.ControllerLog;
@@ -43,8 +41,7 @@ public class AdvisorApproveController extends BaseController {
     @RequiresPermissions("/serviceMarket/advisorApproveController/selectOrgInfo")
     @ApiOperation(value = "选择机构",notes = "根据输入的机构名称模糊查询系统中可供选择的机构")
     @RequestMapping(value = "/selectOrgInfo",method = RequestMethod.GET)
-    public Result<List<OrgInfoShow>> selectOrgInfo(@ApiParam(value = "服务机构名称" ,required = true,example = "xxx机构") @RequestParam("orgName") String orgName){
-        Assert.notNull(orgName, AdvisorExceptionEnum.ORG_NAME_NOT_NULL.getMessage());
+    public Result<List<OrgInfoShow>> selectOrgInfo(@ApiParam(value = "服务机构名称" ,example = "xxx机构") @RequestParam("orgName") String orgName){
         return  new Result(advisorApproveService.selectOrgInfo(orgName));
     }
 

@@ -1,5 +1,6 @@
 package com.jn.config;
 
+import com.jn.system.model.User;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -21,7 +22,7 @@ public interface FastDfsUploadClient {
      * @return
      * @throws IOException
      */
-    String uploadFile(MultipartFile file) throws IOException;
+    String uploadFile(MultipartFile file,User user,String fileGroupId) throws IOException;
 
     /**
      * 上传需要密钥的文件
@@ -29,5 +30,5 @@ public interface FastDfsUploadClient {
      * @return
      * @throws IOException
      */
-    String uploadNeedTokenFile(MultipartFile file) throws IOException;
+    String uploadNeedTokenFile(MultipartFile file,User user,String fileGroupId) throws IOException;
 }

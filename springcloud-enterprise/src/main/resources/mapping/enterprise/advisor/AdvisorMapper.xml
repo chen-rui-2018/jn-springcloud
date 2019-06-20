@@ -23,7 +23,7 @@
        FROM
        (
        SELECT
-       sa.`org_id` AS "orgId"			   			                      <!-- 机构id-->
+       sa.`org_id_` AS "orgId"			   			                      <!-- 机构id-->
        ,sa.`org_name` AS "orgName"					                      <!-- 所属机构名称-->
        ,sa.`advisor_account` AS "advisorAccount"  			              <!-- 顾问账号-->
        ,sa.`advisor_name` AS "advisorName"				                  <!-- 顾问名称-->
@@ -44,7 +44,7 @@
        and sa.approval_status='2'            <!--审批通过-->
        and sa.record_status='1'              <!--数据状态为正常数据-->
        GROUP BY
-       sa.`org_id`,sa.`advisor_account`,sa.`advisor_name`,sa.`business_area`,
+       sa.`org_id_`,sa.`advisor_account`,sa.`advisor_name`,sa.`business_area`,
        sa.`avatar`,sa.`position`,sa.working_years,sa.`org_name`,sa.`is_certification`,
        sa.`good_at_business`,sa.`transaction_num`,sa.page_views
        )tt
@@ -57,7 +57,21 @@
        </if>
        <if test="keyWords !=null  and keyWords !=''">
            <!-- 关键词-->
-           and (tt.advisorName like '%'||#{domain}||'%' or tt.position like '%'||#{domain}||'%')
+           and (tt.advisorName like concat('%',#{keyWords},'%') or tt.position like concat('%',#{keyWords},'%'))
+       </if>
+       <if test="templateId !=null and templateId!=''">
+           and tt.advisorAccount in (
+           select distinct
+           saa.advisor_account
+           from tb_service_product ssp
+           join tb_service_and_advisor saa
+           on ssp.product_id_=saa.product_id_
+           join tb_service_advisor tsa
+           on tsa.advisor_account=saa.advisor_account
+           and tsa.approval_status='2'
+           and tsa.record_status='1'
+           where ssp.template_id  =#{templateId}
+           )
        </if>
        <if test="sortTypes =='integrate'">
            ORDER BY <!-- 综合排序-->
@@ -95,11 +109,11 @@
 	    FROM
 	      (
             SELECT
-                sa.`org_id` AS "orgId"			   			                <!-- 机构id-->
+                sa.`org_id_` AS "orgId"			   			                <!-- 机构id-->
                 ,sa.`org_name` AS "orgName"					                <!-- 所属机构名称-->
                 ,sa.`advisor_account` AS "advisorAccount"  			        <!-- 顾问账号-->
                 ,sa.`advisor_name` AS "advisorName"				            <!-- 顾问名称-->
-                ,sr.product_id as "productId"                               <!-- 服务产品id-->
+                ,sr.product_id_ as "productId"                               <!-- 服务产品id-->
                 ,sr.`product_name` AS "productName"				            <!-- 服务产品名称-->
                 ,sp.`picture_url` AS "pictureUrl"				            <!-- 服务产品图片-->
                 ,concat_ws('****', substring(sr.`evaluator_account`, 1, 4),
@@ -113,9 +127,9 @@
             and sa.approval_status='2'            <!--审批通过-->
             and sa.record_status='1'              <!--数据状态为正常数据-->
             LEFT JOIN tb_service_product sp
-            ON sr.`product_id`=sp.`product_id`
-            GROUP BY sa.`org_id`,sa.`org_name`,sa.`advisor_account`,sa.`advisor_name`,
-                 sr.product_id,sr.`product_name`, sp.`picture_url`,sr.`evaluator_account`,
+            ON sr.`product_id_`=sp.`product_id_`
+            GROUP BY sa.`org_id_`,sa.`org_name`,sa.`advisor_account`,sa.`advisor_name`,
+                 sr.product_id_,sr.`product_name`, sp.`picture_url`,sr.`evaluator_account`,
                  sr.`created_time`,sr.`evaluation_desc`
           )tt
         WHERE 1=1
@@ -156,11 +170,11 @@
         FROM
         (
         SELECT
-        sa.`org_id` AS "orgId"			   			                <!-- 机构id-->
+        sa.`org_id_` AS "orgId"			   			                <!-- 机构id-->
         ,sa.`org_name` AS "orgName"					                <!-- 所属机构名称-->
         ,sa.`advisor_account` AS "advisorAccount"  			        <!-- 顾问账号-->
         ,sa.`advisor_name` AS "advisorName"				            <!-- 顾问名称-->
-        ,sr.product_id as "productId"                               <!-- 服务产品id-->
+        ,sr.product_id_ as "productId"                               <!-- 服务产品id-->
         ,sr.`product_name` AS "productName"				            <!-- 服务产品名称-->
         ,sp.`picture_url` AS "pictureUrl"				            <!-- 服务产品图片-->
         ,concat_ws('****', substring(sr.`evaluator_account`, 1, 4),
@@ -174,9 +188,9 @@
         and sa.approval_status='2'            <!--审批通过-->
         and sa.record_status='1'              <!--数据状态为正常数据-->
         LEFT JOIN tb_service_product sp
-        ON sr.`product_id`=sp.`product_id`
-        GROUP BY sa.`org_id`,sa.`org_name`,sa.`advisor_account`,sa.`advisor_name`,
-        sr.product_id,sr.`product_name`, sp.`picture_url`,sr.`evaluator_account`,
+        ON sr.`product_id_`=sp.`product_id_`
+        GROUP BY sa.`org_id_`,sa.`org_name`,sa.`advisor_account`,sa.`advisor_name`,
+        sr.product_id_,sr.`product_name`, sp.`picture_url`,sr.`evaluator_account`,
         sr.`created_time`,sr.`evaluation_desc`
         )tt
         WHERE 1=1

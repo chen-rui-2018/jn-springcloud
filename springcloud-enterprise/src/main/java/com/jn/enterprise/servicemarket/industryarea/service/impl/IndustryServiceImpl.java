@@ -10,7 +10,6 @@ import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePrefer;
 import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePreferCriteria;
 import com.jn.enterprise.servicemarket.industryarea.model.*;
 import com.jn.enterprise.servicemarket.industryarea.service.IndustryService;
-import com.jn.enterprise.servicemarket.org.service.impl.OrgApproveServiceImpl;
 import com.jn.system.log.annotation.ServiceLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -110,6 +109,24 @@ public class IndustryServiceImpl implements IndustryService {
             dictionaries.add(industryDictionary);
         }
         return dictionaries;
+    }
+
+    @Override
+    @ServiceLog(doAction = "获取业务领域-二级菜单")
+    public List<IndustryDictionaryProduct> selectIndustryProductList(){
+        List<IndustryDictionaryProduct> industryDictionaryProducts = industryMapper.selectIndustryProductList();
+        for (IndustryDictionaryProduct product : industryDictionaryProducts) {
+            if (product.getId().equals("technology_finance")) {
+                product.setProducts(null);
+            }
+        }
+        return industryDictionaryProducts;
+    }
+
+    @Override
+    @ServiceLog(doAction = "服务超市业务领域列表")
+    public List<Industry> getIndustryForMarket(){
+        return industryMapper.getIndustryForMarket();
     }
 
 }

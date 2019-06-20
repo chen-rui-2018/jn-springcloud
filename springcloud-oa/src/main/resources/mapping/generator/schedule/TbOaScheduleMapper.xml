@@ -8,11 +8,13 @@
     <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
     <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
     <result column="remind_time" jdbcType="TIMESTAMP" property="remindTime" />
+    <result column="all_day" jdbcType="VARCHAR" property="allDay" />
+    <result column="remind_way" jdbcType="VARCHAR" property="remindWay" />
     <result column="is_remind" jdbcType="VARCHAR" property="isRemind" />
     <result column="wechat_remind" jdbcType="VARCHAR" property="wechatRemind" />
     <result column="message_remind" jdbcType="VARCHAR" property="messageRemind" />
-    <result column="pc_remind" jdbcType="VARCHAR" property="pcRemind" />
     <result column="app_remind" jdbcType="VARCHAR" property="appRemind" />
+    <result column="pc_remind" jdbcType="VARCHAR" property="pcRemind" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
@@ -79,9 +81,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, title, content, start_time, end_time, remind_time, is_remind, wechat_remind, 
-    message_remind, pc_remind, app_remind, remark, record_status, creator_account, created_time, 
-    modifier_account, modified_time
+    id, title, content, start_time, end_time, remind_time, all_day, remind_way, is_remind, 
+    wechat_remind, message_remind, app_remind, pc_remind, remark, record_status, creator_account, 
+    created_time, modifier_account, modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.oa.schedule.entity.TbOaScheduleCriteria" resultMap="BaseResultMap">
     select
@@ -116,16 +118,18 @@
   <insert id="insert" parameterType="com.jn.oa.schedule.entity.TbOaSchedule">
     insert into tb_oa_schedule (id, title, content, 
       start_time, end_time, remind_time, 
-      is_remind, wechat_remind, message_remind, 
-      pc_remind, app_remind, remark, 
-      record_status, creator_account, created_time, 
-      modifier_account, modified_time)
+      all_day, remind_way, is_remind, 
+      wechat_remind, message_remind, app_remind, 
+      pc_remind, remark, record_status, 
+      creator_account, created_time, modifier_account, 
+      modified_time)
     values (#{id,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
       #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{remindTime,jdbcType=TIMESTAMP}, 
-      #{isRemind,jdbcType=VARCHAR}, #{wechatRemind,jdbcType=VARCHAR}, #{messageRemind,jdbcType=VARCHAR}, 
-      #{pcRemind,jdbcType=VARCHAR}, #{appRemind,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
-      #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
+      #{allDay,jdbcType=VARCHAR}, #{remindWay,jdbcType=VARCHAR}, #{isRemind,jdbcType=VARCHAR}, 
+      #{wechatRemind,jdbcType=VARCHAR}, #{messageRemind,jdbcType=VARCHAR}, #{appRemind,jdbcType=VARCHAR}, 
+      #{pcRemind,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.oa.schedule.entity.TbOaSchedule">
     insert into tb_oa_schedule
@@ -148,6 +152,12 @@
       <if test="remindTime != null">
         remind_time,
       </if>
+      <if test="allDay != null">
+        all_day,
+      </if>
+      <if test="remindWay != null">
+        remind_way,
+      </if>
       <if test="isRemind != null">
         is_remind,
       </if>
@@ -157,11 +167,11 @@
       <if test="messageRemind != null">
         message_remind,
       </if>
-      <if test="pcRemind != null">
-        pc_remind,
-      </if>
       <if test="appRemind != null">
         app_remind,
+      </if>
+      <if test="pcRemind != null">
+        pc_remind,
       </if>
       <if test="remark != null">
         remark,
@@ -201,6 +211,12 @@
       <if test="remindTime != null">
         #{remindTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="allDay != null">
+        #{allDay,jdbcType=VARCHAR},
+      </if>
+      <if test="remindWay != null">
+        #{remindWay,jdbcType=VARCHAR},
+      </if>
       <if test="isRemind != null">
         #{isRemind,jdbcType=VARCHAR},
       </if>
@@ -210,11 +226,11 @@
       <if test="messageRemind != null">
         #{messageRemind,jdbcType=VARCHAR},
       </if>
-      <if test="pcRemind != null">
-        #{pcRemind,jdbcType=VARCHAR},
-      </if>
       <if test="appRemind != null">
         #{appRemind,jdbcType=VARCHAR},
+      </if>
+      <if test="pcRemind != null">
+        #{pcRemind,jdbcType=VARCHAR},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
@@ -263,6 +279,12 @@
       <if test="record.remindTime != null">
         remind_time = #{record.remindTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.allDay != null">
+        all_day = #{record.allDay,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remindWay != null">
+        remind_way = #{record.remindWay,jdbcType=VARCHAR},
+      </if>
       <if test="record.isRemind != null">
         is_remind = #{record.isRemind,jdbcType=VARCHAR},
       </if>
@@ -272,11 +294,11 @@
       <if test="record.messageRemind != null">
         message_remind = #{record.messageRemind,jdbcType=VARCHAR},
       </if>
-      <if test="record.pcRemind != null">
-        pc_remind = #{record.pcRemind,jdbcType=VARCHAR},
-      </if>
       <if test="record.appRemind != null">
         app_remind = #{record.appRemind,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pcRemind != null">
+        pc_remind = #{record.pcRemind,jdbcType=VARCHAR},
       </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
@@ -309,11 +331,13 @@
       start_time = #{record.startTime,jdbcType=TIMESTAMP},
       end_time = #{record.endTime,jdbcType=TIMESTAMP},
       remind_time = #{record.remindTime,jdbcType=TIMESTAMP},
+      all_day = #{record.allDay,jdbcType=VARCHAR},
+      remind_way = #{record.remindWay,jdbcType=VARCHAR},
       is_remind = #{record.isRemind,jdbcType=VARCHAR},
       wechat_remind = #{record.wechatRemind,jdbcType=VARCHAR},
       message_remind = #{record.messageRemind,jdbcType=VARCHAR},
-      pc_remind = #{record.pcRemind,jdbcType=VARCHAR},
       app_remind = #{record.appRemind,jdbcType=VARCHAR},
+      pc_remind = #{record.pcRemind,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR},
       record_status = #{record.recordStatus,jdbcType=TINYINT},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
@@ -342,6 +366,12 @@
       <if test="remindTime != null">
         remind_time = #{remindTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="allDay != null">
+        all_day = #{allDay,jdbcType=VARCHAR},
+      </if>
+      <if test="remindWay != null">
+        remind_way = #{remindWay,jdbcType=VARCHAR},
+      </if>
       <if test="isRemind != null">
         is_remind = #{isRemind,jdbcType=VARCHAR},
       </if>
@@ -351,11 +381,11 @@
       <if test="messageRemind != null">
         message_remind = #{messageRemind,jdbcType=VARCHAR},
       </if>
-      <if test="pcRemind != null">
-        pc_remind = #{pcRemind,jdbcType=VARCHAR},
-      </if>
       <if test="appRemind != null">
         app_remind = #{appRemind,jdbcType=VARCHAR},
+      </if>
+      <if test="pcRemind != null">
+        pc_remind = #{pcRemind,jdbcType=VARCHAR},
       </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
@@ -385,11 +415,13 @@
       start_time = #{startTime,jdbcType=TIMESTAMP},
       end_time = #{endTime,jdbcType=TIMESTAMP},
       remind_time = #{remindTime,jdbcType=TIMESTAMP},
+      all_day = #{allDay,jdbcType=VARCHAR},
+      remind_way = #{remindWay,jdbcType=VARCHAR},
       is_remind = #{isRemind,jdbcType=VARCHAR},
       wechat_remind = #{wechatRemind,jdbcType=VARCHAR},
       message_remind = #{messageRemind,jdbcType=VARCHAR},
-      pc_remind = #{pcRemind,jdbcType=VARCHAR},
       app_remind = #{appRemind,jdbcType=VARCHAR},
+      pc_remind = #{pcRemind,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       record_status = #{recordStatus,jdbcType=TINYINT},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},

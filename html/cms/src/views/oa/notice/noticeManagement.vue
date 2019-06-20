@@ -1,7 +1,7 @@
 <template>
   <div v-loading="listLoading" class="noticeManagement">
     <el-form :inline="true" :model="listQuery" class="filter-bar">
-      <el-radio-group v-model="listQuery.recordStatus">
+      <el-radio-group v-model="listQuery.recordStatus" @click="handleFilter">
         <el-radio-button label="">全部</el-radio-button>
         <el-radio-button label= "1">有效</el-radio-button>
         <el-radio-button label="2">失效</el-radio-button>
@@ -223,6 +223,7 @@ export default {
 <style lang="scss">
 .noticeContent{
 .el-dialog{
+
       height: 550px;
       overflow: auto;
     }

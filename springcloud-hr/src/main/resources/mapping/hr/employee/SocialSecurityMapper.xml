@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.employee.dao.SocialSecurityMapper">
+
+
+
+    <select id="selectByJobNumber" parameterType="map" resultType="com.jn.hr.employee.model.SocialSecurity">
+        select id, job_number jobNumber, salary_bank salaryBank, salary_number salaryNumber,
+         provident_fund_account providentFundAccount, provident_fund_payment providentFundPayment,
+    social_security_account socialSecurityAccount, social_security_payment socialSecurityPayment
+    from tb_manpower_social_security
+         where job_number=#{jobNumber}
+    </select>
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into tb_manpower_social_security
+        (
+        id, job_number, salary_bank,
+        salary_number, provident_fund_account, provident_fund_payment,
+        social_security_account, social_security_payment
+        ) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.id},
+            #{item.jobNumber},
+            #{item.salaryBank},
+            #{item.salaryNumber},
+            #{item.providentFundAccount},
+            #{item.providentFundPayment},
+            #{item.socialSecurityAccount},
+            #{item.socialSecurityPayment}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectAllSocialSecurityToMap" resultType="com.jn.hr.employee.model.SocialSecurity">
+        select id, job_number jobNumber, salary_bank salaryBank, salary_number salaryNumber,
+         provident_fund_account providentFundAccount, provident_fund_payment providentFundPayment,
+    social_security_account socialSecurityAccount, social_security_payment socialSecurityPayment
+    from tb_manpower_social_security
+    </select>
+
+</mapper>

@@ -1,0 +1,496 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.pmpaybill.dao.TbPmPayBillItemMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.pmpaybill.entity.TbPmPayBillItem">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="bill_id" jdbcType="VARCHAR" property="billId" />
+    <result column="company_id" jdbcType="VARCHAR" property="companyId" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="company_address" jdbcType="VARCHAR" property="companyAddress" />
+    <result column="calc_mode" jdbcType="TINYINT" property="calcMode" />
+    <result column="pay_period" jdbcType="VARCHAR" property="payPeriod" />
+    <result column="bill_acount" jdbcType="DECIMAL" property="billAcount" />
+    <result column="fee_amount" jdbcType="DECIMAL" property="feeAmount" />
+    <result column="fee_reason" jdbcType="VARCHAR" property="feeReason" />
+    <result column="total_amount" jdbcType="DECIMAL" property="totalAmount" />
+    <result column="last_pay_time" jdbcType="TIMESTAMP" property="lastPayTime" />
+    <result column="pay_status" jdbcType="TINYINT" property="payStatus" />
+    <result column="is_expire" jdbcType="TINYINT" property="isExpire" />
+    <result column="pay_type" jdbcType="TINYINT" property="payType" />
+    <result column="generate_status" jdbcType="TINYINT" property="generateStatus" />
+    <result column="derate_state" jdbcType="TINYINT" property="derateState" />
+    <result column="send_pay_bill" jdbcType="TINYINT" property="sendPayBill" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, bill_id, company_id, company_name, company_address, calc_mode, pay_period, bill_acount, 
+    fee_amount, fee_reason, total_amount, last_pay_time, pay_status, is_expire, pay_type, 
+    generate_status, derate_state, send_pay_bill, record_status, creator_account, created_time, 
+    modifier_account, modified_time
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.park.pmpaybill.entity.TbPmPayBillItemCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_pm_pay_bill_item
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_pm_pay_bill_item
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_pm_pay_bill_item
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.park.pmpaybill.entity.TbPmPayBillItemCriteria">
+    delete from tb_pm_pay_bill_item
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.park.pmpaybill.entity.TbPmPayBillItem">
+    insert into tb_pm_pay_bill_item (id, bill_id, company_id, 
+      company_name, company_address, calc_mode, 
+      pay_period, bill_acount, fee_amount, 
+      fee_reason, total_amount, last_pay_time, 
+      pay_status, is_expire, pay_type, 
+      generate_status, derate_state, send_pay_bill, 
+      record_status, creator_account, created_time, 
+      modifier_account, modified_time)
+    values (#{id,jdbcType=VARCHAR}, #{billId,jdbcType=VARCHAR}, #{companyId,jdbcType=VARCHAR}, 
+      #{companyName,jdbcType=VARCHAR}, #{companyAddress,jdbcType=VARCHAR}, #{calcMode,jdbcType=TINYINT}, 
+      #{payPeriod,jdbcType=VARCHAR}, #{billAcount,jdbcType=DECIMAL}, #{feeAmount,jdbcType=DECIMAL}, 
+      #{feeReason,jdbcType=VARCHAR}, #{totalAmount,jdbcType=DECIMAL}, #{lastPayTime,jdbcType=TIMESTAMP}, 
+      #{payStatus,jdbcType=TINYINT}, #{isExpire,jdbcType=TINYINT}, #{payType,jdbcType=TINYINT}, 
+      #{generateStatus,jdbcType=TINYINT}, #{derateState,jdbcType=TINYINT}, #{sendPayBill,jdbcType=TINYINT}, 
+      #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.park.pmpaybill.entity.TbPmPayBillItem">
+    insert into tb_pm_pay_bill_item
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="billId != null">
+        bill_id,
+      </if>
+      <if test="companyId != null">
+        company_id,
+      </if>
+      <if test="companyName != null">
+        company_name,
+      </if>
+      <if test="companyAddress != null">
+        company_address,
+      </if>
+      <if test="calcMode != null">
+        calc_mode,
+      </if>
+      <if test="payPeriod != null">
+        pay_period,
+      </if>
+      <if test="billAcount != null">
+        bill_acount,
+      </if>
+      <if test="feeAmount != null">
+        fee_amount,
+      </if>
+      <if test="feeReason != null">
+        fee_reason,
+      </if>
+      <if test="totalAmount != null">
+        total_amount,
+      </if>
+      <if test="lastPayTime != null">
+        last_pay_time,
+      </if>
+      <if test="payStatus != null">
+        pay_status,
+      </if>
+      <if test="isExpire != null">
+        is_expire,
+      </if>
+      <if test="payType != null">
+        pay_type,
+      </if>
+      <if test="generateStatus != null">
+        generate_status,
+      </if>
+      <if test="derateState != null">
+        derate_state,
+      </if>
+      <if test="sendPayBill != null">
+        send_pay_bill,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="billId != null">
+        #{billId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyAddress != null">
+        #{companyAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="calcMode != null">
+        #{calcMode,jdbcType=TINYINT},
+      </if>
+      <if test="payPeriod != null">
+        #{payPeriod,jdbcType=VARCHAR},
+      </if>
+      <if test="billAcount != null">
+        #{billAcount,jdbcType=DECIMAL},
+      </if>
+      <if test="feeAmount != null">
+        #{feeAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="feeReason != null">
+        #{feeReason,jdbcType=VARCHAR},
+      </if>
+      <if test="totalAmount != null">
+        #{totalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="lastPayTime != null">
+        #{lastPayTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payStatus != null">
+        #{payStatus,jdbcType=TINYINT},
+      </if>
+      <if test="isExpire != null">
+        #{isExpire,jdbcType=TINYINT},
+      </if>
+      <if test="payType != null">
+        #{payType,jdbcType=TINYINT},
+      </if>
+      <if test="generateStatus != null">
+        #{generateStatus,jdbcType=TINYINT},
+      </if>
+      <if test="derateState != null">
+        #{derateState,jdbcType=TINYINT},
+      </if>
+      <if test="sendPayBill != null">
+        #{sendPayBill,jdbcType=TINYINT},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.park.pmpaybill.entity.TbPmPayBillItemCriteria" resultType="java.lang.Long">
+    select count(*) from tb_pm_pay_bill_item
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_pm_pay_bill_item
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.billId != null">
+        bill_id = #{record.billId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyId != null">
+        company_id = #{record.companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyName != null">
+        company_name = #{record.companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyAddress != null">
+        company_address = #{record.companyAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.calcMode != null">
+        calc_mode = #{record.calcMode,jdbcType=TINYINT},
+      </if>
+      <if test="record.payPeriod != null">
+        pay_period = #{record.payPeriod,jdbcType=VARCHAR},
+      </if>
+      <if test="record.billAcount != null">
+        bill_acount = #{record.billAcount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.feeAmount != null">
+        fee_amount = #{record.feeAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.feeReason != null">
+        fee_reason = #{record.feeReason,jdbcType=VARCHAR},
+      </if>
+      <if test="record.totalAmount != null">
+        total_amount = #{record.totalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.lastPayTime != null">
+        last_pay_time = #{record.lastPayTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.payStatus != null">
+        pay_status = #{record.payStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.isExpire != null">
+        is_expire = #{record.isExpire,jdbcType=TINYINT},
+      </if>
+      <if test="record.payType != null">
+        pay_type = #{record.payType,jdbcType=TINYINT},
+      </if>
+      <if test="record.generateStatus != null">
+        generate_status = #{record.generateStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.derateState != null">
+        derate_state = #{record.derateState,jdbcType=TINYINT},
+      </if>
+      <if test="record.sendPayBill != null">
+        send_pay_bill = #{record.sendPayBill,jdbcType=TINYINT},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_pm_pay_bill_item
+    set id = #{record.id,jdbcType=VARCHAR},
+      bill_id = #{record.billId,jdbcType=VARCHAR},
+      company_id = #{record.companyId,jdbcType=VARCHAR},
+      company_name = #{record.companyName,jdbcType=VARCHAR},
+      company_address = #{record.companyAddress,jdbcType=VARCHAR},
+      calc_mode = #{record.calcMode,jdbcType=TINYINT},
+      pay_period = #{record.payPeriod,jdbcType=VARCHAR},
+      bill_acount = #{record.billAcount,jdbcType=DECIMAL},
+      fee_amount = #{record.feeAmount,jdbcType=DECIMAL},
+      fee_reason = #{record.feeReason,jdbcType=VARCHAR},
+      total_amount = #{record.totalAmount,jdbcType=DECIMAL},
+      last_pay_time = #{record.lastPayTime,jdbcType=TIMESTAMP},
+      pay_status = #{record.payStatus,jdbcType=TINYINT},
+      is_expire = #{record.isExpire,jdbcType=TINYINT},
+      pay_type = #{record.payType,jdbcType=TINYINT},
+      generate_status = #{record.generateStatus,jdbcType=TINYINT},
+      derate_state = #{record.derateState,jdbcType=TINYINT},
+      send_pay_bill = #{record.sendPayBill,jdbcType=TINYINT},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.pmpaybill.entity.TbPmPayBillItem">
+    update tb_pm_pay_bill_item
+    <set>
+      <if test="billId != null">
+        bill_id = #{billId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        company_id = #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyAddress != null">
+        company_address = #{companyAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="calcMode != null">
+        calc_mode = #{calcMode,jdbcType=TINYINT},
+      </if>
+      <if test="payPeriod != null">
+        pay_period = #{payPeriod,jdbcType=VARCHAR},
+      </if>
+      <if test="billAcount != null">
+        bill_acount = #{billAcount,jdbcType=DECIMAL},
+      </if>
+      <if test="feeAmount != null">
+        fee_amount = #{feeAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="feeReason != null">
+        fee_reason = #{feeReason,jdbcType=VARCHAR},
+      </if>
+      <if test="totalAmount != null">
+        total_amount = #{totalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="lastPayTime != null">
+        last_pay_time = #{lastPayTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payStatus != null">
+        pay_status = #{payStatus,jdbcType=TINYINT},
+      </if>
+      <if test="isExpire != null">
+        is_expire = #{isExpire,jdbcType=TINYINT},
+      </if>
+      <if test="payType != null">
+        pay_type = #{payType,jdbcType=TINYINT},
+      </if>
+      <if test="generateStatus != null">
+        generate_status = #{generateStatus,jdbcType=TINYINT},
+      </if>
+      <if test="derateState != null">
+        derate_state = #{derateState,jdbcType=TINYINT},
+      </if>
+      <if test="sendPayBill != null">
+        send_pay_bill = #{sendPayBill,jdbcType=TINYINT},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.pmpaybill.entity.TbPmPayBillItem">
+    update tb_pm_pay_bill_item
+    set bill_id = #{billId,jdbcType=VARCHAR},
+      company_id = #{companyId,jdbcType=VARCHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      company_address = #{companyAddress,jdbcType=VARCHAR},
+      calc_mode = #{calcMode,jdbcType=TINYINT},
+      pay_period = #{payPeriod,jdbcType=VARCHAR},
+      bill_acount = #{billAcount,jdbcType=DECIMAL},
+      fee_amount = #{feeAmount,jdbcType=DECIMAL},
+      fee_reason = #{feeReason,jdbcType=VARCHAR},
+      total_amount = #{totalAmount,jdbcType=DECIMAL},
+      last_pay_time = #{lastPayTime,jdbcType=TIMESTAMP},
+      pay_status = #{payStatus,jdbcType=TINYINT},
+      is_expire = #{isExpire,jdbcType=TINYINT},
+      pay_type = #{payType,jdbcType=TINYINT},
+      generate_status = #{generateStatus,jdbcType=TINYINT},
+      derate_state = #{derateState,jdbcType=TINYINT},
+      send_pay_bill = #{sendPayBill,jdbcType=TINYINT},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

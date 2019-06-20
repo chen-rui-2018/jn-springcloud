@@ -20,6 +20,8 @@ public class AdvisorProductInfo implements Serializable {
     private String serialNumber;
     @ApiModelProperty(value = "产品名称")
     private String productName;
+    @ApiModelProperty(value = "领域id")
+    private String signoryId;
     @ApiModelProperty(value ="机构名称")
     private String orgName;
     @ApiModelProperty(value = "顾问名称")
@@ -172,5 +174,36 @@ public class AdvisorProductInfo implements Serializable {
 
     public void setEvaluationNumber(String evaluationNumber) {
         this.evaluationNumber = evaluationNumber;
+    }
+
+    public String getSignoryId() {
+        return signoryId;
+    }
+
+    public void setSignoryId(String signoryId) {
+        this.signoryId = signoryId;
+    }
+
+    @Override
+    public String toString() {
+        return "AdvisorProductInfo{" +
+                "productId='" + productId + '\'' +
+                ", serialNumber='" + serialNumber + '\'' +
+                ", productName='" + productName + '\'' +
+                ", signoryId='" + signoryId + '\'' +
+                ", orgName='" + orgName + '\'' +
+                ", advisorName='" + advisorName + '\'' +
+                ", referPrice='" + referPrice + '\'' +
+                ", serviceCycle='" + serviceCycle + '\'' +
+                ", pictureUrl='" + pictureUrl + '\'' +
+                ", transactionsNumber=" + transactionsNumber +
+                ", viewCount=" + viewCount +
+                ", evaluationScore='" + evaluationScore + '\'' +
+                ", evaluationNumber='" + evaluationNumber + '\'' +
+                ", serviceTotal=" + serviceTotal +
+                ", commonTotal=" + commonTotal +
+                ", featureTotal=" + featureTotal +
+                ", praiseTotal=" + praiseTotal +
+                '}';
     }
 }

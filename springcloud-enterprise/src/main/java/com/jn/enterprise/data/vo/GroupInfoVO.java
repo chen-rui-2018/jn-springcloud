@@ -24,13 +24,13 @@ public class GroupInfoVO implements Serializable {
     private String groupComment;
     @ApiModelProperty(value = "创建者账号",example = "zhansan")
     private String creatorAccount;
-    @ApiModelProperty(value = "创建时间",example = "2018-21-12 23:69:61")
+    @ApiModelProperty(value = "创建时间",example = "2018-21-12")
     private Date createTime;
     @ApiModelProperty(value = "是否删除（0标记删除，1正常）",example = "0")
     private String recordStatus;
     @ApiModelProperty(value = "最新更新者账号",example = "lishi")
     private String modifierAccount;
-    @ApiModelProperty(value = "最新更新时间",example = "2018-21-12 23:69:61")
+    @ApiModelProperty(value = "最新更新时间",example = "2018-21-12")
     private Date modifiedTime;
 
     @ApiModelProperty(value = "选中的公司列表",example = "公司列表")

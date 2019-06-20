@@ -31,8 +31,8 @@ public class ActivityListApply implements Serializable {
     @ApiModelProperty(value = "活动地址")
     private String actiAddress;
     @ApiModelProperty(value = "活动开始时间")
-    private Date actiStartTime;
-    @ApiModelProperty(value = "活动状态 , 2报名中 3活动结束4活动取消")
+    private String actiStartTime;
+    @ApiModelProperty(value = "活动状态 , 2报名中 3活动结束4活动取消6报名已结束")
     private String actiStatus;
 
     public String getId() {
@@ -93,11 +93,11 @@ public class ActivityListApply implements Serializable {
         this.actiAddress = actiAddress;
     }
 
-    public Date getActiStartTime() {
+    public String getActiStartTime() {
         return actiStartTime;
     }
 
-    public void setActiStartTime(Date actiStartTime) {
+    public void setActiStartTime(String actiStartTime) {
         this.actiStartTime = actiStartTime;
     }
 
@@ -107,5 +107,20 @@ public class ActivityListApply implements Serializable {
 
     public void setActiStatus(String actiStatus) {
         this.actiStatus = actiStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "ActivityListApply{" +
+                "id='" + id + '\'' +
+                ", actiName='" + actiName + '\'' +
+                ", typeName='" + typeName + '\'' +
+                ", actiCost=" + actiCost +
+                ", actiOrganizer='" + actiOrganizer + '\'' +
+                ", parkName='" + parkName + '\'' +
+                ", actiAddress='" + actiAddress + '\'' +
+                ", actiStartTime='" + actiStartTime + '\'' +
+                ", actiStatus='" + actiStatus + '\'' +
+                '}';
     }
 }

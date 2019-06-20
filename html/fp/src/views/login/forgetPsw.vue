@@ -9,7 +9,9 @@
       <div class="tipPsw">请输入账号绑定的手机号码</div>
       <div class="yanzheng">
         <input class="input" type="text" placeholder="请输入验证码" style="width:140px" v-model="messageCode">
-        <span class="getCode" @click="getCode">获取验证码</span>
+        <span class="getCode" v-if="sendAuthCode" @click="getCode">获取验证码</span>
+        <span class="getCode" v-else style="padding: 10px 15px;">
+          <span>{{auth_time}}</span>秒后重新获取</span>
       </div>
       <div class="tipPsw">请输入收到短信中的验证码</div>
       <input class="input" type="password" placeholder="请输入新密码" v-model="password">
@@ -25,6 +27,8 @@
 export default {
   data() {
     return {
+      sendAuthCode: true,
+      auth_time: 0,
       phone: "",
       messageCode: "",
       password: "",
@@ -34,7 +38,7 @@ export default {
   created() {},
   methods: {
     handleLogin() {
-      this.$router.push({ path: "/" });
+      this.$router.push({ path: "/login" });
     },
     submit() {
       let phone = /^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\d{8}$/;
@@ -95,7 +99,15 @@ export default {
         // urlFlag: true,
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
+            _this.sendAuthCode = false;
+            _this.auth_time = 60;
+            var auth_timetimer = setInterval(() => {
+              _this.auth_time--;
+              if (_this.auth_time <= 0) {
+                _this.sendAuthCode = true;
+                clearInterval(auth_timetimer);
+              }
+            }, 1000);
           } else {
             _this.$message.error(res.result);
           }
@@ -119,6 +131,9 @@ export default {
   z-index: -1;
   background: url("../../../static/img/beijing.png") 100% 100% / 100% 100%
     no-repeat;
+  input:focus {
+    border-color: #00a041 !important;
+  }
   .returnBack {
     color: #00a041;
     cursor: pointer;
@@ -140,7 +155,7 @@ export default {
   }
   .registerBox,
   .registerBox2 {
-    background: rgba(255, 255, 255, .95);
+    background: rgba(255, 255, 255, 0.95);
     padding: 21px 95px;
     padding-bottom: 35px;
     width: 282px;

@@ -12,8 +12,10 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "RequireInfoList", description = "需求管理列表信息（后台门户管理）")
-public class RequirePortalInfoList extends Page implements Serializable {
+@ApiModel(value = "RequirePortalInfoList", description = "需求管理列表信息（后台门户管理）")
+public class RequirePortalInfoList  implements Serializable {
+    @ApiModelProperty(value = "需求id")
+    private String id;
     @ApiModelProperty(value = "需求单号")
     private String reqNum;
     @ApiModelProperty(value = "企业名称")
@@ -42,6 +44,14 @@ public class RequirePortalInfoList extends Page implements Serializable {
     private String requireTime;
     @ApiModelProperty(value = "对接结果")
     private String handleResult;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getReqNum() {
         return reqNum;

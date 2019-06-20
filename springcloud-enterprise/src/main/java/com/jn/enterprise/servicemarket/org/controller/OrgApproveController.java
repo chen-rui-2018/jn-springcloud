@@ -15,8 +15,10 @@ import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
+import com.jn.system.model.User;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -39,6 +41,10 @@ public class OrgApproveController extends BaseController{
      * 日志组件
      */
     private static Logger logger = LoggerFactory.getLogger(OrgApproveController.class);
+
+    protected User getUser(){
+        return  (User) SecurityUtils.getSubject().getPrincipal();
+    }
 
     @Autowired
     private OrgApproveService orgApproveService;
@@ -72,13 +78,5 @@ public class OrgApproveController extends BaseController{
         return new Result<>(orgApplyDetailVo);
     }
 
-    @ControllerLog(doAction = "服务机构申请审核")
-    @ApiOperation(value = "服务机构申请审核")
-    @RequestMapping(value = "/checkOrgApply",method = RequestMethod.POST)
-    @RequiresPermissions("/serviceMarket/OrgApproveController/checkOrgApply")
-    public Result<Boolean> checkOrgApply(@RequestBody OrgApplyCheckData orgApplyCheckData){
-        Boolean aBoolean = orgApproveService.checkOrgApply(orgApplyCheckData);
-        return new Result<>(aBoolean);
-    }
 
 }

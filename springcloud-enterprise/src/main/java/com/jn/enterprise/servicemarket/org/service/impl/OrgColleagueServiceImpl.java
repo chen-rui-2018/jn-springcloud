@@ -26,6 +26,7 @@ import com.jn.system.model.User;
 import com.jn.system.vo.SysGroupVO;
 import com.jn.system.vo.SysUserRoleVO;
 import com.jn.user.api.UserExtensionClient;
+import com.jn.user.enums.HomeRoleEnum;
 import com.jn.user.model.AffiliateParam;
 import com.jn.user.model.UserAffiliateInfo;
 import com.jn.user.model.UserExtensionInfo;
@@ -80,15 +81,6 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
     @ServiceLog(doAction = "机构同事列表查询")
     @Override
     public PaginationData getOrgColleagueList(String account, OrgColleagueParam orgColleagueParam) {
-        com.github.pagehelper.Page<Object> objects = null;
-        //分页标识
-        String isPage="1";
-        //是否分页标识
-        boolean needPage=false;
-        if(orgColleagueParam != null && orgColleagueParam.getNeedPage()!=null
-                && isPage.equals(orgColleagueParam.getNeedPage())){
-            needPage=true;
-        }
         //根据用户账号获取用户所属机构编码
         Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(account);
         if(userExtension==null || userExtension.getData()==null){
@@ -101,12 +93,30 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
         //所属机构入参
         AffiliateParam affiliateParam=new AffiliateParam();
         affiliateParam.setAffiliateCode(affiliateCode);
+        if(StringUtils.isNotBlank(orgColleagueParam.getName())){
+            affiliateParam.setName(orgColleagueParam.getName());
+        }
+        com.github.pagehelper.Page<Object> objects = null;
+        //分页标识
+        String isPage="1";
+        //是否分页标识
+        boolean needPage=false;
+        if(orgColleagueParam != null && orgColleagueParam.getNeedPage()!=null
+                && isPage.equals(orgColleagueParam.getNeedPage())){
+            needPage=true;
+        }
         if(needPage) {
             objects = PageHelper.startPage(orgColleagueParam.getPage(),
                     orgColleagueParam.getRows() == 0 ? 15 : orgColleagueParam.getRows(), true);
             affiliateParam.setPage(orgColleagueParam.getPage());
             affiliateParam.setRows(orgColleagueParam.getRows() == 0 ? 15 : orgColleagueParam.getRows());
             affiliateParam.setNeedPage(orgColleagueParam.getNeedPage());
+        }else{
+            //跨服务调用需要分页，前端不分页查询直接查询200条数据
+            objects = PageHelper.startPage(1,200);
+            affiliateParam.setPage(1);
+            affiliateParam.setRows(200);
+            affiliateParam.setNeedPage("1");
         }
         //跨服务根据所属机构编码批量获取用户信息
         Result userExtensionByAffiliateCode = userExtensionClient.getUserExtensionByAffiliateCode(affiliateParam);
@@ -118,6 +128,7 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
         Map<String,Object> pageData = (Map<String,Object>)userExtensionByAffiliateCode.getData();
         List<UserExtensionInfo> userExtensionInfoList=new ArrayList<>(16);
         List userList=(List)pageData.get("rows");
+        Integer total=(Integer) pageData.get("total");
         ObjectMapper objectMapper = new ObjectMapper();
         for(int i=0;i<userList.size();i++){
             UserExtensionInfo userExtensionInfo = objectMapper.convertValue(userList.get(i), UserExtensionInfo.class);
@@ -135,16 +146,67 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
         //从顾问信息表获取用户毕业学校，担任职务，入驻时间
         List<TbServiceAdvisor> tbServiceAdvisorList = getTbServiceAdvisorList(accountList);
         List<OrgColleagueInfo> orgColleagueInfoList=new ArrayList<>();
+        String loginAccountRoleName="";
         for(UserExtensionInfo extensionInfo:userExtensionInfoList){
             OrgColleagueInfo orgColleagueInfo=new OrgColleagueInfo();
             BeanUtils.copyProperties(extensionInfo, orgColleagueInfo);
             //遍历机构身份表，设置用户机构身份，
-            setUserRoleName(userRoleInfoList, extensionInfo, orgColleagueInfo);
+            String accountRoleName = setUserRoleName(userRoleInfoList, extensionInfo, orgColleagueInfo, account);
+            if(StringUtils.isNotBlank(accountRoleName)){
+                loginAccountRoleName=accountRoleName;
+            }
             //设置用户教育信息（毕业学校，担任职务，入驻时间）
             setUserEducationInfo(tbServiceAdvisorList, extensionInfo, orgColleagueInfo);
             orgColleagueInfoList.add(orgColleagueInfo);
         }
-        return new PaginationData(orgColleagueInfoList,objects == null ? 0 : objects.getTotal());
+        //设置用户对机构同事的操作权限
+        setOptionPermissions(orgColleagueInfoList,loginAccountRoleName);
+        return new PaginationData(orgColleagueInfoList,total==null ? 0 :total.intValue());
+    }
+
+    /**
+     * 设置用户对机构同事的操作权限
+     * @param orgColleagueInfoList
+     * @param loginAccountRoleName
+     */
+    @ServiceLog(doAction = "设置用户对机构同事的操作权限")
+    private void setOptionPermissions(List<OrgColleagueInfo> orgColleagueInfoList, String loginAccountRoleName) {
+        //登录用户是机构管理员
+        if(StringUtils.equals(HomeRoleEnum.ORG_ADMIN.getCode(),loginAccountRoleName)){
+            for(OrgColleagueInfo orgInfo:orgColleagueInfoList){
+                if(StringUtils.equals(orgInfo.getOrgIdentity(),HomeRoleEnum.ORG_ADMIN.getCode())){
+                    //ignore(机构管理员,全部操作权限为false)
+                }else if(StringUtils.equals(orgInfo.getOrgIdentity(),HomeRoleEnum.ORG_CONTACTS.getCode())){
+                    //机构联系人,取消联系人设为true
+                    orgInfo.setCancelContact(true);
+                    //删除设为true
+                    orgInfo.setDelOrgAdvisor(true);
+                    //详情设为true
+                    orgInfo.setOrgDetail(true);
+                }else if(StringUtils.equals(orgInfo.getOrgIdentity(), HomeRoleEnum.ORG_ADVISER.getCode())){
+                    //机构专员,设为联系人设为true
+                    orgInfo.setSetContact(true);
+                    //删除设为true
+                    orgInfo.setDelOrgAdvisor(true);
+                    //详情设为true
+                    orgInfo.setOrgDetail(true);
+                }
+            }
+        }else if(StringUtils.equals(HomeRoleEnum.ORG_CONTACTS.getCode(),loginAccountRoleName)
+                ||StringUtils.equals(HomeRoleEnum.ORG_ADVISER.getCode(),loginAccountRoleName)){
+            //登录用户是机构联系人或机构专员
+            for(OrgColleagueInfo orgInfo:orgColleagueInfoList){
+                if(StringUtils.equals(orgInfo.getOrgIdentity(),HomeRoleEnum.ORG_ADMIN.getCode())){
+                    //ignore(机构管理员,全部操作权限为false)
+                }else if(StringUtils.equals(orgInfo.getOrgIdentity(),HomeRoleEnum.ORG_CONTACTS.getCode())){
+                    //详情设为true
+                    orgInfo.setOrgDetail(true);
+                }else if(StringUtils.equals(orgInfo.getOrgIdentity(), HomeRoleEnum.ORG_ADVISER.getCode())){
+                    //详情设为true
+                    orgInfo.setOrgDetail(true);
+                }
+            }
+        }
     }
 
     /**
@@ -158,8 +220,14 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
         for(TbServiceAdvisor tbServiceAdvisor:tbServiceAdvisorList){
             //账号相同,设置毕业学校，担任职务，入驻日期
             if(StringUtils.equals(extensionInfo.getAccount(),tbServiceAdvisor.getAdvisorAccount() )){
+                //从业年限
+                orgColleagueInfo.setWorkingYears(tbServiceAdvisor.getWorkingYears().toString());
                 //毕业学校
                 orgColleagueInfo.setGraduatedSchool(tbServiceAdvisor.getGraduatedSchool());
+                //学历
+                orgColleagueInfo.setEducation(tbServiceAdvisor.getEducation());
+                //联系邮箱
+                orgColleagueInfo.setEmail(tbServiceAdvisor.getContactEmail());
                 //担任职务
                 orgColleagueInfo.setPosition(tbServiceAdvisor.getPosition());
                 //入驻日期
@@ -178,13 +246,19 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
      * @param userRoleInfoList
      * @param extensionInfo
      * @param orgColleagueInfo
+     * @param account  登录用户账号
      */
     @ServiceLog(doAction = "设置用户的角色名称")
-    private void setUserRoleName(List<UserRoleInfo> userRoleInfoList, UserExtensionInfo extensionInfo, OrgColleagueInfo orgColleagueInfo) {
+    private String setUserRoleName(List<UserRoleInfo> userRoleInfoList, UserExtensionInfo extensionInfo,
+                                   OrgColleagueInfo orgColleagueInfo,String account) {
+        String loginAccountRoleName="";
         for(UserRoleInfo userRoleInfo: userRoleInfoList){
-            if(extensionInfo.getAccount().equals(userRoleInfo.getAccount())){
+            if(StringUtils.equals(extensionInfo.getAccount(),userRoleInfo.getAccount())){
+                if(StringUtils.equals(userRoleInfo.getAccount(),account)){
+                    loginAccountRoleName=userRoleInfo.getRoleName();
+                }
                 orgColleagueInfo.setOrgIdentity(userRoleInfo.getRoleName());
-                String orgMangeRole="机构管理员";
+                String orgMangeRole=HomeRoleEnum.ORG_ADMIN.getCode();
                 //判断是否为机构管理员，若是从机构表获取入驻日期
                 if(orgMangeRole.equals(userRoleInfo.getRoleName())){
                     //用户基本信息（手机，邮箱，职位，学历，毕业学校）
@@ -197,6 +271,7 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
                 break;
             }
         }
+        return loginAccountRoleName;
     }
 
     /**
@@ -237,7 +312,7 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
     @Override
     public List<UserRoleInfo> getUserRoleInfoList(List<String> accountList,String roleName) {
         Result<List<User>> resultData = systemClient.getUserInfoByAccount(accountList);
-        List<User> userInfoList = resultData.getData();
+        List<User> userInfoList = resultData.getData()==null?Collections.EMPTY_LIST:resultData.getData();
         List<UserRoleInfo> userRoleInfoList=new ArrayList<>(16);
         for(User user:userInfoList){
             UserRoleInfo userRoleInfo=new UserRoleInfo();
@@ -282,14 +357,14 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
         judgeRoleIsOrgManage(loginAccount);
         List<String> accountList =new ArrayList<>(16);
         accountList.add(account);
-        String roleName="机构顾问";
+        String roleName= HomeRoleEnum.ORG_ADVISER.getCode();
         List<UserRoleInfo> userRoleInfoList = getUserRoleInfoList(accountList, roleName);
         if(userRoleInfoList.isEmpty() || !roleName.equals(userRoleInfoList.get(0).getRoleName())){
             logger.warn("设置为联系人的账号：[{}]，不是机构顾问",account);
             throw new JnSpringCloudException(OrgExceptionEnum.ACCOUNT_NOT_ORG_ADVISOR);
         }
         //获取机构联系人角色id
-        roleName="机构联系人";
+        roleName=HomeRoleEnum.ORG_CONTACTS.getCode();
         Result<SysRole> sysRoleData = systemClient.getRoleByName(roleName);
         if(sysRoleData==null || sysRoleData.getData()==null){
             logger.warn("设置为联系人,获取机构联系人角色id失败");
@@ -313,14 +388,14 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
         judgeRoleIsOrgManage(loginAccount);
         List<String> accountList =new ArrayList<>(16);
         accountList.add(account);
-        String roleName="机构联系人";
+        String roleName=HomeRoleEnum.ORG_CONTACTS.getCode();
         List<UserRoleInfo> userRoleInfoList = getUserRoleInfoList(accountList, roleName);
         if(userRoleInfoList.isEmpty() || !roleName.equals(userRoleInfoList.get(0).getRoleName())){
             logger.warn("取消联系人的账号：[{}]，不是机构联系人",account);
             throw new JnSpringCloudException(OrgExceptionEnum.ACCOUNT_NOT_ORG_CONTACT);
         }
         //获取机构顾问角色id
-        roleName="机构顾问";
+        roleName=HomeRoleEnum.ORG_ADVISER.getCode();
         Result<SysRole> sysRoleData = systemClient.getRoleByName(roleName);
         if(sysRoleData==null || sysRoleData.getData()==null){
             logger.warn("取消联系人,获取机构顾问角色id失败");
@@ -341,7 +416,7 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
     private void judgeRoleIsOrgManage(String loginAccount) {
         List<String> accountList=new ArrayList<>(16);
         accountList.add(loginAccount);
-        String roleName="机构管理员";
+        String roleName=HomeRoleEnum.ORG_ADMIN.getCode();
         List<UserRoleInfo> userRoleInfoList = getUserRoleInfoList(accountList, roleName);
         if(userRoleInfoList.isEmpty() || !roleName.equals(userRoleInfoList.get(0).getRoleName())){
             logger.warn("当前登录用户不是{}，不能进行当前操作",roleName);
@@ -356,7 +431,8 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
      * @param addRoleId  要修改的角色
      */
     @ServiceLog(doAction = "修改机构下用户角色")
-    private Boolean updateOrgUserRole(String account, String delRoleId, String addRoleId) {
+    @Override
+    public Boolean updateOrgUserRole(String account, String delRoleId, String addRoleId) {
         SysUserRoleVO sysUserRoleVO=new SysUserRoleVO();
         User user=new User();
         user.setAccount(account);
@@ -397,17 +473,25 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
         tbServiceAdvisorMapper.updateByExampleSelective(tbServiceAdvisor, example);
         //清空用户信息表中的所属机构编码和机构名称
         UserAffiliateInfo userAffiliateInfo=new UserAffiliateInfo();
-        userAffiliateInfo.setAccountList(accountList);
+        userAffiliateInfo.setAccountList(Arrays.asList(accountList));
         userAffiliateInfo.setAffiliateCode("");
         userAffiliateInfo.setAffiliateName("");
         userExtensionClient.updateAffiliateInfo(userAffiliateInfo);
-        //删除用户角色信息
+        //删除用户机构相关角色信息
         List<String> accounts = Arrays.asList(accountList);
         String roleName="机构";
         List<UserRoleInfo> userRoleInfoList = getUserRoleInfoList(accounts, roleName);
+        //把普通用户角色赋给用户
+        roleName="普通用户";
+        Result<SysRole> roleByName = systemClient.getRoleByName(roleName);
+        if(roleByName==null || roleByName.getData()==null){
+            logger.warn("删除联系人或顾问异常，获取“普通用户”角色信息失败");
+            throw new JnSpringCloudException(OrgExceptionEnum.NETWORK_ANOMALY);
+        }
+        String addRoleId=roleByName.getData().getId();
         int responseNum=0;
         for(UserRoleInfo userRoleInfo:userRoleInfoList){
-            Boolean isSuccess = updateOrgUserRole(userRoleInfo.getAccount(), userRoleInfo.getRoleId(), "");
+            Boolean isSuccess = updateOrgUserRole(userRoleInfo.getAccount(), userRoleInfo.getRoleId(), addRoleId);
             if(isSuccess){
                 logger.info("删除[{}]角色信息成功",userRoleInfo.getAccount());
                 responseNum++;

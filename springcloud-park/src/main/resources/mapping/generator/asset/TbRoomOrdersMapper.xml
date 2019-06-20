@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.asset.dao.TbRoomOrdersMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.asset.entity.TbRoomOrders">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="enterprise_id" jdbcType="VARCHAR" property="enterpriseId" />
+    <result column="lease_enterprise" jdbcType="VARCHAR" property="leaseEnterprise" />
+    <result column="lease_start_time" jdbcType="DATE" property="leaseStartTime" />
+    <result column="lease_end_time" jdbcType="DATE" property="leaseEndTime" />
+    <result column="contact_name" jdbcType="VARCHAR" property="contactName" />
+    <result column="contact_phone" jdbcType="VARCHAR" property="contactPhone" />
+    <result column="pay_sum" jdbcType="DECIMAL" property="paySum" />
+    <result column="pay_state" jdbcType="TINYINT" property="payState" />
+    <result column="apply_time" jdbcType="DATE" property="applyTime" />
+    <result column="explain_" jdbcType="VARCHAR" property="explain" />
+    <result column="approval_opinion" jdbcType="VARCHAR" property="approvalOpinion" />
+    <result column="is_relet" jdbcType="TINYINT" property="isRelet" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, enterprise_id, lease_enterprise, lease_start_time, lease_end_time, contact_name, 
+    contact_phone, pay_sum, pay_state, apply_time, explain_, approval_opinion, is_relet, 
+    record_status, creator_account, create_time, modifier_account, modified_time
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.park.asset.entity.TbRoomOrdersCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_room_orders
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_room_orders
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_room_orders
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.park.asset.entity.TbRoomOrdersCriteria">
+    delete from tb_room_orders
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.park.asset.entity.TbRoomOrders">
+    insert into tb_room_orders (id, enterprise_id, lease_enterprise, 
+      lease_start_time, lease_end_time, contact_name, 
+      contact_phone, pay_sum, pay_state, 
+      apply_time, explain_, approval_opinion, 
+      is_relet, record_status, creator_account, 
+      create_time, modifier_account, modified_time
+      )
+    values (#{id,jdbcType=VARCHAR}, #{enterpriseId,jdbcType=VARCHAR}, #{leaseEnterprise,jdbcType=VARCHAR}, 
+      #{leaseStartTime,jdbcType=DATE}, #{leaseEndTime,jdbcType=DATE}, #{contactName,jdbcType=VARCHAR}, 
+      #{contactPhone,jdbcType=VARCHAR}, #{paySum,jdbcType=DECIMAL}, #{payState,jdbcType=TINYINT}, 
+      #{applyTime,jdbcType=DATE}, #{explain,jdbcType=VARCHAR}, #{approvalOpinion,jdbcType=VARCHAR}, 
+      #{isRelet,jdbcType=TINYINT}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.park.asset.entity.TbRoomOrders">
+    insert into tb_room_orders
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="enterpriseId != null">
+        enterprise_id,
+      </if>
+      <if test="leaseEnterprise != null">
+        lease_enterprise,
+      </if>
+      <if test="leaseStartTime != null">
+        lease_start_time,
+      </if>
+      <if test="leaseEndTime != null">
+        lease_end_time,
+      </if>
+      <if test="contactName != null">
+        contact_name,
+      </if>
+      <if test="contactPhone != null">
+        contact_phone,
+      </if>
+      <if test="paySum != null">
+        pay_sum,
+      </if>
+      <if test="payState != null">
+        pay_state,
+      </if>
+      <if test="applyTime != null">
+        apply_time,
+      </if>
+      <if test="explain != null">
+        explain_,
+      </if>
+      <if test="approvalOpinion != null">
+        approval_opinion,
+      </if>
+      <if test="isRelet != null">
+        is_relet,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="enterpriseId != null">
+        #{enterpriseId,jdbcType=VARCHAR},
+      </if>
+      <if test="leaseEnterprise != null">
+        #{leaseEnterprise,jdbcType=VARCHAR},
+      </if>
+      <if test="leaseStartTime != null">
+        #{leaseStartTime,jdbcType=DATE},
+      </if>
+      <if test="leaseEndTime != null">
+        #{leaseEndTime,jdbcType=DATE},
+      </if>
+      <if test="contactName != null">
+        #{contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactPhone != null">
+        #{contactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="paySum != null">
+        #{paySum,jdbcType=DECIMAL},
+      </if>
+      <if test="payState != null">
+        #{payState,jdbcType=TINYINT},
+      </if>
+      <if test="applyTime != null">
+        #{applyTime,jdbcType=DATE},
+      </if>
+      <if test="explain != null">
+        #{explain,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalOpinion != null">
+        #{approvalOpinion,jdbcType=VARCHAR},
+      </if>
+      <if test="isRelet != null">
+        #{isRelet,jdbcType=TINYINT},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.park.asset.entity.TbRoomOrdersCriteria" resultType="java.lang.Long">
+    select count(*) from tb_room_orders
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_room_orders
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.enterpriseId != null">
+        enterprise_id = #{record.enterpriseId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.leaseEnterprise != null">
+        lease_enterprise = #{record.leaseEnterprise,jdbcType=VARCHAR},
+      </if>
+      <if test="record.leaseStartTime != null">
+        lease_start_time = #{record.leaseStartTime,jdbcType=DATE},
+      </if>
+      <if test="record.leaseEndTime != null">
+        lease_end_time = #{record.leaseEndTime,jdbcType=DATE},
+      </if>
+      <if test="record.contactName != null">
+        contact_name = #{record.contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactPhone != null">
+        contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.paySum != null">
+        pay_sum = #{record.paySum,jdbcType=DECIMAL},
+      </if>
+      <if test="record.payState != null">
+        pay_state = #{record.payState,jdbcType=TINYINT},
+      </if>
+      <if test="record.applyTime != null">
+        apply_time = #{record.applyTime,jdbcType=DATE},
+      </if>
+      <if test="record.explain != null">
+        explain_ = #{record.explain,jdbcType=VARCHAR},
+      </if>
+      <if test="record.approvalOpinion != null">
+        approval_opinion = #{record.approvalOpinion,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isRelet != null">
+        is_relet = #{record.isRelet,jdbcType=TINYINT},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_room_orders
+    set id = #{record.id,jdbcType=VARCHAR},
+      enterprise_id = #{record.enterpriseId,jdbcType=VARCHAR},
+      lease_enterprise = #{record.leaseEnterprise,jdbcType=VARCHAR},
+      lease_start_time = #{record.leaseStartTime,jdbcType=DATE},
+      lease_end_time = #{record.leaseEndTime,jdbcType=DATE},
+      contact_name = #{record.contactName,jdbcType=VARCHAR},
+      contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
+      pay_sum = #{record.paySum,jdbcType=DECIMAL},
+      pay_state = #{record.payState,jdbcType=TINYINT},
+      apply_time = #{record.applyTime,jdbcType=DATE},
+      explain_ = #{record.explain,jdbcType=VARCHAR},
+      approval_opinion = #{record.approvalOpinion,jdbcType=VARCHAR},
+      is_relet = #{record.isRelet,jdbcType=TINYINT},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.asset.entity.TbRoomOrders">
+    update tb_room_orders
+    <set>
+      <if test="enterpriseId != null">
+        enterprise_id = #{enterpriseId,jdbcType=VARCHAR},
+      </if>
+      <if test="leaseEnterprise != null">
+        lease_enterprise = #{leaseEnterprise,jdbcType=VARCHAR},
+      </if>
+      <if test="leaseStartTime != null">
+        lease_start_time = #{leaseStartTime,jdbcType=DATE},
+      </if>
+      <if test="leaseEndTime != null">
+        lease_end_time = #{leaseEndTime,jdbcType=DATE},
+      </if>
+      <if test="contactName != null">
+        contact_name = #{contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactPhone != null">
+        contact_phone = #{contactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="paySum != null">
+        pay_sum = #{paySum,jdbcType=DECIMAL},
+      </if>
+      <if test="payState != null">
+        pay_state = #{payState,jdbcType=TINYINT},
+      </if>
+      <if test="applyTime != null">
+        apply_time = #{applyTime,jdbcType=DATE},
+      </if>
+      <if test="explain != null">
+        explain_ = #{explain,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalOpinion != null">
+        approval_opinion = #{approvalOpinion,jdbcType=VARCHAR},
+      </if>
+      <if test="isRelet != null">
+        is_relet = #{isRelet,jdbcType=TINYINT},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.asset.entity.TbRoomOrders">
+    update tb_room_orders
+    set enterprise_id = #{enterpriseId,jdbcType=VARCHAR},
+      lease_enterprise = #{leaseEnterprise,jdbcType=VARCHAR},
+      lease_start_time = #{leaseStartTime,jdbcType=DATE},
+      lease_end_time = #{leaseEndTime,jdbcType=DATE},
+      contact_name = #{contactName,jdbcType=VARCHAR},
+      contact_phone = #{contactPhone,jdbcType=VARCHAR},
+      pay_sum = #{paySum,jdbcType=DECIMAL},
+      pay_state = #{payState,jdbcType=TINYINT},
+      apply_time = #{applyTime,jdbcType=DATE},
+      explain_ = #{explain,jdbcType=VARCHAR},
+      approval_opinion = #{approvalOpinion,jdbcType=VARCHAR},
+      is_relet = #{isRelet,jdbcType=TINYINT},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

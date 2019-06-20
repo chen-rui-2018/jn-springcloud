@@ -1,10 +1,12 @@
 package com.jn.enterprise.servicemarket.product.model;
 
+import com.jn.enterprise.servicemarket.product.entity.TbServiceAndAdvisor;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
 import java.io.Serializable;
+import java.util.List;
 
 
 /**
@@ -42,11 +44,92 @@ public class ServiceContent  implements Serializable {
     @ApiModelProperty(value = "服务产品顾问账号")
     private String advisorAccount;
     @ApiModelProperty(value = "服务产品的详情存入数据库时,后台转换使用")
-    private byte[] serviceDetails;
+    private String  serviceDetails;
     @ApiModelProperty(value = "服务产品详情")
     private String productDetails;
+    @ApiModelProperty(value = "模板ID", hidden = true)
+    private String templateId;
+    @ApiModelProperty(value = "是否删除", hidden = true)
+    private String recordStatus;
+    @ApiModelProperty(value = "创建时间", hidden = true)
+    private String createdTime;
+    @ApiModelProperty(value = "创建者账号", hidden = true)
+    private String creatorAccount;
+    @ApiModelProperty(value = "修改时间", hidden = true)
+    private String modifiedTime;
+    @ApiModelProperty(value = "修改者账号", hidden = true)
+    private String modifierAccount;
+    @ApiModelProperty(value = "浏览数", hidden = true)
+    private String viewCount;
+
+    @ApiModelProperty(value = "顾问")
+    private List<TbServiceAndAdvisor> tb_service_and_advisor;
 
     private static final long serialVersionUID = 1L;
+
+    public String getModifiedTime() {
+        return modifiedTime;
+    }
+
+    public void setModifiedTime(String modifiedTime) {
+        this.modifiedTime = modifiedTime;
+    }
+
+    public String getModifierAccount() {
+        return modifierAccount;
+    }
+
+    public void setModifierAccount(String modifierAccount) {
+        this.modifierAccount = modifierAccount;
+    }
+
+    public String getViewCount() {
+        return viewCount;
+    }
+
+    public void setViewCount(String viewCount) {
+        this.viewCount = viewCount;
+    }
+
+    public List<TbServiceAndAdvisor> getTb_service_and_advisor() {
+        return tb_service_and_advisor;
+    }
+
+    public void setTb_service_and_advisor(List<TbServiceAndAdvisor> tb_service_and_advisor) {
+        this.tb_service_and_advisor = tb_service_and_advisor;
+    }
+
+    public String getTemplateId() {
+        return templateId;
+    }
+
+    public void setTemplateId(String templateId) {
+        this.templateId = templateId;
+    }
+
+    public String getRecordStatus() {
+        return recordStatus;
+    }
+
+    public void setRecordStatus(String recordStatus) {
+        this.recordStatus = recordStatus;
+    }
+
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public String getCreatorAccount() {
+        return creatorAccount;
+    }
+
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount;
+    }
 
     public String getProductId() {
         return productId;
@@ -136,11 +219,11 @@ public class ServiceContent  implements Serializable {
         this.advisorAccount = advisorAccount;
     }
 
-    public byte[] getServiceDetails() {
+    public String getServiceDetails() {
         return serviceDetails;
     }
 
-    public void setServiceDetails(byte[] serviceDetails) {
+    public void setServiceDetails(String serviceDetails) {
         this.serviceDetails = serviceDetails;
     }
 
@@ -166,5 +249,34 @@ public class ServiceContent  implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "ServiceContent{" +
+                "productId='" + productId + '\'' +
+                ", serialNumber='" + serialNumber + '\'' +
+                ", productName='" + productName + '\'' +
+                ", referPrice='" + referPrice + '\'' +
+                ", signoryId='" + signoryId + '\'' +
+                ", signoryName='" + signoryName + '\'' +
+                ", orgId='" + orgId + '\'' +
+                ", orgName='" + orgName + '\'' +
+                ", serviceCycle='" + serviceCycle + '\'' +
+                ", pictureUrl='" + pictureUrl + '\'' +
+                ", productType='" + productType + '\'' +
+                ", status='" + status + '\'' +
+                ", advisorAccount='" + advisorAccount + '\'' +
+                ", serviceDetails='" + serviceDetails + '\'' +
+                ", productDetails='" + productDetails + '\'' +
+                ", templateId='" + templateId + '\'' +
+                ", recordStatus='" + recordStatus + '\'' +
+                ", createdTime='" + createdTime + '\'' +
+                ", creatorAccount='" + creatorAccount + '\'' +
+                ", modifiedTime='" + modifiedTime + '\'' +
+                ", modifierAccount='" + modifierAccount + '\'' +
+                ", viewCount='" + viewCount + '\'' +
+                ", tb_service_and_advisor=" + tb_service_and_advisor +
+                '}';
     }
 }

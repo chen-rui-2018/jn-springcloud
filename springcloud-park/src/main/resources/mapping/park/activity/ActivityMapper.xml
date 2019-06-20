@@ -16,7 +16,9 @@
         a.acti_views as "actiViews", a.acti_like as "actiLike", a.apply_num as "applyNum",
         a.partic_num as "particNum",a.is_apply as "isApply",a.park_id as "parkId",co.code_name as "parkName",
         a.acti_order as "actiOrder",t.type_name as "typeName",a.show_apply_num as "showApplyNum",a.apply_check as "applyCheck"
-        from tb_activity a left join tb_activity_type t on a.acti_type = t.type_id left join tb_park_code co on co.id = a.park_id
+        from tb_activity a
+        left join tb_activity_type t on a.acti_type = t.type_id
+        left join tb_park_code co on co.id = a.park_id
         where 1=1  and a.record_status != '0'
         <if test="actiType != null and actiType != ''">
             and a.acti_type = #{actiType}
@@ -50,18 +52,22 @@
             ta.id as "id"                                                                                 <!--活动id-->
             ,ta.acti_name as "actiName"                                                                   <!--活动名称-->
             ,ta.acti_address as "actiAddress"                                                             <!--活动地址-->
+            ,ta.acti_status as "actiStatus"                                                               <!--活动状态-->
             ,date_format(ta.acti_start_time,'%Y-%m-%d %H:%i:%s') as "actiStartTime"                       <!--活动开始时间-->
             ,date_format(ta.acti_end_time,'%Y-%m-%d %H:%i:%s') as "actiEndTime"                           <!--活动结束时间-->
             ,ta.apply_num as "applyNum"                                                                   <!--活动报名人数-->
             ,ta.acti_like as "actiLike"                                                                   <!--活动点赞人数-->
             ,ta.acti_number as "actiNumber"                                                               <!--活动人数-->
             ,ta.acti_poster_url as "actiPosterUrl"                                                        <!--活动海报路径-->
-            ,ta.show_apply_num as "showApplyNum"
+            ,ta.show_apply_num as "showApplyNum"                                                          <!--活动报名人数-->
+            ,ta.is_index as "isIndex"                                                                     <!--是否置顶-->
+            ,ifnull(ta.acti_views,0) as "actiViews"                                                       <!--活动浏览人数-->
+            ,date_format(ta.issue_time,'%Y-%m-%d %H:%i:%s') as "issueTime"                                <!--活动发布时间-->
+            ,td.acti_detail AS "actiDetails"
             from tb_activity ta
             left join tb_activity_detail td on td.activity_id = ta.id
-            where 1=1
-            and ta.acti_status  not in ('1','5')                                                        <!--不展示活动状态为草稿(status=1),和已删除的的活动(status=5)-->
-            and ta.record_status != 0
+            where ta.record_status = 1
+            and ta.acti_status != '1'
             <if test="typeId != null and typeId !=''">
                 and  ta.acti_type = #{typeId,jdbcType=VARCHAR}
             </if>
@@ -81,7 +87,7 @@
         <if test = "orderBy != null and orderBy != ''">
             ${orderBy} desc,
         </if>
-        ta.acti_order desc
+        ta.is_index DESC, ta.acti_order DESC
     </select>
 
     <select id="findActivitySuccessfulRegistration" resultType="com.jn.park.activity.model.ActivityListApply">
@@ -93,15 +99,24 @@
         ,t1.acti_organizer as "actiOrganizer"
         ,t2.code_name as "parkName"
         ,t1.acti_address as "actiAddress"
-        ,date_format(t1.acti_start_time,"%Y-%m-%d %H:%m:%s") as "actiStartTime"
-        ,t1.acti_status as "actiStatus"
+        , date_format(t1.acti_start_time,'%Y-%m-%d %H:%i:%s') as "actiStartTime"
+        ,case
+         when (t1.acti_status = '4') then "4"
+         when(t1.acti_end_time &lt; now()) then "3"
+         when(t1.apply_start_time &lt; now() and t1.apply_end_time &gt; now()) then "2"
+         when(t1.apply_end_time &lt; now() and t1.acti_end_time &gt; now()) then "6"
+        end
+         as "actiStatus"  <!--活动状态 2报名中 3活动结束4活动取消6报名已结束-->
 
         from tb_activity t1
             left join tb_park_code t2 on t2.id =t1.park_id
             left join tb_activity_type t3 on t3.type_id = t1.acti_type
             where t1.record_status ='1' and t1.acti_status != '1' and  t1.id in (
-            select activity_id from tb_activity_apply where creator_account = #{account} and apply_status=#{applyStatus}
+              select activity_id from tb_activity_apply where creator_account = #{account} and apply_status=#{applyStatus}
             )
+            <if test = "actiName != null and actiName != '' ">
+                and t1.acti_name like  concat('%', #{actiName},'%')
+            </if>
     </select>
 
     <!--机构活动列表-->
@@ -118,6 +133,19 @@
         ,ta.acti_poster_url as "actiPosterUrl"                                                        <!--活动海报路径-->
         ,ta.show_apply_num as "showApplyNum"                                                          <!--报名人人数-->
         ,ta.acti_status as "actiStatus"                                                               <!--活动状态-->
+        ,(select count(1) from tb_activity ta1 where ta1.acti_status  not in ('1','5')
+                  and ta1.record_status != 0
+                  and ta1.acti_type = #{activityType,jdbcType=VARCHAR}) as "actiNum"  <!--活动总数-->
+        ,(select count(1) from tb_activity ta2 where ta2.acti_status  not in ('1','5')
+        and ta2.record_status != 0
+        and ta2.acti_type = #{activityType,jdbcType=VARCHAR}
+        and ta2.acti_start_time &gt; date_add(now(), interval -1 week)
+        and ta2.acti_start_time &lt; date_add(now(), interval 1 day)) as "weekNum"   <!--最近一周活动数-->
+        ,(select count(1) from tb_activity ta3 where ta3.acti_status  not in ('1','5')
+        and ta3.record_status != 0
+        and ta3.acti_type = #{activityType,jdbcType=VARCHAR}
+        and ta3.acti_start_time  &gt; date_add(now(), interval -1 month )
+        and ta3.acti_start_time &lt; date_add(now(), interval 1 day)) as "monthNum"  <!--最近一月活动数-->
         from tb_activity ta
         left join tb_activity_detail td on td.activity_id = ta.id
         where 1=1
@@ -131,6 +159,14 @@
         </if>
         <if test="endTime != null and endTime != ''">
             and ta.acti_start_time &lt;=   concat(#{endTime,jdbcType=VARCHAR}," 23:59:59")
+        </if>
+        <if test="timeInterval == 2">
+            and  ta.acti_start_time &gt; date_add(now(), interval -1 week)
+            and ta.acti_start_time &lt; date_add(now(), interval 1 day)
+        </if>
+        <if test="timeInterval == 1">
+            and  ta.acti_start_time  &gt; date_add(now(), interval -1 month )
+            and ta.acti_start_time &lt; date_add(now(), interval 1 day)
         </if>
         order by ta.acti_start_time desc,  ta.acti_order desc
     </select>

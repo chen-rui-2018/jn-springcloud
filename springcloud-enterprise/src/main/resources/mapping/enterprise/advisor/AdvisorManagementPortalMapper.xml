@@ -23,7 +23,7 @@
         LEFT JOIN tb_service_and_advisor sd
         ON sa.`advisor_account`=sd.`advisor_account`
         LEFT JOIN tb_service_product sp
-        ON sd.`product_id`=sp.`product_id`
+        ON sd.`product_id_`=sp.`product_id_`
         LEFT JOIN tb_service_rating sr
         ON sa.`advisor_account`=sr.`advisor_account`
         WHERE 1=1
@@ -40,7 +40,7 @@
             and date_format(sa.created_time,'%Y%m')&lt;=#{submitEndTime}
         </if>
         <if test="affiliation!=null and affiliation!=''"><!--提交开始时间精确搜索-->
-            and (sa.org_id like CONCAT('%', #{affiliation}, '%') or sa.org_name like CONCAT('%', #{affiliation}, '%'))
+            and (sa.org_id_ like CONCAT('%', #{affiliation}, '%') or sa.org_name like CONCAT('%', #{affiliation}, '%'))
         </if>
         GROUP BY  sa.`avatar` ,sa.`personal_profile`,sa.`org_name`
               ,sa.`is_certification`,sa.`working_years`,sa.`good_at_business`
@@ -67,7 +67,7 @@
         LEFT JOIN tb_service_and_advisor sd
         ON sa.`advisor_account`=sd.`advisor_account`
         LEFT JOIN tb_service_product sp
-        ON sd.`product_id`=sp.`product_id`
+        ON sd.`product_id_`=sp.`product_id_`
         LEFT JOIN tb_service_rating sr
         ON sa.`advisor_account`=sr.`advisor_account`
         WHERE  sa.advisor_account=#{advisorAccount}

@@ -20,7 +20,18 @@
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
-            <version>1.9.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-hardware-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>xxpay-web-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-payment-api</artifactId>
         </dependency>
     </dependencies>
 

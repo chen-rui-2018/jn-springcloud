@@ -2,9 +2,13 @@ const app = getApp()
 
 Page({
   data: {
-    userInfo: {}
+    userInfo: {},
+    imgBaseUrl:''
   },
   onLoad() {
+    this.setData({
+      imgBaseUrl:app.globalData.imgBaseUrl
+    })
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,
@@ -54,12 +58,9 @@ Page({
       hasUserInfo: true
     })
   },
-  getStorageInfo() {
-  },
-  bindtap() {
-  },
-  logout() {
-  },
-  signOut() {
-  },
+  goabout(){
+    wx.navigateTo({
+      url: "./aboutUs/aboutUs", // 拼接传参到下个页面
+    });
+  }
 })

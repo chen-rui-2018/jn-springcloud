@@ -1,6 +1,6 @@
 <template>
   <div id="queditor">
-    <el-form ref="activityForm" :model="activityForm" label-width="200px">
+    <el-form ref="activityForm" :model="activityForm" :disabled="disabledEditorFlag" label-width="200px">
       <el-form-item label="排序" prop="actiOrder">
         <el-input v-model="activityForm.actiOrder" style="width: 205px;"/>
       </el-form-item>
@@ -47,8 +47,17 @@
       <el-form-item label="活动费用" prop="actiCost">
         <el-input v-model="activityForm.actiCost" style="width: 205px;" />
       </el-form-item>
-      <el-form-item label="主办方" prop="actiOrganizer">
+      <el-form-item label="主办单位" prop="actiOrganizer">
         <el-input v-model="activityForm.actiOrganizer" style="width: 205px;" />
+      </el-form-item>
+      <el-form-item label="指导单位" prop="actiGuideOrganizer">
+        <el-input v-model="activityForm.actiGuideOrganizer" style="width: 205px;" />
+      </el-form-item>
+      <el-form-item label="承办单位" prop="actiUndertakeOrganizer">
+        <el-input v-model="activityForm.actiUndertakeOrganizer" style="width: 205px;" />
+      </el-form-item>
+      <el-form-item label="协办单位" prop="actiCoOrganizer">
+        <el-input v-model="activityForm.actiCoOrganizer" style="width: 205px;" />
       </el-form-item>
       <el-form-item label="是否展示报名人数" prop="showApplyNum" class="setHeight">
         <el-radio-group v-model="activityForm.showApplyNum">
@@ -77,7 +86,7 @@
         <template>
           <el-row>
             <div class="editor-container">
-              <UE ref="ue" :default-msg="defaultMsg" :config="config" />
+              <UE ref="ue" :disabled-editor-flag="disabledEditorFlag" :default-msg="defaultMsg" :config="config" />
             </div>
           </el-row>
         </template>
@@ -89,19 +98,24 @@
           <el-step title="已结束" />
         </el-steps>
       </el-form-item>
-      <el-form-item>
+      <!-- <el-form-item>
         <el-button v-if="activityForm.actiStatus==='1'" type="primary" @click="saveDrafts">保存草稿</el-button>
         <el-button v-if="activityForm.actiStatus==='1'" type="primary" @click="release">发布</el-button>
-        <el-button type="primary" @click="goBack">返回</el-button>
-      </el-form-item>
+        <el-button type="primary" @click="$router.push({path:'activityManagement'})">返回</el-button>
+      </el-form-item> -->
     </el-form>
+    <div class="btns">
+      <el-button v-if="activityForm.actiStatus==='1'" type="primary" @click="saveDrafts">保存草稿</el-button>
+      <el-button v-if="activityForm.actiStatus==='1'" type="primary" @click="release">发布</el-button>
+      <el-button type="primary" @click="$router.push({path:'activityManagement'})">返回</el-button>
+    </div>
     <!-- 新增海报弹出框 -->
     <el-dialog :visible.sync="dialogPosterVisible">
       <!-- <el-upload :auto-upload="false" :limit="1" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" action="https://jsonplaceholder.typicode.com/posts/" list-type="picture-card">
         <i class="el-icon-plus" />
       </el-upload> -->
       <!-- <p>已选择的图片</p> -->
-      <el-upload :headers="headers" :show-file-list="false" :auto-upload="false" :multiple="false" :on-change="changeImg" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload" class="avatar-uploader" action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload">
+      <el-upload :headers="headers" :show-file-list="false" :multiple="false" :on-change="changeImg" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload" class="avatar-uploader" action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload">
         <img v-if="imageUrl" :src="imageUrl" class="avatar">
         <i v-else class="el-icon-plus avatar-uploader-icon" />
       </el-upload>
@@ -142,6 +156,7 @@ export default {
   components: { UE },
   data() {
     return {
+      // disabled: false,
       headers: {
         token: getToken()
       },
@@ -166,11 +181,14 @@ export default {
         actiNumber: 0,
         actiPosterUrl: '',
         actiDetail: '',
-        actiStatus: 1,
+        actiStatus: '1',
         id: '',
         applyCheck: '0',
         page: 1,
-        rows: 10
+        rows: 10,
+        actiGuideOrganizer: '',
+        actiUndertakeOrganizer: '',
+        actiCoOrganizer: ''
       },
       defaultMsg: '',
       config: {
@@ -184,18 +202,22 @@ export default {
       templateImgList: [],
       row: {
         actiStatus: '1'
-      }
+      },
+      disabledEditorFlag: false
     }
   },
   mounted() {
     console.log(this.$route.query.activityId)
+    console.log(this.$route.query.disabled)
+    if (this.$route.query.disabled) {
+      this.disabledEditorFlag = true
+    }
     if (this.$route.query.activityId) {
       // this.row = JSON.parse(this.$route.query.row)
       this.init()
       // this.getEditContent()
-    } else {
-      this.getActivityType()
     }
+    this.getActivityType()
   },
   methods: {
     init() {
@@ -235,6 +257,10 @@ export default {
       console.log(this.content)
     },
     handleClick() {
+      if (this.disabledEditorFlag) {
+        this.$message.error('查看活动内容，不可编辑')
+        return
+      }
       if (!this.activityForm.actiType) {
         this.$message({
           message: '没有选择活动类型',
@@ -246,8 +272,8 @@ export default {
       paramApi(`${this.GLOBAL.parkUrl}activity/activityType/findActivityType`, this.activityForm.actiType, 'typeId').then(res => {
         console.log(res)
         if (res.data.code === this.GLOBAL.code) {
-          if (res.data.data.templateImgList.length > 0) {
-            this.templateImgList = res.data.data.templateImgList
+          if (res.data.data.templateList.length > 0) {
+            this.templateImgList = res.data.data.templateList
           } else {
             this.$message('选择的活动类型没有模板图片')
           }
@@ -263,18 +289,18 @@ export default {
     },
     changeImg(res, file) {
       // this.imageUrl = file[0].url
-      if (file.length > 1) {
-        file.shift()
-      }
+      // if (file.length > 1) {
+      //   file.shift()
+      // }
       // 赋值下这个imageUrl就能看到图片了
-      this.imageUrl = URL.createObjectURL(file[0].raw)
+      // this.imageUrl = URL.createObjectURL(file[0].raw)
     },
     confirm() {
       this.dialogPosterVisible = false
       this.activityForm.actiPosterUrl = this.imageUrl
     },
     handleAvatarSuccess(res, file) {
-      // this.imageUrl = URL.createObjectURL(file.raw)
+      this.imageUrl = res.data
     },
     beforeAvatarUpload(file) {
       // const isJPG = file.type === 'image/jpeg'
@@ -348,6 +374,7 @@ export default {
             type: 'success'
           })
           this.goBack()
+          this.$router.push({ path: 'activityManagement' })
         } else {
           this.$message(res.data.result)
         }
@@ -478,6 +505,7 @@ export default {
             type: 'success'
           })
           this.goBack()
+          this.$router.push({ path: 'activityManagement' })
         } else {
           this.$message(res.data.result)
         }
@@ -491,6 +519,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.btns{
+  margin-left:200px;
+}
 ul {
   list-style: none;
 }

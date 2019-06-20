@@ -33,7 +33,7 @@ public enum ActivityExceptionEnum implements CodeAndMsg {
     ACTIVITY_MES_SEND_TIME_NOT_NULL("4020219","活动消息推送时间不能为空"),
     ACTIVITY_ADDRESS_NOT_NULL("4020220","活动地址不能为空"),
     ACTIVITY_COST_NOT_NULL("4020221","活动费用不能为空"),
-    ACTIVITY_ORGANIZER_NOT_NULL("4020222","活动主办方不能为空"),
+    ACTIVITY_ORGANIZER_NOT_NULL("4020222","活动主办单位不能为空"),
     ACTIVITY_NUMBER_NOT_NULL("4020223","活动主人数不能为空"),
     ACTIVITY_PARK_ID_NOT_NULL("4020224","活动园区不能为空"),
     ACTIVITY_APPLY_CHECK_NOT_NULL("4020224","报名状态是否需审核不能为空"),
@@ -72,6 +72,7 @@ public enum ActivityExceptionEnum implements CodeAndMsg {
     APPLY_IS_NOT_EXIST("4020512","点赞评论或服务不存在"),
     EXPORT_COL_NAME_NOT_NULL("4020513","excel导出的字段别名不能为空"),
     EXPORT__TITLE_NOT_NULL("4020514","excel导出字段的标题不能为空"),
+    START_TIME_MORE_THAN_END_TIME("4020515","开始时间晚于结束时间"),
     ;
 
     /**

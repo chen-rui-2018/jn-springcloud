@@ -1,10 +1,10 @@
 package com.jn.user.userjoin.controller;
 
+import com.codingapi.tx.annotation.TxTransaction;
 import com.jn.common.controller.BaseController;
-import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
-import com.jn.common.util.StringUtils;
+import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import com.jn.user.userjoin.enums.UserJoinExceptionEnum;
@@ -40,6 +40,9 @@ public class UserJoinController extends BaseController {
     @Autowired
     private UserJoinService userJoinService;
 
+    @Autowired
+    private SystemClient systemClient;
+
     @ControllerLog(doAction = "获取短信验证码")
     @ApiOperation(value = "获取短信验证码",notes = "根据手机号获取")
     @RequestMapping(value = "/getCode",method = RequestMethod.GET)
@@ -52,6 +55,7 @@ public class UserJoinController extends BaseController {
     @ControllerLog(doAction = "用户注册")
     @ApiOperation(value = "用户注册")
     @RequestMapping(value = "/addUser",method = RequestMethod.POST)
+    @TxTransaction(isStart = true)
     public Result addUser(@RequestBody @Validated UserRegister userRegister){
         return userJoinService.addUser(userRegister);
     }
@@ -74,6 +78,14 @@ public class UserJoinController extends BaseController {
         Result<String> result = new Result<>();
         result.setData("验证码发送成功。接收尾号:"+phone.substring((phone.length()>4)?phone.length()-4:0,phone.length()));
         return result;
+    }
+
+    @ControllerLog(doAction = "当前账号是否已存在")
+    @ApiOperation(value = "当前账号是否已存在",notes = "success:账号不存在; fail:账号存在")
+    @RequestMapping(value = "/accountIsExist",method = RequestMethod.GET)
+    public Result<String> accountIsExist(@ApiParam(value = "注册账号",required = true,example = "1817590****")
+                                             @RequestParam(value="registerAccount") String registerAccount){
+        return systemClient.checkUserAccount(registerAccount);
     }
 
 }

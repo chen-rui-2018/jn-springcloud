@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class TbDataReportingGroupCompany implements Serializable {
-    /*@ApiModelProperty("")*/
+    /*@ApiModelProperty("序列")*/
     private String id;
 
     /*@ApiModelProperty("群组ID")*/

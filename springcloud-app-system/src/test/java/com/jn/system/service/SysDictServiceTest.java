@@ -4,8 +4,8 @@ import com.jn.common.model.PaginationData;
 import com.jn.system.common.enums.SysStatusEnums;
 import com.jn.system.dict.entity.TbSysDict;
 import com.jn.system.dict.model.SysDictEdit;
-import com.jn.system.dict.model.SysDictInvoke;
-import com.jn.system.dict.model.SysDictKeyValue;
+import com.jn.system.model.SysDictInvoke;
+import com.jn.system.vo.SysDictKeyValue;
 import com.jn.system.dict.model.SysDictPage;
 import com.jn.system.dict.service.SysDictService;
 import com.jn.system.model.User;
@@ -132,6 +132,21 @@ public class SysDictServiceTest {
         BeanUtils.copyProperties(tbSysDict, dictInvoke);
         List<SysDictKeyValue> data = sysDictService.getDict(dictInvoke);
         Assert.assertThat(data, Matchers.anything());
+    }
+
+    @Test
+    public void selectDictValueByCondition(){
+        SysDictInvoke sysDictInvoke=new SysDictInvoke();
+        //数据字典模块编码
+        sysDictInvoke.setModuleCode("springcloud-oa");
+        //数据字典父分组编码
+        sysDictInvoke.setParentGroupCode("common");
+        //数据字典分组编码
+        sysDictInvoke.setGroupCode("attachment");
+        //数据字典key
+        sysDictInvoke.setKey("attachment_file_group");
+        String result = sysDictService.selectDictValueByCondition(sysDictInvoke);
+        Assert.assertThat(result, Matchers.anything());
     }
 
     @Test

@@ -2,9 +2,8 @@ package com.jn.enterprise.servicemarket.org.service;
 
 import com.jn.common.model.PaginationData;
 import com.jn.enterprise.model.ServiceOrg;
+import com.jn.enterprise.servicemarket.org.vo.*;
 import com.jn.enterprise.servicemarket.org.model.*;
-import com.jn.enterprise.servicemarket.org.vo.MyOrgInfoVo;
-import com.jn.enterprise.servicemarket.org.vo.OrgDetailVo;
 
 import java.util.List;
 
@@ -20,9 +19,10 @@ public interface OrgService {
     /**
      * 查询服务机构列表
      * @param orgParment
+     * @param allowTechnology 是否允许展示科技金融业务领域数据  true:允许展示  false:不允许展示
      * @return
      */
-    PaginationData<List<ServiceOrg>> selectServiceOrgList(OrgParameter orgParment);
+    PaginationData<List<ServiceOrg>> selectServiceOrgList(OrgParameter orgParment,boolean allowTechnology);
 
     /**
      * 根据机构ID查询机构详情
@@ -69,4 +69,34 @@ public interface OrgService {
      * @return
      */
     MyOrgInfoVo getMyOrgInfo(String account);
+
+    /**
+     * 查询服务超市统计数据
+     * @return
+     */
+    ServiceStatisticalNumVO selectServiceStatisticalNum();
+
+    /**
+     * 根据业务领域/产品查询服务超市统计数据
+     * @param businessStatisticalParam
+     * @return
+     */
+    BusinessStatisticalNumVO selectBusinessAreaStatisticalNum(BusinessStatisticalParam businessStatisticalParam);
+
+    /**
+     * 获取当前用户机构状态
+     * @param account
+     * @return
+     */
+    String getOrgStatusByUser(String account);
+
+    /**
+     * 添加机构管理员角色
+     * @param orgAccount
+     * @param orgId
+     * @param loginAccount
+     * @return
+     */
+    int addOrgRole(String orgAccount,String orgId,String loginAccount);
+
 }

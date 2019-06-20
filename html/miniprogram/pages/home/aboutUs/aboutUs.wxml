@@ -1,0 +1,5 @@
+<!--pages/home/aboutUs/aboutUs.wxml-->
+<!-- <nav-bar navbar-data='{{nvabarData}}'></nav-bar> -->
+<view>
+<web-view src="{{url}}?isShow={{isShow}} "></web-view>
+</view>

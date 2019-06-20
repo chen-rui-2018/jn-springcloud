@@ -525,6 +525,66 @@ public class TbPdDeclarationNoticeManageCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andPreliminaryDeadlineIsNull() {
+            addCriterion("preliminary_deadline is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreliminaryDeadlineIsNotNull() {
+            addCriterion("preliminary_deadline is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreliminaryDeadlineEqualTo(Date value) {
+            addCriterion("preliminary_deadline =", value, "preliminaryDeadline");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreliminaryDeadlineNotEqualTo(Date value) {
+            addCriterion("preliminary_deadline <>", value, "preliminaryDeadline");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreliminaryDeadlineGreaterThan(Date value) {
+            addCriterion("preliminary_deadline >", value, "preliminaryDeadline");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreliminaryDeadlineGreaterThanOrEqualTo(Date value) {
+            addCriterion("preliminary_deadline >=", value, "preliminaryDeadline");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreliminaryDeadlineLessThan(Date value) {
+            addCriterion("preliminary_deadline <", value, "preliminaryDeadline");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreliminaryDeadlineLessThanOrEqualTo(Date value) {
+            addCriterion("preliminary_deadline <=", value, "preliminaryDeadline");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreliminaryDeadlineIn(List<Date> values) {
+            addCriterion("preliminary_deadline in", values, "preliminaryDeadline");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreliminaryDeadlineNotIn(List<Date> values) {
+            addCriterion("preliminary_deadline not in", values, "preliminaryDeadline");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreliminaryDeadlineBetween(Date value1, Date value2) {
+            addCriterion("preliminary_deadline between", value1, value2, "preliminaryDeadline");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreliminaryDeadlineNotBetween(Date value1, Date value2) {
+            addCriterion("preliminary_deadline not between", value1, value2, "preliminaryDeadline");
+            return (Criteria) this;
+        }
+
         public Criteria andDeadlineIsNull() {
             addCriterion("deadline is null");
             return (Criteria) this;
@@ -782,76 +842,6 @@ public class TbPdDeclarationNoticeManageCriteria {
 
         public Criteria andContactPhoneConfigurationNotBetween(String value1, String value2) {
             addCriterion("contact_phone_configuration not between", value1, value2, "contactPhoneConfiguration");
-            return (Criteria) this;
-        }
-
-        public Criteria andAnnouncementContentIsNull() {
-            addCriterion("announcement_content is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andAnnouncementContentIsNotNull() {
-            addCriterion("announcement_content is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andAnnouncementContentEqualTo(String value) {
-            addCriterion("announcement_content =", value, "announcementContent");
-            return (Criteria) this;
-        }
-
-        public Criteria andAnnouncementContentNotEqualTo(String value) {
-            addCriterion("announcement_content <>", value, "announcementContent");
-            return (Criteria) this;
-        }
-
-        public Criteria andAnnouncementContentGreaterThan(String value) {
-            addCriterion("announcement_content >", value, "announcementContent");
-            return (Criteria) this;
-        }
-
-        public Criteria andAnnouncementContentGreaterThanOrEqualTo(String value) {
-            addCriterion("announcement_content >=", value, "announcementContent");
-            return (Criteria) this;
-        }
-
-        public Criteria andAnnouncementContentLessThan(String value) {
-            addCriterion("announcement_content <", value, "announcementContent");
-            return (Criteria) this;
-        }
-
-        public Criteria andAnnouncementContentLessThanOrEqualTo(String value) {
-            addCriterion("announcement_content <=", value, "announcementContent");
-            return (Criteria) this;
-        }
-
-        public Criteria andAnnouncementContentLike(String value) {
-            addCriterion("announcement_content like", value, "announcementContent");
-            return (Criteria) this;
-        }
-
-        public Criteria andAnnouncementContentNotLike(String value) {
-            addCriterion("announcement_content not like", value, "announcementContent");
-            return (Criteria) this;
-        }
-
-        public Criteria andAnnouncementContentIn(List<String> values) {
-            addCriterion("announcement_content in", values, "announcementContent");
-            return (Criteria) this;
-        }
-
-        public Criteria andAnnouncementContentNotIn(List<String> values) {
-            addCriterion("announcement_content not in", values, "announcementContent");
-            return (Criteria) this;
-        }
-
-        public Criteria andAnnouncementContentBetween(String value1, String value2) {
-            addCriterion("announcement_content between", value1, value2, "announcementContent");
-            return (Criteria) this;
-        }
-
-        public Criteria andAnnouncementContentNotBetween(String value1, String value2) {
-            addCriterion("announcement_content not between", value1, value2, "announcementContent");
             return (Criteria) this;
         }
 
@@ -1362,6 +1352,76 @@ public class TbPdDeclarationNoticeManageCriteria {
 
         public Criteria andModifiedTimeNotBetween(Date value1, Date value2) {
             addCriterion("modified_time not between", value1, value2, "modifiedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefIntroductIsNull() {
+            addCriterion("brief_introduct is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefIntroductIsNotNull() {
+            addCriterion("brief_introduct is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefIntroductEqualTo(String value) {
+            addCriterion("brief_introduct =", value, "briefIntroduct");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefIntroductNotEqualTo(String value) {
+            addCriterion("brief_introduct <>", value, "briefIntroduct");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefIntroductGreaterThan(String value) {
+            addCriterion("brief_introduct >", value, "briefIntroduct");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefIntroductGreaterThanOrEqualTo(String value) {
+            addCriterion("brief_introduct >=", value, "briefIntroduct");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefIntroductLessThan(String value) {
+            addCriterion("brief_introduct <", value, "briefIntroduct");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefIntroductLessThanOrEqualTo(String value) {
+            addCriterion("brief_introduct <=", value, "briefIntroduct");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefIntroductLike(String value) {
+            addCriterion("brief_introduct like", value, "briefIntroduct");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefIntroductNotLike(String value) {
+            addCriterion("brief_introduct not like", value, "briefIntroduct");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefIntroductIn(List<String> values) {
+            addCriterion("brief_introduct in", values, "briefIntroduct");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefIntroductNotIn(List<String> values) {
+            addCriterion("brief_introduct not in", values, "briefIntroduct");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefIntroductBetween(String value1, String value2) {
+            addCriterion("brief_introduct between", value1, value2, "briefIntroduct");
+            return (Criteria) this;
+        }
+
+        public Criteria andBriefIntroductNotBetween(String value1, String value2) {
+            addCriterion("brief_introduct not between", value1, value2, "briefIntroduct");
             return (Criteria) this;
         }
     }

@@ -1,12 +1,14 @@
 import axios from 'axios'
-const baseURL = 'http://192.168.10.31:1101/springcloud-park/'
+import api from '@/util/api'
+import { getToken, removeToken } from '@/util/auth'
+const baseURL = api.host + 'springcloud-park/'
 // 设置默认的基准路径
 axios.defaults.baseURL = baseURL
 // 设置axios拦截器  config:可以进行请求头的设置，通过headers属性
 axios.interceptors.request.use(function (config) {
   // Do something before request is sent
   // 获取token
-  var token = localStorage.getItem('mytoken')
+  var token = getToken()
   if (token) {
     config.headers['Authorization'] = token
   }

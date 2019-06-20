@@ -1,0 +1,18 @@
+<!--pages/meeting/meetingPerson/meetingPerson.wxml-->
+<!-- <nav-bar navbar-data='{{nvabarData}}'></nav-bar> -->
+<view class="meetingPerson" hover-class="none" hover-stop-propagation="false">
+  <!-- 搜索框 -->
+  <view class="search" hover-class="none" hover-stop-propagation="false">
+    <text class='icon-search'></text>
+    <input bindinput="changesearch" type="text" placeholder="搜索参会人员" />
+  </view>  
+  <!-- 多选 -->
+    <view class="select" wx:for="{{userList}}" wx:key bindtap="selectUser" data-id="{{item.id}}" data-name="{{item.name}}" data-index="{{index}}">
+        {{item.name}}
+      <text wx:if="{{item.checked}}" class="icon-select"></text>
+    </view>
+
+  <view class="btnBox">
+    <button form-type="submit" class="submit" bindtap="goback">完成</button>
+  </view>
+</view>

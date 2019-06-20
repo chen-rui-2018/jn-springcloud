@@ -13,6 +13,12 @@ public class TbSpDictDepart implements Serializable {
     /*@ApiModelProperty("是否删除（0标记删除，1正常）")*/
     private Byte recordStatus;
 
+    /*@ApiModelProperty("级别（1省级，2市级，3区级）")*/
+    private Byte level;
+
+    /*@ApiModelProperty("同级排序（从小到大排序）")*/
+    private Integer sort;
+
     /*@ApiModelProperty("创建者账号")*/
     private String creatorAccount;
 
@@ -49,6 +55,22 @@ public class TbSpDictDepart implements Serializable {
 
     public void setRecordStatus(Byte recordStatus) {
         this.recordStatus = recordStatus;
+    }
+
+    public Byte getLevel() {
+        return level;
+    }
+
+    public void setLevel(Byte level) {
+        this.level = level;
+    }
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
     }
 
     public String getCreatorAccount() {
@@ -98,6 +120,8 @@ public class TbSpDictDepart implements Serializable {
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
+            && (this.getLevel() == null ? other.getLevel() == null : this.getLevel().equals(other.getLevel()))
+            && (this.getSort() == null ? other.getSort() == null : this.getSort().equals(other.getSort()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
@@ -111,6 +135,8 @@ public class TbSpDictDepart implements Serializable {
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
+        result = prime * result + ((getLevel() == null) ? 0 : getLevel().hashCode());
+        result = prime * result + ((getSort() == null) ? 0 : getSort().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
@@ -127,6 +153,8 @@ public class TbSpDictDepart implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", name=").append(name);
         sb.append(", recordStatus=").append(recordStatus);
+        sb.append(", level=").append(level);
+        sb.append(", sort=").append(sort);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", createdTime=").append(createdTime);
         sb.append(", modifierAccount=").append(modifierAccount);

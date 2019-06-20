@@ -33,6 +33,8 @@ public class PolicyCenterHomeShow implements Serializable {
     private String thematicType;
     @ApiModelProperty(value = "政策标题")
     private String policyTitle;
+    @ApiModelProperty(value = "政策颁发编号")
+    private String policyIssuNum;
     @ApiModelProperty(value = "阅读次数")
     private Integer readNum;
     @ApiModelProperty(value = "发布日期")
@@ -45,6 +47,8 @@ public class PolicyCenterHomeShow implements Serializable {
     private String supportIndustry;
     @ApiModelProperty(value = "发文单位")
     private String issueUnit;
+    @ApiModelProperty(value = "政策内容")
+    private String policyContent;
     @ApiModelProperty(value = "简要内容")
     private String briefContent;
     @ApiModelProperty(value = "有无关联政策图解(0:无  1:有)")
@@ -136,6 +140,14 @@ public class PolicyCenterHomeShow implements Serializable {
         this.policyTitle = policyTitle;
     }
 
+    public String getPolicyIssuNum() {
+        return policyIssuNum;
+    }
+
+    public void setPolicyIssuNum(String policyIssuNum) {
+        this.policyIssuNum = policyIssuNum;
+    }
+
     public Integer getReadNum() {
         return readNum;
     }
@@ -182,6 +194,14 @@ public class PolicyCenterHomeShow implements Serializable {
 
     public void setIssueUnit(String issueUnit) {
         this.issueUnit = issueUnit;
+    }
+
+    public String getPolicyContent() {
+        return policyContent;
+    }
+
+    public void setPolicyContent(String policyContent) {
+        this.policyContent = policyContent;
     }
 
     public String getBriefContent() {
@@ -237,12 +257,14 @@ public class PolicyCenterHomeShow implements Serializable {
                 ", policyDiagramUrl='" + policyDiagramUrl + '\'' +
                 ", thematicType='" + thematicType + '\'' +
                 ", policyTitle='" + policyTitle + '\'' +
+                ", policyIssuNum='" + policyIssuNum + '\'' +
                 ", readNum=" + readNum +
                 ", releaseDate='" + releaseDate + '\'' +
                 ", status='" + status + '\'' +
                 ", supportMethod='" + supportMethod + '\'' +
                 ", supportIndustry='" + supportIndustry + '\'' +
                 ", issueUnit='" + issueUnit + '\'' +
+                ", policyContent='" + policyContent + '\'' +
                 ", briefContent='" + briefContent + '\'' +
                 ", isPolicyDiagram='" + isPolicyDiagram + '\'' +
                 ", relationPolicyDiagramId='" + relationPolicyDiagramId + '\'' +

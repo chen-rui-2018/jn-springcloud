@@ -8,14 +8,12 @@
             start_time AS `date`,
             title,
             content,
-            start_time,
-            end_time,
-            remind_time,
-            is_remind,
-            wechat_remind,
-            message_remind,
-            pc_remind,
-            app_remind,
+            start_time as `start`,
+            end_time as `end`,
+            remind_time as remindTime,
+            is_remind as isRemind,
+            remind_way as remindWay,
+            all_day as allDay,
             remark
         FROM
             `tb_oa_schedule`
@@ -23,7 +21,7 @@
             creator_account = #{userAccount,jdbcType=VARCHAR}
         AND record_status = 1
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(title)">
-          and title like CONCAT('%', #{title,jdbcType=VARCHAR}, '%')
+          and title like CONCAT('%', trim(#{title,jdbcType=VARCHAR}), '%')
         </if>
         <if test="null != date">
           AND MONTH (start_time) = MONTH (#{date,jdbcType=TIMESTAMP})

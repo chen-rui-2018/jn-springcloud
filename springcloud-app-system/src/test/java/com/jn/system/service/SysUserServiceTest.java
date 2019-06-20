@@ -2,6 +2,7 @@ package com.jn.system.service;
 
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.util.encryption.EncryptUtil;
 import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
 import com.jn.system.dept.model.SysDepartmentPost;
@@ -73,6 +74,15 @@ public class SysUserServiceTest {
     public void addSysUserTest() {
         try {
             sysUserService.addSysUser(sysUser, user);
+        } catch (JnSpringCloudException e) {
+            Assert.assertThat(e, Matchers.anything());
+        }
+    }
+
+    @Test
+    public void Test() {
+        try {
+            System.out.println(EncryptUtil.encryptSha256("123456"));
         } catch (JnSpringCloudException e) {
             Assert.assertThat(e, Matchers.anything());
         }
@@ -157,7 +167,7 @@ public class SysUserServiceTest {
     }
 
     @Test
-    public void getUserAll(){
+    public void getUserAll() {
         List<User> data = sysUserService.getUserAll();
         System.out.println(data.size());
         for (User user : data) {
@@ -182,7 +192,7 @@ public class SysUserServiceTest {
     }
 
     @Test
-    public void getUserInfoByAccount(){
+    public void getUserInfoByAccount() {
         List<String> accountList = new ArrayList<String>(16);
         accountList.add("userAccount");
         List<User> userInfoByAccount = sysUserService.getUserInfoByAccount(accountList);
@@ -190,13 +200,13 @@ public class SysUserServiceTest {
     }
 
     @Test
-    public void updateUserRole(){
+    public void updateUserRole() {
         //1.测试不传账号及id
         User user1 = new User();
         Set<String> deleRoleId = new HashSet<>(16);
         Set<String> addRoleId = new HashSet<String>(16);
         try {
-            sysUserService.updateUserRole(user1,deleRoleId,addRoleId);
+            sysUserService.updateUserRole(user1, deleRoleId, addRoleId);
         } catch (JnSpringCloudException e) {
             Assert.assertThat(e, Matchers.anything());
         }
@@ -214,6 +224,13 @@ public class SysUserServiceTest {
         deleRoleId.add("6f7fef69-c61c-43cf-a82c-fbb9ba088e81");
         Boolean result = sysUserService.updateUserRole(user1, deleRoleId, addRoleId);
         Assert.assertThat(result, Matchers.equalTo(Boolean.TRUE));
+    }
+
+    @Test
+    public void selectUserByIds() {
+        String[] ids = {"10000", "3"};
+        List<User> list = sysUserService.selectUserByIds(ids);
+        Assert.assertThat(list, Matchers.anything());
     }
 
 }

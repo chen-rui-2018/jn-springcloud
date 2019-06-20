@@ -68,11 +68,13 @@
             <result column="meeting_title" jdbcType="VARCHAR" property="title" />
         </collection>
     </resultMap>
-    <resultMap id="meetingBaseResultMap" type="com.jn.oa.meeting.model.OaMeeting">
+    <resultMap id="meetingBaseResultMap" type="com.jn.oa.meeting.vo.OaMeetingVo">
         <id column="meeting_id" jdbcType="VARCHAR" property="id" />
+        <result column="meeting_start_date" jdbcType="TIMESTAMP" property="startDate" />
         <result column="meeting_start_time" jdbcType="TIMESTAMP" property="startTime" />
         <result column="meeting_end_time" jdbcType="TIMESTAMP" property="endTime" />
         <result column="meeting_title" jdbcType="VARCHAR" property="title" />
+        <result column="meeting_status" jdbcType="VARCHAR" property="meetingStatus" />
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -140,7 +142,7 @@
                 ) u ON meetingroom.creator_account = u.id
                 where meetingroom.record_status != 0
                 <if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
-                    and meetingroom.NAME like CONCAT('%', #{name,jdbcType=VARCHAR}, '%')
+                    and meetingroom.NAME like CONCAT('%', trim(#{name,jdbcType=VARCHAR}), '%')
                 </if>
                 <if test="@org.apache.commons.lang.StringUtils@isNotBlank(recordStatus)">
                     and meetingroom.record_status = #{recordStatus,jdbcType=VARCHAR}
@@ -186,15 +188,12 @@
 	meetingroom.created_time AS meetingroom_created_time,
 	meetingroom.modifier_account AS meetingroom_modifier_account,
 	meetingroom.modified_time AS meetingroom_modified_time
-
-
-FROM
+    FROM
 	tb_oa_meeting_room meetingroom
-
-
-
 	where meetingroom.record_status=1
-
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(meetingRoomId)">
+            and meetingroom.id =#{meetingRoomId}
+        </if>
 
 
     </select>
@@ -202,11 +201,22 @@ FROM
         select
         m.id as meeting_id,
         m.title  as meeting_title,
-       m.start_time as meeting_start_time,
-       m.end_time as meeting_end_time
+        date_format(m.start_time,'%Y-%m-%d') AS meeting_start_date,
+        date_format(m.start_time,'%k:%i')  AS meeting_start_time,
+        date_format(m.end_time,'%k:%i') AS meeting_end_time,
+        m.meeting_status,
+        t.name as organizationalUser
 
         FROM
         tb_oa_meeting m
+        left join (
+                SELECT
+                t.id,
+                t.name
+                FROM
+                tb_sys_user t
+                where  t.record_status = 1
+        )t on t.id=m.applicant
         where m.meeting_status !=3
         <if test=" meetingStartTime !=null">
             and Date(m.start_time)=DATE_FORMAT(#{meetingStartTime},'%Y-%m-%d')
@@ -255,7 +265,7 @@ FROM
         )m
         ) and meetingroom.record_status=1
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
-            and meetingroom.NAME like CONCAT('%', #{name,jdbcType=VARCHAR}, '%')
+            and meetingroom.NAME like CONCAT('%', trim(#{name,jdbcType=VARCHAR}), '%')
         </if>
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(recordStatus)">
             and meetingroom.record_status = #{recordStatus,jdbcType=VARCHAR}

@@ -2,6 +2,7 @@ package com.jn.park.sp.service;
 
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
+import com.jn.company.model.ServiceCompanyParam;
 import com.jn.park.sp.model.SpAdModel;
 import com.jn.park.sp.model.SpDictDepartModel;
 import com.jn.park.sp.model.SpMessageModel;
@@ -37,13 +38,6 @@ public interface SpPowerPortalService {
      */
     List<SpPowerDetailVo> get(String id);
 
-    /**
-     * 通过部门名称获取全部的实施部门(模糊查询)
-     *
-     * @param name
-     * @return
-     */
-    List<SpDictDepartModel> departList(String name);
 
     /**
      * 返回全部的权力清单(包含孩子)
@@ -71,4 +65,25 @@ public interface SpPowerPortalService {
      * @return
      */
     List<SpAdModel> getAdvertising();
+
+    /**
+     * 获取在线受理地址
+     *
+     * @param id
+     * @return
+     */
+    String getDealUrl(String id);
+
+    /**
+     * 把行政审批指南推送给全部企业
+     * @param powerBusiIds
+     * @param userId
+     */
+    Integer pushPowerBusiBatch(String powerBusiIds, ServiceCompanyParam serviceCompanyParam, String userId);
+
+    /**
+     * 获取(新)实施部门列表
+     * @return
+     */
+    List<List<SpDictDepartModel>> departList();
 }

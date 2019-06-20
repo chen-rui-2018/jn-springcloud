@@ -1,7 +1,9 @@
 package com.jn.enterprise.pd.personnel.service;
 
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.enterprise.model.PersonnelProject;
+import com.jn.enterprise.pd.personnel.entity.TbPersonnelProject;
 
 import java.util.List;
 
@@ -21,6 +23,6 @@ public interface PersonnelService {
      * @param
      * @return
      */
-    PaginationData<List<PersonnelProject>> selectByPersonnelProjectList(PersonnelProject personnelProject);
+    List<PersonnelProject> selectByPersonnelProjectList(PersonnelProject personnelProject);
 
 }

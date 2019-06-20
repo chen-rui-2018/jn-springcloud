@@ -67,10 +67,11 @@ public interface ActivityService {
     /**
      * 前台分页获取的活动列表
      * @param activitySlimQuery
+     * @param account
      * @return
      */
 
-    PaginationData<List<ActivitySlim>> activityListSlim(ActivitySlimQuery activitySlimQuery);
+    PaginationData<List<ActivitySlim>> activityListSlim(ActivitySlimQuery activitySlimQuery ,String account);
 
 	 /**
      * 手动发送活动通知接口
@@ -109,5 +110,24 @@ public interface ActivityService {
      * @return
      */
     PaginationData findOrgActivityList( OrgActivityParam query,String activityType,boolean needPage);
+
+    /**
+     * 获取有效活动总数
+     * @return
+     */
+    String getActivityNum();
+
+    /**
+     * 获取企业报报名活动信息
+     * @param param
+     * @return
+     */
+    List<CompanyActivityApplyShow> getCompanyActivityApplyInfo(CompanyActivityApplyParam param);
+
+    /**
+     * 获取累计举办活动总数
+     * @return
+     */
+    Integer getActivityHistoryNum();
 
 }

@@ -1,0 +1,38 @@
+<!-- <view class="head" >
+  <view class="head_scan" bindtap="scan">
+    <text class="icon-scan" >
+    </text> 扫一扫
+  </view>
+  <view class="head_title" >
+    会议室列表
+  </view>
+</view> -->
+
+<view class="search paddihng_side" >
+  <view class="head_scan" bindtap="scan">
+    <text class="icon-scan" ></text> 
+  </view>
+  <view class="searchBox">
+    <text class='icon-search'></text>
+    <input type="text" placeholder="搜索会议室" bindinput="changesearch" name="meetingroom"/>
+  </view>
+</view> 
+<view class="meeting_list" >
+  <view class="meeting_main"  bindtap="goDetail" 
+  wx:for="{{roomList}}"
+  wx:key="{{index}}"
+  data-status="{{item.recordStatus}} "
+  data-id="{{item.id}} "
+   >
+    <view class="meeting_li" >
+      <view class="room_num" >
+        <text>{{item.name}} </text>
+        <text class="green">{{item.recordStatus===1?'可用':'可用'}}</text>
+      </view>
+      <view class='address'> 
+        <text>{{item.position}} </text>
+        <text>容量：{{item.capacity}}人</text>
+      </view>
+    </view>
+  </view>
+</view>     

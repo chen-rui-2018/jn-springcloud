@@ -34,8 +34,7 @@
           <!-- </a> -->
         </div>
       </div>
-
-      <div class="declaration_consult" @click="$router.push({path: '/guest/pd/consult',query:{id:id}})">预约申报</div>
+      <div class="declaration_consult" @click="goConsult">预约申报</div>
     </div>
   </div>
 </div>
@@ -113,6 +112,17 @@ export default {
         .then(res => {
           window.location.href = res.request.responseURL
         })
+    },
+    goConsult () {
+      let myDate = new Date()
+      let myDateStr = myDate.getFullYear() + '' + (myDate.getMonth() + 1 > 10 ? myDate.getMonth() + 1 : '0' + (myDate.getMonth() + 1)) + '' + myDate.getDate() + '' + (myDate.getHours() > 10 ? myDate.getHours() : '0' + myDate.getHours()) + (myDate.getMinutes() > 10 ? myDate.getMinutes() : '0' + myDate.getMinutes()) + (myDate.getSeconds() > 10 ? myDate.getSeconds() : '0' + myDate.getSeconds())
+      let time = new Date(this.detailData.preliminaryDeadline).toJSON()
+      let deadline = new Date(+new Date(time) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '').replace(/[^0-9]/ig, '')
+      if (myDateStr < deadline) {
+        this.$router.push({path: '/guest/pd/consult', query: {id: this.id}})
+      } else {
+        this.$vux.toast.text('您申报的项目已经截止', 'middle')
+      }
     }
   }
 }

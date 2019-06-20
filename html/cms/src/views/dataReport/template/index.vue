@@ -146,7 +146,7 @@
             </el-checkbox-group>
           </el-form-item>
         </target-row>
-        <target-row class="target-row" title="数据指标">
+        <target-row class="target-row target-row-hidden" title="数据指标">
           <div v-for="(form, index) in formData.tabs" :key="index" class="chart-list">
             <el-row align="middle" class="target-form-header">
               <el-col :span="2">表名：</el-col>
@@ -1193,13 +1193,15 @@ export default {
       width: calc(100% - 200px);
       padding: 15px;
       border-left: 1px solid $gray;
-
       .chart-list {
         margin: 20px auto;
       }
 
       .target-row {
         margin: 5px auto;
+        &.target-row-hidden {
+          overflow: hidden;
+        }
       }
     }
 

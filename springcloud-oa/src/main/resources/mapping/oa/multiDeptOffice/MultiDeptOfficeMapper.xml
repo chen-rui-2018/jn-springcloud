@@ -61,7 +61,7 @@
     tb_oa_multi_dept_office
     WHERE
     `status` = '1'
-    AND start_time <![CDATA[ < ]]> CURRENT_DATE ()
+    AND start_time <![CDATA[ <= ]]> CURRENT_DATE ()
     AND period = '1'
     AND remind_time = CURRENT_DATE ()
     AND remind_hour = date_format(now(), '%k')
@@ -73,7 +73,7 @@
     tb_oa_multi_dept_office
     WHERE
     `status` = '1'
-    AND start_time <![CDATA[ < ]]> CURRENT_DATE ()
+    AND start_time <![CDATA[ <= ]]> CURRENT_DATE ()
     AND period = '2'
     AND remind_hour = date_format(now(), '%k')
     AND remind_minute = date_format(now(), '%i')
@@ -84,7 +84,7 @@
     tb_oa_multi_dept_office
     WHERE
     `status` = '1'
-    AND start_time <![CDATA[ < ]]> CURRENT_DATE ()
+    AND start_time <![CDATA[ <= ]]> CURRENT_DATE ()
     AND period = '3'
     AND remind_weekday = date_format(now(), '%a')
     AND remind_hour = date_format(now(), '%k')
@@ -96,7 +96,7 @@
     tb_oa_multi_dept_office
     WHERE
     `status` = '1'
-    AND start_time <![CDATA[ < ]]> CURRENT_DATE ()
+    AND start_time <![CDATA[ <= ]]> CURRENT_DATE ()
     AND period = '4'
     AND remind_month_day = date_format(now(), '%e')
     AND remind_hour = date_format(now(), '%k')

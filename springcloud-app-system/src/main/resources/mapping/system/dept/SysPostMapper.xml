@@ -15,40 +15,51 @@
 
     <select id="findByPage" parameterType="com.jn.system.dept.model.SysPostPage"
             resultType="com.jn.system.model.SysPost">
-        select id,
-        post_name as postName,
-        created_time as createdTime,
-        record_status as recordStatus,
-        post_type_id as postTypeId,
-        (SELECT post_type_name
-            from tb_sys_post_type
-            where id = post_type_id
-            and record_status = 1) as postTypeName
-        from tb_sys_post
-        where `record_status` != 0
-        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(postName)">
-            and post_name like CONCAT('%', #{postName,jdbcType=VARCHAR}, '%')
-        </if>
-        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(recordStatus)">
-            and record_status = #{recordStatus,jdbcType=TINYINT}
-        </if>
-        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(postTypeId)">
-            and post_type_id = #{postTypeId,jdbcType=VARCHAR}
-        </if>
-        ORDER BY created_time desc,id desc
+        SELECT
+            id,
+            post_name AS postName,
+            created_time AS createdTime,
+            record_status AS recordStatus,
+            rank,
+            post_type_id AS postTypeId,
+            (
+            SELECT
+              post_type_name
+            FROM
+              tb_sys_post_type
+            WHERE
+              id = post_type_id
+            AND record_status = 1
+            ) AS postTypeName
+        FROM
+          tb_sys_post
+        WHERE
+            `record_status` != 0
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(postName)">
+                and post_name like CONCAT('%', #{postName,jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(recordStatus)">
+                and record_status = #{recordStatus,jdbcType=TINYINT}
+            </if>
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(postTypeId)">
+                and post_type_id = #{postTypeId,jdbcType=VARCHAR}
+            </if>
+        ORDER BY
+          rank ASC
     </select>
     <select id="getPostAll" resultType="com.jn.system.model.SysPost">
         SELECT
             id,
-            post_name as postName,
-            created_time as createdTime,
-            record_status as recordStatus,
-            post_type_id as postTypeId
+            post_name AS postName,
+            created_time AS createdTime,
+            record_status AS recordStatus,
+            post_type_id AS postTypeId,
+            rank
         FROM
             tb_sys_post
         WHERE
             record_status = '1'
         ORDER BY
-            created_time DESC
+            rank ASC
     </select>
 </mapper>

@@ -47,10 +47,11 @@ SELECT
         FROM
           (SELECT
             r.id,
-            r.pre_value
+            r.pre_value,
+            r.created_time
           FROM
             tb_service_prefer r
-          WHERE r.pre_type = '0' AND r.id != 'technology_finance' AND r.record_status = '1') p
+          WHERE r.pre_type = '0' AND r.record_status = '1') p
           LEFT JOIN tb_service_product pr
             ON p.id = pr.signory_id
             AND (
@@ -60,11 +61,19 @@ SELECT
             AND pr.status = '1'
             AND pr.product_type = '0'
             AND pr.record_status = '1'
-
+          ORDER BY p.created_time ASC
     </select>
 
-
-
-
+    <!-- 服务超市业务领域列表 -->
+    <select id="getIndustryForMarket" resultType="com.jn.enterprise.servicemarket.industryarea.model.Industry">
+        SELECT
+            p.id AS "id",
+            p.pre_value AS "preValue"
+        FROM tb_service_prefer p
+        WHERE p.record_status = '1'
+        AND p.pre_type = '0'
+        AND p.id != 'technology_finance'
+        ORDER BY p.created_time ASC
+    </select>
 
 </mapper>

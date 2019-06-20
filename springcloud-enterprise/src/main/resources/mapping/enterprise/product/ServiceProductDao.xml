@@ -191,6 +191,7 @@
            ifnull((select count(1)  from tb_service_product tp3 where tp3.signory_id = tt.signory_id  and tp3.product_type = '1' and  tp3.org_id_ !="" and tp3.org_id_ is  not null and tp3.status = '1' and tp3.record_status = 1),0) as "featureNum",         <!--同类型特色产品数-->
            tt.viewCount,          <!--浏览次数-->
            tt.transactionsNumber, <!--交易次数-->
+           tt.evaluationNumber,    <!--评价数量-->
            round(tt.attitudeScore,1 )AS "evaluationScore" <!--综合评分-->
         from (
             select
@@ -209,6 +210,7 @@
                 )) as "advisorName",
                 t1.product_details as "serviceDetails",
                 count(t4.product_id_) as "transactionsNumber",
+                count(t5.product_id_) as "evaluationNumber",
                 IFNULL(AVG(t5.`attitude_score`),0) AS "attitudeScore"
                 from tb_service_product t1
                 left join  tb_service_org t2 on  t2.org_id_= t1.org_id_
@@ -235,7 +237,7 @@
                tt.serviceDetails,  <!--服务详情-->
                tt.transactionsNumber,  <!--交易数量-->
                tt.evaluationNumber,    <!--评价数量-->
-               round(tt.evaluationScore* #{praiseWeight}+tt.viewCount* #{popularityWeight} +tt.transactionsNumber* #{serviceWeight} + #{otherFactorScore},1)AS "evaluationScore" <!--综合排序结果值-->
+               round(tt.evaluationScore,1)AS "evaluationScore" <!--综合排序结果值-->
         from (
         select
                t1.product_id_ as "productId",

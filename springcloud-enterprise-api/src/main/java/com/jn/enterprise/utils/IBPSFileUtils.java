@@ -7,6 +7,7 @@ import com.jn.common.util.StringUtils;
 import com.jn.enterprise.enums.IBPSRequestUrlEnum;
 import com.jn.enterprise.model.IBPSFile;
 import com.jn.enterprise.model.IBPSUploadResult;
+import org.checkerframework.checker.units.qual.A;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -148,6 +149,25 @@ public class IBPSFileUtils {
         }
         logger.info("[IBPS文件存储] 处理成功");
         return sb.toString();
+    }
+
+    /**
+     * 获取文件全路径
+     * @param ibpsUrl ibps格式路径
+     * @return 发生错误返回原字符串，成功返回全路径
+     */
+    public static List<IBPSFile> getFileAllInfo(String ibpsUrl) {
+        String tempUrl = ibpsUrl;
+        if (!StringUtils.startsWith(tempUrl, "[{") || !StringUtils.endsWith(tempUrl, "}]")) {
+            logger.warn("[IBPS文件存储] 处理的路径不是IBPS文件存储格式");
+            IBPSFile ibpsFile=new IBPSFile();
+            ibpsFile.setFilePath(ibpsUrl);
+            List<IBPSFile>ibpsFileList=new ArrayList<>();
+            ibpsFileList.add(ibpsFile);
+            return ibpsFileList;
+        }
+        List<IBPSFile> ibpsFileList = new Gson().fromJson(tempUrl, new TypeToken<List<IBPSFile>>() {}.getType());
+        return ibpsFileList;
     }
 
     /**

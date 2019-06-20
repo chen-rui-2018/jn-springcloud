@@ -6,7 +6,7 @@
           <h5>友情链接</h5>
           <div class="line"></div>
           <div class="help">
-            <h5>国家</h5>
+            <!-- <h5>国家</h5> -->
             <!-- <div class="line"></div> -->
             <ul>
               <li>
@@ -27,7 +27,7 @@
             </ul>
           </div>
           <div class="help">
-            <h5>江苏省</h5>
+            <!-- <h5>江苏省</h5> -->
             <!-- <div class="line"></div> -->
             <ul>
               <li>
@@ -74,7 +74,7 @@
             </ul>
           </div>
           <div class="help">
-            <h5>南京市</h5>
+            <!-- <h5>南京市</h5> -->
             <ul>
               <li>
                 <a href="http://www.njkj.gov.cn/" target="_blank">南京市科学技术委员会</a>
@@ -200,9 +200,9 @@ export default {
             }
           }
         }
-        .help2{
-          margin-top:20px;
-        }
+        // .help2{
+        //   margin-top:20px;
+        // }
         .help1 {
           margin-top: 45px;
         }

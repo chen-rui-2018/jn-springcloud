@@ -1,5 +1,6 @@
 package com.jn.enterprise.company.vo;
 
+import com.jn.enterprise.company.enums.UpgradeStatusEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -15,7 +16,7 @@ import java.io.Serializable;
 @ApiModel(value = "UpgradeStatusVO",description = "认证状态返回")
 public class UpgradeStatusVO implements Serializable {
 
-    @ApiModelProperty(value = "编码（0：允许认证 1：已认证企业 2：已认证员工 3：已认证机构 4：已认证投资人 5：已认证专员）")
+    @ApiModelProperty(value = "编码（0：允许认证 1：正在认证企业中 2：正在认证员工中 3：正在认证机构中 4：正在认证投资人中 5：正在认证专员中）")
     private String code;
 
     @ApiModelProperty(value = "消息")
@@ -37,9 +38,9 @@ public class UpgradeStatusVO implements Serializable {
         this.message = message;
     }
 
-    public UpgradeStatusVO(String code, String message) {
-        this.code = code;
-        this.message = message;
+    public UpgradeStatusVO(UpgradeStatusEnum upgradeStatusEnum) {
+        this.code = upgradeStatusEnum.getCode();
+        this.message = upgradeStatusEnum.getMessage();
     }
 
     @Override

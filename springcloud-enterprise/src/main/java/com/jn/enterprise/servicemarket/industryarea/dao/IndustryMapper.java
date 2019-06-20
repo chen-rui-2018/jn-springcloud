@@ -37,4 +37,10 @@ public interface IndustryMapper {
      */
     List<IndustryDictionaryProduct> selectIndustryProductList();
 
+    /**
+     * 服务超市业务领域列表
+     * @return
+     */
+    List<Industry> getIndustryForMarket();
+
 }

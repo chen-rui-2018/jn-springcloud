@@ -13,6 +13,8 @@ import java.io.Serializable;
  */
 @ApiModel(value = "RequirePortalDetails", description = "后台门户管理需求详情")
 public class RequirePortalDetails implements Serializable {
+    @ApiModelProperty(value = "需求id")
+    private String id;
     @ApiModelProperty(value = "需求单号")
     private String reqNum;
     @ApiModelProperty(value = "企业名称")
@@ -64,6 +66,13 @@ public class RequirePortalDetails implements Serializable {
     @ApiModelProperty(value = "评价描述")
     private String evaluationDesc;
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getReqNum() {
         return reqNum;
@@ -260,9 +269,10 @@ public class RequirePortalDetails implements Serializable {
     @Override
     public String toString() {
         return "RequirePortalDetails{" +
-                "reqNum='" + reqNum + '\'' +
+                "id='" + id + '\'' +
+                ", reqNum='" + reqNum + '\'' +
                 ", companyName='" + companyName + '\'' +
-                ", issueTime=" + issueTime +
+                ", issueTime='" + issueTime + '\'' +
                 ", businessArea='" + businessArea + '\'' +
                 ", orgName='" + orgName + '\'' +
                 ", productName='" + productName + '\'' +
@@ -282,6 +292,8 @@ public class RequirePortalDetails implements Serializable {
                 ", actualLoanAmount='" + actualLoanAmount + '\'' +
                 ", fundsReqDesc='" + fundsReqDesc + '\'' +
                 ", expectedDate='" + expectedDate + '\'' +
+                ", ratingScore='" + ratingScore + '\'' +
+                ", evaluationDesc='" + evaluationDesc + '\'' +
                 '}';
     }
 }

@@ -67,7 +67,7 @@
                   <span v-if="i.type=='technology'">科技</span>
                   <span v-if="i.type=='science'">学术</span>
                 </p>
-                <p class="color22" v-html="i.details"></p>
+                <p v-html="i.details"></p>
                 <!-- <div class="firInfo">{{i.briefContent}}</div> -->
               </div>
               <div class="fir2 fr pointer mainColor" @click="$router.push({path:'/technologyDetails',query:{achievementId:i.id}})">详情</div>

@@ -3,7 +3,7 @@
     <div class="user-header">
       <div class="user-header-l">
         <img v-if="userInfo" :src="userInfo.avatar || '@/../static/img/touxiang.png'" alt="">
-        <span v-if="userInfo" class="welcome">您好，{{ userInfo.nickName }}</span>
+        <span v-if="userInfo" class="welcome">您好，{{ userInfo.nickName || ''}}</span>
       </div>
       <div class="user-header-r">
         <router-link to="/userHome" class="tag-list">
@@ -359,7 +359,11 @@ export default {
       });
     },
     getUserInfo() {
-      this.userInfo = JSON.parse(getUserInfo());
+      let userInfo = getUserInfo()
+      if (userInfo) {
+        userInfo = JSON.parse(userInfo)
+      }
+      this.userInfo = userInfo || {}
     }
   }
 };

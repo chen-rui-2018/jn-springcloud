@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.hatch.dao.TbHatchHomeConfigMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.hatch.entity.TbHatchHomeConfig">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="incubator_name" jdbcType="VARCHAR" property="incubatorName" />
+    <result column="incubator_abb" jdbcType="VARCHAR" property="incubatorAbb" />
+    <result column="advantage_introduct" jdbcType="VARCHAR" property="advantageIntroduct" />
+    <result column="spatial_character" jdbcType="VARCHAR" property="spatialCharacter" />
+    <result column="entry_criteria" jdbcType="VARCHAR" property="entryCriteria" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="status" jdbcType="CHAR" property="status" />
+    <result column="record_status" jdbcType="CHAR" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, incubator_name, incubator_abb, advantage_introduct, spatial_character, entry_criteria, 
+    phone, status, record_status, creator_account, created_time, modifier_account, modified_time
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.park.hatch.entity.TbHatchHomeConfigCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_hatch_home_config
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_hatch_home_config
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_hatch_home_config
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.park.hatch.entity.TbHatchHomeConfigCriteria">
+    delete from tb_hatch_home_config
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.park.hatch.entity.TbHatchHomeConfig">
+    insert into tb_hatch_home_config (id, incubator_name, incubator_abb, 
+      advantage_introduct, spatial_character, entry_criteria, 
+      phone, status, record_status, 
+      creator_account, created_time, modifier_account, 
+      modified_time)
+    values (#{id,jdbcType=VARCHAR}, #{incubatorName,jdbcType=VARCHAR}, #{incubatorAbb,jdbcType=VARCHAR}, 
+      #{advantageIntroduct,jdbcType=VARCHAR}, #{spatialCharacter,jdbcType=VARCHAR}, #{entryCriteria,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{recordStatus,jdbcType=CHAR}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.park.hatch.entity.TbHatchHomeConfig">
+    insert into tb_hatch_home_config
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="incubatorName != null">
+        incubator_name,
+      </if>
+      <if test="incubatorAbb != null">
+        incubator_abb,
+      </if>
+      <if test="advantageIntroduct != null">
+        advantage_introduct,
+      </if>
+      <if test="spatialCharacter != null">
+        spatial_character,
+      </if>
+      <if test="entryCriteria != null">
+        entry_criteria,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="incubatorName != null">
+        #{incubatorName,jdbcType=VARCHAR},
+      </if>
+      <if test="incubatorAbb != null">
+        #{incubatorAbb,jdbcType=VARCHAR},
+      </if>
+      <if test="advantageIntroduct != null">
+        #{advantageIntroduct,jdbcType=VARCHAR},
+      </if>
+      <if test="spatialCharacter != null">
+        #{spatialCharacter,jdbcType=VARCHAR},
+      </if>
+      <if test="entryCriteria != null">
+        #{entryCriteria,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=CHAR},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.park.hatch.entity.TbHatchHomeConfigCriteria" resultType="java.lang.Long">
+    select count(*) from tb_hatch_home_config
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_hatch_home_config
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.incubatorName != null">
+        incubator_name = #{record.incubatorName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.incubatorAbb != null">
+        incubator_abb = #{record.incubatorAbb,jdbcType=VARCHAR},
+      </if>
+      <if test="record.advantageIntroduct != null">
+        advantage_introduct = #{record.advantageIntroduct,jdbcType=VARCHAR},
+      </if>
+      <if test="record.spatialCharacter != null">
+        spatial_character = #{record.spatialCharacter,jdbcType=VARCHAR},
+      </if>
+      <if test="record.entryCriteria != null">
+        entry_criteria = #{record.entryCriteria,jdbcType=VARCHAR},
+      </if>
+      <if test="record.phone != null">
+        phone = #{record.phone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=CHAR},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=CHAR},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_hatch_home_config
+    set id = #{record.id,jdbcType=VARCHAR},
+      incubator_name = #{record.incubatorName,jdbcType=VARCHAR},
+      incubator_abb = #{record.incubatorAbb,jdbcType=VARCHAR},
+      advantage_introduct = #{record.advantageIntroduct,jdbcType=VARCHAR},
+      spatial_character = #{record.spatialCharacter,jdbcType=VARCHAR},
+      entry_criteria = #{record.entryCriteria,jdbcType=VARCHAR},
+      phone = #{record.phone,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=CHAR},
+      record_status = #{record.recordStatus,jdbcType=CHAR},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.hatch.entity.TbHatchHomeConfig">
+    update tb_hatch_home_config
+    <set>
+      <if test="incubatorName != null">
+        incubator_name = #{incubatorName,jdbcType=VARCHAR},
+      </if>
+      <if test="incubatorAbb != null">
+        incubator_abb = #{incubatorAbb,jdbcType=VARCHAR},
+      </if>
+      <if test="advantageIntroduct != null">
+        advantage_introduct = #{advantageIntroduct,jdbcType=VARCHAR},
+      </if>
+      <if test="spatialCharacter != null">
+        spatial_character = #{spatialCharacter,jdbcType=VARCHAR},
+      </if>
+      <if test="entryCriteria != null">
+        entry_criteria = #{entryCriteria,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=CHAR},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.hatch.entity.TbHatchHomeConfig">
+    update tb_hatch_home_config
+    set incubator_name = #{incubatorName,jdbcType=VARCHAR},
+      incubator_abb = #{incubatorAbb,jdbcType=VARCHAR},
+      advantage_introduct = #{advantageIntroduct,jdbcType=VARCHAR},
+      spatial_character = #{spatialCharacter,jdbcType=VARCHAR},
+      entry_criteria = #{entryCriteria,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      status = #{status,jdbcType=CHAR},
+      record_status = #{recordStatus,jdbcType=CHAR},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

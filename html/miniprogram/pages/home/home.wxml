@@ -1,0 +1,36 @@
+<view class='UCenter-bg'>
+  <image class="userinfo-avatar" src="{{ userInfo.avatarUrl }}" background-size="cover"></image>
+  <view class='text-xl'>{{ userInfo.nickName }}
+  </view>
+  <view class='margin-top-sm'>
+  </view>
+</view>
+<view class="cu-list menu  shadow-lg">
+  <view class="cu-item arrow">
+    <navigator class='content' url='/pages/home/payRecord/payRecord' hover-class='none'>
+      <image class="" wx:if="{{imgBaseUrl}}" src="{{imgBaseUrl}}1@2x.png"> </image>
+      <text class='text-grey'>缴费记录</text>
+    </navigator>
+  </view>
+  <!-- <view class="cu-item arrow">
+    <button class='cu-btn content' open-type='feedback'>
+      <image class="" src="./../../images/tijian@2x.png"> </image>
+      <text class='text-grey'>我的活动</text>
+    </button>
+  </view> -->
+  <view class="cu-item arrow">
+    <navigator class='content' url='/pages/home/maCar/maCar' hover-class='none'>
+      <image class="" wx:if="{{imgBaseUrl}}" src="{{imgBaseUrl}}my_car.png"></image>
+      <text class='text-grey'>我的爱车</text>
+    </navigator>
+  </view>
+  <view class="cu-item arrow" bindtap="goabout">
+    <!-- <navigator class='content' url='./aboutUs/aboutUs' hover-class='none'> -->
+    <view class="content">
+      <image class="" wx:if="{{imgBaseUrl}}" src="{{imgBaseUrl}}tingche-@2x.png"> </image>      
+      <text class='text-grey'>关于我们</text>
+    </view>
+    <!-- </navigator> -->
+  </view>
+</view>
+<view class='cu-tabbar-height'></view>

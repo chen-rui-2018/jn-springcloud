@@ -7,9 +7,6 @@
         </el-form-item>
         <el-form-item label="模块名称">
           <el-input v-model="moduleForm.moduleValue" placeholder="请输入内容" clearable style="width: 200px;" @keyup.enter.native="handleFilter"/>
-          <!-- <el-select v-model="moduleForm.moduleValue" placeholder="请选择" style="width: 200px;">
-            <el-option v-for="(item,index) in moduleOptions" :key="index" :label="item.moduleValue" :value="item.moduleValue"/>
-          </el-select> -->
         </el-form-item>
         <el-button type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
         <el-button type="primary" icon="el-icon-plus" @click="handleCreate">新增</el-button>
@@ -20,11 +17,7 @@
       <el-table-column label="序列" type="index" align="center" width="60"/>
       <el-table-column label="模块编码" prop="moduleCode" align="center" />
       <el-table-column label="模块名称" prop="moduleValue" align="center" />
-      <el-table-column label="创建时间" prop="createdTime" align="center" >
-        <!-- <template slot-scope="scope">
-          {{ scope.row.createdTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}
-        </template> -->
-      </el-table-column>
+      <el-table-column label="创建时间" prop="createdTime" align="center" />
       <el-table-column label="操作" prop="operate" align="center">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
@@ -55,9 +48,7 @@
   </div>
 </template>
 <script>
-import { api, paramApi } from '@/api/Permission-model/userManagement'
-// import { getAllModule } from '@/api/Permission-model/dataDictionary'
-// import { getModuleList, addModule, editModule, deleteModule } from '@/api/Permission-model/moduleManagement'
+import { api, paramApi } from '@/api/axios'
 export default {
   data() {
     var check = (rule, value, callback) => {
@@ -114,12 +105,10 @@ export default {
     handleSizeChange(val) {
       this.moduleForm.rows = val
       this.initList()
-      // console.log(`每页 ${val} 条`)
     },
     handleCurrentChange(val) {
       this.moduleForm.page = val
       this.initList()
-      // console.log(`当前页: ${val}`)
     },
     handleFilter() {
       this.moduleForm.page = 1
@@ -155,14 +144,13 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          paramApi('system/sysModule/delete', id, 'moduleId').then(res => {
-            if (res.data.code === '0000') {
+          paramApi(`${this.GLOBAL.systemUrl}system/sysModule/delete`, id, 'moduleId').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '删除成功',
                 type: 'success'
               })
               if (this.total % this.moduleForm.rows === 1) {
-                debugger
                 this.moduleForm.page = this.moduleForm.page - 1
               }
               this.initList()
@@ -174,25 +162,9 @@ export default {
 
         })
     },
-    // 获取全部模块
-    // getAllModule() {
-    //   getAllModule().then(res => {
-    //     if (res.data.code === '0000') {
-    //       res.data.data.forEach(val => {
-    //         this.moduleOptions.push({
-    //           value: val.moduleCode,
-    //           label: val.moduleValue
-    //         })
-    //       })
-    //     } else {
-    //       this.$message.error(res.data.result)
-    //     }
-    //     this.moduleOptions = res.data.data
-    //   })
-    // },
     initList() {
-      api('system/sysModule/list', this.moduleForm).then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.systemUrl}system/sysModule/list`, this.moduleForm, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.moduleData = res.data.data.rows
           this.total = res.data.data.total
           if (this.moduleData.length === 0 && this.total > 0) {
@@ -210,8 +182,8 @@ export default {
       this.$refs['moduleform'].validate(valid => {
         if (valid) {
           // 调用接口发送请求
-          api('system/sysModule/add', this.moduleform).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.systemUrl}system/sysModule/add`, this.moduleform, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '添加成功',
                 type: 'success'
@@ -232,8 +204,8 @@ export default {
       this.$refs['moduleform'].validate(valid => {
         this.isDisabled = true
         if (valid) {
-          api('system/sysModule/update', this.moduleform).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.systemUrl}system/sysModule/update`, this.moduleform, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '编辑成功',
                 type: 'success'

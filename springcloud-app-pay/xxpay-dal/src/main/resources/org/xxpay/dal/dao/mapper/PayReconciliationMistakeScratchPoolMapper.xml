@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.xxpay.dal.dao.mapper.PayReconciliationMistakeScratchPoolMapper" >
+
+  <sql id="table_name">TB_PAY_RECONCILIATION_MISTAKE_SCRATCH_POOL</sql>
+
+  <resultMap id="BaseResultMap" type="org.xxpay.dal.dao.entity.reconciliation.TbPayReconciliationMistakeScratchPool">
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="version" property="version" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="editor" property="editor" jdbcType="VARCHAR" />
+    <result column="creater" property="creater" jdbcType="VARCHAR" />
+    <result column="edit_time" property="editTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="batch_no" property="batchNo" jdbcType="VARCHAR" />
+    <result column="bill_date" property="billDate" jdbcType="TIMESTAMP" />
+    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+    <result column="merchant_order_no" property="merchantOrderNo" jdbcType="VARCHAR" />
+    <result column="trx_no" property="trxNo" jdbcType="CHAR" />
+    <result column="bank_order_no" property="bankOrderNo" jdbcType="CHAR" />
+    <result column="bank_trx_no" property="bankTrxNo" jdbcType="VARCHAR" />
+    <result column="order_amount" property="orderAmount" jdbcType="DECIMAL" />
+    <result column="plat_income" property="platIncome" jdbcType="DECIMAL" />
+    <result column="fee_rate" property="feeRate" jdbcType="DECIMAL" />
+    <result column="plat_cost" property="platCost" jdbcType="DECIMAL" />
+    <result column="plat_profit" property="platProfit" jdbcType="DECIMAL" />
+    <result column="pay_way_code" property="payWayCode" jdbcType="VARCHAR" />
+    <result column="pay_way_name" property="payWayName" jdbcType="VARCHAR" />
+    <result column="pay_success_time" property="paySuccessTime" jdbcType="TIMESTAMP" />
+    <result column="complete_time" property="completeTime" jdbcType="TIMESTAMP" />
+    <result column="is_refund" property="isRefund" jdbcType="VARCHAR" />
+    <result column="refund_times" property="refundTimes" jdbcType="SMALLINT" />
+    <result column="success_refund_amount" property="successRefundAmount" jdbcType="DECIMAL" />
+  </resultMap>
+
+
+  <!-- list查询 -->
+  <select id="listByMaxDate" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select *
+    from
+    <include refid="table_name" />
+
+    <![CDATA[ where create_time < #{maxDate}]]>
+  </select>
+
+</mapper>

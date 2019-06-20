@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.servicemarket.advisor.dao.AdvisorMapper">
+    <!--1.根据查询条件获取顾问列表信息-->
+   <select id="getServiceConsultantList" parameterType="com.jn.enterprise.servicemarket.advisor.model.AdvisorQueryConditions"
+           resultType="com.jn.enterprise.servicemarket.advisor.model.AdvisorListInfo">
+       SELECT
+       tt.orgId
+       ,tt.advisorAccount
+       ,tt.advisorName
+       ,tt.businessArea
+       ,tt.avatar
+       ,tt.position
+       ,tt.workingYears
+       ,tt.orgName
+       ,tt.isCertification
+       ,tt.goodAtBusiness
+       ,tt.transactionNum
+       ,tt.pageviews
+       ,tt.evaluationScore       <!--评价分数-->
+       ,tt.evaluationNum		 <!--评价次数-->
+       ,(tt.evaluationScore* #{praiseWeight}+tt.pageviews* #{popularityWeight} +tt.transactionNum* #{serviceWeight} + #{otherFactorScore} )AS "integratedSort"  <!--综合排序结果值-->
+       FROM
+       (
+       SELECT
+       sa.`org_id_` AS "orgId"			   			                      <!-- 机构id-->
+       ,sa.`org_name` AS "orgName"					                      <!-- 所属机构名称-->
+       ,sa.`advisor_account` AS "advisorAccount"  			              <!-- 顾问账号-->
+       ,sa.`advisor_name` AS "advisorName"				                  <!-- 顾问名称-->
+       ,sa.`business_area` AS "businessArea"				              <!-- 业务领域-->
+       ,sa.`avatar` AS "avatar"					                          <!-- 头像-->
+       ,sa.`position` AS "position"					                      <!-- 职务-->
+       ,sa.working_years as "workingYears"                                <!--从业年限-->
+       ,sa.`is_certification` AS "isCertification"			              <!-- 是否认证-->
+       ,sa.`good_at_business` AS "goodAtBusiness"			              <!-- 业务擅长-->
+       ,IFNULL(sa.`transaction_num`,0) AS "transactionNum"			      <!-- 累计交易数-->
+       ,IFNULL(sa.page_views,0) AS "pageviews"					          <!-- 浏览量-->
+       ,IFNULL(AVG(sr.`attitude_score`),0) AS "evaluationScore"		      <!-- 评价分数-->
+       ,COUNT(sr.`attitude_score`) AS "evaluationNum"			          <!-- 评价次数-->
+       FROM tb_service_advisor  sa
+       LEFT JOIN tb_service_rating sr
+       ON sa.`advisor_account` = sr.`advisor_account`
+       where 1=1
+       and sa.approval_status='2'            <!--审批通过-->
+       and sa.record_status='1'              <!--数据状态为正常数据-->
+       GROUP BY
+       sa.`org_id_`,sa.`advisor_account`,sa.`advisor_name`,sa.`business_area`,
+       sa.`avatar`,sa.`position`,sa.working_years,sa.`org_name`,sa.`is_certification`,
+       sa.`good_at_business`,sa.`transaction_num`,sa.page_views
+       )tt
+       where 1=1
+       <if test="domain !=null  and domain !=''">
+           and tt.businessArea=#{domain}  <!-- 领域-->
+       </if>
+       <if test="orgId !=null and orgId!=''">
+           and tt.orgId=#{orgId}
+       </if>
+       <if test="keyWords !=null  and keyWords !=''">
+           <!-- 关键词-->
+           and (tt.advisorName like concat('%',#{keyWords},'%') or tt.position like concat('%',#{keyWords},'%'))
+       </if>
+       <if test="templateId !=null and templateId!=''">
+           and tt.advisorAccount in (
+           select distinct
+           saa.advisor_account
+           from tb_service_product ssp
+           join tb_service_and_advisor saa
+           on ssp.product_id_=saa.product_id_
+           join tb_service_advisor tsa
+           on tsa.advisor_account=saa.advisor_account
+           and tsa.approval_status='2'
+           and tsa.record_status='1'
+           where ssp.template_id  =#{templateId}
+           )
+       </if>
+       <if test="sortTypes =='integrate'">
+           ORDER BY <!-- 综合排序-->
+           (tt.evaluationScore * #{praiseWeight}+tt.pageviews* #{popularityWeight} +tt.transactionNum* #{serviceWeight} + #{otherFactorScore} ) DESC <!--综合排序结果值-->
+       </if>
+       <if test="sortTypes =='popularity'">
+           ORDER BY <!-- 人气排序-->
+           tt.pageviews DESC   <!-- 浏览量-->
+       </if>
+       <if test="sortTypes =='praise'">
+           ORDER BY  <!-- 好评排序-->
+           tt.evaluationScore DESC   <!--评价分数-->
+       </if>
+       <if test="sortTypes =='serviceNum'">
+           ORDER BY <!-- 服务量排序-->
+           tt.transactionNum DESC <!-- 累计交易数-->
+       </if>
+   </select>
+
+    <!--2.根据查询条件获取服务评价信息-->
+    <select id="getServiceRatingInfo" parameterType="com.jn.enterprise.servicemarket.advisor.model.ServiceEvaluationParam"
+            resultType="com.jn.enterprise.servicemarket.comment.model.ServiceRating">
+        SELECT
+		tt.orgId
+		,tt.orgName
+		,tt.advisorAccount
+		,tt.advisorName
+        ,tt.productId
+		,tt.productName
+		,tt.pictureUrl
+		,tt.evaluationAccount
+		,tt.evaluationTime
+		,tt.evaluationDesc
+		,tt.evaluationScore
+	    FROM
+	      (
+            SELECT
+                sa.`org_id_` AS "orgId"			   			                <!-- 机构id-->
+                ,sa.`org_name` AS "orgName"					                <!-- 所属机构名称-->
+                ,sa.`advisor_account` AS "advisorAccount"  			        <!-- 顾问账号-->
+                ,sa.`advisor_name` AS "advisorName"				            <!-- 顾问名称-->
+                ,sr.product_id_ as "productId"                               <!-- 服务产品id-->
+                ,sr.`product_name` AS "productName"				            <!-- 服务产品名称-->
+                ,sp.`picture_url` AS "pictureUrl"				            <!-- 服务产品图片-->
+                ,concat_ws('****', substring(sr.`evaluator_account`, 1, 4),
+                substring(sr.`evaluator_account`, 9, 3)) AS "evaluationAccount" <!-- 评价人账号-->
+                ,date_format(sr.`created_time`,'%Y-%m-%d %H:%i:%s') AS "evaluationTime"<!-- 评价时间-->
+                ,sr.`evaluation_desc` AS "evaluationDesc"			        <!-- 评价描述-->
+                ,IFNULL(AVG(sr.`attitude_score`),0) AS "evaluationScore"	<!-- 评价分数-->
+            FROM tb_service_advisor  sa
+            RIGHT JOIN tb_service_rating sr
+            ON sa.`advisor_account` = sr.`advisor_account`
+            and sa.approval_status='2'            <!--审批通过-->
+            and sa.record_status='1'              <!--数据状态为正常数据-->
+            LEFT JOIN tb_service_product sp
+            ON sr.`product_id_`=sp.`product_id_`
+            GROUP BY sa.`org_id_`,sa.`org_name`,sa.`advisor_account`,sa.`advisor_name`,
+                 sr.product_id_,sr.`product_name`, sp.`picture_url`,sr.`evaluator_account`,
+                 sr.`created_time`,sr.`evaluation_desc`
+          )tt
+        WHERE 1=1
+        <if test="orgId !=null and orgId !=''"> <!--查询机构评价-->
+            AND tt.orgId=#{orgId}
+        </if>
+        <if test="productId !=null and productId !=''"><!--查询机构评价-->
+            AND tt.productId=#{productId}
+        </if>
+        <if test="advisorAccount !=null and advisorAccount !=''">
+            AND tt.advisorAccount=#{advisorAccount}
+        </if>
+        <if test="ratingType=='praise'">    <!--好评  5星-->
+            and tt.evaluationScore=5
+        </if>
+        <if test="ratingType=='average'">   <!--中评 大于等于3星小于5星-->
+            and tt.evaluationScore&gt;=3
+            and tt.evaluationScore&lt;5
+        </if>
+        <if test="ratingType=='badReview'"> <!--差评 大于等于1星小于3星-->
+            and tt.evaluationScore&gt;=1
+            and tt.evaluationScore&lt;3
+        </if>
+        ORDER BY tt.evaluationTime desc, tt.advisorAccount, tt.evaluationScore DESC
+
+    </select>
+    <!--获取评价总数，好评数,中平数，差评数-->
+    <select id="getEvaluationInfo" parameterType="com.jn.enterprise.servicemarket.advisor.model.ServiceEvaluationParam"
+            resultType="com.jn.enterprise.servicemarket.advisor.model.EvaluationCountInfo">
+        select
+        count(1) as "evaluationTotal" <!--评价总数-->
+        ,count(case when  tt.evaluationScore &gt;4 then 1
+        end )as "praiseNum"  <!--好评-->
+        ,count(case when  tt.evaluationScore &gt;=3  and tt.evaluationScore &lt;=4 then 1
+        end ) as "averageNum"<!--中评-->
+        ,count(case when  tt.evaluationScore &gt;=0  and tt.evaluationScore &lt;=2 then 1
+        end ) as "badReviewNum"<!--差评-->
+        FROM
+        (
+        SELECT
+        sa.`org_id_` AS "orgId"			   			                <!-- 机构id-->
+        ,sa.`org_name` AS "orgName"					                <!-- 所属机构名称-->
+        ,sa.`advisor_account` AS "advisorAccount"  			        <!-- 顾问账号-->
+        ,sa.`advisor_name` AS "advisorName"				            <!-- 顾问名称-->
+        ,sr.product_id_ as "productId"                               <!-- 服务产品id-->
+        ,sr.`product_name` AS "productName"				            <!-- 服务产品名称-->
+        ,sp.`picture_url` AS "pictureUrl"				            <!-- 服务产品图片-->
+        ,concat_ws('****', substring(sr.`evaluator_account`, 1, 4),
+        substring(sr.`evaluator_account`, 9, 3)) AS "evaluationAccount" <!-- 评价人账号-->
+        ,date_format(sr.`created_time`,'%Y-%m-%d %H:%i:%s') AS "evaluationTime"<!-- 评价时间-->
+        ,sr.`evaluation_desc` AS "evaluationDesc"			        <!-- 评价描述-->
+        ,IFNULL(AVG(sr.`attitude_score`),0) AS "evaluationScore"	<!-- 评价分数-->
+        FROM tb_service_advisor  sa
+        RIGHT JOIN tb_service_rating sr
+        ON sa.`advisor_account` = sr.`advisor_account`
+        and sa.approval_status='2'            <!--审批通过-->
+        and sa.record_status='1'              <!--数据状态为正常数据-->
+        LEFT JOIN tb_service_product sp
+        ON sr.`product_id_`=sp.`product_id_`
+        GROUP BY sa.`org_id_`,sa.`org_name`,sa.`advisor_account`,sa.`advisor_name`,
+        sr.product_id_,sr.`product_name`, sp.`picture_url`,sr.`evaluator_account`,
+        sr.`created_time`,sr.`evaluation_desc`
+        )tt
+        WHERE 1=1
+        <if test="orgId !=null and orgId !=''"> <!--查询机构评价-->
+            AND tt.orgId=#{orgId}
+        </if>
+        <if test="productId !=null and productId !=''"><!--查询机构评价-->
+            AND tt.productId=#{productId}
+        </if>
+        <if test="advisorAccount !=null and advisorAccount !=''">
+            AND tt.advisorAccount=#{advisorAccount}
+        </if>
+        <if test="ratingType=='praise'">    <!--好评  5星-->
+            and tt.evaluationScore=5
+        </if>
+        <if test="ratingType=='average'">   <!--中评 大于等于3星小于5星-->
+            and tt.evaluationScore&gt;=3
+            and tt.evaluationScore&lt;5
+        </if>
+        <if test="ratingType=='badReview'"> <!--差评 大于等于1星小于3星-->
+            and tt.evaluationScore&gt;=1
+            and tt.evaluationScore&lt;3
+        </if>
+        ORDER BY tt.evaluationTime desc, tt.advisorAccount, tt.evaluationScore DESC
+    </select>
+
+
+    <!--批量插入顾问荣誉资质-->
+    <insert id="insertServiceHonorList" parameterType="java.util.List">
+        insert into tb_service_honor (id,advisor_account,certificate_name,certificate_type,issuing_agency
+        ,get_time,certificate_photo,created_time,creator_account,modified_time,modifier_account,record_status)
+        select A.* from(
+        <foreach collection="list" item="item" index="index" open="" close="" separator="union all">
+            ( select #{item.id,jdbcType=VARCHAR} as 'id'
+            ,#{item.advisorAccount,jdbcType=VARCHAR} as 'advisorAccount'
+            ,#{item.certificateName,jdbcType=VARCHAR} as 'certificateName'
+            ,#{item.certificateType,jdbcType=VARCHAR} as 'certificateType'
+            ,#{item.issuingAgency,jdbcType=VARCHAR} as 'issuingAgency'
+            ,#{item.getTime,jdbcType=VARCHAR} as 'getTime'
+            ,#{item.certificatePhoto,jdbcType=VARCHAR} as 'certificatePhoto'
+            ,#{item.createdTime,jdbcType=TIMESTAMP} as 'createdTime'
+            ,#{item.creatorAccount,jdbcType=VARCHAR} as 'creatorAccount'
+            ,#{item.modifiedTime,jdbcType=TIMESTAMP} as 'modifiedTime'
+            ,#{item.modifierAccount,jdbcType=VARCHAR} as 'modifierAccount'
+            ,1 as 'recordStatus'
+            from dual )
+        </foreach>
+        )A
+    </insert>
+
+
+    <!--批量插入顾问项目经验-->
+    <insert id="insertServiceProjectList" parameterType="java.util.List">
+        insert into tb_service_pro_exper (id,advisor_account,company_name,project_name
+        ,project_time,project_end_time,personal_duties,created_time,creator_account,modified_time,modifier_account,record_status)
+        select A.* from(
+        <foreach collection="list" item="item" index="index" open="" close="" separator="union all">
+            ( select #{item.id,jdbcType=VARCHAR} as 'id'
+            ,#{item.advisorAccount,jdbcType=VARCHAR} as 'advisorAccount'
+            ,#{item.companyName,jdbcType=VARCHAR} as 'companyName'
+            ,#{item.projectName,jdbcType=VARCHAR} as 'projectName'
+            ,#{item.projectTime,jdbcType=VARCHAR} as 'projectTime'
+            ,#{item.projectEndTime,jdbcType=VARCHAR} as 'projectEndTime'
+            ,#{item.personalDuties,jdbcType=VARCHAR} as 'personalDuties'
+            ,#{item.createdTime,jdbcType=TIMESTAMP} as 'createdTime'
+            ,#{item.creatorAccount,jdbcType=VARCHAR} as 'creatorAccount'
+            ,#{item.modifiedTime,jdbcType=TIMESTAMP} as 'modifiedTime'
+            ,#{item.modifierAccount,jdbcType=VARCHAR} as 'modifierAccount'
+            ,1 as 'recordStatus'
+            from dual )
+        </foreach>
+        )A
+    </insert>
+
+
+    <!--批量插入顾问服务经验-->
+    <insert id="insertServiceExperienceList" parameterType="java.util.List">
+        insert into tb_service_experience (id,advisor_account,company_name,position
+        ,work_time,work_end_time,created_time,creator_account,modified_time,modifier_account,record_status)
+        select A.* from(
+        <foreach collection="list" item="item" index="index" open="" close="" separator="union all">
+            ( select #{item.id,jdbcType=VARCHAR} as 'id'
+            ,#{item.advisorAccount,jdbcType=VARCHAR} as 'advisorAccount'
+            ,#{item.companyName,jdbcType=VARCHAR} as 'companyName'
+            ,#{item.position,jdbcType=VARCHAR} as 'position'
+            ,#{item.workTime,jdbcType=VARCHAR} as 'workTime'
+            ,#{item.workEndTime,jdbcType=VARCHAR} as 'workEndTime'
+            ,#{item.createdTime,jdbcType=TIMESTAMP} as 'createdTime'
+            ,#{item.creatorAccount,jdbcType=VARCHAR} as 'creatorAccount'
+            ,#{item.modifiedTime,jdbcType=TIMESTAMP} as 'modifiedTime'
+            ,#{item.modifierAccount,jdbcType=VARCHAR} as 'modifierAccount'
+            ,1 as 'recordStatus'
+            from dual )
+        </foreach>
+        )A
+    </insert>
+
+
+
+
+</mapper>

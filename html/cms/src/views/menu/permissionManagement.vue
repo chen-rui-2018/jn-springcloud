@@ -122,20 +122,7 @@
 </template>
 
 <script>
-import { api, paramApi } from '@/api/Permission-model/userManagement'
-// import {
-//   getPermissionList,
-//   addPermissionList,
-//   editPermissionList,
-//   checkPermissionName,
-//   getRoleInfo,
-//   updataRole,
-//   deletePermissionById,
-//   getAllList,
-//   updataAllData,
-//   getFileGroupInfo,
-//   updataFileGroup
-// } from '@/api/Permission-model/permissionManagement'
+import { api, paramApi } from '@/api/axios'
 export default {
 
   data() {
@@ -145,8 +132,8 @@ export default {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
         if (this.dialogStatus === '新增权限') {
-          paramApi('system/sysPermission/checkPerssionName', this.permissionform.permissionName, 'permissionName').then(res => {
-            if (res.data.code === '0000') {
+          paramApi(`${this.GLOBAL.systemUrl}system/sysPermission/checkPerssionName`, this.permissionform.permissionName, 'permissionName').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               if (res.data.data === 'success') {
                 callback()
               } else {
@@ -156,8 +143,8 @@ export default {
           })
         } else {
           if (this.oldPermissionName !== this.permissionform.permissionName) {
-            paramApi('system/sysPermission/checkPerssionName', this.permissionform.permissionName, 'permissionName').then(res => {
-              if (res.data.code === '0000') {
+            paramApi(`${this.GLOBAL.systemUrl}system/sysPermission/checkPerssionName`, this.permissionform.permissionName, 'permissionName').then(res => {
+              if (res.data.code === this.GLOBAL.code) {
                 if (res.data.data === 'success') {
                   callback()
                 } else {
@@ -257,8 +244,8 @@ export default {
     },
     getCheckedKeys() {
       const checkData = this.$refs.tree.getCheckedKeys().concat(this.$refs.tree.getHalfCheckedKeys())
-      api('system/sysPermission/addMenuAndResourcesToPermission', { menuAndResourcesIds: checkData, permissionId: this.permissionId }).then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.systemUrl}system/sysPermission/addMenuAndResourcesToPermission`, { menuAndResourcesIds: checkData, permissionId: this.permissionId }, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.$message({
             message: '授权成功',
             type: 'success'
@@ -275,8 +262,8 @@ export default {
       this.menuDialogVisible = true
       this.menuLoading = true
       // 获取权限具有的菜单和功能
-      paramApi('system/sysPermission/getMenuAndResources', id, 'permissionId').then(res => {
-        if (res.data.code === '0000') {
+      paramApi(`${this.GLOBAL.systemUrl}system/sysPermission/getMenuAndResources`, id, 'permissionId').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.data2 = res.data.data.sysMenuTreeVOList
           var rules = res.data.data.menuAndResourcesIds
           var needDelArr = []
@@ -293,7 +280,7 @@ export default {
     },
     // 授权文件组分页功能
     handleFileGroupCurrentChange(val) {
-      if (this.numberTotal - this.moveArr > (val - 1) * this.numberRows) {
+      if (this.numberTotal > (val - 1) * this.numberRows) {
         this.numberPage = val
       } else {
         this.numberPage = val - 1
@@ -309,8 +296,14 @@ export default {
       } else if (direction === 'right') {
         this.moveArr = movedKeys.length
       }
-      api('system/sysPermission/addFileGroupToPermission', { permissionId: this.permissionId, fileGroupIds: value }).then(res => {
-        if (res.data.code === '0000') {
+      this.numberTotal = this.numberTotal - this.moveArr
+      if (this.numberTotal > (this.numberPage - 1) * this.numberRows) {
+        this.numberPage = this.numberPage
+      } else {
+        this.numberPage = this.numberPage - 1
+      }
+      api(`${this.GLOBAL.systemUrl}system/sysPermission/addFileGroupToPermission`, { permissionId: this.permissionId, fileGroupIds: value }, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.$message({
             message: '授权成功',
             type: 'success'
@@ -318,7 +311,8 @@ export default {
         } else {
           this.$message.error(res.data.result)
         }
-        // this.initList()
+        this.initList()
+        this.getFileGroup()
       })
     },
     // 显示授权文件组对话框
@@ -331,12 +325,12 @@ export default {
       this.getFileGroup()
     },
     getFileGroup() {
-      api('system/sysPermission/findFileGroupOfPermission', {
+      api(`${this.GLOBAL.systemUrl}system/sysPermission/findFileGroupOfPermission`, {
         permissionId: this.permissionId,
         page: this.numberPage,
         rows: this.numberRows,
         fileGroupName: this.fileGroupName
-      }).then(res => {
+      }, 'post').then(res => {
         const fileGroupData = []
         const checkFileGroup = []
         this.numberTotal = res.data.data.total
@@ -356,7 +350,7 @@ export default {
     },
     // 授权角色分页功能
     handleRoleCurrentChange(val) {
-      if (this.numberTotal - this.moveArr > (val - 1) * this.numberRows) {
+      if (this.numberTotal > (val - 1) * this.numberRows) {
         this.numberPage = val
       } else {
         this.numberPage = val - 1
@@ -372,8 +366,14 @@ export default {
       } else if (direction === 'right') {
         this.moveArr = movedKeys.length
       }
-      api('system/sysPermission/addRoleToPermission', { permissionId: this.permissionId, roleIds: value }).then(res => {
-        if (res.data.code === '0000') {
+      this.numberTotal = this.numberTotal - this.moveArr
+      if (this.numberTotal > (this.numberPage - 1) * this.numberRows) {
+        this.numberPage = this.numberPage
+      } else {
+        this.numberPage = this.numberPage - 1
+      }
+      api(`${this.GLOBAL.systemUrl}system/sysPermission/addRoleToPermission`, { permissionId: this.permissionId, roleIds: value }, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.$message({
             message: '授权成功',
             type: 'success'
@@ -381,7 +381,8 @@ export default {
         } else {
           this.$message.error(res.data.result)
         }
-        // this.initList()
+        this.initList()
+        this.getRole()
       })
     },
     // 显示授权角色对话框
@@ -394,12 +395,12 @@ export default {
       this.getRole()
     },
     getRole() {
-      api('system/sysPermission/findRoleOfPermission', {
+      api(`${this.GLOBAL.systemUrl}system/sysPermission/findRoleOfPermission`, {
         permissionId: this.permissionId,
         page: this.numberPage,
         rows: this.numberRows,
         roleName: this.roleName
-      }).then(res => {
+      }, 'post').then(res => {
         const roleData = []
         const checkRole = []
         this.numberTotal = res.data.data.total
@@ -425,8 +426,8 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          paramApi('system/sysPermission/delete', id, 'ids').then(res => {
-            if (res.data.code === '0000') {
+          paramApi(`${this.GLOBAL.systemUrl}system/sysPermission/delete`, id, 'ids').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '删除成功',
                 type: 'success'
@@ -449,8 +450,8 @@ export default {
       this.$refs['permissionform'].validate(valid => {
         if (valid) {
           // // 调用接口发送请求
-          api('system/sysPermission/update', this.permissionform).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.systemUrl}system/sysPermission/update`, this.permissionform, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '编辑成功',
                 type: 'success'
@@ -491,8 +492,8 @@ export default {
       this.$refs['permissionform'].validate(valid => {
         if (valid) {
           // 调用接口发送请求
-          api('system/sysPermission/add', this.permissionform).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.systemUrl}system/sysPermission/add`, this.permissionform, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '添加成功',
                 type: 'success'
@@ -540,8 +541,8 @@ export default {
     // 项目初始化
     initList() {
       this.permissionLoading = true
-      api('system/sysPermission/list', this.listQuery).then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.systemUrl}system/sysPermission/list`, this.listQuery, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.permissionList = res.data.data.rows
           this.total = res.data.data.total
           if (this.permissionList.length === 0 && this.total > 0) {

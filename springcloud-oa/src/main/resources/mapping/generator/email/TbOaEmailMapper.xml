@@ -5,16 +5,19 @@
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="work_order_num" jdbcType="VARCHAR" property="workOrderNum" />
     <result column="title" jdbcType="VARCHAR" property="title" />
-    <result column="email_content" jdbcType="VARCHAR" property="emailContent" />
     <result column="send_status" jdbcType="VARCHAR" property="sendStatus" />
     <result column="is_delay" jdbcType="VARCHAR" property="isDelay" />
     <result column="delay_send_time" jdbcType="TIMESTAMP" property="delaySendTime" />
+    <result column="attachment" jdbcType="VARCHAR" property="attachment" />
     <result column="send_time" jdbcType="TIMESTAMP" property="sendTime" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.jn.oa.email.entity.TbOaEmail">
+    <result column="email_content" jdbcType="LONGVARCHAR" property="emailContent" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -75,9 +78,28 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, work_order_num, title, email_content, send_status, is_delay, delay_send_time, 
-    send_time, record_status, creator_account, created_time, modifier_account, modified_time
+    id, work_order_num, title, send_status, is_delay, delay_send_time, attachment, send_time, 
+    record_status, creator_account, created_time, modifier_account, modified_time
   </sql>
+  <sql id="Blob_Column_List">
+    email_content
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.jn.oa.email.entity.TbOaEmailCriteria" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tb_oa_email
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
   <select id="selectByExample" parameterType="com.jn.oa.email.entity.TbOaEmailCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
@@ -92,9 +114,11 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
     select 
     <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
     from tb_oa_email
     where id = #{id,jdbcType=VARCHAR}
   </select>
@@ -110,15 +134,15 @@
   </delete>
   <insert id="insert" parameterType="com.jn.oa.email.entity.TbOaEmail">
     insert into tb_oa_email (id, work_order_num, title, 
-      email_content, send_status, is_delay, 
-      delay_send_time, send_time, record_status, 
+      send_status, is_delay, delay_send_time, 
+      attachment, send_time, record_status, 
       creator_account, created_time, modifier_account, 
-      modified_time)
+      modified_time, email_content)
     values (#{id,jdbcType=VARCHAR}, #{workOrderNum,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
-      #{emailContent,jdbcType=VARCHAR}, #{sendStatus,jdbcType=VARCHAR}, #{isDelay,jdbcType=VARCHAR}, 
-      #{delaySendTime,jdbcType=TIMESTAMP}, #{sendTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=TINYINT}, 
+      #{sendStatus,jdbcType=VARCHAR}, #{isDelay,jdbcType=VARCHAR}, #{delaySendTime,jdbcType=TIMESTAMP}, 
+      #{attachment,jdbcType=VARCHAR}, #{sendTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=TINYINT}, 
       #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP})
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{emailContent,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.oa.email.entity.TbOaEmail">
     insert into tb_oa_email
@@ -132,9 +156,6 @@
       <if test="title != null">
         title,
       </if>
-      <if test="emailContent != null">
-        email_content,
-      </if>
       <if test="sendStatus != null">
         send_status,
       </if>
@@ -143,6 +164,9 @@
       </if>
       <if test="delaySendTime != null">
         delay_send_time,
+      </if>
+      <if test="attachment != null">
+        attachment,
       </if>
       <if test="sendTime != null">
         send_time,
@@ -162,6 +186,9 @@
       <if test="modifiedTime != null">
         modified_time,
       </if>
+      <if test="emailContent != null">
+        email_content,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -173,9 +200,6 @@
       <if test="title != null">
         #{title,jdbcType=VARCHAR},
       </if>
-      <if test="emailContent != null">
-        #{emailContent,jdbcType=VARCHAR},
-      </if>
       <if test="sendStatus != null">
         #{sendStatus,jdbcType=VARCHAR},
       </if>
@@ -184,6 +208,9 @@
       </if>
       <if test="delaySendTime != null">
         #{delaySendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="attachment != null">
+        #{attachment,jdbcType=VARCHAR},
       </if>
       <if test="sendTime != null">
         #{sendTime,jdbcType=TIMESTAMP},
@@ -202,6 +229,9 @@
       </if>
       <if test="modifiedTime != null">
         #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="emailContent != null">
+        #{emailContent,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -223,9 +253,6 @@
       <if test="record.title != null">
         title = #{record.title,jdbcType=VARCHAR},
       </if>
-      <if test="record.emailContent != null">
-        email_content = #{record.emailContent,jdbcType=VARCHAR},
-      </if>
       <if test="record.sendStatus != null">
         send_status = #{record.sendStatus,jdbcType=VARCHAR},
       </if>
@@ -234,6 +261,9 @@
       </if>
       <if test="record.delaySendTime != null">
         delay_send_time = #{record.delaySendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.attachment != null">
+        attachment = #{record.attachment,jdbcType=VARCHAR},
       </if>
       <if test="record.sendTime != null">
         send_time = #{record.sendTime,jdbcType=TIMESTAMP},
@@ -253,7 +283,30 @@
       <if test="record.modifiedTime != null">
         modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.emailContent != null">
+        email_content = #{record.emailContent,jdbcType=LONGVARCHAR},
+      </if>
     </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update tb_oa_email
+    set id = #{record.id,jdbcType=VARCHAR},
+      work_order_num = #{record.workOrderNum,jdbcType=VARCHAR},
+      title = #{record.title,jdbcType=VARCHAR},
+      send_status = #{record.sendStatus,jdbcType=VARCHAR},
+      is_delay = #{record.isDelay,jdbcType=VARCHAR},
+      delay_send_time = #{record.delaySendTime,jdbcType=TIMESTAMP},
+      attachment = #{record.attachment,jdbcType=VARCHAR},
+      send_time = #{record.sendTime,jdbcType=TIMESTAMP},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      email_content = #{record.emailContent,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -263,10 +316,10 @@
     set id = #{record.id,jdbcType=VARCHAR},
       work_order_num = #{record.workOrderNum,jdbcType=VARCHAR},
       title = #{record.title,jdbcType=VARCHAR},
-      email_content = #{record.emailContent,jdbcType=VARCHAR},
       send_status = #{record.sendStatus,jdbcType=VARCHAR},
       is_delay = #{record.isDelay,jdbcType=VARCHAR},
       delay_send_time = #{record.delaySendTime,jdbcType=TIMESTAMP},
+      attachment = #{record.attachment,jdbcType=VARCHAR},
       send_time = #{record.sendTime,jdbcType=TIMESTAMP},
       record_status = #{record.recordStatus,jdbcType=TINYINT},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
@@ -286,9 +339,6 @@
       <if test="title != null">
         title = #{title,jdbcType=VARCHAR},
       </if>
-      <if test="emailContent != null">
-        email_content = #{emailContent,jdbcType=VARCHAR},
-      </if>
       <if test="sendStatus != null">
         send_status = #{sendStatus,jdbcType=VARCHAR},
       </if>
@@ -297,6 +347,9 @@
       </if>
       <if test="delaySendTime != null">
         delay_send_time = #{delaySendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="attachment != null">
+        attachment = #{attachment,jdbcType=VARCHAR},
       </if>
       <if test="sendTime != null">
         send_time = #{sendTime,jdbcType=TIMESTAMP},
@@ -316,17 +369,37 @@
       <if test="modifiedTime != null">
         modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="emailContent != null">
+        email_content = #{emailContent,jdbcType=LONGVARCHAR},
+      </if>
     </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.jn.oa.email.entity.TbOaEmail">
+    update tb_oa_email
+    set work_order_num = #{workOrderNum,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      send_status = #{sendStatus,jdbcType=VARCHAR},
+      is_delay = #{isDelay,jdbcType=VARCHAR},
+      delay_send_time = #{delaySendTime,jdbcType=TIMESTAMP},
+      attachment = #{attachment,jdbcType=VARCHAR},
+      send_time = #{sendTime,jdbcType=TIMESTAMP},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      email_content = #{emailContent,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.oa.email.entity.TbOaEmail">
     update tb_oa_email
     set work_order_num = #{workOrderNum,jdbcType=VARCHAR},
       title = #{title,jdbcType=VARCHAR},
-      email_content = #{emailContent,jdbcType=VARCHAR},
       send_status = #{sendStatus,jdbcType=VARCHAR},
       is_delay = #{isDelay,jdbcType=VARCHAR},
       delay_send_time = #{delaySendTime,jdbcType=TIMESTAMP},
+      attachment = #{attachment,jdbcType=VARCHAR},
       send_time = #{sendTime,jdbcType=TIMESTAMP},
       record_status = #{recordStatus,jdbcType=TINYINT},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},

@@ -1,0 +1,2739 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+  /* 解决侧边滑动引起界面抖动 */
+  overflow-y:scroll;
+}
+// .el-input__inner {
+//   -webkit-appearance: none;
+//   background-color: #fff;
+//   background-image: none;
+//   border-radius: 4px;
+//   border: 1px solid #dcdfe6;
+//   -webkit-box-sizing: border-box;
+//   box-sizing: border-box;
+//   color: #b7b7b7;
+//   display: inline-block;
+//   font-size: inherit;
+//   height: 40px;
+//   line-height: 40px;
+//   outline: 0;
+//   padding: 0 15px;
+//   -webkit-transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+//   transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+//   width: 100%;
+//   font-family: '微软雅黑'
+// }
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit
+}
+
+i {
+  font-style: normal;
+}
+
+input {
+  outline-style: none;
+}
+
+img {
+  vertical-align: middle;
+}
+
+.clearfix:after {
+  /*正常浏览器 清除浮动*/
+  clear: both;
+  content: '';
+  display: block;
+  width: 0;
+  height: 0;
+  visibility: hidden;
+}
+
+.clearfix {
+  *zoom: 1;
+  /*zoom 1 就是ie6 清除浮动方式  *  ie7一下的版本所识别*/
+}
+
+.pr {
+  position: relative;
+}
+
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+.w {
+  width: 1190px;
+  margin: 0 auto;
+}
+
+.mainColor {
+  color: #00a041;
+}
+
+.ct {
+  text-align: center;
+}
+
+.color1 {
+  color: #333;
+}
+
+.color2 {
+  color: #666;
+}
+
+.color3 {
+  color: #999;
+}
+
+.color4 {
+  color: #222;
+}
+
+.mainBorder {
+  border: 1px solid #eee;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.impact {
+  font-family: IMPACT;
+}
+
+.maxWidth {
+  .el-input {
+    width: 266px;
+  }
+}
+
+.arialn {
+  font-family: ARIALN;
+}
+
+/* 活动中心开始 */
+.actiCenter,
+.actiTrain {
+  .actiContent {
+    width: 1190px;
+    margin: 0 auto;
+
+    .actiNav {
+      margin: 20px 0;
+      font-size: 13px;
+      font-weight: bold;
+
+      a:last-child {
+        color: #00a041;
+        font-weight: bold;
+      }
+    }
+
+    .actiFilter {
+      height: 75px;
+      line-height: 75px;
+      padding: 0 20px;
+      border: 1px solid #eee;
+
+      .timeFilter {
+        float: left;
+        color: #797979;
+
+        >span {
+          cursor: pointer;
+          display: inline-block;
+          width: 100px;
+          height: 32px;
+          line-height: 32px;
+          text-align: center;
+          margin-left: 20px;
+          border-radius: 16px;
+        }
+
+        >span.active0 {
+          color: #fff;
+          background: linear-gradient(to bottom right, #35bf6d, #00a041);
+        }
+      }
+
+      .timeOrder {
+        float: right;
+        color: #919191;
+
+        >ul {
+          overflow: hidden;
+
+          li {
+            display: inline-block;
+            margin-left: 20px;
+            cursor: pointer;
+
+            .iconfont {
+              font-size: 18px;
+            }
+
+            .icon-menu1:hover {
+              cursor: pointer;
+            }
+
+            .icon-menu {
+              cursor: pointer;
+              margin-left: 10px;
+            }
+          }
+
+          li.active0 {
+            // color: #00a041;
+            background-image: -webkit-linear-gradient(to bottom right, #35bf6d, #00a041);
+            // -webkit-background-clip: text;
+            // color: transparent;
+            -webkit-text-fill-color: #00a041;
+            -webkit-background-clip: text;
+          }
+
+          .showListLi>i.active0 {
+            color: #00a041;
+          }
+        }
+      }
+    }
+
+    .allActi {
+      padding-top: 20px;
+      border-bottom: 1px solid #eee;
+      line-height: 37px;
+
+      .actiFilterUl {
+        >li {
+          float: left;
+          padding-bottom: 10px;
+          margin-right: 20px;
+          cursor: pointer;
+          color: #333;
+        }
+
+        >li.active0 {
+          border-bottom: 2px solid #00a041;
+          color: #00a041;
+        }
+
+        .bottomLi {
+          margin-right: 0;
+        }
+
+        .box-card {
+          position: absolute;
+          left: 8px;
+          top: 23px;
+          background-color: #fff;
+          padding: 0;
+          z-index: 4;
+        }
+
+        .el-card__body {
+          padding: 0;
+          width: 100%;
+          height: 100%;
+        }
+
+        .listUl {
+          width: 100%;
+          height: 100%;
+          padding: 0 20px;
+        }
+
+        .listUl>li {
+          padding: 5px 0;
+          float: left;
+          width: 170px;
+          cursor: pointer;
+          color: #000;
+        }
+
+        .listUl>li.active {
+          color: #00a041;
+        }
+      }
+
+      .actiSearch {
+        width: 200px;
+        height: 38px;
+        line-height: 35px;
+        text-align: center;
+        padding-right: 40px;
+        border: 1px solid #eee;
+        border-radius: 5px;
+
+        >input {
+          border: 0;
+          height: 100%;
+          width: 80%;
+        }
+
+        input::-webkit-input-placeholder {
+          /* WebKit browsers*/
+          color: #999;
+          font-size: 13px;
+        }
+
+        input:-moz-placeholder {
+          /* Mozilla Firefox 4 to 18*/
+          color: #999;
+          font-size: 13px;
+        }
+
+
+        input::-moz-placeholder {
+          /* Mozilla Firefox 19+*/
+          color: #999;
+          font-size: 13px;
+        }
+
+
+        input:-ms-input-placeholder {
+          /* Internet Explorer 10+*/
+          color: #999;
+          font-size: 13px;
+        }
+
+        input,
+        textarea,
+        select,
+        button {
+          text-rendering: auto;
+          color: #333;
+          letter-spacing: normal;
+          word-spacing: normal;
+          text-transform: none;
+          text-indent: 0;
+          text-shadow: none;
+          display: inline-block;
+          text-align: start;
+          margin: 0em;
+          font: 400 16px Arial;
+        }
+
+        >.icon-sousuo {
+          position: relative;
+          top: -36px;
+          right: -120px;
+          cursor: pointer;
+          font-size: 20px;
+          display: inline-block;
+          width: 40px;
+          line-height: 37px;
+          text-align: center;
+          border-left: 1px solid #eee;
+        }
+      }
+    }
+
+    .actiTab {
+      margin-top: 20px;
+      margin-bottom: 30px;
+
+      .allActiUl {
+        // overflow: hidden;
+
+        >li {
+          float: left;
+          width: 280px;
+          height: 345px;
+          border: 1px solid #eee;
+          margin-right: 20px;
+          margin-bottom: 30px;
+
+          .postImgItem {
+            display: inline-block;
+            width: 100%;
+            height: 192px;
+
+            .postImg {
+
+              height: 100%;
+              width: 100%;
+            }
+          }
+
+
+          .actiNum {
+            padding: 10px;
+            border-top: 1px solid #eee;
+            color: #999;
+            font-size: 12px;
+
+            .avatar {
+              float: left;
+              padding-left: 10px;
+
+              >ul {
+                display: inline-block;
+
+                li {
+                  float: left;
+                  width: 18px;
+                  height: 18px;
+                  // border: 1px solid #ccc;
+                  border-radius: 50%;
+                  margin-left: -10px;
+
+                  img {
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 50%;
+                  }
+                }
+              }
+            }
+
+            >i {
+              margin-left: 10px;
+            }
+
+            >span {
+              float: right;
+
+              .icon-xihuan {
+                margin-right: 5px;
+              }
+            }
+
+          }
+
+          .actiInfo {
+            padding: 10px;
+            color: #999;
+            font-size: 13px;
+
+            >.actiNameItem {
+              color: #222;
+              font-size: 16px;
+              overflow:hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+            }
+
+            .actiTimer {
+              text-indent: -10px;
+              margin: 10px 0 5px 18px;
+            }
+            .actiAddress{
+              overflow:hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+            }
+          }
+        }
+
+        li:nth-child(4n) {
+          margin-right: 0;
+        }
+      }
+
+      // 竖向排列样式
+      .verticalUl {
+        margin-bottom: 50px;
+
+        >li {
+          padding: 20px 0;
+          border-bottom: 1px solid #ccc;
+
+          .verticalLeft {
+            margin-right: 30px;
+            width: 304px;
+            height: 185px;
+
+            >img {
+              width: 100%;
+              height: 100%;
+            }
+          }
+
+          .verticalMiddle {
+            .verticalTit {
+              color: #333;
+            }
+
+            >p {
+              >span {
+                color: #999;
+              }
+            }
+
+            .xihuan {
+              margin: 15px 0;
+            }
+
+            .location {
+              margin: 18px 0;
+            }
+
+            .actiNum {
+              >i {
+                color: #999;
+                margin-left: 10px;
+                font-size: 12px;
+              }
+
+              .avatar {
+                float: left;
+                padding-left: 10px;
+
+                >ul {
+                  display: inline-block;
+
+                  li {
+                    float: left;
+                    width: 22px;
+                    height: 22px;
+                    // border: 1px solid #ccc;
+                    border-radius: 50%;
+                    margin-left: -10px;
+
+                    img {
+                      width: 100%;
+                      height: 100%;
+                      border-radius: 50%;
+                    }
+                  }
+                }
+              }
+
+              >.btn {
+                float: right;
+              }
+            }
+          }
+
+          .verticalRight {
+            margin-top: 145px;
+          }
+        }
+
+        >li:first-child {
+          padding-top: 0;
+        }
+      }
+    }
+  }
+}
+
+
+.el-pagination.is-background .el-pager li:not(.disabled).active {
+  background-color: #00a041 !important;
+  color: #fff;
+}
+
+.el-pager li:hover {
+  color: #00a041;
+}
+
+.pagination-container .el-pagination.is-background .el-pager li:not(.disabled):hover {
+  color: #00a041;
+}
+
+.pagination-container .el-pagination.is-background .el-pager li.number.active {
+  color: #fff;
+}
+
+.pagination-container .el-pager li {
+  min-width: 28px;
+}
+
+.pagination-container {
+  text-align: center;
+}
+
+/* 活动中心结束 */
+/* 活动详情 */
+.el-textarea__inner {
+  background: #f9f9f9;
+}
+
+/* 活动详情 */
+/* 服务超市-服务机构，服务产品 */
+.serverOrg,
+.serverPro,
+.serverCon,
+.quickSearch,
+.aboutUs,
+.finaInstitution,
+.finaPro,
+.companyProfile {
+  .el-tabs__nav-wrap::after {
+    height: 1px;
+  }
+
+  .el-tabs__item {
+    height: 50px !important;
+    line-height: 50px !important;
+  }
+
+  .loginTip {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 15px;
+  }
+
+  // .el-rate__icon.el-icon-star-on{
+  //   color:#00a041 !important;
+  // }
+  // padding-top: 65px;
+  .serverOrgMenu {
+    padding: 20px 0;
+    font-size: 13px;
+    font-weight: bold;
+
+    .agent {
+      font-weight: bold;
+    }
+  }
+
+  .serverOrgNav {
+    padding: 0 20px;
+    font-size: 13px;
+    margin-bottom: 20px;
+    text-align: center;
+
+    .nav1 {
+      padding: 15px 0;
+      border-bottom: 1px solid #eee;
+      color: #666;
+
+      >img {
+        width: 12px;
+        height: 15px;
+        vertical-align: top;
+      }
+
+      // color:#666;
+      .nav1Tit {
+        margin-top: 5px;
+      }
+
+      .nav1Ul {
+        width: 860px;
+        overflow: hidden;
+        height: 27px;
+
+        // text-indent: -35px;
+        // margin-left: 35px;
+        >li {
+          float: left;
+          margin-left: 20px;
+          padding: 5px 10px;
+          cursor: pointer;
+          line-height: 17px;
+        }
+
+        >li.active1 {
+          background: #009f42;
+          border-radius: 4px;
+          color: #fff;
+        }
+      }
+
+      .nav1Ul.sh {
+        overflow: visible;
+        height: auto;
+      }
+
+      .el-icon-arrow-down,
+      .el-icon-arrow-up {
+        font-size: 18px;
+        color: #999;
+      }
+    }
+
+    #nav1 {
+      border: none;
+    }
+
+    .nav2 {
+      border-bottom: none;
+    }
+  }
+
+  .serverOrgFilter {
+    padding: 10px;
+    font-size: 13px;
+
+    input::-webkit-input-placeholder {
+      /* WebKit browsers*/
+      color: #999;
+      font-size: 13px;
+    }
+
+    input:-moz-placeholder {
+      /* Mozilla Firefox 4 to 18*/
+      color: #999;
+      font-size: 13px;
+    }
+
+
+    input::-moz-placeholder {
+      /* Mozilla Firefox 19+*/
+      color: #999;
+      font-size: 13px;
+    }
+
+
+    input:-ms-input-placeholder {
+      /* Internet Explorer 10+*/
+      color: #999;
+      font-size: 13px;
+    }
+
+    .filLeft {
+      margin-top: 10px;
+      color: #797979;
+
+      >span {
+        margin-right: 20px;
+        cursor: pointer;
+        color: #999;
+      }
+
+      >span.active2 {
+        color: #00a041;
+      }
+    }
+
+    .filRight {
+      width: 200px;
+      height: 36px;
+      line-height: 35px;
+      text-align: center;
+      padding-right: 40px;
+      border: 1px solid #eee;
+      border-radius: 5px;
+
+      >input {
+        border: 0;
+        height: 100%;
+        width: 80%;
+      }
+
+      input,
+      textarea,
+      select,
+      button {
+        text-rendering: auto;
+        color: #333;
+        letter-spacing: normal;
+        word-spacing: normal;
+        text-transform: none;
+        text-indent: 0;
+        text-shadow: none;
+        display: inline-block;
+        text-align: start;
+        margin: 0em;
+        font: 400 16px Arial;
+      }
+
+      >.icon-sousuo {
+        position: relative;
+        top: -36px;
+        right: -120px;
+        cursor: pointer;
+        font-size: 20px;
+        display: inline-block;
+        width: 40px;
+        line-height: 37px;
+        text-align: center;
+        border-left: 1px solid #eee;
+      }
+    }
+  }
+
+  .serverOrgContent {
+    margin-top: 20px;
+    margin-bottom: 70px;
+
+    >ul {
+      >li {
+        padding: 20px 0;
+        border-bottom: 1px solid #eee;
+
+        .orgImg {
+          width: 198px;
+          height: 128px;
+
+          >img {
+            width: 100%;
+            height: 100%;
+            border-radius: 7px;
+          }
+        }
+
+        .orgCon {
+          margin-left: 20px;
+
+          .conTil {
+            font-size: 15px;
+            color: #222;
+            font-weight: bold;
+            margin-bottom: 40px;
+          }
+
+          .conContent {
+            font-size: 12px;
+
+            .left1 {
+              width: 300px;
+
+              >p {
+                margin-bottom: 5px;
+              }
+            }
+
+            .right1 {
+
+              // margin-left: 40px;
+              >p {
+                margin-top: 4px;
+              }
+
+              .el-rate {
+                display: inline-block;
+              }
+
+              //   .el-rate__icon{
+              //       color:#009f42 !important;
+              //   }
+            }
+          }
+        }
+
+        .orgBtn {
+          font-size: 13px;
+          background: #ecfcf2;
+          padding: 6px 20px;
+          border: 1px solid #00a041;
+          border-radius: 4px;
+          margin-top: 50px;
+          cursor: pointer;
+        }
+      }
+
+      >li:first-child {
+        padding-top: 10px;
+      }
+    }
+  }
+
+  .pagination-container {
+    margin-bottom: 50px;
+  }
+}
+
+/* 服务超市-服务机构，服务产品  */
+/* 服务机构详情 */
+.serverOrgDetail,
+.serverProDetail,
+.serverConDetail,
+.quickSearch,
+.finaInsDetail,
+.finaProDetail {
+  padding-top: 65px;
+
+  .el-tabs__nav-wrap::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #e4e7ed;
+    z-index: 1;
+  }
+
+  .loginTip {
+    text-align: center;
+    font-size: 15px;
+    margin-bottom: 20px;
+  }
+
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+
+  .el-tabs__item.is-active {
+    color: #00a041;
+  }
+
+  .el-tabs__active-bar {
+    background: #00a041;
+  }
+
+  .el-tabs__item:hover {
+    color: #00a041;
+  }
+
+  .serverOrgMenu {
+    padding: 20px 0;
+    font-size: 13px;
+    font-weight: bold;
+
+    .agent {
+      font-weight: bold;
+    }
+  }
+
+  .agentInfo {
+    .el-card__body {
+      padding: 30px;
+    }
+
+    .agent1 {
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
+
+      .agentTil {
+        color: #333;
+        margin-top: 6px;
+        font-size: 20px;
+      }
+
+      .orgBtn {
+        font-size: 13px;
+        background: #ecfcf2;
+        padding: 6px 20px;
+        border: 1px solid #00a041;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+    }
+
+    .agent2 {
+      margin-top: 20px;
+      font-size: 13px;
+
+      .agentImg {
+        width: 198px;
+        height: 128px;
+
+        >img {
+          width: 100%;
+          height: 100%;
+          border-radius: 7px;
+        }
+      }
+
+      .agent2Info {
+        margin-left: 20px;
+
+        >p {
+          margin-bottom: 7px;
+        }
+
+        .lastP {
+          position: absolute;
+          // margin-top: 20px;
+          // margin-left: 630px;
+          right: 0;
+          bottom:20px;
+          bottom: -8px;
+
+          >span {
+            margin-left: 20px;
+          }
+        }
+      }
+    }
+  }
+
+  .agentDel {
+    font-size: 14px;
+
+    .agentDelTit {
+      padding: 20px 0;
+      font-size: 16px;
+      color: #333;
+    }
+
+    .agentDelCon {
+      font-size: 12px;
+
+      .el-tabs__item {
+        font-size: 15px;
+        color: #333;
+      }
+
+      >.shouqi {
+        position: absolute;
+        right: 25px;
+        top: 30px;
+        font-size: 14px;
+        z-index: 2;
+        text-align: center;
+      }
+
+      >.zhankai {
+        // width: 30px;
+        position: absolute;
+        right: 25px;
+        top: 30px;
+        font-size: 14px;
+        z-index: 2;
+        text-align: center;
+      }
+
+      .basicInfo,
+      .businessinfo,
+      .teamInfo,
+      .contactInfo {
+        .table-orgspace {
+          width: 100%;
+
+          tr td {
+            padding: 0px 14px;
+            line-height: 50px;
+            font-size: 14px;
+            border: 1px solid #e4e4e4;
+          }
+
+          .table-orgspace-title {
+            color: #666;
+            background-color: #f8f8f8;
+            font-size: 13px;
+            width: 146px;
+          }
+
+          .table-orgspace-detail {
+            color: #333;
+            font-size: 13px;
+          }
+
+          .table-orgspace-col {
+            color: #333;
+            padding: 10px 0px;
+            line-height: 22px;
+            text-align: justify;
+            font-size: 13px;
+          }
+        }
+      }
+      .basicInfo{
+        .table-orgspace-title {
+          width: 146px;
+        }
+      }
+      .businessinfo {
+        .table-orgspace-title {
+          width: 146px;
+        }
+      }
+      .contactInfo{
+        .table-orgspace-title.ta_c{
+          width: auto;
+        }
+      }
+
+      .honor {
+        // padding: 20 0px;
+        font-size: 14px;
+
+        >ul {
+          >li {
+            margin-bottom: 20px;
+
+            // font-size: 0;
+            .honorImg {
+              width: 130px;
+              height: 80px;
+              display: inline-block;
+              vertical-align: middle;
+
+              >img {
+                width: 100%;
+                height: 100%;
+              }
+            }
+
+            .dataCircle {
+              width: 20px;
+              height: 20px;
+              margin: 0 40px;
+              display: inline-block;
+              vertical-align: middle;
+
+              >img {
+                width: 100%;
+                height: 100%;
+              }
+            }
+
+            .honorTime {
+              display: inline-block;
+              vertical-align: middle;
+            }
+
+            .honorName {
+              margin-left: 40px;
+              display: inline-block;
+              vertical-align: middle;
+            }
+          }
+
+          >li:last-child {
+            margin-bottom: 0;
+          }
+        }
+
+        .dataLeft {
+          >div {
+            margin-bottom: 20px;
+            width: 130px;
+            height: 80px;
+
+            >img {
+              width: 100%;
+              height: 100%;
+            }
+          }
+        }
+
+        .dataMid {
+          margin: 0 50px;
+          margin-top: 30px;
+
+          .dataCircle {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 1px solid #ccc;
+            background: #00a041;
+          }
+
+          .dataLine {
+            width: 2px;
+            height: 80px;
+            margin-left: 10px;
+            background-color: #00a041;
+          }
+        }
+
+        .dataMid2 {
+          margin-top: 35px;
+          margin-right: 30px;
+
+          >div {
+            margin-bottom: 80px;
+          }
+
+          >div:last-child {
+            margin-bottom: 0px;
+          }
+        }
+
+        .dataRight {
+          margin-top: 30px;
+
+          >div {
+            margin-bottom: 60px;
+          }
+
+          >div:last-child {
+            margin-bottom: 0px;
+          }
+        }
+      }
+
+      .teamInfo,
+      .contactInfo {
+        .contact-title {
+          padding: 0px 0px 16px;
+          color: #333;
+          font-weight: bold;
+        }
+
+        .mt20 {
+          margin-top: 20px;
+        }
+
+        .mr5 {
+          margin-right: 5px;
+        }
+
+        .contact-detail-img {
+          display: inline-block;
+          height: 10px;
+          width: 10px;
+          line-height: 15px;
+          border-radius: 50%;
+          background: #00a041;
+        }
+      }
+    }
+  }
+
+  .agentCon {
+    margin-bottom: 80px;
+
+    .el-tabs {
+      font-size: 13px;
+      color: #333;
+    }
+
+    .el-tabs__item {
+      font-size: 15px;
+      color: #333;
+    }
+
+    .agentFil {
+      font-size: 13px;
+      margin-top: 20px;
+      color: #999;
+
+      .select-list {
+        padding: 15px;
+        color: #666;
+        vertical-align: middle;
+        padding-left: 12px;
+
+        >li {
+          float: left;
+        }
+
+        >li.active3 {
+          color: #00a041;
+        }
+
+        .list-item {
+          margin-right: 30px;
+        }
+      }
+    }
+
+    .serverPro,
+    .serConsultant,
+    .serEvaluation {
+      font-size: 13px;
+
+      .list-imgleft {
+        // padding: 0 25px;
+
+        .list-item {
+          padding: 20px 0;
+          // padding-top: 10px;
+          border-bottom: 1px solid #eee;
+
+          .list-imgleft-container.product {
+            width: 198px;
+            height: 128px;
+            display: inline-block;
+            vertical-align: middle;
+
+            >img {
+              width: 100%;
+              height: 100%;
+              border-radius: 7px;
+            }
+          }
+
+          .list-info-middle.inner-product {
+            width: 820px;
+          }
+
+          .list-info-middle {
+            margin-left: 20px;
+            display: inline-block;
+            vertical-align: middle;
+          }
+
+          .top-title.inner-product {
+            font-size: 16px;
+            color: #222;
+            cursor: pointer;
+          }
+
+          .top-title {
+            margin-bottom: 18px;
+            display: inline-block;
+            vertical-align: middle;
+          }
+
+          .detail-contact.inner-product {
+            color: #999;
+            width: 240px;
+          }
+
+          .detail-contact {
+            line-height: 22px;
+            display: inline-block;
+            vertical-align: middle;
+          }
+
+          .detail-evaluate.inner-product {
+            width: 420px;
+            color: #999;
+          }
+
+          .detail-evaluate {
+            display: inline-block;
+            vertical-align: middle;
+          }
+
+          .detail-count {
+            // width: 150px;
+            // display: inline-block;
+            // vertical-align: top;
+            margin-top: 40px;
+          }
+
+          .orgBtn {
+            font-size: 13px;
+            background: #ecfcf2;
+            padding: 6px 20px;
+            border: 1px solid #00a041;
+            border-radius: 4px;
+            // margin-top: 50px;
+            cursor: pointer;
+          }
+        }
+        .list-item:nth-child(1){
+          padding-top:10px;
+        }
+      }
+    }
+
+    .serConsultant {
+      .list-imgleft-container {
+        width: 120px;
+        height: 128px;
+        display: inline-block;
+        vertical-align: middle;
+
+        >img {
+          width: 100%;
+          height: 100%;
+          border-radius: 4px;
+        }
+      }
+
+      .detail-contact .text-of {
+        width: 270px;
+        color: #999;
+      }
+
+      .text-of {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+
+      .pt5 {
+        padding-top: 5px;
+      }
+
+      .top-title.inner-consultant {
+        font-size: 15px;
+        cursor: pointer;
+        color: #222;
+      }
+
+      .top-title {
+        font-weight: normal;
+        margin-bottom: 18px;
+        display: inline-block;
+        vertical-align: middle;
+      }
+
+      .detail-evaluate.inner-consultant {
+        width: 440px;
+        margin-left: 30px;
+      }
+    }
+
+    .serEvaluation {
+      .evaluate-container {
+        display: inline-block;
+        max-width: 620px;
+        width: auto;
+        padding: 6px 20px;
+        line-height: 26px;
+        color: #666;
+        background-color: #f8f8f8;
+        border-radius: 4px;
+        margin-top: 16px;
+      }
+
+      .arrow-container:before {
+        margin-top: -25px;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+        border-bottom-color: #f8f8f8;
+        border-width: 10px;
+        left: 24%;
+      }
+    }
+
+    .actiConsultation {
+      .allActiUl {
+        >li {
+          float: left;
+          width: 280px;
+          height: 345px;
+          border: 1px solid #eee;
+          margin-right: 20px;
+          margin-bottom: 30px;
+
+          .postImgItem {
+            display: inline-block;
+            width: 100%;
+            height: 192px;
+
+            .postImg {
+              height: 100%;
+              width: 100%;
+            }
+          }
+
+          .actiNum {
+            padding: 10px;
+            border-top: 1px solid #eee;
+            color: #999;
+            font-size: 12px;
+
+            .avatar {
+              float: left;
+              padding-left: 10px;
+
+              >ul {
+                display: inline-block;
+
+                li {
+                  float: left;
+                  width: 18px;
+                  height: 18px;
+                  border: 1px solid #ccc;
+                  border-radius: 50%;
+                  margin-left: -10px;
+
+                  img {
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 50%;
+                  }
+                }
+              }
+            }
+
+            >i {
+              margin-left: 10px;
+            }
+
+            >span {
+              float: right;
+
+              .icon-xihuan {
+                margin-right: 5px;
+              }
+            }
+          }
+
+          .actiInfo {
+            padding: 10px;
+            color: #999;
+            font-size: 13px;
+
+            >.actiNameItem {
+              color: #222;
+              font-size: 16px;
+              overflow:hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+            }
+
+            .actiTimer {
+              text-indent: -10px;
+              margin: 10px 0 5px 18px;
+            }
+            .actiAddress{
+              overflow:hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+            }
+          }
+        }
+
+        li:nth-child(4n) {
+          margin-right: 0;
+        }
+      }
+    }
+  }
+}
+
+/* 服务机构详情 */
+/* 门户首页、企业服务 */
+.portalIndex,
+.enterpriseservice {
+  .loginTip {
+    text-align: center;
+    font-size: 15px;
+    margin-bottom: 20px;
+  }
+
+  .avaP {
+    float: right;
+    color: #00a041;
+
+    >img {
+      width: 12px;
+      height: 12px;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 5px;
+    }
+  }
+
+  .el-pagination.is-background .btn-next,
+  .el-pagination.is-background .btn-prev,
+  .el-pagination.is-background .el-pager li {
+    margin: 0 5px;
+    background-color: #fff;
+    color: #606266;
+    min-width: 30px;
+    border-radius: 2px;
+    border: 1px solid #D9D9D9;
+  }
+
+  .header {
+    background-color: rgba(255, 255, 255, 0.2);
+    width: 100%;
+    z-index: 3;
+
+    .headerContainer {
+      // position: relative;
+      width: 100%;
+      padding: 0 160px;
+      height: 65px;
+      line-height: 65px;
+      color: #fff;
+      // font-weight: bold;
+      font-size: 16px;
+      box-sizing: border-box;
+
+      .titleImg {
+        width: 151px;
+        height: 37px;
+
+        img {
+          width: 100%;
+          height: 100%;
+          vertical-align: middle;
+        }
+      }
+
+      .nav {
+        width: 700px;
+        height: 37.6px;
+        margin: 0 auto;
+
+        >ul {
+          overflow: hidden;
+
+          li {
+            float: left;
+            // color: #ccc;
+            font-size: 14px;
+            text-align: center;
+            // line-height: 52px;
+            // padding: 0 50px;
+            // width: 100px;
+            width: 84px;
+
+          }
+
+          >li:hover {
+            background: #fff;
+            color: #00a041;
+            border-radius: 5px;
+          }
+
+          // >li:first-child{
+          //   background: #fff;
+          //   color: #00a041;
+          //   border-radius: 5px;
+          // }
+          .ru-active {
+            background: #fff;
+            color: #00a041;
+            border-radius: 5px;
+          }
+        }
+
+        .posA {
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%);
+          padding: 0;
+        }
+
+        .sousuo {
+          font-size: 18px;
+          line-height: 48px;
+
+          >input {
+            border: none;
+            width: 350px;
+            height: 38px;
+            font-size: 14px;
+          }
+
+          >input::-webkit-input-placeholder {
+            color: #b7b7b7;
+            font-size: 12px;
+          }
+        }
+      }
+
+      .headerRight {
+        .search {
+          display: inline-block;
+          margin-right: 20px;
+          vertical-align: middle;
+
+          i {
+            width: 20px;
+            height: 20px;
+          }
+        }
+
+        .navlogin {
+          display: inline-block;
+
+          a {
+            display: inline-block;
+            font-size: 14px;
+            cursor: pointer;
+          }
+
+          .line {
+            display: inline-block;
+            height: 12px;
+            margin: 0 15px;
+          }
+
+          >img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+          }
+        }
+      }
+    }
+  }
+
+  // .portalIndexImg {
+  //   // height: 650px;
+  //   position: fixed;
+  //   z-index: 99;
+  //   width: 100%;
+
+  //   .el-carousel__button {
+  //     width: 10px;
+  //     height: 10px;
+  //     border-radius: 50%;
+  //   }
+  //   .el-carousel__indicator {
+  //     display: block;
+  //     padding: 8px 4px;
+  //     width: 8px;
+  //   }
+  //   .el-carousel__indicator.is-active .el-carousel__button {
+  //     width: 10px;
+  //     height: 80px;
+  //     border-radius: 15px;
+  //   }
+  //   .el-carousel__indicators {
+  //     bottom: 35%;
+  //     left: 92%;
+  //   }
+  //   .el-carousel__arrow--right {
+  //     right: 60px;
+  //   }
+  //   .el-carousel__arrow--left {
+  //     left: 60px;
+  //   }
+  //   .el-carousel__arrow {
+  //     font-size: 20px;
+  //     border: 2px solid #fff;
+  //     height: 38px;
+  //     width: 38px;
+  //     background: rgba(255, 255, 255, 0.2);
+  //   }
+  //   .search_box {
+  //     background: rgba(0, 0, 0, 0.3);
+  //     // text-align: center;
+  //     .el-input-group {
+  //       border-radius: 28px;
+  //       width: 42%;
+  //       margin: 43px 0;
+  //       position: relative;
+  //       transform: translateX(-50%);
+  //       left: 50%;
+  //       .el-input {
+  //         width: 94px;
+  //       }
+  //       .el-input__inner:focus {
+  //         border-color: #00a041;
+  //       }
+  //       .el-input-group__append,
+  //       .el-input-group__prepend {
+  //         border-radius: 28px;
+  //       }
+  //       .el-input-group__append {
+  //         /* border-top-left-radius: 0;
+  //     border-bottom-left-radius: 0; */
+  //         background: #00a041;
+  //         color: #fff;
+  //         right: 58px;
+  //         .el-button {
+  //           margin: -10px -10px;
+  //         }
+  //       }
+  //       .el-input-group__prepend {
+  //         border-top-right-radius: 0;
+  //         border-bottom-right-radius: 0;
+  //         background-color: #fff;
+  //         padding: 0px 17px 0 9px;
+  //         input {
+  //           color: #666666;
+  //           text-align: right;
+  //         }
+  //       }
+
+  //     }
+  //     .input-with-select .el-input__inner{
+  //         border-top-left-radius: 19px;
+  //         border-bottom-left-radius: 19px;
+  //         border: 1px solid #00a041;
+  //       }
+  //   }
+  //   .searchbox{
+  //     background: #fff;
+  //     box-shadow:0 10px 10px -10px #ccc;
+  //   }
+  // }
+  .banner {
+    .quickEnter {
+      position: absolute;
+      z-index: 4;
+      bottom: 0;
+      // padding:0 200px;
+      width: 100%;
+      // background: rgba(93, 92, 127, 0.7);
+      background-color: rgba(0, 0, 0, 0.5);
+
+      >ul {
+        padding: 0 300px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        li {
+          padding: 50px 0px;
+          flex: 1;
+          color: #fff;
+          text-align: center;
+          cursor: pointer;
+          background: rgba(122, 118, 138, 0.1);
+
+          >span {
+            font-weight: bold;
+            font-size: 14px;
+          }
+
+          >p {
+            font-size: 12px;
+          }
+
+          >img {
+            // display: inline-block;
+            width: 25px;
+            height: 8px;
+            // color:#00a041;
+          }
+        }
+
+        li:hover {
+          background: rgba(255, 255, 255, 0.2);
+        }
+      }
+    }
+  }
+
+  .parkNotice {
+    padding: 20px 0;
+    font-size: 14px;
+    color: #999;
+    line-height: 30px;
+
+    .noticeList {
+      margin-left: 20px;
+    }
+  }
+
+  .declarationNotice,
+  .popularActi,
+  .districtGardens,
+  .enterpriseinfo,
+  .policyCenter,
+  .technologyFinance,
+  .humanResources,
+  .academiExchange {
+    padding: 50px 0px;
+    // border-top: 1px solid #eee;
+    text-align: center;
+
+    .tuoyuan {
+      width: 48px;
+      height: 48px;
+      line-height: 48px;
+      color: #00a041;
+      background: url("../../static/img/椭圆1.png") 100% 100% / 100% 100% no-repeat;
+      position: absolute;
+      top: -25px;
+      left: 48%;
+    }
+
+    .tit {
+      font-size: 26px;
+
+      .titImg {
+        width: 23px;
+        height: 26px;
+        // width: 36px;
+        // height: 36px;
+        // position: absolute;
+        position: fixed;
+        right: 0;
+        // top: 12%;
+        bottom: 0;
+
+        >img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+
+    .eng {
+      font-size: 43px;
+      font-weight: 100;
+    }
+
+    .line {
+      width: 33px;
+      height: 1px;
+      background: #00a041;
+      margin: 0 auto;
+      margin-top: 5px;
+      margin-bottom: 20px;
+    }
+
+    .btns {
+      font-size: 0;
+      margin: 50px 0;
+
+      >button {
+        padding: 5px 20px;
+        background: #fff;
+        border: none;
+        border: 1px solid #c2c2c2;
+        color: #999;
+        outline: none;
+        cursor: pointer;
+      }
+
+      >button:hover {
+        color: #fff;
+        background: #00a041;
+      }
+
+      .btn1 {
+        border-top-left-radius: 3px;
+        border-bottom-left-radius: 3px;
+      }
+
+      .btn2 {
+        border-top-right-radius: 3px;
+        border-bottom-right-radius: 3px;
+        border-left: none;
+      }
+
+      .btn11 {
+        border-radius: 0;
+      }
+
+      >button.btActive {
+        color: #fff;
+        background: #00a041;
+      }
+    }
+
+    .info {
+      // width: 1029px;
+      // margin:0 auto;
+      margin-top: 50px;
+      margin-left: 200px;
+      display: flex;
+
+      .left {
+        flex: 2;
+        margin-right: 40px;
+
+        // .li1 {
+        //   width: 40px;
+        //   height: 40px;
+        //   color: #fff;
+        //   text-align: center;
+        //   line-height: 40px;
+        //   background: url("../../static/img/椭圆2.png") 100% 100% / 100% 100%
+        //     no-repeat;
+        //     margin-right: 20px;
+        //     z-index: 2;
+        // }
+        // .li2 {
+        //   width: 1px;
+        //   height: 122px;
+        //   background: #d5d5d5;
+        //   margin-left: 20px;
+        // }
+        // .li3,.li5 {
+        //   width: 30px;
+        //   height: 30px;
+        //   border-radius: 50%;
+        //   text-align: center;
+        //   color: #d9d9d9;
+        //   border: 1px solid #d9d9d9;
+        //   line-height: 30px;
+        //   margin-left: 4px;
+        //   margin-right: 20px;
+        //   z-index: 2;
+        // }
+        .aa {
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          text-align: center;
+          color: #d9d9d9;
+          border: 1px solid #d9d9d9;
+          line-height: 30px;
+          // margin-left: 4px;
+          margin-right: 20px;
+          z-index: 2;
+        }
+
+        .active0 {
+          width: 40px;
+          height: 40px;
+          color: #fff;
+          text-align: center;
+          line-height: 40px;
+          background: url("../../static/img/tuoyuan2.png") 100% 100% / 100% 100% no-repeat;
+          margin-right: 20px;
+          z-index: 2;
+          border: none;
+          margin-left: -4px;
+        }
+
+        // .lf {
+        //   display: inline-block;
+        //   vertical-align: top;
+        //   margin-top: -8px;
+        //   .li1 {
+        //     width: 40px;
+        //     height: 40px;
+        //     color: #fff;
+        //     line-height: 40px;
+        //     background: url("../../static/img/椭圆2.png") 100% 100% / 100% 100%
+        //       no-repeat;
+        //   }
+        //   .li2 {
+        //     width: 1px;
+        //     height: 122px;
+        //     background: #d5d5d5;
+        //     margin-left: 20px;
+        //   }
+        //   .li3,
+        //   .li5 {
+        //     width: 30px;
+        //     height: 30px;
+        //     border-radius: 50%;
+        //     color: #d9d9d9;
+        //     border: 1px solid #d9d9d9;
+        //     line-height: 30px;
+        //     margin-left: 4px;
+        //   }
+        //   .li4 {
+        //     width: 1px;
+        //     height: 28px;
+        //     background: #d5d5d5;
+        //     margin-left: 20px;
+        //   }
+        // }
+        // .rt {
+        //   width: 350px;
+        //   text-align: left;
+        //   display: inline-block;
+        //   margin: 0 50px 0 20px;
+        //   .t1 {
+        //     font-size: 13px;
+        //     margin-bottom: 50px;
+        //     > p {
+        //       color: #919191;
+        //       font-size: 12px;
+        //       margin-top: 10px;
+        //     }
+        //   }
+        // }
+      }
+
+      .right {
+        flex: 1;
+        width: 200px;
+        height: 200px;
+        margin-right: 260px;
+        background: url("../../static/img/tupian1.png") 100% 100% / 75% 100% no-repeat;
+      }
+
+      .el-collapse-item__header {
+        font-size: 15px;
+      }
+
+      .el-collapse-item__content {
+        font-size: 13px;
+        color: #999;
+        margin-left: 58px;
+      }
+    }
+  }
+
+  .technologyFinance {
+    border-top: 1px solid #eee;
+  }
+
+  .portalNotice {
+    border-top: 1px solid #eee;
+    padding-bottom: 0;
+  }
+
+  .policyGuide,
+  .enterprisesPark {
+    margin-top: 100px;
+    height: 589px;
+    padding: 50px 0px;
+    text-align: center;
+    color: #fff;
+    background: url("../../static/img/tuceng1.png") 100% 100% / 100% 100% no-repeat;
+
+    .tit {
+      font-size: 26px;
+    }
+
+    .eng {
+      font-size: 43px;
+      font-weight: 100;
+    }
+
+    .line {
+      width: 33px;
+      height: 1px;
+      background: #fff;
+      margin: 0 auto;
+      margin-top: 5px;
+      margin-bottom: 20px;
+    }
+
+    .fenye {
+      // margin-top: 80px;
+      padding: 60px 0 100px 0;
+
+      >.qiehuan1 {
+        >li {
+          display: inline-block;
+          width: 190px;
+          height: 210px;
+          padding: 30px 10px;
+          font-size: 12px;
+          text-align: left;
+          margin-right: 15px;
+          vertical-align: middle;
+          background-color: rgba(255, 255, 255, 0.2);
+
+          .liTit {
+            font-size: 14px;
+            text-align: center;
+          }
+
+          .liInfo {
+            margin: 40px 0 50px 0;
+          }
+
+          .liBom {
+            padding: 0 15px;
+
+            >i {
+              margin-right: 8px;
+            }
+          }
+        }
+
+        // > li:nth-child(1) {
+        //   width: 200px;
+        //   height: 210px;
+        //   padding: 50px 20px;
+        // }
+        >li:nth-child(4n) {
+          margin-right: 0;
+        }
+      }
+
+      >.qiehuan2 {
+        width: 60px;
+        margin: 0 auto;
+        margin-top: 60px;
+
+        li {
+          float: left;
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background-color: #97ecc8;
+          margin-right: 10px;
+        }
+
+        li:nth-child(2) {
+          background: #fff;
+        }
+      }
+
+      .arrow {
+        width: 17px;
+        height: 31px;
+
+        .arrow1 {
+          width: 17px;
+          height: 31px;
+          position: absolute;
+          left: 75px;
+          top: 200px;
+          background: url("../../static/img/zuo1.png") 100% 100% / 100% 100% no-repeat;
+        }
+
+        .arrow2 {
+          width: 17px;
+          height: 31px;
+          position: absolute;
+          right: 75px;
+          top: 200px;
+          background: url("../../static/img/you1.png") 100% 100% / 100% 100% no-repeat;
+        }
+      }
+    }
+  }
+
+  .popularActi {
+    .acti {
+      margin-top: 30px;
+      text-align: left;
+
+      .swiper-button-next,
+      .swiper-container-rtl .swiper-button-prev {
+        background-image: none;
+        right: 0;
+        left: auto;
+      }
+
+      .swiper-button-prev,
+      .swiper-container-rtl .swiper-button-next {
+        background-image: none;
+        left: 0px;
+        right: auto;
+      }
+
+      .actiUl {
+        width: 910px;
+        margin: 0 auto;
+
+        >li {
+          float: left;
+          // display: inline-block;
+          width: 280px;
+          // height: 340px;
+          border: 1px solid #eee;
+          margin-right: 20px;
+          margin-bottom: 30px;
+
+          .postImgItem,
+          .postImgItem2 {
+            display: inline-block;
+            width: 100%;
+            height: 180px;
+            padding-top: 12px;
+            position: relative;
+
+            .postImg,
+            .postImg1 {
+              position: absolute;
+              left: 0;
+              top: 10px;
+              height: 100%;
+              width: 100%;
+            }
+
+          }
+
+          .postImgItem2 {
+
+            // background: url("../../static/img/tuceng2.png") 100% 100% / 100% 94%
+            //   no-repeat;
+            .postImg1 {
+              height: 50px;
+              width: 38px;
+              margin-top: 60px;
+              margin-left: 120px;
+            }
+          }
+
+          // .postImgItem .poIm{
+          //   animation: fadeOut 1.5s;
+          // }
+          // .postImgItem2 .poIm1{
+          //   animation: fadeIn 1.5s;
+          // }
+          .postImgItem img {
+            transition: all 1s;
+          }
+
+          .postImgItem .postImg {
+            opacity: 1;
+          }
+
+          .postImgItem .postImg1 {
+            opacity: 0;
+          }
+
+          .postImgItem .postImg.poIm {
+            opacity: 0;
+          }
+
+          .postImgItem .postImg1.poIm {
+            opacity: 1;
+          }
+
+          .actiNum {
+            padding: 10px;
+            border-top: 1px solid #eee;
+            color: #999;
+            font-size: 12px;
+
+            .avatar {
+              float: left;
+              padding-left: 10px;
+
+              >ul {
+                display: inline-block;
+
+                li {
+                  float: left;
+                  width: 16px;
+                  height: 16px;
+                  // border: 1px solid #ccc;
+                  border-radius: 50%;
+                  margin-left: -7px;
+                  background: url("../../static/img/detail2.png") 100% 100% / 100% 100% no-repeat;
+
+                  img {
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 50%;
+                  }
+                }
+              }
+            }
+
+            >i {
+              margin-left: 10px;
+            }
+
+            >span {
+              float: right;
+
+              .icon-xihuan {
+                margin-right: 5px;
+              }
+            }
+          }
+
+          .actiInfo {
+            padding: 10px;
+            color: #999;
+            font-size: 13px;
+
+            >.actiNameItem {
+              color: #222;
+              font-size: 16px;
+              overflow:hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+            }
+
+            .actiTimer {
+              // text-indent: -10px;
+              // margin: 10px 0 5px 18px;
+              // text-indent: -10px;
+              margin: 10px 0 5px 0px;
+            }
+          }
+        }
+
+        >li:hover {
+          border: 1px solid #00a041;
+        }
+
+        >li:nth-child(3n) {
+          margin-right: 0;
+        }
+      }
+
+      .icon-leftarrow {
+        position: absolute;
+        left: 60px;
+        font-size: 34px;
+        height: 34px;
+        color: #d0d0d0;
+        // top: 166px;
+      }
+
+      .icon-rightarrow {
+        position: absolute;
+        right: 80px;
+        font-size: 34px;
+        height: 34px;
+        color: #d0d0d0;
+        // top: 166px;
+      }
+
+      .lejieDel {
+        width: 132px;
+        margin: 0 auto;
+        text-align: center;
+        border-radius: 20px;
+        padding: 5px;
+        font-size: 14px;
+        color: #fff;
+        background: #00a041;
+      }
+
+      .el-carousel__arrow {
+        background: #fff;
+        font-size: 20px;
+        color: #D0D0D0;
+        border: 1px solid #D0D0D0;
+      }
+
+      .el-carousel__arrow--left {
+        left: 75px;
+      }
+
+      .el-carousel__arrow--right {
+        right: 100px;
+      }
+
+      .el-carousel__indicators {
+        display: none;
+      }
+
+      .el-carousel {
+        margin-bottom: 60px;
+      }
+    }
+  }
+
+  .districtGardens {
+    .card {
+      padding: 40px 0;
+
+      .cardUl {
+
+        // margin: 50px 0;
+        >li {
+          display: inline-block;
+          margin-right: 30px;
+
+          .el-card__body {
+            padding: 30px;
+          }
+
+          img {
+            width: 200px;
+            height: 200px;
+            margin-top: 10px;
+          }
+
+          p {
+            margin-top: 50px;
+            margin-bottom: 10px;
+          }
+
+          div {
+            padding-bottom: 20px;
+            color: #C4C4C4;
+          }
+        }
+
+        >li:nth-child(3n) {
+          margin-right: 0;
+        }
+      }
+
+      .arrow {
+        width: 17px;
+        height: 31px;
+
+        .arrow1 {
+          width: 17px;
+          height: 31px;
+          position: absolute;
+          left: 100px;
+          top: 200px;
+          background: url("../../static/img/zuo2.png") 100% 100% / 100% 100% no-repeat;
+        }
+
+        .arrow2 {
+          width: 17px;
+          height: 31px;
+          position: absolute;
+          right: 100px;
+          top: 200px;
+          background: url("../../static/img/you2.png") 100% 100% / 100% 100% no-repeat;
+        }
+      }
+
+      .el-carousel__arrow {
+        background: none;
+        color: #eee;
+        font-size: 35px;
+      }
+
+      .el-carousel__arrow--left {
+        left: 105px;
+      }
+
+      .el-carousel__arrow--right {
+        right: 105px;
+      }
+
+      .el-carousel__container {
+        height: 430px;
+      }
+
+      .el-carousel__indicators {
+        display: none;
+      }
+    }
+  }
+
+  .enterpriseinfo {
+
+    // text-align: left;
+    .enterPriseCon {
+
+      .con1,
+      .conlef1 {
+        width: 416px;
+        display: inline-block;
+
+        .con1Img {
+          width: 416px;
+          height: 232px;
+
+          >img {
+            width: 100%;
+            height: 100%;
+          }
+        }
+
+        .conTit1 {
+          font-size: 16px;
+          font-weight: 500;
+          margin-top: 10px;
+          text-align: left;
+        }
+
+        .conInfo {
+          text-align: left;
+          font-size: 13px;
+          color: #b6b6b6;
+          margin: 10px 0;
+
+          >img {
+            width: 53px;
+            height: 39px;
+            vertical-align: middle;
+            display: inline-block;
+          }
+        }
+
+        >p {
+          text-align: left;
+          font-size: 13px;
+        }
+
+        .more {
+          width: 58px;
+          height: 25px;
+          line-height: 25px;
+          margin-top: 20px;
+          color: #fff;
+          font-size: 12px;
+          background: url("../../static/img/圆角矩形14.png") 100% 100% / 100% 100% no-repeat;
+        }
+      }
+
+      .con2 {
+        display: inline-block;
+        margin-left: 20px;
+        vertical-align: top;
+        text-align: left;
+
+        .conlef1 {
+          text-align: left;
+          width: 192px;
+
+          >img {
+            width: 192px;
+            height: 108px;
+          }
+
+          >.conInfo {
+            margin: 5px 0 10px 0;
+
+            >img {
+              width: 55px;
+              height: 15px;
+            }
+          }
+
+          >.more {
+            text-align: center;
+          }
+        }
+
+        // .conlef2 {
+        //   margin-left: 20px;
+        // }
+        .conlef1:nth-child(2) {
+          margin-left: 20px;
+        }
+
+        .conT2 {
+          width: 416px;
+          margin-top: 20px;
+
+          >.contop1 {
+            >div {
+              >i {
+                display: inline-block;
+                vertical-align: middle;
+                width: 5px;
+                height: 5px;
+                border-radius: 50%;
+                background: #00a041;
+              }
+
+              >span {
+                font-size: 14px;
+              }
+
+              >p {
+                font-size: 13px;
+                color: #b6b6b6;
+                text-align: left;
+                margin-top: 5px;
+
+                >img {
+                  width: 45px;
+                  width: 33px;
+                  display: inline-block;
+                  vertical-align: middle;
+                }
+              }
+            }
+
+            >p {
+              font-size: 12px;
+              margin-top: 5px;
+            }
+
+            .sp1 {
+              margin-left: 10px;
+            }
+          }
+
+          >.contop2 {
+            margin-top: 20px;
+          }
+        }
+      }
+    }
+
+    .enterPriseCon {
+      margin-top: 40px;
+    }
+  }
+
+  .enterprisesPark {
+    background: url("../../static/img/tuceng3.png") 100% 100% / 100% 100% no-repeat;
+    height: 753px;
+    margin-bottom: 100px;
+
+    .enterPark {
+      margin-top: 60px;
+
+      >ul {
+        width: 850px;
+        margin: 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+
+        li {
+          flex: 23%;
+          // width: 185px;
+          // height: 111px;
+          // padding: 50px 0;
+          margin-bottom: 40px;
+          opacity: 0;
+
+          // display: inline-block;
+          // float: left;
+          // border: 1px solid #fff;
+          // margin-right: 30px;
+          p {
+            margin-top: 30px;
+          }
+
+          img {
+            width: 50px;
+            height: 50px;
+          }
+        }
+
+        .li1Div {
+          width: 185px;
+          height: 111px;
+          padding: 50px 0;
+        }
+
+        li:nth-child(4n) {
+          margin-right: 0;
+        }
+
+        li .li1Div:hover {
+          background: rgba(255, 255, 255, 0.3);
+          transform: scale(1.1);
+          transition: all .6s;
+        }
+      }
+    }
+  }
+}
+
+/* 门户首页、企业服务 */
+/* 动画效果 */
+
+@keyframes bounceInUp {
+
+  from,
+  60%,
+  75%,
+  90%,
+  to {
+    -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 3000px, 0);
+    transform: translate3d(0, 3000px, 0);
+  }
+
+  60% {
+    opacity: 1;
+    -webkit-transform: translate3d(0, -20px, 0);
+    transform: translate3d(0, -20px, 0);
+  }
+
+  75% {
+    -webkit-transform: translate3d(0, 10px, 0);
+    transform: translate3d(0, 10px, 0);
+  }
+
+  90% {
+    -webkit-transform: translate3d(0, -5px, 0);
+    transform: translate3d(0, -5px, 0);
+  }
+
+  to {
+    opacity: 1;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
+  }
+
+  to {
+    opacity: 1;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(100%, 0, 0);
+    transform: translate3d(100%, 0, 0);
+  }
+
+  to {
+    opacity: 1;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* 动画效果 */

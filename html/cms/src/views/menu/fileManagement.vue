@@ -28,11 +28,7 @@
         </template>
       </el-table-column>
       <el-table-column label="文件路径" align="center" prop="fileUrl" min-width="100"/>
-      <el-table-column label="创建时间" align="center" prop="createdTime">
-        <!-- <template slot-scope="scope">
-          {{ scope.row.createdTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
-        </template> -->
-      </el-table-column>
+      <el-table-column label="创建时间" align="center" prop="createdTime"/>
       <el-table-column label="状态" align="center" prop="recordStatus">
         <template slot-scope="scope">
           <span :class="scope.row.recordStatus==1 ? 'text-green' : 'text-red'">{{ scope.row.recordStatus==1?'生效':'未生效' }}</span>
@@ -45,11 +41,7 @@
 </template>
 
 <script>
-import { api } from '@/api/Permission-model/userManagement'
-// import {
-//   getFileList
-
-// } from '@/api/Permission-model/fileManagement'
+import { api } from '@/api/axios'
 export default {
   data() {
     return {
@@ -87,8 +79,8 @@ export default {
     // 项目初始化
     initList() {
       this.fileListLoading = true
-      api('system/sysFile/list', this.listQuery).then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.systemUrl}system/sysFile/list`, this.listQuery, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.fileList = res.data.data.rows
           this.total = res.data.data.total
           if (this.fileList.length === 0 && this.total > 0) {

@@ -24,7 +24,7 @@ public class TbFinanceExpenses implements Serializable {
     private String costBeforeTypeName;
 
     /*@ApiModelProperty("打标后费用类型")*/
-    private Integer costAfterTypeId;
+    private String costAfterTypeId;
 
     /*@ApiModelProperty("打标后费用类型名称")*/
     private String costAfterTypeName;
@@ -100,12 +100,12 @@ public class TbFinanceExpenses implements Serializable {
         this.costBeforeTypeName = costBeforeTypeName == null ? null : costBeforeTypeName.trim();
     }
 
-    public Integer getCostAfterTypeId() {
+    public String getCostAfterTypeId() {
         return costAfterTypeId;
     }
 
-    public void setCostAfterTypeId(Integer costAfterTypeId) {
-        this.costAfterTypeId = costAfterTypeId;
+    public void setCostAfterTypeId(String costAfterTypeId) {
+        this.costAfterTypeId = costAfterTypeId == null ? null : costAfterTypeId.trim();
     }
 
     public String getCostAfterTypeName() {

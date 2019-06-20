@@ -20,6 +20,14 @@
             <result property="isDefault" column="is_default" jdbcType="VARCHAR"/>
         </collection>
     </resultMap>
+    <resultMap id="SimpleResultMap" type="com.jn.system.model.User">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="account" jdbcType="VARCHAR" property="account"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="wechat_account" jdbcType="VARCHAR" property="wechatAccount"/>
+    </resultMap>
 
     <sql id="Get_User_Page_Column">
         t.id,
@@ -90,6 +98,33 @@
         where u.id = #{id,jdbcType=VARCHAR}
     </select>
 
+    <sql id="Group_Select_Sql">
+            (
+                SELECT
+                    t3.id,
+                    t3.account,
+                    t3.`name`,
+                    t3.phone,
+                    t3.email,
+                    t3.creator_account,
+                    t3.created_time,
+                    t3.record_status,
+                    t3.remark,
+                    t3.wechat_account,
+                    t3.modified_time,
+                    t3.modifier_account
+                FROM
+                    tb_sys_group t1,
+                    tb_sys_user_group t2,
+                    tb_sys_user t3
+                WHERE t1.id = t2.group_id
+                    AND t2.user_id = t3.id
+                    AND t1.record_status = 1
+                    AND t2.record_status = 1
+                    AND t3.record_status != 0
+                    AND t1.id = #{userGroupId,jdbcType=VARCHAR}
+            ) t
+    </sql>
     <select id="findSysUserByPage" resultType="com.jn.system.user.vo.SysUserVO"
             parameterType="com.jn.system.model.UserPage">
         select
@@ -97,7 +132,13 @@
         from
         (select
         <include refid="Get_User_Page_Column"/>
-        from tb_sys_user t
+        from
+        <if test="@org.apache.commons.lang.StringUtils@isBlank(userGroupId)">
+            tb_sys_user t
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(userGroupId)">
+            <include refid="Group_Select_Sql"/>
+        </if>
         left join
         (select
         t1.department_name,
@@ -133,20 +174,23 @@
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
             and tt.department_id = #{departmentId,jdbcType=VARCHAR}
         </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
+            ORDER BY tt.is_default desc
+        </if>
         ) t
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)"> <!-- 对同一部门同一用户多个岗位信息去重 -->
             LEFT JOIN
-            (SELECT t.id
-            FROM tb_sys_user t
-            INNER JOIN tb_sys_user_department_post tt
-            ON t.id = tt.user_id
-            where t.record_status != 0
-            AND tt.department_id = #{departmentId,jdbcType=VARCHAR}
-            AND tt.`record_status` = 1
+            (SELECT t3.id
+            FROM tb_sys_user t3
+            INNER JOIN tb_sys_user_department_post t4
+            ON t3.id = t4.user_id
+            where t3.record_status != 0
+            AND t4.department_id = #{departmentId,jdbcType=VARCHAR}
+            AND t4.`record_status` = 1
+            GROUP BY t3.id
+            HAVING COUNT(t3.id) > 1) tt
+            ON t.id = tt.id
             GROUP BY t.id
-            HAVING COUNT(t.id) > 1) tt
-            ON t.id = tt.id AND t.is_default = '0'
-            WHERE tt.id IS NULL
         </if>
         ORDER BY t.createdTime desc, t.id desc
     </select>
@@ -306,6 +350,158 @@
         ON t.id = tt.user_id
         WHERE t.record_status = 1
         ORDER BY t.created_time DESC
+    </select>
+    <select id="selectUserByIds" resultMap="SimpleResultMap"  parameterType="java.util.Arrays">
+          SELECT
+            t.id,
+            t.account,
+            t.phone,
+            t.email,
+            t.wechat_account,
+            case when t.`name` is null  then t.account
+            else t.`name` end  name
+          FROM
+          `tb_sys_user` t
+          WHERE t.record_status = 1
+
+        and id in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+
+    <resultMap id="getUserInfoMap" type="com.jn.system.model.User">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="account" jdbcType="VARCHAR" property="account"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount"/>
+        <result column="record_status" jdbcType="TINYINT" property="recordStatus"/>
+        <result column="wechat_account" jdbcType="VARCHAR" property="wechatAccount"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+
+        <collection property="sysRole" ofType="com.jn.system.model.SysRole">
+            <id column="roleId" jdbcType="VARCHAR" property="id"/>
+            <result column="role_name" jdbcType="VARCHAR" property="roleName"/>
+            <result column="r_created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+            <result column="r_creator_account" jdbcType="VARCHAR" property="creatorAccount"/>
+            <result column="r_record_status" jdbcType="TINYINT" property="recordStatus"/>
+        </collection>
+        <collection property="sysDepartmentPostVO" ofType="com.jn.system.vo.SysDepartmentPostVO"
+         select="com.jn.system.dept.dao.SysUserDepartmentPostMapper.findDepartmentAndPostByUserId" column="id">
+            <result column="departmentId" jdbcType="VARCHAR" property="departmentId"/>
+            <result column="departmentName" jdbcType="VARCHAR" property="departmentName"/>
+            <result column="parentId" jdbcType="VARCHAR" property="parentId"/>
+            <result column="level" jdbcType="VARCHAR" property="level"/>
+            <result column="postId" jdbcType="VARCHAR" property="postId"/>
+            <result column="postName" jdbcType="VARCHAR" property="postName"/>
+            <result column="isDefault" jdbcType="VARCHAR" property="isDefault"/>
+            <result column="postTypeId" jdbcType="VARCHAR" property="postTypeId"/>
+            <result column="postTypeName" jdbcType="VARCHAR" property="postTypeName"/>
+        </collection>
+        <collection property="sysGroupVO"  ofType="com.jn.system.vo.SysGroupVO" column="id" select="getGroupAndRole"/>
+    </resultMap>
+    <select id="getUserInfoByAccount" resultMap="getUserInfoMap" parameterType="java.util.List">
+        SELECT
+            t1.id,
+            t1.account,
+            t1.`name`,
+            t1.phone,
+            t1.email,
+            t1.creator_account,
+            t1.created_time,
+            t1.record_status,
+            t1.wechat_account,
+            t1.remark,
+            t2.id as roleId,
+            t2.role_name,
+            t2.created_time as r_created_time,
+            t2.creator_account as r_creator_account,
+            t2.record_status as r_record_status
+        FROM
+            (
+                SELECT
+                    id,
+                    account,
+                    `name`,
+                    phone,
+                    email,
+                    creator_account,
+                    created_time,
+                    record_status,
+                    wechat_account,
+                    remark
+                FROM
+                    tb_sys_user
+                WHERE
+                    account IN
+                    <foreach item="account" collection="accountList" open="(" separator="," close=")">
+                        #{account,jdbcType=VARCHAR}
+                    </foreach>
+                AND record_status = 1
+            ) t1
+        LEFT JOIN (
+            SELECT
+                sur.user_id,
+                tsr.id,
+                tsr.role_name,
+                tsr.created_time,
+                tsr.creator_account,
+                tsr.record_status
+            FROM
+                tb_sys_user_role sur,
+                tb_sys_role tsr
+            WHERE
+                sur.role_id = tsr.id
+            AND sur.record_status = 1
+            AND tsr.record_status = 1
+        ) t2 ON t1.id = t2.user_id
+    </select>
+
+    <resultMap id="getGroupAndRoleMap" type="com.jn.system.vo.SysGroupVO">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="group_name" jdbcType="VARCHAR" property="groupName"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount"/>
+        <result column="record_status" jdbcType="TINYINT" property="recordStatus"/>
+
+        <collection property="sysRoleList" ofType="com.jn.system.model.SysRole">
+            <id column="roleId" jdbcType="VARCHAR" property="id"/>
+            <result column="role_name" jdbcType="VARCHAR" property="roleName"/>
+            <result column="r_created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+            <result column="r_creator_account" jdbcType="VARCHAR" property="creatorAccount"/>
+            <result column="r_record_status" jdbcType="TINYINT" property="recordStatus"/>
+        </collection>
+    </resultMap>
+    <select id="getGroupAndRole" resultMap="getGroupAndRoleMap" parameterType="java.lang.String">
+        SELECT
+            t2.id,
+            t2.group_name,
+            t2.record_status,
+            t2.created_time,
+            t2.creator_account,
+            t4.id AS roleId,
+            t4.role_name,
+            t4.created_time as r_created_time,
+            t4.creator_account as r_creator_account,
+            t4.record_status as r_record_status
+        FROM
+            tb_sys_user_group t1,
+            tb_sys_group t2,
+            tb_sys_group_role t3,
+            tb_sys_role t4
+        WHERE
+            t1.group_id = t2.id
+        AND t3.user_group_id = t2.id
+        AND t3.role_id = t4.id
+        AND t1.record_status = 1
+        AND t2.record_status = 1
+        AND t3.record_status = 1
+        AND t4.record_status = 1
+        AND t1.user_id = #{id,jdbcType=VARCHAR}
     </select>
 
     <update id="deleteUserBranch" parameterType="java.util.Map">

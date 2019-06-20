@@ -2,6 +2,39 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.oa.item.dao.WorkPlanMapper">
 
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into tb_oa_work_plan
+        (
+        id, item_id,work_plan_name,content,demand_describe,is_expire,plan_start_time,
+        plan_end_time,plan_time,work_plan_status,record_status,creator_account,created_time
+        ) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.id,jdbcType=VARCHAR},
+            #{item.itemId,jdbcType=VARCHAR},
+            #{item.workPlanName,jdbcType=VARCHAR},
+            #{item.content,jdbcType=VARCHAR},
+            #{item.demandDescribe,jdbcType=VARCHAR},
+            #{item.isExpire,jdbcType=VARCHAR},
+            #{item.planStartTime,jdbcType=TIMESTAMP},
+            #{item.planEndTime,jdbcType=TIMESTAMP},
+            #{item.planTime,jdbcType=INTEGER},
+            #{item.workPlanStatus,jdbcType=VARCHAR},
+            #{item.recordStatus,jdbcType=TINYINT},
+            #{item.creatorAccount,jdbcType=VARCHAR},
+            NOW())
+        </foreach>
+    </insert>
+
+    <update id="updateWorkPlanIsExpire" parameterType="java.util.List">
+        UPDATE tb_oa_work_plan
+        SET is_expire = '1'
+        where id in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item.id,jdbcType=BIGINT}
+        </foreach>
+    </update>
+
     <select id="list" resultType="com.jn.oa.item.vo.WorkPlanVO" parameterType="com.jn.oa.item.model.WorkPlanPage">
         SELECT
         t.id,
@@ -10,11 +43,11 @@
         t.work_plan_name as workPlanName,
         t.content,
         t.demand_describe as demandDescribe,
-        t.plan_start_time as planStartTime,
-        t.plan_end_time as planEndTime,
-        t.start_time as startTime,
-        t.end_time as endTime,
-        t.plan_time as planTime,
+        date_format(t.plan_start_time,'%Y-%m-%d') as "planStartTime",
+        date_format(t.plan_end_time,'%Y-%m-%d') as "planEndTime",
+        date_format(t.start_time,'%Y-%m-%d %H:%i:%s') as "startTime",
+        date_format(t.end_time,'%Y-%m-%d %H:%i:%s') as "endTime",
+        t.plan_time as "planTime",
         t.total_consume_time as totalConsumeTime,
         t.total_remain_time as totalRemainTime,
         t.work_plan_status as workPlanStatus,
@@ -22,37 +55,30 @@
         t.created_time as createdTime,
         t.creator_account as creatorAccount,
         t.responsibleUserName,
-        t.responsibleUserAccount
+        t.responsibleUserAccount,
+        (CASE t.work_plan_status
+            WHEN 0 THEN '未开始'
+            WHEN 1 THEN '进行中'
+            WHEN 2 THEN '已暂停'
+            WHEN 3 THEN '已完成'
+            WHEN 4 THEN '已延期'
+          END)workPlanStatusMessage,
+        t.is_expire as isExpire,
+        (CASE t.is_expire
+            WHEN 0 THEN '否'
+            WHEN 1 THEN '是'
+            END)isExpireMessage
         FROM
         (SELECT DISTINCT
-        t1.id,
-        t1.item_id,
-        t2.item_name,
-        t1.work_plan_name,
-        t1.content,
-        t1.demand_describe,
-        t1.plan_start_time,
-        t1.plan_end_time,
-        t1.start_time,
-        t1.end_time,
-        t1.plan_time,
-        t1.total_consume_time,
-        t1.total_remain_time,
-        t1.work_plan_status,
-        t1.attachment,
-        t1.created_time,
-        t1.creator_account,
-        GROUP_CONCAT(t4.`name`) as responsibleUserName,
-        GROUP_CONCAT(t4.`account`) as responsibleUserAccount
+        <include refid="work_plan_vo_columns"></include>
         FROM tb_oa_work_plan t1,
         tb_oa_item t2,
         tb_oa_work_plan_user t3,
         tb_sys_user t4
-        WHERE t1.item_id = t2.id
+        WHERE t1.item_id = t2.id_
         and t1.id = t3.work_plan_id
         and t3.responsible_user_account = t4.account
         AND t1.record_status = 1
-        AND t2.record_status = 1
         AND t3.record_status = 1
         GROUP BY t1.id
         ) t
@@ -69,15 +95,171 @@
             ) tt
             on t.id = tt.id
         </if>
-        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(workPlanName)">
-            and t.work_plan_name like CONCAT('%', #{workPlanName,jdbcType=VARCHAR}, '%')
-        </if>
-        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(itemId)">
-            and t.item_id = #{itemId,jdbcType=VARCHAR}
-        </if>
-        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(workPlanStatus)">
-            and t.work_plan_status = #{workPlanStatus,jdbcType=VARCHAR}
-        </if>
+        <where>
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(workPlanName)">
+                and t.work_plan_name like CONCAT('%', trim(#{workPlanName,jdbcType=VARCHAR}), '%')
+            </if>
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(itemId)">
+                and t.item_id = #{itemId,jdbcType=VARCHAR}
+            </if>
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(workPlanStatus)">
+                and t.work_plan_status = #{workPlanStatus,jdbcType=VARCHAR}
+            </if>
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(isExpire)">
+                and t.is_expire = #{isExpire,jdbcType=VARCHAR}
+            </if>
+        </where>
         ORDER BY t.created_time DESC ,t.id DESC
     </select>
+
+    <sql id="work_plan_vo_columns">
+        t1.id,
+        t1.item_id,
+        t2.item_name,
+        t1.work_plan_name,
+        t1.content,
+        t1.demand_describe,
+        t1.plan_start_time,
+        t1.plan_end_time,
+        t1.start_time,
+        t1.is_expire,
+        t1.end_time,
+        t1.plan_time,
+        t1.total_consume_time,
+        t1.total_remain_time,
+        t1.work_plan_status,
+        t1.attachment,
+        t1.created_time,
+        t1.creator_account,
+        GROUP_CONCAT(t4.`name`) as responsibleUserName,
+        GROUP_CONCAT(t4.`account`) as responsibleUserAccount
+    </sql>
+
+    <resultMap id="WorkPlanVOltMap" type="com.jn.oa.item.vo.WorkPlanVO">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="item_id" jdbcType="VARCHAR" property="itemId"/>
+        <result column="item_name" jdbcType="VARCHAR" property="itemName"/>
+        <result column="work_plan_name" jdbcType="VARCHAR" property="workPlanName"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="demand_describe" jdbcType="VARCHAR" property="demandDescribe"/>
+        <result column="plan_start_time" jdbcType="VARCHAR" property="planStartTime"/>
+        <result column="plan_end_time" jdbcType="VARCHAR" property="planEndTime"/>
+        <result column="start_time" jdbcType="VARCHAR" property="startTime"/>
+        <result column="end_time" jdbcType="VARCHAR" property="endTime"/>
+        <result column="plan_time" jdbcType="INTEGER" property="planTime"/>
+        <result column="total_consume_time" jdbcType="INTEGER" property="totalConsumeTime"/>
+        <result column="total_remain_time" jdbcType="INTEGER" property="totalRemainTime"/>
+        <result column="work_plan_status" jdbcType="VARCHAR" property="workPlanStatus"/>
+        <result column="is_expire" jdbcType="VARCHAR" property="isExpire"/>
+        <result column="attachment" jdbcType="VARCHAR" property="attachment"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount"/>
+        <result column="responsibleUserName" jdbcType="VARCHAR" property="responsibleUserName"/>
+        <result column="responsibleUserAccount" jdbcType="VARCHAR" property="responsibleUserAccount"/>
+
+        <collection property="workPlanHistorys" ofType="com.jn.oa.item.model.WorkPlanHistory">
+            <id column="hid" property="id" jdbcType="VARCHAR"/>
+            <result column="work_plan_id" property="workPlanId" jdbcType="VARCHAR"/>
+            <result column="operate_recode" property="operateRecode" jdbcType="VARCHAR"/>
+            <result column="operate_details" property="operateDetails" jdbcType="VARCHAR"/>
+            <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+
+    <select id="getResponsibleAndHistoryById" resultMap="WorkPlanVOltMap" parameterType="java.lang.String">
+        SELECT
+            t.id,
+            t.item_id,
+            t.item_name,
+            t.work_plan_name,
+            t.content,
+            t.demand_describe,
+            date_format(t.plan_start_time,'%Y-%m-%d') AS "plan_start_time",
+            date_format(t.plan_end_time, '%Y-%m-%d') AS "plan_end_time",
+            date_format(t.start_time, '%Y-%m-%d %H:%i:%s') AS "start_time",
+            date_format(t.end_time, '%Y-%m-%d %H:%i:%s') AS "end_time",
+            t.plan_time,
+            t.total_consume_time,
+            t.total_remain_time,
+            t.work_plan_status,
+            t.attachment,
+            t.is_expire,
+            t.created_time,
+            t.creator_account,
+            t.responsibleUserName,
+            t.responsibleUserAccount,
+            tt.id AS hid,
+            tt.work_plan_id,
+            tt.operate_recode,
+            tt.remark,
+            tt.operate_details
+        FROM
+            (
+                SELECT DISTINCT
+                <include refid="work_plan_vo_columns"></include>
+                FROM
+                    tb_oa_work_plan t1,
+                    tb_oa_item t2,
+                    tb_oa_work_plan_user t3,
+                    tb_sys_user t4
+                WHERE
+                    t1.item_id = t2.id_
+                AND t1.id = t3.work_plan_id
+                AND t3.responsible_user_account = t4.account
+                AND t1.record_status = 1
+                AND t3.record_status = 1
+                AND t1.id = #{id,jdbcType=VARCHAR}
+                GROUP BY
+                    t1.id
+            ) t
+        LEFT JOIN (
+            SELECT
+                id,
+                work_plan_id,
+                operate_recode,
+                remark,
+                created_time,
+                operate_details
+            FROM
+                tb_oa_work_plan_history
+            WHERE
+                record_status = 1
+        ) tt ON t.id = tt.work_plan_id
+        ORDER BY
+            tt.created_time ASC
+    </select>
+
+    <select id="getResponsibleById" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT
+            responsible_user_account
+        FROM
+            tb_oa_work_plan_user
+        WHERE
+            work_plan_id = #{id,jdbcType=VARCHAR}
+        AND record_status = 1
+    </select>
+
+    <select id="getResponsibleName" resultType="java.lang.String" parameterType="java.lang.String">
+          SELECT
+            GROUP_CONCAT(t2.`name`)
+          FROM
+            tb_oa_work_plan_user t1,
+            tb_sys_user t2
+          WHERE
+            t1.responsible_user_account = t2.account
+          AND t1.record_status = 1
+          AND t2.record_status = 1
+          AND work_plan_id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getUser" resultType="java.lang.String">
+        SELECT
+            account
+        FROM
+            tb_sys_user
+        WHERE
+            `name` = #{userName,jdbcType=VARCHAR}
+        AND email = #{email,jdbcType=VARCHAR}
+    </select>
+
 </mapper>

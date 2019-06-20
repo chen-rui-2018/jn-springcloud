@@ -2,6 +2,7 @@ package com.jn.park.finance.service.impl;
 
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
+import com.jn.common.util.StringUtils;
 import com.jn.park.finance.dao.FinanceTypeDao;
 import com.jn.park.finance.dao.TbFinanceDepartmentToTypeMapper;
 import com.jn.park.finance.dao.TbFinanceTypeMapper;
@@ -15,6 +16,7 @@ import com.jn.park.finance.model.FinanceTypeModel;
 import com.jn.park.finance.service.FinanceTypeService;
 import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
+import io.swagger.models.auth.In;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -25,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author： huangbq
@@ -54,11 +57,12 @@ public class FinanceTypeServiceImpl implements FinanceTypeService {
         TbFinanceType tbFinanceType=new TbFinanceType();
         BeanUtils.copyProperties(financeTypeModel,tbFinanceType);
         if(null==financeTypeModel.getId()){
+            tbFinanceType.setId(UUID.randomUUID().toString());
            tbFinanceType.setCreatedTime(new Date());
            tbFinanceType.setCreatorAccount(userAccount);
            int addCount=tbFinanceTypeMapper.insertSelective(tbFinanceType);
            logger.info("【添加】财务项目类型成功，添加成功的条数为{},对应ID为{}",addCount,tbFinanceType.getId());
-           return tbFinanceType.getId();
+           return addCount;
         }else{
             tbFinanceType.setModifiedTime(new Date());
             tbFinanceType.setModifierAccount(userAccount);
@@ -70,7 +74,7 @@ public class FinanceTypeServiceImpl implements FinanceTypeService {
 
     @ServiceLog(doAction = "更新财务项目类型对应的部门")
     @Override
-    public Integer updateDepartmentByType(Integer typeId, List<String> departmentIdList, String userAccount) {
+    public Integer updateDepartmentByType(String typeId, List<String> departmentIdList, String userAccount) {
         //1、删除 typeId类型的所有数据
         TbFinanceDepartmentToTypeExample example=new TbFinanceDepartmentToTypeExample();
         TbFinanceDepartmentToTypeExample.Criteria criteria=example.createCriteria();
@@ -122,13 +126,13 @@ public class FinanceTypeServiceImpl implements FinanceTypeService {
     }
 
    @ServiceLog(doAction = "校验费用类型名称是否已经存在")
-    private void checkTypeName(String typeName,Integer typeId){
+    private void checkTypeName(String typeName,String typeId){
        //修改操作时，name可能是null(不修改name)，此时路过校验
-        if(null!=typeId&&null==typeName){
+        if(null!=typeId&& StringUtils.isBlank(typeName)){
             return;
         }
         //新增时名称不能为空
-        if(null==typeId&&null==typeName){
+        if(null==typeId&&StringUtils.isBlank(typeName)){
             throw new JnSpringCloudException(FinanceTypeExceptionEnums.TYPE_NAME_NOT_NULL);
         }
         TbFinanceTypeExample example=new TbFinanceTypeExample();

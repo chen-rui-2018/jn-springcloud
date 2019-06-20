@@ -28,7 +28,7 @@ public class FinanceDepartmentToTypeModel implements Serializable {
 
     @NotNull(message = "财务类型ID不能为空")
     @ApiModelProperty("财务类型")
-    private Integer financeTypeId;
+    private String financeTypeId;
 
     public Integer getId() {
         return id;
@@ -54,11 +54,11 @@ public class FinanceDepartmentToTypeModel implements Serializable {
         this.departmentName = departmentName;
     }
 
-    public Integer getFinanceTypeId() {
+    public String getFinanceTypeId() {
         return financeTypeId;
     }
 
-    public void setFinanceTypeId(Integer financeTypeId) {
+    public void setFinanceTypeId(String financeTypeId) {
         this.financeTypeId = financeTypeId;
     }
 

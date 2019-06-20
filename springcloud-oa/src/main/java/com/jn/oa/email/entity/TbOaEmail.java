@@ -10,13 +10,13 @@ public class TbOaEmail implements Serializable {
 
     private String title;
 
-    private String emailContent;
-
     private String sendStatus;
 
     private String isDelay;
 
     private Date delaySendTime;
+
+    private String attachment;
 
     private Date sendTime;
 
@@ -29,6 +29,8 @@ public class TbOaEmail implements Serializable {
     private String modifierAccount;
 
     private Date modifiedTime;
+
+    private String emailContent;
 
     private static final long serialVersionUID = 1L;
 
@@ -56,14 +58,6 @@ public class TbOaEmail implements Serializable {
         this.title = title == null ? null : title.trim();
     }
 
-    public String getEmailContent() {
-        return emailContent;
-    }
-
-    public void setEmailContent(String emailContent) {
-        this.emailContent = emailContent == null ? null : emailContent.trim();
-    }
-
     public String getSendStatus() {
         return sendStatus;
     }
@@ -86,6 +80,14 @@ public class TbOaEmail implements Serializable {
 
     public void setDelaySendTime(Date delaySendTime) {
         this.delaySendTime = delaySendTime;
+    }
+
+    public String getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(String attachment) {
+        this.attachment = attachment == null ? null : attachment.trim();
     }
 
     public Date getSendTime() {
@@ -136,6 +138,14 @@ public class TbOaEmail implements Serializable {
         this.modifiedTime = modifiedTime;
     }
 
+    public String getEmailContent() {
+        return emailContent;
+    }
+
+    public void setEmailContent(String emailContent) {
+        this.emailContent = emailContent == null ? null : emailContent.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -151,16 +161,17 @@ public class TbOaEmail implements Serializable {
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getWorkOrderNum() == null ? other.getWorkOrderNum() == null : this.getWorkOrderNum().equals(other.getWorkOrderNum()))
             && (this.getTitle() == null ? other.getTitle() == null : this.getTitle().equals(other.getTitle()))
-            && (this.getEmailContent() == null ? other.getEmailContent() == null : this.getEmailContent().equals(other.getEmailContent()))
             && (this.getSendStatus() == null ? other.getSendStatus() == null : this.getSendStatus().equals(other.getSendStatus()))
             && (this.getIsDelay() == null ? other.getIsDelay() == null : this.getIsDelay().equals(other.getIsDelay()))
             && (this.getDelaySendTime() == null ? other.getDelaySendTime() == null : this.getDelaySendTime().equals(other.getDelaySendTime()))
+            && (this.getAttachment() == null ? other.getAttachment() == null : this.getAttachment().equals(other.getAttachment()))
             && (this.getSendTime() == null ? other.getSendTime() == null : this.getSendTime().equals(other.getSendTime()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
-            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()));
+            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
+            && (this.getEmailContent() == null ? other.getEmailContent() == null : this.getEmailContent().equals(other.getEmailContent()));
     }
 
     @Override
@@ -170,16 +181,17 @@ public class TbOaEmail implements Serializable {
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getWorkOrderNum() == null) ? 0 : getWorkOrderNum().hashCode());
         result = prime * result + ((getTitle() == null) ? 0 : getTitle().hashCode());
-        result = prime * result + ((getEmailContent() == null) ? 0 : getEmailContent().hashCode());
         result = prime * result + ((getSendStatus() == null) ? 0 : getSendStatus().hashCode());
         result = prime * result + ((getIsDelay() == null) ? 0 : getIsDelay().hashCode());
         result = prime * result + ((getDelaySendTime() == null) ? 0 : getDelaySendTime().hashCode());
+        result = prime * result + ((getAttachment() == null) ? 0 : getAttachment().hashCode());
         result = prime * result + ((getSendTime() == null) ? 0 : getSendTime().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
+        result = prime * result + ((getEmailContent() == null) ? 0 : getEmailContent().hashCode());
         return result;
     }
 
@@ -192,16 +204,17 @@ public class TbOaEmail implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", workOrderNum=").append(workOrderNum);
         sb.append(", title=").append(title);
-        sb.append(", emailContent=").append(emailContent);
         sb.append(", sendStatus=").append(sendStatus);
         sb.append(", isDelay=").append(isDelay);
         sb.append(", delaySendTime=").append(delaySendTime);
+        sb.append(", attachment=").append(attachment);
         sb.append(", sendTime=").append(sendTime);
         sb.append(", recordStatus=").append(recordStatus);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", createdTime=").append(createdTime);
         sb.append(", modifierAccount=").append(modifierAccount);
         sb.append(", modifiedTime=").append(modifiedTime);
+        sb.append(", emailContent=").append(emailContent);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

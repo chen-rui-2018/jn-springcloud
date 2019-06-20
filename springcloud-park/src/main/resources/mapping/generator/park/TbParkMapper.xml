@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.park.dao.TbParkMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.park.entity.TbPark">
+    <id column="id_" jdbcType="VARCHAR" property="id" />
+    <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
+    <result column="park_name" jdbcType="VARCHAR" property="parkName" />
+    <result column="main_picture" jdbcType="VARCHAR" property="mainPicture" />
+    <result column="minor_picture" jdbcType="VARCHAR" property="minorPicture" />
+    <result column="short_introduce" jdbcType="VARCHAR" property="shortIntroduce" />
+    <result column="park_state" jdbcType="VARCHAR" property="parkState" />
+    <result column="show_order" jdbcType="INTEGER" property="showOrder" />
+    <result column="is_enter" jdbcType="VARCHAR" property="isEnter" />
+    <result column="record_status" jdbcType="VARCHAR" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.jn.park.park.entity.TbPark">
+    <result column="park_introduce" jdbcType="LONGVARCHAR" property="parkIntroduce" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id_, parent_id, park_name, main_picture, minor_picture, short_introduce, park_state, 
+    show_order, is_enter, record_status, creator_account, created_time, modifier_account, 
+    modified_time
+  </sql>
+  <sql id="Blob_Column_List">
+    park_introduce
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.jn.park.park.entity.TbParkCriteria" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tb_park
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.jn.park.park.entity.TbParkCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_park
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tb_park
+    where id_ = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_park
+    where id_ = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.park.park.entity.TbParkCriteria">
+    delete from tb_park
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.park.park.entity.TbPark">
+    insert into tb_park (id_, parent_id, park_name, 
+      main_picture, minor_picture, short_introduce, 
+      park_state, show_order, is_enter, 
+      record_status, creator_account, created_time, 
+      modifier_account, modified_time, park_introduce
+      )
+    values (#{id,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, #{parkName,jdbcType=VARCHAR}, 
+      #{mainPicture,jdbcType=VARCHAR}, #{minorPicture,jdbcType=VARCHAR}, #{shortIntroduce,jdbcType=VARCHAR}, 
+      #{parkState,jdbcType=VARCHAR}, #{showOrder,jdbcType=INTEGER}, #{isEnter,jdbcType=VARCHAR}, 
+      #{recordStatus,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{parkIntroduce,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.park.park.entity.TbPark">
+    insert into tb_park
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id_,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="parkName != null">
+        park_name,
+      </if>
+      <if test="mainPicture != null">
+        main_picture,
+      </if>
+      <if test="minorPicture != null">
+        minor_picture,
+      </if>
+      <if test="shortIntroduce != null">
+        short_introduce,
+      </if>
+      <if test="parkState != null">
+        park_state,
+      </if>
+      <if test="showOrder != null">
+        show_order,
+      </if>
+      <if test="isEnter != null">
+        is_enter,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="parkIntroduce != null">
+        park_introduce,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="parkName != null">
+        #{parkName,jdbcType=VARCHAR},
+      </if>
+      <if test="mainPicture != null">
+        #{mainPicture,jdbcType=VARCHAR},
+      </if>
+      <if test="minorPicture != null">
+        #{minorPicture,jdbcType=VARCHAR},
+      </if>
+      <if test="shortIntroduce != null">
+        #{shortIntroduce,jdbcType=VARCHAR},
+      </if>
+      <if test="parkState != null">
+        #{parkState,jdbcType=VARCHAR},
+      </if>
+      <if test="showOrder != null">
+        #{showOrder,jdbcType=INTEGER},
+      </if>
+      <if test="isEnter != null">
+        #{isEnter,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="parkIntroduce != null">
+        #{parkIntroduce,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.park.park.entity.TbParkCriteria" resultType="java.lang.Long">
+    select count(*) from tb_park
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_park
+    <set>
+      <if test="record.id != null">
+        id_ = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parentId != null">
+        parent_id = #{record.parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parkName != null">
+        park_name = #{record.parkName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mainPicture != null">
+        main_picture = #{record.mainPicture,jdbcType=VARCHAR},
+      </if>
+      <if test="record.minorPicture != null">
+        minor_picture = #{record.minorPicture,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shortIntroduce != null">
+        short_introduce = #{record.shortIntroduce,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parkState != null">
+        park_state = #{record.parkState,jdbcType=VARCHAR},
+      </if>
+      <if test="record.showOrder != null">
+        show_order = #{record.showOrder,jdbcType=INTEGER},
+      </if>
+      <if test="record.isEnter != null">
+        is_enter = #{record.isEnter,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.parkIntroduce != null">
+        park_introduce = #{record.parkIntroduce,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update tb_park
+    set id_ = #{record.id,jdbcType=VARCHAR},
+      parent_id = #{record.parentId,jdbcType=VARCHAR},
+      park_name = #{record.parkName,jdbcType=VARCHAR},
+      main_picture = #{record.mainPicture,jdbcType=VARCHAR},
+      minor_picture = #{record.minorPicture,jdbcType=VARCHAR},
+      short_introduce = #{record.shortIntroduce,jdbcType=VARCHAR},
+      park_state = #{record.parkState,jdbcType=VARCHAR},
+      show_order = #{record.showOrder,jdbcType=INTEGER},
+      is_enter = #{record.isEnter,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=VARCHAR},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      park_introduce = #{record.parkIntroduce,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_park
+    set id_ = #{record.id,jdbcType=VARCHAR},
+      parent_id = #{record.parentId,jdbcType=VARCHAR},
+      park_name = #{record.parkName,jdbcType=VARCHAR},
+      main_picture = #{record.mainPicture,jdbcType=VARCHAR},
+      minor_picture = #{record.minorPicture,jdbcType=VARCHAR},
+      short_introduce = #{record.shortIntroduce,jdbcType=VARCHAR},
+      park_state = #{record.parkState,jdbcType=VARCHAR},
+      show_order = #{record.showOrder,jdbcType=INTEGER},
+      is_enter = #{record.isEnter,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=VARCHAR},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.park.entity.TbPark">
+    update tb_park
+    <set>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="parkName != null">
+        park_name = #{parkName,jdbcType=VARCHAR},
+      </if>
+      <if test="mainPicture != null">
+        main_picture = #{mainPicture,jdbcType=VARCHAR},
+      </if>
+      <if test="minorPicture != null">
+        minor_picture = #{minorPicture,jdbcType=VARCHAR},
+      </if>
+      <if test="shortIntroduce != null">
+        short_introduce = #{shortIntroduce,jdbcType=VARCHAR},
+      </if>
+      <if test="parkState != null">
+        park_state = #{parkState,jdbcType=VARCHAR},
+      </if>
+      <if test="showOrder != null">
+        show_order = #{showOrder,jdbcType=INTEGER},
+      </if>
+      <if test="isEnter != null">
+        is_enter = #{isEnter,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="parkIntroduce != null">
+        park_introduce = #{parkIntroduce,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id_ = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.jn.park.park.entity.TbPark">
+    update tb_park
+    set parent_id = #{parentId,jdbcType=VARCHAR},
+      park_name = #{parkName,jdbcType=VARCHAR},
+      main_picture = #{mainPicture,jdbcType=VARCHAR},
+      minor_picture = #{minorPicture,jdbcType=VARCHAR},
+      short_introduce = #{shortIntroduce,jdbcType=VARCHAR},
+      park_state = #{parkState,jdbcType=VARCHAR},
+      show_order = #{showOrder,jdbcType=INTEGER},
+      is_enter = #{isEnter,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=VARCHAR},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      park_introduce = #{parkIntroduce,jdbcType=LONGVARCHAR}
+    where id_ = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.park.entity.TbPark">
+    update tb_park
+    set parent_id = #{parentId,jdbcType=VARCHAR},
+      park_name = #{parkName,jdbcType=VARCHAR},
+      main_picture = #{mainPicture,jdbcType=VARCHAR},
+      minor_picture = #{minorPicture,jdbcType=VARCHAR},
+      short_introduce = #{shortIntroduce,jdbcType=VARCHAR},
+      park_state = #{parkState,jdbcType=VARCHAR},
+      show_order = #{showOrder,jdbcType=INTEGER},
+      is_enter = #{isEnter,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=VARCHAR},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id_ = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.oa.meeting.dao.MeetingParticipantMapper">
+<resultMap id="BaseResultMap" type="com.jn.oa.meeting.entity.TbOaMeetingParticipants">
+    <id column="meetingparticipants_id" jdbcType="VARCHAR" property="id" />
+    <result column="meetingparticipants_meeting_id" jdbcType="VARCHAR" property="meetingId" />
+    <result column="meetingparticipants_meeting_user_id" jdbcType="VARCHAR" property="meetingUserId" />
+    <result column="meetingparticipants_sign_in_time" jdbcType="TIMESTAMP" property="signInTime" />
+    <result column="meetingparticipants_sign_back_time" jdbcType="TIMESTAMP" property="signBackTime" />
+    <result column="meetingparticipants_record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="meetingparticipants_userName" jdbcType="VARCHAR" property="userName" />
+    <result column="meetingparticipants_account" jdbcType="VARCHAR" property="account" />
+</resultMap>
+    <resultMap id="ListBaseResultMap" type="com.jn.oa.meeting.vo.OaMeetingParticipantsAttendanceVo">
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="meeting_id" jdbcType="VARCHAR" property="meetingId" />
+        <result column="meeting_user_id" jdbcType="VARCHAR" property="meetingUserId" />
+        <result column="sign_in_time" jdbcType="VARCHAR" property="signInTime" />
+        <result column="sign_back_time" jdbcType="VARCHAR" property="signBackTime" />
+        <result column="departmentName" jdbcType="VARCHAR" property="departmentName" />
+        <result column="account" jdbcType="VARCHAR" property="account" />
+        <result column="userName" jdbcType="VARCHAR" property="userName" />
+        <result column="signInStatus" jdbcType="VARCHAR" property="signInStatus" />
+        <result column="signOutStatus" jdbcType="VARCHAR" property="signOutStatus" />
+
+        <result column="title" jdbcType="VARCHAR" property="meetingTitle" />
+        <result column="meeting_room_id" jdbcType="VARCHAR" property="meetingRoomId" />
+        <result column="meeting_start_date" jdbcType="VARCHAR" property="meetingStartDate" />
+        <result column="meeting_start_time" jdbcType="VARCHAR" property="meetingStartTime" />
+        <result column="meeting_end_time" jdbcType="VARCHAR" property="meetingEndTime" />
+        <collection property="oaMeetingRoomPhotoList" column="meeting_room_id" javaType="java.util.List" select="selectMeetingRoomPhotoByMeetingRoomId" ofType="com.jn.oa.meeting.entity.TbOaMeetingRoomPhoto">
+        </collection>
+
+
+    </resultMap>
+
+    <resultMap id="VOBaseResultMap" type="com.jn.oa.meeting.vo.OaMeetingAttendanceVo">
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="meeting_id" jdbcType="VARCHAR" property="meetingId" />
+        <result column="meeting_user_id" jdbcType="VARCHAR" property="meetingUserId" />
+        <result column="sign_in_time" jdbcType="TIMESTAMP" property="signInTime" />
+        <result column="sign_back_time" jdbcType="TIMESTAMP" property="signBackTime" />
+        <result column="departmentName" jdbcType="VARCHAR" property="departmentName" />
+        <result column="account" jdbcType="VARCHAR" property="account" />
+        <result column="userName" jdbcType="VARCHAR" property="userName" />
+        <result column="signInStatus" jdbcType="VARCHAR" property="signInStatus" />
+        <result column="signOutStatus" jdbcType="VARCHAR" property="signOutStatus" />
+        <association property="oaMeetingVo" column="meeting_id"
+                     select="com.jn.oa.meeting.dao.MeetingMapper.selectMeetingById" />
+    </resultMap>
+
+    <update id="deleteBranchByIds" parameterType="java.util.Map">
+        update tb_oa_meeting_participants
+        set
+        record_status = 0,
+        modifier_account=#{account},
+        modified_time = now()
+        where id in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+
+    <update id="deleteBranchByMeetingIds" parameterType="java.util.Map">
+        update tb_oa_meeting_participants
+        set
+        record_status = 0,
+        modifier_account=#{account},
+        modified_time = now()
+        where meeting_id =   #{meetingId}
+
+    </update>
+
+    <select id="selectList" resultMap="VOBaseResultMap"  parameterType="java.lang.String">
+        SELECT
+            mp.id,
+            mp.meeting_id ,
+            mp.meeting_user_id ,
+            mp.sign_in_time,
+            mp.sign_back_time,
+            mp.creator_account,
+            mp.created_time,
+            mp.modifier_account,
+            mp.modified_time,
+            o.department_name AS departmentName,
+            o.account,
+            o.`NAME` as userName,
+            CASE
+            WHEN mp.sign_in_time &lt;= meeting.start_time THEN '正常'
+            WHEN mp.sign_in_time &gt;  meeting.start_time THEN '迟到'
+            WHEN mp.sign_in_time IS NULL THEN '未打卡' ELSE NULL
+            END signInStatus,
+            CASE
+            WHEN mp.sign_back_time &gt;= meeting.end_time THEN
+            '正常'
+            WHEN mp.sign_back_time &lt; meeting.end_time THEN
+            '早退'
+            WHEN mp.sign_back_time IS NULL THEN
+            '未打卡' ELSE NULL
+            END signOutStatus
+        FROM
+        tb_oa_meeting_participants mp
+         LEFT JOIN (
+            SELECT
+                m.start_time,
+                m.end_time,
+                m.title,
+                m.id,
+                m.meeting_room_id
+            FROM
+            tb_oa_meeting m
+        ) meeting ON meeting.id = mp.meeting_id
+        LEFT JOIN (
+            SELECT
+                t.id,
+                t.NAME,
+                t.account,
+                tt.department_name
+            FROM
+            tb_sys_user t
+        LEFT JOIN (
+            SELECT
+                t1.user_id,
+                t2.department_name
+            FROM
+            tb_sys_user_department_post t1
+          INNER JOIN tb_sys_department t2 ON t1.department_id = t2.id
+        WHERE
+         t1.is_default = 1
+        AND t1.record_status = 1
+        AND t2.record_status = 1
+        ) tt ON t.id = tt.user_id
+        WHERE
+        t.record_status = 1
+        ) o ON mp.meeting_user_id = o.id
+        where 1=1
+        and mp.id=#{id,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectMeetingAttendanceListByCondition" parameterType="com.jn.oa.meeting.model.OaMeetingAttendancePage" resultMap="ListBaseResultMap" >
+        SELECT
+            mp.id,
+            mp.meeting_id ,
+            mp.meeting_user_id ,
+            date_format( mp.sign_in_time, '%Y/%m/%d %k:%i:%s' ) sign_in_time ,
+            date_format( mp.sign_back_time, '%Y/%m/%d %k:%i:%s' ) sign_back_time ,
+            mp.creator_account,
+            mp.created_time,
+            mp.modifier_account,
+            mp.modified_time,
+            meeting.title,
+            date_format( meeting.start_time, '%Y-%m-%d' ) AS meeting_start_date,
+            date_format( meeting.start_time, '%k:%i' ) AS meeting_start_time,
+            date_format( meeting.end_time, '%k:%i' ) AS meeting_end_time,
+            o.department_name AS departmentName,
+            o.account,
+            o.`NAME` as userName,
+           meeting.meeting_room_id,
+            CASE
+            WHEN mp.sign_in_time &lt;= meeting.start_time THEN '正常'
+            WHEN mp.sign_in_time &gt;  meeting.start_time THEN '迟到'
+            WHEN mp.sign_in_time IS NULL THEN '未打卡' ELSE NULL
+            END signInStatus,
+            CASE
+            WHEN mp.sign_back_time &gt;= meeting.end_time THEN
+            '正常'
+            WHEN mp.sign_back_time &lt; meeting.end_time THEN
+            '早退'
+            WHEN mp.sign_back_time IS NULL THEN
+            '未打卡' ELSE NULL
+            END signOutStatus
+        FROM
+        tb_oa_meeting_participants mp
+        LEFT JOIN (
+            SELECT
+                m.start_time,
+                m.end_time,
+                m.title,
+                m.id,
+                m.meeting_room_id
+            FROM
+            tb_oa_meeting m
+        ) meeting ON meeting.id = mp.meeting_id
+        LEFT JOIN (
+            SELECT
+                t.id,
+                t.NAME,
+                t.account,
+                tt.department_name
+            FROM
+            tb_sys_user t
+        LEFT JOIN (
+            SELECT
+                t1.user_id,
+                t2.department_name
+            FROM
+            tb_sys_user_department_post t1
+          INNER JOIN tb_sys_department t2 ON t1.department_id = t2.id
+        WHERE
+         t1.is_default = 1
+        AND t1.record_status = 1
+        AND t2.record_status = 1
+        ) tt ON t.id = tt.user_id
+        WHERE
+        t.record_status = 1
+        ) o ON mp.meeting_user_id = o.id
+        where 1=1
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(id)">
+            and mp.id=#{id,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(meetingUserId)">
+            and mp.meeting_user_id=#{meetingUserId,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(userName)">
+            and o.name like CONCAT('%', trim(#{userName,jdbcType=VARCHAR}), '%')
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(meetingTitle)">
+            and meeting.title like CONCAT('%', trim(#{meetingTitle,jdbcType=VARCHAR}), '%')
+        </if>
+
+        <if test="startTime != null">
+        AND  Date(meeting.start_time) &lt;= DATE_FORMAT(#{startTime},'%Y-%m')
+        </if>
+        <if test="endTime != null">
+        AND   Date(meeting.end_time) &gt;= DATE_FORMAT(#{endTime},'%Y-%m')
+
+        </if>
+
+    </select>
+
+    <select id="selectMeetingRoomPhotoByMeetingRoomId"  resultType="com.jn.oa.meeting.entity.TbOaMeetingRoomPhoto" parameterType="java.lang.String" >
+      select
+          id,
+          meeting_room_id AS meetingRoomId,
+          photo_url as photoUrl,
+          record_status as recordStatus,
+          creator_account as creatorAccount,
+          created_time as createdTime,
+          modifier_account as modifierAccount,
+          modified_time as modifiedTime,
+          remark
+     from  tb_oa_meeting_room_photo where record_status=1  and  meeting_room_id=#{meetingRoomId}
+
+    </select>
+
+
+</mapper>

@@ -32,7 +32,7 @@ public interface SysPostTypeService {
      * @param postTypePage 岗位类型分页实体
      * @return
      */
-    PaginationData getPostTypeByPage(SysPostTypePage postTypePage);
+    PaginationData<List<SysPostType>> getPostTypeByPage(SysPostTypePage postTypePage);
 
     /**
      * 校验岗位类型名称是否存在

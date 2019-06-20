@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.notice.dao.NoticeWebDao">
+  <!---->
+  <select id="integrationList" resultType="com.jn.park.notice.vo.IntegrationListVo">
+     <!-- 获取园区公告信息 前四条-->
+      SELECT
+      *
+      from (
+      (SELECT
+      t1.id as "id",
+      t1.notice_title as "title",
+      t2.notice_details as "intro",
+      t1.is_stick  as "isStick",
+      t1.created_time as "createdTime",
+      t1.modified_time as "modifiedTime",
+      '1' as "type"
+      FROM
+      (SELECT
+      t.id,
+      t.notice_title,
+      t.is_stick ,
+      t.created_time,
+      t.modified_time
+
+      FROM tb_notice_info t
+      WHERE t.record_status = 1
+      ORDER BY t.is_stick DESC , t.modified_time DESC
+      LIMIT 4
+      )t1
+      INNER JOIN
+      (
+      SELECT
+      t.notice_id,
+      t.notice_details
+      FROM tb_notice_details t
+      )t2
+      ON t2.notice_id=t1.id
+      ORDER BY t1.is_stick DESC , t1.modified_time DESC )
+
+      UNION ALL
+
+      <!-- 查询政策指南信息 前4条-->
+      (
+      SELECT
+      t.policy_id as "id",
+      t.policy_title as "title",
+      t.policy_content as "intro",
+      t.is_stick as "isStick",
+      t.created_time as "createdTime",
+      t.modified_time  as "modifiedTime",
+      '2' as "type"
+      from tb_policy t
+      WHERE t.record_status = 1
+      AND t.policy_type = 0
+      ORDER BY t.is_stick DESC , t.modified_time DESC
+      LIMIT 4)
+
+      UNION ALL
+      <!-- 获取热门活动信息 前4条-->
+      (SELECT
+      t1.id  as "id",
+      t1.acti_name as "title",
+      t2.acti_detail as "intro",
+      t1.is_index as "isStick",
+      t1.created_time as "createdTime",
+      t1.modified_time as "modifiedTime",
+      '3' as "type"
+      FROM
+      (SELECT
+      t.id,
+      t.acti_name,
+      t.is_index,
+      t.created_time,
+      t.modified_time
+      FROM tb_activity t
+      WHERE t.record_status = 1
+      ORDER BY t.is_index DESC , t.modified_time DESC
+      LIMIT 4)t1
+      INNER JOIN
+      (SELECT
+      t.activity_id,
+      t.acti_detail
+      FROM tb_activity_detail t)t2
+      ON t2.activity_id=t1.id
+      ORDER BY t1.is_index DESC , t1.modified_time DESC )) t
+      ORDER BY t.type ASC, t.isStick DESC , t.modifiedTime DESC
+
+  </select>
+
+
+  <!--App首页弹出公告列表-->
+  <select id="popupNoticeListForApp" resultType="com.jn.park.notice.model.NoticeDetailShow">
+      select
+          t1.id as "noticeId"
+        ,t1.notice_title as "noticeTitle"
+        ,t1.notice_serial as "noticeSerial"
+        ,DATE_FORMAT(t1.start_time,"%Y-%m-%d") as "startTime"
+        ,DATE_FORMAT(t1.end_time,"%Y-%m-%d") as "endTime"
+        ,t1.publish_name as "publishName"
+        ,DATE_FORMAT(t1.created_time,"%Y-%m-%d %H:%i:%s") as "createdTime"
+        ,t2.notice_details as "noticeDetails"
+        from tb_notice_info t1
+        left join tb_notice_details t2 on t1.id=t2.notice_id
+        where t1.record_status = 1  and  t1.notice_status = '1'
+        and t1.home_popup = '1'
+        and t1.start_time &lt;= CURDATE() and t1.end_time &gt;= CURDATE()
+        and (t1.platform_type = 'P002' or t1.platform_type= 'P001' )
+        order by t1.sort_field,t1.created_time desc limit 3
+  </select>
+    <!--门户首页弹出公告列表-->
+    <select id="popupNoticeListForPortal" resultType="com.jn.park.notice.model.NoticeDetailShow">
+      select
+          t1.id as "noticeId"
+        ,t1.notice_title as "noticeTitle"
+        ,t1.notice_serial as "noticeSerial"
+        ,DATE_FORMAT(t1.start_time,"%Y-%m-%d") as "startTime"
+        ,DATE_FORMAT(t1.end_time,"%Y-%m-%d") as "endTime"
+        ,t1.publish_name as "publishName"
+        ,DATE_FORMAT(t1.created_time,"%Y-%m-%d %H:%i:%s") as "createdTime"
+        ,t2.notice_details as "noticeDetails"
+        from tb_notice_info t1
+        left join tb_notice_details t2 on t1.id=t2.notice_id
+        where t1.record_status = 1  and  t1.notice_status = '1'
+        and t1.home_popup = '1'
+        and t1.start_time &lt;= CURDATE() and t1.end_time &gt;= CURDATE()
+        and (t1.platform_type = 'P003' or t1.platform_type= 'P001' )
+        order by t1.sort_field,t1.created_time desc limit 3
+  </select>
+    <!--门户首页展示(轮播)公告列表-->
+    <select id="showNoticeListForPortal" resultType="com.jn.park.notice.model.NoticeDetailShow">
+      select
+          t1.id as "noticeId"
+        ,t1.notice_title as "noticeTitle"
+        ,t1.notice_serial as "noticeSerial"
+        ,DATE_FORMAT(t1.start_time,"%Y-%m-%d") as "startTime"
+        ,DATE_FORMAT(t1.end_time,"%Y-%m-%d") as "endTime"
+        ,t1.publish_name as "publishName"
+        ,DATE_FORMAT(t1.created_time,"%Y-%m-%d %H:%i:%s") as "createdTime"
+        ,t2.notice_details as "noticeDetails"
+        from tb_notice_info t1
+        left join tb_notice_details t2 on t1.id=t2.notice_id
+        where t1.record_status = 1  and  t1.notice_status = '1'
+        and t1.home_show ='1'
+        and (t1.platform_type = 'P003' or t1.platform_type= 'P001' )
+        order by t1.sort_field,t1.created_time desc
+  </select>
+    <!--App首页展示(轮播)公告列表-->
+    <select id="showNoticeListForApp" resultType="com.jn.park.notice.model.NoticeDetailShow">
+      select
+          t1.id as "noticeId"
+        ,t1.notice_title as "noticeTitle"
+        ,t1.notice_serial as "noticeSerial"
+        ,DATE_FORMAT(t1.start_time,"%Y-%m-%d") as "startTime"
+        ,DATE_FORMAT(t1.end_time,"%Y-%m-%d") as "endTime"
+        ,t1.publish_name as "publishName"
+        ,DATE_FORMAT(t1.created_time,"%Y-%m-%d %H:%i:%s") as "createdTime"
+        ,t2.notice_details as "noticeDetails"
+        from tb_notice_info t1
+        left join tb_notice_details t2 on t1.id=t2.notice_id
+        where t1.record_status = 1  and  t1.notice_status = '1'
+        and t1.home_show ='1'
+        and (t1.platform_type = 'P002' or t1.platform_type= 'P001' )
+        order by t1.sort_field,t1.created_time desc
+  </select>
+    <!--App公告列表-->
+    <select id="noticeListApp" resultType="com.jn.park.notice.model.NoticeDetailShow">
+      select
+          t1.id as "noticeId"
+        ,t1.is_stick as "isStick"
+        ,t1.notice_title as "noticeTitle"
+        ,t1.notice_serial as "noticeSerial"
+        ,DATE_FORMAT(t1.start_time,"%Y-%m-%d") as "startTime"
+        ,DATE_FORMAT(t1.end_time,"%Y-%m-%d") as "endTime"
+        ,t1.publish_name as "publishName"
+        ,DATE_FORMAT(t1.created_time,"%Y-%m-%d %H:%i:%s") as "createdTime"
+        ,t2.notice_details as "noticeDetails"
+        from tb_notice_info t1
+        left join tb_notice_details t2 on t1.id=t2.notice_id
+        where t1.record_status = 1  and  t1.notice_status = '1'
+        and (t1.platform_type = 'P002' or t1.platform_type= 'P001' )
+        order by  t1.is_stick desc,t1.sort_field,t1.created_time desc
+  </select>
+    <!--门户公告列表-->
+    <select id="noticeListPortal" resultType="com.jn.park.notice.model.NoticeDetailShow">
+      select
+          t1.id as "noticeId"
+        ,t1.is_stick as "isStick"
+        ,t1.notice_title as "noticeTitle"
+        ,t1.notice_serial as "noticeSerial"
+        ,DATE_FORMAT(t1.start_time,"%Y-%m-%d") as "startTime"
+        ,DATE_FORMAT(t1.end_time,"%Y-%m-%d") as "endTime"
+        ,t1.publish_name as "publishName"
+        ,DATE_FORMAT(t1.created_time,"%Y-%m-%d %H:%i:%s") as "createdTime"
+        ,t2.notice_details as "noticeDetails"
+        from tb_notice_info t1
+        left join tb_notice_details t2 on t1.id=t2.notice_id
+        where t1.record_status = 1  and  t1.notice_status = '1'
+        and (t1.platform_type = 'P003' or t1.platform_type= 'P001' )
+        order by t1.is_stick desc,t1.sort_field,t1.created_time desc
+  </select>
+    <!--前端公告详情-->
+    <select id="findNoticeDetailsByNoticeId" resultType="com.jn.park.notice.model.NoticeDetailShow">
+      select
+          t1.id as "noticeId"
+        ,t1.notice_title as "noticeTitle"
+        ,t1.notice_serial as "noticeSerial"
+        ,DATE_FORMAT(t1.start_time,"%Y-%m-%d") as "startTime"
+        ,DATE_FORMAT(t1.end_time,"%Y-%m-%d") as "endTime"
+        ,t1.publish_name as "publishName"
+        ,DATE_FORMAT(t1.created_time,"%Y-%m-%d %H:%i:%s") as "createdTime"
+        ,t2.notice_details as "noticeDetails"
+        from tb_notice_info t1
+        left join tb_notice_details t2 on t1.id=t2.notice_id
+        where t1.record_status = 1  and  t1.notice_status = '1'
+        and t1.id=#{noticeId}
+  </select>
+</mapper>

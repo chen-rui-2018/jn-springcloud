@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.electricmeter.dao.TbElectricEnergyBillMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.electricmeter.entity.TbElectricEnergyBill">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="bill_name" jdbcType="VARCHAR" property="billName" />
+    <result column="bill_source" jdbcType="VARCHAR" property="billSource" />
+    <result column="obj_id" jdbcType="VARCHAR" property="objId" />
+    <result column="obj_name" jdbcType="VARCHAR" property="objName" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="bill_expense" jdbcType="DECIMAL" property="billExpense" />
+    <result column="obj_type" jdbcType="VARCHAR" property="objType" />
+    <result column="ac_book_type" jdbcType="VARCHAR" property="acBookType" />
+    <result column="call_back_id" jdbcType="VARCHAR" property="callBackId" />
+    <result column="call_back_url" jdbcType="VARCHAR" property="callBackUrl" />
+    <result column="late_payment" jdbcType="DATE" property="latePayment" />
+    <result column="call_times" jdbcType="INTEGER" property="callTimes" />
+    <result column="pay_status" jdbcType="TINYINT" property="payStatus" />
+    <result column="pay_time" jdbcType="TIMESTAMP" property="payTime" />
+    <result column="paier" jdbcType="VARCHAR" property="paier" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, bill_name, bill_source, obj_id, obj_name, record_status, creator_account, created_time, 
+    modifier_account, modified_time, bill_expense, obj_type, ac_book_type, call_back_id, 
+    call_back_url, late_payment, call_times, pay_status, pay_time, paier
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.park.electricmeter.entity.TbElectricEnergyBillCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_electric_energy_bill
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_electric_energy_bill
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_electric_energy_bill
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.park.electricmeter.entity.TbElectricEnergyBillCriteria">
+    delete from tb_electric_energy_bill
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.park.electricmeter.entity.TbElectricEnergyBill">
+    insert into tb_electric_energy_bill (id, bill_name, bill_source, 
+      obj_id, obj_name, record_status, 
+      creator_account, created_time, modifier_account, 
+      modified_time, bill_expense, obj_type, 
+      ac_book_type, call_back_id, call_back_url, 
+      late_payment, call_times, pay_status, 
+      pay_time, paier)
+    values (#{id,jdbcType=VARCHAR}, #{billName,jdbcType=VARCHAR}, #{billSource,jdbcType=VARCHAR}, 
+      #{objId,jdbcType=VARCHAR}, #{objName,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{billExpense,jdbcType=DECIMAL}, #{objType,jdbcType=VARCHAR}, 
+      #{acBookType,jdbcType=VARCHAR}, #{callBackId,jdbcType=VARCHAR}, #{callBackUrl,jdbcType=VARCHAR}, 
+      #{latePayment,jdbcType=DATE}, #{callTimes,jdbcType=INTEGER}, #{payStatus,jdbcType=TINYINT}, 
+      #{payTime,jdbcType=TIMESTAMP}, #{paier,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.park.electricmeter.entity.TbElectricEnergyBill">
+    insert into tb_electric_energy_bill
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="billName != null">
+        bill_name,
+      </if>
+      <if test="billSource != null">
+        bill_source,
+      </if>
+      <if test="objId != null">
+        obj_id,
+      </if>
+      <if test="objName != null">
+        obj_name,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="billExpense != null">
+        bill_expense,
+      </if>
+      <if test="objType != null">
+        obj_type,
+      </if>
+      <if test="acBookType != null">
+        ac_book_type,
+      </if>
+      <if test="callBackId != null">
+        call_back_id,
+      </if>
+      <if test="callBackUrl != null">
+        call_back_url,
+      </if>
+      <if test="latePayment != null">
+        late_payment,
+      </if>
+      <if test="callTimes != null">
+        call_times,
+      </if>
+      <if test="payStatus != null">
+        pay_status,
+      </if>
+      <if test="payTime != null">
+        pay_time,
+      </if>
+      <if test="paier != null">
+        paier,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="billName != null">
+        #{billName,jdbcType=VARCHAR},
+      </if>
+      <if test="billSource != null">
+        #{billSource,jdbcType=VARCHAR},
+      </if>
+      <if test="objId != null">
+        #{objId,jdbcType=VARCHAR},
+      </if>
+      <if test="objName != null">
+        #{objName,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="billExpense != null">
+        #{billExpense,jdbcType=DECIMAL},
+      </if>
+      <if test="objType != null">
+        #{objType,jdbcType=VARCHAR},
+      </if>
+      <if test="acBookType != null">
+        #{acBookType,jdbcType=VARCHAR},
+      </if>
+      <if test="callBackId != null">
+        #{callBackId,jdbcType=VARCHAR},
+      </if>
+      <if test="callBackUrl != null">
+        #{callBackUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="latePayment != null">
+        #{latePayment,jdbcType=DATE},
+      </if>
+      <if test="callTimes != null">
+        #{callTimes,jdbcType=INTEGER},
+      </if>
+      <if test="payStatus != null">
+        #{payStatus,jdbcType=TINYINT},
+      </if>
+      <if test="payTime != null">
+        #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paier != null">
+        #{paier,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.park.electricmeter.entity.TbElectricEnergyBillCriteria" resultType="java.lang.Long">
+    select count(*) from tb_electric_energy_bill
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_electric_energy_bill
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.billName != null">
+        bill_name = #{record.billName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.billSource != null">
+        bill_source = #{record.billSource,jdbcType=VARCHAR},
+      </if>
+      <if test="record.objId != null">
+        obj_id = #{record.objId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.objName != null">
+        obj_name = #{record.objName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.billExpense != null">
+        bill_expense = #{record.billExpense,jdbcType=DECIMAL},
+      </if>
+      <if test="record.objType != null">
+        obj_type = #{record.objType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.acBookType != null">
+        ac_book_type = #{record.acBookType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.callBackId != null">
+        call_back_id = #{record.callBackId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.callBackUrl != null">
+        call_back_url = #{record.callBackUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.latePayment != null">
+        late_payment = #{record.latePayment,jdbcType=DATE},
+      </if>
+      <if test="record.callTimes != null">
+        call_times = #{record.callTimes,jdbcType=INTEGER},
+      </if>
+      <if test="record.payStatus != null">
+        pay_status = #{record.payStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.payTime != null">
+        pay_time = #{record.payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.paier != null">
+        paier = #{record.paier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_electric_energy_bill
+    set id = #{record.id,jdbcType=VARCHAR},
+      bill_name = #{record.billName,jdbcType=VARCHAR},
+      bill_source = #{record.billSource,jdbcType=VARCHAR},
+      obj_id = #{record.objId,jdbcType=VARCHAR},
+      obj_name = #{record.objName,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      bill_expense = #{record.billExpense,jdbcType=DECIMAL},
+      obj_type = #{record.objType,jdbcType=VARCHAR},
+      ac_book_type = #{record.acBookType,jdbcType=VARCHAR},
+      call_back_id = #{record.callBackId,jdbcType=VARCHAR},
+      call_back_url = #{record.callBackUrl,jdbcType=VARCHAR},
+      late_payment = #{record.latePayment,jdbcType=DATE},
+      call_times = #{record.callTimes,jdbcType=INTEGER},
+      pay_status = #{record.payStatus,jdbcType=TINYINT},
+      pay_time = #{record.payTime,jdbcType=TIMESTAMP},
+      paier = #{record.paier,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.electricmeter.entity.TbElectricEnergyBill">
+    update tb_electric_energy_bill
+    <set>
+      <if test="billName != null">
+        bill_name = #{billName,jdbcType=VARCHAR},
+      </if>
+      <if test="billSource != null">
+        bill_source = #{billSource,jdbcType=VARCHAR},
+      </if>
+      <if test="objId != null">
+        obj_id = #{objId,jdbcType=VARCHAR},
+      </if>
+      <if test="objName != null">
+        obj_name = #{objName,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="billExpense != null">
+        bill_expense = #{billExpense,jdbcType=DECIMAL},
+      </if>
+      <if test="objType != null">
+        obj_type = #{objType,jdbcType=VARCHAR},
+      </if>
+      <if test="acBookType != null">
+        ac_book_type = #{acBookType,jdbcType=VARCHAR},
+      </if>
+      <if test="callBackId != null">
+        call_back_id = #{callBackId,jdbcType=VARCHAR},
+      </if>
+      <if test="callBackUrl != null">
+        call_back_url = #{callBackUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="latePayment != null">
+        late_payment = #{latePayment,jdbcType=DATE},
+      </if>
+      <if test="callTimes != null">
+        call_times = #{callTimes,jdbcType=INTEGER},
+      </if>
+      <if test="payStatus != null">
+        pay_status = #{payStatus,jdbcType=TINYINT},
+      </if>
+      <if test="payTime != null">
+        pay_time = #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paier != null">
+        paier = #{paier,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.electricmeter.entity.TbElectricEnergyBill">
+    update tb_electric_energy_bill
+    set bill_name = #{billName,jdbcType=VARCHAR},
+      bill_source = #{billSource,jdbcType=VARCHAR},
+      obj_id = #{objId,jdbcType=VARCHAR},
+      obj_name = #{objName,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      bill_expense = #{billExpense,jdbcType=DECIMAL},
+      obj_type = #{objType,jdbcType=VARCHAR},
+      ac_book_type = #{acBookType,jdbcType=VARCHAR},
+      call_back_id = #{callBackId,jdbcType=VARCHAR},
+      call_back_url = #{callBackUrl,jdbcType=VARCHAR},
+      late_payment = #{latePayment,jdbcType=DATE},
+      call_times = #{callTimes,jdbcType=INTEGER},
+      pay_status = #{payStatus,jdbcType=TINYINT},
+      pay_time = #{payTime,jdbcType=TIMESTAMP},
+      paier = #{paier,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

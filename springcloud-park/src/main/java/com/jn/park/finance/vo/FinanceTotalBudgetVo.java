@@ -23,7 +23,7 @@ public class FinanceTotalBudgetVo implements Serializable {
     private static final long serialVersionUID = -6442093408224615797L;
 
     @ApiModelProperty("费用类型ID")
-    private Integer costTypeId;
+    private String costTypeId;
 
     @ApiModelProperty("费用类型名称")
     private String costTypeName;
@@ -37,11 +37,11 @@ public class FinanceTotalBudgetVo implements Serializable {
     @ApiModelProperty("月度预算列表")
     private List<FinanceBudgetMoneyModel> budgetMoneyModels;
 
-    public Integer getCostTypeId() {
+    public String getCostTypeId() {
         return costTypeId;
     }
 
-    public void setCostTypeId(Integer costTypeId) {
+    public void setCostTypeId(String costTypeId) {
         this.costTypeId = costTypeId;
     }
 

@@ -1,0 +1,543 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.asset.dao.TbRoomOrdersItemMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.asset.entity.TbRoomOrdersItem">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="room_id" jdbcType="VARCHAR" property="roomId" />
+    <result column="room_name" jdbcType="VARCHAR" property="roomName" />
+    <result column="floor" jdbcType="VARCHAR" property="floor" />
+    <result column="tower_id" jdbcType="VARCHAR" property="towerId" />
+    <result column="tower_name" jdbcType="VARCHAR" property="towerName" />
+    <result column="room_url" jdbcType="VARCHAR" property="roomUrl" />
+    <result column="room_area" jdbcType="VARCHAR" property="roomArea" />
+    <result column="lease_price" jdbcType="DECIMAL" property="leasePrice" />
+    <result column="lease_sum" jdbcType="DECIMAL" property="leaseSum" />
+    <result column="press_pay" jdbcType="VARCHAR" property="pressPay" />
+    <result column="shortest_lease" jdbcType="VARCHAR" property="shortestLease" />
+    <result column="introduce" jdbcType="VARCHAR" property="introduce" />
+    <result column="pay_sum" jdbcType="DECIMAL" property="paySum" />
+    <result column="quit_penal_sum" jdbcType="DECIMAL" property="quitPenalSum" />
+    <result column="explain_" jdbcType="VARCHAR" property="explain" />
+    <result column="approval_opinion" jdbcType="VARCHAR" property="approvalOpinion" />
+    <result column="practical_quit_time" jdbcType="DATE" property="practicalQuitTime" />
+    <result column="lease_apply_status" jdbcType="TINYINT" property="leaseApplyStatus" />
+    <result column="quit_apply_status" jdbcType="TINYINT" property="quitApplyStatus" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, order_id, room_id, room_name, floor, tower_id, tower_name, room_url, room_area, 
+    lease_price, lease_sum, press_pay, shortest_lease, introduce, pay_sum, quit_penal_sum, 
+    explain_, approval_opinion, practical_quit_time, lease_apply_status, quit_apply_status, 
+    record_status, creator_account, create_time, modifier_account, modified_time
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.park.asset.entity.TbRoomOrdersItemCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_room_orders_item
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_room_orders_item
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_room_orders_item
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.park.asset.entity.TbRoomOrdersItemCriteria">
+    delete from tb_room_orders_item
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.park.asset.entity.TbRoomOrdersItem">
+    insert into tb_room_orders_item (id, order_id, room_id, 
+      room_name, floor, tower_id, 
+      tower_name, room_url, room_area, 
+      lease_price, lease_sum, press_pay, 
+      shortest_lease, introduce, pay_sum, 
+      quit_penal_sum, explain_, approval_opinion, 
+      practical_quit_time, lease_apply_status, quit_apply_status, 
+      record_status, creator_account, create_time, 
+      modifier_account, modified_time)
+    values (#{id,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, #{roomId,jdbcType=VARCHAR}, 
+      #{roomName,jdbcType=VARCHAR}, #{floor,jdbcType=VARCHAR}, #{towerId,jdbcType=VARCHAR}, 
+      #{towerName,jdbcType=VARCHAR}, #{roomUrl,jdbcType=VARCHAR}, #{roomArea,jdbcType=VARCHAR}, 
+      #{leasePrice,jdbcType=DECIMAL}, #{leaseSum,jdbcType=DECIMAL}, #{pressPay,jdbcType=VARCHAR}, 
+      #{shortestLease,jdbcType=VARCHAR}, #{introduce,jdbcType=VARCHAR}, #{paySum,jdbcType=DECIMAL}, 
+      #{quitPenalSum,jdbcType=DECIMAL}, #{explain,jdbcType=VARCHAR}, #{approvalOpinion,jdbcType=VARCHAR}, 
+      #{practicalQuitTime,jdbcType=DATE}, #{leaseApplyStatus,jdbcType=TINYINT}, #{quitApplyStatus,jdbcType=TINYINT}, 
+      #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.park.asset.entity.TbRoomOrdersItem">
+    insert into tb_room_orders_item
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="roomId != null">
+        room_id,
+      </if>
+      <if test="roomName != null">
+        room_name,
+      </if>
+      <if test="floor != null">
+        floor,
+      </if>
+      <if test="towerId != null">
+        tower_id,
+      </if>
+      <if test="towerName != null">
+        tower_name,
+      </if>
+      <if test="roomUrl != null">
+        room_url,
+      </if>
+      <if test="roomArea != null">
+        room_area,
+      </if>
+      <if test="leasePrice != null">
+        lease_price,
+      </if>
+      <if test="leaseSum != null">
+        lease_sum,
+      </if>
+      <if test="pressPay != null">
+        press_pay,
+      </if>
+      <if test="shortestLease != null">
+        shortest_lease,
+      </if>
+      <if test="introduce != null">
+        introduce,
+      </if>
+      <if test="paySum != null">
+        pay_sum,
+      </if>
+      <if test="quitPenalSum != null">
+        quit_penal_sum,
+      </if>
+      <if test="explain != null">
+        explain_,
+      </if>
+      <if test="approvalOpinion != null">
+        approval_opinion,
+      </if>
+      <if test="practicalQuitTime != null">
+        practical_quit_time,
+      </if>
+      <if test="leaseApplyStatus != null">
+        lease_apply_status,
+      </if>
+      <if test="quitApplyStatus != null">
+        quit_apply_status,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="roomId != null">
+        #{roomId,jdbcType=VARCHAR},
+      </if>
+      <if test="roomName != null">
+        #{roomName,jdbcType=VARCHAR},
+      </if>
+      <if test="floor != null">
+        #{floor,jdbcType=VARCHAR},
+      </if>
+      <if test="towerId != null">
+        #{towerId,jdbcType=VARCHAR},
+      </if>
+      <if test="towerName != null">
+        #{towerName,jdbcType=VARCHAR},
+      </if>
+      <if test="roomUrl != null">
+        #{roomUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="roomArea != null">
+        #{roomArea,jdbcType=VARCHAR},
+      </if>
+      <if test="leasePrice != null">
+        #{leasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="leaseSum != null">
+        #{leaseSum,jdbcType=DECIMAL},
+      </if>
+      <if test="pressPay != null">
+        #{pressPay,jdbcType=VARCHAR},
+      </if>
+      <if test="shortestLease != null">
+        #{shortestLease,jdbcType=VARCHAR},
+      </if>
+      <if test="introduce != null">
+        #{introduce,jdbcType=VARCHAR},
+      </if>
+      <if test="paySum != null">
+        #{paySum,jdbcType=DECIMAL},
+      </if>
+      <if test="quitPenalSum != null">
+        #{quitPenalSum,jdbcType=DECIMAL},
+      </if>
+      <if test="explain != null">
+        #{explain,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalOpinion != null">
+        #{approvalOpinion,jdbcType=VARCHAR},
+      </if>
+      <if test="practicalQuitTime != null">
+        #{practicalQuitTime,jdbcType=DATE},
+      </if>
+      <if test="leaseApplyStatus != null">
+        #{leaseApplyStatus,jdbcType=TINYINT},
+      </if>
+      <if test="quitApplyStatus != null">
+        #{quitApplyStatus,jdbcType=TINYINT},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.park.asset.entity.TbRoomOrdersItemCriteria" resultType="java.lang.Long">
+    select count(*) from tb_room_orders_item
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_room_orders_item
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderId != null">
+        order_id = #{record.orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.roomId != null">
+        room_id = #{record.roomId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.roomName != null">
+        room_name = #{record.roomName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.floor != null">
+        floor = #{record.floor,jdbcType=VARCHAR},
+      </if>
+      <if test="record.towerId != null">
+        tower_id = #{record.towerId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.towerName != null">
+        tower_name = #{record.towerName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.roomUrl != null">
+        room_url = #{record.roomUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.roomArea != null">
+        room_area = #{record.roomArea,jdbcType=VARCHAR},
+      </if>
+      <if test="record.leasePrice != null">
+        lease_price = #{record.leasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.leaseSum != null">
+        lease_sum = #{record.leaseSum,jdbcType=DECIMAL},
+      </if>
+      <if test="record.pressPay != null">
+        press_pay = #{record.pressPay,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shortestLease != null">
+        shortest_lease = #{record.shortestLease,jdbcType=VARCHAR},
+      </if>
+      <if test="record.introduce != null">
+        introduce = #{record.introduce,jdbcType=VARCHAR},
+      </if>
+      <if test="record.paySum != null">
+        pay_sum = #{record.paySum,jdbcType=DECIMAL},
+      </if>
+      <if test="record.quitPenalSum != null">
+        quit_penal_sum = #{record.quitPenalSum,jdbcType=DECIMAL},
+      </if>
+      <if test="record.explain != null">
+        explain_ = #{record.explain,jdbcType=VARCHAR},
+      </if>
+      <if test="record.approvalOpinion != null">
+        approval_opinion = #{record.approvalOpinion,jdbcType=VARCHAR},
+      </if>
+      <if test="record.practicalQuitTime != null">
+        practical_quit_time = #{record.practicalQuitTime,jdbcType=DATE},
+      </if>
+      <if test="record.leaseApplyStatus != null">
+        lease_apply_status = #{record.leaseApplyStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.quitApplyStatus != null">
+        quit_apply_status = #{record.quitApplyStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_room_orders_item
+    set id = #{record.id,jdbcType=VARCHAR},
+      order_id = #{record.orderId,jdbcType=VARCHAR},
+      room_id = #{record.roomId,jdbcType=VARCHAR},
+      room_name = #{record.roomName,jdbcType=VARCHAR},
+      floor = #{record.floor,jdbcType=VARCHAR},
+      tower_id = #{record.towerId,jdbcType=VARCHAR},
+      tower_name = #{record.towerName,jdbcType=VARCHAR},
+      room_url = #{record.roomUrl,jdbcType=VARCHAR},
+      room_area = #{record.roomArea,jdbcType=VARCHAR},
+      lease_price = #{record.leasePrice,jdbcType=DECIMAL},
+      lease_sum = #{record.leaseSum,jdbcType=DECIMAL},
+      press_pay = #{record.pressPay,jdbcType=VARCHAR},
+      shortest_lease = #{record.shortestLease,jdbcType=VARCHAR},
+      introduce = #{record.introduce,jdbcType=VARCHAR},
+      pay_sum = #{record.paySum,jdbcType=DECIMAL},
+      quit_penal_sum = #{record.quitPenalSum,jdbcType=DECIMAL},
+      explain_ = #{record.explain,jdbcType=VARCHAR},
+      approval_opinion = #{record.approvalOpinion,jdbcType=VARCHAR},
+      practical_quit_time = #{record.practicalQuitTime,jdbcType=DATE},
+      lease_apply_status = #{record.leaseApplyStatus,jdbcType=TINYINT},
+      quit_apply_status = #{record.quitApplyStatus,jdbcType=TINYINT},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.asset.entity.TbRoomOrdersItem">
+    update tb_room_orders_item
+    <set>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="roomId != null">
+        room_id = #{roomId,jdbcType=VARCHAR},
+      </if>
+      <if test="roomName != null">
+        room_name = #{roomName,jdbcType=VARCHAR},
+      </if>
+      <if test="floor != null">
+        floor = #{floor,jdbcType=VARCHAR},
+      </if>
+      <if test="towerId != null">
+        tower_id = #{towerId,jdbcType=VARCHAR},
+      </if>
+      <if test="towerName != null">
+        tower_name = #{towerName,jdbcType=VARCHAR},
+      </if>
+      <if test="roomUrl != null">
+        room_url = #{roomUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="roomArea != null">
+        room_area = #{roomArea,jdbcType=VARCHAR},
+      </if>
+      <if test="leasePrice != null">
+        lease_price = #{leasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="leaseSum != null">
+        lease_sum = #{leaseSum,jdbcType=DECIMAL},
+      </if>
+      <if test="pressPay != null">
+        press_pay = #{pressPay,jdbcType=VARCHAR},
+      </if>
+      <if test="shortestLease != null">
+        shortest_lease = #{shortestLease,jdbcType=VARCHAR},
+      </if>
+      <if test="introduce != null">
+        introduce = #{introduce,jdbcType=VARCHAR},
+      </if>
+      <if test="paySum != null">
+        pay_sum = #{paySum,jdbcType=DECIMAL},
+      </if>
+      <if test="quitPenalSum != null">
+        quit_penal_sum = #{quitPenalSum,jdbcType=DECIMAL},
+      </if>
+      <if test="explain != null">
+        explain_ = #{explain,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalOpinion != null">
+        approval_opinion = #{approvalOpinion,jdbcType=VARCHAR},
+      </if>
+      <if test="practicalQuitTime != null">
+        practical_quit_time = #{practicalQuitTime,jdbcType=DATE},
+      </if>
+      <if test="leaseApplyStatus != null">
+        lease_apply_status = #{leaseApplyStatus,jdbcType=TINYINT},
+      </if>
+      <if test="quitApplyStatus != null">
+        quit_apply_status = #{quitApplyStatus,jdbcType=TINYINT},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.asset.entity.TbRoomOrdersItem">
+    update tb_room_orders_item
+    set order_id = #{orderId,jdbcType=VARCHAR},
+      room_id = #{roomId,jdbcType=VARCHAR},
+      room_name = #{roomName,jdbcType=VARCHAR},
+      floor = #{floor,jdbcType=VARCHAR},
+      tower_id = #{towerId,jdbcType=VARCHAR},
+      tower_name = #{towerName,jdbcType=VARCHAR},
+      room_url = #{roomUrl,jdbcType=VARCHAR},
+      room_area = #{roomArea,jdbcType=VARCHAR},
+      lease_price = #{leasePrice,jdbcType=DECIMAL},
+      lease_sum = #{leaseSum,jdbcType=DECIMAL},
+      press_pay = #{pressPay,jdbcType=VARCHAR},
+      shortest_lease = #{shortestLease,jdbcType=VARCHAR},
+      introduce = #{introduce,jdbcType=VARCHAR},
+      pay_sum = #{paySum,jdbcType=DECIMAL},
+      quit_penal_sum = #{quitPenalSum,jdbcType=DECIMAL},
+      explain_ = #{explain,jdbcType=VARCHAR},
+      approval_opinion = #{approvalOpinion,jdbcType=VARCHAR},
+      practical_quit_time = #{practicalQuitTime,jdbcType=DATE},
+      lease_apply_status = #{leaseApplyStatus,jdbcType=TINYINT},
+      quit_apply_status = #{quitApplyStatus,jdbcType=TINYINT},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

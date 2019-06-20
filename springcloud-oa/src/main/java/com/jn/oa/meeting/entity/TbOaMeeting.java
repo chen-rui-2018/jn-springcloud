@@ -6,15 +6,13 @@ import java.util.Date;
 public class TbOaMeeting implements Serializable {
     private String id;
 
-    private String workOrderNum;
-
     private Date startTime;
 
     private Date endTime;
 
     private String meetingRoomId;
 
-    private String approvalStatus;
+    private String meetingStatus;
 
     private Byte recordStatus;
 
@@ -26,7 +24,7 @@ public class TbOaMeeting implements Serializable {
 
     private Date modifiedTime;
 
-    private String userIdStr;
+    private String participantsStr;
 
     private String applicant;
 
@@ -46,13 +44,9 @@ public class TbOaMeeting implements Serializable {
 
     private String title;
 
-    private String approvalRole;
+    private String organizationalUser;
 
-    private String approvalUser;
-
-    private String approvalOpinion;
-
-    private String meetingStatus;
+    private String fileUrl;
 
     private static final long serialVersionUID = 1L;
 
@@ -62,14 +56,6 @@ public class TbOaMeeting implements Serializable {
 
     public void setId(String id) {
         this.id = id == null ? null : id.trim();
-    }
-
-    public String getWorkOrderNum() {
-        return workOrderNum;
-    }
-
-    public void setWorkOrderNum(String workOrderNum) {
-        this.workOrderNum = workOrderNum == null ? null : workOrderNum.trim();
     }
 
     public Date getStartTime() {
@@ -96,12 +82,12 @@ public class TbOaMeeting implements Serializable {
         this.meetingRoomId = meetingRoomId == null ? null : meetingRoomId.trim();
     }
 
-    public String getApprovalStatus() {
-        return approvalStatus;
+    public String getMeetingStatus() {
+        return meetingStatus;
     }
 
-    public void setApprovalStatus(String approvalStatus) {
-        this.approvalStatus = approvalStatus == null ? null : approvalStatus.trim();
+    public void setMeetingStatus(String meetingStatus) {
+        this.meetingStatus = meetingStatus == null ? null : meetingStatus.trim();
     }
 
     public Byte getRecordStatus() {
@@ -144,12 +130,12 @@ public class TbOaMeeting implements Serializable {
         this.modifiedTime = modifiedTime;
     }
 
-    public String getUserIdStr() {
-        return userIdStr;
+    public String getParticipantsStr() {
+        return participantsStr;
     }
 
-    public void setUserIdStr(String userIdStr) {
-        this.userIdStr = userIdStr == null ? null : userIdStr.trim();
+    public void setParticipantsStr(String participantsStr) {
+        this.participantsStr = participantsStr == null ? null : participantsStr.trim();
     }
 
     public String getApplicant() {
@@ -224,36 +210,20 @@ public class TbOaMeeting implements Serializable {
         this.title = title == null ? null : title.trim();
     }
 
-    public String getApprovalRole() {
-        return approvalRole;
+    public String getOrganizationalUser() {
+        return organizationalUser;
     }
 
-    public void setApprovalRole(String approvalRole) {
-        this.approvalRole = approvalRole == null ? null : approvalRole.trim();
+    public void setOrganizationalUser(String organizationalUser) {
+        this.organizationalUser = organizationalUser == null ? null : organizationalUser.trim();
     }
 
-    public String getApprovalUser() {
-        return approvalUser;
+    public String getFileUrl() {
+        return fileUrl;
     }
 
-    public void setApprovalUser(String approvalUser) {
-        this.approvalUser = approvalUser == null ? null : approvalUser.trim();
-    }
-
-    public String getApprovalOpinion() {
-        return approvalOpinion;
-    }
-
-    public void setApprovalOpinion(String approvalOpinion) {
-        this.approvalOpinion = approvalOpinion == null ? null : approvalOpinion.trim();
-    }
-
-    public String getMeetingStatus() {
-        return meetingStatus;
-    }
-
-    public void setMeetingStatus(String meetingStatus) {
-        this.meetingStatus = meetingStatus == null ? null : meetingStatus.trim();
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl == null ? null : fileUrl.trim();
     }
 
     @Override
@@ -269,17 +239,16 @@ public class TbOaMeeting implements Serializable {
         }
         TbOaMeeting other = (TbOaMeeting) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getWorkOrderNum() == null ? other.getWorkOrderNum() == null : this.getWorkOrderNum().equals(other.getWorkOrderNum()))
             && (this.getStartTime() == null ? other.getStartTime() == null : this.getStartTime().equals(other.getStartTime()))
             && (this.getEndTime() == null ? other.getEndTime() == null : this.getEndTime().equals(other.getEndTime()))
             && (this.getMeetingRoomId() == null ? other.getMeetingRoomId() == null : this.getMeetingRoomId().equals(other.getMeetingRoomId()))
-            && (this.getApprovalStatus() == null ? other.getApprovalStatus() == null : this.getApprovalStatus().equals(other.getApprovalStatus()))
+            && (this.getMeetingStatus() == null ? other.getMeetingStatus() == null : this.getMeetingStatus().equals(other.getMeetingStatus()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
             && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
-            && (this.getUserIdStr() == null ? other.getUserIdStr() == null : this.getUserIdStr().equals(other.getUserIdStr()))
+            && (this.getParticipantsStr() == null ? other.getParticipantsStr() == null : this.getParticipantsStr().equals(other.getParticipantsStr()))
             && (this.getApplicant() == null ? other.getApplicant() == null : this.getApplicant().equals(other.getApplicant()))
             && (this.getApplicationTime() == null ? other.getApplicationTime() == null : this.getApplicationTime().equals(other.getApplicationTime()))
             && (this.getSignInQr() == null ? other.getSignInQr() == null : this.getSignInQr().equals(other.getSignInQr()))
@@ -289,10 +258,8 @@ public class TbOaMeeting implements Serializable {
             && (this.getAppRemind() == null ? other.getAppRemind() == null : this.getAppRemind().equals(other.getAppRemind()))
             && (this.getIsRemind() == null ? other.getIsRemind() == null : this.getIsRemind().equals(other.getIsRemind()))
             && (this.getTitle() == null ? other.getTitle() == null : this.getTitle().equals(other.getTitle()))
-            && (this.getApprovalRole() == null ? other.getApprovalRole() == null : this.getApprovalRole().equals(other.getApprovalRole()))
-            && (this.getApprovalUser() == null ? other.getApprovalUser() == null : this.getApprovalUser().equals(other.getApprovalUser()))
-            && (this.getApprovalOpinion() == null ? other.getApprovalOpinion() == null : this.getApprovalOpinion().equals(other.getApprovalOpinion()))
-            && (this.getMeetingStatus() == null ? other.getMeetingStatus() == null : this.getMeetingStatus().equals(other.getMeetingStatus()));
+            && (this.getOrganizationalUser() == null ? other.getOrganizationalUser() == null : this.getOrganizationalUser().equals(other.getOrganizationalUser()))
+            && (this.getFileUrl() == null ? other.getFileUrl() == null : this.getFileUrl().equals(other.getFileUrl()));
     }
 
     @Override
@@ -300,17 +267,16 @@ public class TbOaMeeting implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getWorkOrderNum() == null) ? 0 : getWorkOrderNum().hashCode());
         result = prime * result + ((getStartTime() == null) ? 0 : getStartTime().hashCode());
         result = prime * result + ((getEndTime() == null) ? 0 : getEndTime().hashCode());
         result = prime * result + ((getMeetingRoomId() == null) ? 0 : getMeetingRoomId().hashCode());
-        result = prime * result + ((getApprovalStatus() == null) ? 0 : getApprovalStatus().hashCode());
+        result = prime * result + ((getMeetingStatus() == null) ? 0 : getMeetingStatus().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
-        result = prime * result + ((getUserIdStr() == null) ? 0 : getUserIdStr().hashCode());
+        result = prime * result + ((getParticipantsStr() == null) ? 0 : getParticipantsStr().hashCode());
         result = prime * result + ((getApplicant() == null) ? 0 : getApplicant().hashCode());
         result = prime * result + ((getApplicationTime() == null) ? 0 : getApplicationTime().hashCode());
         result = prime * result + ((getSignInQr() == null) ? 0 : getSignInQr().hashCode());
@@ -320,10 +286,8 @@ public class TbOaMeeting implements Serializable {
         result = prime * result + ((getAppRemind() == null) ? 0 : getAppRemind().hashCode());
         result = prime * result + ((getIsRemind() == null) ? 0 : getIsRemind().hashCode());
         result = prime * result + ((getTitle() == null) ? 0 : getTitle().hashCode());
-        result = prime * result + ((getApprovalRole() == null) ? 0 : getApprovalRole().hashCode());
-        result = prime * result + ((getApprovalUser() == null) ? 0 : getApprovalUser().hashCode());
-        result = prime * result + ((getApprovalOpinion() == null) ? 0 : getApprovalOpinion().hashCode());
-        result = prime * result + ((getMeetingStatus() == null) ? 0 : getMeetingStatus().hashCode());
+        result = prime * result + ((getOrganizationalUser() == null) ? 0 : getOrganizationalUser().hashCode());
+        result = prime * result + ((getFileUrl() == null) ? 0 : getFileUrl().hashCode());
         return result;
     }
 
@@ -334,17 +298,16 @@ public class TbOaMeeting implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", workOrderNum=").append(workOrderNum);
         sb.append(", startTime=").append(startTime);
         sb.append(", endTime=").append(endTime);
         sb.append(", meetingRoomId=").append(meetingRoomId);
-        sb.append(", approvalStatus=").append(approvalStatus);
+        sb.append(", meetingStatus=").append(meetingStatus);
         sb.append(", recordStatus=").append(recordStatus);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", createdTime=").append(createdTime);
         sb.append(", modifierAccount=").append(modifierAccount);
         sb.append(", modifiedTime=").append(modifiedTime);
-        sb.append(", userIdStr=").append(userIdStr);
+        sb.append(", participantsStr=").append(participantsStr);
         sb.append(", applicant=").append(applicant);
         sb.append(", applicationTime=").append(applicationTime);
         sb.append(", signInQr=").append(signInQr);
@@ -354,10 +317,8 @@ public class TbOaMeeting implements Serializable {
         sb.append(", appRemind=").append(appRemind);
         sb.append(", isRemind=").append(isRemind);
         sb.append(", title=").append(title);
-        sb.append(", approvalRole=").append(approvalRole);
-        sb.append(", approvalUser=").append(approvalUser);
-        sb.append(", approvalOpinion=").append(approvalOpinion);
-        sb.append(", meetingStatus=").append(meetingStatus);
+        sb.append(", organizationalUser=").append(organizationalUser);
+        sb.append(", fileUrl=").append(fileUrl);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

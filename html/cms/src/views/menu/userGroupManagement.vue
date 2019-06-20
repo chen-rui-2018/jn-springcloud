@@ -30,11 +30,7 @@
           {{ scope.row.sysRoleList.join('、') }}
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" min-width="200" align="center" prop="createdTime">
-        <!-- <template slot-scope="scope">
-          {{ scope.row.createdTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
-        </template> -->
-      </el-table-column>
+      <el-table-column label="创建时间" min-width="200" align="center" prop="createdTime"/>
       <el-table-column label="状态" align="center" prop="status">
         <template slot-scope="scope">
           <span :class="scope.row.recordStatus==1 ? 'text-green' : 'text-red'">{{ scope.row.recordStatus | statusFilter }}</span>
@@ -130,7 +126,7 @@
 </template>
 
 <script>
-import { api, paramApi } from '@/api/Permission-model/userManagement'
+import { api, paramApi } from '@/api/axios'
 export default {
   filters: {
     statusFilter(recordStatus) {
@@ -148,8 +144,8 @@ export default {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
         if (this.dialogStatus === '新增用户组') {
-          paramApi('system/sysGroup/checkGroupName', this.userGroupform.groupName, 'groupName').then(res => {
-            if (res.data.code === '0000') {
+          paramApi(`${this.GLOBAL.systemUrl}system/sysGroup/checkGroupName`, this.userGroupform.groupName, 'groupName').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               if (res.data.data === 'success') {
                 callback()
               } else {
@@ -159,8 +155,8 @@ export default {
           })
         } else {
           if (this.oldGroupName !== this.userGroupform.groupName) {
-            paramApi('system/sysGroup/checkGroupName', this.userGroupform.groupName, 'groupName').then(res => {
-              if (res.data.code === '0000') {
+            paramApi(`${this.GLOBAL.systemUrl}system/sysGroup/checkGroupName`, this.userGroupform.groupName, 'groupName').then(res => {
+              if (res.data.code === this.GLOBAL.code) {
                 if (res.data.data === 'success') {
                   callback()
                 } else {
@@ -245,7 +241,7 @@ export default {
   methods: {
     // 授权角色分页功能
     handleRoleCurrentChange(val) {
-      if (this.numberTotal - this.moveArr > (val - 1) * this.numberRows) {
+      if (this.numberTotal > (val - 1) * this.numberRows) {
         this.numberPage = val
       } else {
         this.numberPage = val - 1
@@ -261,8 +257,14 @@ export default {
       } else if (direction === 'right') {
         this.moveArr = movedKeys.length
       }
-      api('system/sysGroup/roleGroupAuthorization', { groupId: this.groupId, roleIds: value }).then(res => {
-        if (res.data.code === '0000') {
+      this.numberTotal = this.numberTotal - this.moveArr
+      if (this.numberTotal > (this.numberPage - 1) * this.numberRows) {
+        this.numberPage = this.numberPage
+      } else {
+        this.numberPage = this.numberPage - 1
+      }
+      api(`${this.GLOBAL.systemUrl}system/sysGroup/roleGroupAuthorization`, { groupId: this.groupId, roleIds: value }, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.$message({
             message: '授权成功',
             type: 'success'
@@ -271,6 +273,7 @@ export default {
           this.$message.error(res.data.result)
         }
         this.initList()
+        this.getRole()
       })
     },
     // 显示授权角色对话框
@@ -283,13 +286,13 @@ export default {
       this.getRole()
     },
     getRole() {
-      api('system/sysGroup/selectGroupRoleAndOtherRole', {
+      api(`${this.GLOBAL.systemUrl}system/sysGroup/selectGroupRoleAndOtherRole`, {
         groupId: this.groupId,
         page: this.numberPage,
         rows: this.numberRows,
         roleName: this.roleName
-      }).then(res => {
-        if (res.data.code === '0000') {
+      }, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           const roleData = []
           const checkRole = []
           this.numberTotal = res.data.data.total
@@ -322,7 +325,7 @@ export default {
 
     // 根据用户组id获取用户组拥有的用户和其他用户
     getUser() {
-      api('system/sysGroup/findOtherUserByPage', { groupId: this.userGroupId, page: this.userPage, rows: this.userRows, name: this.name }).then(res => {
+      api(`${this.GLOBAL.systemUrl}system/sysGroup/findOtherUserByPage`, { groupId: this.userGroupId, page: this.userPage, rows: this.userRows, name: this.name }, 'post').then(res => {
         const userData = []
         const checkUser = []
         this.userTotal = res.data.data.total
@@ -342,13 +345,13 @@ export default {
     },
     // 授权用户分页功能
     handleUserCurrentChange(val) {
-      if (this.userTotal - this.moveArr > (val - 1) * this.userRows) {
+      if (this.userTotal > (val - 1) * this.userRows) {
         this.userPage = val
       } else {
         this.userPage = val - 1
       }
-      this.userLoading = true
       this.getUser()
+      this.userLoading = true
     },
     // 改变授权用户穿梭框时获取选中的用户
     handleUserChange(value, direction, movedKeys) {
@@ -358,9 +361,15 @@ export default {
       } else if (direction === 'right') {
         this.moveArr = movedKeys.length
       }
-      api('system/sysGroup/userGroupAuthorization', { groupId: this.userGroupId, userIds: value }).then(
+      this.userTotal = this.userTotal - this.moveArr
+      if (this.userTotal > (this.userPage - 1) * this.userRows) {
+        this.userPage = this.userPage
+      } else {
+        this.userPage = this.userPage - 1
+      }
+      api(`${this.GLOBAL.systemUrl}system/sysGroup/userGroupAuthorization`, { groupId: this.userGroupId, userIds: value }, 'post').then(
         res => {
-          if (res.data.code === '0000') {
+          if (res.data.code === this.GLOBAL.code) {
             this.$message({
               message: '授权成功',
               type: 'success'
@@ -369,6 +378,7 @@ export default {
             this.$message.error(res.data.result)
           }
           this.initList()
+          this.getUser()
         }
       )
     },
@@ -402,8 +412,8 @@ export default {
       this.$refs['userGroupform'].validate(valid => {
         if (valid) {
           // 调用接口发送请求
-          api('system/sysGroup/add', this.userGroupform).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.systemUrl}system/sysGroup/add `, this.userGroupform, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '添加成功',
                 type: 'success'
@@ -446,8 +456,8 @@ export default {
           // 将对话框隐藏
           this.userGroupdialogFormVisible = false
           // 调用接口发送请求
-          api('system/sysGroup/update', this.userGroupform).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.systemUrl}system/sysGroup/update`, this.userGroupform, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '编辑成功',
                 type: 'success'
@@ -472,8 +482,8 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          paramApi('system/sysGroup/delete', row.id, 'groupIds').then(res => {
-            if (res.data.code === '0000') {
+          paramApi(`${this.GLOBAL.systemUrl}system/sysGroup/delete`, row.id, 'groupIds').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '删除成功',
                 type: 'success'
@@ -494,9 +504,8 @@ export default {
     // 项目初始化
     initList() {
       this.listLoading = true
-      api('system/sysGroup/list', this.listQuery).then(res => {
-        console.log(res)
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.systemUrl}system/sysGroup/list`, this.listQuery, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.usergroupList = res.data.data.rows
           this.total = res.data.data.total
           if (this.usergroupList.length === 0 && this.total > 0) {
@@ -527,6 +536,11 @@ export default {
 <style lang="scss">
 .tablePagination{
   margin-top:15px;
+}
+.el-tooltip__popper{
+   text-align: center;
+    max-width: 260px;
+    word-break: break-all;
 }
 .management {
   .filter-container {

@@ -11,6 +11,7 @@ import com.jn.park.finance.model.FinanceBudgetHistoryModel;
 import com.jn.park.finance.model.FinanceBudgetMoneyModel;
 import com.jn.park.finance.model.FinanceBudgetQueryModel;
 import com.jn.park.finance.service.FinanceBudgetService;
+import com.jn.park.finance.vo.FianceDynamicTableVo;
 import com.jn.park.finance.vo.FinanceBudgetHistoryVo;
 import com.jn.park.finance.vo.FinanceTotalBudgetVo;
 import org.junit.FixMethodOrder;
@@ -65,7 +66,7 @@ public class FinanceBudgetServiceImplTest {
         calendar.set(Calendar.DAY_OF_MONTH,1);
         financeBudgetHistoryVo.setDepartmentId("281f4005-0363-4528-92a3-60a730532e53");
         financeBudgetHistoryVo.setDepartmentName("行政综合部");
-        financeBudgetHistoryVo.setCostTypeId(4);
+        financeBudgetHistoryVo.setCostTypeId("4");
         financeBudgetHistoryVo.setCostTypeName("差旅支出");
         financeBudgetHistoryVo.setBudgetType(new Byte("0"));
         financeBudgetHistoryVo.setBudgetMoneyModels(new ArrayList<FinanceBudgetMoneyModel>());
@@ -89,7 +90,7 @@ public class FinanceBudgetServiceImplTest {
         financeBudgetHistoryVo=new  FinanceBudgetHistoryVo();
         financeBudgetHistoryVo.setDepartmentId("281f4005-0363-4528-92a3-60a730532e53");
         financeBudgetHistoryVo.setDepartmentName("行政综合部");
-        financeBudgetHistoryVo.setCostTypeId(4);
+        financeBudgetHistoryVo.setCostTypeId("4");
         financeBudgetHistoryVo.setCostTypeName("差旅支出");
         financeBudgetHistoryVo.setBudgetType(new Byte("1"));
         financeBudgetHistoryVo.setBudgetMoneyModels(new ArrayList<FinanceBudgetMoneyModel>());
@@ -110,7 +111,7 @@ public class FinanceBudgetServiceImplTest {
         financeBudgetHistoryVo=new  FinanceBudgetHistoryVo();
         financeBudgetHistoryVo.setDepartmentId("281f4005-0363-4528-92a3-60a730532e53");
         financeBudgetHistoryVo.setDepartmentName("行政综合部");
-        financeBudgetHistoryVo.setCostTypeId(5);
+        financeBudgetHistoryVo.setCostTypeId("5");
         financeBudgetHistoryVo.setCostTypeName("办公支出");
         financeBudgetHistoryVo.setBudgetType(new Byte("0"));
         financeBudgetHistoryVo.setBudgetMoneyModels(new ArrayList<FinanceBudgetMoneyModel>());
@@ -137,7 +138,7 @@ public class FinanceBudgetServiceImplTest {
         FinanceBudgetQueryModel model=new FinanceBudgetQueryModel();
         model.setStartMonth("201901");
         model.setEndMonth("201912");
-        List<FinanceTotalBudgetVo> financeTotalBudgetVoList=financeBudgetService.selectTotalBudget(model,"huangbq");
-        logger.info("========>{}",financeTotalBudgetVoList.size());
+        FianceDynamicTableVo<List<FinanceTotalBudgetVo>> financeTotalBudgetVoList=financeBudgetService.selectTotalBudget(model,"huangbq");
+        logger.info("========>{}",financeTotalBudgetVoList.getRows());
     }
 }

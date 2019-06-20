@@ -116,9 +116,7 @@
   </div>
 </template>
 <script>
-import { api, paramApi } from '@/api/Permission-model/userManagement'
-// import { getList, getAllModule, addDictionary, editDictionary, deleteDictionary, sortSearch, groupSort } from '@/api/Permission-model/dataDictionary'
-// import '../../utils/index.js'
+import { api, paramApi } from '@/api/axios'
 export default {
   data() {
     var check = (rule, value, callback) => {
@@ -191,12 +189,10 @@ export default {
     handleSizeChange(val) {
       this.dictionaryForm.rows = val
       this.initList()
-      // console.log(`每页 ${val} 条`)
     },
     handleCurrentChange(val) {
       this.dictionaryForm.page = val
       this.initList()
-      // console.log(`当前页: ${val}`)
     },
     handleSearch() {
       if (!this.groupformInline.moduleCode) {
@@ -217,8 +213,8 @@ export default {
         moduleCode: this.groupformInline.moduleCode,
         parentGroupCode: this.groupformInline.parentGroupCode
       }
-      api('system/sysDict/sortSearch', data).then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.systemUrl}system/sysDict/sortSearch`, data, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.dataItem = res.data.data
           if (this.dataItem.length === 0) {
             this.$message.error('该搜索条件没有数据')
@@ -232,8 +228,8 @@ export default {
       this.isDisabled = true
       this.$refs['groupform'].validate(valid => {
         if (valid) {
-          api('system/sysDict/update').then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.systemUrl}system/sysDict/update`, '', 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '编辑成功',
                 type: 'success'
@@ -298,14 +294,13 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          paramApi('system/sysDict/delete', id, 'dictId').then(res => {
-            if (res.data.code === '0000') {
+          paramApi(`${this.GLOBAL.systemUrl}system/sysDict/delete`, id, 'dictId').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '删除成功',
                 type: 'success'
               })
               if (this.total % this.dictionaryForm.rows === 1) {
-                debugger
                 this.dictionaryForm.page = this.dictionaryForm.page - 1
               }
               this.initList()
@@ -320,9 +315,8 @@ export default {
     // 初始化
     initList() {
       this.listLoading = true
-      api('system/sysDict/list', this.dictionaryForm).then(res => {
-        console.log(res)
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.systemUrl}system/sysDict/list`, this.dictionaryForm, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.dictionaryData = res.data.data.rows
           this.total = res.data.data.total
         } else {
@@ -333,8 +327,8 @@ export default {
     },
     // 获取全部模块
     getAllModule() {
-      api('system/sysModule/getAll').then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.systemUrl}system/sysModule/getAll`, '', 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           res.data.data.forEach(val => {
             this.dictionaryOptions.push({
               value: val.moduleCode,
@@ -353,8 +347,8 @@ export default {
       this.$refs['dictionaryform'].validate(valid => {
         if (valid) {
           // 调用接口发送请求
-          api('system/sysDict/add', this.dictionaryform).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.systemUrl}system/sysDict/add`, this.dictionaryform, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '添加成功',
                 type: 'success'
@@ -376,8 +370,8 @@ export default {
       this.isDisabled = true
       this.$refs['dictionaryform'].validate(valid => {
         if (valid) {
-          api('system/sysDict/update', this.dictionaryform).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.systemUrl}system/sysDict/update`, this.dictionaryform, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '编辑成功',
                 type: 'success'
@@ -429,8 +423,8 @@ export default {
         dictData.push(dictObj)
         index = index + 1
       }
-      api('system/sysDict/sortByGroup', dictData).then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.systemUrl}system/sysDict/sortByGroup`, dictData, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.groupDialogFormVisible = false
           this.initList()
         }

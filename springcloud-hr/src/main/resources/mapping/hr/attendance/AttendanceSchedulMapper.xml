@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.attendance.dao.AttendanceSchedulMapper">
+    <select id="list" parameterType="com.jn.hr.attendance.model.AttendanceSchedulPage"
+		resultType="com.jn.hr.attendance.model.AttendanceSchedulVo">
+		SELECT * FROM tb_manpower_attendance_schedul t1
+		where 1 = 1
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(startDate)">
+            and t1.schedul_month &gt;=#{startDate,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(endDate)">
+            and t1.schedul_month &lt;=#{endDate,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(schedulMonth)">
+            and t1.schedul_month =#{schedulMonth,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentName)">
+            and t1.department_name =#{departmentName,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
+            and  t1.name like concat('%',#{name},'%')
+        </if>
+      <if test="departmentIds!=null and departmentIds.size>0">
+        and t1.department_id in
+        <foreach collection="departmentIds" item="depart" open="(" close=")" separator=",">
+          #{depart}
+        </foreach>
+      </if>
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(jobNumber)">
+			and t1.job_number = #{jobNumber,jdbcType=VARCHAR}
+		</if>
+	</select>
+	
+	 <select id="obtainMap" parameterType="com.jn.hr.attendance.model.AttendanceSchedulPage"
+		resultType="com.jn.hr.attendance.model.AttendanceSchedulVo">
+		SELECT * FROM tb_manpower_attendance_schedul t1
+		where t1.record_status = 1
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(startDate)">
+            and t1.schedul_month &gt;=#{startDate,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(endDate)">
+            and t1.schedul_month &lt;=#{endDate,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(schedulMonth)">
+            and t1.schedul_month =#{schedulMonth,jdbcType=VARCHAR}
+        </if>
+	</select>
+	
+	<select id="selectBySchedulMonth" parameterType="com.jn.hr.attendance.model.AttendanceSchedulPage"
+		resultType="com.jn.hr.attendance.model.AttendanceSchedulVo">
+		SELECT * FROM tb_manpower_attendance_schedul t1
+		where 1 = 1
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(startDate)">
+            and t1.schedul_month &gt;=#{startDate,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(endDate)">
+            and t1.schedul_month &lt;=#{endDate,jdbcType=VARCHAR}
+        </if>
+		group by schedul_month desc
+	</select>
+	
+	<select id="selectByJobNumberAndMonth" parameterType="com.jn.hr.attendance.model.AttendanceSchedulAdd"
+		resultType="com.jn.hr.attendance.model.AttendanceSchedulVo">
+		SELECT * FROM tb_manpower_attendance_schedul t1
+		where 1=1
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(schedulMonth)">
+            and t1.schedul_month =#{schedulMonth,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(jobNumber)">
+            and t1.job_number =#{jobNumber,jdbcType=VARCHAR}
+        </if>
+        group by t1.schedul_month
+	</select>
+	
+	<insert id="insertBatch" parameterType="java.util.List">
+        insert into tb_manpower_attendance_schedul
+        (id, schedul_month, department_id, 
+      department_name, job_number, name, 
+      number_1, number_2, number_3, 
+      number_4, number_5, number_6, 
+      number_7, number_8, number_9, 
+      number_10, number_11, number_12, 
+      number_13, number_14, number_15, 
+      number_16, number_17, number_18, 
+      number_19, number_20, number_21, 
+      number_22, number_23, number_24, 
+      number_25, number_26, number_27, 
+      number_28, number_29, number_30, 
+      number_31, record_status, creator_account, 
+      created_time, modifier_account, modified_time
+        ) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.id}, #{item.schedulMonth}, #{item.departmentId}, 
+      #{item.departmentName}, #{item.jobNumber}, #{item.name}, 
+      #{item.number1}, #{item.number2}, #{item.number3}, 
+      #{item.number4}, #{item.number5}, #{item.number6}, 
+      #{item.number7}, #{item.number8}, #{item.number9}, 
+      #{item.number10}, #{item.number11}, #{item.number12}, 
+      #{item.number13}, #{item.number14}, #{item.number15}, 
+      #{item.number16}, #{item.number17}, #{item.number18}, 
+      #{item.number19}, #{item.number20}, #{item.number21}, 
+      #{item.number22}, #{item.number23}, #{item.number24}, 
+      #{item.number25}, #{item.number26}, #{item.number27}, 
+      #{item.number28}, #{item.number29}, #{item.number30}, 
+      #{item.number31}, #{item.recordStatus}, #{item.creatorAccount}, 
+      #{item.createdTime}, #{item.modifierAccount}, #{item.modifiedTime}
+            )
+        </foreach>
+    </insert>
+    
+    <update id="updateBatch" parameterType="java.util.List">
+    <foreach collection="list" item="item" index="index" separator=",">
+    update tb_manpower_attendance_schedul t1
+    <set>
+        <if test="record.id != null">
+        id = #{item.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.schedulMonth != null">
+        schedul_month = #{item.schedulMonth,jdbcType=VARCHAR},
+      </if>
+      <if test="record.departmentId != null">
+        department_id = #{item.departmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.departmentName != null">
+        department_name = #{item.departmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null">
+        name = #{item.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.number1 != null">
+        number_1 = #{item.number1,jdbcType=INTEGER},
+      </if>
+      <if test="record.number2 != null">
+        number_2 = #{item.number2,jdbcType=INTEGER},
+      </if>
+      <if test="record.number3 != null">
+        number_3 = #{item.number3,jdbcType=INTEGER},
+      </if>
+      <if test="record.number4 != null">
+        number_4 = #{item.number4,jdbcType=INTEGER},
+      </if>
+      <if test="record.number5 != null">
+        number_5 = #{item.number5,jdbcType=INTEGER},
+      </if>
+      <if test="record.number6 != null">
+        number_6 = #{item.number6,jdbcType=INTEGER},
+      </if>
+      <if test="record.number7 != null">
+        number_7 = #{item.number7,jdbcType=INTEGER},
+      </if>
+      <if test="record.number8 != null">
+        number_8 = #{item.number8,jdbcType=INTEGER},
+      </if>
+      <if test="record.number9 != null">
+        number_9 = #{item.number9,jdbcType=INTEGER},
+      </if>
+      <if test="record.number10 != null">
+        number_10 = #{item.number10,jdbcType=INTEGER},
+      </if>
+      <if test="record.number11 != null">
+        number_11 = #{item.number11,jdbcType=INTEGER},
+      </if>
+      <if test="record.number12 != null">
+        number_12 = #{item.number12,jdbcType=INTEGER},
+      </if>
+      <if test="record.number13 != null">
+        number_13 = #{item.number13,jdbcType=INTEGER},
+      </if>
+      <if test="record.number14 != null">
+        number_14 = #{item.number14,jdbcType=INTEGER},
+      </if>
+      <if test="record.number15 != null">
+        number_15 = #{item.number15,jdbcType=INTEGER},
+      </if>
+      <if test="record.number16 != null">
+        number_16 = #{item.number16,jdbcType=INTEGER},
+      </if>
+      <if test="record.number17 != null">
+        number_17 = #{item.number17,jdbcType=INTEGER},
+      </if>
+      <if test="record.number18 != null">
+        number_18 = #{item.number18,jdbcType=INTEGER},
+      </if>
+      <if test="record.number19 != null">
+        number_19 = #{item.number19,jdbcType=INTEGER},
+      </if>
+      <if test="record.number20 != null">
+        number_20 = #{item.number20,jdbcType=INTEGER},
+      </if>
+      <if test="record.number21 != null">
+        number_21 = #{item.number21,jdbcType=INTEGER},
+      </if>
+      <if test="record.number22 != null">
+        number_22 = #{item.number22,jdbcType=INTEGER},
+      </if>
+      <if test="record.number23 != null">
+        number_23 = #{item.number23,jdbcType=INTEGER},
+      </if>
+      <if test="record.number24 != null">
+        number_24 = #{item.number24,jdbcType=INTEGER},
+      </if>
+      <if test="record.number25 != null">
+        number_25 = #{item.number25,jdbcType=INTEGER},
+      </if>
+      <if test="record.number26 != null">
+        number_26 = #{item.number26,jdbcType=INTEGER},
+      </if>
+      <if test="record.number27 != null">
+        number_27 = #{item.number27,jdbcType=INTEGER},
+      </if>
+      <if test="record.number28 != null">
+        number_28 = #{item.number28,jdbcType=INTEGER},
+      </if>
+      <if test="record.number29 != null">
+        number_29 = #{item.number29,jdbcType=INTEGER},
+      </if>
+      <if test="record.number30 != null">
+        number_30 = #{item.number30,jdbcType=INTEGER},
+      </if>
+      <if test="record.number31 != null">
+        number_31 = #{item.number31,jdbcType=INTEGER},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{item.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{item.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{item.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{item.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{item.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where t1.job_number = = #{item.jobNumber,jdbcType=VARCHAR}
+    </foreach>
+  </update>
+	
+	<update id="updateByPrimaryKeySelective" parameterType="com.jn.hr.attendance.entity.TbManpowerAttendanceSchedul">
+    update tb_manpower_attendance_schedul
+    <set>
+      <if test="schedulMonth != null">
+        schedul_month = #{schedulMonth,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentId != null">
+        department_id = #{departmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentName != null">
+        department_name = #{departmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="jobNumber != null">
+        job_number = #{jobNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+        number_1 = #{number1,jdbcType=INTEGER},
+      
+        number_2 = #{number2,jdbcType=INTEGER},
+     
+        number_3 = #{number3,jdbcType=INTEGER},
+      
+        number_4 = #{number4,jdbcType=INTEGER},
+      
+        number_5 = #{number5,jdbcType=INTEGER},
+      
+        number_6 = #{number6,jdbcType=INTEGER},
+      
+        number_7 = #{number7,jdbcType=INTEGER},
+      
+        number_8 = #{number8,jdbcType=INTEGER},
+      
+        number_9 = #{number9,jdbcType=INTEGER},
+      
+        number_10 = #{number10,jdbcType=INTEGER},
+      
+        number_11 = #{number11,jdbcType=INTEGER},
+      
+        number_12 = #{number12,jdbcType=INTEGER},
+      
+        number_13 = #{number13,jdbcType=INTEGER},
+      
+        number_14 = #{number14,jdbcType=INTEGER},
+      
+        number_15 = #{number15,jdbcType=INTEGER},
+      
+        number_16 = #{number16,jdbcType=INTEGER},
+     
+        number_17 = #{number17,jdbcType=INTEGER},
+      
+        number_18 = #{number18,jdbcType=INTEGER},
+      
+        number_19 = #{number19,jdbcType=INTEGER},
+      
+        number_20 = #{number20,jdbcType=INTEGER},
+      
+        number_21 = #{number21,jdbcType=INTEGER},
+     
+        number_22 = #{number22,jdbcType=INTEGER},
+      
+        number_23 = #{number23,jdbcType=INTEGER},
+      
+        number_24 = #{number24,jdbcType=INTEGER},
+      
+        number_25 = #{number25,jdbcType=INTEGER},
+      
+        number_26 = #{number26,jdbcType=INTEGER},
+      
+        number_27 = #{number27,jdbcType=INTEGER},
+      
+        number_28 = #{number28,jdbcType=INTEGER},
+      
+        number_29 = #{number29,jdbcType=INTEGER},
+      
+        number_30 = #{number30,jdbcType=INTEGER},
+      
+        number_31 = #{number31,jdbcType=INTEGER},
+      
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

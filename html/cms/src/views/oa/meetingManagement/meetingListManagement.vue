@@ -1,8 +1,8 @@
 <template>
   <div v-loading="listLoading" class="meetingManagement">
     <el-form :inline="true" :model="listQuery" class="filter-bar">
-      <el-radio-group v-model="listQuery.meetingStatus" style="width:40%">
-        <el-radio-button label="">全部</el-radio-button>
+      <el-radio-group v-model="listQuery.meetingStatus" style="width:40%" @change="handleFilter">
+        <el-radio-button label="" >全部</el-radio-button>
         <el-radio-button label= "1">进行中</el-radio-button>
         <el-radio-button label="2">已完成</el-radio-button>
         <el-radio-button label="3">已取消</el-radio-button>
@@ -39,8 +39,8 @@
       <el-table-column label="人员" align="center">
         <el-table-column label="组织方" align="center" class-name="small-padding fixed-width" width="150">
           <template slot-scope="scope">
-            <div>部门:{{ scope.row.departmentName }}</div>
-            <div>组织人:{{ scope.row.userName }}</div>
+            <div>部门:{{ scope.row.organizationalDepartmentName ? scope.row.organizationalDepartmentName : '无' }}</div>
+            <div>组织人:{{ scope.row.organizationalUserName ? scope.row.organizationalUserName : '无' }}</div>
             <div>预约人:{{ scope.row.userName }}</div>
           </template>
         </el-table-column>
@@ -126,8 +126,8 @@
 
 <script>
 import {
-  api, paramApi, exportExcel
-} from '@/api/oa/meetingManagement'
+  api, paramApi
+} from '@/api/axios'
 export default {
   data() {
     return {
@@ -153,7 +153,7 @@ export default {
   methods: {
     // 导出
     exportText() {
-      exportExcel(this.listQuery).then(res => {
+      api(`${this.GLOBAL.oaUrl}oa/oaMeeting/exportExcelMeeting?meetingRoomName=${this.listQuery.meetingRoomName}&meetingStatus=${this.listQuery.meetingStatus}&departmentName=${this.listQuery.departmentName}&startTime=${this.listQuery.startTime}&endTime=${this.listQuery.endTime}`, '', 'get').then(res => {
         window.location.href = res.request.responseURL
       })
     },
@@ -170,8 +170,8 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          paramApi('oa/oaMeeting/finishOaMeeting', row.id, 'id').then(res => {
-            if (res.data.code === '0000') {
+          paramApi(`${this.GLOBAL.oaUrl}oa/oaMeeting/finishOaMeeting`, row.id, 'id').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '结束会议成功',
                 type: 'success'
@@ -201,9 +201,9 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          paramApi('oa/oaMeeting/cancelOaMeeting', row.id, 'id').then(res => {
+          paramApi(`${this.GLOBAL.oaUrl}oa/oaMeeting/cancelOaMeeting`, row.id, 'id').then(res => {
           // api('oa/oaMeeting/delete', { id: [row.id] }).then(res => {
-            if (res.data.code === '0000') {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '取消会议成功',
                 type: 'success'
@@ -239,8 +239,8 @@ export default {
     // 获取会议列表
     initList() {
       this.listLoading = true
-      api('oa/oaMeeting/list', this.listQuery).then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.oaUrl}oa/oaMeeting/list`, this.listQuery, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.meetingList = res.data.data.rows
           this.total = res.data.data.total
         } else {
@@ -256,9 +256,9 @@ export default {
 <style lang="scss" >
   .erweima{
     .el-dialog{
-      margin-top: 8vh !important;
+      height: 400px;
       img{
-           width: 60%;
+           width: 45%;
     display: block;
     border-style: none;
     margin: 0 auto;

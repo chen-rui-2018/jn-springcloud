@@ -26,7 +26,7 @@
           <el-table-column label="部门" prop="departmentName" align="center" />
           <el-table-column label="岗位" prop="postName" align="center" />
           <el-table-column label="岗位类型" prop="postTypeName" align="center" />
-          <el-table-column label="邮箱" prop="email" align="center" />
+          <el-table-column label="邮箱" prop="email" align="center" min-width="120" />
           <el-table-column label="联系方式" prop="phone" align="center" />
           <el-table-column label="微信" prop="wechatAccount" align="center"/>
           <el-table-column fit label="操作" align="center">
@@ -35,7 +35,7 @@
             </template>
           </el-table-column>
         </el-table>
-        <div class="pagination-container">
+        <div style="margin-top:15px;">
           <el-pagination v-show="total>0" :current-page="listQuery.page" :page-sizes="[10,20,30,50]" :page-size="listQuery.rows" :total="total" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
         </div>
       </div>
@@ -43,32 +43,24 @@
 
     <!-- S 新增弹窗 -->
     <template v-if="dialogFormVisible">
-      <el-dialog :visible.sync="dialogFormVisible" title="查看通讯录" margin-top="10vh" width="500px">
-        <el-form ref="dataForm" :model="addressListForm" label-position="right" label-width="80px" style="max-width:320px;margin-left:20px;">
-          <el-form-item label="姓名" >
-            <el-input v-model="addressListForm.name" :disabled="looking"/>
-          </el-form-item>
-          <el-form-item label="部门">
-            <el-input v-model="addressListForm.departmentName" :disabled="looking"/>
-          </el-form-item>
-          <el-form-item label="岗位">
-            <el-input v-model="addressListForm.postName" :disabled="looking"/>
-          </el-form-item>
-          <el-form-item label="岗位类型">
-            <el-input v-model="addressListForm.postTypeName" :disabled="looking"/>
-          </el-form-item>
-          <el-form-item label="邮箱">
-            <el-input v-model="addressListForm.email" :disabled="looking"/>
-          </el-form-item>
-          <el-form-item label="手机">
-            <el-input v-model="addressListForm.phone" :disabled="looking"/>
-          </el-form-item>
-          <el-form-item label="微信">
-            <el-input v-model="addressListForm.wechatAccount" :disabled="looking"/>
-          </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="dialogFormVisible = false">返回</el-button>
+      <el-dialog :visible.sync="dialogFormVisible" title="通讯录详情" width="700px">
+        <div class="userInfo">
+          <div class="addressBook-top">
+            <div class="userName">
+              <span :style="`background:rgb${aaa}`">{{ addressListForm.lastName }}</span>
+              <span>{{ addressListForm.name }}</span>
+            </div>
+            <div class="userContact">
+              <div>联 系 方 式: <span>{{ addressListForm.phone }}</span></div>
+              <div>邮 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;箱: <span>{{ addressListForm.email }}</span></div>
+              <div>微&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 信: <span>{{ addressListForm.wechatAccount }}</span></div>
+            </div>
+          </div>
+          <div v-for="(item, index) in userPosition" :key="index" class="userPosition">
+            <div>部门: <span :class="index===0? 'defaultColor':''">{{ item.departmentName }}</span></div>
+            <div>岗位: <span :class="index===0? 'defaultColor':''">{{ item.postName }}</span></div>
+            <div>岗位类型: <span :class="index===0? 'defaultColor':''">{{ item.postTypeName }}</span></div>
+          </div>
         </div>
       </el-dialog>
     </template>
@@ -77,12 +69,14 @@
 
 <script>
 import {
-  api
-} from '@/api/oa/meetingManagement'
+  api, paramApi
+} from '@/api/axios'
 export default {
 
   data() {
     return {
+      aaa: '',
+      userPosition: [],
       dialogFormVisible: false,
       listLoading: false,
       total: 0,
@@ -93,13 +87,11 @@ export default {
       },
       looking: false,
       addressListForm: {
+        lastName: '',
         name: '',
-        postName: '',
         phone: '',
         email: '',
-        departmentName: '',
-        wechatAccount: '',
-        postTypeName: ''
+        wechatAccount: ''
       },
       departmentList: [],
       departmentListLoading: false,
@@ -121,16 +113,25 @@ export default {
   methods: {
     // 查看数据
     handlelooking(row) {
-      console.log(row)
-      this.dialogFormVisible = true
-      this.looking = true
-      this.addressListForm.name = row.name
-      this.addressListForm.postName = row.postName
-      this.addressListForm.postTypeName = row.postTypeName
-      this.addressListForm.phone = row.phone
-      this.addressListForm.email = row.email
-      this.addressListForm.departmentName = row.departmentName
-      this.addressListForm.wechatAccount = row.wechatAccount
+      this.aaa = this.randomColor()
+      paramApi(`${this.GLOBAL.oaUrl}oa/addressBook/getUserInfo`, row.account, 'userAccount').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
+          this.dialogFormVisible = true
+          if (res.data.data.name) {
+            this.addressListForm.name = res.data.data.name
+            this.addressListForm.lastName = res.data.data.name.charAt((res.data.data.name).length - 1)
+          }
+          if (res.data.data.sysDepartmentPostVO) {
+            this.userPosition = res.data.data.sysDepartmentPostVO
+          }
+          this.addressListForm.phone = res.data.data.phone
+          this.addressListForm.email = res.data.data.email
+          // this.addressListForm.departmentName = row.departmentName
+          this.addressListForm.wechatAccount = res.data.data.wechatAccount
+        } else {
+          this.$message.error(res.data.result)
+        }
+      })
     },
     // 点击部门树的节点
     handleNodeClick(data) {
@@ -138,11 +139,18 @@ export default {
       this.listQuery.departmentId = data.value
       this.initList()
     },
+    randomColor() { // rgb颜色随机
+      var r = Math.floor(Math.random() * 256)
+      var g = Math.floor(Math.random() * 256)
+      var b = Math.floor(Math.random() * 256)
+      var rgb = '(' + r + ',' + g + ',' + b + ')'
+      return rgb
+    },
     // 获取所有部门列表
     getAllDepartment() {
       this.departmentListLoading = true
-      api('oa/addressBook/getDeptTree').then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.oaUrl}oa/addressBook/getDeptTree`, '', 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.departmentList = res.data.data
         } else {
           this.$message.error(res.data.result)
@@ -168,9 +176,8 @@ export default {
     // 初始化页面
     initList() {
       this.listLoading = true
-      api('oa/addressBook/list', this.listQuery).then(res => {
-        console.log(res)
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.oaUrl}oa/addressBook/list`, this.listQuery, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.addressList = res.data.data.rows
           this.total = res.data.data.total
           if (this.addressList.length === 0 && this.total > 0) {
@@ -206,7 +213,8 @@ export default {
 .addressBook-content{
   display: flex;
   .addressBook-left{
-          margin-top:15px;
+    padding: 15px;
+    background:#fff;
     margin-right:30px;
   }
   .addressBook-right{
@@ -220,11 +228,58 @@ export default {
 </style>
 <style lang="scss">
 .addressBook{
-  .el-dialog{
-    margin-top:8vh !important;
+  .userInfo{
+    padding:20px 30px;
   }
-  .el-input.is-disabled .el-input__inner{
-    color:unset;
+  .addressBook-top{
+    display:flex;
+    // justify-content:space-between;
+    .userName{
+      flex:1;
+    }
+  }
+  .userContact{
+    flex:1;
+    >div{
+    margin:15px 0px ;
+    color:rgb(169,169,169);
+    >span{
+      margin-left:20px;
+      font-size:20px;
+      color:black;
+    }
+    }
+  }
+  .userName span{
+    color: black;
+    font-size: 20px;
+  }
+  .userName span:nth-child(1){
+    display: inline-block;
+    width: 70px;
+    height: 70px;
+    text-align: center;
+    border-radius: 50%;
+    // background: aqua;
+    line-height: 70px;
+    color: #fff;
+    font-size: 30px;
+    margin-right: 15px;
+  }
+  .defaultColor{
+    color:blueviolet !important;
+  }
+  .userPosition{
+        display: flex;
+    padding: 20px 0;
+    flex: 1;
+    >div{
+      flex:1;
+      color:rgb(169,169,169);
+      >span{
+        color:black;
+      }
+    }
   }
 }
 </style>

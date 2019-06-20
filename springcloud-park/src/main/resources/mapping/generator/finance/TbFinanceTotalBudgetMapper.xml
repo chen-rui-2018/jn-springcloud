@@ -2,18 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.park.finance.dao.TbFinanceTotalBudgetMapper">
   <resultMap id="BaseResultMap" type="com.jn.park.finance.entity.TbFinanceTotalBudget">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="cost_type_id" jdbcType="INTEGER" property="costTypeId" />
-    <result column="cost_type_name" jdbcType="VARCHAR" property="costTypeName" />
-    <result column="department_id" jdbcType="VARCHAR" property="departmentId" />
-    <result column="department_name" jdbcType="VARCHAR" property="departmentName" />
-    <result column="budget_month" jdbcType="CHAR" property="budgetMonth" />
-    <result column="budget_number" jdbcType="DECIMAL" property="budgetNumber" />
-    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
-    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
-    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
-    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
-    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <id column="tb_id" jdbcType="INTEGER" property="id" />
+    <result column="tb_cost_type_id" jdbcType="VARCHAR" property="costTypeId" />
+    <result column="tb_cost_type_name" jdbcType="VARCHAR" property="costTypeName" />
+    <result column="tb_department_id" jdbcType="VARCHAR" property="departmentId" />
+    <result column="tb_department_name" jdbcType="VARCHAR" property="departmentName" />
+    <result column="tb_budget_month" jdbcType="CHAR" property="budgetMonth" />
+    <result column="tb_budget_number" jdbcType="DECIMAL" property="budgetNumber" />
+    <result column="tb_record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="tb_modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="tb_creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="tb_modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="tb_created_time" jdbcType="TIMESTAMP" property="createdTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -74,8 +74,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, cost_type_id, cost_type_name, department_id, department_name, budget_month, budget_number, 
-    record_status, modifier_account, creator_account, modified_time, created_time
+    tb.id as tb_id, tb.cost_type_id as tb_cost_type_id, tb.cost_type_name as tb_cost_type_name, 
+    tb.department_id as tb_department_id, tb.department_name as tb_department_name, tb.budget_month as tb_budget_month, 
+    tb.budget_number as tb_budget_number, tb.record_status as tb_record_status, tb.modifier_account as tb_modifier_account, 
+    tb.creator_account as tb_creator_account, tb.modified_time as tb_modified_time, tb.created_time as tb_created_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.finance.entity.TbFinanceTotalBudgetExample" resultMap="BaseResultMap">
     select
@@ -83,7 +85,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_finance_total_budget
+    from tb_finance_total_budget tb
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -94,15 +96,15 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_finance_total_budget
-    where id = #{id,jdbcType=INTEGER}
+    from tb_finance_total_budget tb
+    where tb.id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from tb_finance_total_budget
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.park.finance.entity.TbFinanceTotalBudgetExample">
-    delete from tb_finance_total_budget
+    delete from tb_finance_total_budget tb
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -115,7 +117,7 @@
       department_name, budget_month, budget_number, 
       record_status, modifier_account, creator_account, 
       modified_time, created_time)
-    values (#{costTypeId,jdbcType=INTEGER}, #{costTypeName,jdbcType=VARCHAR}, #{departmentId,jdbcType=VARCHAR}, 
+    values (#{costTypeId,jdbcType=VARCHAR}, #{costTypeName,jdbcType=VARCHAR}, #{departmentId,jdbcType=VARCHAR}, 
       #{departmentName,jdbcType=VARCHAR}, #{budgetMonth,jdbcType=CHAR}, #{budgetNumber,jdbcType=DECIMAL}, 
       #{recordStatus,jdbcType=TINYINT}, #{modifierAccount,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, 
       #{modifiedTime,jdbcType=TIMESTAMP}, #{createdTime,jdbcType=TIMESTAMP})
@@ -162,7 +164,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="costTypeId != null">
-        #{costTypeId,jdbcType=INTEGER},
+        #{costTypeId,jdbcType=VARCHAR},
       </if>
       <if test="costTypeName != null">
         #{costTypeName,jdbcType=VARCHAR},
@@ -197,49 +199,49 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.park.finance.entity.TbFinanceTotalBudgetExample" resultType="java.lang.Long">
-    select count(*) from tb_finance_total_budget
+    select count(*) from tb_finance_total_budget tb
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_finance_total_budget
+    update tb_finance_total_budget tb
     <set>
       <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+        tb.id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.costTypeId != null">
-        cost_type_id = #{record.costTypeId,jdbcType=INTEGER},
+        tb.cost_type_id = #{record.costTypeId,jdbcType=VARCHAR},
       </if>
       <if test="record.costTypeName != null">
-        cost_type_name = #{record.costTypeName,jdbcType=VARCHAR},
+        tb.cost_type_name = #{record.costTypeName,jdbcType=VARCHAR},
       </if>
       <if test="record.departmentId != null">
-        department_id = #{record.departmentId,jdbcType=VARCHAR},
+        tb.department_id = #{record.departmentId,jdbcType=VARCHAR},
       </if>
       <if test="record.departmentName != null">
-        department_name = #{record.departmentName,jdbcType=VARCHAR},
+        tb.department_name = #{record.departmentName,jdbcType=VARCHAR},
       </if>
       <if test="record.budgetMonth != null">
-        budget_month = #{record.budgetMonth,jdbcType=CHAR},
+        tb.budget_month = #{record.budgetMonth,jdbcType=CHAR},
       </if>
       <if test="record.budgetNumber != null">
-        budget_number = #{record.budgetNumber,jdbcType=DECIMAL},
+        tb.budget_number = #{record.budgetNumber,jdbcType=DECIMAL},
       </if>
       <if test="record.recordStatus != null">
-        record_status = #{record.recordStatus,jdbcType=TINYINT},
+        tb.record_status = #{record.recordStatus,jdbcType=TINYINT},
       </if>
       <if test="record.modifierAccount != null">
-        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+        tb.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.creatorAccount != null">
-        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+        tb.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.modifiedTime != null">
-        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+        tb.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.createdTime != null">
-        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+        tb.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -247,19 +249,19 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_finance_total_budget
-    set id = #{record.id,jdbcType=INTEGER},
-      cost_type_id = #{record.costTypeId,jdbcType=INTEGER},
-      cost_type_name = #{record.costTypeName,jdbcType=VARCHAR},
-      department_id = #{record.departmentId,jdbcType=VARCHAR},
-      department_name = #{record.departmentName,jdbcType=VARCHAR},
-      budget_month = #{record.budgetMonth,jdbcType=CHAR},
-      budget_number = #{record.budgetNumber,jdbcType=DECIMAL},
-      record_status = #{record.recordStatus,jdbcType=TINYINT},
-      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
-      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
-      created_time = #{record.createdTime,jdbcType=TIMESTAMP}
+    update tb_finance_total_budget tb
+    set tb.id = #{record.id,jdbcType=INTEGER},
+      tb.cost_type_id = #{record.costTypeId,jdbcType=VARCHAR},
+      tb.cost_type_name = #{record.costTypeName,jdbcType=VARCHAR},
+      tb.department_id = #{record.departmentId,jdbcType=VARCHAR},
+      tb.department_name = #{record.departmentName,jdbcType=VARCHAR},
+      tb.budget_month = #{record.budgetMonth,jdbcType=CHAR},
+      tb.budget_number = #{record.budgetNumber,jdbcType=DECIMAL},
+      tb.record_status = #{record.recordStatus,jdbcType=TINYINT},
+      tb.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      tb.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      tb.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      tb.created_time = #{record.createdTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -268,7 +270,7 @@
     update tb_finance_total_budget
     <set>
       <if test="costTypeId != null">
-        cost_type_id = #{costTypeId,jdbcType=INTEGER},
+        cost_type_id = #{costTypeId,jdbcType=VARCHAR},
       </if>
       <if test="costTypeName != null">
         cost_type_name = #{costTypeName,jdbcType=VARCHAR},
@@ -305,7 +307,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.park.finance.entity.TbFinanceTotalBudget">
     update tb_finance_total_budget
-    set cost_type_id = #{costTypeId,jdbcType=INTEGER},
+    set cost_type_id = #{costTypeId,jdbcType=VARCHAR},
       cost_type_name = #{costTypeName,jdbcType=VARCHAR},
       department_id = #{departmentId,jdbcType=VARCHAR},
       department_name = #{departmentName,jdbcType=VARCHAR},

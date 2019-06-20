@@ -6,11 +6,11 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.wechat.base.enums.WxExceptionEnums;
-import com.jn.wechat.base.model.template.WxTemplateData;
 import com.jn.wechat.base.model.template.WxTemplateIndustrySet;
-import com.jn.wechat.base.model.template.WxTemplateMessage;
 import com.jn.wechat.base.service.WxHttpClientService;
 import com.jn.wechat.base.service.WxTemplateMsgService;
+import com.jn.wechat.model.WxTemplateData;
+import com.jn.wechat.model.WxTemplateMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

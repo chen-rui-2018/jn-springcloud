@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.finance.dao.FinanceExpensesDao">
+
+    <!--支出录入查询-->
+    <select id="findAll" parameterType="com.jn.park.finance.model.FinanceExpensesPageModel" resultType="com.jn.park.finance.vo.FinanceExpendVo">
+        SELECT
+        t.cost_happend_time AS "costhappendtime",
+        SUM(t.cost) AS "cost",
+        max(t.cost_after_type_name) AS "costaftertypename",
+        IFNULL(
+        MAX(t.modified_time),
+        MAX(t.cost_happend_time)
+        ) AS "modifiedtime",
+        max(t.department_name) AS "departmentname"
+        FROM
+        `tb_finance_expenses_month` t
+        WHERE
+        t.record_status = '1'
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
+        AND t.department_id=#{departmentId}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(cost)">
+        AND t.cost = #{cost}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(costAfterTypeId)">
+        AND t.cost_after_type_id=#{costAfterTypeId}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(startTime)">
+        AND t.cost_happend_time BETWEEN #{startTime} AND #{endTime}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(startMonth)">
+        AND DATE_FORMAT(t.modified_time,'%Y%m') BETWEEN #{startMonth} AND #{endMonth}
+        </if>
+        GROUP BY t.cost_happend_time, t.cost_after_type_id,t.department_id
+        order by ${orderByClause}
+
+    </select>
+
+
+    <!--支出录入历史查询-->
+    <select id="findHistoryAll" parameterType="com.jn.park.finance.model.FinanceExpensesHistoryPageModel" resultType="com.jn.park.finance.vo.FinanceExpendHistoryVo">
+        SELECT
+        t.cost_happend_time AS "costhappendtime",
+        t.cost_id AS "costid",
+        SUM(t.cost) AS "cost",
+        t.cost_before_type_name AS "costbeforetypename",
+        t.cost_after_type_name AS "costaftertypename",
+        MAX(t.modified_time) AS "modifiedTime",
+        t.department_name AS "departmentname"
+        FROM
+        tb_finance_expenses t
+        WHERE
+        t.record_status = 1
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(costId)">
+            and t.cost_id like CONCAT('%', #{costId,jdbcType=VARCHAR}, '%')
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(costAfterTypeId)">
+        AND t.cost_after_type_id = #{costAfterTypeId}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
+        AND t.department_id = #{departmentId}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(cost)">
+        AND t.cost = #{cost}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(startTime)">
+        AND t.cost_happend_time BETWEEN #{startTime} AND #{endTime}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(startMonth)">
+        AND DATE_FORMAT(t.modified_time, '%Y%m') BETWEEN #{startMonth} AND #{endMonth}
+        </if>
+        GROUP BY t.cost_happend_time,t.cost_after_type_id
+        order by ${orderByClause}
+
+    </select>
+
+    <!--导入 到临时表-->
+    <insert id="importData" parameterType="java.util.Map">
+        insert into tb_finance_expenses_temp (cost_happend_time,cost,cost_id,excel_id,cost_before_type_name,cost_after_type_id,cost_after_type_name,department_id,department_name,creator_account,created_time,modifier_account,modified_time)values
+        <foreach collection="list" item="item" index="index" open="" close="" separator=",">
+            (
+            <choose>
+                <when test="item.costHappendTime != null" >
+                    #{item.costHappendTime},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="item.cost != null" >
+                    #{item.cost},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="item.costId != null" >
+                    #{item.costId},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="item.excelId != null" >
+                    #{item.excelId},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="item.costBeforeTypeName != null" >
+                    #{item.costBeforeTypeName},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="item.costAfterTypeId != null" >
+                    #{item.costAfterTypeId},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="item.costAfterTypeName != null" >
+                    #{item.costAfterTypeName},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="item.departmentId != null" >
+                    #{item.departmentId},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="item.departmentName != null" >
+                    #{item.departmentName},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            #{account},
+            SYSDATE(),
+            #{account},
+            SYSDATE()
+            )
+        </foreach>
+    </insert>
+
+    <!--支出录入查询-->
+    <select id="findImportData" parameterType="java.lang.String" resultType="com.jn.park.finance.vo.FinanceExpendFindImportDataVo">
+
+        SELECT
+		t.id as "id",
+		t.cost_happend_time as "costhappendtime",
+		t.cost_id as "costid",
+		t.cost as "cost",
+		t.cost_before_type_name as "costbeforetypename",
+		t.cost_after_type_id as "costaftertypeid",
+		t.cost_after_type_name  as "costaftertypename",
+		t.department_id as "departmentid",
+		t.department_name as "departmentname"
+		 FROM tb_finance_expenses_temp t
+		where t.excel_id=#{excelId}
+		and t.record_status = 1
+    </select>
+
+
+    <!--查询此次打标的数据-->
+    <select id="selectSaveExpensesMonth" parameterType="java.lang.String" resultType="com.jn.park.finance.model.FinanceSaveExpensesMonthModel">
+        select
+        t.cost_happend_time as "costhappendtime",
+        SUM(t.cost) as "cost",
+        t.cost_after_type_id as "costaftertypeid",
+        t.cost_after_type_name as "costaftertypename",
+        t.department_id as "departmentid",
+        t.department_name as "departmentname",
+        t.creator_account as "creatoraccount",
+        t.created_time as "createdtime"
+         from tb_finance_expenses t
+        where t.record_status =1
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(excel)">
+        AND t.excel_id=#{excel}
+        </if>
+        GROUP BY t.cost_happend_time,t.cost_after_type_id
+
+
+    </select>
+
+
+    <!--保存 到支出记录表月表-->
+    <insert id="saveExpensesMonth" parameterType="java.util.Map">
+        insert into tb_finance_expenses_month (cost_happend_time,cost,cost_after_type_id,cost_after_type_name,department_id,department_name,creator_account,created_time,modifier_account,modified_time) values
+
+        <foreach collection="list" item="item" index="index" open="" close="" separator=",">
+            (
+            <choose>
+                <when test="item.costHappendTime != null" >
+                    #{item.costHappendTime},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="item.cost != null" >
+                    #{item.cost},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="item.costAfterTypeId != null" >
+                    #{item.costAfterTypeId},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="item.costAfterTypeName != null" >
+                    #{item.costAfterTypeName},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="item.departmentId != null" >
+                    #{item.departmentId},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="item.departmentName != null" >
+                    #{item.departmentName},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="item.creatorAccount != null" >
+                    #{item.creatorAccount},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="item.createdTime != null" >
+                    #{item.createdTime},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            #{account},
+            SYSDATE()
+            )
+        </foreach>
+    </insert>
+
+    <!--判断流水号是否存在-->
+    <select id="isExist" resultType="java.lang.Integer" >
+        SELECT
+        COUNT(t.id)
+        FROM tb_finance_expenses t
+        WHERE t.record_status = 1
+        AND t.cost_id = #{costId}
+    </select>
+
+    <!--保存 到支出记录表-->
+    <insert id="saveMarkData" parameterType="java.util.Map">
+        insert into tb_finance_expenses (cost_happend_time,cost,cost_id,excel_id,cost_before_type_name,cost_after_type_id,cost_after_type_name,department_id,department_name,creator_account,created_time,modifier_account,modified_time) values
+        <foreach collection="list" item="item" index="index" open="" close="" separator=",">
+            (
+            <choose>
+                <when test="item.costHappendTime != null" >
+                    #{item.costHappendTime},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="item.cost != null" >
+                    #{item.cost},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="item.costId != null" >
+                    #{item.costId},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="item.excelId != null" >
+                    #{item.excelId},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="item.costBeforeTypeName != null" >
+                    #{item.costBeforeTypeName},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="item.costAfterTypeId != null" >
+                    #{item.costAfterTypeId},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="item.costAfterTypeName != null" >
+                    #{item.costAfterTypeName},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="item.departmentId != null" >
+                    #{item.departmentId},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="item.departmentName != null" >
+                    #{item.departmentName},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            #{account},
+            SYSDATE(),
+            #{account},
+            SYSDATE()
+            )
+        </foreach>
+    </insert>
+
+    <!--费用类型查询-->
+    <select id="selectFinanceType" parameterType="java.lang.String" resultType="com.jn.park.finance.vo.FinanceExpendFinanceTypeVo">
+        SELECT t.id as "id",t.finance_name as "financename"
+        FROM tb_finance_type t
+        where t.record_status='1'
+        ORDER by  t.show_order
+    </select>
+
+    <!--根据导入的费用类型对比，看是否有相同的费用类型-->
+    <select id="selectAfterTypeName" resultType="com.jn.park.finance.model.FinanceExpensesTypeNameModel">
+
+        select t.id as "costAfterTypeId",
+        t.finance_name as "costAfterTypeName"
+        from tb_finance_type t
+        where t.finance_name=#{costBeforeTypeName}
+        AND t.record_status=1
+
+    </select>
+
+
+</mapper>

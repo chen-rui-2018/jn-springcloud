@@ -315,76 +315,6 @@ public class TbOaEmailCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andEmailContentIsNull() {
-            addCriterion("email_content is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andEmailContentIsNotNull() {
-            addCriterion("email_content is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andEmailContentEqualTo(String value) {
-            addCriterion("email_content =", value, "emailContent");
-            return (Criteria) this;
-        }
-
-        public Criteria andEmailContentNotEqualTo(String value) {
-            addCriterion("email_content <>", value, "emailContent");
-            return (Criteria) this;
-        }
-
-        public Criteria andEmailContentGreaterThan(String value) {
-            addCriterion("email_content >", value, "emailContent");
-            return (Criteria) this;
-        }
-
-        public Criteria andEmailContentGreaterThanOrEqualTo(String value) {
-            addCriterion("email_content >=", value, "emailContent");
-            return (Criteria) this;
-        }
-
-        public Criteria andEmailContentLessThan(String value) {
-            addCriterion("email_content <", value, "emailContent");
-            return (Criteria) this;
-        }
-
-        public Criteria andEmailContentLessThanOrEqualTo(String value) {
-            addCriterion("email_content <=", value, "emailContent");
-            return (Criteria) this;
-        }
-
-        public Criteria andEmailContentLike(String value) {
-            addCriterion("email_content like", value, "emailContent");
-            return (Criteria) this;
-        }
-
-        public Criteria andEmailContentNotLike(String value) {
-            addCriterion("email_content not like", value, "emailContent");
-            return (Criteria) this;
-        }
-
-        public Criteria andEmailContentIn(List<String> values) {
-            addCriterion("email_content in", values, "emailContent");
-            return (Criteria) this;
-        }
-
-        public Criteria andEmailContentNotIn(List<String> values) {
-            addCriterion("email_content not in", values, "emailContent");
-            return (Criteria) this;
-        }
-
-        public Criteria andEmailContentBetween(String value1, String value2) {
-            addCriterion("email_content between", value1, value2, "emailContent");
-            return (Criteria) this;
-        }
-
-        public Criteria andEmailContentNotBetween(String value1, String value2) {
-            addCriterion("email_content not between", value1, value2, "emailContent");
-            return (Criteria) this;
-        }
-
         public Criteria andSendStatusIsNull() {
             addCriterion("send_status is null");
             return (Criteria) this;
@@ -582,6 +512,76 @@ public class TbOaEmailCriteria {
 
         public Criteria andDelaySendTimeNotBetween(Date value1, Date value2) {
             addCriterion("delay_send_time not between", value1, value2, "delaySendTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttachmentIsNull() {
+            addCriterion("attachment is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttachmentIsNotNull() {
+            addCriterion("attachment is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttachmentEqualTo(String value) {
+            addCriterion("attachment =", value, "attachment");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttachmentNotEqualTo(String value) {
+            addCriterion("attachment <>", value, "attachment");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttachmentGreaterThan(String value) {
+            addCriterion("attachment >", value, "attachment");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttachmentGreaterThanOrEqualTo(String value) {
+            addCriterion("attachment >=", value, "attachment");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttachmentLessThan(String value) {
+            addCriterion("attachment <", value, "attachment");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttachmentLessThanOrEqualTo(String value) {
+            addCriterion("attachment <=", value, "attachment");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttachmentLike(String value) {
+            addCriterion("attachment like", value, "attachment");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttachmentNotLike(String value) {
+            addCriterion("attachment not like", value, "attachment");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttachmentIn(List<String> values) {
+            addCriterion("attachment in", values, "attachment");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttachmentNotIn(List<String> values) {
+            addCriterion("attachment not in", values, "attachment");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttachmentBetween(String value1, String value2) {
+            addCriterion("attachment between", value1, value2, "attachment");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttachmentNotBetween(String value1, String value2) {
+            addCriterion("attachment not between", value1, value2, "attachment");
             return (Criteria) this;
         }
 

@@ -54,6 +54,11 @@ public class EmailVo implements Serializable {
     private String templatesName;
 
     /**
+     * 模板标识；true:是模板邮件，默认false:不是模板邮件
+     */
+    private Boolean templateFlag = false;
+
+    /**
      * 用于存储模板渲染所需要的数据
      */
     private Map templatesDataMap;
@@ -114,6 +119,14 @@ public class EmailVo implements Serializable {
         this.templatesDataMap = templatesDataMap;
     }
 
+    public Boolean getTemplateFlag() {
+        return templateFlag;
+    }
+
+    public void setTemplateFlag(Boolean templateFlag) {
+        this.templateFlag = templateFlag;
+    }
+
     @Override
     public String toString() {
         return "EmailVo{" +
@@ -123,6 +136,7 @@ public class EmailVo implements Serializable {
                 ", files=" + Arrays.toString(files) +
                 ", emailInlayImageVoList=" + emailInlayImageVoList +
                 ", templatesName='" + templatesName + '\'' +
+                ", templateFlag=" + templateFlag +
                 ", templatesDataMap=" + templatesDataMap +
                 '}';
     }

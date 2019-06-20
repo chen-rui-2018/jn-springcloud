@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.servicemarket.org.dao.OrgTraitMapper">
+    <!--批量插入服务机构特性值-->
+    <insert id="insertTraitList" parameterType="java.util.Map">
+        insert into tb_service_org_trait (id,org_id_,trait_type,trait_value,status,created_time,creator_account,
+        modified_time,modifier_account,record_status)
+        select A.* from(
+        <foreach collection="list" item="item" index="index" open="" close="" separator="union all">
+            ( select #{item.id,jdbcType=VARCHAR} as 'id'
+            ,#{item.orgId,jdbcType=VARCHAR} as 'org_id_'
+            ,#{item.traitType,jdbcType=VARCHAR} as 'trait_type'
+            ,#{item.traitValue,jdbcType=VARCHAR} as 'trait_value'
+            ,#{item.status,jdbcType=VARCHAR} as 'status'
+            ,#{item.createdTime,jdbcType=TIMESTAMP} as 'created_time'
+            ,#{item.creatorAccount,jdbcType=VARCHAR} as 'creator_account'
+            ,#{item.modifiedTime,jdbcType=TIMESTAMP} as 'modified_time'
+            ,#{item.modifierAccount,jdbcType=VARCHAR} as 'modifier_account'
+            ,#{item.recordStatus,jdbcType=TINYINT} as 'record_status'
+            from dual )
+        </foreach>
+        )A
+    </insert>
+
+</mapper>

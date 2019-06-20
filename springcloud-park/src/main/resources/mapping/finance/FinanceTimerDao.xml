@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.finance.dao.FinanceTimerDao">
+
+
+    <!--读取字典表状态，是否需要更新月表-->
+    <select id="getDictionaryStatus" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT
+            MAX(t.dic_value) AS "dicvalue"
+        FROM
+            tb_finance_dictionary t
+        WHERE
+            t.record_status = 1
+        AND t.dic_key=#{dicKey}
+
+    </select>
+
+
+    <!--根据账期汇总月数据-->
+    <select id="selectSummarizing" resultType="com.jn.park.finance.model.FinanceIncomeUpdateMonthModel" parameterType="java.lang.String">
+    SELECT
+        t1.incomeday as "incomemonth",
+        t1.incometype as "incometype",
+        t1.incometypename as "incometypename",
+        t1.income as "income",
+        t2.income AS "lastyearincome"
+        from
+        (SELECT <!-- 汇总本月数据，除合计类型外-->
+        DATE_FORMAT(t.income_day,'%Y%m') as "incomeday",
+        t.income_type as "incometype",
+        t.income_typename as "incometypename",
+        SUM(t.income) as "income"
+        FROM tb_finance_income_day t
+        where t.record_status = 1
+        AND t.income_type != 4
+        AND DATE_FORMAT(t.income_day,'%Y%m')=#{maxValue}
+        GROUP BY t.income_type
+        <!-- 汇总合计，单独汇总是因为有合计这个类型的数据，
+         不分开的话就会是合计的合计，数据对不上-->
+        union
+        SELECT
+        DATE_FORMAT(t.income_day,'%Y%m') as "incomeday",
+        <!--'4' as "incometype",
+        '合计' as "incometypename",-->
+        CASE  WHEN t.income_day!='' then '4' else '' end  as "incometype",
+        CASE  WHEN t.income_day!='' then '合计' else '' end as "incometypename",
+        SUM(t.income) as "income"
+        FROM tb_finance_income_day t
+        where t.record_status = 1
+        AND t.income_type != 4
+        AND DATE_FORMAT(t.income_day,'%Y%m')=#{maxValue}) t1
+        LEFT JOIN
+        (SELECT
+        IFNULL(t.income_month,'') as "incomemonth",
+        IFNULL(t.income_type,'') as "incometype",
+        IFNULL(t.income_typename,'') as "incometypename",
+        IFNULL(SUM(t.income),'') as "income"
+        FROM tb_finance_income_month t
+        where t.record_status = 1
+        AND t.income_type != 4
+        AND t.income_month=#{lastYear}
+        GROUP BY t.income_type
+        union
+        SELECT
+        IFNULL(t.income_month,'') as "incomemonth",
+        CASE  WHEN t.income_month!='' then '4' else '' end  as "incometype",
+        CASE  WHEN t.income_month!='' then '合计' else '' end as "incometypename",
+        IFNULL(SUM(t.income),'') as "income"
+        FROM tb_finance_income_month t
+        where t.record_status = 1
+        AND t.income_type != 4
+        AND t.income_month=#{lastYear}) t2
+        ON t1.incometype = t2.incometype
+
+    </select>
+
+
+    <!-- 到月表-->
+    <insert id="saveSummarizing" parameterType="java.util.Map">
+        insert into tb_finance_income_month (income_month,income_type,income_typename,income,created_time,last_year_income)values
+        <foreach collection="list" item="item" index="index" open="" close="" separator=",">
+            (
+            <choose>
+                <when test="item.incomeMonth != null" >
+                    #{item.incomeMonth},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="item.incomeType != null" >
+                    #{item.incomeType},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="item.incomeTypename != null" >
+                    #{item.incomeTypename},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="item.income != null" >
+                    #{item.income},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            SYSDATE(),
+            <choose>
+                <when test="item.lastYearIncome != null" >
+                    #{item.lastYearIncome}
+                </when>
+                <otherwise>
+                    null
+                </otherwise>
+            </choose>
+
+            )
+        </foreach>
+    </insert>
+
+    <!--逻辑删除字典表信息-->
+    <update id="updateDictionary" parameterType="java.lang.String">
+        UPDATE tb_finance_dictionary
+        SET record_status = '0'
+        WHERE
+            dic_key = #{dicKey}
+        AND dic_value = #{dicValue}
+    </update>
+
+    <!--新增字典表最大账期-->
+    <insert id="insertDictionary" parameterType="java.lang.String">
+        INSERT INTO tb_finance_dictionary (
+            dic_key,
+            dic_value,
+            created_time
+        )
+        VALUES
+            (
+                #{dicKey},
+                #{dicValue},
+                SYSDATE()
+            )
+    </insert>
+
+    <!-- 到日表-->
+    <insert id="getDaysData" parameterType="java.util.Map">
+        insert into tb_finance_income_day (income_day,income_type,income_typename,income,creator_account,created_time,modified_time)values
+        <foreach collection="list" item="item" index="index" open="" close="" separator=",">
+            (
+            <choose>
+                <when test="item.incomeDay != null" >
+                    #{item.incomeDay},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="item.incomeType != null" >
+                    #{item.incomeType},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="item.incomeTypename != null" >
+                    #{item.incomeTypename},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="item.income != null" >
+                    #{item.income},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="item.creatorAccount != null" >
+                    #{item.creatorAccount},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="item.creatorTime != null" >
+                    #{item.creatorTime},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            SYSDATE()
+            )
+        </foreach>
+    </insert>
+
+
+</mapper>

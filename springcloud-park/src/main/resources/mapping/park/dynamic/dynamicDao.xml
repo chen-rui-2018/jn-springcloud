@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.gamtopic.dao.DynamicDao">
+    <!--后台管理动态列表-->
+    <select id="findDynamicList" resultType="com.jn.park.gamtopic.model.DynamicManageShow">
+      select
+        t1.topic_id as topicId
+        ,DATE_FORMAT(t1.created_time,'%Y-%m-%d %H:%i:%s') as "createdTime"
+        ,t1.topic_content as "topicContent"
+        ,t1.creator_account as "creatorAccount"
+        from tb_gam_topic t1
+        where  t1.record_status = 1
+         <if test="startTime != null and startTime != ''">
+             and t1.created_time &gt;= startTime
+         </if>
+        <if test="endTime != null and endTime != ''">
+             and t1.created_time &lt;= endTime
+        </if>
+        <if test="accountList != null ">
+            and t1.creator_account in
+             <foreach item ="item" index="index" collection="accountList" open="(" close=")" separator=",">
+                  #{item}
+             </foreach>
+        </if>
+        order by t1.created_time desc
+    </select>
+    <!-- 后台管理 动态详情-->
+    <select id="findDynamicDetails" resultMap="dynamicMap">
+        select
+        t1.topic_id as "topicId"
+        ,DATE_FORMAT(t1.created_time,'%Y-%m-%d %H:%i:%s') as "createdTime"
+        ,t1.topic_content as "topicContent"
+        ,t1.creator_account as "creatorAccount"
+        ,t2.img_url as "imgUrl"
+        from tb_gam_topic t1
+        left join tb_file_img t2 on t1.topic_id = t2.topic_id
+        where t1.topic_id = #{dynamicId}
+    </select>
+    <resultMap id="dynamicMap" type="com.jn.park.gamtopic.model.DynamicManageDetails">
+        <id column="topicId" property="topicId"/>
+        <result column="createdTime" property="createdTime"/>
+        <result column="topicContent" property="topicContent"/>
+        <result column="creatorAccount" property="creatorAccount"/>
+        <collection property="imgList" ofType="java.lang.String">
+            <constructor>
+                <arg column="imgUrl"/>
+            </constructor>
+        </collection>
+    </resultMap>
+<!--前台动态列表-->
+    <select id="findDynamicWebList" resultMap = "findDynamicWebListMap">
+        select
+       t1.topic_id as "topicId"
+    ,DATE_FORMAT(t1.created_time,'%Y-%m-%d %H:%i:%s') as "createdTime"
+    ,t1.topic_content as "topicContent"
+    ,t1.creator_account as "creatorAccount"
+    ,t1.identity as "identity"
+    ,IFNULL((SELECT SUM(1) FROM tb_comment com WHERE com.root_id = t1.topic_id ),0) AS "commentsNum"
+    ,IFNULL((SELECT SUM(1) FROM tb_park_like li WHERE li.like_parent_id = t1.topic_id and li.like_status = "1" and li.record_status = 1),0) AS "likeNum"
+    ,ifnull((SELECT SUM(1) FROM tb_person_care tc  WHERE  tc.care_account= #{currentAccount} and tc.receive_account = t1.creator_account and tc.record_status= 1),0) AS "careStatus"
+    ,ifnull((select SUM(1) from tb_park_like tl where tl.creator_account= #{currentAccount} and  tl.like_parent_id = t1.topic_id and tl.like_status='1' and tl.record_status =1),0) AS "isLike"
+    ,group_concat(t2.img_url) as "imgUrl"
+    from tb_gam_topic t1
+            left join tb_file_img t2 on t1.topic_id = t2.topic_id
+    where t1.topic_status = "1" and t1.record_status = 1 and
+      (t1.topic_type = "1"
+      <if test = "accountList != null ">
+      or (t1.topic_type = "2"
+          and t1.creator_account in
+          <foreach index="index" item="item" collection="accountList" open="(" close=")" separator=",">
+              #{item}
+          </foreach>
+          )
+      </if>
+       )
+      group by t1.topic_id  order by t1.created_time desc
+    </select>
+    <resultMap id="findDynamicWebListMap" type="com.jn.park.gamtopic.model.DynamicWebShow">
+        <id column="topicId" property="topicId"/>
+        <result column="createdTime" property="createdTime"/>
+        <result column="topicContent" property="topicContent"/>
+        <result column="creatorAccount" property="creatorAccount"/>
+        <result column="commentsNum" property="commentsNum"/>
+        <result column="likeNum" property="likeNum"/>
+        <result column="identity" property="identity"/>
+        <result column="imgUrl" property="imgString"/>
+        <result column="isLike" property="isLike"/>
+    </resultMap>
+
+    <!--关注详情动态列表-->
+    <select id="findDynamicByAccount" resultMap = "findDynamicWebListMap">
+        select
+        t1.topic_id as "topicId"
+        ,DATE_FORMAT(t1.created_time,'%Y-%m-%d %H:%i:%s') as "createdTime"
+        ,t1.topic_content as "topicContent"
+        ,t1.creator_account as "creatorAccount"
+        ,t1.identity as "identity"
+        ,IFNULL((SELECT SUM(1) FROM tb_comment com WHERE com.root_id = t1.topic_id ),0) AS "commentsNum"
+        ,IFNULL((SELECT SUM(1) FROM tb_park_like li WHERE li.like_parent_id = t1.topic_id  and li.like_status = "1" and li.record_status = '1'),0) AS "likeNum"
+        ,ifnull((select SUM(1) from tb_park_like tl where tl.creator_account= #{currentAccount} and  tl.like_parent_id = t1.topic_id and tl.like_status='1' and tl.record_status =1),0) AS "isLike"
+        ,group_concat(t2.img_url) as "imgUrl"
+        from tb_gam_topic t1
+        left join tb_file_img t2 on t1.topic_id = t2.topic_id
+        where t1.topic_status = "1" and t1.record_status = 1 and t1.creator_account = #{account}
+        <if test="currentAccount != null and  currentAccount != ''">
+            and (t1.topic_type = "1"  or t1.topic_type = "2")
+        </if>
+         group by t1.topic_id order by t1.created_time desc
+    </select>
+
+<!--前台动态详情-->
+    <select id="findDynamicWebDetails" resultMap="findDynamicWebListMap">
+        select
+        t1.topic_id as "topicId"
+        ,DATE_FORMAT(t1.created_time,'%Y-%m-%d %H:%i:%s') as "createdTime"
+        ,t1.topic_content as "topicContent"
+        ,t1.creator_account as "creatorAccount"
+        ,t1.identity as "identity"
+        ,IFNULL((SELECT SUM(1) FROM tb_comment com WHERE com.root_id = t1.topic_id and com.p_id = com.root_id),0) AS "commentsNum"
+        ,IFNULL((SELECT SUM(1) FROM tb_park_like li WHERE li.like_parent_id = t1.topic_id  and li.like_status = "1" and li.record_status = 1),0) AS "likeNum"
+        ,ifnull((select SUM(1) from tb_park_like tl where tl.creator_account= #{currentAccount} and  tl.like_parent_id = t1.topic_id and tl.like_status='1' and tl.record_status =1),0) AS "isLike"
+        ,group_concat(t2.img_url) as "imgUrl"
+        from tb_gam_topic t1
+        left join tb_file_img t2 on t1.topic_id = t2.topic_id
+        where t1.topic_id = #{dynamicId}
+    </select>
+    <!--动态评论列表-->
+    <select id="findDynamicComments" resultType ="com.jn.park.gamtopic.model.DynamicComments">
+       select
+        t1.creator_account as "creatorAccount"
+       ,date_format(t1.created_time,"%Y-%m-%d %H:%i:%s") as "createdTime"
+       ,t1.id as "commentId"
+       ,t1.com_content as "comContent"
+       ,IFNULL((SELECT SUM(1) FROM tb_comment com WHERE com.p_id is not  null and t1.id = com.p_id),0) AS "replyNum"
+       ,IFNULL((SELECT SUM(1) FROM tb_park_like li WHERE li.like_parent_id = t1.id  and li.like_status = "1" and li.record_status = 1),0) AS "likeNum"
+    from tb_comment  t1 where t1.root_id = #{dynamicId} and t1.p_id = t1.root_id order by t1.created_time desc
+        </select>
+    <!--评论信息-->
+    <select id="findCommentsInfo" resultType="com.jn.park.gamtopic.model.DynamicComments">
+       select
+        t1.creator_account as "creatorAccount"
+       ,date_format(t1.created_time,"%Y-%m-%d %H:%i:%s") as "createdTime"
+       ,t1.id as "commentId"
+       ,t1.com_content as "comContent"
+       ,IFNULL((SELECT SUM(1) FROM tb_park_like li WHERE li.like_parent_id = t1.id  and li.like_status = "1" and li.record_status = 1) ,0) AS "likeNum"
+    from tb_comment  t1 where t1.id = #{commentId}
+    </select>
+    <!--评论回复列表-->
+    <select id="findCommentReplyList" resultType="com.jn.park.gamtopic.model.DynamicComments">
+       select
+        t1.creator_account as "creatorAccount"
+       ,date_format(t1.created_time,"%Y-%m-%d %H:%i:%s") as "createdTime"
+       ,t1.id as "commentId"
+       ,t1.com_content as "comContent"
+       ,IFNULL((SELECT SUM(1) FROM tb_park_like li WHERE li.like_parent_id = t1.id  and li.like_status = "1" and li.record_status = 1),0) AS "likeNum"
+    from tb_comment  t1 where t1.p_id = #{commentId} order by  t1.created_time
+    </select>
+    <!--点赞用户列表-->
+    <select id="findLikedUserInfoList" resultType="com.jn.park.gamtopic.model.LikedUserInfo">
+        select
+         t1.creator_account as "account"
+         from tb_park_like t1
+        where t1.record_status = 1 and t1.like_status = "1" and  t1.like_parent_id = #{parentId}
+    </select>
+    <select id="findCareDynamicList" resultMap="findDynamicWebListMap">
+        select
+        t1.topic_id as "topicId"
+        ,DATE_FORMAT(t1.created_time,'%Y-%m-%d %H:%i:%s') as "createdTime"
+        ,t1.topic_content as "topicContent"
+        ,t1.creator_account as "creatorAccount"
+        ,t1.identity as "identity"
+        ,IFNULL((SELECT SUM(1) FROM tb_comment com WHERE com.root_id = t1.topic_id ),0) AS "commentsNum"
+        ,IFNULL((SELECT SUM(1) FROM tb_park_like li WHERE li.like_parent_id = t1.topic_id  and li.like_status = "1" and li.record_status = 1),0) AS "likeNum"
+        ,ifnull((SELECT SUM(1) FROM tb_person_care tc  WHERE  tc.care_account= #{account} and tc.receive_account = t1.creator_account and tc.record_status = 1 ),0) AS "careStatus"
+        ,ifnull((select SUM(1) from tb_park_like tl where tl.creator_account= #{account} and  tl.like_parent_id = t1.topic_id and tl.like_status='1' and tl.record_status =1),0) AS "isLike"
+        ,group_concat(t2.img_url) as "imgUrl"
+        from tb_gam_topic t1
+        left join tb_file_img t2 on t1.topic_id = t2.topic_id
+        where t1.topic_status = "1" and t1.record_status = 1 and
+        t1.creator_account in (
+          select  tpc.receive_account from  tb_person_care tpc where tpc.care_account = #{account}
+        )
+        group by t1.topic_id  order by t1.created_time desc
+
+    </select>
+    <!--评论列表-->
+    <select id ="findDynamicCommentAndReplyList" resultType="com.jn.park.gamtopic.model.DynamicCommentReplyShow">
+           select
+        t1.creator_account as "creatorAccount"
+       ,t1.id as "commentId"
+       ,t1.com_content as "comContent"
+       ,date_format(t1.created_time,'%Y-%m-%d %H:%i:%s') as "createdTime"
+       ,IFNULL((SELECT SUM(1) FROM tb_comment com WHERE com.p_id is not  null and t1.id = com.p_id),0) AS "replyNum"
+       ,IFNULL((SELECT SUM(1) FROM tb_park_like li WHERE li.like_parent_id = t1.id  and li.like_status = "1" and li.record_status = 1),0) AS "likeNum"
+    from tb_comment  t1 where t1.root_id = #{dynamicId} and t1.p_id = t1.root_id order by t1.created_time desc
+    </select>
+    <!--评论回复列表-->
+    <select id="findReplyList"  parameterType="java.util.List" resultType="com.jn.park.gamtopic.model.DynamicComments">
+
+         select
+        t1.creator_account as "creatorAccount"
+       ,t1.id as "commentId"
+       ,t1.com_content as "comContent"
+       ,t1.p_id as "parentId"
+       ,date_format(t1.created_time,'%Y-%m-%d %H:%i:%s') as "createdTime"
+       ,IFNULL((SELECT SUM(1) FROM tb_park_like li WHERE li.like_parent_id = t1.id  and li.like_status = "1" and li.record_status = 1),0) AS "likeNum"
+    from tb_comment  t1 where
+    1=1
+    <if test="parentIdList != null">
+        and   t1.p_id in
+        <foreach collection="parentIdList" index="index" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+
+    </if>
+        order by t1.created_time desc
+    </select>
+</mapper>

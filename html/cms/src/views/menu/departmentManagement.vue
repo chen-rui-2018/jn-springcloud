@@ -64,10 +64,7 @@
 </template>
 
 <script>
-import { api, paramApi } from '@/api/Permission-model/userManagement'
-// import {
-//   getDepartment, updateDepartment, createDepartment, checkDepartmentName, deleteDepartmentById, updateAllMenu, getOldData
-// } from '@/api/Permission-model/departmentManagement'
+import { api, paramApi } from '@/api/axios'
 export default {
   data() {
     var checkAccount = (rule, value, callback) => {
@@ -76,8 +73,8 @@ export default {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
         if (this.dialogStatus === '新增部门') {
-          paramApi('system/sysDepartment/checkDepartmentName', { departmentName: this.departmentForm.departmentName, parentId: this.departmentForm.parentId }, 'departmentName').then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.systemUrl}system/sysDepartment/checkDepartmentName`, { departmentName: this.departmentForm.departmentName, parentId: this.departmentForm.parentId }, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               if (res.data.data === 'success') {
                 callback()
               } else {
@@ -87,8 +84,8 @@ export default {
           })
         } else {
           if (this.oldDepartmentName !== this.departmentForm.departmentName) {
-            paramApi('system/sysDepartment/checkDepartmentName', { departmentName: this.departmentForm.departmentName, parentId: this.departmentForm.parentId }, 'departmentName').then(res => {
-              if (res.data.code === '0000') {
+            api(`${this.GLOBAL.systemUrl}system/sysDepartment/checkDepartmentName`, { departmentName: this.departmentForm.departmentName, parentId: this.departmentForm.parentId }, 'post').then(res => {
+              if (res.data.code === this.GLOBAL.code) {
                 if (res.data.data === 'success') {
                   callback()
                 } else {
@@ -181,8 +178,8 @@ export default {
       }
     },
     cencalEdit(formName) {
-      paramApi('system/sysDepartment/getChildDepartmentByParentId', this.currentId, 'parentId').then(res => {
-        if (res.data.code === '0000') {
+      paramApi(`${this.GLOBAL.systemUrl}system/sysDepartment/getChildDepartmentByParentId`, this.currentId, 'parentId').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.subForm.departmentData = res.data.data
           this.$refs['subForm'].clearValidate()
         } else {
@@ -206,8 +203,8 @@ export default {
       this.$refs['subForm'].validate(valid => {
         if (valid) {
           // 调用接口发送请求 进行批量更新
-          api('system/sysDepartment/addDepartmentBatch', newData).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.systemUrl}system/sysDepartment/addDepartmentBatch`, newData, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '保存成功',
                 type: 'success'
@@ -250,8 +247,8 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          paramApi('system/sysDepartment/delete', id, 'departmentId').then(res => {
-            if (res.data.code === '0000') {
+          paramApi(`${this.GLOBAL.systemUrl}system/sysDepartment/delete`, id, 'departmentId').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '删除成功',
                 type: 'success'
@@ -295,8 +292,8 @@ export default {
           // 将对话框隐藏
           this.departmentDialogVisible = false
           // // 调用接口发送请求
-          api('system/sysDepartment/update', this.departmentForm).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.systemUrl}system/sysDepartment/update`, this.departmentForm, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '编辑成功',
                 type: 'success'
@@ -318,8 +315,8 @@ export default {
       this.$refs['departmentForm'].validate(valid => {
         if (valid) {
           // 调用接口发送请求
-          api('system/sysDepartment/add', this.departmentForm).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.systemUrl}system/sysDepartment/add`, this.departmentForm, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '添加成功',
                 type: 'success'
@@ -362,8 +359,8 @@ export default {
     // 更新右侧页面
     updataRight() {
       if (this.location === '0') {
-        paramApi('system/sysDepartment/getChildDepartmentByParentId', this.checkoutId, 'parentId').then(res => {
-          if (res.data.code === '0000') {
+        paramApi(`${this.GLOBAL.systemUrl}system/sysDepartment/getChildDepartmentByParentId`, this.checkoutId, 'parentId').then(res => {
+          if (res.data.code === this.GLOBAL.code) {
             this.subForm.departmentData = res.data.data
           } else {
             this.$message.error(res.data.result)
@@ -374,8 +371,8 @@ export default {
     // 初始化项目
     initList() {
       this.listLoading = true
-      api('system/sysDepartment/findDepartmentAllByLevel').then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.systemUrl}system/sysDepartment/findDepartmentAllByLevel`, '', 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.departmentList = res.data.data
         } else {
           this.$message.error(res.data.result)
@@ -390,10 +387,12 @@ export default {
 <style lang="scss" scoped>
 .departmentManagement{
   height: 100%;
+  padding: 15px;
   display: flex;
+   background:#fff;
 .department-left{
   height: 100%;
-  width:270px;
+  // width:270px;
   .el-tree{
     height: 100%;
     // overflow: auto;
@@ -415,8 +414,9 @@ export default {
    flex:1;
    height: 100%;
    width: 100%;
+
    overflow:auto;
-   margin-left:30px;
+   margin-left:50px;
     // padding: 20px;
     .department-content{
       display: flex;

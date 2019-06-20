@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.hr.assessment.dao.TbManpowerAssessmentTemplateDetailMapper">
+  <resultMap id="BaseResultMap" type="com.jn.hr.assessment.entity.TbManpowerAssessmentTemplateDetail">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="target_category" jdbcType="VARCHAR" property="targetCategory" />
+    <result column="serial_number" jdbcType="INTEGER" property="serialNumber" />
+    <result column="assessment_target" jdbcType="VARCHAR" property="assessmentTarget" />
+    <result column="score" jdbcType="INTEGER" property="score" />
+    <result column="score_rubric" jdbcType="VARCHAR" property="scoreRubric" />
+    <result column="lead_assessment_department" jdbcType="VARCHAR" property="leadAssessmentDepartment" />
+    <result column="template_id" jdbcType="VARCHAR" property="templateId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, target_category, serial_number, assessment_target, score, score_rubric, lead_assessment_department, 
+    template_id
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.hr.assessment.entity.TbManpowerAssessmentTemplateDetailCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_manpower_assessment_template_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_manpower_assessment_template_detail
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_manpower_assessment_template_detail
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.hr.assessment.entity.TbManpowerAssessmentTemplateDetailCriteria">
+    delete from tb_manpower_assessment_template_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.hr.assessment.entity.TbManpowerAssessmentTemplateDetail">
+    insert into tb_manpower_assessment_template_detail (id, target_category, serial_number, 
+      assessment_target, score, score_rubric, 
+      lead_assessment_department, template_id)
+    values (#{id,jdbcType=VARCHAR}, #{targetCategory,jdbcType=VARCHAR}, #{serialNumber,jdbcType=INTEGER}, 
+      #{assessmentTarget,jdbcType=VARCHAR}, #{score,jdbcType=INTEGER}, #{scoreRubric,jdbcType=VARCHAR}, 
+      #{leadAssessmentDepartment,jdbcType=VARCHAR}, #{templateId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.hr.assessment.entity.TbManpowerAssessmentTemplateDetail">
+    insert into tb_manpower_assessment_template_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="targetCategory != null">
+        target_category,
+      </if>
+      <if test="serialNumber != null">
+        serial_number,
+      </if>
+      <if test="assessmentTarget != null">
+        assessment_target,
+      </if>
+      <if test="score != null">
+        score,
+      </if>
+      <if test="scoreRubric != null">
+        score_rubric,
+      </if>
+      <if test="leadAssessmentDepartment != null">
+        lead_assessment_department,
+      </if>
+      <if test="templateId != null">
+        template_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="targetCategory != null">
+        #{targetCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNumber != null">
+        #{serialNumber,jdbcType=INTEGER},
+      </if>
+      <if test="assessmentTarget != null">
+        #{assessmentTarget,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null">
+        #{score,jdbcType=INTEGER},
+      </if>
+      <if test="scoreRubric != null">
+        #{scoreRubric,jdbcType=VARCHAR},
+      </if>
+      <if test="leadAssessmentDepartment != null">
+        #{leadAssessmentDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="templateId != null">
+        #{templateId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.hr.assessment.entity.TbManpowerAssessmentTemplateDetailCriteria" resultType="java.lang.Long">
+    select count(*) from tb_manpower_assessment_template_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_manpower_assessment_template_detail
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.targetCategory != null">
+        target_category = #{record.targetCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serialNumber != null">
+        serial_number = #{record.serialNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.assessmentTarget != null">
+        assessment_target = #{record.assessmentTarget,jdbcType=VARCHAR},
+      </if>
+      <if test="record.score != null">
+        score = #{record.score,jdbcType=INTEGER},
+      </if>
+      <if test="record.scoreRubric != null">
+        score_rubric = #{record.scoreRubric,jdbcType=VARCHAR},
+      </if>
+      <if test="record.leadAssessmentDepartment != null">
+        lead_assessment_department = #{record.leadAssessmentDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.templateId != null">
+        template_id = #{record.templateId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_manpower_assessment_template_detail
+    set id = #{record.id,jdbcType=VARCHAR},
+      target_category = #{record.targetCategory,jdbcType=VARCHAR},
+      serial_number = #{record.serialNumber,jdbcType=INTEGER},
+      assessment_target = #{record.assessmentTarget,jdbcType=VARCHAR},
+      score = #{record.score,jdbcType=INTEGER},
+      score_rubric = #{record.scoreRubric,jdbcType=VARCHAR},
+      lead_assessment_department = #{record.leadAssessmentDepartment,jdbcType=VARCHAR},
+      template_id = #{record.templateId,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.hr.assessment.entity.TbManpowerAssessmentTemplateDetail">
+    update tb_manpower_assessment_template_detail
+    <set>
+      <if test="targetCategory != null">
+        target_category = #{targetCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNumber != null">
+        serial_number = #{serialNumber,jdbcType=INTEGER},
+      </if>
+      <if test="assessmentTarget != null">
+        assessment_target = #{assessmentTarget,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null">
+        score = #{score,jdbcType=INTEGER},
+      </if>
+      <if test="scoreRubric != null">
+        score_rubric = #{scoreRubric,jdbcType=VARCHAR},
+      </if>
+      <if test="leadAssessmentDepartment != null">
+        lead_assessment_department = #{leadAssessmentDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="templateId != null">
+        template_id = #{templateId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.hr.assessment.entity.TbManpowerAssessmentTemplateDetail">
+    update tb_manpower_assessment_template_detail
+    set target_category = #{targetCategory,jdbcType=VARCHAR},
+      serial_number = #{serialNumber,jdbcType=INTEGER},
+      assessment_target = #{assessmentTarget,jdbcType=VARCHAR},
+      score = #{score,jdbcType=INTEGER},
+      score_rubric = #{scoreRubric,jdbcType=VARCHAR},
+      lead_assessment_department = #{leadAssessmentDepartment,jdbcType=VARCHAR},
+      template_id = #{templateId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -26,17 +26,19 @@
 		<module>springcloud-app-system-api</module>
 		<module>springcloud-app-delay-stream</module>
 		<module>springcloud-app-delay-stream-api</module>
-
 		<module>springcloud-app-tx-manager</module>
+		<module>springcloud-app-im</module>
 
+		<module>springcloud-app-pay</module>
 
 		<module>springcloud-oa</module>
 		<module>springcloud-oa-api</module>
-
         <module>springcloud-enterprise</module>
         <module>springcloud-enterprise-api</module>
         <module>springcloud-hardware</module>
         <module>springcloud-hardware-api</module>
+		<module>springcloud-hr</module>
+		<module>springcloud-hr-api</module>
         <module>springcloud-news</module>
 		<module>springcloud-news-api</module>
         <module>springcloud-park</module>
@@ -57,6 +59,13 @@
 		<janino.version>2.7.8</janino.version>
 		<scca.version>1.1.1-RELEASE</scca.version>
 		<spring-boot-admin>1.5.7</spring-boot-admin>
+		<alibaba.easyexcel>1.1.2-beta5</alibaba.easyexcel>
+		<google-zxing-core>3.3.3</google-zxing-core>
+		<ibps-auth-client-filter-other>2.8.15-LC.RELEASE</ibps-auth-client-filter-other>
+		<jpush-client>3.3.12</jpush-client>
+		<jiguang-common>1.1.6</jiguang-common>
+        <alibaba-fastjson>1.2.58</alibaba-fastjson>
+		<commons-lang3>3.9</commons-lang3>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -90,6 +99,11 @@
 			<dependency>
 				<groupId>com.jn</groupId>
 				<artifactId>springcloud-hardware-api</artifactId>
+				<version>1.0.0-RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>com.jn</groupId>
+				<artifactId>springcloud-hr-api</artifactId>
 				<version>1.0.0-RELEASE</version>
 			</dependency>
 			<dependency>
@@ -132,12 +146,44 @@
 				<artifactId>springcloud-oa-api</artifactId>
 				<version>1.0.0-RELEASE</version>
 			</dependency>
+			<dependency>
+				<groupId>com.jn</groupId>
+				<artifactId>xxpay-web-api</artifactId>
+				<version>1.0.0-RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>com.jn</groupId>
+				<artifactId>xxpay-common</artifactId>
+				<version>1.0.0-RELEASE</version>
+			</dependency>
 
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-lang3</artifactId>
-				<version>3.1</version>
+				<version>${commons-lang3}</version>
 			</dependency>
+
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>2.6</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-fileupload</groupId>
+				<artifactId>commons-fileupload</artifactId>
+				<version>1.3.1</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.zxing</groupId>
+				<artifactId>core</artifactId>
+				<version>${google-zxing-core}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>fastjson</artifactId>
+				<version>${alibaba-fastjson}</version>
+			</dependency>
+
 			<!-- 使用Shiro认证 -->
 			<dependency>
 				<groupId>org.apache.shiro</groupId>
@@ -277,14 +323,47 @@
 			<dependency>
 				<groupId>com.alibaba</groupId>
 				<artifactId>easyexcel</artifactId>
-				<version>1.1.2-beta5</version>
+				<version>${alibaba.easyexcel}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>com.google.zxing</groupId>
 				<artifactId>core</artifactId>
-				<version>3.3.3</version>
+				<version>${google-zxing-core}</version>
 			</dependency>
+
+			<dependency>
+				<groupId>com.lc.ibps.auth</groupId>
+				<artifactId>ibps-auth-client-filter-other</artifactId>
+				<version>${ibps-auth-client-filter-other}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>cn.jpush.api</groupId>
+				<artifactId>jpush-client</artifactId>
+				<version>${jpush-client}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>cn.jpush.api</groupId>
+				<artifactId>jiguang-common</artifactId>
+				<version>${jiguang-common}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>artemis</groupId>
+				<artifactId>http-client</artifactId>
+				<version>1.0</version>
+			</dependency>
+
+			<!--kafka -->
+			<dependency>
+				<groupId>org.springframework.kafka</groupId>
+				<artifactId>spring-kafka</artifactId>
+				<version>1.2.3.RELEASE</version>
+			</dependency>
+
+
 
 		</dependencies>
 	</dependencyManagement>
@@ -313,5 +392,11 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+	<distributionManagement>
+		<repository>
+			<id>releases</id>
+			<url>http://192.168.10.20:8081/nexus/content/repositories/releases</url>
+		</repository>
+	</distributionManagement>
 
 </project>

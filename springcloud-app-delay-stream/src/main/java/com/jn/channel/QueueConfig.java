@@ -26,21 +26,21 @@ public class QueueConfig {
      * 发送到该队列的message会在一段时间后过期进入到delay_process_queue
      * 每个message可以控制自己的失效时间
      */
-    final static String DELAY_QUEUE_PER_MESSAGE_TTL_NAME = "delay_queue_per_message_ttl";
+    public final static String DELAY_QUEUE_PER_MESSAGE_TTL_NAME = "delay_queue_per_message_ttl";
     /**
      * message失效后进入的队列，也就是实际的消费队列
      */
-    final static String DELAY_PROCESS_QUEUE_NAME = "delay_process_queue";
+    public final static String DELAY_PROCESS_QUEUE_NAME = "delay_process_queue";
     /**
      * 实际消费队列的exchange
      */
-    final static String DELAY_EXCHANGE_NAME = "delay_exchange";
+    public final static String DELAY_EXCHANGE_NAME = "delay_exchange";
     /**
      * 失败后的消息保存
      */
-    final static String DLQ = "delay_process_queue.dlq";
+    public final static String DLQ = "delay_process_queue.dlq";
 
-    final static String DLQ_EXCHANGE_NAME = "DLX";
+    public final static String DLQ_EXCHANGE_NAME = "DLX";
     /**
      * 创建DLX exchange
      *

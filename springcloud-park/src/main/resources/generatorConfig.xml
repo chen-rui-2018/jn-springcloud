@@ -9,8 +9,527 @@
         <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
         <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
         <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+        <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+            <property name="searchString" value="Example$"/>
+            <property name="replaceString" value="Criteria"/>
+        </plugin>
+        <commentGenerator>
+            <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
+            <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
+            <property name="suppressDate" value="true"/>
+            <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+        <!--数据库链接URL，用户名、密码 -->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://192.168.10.28:3306/dcs?useUnicode=true&amp;characterEncoding=utf-8"
+                        userId="dcsuser" password="dcs_u_123">
+        </jdbcConnection>
+    <javaTypeResolver>
+      <property name="forceBigDecimals" value="false"/>
+    </javaTypeResolver>
+
+    <!-- 生成模型的包名和位置 -->
+    <javaModelGenerator targetPackage="com.jn.park.demo.entity"
+                        targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+      <property name="trimStrings" value="true"/>
+    </javaModelGenerator>
+
+    <!-- 生成映射文件的包名和位置 -->
+    <sqlMapGenerator targetPackage="mapping.generator.demo"
+                     targetProject="src/main/resources">
+      <property name="enableSubPackages" value="true"/>
+    </sqlMapGenerator>
+
+    <!-- 生成Mapper 接口的包名和位置-->
+    <javaClientGenerator type="XMLMAPPER"
+                         targetPackage="com.jn.park.demo.dao"
+                         targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+    </javaClientGenerator>
+
+    <table tableName="tb_sys_user" alias="user">
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+    </table>
+  </context>
+
+  <!--园区活动-->
+  <context id="activity">
+    <!-- 实现Serializable接口 -->
+    <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+      <property name="searchString" value="Example$"/>
+      <property name="replaceString" value="Criteria"/>
+    </plugin>
+    <commentGenerator>
+      <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
+      <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
+      <property name="suppressDate" value="true"/>
+      <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+      <property name="suppressAllComments" value="true"/>
+    </commentGenerator>
+    <!--数据库链接URL，用户名、密码 -->
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                    connectionURL="jdbc:mysql://192.168.10.28:3306/dcs?useUnicode=true&amp;characterEncoding=utf-8&amp;tinyInt1isBit=false"
+                    userId="dcsuser" password="dcs_u_123">
+    </jdbcConnection>
+    <javaTypeResolver>
+      <property name="forceBigDecimals" value="false"/>
+    </javaTypeResolver>
+
+    <!-- 生成模型的包名和位置 -->
+    <javaModelGenerator targetPackage="com.jn.park.activity.entity"
+                        targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+      <property name="trimStrings" value="true"/>
+    </javaModelGenerator>
+
+    <!-- 生成映射文件的包名和位置 -->
+    <sqlMapGenerator targetPackage="mapping.generator.activity"
+                     targetProject="src/main/resources">
+      <property name="enableSubPackages" value="true"/>
+    </sqlMapGenerator>
+
+    <!-- 生成Mapper 接口的包名和位置-->
+    <javaClientGenerator type="XMLMAPPER"
+                         targetPackage="com.jn.park.activity.dao"
+                         targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+    </javaClientGenerator>
+
+    <table tableName="tb_activity">
+    </table>
+    <table tableName="tb_activity_apply">
+    </table>
+    <table tableName="tb_activity_type">
+    </table>
+    <table tableName="tb_activity_detail">
+    </table>
+    <table tableName="tb_park_like">
+    </table>
+    <table tableName="tb_activity_file">
+    </table>
+  </context>
+
+  <!--评论-->
+  <context id="comment">
+    <!-- 实现Serializable接口 -->
+    <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+      <property name="searchString" value="Example$"/>
+      <property name="replaceString" value="Criteria"/>
+    </plugin>
+    <commentGenerator>
+      <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
+      <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
+      <property name="suppressDate" value="true"/>
+      <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+      <property name="suppressAllComments" value="true"/>
+    </commentGenerator>
+    <!--数据库链接URL，用户名、密码 -->
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                    connectionURL="jdbc:mysql://192.168.10.28:3306/dcs?useUnicode=true&amp;characterEncoding=utf-8&amp;tinyInt1isBit=false"
+                    userId="dcsuser" password="dcs_u_123">
+    </jdbcConnection>
+    <javaTypeResolver>
+      <property name="forceBigDecimals" value="false"/>
+    </javaTypeResolver>
+
+    <!-- 生成模型的包名和位置 -->
+    <javaModelGenerator targetPackage="com.jn.park.comment.entity"
+                        targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+      <property name="trimStrings" value="true"/>
+    </javaModelGenerator>
+
+    <!-- 生成映射文件的包名和位置 -->
+    <sqlMapGenerator targetPackage="mapping.generator.comment"
+                     targetProject="src/main/resources">
+      <property name="enableSubPackages" value="true"/>
+    </sqlMapGenerator>
+
+    <!-- 生成Mapper 接口的包名和位置-->
+    <javaClientGenerator type="XMLMAPPER"
+                         targetPackage="com.jn.park.comment.dao"
+                         targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+    </javaClientGenerator>
+    <table tableName="tb_comment">
+    </table>
+    <table tableName="tb_comment_sensitive_word">
+    </table>
+  </context>
+
+  <!--评论-->
+  <context id="parkCode">
+    <!-- 实现Serializable接口 -->
+    <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+      <property name="searchString" value="Example$"/>
+      <property name="replaceString" value="Criteria"/>
+    </plugin>
+    <commentGenerator>
+      <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
+      <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
+      <property name="suppressDate" value="true"/>
+      <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+      <property name="suppressAllComments" value="true"/>
+    </commentGenerator>
+    <!--数据库链接URL，用户名、密码 -->
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                    connectionURL="jdbc:mysql://192.168.10.28:3306/dcs?useUnicode=true&amp;characterEncoding=utf-8&amp;tinyInt1isBit=false"
+                    userId="dcsuser" password="dcs_u_123">
+    </jdbcConnection>
+    <javaTypeResolver>
+      <property name="forceBigDecimals" value="false"/>
+    </javaTypeResolver>
+
+    <!-- 生成模型的包名和位置 -->
+    <javaModelGenerator targetPackage="com.jn.park.parkcode.entity"
+                        targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+      <property name="trimStrings" value="true"/>
+    </javaModelGenerator>
+
+    <!-- 生成映射文件的包名和位置 -->
+    <sqlMapGenerator targetPackage="mapping.generator.parkcode"
+                     targetProject="src/main/resources">
+      <property name="enableSubPackages" value="true"/>
+    </sqlMapGenerator>
+
+    <!-- 生成Mapper 接口的包名和位置-->
+    <javaClientGenerator type="XMLMAPPER"
+                         targetPackage="com.jn.park.parkcode.dao"
+                         targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+    </javaClientGenerator>
+    <table tableName="tb_park_code">
+    </table>
+  </context>
+
+  <!--用户反馈-->
+  <context id="feedback">
+    <!-- 实现Serializable接口 -->
+    <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+      <property name="searchString" value="Example$"/>
+      <property name="replaceString" value="Criteria"/>
+    </plugin>
+    <commentGenerator>
+      <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
+      <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
+      <property name="suppressDate" value="true"/>
+      <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+      <property name="suppressAllComments" value="true"/>
+    </commentGenerator>
+    <!--数据库链接URL，用户名、密码 -->
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                    connectionURL="jdbc:mysql://192.168.10.28:3306/dcs?useUnicode=true&amp;characterEncoding=utf-8&amp;tinyInt1isBit=false"
+                    userId="dcsuser" password="dcs_u_123">
+    </jdbcConnection>
+    <javaTypeResolver>
+      <property name="forceBigDecimals" value="false"/>
+    </javaTypeResolver>
+
+    <!-- 生成模型的包名和位置 -->
+    <javaModelGenerator targetPackage="com.jn.park.feedback.entity"
+                        targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+      <property name="trimStrings" value="true"/>
+    </javaModelGenerator>
+
+    <!-- 生成映射文件的包名和位置 -->
+    <sqlMapGenerator targetPackage="mapping.generator.feedback"
+                     targetProject="src/main/resources">
+      <property name="enableSubPackages" value="true"/>
+    </sqlMapGenerator>
+
+    <!-- 生成Mapper 接口的包名和位置-->
+    <javaClientGenerator type="XMLMAPPER"
+                         targetPackage="com.jn.park.feedback.dao"
+                         targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+    </javaClientGenerator>
+    <table tableName="tb_user_feedback">
+    </table>
+  </context>
+
+  <!--用户反馈-->
+  <context id="fileImg">
+    <!-- 实现Serializable接口 -->
+    <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+      <property name="searchString" value="Example$"/>
+      <property name="replaceString" value="Criteria"/>
+    </plugin>
+    <commentGenerator>
+      <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
+      <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
+      <property name="suppressDate" value="true"/>
+      <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+      <property name="suppressAllComments" value="true"/>
+    </commentGenerator>
+    <!--数据库链接URL，用户名、密码 -->
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                    connectionURL="jdbc:mysql://192.168.10.28:3306/dcs?useUnicode=true&amp;characterEncoding=utf-8&amp;tinyInt1isBit=false"
+                    userId="dcsuser" password="dcs_u_123">
+    </jdbcConnection>
+    <javaTypeResolver>
+      <property name="forceBigDecimals" value="false"/>
+    </javaTypeResolver>
+
+    <!-- 生成模型的包名和位置 -->
+    <javaModelGenerator targetPackage="com.jn.park.fileimg.entity"
+                        targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+      <property name="trimStrings" value="true"/>
+    </javaModelGenerator>
+
+    <!-- 生成映射文件的包名和位置 -->
+    <sqlMapGenerator targetPackage="mapping.generator.fileimg"
+                     targetProject="src/main/resources">
+      <property name="enableSubPackages" value="true"/>
+    </sqlMapGenerator>
+
+    <!-- 生成Mapper 接口的包名和位置-->
+    <javaClientGenerator type="XMLMAPPER"
+                         targetPackage="com.jn.park.fileimg.dao"
+                         targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+    </javaClientGenerator>
+    <table tableName="tb_file_img">
+    </table>
+  </context>
+
+  <!--用户反馈-->
+  <context id="gamtopic">
+    <!-- 实现Serializable接口 -->
+    <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+      <property name="searchString" value="Example$"/>
+      <property name="replaceString" value="Criteria"/>
+    </plugin>
+    <commentGenerator>
+      <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
+      <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
+      <property name="suppressDate" value="true"/>
+      <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+      <property name="suppressAllComments" value="true"/>
+    </commentGenerator>
+    <!--数据库链接URL，用户名、密码 -->
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                    connectionURL="jdbc:mysql://192.168.10.28:3306/dcs?useUnicode=true&amp;characterEncoding=utf-8&amp;tinyInt1isBit=false"
+                    userId="dcsuser" password="dcs_u_123">
+    </jdbcConnection>
+    <javaTypeResolver>
+      <property name="forceBigDecimals" value="false"/>
+    </javaTypeResolver>
+
+    <!-- 生成模型的包名和位置 -->
+    <javaModelGenerator targetPackage="com.jn.park.gamtopic.entity"
+                        targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+      <property name="trimStrings" value="true"/>
+    </javaModelGenerator>
+
+    <!-- 生成映射文件的包名和位置 -->
+    <sqlMapGenerator targetPackage="mapping.generator.gamtopic"
+                     targetProject="src/main/resources">
+      <property name="enableSubPackages" value="true"/>
+    </sqlMapGenerator>
+
+    <!-- 生成Mapper 接口的包名和位置-->
+    <javaClientGenerator type="XMLMAPPER"
+                         targetPackage="com.jn.park.gamtopic.dao"
+                         targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+    </javaClientGenerator>
+    <table tableName="tb_gam_topic"/>
+    <table tableName="tb_person_care">
+    </table>
+  </context>
+
+  <!--XQ00010财务协同-->
+  <context id="finance">
+    <!-- 实现Serializable接口 -->
+    <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+    <!--覆盖生成XML文件-->
+    <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin" />
+    <!--在各个字段添加注解-->
+    <plugin type="com.jn.generator.CommentsPlugin"></plugin>
+    <!--在生成xxxMapper.xml文件后，再生成一次，新的内容会以<b>覆盖</b>的方式加入到原来的xxxMapper.xml文件中-->
+    <!--<plugin type="com.jn.generator.CoverMapperPlugin"></plugin>-->
+    <commentGenerator>
+      <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
+      <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
+      <property name="suppressDate" value="true"/>
+      <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+      <property name="suppressAllComments" value="true"/>
+    </commentGenerator>
+    <!--数据库链接URL，用户名、密码 -->
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                    connectionURL="jdbc:mysql://192.168.10.28:3306/dcs?useUnicode=true&amp;characterEncoding=utf-8"
+                    userId="dcsuser" password="dcs_u_123">
+    </jdbcConnection>
+    <javaTypeResolver>
+      <property name="forceBigDecimals" value="false"/>
+    </javaTypeResolver>
+
+    <!-- 生成模型的包名和位置 -->
+    <javaModelGenerator targetPackage="com.jn.park.finance.entity"
+                        targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+      <property name="trimStrings" value="true"/>
+    </javaModelGenerator>
+
+    <!-- 生成映射文件的包名和位置 -->
+    <sqlMapGenerator targetPackage="mapping.generator.finance"
+                     targetProject="src/main/resources">
+      <property name="enableSubPackages" value="true"/>
+    </sqlMapGenerator>
+
+    <!-- 生成Mapper 接口的包名和位置-->
+    <javaClientGenerator type="XMLMAPPER"
+                         targetPackage="com.jn.park.finance.dao"
+                         targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+    </javaClientGenerator>
+
+    <!--费用预算历史表-->
+    <table tableName="tb_finance_budget_history" alias="bh">
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+    </table>
+    <!--财务事项-财务文档上传-->
+    <table tableName="tb_finance_document" alias="doc">
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+    </table>
+    <!--财务支出录入总表(月表)-->
+    <table tableName="tb_finance_expenses_month" alias="emonth">
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+    </table>
+    <!--财务支出录入表-->
+    <table tableName="tb_finance_expenses" alias="e">
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+    </table>
+    <!--财务支出录入临时表-->
+    <table tableName="tb_finance_expenses_temp" alias="etemp">
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+    </table>
+    <!--财务协同-备案资料-->
+    <table tableName="tb_finance_record_information" alias="ri">
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+    </table>
+    <!--费用总预算表-->
+    <table tableName="tb_finance_total_budget" alias="tb">
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+    </table>
+    <!--财务项目类型-->
+    <table tableName="tb_finance_type" alias="t">
+    </table>
+    <!--部门与财务类型关系表-->
+    <table tableName="tb_finance_department_to_type" alias="dt">
+    </table>
+    <!--财务事项-工单表-->
+    <table tableName="tb_finance_work_order" alias="wo">
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+    </table>
+    <!--财务协同-收入情况(日表)-->
+    <table tableName="tb_finance_income_day" alias="iday">
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+    </table>
+    <!--财务协同-收入情况(月表)-->
+    <table tableName="tb_finance_income_month" alias="imonth">
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+    </table>
+    <!--财务协同-字典表-->
+    <table tableName="tb_finance_dictionary" alias="dict">
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+    </table>
+    <!--各费用年表-->
+    <table tableName="tb_finance_year" alias="y">
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+    </table>
+    <!--财务协同-字典表月份表，做为左表进行关联查出1年中12个月的数据-->
+    <table tableName="tb_month" alias="m">
+    </table>
+  </context>
+  <!--对外公告-->
+  <context id="notice">
+    <!-- 实现Serializable接口 -->
+    <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+      <property name="searchString" value="Example$"/>
+      <property name="replaceString" value="Criteria"/>
+    </plugin>
+    <commentGenerator>
+      <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
+      <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
+      <property name="suppressDate" value="true"/>
+      <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+      <property name="suppressAllComments" value="true"/>
+    </commentGenerator>
+    <!--数据库链接URL，用户名、密码 -->
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                    connectionURL="jdbc:mysql://192.168.10.28:3306/dcs?useUnicode=true&amp;characterEncoding=utf-8&amp;tinyInt1isBit=false"
+                    userId="dcsuser" password="dcs_u_123">
+    </jdbcConnection>
+    <javaTypeResolver>
+      <property name="forceBigDecimals" value="false"/>
+    </javaTypeResolver>
+
+    <!-- 生成模型的包名和位置 -->
+    <javaModelGenerator targetPackage="com.jn.park.notice.entity"
+                        targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+      <property name="trimStrings" value="true"/>
+    </javaModelGenerator>
+
+    <!-- 生成映射文件的包名和位置 -->
+    <sqlMapGenerator targetPackage="mapping.generator.notice"
+                     targetProject="src/main/resources">
+      <property name="enableSubPackages" value="true"/>
+    </sqlMapGenerator>
+
+    <!-- 生成Mapper 接口的包名和位置-->
+    <javaClientGenerator type="XMLMAPPER"
+                         targetPackage="com.jn.park.notice.dao"
+                         targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+    </javaClientGenerator>
+    <table tableName="tb_notice_details">
+    </table>
+
+    <table tableName="tb_notice_info">
+    </table>
+  </context>
+
+  <!--XQ00017对外行政审批中心-->
+    <context id="sp">
+        <!-- 实现Serializable接口 -->
+        <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
         <!--覆盖生成XML文件-->
         <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin" />
+        <!--在各个字段添加注解-->
+        <plugin type="com.jn.generator.CommentsPlugin"></plugin>
         <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
             <property name="searchString" value="Example$"/>
             <property name="replaceString" value="Criteria"/>
@@ -32,136 +551,906 @@
         </javaTypeResolver>
 
         <!-- 生成模型的包名和位置 -->
-        <javaModelGenerator targetPackage="com.jn.park.demo.entity"
+        <javaModelGenerator targetPackage="com.jn.park.sp.entity"
                             targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
 
         <!-- 生成映射文件的包名和位置 -->
-        <sqlMapGenerator targetPackage="mapping.generator.demo"
+        <sqlMapGenerator targetPackage="mapping.generator.sp"
                          targetProject="src/main/resources">
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
 
         <!-- 生成Mapper 接口的包名和位置-->
         <javaClientGenerator type="XMLMAPPER"
-                             targetPackage="com.jn.park.demo.dao"
+                             targetPackage="com.jn.park.sp.dao"
                              targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <table tableName="tb_sys_user" alias="user">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
-        </table>
+        <!--行对外行政审批中心-实施部门-->
+        <table tableName="tb_sp_dict_depart"  ></table>
+        <!--对外行政审批中心-留言表-->
+        <table tableName="tb_sp_message" ></table>
+        <!--对外行政审批中心-权力清单-->
+        <table tableName="tb_sp_power"></table>
+        <!--对外行政审批中心-权力清单-服务业务-->
+        <table tableName="tb_sp_power_busi"></table>
+        <!--对外行政审批中心-权力清单-服务业务-办理清单-->
+        <table tableName="tb_sp_power_busi_materials"></table>
+        <!--对外行政审批中心-行政审批广告-->
+        <table tableName="tb_sp_ad"></table>
     </context>
 
-    <!--XQ00010财务协同-->
-    <context id="finance">
-        <!-- 实现Serializable接口 -->
-        <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
-        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
-        <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
-        <!--覆盖生成XML文件-->
-        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin" />
-        <!--在各个字段添加注解-->
-        <plugin type="com.jn.generator.CommentsPlugin"></plugin>
-        <!--在生成xxxMapper.xml文件后，再生成一次，新的内容会以<b>覆盖</b>的方式加入到原来的xxxMapper.xml文件中-->
-        <!--<plugin type="com.jn.generator.CoverMapperPlugin"></plugin>-->
-        <commentGenerator>
-            <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
-            <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
-            <property name="suppressDate" value="true"/>
-            <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
-            <property name="suppressAllComments" value="true"/>
-        </commentGenerator>
-        <!--数据库链接URL，用户名、密码 -->
-        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://192.168.10.28:3306/dcs?useUnicode=true&amp;characterEncoding=utf-8"
-                        userId="dcsuser" password="dcs_u_123">
-        </jdbcConnection>
-        <javaTypeResolver>
-            <property name="forceBigDecimals" value="false"/>
-        </javaTypeResolver>
 
-        <!-- 生成模型的包名和位置 -->
-        <javaModelGenerator targetPackage="com.jn.park.finance.entity"
-                            targetProject="src/main/java">
-            <property name="enableSubPackages" value="true"/>
-            <property name="trimStrings" value="true"/>
-        </javaModelGenerator>
+  <context id="message">
+    <!-- 实现Serializable接口 -->
+    <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+      <property name="searchString" value="Example$"/>
+      <property name="replaceString" value="Criteria"/>
+    </plugin>
+    <commentGenerator>
+      <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
+      <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
+      <property name="suppressDate" value="true"/>
+      <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+      <property name="suppressAllComments" value="true"/>
+    </commentGenerator>
+    <!--数据库链接URL，用户名、密码 -->
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                    connectionURL="jdbc:mysql://192.168.10.28:3306/dcs?useUnicode=true&amp;characterEncoding=utf-8"
+                    userId="dcsuser" password="dcs_u_123">
+    </jdbcConnection>
+    <javaTypeResolver>
+      <property name="forceBigDecimals" value="false"/>
+    </javaTypeResolver>
 
-        <!-- 生成映射文件的包名和位置 -->
-        <sqlMapGenerator targetPackage="mapping.generator.finance"
-                         targetProject="src/main/resources">
-            <property name="enableSubPackages" value="true"/>
-        </sqlMapGenerator>
+    <!-- 生成模型的包名和位置 -->
+    <javaModelGenerator targetPackage="com.jn.park.message.entity"
+                        targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+      <property name="trimStrings" value="true"/>
+    </javaModelGenerator>
 
-        <!-- 生成Mapper 接口的包名和位置-->
-        <javaClientGenerator type="XMLMAPPER"
-                             targetPackage="com.jn.park.finance.dao"
-                             targetProject="src/main/java">
-            <property name="enableSubPackages" value="true"/>
-        </javaClientGenerator>
+    <!-- 生成映射文件的包名和位置 -->
+    <sqlMapGenerator targetPackage="mapping.generator.message"
+                     targetProject="src/main/resources">
+      <property name="enableSubPackages" value="true"/>
+    </sqlMapGenerator>
 
-        <!--费用预算历史表-->
-        <table tableName="tb_finance_budget_history" alias="bh">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
-        </table>
-        <!--财务事项-财务文档上传-->
-        <table tableName="tb_finance_document" alias="doc">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
-        </table>
-        <!--财务支出录入总表(月表)-->
-        <table tableName="tb_finance_expenses_month" alias="emonth">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
-        </table>
-        <!--财务支出录入表-->
-        <table tableName="tb_finance_expenses" alias="e">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
-        </table>
-        <!--财务支出录入临时表-->
-        <table tableName="tb_finance_expenses_temp" alias="etemp">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
-        </table>
-        <!--财务协同-备案资料-->
-        <table tableName="tb_finance_record_information" alias="ri">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
-        </table>
-        <!--费用总预算表-->
-        <table tableName="tb_finance_total_budget" alias="tb">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
-        </table>
-        <!--财务项目类型-->
-        <table tableName="tb_finance_type" alias="t">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
-        </table>
-        <!--部门与财务类型关系表-->
-        <table tableName="tb_finance_department_to_type" alias="dt">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
-        </table>
-        <!--财务事项-工单表-->
-        <table tableName="tb_finance_work_order" alias="wo">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
-        </table>
-        <!--财务协同-收入情况(日表)-->
-        <table tableName="tb_finance_income_day" alias="iday">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
-        </table>
-        <!--财务协同-收入情况(月表)-->
-        <table tableName="tb_finance_income_month" alias="imonth">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
-        </table>
-        <!--财务协同-字典表-->
-        <table tableName="tb_finance_dictionary" alias="dict">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
-        </table>
-        <!--各费用年表-->
-        <table tableName="tb_finance_year" alias="y">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
-        </table>
-        <!--财务协同-字典表月份表，做为左表进行关联查出1年中12个月的数据-->
-        <table tableName="tb_month" alias="m">
-        </table>
+    <!-- 生成Mapper 接口的包名和位置-->
+    <javaClientGenerator type="XMLMAPPER"
+                         targetPackage="com.jn.park.message.dao"
+                         targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+    </javaClientGenerator>
+
+    <table tableName="tb_message_list" alias="message">
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+    </table>
+  </context>
+
+  <!--服务链接管理-->
+  <context id="connect">
+    <!-- 实现Serializable接口 -->
+    <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+      <property name="searchString" value="Example$"/>
+      <property name="replaceString" value="Criteria"/>
+    </plugin>
+    <commentGenerator>
+      <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
+      <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
+      <property name="suppressDate" value="true"/>
+      <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+      <property name="suppressAllComments" value="true"/>
+    </commentGenerator>
+    <!--数据库链接URL，用户名、密码 -->
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                    connectionURL="jdbc:mysql://192.168.10.28:3306/dcs?useUnicode=true&amp;characterEncoding=utf-8"
+                    userId="dcsuser" password="dcs_u_123">
+    </jdbcConnection>
+    <javaTypeResolver>
+      <property name="forceBigDecimals" value="false"/>
+    </javaTypeResolver>
+
+    <!-- 生成模型的包名和位置 -->
+    <javaModelGenerator targetPackage="com.jn.park.connect.entity"
+                        targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+      <property name="trimStrings" value="true"/>
+    </javaModelGenerator>
+
+    <!-- 生成映射文件的包名和位置 -->
+    <sqlMapGenerator targetPackage="mapping.generator.connect"
+                     targetProject="src/main/resources">
+      <property name="enableSubPackages" value="true"/>
+    </sqlMapGenerator>
+
+    <!-- 生成Mapper 接口的包名和位置-->
+    <javaClientGenerator type="XMLMAPPER"
+                         targetPackage="com.jn.park.connect.dao"
+                         targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+    </javaClientGenerator>
+
+    <table tableName="tb_service_connect_manage" alias="connect">
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+    </table>
+  </context>
+
+
+
+  <!--XQ00050智慧停车-->
+  <context id="parking">
+    <!-- 实现Serializable接口 -->
+    <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+    <!--覆盖生成XML文件-->
+    <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin" />
+    <!--在各个字段添加注解-->
+    <plugin type="com.jn.generator.CommentsPlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+      <property name="searchString" value="Example$"/>
+      <property name="replaceString" value="Criteria"/>
+    </plugin>
+    <commentGenerator>
+      <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
+      <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
+      <property name="suppressDate" value="true"/>
+      <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+      <property name="suppressAllComments" value="true"/>
+    </commentGenerator>
+    <!--数据库链接URL，用户名、密码 -->
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                    connectionURL="jdbc:mysql://192.168.10.28:3306/dcs?useUnicode=true&amp;characterEncoding=utf-8"
+                    userId="dcsuser" password="dcs_u_123">
+    </jdbcConnection>
+    <javaTypeResolver>
+      <property name="forceBigDecimals" value="false"/>
+    </javaTypeResolver>
+
+    <!-- 生成模型的包名和位置 -->
+    <javaModelGenerator targetPackage="com.jn.park.parking.entity"
+                        targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+      <property name="trimStrings" value="true"/>
+    </javaModelGenerator>
+
+    <!-- 生成映射文件的包名和位置 -->
+    <sqlMapGenerator targetPackage="mapping.generator.parking"
+                     targetProject="src/main/resources">
+      <property name="enableSubPackages" value="true"/>
+    </sqlMapGenerator>
+
+    <!-- 生成Mapper 接口的包名和位置-->
+    <javaClientGenerator type="XMLMAPPER"
+                         targetPackage="com.jn.park.parking.dao"
+                         targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+    </javaClientGenerator>
+
+    <!--智慧停车-停车位-->
+    <table tableName="tb_parking_space"  ></table>
+    <!--智慧停车-停车场-->
+    <table tableName="tb_parking_area" ></table>
+    <!--智慧停车-停车记录-->
+    <table tableName="tb_parking_record"></table>
+    <!--智慧停车-车位出租记录-->
+    <table tableName="tb_parking_space_rental"></table>
+    <!--智慧停车-停车优惠政策-->
+    <table tableName="tb_parking_preferential"></table>
+    <!--智慧停车-车辆信息-->
+    <table tableName="tb_parking_car_info"></table>
+    <!--智慧停车-车场服务关联表-->
+    <table tableName="tb_parking_service"></table>
+    <!--智慧停车-违停上报-->
+    <table tableName="tb_parking_violation"></table>
+    <!--智慧停车-停车场服务-->
+    <table tableName="tb_parking_service_type"></table>
+    <!--智慧停车-停车优惠政策-->
+    <table tableName="tb_parking_preferential_area"></table>
+  </context>
+
+ <!--XQ00008资产管理子系统-->
+    <context id="asset">
+      <!-- 实现Serializable接口 -->
+      <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+      <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+      <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+      <!--覆盖生成XML文件-->
+      <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin" />
+      <!--在各个字段添加注解-->
+      <plugin type="com.jn.generator.CommentsPlugin"></plugin>
+      <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+        <property name="searchString" value="Example$"/>
+        <property name="replaceString" value="Criteria"/>
+      </plugin>
+      <commentGenerator>
+        <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
+        <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
+        <property name="suppressDate" value="true"/>
+        <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+        <property name="suppressAllComments" value="true"/>
+      </commentGenerator>
+      <!--数据库链接URL，用户名、密码 -->
+      <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                      connectionURL="jdbc:mysql://192.168.10.28:3306/dcs?useUnicode=true&amp;characterEncoding=utf-8"
+                      userId="dcsuser" password="dcs_u_123">
+      </jdbcConnection>
+      <javaTypeResolver>
+        <property name="forceBigDecimals" value="false"/>
+      </javaTypeResolver>
+
+      <!-- 生成模型的包名和位置 -->
+      <javaModelGenerator targetPackage="com.jn.park.asset.entity"
+                          targetProject="src/main/java">
+        <property name="enableSubPackages" value="true"/>
+        <property name="trimStrings" value="true"/>
+      </javaModelGenerator>
+
+      <!-- 生成映射文件的包名和位置 -->
+      <sqlMapGenerator targetPackage="mapping.generator.asset"
+                       targetProject="src/main/resources">
+        <property name="enableSubPackages" value="true"/>
+      </sqlMapGenerator>
+
+      <!-- 生成Mapper 接口的包名和位置-->
+      <javaClientGenerator type="XMLMAPPER"
+                           targetPackage="com.jn.park.asset.dao"
+                           targetProject="src/main/java">
+        <property name="enableSubPackages" value="true"/>
+      </javaClientGenerator>
+
+      <!--楼宇管理-楼宇信息-->
+      <table tableName="tb_tower_information"></table>
+      <!--物品租赁-物品信息-->
+      <table tableName="tb_asset_article_lease"></table>
+      <!--物品租赁-物品租赁订单-->
+      <table tableName="tb_asset_article_lease_orders"></table>
+      <!--物品订单-支付中心关系表-->
+      <table tableName="tb_asset_article_lease_orders_pay"></table>
+      <!--资产管理-资产信息-->
+      <table tableName="tb_asset_information"></table>
+      <!--维保管理-维保信息-->
+      <table tableName="tb_asset_maintain_manage"></table>
+      <!--维保管理-维保信息记录-->
+      <table tableName="tb_asset_maintain_record"></table>
+      <!--维保厂家-->
+      <table tableName="tb_asset_maintain_company"></table>
+      <!--房间管理-房间信息-->
+      <table tableName="tb_room_information"></table>
+      <!--房间管理-房间订单-->
+      <table tableName="tb_room_orders"></table>
+      <!--房间订单-支付中心关系表-->
+      <table tableName="tb_room_orders_pay"></table>
+      <!--房间管理-房间订单(子)-->
+      <table tableName="tb_room_orders_item"></table>
+      <!--房间管理-房间分组-->
+      <table tableName="tb_room_group"></table>
+      <!--房间管理-缴费单-->
+      <table tableName="tb_room_orders_bill"></table>
     </context>
+
+
+  <!--XQ00016一区多园-->
+  <context id="park">
+    <!-- 实现Serializable接口 -->
+    <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+    <!--覆盖生成XML文件-->
+    <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin" />
+    <!--在各个字段添加注解-->
+    <plugin type="com.jn.generator.CommentsPlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+      <property name="searchString" value="Example$"/>
+      <property name="replaceString" value="Criteria"/>
+    </plugin>
+    <commentGenerator>
+      <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
+      <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
+      <property name="suppressDate" value="true"/>
+      <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+      <property name="suppressAllComments" value="true"/>
+    </commentGenerator>
+    <!--数据库链接URL，用户名、密码 -->
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                    connectionURL="jdbc:mysql://192.168.10.28:3306/dcs?useUnicode=true&amp;characterEncoding=utf-8"
+                    userId="dcsuser" password="dcs_u_123">
+    </jdbcConnection>
+    <javaTypeResolver>
+      <property name="forceBigDecimals" value="false"/>
+    </javaTypeResolver>
+
+    <!-- 生成模型的包名和位置 -->
+    <javaModelGenerator targetPackage="com.jn.park.park.entity"
+                        targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+      <property name="trimStrings" value="true"/>
+    </javaModelGenerator>
+
+    <!-- 生成映射文件的包名和位置 -->
+    <sqlMapGenerator targetPackage="mapping.generator.park"
+                     targetProject="src/main/resources">
+      <property name="enableSubPackages" value="true"/>
+    </sqlMapGenerator>
+
+    <!-- 生成Mapper 接口的包名和位置-->
+    <javaClientGenerator type="XMLMAPPER"
+                         targetPackage="com.jn.park.park.dao"
+                         targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+    </javaClientGenerator>
+
+    <!--  一区多园-->
+    <table tableName="tb_park"></table>
+
+  </context>
+
+  <!--政策中心-->
+  <context id="policy">
+    <!-- 实现Serializable接口 -->
+    <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+    <!--覆盖生成XML文件-->
+    <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin" />
+    <!--在各个字段添加注解-->
+    <plugin type="com.jn.generator.CommentsPlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+      <property name="searchString" value="Example$"/>
+      <property name="replaceString" value="Criteria"/>
+    </plugin>
+    <commentGenerator>
+      <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
+      <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
+      <property name="suppressDate" value="true"/>
+      <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+      <property name="suppressAllComments" value="true"/>
+    </commentGenerator>
+    <!--数据库链接URL，用户名、密码 -->
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                    connectionURL="jdbc:mysql://192.168.10.28:3306/dcs?useUnicode=true&amp;characterEncoding=utf-8"
+                    userId="dcsuser" password="dcs_u_123">
+    </jdbcConnection>
+    <javaTypeResolver>
+      <property name="forceBigDecimals" value="false"/>
+    </javaTypeResolver>
+
+    <!-- 生成模型的包名和位置 -->
+    <javaModelGenerator targetPackage="com.jn.park.policy.entity"
+                        targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+      <property name="trimStrings" value="true"/>
+    </javaModelGenerator>
+
+    <!-- 生成映射文件的包名和位置 -->
+    <sqlMapGenerator targetPackage="mapping.generator.policy"
+                     targetProject="src/main/resources">
+      <property name="enableSubPackages" value="true"/>
+    </sqlMapGenerator>
+
+    <!-- 生成Mapper 接口的包名和位置-->
+    <javaClientGenerator type="XMLMAPPER"
+                         targetPackage="com.jn.park.policy.dao"
+                         targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+    </javaClientGenerator>
+
+    <!--政策表-->
+    <table tableName="tb_policy"></table>
+    <!--政策分类码表-->
+    <table tableName="tb_policy_class"></table>
+    <!--政策详情表-->
+    <table tableName="tb_policy_details"></table>
+    <!--政策级别码表-->
+    <table tableName="tb_policy_level"></table>
+  </context>
+
+  <context id="plan">
+    <!-- 实现Serializable接口 -->
+    <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+      <property name="searchString" value="Example$"/>
+      <property name="replaceString" value="Criteria"/>
+    </plugin>
+    <commentGenerator>
+      <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
+      <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
+      <property name="suppressDate" value="true"/>
+      <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+      <property name="suppressAllComments" value="true"/>
+    </commentGenerator>
+    <!--数据库链接URL，用户名、密码 -->
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                    connectionURL="jdbc:mysql://192.168.10.28:3306/dcs?useUnicode=true&amp;characterEncoding=utf-8"
+                    userId="dcsuser" password="dcs_u_123">
+    </jdbcConnection>
+    <javaTypeResolver>
+      <property name="forceBigDecimals" value="false"/>
+    </javaTypeResolver>
+
+    <!-- 生成模型的包名和位置 -->
+    <javaModelGenerator targetPackage="com.jn.park.plan.entity"
+                        targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+      <property name="trimStrings" value="true"/>
+    </javaModelGenerator>
+
+    <!-- 生成映射文件的包名和位置 -->
+    <sqlMapGenerator targetPackage="mapping.generator.plan"
+                     targetProject="src/main/resources">
+      <property name="enableSubPackages" value="true"/>
+    </sqlMapGenerator>
+
+    <!-- 生成Mapper 接口的包名和位置-->
+    <javaClientGenerator type="XMLMAPPER"
+                         targetPackage="com.jn.park.plan.dao"
+                         targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+    </javaClientGenerator>
+
+    <table tableName="tb_plan_project" alias="project">
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+    </table>
+    <table tableName="tb_plan_project_d" alias="project_d">
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+    </table>
+    <table tableName="tb_plan_project_task" alias="project_task">
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+    </table>
+    <table tableName="tb_plan_project_task_process" alias="project_task_process">
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
+    </table>
+  </context>
+
+  <!--客服中心-->
+  <context id="customer">
+    <!-- 实现Serializable接口 -->
+    <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+    <!--覆盖生成XML文件-->
+    <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin" />
+    <!--在各个字段添加注解-->
+    <plugin type="com.jn.generator.CommentsPlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+      <property name="searchString" value="Example$"/>
+      <property name="replaceString" value="Criteria"/>
+    </plugin>
+    <commentGenerator>
+      <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
+      <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
+      <property name="suppressDate" value="true"/>
+      <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+      <property name="suppressAllComments" value="true"/>
+    </commentGenerator>
+    <!--数据库链接URL，用户名、密码 -->
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                    connectionURL="jdbc:mysql://192.168.10.28:3306/dcs?useUnicode=true&amp;characterEncoding=utf-8"
+                    userId="dcsuser" password="dcs_u_123">
+    </jdbcConnection>
+    <javaTypeResolver>
+      <property name="forceBigDecimals" value="false"/>
+    </javaTypeResolver>
+
+    <!-- 生成模型的包名和位置 -->
+    <javaModelGenerator targetPackage="com.jn.park.customer.entity"
+                        targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+      <property name="trimStrings" value="true"/>
+    </javaModelGenerator>
+
+    <!-- 生成映射文件的包名和位置 -->
+    <sqlMapGenerator targetPackage="mapping.generator.customer"
+                     targetProject="src/main/resources">
+      <property name="enableSubPackages" value="true"/>
+    </sqlMapGenerator>
+
+    <!-- 生成Mapper 接口的包名和位置-->
+    <javaClientGenerator type="XMLMAPPER"
+                         targetPackage="com.jn.park.customer.dao"
+                         targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+    </javaClientGenerator>
+
+    <!--客服中心表-->
+    <table tableName="tb_client_service_center"></table>
+    <!--客服处理角色所属用户信息-->
+    <table tableName="tb_client_role_person_info"></table>
+    <!--客服处理问题图片表-->
+    <table tableName="tb_client_execute_img"></table>
+
+  </context>
+
+    <!--招商管理-->
+  <context id="attractinvest">
+    <!-- 实现Serializable接口 -->
+    <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+    <!--覆盖生成XML文件-->
+    <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"/>
+    <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+      <property name="searchString" value="Example$"/>
+      <property name="replaceString" value="Criteria"/>
+    </plugin>
+    <commentGenerator>
+      <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
+      <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
+      <property name="suppressDate" value="true"/>
+      <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+      <property name="suppressAllComments" value="true"/>
+    </commentGenerator>
+    <!--数据库链接URL，用户名、密码 -->
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                    connectionURL="jdbc:mysql://192.168.10.28:3306/dcs?useUnicode=true&amp;characterEncoding=utf-8&amp;tinyInt1isBit=false"
+                    userId="dcsuser" password="dcs_u_123">
+    </jdbcConnection>
+    <javaTypeResolver>
+      <property name="forceBigDecimals" value="false"/>
+    </javaTypeResolver>
+
+    <!-- 生成模型的包名和位置 -->
+    <javaModelGenerator targetPackage="com.jn.park.attractinvest.entity"
+                        targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+      <property name="trimStrings" value="true"/>
+    </javaModelGenerator>
+
+    <!-- 生成映射文件的包名和位置 -->
+    <sqlMapGenerator targetPackage="mapping.generator.attractinvest"
+                     targetProject="src/main/resources">
+      <property name="enableSubPackages" value="true"/>
+    </sqlMapGenerator>
+
+    <!-- 生成Mapper 接口的包名和位置-->
+    <javaClientGenerator type="XMLMAPPER"
+                         targetPackage="com.jn.park.attractinvest.dao"
+                         targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+    </javaClientGenerator>
+
+    <!--招商管理-招商信息管理表-->
+    <table tableName="tb_business_ad_content"></table>
+    <!--招商管理-招商动态管理表-->
+    <table tableName="tb_business_ad_dynamic"></table>
+    <!--招商管理-招商政策管理表-->
+    <table tableName="tb_business_ad_policy"></table>
+    <!--招商管理-项目管理表-->
+    <table tableName="tb_project_info"></table>
+    <!--招商管理-项目入驻企业租赁信息管理表-->
+    <table tableName="tb_project_enter_details"></table>
+
+  </context>
+
+
+  <!--孵化企业-->
+  <context id="hatch">
+    <!-- 实现Serializable接口 -->
+    <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+    <!--覆盖生成XML文件-->
+    <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"/>
+    <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+      <property name="searchString" value="Example$"/>
+      <property name="replaceString" value="Criteria"/>
+    </plugin>
+    <commentGenerator>
+      <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
+      <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
+      <property name="suppressDate" value="true"/>
+      <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+      <property name="suppressAllComments" value="true"/>
+    </commentGenerator>
+    <!--数据库链接URL，用户名、密码 -->
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                    connectionURL="jdbc:mysql://192.168.10.28:3306/dcs?useUnicode=true&amp;characterEncoding=utf-8"
+                    userId="dcsuser" password="dcs_u_123">
+    </jdbcConnection>
+    <javaTypeResolver>
+      <property name="forceBigDecimals" value="false"/>
+    </javaTypeResolver>
+
+    <!-- 生成模型的包名和位置 -->
+    <javaModelGenerator targetPackage="com.jn.park.hatch.entity"
+                        targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+      <property name="trimStrings" value="true"/>
+    </javaModelGenerator>
+
+    <!-- 生成映射文件的包名和位置 -->
+    <sqlMapGenerator targetPackage="mapping.generator.hatch"
+                     targetProject="src/main/resources">
+      <property name="enableSubPackages" value="true"/>
+    </sqlMapGenerator>
+
+    <!-- 生成Mapper 接口的包名和位置-->
+    <javaClientGenerator type="XMLMAPPER"
+                         targetPackage="com.jn.park.hatch.dao"
+                         targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+    </javaClientGenerator>
+
+    <table tableName="tb_hatch_enterprise_nature">
+    </table>
+    <table tableName="tb_hatch_enterprise_tech">
+    </table>
+    <table tableName="tb_hatch_enterprise_type">
+    </table>
+    <table tableName="tb_hatch_home_config">
+    </table>
+    <table tableName="tb_hatch_incubator">
+    </table>
+    <table tableName="tb_hatch_incubator_enterprise">
+    </table>
+    <table tableName="tb_hatch_incubator_team">
+    </table>
+    <table tableName="tb_hatch_incubator_type">
+    </table>
+    <table tableName="tb_hatch_incubator_enterprise_and_team">
+    </table>
+
+  </context>
+
+  <!--XQ00007物业服务管理子系统-电表相关-->
+  <context id="electric">
+    <!-- 实现Serializable接口 -->
+    <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+    <!--覆盖生成XML文件-->
+    <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin" />
+    <!--在各个字段添加注解-->
+    <plugin type="com.jn.generator.CommentsPlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+      <property name="searchString" value="Example$"/>
+      <property name="replaceString" value="Criteria"/>
+    </plugin>
+    <commentGenerator>
+      <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
+      <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
+      <property name="suppressDate" value="true"/>
+      <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+      <property name="suppressAllComments" value="true"/>
+    </commentGenerator>
+    <!--数据库链接URL，用户名、密码 -->
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                    connectionURL="jdbc:mysql://192.168.10.28:3306/dcs?useUnicode=true&amp;characterEncoding=utf-8"
+                    userId="dcsuser" password="dcs_u_123">
+    </jdbcConnection>
+    <javaTypeResolver>
+      <property name="forceBigDecimals" value="false"/>
+    </javaTypeResolver>
+
+    <!-- 生成模型的包名和位置 -->
+    <javaModelGenerator targetPackage="com.jn.park.electricmeter.entity"
+                        targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+      <property name="trimStrings" value="true"/>
+    </javaModelGenerator>
+
+    <!-- 生成映射文件的包名和位置 -->
+    <sqlMapGenerator targetPackage="mapping.generator.electricmeter"
+                     targetProject="src/main/resources">
+      <property name="enableSubPackages" value="true"/>
+    </sqlMapGenerator>
+
+    <!-- 生成Mapper 接口的包名和位置-->
+    <javaClientGenerator type="XMLMAPPER"
+                         targetPackage="com.jn.park.electricmeter.dao"
+                         targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+    </javaClientGenerator>
+
+
+    <table tableName="tb_electric_energy_control_person_config"></table>
+    <table tableName="tb_electric_energy_control_push_log"></table>
+    <table tableName="tb_electric_energy_control_rules"></table>
+    <table tableName="tb_electric_energy_control_target"></table>
+    <table tableName="tb_electric_energy_day_log"></table>
+    <table tableName="tb_electric_energy_group_log"></table>
+    <table tableName="tb_electric_meter_company_day"></table>
+    <table tableName="tb_electric_meter_day_log"></table>
+    <table tableName="tb_electric_meter_info"></table>
+    <table tableName="tb_electric_price_rules"></table>
+    <table tableName="tb_electric_pricerule_company"></table>
+    <table tableName="tb_electric_pricerule_company_in_day"></table>
+    <table tableName="tb_electric_reading"></table>
+    <table tableName="tb_electric_rules_content"></table>
+    <table tableName="tb_electric_turn_rules"></table>
+    <table tableName="tb_electric_warning_record"></table>
+    <table tableName="tb_electric_warning_rules"></table>
+    <table tableName="tb_electric_reading_source"></table>
+    <table tableName="tb_electric_reading_fail_log"></table>
+    <table tableName="tb_electric_cost"></table>
+    <table tableName="tb_electric_error_log"></table>
+    <table tableName="tb_electric_energy_bill"></table>
+    <table tableName="tb_electric_energy_bill_detail"></table>
+    <table tableName="tb_electric_meter_switch_log"></table>
+    <!--电量规则监控信息视图-->
+    <table tableName="v_electric_rules_info"></table>
+  </context>
+  <!--物业维修-->
+  <context id="repair">
+    <!-- 实现Serializable接口 -->
+    <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+      <property name="searchString" value="Example$"/>
+      <property name="replaceString" value="Criteria"/>
+    </plugin>
+    <commentGenerator>
+      <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
+      <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
+      <property name="suppressDate" value="true"/>
+      <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+      <property name="suppressAllComments" value="true"/>
+    </commentGenerator>
+    <!--数据库链接URL，用户名、密码 -->
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                    connectionURL="jdbc:mysql://192.168.10.28:3306/dcs?useUnicode=true&amp;characterEncoding=utf-8&amp;tinyInt1isBit=false"
+                    userId="dcsuser" password="dcs_u_123">
+    </jdbcConnection>
+    <javaTypeResolver>
+      <property name="forceBigDecimals" value="false"/>
+    </javaTypeResolver>
+
+    <!-- 生成模型的包名和位置 -->
+    <javaModelGenerator targetPackage="com.jn.park.repair.entity"
+                        targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+      <property name="trimStrings" value="true"/>
+    </javaModelGenerator>
+
+    <!-- 生成映射文件的包名和位置 -->
+    <sqlMapGenerator targetPackage="mapping.generator.repair"
+                     targetProject="src/main/resources">
+      <property name="enableSubPackages" value="true"/>
+    </sqlMapGenerator>
+
+    <!-- 生成Mapper 接口的包名和位置-->
+    <javaClientGenerator type="XMLMAPPER"
+                         targetPackage="com.jn.park.repair.dao"
+                         targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+    </javaClientGenerator>
+    <table tableName="tb_pm_repair">
+    </table>
+  </context>
+
+  <!--物业缴费-->
+  <context id="pmpaybill">
+    <!-- 实现Serializable接口 -->
+    <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+    <!--覆盖生成XML文件-->
+    <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"/>
+    <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+      <property name="searchString" value="Example$"/>
+      <property name="replaceString" value="Criteria"/>
+    </plugin>
+    <commentGenerator>
+      <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
+      <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
+      <property name="suppressDate" value="true"/>
+      <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+      <property name="suppressAllComments" value="true"/>
+    </commentGenerator>
+    <!--数据库链接URL，用户名、密码 -->
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                    connectionURL="jdbc:mysql://192.168.10.28:3306/dcs?useUnicode=true&amp;characterEncoding=utf-8&amp;tinyInt1isBit=false"
+                    userId="dcsuser" password="dcs_u_123">
+    </jdbcConnection>
+    <javaTypeResolver>
+      <property name="forceBigDecimals" value="false"/>
+    </javaTypeResolver>
+
+    <!-- 生成模型的包名和位置 -->
+    <javaModelGenerator targetPackage="com.jn.park.pmpaybill.entity"
+                        targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+      <property name="trimStrings" value="true"/>
+    </javaModelGenerator>
+
+    <!-- 生成映射文件的包名和位置 -->
+    <sqlMapGenerator targetPackage="mapping.generator.pmpaybill"
+                     targetProject="src/main/resources">
+      <property name="enableSubPackages" value="true"/>
+    </sqlMapGenerator>
+
+    <!-- 生成Mapper 接口的包名和位置-->
+    <javaClientGenerator type="XMLMAPPER"
+                         targetPackage="com.jn.park.pmpaybill.dao"
+                         targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+    </javaClientGenerator>
+
+    <!-- 缴费单管理表-->
+    <table tableName="tb_pm_pay_bill"></table>
+    <!-- 收费规则管理-->
+    <table tableName="tb_pm_pay_rule"></table>
+    <!-- 收费规则管理明细表-->
+    <table tableName="tb_pm_pay_rule_object"></table>
+    <!-- 缴费单-类型条目管理表-->
+    <table tableName="tb_pm_pay_bill_item"></table>
+    <!-- 缴费单-类型条目物业费明细管理表-->
+    <table tableName="tb_pm_pay_bill_item_pm_list"></table>
+    <!-- 物业单价规则管理表-->
+    <table tableName="tb_pm_price_rules"></table>
+    <!-- 物业单价规则明细表-->
+    <table tableName="tb_pm_price_rule_deatils"></table>
+
+  </context>
+
+  <!--XQ00007物业服务管理子系统-电表相关-->
+  <context id="video">
+    <!-- 实现Serializable接口 -->
+    <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+    <!--覆盖生成XML文件-->
+    <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin" />
+    <!--在各个字段添加注解-->
+    <plugin type="com.jn.generator.CommentsPlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+      <property name="searchString" value="Example$"/>
+      <property name="replaceString" value="Criteria"/>
+    </plugin>
+    <commentGenerator>
+      <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
+      <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
+      <property name="suppressDate" value="true"/>
+      <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+      <property name="suppressAllComments" value="true"/>
+    </commentGenerator>
+    <!--数据库链接URL，用户名、密码 -->
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                    connectionURL="jdbc:mysql://192.168.10.28:3306/dcs?useUnicode=true&amp;characterEncoding=utf-8"
+                    userId="dcsuser" password="dcs_u_123">
+    </jdbcConnection>
+    <javaTypeResolver>
+      <property name="forceBigDecimals" value="false"/>
+    </javaTypeResolver>
+
+    <!-- 生成模型的包名和位置 -->
+    <javaModelGenerator targetPackage="com.jn.park.video.entity"
+                        targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+      <property name="trimStrings" value="true"/>
+    </javaModelGenerator>
+
+    <!-- 生成映射文件的包名和位置 -->
+    <sqlMapGenerator targetPackage="mapping.generator.video"
+                     targetProject="src/main/resources">
+      <property name="enableSubPackages" value="true"/>
+    </sqlMapGenerator>
+
+    <!-- 生成Mapper 接口的包名和位置-->
+    <javaClientGenerator type="XMLMAPPER"
+                         targetPackage="com.jn.park.video.dao"
+                         targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+    </javaClientGenerator>
+
+
+    <table tableName="tb_pm_video"></table>
+    <table tableName="tb_pm_video_item"></table>
+    <table tableName="tb_video_info"></table>
+  </context>
+
 </generatorConfiguration>

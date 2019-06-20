@@ -101,11 +101,11 @@ export default {
   },
   methods: {
     goEnter() {
-      this.showMes = !showMes
+      this.showMes = !this.showMes
       this.menuFlag = false
     },
     goImg(){
-      this,menuFlag=!menuFlag
+      this.menuFlag=!this.menuFlag
       this.showMes=false
     },
     goRoute(i) {

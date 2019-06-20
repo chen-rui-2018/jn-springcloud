@@ -476,7 +476,7 @@ export default {
     .d3 {
       margin-top: 10px;
       p {
-        font-size: 13px;
+        // font-size: 13px;
         line-height: 20px;
         margin-top: 5px;
       }

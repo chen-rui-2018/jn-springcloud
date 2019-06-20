@@ -137,8 +137,8 @@
             <ul class="inverUl">
               <li class="clearfix">
                 <div class="liLeft fl">
-                  <div class="intorImgLar" v-if="InvestorInfoList.length > 0">
-                    <img class="pointer" v-if="InvestorInfoList[0].avatar" :src="InvestorInfoList[0].avatar" alt="" @click="$router.push({path:'/investorDetail',query: { investorAccount: InvestorInfoList[0].investorAccount }})">
+                  <div class="intorImgLar">
+                    <img class="pointer"  v-if="InvestorInfoList.length > 0" :src="InvestorInfoList[0].avatar" alt="" @click="$router.push({path:'/investorDetail',query: { investorAccount: InvestorInfoList[0].investorAccount }})">
                     <img class="pointer" v-else src="@/../static/img/larImg.png" alt="" @click="$router.push({path:'/investorDetail',query: { investorAccount: InvestorInfoList[0].investorAccount }})">
                   </div>
                   <div class="leftInfo" v-if="InvestorInfoList.length > 0">
@@ -499,7 +499,6 @@ export default {
     this.getInvestorInfoList();
     this.getFinancialProList();
     this.selectServiceOrgList();
-    this.selectIndustryList();
   },
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
@@ -511,12 +510,12 @@ export default {
     },
     //判断是否登录
     isLogin() {
-      if (!sessionStorage.userInfo) {
+      if (!this.getToken()) {
         this.islogin = false;
       }
     },
     handleInvertor() {
-      if (!sessionStorage.userInfo) {
+      if (!this.getToken()) {
         this.concatVisible = true;
         return;
       }
@@ -640,10 +639,6 @@ export default {
     },
     //提需求
     raiseDemand(i) {
-      // if (!sessionStorage.userInfo) {
-      //   this.$message.error("请先登录");
-      //   return;
-      // }
       this.isLogin();
       this.financialProVisible = true;
       this.financialProform.expectedDate = "";
@@ -708,22 +703,6 @@ export default {
             _this.ServiceOrgList = res.data.rows;
           } else {
             _this.$message.error(res.result);
-          }
-        }
-      });
-    },
-    //机构字典
-    selectIndustryList() {
-      let _this = this;
-      this.api.get({
-        url: "selectIndustryList",
-        data: {
-          id: "",
-          preType: "0",
-          preValue: ""
-        },
-        callback: function(res) {
-          if (res.code == "0000") {
           }
         }
       });

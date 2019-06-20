@@ -20,7 +20,7 @@ public interface WxService {
     /**
      * oauth2授权的url连接.
      */
-    String CONNECT_OAUTH2_AUTHORIZE_URL = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=%s&state=%s&connect_redirect=1#wechat_redirect";
+    String CONNECT_OAUTH2_AUTHORIZE_URL = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=%s&state=%s#wechat_redirect";
 
     /**
      * 用code换取oauth2的access token.
@@ -31,6 +31,16 @@ public interface WxService {
      * 用oauth2获取用户信息.
      */
     String OAUTH2_USERINFO_URL = "https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s&lang=%s";
+
+    /**
+     * 检验授权凭证（access_token）是否有效
+     */
+    String OAUTH2_JUDGE_EFFECTIVE_URL = "https://api.weixin.qq.com/sns/auth?access_token=%s&openid=%s";
+
+    /**
+     * 刷新access_token（如果需要）
+     */
+    String OAUTH2_REFRESH_TOKEN_URL = "https://api.weixin.qq.com/sns/oauth2/refresh_token?appid=%s&grant_type=refresh_token&refresh_token=%s";
 
     /**
      * 验证消息的确来自微信服务器.

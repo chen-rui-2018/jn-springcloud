@@ -163,9 +163,9 @@
           </el-tab-pane>
           <el-tab-pane label="图解政策" name="second">
             <ul class="finaUl clearfix">
-              <li class="mainBorder" v-for="(i,k) in policyCenterList" :key="k">
+              <li class="mainBorder pointer" v-for="(i,k) in policyCenterList" :key="k" @click="$router.push({path:'/graphicPolicy',query:{policyId:i.policyId}})">
                 <!-- <img src="@/../static/img/midBan.png" alt=""> -->
-                <div class="finaProItem pointer" @click="$router.push({path:'/graphicPolicy',query:{policyId:i.policyId}})">
+                <div class="finaProItem pointer">
                   <img :src="i.policyDiagramUrl" alt="">
                 </div>
                 <div class="finaDiv1">
@@ -184,7 +184,7 @@
           </el-tab-pane>
           <el-tab-pane label="一号专题" name="third">
             <ul class="policyUl11 clearfix">
-              <li class="mainBorder" v-for="(i,k) in policyCenterList" :key="k">
+              <li class="mainBorder pointer" v-for="(i,k) in policyCenterList" :key="k" @click="$router.push({path:'/policyGuide',query:{policyId:i.policyId}})">
                 <!-- <img src="@/../static/img/midBan.png" alt=""> -->
                 <div class="finaProItem">
                   <img :src="i.policyDiagramUrl" alt="">
@@ -200,7 +200,7 @@
           </el-tab-pane>
           <el-tab-pane label="民营专题" name="fourth">
             <ul class="policyUl22 clearfix">
-              <li class="mainBorder" v-for="(i,k) in policyCenterList" :key="k">
+              <li class="mainBorder pointer" v-for="(i,k) in policyCenterList" :key="k" @click="$router.push({path:'/policyGuide',query:{policyId:i.policyId}})">
                 <!-- <img src="@/../static/img/midBan.png" alt=""> -->
                 <div class="finaProItem">
                   <img :src="i.policyDiagramUrl" alt="">
@@ -887,9 +887,10 @@ export default {
           > .finaProItem {
             width: 280px;
             height: 150px;
+            overflow: hidden;
             > img {
               width: 100%;
-              height: 100%;
+              // height: 100%;
             }
           }
         }

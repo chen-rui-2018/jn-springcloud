@@ -34,7 +34,7 @@
           </div>
         </a>
         <div class="imgU" @mouseenter="goImg">
-          <img v-if="userInfo&&userInfoData.avatar" :src="userInfoData.avatar" style="vertical-align: middle;">
+          <img v-if="userInfoData && userInfoData.avatar" :src="userInfoData.avatar" style="vertical-align: middle;">
           <img v-else src="@/../static/img/smaImg.png">
         </div>
       </template>
@@ -101,11 +101,11 @@ export default {
   },
   methods: {
     goEnter() {
-      this.showMes = !showMes
+      this.showMes = !this.showMes
       this.menuFlag = false
     },
     goImg(){
-      this,menuFlag=!menuFlag
+      this.menuFlag=!this.menuFlag
       this.showMes=false
     },
     goRoute(i) {

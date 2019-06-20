@@ -80,7 +80,7 @@
             <!-- <span>{{unifyCode}}</span> -->
           </el-form-item>
           <el-form-item label="企业性质:" lass="inline" prop="comProperty">
-            <el-select v-model="businessForm.comProperty" placeholder="请选择企业性质" clearable>
+            <el-select v-model="businessForm.comProperty" multiple placeholder="请选择企业性质" clearable :multiple-limit=3>
               <el-option v-for="item in comPropertyOptions" :key="item.id" :label="item.preValue" :value="item.id">
               </el-option>
             </el-select>
@@ -106,11 +106,11 @@
         <div style="display:flex">
           <el-form-item label="我的服务:" lass="inline" prop="comServer">
             <label slot="label">&nbsp;&nbsp;&nbsp;&nbsp;我的服务:</label>
-            <el-input v-model="businessForm.comServer" clearable></el-input>
+            <el-input v-model="businessForm.comServer" clearable maxlength=20></el-input>
           </el-form-item>
           <el-form-item label="我的需求:" lass="inline" prop="comDemand">
             <label slot="label">&nbsp;&nbsp;&nbsp;我的需求:</label>
-            <el-input v-model="businessForm.comDemand" clearable></el-input>
+            <el-input v-model="businessForm.comDemand" clearable maxlength=20></el-input>
           </el-form-item>
 
         </div>
@@ -152,7 +152,7 @@
 </template>
 
 <script>
-import { getToken } from '@/util/auth'
+import { getToken } from "@/util/auth";
 export default {
   data() {
     var checkPhoneNumber = (rule, value, callback) => {
@@ -179,8 +179,24 @@ export default {
         callback();
       }
     };
+    var checkNumber = (rule, value, callback) => {
+      const reg = /^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/;
+      if (!reg.test(value)) {
+        callback("请输入大于0的数字");
+      } else {
+        callback();
+      }
+    };
+     var checkComScale = (rule, value, callback) => {
+      const reg = /^[1-9][0-9]*$/;
+      if (!reg.test(value)) {
+        callback("请输入大于0的整数");
+      } else {
+        callback();
+      }
+    };
     return {
-      loading:false,
+      loading: false,
       baseUrl: this.api.host,
       fileList: [],
       showImg: false,
@@ -212,7 +228,7 @@ export default {
       induTypeOptions: [],
       userAccount: "",
       businessForm: {
-        comProperty: "",
+        comProperty: [],
         affiliatedPark: "",
         comServer: "", //我的服务
         comDemand: "", //我的需求
@@ -265,10 +281,12 @@ export default {
           // { required: false, message: "", trigger: "blur" }
         ],
         regCapital: [
-          { required: true, message: "请输入注册资金", trigger: "blur" }
+          { required: true, message: "请输入注册资金", trigger: "blur" },
+          { validator: checkNumber, trigger: "blur" }
         ],
         comScale: [
-          { required: true, message: "请输入企业规模", trigger: "blur" }
+          { required: true, message: "请输入企业规模", trigger: "blur" },
+          { validator: checkComScale, trigger: "blur" }
         ],
         unifyCode: [
           { required: true, message: "请输入统一社会信用代码", trigger: "blur" }
@@ -285,9 +303,9 @@ export default {
         // comDemand: [
         //   { required: true, message: "请输入我的需求", trigger: "blur" }
         // ],
-        comWeb: [
-          { required: true, message: "请输入企业官网地址", trigger: "blur" }
-        ],
+        // comWeb: [
+        //   { required: true, message: "请输入企业官网地址", trigger: "blur" }
+        // ],
         comAddress: [
           { required: true, message: "请输入注册地址", trigger: "blur" }
         ],
@@ -318,14 +336,17 @@ export default {
     this.getParkList();
   },
   methods: {
-    submitCompany(formName) {     
+    submitCompany(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          if(new Date(this.businessForm.runTime)<new Date(this.businessForm.foundingTime)){
-             this.$message.error('落地时间须大于注册时间');
-             return false
+          if (
+            new Date(this.businessForm.runTime) <
+            new Date(this.businessForm.foundingTime)
+          ) {
+            this.$message.error("落地时间须大于注册时间");
+            return false;
           }
-          this.loading=true
+          this.loading = true;
           let _this = this;
           this.api.post({
             url: "changeToCompany",
@@ -343,7 +364,7 @@ export default {
               regCapital: _this.businessForm.regCapital,
               comScale: _this.businessForm.comScale,
               unifyCode: _this.businessForm.unifyCode,
-              comProperty: _this.businessForm.comProperty,
+              comProperty: _this.businessForm.comProperty.join(','),
               affiliatedPark: _this.businessForm.affiliatedPark,
               comSource: _this.businessForm.comSource,
               comServer: _this.businessForm.comServer,
@@ -354,12 +375,13 @@ export default {
               checkCode: _this.businessForm.checkCode
             },
             callback: function(res) {
-              _this.loading=false
+              _this.loading = false;
               if (res.code == "0000") {
                 _this.$message.success("提交成功，等待审核");
                 _this.$refs["businessForm"].resetFields();
               } else {
                 _this.$message.error(res.result);
+                _this.businessForm.comProperty.split(',')
                 return false;
               }
             }
@@ -384,24 +406,36 @@ export default {
     },
     //获取验证码
     getCode() {
-      let _this = this;
-      this.api.get({
-        url: "getUserCode",
-        data: {},
-        callback: function(res) {
-          if (res.code == "0000") {
-            _this.sendAuthCode = false;
-            _this.auth_time = 60;
-            var auth_timetimer = setInterval(() => {
-              _this.auth_time--;
-              if (_this.auth_time <= 0) {
-                _this.sendAuthCode = true;
-                clearInterval(auth_timetimer);
-              }
-            }, 1000);
-          } else {
-            _this.$message.error(res.result);
+      this.$refs["businessForm"].validate(valid => {
+        if (valid) {
+          if (
+            new Date(this.businessForm.runTime) <
+            new Date(this.businessForm.foundingTime)
+          ) {
+            this.$message.error("落地时间须大于注册时间");
+            return false;
           }
+          let _this = this;
+          this.api.get({
+            url: "getUserCode",
+            data: {},
+            callback: function(res) {
+              if (res.code == "0000") {
+                _this.$message.success(res.data);
+                _this.sendAuthCode = false;
+                _this.auth_time = 60;
+                var auth_timetimer = setInterval(() => {
+                  _this.auth_time--;
+                  if (_this.auth_time <= 0) {
+                    _this.sendAuthCode = true;
+                    clearInterval(auth_timetimer);
+                  }
+                }, 1000);
+              } else {
+                _this.$message.error(res.result);
+              }
+            }
+          });
         }
       });
     },

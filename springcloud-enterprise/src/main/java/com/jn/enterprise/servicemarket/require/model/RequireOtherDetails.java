@@ -14,6 +14,8 @@ import java.util.Date;
  */
 @ApiModel(value = "RequireOtherDetails", description = "对他人的需求详情")
 public class RequireOtherDetails implements Serializable {
+    @ApiModelProperty(value = "需求id")
+    private String id;
     @ApiModelProperty(value = "企业名称")
     private String companyName;
     @ApiModelProperty(value = "需求单号")
@@ -36,11 +38,24 @@ public class RequireOtherDetails implements Serializable {
     private String requireDetail;
     @ApiModelProperty(value="需求状态, (-1:已撤销 1：待处理，2：已处理)")
     private String status;
+    @ApiModelProperty(value = "合同总金额")
+    private String contractAmount;
+    @ApiModelProperty(value = "对接结果(1:对接成功  2:对接失败  3:企业需求撤销 4:未对接)")
+    private String handleResult;
+    @ApiModelProperty(value = "结果描述")
+    private String resultDetail;
+    @ApiModelProperty(value = "合同首页")
+    private String contractHomePage;
+    @ApiModelProperty(value = "合同尾页")
+    private String contractEndPage;
+
 
     @ApiModelProperty(value = "[科技金融]融资金额")
     private String financingAmount;
     @ApiModelProperty(value = "[科技金融]融资期限")
     private String financingPeriod;
+    @ApiModelProperty(value = "[科技金融]实际贷款金额(万元)")
+    private String actualLoanAmount;
     @ApiModelProperty(value = "[科技金融]资金需求说明")
     private String fundsReqDesc;
     @ApiModelProperty(value = "[科技金融]资金需求日期")
@@ -51,13 +66,12 @@ public class RequireOtherDetails implements Serializable {
     @ApiModelProperty(value = "评价描述")
     private String evaluationDesc;
 
-
-    public String getStatus() {
-        return status;
+    public String getId() {
+        return id;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getCompanyName() {
@@ -140,6 +154,54 @@ public class RequireOtherDetails implements Serializable {
         this.requireDetail = requireDetail;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getContractAmount() {
+        return contractAmount;
+    }
+
+    public void setContractAmount(String contractAmount) {
+        this.contractAmount = contractAmount;
+    }
+
+    public String getHandleResult() {
+        return handleResult;
+    }
+
+    public void setHandleResult(String handleResult) {
+        this.handleResult = handleResult;
+    }
+
+    public String getResultDetail() {
+        return resultDetail;
+    }
+
+    public void setResultDetail(String resultDetail) {
+        this.resultDetail = resultDetail;
+    }
+
+    public String getContractHomePage() {
+        return contractHomePage;
+    }
+
+    public void setContractHomePage(String contractHomePage) {
+        this.contractHomePage = contractHomePage;
+    }
+
+    public String getContractEndPage() {
+        return contractEndPage;
+    }
+
+    public void setContractEndPage(String contractEndPage) {
+        this.contractEndPage = contractEndPage;
+    }
+
     public String getFinancingAmount() {
         return financingAmount;
     }
@@ -172,6 +234,14 @@ public class RequireOtherDetails implements Serializable {
         this.expectedDate = expectedDate;
     }
 
+    public String getActualLoanAmount() {
+        return actualLoanAmount;
+    }
+
+    public void setActualLoanAmount(String actualLoanAmount) {
+        this.actualLoanAmount = actualLoanAmount;
+    }
+
     public String getRatingScore() {
         return ratingScore;
     }
@@ -191,7 +261,8 @@ public class RequireOtherDetails implements Serializable {
     @Override
     public String toString() {
         return "RequireOtherDetails{" +
-                "companyName='" + companyName + '\'' +
+                "id='" + id + '\'' +
+                ", companyName='" + companyName + '\'' +
                 ", reqNum='" + reqNum + '\'' +
                 ", issueTime=" + issueTime +
                 ", orgName='" + orgName + '\'' +
@@ -201,10 +272,19 @@ public class RequireOtherDetails implements Serializable {
                 ", reqPhone='" + reqPhone + '\'' +
                 ", reqEmail='" + reqEmail + '\'' +
                 ", requireDetail='" + requireDetail + '\'' +
+                ", status='" + status + '\'' +
+                ", contractAmount='" + contractAmount + '\'' +
+                ", handleResult='" + handleResult + '\'' +
+                ", resultDetail='" + resultDetail + '\'' +
+                ", contractHomePage='" + contractHomePage + '\'' +
+                ", contractEndPage='" + contractEndPage + '\'' +
                 ", financingAmount='" + financingAmount + '\'' +
                 ", financingPeriod='" + financingPeriod + '\'' +
+                ", actualLoanAmount='" + actualLoanAmount + '\'' +
                 ", fundsReqDesc='" + fundsReqDesc + '\'' +
-                ", expectedDate=" + expectedDate +
+                ", expectedDate='" + expectedDate + '\'' +
+                ", ratingScore='" + ratingScore + '\'' +
+                ", evaluationDesc='" + evaluationDesc + '\'' +
                 '}';
     }
 }

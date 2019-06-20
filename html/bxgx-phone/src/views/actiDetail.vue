@@ -94,7 +94,8 @@ export default {
   created () {
     this.actiDel()
   },
-  mounted () {},
+  mounted () {
+  },
   destroyed () {
     clearInterval(this._interval)
   },
@@ -159,8 +160,12 @@ export default {
             // _this.$message.success('点赞成功')
             // _this.accountIsLike = true
             // window.location.href = 'protocol://android?code=toast&data=' + _this.actiForm.actiLike
-            _this.dispatch(document.queryselector('.attention'), 'click')
-            document.queryselector('.attention').click(_this.actiForm.actiLike)
+            if (this.$route.query.isMini) {
+
+            } else {
+              _this.dispatch(document.queryselector('.attention'), 'click')
+              document.queryselector('.attention').click(_this.actiForm.actiLike)
+            }
           } else {
             _this.$vux.toast.text(res.result)
           }

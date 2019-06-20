@@ -2771,7 +2771,7 @@ img {
 
 .portalIndex .banner .quickEnter > ul,
 .enterpriseservice .banner .quickEnter > ul {
-  padding: 0 300px;
+  padding: 0 100px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;

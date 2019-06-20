@@ -34,7 +34,7 @@
           </div>
         </a>
         <div class="imgU" @mouseenter="goImg">
-          <img v-if="userInfo&&userInfoData.avatar" :src="userInfoData.avatar" style="vertical-align: middle;">
+          <img v-if="userInfoData && userInfoData.avatar" :src="userInfoData.avatar" style="vertical-align: middle;">
           <img v-else src="@/../static/img/smaImg.png">
         </div>
       </template>

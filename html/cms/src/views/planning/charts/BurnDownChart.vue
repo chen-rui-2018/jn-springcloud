@@ -55,21 +55,6 @@ export default {
   methods: {
     initChart() {
       const opts = this.chartopts // 图表参数
-      if (opts.arrayModel.createdTime) {
-        var dateData = opts.arrayModel.createdTime // 项目月份周期数组  ;
-      }
-      const mLength = dateData[dateData.length - 1]// 当前月份
-      if (opts.planStartTime !== opts.arrayModel.createdTime[0]) {
-        dateData.unshift(opts.planStartTime)
-      }
-      dateData.push(opts.planStopTime)
-      const pData = []// 项目月份未完成比例数组,开始默认100%
-      opts.arrayModel.progress.forEach(v => {
-        pData.push(100 - v)
-      })
-      // pData = pData.map(function(n) {
-      //   return parseInt(n)
-      // })
       function inArray(value, arr) {
         for (var k in arr) {
           if (arr[k] === value) {
@@ -80,28 +65,45 @@ export default {
           }
         }
       }
-      const mIndex = parseInt(inArray(mLength, dateData))
-      // console.log(mIndex, mLength, dateData)
-      const dateDateLength = dateData.length
-      const unfinishedData = []
-      const doneData = []
-      // const unfinishedData = dateData.slice(dateData.length - 1)
-      // const doneData = dateData.slice(0, dateData.length - 1)
-      // console.log(unfinishedData, doneData)
-      const c = 100 / (dateDateLength - 1)
-      for (let i = 0; i < dateDateLength; i++) {
-        const j = dateDateLength - i - 1
-        if (i < mIndex) {
-          doneData.push(c * j)
-          unfinishedData.push('')
-        } else if (i === mIndex) {
-          doneData.push(c * j)
-          unfinishedData.push(c * j)
-        } else {
-          doneData.push('')
-          unfinishedData.push(c * j)
+      if (opts.arrayModel) {
+        var dateData = opts.arrayModel.createdTime // 项目月份周期数组  ;
+        var mLength = dateData[dateData.length - 1]// 当前月份
+        if (opts.planStartTime !== opts.arrayModel.createdTime[0]) {
+          dateData.unshift(opts.planStartTime)
+        }
+        dateData.push(opts.planStopTime)
+        var pData = []// 项目月份未完成比例数组,开始默认100%
+        opts.arrayModel.progress.forEach(v => {
+          pData.push(100 - v)
+        })
+
+        var mIndex = parseInt(inArray(mLength, dateData))
+        // console.log(mIndex, mLength, dateData)
+        var dateDateLength = dateData.length
+        var unfinishedData = []
+        var doneData = []
+        // const unfinishedData = dateData.slice(dateData.length - 1)
+        // const doneData = dateData.slice(0, dateData.length - 1)
+        // console.log(unfinishedData, doneData)
+        var c = 100 / (dateDateLength - 1)
+        for (let i = 0; i < dateDateLength; i++) {
+          const j = dateDateLength - i - 1
+          if (i < mIndex) {
+            doneData.push(c * j)
+            unfinishedData.push('')
+          } else if (i === mIndex) {
+            doneData.push(c * j)
+            unfinishedData.push(c * j)
+          } else {
+            doneData.push('')
+            unfinishedData.push(c * j)
+          }
         }
       }
+      // pData = pData.map(function(n) {
+      //   return parseInt(n)
+      // })
+
       // console.log(unfinishedData, doneData)
       this.chart = echarts.init(document.getElementById(this.id))
       var option = {

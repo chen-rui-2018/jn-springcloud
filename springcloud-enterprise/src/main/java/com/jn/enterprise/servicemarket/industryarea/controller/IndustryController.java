@@ -1,6 +1,7 @@
 package com.jn.enterprise.servicemarket.industryarea.controller;
 
 import com.jn.common.model.Result;
+import com.jn.enterprise.servicemarket.industryarea.model.Industry;
 import com.jn.enterprise.servicemarket.industryarea.model.IndustryDictParameter;
 import com.jn.enterprise.servicemarket.industryarea.model.IndustryDictionary;
 import com.jn.enterprise.servicemarket.industryarea.model.IndustryDictionaryProduct;
@@ -47,6 +48,13 @@ public class IndustryController {
     public Result<List<IndustryDictionaryProduct>> selectIndustryProductList(){
         List<IndustryDictionaryProduct> industry = industryService.selectIndustryProductList();
         return new Result<>(industry);
+    }
+
+    @ControllerLog(doAction = "获取服务超市业务领域列表")
+    @ApiOperation(value = "获取服务超市业务领域列表")
+    @RequestMapping(value = "/getIndustryForMarket",method = RequestMethod.GET)
+    public Result<List<Industry>> getIndustryForMarket(){
+        return new Result(industryService.getIndustryForMarket());
     }
 
 }

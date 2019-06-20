@@ -693,7 +693,7 @@ export default {
 
       .honor {
         // padding: 20 0px;
-        font-size: 14px;
+        // font-size: 14px;
 
         > ul {
           > li {

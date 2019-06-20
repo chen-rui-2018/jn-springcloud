@@ -94,14 +94,20 @@ export default {
   created () {
     this.actiDel()
   },
-  mounted () {
-    // WebSettings settings = webview.getSettings();
-    // settings.setJavaScriptEnabled(true); //允许在WebView中使用js
-  },
+  mounted () {},
   destroyed () {
     clearInterval(this._interval)
   },
   methods: {
+    dispatch (c, b) {
+      try {
+        var a = document.createEvent('Event')
+        a.initEvent(b, true, true)
+        c.dispatchEvent(a)
+      } catch (d) {
+        // alert(d)
+      }
+    },
     actiDel () {
       let _this = this
       this.api.post({
@@ -118,7 +124,9 @@ export default {
             _this.activityApplyShow = res.data.activityApplyShow
             _this.activityApplyList = res.data.activityApplyList
             _this.sysTemTime = _this.getTime(res.data.sysTemTime)
-            _this.applyEndTime = _this.getTime(res.data.activityDetail.applyEndTime)
+            _this.applyEndTime = _this.getTime(
+              res.data.activityDetail.applyEndTime
+            )
             _this._interval = setInterval(() => {
               let data = _this.countTime(_this.applyEndTime, _this.sysTemTime)
               _this.sysTemTime = _this.sysTemTime + 1000
@@ -149,9 +157,10 @@ export default {
             _this.$vux.toast.text('点赞成功')
             _this.actiForm.actiLike = _this.actiForm.actiLike * 1 + 1
             // _this.$message.success('点赞成功')
-            _this.accountIsLike = true
-            window.location.href = 'protocol://android?code=toast&data=' + _this.actiForm.actiLike
-            window.location.href = 'protocol://android?code=toast&data=' + JSON.stringify(_this.actiForm.actiLike)
+            // _this.accountIsLike = true
+            // window.location.href = 'protocol://android?code=toast&data=' + _this.actiForm.actiLike
+            _this.dispatch(document.queryselector('.attention'), 'click')
+            document.queryselector('.attention').click(_this.actiForm.actiLike)
           } else {
             _this.$vux.toast.text(res.result)
           }
@@ -175,7 +184,8 @@ export default {
             _this.$vux.toast.text('取消点赞成功')
             _this.actiForm.actiLike -= 1
             _this.accountIsLike = false
-            window.location.href = 'protocol://android?code=toast&data=' + _this.actiForm.actiLike
+            window.location.href =
+              'protocol://android?code=toast&data=' + _this.actiForm.actiLike
           } else {
             _this.$vux.toast.text(res.result)
           }

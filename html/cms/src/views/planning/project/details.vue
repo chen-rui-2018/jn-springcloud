@@ -178,7 +178,7 @@ export default {
         '',
         'get'
       ).then(res => {
-        console.log(res)
+        // console.log(res)
         // const date = new Date()
         if (res.data.code === this.GLOBAL.code) {
           this.detailData = res.data.data
@@ -203,7 +203,7 @@ export default {
               })
             })
           }
-          console.log(this.tasks.data)
+          // console.log(this.tasks.data)
         } else {
           this.$message.error(res.data.result)
         }
@@ -526,9 +526,9 @@ export default {
   // }
   .details-top{
     display: flex;
-    >div:nth-child(1){
-      // flex:6;
-    }
+    // >div:nth-child(1){
+    //   // flex:6;
+    // }
      >div:nth-child(2){
       // flex:4;
       width:54%;
@@ -618,12 +618,12 @@ export default {
 .gantt_task_scale{
   width: 100% !important;
 }
-.gantt_bars_area{
-  >div{
-    // height: 44px !important;
-    // line-height: 44px !important;
-    // top:0px !important;
-  }
-}
+// .gantt_bars_area{
+//   // >div{
+//   //   // height: 44px !important;
+//   //   // line-height: 44px !important;
+//   //   // top:0px !important;
+//   // }
+// }
 }
 </style>

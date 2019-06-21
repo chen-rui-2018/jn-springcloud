@@ -32,6 +32,7 @@
       :data="tableData"
       v-loading="loading"
       stripe
+      border
       header-cell-class-name="science-part-table-header"
       style="width: 100%">
       <el-table-column

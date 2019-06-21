@@ -44,7 +44,8 @@
     <div class="avaMenu" v-if="menuFlag" @mouseleave="menuFlag=!menuFlag">
       <el-card class="box-card bxcard">
         <ul class="avaUL">
-          <li style="border-bottom:1px solid #eee;color:#333" @click="$router.push({path:'/home'})">您好,{{ userInfoData.account }}</li>
+          <li v-if="userInfoData" style="border-bottom:1px solid #eee;color:#333" @click="$router.push({path:'/home'})">您好,{{ userInfoData.account || ''}}</li>
+          <li v-else style="border-bottom:1px solid #eee;color:#333" @click="$router.push({path:'/home'})">您好</li>
           <!-- <li class="homeLi" v-for="(i,k) in list" :key="k" :class="{'act':bgFlag==i.name}" @click="$router.push({path:i.path})">{{i.name}}</li> -->
           <!-- <li class="homeLi" @click="$router.push({path:'/home'})">首页</li> -->
           <!-- <li class="homeLi" @click="$router.push({path:'/userHome'})">用户资料</li>

@@ -7,8 +7,8 @@ public class TbParkingRecord implements Serializable {
     /*@ApiModelProperty("停车记录id")*/
     private String parkingId;
 
-    /*@ApiModelProperty("停车场ID")*/
-    private String areaId;
+    /*@ApiModelProperty("同步过来的消息自带的id")*/
+    private String messageId;
 
     /*@ApiModelProperty("停车场名称")*/
     private String areaName;
@@ -28,7 +28,7 @@ public class TbParkingRecord implements Serializable {
     /*@ApiModelProperty("入场时间")*/
     private Date admissionTime;
 
-    /*@ApiModelProperty("缴费开始计算时间")*/
+    /*@ApiModelProperty("缴费开始计算时间[支付成功后创建新记录时才有该值]（有数据则以该时间计算金额）")*/
     private Date startBillingTime;
 
     /*@ApiModelProperty("离场时间")*/
@@ -79,6 +79,9 @@ public class TbParkingRecord implements Serializable {
     /*@ApiModelProperty("是否删除（0标记删除，1正常）")*/
     private Byte recordStatus;
 
+    /*@ApiModelProperty("停车场ID")*/
+    private String areaId;
+
     private static final long serialVersionUID = 1L;
 
     public String getParkingId() {
@@ -89,12 +92,12 @@ public class TbParkingRecord implements Serializable {
         this.parkingId = parkingId == null ? null : parkingId.trim();
     }
 
-    public String getAreaId() {
-        return areaId;
+    public String getMessageId() {
+        return messageId;
     }
 
-    public void setAreaId(String areaId) {
-        this.areaId = areaId == null ? null : areaId.trim();
+    public void setMessageId(String messageId) {
+        this.messageId = messageId == null ? null : messageId.trim();
     }
 
     public String getAreaName() {
@@ -281,6 +284,14 @@ public class TbParkingRecord implements Serializable {
         this.recordStatus = recordStatus;
     }
 
+    public String getAreaId() {
+        return areaId;
+    }
+
+    public void setAreaId(String areaId) {
+        this.areaId = areaId == null ? null : areaId.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -294,7 +305,7 @@ public class TbParkingRecord implements Serializable {
         }
         TbParkingRecord other = (TbParkingRecord) that;
         return (this.getParkingId() == null ? other.getParkingId() == null : this.getParkingId().equals(other.getParkingId()))
-            && (this.getAreaId() == null ? other.getAreaId() == null : this.getAreaId().equals(other.getAreaId()))
+            && (this.getMessageId() == null ? other.getMessageId() == null : this.getMessageId().equals(other.getMessageId()))
             && (this.getAreaName() == null ? other.getAreaName() == null : this.getAreaName().equals(other.getAreaName()))
             && (this.getCarLicense() == null ? other.getCarLicense() == null : this.getCarLicense().equals(other.getCarLicense()))
             && (this.getAccount() == null ? other.getAccount() == null : this.getAccount().equals(other.getAccount()))
@@ -317,7 +328,8 @@ public class TbParkingRecord implements Serializable {
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
             && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
-            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()));
+            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
+            && (this.getAreaId() == null ? other.getAreaId() == null : this.getAreaId().equals(other.getAreaId()));
     }
 
     @Override
@@ -325,7 +337,7 @@ public class TbParkingRecord implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getParkingId() == null) ? 0 : getParkingId().hashCode());
-        result = prime * result + ((getAreaId() == null) ? 0 : getAreaId().hashCode());
+        result = prime * result + ((getMessageId() == null) ? 0 : getMessageId().hashCode());
         result = prime * result + ((getAreaName() == null) ? 0 : getAreaName().hashCode());
         result = prime * result + ((getCarLicense() == null) ? 0 : getCarLicense().hashCode());
         result = prime * result + ((getAccount() == null) ? 0 : getAccount().hashCode());
@@ -349,6 +361,7 @@ public class TbParkingRecord implements Serializable {
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
+        result = prime * result + ((getAreaId() == null) ? 0 : getAreaId().hashCode());
         return result;
     }
 
@@ -359,7 +372,7 @@ public class TbParkingRecord implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", parkingId=").append(parkingId);
-        sb.append(", areaId=").append(areaId);
+        sb.append(", messageId=").append(messageId);
         sb.append(", areaName=").append(areaName);
         sb.append(", carLicense=").append(carLicense);
         sb.append(", account=").append(account);
@@ -383,6 +396,7 @@ public class TbParkingRecord implements Serializable {
         sb.append(", modifierAccount=").append(modifierAccount);
         sb.append(", modifiedTime=").append(modifiedTime);
         sb.append(", recordStatus=").append(recordStatus);
+        sb.append(", areaId=").append(areaId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

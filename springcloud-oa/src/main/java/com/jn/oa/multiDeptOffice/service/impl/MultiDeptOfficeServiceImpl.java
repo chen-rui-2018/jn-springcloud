@@ -1,7 +1,9 @@
 package com.jn.oa.multiDeptOffice.service.impl;
 
 import com.jn.common.channel.MessageSource;
+import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
+import com.jn.news.vo.AppSinkVo;
 import com.jn.news.vo.SmsTemplateVo;
 import com.jn.oa.item.service.impl.WorkPlanServiceImpl;
 import com.jn.oa.multiDeptOffice.dao.MultiDeptOfficeMapper;
@@ -11,6 +13,8 @@ import com.jn.oa.multiDeptOffice.model.MultiDeptOffice;
 import com.jn.oa.multiDeptOffice.service.MultiDeptOfficeService;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
+import com.jn.user.api.UserExtensionClient;
+import com.jn.user.model.UserExtensionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +45,9 @@ public class MultiDeptOfficeServiceImpl implements MultiDeptOfficeService {
 
     @Autowired
     private MessageSource messageSource;
+
+    @Autowired
+    private UserExtensionClient userExtensionClient;
 
 
     /**
@@ -75,7 +82,7 @@ public class MultiDeptOfficeServiceImpl implements MultiDeptOfficeService {
                         //获取协同部门人员的手机号
                         List<String> phones = new ArrayList<String>(16);
                         for (User user : userList) {
-                            if (StringUtils.isNotBlank(user.getPhone())){
+                            if (StringUtils.isNotBlank(user.getPhone())) {
                                 phones.add(user.getPhone());
                             }
                         }
@@ -93,14 +100,66 @@ public class MultiDeptOfficeServiceImpl implements MultiDeptOfficeService {
 
                         logger.info("[多部门协同] 短信提醒！,multiDeptOfficeId: {}，phone：{}",
                                 multiDeptOffice.getId(), phones.toString());
-                    } else if (RemindWayEnums.PC.getCode().equals(way)) {
-                        //TODO: 调用PC推动消息接口,等在接口提供在完善
-
-                    } else {
-                        //TODO: 调用APP推动消息接口,等在接口提供在完善
-
+                    } else if (RemindWayEnums.APP.getCode().equals(way)) {
+                        //app推送通知
+                        appSend(multiDeptOffice, userList);
                     }
                 }
+            }
+        }
+    }
+
+    /**
+     * app推送通知功能
+     *
+     * @param multiDeptOffice
+     * @param userList
+     */
+    private void appSend(MultiDeptOffice multiDeptOffice, List<User> userList) {
+        List<String> registrationIds = new ArrayList<>(16);
+        //进行app功能提醒,获取协调用户app极光推送id
+        for (User user : userList) {
+            String account = user.getAccount();
+            Result<UserExtensionInfo> userResult = userExtensionClient.getUserExtension(account);
+            if (userResult == null || userResult.getData() == null) {
+                logger.warn("[消息极光推送] 获取用户信息失败，account：{}", account);
+                continue;
+            }
+
+            String registrationId = userResult.getData().getRegistrationId();
+            if (StringUtils.isBlank(registrationId)) {
+                logger.warn("[消息极光推送] 用户未绑定设备ID，account：{}", account);
+                continue;
+            } else {
+                registrationIds.add(registrationId);
+            }
+
+        }
+
+        //如果极光推送ids不为空,
+        if (registrationIds != null && registrationIds.size() > 0) {
+            //进行app功能推送
+            AppSinkVo appSinkVo = new AppSinkVo();
+            appSinkVo.setTitle("多部门协同事项提醒");
+            appSinkVo.setContent(multiDeptOffice.getTitle());
+            // 推送方式（DEVICE：设备 TAG：标签）
+            String pushType = "DEVICE";
+            // 平台类型 ANDROID/IOS/null  如果为null 则发送给所有平台
+            String platFromType = null;
+            // 推送通知类型（ALL：全部 NOTICE：通知 MESSAGE：透传消息）
+            String noticeType = "NOTICE";
+            // 透传消息内容
+            String message = multiDeptOffice.getContent();
+            appSinkVo.setIds(registrationIds);
+            appSinkVo.setPushType(pushType);
+            appSinkVo.setNoticeType(noticeType);
+            appSinkVo.setPlatFromType(platFromType);
+            appSinkVo.setMessage(message);
+            boolean result = messageSource.outputApp().send(MessageBuilder.withPayload(appSinkVo).build());
+            if (result){
+                logger.info("[多部门协同] 为用户推送app消息通知成功，协调事项ID：{}",multiDeptOffice.getId());
+            }else {
+                logger.error("[多部门协同] 为用户推送app消息通知失败，协调事项ID：{}",multiDeptOffice.getId());
             }
         }
     }

@@ -49,7 +49,7 @@
               <div v-for="(ruleRow, index) in scope.row['inputFormatModel']" :key="index" class="target-bg">
                 <div v-for="(item, itemIndex) in ruleRow" :key="itemIndex" class="target-bg-cell">
                   <div v-if="item.formType === '0'" :class="{app: isMobile, pc: !isMobile}" class="target-left-row">
-                    <div class="target-left-row-title" :class="{app: isMobile, pc: !isMobile}">{{ item.formName || '去去去' }}</div>
+                    <div class="target-left-row-title" :class="{app: isMobile, pc: !isMobile}">{{ item.formName }}</div>
                     <div class="target-left-row-form" :class="{app: isMobile, pc: !isMobile}">
                       <el-input
                         :disabled="isReported === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])"

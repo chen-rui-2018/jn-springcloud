@@ -1,18 +1,20 @@
-package com.jn.enterprise.common.enums;
+package com.jn.enterprise.servicemarket.comment.enums;
 
 import com.jn.common.api.CodeAndMsg;
 
 /**
- * 公共异常枚举
- * @Author: huxw
- * @Date: 2019-4-3 15:19:28
+ * 需求对接结果枚举
+ * @Author: yangph
+ * @Date: 2019/6/21 15:02
  * @Version v1.0
  * @modified By:
  */
-public enum CommonExceptionEnum implements CodeAndMsg {
-
-    CODE_GROUP_ID_IS_NULL("5000201","分组ID不能为空"),
-    UPGRADE_COMMON("5000202","角色认证公共返回"),
+public enum HandleResultEnum implements CodeAndMsg {
+    //对接结果(1:对接成功  2:对接失败  3:企业需求撤销 4:未对接)
+    DOCKING_SUCCESS("1","对接成功"),
+    DOCKING_FAILURE("2","对接失败"),
+    COMPANY_REQUIRE_DEMAND("3","企业需求撤销"),
+    NOT_DOCKED("4","未对接"),
     ;
     /**
      * 编码
@@ -23,7 +25,7 @@ public enum CommonExceptionEnum implements CodeAndMsg {
      */
     private String message;
 
-    CommonExceptionEnum(String code, String message) {
+    HandleResultEnum(String code, String message) {
         this.code = code;
         this.message = message;
     }

@@ -11,12 +11,12 @@ import com.jn.common.api.CodeAndMsg;
  */
 public enum UpgradeStatusEnum implements CodeAndMsg {
 
-    UPGRADE_OK("0","允许认证"),
-    UPGRADE_COMPANY("1","您的账号正在认证企业中"),
-    UPGRADE_STAFF("2","您的账号正在认证员工中"),
-    UPGRADE_ORG("3","您的账号正在认证机构中"),
-    UPGRADE_INVESTOR("4","您的账号正在认证投资人中"),
-    UPGRADE_ADVISOR("5","您的账号正在认证专员中"),
+    UPGRADE_OK("0","允许认证", "允许认证"),
+    UPGRADE_COMPANY("1","该账号正在认证企业中", "已认证企业或正在认证中"),
+    UPGRADE_STAFF("2","该账号正在认证员工中", "已认证员工或正在认证中"),
+    UPGRADE_ORG("3","该账号正在认证机构中", "已认证机构或正在认证中"),
+    UPGRADE_INVESTOR("4","该账号正在认证投资人中", "已认证投资人或正在认证中"),
+    UPGRADE_ADVISOR("5","该账号正在认证专员中", "已认证专员或正在认证中"),
     ;
 
     /**
@@ -28,9 +28,13 @@ public enum UpgradeStatusEnum implements CodeAndMsg {
      */
     private String message;
 
-    UpgradeStatusEnum(String code, String message) {
+    // 发送邀请抛出的消息
+    private String inviteMessage;
+
+    UpgradeStatusEnum(String code, String message, String inviteMessage) {
         this.code = code;
         this.message = message;
+        this.inviteMessage = inviteMessage;
     }
 
     @Override
@@ -50,4 +54,11 @@ public enum UpgradeStatusEnum implements CodeAndMsg {
     public void setMessage(String message) {
         this.message = message;
     }
-}
+
+    public String getInviteMessage() {
+        return inviteMessage;
+    }
+
+    public void setInviteMessage(String inviteMessage) {
+        this.inviteMessage = inviteMessage;
+    }}

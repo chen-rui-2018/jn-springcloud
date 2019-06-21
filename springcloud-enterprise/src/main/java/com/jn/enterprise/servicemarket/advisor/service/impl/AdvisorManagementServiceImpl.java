@@ -7,6 +7,10 @@ import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.GlobalConstants;
 import com.jn.common.util.StringUtils;
+import com.jn.enterprise.common.enums.CommonExceptionEnum;
+import com.jn.enterprise.company.service.CompanyService;
+import com.jn.enterprise.company.vo.InviteUpgradeStatusVO;
+import com.jn.enterprise.company.vo.UpgradeStatusVO;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
 import com.jn.enterprise.enums.OrgExceptionEnum;
 import com.jn.enterprise.enums.RecordStatusEnum;
@@ -83,6 +87,9 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
     @Autowired
     private InvestorService investorService;
 
+    @Autowired
+    private CompanyService companyService;
+
 
     /**
      * 是否删除 0：删除  1：有效
@@ -104,6 +111,13 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
     @ServiceLog(doAction = "邀请顾问")
     @Transactional(rollbackFor = Exception.class)
     public int inviteAdvisor(String registerAccount,String loginAccount) {
+        //判断当前用户是否可以认证
+        InviteUpgradeStatusVO joinParkStatus = companyService.getJoinParkStatus(loginAccount);
+        String allowStatus="0";
+        if(!StringUtils.equals(allowStatus,joinParkStatus.getCode())){
+            logger.warn(joinParkStatus.getMessage());
+            throw new JnSpringCloudException(CommonExceptionEnum.UPGRADE_COMMON, loginAccount + joinParkStatus.getInviteMessage());
+        }
         //1.判断当前登录用户是否为机构管理员
         judgeAccountIsOrgManage(loginAccount);
         //2.判断被邀请顾问是否为普通用户，非普通用户不能被邀请

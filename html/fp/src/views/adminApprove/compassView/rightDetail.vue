@@ -57,7 +57,8 @@
                     <el-form-item label="实施依据：">
                       <div class="table_item_cont">
                         <!-- <span v-if="isWord&&word&&word.length>135" class="66">{{word|word}} </span> -->
-                        <span v-html="powerDetail.settingBasis"></span>
+                        <span v-if="powerDetail.settingBasis===null">暂无</span>
+                        <span v-html="powerDetail.settingBasis" v-else></span>
                         <!-- <span @click="isWord=!isWord" v-show="isWord&&word&&word.length>135" class="pack_up">[点击展开]</span>
                         <span @click="isWord=!isWord" v-show="isWord===false&&word&&word.length>135" class="pack_up">[点击收起]</span> -->
                       </div> 
@@ -322,7 +323,7 @@ export default {
                 .el-form-item__content{
                   line-height: 1;
                   background-color: #fff;
-                  padding: 10px 0;
+                  padding: 12px 0;
                 }
                 .table_item_cont{
                   

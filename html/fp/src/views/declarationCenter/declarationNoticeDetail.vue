@@ -24,9 +24,11 @@
           <div class="accessory">
             <div class="accessory_right">
               <div class="accessory_detail">
-                <span>附件下载：</span>
-                <a v-if="fileList.length===0" href="javascript:;">暂无</a>
-                <a  :href="item.filePath" v-for="(item,index) in fileList " :key="index">附件{{index+1}}  {{item.fileName}}</a>
+                <div>附件下载：</div>
+                <div>
+                  <a v-if="fileList.length===0" href="javascript:;">暂无</a>
+                  <a  :href="item.filePath" v-for="(item,index) in fileList " :key="index">附件{{index+1}}  {{item.fileName}}</a>
+                </div>
               </div>
               <p>
                 <span>最终日期：{{detailList.deadline|time}}</span>

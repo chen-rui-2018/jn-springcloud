@@ -187,7 +187,6 @@ export default {
       _this.api.get({
         url: "getUserExtension",
         data: {
-          // account: sessionStorage.account
         },
         dataFlag: false,
         callback: function(res) {

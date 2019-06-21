@@ -57,9 +57,9 @@ export default {
      font-size: 24px;
      color:#A2A2A2;
  }
- .anContent{
-     font-size: 26px;
-     color:#666;
- }
+//  .anContent{
+//      font-size: 26px;
+//      color:#666;
+//  }
 }
 </style>

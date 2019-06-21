@@ -110,7 +110,8 @@ export default {
     };
   },
   mounted() {
-    this.selectIndustryList();
+    // this.selectIndustryList();
+    this.getIndustryForMarket();
     if (this.$route.query.searchData) {
       this.keyWords = this.$route.query.searchData;
       this.initList();
@@ -209,25 +210,39 @@ export default {
         }
       });
     },
-    selectIndustryList() {
+    // selectIndustryList() {
+    //   let _this = this;
+    //   this.api.get({
+    //     url: "selectIndustryProductList",
+    //     data: {},
+    //     callback: function(res) {
+    //       if (res.code == "0000") {
+    //         // for (let it in res.data) {
+    //         //   if (res.data[it].preType == "0") {
+    //         //     _this.businessArea.push(res.data[it]);
+    //         //   }
+    //         // }
+    //         _this.businessArea = res.data;
+    //       } else {
+    //         _this.$message.error(res.result);
+    //       }
+    //     }
+    //   });
+    // }
+     getIndustryForMarket() {
       let _this = this;
       this.api.get({
-        url: "selectIndustryProductList",
+        url: "getIndustryForMarket",
         data: {},
         callback: function(res) {
           if (res.code == "0000") {
-            // for (let it in res.data) {
-            //   if (res.data[it].preType == "0") {
-            //     _this.businessArea.push(res.data[it]);
-            //   }
-            // }
             _this.businessArea = res.data;
           } else {
             _this.$message.error(res.result);
           }
         }
       });
-    }
+    },
   }
 };
 </script>

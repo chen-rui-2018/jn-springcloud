@@ -66,7 +66,7 @@
         <span class="att1">关注{{actiForm.actiLike}}</span>
       </div>
       <div class="attend ">
-        <span v-if="activityApplyShow=='0'">停止报名</span>
+        <span class="stopJoin" v-if="activityApplyShow=='0'">停止报名</span>
         <span v-if="activityApplyShow=='1'" @click="quickSign(actiForm.id)">我要参加</span>
         <span v-if="activityApplyShow=='2'" @click="stopApply(actiForm.id)">取消报名</span>
       </div>
@@ -165,6 +165,8 @@ export default {
             } else {
               _this.dispatch(document.queryselector('.attention'), 'click')
               document.queryselector('.attention').click(_this.actiForm.actiLike)
+              let action = 'handleLike'
+              window.webkit.messageHandlers.jsToOc.postMessage(action, _this.actiForm.actiLike)
             }
           } else {
             _this.$vux.toast.text(res.result)
@@ -196,6 +198,8 @@ export default {
             } else {
               _this.dispatch(document.queryselector('.attention'), 'click')
               document.queryselector('.attention').click(_this.actiForm.actiLike)
+              let action = 'cancelLike'
+              window.webkit.messageHandlers.jsToOc.postMessage(action, _this.actiForm.actiLike)
             }
           } else {
             _this.$vux.toast.text(res.result)
@@ -404,9 +408,9 @@ export default {
       font-size: 30px;
       margin-bottom: 30px;
     }
-    > p {
-      line-height: 40px;
-    }
+    // > p {
+    //   line-height: 40px;
+    // }
   }
   .actiFooter {
     display: flex;
@@ -446,6 +450,10 @@ export default {
         font-size: 34px;
         width: 100%;
         text-align: center;
+      }
+      .stopJoin{
+        background: #eee;
+        color:#999;
       }
     }
     .att1 {

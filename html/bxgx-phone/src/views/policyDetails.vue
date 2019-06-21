@@ -83,12 +83,5 @@ export default {
           line-height: 40px;
       }
   }
-  .anContent{
-      margin-top:20px;
-      padding:20px;
-      color:#333;
-      font-size: 26px;
-      line-height: 40px;
-  }
 }
 </style>

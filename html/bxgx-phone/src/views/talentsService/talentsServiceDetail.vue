@@ -46,10 +46,12 @@ export default {
       }
     }
   },
-  mounted () {
+  created () {
     this.id = this.$route.query.id
-    this.getDetail()
     this.addView()
+  },
+  mounted () {
+    this.getDetail()
   },
   methods: {
     getDetail () {

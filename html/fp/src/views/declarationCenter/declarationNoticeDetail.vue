@@ -264,6 +264,7 @@ export default {
                               _this.appointment.contactPhone= res.data.phone
                               _this.appointment.email= res.data.email
                               _this.appointment.declareEnterprise= res.data.companyName
+                              _this.appointment.fileUrl= res.data.fileUrl
                             }
                           }
                         });

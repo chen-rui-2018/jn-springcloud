@@ -770,7 +770,7 @@ export default {
                     for (const tree of treeData) {
                       // 如果不属于选择节点的最高级父指标，即兄弟指标，那么设置禁用
                       if (tree.id !== parentNode.id) {
-                        // this.setBroDisabled(tree)
+                        this.setBroDisabled(tree)
                       }
                     }
                     for (const obj of item.targetList) {
@@ -857,27 +857,33 @@ export default {
       this.menuVisible = false
     },
     setBroNode(index, target, nodes) {
-      // 因为选择指标时，最高级的父指标只能选择一个，它的兄弟指标和其子指标都设置禁用
-      const treeData = this.formData.tabs[index].treeData
       // 如果指标树不是空状态
       if (nodes.checkedNodes.length > 0) {
-        // 获取当前选择节点的最高级父指标
-        const parentNode = nodes.halfCheckedNodes.length > 0 ? nodes.halfCheckedNodes[0] : nodes.checkedNodes[0]
-        for (const tree of treeData) {
-          // 如果不属于选择节点的最高级父指标，即兄弟指标，那么设置禁用
-          if (tree.id !== parentNode.id) {
-            this.setBroDisabled(tree)
-          }
-        }
+        this.formData.tabs[index].targetList = this.$refs.targetTree[index].getCheckedNodes(false, true)
+        this.$nextTick(() => {
+          setTimeout(() => {
+            // 因为选择指标时，最高级的父指标只能选择一个，它的兄弟指标和其子指标都设置禁用
+            const treeData = this.formData.tabs[index].treeData
+            // 获取当前选择节点的最高级父指标
+            const parentNode = nodes.halfCheckedNodes.length > 0 ? nodes.halfCheckedNodes[0] : nodes.checkedNodes[0]
+            for (const tree of treeData) {
+              // 如果不属于选择节点的最高级父指标，即兄弟指标，那么设置禁用
+              if (tree.id !== parentNode.id) {
+                this.setBroDisabled(tree)
+              }
+            }
+          }, 50)
+        })
       } else {
         // 如果指标树是空状态，全部解除禁用
         this.formData.tabs[index].treeData = deepClone(this.originTab.treeData)
+        this.deepSetData(this.formData.tabs[index].treeData, this.formData.modelType)
+        this.formData.tabs[index].targetList = []
       }
-      this.formData.tabs[index].targetList = this.$refs.targetTree[index].getCheckedNodes(false, true)
     },
     setBroDisabled(tree) {
       // 兄弟指标设置禁用函数
-      tree.disabled = true
+      this.$set(tree, 'disabled', true)
       if (tree.children && tree.children.length > 0) {
         for (const item of tree.children) {
           this.setBroDisabled(item)
@@ -1175,7 +1181,7 @@ export default {
     border: 1px solid $gray;
 
     .target-management-l {
-      width: 200px;
+      width: 20%;
       .tree-filter-bg {
         padding: 4px;
       }
@@ -1190,7 +1196,7 @@ export default {
 
     .target-management-r {
       min-height: 100%;
-      width: calc(100% - 200px);
+      width: 80%;
       padding: 15px;
       border-left: 1px solid $gray;
       .chart-list {

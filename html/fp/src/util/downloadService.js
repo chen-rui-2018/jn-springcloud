@@ -20,7 +20,7 @@ const download = (data, name) => {
     const fileName = name || 'download'
     if ('download' in document.createElement('a')) { // 非IE下载
       const elink = document.createElement('a')
-      elink.setAttribute('download', fileName + '.xls')
+      elink.setAttribute('download', fileName + '.xlsx')
       elink.style.display = 'none'
       elink.href = URL.createObjectURL(blob)
       document.body.appendChild(elink)

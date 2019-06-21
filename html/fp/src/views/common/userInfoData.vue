@@ -67,7 +67,8 @@ import {
   removeToken,
   removeUserInfo,
   getUserInfo,
-  setUserInfo
+  setUserInfo,
+  removeIbpsToken
 } from "@/util/auth";
 export default {
   data() {
@@ -155,6 +156,7 @@ export default {
     loginOut() {
       removeToken();
       removeUserInfo();
+      removeIbpsToken();
       this.$router.push({ path: "/" });
       // this.islogin();
       this.isLogin=false

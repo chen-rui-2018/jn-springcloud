@@ -99,7 +99,7 @@ import SerHeader from "./components/serverHeader";
 import adminApproveHeader from "./components/adminApproveHeader";
 import TechnologyHeader from "./components/technologyHeader";
 import "./common/font/font.css";
-import { getToken, setToken, removeToken } from "@/util/auth";
+import { getToken, setToken } from "@/util/auth";
 import { isMobile } from "@/util";
 import bus from "@/util/bus";
 

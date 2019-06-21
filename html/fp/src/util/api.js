@@ -1,6 +1,6 @@
 ﻿import axios from "axios"
 import { BASE_URL } from './url'
-import { getToken, setToken, removeToken, removeUserInfo, getIbpsToken } from '@/util/auth'
+import { getToken, setToken, removeToken, removeUserInfo, getIbpsToken, removeIbpsToken } from '@/util/auth'
 
 axios.defaults.withCredentials = true // 让ajax携带cookie
 const verifyToken = () => {
@@ -313,6 +313,7 @@ export default {
                 if(response.data.code == "index"){
                   removeToken()
                   removeUserInfo()
+                  removeIbpsToken()
                   location.href="#/";
                   return
                 }
@@ -393,6 +394,7 @@ export default {
                 if(response.data.code == "index"){
                   removeToken()
                   removeUserInfo()
+                  removeIbpsToken()
                   location.href="#login";
                   return
                 }

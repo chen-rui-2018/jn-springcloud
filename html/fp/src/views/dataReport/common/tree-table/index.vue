@@ -137,7 +137,7 @@
 <script>
 import { deepClone, isMobile } from '@/util'
 import treeToArray from './eval'
-import { getToken, removeToken } from '@/util/auth'
+import { getToken } from '@/util/auth'
 export default {
   name: 'TreeTable',
   props: {

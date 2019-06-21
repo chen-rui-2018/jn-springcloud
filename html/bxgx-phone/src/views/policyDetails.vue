@@ -83,5 +83,12 @@ export default {
           line-height: 40px;
       }
   }
+  .anContent{
+      margin-top:20px;
+      padding:20px;
+      // max-width:100%
+      width: 100%;
+      overflow: hidden;
+  }
 }
 </style>

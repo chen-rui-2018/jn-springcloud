@@ -63,7 +63,7 @@
       <div class="nav" v-if="!show3&&isNavShow">
         <div class="nav_cont" v-for="(slideitem,slideindex) in sliderData " :key="slideindex">
           <div class="nav_cont_father" @click="$router.push({path:'/quickSearch',query:{signoryId:slideitem.id,preValue:slideitem.preValue}})">{{slideitem.preValue}} <i class="el-icon-arrow-right"></i></div>
-          <div class="nav_cont_son" :class="{'hidder_son':slideitem.products.length===0} ">  
+          <div class="nav_cont_son" :class="{'hidder_son':slideitem.products===null} ">  
             <div v-for="(item,index) in slideitem.products" :key="index" @click="$router.push({path:'/serverProDetail',query:{productId:item.productId,signoryId:slideitem.id}})">
               <span></span>
               {{item.productName}}
@@ -614,7 +614,7 @@ export default {
       });
     },
     // 获取专员领域
-    getIndustryList(){
+    /* getIndustryList(){
       let _this = this;
       this.api.get({
         url: "selectIndustryList",
@@ -625,7 +625,7 @@ export default {
           }
         }
       });
-    },
+    }, */
     //改变专员领域列表
     changedomain(domain){
       this.domain=domain
@@ -635,7 +635,7 @@ export default {
     getSelectTeamList(){
       let _this = this;
       this.api.get({
-        url: "selectTeamList",
+        url: "getIndustryForMarket",
         data: {
           preType:0
          },

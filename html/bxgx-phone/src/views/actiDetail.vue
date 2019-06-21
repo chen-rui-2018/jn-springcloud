@@ -122,6 +122,7 @@ export default {
           if (res.code === '0000') {
             _this.actiForm = res.data.activityDetail
             _this.apply = res.data
+            _this.accountIsLike = res.data.accountIsLike
             _this.activityApplyShow = res.data.activityApplyShow
             _this.activityApplyList = res.data.activityApplyList
             _this.sysTemTime = _this.getTime(res.data.sysTemTime)

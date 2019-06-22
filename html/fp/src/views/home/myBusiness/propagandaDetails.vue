@@ -18,7 +18,7 @@
           <span>{{propagandaTitle}}</span>
         </el-form-item>
         <el-form-item label="宣传详情:">
-          <span>{{propagandaDetails}}</span>
+          <span v-html="propagandaDetails">{{propagandaDetails}}</span>
         </el-form-item>
         <el-form-item label="宣传海报:">
           <span v-if="posterUrl" class="posterUrlBtn" @click="lookPoster(posterUrl)">点击查看</span>

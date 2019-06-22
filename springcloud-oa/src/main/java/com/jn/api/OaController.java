@@ -11,7 +11,9 @@ import com.jn.oa.meeting.service.MeetingService;
 import com.jn.oa.model.Attendance;
 import com.jn.oa.model.Email;
 import com.jn.oa.model.Leave;
+import com.jn.oa.model.Schedule;
 import com.jn.oa.multiDeptOffice.service.MultiDeptOfficeService;
+import com.jn.oa.schedule.service.ScheduleService;
 import com.jn.oa.vo.AttendanceApiVo;
 import com.jn.oa.vo.LeaveApiVo;
 import com.jn.system.log.annotation.ControllerLog;
@@ -52,6 +54,9 @@ public class OaController extends BaseController implements OaClient {
 
     @Autowired
     private LeaveService leaveService;
+
+    @Autowired
+    private ScheduleService scheduleService;
 
     /**
      * 定时十分钟通知会议申请人
@@ -164,6 +169,19 @@ public class OaController extends BaseController implements OaClient {
     public Result<List<AttendanceApiVo>> selectAttendanceListByCondition(@RequestBody Attendance attendance) {
         List<AttendanceApiVo> result = attendanceService.selectApiAttendanceListByCondition(attendance);
         return new Result(result);
+    }
+
+    /**
+     * 日程管理定时提醒功能
+     *
+     * @param Schedule
+     * @return
+     */
+    @Override
+    @ControllerLog(doAction = "日程管理定时提醒功能")
+    public Result scheduleRemind(@RequestBody Schedule Schedule) {
+        scheduleService.scheduleRemind(Schedule);
+        return null;
     }
 
 

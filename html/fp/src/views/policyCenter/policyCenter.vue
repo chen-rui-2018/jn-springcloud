@@ -1,4 +1,4 @@
-<template>
+1<template>
   <div class="policyCenter0">
     <!-- <div class="techHeah">
       <div id="header" class="header" :class="{'headerw':showFF}">
@@ -268,7 +268,7 @@ export default {
       total: 0,
       arrYear: [],
       yearBefore: "",
-      scroll_top:0
+      scroll_top: 0
     };
   },
   mounted() {
@@ -296,7 +296,6 @@ export default {
       }
     },
     handleClick(tab) {
-      console.log(tab);
       if (tab.name == "second") {
         this.tableType = "diagramPolicy";
         this.getPolicyCenterList();
@@ -361,23 +360,40 @@ export default {
     },
     //筛选政策级别
     handleFilter(i) {
-      console.log(this.getScrollTop())
-       console.log( document.querySelector('.tabBox').offsetTop)
-      (this.policyLevelCode = `${i}`), (this.filterFlag = i);
+      if(this.filterFlag == i){
+        return
+      }
+      document.documentElement.scrollTop = document.getElementsByClassName("tabBox")[0].offsetTop;
+      this.policyLevelCode = `${i}`;
+      this.filterFlag = i;
       this.getPolicyCenterList();
     },
     //筛选政策分类
     handleFilter1(i) {
-      (this.policyClassCode = `${i}`), (this.filterFlag1 = i);
+      if(this.filterFlag1 == i){
+        return
+      }
+      document.documentElement.scrollTop = document.getElementsByClassName("tabBox")[0].offsetTop
+      this.policyClassCode = `${i}`;
+      this.filterFlag1 = i;
       this.getPolicyCenterList();
     },
     //筛选政策类型
     handleFilter2(i) {
-      (this.policyType = i), (this.filterFlag2 = i);
+       if(this.filterFlag2 == i){
+        return
+      }
+      document.documentElement.scrollTop = document.getElementsByClassName("tabBox")[0].offsetTop
+      this.policyType = i;
+      this.filterFlag2 = i;
       this.getPolicyCenterList();
     },
     //筛选发布时间
     handleFilter3(i) {
+      if(this.filterFlag3 == i){
+        return
+      }
+      document.documentElement.scrollTop = document.getElementsByClassName("tabBox")[0].offsetTop
       if (i == "1") {
         this.yearBefore = "1";
         this.filterFlag3 = i;

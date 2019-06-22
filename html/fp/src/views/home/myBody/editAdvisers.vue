@@ -222,7 +222,7 @@
 </template>
 
 <script>
-import { getToken, removeToken } from '@/util/auth'
+import { getToken } from '@/util/auth'
 export default {
 //   data() {
 //     var checkPhone = (rule, value, callback) => {

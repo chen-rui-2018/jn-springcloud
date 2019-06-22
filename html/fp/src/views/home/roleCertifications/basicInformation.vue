@@ -291,7 +291,7 @@
               <el-form-item label="咨询电话:" prop="orgPhone">
                 <el-input v-model="contactForm.orgPhone" placeholder="请输入咨询电话" maxlength="12" clearable></el-input>
               </el-form-item>
-              <el-form-item label="机构网址:" prop="orgWeb">
+              <el-form-item label="机构网址:">
                 <el-input v-model="contactForm.orgWeb" placeholder="请输入机构网址" clearable></el-input>
               </el-form-item>
               <el-form-item label="联系人姓名:" prop="conName">
@@ -600,10 +600,10 @@ export default {
           { required: true, message: "请输入咨询电话", trigger: "blur" }
           //  { validator: checkTel, trigger: 'blur' }
         ],
-        orgWeb: [
-          { required: true, message: "请输入机构网址", trigger: "blur" }
-          // { validator: checkWeb, trigger: 'blur' }
-        ],
+        // orgWeb: [
+        //   // { required: true, message: "请输入机构网址", trigger: "blur" }
+        //   // { validator: checkWeb, trigger: 'blur' }
+        // ],
         orgProvince: [
           { required: true, message: "请选择省份", trigger: "change" }
         ],

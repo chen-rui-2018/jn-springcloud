@@ -21,18 +21,18 @@
     </div> -->
       <!-- <div id ="GanttChartDIV" style ="position:relative;" class="gantt"/> -->
       <el-table :data="detailData" style="width: 100%;margin-bottom:40px;">
-        <el-table-column prop="taskName" label="任务" min-width="150" align="center">
+        <el-table-column :show-overflow-tooltip="true" prop="taskName" label="任务" align="center">
           <template slot-scope="scope">
             <span class="text-blue">{{ scope.row.taskName }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="nowadaysProgress" label="进度" min-width="80" align="center">
+        <el-table-column prop="nowadaysProgress" label="进度" align="center">
           <template slot-scope="scope">
             <span :class="scope.row.nowadaysProgress==='100%'?'text-green':''">{{ scope.row.nowadaysProgress }}</span>
           </template>
         </el-table-column>
         <el-table-column label="状态" align="center">
-          <el-table-column prop="taskState" label="时间" min-width="120" align="center">
+          <el-table-column prop="taskState" label="时间" align="center">
             <template slot-scope="scope">
               <span v-show="scope.row.taskState==='延期'" class="text-red">{{ scope.row.taskState }}</span>
               <span v-show="scope.row.taskState==='提前'||scope.row.taskState==='准时'" class="text-green">{{
@@ -40,11 +40,11 @@
               <span v-show="scope.row.taskState==='未到期'">{{ scope.row.taskState }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="appraise" label="评价" min-width="50" align="center" />
+          <el-table-column prop="appraise" label="评价" align="center" />
         </el-table-column>
         <el-table-column label="计划时间" align="center">
-          <el-table-column prop="planStartTime" label="开始" min-width="120" align="center" />
-          <el-table-column prop="planStopTime" label="结束" min-width="120" align="center" />
+          <el-table-column prop="planStartTime" label="开始" align="center" />
+          <el-table-column prop="planStopTime" label="结束" align="center" />
         </el-table-column>
         <!-- <el-table-column /> -->
       </el-table>
@@ -502,6 +502,9 @@ export default {
 </script>
 
 <style lang="scss">
+ .gantt_message_area{
+    display: none!important;
+  }
 .projectDetails {
   .el-table--medium td, .el-table--medium th{
     padding:6px 0;
@@ -582,6 +585,7 @@ export default {
     background: #67c23a;
   }
   }
+
   .gantt_task .gantt_task_scale .gantt_scale_cell{
         color: black;
     border-right: 1px solid #a3d9f4;

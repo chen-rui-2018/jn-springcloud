@@ -85,6 +85,9 @@ export default {
             this.typeList = res.data
           } else {
             this.$vux.toast.text(res.result)
+            setTimeout(() => {
+              this.$router.go(-1)
+            }, 1000)
           }
         }
       })
@@ -100,6 +103,9 @@ export default {
             this.total = res.data.total
           } else {
             this.$vux.toast.text(res.result)
+            setTimeout(() => {
+              this.$router.go(-1)
+            }, 1000)
           }
         }
       })
@@ -195,9 +201,10 @@ export default {
             font-size: 26px;
             p:nth-child(1){
               font-size: 34px;
-              color:#538aef;
+              color:#538AEF;
               a:visited{color:#538aef;}
               a:active{color:#538aef;}
+              a{color:#538aef;}
             }
             p:nth-child(2){
               padding-top: 32px;

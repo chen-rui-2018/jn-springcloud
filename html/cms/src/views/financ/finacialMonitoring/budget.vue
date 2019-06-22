@@ -21,7 +21,7 @@
             <el-button v-show="status==='1'" type="primary" @click="startYear">年初预算导入</el-button>
           <el-button v-show="status==='1'" type="primary" @click="temporary ">临时预算导入</el-button></el-form-item>
         </div>
-        <div >
+        <div class="queryCondition-top">
           <el-form-item label="数据月份:" class="budgetWidth">
             <el-date-picker
               v-model="listQuery.startMonth"
@@ -35,12 +35,12 @@
               value-format="yyyyMM"
               placeholder="结束月份"/>
           </el-form-item>
-          <el-form-item v-show="status==='2'" label="录入类型:" style="margin-left:321px;">
+          <el-form-item v-show="status==='2'" label="录入类型:" style="margin-left:-169px;">
             <el-select v-model="listQuery.budgetType" placeholder="请选择" clearable >
               <el-option v-for="item in budgetTypeOptions" :key="item.id" :label="item.value" :value="item.id" />
             </el-select>
           </el-form-item>
-        <el-button type="primary" style="float:right;margin-right:10px;" icon="el-icon-search" @click="handleFilter">查询</el-button></div>
+        <el-button type="primary" style="float:right;margin-right:10px;height:40px;" icon="el-icon-search" @click="handleFilter">查询</el-button></div>
       </el-form>
     </div>
     <!-- 表格 -->

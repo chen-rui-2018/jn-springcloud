@@ -58,7 +58,7 @@
 </template>
 
 <script>
-  import { getToken, removeToken } from '@/util/auth'
+  import { getToken } from '@/util/auth'
   import { downloadService, download} from '@/util/downloadService'
   export default {
     name: "sciencePartDataReportEntrance",

@@ -119,6 +119,10 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
             result.setCode(electricResult.getCode());
             result.setResult(electricResult.getMsg());
             logger.info("获取电表平台建筑信息失败,失败原因:【{}】",electricResult.getMsg());
+            //如果编号为无效的令牌则重新进行令牌获取操作
+            if(electricResult.getCode().equals(ElectricMeterEnum.ELECTRIC_TOKEN_INVALID.getCode())){
+                getElectricMeterAccessToken();
+            }
         }
         return result;
     }
@@ -151,6 +155,10 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
             result.setCode(electricResult.getCode());
             result.setResult(electricResult.getMsg());
             logger.info("获取建筑下的仪表信息息失败,失败原因:【{}】",electricResult.getMsg());
+            //如果编号为无效的令牌则重新进行令牌获取操作
+            if(electricResult.getCode().equals(ElectricMeterEnum.ELECTRIC_TOKEN_INVALID.getCode())){
+                getElectricMeterAccessToken();
+            }
         }
 
         return result;
@@ -182,6 +190,10 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
             result.setCode(electricResult.getCode());
             result.setResult(electricResult.getMsg());
             logger.info("获取建筑下的仪表信息息失败,失败原因:【{}】",electricResult.getMsg());
+            //如果编号为无效的令牌则重新进行令牌获取操作
+            if(electricResult.getCode().equals(ElectricMeterEnum.ELECTRIC_TOKEN_INVALID.getCode())){
+                getElectricMeterAccessToken();
+            }
         }
         return result;
     }
@@ -205,6 +217,10 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
            ElectricResult electricResult = JsonStringToObjectUtil.jsonToObject(switchSting, new TypeReference<ElectricResult>() {});
            result.setCode(electricResult.getCode());
            result.setResult(electricResult.getMsg());
+            //如果编号为无效的令牌则重新进行令牌获取操作
+            if(electricResult.getCode().equals(ElectricMeterEnum.ELECTRIC_TOKEN_INVALID.getCode())){
+                getElectricMeterAccessToken();
+            }
         }
         return result;
     }
@@ -244,6 +260,10 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
                 result.setCode(electricResult.getCode());
                 result.setResult(electricResult.getMsg());
                 logger.info("\n空调表数据信息采集失败,失败原因:【{}】",electricResult.getMsg());
+                  //如果编号为无效的令牌则重新进行令牌获取操作
+                  if(electricResult.getCode().equals(ElectricMeterEnum.ELECTRIC_TOKEN_INVALID.getCode())){
+                      getElectricMeterAccessToken();
+                  }
             }
         } else {
             //电表 或 水表数据采集 使用相同的返回实体
@@ -266,6 +286,10 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
                 result.setCode(electricResult.getCode());
                 result.setResult(electricResult.getMsg());
                 logger.info(meterName+"\n数据信息采集失败,失败原因:【{}】",electricResult.getMsg());
+                //如果编号为无效的令牌则重新进行令牌获取操作
+                if(electricResult.getCode().equals(ElectricMeterEnum.ELECTRIC_TOKEN_INVALID.getCode())){
+                    getElectricMeterAccessToken();
+                }
             }
         }
         return result;

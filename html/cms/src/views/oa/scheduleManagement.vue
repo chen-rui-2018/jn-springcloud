@@ -508,6 +508,9 @@ export default {
   //     text-align: center;
   //   }
 }
+.el-textarea__inner {
+  min-height:90px!important;
+}
 .fc-button-primary {
   color: unset;
   background-color: unset;

@@ -26,7 +26,7 @@ public class CompanyCheckParam implements Serializable {
     @ApiModelProperty(value = "企业简称", required = true, example = "白下")
     private String comNameShort;
     @NotNull(message = "企业领域不能为空")
-    @ApiModelProperty(value = "企业领域[产业领域、所属行业][传机构字典接口入参preType=1返回的ID]", required = true, notes = "传机构字典接口入参preType=1返回的ID", example = "cloud_computing")
+    @ApiModelProperty(value = "企业领域[产业领域、所属行业][传机构字典接口入参preType=1返回的ID]", required = true, notes = "传机构字典接口入参preType=1返回的ID", example = "intelligence_equipment")
     private String induType;
     @NotNull(message = "企业法人不能为空")
     @ApiModelProperty(value = "企业法人", required = true, example = "李薇薇")
@@ -38,9 +38,7 @@ public class CompanyCheckParam implements Serializable {
     @Pattern(regexp = "^[12]\\d{3}\\-(0[1-9]|1[0-2])\\-(0[1-9]|[1-2]\\d|3[01])$", message = "注册时间校验失败")
     @ApiModelProperty(value = "注册时间yyyy-MM-dd", required = true, example = "2018-01-01")
     private String foundingTime;
-    @NotNull(message = "落地时间不能为空")
-    @Pattern(regexp = "^[12]\\d{3}\\-(0[1-9]|1[0-2])\\-(0[1-9]|[1-2]\\d|3[01])$", message = "落地时间校验失败")
-    @ApiModelProperty(value = "落地时间yyyy-MM-dd", required = true, example = "2018-01-01")
+    @ApiModelProperty(value = "落地时间yyyy-MM-dd", example = "2018-01-01")
     private String runTime;
     @NotNull(message = "公司注册地址不能为空")
     @ApiModelProperty(value = "公司注册地址", required = true, example = "南京白下区")
@@ -55,17 +53,17 @@ public class CompanyCheckParam implements Serializable {
     @ApiModelProperty(value = "注册资金（万元）", required = true, example = "500")
     private String regCapital;
     @NotNull(message = "企业规模不能为空")
-    @ApiModelProperty(value = "企业规模", required = true, example = "100-200人")
+    @ApiModelProperty(value = "企业规模（请调用[企业服务-公共：码表-数据列表]获取数据，传值为groupId=companyScale）", required = true)
     private String comScale;
     @NotNull(message = "统一社会信用代码不能为空")
     @ApiModelProperty(value = "统一社会信用代码", required = true, example = "1000")
     private String unifyCode;
     @NotNull(message = "企业性质不能为空")
-    @ApiModelProperty(value = "企业性质[传机构字典接口入参preType=3返回的ID]", required = true,notes = "传机构字典接口入参preType=3返回的ID", example = "joint_enterprise")
-    private String comProperty;
+    @ApiModelProperty(value = "企业性质[传机构字典接口入参preType=3返回的ID]", required = true, example = "[\"joint_enterprise\"]")
+    private String[] comPropertys;
     @NotNull(message = "企业来源不能为空")
     @Pattern(regexp = "^[12]$", message = "企业来源校验错误")
-    @ApiModelProperty(value = "企业来源 [1人才企业2招商企业]",notes = "1人才企业2招商企业", required = true, example = "1")
+    @ApiModelProperty(value = "企业来源 [1人才企业 2招商企业]",notes = "1人才企业 2招商企业", required = true, example = "1")
     private String comSource;
     @NotNull(message = "企业logo不能为空")
     @ApiModelProperty(value = "企业logo", required = true, example = "http://xxxx.png")
@@ -80,12 +78,16 @@ public class CompanyCheckParam implements Serializable {
     @ApiModelProperty(value = "企业官网地址", example = "http://www.baidu.com")
     private String comWeb;
     @ApiModelProperty(value = "我的服务", example = "我的服务")
+    @Pattern(regexp = "^.{0,20}$", message = "我的服务校验失败，不能超过20个字")
     private String comServer;
     @ApiModelProperty(value = "我的需求", example = "我的需求")
+    @Pattern(regexp = "^.{0,20}$", message = "我的需求校验失败，不能超过20个字")
     private String comDemand;
     @ApiModelProperty(value = "所属园区[园区ID]", example = "846841")
     private String affiliatedPark;
 
+    @ApiModelProperty(value = "企业性质", hidden = true)
+    private String comProperty;
     @ApiModelProperty(value = "信用分", hidden = true)
     private String creditPoints;
     @ApiModelProperty(value = "信用分更新时间", hidden = true)
@@ -100,6 +102,8 @@ public class CompanyCheckParam implements Serializable {
     private String createdTime;
     @ApiModelProperty(value = "创建者账号", hidden = true)
     private String creatorAccount;
+    @ApiModelProperty(value = "企业ID", hidden = true)
+    private String comId;
 
     public String getId() {
         return id;
@@ -213,12 +217,12 @@ public class CompanyCheckParam implements Serializable {
         this.unifyCode = unifyCode;
     }
 
-    public String getComProperty() {
-        return comProperty;
+    public String[] getComPropertys() {
+        return comPropertys;
     }
 
-    public void setComProperty(String comProperty) {
-        this.comProperty = comProperty;
+    public void setComPropertys(String[] comPropertys) {
+        this.comPropertys = comPropertys;
     }
 
     public String getComSource() {
@@ -285,6 +289,14 @@ public class CompanyCheckParam implements Serializable {
         this.affiliatedPark = affiliatedPark;
     }
 
+    public String getComProperty() {
+        return comProperty;
+    }
+
+    public void setComProperty(String comProperty) {
+        this.comProperty = comProperty;
+    }
+
     public String getCreditPoints() {
         return creditPoints;
     }
@@ -341,6 +353,14 @@ public class CompanyCheckParam implements Serializable {
         this.creatorAccount = creatorAccount;
     }
 
+    public String getComId() {
+        return comId;
+    }
+
+    public void setComId(String comId) {
+        this.comId = comId;
+    }
+
     @Override
     public String toString() {
         return "CompanyCheckParam{" +
@@ -358,7 +378,7 @@ public class CompanyCheckParam implements Serializable {
                 ", regCapital='" + regCapital + '\'' +
                 ", comScale='" + comScale + '\'' +
                 ", unifyCode='" + unifyCode + '\'' +
-                ", comProperty='" + comProperty + '\'' +
+                ", comPropertys=" + Arrays.toString(comPropertys) +
                 ", comSource='" + comSource + '\'' +
                 ", avatar='" + avatar + '\'' +
                 ", businessLicense='" + businessLicense + '\'' +
@@ -367,6 +387,7 @@ public class CompanyCheckParam implements Serializable {
                 ", comServer='" + comServer + '\'' +
                 ", comDemand='" + comDemand + '\'' +
                 ", affiliatedPark='" + affiliatedPark + '\'' +
+                ", comProperty='" + comProperty + '\'' +
                 ", creditPoints='" + creditPoints + '\'' +
                 ", creditUpdateTime='" + creditUpdateTime + '\'' +
                 ", comAdmin='" + comAdmin + '\'' +
@@ -374,6 +395,7 @@ public class CompanyCheckParam implements Serializable {
                 ", checkStatus='" + checkStatus + '\'' +
                 ", createdTime='" + createdTime + '\'' +
                 ", creatorAccount='" + creatorAccount + '\'' +
+                ", comId='" + comId + '\'' +
                 '}';
     }
 }

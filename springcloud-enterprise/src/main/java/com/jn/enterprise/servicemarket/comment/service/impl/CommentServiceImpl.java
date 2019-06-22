@@ -8,9 +8,11 @@ import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.enterprise.enums.OrgExceptionEnum;
+import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.servicemarket.comment.dao.CommentMapper;
 import com.jn.enterprise.servicemarket.comment.dao.TbServiceRatingMapper;
 import com.jn.enterprise.servicemarket.comment.entity.TbServiceRating;
+import com.jn.enterprise.servicemarket.comment.enums.HandleResultEnum;
 import com.jn.enterprise.servicemarket.comment.model.*;
 import com.jn.enterprise.servicemarket.comment.service.CommentService;
 import com.jn.enterprise.servicemarket.org.dao.TbServiceOrgMapper;
@@ -18,6 +20,7 @@ import com.jn.enterprise.servicemarket.product.entity.TbServiceProduct;
 import com.jn.enterprise.servicemarket.require.dao.TbServiceRequireMapper;
 import com.jn.enterprise.servicemarket.require.entity.TbServiceRequire;
 import com.jn.enterprise.servicemarket.require.entity.TbServiceRequireCriteria;
+import com.jn.park.enums.CommentExceptionEnum;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
@@ -45,10 +48,7 @@ public class CommentServiceImpl implements CommentService {
     private TbServiceRequireMapper requireMapper;
     @Autowired
     private CommentMapper commentMapper;
-    @Autowired
-    private UserExtensionClient userExtensionClient;
-    @Autowired
-    private TbServiceOrgMapper tbServiceOrgMapper;
+
     @Autowired
     private TbServiceRatingMapper tbServiceRatingMapper;
 
@@ -112,7 +112,15 @@ public class CommentServiceImpl implements CommentService {
         TbServiceRating tbServiceRating = new TbServiceRating();
         TbServiceRequire serviceRequire = requireMapper.selectByPrimaryKey(commentParameter.getId());
         if(null == serviceRequire){
+            logger.warn("需求不存在，请核实数据");
             throw new JnSpringCloudException(OrgExceptionEnum.REQUIRE_IS_NOT_EXIT);
+        }
+        //判断当前需求是否允许评价(对接成功才允许评价)
+        //对接结果(1:对接成功  2:对接失败  3:企业需求撤销 4:未对接)
+        long existNum = successRequireIsExist(commentParameter);
+        if(existNum==0){
+            logger.warn("当前需求对接结果非“对接成功”,不允许评价");
+            throw new JnSpringCloudException(CommentExceptionEnum.NOT_ALLOW_COMMENT);
         }
         TbServiceRating ratingOld = tbServiceRatingMapper.selectByPrimaryKey(commentParameter.getId());
         if(null != ratingOld){
@@ -133,6 +141,20 @@ public class CommentServiceImpl implements CommentService {
         logger.info("提交评论，修改需求表评论状态，需求iD：{}，响应条数：{}",commentParameter.getId(),i);
         int insert = tbServiceRatingMapper.insert(tbServiceRating);
         return insert==1?true:false;
+    }
+
+    /**
+     * 对接成功需求是否存在
+     * @param commentParameter
+     * @return
+     */
+    @ServiceLog(doAction = "对接成功需求是否存在")
+    private long successRequireIsExist(CommentParameter commentParameter) {
+        TbServiceRequireCriteria example=new TbServiceRequireCriteria();
+        example.createCriteria().andIdEqualTo(commentParameter.getId())
+                .andHandleResultEqualTo(HandleResultEnum.DOCKING_SUCCESS.getCode())
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        return requireMapper.countByExample(example);
     }
 
 }

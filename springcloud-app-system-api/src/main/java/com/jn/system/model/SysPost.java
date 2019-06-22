@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
@@ -30,22 +31,25 @@ public class SysPost implements Serializable {
     @ApiModelProperty("状态，0删除，1有效，2无效")
     private Byte recordStatus;
     @ApiModelProperty(value ="岗位类型id",required = true)
-    @NotBlank(message = "岗位类型不能为空")
     private String postTypeId;
     @ApiModelProperty("岗位类型名称")
     private String postTypeName;
+    @ApiModelProperty("等级")
+    @NotNull(message = "等级不能为空")
+    private Integer rank;
 
     public SysPost() {
     }
 
     public SysPost(String id, String postName, Date createdTime, Byte recordStatus,
-                   String postTypeId, String postTypeName) {
+                   String postTypeId, String postTypeName, Integer rank) {
         this.id = id;
         this.postName = postName;
         this.createdTime = createdTime;
         this.recordStatus = recordStatus;
         this.postTypeId = postTypeId;
         this.postTypeName = postTypeName;
+        this.rank = rank;
     }
 
     public String getId() {
@@ -96,6 +100,14 @@ public class SysPost implements Serializable {
         this.postTypeName = postTypeName;
     }
 
+    public Integer getRank() {
+        return rank;
+    }
+
+    public void setRank(Integer rank) {
+        this.rank = rank;
+    }
+
     @Override
     public String toString() {
         return "SysPost{" +
@@ -105,6 +117,7 @@ public class SysPost implements Serializable {
                 ", recordStatus=" + recordStatus +
                 ", postTypeId='" + postTypeId + '\'' +
                 ", postTypeName='" + postTypeName + '\'' +
+                ", rank=" + rank +
                 '}';
     }
 }

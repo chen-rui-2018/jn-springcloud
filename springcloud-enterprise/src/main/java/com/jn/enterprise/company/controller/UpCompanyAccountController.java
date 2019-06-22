@@ -3,7 +3,6 @@ package com.jn.enterprise.company.controller;
 import com.codingapi.tx.annotation.TxTransaction;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
-import com.jn.enterprise.company.entity.TbServiceCompany;
 import com.jn.enterprise.company.model.ServiceCompany;
 import com.jn.enterprise.company.service.UpCompanyAccountService;
 import com.jn.system.log.annotation.ControllerLog;

@@ -8,7 +8,12 @@ import com.jn.common.util.Assert;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.company.model.IBPSResult;
+import com.jn.enterprise.common.enums.CommonExceptionEnum;
+import com.jn.enterprise.company.service.CompanyService;
+import com.jn.enterprise.company.vo.InviteUpgradeStatusVO;
+import com.jn.enterprise.company.vo.UpgradeStatusVO;
 import com.jn.enterprise.enums.InvestorExceptionEnum;
+import com.jn.enterprise.enums.OrgExceptionEnum;
 import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.propaganda.enums.ApprovalStatusEnum;
 import com.jn.enterprise.servicemarket.org.dao.TbServiceOrgMapper;
@@ -80,6 +85,9 @@ public class InvestorServiceImpl implements InvestorService {
 
     @Autowired
     private SystemClient systemClient;
+
+    @Autowired
+    private CompanyService companyService;
 
     /**
      * 投资人认证流程id
@@ -358,6 +366,14 @@ public class InvestorServiceImpl implements InvestorService {
         Assert.notNull(investorAuthenticateParam, InvestorExceptionEnum.INVESTOR_INFO_NOT_NULL.getMessage());
         Assert.notNull(investorAuthenticateParam.getInvestorMainAreaList(), InvestorExceptionEnum.INVESTOR_MAIN_AREA_NOT_NULL.getMessage());
         Assert.notNull(investorAuthenticateParam.getInvestorMainRoundList(), InvestorExceptionEnum.INVESTOR_MAIN_ROUND_NOT_NULL.getMessage());
+        //判断当前用户是否可以认证
+        InviteUpgradeStatusVO joinParkStatus = companyService.getJoinParkStatus(investorAccount);
+        String allowStatus="0";
+        if(!StringUtils.equals(allowStatus,joinParkStatus.getCode())){
+            logger.warn(joinParkStatus.getMessage());
+            throw new JnSpringCloudException(CommonExceptionEnum.UPGRADE_COMMON, investorAccount + joinParkStatus.getInviteMessage());
+        }
+
 
         //判断条件  审批状态不包含审批不通过（-1）
         //判断投资人是否已存在

@@ -34,7 +34,7 @@
           </div>
         </a>
         <div class="imgU" @mouseenter="goImg">
-          <img v-if="userInfo&&userInfoData.avatar" :src="userInfoData.avatar" style="vertical-align: middle;">
+          <img v-if="userInfoData && userInfoData.avatar" :src="userInfoData.avatar" style="vertical-align: middle;">
           <img v-else src="@/../static/img/smaImg.png">
         </div>
       </template>
@@ -44,7 +44,8 @@
     <div class="avaMenu" v-if="menuFlag" @mouseleave="menuFlag=!menuFlag">
       <el-card class="box-card bxcard">
         <ul class="avaUL">
-          <li style="border-bottom:1px solid #eee;color:#333" @click="$router.push({path:'/home'})">您好,{{ userInfoData.account }}</li>
+          <li v-if="userInfoData" style="border-bottom:1px solid #eee;color:#333" @click="$router.push({path:'/home'})">您好,{{ userInfoData.account || ''}}</li>
+          <li v-else style="border-bottom:1px solid #eee;color:#333" @click="$router.push({path:'/home'})">您好</li>
           <!-- <li class="homeLi" v-for="(i,k) in list" :key="k" :class="{'act':bgFlag==i.name}" @click="$router.push({path:i.path})">{{i.name}}</li> -->
           <!-- <li class="homeLi" @click="$router.push({path:'/home'})">首页</li> -->
           <!-- <li class="homeLi" @click="$router.push({path:'/userHome'})">用户资料</li>
@@ -66,7 +67,8 @@ import {
   removeToken,
   removeUserInfo,
   getUserInfo,
-  setUserInfo
+  setUserInfo,
+  removeIbpsToken
 } from "@/util/auth";
 export default {
   data() {
@@ -101,11 +103,11 @@ export default {
   },
   methods: {
     goEnter() {
-      this.showMes = !showMes
+      this.showMes = !this.showMes
       this.menuFlag = false
     },
     goImg(){
-      this,menuFlag=!menuFlag
+      this.menuFlag=!this.menuFlag
       this.showMes=false
     },
     goRoute(i) {
@@ -154,6 +156,7 @@ export default {
     loginOut() {
       removeToken();
       removeUserInfo();
+      removeIbpsToken();
       this.$router.push({ path: "/" });
       // this.islogin();
       this.isLogin=false
@@ -186,7 +189,6 @@ export default {
       _this.api.get({
         url: "getUserExtension",
         data: {
-          // account: sessionStorage.account
         },
         dataFlag: false,
         callback: function(res) {

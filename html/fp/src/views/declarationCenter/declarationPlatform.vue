@@ -136,6 +136,11 @@ export default {
           if (res.code == "0000") {
             _this.pladformList = res.data.rows;
             _this.total=res.data.total
+          }else{
+            _this.$message.error(res.result)
+            setTimeout(() => {
+              this.$router.go(-1)
+            }, 1000)
           }
         }
       });
@@ -149,6 +154,11 @@ export default {
           // console.log(res);
           if (res.code == "0000") {
             _this.platformType = res.data;
+          }else{
+            _this.$message.error(res.result)
+            setTimeout(() => {
+              this.$router.go(-1)
+            }, 1000)
           }
         }
       });

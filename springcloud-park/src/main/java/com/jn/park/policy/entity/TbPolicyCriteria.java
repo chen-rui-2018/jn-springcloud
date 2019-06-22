@@ -1205,6 +1205,66 @@ public class TbPolicyCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andIsStickIsNull() {
+            addCriterion("is_stick is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsStickIsNotNull() {
+            addCriterion("is_stick is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsStickEqualTo(Byte value) {
+            addCriterion("is_stick =", value, "isStick");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsStickNotEqualTo(Byte value) {
+            addCriterion("is_stick <>", value, "isStick");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsStickGreaterThan(Byte value) {
+            addCriterion("is_stick >", value, "isStick");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsStickGreaterThanOrEqualTo(Byte value) {
+            addCriterion("is_stick >=", value, "isStick");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsStickLessThan(Byte value) {
+            addCriterion("is_stick <", value, "isStick");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsStickLessThanOrEqualTo(Byte value) {
+            addCriterion("is_stick <=", value, "isStick");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsStickIn(List<Byte> values) {
+            addCriterion("is_stick in", values, "isStick");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsStickNotIn(List<Byte> values) {
+            addCriterion("is_stick not in", values, "isStick");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsStickBetween(Byte value1, Byte value2) {
+            addCriterion("is_stick between", value1, value2, "isStick");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsStickNotBetween(Byte value1, Byte value2) {
+            addCriterion("is_stick not between", value1, value2, "isStick");
+            return (Criteria) this;
+        }
+
         public Criteria andIssueUnitIsNull() {
             addCriterion("issue_unit is null");
             return (Criteria) this;
@@ -1872,6 +1932,76 @@ public class TbPolicyCriteria {
 
         public Criteria andRecordStatusNotBetween(Byte value1, Byte value2) {
             addCriterion("record_status not between", value1, value2, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlIsNull() {
+            addCriterion("file_url is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlIsNotNull() {
+            addCriterion("file_url is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlEqualTo(String value) {
+            addCriterion("file_url =", value, "fileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlNotEqualTo(String value) {
+            addCriterion("file_url <>", value, "fileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlGreaterThan(String value) {
+            addCriterion("file_url >", value, "fileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlGreaterThanOrEqualTo(String value) {
+            addCriterion("file_url >=", value, "fileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlLessThan(String value) {
+            addCriterion("file_url <", value, "fileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlLessThanOrEqualTo(String value) {
+            addCriterion("file_url <=", value, "fileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlLike(String value) {
+            addCriterion("file_url like", value, "fileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlNotLike(String value) {
+            addCriterion("file_url not like", value, "fileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlIn(List<String> values) {
+            addCriterion("file_url in", values, "fileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlNotIn(List<String> values) {
+            addCriterion("file_url not in", values, "fileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlBetween(String value1, String value2) {
+            addCriterion("file_url between", value1, value2, "fileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlNotBetween(String value1, String value2) {
+            addCriterion("file_url not between", value1, value2, "fileUrl");
             return (Criteria) this;
         }
     }

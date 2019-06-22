@@ -29,16 +29,20 @@ public class SysPostAdd implements Serializable {
     private Byte recordStatus;
 
     @ApiModelProperty("岗位类型id")
-    @NotBlank(message = "岗位类型不能为空")
     private String postTypeId;
+
+    @ApiModelProperty("等级")
+    @NotNull(message = "等级不能为空")
+    private Integer rank;
 
     public SysPostAdd() {
     }
 
-    public SysPostAdd(String postName, Byte recordStatus, String postTypeId) {
+    public SysPostAdd(String postName, Byte recordStatus, String postTypeId, Integer rank) {
         this.postName = postName;
         this.recordStatus = recordStatus;
         this.postTypeId = postTypeId;
+        this.rank = rank;
     }
 
     public String getPostName() {
@@ -65,12 +69,22 @@ public class SysPostAdd implements Serializable {
         this.postTypeId = postTypeId;
     }
 
+    public Integer getRank() {
+        return rank;
+    }
+
+    public void setRank(Integer rank) {
+        this.rank = rank;
+    }
+
+
     @Override
     public String toString() {
         return "SysPostAdd{" +
                 "postName='" + postName + '\'' +
                 ", recordStatus=" + recordStatus +
                 ", postTypeId='" + postTypeId + '\'' +
+                ", rank=" + rank +
                 '}';
     }
 }

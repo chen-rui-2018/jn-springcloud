@@ -21,18 +21,18 @@
     </div> -->
       <!-- <div id ="GanttChartDIV" style ="position:relative;" class="gantt"/> -->
       <el-table :data="detailData" style="width: 100%;margin-bottom:40px;">
-        <el-table-column prop="taskName" label="任务" min-width="150" align="center">
+        <el-table-column :show-overflow-tooltip="true" prop="taskName" label="任务" align="center">
           <template slot-scope="scope">
             <span class="text-blue">{{ scope.row.taskName }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="nowadaysProgress" label="进度" min-width="80" align="center">
+        <el-table-column prop="nowadaysProgress" label="进度" align="center">
           <template slot-scope="scope">
             <span :class="scope.row.nowadaysProgress==='100%'?'text-green':''">{{ scope.row.nowadaysProgress }}</span>
           </template>
         </el-table-column>
         <el-table-column label="状态" align="center">
-          <el-table-column prop="taskState" label="时间" min-width="120" align="center">
+          <el-table-column prop="taskState" label="时间" align="center">
             <template slot-scope="scope">
               <span v-show="scope.row.taskState==='延期'" class="text-red">{{ scope.row.taskState }}</span>
               <span v-show="scope.row.taskState==='提前'||scope.row.taskState==='准时'" class="text-green">{{
@@ -40,11 +40,11 @@
               <span v-show="scope.row.taskState==='未到期'">{{ scope.row.taskState }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="appraise" label="评价" min-width="50" align="center" />
+          <el-table-column prop="appraise" label="评价" align="center" />
         </el-table-column>
         <el-table-column label="计划时间" align="center">
-          <el-table-column prop="planStartTime" label="开始" min-width="120" align="center" />
-          <el-table-column prop="planStopTime" label="结束" min-width="120" align="center" />
+          <el-table-column prop="planStartTime" label="开始" align="center" />
+          <el-table-column prop="planStopTime" label="结束" align="center" />
         </el-table-column>
         <!-- <el-table-column /> -->
       </el-table>
@@ -178,7 +178,7 @@ export default {
         '',
         'get'
       ).then(res => {
-        console.log(res)
+        // console.log(res)
         // const date = new Date()
         if (res.data.code === this.GLOBAL.code) {
           this.detailData = res.data.data
@@ -196,12 +196,14 @@ export default {
                 id: i + 1,
                 // start_date: this.reverseString(v.planStartTime),
                 start_date: new Date(v.planStartTime),
-                duration: (new Date(v.planStopTime).getTime() - new Date(v.planStartTime).getTime()) / 3600 / 1000 / 24,
+                // end_date: this.reverseString(v.planStopTime),
+                duration: ((new Date(v.planStopTime).getTime() - new Date(v.planStartTime).getTime()) / 3600 / 1000 / 24) + 1,
+                // duration: 20,
                 progress: Number(v.nowadaysProgress.split('%')[0]) / 100
               })
             })
           }
-          console.log(this.tasks.data)
+          // console.log(this.tasks.data)
         } else {
           this.$message.error(res.data.result)
         }
@@ -500,6 +502,9 @@ export default {
 </script>
 
 <style lang="scss">
+ .gantt_message_area{
+    display: none!important;
+  }
 .projectDetails {
   .el-table--medium td, .el-table--medium th{
     padding:6px 0;
@@ -524,22 +529,27 @@ export default {
   // }
   .details-top{
     display: flex;
-    >div:nth-child(1){
-      flex:6;
-    }
+    // >div:nth-child(1){
+    //   // flex:6;
+    // }
      >div:nth-child(2){
-      flex:4;
-      width: 40%;
+      // flex:4;
+      width:54%;
       >div:nth-child(1){
         height: 100%;
         >div:nth-child(1){
-          height: 100%!important;
+          height: unset!important;
           >div:nth-child(1){
+            height: unset!important;
             >div:nth-child(1){
                display: none;
             }
             >div:nth-child(2){
+              height: unset!important;
               width: 100%!important;
+              >div:nth-child(1){
+                height: unset!important;
+              }
               .gantt_task_scale{
                 height: 74px!important;
                 >div:nth-child(1){
@@ -575,6 +585,7 @@ export default {
     background: #67c23a;
   }
   }
+
   .gantt_task .gantt_task_scale .gantt_scale_cell{
         color: black;
     border-right: 1px solid #a3d9f4;
@@ -611,12 +622,12 @@ export default {
 .gantt_task_scale{
   width: 100% !important;
 }
-.gantt_bars_area{
-  >div{
-    // height: 44px !important;
-    // line-height: 44px !important;
-    // top:0px !important;
-  }
-}
+// .gantt_bars_area{
+//   // >div{
+//   //   // height: 44px !important;
+//   //   // line-height: 44px !important;
+//   //   // top:0px !important;
+//   // }
+// }
 }
 </style>

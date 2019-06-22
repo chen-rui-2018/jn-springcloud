@@ -2,6 +2,10 @@ package com.jn.enterprise.joinpark.org.service.impl;
 
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.util.StringUtils;
+import com.jn.enterprise.common.enums.CommonExceptionEnum;
+import com.jn.enterprise.company.service.CompanyService;
+import com.jn.enterprise.company.vo.InviteUpgradeStatusVO;
+import com.jn.enterprise.company.vo.UpgradeStatusVO;
 import com.jn.enterprise.enums.OrgExceptionEnum;
 import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.joinpark.org.dao.ServiceOrgMapper;
@@ -54,9 +58,20 @@ public class OrgJoinServiceImpl implements OrgJoinService {
     @Autowired
     private ServiceOrgTempMapper serviceOrgTempMapper;
 
+    @Autowired
+    private CompanyService companyService;
+
     @ServiceLog(doAction = "机构认证保存/更新")
     @Override
     public int saveOrUpdateOrgDetail(OrgDetailParameter orgDetailParameter,String account){
+        //判断当前用户是否可以认证
+        InviteUpgradeStatusVO joinParkStatus = companyService.getJoinParkStatus(account);
+        String allowStatus="0";
+        if(!StringUtils.equals(allowStatus,joinParkStatus.getCode())){
+            logger.warn(joinParkStatus.getMessage());
+            throw new JnSpringCloudException(CommonExceptionEnum.UPGRADE_COMMON, account + joinParkStatus.getInviteMessage());
+        }
+
         //机构id为空
         if(StringUtils.isBlank(orgDetailParameter.getOrgId())){
             //校验当前用户是否已认证机构认证

@@ -608,9 +608,9 @@ export default {
       margin-bottom: 20px;
     }
     .delContent {
-      > p {
-        margin: 50px 0;
-      }
+      // > p {
+      //   margin: 50px 0;
+      // }
     }
   }
   .delmessage {

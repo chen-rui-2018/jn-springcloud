@@ -8,6 +8,8 @@ public class TbSysPost implements Serializable {
 
     private String postName;
 
+    private Integer rank;
+
     private String creatorAccount;
 
     private Date createdTime;
@@ -36,6 +38,14 @@ public class TbSysPost implements Serializable {
 
     public void setPostName(String postName) {
         this.postName = postName == null ? null : postName.trim();
+    }
+
+    public Integer getRank() {
+        return rank;
+    }
+
+    public void setRank(Integer rank) {
+        this.rank = rank;
     }
 
     public String getCreatorAccount() {
@@ -100,6 +110,7 @@ public class TbSysPost implements Serializable {
         TbSysPost other = (TbSysPost) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getPostName() == null ? other.getPostName() == null : this.getPostName().equals(other.getPostName()))
+            && (this.getRank() == null ? other.getRank() == null : this.getRank().equals(other.getRank()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
@@ -114,6 +125,7 @@ public class TbSysPost implements Serializable {
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getPostName() == null) ? 0 : getPostName().hashCode());
+        result = prime * result + ((getRank() == null) ? 0 : getRank().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
@@ -131,6 +143,7 @@ public class TbSysPost implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", postName=").append(postName);
+        sb.append(", rank=").append(rank);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", createdTime=").append(createdTime);
         sb.append(", recordStatus=").append(recordStatus);

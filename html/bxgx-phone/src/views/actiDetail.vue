@@ -66,7 +66,7 @@
         <span class="att1">关注{{actiForm.actiLike}}</span>
       </div>
       <div class="attend ">
-        <span v-if="activityApplyShow=='0'">停止报名</span>
+        <span class="stopJoin" v-if="activityApplyShow=='0'">停止报名</span>
         <span v-if="activityApplyShow=='1'" @click="quickSign(actiForm.id)">我要参加</span>
         <span v-if="activityApplyShow=='2'" @click="stopApply(actiForm.id)">取消报名</span>
       </div>
@@ -94,7 +94,8 @@ export default {
   created () {
     this.actiDel()
   },
-  mounted () {},
+  mounted () {
+  },
   destroyed () {
     clearInterval(this._interval)
   },
@@ -121,6 +122,7 @@ export default {
           if (res.code === '0000') {
             _this.actiForm = res.data.activityDetail
             _this.apply = res.data
+            _this.accountIsLike = res.data.accountIsLike
             _this.activityApplyShow = res.data.activityApplyShow
             _this.activityApplyList = res.data.activityApplyList
             _this.sysTemTime = _this.getTime(res.data.sysTemTime)
@@ -157,10 +159,16 @@ export default {
             _this.$vux.toast.text('点赞成功')
             _this.actiForm.actiLike = _this.actiForm.actiLike * 1 + 1
             // _this.$message.success('点赞成功')
-            // _this.accountIsLike = true
+            _this.accountIsLike = true
             // window.location.href = 'protocol://android?code=toast&data=' + _this.actiForm.actiLike
-            _this.dispatch(document.queryselector('.attention'), 'click')
-            document.queryselector('.attention').click(_this.actiForm.actiLike)
+            if (_this.$route.query.isMini) {
+
+            } else {
+              _this.dispatch(document.queryselector('.attention'), 'click')
+              document.queryselector('.attention').click(_this.actiForm.actiLike)
+              let action = 'handleLike'
+              window.webkit.messageHandlers.jsToOc.postMessage(action, _this.actiForm.actiLike)
+            }
           } else {
             _this.$vux.toast.text(res.result)
           }
@@ -184,8 +192,16 @@ export default {
             _this.$vux.toast.text('取消点赞成功')
             _this.actiForm.actiLike -= 1
             _this.accountIsLike = false
-            window.location.href =
-              'protocol://android?code=toast&data=' + _this.actiForm.actiLike
+            // window.location.href =
+            //   'protocol://android?code=toast&data=' + _this.actiForm.actiLike
+            if (_this.$route.query.isMini) {
+
+            } else {
+              _this.dispatch(document.queryselector('.attention'), 'click')
+              document.queryselector('.attention').click(_this.actiForm.actiLike)
+              let action = 'cancelLike'
+              window.webkit.messageHandlers.jsToOc.postMessage(action, _this.actiForm.actiLike)
+            }
           } else {
             _this.$vux.toast.text(res.result)
           }
@@ -393,9 +409,9 @@ export default {
       font-size: 30px;
       margin-bottom: 30px;
     }
-    > p {
-      line-height: 40px;
-    }
+    // > p {
+    //   line-height: 40px;
+    // }
   }
   .actiFooter {
     display: flex;
@@ -435,6 +451,10 @@ export default {
         font-size: 34px;
         width: 100%;
         text-align: center;
+      }
+      .stopJoin{
+        background: #eee;
+        color:#999;
       }
     }
     .att1 {

@@ -32,6 +32,7 @@
       :data="tableData"
       v-loading="loading"
       stripe
+      border
       header-cell-class-name="science-part-table-header"
       style="width: 100%">
       <el-table-column
@@ -57,7 +58,7 @@
 </template>
 
 <script>
-  import { getToken, removeToken } from '@/util/auth'
+  import { getToken } from '@/util/auth'
   import { downloadService, download} from '@/util/downloadService'
   export default {
     name: "sciencePartDataReportEntrance",

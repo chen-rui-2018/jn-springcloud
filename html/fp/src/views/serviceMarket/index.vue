@@ -63,7 +63,7 @@
       <div class="nav" v-if="!show3&&isNavShow">
         <div class="nav_cont" v-for="(slideitem,slideindex) in sliderData " :key="slideindex">
           <div class="nav_cont_father" @click="$router.push({path:'/quickSearch',query:{signoryId:slideitem.id,preValue:slideitem.preValue}})">{{slideitem.preValue}} <i class="el-icon-arrow-right"></i></div>
-          <div class="nav_cont_son" :class="{'hidder_son':slideitem.products.length===0} ">  
+          <div class="nav_cont_son" :class="{'hidder_son':slideitem.products===null} ">  
             <div v-for="(item,index) in slideitem.products" :key="index" @click="$router.push({path:'/serverProDetail',query:{productId:item.productId,signoryId:slideitem.id}})">
               <span></span>
               {{item.productName}}
@@ -112,14 +112,14 @@
           <div class="nav_todo"><span>机构入驻</span></div>
         </a>
         <a href="javascript:;">
-          <div class="nav_icon"><i class="iconfont icon-huodong"></i></div>
-          <div class="nav_discribe"> <span>累计举办活动<span>{{navData.activityNum}}</span>场</span> </div>
-          <div class="nav_todo"><span @click='$router.push({path:"/actiTrain"})'>近期活动</span></div>
-        </a>
-        <a href="javascript:;">
           <div class="nav_icon"><i class="iconfont icon-jigou11"></i></div>
           <div class="nav_discribe"> <span>已入住服务专员<span>{{navData.advisorNum}}</span>人</span> </div>
           <div class="nav_todo" @click="isVisibility=true"><span>申请专员</span></div>
+        </a>
+        <a href="javascript:;">
+          <div class="nav_icon"><i class="iconfont icon-huodong"></i></div>
+          <div class="nav_discribe"> <span>累计举办活动<span>{{navData.activityNum}}</span>场</span> </div>
+          <div class="nav_todo"><span @click='$router.push({path:"/actiTrain"})'>近期活动</span></div>
         </a>
       </div>
       <!-- 申请专员弹窗 -->
@@ -614,7 +614,7 @@ export default {
       });
     },
     // 获取专员领域
-    getIndustryList(){
+    /* getIndustryList(){
       let _this = this;
       this.api.get({
         url: "selectIndustryList",
@@ -625,7 +625,7 @@ export default {
           }
         }
       });
-    },
+    }, */
     //改变专员领域列表
     changedomain(domain){
       this.domain=domain
@@ -635,7 +635,7 @@ export default {
     getSelectTeamList(){
       let _this = this;
       this.api.get({
-        url: "selectTeamList",
+        url: "getIndustryForMarket",
         data: {
           preType:0
          },
@@ -689,7 +689,9 @@ export default {
          },
         callback: function(res) {
           // console.log(res);
+          if(res.code==='0000'){
             _this.serviceOrgList = res.data.rows;
+          }else{}
         }
       });
     },
@@ -854,7 +856,7 @@ export default {
       top: 0;
       left: auto;
       width: 1%;
-      }
+    }
     .swiper-container{
       img{
         width:100%;
@@ -1485,6 +1487,12 @@ export default {
                     text-align: center;
                     p:nth-child(1){
                       font-size: 16px;
+                      height: 42px;
+                      overflow: hidden;
+                      text-overflow: ellipsis;
+                      display: -webkit-box;
+                      -webkit-line-clamp:2;
+                      -webkit-box-orient: vertical;
                     }
                     p:nth-child(2){
                       font-size: 12px;
@@ -1523,9 +1531,9 @@ export default {
           .comment_box{
             width: 100%;
             border: 1px solid #dedede;
-            margin-top: 24px;
+            margin-top: 35px;
             .comment_list{
-              height: 572px;
+              height: 604px;
               width:95%;
               overflow: hidden;
               margin: 17px auto;

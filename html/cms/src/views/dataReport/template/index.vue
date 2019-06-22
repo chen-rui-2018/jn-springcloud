@@ -146,7 +146,7 @@
             </el-checkbox-group>
           </el-form-item>
         </target-row>
-        <target-row class="target-row" title="数据指标">
+        <target-row class="target-row target-row-hidden" title="数据指标">
           <div v-for="(form, index) in formData.tabs" :key="index" class="chart-list">
             <el-row align="middle" class="target-form-header">
               <el-col :span="2">表名：</el-col>
@@ -323,7 +323,7 @@
         </target-row>
       </el-form>
       <div class="submit-row">
-        <el-button type="primary" @click="submitTarget">保存</el-button>
+        <el-button :disabled="submitting" :loading="submitting" type="primary" @click="submitTarget">保存</el-button>
         <el-button :disabled="submitting" type="primary">取消</el-button>
       </div>
     </div>
@@ -605,39 +605,50 @@ export default {
           // 保存的时候再预览一遍, 获取选中指标树的填报格式
           this.previewForm()
             .then(() => {
-              let cache = []
-              const passList = ['treeData', 'treeTableData', 'columns', 'targetList']
-              let formData = JSON.stringify(this.formData, function(key, value) {
-                if (passList.indexOf(key) !== -1) {
-                  return ''
-                } else {
-                  if (typeof value === 'object' && value !== null) {
-                    if (cache.indexOf(value) !== -1) {
-                      // Duplicate reference found
-                      try {
-                        // If this value does not reference a parent it can be deduped
-                        return JSON.parse(JSON.stringify(value))
-                      } catch (error) {
-                        // discard key if value cannot be deduped
-                        return
-                      }
-                    }
-                    // Store value in our collection
-                    cache.push(value)
-                  }
-                  return value
+              const formData = {
+                ...this.formData
+              }
+              formData.tabs = []
+              this.formData.tabs.forEach((tab, index) => {
+                formData.tabs[index] = {
+                  ...tab
                 }
-              })
-              // Enable garbage collection
-              cache = null
-              formData = JSON.parse(formData)
-              formData.tabs.forEach((item, index) => {
+                delete formData.tabs[index].treeData
+                delete formData.tabs[index].treeTableData
+                delete formData.tabs[index].columns
+                delete formData.tabs[index].inputList
                 // tab增加排序
-                item.orderNumber = index.toString()
+                formData.tabs[index].orderNumber = index.toString()
                 // 多选值转字符串 1.表类型（0：上月填报值；1：上年同期值；2：上月上年同期值；3增幅)
-                item.tabClumnTargetShow = item.tabClumnTargetShow.join(',')
+                formData.tabs[index].tabClumnTargetShow = formData.tabs[index].tabClumnTargetShow.join(',')
               })
 
+              formData.tabs.forEach(tab => {
+                const targetListCopy = []
+                tab.targetList.forEach(target => {
+                  const targetCopy = {
+                    children: null,
+                    createdTime: target.createdTime,
+                    creatorAccount: target.creatorAccount,
+                    departmentId: target.departmentId,
+                    departmentName: target.departmentName,
+                    id: target.id,
+                    isMuiltRow: target.isMuiltRow,
+                    modifiedTime: target.modifiedTime,
+                    modifierAccount: target.modifierAccount,
+                    orderNumber: target.orderNumber,
+                    pid: target.pid,
+                    recordStatus: target.recordStatus,
+                    state: target.state,
+                    targetCommon: target.targetCommon,
+                    targetType: target.targetType,
+                    text: target.text,
+                    unit: target.unit
+                  }
+                  targetListCopy.push(targetCopy)
+                })
+                tab.targetList = targetListCopy
+              })
               if (formData.modelCycle === 0) {
                 // 如果填报周期是月
                 const filllInFormDeadline = this.formData.filllInFormDeadline < 10 ? '0' + this.formData.filllInFormDeadline : this.formData.filllInFormDeadline
@@ -654,14 +665,6 @@ export default {
               formData.pcAd = this.tempPcUrl ? this.tempPcUrl : formData.pcAd
               formData.appAd = this.tempAppUrl ? this.tempAppUrl : formData.appAd
               formData.otherData = this.otherDataUrl ? this.otherDataUrl : formData.otherData
-              // 把填报格式是多选的value把数组转成字符串
-              formData.tabs.forEach((item, index) => {
-                for (const list of item.inputList) {
-                  if (list.formType === '4') {
-                    list.value = ''
-                  }
-                }
-              })
               this.$_post(`${this.GLOBAL.enterpriseUrl}data/dataModel/updateModel`, formData).then(data => {
                 if (data.code === '0000') {
                   this.getModelTree()
@@ -767,7 +770,7 @@ export default {
                     for (const tree of treeData) {
                       // 如果不属于选择节点的最高级父指标，即兄弟指标，那么设置禁用
                       if (tree.id !== parentNode.id) {
-                        // this.setBroDisabled(tree)
+                        this.setBroDisabled(tree)
                       }
                     }
                     for (const obj of item.targetList) {
@@ -854,27 +857,33 @@ export default {
       this.menuVisible = false
     },
     setBroNode(index, target, nodes) {
-      // 因为选择指标时，最高级的父指标只能选择一个，它的兄弟指标和其子指标都设置禁用
-      const treeData = this.formData.tabs[index].treeData
       // 如果指标树不是空状态
       if (nodes.checkedNodes.length > 0) {
-        // 获取当前选择节点的最高级父指标
-        const parentNode = nodes.halfCheckedNodes.length > 0 ? nodes.halfCheckedNodes[0] : nodes.checkedNodes[0]
-        for (const tree of treeData) {
-          // 如果不属于选择节点的最高级父指标，即兄弟指标，那么设置禁用
-          if (tree.id !== parentNode.id) {
-            this.setBroDisabled(tree)
-          }
-        }
+        this.formData.tabs[index].targetList = this.$refs.targetTree[index].getCheckedNodes(false, true)
+        this.$nextTick(() => {
+          setTimeout(() => {
+            // 因为选择指标时，最高级的父指标只能选择一个，它的兄弟指标和其子指标都设置禁用
+            const treeData = this.formData.tabs[index].treeData
+            // 获取当前选择节点的最高级父指标
+            const parentNode = nodes.halfCheckedNodes.length > 0 ? nodes.halfCheckedNodes[0] : nodes.checkedNodes[0]
+            for (const tree of treeData) {
+              // 如果不属于选择节点的最高级父指标，即兄弟指标，那么设置禁用
+              if (tree.id !== parentNode.id) {
+                this.setBroDisabled(tree)
+              }
+            }
+          }, 50)
+        })
       } else {
         // 如果指标树是空状态，全部解除禁用
         this.formData.tabs[index].treeData = deepClone(this.originTab.treeData)
+        this.deepSetData(this.formData.tabs[index].treeData, this.formData.modelType)
+        this.formData.tabs[index].targetList = []
       }
-      this.formData.tabs[index].targetList = this.$refs.targetTree[index].getCheckedNodes(false, true)
     },
     setBroDisabled(tree) {
       // 兄弟指标设置禁用函数
-      tree.disabled = true
+      this.$set(tree, 'disabled', true)
       if (tree.children && tree.children.length > 0) {
         for (const item of tree.children) {
           this.setBroDisabled(item)
@@ -1045,7 +1054,7 @@ export default {
               const targetIdList = nodeList.map(list => list.id)
               this.getInputFormat(targetIdList)
                 .then(data => {
-                  tab.inputList = deepClone(data.data)
+                  tab.inputList = data.data
                   const formModels = tab.inputList
                   formModels.sort((a, b) => {
                     return a['rowNum'] - b['rowNum']
@@ -1172,7 +1181,7 @@ export default {
     border: 1px solid $gray;
 
     .target-management-l {
-      width: 200px;
+      width: 20%;
       .tree-filter-bg {
         padding: 4px;
       }
@@ -1187,16 +1196,18 @@ export default {
 
     .target-management-r {
       min-height: 100%;
-      width: calc(100% - 200px);
+      width: 80%;
       padding: 15px;
       border-left: 1px solid $gray;
-
       .chart-list {
         margin: 20px auto;
       }
 
       .target-row {
         margin: 5px auto;
+        &.target-row-hidden {
+          overflow: hidden;
+        }
       }
     }
 

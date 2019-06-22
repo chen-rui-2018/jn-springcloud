@@ -803,7 +803,7 @@ img {
 
             .right1 {
 
-              // margin-left: 40px;
+              margin-left: 20px;
               >p {
                 margin-top: 4px;
               }
@@ -1271,7 +1271,7 @@ img {
 
           .detail-contact.inner-product {
             color: #999;
-            width: 240px;
+            width: 340px;
           }
 
           .detail-contact {
@@ -1281,13 +1281,14 @@ img {
           }
 
           .detail-evaluate.inner-product {
-            width: 420px;
+            width: 320px;
             color: #999;
           }
 
           .detail-evaluate {
             display: inline-block;
             vertical-align: middle;
+            margin-left:20px;
           }
 
           .detail-count {
@@ -1748,7 +1749,7 @@ img {
       background-color: rgba(0, 0, 0, 0.5);
 
       >ul {
-        padding: 0 300px;
+        padding: 0 100px;
         display: flex;
         justify-content: center;
         align-items: center;

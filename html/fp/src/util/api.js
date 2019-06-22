@@ -1,6 +1,6 @@
 ﻿import axios from "axios"
 import { BASE_URL } from './url'
-import { getToken, setToken, removeToken, removeUserInfo, getIbpsToken } from '@/util/auth'
+import { getToken, setToken, removeToken, removeUserInfo, getIbpsToken, removeIbpsToken } from '@/util/auth'
 
 axios.defaults.withCredentials = true // 让ajax携带cookie
 const verifyToken = () => {
@@ -67,7 +67,6 @@ export default {
         saveUserInfo:"springcloud-user/user/userInfo/saveUserInfo",//保存用户资料
         getTagCodeList:"springcloud-user/guest/userTag/getTagCodeList",//获取用户字典列表
         findHotProducts:"springcloud-enterprise/guest/servicemarket/product/web/findHotProducts",//热门产品
-        selectIndustryList:"springcloud-enterprise/serviceMarket/industryManage/selectIndustryList",//专员领域列表
         getServiceConsultantList:"springcloud-enterprise/guest/serviceMarket/advisorController/getServiceConsultantList",//机构服务专员
         selectTeamList:"springcloud-enterprise/guest/serviceMarket/industryManage/selectIndustryList",//机构字典
         selectServiceOrgList:"springcloud-enterprise/guest/serviceMarket/org/selectServiceOrgList",//服务机构列表获取
@@ -202,7 +201,8 @@ export default {
         refuseInvitation:"springcloud-enterprise/serviceMarket/acceptOrgInvitationController/refuseInvitation",//拒绝机构邀请
         getOrgInfoForManage:"springcloud-enterprise/guest/serviceMarket/org/getOrgInfoForManage",//获取服机构信息[机构详情+产品列表](pc/app机构信息)
         // 角色认证
-        getInvestorMainRound:"springcloud-enterprise//guest/technologyFinancial/investorController/getInvestorMainRound",//获取主投领域
+        getInvestorMainRound:"springcloud-enterprise/guest/technologyFinancial/investorController/getInvestorMainRound",//获取主投领域
+        getJoinParkStatus:"springcloud-enterprise/enterprise/company/getJoinParkStatus",//查询当前账号是否允许认证
         getAffiliationUnit:"springcloud-enterprise/guest/technologyFinancial/investorController/getAffiliationUnit",//获取所属单位
         addInvestorInfo:"springcloud-enterprise/technologyFinancial/investorController/addInvestorInfo",//提交投资人认证资料
         saveOrUpdateOrgDetail:"springcloud-enterprise/orgJoinPark/saveOrUpdateOrgDetail",//服务机构认证
@@ -275,6 +275,7 @@ export default {
         getDataStatistics:"springcloud-enterprise/guest/MarketIndexController/getDataStatistics",//获取企业，机构，活动，服务专员数量
         queryOnlineInfo:"springcloud-enterprise/pd/online/queryOnlineInfo",//通过公告ID和登录人查询预约信息
         integrationList:"springcloud-park/guest/park/notice/web/integrationList",//PC端整合接口
+        getIndustryForMarket:"springcloud-enterprise/guest/serviceMarket/industryManage/getIndustryForMarket",//PC端整合接口
     },
     setToken: function (obj) {   //设置token在请求头上面
         // axios.interceptors.request.use(function (config) {
@@ -312,6 +313,7 @@ export default {
                 if(response.data.code == "index"){
                   removeToken()
                   removeUserInfo()
+                  removeIbpsToken()
                   location.href="#/";
                   return
                 }
@@ -392,6 +394,7 @@ export default {
                 if(response.data.code == "index"){
                   removeToken()
                   removeUserInfo()
+                  removeIbpsToken()
                   location.href="#login";
                   return
                 }

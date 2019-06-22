@@ -1,29 +1,75 @@
 <template>
   <div class="talentsServiceCenter">
         <div class="banner"><img src="@/assets/image/talentsServiceCenter-baner.png" alt=""></div>
-        <!-- 常年申报 -->
+        <!-- 申报平台 -->
         <div class="perennial">
           <div class="perennial_titile">
-            <div>常年申报</div>
-            <div>MORE <span class="iconfont icon-jiantou "></span></div>
+            <div>申报平台</div>
+            <div @click="gotalentplatform">MORE <span class="iconfont icon-jiantou "></span></div>
           </div>
           <div class="perennial_list">
             <ul>
-              <li v-for="(item,index) in perennialList" :key="index">
-                <div class="list_cont">
-                  <p><img src="@/assets/image/perennial.png" alt=""> </p>
-                  <p>{{item.title}}</p>
-                  <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
-                  <p>收益：<span>{{item.profit}}</span> </p>
-                  <p>价格：{{item.price}}</p>
-                </div>
-                <div class="list_view"><span>查看详情</span> </div>
+              <li>
+                <a href="http://112.94.22.222:2383/ibps-platform-portal/login.jsp" target="_blank">
+                  <div class="list_cont">
+                    <p><img src="@/assets/image/perennial.png" alt=""> </p>
+                    <!-- <p>{{item.title}}</p>
+                    <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
+                    <p>收益：<span>{{item.profit}}</span> </p>
+                    <p>价格：{{item.price}}</p> -->
+                    <p>高层次创业人才引进计划高层次创业人才引进计划高层次创业人才引进计划高层次创业人才引进计划</p>
+                    <p>平台功能：高层次创业人才引进计划</p>
+                  </div>
+                </a>
+                <div class="list_view"><span>我要申报</span> </div>
+              </li>
+              <li>
+                <a href="http://xmsb.jsrcgz.gov.cn/" target="_blank">
+                  <div class="list_cont">
+                    <p><img src="@/assets/image/jsrcgz.png" alt=""> </p>
+                    <!-- <p>{{item.title}}</p>
+                    <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
+                    <p>收益：<span>{{item.profit}}</span> </p>
+                    <p>价格：{{item.price}}</p> -->
+                    <p>江苏省“双创计划”</p>
+                    <p>平台功能：江苏省双创计划</p>
+                  </div>
+                  <div class="list_view"><span>我要申报</span> </div>
+                </a>
+              </li>
+              <li>
+                <a href="http://49.65.0.223:85/njrc_cxxqyj.jsp" target="_blank">
+                  <div class="list_cont">
+                    <p><img src="@/assets/image/njrc_kjdjzj22.png" alt=""> </p>
+                    <!-- <p>{{item.title}}</p>
+                    <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
+                    <p>收益：<span>{{item.profit}}</span> </p>
+                    <p>价格：{{item.price}}</p> -->
+                    <p>创新型企业家培育计划</p>
+                    <p>平台功能：创新型企业家培育计划</p>
+                  </div>
+                  <div class="list_view"><span>我要申报</span> </div>
+                </a>
+              </li>
+              <li>
+                <a href="http://49.65.0.223:85/njrc_kjdjzj.jsp " target="_blank">
+                  <div class="list_cont">
+                    <p><img src="@/assets/image/njrc_cxxqyj.png" alt=""> </p>
+                    <!-- <p>{{item.title}}</p>
+                    <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
+                    <p>收益：<span>{{item.profit}}</span> </p>
+                    <p>价格：{{item.price}}</p> -->
+                    <p>科技顶尖专家集聚计划</p>
+                    <p>平台功能：科技顶尖专家集聚计划</p>
+                  </div>
+                  <div class="list_view"><span>我要申报</span> </div>
+                </a>
               </li>
             </ul>
           </div>
         </div>
         <!-- 申报平台 -->
-        <div class="talentsService_platform">
+        <!-- <div class="talentsService_platform">
           <div class="platform_titile">
             <div>申报平台</div>
             <div @click="$router.push({path:'/guest/pd/talentNotice/talentsServicePlatform'})">MORE <span class="iconfont icon-jiantou"></span></div>
@@ -38,7 +84,7 @@
               <img src="@/assets/image/platform.png" alt="">
             </div>
           </div>
-        </div>
+        </div> -->
         <div class="before"></div>
         <!-- 申报中心列表 -->
         <div class="talentsService_list">
@@ -131,6 +177,8 @@ export default {
               callback: res => {
                 if (res.code === '0000') {
                   this.talentsList.push(...res.data.rows)
+                } else {
+                  this.$vux.toast.text(res.result, 'middle')
                 }
               }
             })
@@ -138,7 +186,6 @@ export default {
         }
       }
     },
-
     getperennialList () {
       this.api.get({
         url: 'perennialList',
@@ -185,7 +232,22 @@ export default {
         }
       })
     },
-    goplatform () {
+    gotalentplatform () {
+      this.api.get({
+        url: 'getUserExtension',
+        data: { },
+        callback: (res) => {
+          if (res.code === '0000') {
+            if (res.data.roleCode === 'COM_ADMIN' || res.data.roleCode === 'COM_CONTACTS') {
+              this.$router.push({path: '/guest/pd/talentNotice/talentsServicePlatform'})
+            } else {
+              this.$vux.toast.text('只有企业管理员和企业联系人才可以进申报平台！！')
+            }
+          } else {
+            this.$vux.toast.text(res.result)
+          }
+        }
+      })
     },
     changetype (rangeId) {
       this.sendData.rangeId = rangeId

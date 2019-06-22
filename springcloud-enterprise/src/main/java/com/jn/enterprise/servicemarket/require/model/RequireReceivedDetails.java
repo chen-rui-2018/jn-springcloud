@@ -14,6 +14,8 @@ import java.util.Date;
  */
 @ApiModel(value = "RequireReceivedDetails", description = "我收到的需求详情")
 public class RequireReceivedDetails implements Serializable {
+    @ApiModelProperty(value = "需求id")
+    private String id;
     @ApiModelProperty(value = "企业名称")
     private String companyName;
     @ApiModelProperty(value = "需求单号")
@@ -61,6 +63,13 @@ public class RequireReceivedDetails implements Serializable {
     @ApiModelProperty(value = "评价描述")
     private String evaluationDesc;
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getCompanyName() {
         return companyName;
@@ -241,7 +250,8 @@ public class RequireReceivedDetails implements Serializable {
     @Override
     public String toString() {
         return "RequireReceivedDetails{" +
-                "companyName='" + companyName + '\'' +
+                "id='" + id + '\'' +
+                ", companyName='" + companyName + '\'' +
                 ", reqNum='" + reqNum + '\'' +
                 ", issueTime=" + issueTime +
                 ", orgName='" + orgName + '\'' +
@@ -260,7 +270,9 @@ public class RequireReceivedDetails implements Serializable {
                 ", financingPeriod='" + financingPeriod + '\'' +
                 ", actualLoanAmount='" + actualLoanAmount + '\'' +
                 ", fundsReqDesc='" + fundsReqDesc + '\'' +
-                ", expectedDate=" + expectedDate +
+                ", expectedDate='" + expectedDate + '\'' +
+                ", ratingScore='" + ratingScore + '\'' +
+                ", evaluationDesc='" + evaluationDesc + '\'' +
                 '}';
     }
 }

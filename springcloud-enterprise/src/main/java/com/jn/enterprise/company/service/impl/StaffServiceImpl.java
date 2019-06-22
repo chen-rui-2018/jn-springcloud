@@ -8,6 +8,7 @@ import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.common.util.StringUtils;
 import com.jn.company.model.ServiceCompany;
+import com.jn.enterprise.common.enums.CommonExceptionEnum;
 import com.jn.enterprise.company.dao.StaffMapper;
 import com.jn.enterprise.company.dao.TbServiceCompanyStaffMapper;
 import com.jn.enterprise.company.entity.TbServiceCompanyStaff;
@@ -15,13 +16,11 @@ import com.jn.enterprise.company.entity.TbServiceCompanyStaffCriteria;
 import com.jn.enterprise.company.enums.CompanyDataEnum;
 import com.jn.enterprise.company.enums.CompanyExceptionEnum;
 import com.jn.enterprise.company.enums.RecruitExceptionEnum;
+import com.jn.enterprise.company.enums.UpgradeStatusEnum;
 import com.jn.enterprise.company.model.*;
 import com.jn.enterprise.company.service.CompanyService;
 import com.jn.enterprise.company.service.StaffService;
-import com.jn.enterprise.company.vo.ColleagueListVO;
-import com.jn.enterprise.company.vo.StaffAuditVO;
-import com.jn.enterprise.company.vo.StaffListVO;
-import com.jn.enterprise.company.vo.UserExtensionInfoVO;
+import com.jn.enterprise.company.vo.*;
 import com.jn.enterprise.enums.OrgExceptionEnum;
 import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.servicemarket.org.model.UserRoleInfo;
@@ -43,10 +42,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisKeyValueTemplate;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.RedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -275,20 +270,10 @@ public class StaffServiceImpl implements StaffService {
         UserExtensionInfo userExtensionInfo = checkCompanyUser(curAccount);
         ServiceCompany company = companyService.getCompanyDetailByAccountOrId(userExtensionInfo.getCompanyCode());
 
-        // 判断邀请账号不是企业管理员
-        List<String> accountList = new ArrayList<>();
-        accountList.add(inviteAccount);
-        List<UserRoleInfo> userRoleInfoList = orgColleagueService.getUserRoleInfoList(accountList, HomeRoleEnum.COM_ADMIN.getCode());
-        for (UserRoleInfo userRole : userRoleInfoList) {
-            if (StringUtils.isNotEmpty(userRole.getRoleName()) && userRole.getAccount().equals(inviteAccount)) {
-                throw new JnSpringCloudException(CompanyExceptionEnum.USER_IS_COMPANY_ADMIN);
-            }
-        }
-
-        // 判断邀请账号不是企业员工
-        if(!checkUserIsCompanyStaff(inviteAccount)) {
-            logger.warn("[邀请员工] {} 已是其他企业员工或有未处理的企业邀请", inviteAccount);
-            throw new JnSpringCloudException(CompanyExceptionEnum.USER_IS_COMPANY_EXIST);
+        InviteUpgradeStatusVO joinParkStatus = companyService.getJoinParkStatus(inviteAccount);
+        if (!joinParkStatus.getCode().equals(UpgradeStatusEnum.UPGRADE_OK.getCode())) {
+            logger.warn("[邀请员工] {}", inviteAccount + joinParkStatus.getInviteMessage());
+            throw new JnSpringCloudException(CommonExceptionEnum.UPGRADE_COMMON, inviteAccount + joinParkStatus.getInviteMessage());
         }
 
         // 删除所有拒绝或未审批的数据

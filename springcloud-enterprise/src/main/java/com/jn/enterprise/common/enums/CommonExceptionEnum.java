@@ -12,6 +12,7 @@ import com.jn.common.api.CodeAndMsg;
 public enum CommonExceptionEnum implements CodeAndMsg {
 
     CODE_GROUP_ID_IS_NULL("5000201","分组ID不能为空"),
+    UPGRADE_COMMON("5000202","角色认证公共返回"),
     ;
     /**
      * 编码

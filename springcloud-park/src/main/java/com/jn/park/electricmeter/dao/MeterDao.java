@@ -206,6 +206,10 @@ public interface MeterDao {
      */
     List<YearElectro> yearElectric(@Param("companyid") String companyid);
 
-
+    /**
+     * 获取使用默认计价规则的企业
+     * @return
+     */
+    void getUseDefualtPriceCompany(@Param("dealDate") Date dealDate);
 
 }

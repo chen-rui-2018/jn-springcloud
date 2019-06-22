@@ -44,7 +44,7 @@ import { isMobile } from "@/util"
 import bus from "@/util/bus"
 import UserHome from "@/components/userHome"
 import ElementUI from 'element-ui'
-import { getToken, removeToken } from '@/util/auth'
+import { getToken, removeToken, removeIbpsToken } from '@/util/auth'
 export default {
   components: { UserHome ,SidebarItem},
   //  components: { SidebarItem },
@@ -190,7 +190,8 @@ export default {
     },
     handleSearch() {},
     loginOut() {
-      removeToken()
+      removeToken();
+      removeIbpsToken();
       this.$router.push({ path: "/" });
     },
     dianji(i) {

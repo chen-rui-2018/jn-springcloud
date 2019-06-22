@@ -4,7 +4,7 @@
       <div class="declartionConsult_cont">
         <div class="declartionConsult_title">在线预约</div>
         <div class="declartionConsult_form" >
-          <group label-align="left" label-width="6em" label-margin-right="1em">
+          <group label-align="left" label-width="100%" label-margin-right="1em">
             <!-- <x-input title="* 预约项：" placeholder="请输入内容" v-model="appointment.appointmentItemName" ></x-input> -->
             <x-input title="* 申报项目：" placeholder="请输入内容" v-model="appointment.declareItem"></x-input>
             <x-input title="* 申报企业：" placeholder="请输入内容" v-model="appointment.declareEnterprise"></x-input>
@@ -13,7 +13,7 @@
             <!-- <x-input title="* 电子邮箱：" placeholder="请输入内容" v-model="appointment.email"></x-input> -->
             <div class="upload">
               <div>* 附件：</div>
-              <input type="file" @change="fileChange($event)" v-if="appointment.fileUrl===''">
+              <input type="file" @change="fileChange($event)" v-if="isSumbmitShow">
               <a v-else :href="appointment.fileUrl">下载<i class="iconfont icon-jiantou"></i></a>
             </div>
           </group>
@@ -26,12 +26,12 @@
       <div class="sumbmit" v-if="isSumbmitShow">
         <span @click="sumbmit">提交</span>
       </div>
-      <div>
+      <div class="success">
         <confirm v-model="isVisible"
         title="留言成功，是否跳到上一页"
         theme="android"
         @on-cancel="onCancel"
-        @on-confirm="this.$router.go(-1)"
+        @on-confirm="$router.go(-1)"
        >
           <p style="text-align:center;"></p>
         </confirm>
@@ -103,18 +103,26 @@ export default {
               data: { },
               callback: (res) => {
                 if (res.code === '0000') {
-                  this.appointment.declareItem = this.detailList.titleName
+                  this.appointment.declareItem = this.$route.query.title
                   this.appointment.contactName = res.data.nickName
                   this.appointment.contactPhone = res.data.phone
                   this.appointment.email = res.data.email
                   this.appointment.declareEnterprise = res.data.companyName
+                  this.appointment.fileUrl = res.data.fileUrl
                 } else {
                   this.$vux.toast.text(res.result, 'middle')
                 }
               }
             })
           } else {
-            this.$vux.toast.text(res.result, 'middle')
+            this.$vux.toast.show({
+              text: res.result,
+              time: 1000,
+              position: 'middle'
+            })
+            setTimeout(() => {
+              this.$router.go(-1)
+            }, 1300)
           }
         }
       })
@@ -232,6 +240,18 @@ export default {
           padding:26px 312px;
           color:#07ab50;
           // margin: 38px 37px;
+        }
+      }
+      .success{
+        .weui-dialog{
+          max-width:20em;
+        }
+        .weui-skin_android .weui-dialog__ft{
+          text-align:center;
+          font-size: 1.5em;
+        }
+        .weui-skin_android .weui-dialog__title{
+          font-size: 1.5em;
         }
       }
     }

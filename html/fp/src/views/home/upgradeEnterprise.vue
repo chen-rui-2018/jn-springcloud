@@ -43,17 +43,15 @@
             <!-- {{foundingTime}} -->
           </el-form-item>
         </div>
-        <div style="display:flex">
+        <!-- <div style="display:flex">
           <el-form-item label="落地时间:" lass="inline" prop="runTime">
             <el-date-picker value-format="yyyy-MM-dd" v-model="businessForm.runTime" type="date" placeholder="选择日期">
             </el-date-picker>
-            <!-- <span>{{runTime}}</span> -->
           </el-form-item>
           <el-form-item label="注册地址:" lass="inline" prop="comAddress">
             <el-input v-model="businessForm.comAddress" clearable></el-input>
-            <!-- <span>{{comAddress}}</span> -->
           </el-form-item>
-        </div>
+        </div> -->
         <div style="display:flex">
           <el-form-item class="br" label="实际经营地址:" lass="inline" prop="addrPark">
             <el-input v-model="businessForm.addrPark" clearable></el-input>
@@ -115,6 +113,10 @@
 
         </div>
         <div style="display:flex">
+          <el-form-item label="注册地址:" lass="inline" prop="comAddress">
+            <el-input v-model="businessForm.comAddress" clearable></el-input>
+            <!-- <span>{{comAddress}}</span> -->
+          </el-form-item>
           <el-form-item label="企业官网地址:" lass="inline" class="br" prop="comWeb">
             <el-input v-model="businessForm.comWeb" clearable></el-input>
           </el-form-item>

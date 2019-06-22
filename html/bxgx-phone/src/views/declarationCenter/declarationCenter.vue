@@ -136,9 +136,29 @@ export default {
   methods: {
     goDetail (id) {
       if (this.isShow === 1) {
-        this.$router.push({path: '/guest/pd/declarationDetail', query: {id: id}})
+        this.api.get({
+          url: 'trafficVolume',
+          data: {id: id},
+          callback: res => {
+            if (res.code === '0000') {
+              this.$router.push({path: '/guest/pd/declarationDetail', query: {id: id}})
+            } else {
+              this.$vux.toast.text(res.result)
+            }
+          }
+        })
       } else {
-        this.$router.push({path: '/guest/pd/declarationDetail', query: {id: id, isShow: '0'}})
+        this.api.get({
+          url: 'trafficVolume',
+          data: {id: id},
+          callback: res => {
+            if (res.code === '0000') {
+              this.$router.push({path: '/guest/pd/declarationDetail', query: {id: id, isShow: '0'}})
+            } else {
+              this.$vux.toast.text(res.result)
+            }
+          }
+        })
       }
     },
     gosearch () {

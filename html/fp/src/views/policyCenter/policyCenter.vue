@@ -128,7 +128,7 @@
             </el-input>
           </div> -->
         </div>
-        <el-tabs v-model="activeName" @tab-click="handleClick">
+        <el-tabs v-model="activeName" @tab-click="handleClick" class="tabBox">
           <el-tab-pane label="政策一览" name="first">
             <ul class="fir">
               <li class="clearfix" v-for="(i,k) in policyCenterList" :key="k">
@@ -267,7 +267,8 @@ export default {
       row: 8,
       total: 0,
       arrYear: [],
-      yearBefore: ""
+      yearBefore: "",
+      scroll_top:0
     };
   },
   mounted() {
@@ -360,6 +361,8 @@ export default {
     },
     //筛选政策级别
     handleFilter(i) {
+      console.log(this.getScrollTop())
+       console.log( document.querySelector('.tabBox').offsetTop)
       (this.policyLevelCode = `${i}`), (this.filterFlag = i);
       this.getPolicyCenterList();
     },

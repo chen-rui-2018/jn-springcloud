@@ -97,7 +97,7 @@
 import $ from 'jquery'
 import bus from "@/util/bus";
 import UserHome from '@/components/userHome'
-import { getToken, removeToken } from '@/util/auth'
+import { getToken, removeToken, removeIbpsToken } from '@/util/auth'
 import { IBPS_URL } from '@/util/url'
 export default {
   components:{UserHome},
@@ -203,6 +203,7 @@ export default {
     handleSearch() {},
     loginOut() {
       removeToken();
+      removeIbpsToken();
       this.$router.push({ path: "/" });
     },
     dianji(i) {

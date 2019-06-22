@@ -1255,13 +1255,13 @@ export default {
               }
               > .finaContent {
                 .finaPhone {
-                  font-size: 15px;
+                  font-size: 13px;
                 }
               }
               .finaAddress {
                 text-indent: -35px;
                 margin-left: 35px;
-                font-size: 15px;
+                font-size: 13px;
               }
             }
             > .finaPP {

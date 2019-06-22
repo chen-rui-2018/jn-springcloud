@@ -31,3 +31,7 @@ export function removeUserInfo() {
 export function getIbpsToken() {
   return Cookies.get('ibpsoauth', { domain: 'bxgxq.com', path: '/' })
 }
+
+export function removeIbpsToken() {
+  return Cookies.remove('ibpsoauth', { domain: 'bxgxq.com', path: '/' })
+}

@@ -149,6 +149,7 @@ public class ElectricRulesInfoServiceImpl implements ElectricRulesInfoService {
             logSms.setLinkAccount(u.getAccount());
             logSms.setRecordStatus(new Byte("1"));
             logSms.setCreatedTime(new Date());
+            logSms.setAcceptPhone(u.getPhone());
             tbElectricEnergyControlPushLogMapper.insertSelective(logSms);
 
 

@@ -16,6 +16,7 @@ import com.jn.park.electricmeter.dao.*;
 import com.jn.park.electricmeter.entity.*;
 import com.jn.park.electricmeter.enums.MeterConstants;
 import com.jn.park.electricmeter.enums.MeterExceptionEnums;
+import com.jn.park.electricmeter.model.CompanyModel;
 import com.jn.park.electricmeter.model.PriceRuleContentModel;
 import com.jn.park.electricmeter.model.SwitchModel;
 import com.jn.park.electricmeter.service.MeterRulesService;
@@ -34,10 +35,7 @@ import org.xxpay.common.util.DateUtil;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author： yangh
@@ -141,6 +139,22 @@ public class MeterRulesServiceImpl implements MeterRulesService {
             throw new JnSpringCloudException(MeterExceptionEnums.PRICE_RULE_WRONG);
         }
         String id = UUID.randomUUID().toString().replaceAll("-", "");
+        //检测默认的计价规则是否存在 // 存在，则需要进行作废；后才可新建 //不存在则新建
+
+        if(priceRuleVO.getIsDefaultUse().equals(MeterConstants.IS_DEFAULT_PRICE_RULE)){
+            TbElectricPriceRulesCriteria criteria = new TbElectricPriceRulesCriteria();
+            criteria.or().andIsDefaultUseEqualTo(MeterConstants.IS_DEFAULT_PRICE_RULE).andRecordStatusEqualTo(new Byte(MeterConstants.VALID));
+            List<TbElectricPriceRules>  rules = priceRulesMapper.selectByExample(criteria);
+            if(rules!=null && rules.size()>0){
+                //如果更新的不是默认计价规则
+                if( ! rules.get(0).getId().equals(priceRuleVO.getId())){
+                    throw new JnSpringCloudException(MeterExceptionEnums.DEFAULT_PRICE_ERROR);
+                }
+            }
+
+        }
+
+
         if(StringUtils.isBlank(ruleIdBefore)){
             //新增
             insertPriceRule(id,priceRuleVO, user,contents);
@@ -404,6 +418,8 @@ public class MeterRulesServiceImpl implements MeterRulesService {
         priceruleCompanyCriteria.or().andRecordStatusEqualTo(new Byte(MeterConstants.VALID))
                 .andIdEqualTo(id);
         List<TbElectricPriceruleCompany> records = priceruleCompanyMapper.selectByExample(priceruleCompanyCriteria);
+        priceruleCompanyCriteria.or().andRecordStatusEqualTo(new Byte(MeterConstants.INVALID))
+                .andIdEqualTo(id);
         priceruleCompanyMapper.updateByExampleSelective(record, priceruleCompanyCriteria);
 
         if (records == null || records.size() == 0) {
@@ -478,9 +494,11 @@ public class MeterRulesServiceImpl implements MeterRulesService {
         companyInDay.setModifierAccount("systemTimer");
         companyInDayMapper.updateByExampleSelective(companyInDay, companyInDayCriteria);
         meterDao.saveCompanyLinkInDay(day);
+
+        //没有计价规则的企业默认使用默认的计价规则
+        meterDao.getUseDefualtPriceCompany(day);
         return result + 1;
     }
-
 
     @Override
     @ServiceLog(doAction = "电表拉闸和回复")

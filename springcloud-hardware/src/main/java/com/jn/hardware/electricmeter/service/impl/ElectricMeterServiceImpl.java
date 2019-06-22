@@ -6,6 +6,7 @@ import com.jn.common.model.Result;
 import com.jn.common.util.GlobalConstants;
 import com.jn.common.util.RestTemplateUtil;
 import com.jn.common.util.StringUtils;
+import com.jn.common.util.lock.LockAnnotation;
 import com.jn.hardware.electricmeter.service.ElectricMeterService;
 import com.jn.hardware.electricmeter.service.ElectricRedisConfigStorage;
 import com.jn.hardware.enums.ElectricMeterEnum;
@@ -54,6 +55,7 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
      *
      * @return
      */
+    @LockAnnotation(lockPrefix = "electricMeter-getToken",timeOut = 20,tryCount = 3,tryTime = 500L)
     @Override
     public Result<ElectricAccessTokenShow> getElectricMeterAccessToken() {
         ElectricAccessTokenParam electricAccessTokenParam = new ElectricAccessTokenParam();

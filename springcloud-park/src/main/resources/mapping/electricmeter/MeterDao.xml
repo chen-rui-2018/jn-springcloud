@@ -308,7 +308,6 @@
             and day=date_sub(curdate(),interval 1 day)
             and company_id=#{companyId}
         </if>
-        and use_status =1
     </select>
 
     <insert id="saveMeterLinkInDay" parameterType="java.util.List">

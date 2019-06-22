@@ -13,6 +13,7 @@ import com.jn.company.model.*;
 import com.jn.enterprise.common.config.IBPSDefIdConfig;
 import com.jn.enterprise.company.dao.CompanyMapper;
 import com.jn.enterprise.company.dao.TbServiceCompanyMapper;
+import com.jn.enterprise.company.dao.TbServiceCompanyModifyMapper;
 import com.jn.enterprise.company.dao.TbServiceCompanyStaffMapper;
 import com.jn.enterprise.company.entity.*;
 import com.jn.enterprise.company.enums.CompanyDataEnum;
@@ -34,8 +35,11 @@ import com.jn.enterprise.servicemarket.industryarea.dao.TbServicePreferMapper;
 import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePrefer;
 import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePreferCriteria;
 import com.jn.enterprise.servicemarket.org.dao.TbServiceOrgMapper;
+import com.jn.enterprise.servicemarket.org.dao.TbServiceOrgTempMapper;
 import com.jn.enterprise.servicemarket.org.entity.TbServiceOrg;
 import com.jn.enterprise.servicemarket.org.entity.TbServiceOrgCriteria;
+import com.jn.enterprise.servicemarket.org.entity.TbServiceOrgTemp;
+import com.jn.enterprise.servicemarket.org.entity.TbServiceOrgTempCriteria;
 import com.jn.enterprise.servicemarket.org.model.UserRoleInfo;
 import com.jn.enterprise.servicemarket.org.service.OrgColleagueService;
 import com.jn.enterprise.technologyfinancial.investors.dao.TbServiceInvestorMapper;
@@ -60,6 +64,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -80,6 +85,8 @@ public class CompanyServiceImpl implements CompanyService {
     @Autowired
     private TbServiceCompanyMapper tbServiceCompanyMapper;
     @Autowired
+    private TbServiceCompanyModifyMapper tbServiceCompanyModifyMapper;
+    @Autowired
     private TbServicePreferMapper tbServicePreferMapper;
     @Autowired
     private OrgColleagueService orgColleagueService;
@@ -99,6 +106,8 @@ public class CompanyServiceImpl implements CompanyService {
     private IBPSDefIdConfig ibpsDefIdConfig;
     @Autowired
     private TbServiceOrgMapper tbServiceOrgMapper;
+    @Autowired
+    private TbServiceOrgTempMapper tbServiceOrgTempMapper;
     @Autowired
     private TbServiceAdvisorMapper tbServiceAdvisorMapper;
     @Autowired
@@ -252,6 +261,11 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     @ServiceLog(doAction = "编辑企业信息")
     public Integer updateCompanyInfo(CompanyUpdateParam companyUpdateParam, String account, String phone) {
+        if (companyUpdateParam.getComPropertys().length == 0 || companyUpdateParam.getComPropertys().length > 3) {
+            logger.warn("[编辑企业信息] 企业性质超过3条");
+            throw new JnSpringCloudException(com.jn.enterprise.company.enums.CompanyExceptionEnum.UPGRADE_COMPANY_PROPERTY_GT_THREE);
+        }
+
         Result<UserExtensionInfo> userExtensionResult = userExtensionClient.getUserExtension(account);
         if (userExtensionResult == null || userExtensionResult.getData() == null) {
             logger.warn("[编辑企业信息] 获取用户信息失败，account：{}", account);
@@ -284,6 +298,11 @@ public class CompanyServiceImpl implements CompanyService {
         companyUpdateParam.setCreatedTime(DateUtils.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss"));
         companyUpdateParam.setCreatorAccount(account);
         companyUpdateParam.setRecordStatus(CompanyDataEnum.RECORD_STATUS_VALID.getCode());
+        companyUpdateParam.setComAdmin(account);
+
+        // 处理企业性质，多个以‘,’拼接
+        companyUpdateParam.setComProperty(StringUtils.join(companyUpdateParam.getComPropertys(),","));
+        companyUpdateParam.setComPropertys(null);
 
         // 处理图片
         companyUpdateParam.setAvatar(IBPSFileUtils.uploadFile2Json(account, companyUpdateParam.getAvatar()));
@@ -554,7 +573,13 @@ public class CompanyServiceImpl implements CompanyService {
                 .andCheckStatusNotEqualTo(CompanyDataEnum.STAFF_CHECK_STATUS_NOT_PASS.getCode())
                 .andComAdminEqualTo(account);
         List<TbServiceCompany> tbServiceCompanies = tbServiceCompanyMapper.selectByExample(companyCriteria);
-        if (tbServiceCompanies != null && !tbServiceCompanies.isEmpty()) {
+
+        TbServiceCompanyModifyCriteria companyModifyCriteria = new TbServiceCompanyModifyCriteria();
+        companyModifyCriteria.createCriteria().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue())
+                .andCheckStatusNotEqualTo(CompanyDataEnum.STAFF_CHECK_STATUS_NOT_PASS.getCode())
+                .andComAdminEqualTo(account);
+        List<TbServiceCompanyModify> tbServiceCompanyModifies = tbServiceCompanyModifyMapper.selectByExample(companyModifyCriteria);
+        if ((tbServiceCompanies != null && !tbServiceCompanies.isEmpty()) || (tbServiceCompanyModifies != null && !tbServiceCompanyModifies.isEmpty())) {
             inviteUpgradeStatusVO = new InviteUpgradeStatusVO(UpgradeStatusEnum.UPGRADE_COMPANY);
         }
 
@@ -569,7 +594,13 @@ public class CompanyServiceImpl implements CompanyService {
                 .andOrgStatusNotEqualTo(CompanyDataEnum.ORG_APPROVAL_STATUS_NOT_PASS.getCode())
                 .andOrgAccountEqualTo(account);
         List<TbServiceOrg> tbServiceOrgs = tbServiceOrgMapper.selectByExample(orgCriteria);
-        if (tbServiceOrgs != null && !tbServiceOrgs.isEmpty()) {
+
+        TbServiceOrgTempCriteria orgTempCriteria = new TbServiceOrgTempCriteria();
+        orgTempCriteria.createCriteria().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue())
+                .andOrgStatusNotEqualTo(CompanyDataEnum.ORG_APPROVAL_STATUS_NOT_PASS.getCode())
+                .andOrgAccountEqualTo(account);
+        List<TbServiceOrgTemp> tbServiceOrgTemps = tbServiceOrgTempMapper.selectByExample(orgTempCriteria);
+        if ((tbServiceOrgs != null && !tbServiceOrgs.isEmpty()) || (tbServiceOrgTemps != null && !tbServiceOrgTemps.isEmpty())) {
             inviteUpgradeStatusVO = new InviteUpgradeStatusVO(UpgradeStatusEnum.UPGRADE_ORG);
         }
 
@@ -596,6 +627,55 @@ public class CompanyServiceImpl implements CompanyService {
             inviteUpgradeStatusVO = new InviteUpgradeStatusVO(UpgradeStatusEnum.UPGRADE_ADVISOR);
         }
         return inviteUpgradeStatusVO;
+    }
+
+    @Override
+    @ServiceLog(doAction = "添加/修改企业信息")
+    public int saveOrUpdateCompanyInfo(com.jn.enterprise.company.model.ServiceCompany company) {
+        String comId = company.getComId();
+        TbServiceCompanyCriteria companyCriteria = new TbServiceCompanyCriteria();
+        companyCriteria.createCriteria().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue()).andIdEqualTo(comId);
+        List<TbServiceCompany> companyList = tbServiceCompanyMapper.selectByExample(companyCriteria);
+
+        int result = 0;
+        try {
+            TbServiceCompany tbServiceCompany = new TbServiceCompany();
+            if (companyList != null && !companyList.isEmpty()) {
+                TbServiceCompany tbServiceCompanyTemp = companyList.get(0);
+                BeanUtils.copyProperties(tbServiceCompanyTemp, tbServiceCompany);
+                BeanUtils.copyProperties(company, tbServiceCompany);
+            } else {
+                BeanUtils.copyProperties(company, tbServiceCompany);
+                if (StringUtils.isNotBlank(company.getCreditPoints())) {
+                    tbServiceCompany.setCreditPoints(new BigDecimal(company.getCreditPoints()));
+                }
+                if (StringUtils.isNotBlank(company.getCreditUpdateTime())) {
+                    tbServiceCompany.setCreditUpdateTime(DateUtils.parseDate(company.getCreditUpdateTime(), "yyyy-MM-dd HH:mm:ss"));
+                }
+            }
+            tbServiceCompany.setId(company.getComId());
+            tbServiceCompany.setRecordStatus(Byte.parseByte(company.getRecordStatus()));
+            tbServiceCompany.setCheckStatus(CompanyDataEnum.COMPANY_CHECK_STATUS_PASS.getCode());
+            if (StringUtils.isNotBlank(company.getRegCapital())) {
+                tbServiceCompany.setRegCapital(new BigDecimal(company.getRegCapital()));
+            }
+            if (StringUtils.isNotBlank(company.getFoundingTime())) {
+                tbServiceCompany.setFoundingTime(DateUtils.parseDate(company.getFoundingTime() + " 00:00:00", "yyyy-MM-dd HH:mm:ss"));
+            }
+
+            // 判断是新增还是修改
+            if (companyList != null && !companyList.isEmpty()) {
+                tbServiceCompany.setModifiedTime(DateUtils.parseDate(company.getCreatedTime(), "yyyy-MM-dd HH:mm:ss"));
+                result = tbServiceCompanyMapper.updateByPrimaryKeySelective(tbServiceCompany);
+            } else {
+                tbServiceCompany.setCreatedTime(DateUtils.parseDate(company.getCreatedTime(), "yyyy-MM-dd HH:mm:ss"));
+                result = tbServiceCompanyMapper.insertSelective(tbServiceCompany);
+            }
+        } catch (ParseException e) {
+            logger.warn("[添加/修改企业信息] 日期转换出错");
+            throw new JnSpringCloudException(CompanyExceptionEnum.DATE_CONVERT_ERROR);
+        }
+        return result;
     }
 
     /**

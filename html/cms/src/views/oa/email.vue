@@ -179,7 +179,7 @@ export default {
     },
     //   点击新增
     handleCreate() {
-      this.$router.push({ name: 'addemail', query: { title: '一键Email新增', workOrderNum: 'GGGL' }})
+      this.$router.push({ name: 'addemail', query: { title: '一键Email新增' }})
     },
     //   点击预览邮件内容
     handlePreview(row) {

@@ -138,6 +138,9 @@ export default {
             _this.total=res.data.total
           }else{
             _this.$message.error(res.result)
+            setTimeout(() => {
+              this.$router.go(-1)
+            }, 1000)
           }
         }
       });
@@ -153,6 +156,9 @@ export default {
             _this.platformType = res.data;
           }else{
             _this.$message.error(res.result)
+            setTimeout(() => {
+              this.$router.go(-1)
+            }, 1000)
           }
         }
       });

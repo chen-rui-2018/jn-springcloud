@@ -9,7 +9,8 @@
           <div class="chat-title">与 {{ toUserNickName }} 的对话</div>
         </div>
         <div ref="chatMain" class="chat-main">
-          <div class="no-more" v-if="noMore">没有更多消息了</div>
+          <div class="no-more" v-if="messageList.length > 0 && noMore">没有更多消息了</div>
+          <div class="no-more" v-if="messageList.length === 0">暂无消息</div>
           <div class="tc" v-if="loading">
             <i class="el-icon-loading"></i>
             <span>正在加载...</span>
@@ -94,11 +95,12 @@
 
 <script>
   import { getUserInfo } from '@/util/auth'
-  import { isArray, getDateString } from '@/util'
+  import { isArray, getDateString, isIos } from '@/util'
   import avatar from './common/avatar'
   import messageRow from './common/messageRow'
   import sockHttp from '@/util/sockHttp'
   import { WS_URL } from '@/util/url'
+  const _isIos = isIos()
   export default {
     name: "Chat",
     components: {
@@ -135,7 +137,8 @@
         loaded: false,
         lastMessageSendTime: '',
         html: null,
-        body: null
+        body: null,
+        isIos: isIos()
       }
     },
     mounted() {
@@ -162,8 +165,9 @@
           return ''
         }
         let td = new Date()
+        const time = _isIos ? d.replace(/-/g,"/") : d
         td = new Date(td.getFullYear(), td.getMonth(), td.getDate())
-        let od = new Date(d)
+        let od = new Date(time)
         const year = od.getFullYear()
         let mon = od.getMonth() + 1
         mon = mon > 9 ? mon : '0' + mon

@@ -511,15 +511,14 @@ export default {
         min-height: 100%;
       }
       min-height: 100%;
-      width: 200px;
+      width: 24%;
       flex: none;
       padding-bottom: 100px;
     }
     .target-management-r {
       min-height: 100%;
-      width: 100%;
+      width: 76%;
       padding: 15px;
-      flex: 1;
       border: 1px solid $gray;
       .target-row {
         margin: 5px auto;

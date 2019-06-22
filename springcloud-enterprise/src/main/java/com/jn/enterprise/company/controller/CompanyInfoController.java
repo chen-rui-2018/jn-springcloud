@@ -6,6 +6,7 @@ import com.jn.common.model.Result;
 import com.jn.company.model.ServiceCompany;
 import com.jn.enterprise.company.enums.CompanyExceptionEnum;
 import com.jn.enterprise.company.service.CompanyService;
+import com.jn.enterprise.company.vo.InviteUpgradeStatusVO;
 import com.jn.enterprise.company.vo.UpgradeStatusVO;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
@@ -13,6 +14,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -47,7 +49,10 @@ public class CompanyInfoController extends BaseController {
     @RequiresPermissions("/enterprise/company/getJoinParkStatus")
     public Result<UpgradeStatusVO> getJoinParkStatus(){
         User user = checkUserValid();
-        return new Result(companyService.getJoinParkStatus(user.getAccount()));
+        InviteUpgradeStatusVO joinParkStatus = companyService.getJoinParkStatus(user.getAccount());
+        UpgradeStatusVO upgradeStatusVO = new UpgradeStatusVO();
+        BeanUtils.copyProperties(joinParkStatus, upgradeStatusVO);
+        return new Result(upgradeStatusVO);
     }
 
     /**

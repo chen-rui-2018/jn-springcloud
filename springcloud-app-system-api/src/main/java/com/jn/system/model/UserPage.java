@@ -28,7 +28,7 @@ public class UserPage extends Page implements Serializable {
     @ApiModelProperty(value = "部门id", example = "6b561892-5310-4ea8-877d-e791df462d0e")
     private String departmentId;
 
-    @ApiModelProperty(value = "岗位或岗位类型名称", example = "领导")
+    @ApiModelProperty(value = "岗位", example = "领导")
     private String postOrTypeName;
 
     @ApiModelProperty(value = "手机号", example = "\"131\"")

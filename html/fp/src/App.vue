@@ -125,10 +125,11 @@ export default {
       isMobile: isMobile(),
       show: false,
       isVisibility: false,
-      telShow: false
+      telShow: false,
+      body: null
     };
   },
-  created() {
+  mounted() {
     let vm = this;
     window.onscroll = function() {
       if (document.documentElement.scrollTop > 60) {
@@ -137,6 +138,15 @@ export default {
         vm.isActive = false;
       }
     };
+    if (this.isMobile) {
+      this.body = document.getElementsByTagName('body')[0]
+      this.body.classList.add('app')
+    }
+  },
+  destroyed() {
+    if (this.isMobile) {
+      this.body.classList.remove('app')
+    }
   },
   methods: {
     toTop() {
@@ -176,6 +186,16 @@ export default {
 [v-show],
 [v-cloak] {
   display: none !important;
+}
+.app {
+  .el-message-box {
+    width: 90%;
+    position: absolute;
+    left: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+
+  }
 }
 #app {
   font-family: "Microsoft YaHei", "Avenir", Helvetica, Arial, sans-serif;

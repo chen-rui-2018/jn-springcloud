@@ -201,7 +201,8 @@ export default {
         refuseInvitation:"springcloud-enterprise/serviceMarket/acceptOrgInvitationController/refuseInvitation",//拒绝机构邀请
         getOrgInfoForManage:"springcloud-enterprise/guest/serviceMarket/org/getOrgInfoForManage",//获取服机构信息[机构详情+产品列表](pc/app机构信息)
         // 角色认证
-        getInvestorMainRound:"springcloud-enterprise//guest/technologyFinancial/investorController/getInvestorMainRound",//获取主投领域
+        getInvestorMainRound:"springcloud-enterprise/guest/technologyFinancial/investorController/getInvestorMainRound",//获取主投领域
+        getJoinParkStatus:"springcloud-enterprise/enterprise/company/getJoinParkStatus",//查询当前账号是否允许认证
         getAffiliationUnit:"springcloud-enterprise/guest/technologyFinancial/investorController/getAffiliationUnit",//获取所属单位
         addInvestorInfo:"springcloud-enterprise/technologyFinancial/investorController/addInvestorInfo",//提交投资人认证资料
         saveOrUpdateOrgDetail:"springcloud-enterprise/orgJoinPark/saveOrUpdateOrgDetail",//服务机构认证

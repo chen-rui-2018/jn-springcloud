@@ -6,6 +6,7 @@ import com.jn.company.model.*;
 import com.jn.enterprise.company.model.CompanyUpdateParam;
 import com.jn.enterprise.company.vo.CompanyContactVO;
 import com.jn.enterprise.company.vo.CompanyDetailsVo;
+import com.jn.enterprise.company.vo.InviteUpgradeStatusVO;
 import com.jn.enterprise.company.vo.UpgradeStatusVO;
 import com.jn.enterprise.model.CompanyInfoModel;
 import com.jn.park.activity.model.ActivityPagingParam;
@@ -126,6 +127,6 @@ public interface CompanyService {
      * @param account
      * @return
      */
-    UpgradeStatusVO getJoinParkStatus(String account);
+    InviteUpgradeStatusVO getJoinParkStatus(String account);
 
 }

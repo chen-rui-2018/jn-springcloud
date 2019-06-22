@@ -38,6 +38,10 @@ public class UpgradeStatusVO implements Serializable {
         this.message = message;
     }
 
+    public UpgradeStatusVO() {
+
+    }
+
     public UpgradeStatusVO(UpgradeStatusEnum upgradeStatusEnum) {
         this.code = upgradeStatusEnum.getCode();
         this.message = upgradeStatusEnum.getMessage();

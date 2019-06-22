@@ -662,6 +662,9 @@ public class CompanyServiceImpl implements CompanyService {
             if (StringUtils.isNotBlank(company.getFoundingTime())) {
                 tbServiceCompany.setFoundingTime(DateUtils.parseDate(company.getFoundingTime() + " 00:00:00", "yyyy-MM-dd HH:mm:ss"));
             }
+            if (StringUtils.isNotBlank(company.getRunTime())) {
+                tbServiceCompany.setRunTime(DateUtils.parseDate(company.getRunTime() + " 00:00:00", "yyyy-MM-dd HH:mm:ss"));
+            }
 
             // 判断是新增还是修改
             if (companyList != null && !companyList.isEmpty()) {

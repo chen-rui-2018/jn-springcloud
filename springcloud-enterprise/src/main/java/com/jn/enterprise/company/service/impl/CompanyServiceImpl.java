@@ -689,17 +689,29 @@ public class CompanyServiceImpl implements CompanyService {
         //查询企业字段数据
         TbServicePreferCriteria preferCriteria = new TbServicePreferCriteria();
         List<TbServicePrefer> tbServicePrefers = tbServicePreferMapper.selectByExample(preferCriteria);
-        if(StringUtils.isNotEmpty(company.getComProperty())){
+
+        // 行业领域
+        if(StringUtils.isNotEmpty(company.getInduType())){
             for (TbServicePrefer prefer: tbServicePrefers) {
-                // 行业领域
                 if(StringUtils.equals(prefer.getId(), company.getInduType())){
                     company.setInduTypeName(prefer.getPreValue());
                 }
-                // 企业性质
-                if(StringUtils.equals(company.getComProperty(), prefer.getId())){
-                    company.setComPropertyName(prefer.getPreValue());
+            }
+        }
+
+        //企业性质
+        if(StringUtils.isNotEmpty(company.getComProperty())){
+            String[] comPropertys = company.getComProperty().split(",");
+            List<String> comPropertyNameList = new ArrayList<>();
+            for (String str : comPropertys) {
+                for (TbServicePrefer prefer : tbServicePrefers) {
+                    if (StringUtils.equals(prefer.getId(), str)) {
+                        comPropertyNameList.add(prefer.getPreValue());
+                    }
                 }
             }
+            company.setComPropertyName(StringUtils.join(comPropertyNameList, ","));
+            company.setComPropertys(company.getComProperty().split(","));
         }
         return company;
     }

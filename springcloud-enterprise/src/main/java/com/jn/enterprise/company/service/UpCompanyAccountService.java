@@ -1,6 +1,5 @@
 package com.jn.enterprise.company.service;
 
-import com.jn.enterprise.company.entity.TbServiceCompany;
 import com.jn.enterprise.company.model.ServiceCompany;
 
 /**

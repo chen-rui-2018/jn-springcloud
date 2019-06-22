@@ -30,6 +30,7 @@ public enum CompanyExceptionEnum implements CodeAndMsg {
     GET_USER_EXTENSION_INFO_ERROR("5020595","获取用户信息发生错误"),
     UPDATE_USER_EXTENSION_INFO_ERROR("5020596","更新用户信息发生错误"),
     COMPANY_ADMIN_LEAVE_ERROR("5020597","企业管理员不能离开企业"),
+    UPGRADE_COMPANY_PROPERTY_GT_THREE("5020598","企业性质为空或超过3条"),
 
     CALL_SYSTEM_SERVICE_ERROR("5020401","调用system服务出错"),
     CALL_USER_SERVICE_ERROR("5020402","调用user服务出错"),

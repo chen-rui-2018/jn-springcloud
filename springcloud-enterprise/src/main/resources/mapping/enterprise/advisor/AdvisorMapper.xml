@@ -95,43 +95,39 @@
     <select id="getServiceRatingInfo" parameterType="com.jn.enterprise.servicemarket.advisor.model.ServiceEvaluationParam"
             resultType="com.jn.enterprise.servicemarket.comment.model.ServiceRating">
         SELECT
-		tt.orgId
-		,tt.orgName
-		,tt.advisorAccount
-		,tt.advisorName
+        tt.orgId
+        ,tt.orgName
+        ,tt.advisorAccount
+        ,tt.advisorName
         ,tt.productId
-		,tt.productName
-		,tt.pictureUrl
-		,tt.evaluationAccount
-		,tt.evaluationTime
-		,tt.evaluationDesc
-		,tt.evaluationScore
-	    FROM
-	      (
-            SELECT
-                sa.`org_id_` AS "orgId"			   			                <!-- 机构id-->
-                ,sa.`org_name` AS "orgName"					                <!-- 所属机构名称-->
-                ,sa.`advisor_account` AS "advisorAccount"  			        <!-- 顾问账号-->
-                ,sa.`advisor_name` AS "advisorName"				            <!-- 顾问名称-->
-                ,sr.product_id_ as "productId"                               <!-- 服务产品id-->
-                ,sr.`product_name` AS "productName"				            <!-- 服务产品名称-->
-                ,sp.`picture_url` AS "pictureUrl"				            <!-- 服务产品图片-->
-                ,concat_ws('****', substring(sr.`evaluator_account`, 1, 4),
-                substring(sr.`evaluator_account`, 9, 3)) AS "evaluationAccount" <!-- 评价人账号-->
-                ,date_format(sr.`created_time`,'%Y-%m-%d %H:%i:%s') AS "evaluationTime"<!-- 评价时间-->
-                ,sr.`evaluation_desc` AS "evaluationDesc"			        <!-- 评价描述-->
-                ,IFNULL(AVG(sr.`attitude_score`),0) AS "evaluationScore"	<!-- 评价分数-->
-            FROM tb_service_advisor  sa
-            RIGHT JOIN tb_service_rating sr
-            ON sa.`advisor_account` = sr.`advisor_account`
-            and sa.approval_status='2'            <!--审批通过-->
-            and sa.record_status='1'              <!--数据状态为正常数据-->
-            LEFT JOIN tb_service_product sp
-            ON sr.`product_id_`=sp.`product_id_`
-            GROUP BY sa.`org_id_`,sa.`org_name`,sa.`advisor_account`,sa.`advisor_name`,
-                 sr.product_id_,sr.`product_name`, sp.`picture_url`,sr.`evaluator_account`,
-                 sr.`created_time`,sr.`evaluation_desc`
-          )tt
+        ,tt.productName
+        ,tt.pictureUrl
+        ,tt.evaluationAccount
+        ,tt.evaluationTime
+        ,tt.evaluationDesc
+        ,tt.evaluationScore
+        FROM
+        (
+        SELECT
+        sr.`org_id_` AS "orgId"			   			                <!-- 机构id-->
+        ,sr.`org_name` AS "orgName"					                <!-- 所属机构名称-->
+        ,sr.`advisor_account` AS "advisorAccount"  			        <!-- 顾问账号-->
+        ,sr.`advisor_name` AS "advisorName"				            <!-- 顾问名称-->
+        ,sr.product_id_ AS "productId"                              <!-- 服务产品id-->
+        ,sr.`product_name` AS "productName"				            <!-- 服务产品名称-->
+        ,sp.`picture_url` AS "pictureUrl"				            <!-- 服务产品图片-->
+        ,CONCAT_WS('****', SUBSTRING(sr.`evaluator_account`, 1, 4),
+        SUBSTRING(sr.`evaluator_account`, 9, 3)) AS "evaluationAccount" <!-- 评价人账号-->
+        ,DATE_FORMAT(sr.`created_time`,'%Y-%m-%d %H:%i:%s') AS "evaluationTime"<!-- 评价时间-->
+        ,sr.`evaluation_desc` AS "evaluationDesc"			        <!-- 评价描述-->
+        ,IFNULL(AVG(sr.`attitude_score`),0) AS "evaluationScore"	<!-- 评价分数-->
+        FROM  tb_service_rating sr
+        LEFT JOIN tb_service_product sp
+        ON sr.`product_id_`=sp.`product_id_`
+        GROUP BY sr.`org_id_`,sr.`org_name`,sr.`advisor_account`,sr.`advisor_name`,
+        sr.product_id_,sr.`product_name`, sp.`picture_url`,sr.`evaluator_account`,
+        sr.`created_time`,sr.`evaluation_desc`
+        )tt
         WHERE 1=1
         <if test="orgId !=null and orgId !=''"> <!--查询机构评价-->
             AND tt.orgId=#{orgId}

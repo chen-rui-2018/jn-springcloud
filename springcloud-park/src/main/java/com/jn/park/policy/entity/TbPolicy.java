@@ -23,7 +23,7 @@ public class TbPolicy implements Serializable {
     private String policyClassName;
 
     /*@ApiModelProperty("政策类型(0：普通政策  1：图解政策)
-需求变更，此字段废弃")*/
+")*/
     private String policyType;
 
     /*@ApiModelProperty("图解政策url")*/
@@ -53,15 +53,18 @@ public class TbPolicy implements Serializable {
     /*@ApiModelProperty("支持产业(1：所有产业   2：其他)")*/
     private String supportIndustry;
 
+    /*@ApiModelProperty("是否置顶(默认为0,0：未置顶，1：已置顶)")*/
+    private Byte isStick;
+
     /*@ApiModelProperty("发文单位")*/
     private String issueUnit;
 
     /*@ApiModelProperty("有无关联政策图解(0：无    1：有)
-需求变更，此字段废弃")*/
+")*/
     private String isPolicyDiagram;
 
     /*@ApiModelProperty("关联的政策图解id
-需求变更，此字段废弃")*/
+")*/
     private String relationPolicyDiagramId;
 
     /*@ApiModelProperty("有无关联政策原文(0：无    1：有)
@@ -69,7 +72,7 @@ public class TbPolicy implements Serializable {
     private String isPolicyOriginal;
 
     /*@ApiModelProperty("关联的政策原文id
-需求变更，此字段废弃")*/
+")*/
     private String relationPolicyOriginalId;
 
     /*@ApiModelProperty("创建时间")*/
@@ -86,6 +89,12 @@ public class TbPolicy implements Serializable {
 
     /*@ApiModelProperty("是否删除  0标记删除，1正常")*/
     private Byte recordStatus;
+
+    /*@ApiModelProperty("附件url(可以有多个，用分号“;”隔开)")*/
+    private String fileUrl;
+
+    /*@ApiModelProperty("政策内容")*/
+    private String policyContent;
 
     private static final long serialVersionUID = 1L;
 
@@ -217,6 +226,14 @@ public class TbPolicy implements Serializable {
         this.supportIndustry = supportIndustry == null ? null : supportIndustry.trim();
     }
 
+    public Byte getIsStick() {
+        return isStick;
+    }
+
+    public void setIsStick(Byte isStick) {
+        this.isStick = isStick;
+    }
+
     public String getIssueUnit() {
         return issueUnit;
     }
@@ -297,6 +314,22 @@ public class TbPolicy implements Serializable {
         this.recordStatus = recordStatus;
     }
 
+    public String getFileUrl() {
+        return fileUrl;
+    }
+
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl == null ? null : fileUrl.trim();
+    }
+
+    public String getPolicyContent() {
+        return policyContent;
+    }
+
+    public void setPolicyContent(String policyContent) {
+        this.policyContent = policyContent == null ? null : policyContent.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -325,6 +358,7 @@ public class TbPolicy implements Serializable {
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getSupportMethod() == null ? other.getSupportMethod() == null : this.getSupportMethod().equals(other.getSupportMethod()))
             && (this.getSupportIndustry() == null ? other.getSupportIndustry() == null : this.getSupportIndustry().equals(other.getSupportIndustry()))
+            && (this.getIsStick() == null ? other.getIsStick() == null : this.getIsStick().equals(other.getIsStick()))
             && (this.getIssueUnit() == null ? other.getIssueUnit() == null : this.getIssueUnit().equals(other.getIssueUnit()))
             && (this.getIsPolicyDiagram() == null ? other.getIsPolicyDiagram() == null : this.getIsPolicyDiagram().equals(other.getIsPolicyDiagram()))
             && (this.getRelationPolicyDiagramId() == null ? other.getRelationPolicyDiagramId() == null : this.getRelationPolicyDiagramId().equals(other.getRelationPolicyDiagramId()))
@@ -334,7 +368,9 @@ public class TbPolicy implements Serializable {
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
-            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()));
+            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
+            && (this.getFileUrl() == null ? other.getFileUrl() == null : this.getFileUrl().equals(other.getFileUrl()))
+            && (this.getPolicyContent() == null ? other.getPolicyContent() == null : this.getPolicyContent().equals(other.getPolicyContent()));
     }
 
     @Override
@@ -357,6 +393,7 @@ public class TbPolicy implements Serializable {
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getSupportMethod() == null) ? 0 : getSupportMethod().hashCode());
         result = prime * result + ((getSupportIndustry() == null) ? 0 : getSupportIndustry().hashCode());
+        result = prime * result + ((getIsStick() == null) ? 0 : getIsStick().hashCode());
         result = prime * result + ((getIssueUnit() == null) ? 0 : getIssueUnit().hashCode());
         result = prime * result + ((getIsPolicyDiagram() == null) ? 0 : getIsPolicyDiagram().hashCode());
         result = prime * result + ((getRelationPolicyDiagramId() == null) ? 0 : getRelationPolicyDiagramId().hashCode());
@@ -367,6 +404,8 @@ public class TbPolicy implements Serializable {
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
+        result = prime * result + ((getFileUrl() == null) ? 0 : getFileUrl().hashCode());
+        result = prime * result + ((getPolicyContent() == null) ? 0 : getPolicyContent().hashCode());
         return result;
     }
 
@@ -392,6 +431,7 @@ public class TbPolicy implements Serializable {
         sb.append(", status=").append(status);
         sb.append(", supportMethod=").append(supportMethod);
         sb.append(", supportIndustry=").append(supportIndustry);
+        sb.append(", isStick=").append(isStick);
         sb.append(", issueUnit=").append(issueUnit);
         sb.append(", isPolicyDiagram=").append(isPolicyDiagram);
         sb.append(", relationPolicyDiagramId=").append(relationPolicyDiagramId);
@@ -402,6 +442,8 @@ public class TbPolicy implements Serializable {
         sb.append(", modifiedTime=").append(modifiedTime);
         sb.append(", modifierAccount=").append(modifierAccount);
         sb.append(", recordStatus=").append(recordStatus);
+        sb.append(", fileUrl=").append(fileUrl);
+        sb.append(", policyContent=").append(policyContent);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

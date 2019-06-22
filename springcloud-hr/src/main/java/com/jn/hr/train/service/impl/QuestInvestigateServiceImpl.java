@@ -430,27 +430,11 @@ public class QuestInvestigateServiceImpl implements QuestInvestigateService {
 					tbInvestigate.getStatus());
 			throw new JnSpringCloudException(TrainExceptionEnums.JOIN_MANAGEMENT_ERROR, "参加问卷调查失败，当前问卷未开始/已结束");
 		}
-		// if (tbInvestigate.getEffectiveTimeStart().compareTo(new Date()) > 0)
-		// {
-		// logger.warn("参加问卷调查失败，当前时间未在问卷时间范围内,project:{},start~end:{}",
-		// tbInvestigate.getProjectId(),
-		// tbInvestigate.getEffectiveTimeStart() + "~" +
-		// tbInvestigate.getEffectiveTimeEnd());
-		// throw new
-		// JnSpringCloudException(TrainExceptionEnums.JOIN_MANAGEMENT_ERROR);
-		// }
-		// if (tbInvestigate.getEffectiveTimeEnd().compareTo(new Date()) < 0) {
-		// logger.warn("参加问卷调查失败，当前时间未在问卷时间范围内,project:{},start~end:{}",
-		// tbInvestigate.getProjectId(),
-		// tbInvestigate.getEffectiveTimeStart() + "~" +
-		// tbInvestigate.getEffectiveTimeEnd());
-		// throw new
-		// JnSpringCloudException(TrainExceptionEnums.JOIN_MANAGEMENT_ERROR);
-		// }
 
 		TbManpowerTrainQuestResearchSet researchSet = tbQuestResearchSetMapper
 				.selectByPrimaryKey(tbInvestigate.getProjectId());
-		if (null != researchSet) {
+		if (null != researchSet
+				&& InvestigateStatusEnums.REAL_NAME.getCode().equals(researchSet.getResearchMethod().toString())) {
 			if (researchSet.getIsShowName().toString().equals(InvestigateStatusEnums.DISPLAY.getCode())) {
 				if (StringUtils.isBlank(investigate.getName())) {
 					logger.warn("参加问卷调查失败，姓名为必填项,project:{}", tbInvestigate.getProjectId());
@@ -516,7 +500,7 @@ public class QuestInvestigateServiceImpl implements QuestInvestigateService {
 		tbInvestiga.setProjectId(projectId);
 		tbQuestInvestigaMapper.updateByPrimaryKeySelective(tbInvestiga);
 		// }
-		logger.info("[问卷调查] 结束问卷成功,projectId:{}", investigaDel.getProjectId());
+		logger.info("[问卷调查] 删除问卷成功,projectId:{}", investigaDel.getProjectId());
 
 	}
 
@@ -545,7 +529,7 @@ public class QuestInvestigateServiceImpl implements QuestInvestigateService {
 		tbInvestiga.setProjectId(projectId);
 		tbQuestInvestigaMapper.updateByPrimaryKeySelective(tbInvestiga);
 		// }
-		logger.info("[问卷调查] 删除问卷成功,projectId:{}", investigaDel.getProjectId());
+		logger.info("[问卷调查] 结束问卷成功,projectId:{}", investigaDel.getProjectId());
 	}
 
 	/**
@@ -745,6 +729,14 @@ public class QuestInvestigateServiceImpl implements QuestInvestigateService {
 	@Override
 	@ServiceLog(doAction = "单人统计功能")
 	public PaginationData<List<SurveyResultVo>> surveyResultList(SurveyResultPage surveyResultPage) {
+		// 查询当前项目设置详情
+		TbManpowerTrainQuestResearchSet tbManpowerTrainQuestResearchSet = tbQuestResearchSetMapper
+				.selectByPrimaryKey(surveyResultPage.getProjectId());
+		if (null != tbManpowerTrainQuestResearchSet && InvestigateStatusEnums.HIDE_NAME.getCode()
+				.equals(tbManpowerTrainQuestResearchSet.getResearchMethod().toString())) {
+			logger.warn("[问卷调查] 查看单人统计页面失败,当前项目为匿名统计项目,projectId:{}", surveyResultPage.getProjectId());
+			throw new JnSpringCloudException(TrainExceptionEnums.INTERFACE_NOT_EXIT, "匿名统计项目无单人统计界面");
+		}
 		Page<Object> objects = PageHelper.startPage(surveyResultPage.getPage(), surveyResultPage.getRows());
 		List<SurveyResultVo> noticeList = surveyResultMapper.listQuest(surveyResultPage);
 		for (SurveyResultVo notice : noticeList) {
@@ -864,7 +856,14 @@ public class QuestInvestigateServiceImpl implements QuestInvestigateService {
 				tbAnswerInfo.setId(tbResult.getId());
 			}
 			if (StringUtils.isBlank(tbAnswerInfo.getJobNumber())) {
-				tbAnswerInfo.setJobNumber(resultAnswerAdd.getJobNumber());
+				String jobNumber = resultAnswerAdd.getJobNumber();
+				if (StringUtils.isBlank(jobNumber)) {
+					jobNumber = resultAnswerAdd.getPhone();
+				}
+				if (StringUtils.isBlank(jobNumber)) {
+					jobNumber = resultAnswerAdd.getName();
+				}
+				tbAnswerInfo.setJobNumber(jobNumber);
 			}
 			if (StringUtils.isBlank(tbAnswerInfo.getTitleId())) {
 				tbAnswerInfo.setTitleId(answer.getTitleId());

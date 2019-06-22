@@ -1,5 +1,6 @@
 import axios from 'axios'
 import api from '@/util/api'
+import { getToken } from '@/util/auth'
 const baseURL = api.host + 'springcloud-park/'
 // 设置默认的基准路径
 axios.defaults.baseURL = baseURL
@@ -7,7 +8,7 @@ axios.defaults.baseURL = baseURL
 axios.interceptors.request.use(function (config) {
   // Do something before request is sent
   // 获取token
-  var token = localStorage.getItem('mytoken')
+  var token = getToken()
   if (token) {
     config.headers['Authorization'] = token
   }

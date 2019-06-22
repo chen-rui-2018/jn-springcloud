@@ -1,5 +1,7 @@
 <template>
-<div class="data-report-check">
+<div
+  :class="{ pd: $store.state.hiddenNav }"
+  class="data-report-check">
   <div class="btn-row">
     <el-button type="primary" @click="exportData">导出</el-button>
   </div>
@@ -10,6 +12,7 @@
 <script>
 import dataReportForm from './dataReportForm'
 import { downloadService, download} from '@/util/downloadService'
+import { getToken } from '@/util/auth'
 export default {
   name: 'DataReportCheck',
   components: {
@@ -31,7 +34,7 @@ export default {
         url: url,
         responseType: 'blob',
         headers: {
-          token: sessionStorage.token
+          token: getToken()
         }
       }).then(response => {
         download(response, '导出模板')
@@ -47,7 +50,9 @@ export default {
 </script>
 <style lang="scss">
   .data-report-check {
-    padding-top: 100px;
+    &.pd {
+      padding-top: 100px;
+    }
     background-color: #f5f5f5;
     .btn-row {
       padding: 20px;

@@ -803,7 +803,7 @@ img {
 
             .right1 {
 
-              // margin-left: 40px;
+              margin-left: 20px;
               >p {
                 margin-top: 4px;
               }
@@ -1012,6 +1012,7 @@ img {
             color: #666;
             background-color: #f8f8f8;
             font-size: 13px;
+            width: 146px;
           }
 
           .table-orgspace-detail {
@@ -1028,10 +1029,19 @@ img {
           }
         }
       }
-
+      .basicInfo{
+        .table-orgspace-title {
+          width: 146px;
+        }
+      }
       .businessinfo {
         .table-orgspace-title {
           width: 146px;
+        }
+      }
+      .contactInfo{
+        .table-orgspace-title.ta_c{
+          width: auto;
         }
       }
 
@@ -1261,7 +1271,7 @@ img {
 
           .detail-contact.inner-product {
             color: #999;
-            width: 240px;
+            width: 340px;
           }
 
           .detail-contact {
@@ -1271,13 +1281,14 @@ img {
           }
 
           .detail-evaluate.inner-product {
-            width: 420px;
+            width: 320px;
             color: #999;
           }
 
           .detail-evaluate {
             display: inline-block;
             vertical-align: middle;
+            margin-left:20px;
           }
 
           .detail-count {
@@ -1537,7 +1548,7 @@ img {
       }
 
       .nav {
-        width: 600px;
+        width: 700px;
         height: 37.6px;
         margin: 0 auto;
 
@@ -1551,7 +1562,8 @@ img {
             text-align: center;
             // line-height: 52px;
             // padding: 0 50px;
-            width: 100px;
+            // width: 100px;
+            width: 84px;
 
           }
 
@@ -1737,7 +1749,7 @@ img {
       background-color: rgba(0, 0, 0, 0.5);
 
       >ul {
-        padding: 0 300px;
+        padding: 0 100px;
         display: flex;
         justify-content: center;
         align-items: center;

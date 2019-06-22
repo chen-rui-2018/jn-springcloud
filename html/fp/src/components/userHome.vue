@@ -150,6 +150,7 @@
 </template>
 <script>
 import bus from '@/util/bus'
+import { getToken } from '@/util/auth'
 export default {
   props:['userData'],
   data() {
@@ -169,7 +170,7 @@ export default {
       value5: [],
       value11: [],
       headers: {
-        token: sessionStorage.token
+        token: getToken()
       }
     };
   },

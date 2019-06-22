@@ -107,11 +107,12 @@
             </el-tab-pane>
             <el-tab-pane label="产品" name="honor">
               <div class="honor clearfix" v-if="zankaiFlag">
-                <ul class="clearfix">
+                <!-- <ul class="clearfix">
                   <li class="">
                     <span class="contact-detail-img mr5"></span>{{companyDetail.products}}
                   </li>
-                </ul>
+                </ul> -->
+                <p v-html="companyDetail.mainProducts"></p>
               </div>
             </el-tab-pane>
           </el-tabs>
@@ -180,7 +181,7 @@
           <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :append-to-body="true" :lock-scroll="false">
             <div class="loginTip" style="text-align:center;padding-bottom:20px">
               你还未
-              <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+              <span class="mainColor pointer" @click="goLogin">登录</span>
               /
               <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
               账号
@@ -192,12 +193,13 @@
   </div>
 </template>
 <script>
+import { getToken } from '@/util/auth'
 import swiper from "swiper";
 export default {
   data() {
     return {
       concatVisible: false,
-      zankaiFlag: false,
+      zankaiFlag: true,
       inFlag: "",
       activeName: "baseInfo",
       companyDetail: {},
@@ -217,20 +219,25 @@ export default {
     this.getComCommentInfo();
   },
   methods: {
+    goLogin() {
+      window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
+      this.$router.push({ path: "/login" });
+    },
     //关注
     handleAttention(id) {
-      if (sessionStorage.token) {
+      if (getToken()) {
         this.api.post({
           url: "addCareOperate",
           data: {
             account: id,
-            receiveType: -2
+            receiveType: 2
           },
           // dataFlag:true,
           callback: res => {
             if (res.code == "0000") {
               // _this.parkList = res.data;
               // this.isCare = "1";
+              this.$message.success('关注成功');
               this.getCompanyDetail();
             } else {
               this.$message.error(res.result);
@@ -244,7 +251,7 @@ export default {
     },
     //取消关注
     cancelAttention(id) {
-      if (sessionStorage.token) {
+      if (getToken()) {
         this.api.post({
           url: "cancelCareOperate",
           data: {
@@ -255,6 +262,7 @@ export default {
             if (res.code == "0000") {
               // _this.parkList = res.data;
               // this.isCare = "0";
+              this.$message.success('取消关注成功');
               this.getCompanyDetail();
             } else {
               this.$message.error(res.result);
@@ -268,7 +276,7 @@ export default {
     },
     //评论点赞
     comLike(item) {
-      if (!sessionStorage.userInfo) {
+      if (!this.getToken()) {
         this.concatVisible = true;
         return;
       }
@@ -305,7 +313,7 @@ export default {
     },
     //留言
     leaveMessage(id) {
-      if (!sessionStorage.userInfo) {
+      if (!this.getToken()) {
         this.concatVisible = true;
         return;
       }
@@ -333,7 +341,7 @@ export default {
       if (this.inFlag == i) {
         return;
       }
-       if (!sessionStorage.userInfo) {
+      if (!this.getToken()) {
         this.concatVisible = true;
         return;
       }
@@ -342,10 +350,6 @@ export default {
     },
     //回复评论
     replycom(item) {
-      // if (!sessionStorage.userInfo) {
-      //   this.concatVisible = true;
-      //   return;
-      // }
       this.inFlag = "";
       let _this = this;
       this.api.post({
@@ -367,7 +371,7 @@ export default {
     },
     //在线联系
     onlineContact(id) {
-      if (!sessionStorage.userInfo) {
+      if (!this.getUserInfo()) {
         this.concatVisible = true;
         return;
       }
@@ -380,16 +384,15 @@ export default {
           if (res.code == "0000") {
             // this.typeList = res.data;
             if (
-              JSON.parse(sessionStorage.userInfo).account == res.data.account
+              JSON.parse(this.getUserInfo()).account == res.data.account
             ) {
               this.$message.error("当前登录的账号跟聊天对象一样");
               return;
             }
-            // this.$router.push({path:'/chat',query:{fromUser:sessionStorage.userInfo.account,toUser:res.data.account,nickName:res.data.nickName}})
             this.$router.push({
               path: "/chat",
               query: {
-                fromUser: JSON.parse(sessionStorage.userInfo).account,
+                fromUser: JSON.parse(this.getUserInfo()).account,
                 toUser: res.data.account,
                 nickName: res.data.nickName
               }
@@ -492,9 +495,9 @@ export default {
 </script>
 <style lang="scss">
 .profileDetails {
-  .loginTip{
+  .loginTip {
     text-align: center;
-    margin-bottom:20px;
+    margin-bottom: 20px;
     font-size: 15px;
   }
   .banner {
@@ -690,7 +693,7 @@ export default {
 
       .honor {
         // padding: 20 0px;
-        font-size: 14px;
+        // font-size: 14px;
 
         > ul {
           > li {

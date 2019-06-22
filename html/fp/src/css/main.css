@@ -1098,6 +1098,17 @@ img {
   margin-bottom: 5px;
 }
 
+.serverOrg .serverOrgContent > ul > li .orgCon .conContent .right1,
+.serverPro .serverOrgContent > ul > li .orgCon .conContent .right1,
+.serverCon .serverOrgContent > ul > li .orgCon .conContent .right1,
+.quickSearch .serverOrgContent > ul > li .orgCon .conContent .right1,
+.aboutUs .serverOrgContent > ul > li .orgCon .conContent .right1,
+.finaInstitution .serverOrgContent > ul > li .orgCon .conContent .right1,
+.finaPro .serverOrgContent > ul > li .orgCon .conContent .right1,
+.companyProfile .serverOrgContent > ul > li .orgCon .conContent .right1 {
+  margin-left: 20px;
+}
+
 .serverOrg .serverOrgContent > ul > li .orgCon .conContent .right1 > p,
 .serverPro .serverOrgContent > ul > li .orgCon .conContent .right1 > p,
 .serverCon .serverOrgContent > ul > li .orgCon .conContent .right1 > p,
@@ -1519,6 +1530,7 @@ img {
   color: #666;
   background-color: #f8f8f8;
   font-size: 13px;
+  width: 146px;
 }
 
 .serverOrgDetail .agentDel .agentDelCon .basicInfo .table-orgspace .table-orgspace-detail,
@@ -1580,6 +1592,15 @@ img {
   font-size: 13px;
 }
 
+.serverOrgDetail .agentDel .agentDelCon .basicInfo .table-orgspace-title,
+.serverProDetail .agentDel .agentDelCon .basicInfo .table-orgspace-title,
+.serverConDetail .agentDel .agentDelCon .basicInfo .table-orgspace-title,
+.quickSearch .agentDel .agentDelCon .basicInfo .table-orgspace-title,
+.finaInsDetail .agentDel .agentDelCon .basicInfo .table-orgspace-title,
+.finaProDetail .agentDel .agentDelCon .basicInfo .table-orgspace-title {
+  width: 146px;
+}
+
 .serverOrgDetail .agentDel .agentDelCon .businessinfo .table-orgspace-title,
 .serverProDetail .agentDel .agentDelCon .businessinfo .table-orgspace-title,
 .serverConDetail .agentDel .agentDelCon .businessinfo .table-orgspace-title,
@@ -1587,6 +1608,15 @@ img {
 .finaInsDetail .agentDel .agentDelCon .businessinfo .table-orgspace-title,
 .finaProDetail .agentDel .agentDelCon .businessinfo .table-orgspace-title {
   width: 146px;
+}
+
+.serverOrgDetail .agentDel .agentDelCon .contactInfo .table-orgspace-title.ta_c,
+.serverProDetail .agentDel .agentDelCon .contactInfo .table-orgspace-title.ta_c,
+.serverConDetail .agentDel .agentDelCon .contactInfo .table-orgspace-title.ta_c,
+.quickSearch .agentDel .agentDelCon .contactInfo .table-orgspace-title.ta_c,
+.finaInsDetail .agentDel .agentDelCon .contactInfo .table-orgspace-title.ta_c,
+.finaProDetail .agentDel .agentDelCon .contactInfo .table-orgspace-title.ta_c {
+  width: auto;
 }
 
 .serverOrgDetail .agentDel .agentDelCon .honor,
@@ -2138,7 +2168,7 @@ img {
 .finaProDetail .agentCon .serConsultant .list-imgleft .list-item .detail-contact.inner-product,
 .finaProDetail .agentCon .serEvaluation .list-imgleft .list-item .detail-contact.inner-product {
   color: #999;
-  width: 240px;
+  width: 340px;
 }
 
 .serverOrgDetail .agentCon .serverPro .list-imgleft .list-item .detail-contact,
@@ -2182,7 +2212,7 @@ img {
 .finaProDetail .agentCon .serverPro .list-imgleft .list-item .detail-evaluate.inner-product,
 .finaProDetail .agentCon .serConsultant .list-imgleft .list-item .detail-evaluate.inner-product,
 .finaProDetail .agentCon .serEvaluation .list-imgleft .list-item .detail-evaluate.inner-product {
-  width: 420px;
+  width: 320px;
   color: #999;
 }
 
@@ -2206,6 +2236,7 @@ img {
 .finaProDetail .agentCon .serEvaluation .list-imgleft .list-item .detail-evaluate {
   display: inline-block;
   vertical-align: middle;
+  margin-left: 20px;
 }
 
 .serverOrgDetail .agentCon .serverPro .list-imgleft .list-item .detail-count,
@@ -2641,7 +2672,7 @@ img {
 
 .portalIndex .header .headerContainer .nav,
 .enterpriseservice .header .headerContainer .nav {
-  width: 600px;
+  width: 700px;
   height: 37.6px;
   margin: 0 auto;
 }
@@ -2656,7 +2687,7 @@ img {
   float: left;
   font-size: 14px;
   text-align: center;
-  width: 100px;
+  width: 84px;
 }
 
 .portalIndex .header .headerContainer .nav > ul > li:hover,
@@ -2752,7 +2783,7 @@ img {
 
 .portalIndex .banner .quickEnter > ul,
 .enterpriseservice .banner .quickEnter > ul {
-  padding: 0 300px;
+  padding: 0 100px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;

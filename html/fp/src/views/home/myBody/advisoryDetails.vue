@@ -98,6 +98,7 @@
 export default {
   data() {
     return {
+      certificatePhoto:'',
       dialogVisible:false,
       loading:false,
       serviceProjectExperienceList: [],
@@ -156,7 +157,12 @@ export default {
       });
     },
     toCounselorManagement() {
-      this.$router.push({ name: "counselorManagement", query:{approvalStatus:this.$route.query.approvalStatus}});
+      if(this.$route.query.path){
+        this.$router.push({ path: "/myBody/agencyColleaguesList"});
+      }else{
+
+        this.$router.push({ name: "counselorManagement", query:{approvalStatus:this.$route.query.approvalStatus}});
+      }
     },
   }
 };

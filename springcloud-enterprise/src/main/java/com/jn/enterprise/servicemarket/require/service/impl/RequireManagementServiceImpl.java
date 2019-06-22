@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.xxpay.common.util.DateUtil;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -207,6 +208,11 @@ public class RequireManagementServiceImpl implements RequireManagementService {
         //融资期限没有传值判断标志，默认没有传值
         boolean flag=true;
         //融资期限
+        if(StringUtils.isNotBlank(requireTechnologyParam.getFinancingPeriodMax())
+                && StringUtils.isNotBlank(requireTechnologyParam.getFinancingPeriodMin())){
+            logger.warn("用户提需求(科技金融),融资期限最大最小值不能都有值");
+            throw new JnSpringCloudException(RequireExceptionEnum.FINANCING_PERIOD_NOT_ALL_ALLOWED);
+        }
         if(StringUtils.isNotBlank(requireTechnologyParam.getFinancingPeriodMax())){
             tbServiceRequire.setFinancingPeriodMax(Integer.parseInt(requireTechnologyParam.getFinancingPeriodMax()));
             flag=false;
@@ -414,18 +420,20 @@ public class RequireManagementServiceImpl implements RequireManagementService {
     @ServiceLog(doAction = "需求详情（对他人需求）")
     @Override
     public RequireOtherDetails getOtherRequireDetails(String reqNum) {
-        TbServiceRequireCriteria  example=new TbServiceRequireCriteria();
-        //数据状态  0：删除  1：有效
-        byte recordStatus=1;
-        example.createCriteria().andReqNumEqualTo(reqNum).andRecordStatusEqualTo(recordStatus);
-        List<TbServiceRequire> tbServiceRequireList = tbServiceRequireMapper.selectByExample(example);
-        if(tbServiceRequireList.isEmpty()){
-            logger.warn("需求单号为：{}的需求在系统中不存在或已失效",reqNum);
-            throw new JnSpringCloudException(RequireExceptionEnum.REQUIRE_INFO_NOT_EXIST);
-        }
-        TbServiceRequire tbServiceRequire = tbServiceRequireList.get(0);
+        TbServiceRequire tbServiceRequire = getTbServiceRequire(reqNum);
         RequireOtherDetails requireOtherDetails=new RequireOtherDetails();
         BeanUtils.copyProperties(tbServiceRequire, requireOtherDetails);
+        //融资期限
+        if(StringUtils.isNotBlank(tbServiceRequire.getFinancingPeriodMax()+"")){
+            logger.info("需求详情（对他人需求）,融资期限：{}",tbServiceRequire.getFinancingPeriodMax()+"");
+            requireOtherDetails.setFinancingPeriod(tbServiceRequire.getFinancingPeriodMax()+"");
+        }else if(StringUtils.isNotBlank(tbServiceRequire.getFinancingPeriodMin()+"")){
+            logger.info("需求详情（对他人需求）,融资期限：{}",tbServiceRequire.getFinancingPeriodMin()+"");
+            requireOtherDetails.setFinancingPeriod(tbServiceRequire.getFinancingPeriodMin()+"");
+        }
+        if(tbServiceRequire.getExpectedDate()!=null){
+            requireOtherDetails.setExpectedDate(DateUtils.formatDate(tbServiceRequire.getExpectedDate(),"yyyy-MM-dd"));
+        }
         //根据企业账号获取企业名称
         Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(tbServiceRequire.getIssueAccount());
         if(userExtension==null || userExtension.getData()==null){
@@ -441,6 +449,23 @@ public class RequireManagementServiceImpl implements RequireManagementService {
             requireOtherDetails.setEvaluationDesc(ratingInfo.getEvaluationDesc());
         }
         return requireOtherDetails;
+    }
+
+    /**
+     * 根据需求单号获取需求信息
+     * @param reqNum
+     * @return
+     */
+    @ServiceLog(doAction = "根据需求单号获取需求信息")
+    private TbServiceRequire getTbServiceRequire(String reqNum) {
+        TbServiceRequireCriteria example = new TbServiceRequireCriteria();
+        example.createCriteria().andReqNumEqualTo(reqNum).andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        List<TbServiceRequire> tbServiceRequireList = tbServiceRequireMapper.selectByExample(example);
+        if (tbServiceRequireList.isEmpty()) {
+            logger.warn("需求单号为：{}的需求在系统中不存在或已失效", reqNum);
+            throw new JnSpringCloudException(RequireExceptionEnum.REQUIRE_INFO_NOT_EXIST);
+        }
+        return tbServiceRequireList.get(0);
     }
 
     /**
@@ -542,18 +567,20 @@ public class RequireManagementServiceImpl implements RequireManagementService {
     @ServiceLog(doAction = "需求详情（我收到的需求）")
     @Override
     public RequireReceivedDetails getReceivedRequireDetails(String reqNum) {
-        TbServiceRequireCriteria  example=new TbServiceRequireCriteria();
-        //数据状态  0：删除  1：有效
-        byte recordStatus=1;
-        example.createCriteria().andReqNumEqualTo(reqNum).andRecordStatusEqualTo(recordStatus);
-        List<TbServiceRequire> tbServiceRequireList = tbServiceRequireMapper.selectByExample(example);
-        if(tbServiceRequireList.isEmpty()){
-            logger.warn("需求单号为：{}的需求在系统中不存在或已失效",reqNum);
-            throw new JnSpringCloudException(RequireExceptionEnum.REQUIRE_INFO_NOT_EXIST);
-        }
-        TbServiceRequire tbServiceRequire = tbServiceRequireList.get(0);
+        TbServiceRequire tbServiceRequire = getTbServiceRequire(reqNum);
         RequireReceivedDetails requireReceivedDetails=new RequireReceivedDetails();
         BeanUtils.copyProperties(tbServiceRequire, requireReceivedDetails);
+        //融资期限设置
+        if(StringUtils.isNotBlank(tbServiceRequire.getFinancingPeriodMax()+"")){
+            logger.info("需求详情（我收到的需求）,融资期限：{}",tbServiceRequire.getFinancingPeriodMax()+"");
+            requireReceivedDetails.setFinancingPeriod(tbServiceRequire.getFinancingPeriodMax()+"");
+        }else if(StringUtils.isNotBlank(tbServiceRequire.getFinancingPeriodMin()+"")){
+            logger.info("需求详情（我收到的需求）,融资期限：{}",tbServiceRequire.getFinancingPeriodMin()+"");
+            requireReceivedDetails.setFinancingPeriod(tbServiceRequire.getFinancingPeriodMin()+"");
+        }
+        if(tbServiceRequire.getExpectedDate()!=null){
+            requireReceivedDetails.setExpectedDate(DateUtils.formatDate(tbServiceRequire.getExpectedDate(),"yyyy-MM-dd"));
+        }
         //根据企业账号获取企业名称
         Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(tbServiceRequire.getIssueAccount());
         if(userExtension==null || userExtension.getData()==null){
@@ -565,8 +592,9 @@ public class RequireManagementServiceImpl implements RequireManagementService {
         //根据需求id获取评价信息
         TbServiceRating ratingInfo = getRatingInfo(tbServiceRequire.getId());
         if(ratingInfo!=null){
-            requireReceivedDetails.setRatingScore(ratingInfo.getAttitudeScore());
             requireReceivedDetails.setEvaluationDesc(ratingInfo.getEvaluationDesc());
+            requireReceivedDetails.setRatingScore(ratingInfo.getAttitudeScore());
+
         }
         return requireReceivedDetails;
     }

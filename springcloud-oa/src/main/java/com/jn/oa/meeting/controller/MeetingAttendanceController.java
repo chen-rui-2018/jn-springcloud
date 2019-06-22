@@ -4,6 +4,7 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
+import com.jn.common.util.excel.ExcelUtil;
 import com.jn.oa.meeting.model.OaMeetingAttendancePage;
 import com.jn.oa.meeting.model.OaMeetingParticipantsAttendance;
 import com.jn.oa.meeting.service.MeetingAttendanceService;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 
@@ -67,6 +69,24 @@ public class MeetingAttendanceController extends BaseController {
         Assert.notNull(id, "会议考勤ID不能为空");
         OaMeetingAttendanceVo data = meetingAttendanceService.selectMeetingAttendanceById(id);
         return new Result(data);
+    }
+
+
+    @ControllerLog(doAction = "导出会议考勤信息")
+    @RequestMapping(value = "/exportExcelMeetingAttendance", method = RequestMethod.GET)
+    @RequiresPermissions("/oa/oaMeetingAttendance/exportExcelMeetingAttendance")
+    @ApiOperation(value = "导出会议考勤信息")
+    public void exportExcelMeeting(OaMeetingAttendancePage oaMeetingAttendancePage, HttpServletResponse response) {
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        String exportTitle = "会议室,日期,开始时间,结束时间,会议主题,姓名,部门,签到打卡,签退打卡,签到状态,签退状态";
+        String exportColName = "meetingRoomName,meetingStartDate,meetingStartTime,meetingEndTime,meetingTitle,userName,departmentName,signInTime,signBackTime,signInStatus,signOutStatus";
+        oaMeetingAttendancePage.setPage(1);
+        oaMeetingAttendancePage.setRows(200000);
+        PaginationData<List<OaMeetingParticipantsAttendanceVo>> data = meetingAttendanceService.selectMeetingAttendanceList(oaMeetingAttendancePage);
+        List dataRows = (List) data.getRows();
+        String fileName = "会议考勤信息";
+        String sheetName = "会议考勤信息";
+        ExcelUtil.writeExcelWithCol(response, fileName, sheetName, exportTitle, exportColName, dataRows);
     }
 
 

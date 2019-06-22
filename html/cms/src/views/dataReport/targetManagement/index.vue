@@ -355,13 +355,13 @@ export default {
           this.$_post(`${this.GLOBAL.enterpriseUrl}data/target/updateTarget`, this.formData).then(data => {
             if (data.code === '0000') {
               this.getData()
-              this.submitting = false
               this.resetForm('formData')
               this.formData = deepClone(this.originFormData)
               this.$message.success('保存成功')
             } else {
               this.$message.error('提交失败')
             }
+            this.submitting = false
           })
         } else {
           console.log('error submit!!')
@@ -511,15 +511,14 @@ export default {
         min-height: 100%;
       }
       min-height: 100%;
-      width: 200px;
+      width: 24%;
       flex: none;
       padding-bottom: 100px;
     }
     .target-management-r {
       min-height: 100%;
-      width: 100%;
+      width: 76%;
       padding: 15px;
-      flex: 1;
       border: 1px solid $gray;
       .target-row {
         margin: 5px auto;

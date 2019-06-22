@@ -79,27 +79,27 @@
           </div>
           <div class="">
             <el-form-item label="融资金额：">
-              <span >{{receiveDetail.financingAmount}}</span>
+              <span >{{receiveDetail.financingAmount}}万元</span>
             </el-form-item>
           </div>
           <div>
             <el-form-item label="融资期限：">
-              <span>{{receiveDetail.financingPeriod}}</span>
+              <span>{{receiveDetail.financingPeriod}}个月</span>
             </el-form-item>
           </div>
           <div class="">
             <el-form-item label="资金需求日期：">
-              <span>{{receiveDetail.expectedDate}}</span>
+              <span>{{receiveDetail.expectedDate|time}}</span>
             </el-form-item>
           </div>
           <div class="">
             <el-form-item label="意向机构：">
-              <span>{{receiveDetail.serviceCycle}}</span>
+              <span>{{receiveDetail.orgName}}</span>
             </el-form-item>
           </div>
           <div class="">
             <el-form-item label="意向产品：">
-              <div>{{receiveDetail.orgName}}</div>
+              <div>{{receiveDetail.productName}}</div>
             </el-form-item>
           </div>
           <div class="">

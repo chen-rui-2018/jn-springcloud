@@ -68,27 +68,27 @@
           </div>
          <div :model="productDetail" class="">
             <el-form-item label="参考利率范围：">
-              <span>{{productDetail.refRateMin}}-{{productDetail.refRateMax}} </span>
+              <span>{{productDetail.refRateMin}}%-{{productDetail.refRateMax}}%</span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
             <el-form-item label="是否网贷直联：">
-              <span>{{productDetail.isOnlineLoan}} </span>
+              <span>{{productDetail.isOnlineLoan|status}} </span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
             <el-form-item label="是否政策性产品：">
-              <span>{{productDetail.isPolicyPro}}</span>
+              <span>{{productDetail.isPolicyPro|status}}</span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
             <el-form-item label="是否通用产品：">
-              <span>{{productDetail.isGeneralPro}}</span>
+              <span>{{productDetail.isGeneralPro|status}}</span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
             <el-form-item label="是否人民币：">
-              <span>{{productDetail.isRmb}}</span>
+              <span>{{productDetail.isRmb|status}}</span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
@@ -98,7 +98,7 @@
           </div>
           <div :model="productDetail" class="">
             <el-form-item label="贷款期限：">
-              <span>{{productDetail.loanTermMin}}-{{productDetail.loanTermMax}} </span>
+              <span>{{productDetail.loanTermMin}}个月-{{productDetail.loanTermMax}}个月</span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
@@ -108,7 +108,7 @@
           </div>
           <div :model="productDetail" class="">
             <el-form-item label="是否政策性产品：">
-              <span>{{productDetail.isPolicyPro}}</span>
+              <span>{{productDetail.isPolicyPro|status}}</span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
@@ -132,8 +132,8 @@
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
-            <el-form-item label="产品特点：">
-              <span>{{productDetail.productFeature}}</span>
+            <el-form-item label="适用客户：">
+              <span>{{productDetail.applicableCuster}}</span>
             </el-form-item>
           </div>
         </el-form>
@@ -154,6 +154,15 @@ export default {
       templateId:0,
       businessType:'',
       signoryName:''
+    }
+  },
+  filters: {
+    status(status){
+      if(status==="1"){
+        return "是"
+      }else{
+        return "否"
+      }
     }
   },
   mounted () {

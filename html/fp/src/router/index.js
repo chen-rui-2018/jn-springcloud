@@ -1,6 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from '../store'
+import { isMobile } from '@/util'
 import { urlSearch } from '@/util/index'
+import { setToken, getToken, setLastToken, getLastToken } from '@/util/auth'
+import api from '@/util/api'
 Vue.use(Router)
 
 const router= new Router({
@@ -57,12 +61,28 @@ const router= new Router({
           name: 'portalIndex',
         },
         {
+          path: '/parkIntroduction',
+          component: resolve => require(['@/views/parkIntroduction'], resolve),
+          meta: {
+            title: '园区介绍'
+          },
+          name: 'parkIntroduction'
+        },
+        {
           path: '/investment',
           component: resolve => require(['@/views/investment'], resolve),
           meta: {
             title: '招商引资'
           },
           name: 'investment'
+        },
+        {
+          path: '/parkIntroductionChild',
+          component: resolve => require(['@/views/parkIntroductionChild'], resolve),
+          meta: {
+            title: '子园区介绍'
+          },
+          name: 'parkIntroductionChild'
         },
         {
           path: '/enterpriseservice',
@@ -294,7 +314,7 @@ const router= new Router({
               path: '/servicemarket/product/productService/ordinaryproductDetail',
               name: 'ordinaryproductDetail',
               meta: {
-                title: '常规产品详情'
+                title: '产品详情'
               },
               component: resolve => require(['@/views/home/productService/ordinaryproductDetail'], resolve)
             },
@@ -431,7 +451,8 @@ const router= new Router({
               path: '/myBusiness/publishingPropaganda',
               name: 'publishingPropaganda',
               meta: {
-                title: '发布宣传'
+                title: '发布宣传',
+                keepAlive: true
               },
               component: resolve => require(['@/views/home/myBusiness/publishingPropaganda'], resolve)
             },
@@ -440,6 +461,8 @@ const router= new Router({
               name: 'propagandaDetails',
               meta: {
                 title: '宣传详情'
+
+
               },
               component: resolve => require(['@/views/home/myBusiness/propagandaDetails'], resolve)
             },
@@ -799,8 +822,16 @@ const router= new Router({
           name: 'incubatorEnterprises'
         },
         {
+          path: '/noticeList',
+          component: resolve => require(['@/views/noticeList'], resolve),
+          meta: {
+            title: '公告列表'
+          },
+          name: 'noticeList'
+        },
+        {
           path: '/announcementDetails',
-          component: resolve => require(['@/views/announcementDetails'], resolve),
+          component: resolve => require(['@/views/noticeList/announcementDetails'], resolve),
           meta: {
             title: '公告详情'
           },
@@ -1117,7 +1148,14 @@ const router= new Router({
 router.beforeEach((to, from, next) => {
   const token = urlSearch.token
   if (token) {
-    sessionStorage.setItem('token', token)
+    setToken(token)
+  }
+  // 路由iframe字段等于1的时候，去掉导航栏和侧边栏给别的页面嵌入
+  const iframe = urlSearch.iframe
+  if (Number(iframe) === 1 || isMobile()) {
+    store.commit('setHiddenNav', false)
+  } else {
+    store.commit('setHiddenNav', true)
   }
   next()
 })

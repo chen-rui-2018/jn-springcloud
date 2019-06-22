@@ -32,7 +32,7 @@
         </div>
         <div class="quickEnter">
           <ul>
-            <li @click="$router.push({path:'/talentsService'})">
+            <!-- <li @click="$router.push({path:'/talentsService'})">
               <span>人才服务</span>
               <p>THE&nbsp;TALENT&nbsp;SERVICE</p>
               <img src="@/../static/img/right-arrow.png" alt="">
@@ -50,6 +50,41 @@
             <li @click="$router.push({path:'/compassView'})">
               <span>行政审批</span>
               <p>ADMINISTRATIVE&nbsp;EXAMINATIO</p>
+              <img src="@/../static/img/right-arrow.png" alt="">
+            </li> -->
+             <li @click="$router.push({path:'/declarationCenter'})">
+              <span>申报中心</span>
+              <p>DECLARE&nbsp;CENTER</p>
+              <img src="@/../static/img/right-arrow.png" alt="">
+            </li>
+             <li @click="$router.push({path:'/policyCenter'})">
+              <span>政策中心</span>
+              <p>POLICY&nbsp;CENTERE</p>
+              <img src="@/../static/img/right-arrow.png" alt="">
+            </li>
+             <li @click="$router.push({path:'/actiCenter'})">
+              <span>活动中心</span>
+              <p>ACTIVITY&nbsp;CENTERE</p>
+              <img src="@/../static/img/right-arrow.png" alt="">
+            </li>
+            <li @click="$router.push({path:'/compassView'})">
+              <span>行政审批</span>
+              <p>ADMINISTRATIVE&nbsp;EXAMINATIO</p>
+              <img src="@/../static/img/right-arrow.png" alt="">
+            </li>
+            <li @click="$router.push({path:'/tfindex'})">
+              <span>科技金融</span>
+              <p>SCIENCE&nbsp;FINACIAL</p>
+              <img src="@/../static/img/right-arrow.png" alt="">
+            </li>
+            <li @click="$router.push({path:'/recruitmentList'})">
+              <span>人力资源</span>
+              <p>HUMEN&nbsp;RESOURCES</p>
+              <img src="@/../static/img/right-arrow.png" alt="">
+            </li>
+            <li @click="$router.push({path:'/serMatHp'})">
+              <span>服务超市</span>
+              <p>SERVICE&nbsp;SUPERMARKET</p>
               <img src="@/../static/img/right-arrow.png" alt="">
             </li>
           </ul>
@@ -121,7 +156,7 @@
                     <div class="left1">N</div>
                     <div class="right1">
                       <div class="rightTit color1">{{item.policyTitle}}</div>
-                      <p class="color2">{{item.briefContent}}</p>
+                      <p class="color2 policyCon">{{item.briefContent}}</p>
                       <div class="liBom clearfix">
                         <p class="fl color3">
                           <i class="el-icon-view"></i>&nbsp;{{item.readNum}}</p>
@@ -133,118 +168,6 @@
 
                 </ul>
               </div>
-              <!-- <div class="swiper-slide">
-                <ul class="page1 clearfix">
-                  <li>
-                    <div class="left1">N</div>
-                    <div class="right1">
-                      <div class="rightTit color1">白下高新区金融扶持政策</div>
-                      <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
-                      <div class="liBom clearfix">
-                        <p class="fl color3">
-                          <i class="el-icon-view"></i>&nbsp;89</p>
-                        <span class="fr mainColor">南京市级</span>
-                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="left1">E</div>
-                    <div class="right1">
-                      <div class="rightTit color1">南京白下高新区税收优惠政策</div>
-                      <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
-                      <div class="liBom clearfix">
-                        <p class="fl color3">
-                          <i class="el-icon-view"></i>&nbsp;89</p>
-                        <span class="fr mainColor">南京市级</span>
-                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="left1">W</div>
-                    <div class="right1">
-                      <div class="rightTit color1">南京市人民政府人才激励政策...</div>
-                      <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
-                      <div class="liBom clearfix">
-                        <p class="fl color3">
-                          <i class="el-icon-view"></i>&nbsp;89</p>
-                        <span class="fr mainColor">南京市级</span>
-                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="left1">S</div>
-                    <div class="right1">
-                      <div class="rightTit color1">关于维护知识产权政策</div>
-                      <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上....</p>
-                      <div class="liBom clearfix">
-                        <p class="fl color3">
-                          <i class="el-icon-view"></i>&nbsp;89</p>
-                        <span class="fr mainColor">南京市级</span>
-                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-              <div class="swiper-slide">
-                <ul class="page1 clearfix">
-                  <li>
-                    <div class="left1">N</div>
-                    <div class="right1">
-                      <div class="rightTit color1">白下高新区金融扶持政策</div>
-                      <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
-                      <div class="liBom clearfix">
-                        <p class="fl color3">
-                          <i class="el-icon-view"></i>&nbsp;89</p>
-                        <span class="fr mainColor">南京市级</span>
-                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="left1">E</div>
-                    <div class="right1">
-                      <div class="rightTit color1">南京白下高新区税收优惠政策</div>
-                      <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
-                      <div class="liBom clearfix">
-                        <p class="fl color3">
-                          <i class="el-icon-view"></i>&nbsp;89</p>
-                        <span class="fr mainColor">南京市级</span>
-                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="left1">W</div>
-                    <div class="right1">
-                      <div class="rightTit color1">南京市人民政府人才激励政策...</div>
-                      <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上的进一步突破，中央政府特发....</p>
-                      <div class="liBom clearfix">
-                        <p class="fl color3">
-                          <i class="el-icon-view"></i>&nbsp;89</p>
-                        <span class="fr mainColor">南京市级</span>
-                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="left1">S</div>
-                    <div class="right1">
-                      <div class="rightTit color1">关于维护知识产权政策</div>
-                      <p class="color2">中央政府发布国发5号文，进一步扩大对外开放积极利用本土资源与外建立良好的经济贸易往来。为取得经济贸易往来上....</p>
-                      <div class="liBom clearfix">
-                        <p class="fl color3">
-                          <i class="el-icon-view"></i>&nbsp;89</p>
-                        <span class="fr mainColor">南京市级</span>
-                        <i class="fr mainColor" style="marin-left:25px;">财政引导</i>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div> -->
             </div>
 
             <div class="swiper-pagination"></div>
@@ -271,10 +194,10 @@
           <i class="iconfont icon-leftarrow pointer" @click="leftPage"></i>
           <i class="iconfont icon-rightarrow pointer" @click="rightPage"></i>
           <ul class="actiUl clearfix">
-            <li v-for="(i,k) in actiListSlim" :key="k">
+            <li v-for="(i,k) in actiListSlim" :key="k" class="pointer"  @click="$router.push({ path: '/actiDetail', query: { activityId: i.id } })">
               <div class="postImgItem" @mouseenter.stop="show1=i.id,show11=i.id" @mouseleave.stop="show1='',show11=''">
                 <img :src="i.actiPosterUrl" :class="{'poIm':show1==i.id}" class="postImg pointer" alt="活动海报图片">
-                <img src="@/../static/img/组 40.png" :class="{'poIm':show11==i.id}" class="postImg1 pointer" alt="活动海报图片" @click="$router.push({ path: '/actiDetail', query: { activityId: i.id } })">
+                <img src="@/../static/img/组 40.png" :class="{'poIm':show11==i.id}" class="postImg1 pointer" alt="活动海报图片">
               </div>
               <div class="actiInfo">
                 <p class="actiNameItem">
@@ -373,10 +296,10 @@
               <div id="conselor_info" v-if="flag44 == '0'">
                 <ul>
                   <li class="conselor_left">
-                    <div v-for="(item,index) in investorInfoList" :key="index" v-if="index<2">
+                    <div class="pointer" v-for="(item,index) in investorInfoList" :key="index" v-if="index<2" @click="$router.push({path:'investorDetail',query:{investorAccount:item.investorAccount}})">
                       <a href="javascript:;">
                         <div class="info_img">
-                          <div @click="$router.push({path:'investorDetail',query:{investorAccount:item.investorAccount}})"><img v-if="item.avatar" :src="item.avatar" alt=""> <img v-else src="@/../static/img/larImg.png" alt=""></div>
+                          <div ><img v-if="item.avatar" :src="item.avatar" alt=""> <img v-else src="@/../static/img/larImg.png" alt=""></div>
                         </div>
                         <div class="info_all">
                           <div class="info_name">
@@ -392,9 +315,9 @@
                     </div>
                   </li>
                   <li class="conselor_mid">
-                    <div v-for="(item2,index2) in investorInfoList" :key="index2" v-if="index2>1&&index2<10" class="conselor_mid_list">
+                    <div v-for="(item2,index2) in investorInfoList" :key="index2" v-if="index2>1&&index2<10" class="conselor_mid_list"  @click="$router.push({path:'investorDetail',query:{investorAccount:item2.investorAccount}})">
                       <a href="javascript:;">
-                        <div class="info_img" @click="$router.push({path:'investorDetail',query:{investorAccount:item2.investorAccount}})"><img :src="item2.avatar" alt=""></div>
+                        <div class="info_img"><img :src="item2.avatar" alt=""></div>
                         <div class="info_all">
                           <div class="info_name">
                             <span>{{item2.investorName}}</span>/
@@ -418,7 +341,7 @@
                       <img v-if="i.pictureUrl" :src="i.pictureUrl" alt="">
                       <img v-else src="@/../static/img/product.png" alt="">
                     </div>
-                    <div class="orgCon fl">
+                    <div class="orgCon fl pointer" @click="$router.push({ path: 'finaProDetail', query: { productId: i.productId } })">
                       <div class="conTil">{{i.productName}}</div>
                       <div class="conContent clearfix color3">
                         <div class="left1 fl">
@@ -458,7 +381,7 @@
                     <div class="orgImg fl pointer" @click="$router.push({ path: 'finaInsDetail', query: { orgId: i.orgId } })">
                       <img :src="i.orgLogo" alt="">
                     </div>
-                    <div class="orgCon fl">
+                    <div class="orgCon fl pointer" @click="$router.push({ path: 'finaInsDetail', query: { orgId: i.orgId } })">
                       <div class="conTil" style="margin-bottom:40px">{{i.orgName}}</div>
                       <div class="conContent clearfix color3">
                         <div class="left1 fl">
@@ -499,76 +422,76 @@
         </div>
         <div class="humanResInfo w" ref="human2" data-class="bottom1">
           <el-card>
-          <div class="infoTit clearfix">
-            <div class="btn fl">
-              <button class="btn0 pointer" :class="{'btnActive':flag55}" @click="flag55=true">企业招聘</button>
-              <button class="btn2 pointer" :class="{'btnActive':!flag55}" @click="flag55=false">服务</button>
+            <div class="infoTit clearfix">
+              <div class="btn fl">
+                <button class="btn0 pointer" :class="{'btnActive':flag55}" @click="flag55=true">企业招聘</button>
+                <button class="btn2 pointer" :class="{'btnActive':!flag55}" @click="flag55=false">服务</button>
+              </div>
+              <div class="chage fr color3 pointer" @click="hanlepage">
+                <img src="@/../static/img/huanyipi.png" alt=""> 换一批
+              </div>
             </div>
-            <div class="chage fr color3 pointer" @click="hanlepage">
-              <img src="@/../static/img/huanyipi.png" alt=""> 换一批
-            </div>
-          </div>
-          <ul class="infoCon" ref="human3" data-class="bottom1" v-if='flag55'>
-            <li class="clearfix pr" v-for="(i,k) in humanResourcesList" :key="k">
-              <div class="con1 fl">
-                <img :src="i.comAvatar" alt="">
-              </div>
-              <div class="con2 fl">
-                <p class="color4">招聘岗位：{{i.post}}</p>
-                <p>招聘企业： {{i.comName}}</p>
-                <p>招聘人数：{{i.num}}人</p>
-                <p>薪资待遇：
-                  <span class="mainColor">{{i.salaryName}}</span>
-                </p>
-                <p>发布时间：{{i.createdTime}}</p>
-              </div>
-              <div class="con3 fr">
-                <button class="btn1 pointer" @click="onlineContact(i.comId)">在线联系</button>
-                <button class="btn2 pointer" @click.stop="getRecruitDetails(i.id),detailFlag=i.id">了解详情</button>
-              </div>
-              <!-- 详情弹框 -->
-              <div class="detailRes" v-if="detailFlag==i.id">
-                <!-- <el-card> -->
-                <div class="detail">招聘详情</div>
-                <p class="p1">企业名称：{{humanDetail.comName}}</p>
-                <p class="p1">发布时间：{{humanDetail.createdTime}}</p>
-                <p class="p1">岗位详情：</p>
-                <span v-html="humanDetail.details"></span>
-                <!-- </el-card> -->
-              </div>
-            </li>
-          </ul>
-          <div class="serverOrgContent" v-else>
-            <ul>
-              <li class="clearfix" v-for="(i,k) in serverProList" :key='k'>
-                <div class="orgImg fl pointer" @click="handleProDel(i.productId,i.signoryId)">
-                  <img v-if="i.pictureUrl" :src="i.pictureUrl" alt="">
-                  <img v-else src="@/../static/img/product.png" alt="">
+            <ul class="infoCon" ref="human3" data-class="bottom1" v-if='flag55'>
+              <li class="clearfix pr" v-for="(i,k) in humanResourcesList" :key="k">
+                <div class="con1 fl">
+                  <img :src="i.comAvatar" alt="">
                 </div>
-                <div class="orgCon fl">
-                  <div class="conTil">{{i.productName}}</div>
-                  <div class="conContent clearfix color3">
-                    <div class="left1 fl" id="left1">
-                      <p>服务机构：{{i.orgName}}
-                      </p>
-                      <p>服务顾问：{{i.advisorName}}</p>
-                      <p>参考价格
-                        <span class="mainColor">{{i.referPrice}}</span>元</p>
-                      <p>累计
-                        <span class="mainColor">{{i.transactionsNumber}}</span>笔交易</p>
-                    </div>
-                    <div class="right1 fl">
-                      <p>
-                        <el-rate v-model="i.evaluationScore*1" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
-                        </el-rate>
-                        <span class="mainColor">{{i.evaluationNumber}}</span>条评价</p>
-                    </div>
-                  </div>
+                <div class="con2 fl">
+                  <p class="color4">招聘岗位：{{i.post}}</p>
+                  <p>招聘企业： {{i.comName}}</p>
+                  <p>招聘人数：{{i.num}}人</p>
+                  <p>薪资待遇：
+                    <span class="mainColor">{{i.salaryName}}</span>
+                  </p>
+                  <p>发布时间：{{i.createdTime}}</p>
                 </div>
-                <div class="orgBtn fr mainColor" @click="demandRaise(i)">提需求</div>
+                <div class="con3 fr">
+                  <button class="btn1 pointer" @click="onlineContact(i.comId)">在线联系</button>
+                  <button class="btn2 pointer" @click.stop="getRecruitDetails(i.id),detailFlag=i.id">了解详情</button>
+                </div>
+                <!-- 详情弹框 -->
+                <div class="detailRes" v-if="detailFlag==i.id">
+                  <!-- <el-card> -->
+                  <div class="detail">招聘详情</div>
+                  <p class="p1">企业名称：{{humanDetail.comName}}</p>
+                  <p class="p1">发布时间：{{humanDetail.createdTime}}</p>
+                  <p class="p1">岗位详情：</p>
+                  <span v-html="humanDetail.details"></span>
+                  <!-- </el-card> -->
+                </div>
               </li>
             </ul>
-          </div>
+            <div class="serverOrgContent" v-else>
+              <ul>
+                <li class="clearfix" v-for="(i,k) in serverProList" :key='k'>
+                  <div class="orgImg fl pointer" @click="handleProDel(i.productId,i.signoryId)">
+                    <img v-if="i.pictureUrl" :src="i.pictureUrl" alt="">
+                    <img v-else src="@/../static/img/product.png" alt="">
+                  </div>
+                  <div class="orgCon fl pointer" @click="handleProDel(i.productId,i.signoryId)">
+                    <div class="conTil">{{i.productName}}</div>
+                    <div class="conContent clearfix color3">
+                      <div class="left1 fl" id="left1">
+                        <p>服务机构：{{i.orgName}}
+                        </p>
+                        <p>服务顾问：{{i.advisorName}}</p>
+                        <p>参考价格
+                          <span class="mainColor">{{i.referPrice}}</span>元</p>
+                        <p>累计
+                          <span class="mainColor">{{i.transactionsNumber}}</span>笔交易</p>
+                      </div>
+                      <div class="right1 fl">
+                        <p>
+                          <el-rate v-model="i.evaluationScore*1" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
+                          </el-rate>
+                          <span class="mainColor">{{i.evaluationNumber}}</span>条评价</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="orgBtn fr mainColor" @click="demandRaise(i)">提需求</div>
+                </li>
+              </ul>
+            </div>
           </el-card>
         </div>
       </div>
@@ -589,7 +512,9 @@
             </el-form-item>
 
             <el-form-item label="资金需求日期:" prop="expectedDate">
-              <el-input v-model.trim="financialProform.expectedDate" placeholder="请输入需求日期，如2019-04-10" maxlength="100" clearable/>
+              <!-- <el-input v-model.trim="financialProform.expectedDate" placeholder="请输入需求日期，如2019-04-10" maxlength="100" clearable/> -->
+              <el-date-picker v-model="financialProform.expectedDate" type="date" placeholder="选择日期" style="width:100%" value-format="yyyy-MM-dd">
+              </el-date-picker>
             </el-form-item>
             <el-form-item label="资金需求说明:" prop="fundsReqDesc">
               <el-input v-model.trim="financialProform.fundsReqDesc" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
@@ -608,7 +533,7 @@
         </div>
         <div v-else class="loginTip" style="text-align:center;padding-bottom:20px">
           你还未
-          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          <span class="mainColor pointer" @click="goLogin">登录</span>
           /
           <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
           企业账号
@@ -641,7 +566,7 @@
         </div>
         <div v-else class="loginTip" style="text-align:center;padding-bottom:20px">
           你还未
-          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          <span class="mainColor pointer" @click="goLogin">登录</span>
           /
           <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
           企业账号
@@ -652,7 +577,7 @@
       <el-dialog :visible.sync="concatVisible" width="530px" :append-to-body="true" :lock-scroll="false">
         <div class="loginTip" style="text-align:center;padding-bottom:20px">
           你还未
-          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          <span class="mainColor pointer" @click="goLogin">登录</span>
           /
           <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
           账号
@@ -830,22 +755,29 @@ export default {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
   },
   methods: {
+    goLogin() {
+      window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
+      this.$router.push({ path: "/login" });
+    },
     //判断是否登录
     isLogin() {
-      if (!sessionStorage.userInfo) {
+      const token=this.getToken()
+      if (!token) {
         this.islogin = false;
       }
     },
     //在线联系
     onlineContat(orgAccount, orgName) {
-      if (!sessionStorage.userInfo) {
+      const userInfo=this.getUserInfo()
+      // console.log(JSON.parse(userInfo))
+      if (!userInfo) {
         this.concatVisible = true;
         return;
       }
       this.$router.push({
         path: "/chat",
         query: {
-          fromUser: JSON.parse(sessionStorage.userInfo).account,
+          fromUser: JSON.parse(userInfo).account,
           toUser: orgAccount,
           nickName: orgName
         }
@@ -853,7 +785,7 @@ export default {
     },
     //企业招聘列表在线联系
     onlineContact(id) {
-      if (!sessionStorage.userInfo) {
+      if (!this.getUserInfo()) {
         this.concatVisible = true;
         return;
       }
@@ -866,7 +798,7 @@ export default {
           if (res.code == "0000") {
             // this.typeList = res.data;
             if (
-              JSON.parse(sessionStorage.userInfo).account == res.data.account
+              JSON.parse(this.getUserInfo()).account == res.data.account
             ) {
               this.$message.error("当前登录的账号跟聊天对象一样");
               return;
@@ -874,7 +806,7 @@ export default {
             this.$router.push({
               path: "/chat",
               query: {
-                fromUser: JSON.parse(sessionStorage.userInfo).account,
+                fromUser: JSON.parse(this.getUserInfo()).account,
                 toUser: res.data.account,
                 nickName: res.data.nickName
               }
@@ -904,6 +836,9 @@ export default {
     },
     //用户提交需求
     demandDia() {
+      // if(!this.financialProform.financingPeriod){
+      //   return
+      // }
       let _this = this;
       let max = this.arr[this.financialProform.financingPeriod].loanTermMax;
       let min = this.arr[this.financialProform.financingPeriod].loanTermMin;
@@ -1556,6 +1491,8 @@ export default {
   .policyCenter {
     .paging {
       overflow: hidden;
+      margin-top:50px;
+      padding-bottom:20px;
       .swiper-container {
         padding: 40px 0;
       }
@@ -1622,6 +1559,13 @@ export default {
               > span {
                 margin-left: 20px;
               }
+            }
+            .policyCon {
+              height: 50px;
+              display: -webkit-box;
+              -webkit-box-orient: vertical;
+              -webkit-line-clamp: 3;
+              overflow: hidden;
             }
           }
           //   .right1:hover {

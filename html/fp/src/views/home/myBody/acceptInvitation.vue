@@ -234,6 +234,7 @@
 </template>
 
 <script>
+import { getToken, getUserInfo } from '@/util/auth'
 export default {
   data() {
     var checkPhone = (rule, value, callback) => {
@@ -252,6 +253,7 @@ export default {
         callback();
       }
     };
+    const account = JSON.parse(getUserInfo()).account
     return {
       loading:false,
       isConceal: false,
@@ -260,7 +262,7 @@ export default {
       dialogImageUrl: "",
       dialogVisible: false,
       headers: {
-        token: sessionStorage.token
+        token: getToken()
       },
       certificateAreasOptions: [], //证书类型
       editText: "添加荣誉资质",
@@ -286,7 +288,7 @@ export default {
       serviceExperienceList: [], //服务经历表格
       basicForm: {
         business: "",
-        advisorAccount: sessionStorage.getItem("account"),
+        advisorAccount: account,
         businessAreas: null, //业务领域
         personalProfile: "", //个人简介
         practiceQualification: "", //执业资质
@@ -300,7 +302,7 @@ export default {
         orgId: ""
       },
       certificateForm: {
-        advisorAccount: sessionStorage.getItem("account"),
+        advisorAccount: account,
         certificateName: "",
         certificateCode: "",
         id: "",
@@ -309,7 +311,7 @@ export default {
         issuingAgency: "" //颁发机构
       },
       projectExperienceListForm: {
-        advisorAccount: sessionStorage.getItem("account"),
+        advisorAccount: account,
         personalDuties: "",
         companyName: "",
         id: "",
@@ -317,7 +319,7 @@ export default {
         projectTime: ""
       },
       experienceListForm: {
-        advisorAccount: sessionStorage.getItem("account"),
+        advisorAccount: account,
         companyName: "",
         position: "",
         id: "",

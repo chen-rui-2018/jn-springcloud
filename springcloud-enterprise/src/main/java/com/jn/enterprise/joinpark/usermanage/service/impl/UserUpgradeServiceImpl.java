@@ -6,6 +6,7 @@ import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.company.model.IBPSResult;
 import com.jn.enterprise.common.config.IBPSDefIdConfig;
+import com.jn.enterprise.common.enums.CommonExceptionEnum;
 import com.jn.enterprise.company.dao.TbServiceCompanyMapper;
 import com.jn.enterprise.company.dao.TbServiceCompanyStaffMapper;
 import com.jn.enterprise.company.entity.TbServiceCompany;
@@ -14,9 +15,11 @@ import com.jn.enterprise.company.entity.TbServiceCompanyStaff;
 import com.jn.enterprise.company.entity.TbServiceCompanyStaffCriteria;
 import com.jn.enterprise.company.enums.CompanyDataEnum;
 import com.jn.enterprise.company.enums.CompanyExceptionEnum;
+import com.jn.enterprise.company.enums.UpgradeStatusEnum;
 import com.jn.enterprise.company.model.Company;
 import com.jn.enterprise.company.model.CompanyCheckParam;
 import com.jn.enterprise.company.service.CompanyService;
+import com.jn.enterprise.company.vo.InviteUpgradeStatusVO;
 import com.jn.enterprise.enums.JoinParkExceptionEnum;
 import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.joinpark.usermanage.model.StaffCheckParam;
@@ -60,14 +63,14 @@ public class UserUpgradeServiceImpl implements UserUpgradeService {
     @Autowired
     private IBPSDefIdConfig ibpsDefIdConfig;
 
-    /**
-     * 企业审批状态 0:审核中 -1:无效
-     */
-    private final static String COMPANY_APPLY_IS_CHECKING = "0";
-
     @Override
     @ServiceLog(doAction = "升级企业")
     public int changeToCompany(CompanyCheckParam companyCheckParam, String phone, String account) {
+        if (companyCheckParam.getComPropertys().length == 0 || companyCheckParam.getComPropertys().length > 3) {
+            logger.warn("[升级企业] 企业性质超过3条");
+            throw new JnSpringCloudException(com.jn.enterprise.company.enums.CompanyExceptionEnum.UPGRADE_COMPANY_PROPERTY_GT_THREE);
+        }
+
         //从redis中取出短信验证码
         Result sendCodeByPhone = userExtensionClient.getSendCodeByPhone(phone);
         String code = (String)sendCodeByPhone.getData();
@@ -76,6 +79,13 @@ public class UserUpgradeServiceImpl implements UserUpgradeService {
             throw new JnSpringCloudException(JoinParkExceptionEnum.MESSAGE_CODE_IS_WRONG);
         }
 
+        InviteUpgradeStatusVO joinParkStatus = companyService.getJoinParkStatus(account);
+        if (!joinParkStatus.getCode().equals(UpgradeStatusEnum.UPGRADE_OK.getCode())) {
+            logger.warn("[升级企业] {}", account + joinParkStatus.getMessage());
+            throw new JnSpringCloudException(CommonExceptionEnum.UPGRADE_COMMON, account + joinParkStatus.getMessage());
+        }
+
+        // 判断企业名称是否重复
         TbServiceCompanyCriteria companyCriteria = new TbServiceCompanyCriteria();
         companyCriteria.createCriteria().andCheckStatusNotEqualTo(CompanyDataEnum.STAFF_CHECK_STATUS_NOT_PASS.getCode())
                 .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue()).andComNameEqualTo(companyCheckParam.getComName());
@@ -85,44 +95,27 @@ public class UserUpgradeServiceImpl implements UserUpgradeService {
             throw new JnSpringCloudException(JoinParkExceptionEnum.COMPANY_IS_EXIST);
         }
 
-        // 判断用户已是企业员工或企业管理员
-        UserExtensionInfo userExtensionInfo = getUserExtensionByAccount(account);
-        if (StringUtils.isNotBlank(userExtensionInfo.getCompanyCode())) {
-            logger.warn("[升级企业] 用户已是企业员工或企业管理员，account：{}", account);
-            throw new JnSpringCloudException(JoinParkExceptionEnum.USER_IS_COMPANY_EXIST);
-        }
-
-        // 判断用户是否正在升级员工
-        TbServiceCompanyStaffCriteria example = new TbServiceCompanyStaffCriteria();
-        TbServiceCompanyStaffCriteria inviteExample = new TbServiceCompanyStaffCriteria();
-        TbServiceCompanyStaffCriteria.Criteria criteria = inviteExample.createCriteria();
-        example.createCriteria().andCheckStatusEqualTo(CompanyDataEnum.STAFF_CHECK_STATUS_WAIT.getCode())
-                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue()).andAccountEqualTo(account);
-        criteria.andInviteStatusEqualTo(CompanyDataEnum.STAFF_INVITE_STATUS_SEND.getCode())
-                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue()).andAccountEqualTo(account);
-        example.or(criteria);
-        List<TbServiceCompanyStaff> staffList = tbServiceCompanyStaffMapper.selectByExample(example);
-        if (staffList != null && !staffList.isEmpty()) {
-            logger.warn("[升级企业] {}账号已收到企业邀请或已升级员工，请勿执行此操作", account);
-            throw new JnSpringCloudException(JoinParkExceptionEnum.USER_UPGRADE_STAFF_READY);
-        }
-
         // 封装数据
         companyCheckParam.setId("");
+        companyCheckParam.setComId(UUID.randomUUID().toString().replaceAll("-", ""));
         companyCheckParam.setComAdmin(account);
         companyCheckParam.setCreatorAccount(account);
         companyCheckParam.setCreatedTime(DateUtils.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss"));
         companyCheckParam.setCreditUpdateTime(DateUtils.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss"));
         companyCheckParam.setCreditPoints("100");
-        companyCheckParam.setCheckStatus(COMPANY_APPLY_IS_CHECKING);
+        companyCheckParam.setCheckStatus(CompanyDataEnum.COMPANY_CHECK_STATUS_WAIT.getCode());
         companyCheckParam.setRecordStatus(RecordStatusEnum.EFFECTIVE.getCode());
 
         // 处理图片格式
         companyCheckParam.setBusinessLicense(IBPSFileUtils.uploadFile2Json(account, companyCheckParam.getBusinessLicense()));
         companyCheckParam.setAvatar(IBPSFileUtils.uploadFile2Json(account, companyCheckParam.getAvatar()));
 
+        // 处理企业性质，多个以‘,’拼接
+        companyCheckParam.setComProperty(StringUtils.join(companyCheckParam.getComPropertys(),","));
+        companyCheckParam.setComPropertys(null);
+
         // 调用IBPS启动流程
-        String bpmnDefId = ibpsDefIdConfig.getUpgradeCompany();
+        String bpmnDefId = ibpsDefIdConfig.getUpdateCompanyInfo();
         IBPSResult ibpsResult = IBPSUtils.startWorkFlow(bpmnDefId, account, companyCheckParam);
 
         if (ibpsResult == null || !ibpsResult.getState().equals("200")) {

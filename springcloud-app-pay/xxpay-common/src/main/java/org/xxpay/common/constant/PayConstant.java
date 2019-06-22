@@ -79,9 +79,6 @@ public class PayConstant {
 	* */
 	public static final String  PAY_RMB = "cny";
 
-	public static class JdConstant {
-		public final static String CONFIG_PATH = "jd" + File.separator + "jd";	// 京东支付配置文件路径
-	}
 
 	public static class WxConstant {
 		public final static String TRADE_TYPE_APP = "APP";									// APP支付
@@ -103,8 +100,7 @@ public class PayConstant {
 		public final static String TRADE_STATUS_FINISHED = "TRADE_FINISHED";	// 交易成功且结束
 	}
 
-	public static final String NOTIFY_BUSI_PAY = "NOTIFY_VV_PAY_RES";
-	public static final String NOTIFY_BUSI_TRANS = "NOTIFY_VV_TRANS_RES";
+
 
 	/**
  	 * 商户通知方式；
@@ -141,5 +137,10 @@ public class PayConstant {
 	 * 对账标识为有效状态
 	 * */
 	public static final Integer RECONCILIATION_IDENT_EFFECTIVE_STATUS = 1;
+
+	/**
+	 * 对账接口为有效状态
+	 * */
+	public static final Integer RECONCILIATION_INTERFACE_EFFECTIVE_STATUS = 1;
 	
 }

@@ -52,4 +52,13 @@ public class ActivityTypeAdd implements Serializable {
     public void setTemplateList(String templateList) {
         this.templateList = templateList;
     }
+
+    @Override
+    public String toString() {
+        return "ActivityTypeAdd{" +
+                "typeName='" + typeName + '\'' +
+                ", typeStatus='" + typeStatus + '\'' +
+                ", templateList='" + templateList + '\'' +
+                '}';
+    }
 }

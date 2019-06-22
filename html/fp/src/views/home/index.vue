@@ -12,7 +12,7 @@
           </el-breadcrumb>
         </div>
         <!-- 主体内容 -->
-        <el-container>
+        <el-container style="min-height: 500px">
           <!-- 侧边栏 -->
           <div class="slider" v-if="$store.state.hiddenNav">
             <el-aside width="150px">
@@ -44,6 +44,7 @@ import { isMobile } from "@/util"
 import bus from "@/util/bus"
 import UserHome from "@/components/userHome"
 import ElementUI from 'element-ui'
+import { getToken, removeToken, removeIbpsToken } from '@/util/auth'
 export default {
   components: { UserHome ,SidebarItem},
   //  components: { SidebarItem },
@@ -92,7 +93,7 @@ export default {
   // },
   beforeRouteEnter(to, from, next) {
 
-    let token=sessionStorage.token
+    let token = getToken()
     api.post({
       url: "getDynamicMenu",
       headers: { token: token },
@@ -189,7 +190,8 @@ export default {
     },
     handleSearch() {},
     loginOut() {
-      window.sessionStorage.removeItem("token");
+      removeToken();
+      removeIbpsToken();
       this.$router.push({ path: "/" });
     },
     dianji(i) {
@@ -247,8 +249,10 @@ export default {
 .homePage {
   .el-main {
     padding: 0 20px;
+    min-height: 500px;
     &.isMobile {
       padding: 0;
+      min-height: 0;
     }
   }
   &.pd {

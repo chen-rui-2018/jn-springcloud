@@ -2,14 +2,15 @@
   <div class="message-chat">
     <div class="chat-win">
       <div v-if="$route.query.toUser" class="chat-win-cell">
-        <div class="chat-header">
+        <div class="chat-header" v-if="$store.state.hiddenNav">
           <div class="chat-back">
             <i class="el-icon-arrow-left"></i>
           </div>
           <div class="chat-title">与 {{ toUserNickName }} 的对话</div>
         </div>
         <div ref="chatMain" class="chat-main">
-          <div class="no-more" v-if="noMore">没有更多消息了</div>
+          <div class="no-more" v-if="messageList.length > 0 && noMore">没有更多消息了</div>
+          <div class="no-more" v-if="messageList.length === 0">暂无消息</div>
           <div class="tc" v-if="loading">
             <i class="el-icon-loading"></i>
             <span>正在加载...</span>
@@ -79,8 +80,6 @@
               <div class="friend-name">{{ item.content.nickName }}</div>
               <div class="chat-time">
                 {{ item.createTime | formatTime }}
-                <!--                  <span>星期二</span>-->
-                <!--                  <span>10:32</span>-->
               </div>
             </div>
             <div class="message-content">
@@ -95,11 +94,13 @@
 </template>
 
 <script>
-  import { isArray, getDateString } from '@/util'
+  import { getUserInfo } from '@/util/auth'
+  import { isArray, getDateString, isIos } from '@/util'
   import avatar from './common/avatar'
   import messageRow from './common/messageRow'
   import sockHttp from '@/util/sockHttp'
   import { WS_URL } from '@/util/url'
+  const _isIos = isIos()
   export default {
     name: "Chat",
     components: {
@@ -134,13 +135,22 @@
         noMore: false,
         tempMessageList: [],
         loaded: false,
-        lastMessageSendTime: ''
+        lastMessageSendTime: '',
+        html: null,
+        body: null,
+        isIos: isIos()
       }
     },
     mounted() {
       this.$nextTick(
         this.init()
       )
+    },
+    destroyed() {
+      if (this.$store.state.isMobile) {
+        this.html.classList.remove('h-100')
+        this.body.classList.remove('h-100')
+      }
     },
     watch: {
       '$route'() {
@@ -155,8 +165,9 @@
           return ''
         }
         let td = new Date()
+        const time = _isIos ? d.replace(/-/g,"/") : d
         td = new Date(td.getFullYear(), td.getMonth(), td.getDate())
-        let od = new Date(d)
+        let od = new Date(time)
         const year = od.getFullYear()
         let mon = od.getMonth() + 1
         mon = mon > 9 ? mon : '0' + mon
@@ -203,9 +214,17 @@
         /*  1.app路由要求传参发送人账号fromUser, 接收人账号toUser, 发送人昵称nickName(仅用于对话框显示与xxx在聊天)
          *  2.pc端路由参数可以只有发送人账号fromUser, 因为pc端有联系人列表
          */
-        const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
+        this.setWindowHeight()
 
-        this.userListParam.fromUser = this.param.fromUser = this.$route.query.fromUser || userInfo.account
+        if (this.$route.query.fromUser) {
+          this.userListParam.fromUser = this.param.fromUser = this.$route.query.fromUser
+        } else {
+          const userInfoString = getUserInfo()
+          if (userInfoString) {
+            const userInfo = JSON.parse(userInfoString)
+            this.userListParam.fromUser = this.param.fromUser = userInfo.account
+          }
+        }
         if (!this.param.fromUser) {
           this.$message.error('缺少发送人账号')
           return
@@ -225,10 +244,49 @@
             ])
           // 注册滚动加载历史消息事件
           this.checkHistoryMessage()
-          this.resetWindowScrollTop()
+          this.androidInputBugFix()
+          this.iosInputBugFix()
         }
       },
-      resetWindowScrollTop() {
+      scrollToBottom() {
+        setTimeout(() => {
+          document.body.scrollTop = document.documentElement.scrollHeight * 2
+        },300)
+      },
+      scrollToTop() {
+        setTimeout(() => {
+          document.body.scrollTop = 0
+        }, 4)
+      },
+      setWindowHeight() {
+        if (this.$store.state.isMobile) {
+          this.html = document.getElementsByTagName('html')[0]
+          this.body = document.getElementsByTagName('body')[0]
+          this.html.classList.add('h-100')
+          this.body.classList.add('h-100')
+        }
+      },
+      androidInputBugFix(){
+        // .container 设置了 overflow 属性, 导致 Android 手机下输入框获取焦点时, 输入法挡住输入框的 bug
+        // 解决方法:
+        // 0. .container 去掉 overflow 属性, 但此 demo 下会引发别的问题
+        // 1. 参考 http://stackoverflow.com/questions/23757345/android-does-not-correctly-scroll-on-input-focus-if-not-body-element
+        //    Android 手机下, input 或 textarea 元素聚焦时, 主动滚一把
+        if (/Android/gi.test(navigator.userAgent)) {
+          window.addEventListener('resize', function () {
+            // alert('触发了resize')
+            if (document.activeElement.tagName == 'INPUT' || document.activeElement.tagName == 'TEXTAREA') {
+              window.setTimeout(function () {
+                document.activeElement.scrollIntoViewIfNeeded();
+              }, 200);
+            }
+          })
+        }
+      },
+      iosInputBugFix() {
+        /**
+         * 修复页面在ios下被键盘定期后的错位bug
+         */
         window.addEventListener('blur', () => {
           // alert('blur');
           setTimeout(() => {
@@ -239,19 +297,9 @@
               }
             }
             window.scrollTo(0, document.documentElement.clientHeight);
-          }, 20)
-        }, true)
+          }, 250)
 
-        // 输入文字的时候，安卓浏览键盘默认不会把聚焦的输入框顶起，这里把输入框滚上去
-        if(/Android 4\.[0-3]/.test(navigator.appVersion)){
-          window.addEventListener("resize", function(){
-            if(document.activeElement.tagName=="INPUT"){
-              window.setTimeout(function(){
-                document.activeElement.scrollIntoViewIfNeeded();
-              },0);
-            }
-          })
-        }
+        }, true);
       },
       getFromUserInfo() {
         return new Promise(resolve => {
@@ -515,11 +563,11 @@
 
       .chat-main {
         height: 400px;
-        padding: 20px;
         margin-top: 2px;
         background-color: #fff;
+        padding: 16px 16px 54px;
         overflow: auto;
-
+        -webkit-overflow-scrolling: touch;
         .date-tips {
           display: inline-block;
           width: 90px;
@@ -660,15 +708,6 @@
   }
 </style>
 <style>
-  html,
-  body,
-  #app {
-    width: 100%;
-    height: 100%;
-  }
-  #app {
-    overflow: auto;
-  }
   .app-input.el-textarea__inner {
     border-radius: 50px !important;
   }

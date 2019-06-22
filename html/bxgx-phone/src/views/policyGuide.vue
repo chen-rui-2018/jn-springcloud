@@ -1,7 +1,11 @@
 <template>
   <div class="approvalGuide">
-    <div class="approvalGuide_search">
+    <!-- <div class="approvalGuide_search">
       <search v-model="policySearch" ref="search" @keyup.enter.native="searchEnterFun"></search>
+    </div> -->
+    <div class="declarationCenter_search">
+      <i class="weui-icon-search" v-if="policySearch===''"></i>
+      <input type="text" placeholder="搜索" v-model="policySearch" @change="searchEnterFun">
     </div>
     <div class="approvalGuide_main">
       <div class="approvalGuide_tab">
@@ -177,49 +181,72 @@ export default {
 <style lang="scss">
 .approvalGuide {
   overflow: scroll;
-
-  .approvalGuide_search {
+  .declarationCenter_search {
     position: fixed;
     z-index: 10;
-    // top: 105px;
     width: 100%;
-    .weui-search-bar {
-      padding: 28px 32px;
+    background-color: #f5f5f5;
+    padding: 0 35px;
+    display: flex;
+    input::placeholder {
+      text-align: center;
+      font-size: 21px;
     }
-    .vux-search-box {
-      position: fixed;
-      // top: 105px !important;
+    input {
+      height: 60px;
+      width: 100%;
+      margin: 22px 0;
+      border-radius: 30px;
+      padding: 0 40px;
     }
-    .weui-search-bar__input {
-      height: 63px;
-      line-height: 63px;
-      // border-radius: 30px;
-    }
-    .weui-icon-search {
-      line-height: 63px;
-    }
-    .weui-icon-clear {
-      line-height: 0.8rem;
-    }
-    .weui-search-bar.weui-search-bar_focusing .weui-search-bar__cancel-btn {
-      display: flex;
-      align-items: center;
-    }
-    .weui-search-bar__box {
-      padding: 0 70px;
-      .weui-icon-search {
-        left: 20px;
-      }
-      .weui-search-bar__input {
-        padding: 0;
-      }
+    i {
+      position: absolute;
+      top: 37%;
+      right: 54%;
     }
   }
+  // .approvalGuide_search {
+  //   position: fixed;
+  //   z-index: 10;
+  //   // top: 105px;
+  //   width: 100%;
+  //   .weui-search-bar {
+  //     padding: 28px 32px;
+  //   }
+  //   .vux-search-box {
+  //     position: fixed;
+  //     // top: 105px !important;
+  //   }
+  //   .weui-search-bar__input {
+  //     height: 63px;
+  //     line-height: 63px;
+  //     // border-radius: 30px;
+  //   }
+  //   .weui-icon-search {
+  //     line-height: 63px;
+  //   }
+  //   .weui-icon-clear {
+  //     line-height: 0.8rem;
+  //   }
+  //   .weui-search-bar.weui-search-bar_focusing .weui-search-bar__cancel-btn {
+  //     display: flex;
+  //     align-items: center;
+  //   }
+  //   .weui-search-bar__box {
+  //     padding: 0 70px;
+  //     .weui-icon-search {
+  //       left: 20px;
+  //     }
+  //     .weui-search-bar__input {
+  //       padding: 0;
+  //     }
+  //   }
+  // }
   .approvalGuide_main {
     .approvalGuide_tab {
       // margin-top: 110px;
       position: fixed;
-      top: 113px;
+      top: 103px;
       width: 100%;
       z-index: 20;
       background-color: #fff;
@@ -319,6 +346,8 @@ export default {
         padding: 30px;
         .tit {
           font-weight: bold;
+          height: 32px;
+          line-height: 32px;
         }
         .tit,
         .info {

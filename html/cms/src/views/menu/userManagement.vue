@@ -8,12 +8,12 @@
             <el-input v-model="listQuery.name" maxlength="20" placeholder="请输入姓名" style="width: 150px;" class="filter-item" clearable @keyup.enter.native="handleFilter"/>
           </el-form-item>
           <el-form-item label="状态">
-            <el-select v-model="listQuery.recordStatus" placeholder="请选择" clearable style="width: 150px" class="filter-item" @change="selecteUserStatus">
+            <el-select v-model="listQuery.recordStatus" placeholder="请选择状态" clearable style="width: 150px" class="filter-item" @change="selecteUserStatus">
               <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </el-form-item>
           <el-form-item label="岗位">
-            <el-input v-model="listQuery.postOrTypeName" maxlength="20" placeholder="请输入岗位或岗位类型" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter"/>
+            <el-input v-model="listQuery.postOrTypeName" maxlength="20" placeholder="请输入岗位" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter"/>
           </el-form-item>
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
           <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">新增</el-button>
@@ -30,11 +30,11 @@
       <div class="userManagement-content-right">
         <el-table :key="tableKey" :data="userList" border fit highlight-current-row style="width: 100%;">
           <el-table-column label="序列" type="index" align="center" width="60"/>
-          <el-table-column label="账号" prop="account" align="center" width="100" />
+          <el-table-column label="账号" prop="account" align="center" width="120" />
           <el-table-column label="姓名" prop="name" align="center" width="100" />
           <el-table-column label="部门" prop="departmentName" align="center" width="100" />
           <el-table-column label="岗位" prop="postName" align="center" width="85" />
-          <el-table-column label="岗位类型" prop="postTypeName" align="center" width="85" />
+          <!-- <el-table-column label="岗位类型" prop="postTypeName" align="center" width="85" /> -->
           <el-table-column label="邮箱" prop="email" align="center" width="150" />
           <el-table-column label="手机" prop="phone" align="center" width="120" />
           <el-table-column label="微信" prop="wechatAccount" align="center" width="120" />

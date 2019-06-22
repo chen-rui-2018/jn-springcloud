@@ -123,7 +123,13 @@ public class ElectricRulesInfoServiceImpl implements ElectricRulesInfoService {
     @ServiceLog(doAction = "发送告警内容")
     private void sendMonitor(String userIds,String monitorContent){
         List<String>ids=Lists.newArrayList(userIds.split(","));
-        Result<List<User>> userResult= systemClient.getUserInfoByIds(ids);
+        List<String> newId = new ArrayList<>();
+        if(ids !=null && ids.size()>0){
+            for(String id : ids){
+                newId.add(id.replace("user",""));
+            }
+        }
+        Result<List<User>> userResult= systemClient.getUserInfoByIds(newId);
         if(!StringUtils.equals(userResult.getCode(),"0000")){
             logger.info("未配置监控人员,userIds={}",userIds);
             return;
@@ -143,6 +149,7 @@ public class ElectricRulesInfoServiceImpl implements ElectricRulesInfoService {
             logSms.setLinkAccount(u.getAccount());
             logSms.setRecordStatus(new Byte("1"));
             logSms.setCreatedTime(new Date());
+            logSms.setAcceptPhone(u.getPhone());
             tbElectricEnergyControlPushLogMapper.insertSelective(logSms);
 
 

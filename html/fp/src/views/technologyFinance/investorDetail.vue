@@ -45,7 +45,8 @@
                 <i class="el-icon-arrow-up"></i>
               </div>
               <div class="mainColor shouqi zhankai pointer" v-else @click='zankaiFlag=!zankaiFlag'>
-               展开 <i class="el-icon-arrow-down"></i>
+                展开
+                <i class="el-icon-arrow-down"></i>
               </div>
             </div>
           </div>
@@ -67,7 +68,7 @@
       <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :modal-append-to-body=false :lock-scroll="false">
         <div class="loginTip">
           你还未
-          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          <span class="mainColor pointer" @click="goLogin">登录</span>
           /
           <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
           账号
@@ -94,16 +95,20 @@ export default {
     this.getInvestorInfoDetails();
   },
   methods: {
+    goLogin() {
+      window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
+      this.$router.push({ path: "/login" });
+    },
     //在线联系
     onlineContat(investorAccount, investorName) {
-      if (!sessionStorage.userInfo) {
+      if (!this.getUserInfo()) {
         this.concatVisible = true;
         return;
       }
       this.$router.push({
         path: "/chat",
         query: {
-          fromUser: JSON.parse(sessionStorage.userInfo).account,
+          fromUser: JSON.parse(this.getUserInfo()).account,
           toUser: investorAccount,
           nickName: investorName
         }
@@ -138,9 +143,9 @@ export default {
 <style lang="scss">
 .investorDetail {
   padding-top: 65px;
-  .el-icon-arrow-down{
+  .el-icon-arrow-down {
     // font-size: 18px;
-    color:#00a041;
+    color: #00a041;
   }
   .loginTip {
     text-align: center;

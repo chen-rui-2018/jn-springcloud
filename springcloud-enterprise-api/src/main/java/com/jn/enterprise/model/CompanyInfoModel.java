@@ -39,4 +39,13 @@ public class CompanyInfoModel implements Serializable {
     public void setCompanyAvatar(String companyAvatar) {
         this.companyAvatar = companyAvatar;
     }
+
+    @Override
+    public String toString() {
+        return "CompanyInfoModel{" +
+                "companyId='" + companyId + '\'' +
+                ", companyName='" + companyName + '\'' +
+                ", companyAvatar='" + companyAvatar + '\'' +
+                '}';
+    }
 }

@@ -47,27 +47,27 @@ public class SecurityVideoServiceImpl implements SecurityVideoService {
     public Result<SecurityMonitoringPointShow> findSecurityMonitoringPointList(SecurityMonitoringPointParam securityMonitoringPointParam) {
         Result result = new Result();
         String getCamsApi = SecurityEnum.ARTEMIS_PATH .getCode()+SecurityEnum.MONITORING_POINT.getCode() ;
-        logger.info("\n监控点信息："+getCamsApi);
+        logger.info("\n查询监控点列表入参:【{}】,接口地址:【{}】",securityMonitoringPointParam,getCamsApi);
         Map<String,String> path = new HashMap<String,String>(16){
             {
                 put(SecurityEnum.HTTP_PROTOCOL_TYPE.getCode(),getCamsApi);
             }
         };
         String body = JsonStringToObjectUtil.objectToJson(securityMonitoringPointParam);
-        logger.info("\n监控点列表获取入参："+body);
+        logger.info("\n查询监控点列表,接口参数为：【{}】",body);
         // post请求application/json类型参数
         String resultString = ArtemisHttpUtil.doPostStringArtemis(path,body,null,null,SecurityEnum.APPLICATION_JSON.getCode(),null);
-        logger.info("\n监控点列表获取出参："+resultString);
+        logger.info("\n查询监控点列表,接口出参：【{}】",resultString);
        if(StringUtils.isNotBlank(resultString)){
            SecurityResult<SecurityMonitoringPointShow> securityResult = JsonStringToObjectUtil.jsonToObject(resultString, new TypeReference<SecurityResult<SecurityMonitoringPointShow>>() {});
            if(securityResult != null) {
                if(SecurityEnum.SECURITY_RESULT_NORMAL.getCode().equals(securityResult.getCode())){
                    result.setData(securityResult.getData());
-                   logger.info("\n监控点列表获取成功：{}记录总数为"+securityResult.getData().getTotal());
+                   logger.info("\n监控点列表获取成功：{}记录总数为",securityResult.getData().getTotal());
                }else{
                    result.setCode(securityResult.getCode());
                    result.setResult(securityResult.getMsg());
-                   logger.info("\n监控点列表获取失败：{}失败编号"+securityResult.getCode()+"失败原因{}"+securityResult.getMsg());
+                   logger.info("\n监控点列表获取失败：{}失败编号,失败原因{}",securityResult.getCode(),securityResult.getMsg());
                }
            }
         }
@@ -82,27 +82,27 @@ public class SecurityVideoServiceImpl implements SecurityVideoService {
     public Result<SecurityPlayBackUrlShow> findSecurityPlayBackUrlList(SecurityPlayBackUrlParam securityPlayBackUrlParam) {
         Result result = new Result();
         String getCamsApi = SecurityEnum.ARTEMIS_PATH .getCode() + SecurityEnum.PLAY_BACK_URL.getCode();
-        logger.info("\n录像回放："+getCamsApi);
+        logger.info("\n查询监控回放路径url入参:【{}】,接口地址:【{}】",securityPlayBackUrlParam,getCamsApi);
         Map<String,String> path = new HashMap<String,String>(16){
             {
                 put(SecurityEnum.HTTP_PROTOCOL_TYPE.getCode(),getCamsApi);
             }
         };
         String body = JsonStringToObjectUtil.objectToJson(securityPlayBackUrlParam);
-        logger.info("\n监控回放url查询入参："+body);
+        logger.info("\n查询监控回放url,硬件接口参数：【{}】",body);
         // post请求application/json类型参数
         String resultString =ArtemisHttpUtil.doPostStringArtemis(path,body,null,null,SecurityEnum.APPLICATION_JSON.getCode(),null);
-        logger.info("\n监控回放url查询出参："+resultString);
+        logger.info("\n监控回放url查询,硬件接口出参：【{}】",resultString);
         if(StringUtils.isNotBlank(resultString)){
             SecurityResult<SecurityPlayBackUrlShow> securityResult = JsonStringToObjectUtil.jsonToObject(resultString, new TypeReference<SecurityResult<SecurityPlayBackUrlShow>>() {});
             if(securityResult!=null){
                 if(SecurityEnum.SECURITY_RESULT_NORMAL.getCode().equals(securityResult.getCode())){
                     result.setData(securityResult.getData());
-                    logger.info("\n监控点回放url获取成功：{}返回状态为:"+securityResult.getMsg());
+                    logger.info("\n监控点回放url获取成功：{}返回状态为:【{}】",securityResult.getMsg());
                 }else{
                     result.setCode(securityResult.getCode());
                     result.setResult(securityResult.getMsg());
-                    logger.info("\n监控点回放url获取失败：{}失败编号"+securityResult.getCode()+"失败原因{}"+securityResult.getMsg());
+                    logger.info("\n监控点回放url获取失败：{}失败编号,失败原因{}",securityResult.getCode(),securityResult.getMsg());
                 }
             }
         }
@@ -117,6 +117,7 @@ public class SecurityVideoServiceImpl implements SecurityVideoService {
     public Result<String> getSecurityTokenURL(SecurityTokenParam securityTokenParam) {
         Result result = new Result();
         String getCamsApi = SecurityEnum.ARTEMIS_PATH .getCode() + SecurityEnum.GET_TOKEN_URL.getCode();
+        logger.info("\n获取海康威视的接口凭证token入参:【{}】,接口地址:【{}】",securityTokenParam,getCamsApi);
         Map<String,String> query = new HashMap<>(16);
         query.put(SecurityEnum.GET_TOKEN_USER_CODE.getCode(),securityTokenParam.getUserCode());
         query.put(SecurityEnum.GET_TOKEN_SERVICE.getCode(),securityTokenParam.getService());
@@ -126,22 +127,21 @@ public class SecurityVideoServiceImpl implements SecurityVideoService {
                 put(SecurityEnum.HTTP_PROTOCOL_TYPE.getCode(),getCamsApi);
             }
         };
-        logger.info("\n监控认证url获取入参："+securityTokenParam.toString());
+        logger.info("\n获取海康威视的接口凭证token,调用接口入参：【{}】",securityTokenParam.toString());
         String resultString =ArtemisHttpUtil.doGetArtemis(path,query,null, null,null);
-        logger.info("\n监控认证url获取成功：{}海康返回的值:"+resultString);
+        logger.info("\n监控认证url获取成功,海康返回的值:【{}】",resultString);
         if(StringUtils.isNotBlank(resultString)){
             SecurityResult<SecurityTokenShow> securityResult = JsonStringToObjectUtil.jsonToObject(resultString, new TypeReference< SecurityResult<SecurityTokenShow>>() {});
             if(securityResult!=null){
                 if(SecurityEnum.SECURITY_RESULT_NORMAL.getCode().equals(securityResult.getCode())){
                     String ttoken  =  securityResult.getData().getToken();
                     String url =SecurityEnum.HTTP_PROTOCOL_TYPE.getCode()+SecurityEnum.ARTEMIS_CONFIG_HOST.getCode()+String.format(SecurityEnum.SECURITY_TOOKEN_URL.getCode(),ttoken,securityTokenParam.getService());
-                    logger.info("\n获取token后组装的url:"+url);
                     result.setData(url);
-                    logger.info("\n监控认证url获取成功：{}返回状态为:"+securityResult.getMsg());
+                    logger.info("\n获取token后组装的url:【{}】,返回状态为：【{}】",url,securityResult.getMsg());
                 }else{
                     result.setCode(securityResult.getCode());
                     result.setResult(securityResult.getMsg());
-                    logger.info("\n监控认证url获取失败：{}失败编号"+securityResult.getCode()+"失败原因{}"+securityResult.getMsg());
+                    logger.info("\n监控认证url获取失败：{}失败编号，失败原因{}",securityResult.getCode(),securityResult.getMsg());
                 }
             }
         }

@@ -25,13 +25,13 @@ export default {}
     .target-frame-l {
       max-height: 500px;
       overflow: auto;
-      width: 200px;
+      width: 30%;
       padding: 10px;
       flex: none;
     }
     .target-frame-r {
       min-height: 100%;
-      width: calc(100% - 200px);
+      width: 70%;
       padding: 15px;
       border-left: 1px solid $gray;
       .target-row {

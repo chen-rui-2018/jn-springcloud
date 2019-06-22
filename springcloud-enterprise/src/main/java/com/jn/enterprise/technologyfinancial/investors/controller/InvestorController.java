@@ -60,7 +60,7 @@ public class InvestorController extends BaseController {
     }
 
     @ControllerLog(doAction = "查询所属单位")
-    @ApiOperation(value = "查询所属单位")
+    @ApiOperation(value = "查询所属单位",notes = "投资人只能选择科技金融机构")
     @RequestMapping(value = "/guest/technologyFinancial/investorController/getAffiliationUnit",method = RequestMethod.GET)
     public Result<PaginationData<List<AffiliationUnitShow>>> getAffiliationUnit(@Validated  AffiliationUnitInfoParam affiliationUnitInfoParam){
         PaginationData result= investorService.getAffiliationUnit(affiliationUnitInfoParam);

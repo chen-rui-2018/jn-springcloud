@@ -1,5 +1,7 @@
 package com.jn.enterprise.pd.declaration.service;
 
+import com.jn.common.model.Result;
+import com.jn.enterprise.pd.declaration.model.DeclarationOnlineModel;
 import com.jn.enterprise.pd.declaration.model.DeclarationOnlineReservationManageModel;
 import com.jn.system.model.User;
 
@@ -13,5 +15,7 @@ import com.jn.system.model.User;
  */
 public interface DeclarationOnlinkService {
 
-    void onlineBooking(DeclarationOnlineReservationManageModel declarationOnline, User user);
+    Result onlineBooking(DeclarationOnlineReservationManageModel declarationOnline, User user);
+
+    Result<DeclarationOnlineModel> queryOnlineInfo(String appointmentItemId,User user);
 }

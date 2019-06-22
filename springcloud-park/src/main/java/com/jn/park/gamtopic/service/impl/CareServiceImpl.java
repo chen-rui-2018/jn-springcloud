@@ -130,6 +130,11 @@ public class CareServiceImpl implements CareService {
     public CareDetailsVo findCareDetails(CareDetailsQueryParam param,String currentAccount) {
         CareDetailsVo vo = new CareDetailsVo();
         CareUserDetails userDetails =  careDao.findCareDetails(param.getParamAccount(),currentAccount);
+        Result<UserExtensionInfo> result =  userExtensionClient.getUserExtension(param.getParamAccount());
+        if(result.getData()!=null){
+            userDetails.setAvatar(result.getData().getAvatar());
+            userDetails.setNickName(result.getData().getNickName());
+        };
         vo.setUserDetails(userDetails);
         PaginationData<List<DynamicWebShow>> dynamicList =  dynamicService.findDynamicByAccount(param,currentAccount);
         vo.setDnmamicList(dynamicList);

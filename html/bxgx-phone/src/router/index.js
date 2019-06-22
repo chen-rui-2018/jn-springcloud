@@ -103,6 +103,12 @@ const router = new Router({
       component: () => import('@/views/declarationCenter/declarationCenter')
     },
     {
+      path: '/guest/pd/DeclarationItems',
+      name: 'declarationItems',
+      meta: {title: '即时申报项目'},
+      component: () => import('@/views/declarationCenter/DeclarationItems')
+    },
+    {
       path: '/guest/pd/declarationPlatform',
       name: 'declarationPlatform',
       meta: {title: '申报平台'},
@@ -215,6 +221,36 @@ const router = new Router({
       name: 'policyDetails',
       component: () => import('@/views/policyDetails'),
       meta: {title: '政策详情'}
+    },
+    {
+      path: '/enterpriseInformationList',
+      name: 'enterpriseInformationList',
+      component: () => import('@/views/enterpriseInformation/index'),
+      meta: {title: '企业资讯'}
+    },
+    {
+      path: '/enterpriseInformation',
+      name: 'enterpriseInformation',
+      component: () => import('@/views/enterpriseInformation/detail'),
+      meta: {title: '企业资讯详情'}
+    },
+    {
+      path: '/parkNotice',
+      name: 'parkNotice',
+      component: () => import('@/views/parkNotice/index'),
+      meta: {title: '园区公告'}
+    },
+    {
+      path: '/parkNoticeDetail',
+      name: 'parkNoticeDetail',
+      component: () => import('@/views/parkNotice/detail'),
+      meta: {title: '园区公告详情'}
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: () => import('@/views/register'),
+      meta: {title: '注册'}
     }
   ]
 })

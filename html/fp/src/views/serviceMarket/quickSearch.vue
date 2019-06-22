@@ -20,7 +20,7 @@
           <div class="agentMid2">
             <ul class="clearfix">
               <li>
-                <div class="itemImg"><img src="@/../static/img/k1.png" alt=""></div>
+                <div class="itemImg"><img src="@/../static/img/k5.png" alt=""></div>
                 <div class="itemInfo">
                   <p>机构</p>
                   <p class="mainColor">{{businessAreaNum.orgNum}}家</p>
@@ -28,34 +28,34 @@
               </li>
               <li class="line"></li>
               <li>
-                <div class="itemImg"><img src="@/../static/img/k2.png" alt=""></div>
+                <div class="itemImg"><img src="@/../static/img/k1.png" alt=""></div>
                 <div class="itemInfo">
                   <p>产品</p>
-                  <p class="mainColor">{{businessAreaNum.productNum}}家</p>
+                  <p class="mainColor">{{businessAreaNum.productNum}}项</p>
+                </div>
+              </li>
+              <li class="line"></li>
+              <li>
+                <div class="itemImg"><img src="@/../static/img/k2.png" alt=""></div>
+                <div class="itemInfo">
+                  <p>专员</p>
+                  <p class="mainColor">{{businessAreaNum.advisorNum}}名</p>
                 </div>
               </li>
               <li class="line"></li>
               <li>
                 <div class="itemImg"><img src="@/../static/img/k3.png" alt=""></div>
                 <div class="itemInfo">
-                  <p>专员</p>
-                  <p class="mainColor">{{businessAreaNum.advisorNum}}家</p>
+                  <p>评价</p>
+                  <p class="mainColor">{{businessAreaNum.evaluateNum}}条</p>
                 </div>
               </li>
               <li class="line"></li>
               <li>
                 <div class="itemImg"><img src="@/../static/img/k4.png" alt=""></div>
                 <div class="itemInfo">
-                  <p>评价</p>
-                  <p class="mainColor">{{businessAreaNum.evaluateNum}}家</p>
-                </div>
-              </li>
-              <li class="line"></li>
-              <li>
-                <div class="itemImg"><img src="@/../static/img/k5.png" alt=""></div>
-                <div class="itemInfo">
                   <p>交易量</p>
-                  <p class="mainColor">{{businessAreaNum.transactionNum}}家</p>
+                  <p class="mainColor">{{businessAreaNum.transactionNum}}笔</p>
                 </div>
               </li>
             </ul>
@@ -120,7 +120,7 @@
                 </div>
                 <!-- 左侧logo end-->
                 <!-- 中间信息 beign -->
-                <div class="list-info-middle inner-product">
+                <div class="list-info-middle inner-product pointer" @click="$router.push({path:'serverProDetail',query:{productId:i.productId,signoryId:i.signoryId}})">
                   <!-- 中间上半部分--标题和标签 begin -->
                   <div class="list-info-top-title">
                     <!-- 头部 begin -->
@@ -135,7 +135,7 @@
                   <!-- 中间下半部分--参考信息、交易均价和交易 begin -->
                   <div class="list-info-bottom-detail clearfix">
                     <!-- 参考信息、交易均价 begin -->
-                    <div class="detail-contact inner-product">
+                    <div class="detail-contact inner-product fl">
                       <div class="search_area text-of" title="王振英 , 包美芬 , 高凤清">顾&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;问：{{i.advisorName}}</div>
                       <div class="text-of mt5">参考价格：{{i.referPrice}}</div>
                       <div>累计
@@ -143,7 +143,7 @@
                     </div>
                     <!-- 参考信息、交易均价 end -->
                     <!-- 评价 begin -->
-                    <div class="detail-evaluate inner-product">
+                    <div class="detail-evaluate inner-product fl">
                       <div class="score">
                         <el-rate v-model="i.evaluationScore*1" disabled text-color="#00a041" :colors="['#00a041', '#00a041', '#00a041']" style="display:inline-block" score-template="{value}">
                         </el-rate>
@@ -156,7 +156,7 @@
                     </div>
                     <!-- 评价 end -->
                     <!-- 交易量 begin -->
-                    <div class="detail-count">
+                    <div class=" fr">
                       <div class="orgBtn fr mainColor" @click="demandRaise(i)">提需求</div>
                     </div>
                     <!-- 交易量 end -->
@@ -181,7 +181,7 @@
                   <!-- <img src="@/../static/img/ins1.png" alt=""> -->
                   <img :src="i.orgLogo" alt="">
                 </div>
-                <div class="orgCon fl">
+                <div class="orgCon fl pointer" @click="$router.push({ path: '/serverOrgDetail', query: { orgId: i.orgId } })">
                   <div class="conTil">{{i.orgName}}</div>
                   <div class="conContent clearfix color3">
                     <div class="left1 fl">
@@ -222,7 +222,7 @@
                   <!-- <img src="@/../static/img/ins1.png" alt=""> -->
                   <img :src="i.avatar" alt="">
                 </div>
-                <div class="orgCon fl">
+                <div class="orgCon fl pointer" @click="$router.push({path:'serverConDetail',query:{orgId: i.orgId,advisorAccount:i.advisorAccount}})">
                   <div class="conTil">{{i.advisorName}}</div>
                   <div class="conContent clearfix color3">
                     <div class="left1 fl" id="left1">
@@ -268,7 +268,7 @@
         </div>
         <div v-else class="loginTip">
           你还未
-          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          <span class="mainColor pointer" @click="goLogin">登录</span>
           /
           <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
           企业账号
@@ -279,7 +279,7 @@
       <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :modal-append-to-body="false" :lock-scroll="false">
         <div class="loginTip">
           你还未
-          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          <span class="mainColor pointer" @click="goLogin">登录</span>
           /
           <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
           账号
@@ -345,21 +345,25 @@ export default {
     this.commentProductList();
   },
   methods: {
+    goLogin() {
+      window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
+      this.$router.push({ path: "/login" });
+    },
     //判断是否登录
     isLogin() {
-      if (!sessionStorage.userInfo) {
+      if (!this.getToken()) {
         this.islogin = false;
       }
     },
     onlineContact(advisorAccount, advisorName) {
-      if (!sessionStorage.userInfo) {
+      if (!this.getUserInfo()) {
         this.concatVisible = true;
-        return
+        return;
       }
       this.$router.push({
         path: "/chat",
         query: {
-          fromUser: JSON.parse(sessionStorage.userInfo).account,
+          fromUser: JSON.parse(this.getUserInfo()).account,
           toUser: advisorAccount,
           nickName: advisorName
         }
@@ -670,7 +674,7 @@ export default {
         > span {
           color: #919191;
         }
-        > span.active {
+        > span.active2 {
           color: #00a041;
         }
       }
@@ -688,7 +692,7 @@ export default {
           line-height: 26px;
           cursor: pointer;
         }
-        > span.active {
+        > span.active2 {
           color: #fff;
           background: linear-gradient(to bottom right, #35bf6d, #00a041);
         }

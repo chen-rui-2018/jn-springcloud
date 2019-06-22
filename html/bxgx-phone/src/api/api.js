@@ -52,14 +52,15 @@ export default {
     selectAttendanceManagementByUserId: 'springcloud-oa/oa/attendance/selectAttendanceManagementByUserId', // 根据用户id查询用户考勤打卡数据
     selectAttendanceManagementByDepartmentId: 'springcloud-oa/oa/attendance/selectAttendanceManagementByDepartmentId', // 根据部门id查询部门考勤打卡数据
     selectLocation: 'springcloud-oa/oa/attendance/selectLocation', // 根据经纬度查询距离与是否能进行打卡
-
+    showNoticeList: 'springcloud-park/guest/park/notice/web/showNoticeListForPortal', // 门户首页展示(轮播)公告列表
     findNoticeDetails: 'springcloud-park/guest/park/notice/web/findNoticeDetailsByNoticeId', // 公告详情
     findActivityTypeList: 'springcloud-park/guest/activity/findActivityTypeList', // 查询活动类型列表
     activityListSlim: 'springcloud-park/guest/activity/activityListSlim', // 获取前台活动列表
     getPolicyClassList: 'springcloud-park/guest/policy/policyCenterController/getPolicyClassList', // 政策分类列表
     getPolicyCenterList: 'springcloud-park/guest/policy/policyCenterController/getPolicyCenterList', // 政策中心首页列表
     getPolicyDetails: 'springcloud-park/guest/policy/policyCenterController/getPolicyDetails', // 政策指南详情
-
+    getPromotionDetails: 'springcloud-enterprise/guest/businessHomePageController/getBusinessPromotionDetails', // (门户各首页企业宣传详情)
+    getCode: '/springcloud-user/guest/miniProgram/miniProgramRegisterController/getCode', // 注册获取验证码
     // 招商引资
     getPromotionList: 'springcloud-enterprise/guest/businessHomePageController/getBusinessPromotionList', // (门户各首页企业宣传列表查询)
     basic: 'springcloud-park/guest/portal/park/basic', // 获取园区概况
@@ -75,7 +76,11 @@ export default {
     todayelectro: 'springcloud-park/meter/todayElectric', // 今日用电情况
     monthelectro: 'springcloud-park/meter/monthElectric', // 本月用电情况
     yearelectro: 'springcloud-park/meter/yearElectric', // 今年用电情况
-    getCompanyDetailByNowAccount: 'springcloud-enterprise/guest/company/getCompanyDetailByNowAccount' // 获取用户企业信息
+    getCompanyDetailByNowAccount: 'springcloud-enterprise/guest/company/getCompanyDetailByNowAccount', // 获取用户企业信息
+    addOrEditMemorandum: 'springcloud-enterprise/pd/declaration/addOrEditMemorandum', // 申报平台备忘录
+    fastUpload: 'springcloud-app-fastdfs/upload/fastUpload', // 上传文件
+    queryOnlineInfo: 'springcloud-enterprise/pd/online/queryOnlineInfo', // 通过公告ID和登录人查询预约信息
+    getUserExtension: 'springcloud-user/user/userInfo/getUserExtension'
 
   },
   setToken: function (obj) {
@@ -90,7 +95,7 @@ export default {
     if (!url) {
       return alert('未获取到有效的URL')
     };
-
+    const headerType = url.headerType
     if (typeof url === 'object') {
       data = url.data
       callback = url.callback
@@ -99,10 +104,10 @@ export default {
     }
     url = this.apiURL[url]
     if (!data) data = {}
-
     axios.get(this.host + url, {
       params: data || {},
       headers: {
+        'Content-Type': headerType || 'application/json;charset=UTF-8',
         'token': sessionStorage.token || ''
       }
     })

@@ -1,13 +1,9 @@
 package com.jn.enterprise.company.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * 企业实体
@@ -18,159 +14,73 @@ import java.util.Date;
  **/
 @ApiModel(value = "ServiceCompany",description = "企业实体")
 public class ServiceCompany implements Serializable {
-    @ApiModelProperty(value = "id")
+
+    @ApiModelProperty(value = "企业ID")
     private String id;
-    @ApiModelProperty(value = "公司名称")
+    @ApiModelProperty(value = "企业名称")
     private String comName;
-    @ApiModelProperty(value = "公司简称")
+    @ApiModelProperty(value = "企业简称")
     private String comNameShort;
-    @ApiModelProperty(value = "企业logo")
-    private String avatar;
-    @ApiModelProperty(value = "企业管理员")
-    private String comAdmin;
-    @ApiModelProperty(value = "统一社会信用代码")
-    private String unifyCode;
-    @ApiModelProperty(value = "投资人")
-    private String owners;
+    @ApiModelProperty(value = "企业领域")
+    private String induType;
     @ApiModelProperty(value = "企业法人")
     private String ownerLaw;
-    @ApiModelProperty(value = "法人身份证号")
-    private String ownerId;
-    @ApiModelProperty(value = "法人联系电话")
+    @ApiModelProperty(value = "法人联系方式")
     private String ownerPhone;
-    @ApiModelProperty(value = "法人微信")
-    private String ownerWechat;
-    @ApiModelProperty(value = "法人QQ")
-    private String ownerQq;
-    @ApiModelProperty(value = "开户银行")
-    private String bankName;
-    @ApiModelProperty(value = "银行账号")
-    private String bankAccount;
-    @ApiModelProperty(value = "主要产品")
-    private String products;
-    @ApiModelProperty(value = "主要原材料")
-    private String material;
-    @ApiModelProperty(value = "企业性质")
-    private String comProperty;
-    @ApiModelProperty(value = "注册资本（万元）")
-    private BigDecimal regCapital;
-    @ApiModelProperty(value = "增资情况")
-    private String addCapital;
+    @ApiModelProperty(value = "注册时间yyyy-MM-dd")
+    private String foundingTime;
+    @ApiModelProperty(value = "落地时间yyyy-MM-dd")
+    private String runTime;
+    @ApiModelProperty(value = "公司注册地址")
+    private String comAddress;
+    @ApiModelProperty(value = "实际经营地址（园区地址）")
+    private String addrPark;
+    @ApiModelProperty(value = "固定电话")
+    private String comTele;
+    @ApiModelProperty(value = "注册资金（万元）")
+    private String regCapital;
     @ApiModelProperty(value = "企业规模")
     private String comScale;
-    @ApiModelProperty(value = "成立时间（注册时间）")
-    private Date foundingTime;
-    @ApiModelProperty(value = "落地时间（实际运营时间）")
-    private Date runTime;
-    @ApiModelProperty(value = "行业分类")
-    private String induType;
-    @ApiModelProperty(value = "行业代码")
-    private String induCode;
-    @ApiModelProperty(value = "营业执照")
-    private String businessLicense;
-    @ApiModelProperty(value = "企业宣传图（多个")
-    private String propagandaPicture;
-
-    @ApiModelProperty(value = "营业执照开始时间", example = "2019-12-12 12:12:12")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date licStarttime;
-
-    @ApiModelProperty(value = "营业执照到期时间", example = "2019-12-12 12:12:12")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date licEndtime;
-    @ApiModelProperty(value = "注册登记类型")
-    private String registerType;
-    @ApiModelProperty(value = "组织机构代码")
-    private String orgCode;
-    @ApiModelProperty(value = "主要产品")
-    private String mainProducts;
-    @ApiModelProperty(value = "业务范围")
-    private String businessScope;
-    @ApiModelProperty(value = "联系人")
-    private String contact;
-    @ApiModelProperty(value = "联系人手机号")
-    private String conPhone;
-    @ApiModelProperty(value = "联系人微信")
-    private String conWechat;
-    @ApiModelProperty(value = "联系人QQ")
-    private String conQq;
-    @ApiModelProperty(value = "联系人地址")
-    private String conAddress;
-    @ApiModelProperty(value = "邮编")
-    private String postcode;
-    @ApiModelProperty(value = "公司地址")
-    private String comAddress;
-    @ApiModelProperty(value = "公司电话")
-    private String comTele;
-    @ApiModelProperty(value = "公司网址")
-    private String comWeb;
-    @ApiModelProperty(value = "我的需求")
-    private String comServer;
-    @ApiModelProperty(value = "企业类型")
-    private String comDemand;
-    @ApiModelProperty(value = "公司园区地址（实际经营地址）")
-    private String addrPark;
-    @ApiModelProperty(value = "公司简介")
-    private String comSynopsis;
-    @ApiModelProperty(value = "园区楼宇ID")
-    private String parkBuildId;
-    @ApiModelProperty(value = "园区楼宇名称")
-    private String parkBuildName;
-    @ApiModelProperty(value = "信用积分")
-    private BigDecimal creditPoints;
-
-    @ApiModelProperty(value = "信用扥更新时间", example = "2019-12-12 12:12:12")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date creditUpdateTime;
-
-    @ApiModelProperty(value = "企业类型")
-    private String comType;
-
-    @ApiModelProperty(value = "是否加入园区活动")
-    private String isJoinActivity;
-
-    @ApiModelProperty(value = "审核状态")
-    private String checkStatus;
-
-    @ApiModelProperty(value = "审核时间", example = "2019-12-12 12:12:12")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date checkTime;
-    @ApiModelProperty(value = "企业来源")
+    @ApiModelProperty(value = "统一社会信用代码")
+    private String unifyCode;
+    @ApiModelProperty(value = "企业来源 [1人才企业 2招商企业]")
     private String comSource;
-
-    @ApiModelProperty(value = "所属园区id")
+    @ApiModelProperty(value = "企业logo")
+    private String avatar;
+    @ApiModelProperty(value = "三证一体或营业执照照片")
+    private String businessLicense;
+    @ApiModelProperty(value = "企业官网地址")
+    private String comWeb;
+    @ApiModelProperty(value = "我的服务")
+    private String comServer;
+    @ApiModelProperty(value = "我的需求")
+    private String comDemand;
+    @ApiModelProperty(value = "所属园区[园区ID]")
     private String affiliatedPark;
-
-    @ApiModelProperty(value = "所属园区名称")
-    private String affiliatedName;
-
-    @ApiModelProperty(value = "浏览次数")
-    private String browseNumber;
-
+    @ApiModelProperty(value = "企业性质")
+    private String comProperty;
+    @ApiModelProperty(value = "企业简介")
+    private String comSynopsis;
+    @ApiModelProperty(value = "企业宣传图")
+    private String propagandaPicture;
+    @ApiModelProperty(value = "企业宣传图")
+    private String mainProducts;
+    @ApiModelProperty(value = "信用分")
+    private String creditPoints;
+    @ApiModelProperty(value = "信用分更新时间")
+    private String creditUpdateTime;
+    @ApiModelProperty(value = "企业管理员")
+    private String comAdmin;
+    @ApiModelProperty(value = "是否删除")
+    private String recordStatus;
+    @ApiModelProperty(value = "审批状态")
+    private String checkStatus;
+    @ApiModelProperty(value = "创建时间")
+    private String createdTime;
     @ApiModelProperty(value = "创建者账号")
     private String creatorAccount;
-
-    @ApiModelProperty(value = "最新更信任账号")
-    private String modifierAccount;
-
-    @ApiModelProperty(value = "创建时间", example = "2019-12-12 12:12:12")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createdTime;
-
-    @ApiModelProperty(value = "修改时间", example = "2019-12-12 12:12:12")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date modifiedTime;
-
-    @ApiModelProperty(value = "是否删除")
-    private Byte recordStatus;
-
-    private static final long serialVersionUID = 1L;
+    @ApiModelProperty(value = "企业ID")
+    private String comId;
 
     public String getId() {
         return id;
@@ -196,36 +106,12 @@ public class ServiceCompany implements Serializable {
         this.comNameShort = comNameShort;
     }
 
-    public String getAvatar() {
-        return avatar;
+    public String getInduType() {
+        return induType;
     }
 
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
-
-    public String getComAdmin() {
-        return comAdmin;
-    }
-
-    public void setComAdmin(String comAdmin) {
-        this.comAdmin = comAdmin;
-    }
-
-    public String getUnifyCode() {
-        return unifyCode;
-    }
-
-    public void setUnifyCode(String unifyCode) {
-        this.unifyCode = unifyCode;
-    }
-
-    public String getOwners() {
-        return owners;
-    }
-
-    public void setOwners(String owners) {
-        this.owners = owners;
+    public void setInduType(String induType) {
+        this.induType = induType;
     }
 
     public String getOwnerLaw() {
@@ -236,14 +122,6 @@ public class ServiceCompany implements Serializable {
         this.ownerLaw = ownerLaw;
     }
 
-    public String getOwnerId() {
-        return ownerId;
-    }
-
-    public void setOwnerId(String ownerId) {
-        this.ownerId = ownerId;
-    }
-
     public String getOwnerPhone() {
         return ownerPhone;
     }
@@ -252,228 +130,20 @@ public class ServiceCompany implements Serializable {
         this.ownerPhone = ownerPhone;
     }
 
-    public String getOwnerWechat() {
-        return ownerWechat;
-    }
-
-    public void setOwnerWechat(String ownerWechat) {
-        this.ownerWechat = ownerWechat;
-    }
-
-    public String getOwnerQq() {
-        return ownerQq;
-    }
-
-    public void setOwnerQq(String ownerQq) {
-        this.ownerQq = ownerQq;
-    }
-
-    public String getBankName() {
-        return bankName;
-    }
-
-    public void setBankName(String bankName) {
-        this.bankName = bankName;
-    }
-
-    public String getBankAccount() {
-        return bankAccount;
-    }
-
-    public void setBankAccount(String bankAccount) {
-        this.bankAccount = bankAccount;
-    }
-
-    public String getProducts() {
-        return products;
-    }
-
-    public void setProducts(String products) {
-        this.products = products;
-    }
-
-    public String getMaterial() {
-        return material;
-    }
-
-    public void setMaterial(String material) {
-        this.material = material;
-    }
-
-    public String getComProperty() {
-        return comProperty;
-    }
-
-    public void setComProperty(String comProperty) {
-        this.comProperty = comProperty;
-    }
-
-    public BigDecimal getRegCapital() {
-        return regCapital;
-    }
-
-    public void setRegCapital(BigDecimal regCapital) {
-        this.regCapital = regCapital;
-    }
-
-    public String getAddCapital() {
-        return addCapital;
-    }
-
-    public void setAddCapital(String addCapital) {
-        this.addCapital = addCapital;
-    }
-
-    public String getComScale() {
-        return comScale;
-    }
-
-    public void setComScale(String comScale) {
-        this.comScale = comScale;
-    }
-
-    public Date getFoundingTime() {
+    public String getFoundingTime() {
         return foundingTime;
     }
 
-    public void setFoundingTime(Date foundingTime) {
+    public void setFoundingTime(String foundingTime) {
         this.foundingTime = foundingTime;
     }
 
-    public Date getRunTime() {
+    public String getRunTime() {
         return runTime;
     }
 
-    public void setRunTime(Date runTime) {
+    public void setRunTime(String runTime) {
         this.runTime = runTime;
-    }
-
-    public String getInduType() {
-        return induType;
-    }
-
-    public void setInduType(String induType) {
-        this.induType = induType;
-    }
-
-    public String getInduCode() {
-        return induCode;
-    }
-
-    public void setInduCode(String induCode) {
-        this.induCode = induCode;
-    }
-
-    public String getBusinessLicense() {
-        return businessLicense;
-    }
-
-    public void setBusinessLicense(String businessLicense) {
-        this.businessLicense = businessLicense;
-    }
-
-    public String getPropagandaPicture() {
-        return propagandaPicture;
-    }
-
-    public void setPropagandaPicture(String propagandaPicture) {
-        this.propagandaPicture = propagandaPicture;
-    }
-
-    public Date getLicStarttime() {
-        return licStarttime;
-    }
-
-    public void setLicStarttime(Date licStarttime) {
-        this.licStarttime = licStarttime;
-    }
-
-    public Date getLicEndtime() {
-        return licEndtime;
-    }
-
-    public void setLicEndtime(Date licEndtime) {
-        this.licEndtime = licEndtime;
-    }
-
-    public String getRegisterType() {
-        return registerType;
-    }
-
-    public void setRegisterType(String registerType) {
-        this.registerType = registerType;
-    }
-
-    public String getOrgCode() {
-        return orgCode;
-    }
-
-    public void setOrgCode(String orgCode) {
-        this.orgCode = orgCode;
-    }
-
-    public String getMainProducts() {
-        return mainProducts;
-    }
-
-    public void setMainProducts(String mainProducts) {
-        this.mainProducts = mainProducts;
-    }
-
-    public String getBusinessScope() {
-        return businessScope;
-    }
-
-    public void setBusinessScope(String businessScope) {
-        this.businessScope = businessScope;
-    }
-
-    public String getContact() {
-        return contact;
-    }
-
-    public void setContact(String contact) {
-        this.contact = contact;
-    }
-
-    public String getConPhone() {
-        return conPhone;
-    }
-
-    public void setConPhone(String conPhone) {
-        this.conPhone = conPhone;
-    }
-
-    public String getConWechat() {
-        return conWechat;
-    }
-
-    public void setConWechat(String conWechat) {
-        this.conWechat = conWechat;
-    }
-
-    public String getConQq() {
-        return conQq;
-    }
-
-    public void setConQq(String conQq) {
-        this.conQq = conQq;
-    }
-
-    public String getConAddress() {
-        return conAddress;
-    }
-
-    public void setConAddress(String conAddress) {
-        this.conAddress = conAddress;
-    }
-
-    public String getPostcode() {
-        return postcode;
-    }
-
-    public void setPostcode(String postcode) {
-        this.postcode = postcode;
     }
 
     public String getComAddress() {
@@ -484,12 +154,68 @@ public class ServiceCompany implements Serializable {
         this.comAddress = comAddress;
     }
 
+    public String getAddrPark() {
+        return addrPark;
+    }
+
+    public void setAddrPark(String addrPark) {
+        this.addrPark = addrPark;
+    }
+
     public String getComTele() {
         return comTele;
     }
 
     public void setComTele(String comTele) {
         this.comTele = comTele;
+    }
+
+    public String getRegCapital() {
+        return regCapital;
+    }
+
+    public void setRegCapital(String regCapital) {
+        this.regCapital = regCapital;
+    }
+
+    public String getComScale() {
+        return comScale;
+    }
+
+    public void setComScale(String comScale) {
+        this.comScale = comScale;
+    }
+
+    public String getUnifyCode() {
+        return unifyCode;
+    }
+
+    public void setUnifyCode(String unifyCode) {
+        this.unifyCode = unifyCode;
+    }
+
+    public String getComSource() {
+        return comSource;
+    }
+
+    public void setComSource(String comSource) {
+        this.comSource = comSource;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public String getBusinessLicense() {
+        return businessLicense;
+    }
+
+    public void setBusinessLicense(String businessLicense) {
+        this.businessLicense = businessLicense;
     }
 
     public String getComWeb() {
@@ -516,12 +242,20 @@ public class ServiceCompany implements Serializable {
         this.comDemand = comDemand;
     }
 
-    public String getAddrPark() {
-        return addrPark;
+    public String getAffiliatedPark() {
+        return affiliatedPark;
     }
 
-    public void setAddrPark(String addrPark) {
-        this.addrPark = addrPark;
+    public void setAffiliatedPark(String affiliatedPark) {
+        this.affiliatedPark = affiliatedPark;
+    }
+
+    public String getComProperty() {
+        return comProperty;
+    }
+
+    public void setComProperty(String comProperty) {
+        this.comProperty = comProperty;
     }
 
     public String getComSynopsis() {
@@ -532,52 +266,52 @@ public class ServiceCompany implements Serializable {
         this.comSynopsis = comSynopsis;
     }
 
-    public String getParkBuildId() {
-        return parkBuildId;
+    public String getPropagandaPicture() {
+        return propagandaPicture;
     }
 
-    public void setParkBuildId(String parkBuildId) {
-        this.parkBuildId = parkBuildId;
+    public void setPropagandaPicture(String propagandaPicture) {
+        this.propagandaPicture = propagandaPicture;
     }
 
-    public String getParkBuildName() {
-        return parkBuildName;
+    public String getMainProducts() {
+        return mainProducts;
     }
 
-    public void setParkBuildName(String parkBuildName) {
-        this.parkBuildName = parkBuildName;
+    public void setMainProducts(String mainProducts) {
+        this.mainProducts = mainProducts;
     }
 
-    public BigDecimal getCreditPoints() {
+    public String getCreditPoints() {
         return creditPoints;
     }
 
-    public void setCreditPoints(BigDecimal creditPoints) {
+    public void setCreditPoints(String creditPoints) {
         this.creditPoints = creditPoints;
     }
 
-    public Date getCreditUpdateTime() {
+    public String getCreditUpdateTime() {
         return creditUpdateTime;
     }
 
-    public void setCreditUpdateTime(Date creditUpdateTime) {
+    public void setCreditUpdateTime(String creditUpdateTime) {
         this.creditUpdateTime = creditUpdateTime;
     }
 
-    public String getComType() {
-        return comType;
+    public String getComAdmin() {
+        return comAdmin;
     }
 
-    public void setComType(String comType) {
-        this.comType = comType;
+    public void setComAdmin(String comAdmin) {
+        this.comAdmin = comAdmin;
     }
 
-    public String getIsJoinActivity() {
-        return isJoinActivity;
+    public String getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setIsJoinActivity(String isJoinActivity) {
-        this.isJoinActivity = isJoinActivity;
+    public void setRecordStatus(String recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     public String getCheckStatus() {
@@ -588,44 +322,12 @@ public class ServiceCompany implements Serializable {
         this.checkStatus = checkStatus;
     }
 
-    public Date getCheckTime() {
-        return checkTime;
+    public String getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCheckTime(Date checkTime) {
-        this.checkTime = checkTime;
-    }
-
-    public String getComSource() {
-        return comSource;
-    }
-
-    public void setComSource(String comSource) {
-        this.comSource = comSource;
-    }
-
-    public String getAffiliatedPark() {
-        return affiliatedPark;
-    }
-
-    public void setAffiliatedPark(String affiliatedPark) {
-        this.affiliatedPark = affiliatedPark;
-    }
-
-    public String getAffiliatedName() {
-        return affiliatedName;
-    }
-
-    public void setAffiliatedName(String affiliatedName) {
-        this.affiliatedName = affiliatedName;
-    }
-
-    public String getBrowseNumber() {
-        return browseNumber;
-    }
-
-    public void setBrowseNumber(String browseNumber) {
-        this.browseNumber = browseNumber;
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
     }
 
     public String getCreatorAccount() {
@@ -636,36 +338,12 @@ public class ServiceCompany implements Serializable {
         this.creatorAccount = creatorAccount;
     }
 
-    public String getModifierAccount() {
-        return modifierAccount;
+    public String getComId() {
+        return comId;
     }
 
-    public void setModifierAccount(String modifierAccount) {
-        this.modifierAccount = modifierAccount;
-    }
-
-    public Date getCreatedTime() {
-        return createdTime;
-    }
-
-    public void setCreatedTime(Date createdTime) {
-        this.createdTime = createdTime;
-    }
-
-    public Date getModifiedTime() {
-        return modifiedTime;
-    }
-
-    public void setModifiedTime(Date modifiedTime) {
-        this.modifiedTime = modifiedTime;
-    }
-
-    public Byte getRecordStatus() {
-        return recordStatus;
-    }
-
-    public void setRecordStatus(Byte recordStatus) {
-        this.recordStatus = recordStatus;
+    public void setComId(String comId) {
+        this.comId = comId;
     }
 
     @Override
@@ -674,65 +352,36 @@ public class ServiceCompany implements Serializable {
                 "id='" + id + '\'' +
                 ", comName='" + comName + '\'' +
                 ", comNameShort='" + comNameShort + '\'' +
-                ", avatar='" + avatar + '\'' +
-                ", comAdmin='" + comAdmin + '\'' +
-                ", unifyCode='" + unifyCode + '\'' +
-                ", owners='" + owners + '\'' +
-                ", ownerLaw='" + ownerLaw + '\'' +
-                ", ownerId='" + ownerId + '\'' +
-                ", ownerPhone='" + ownerPhone + '\'' +
-                ", ownerWechat='" + ownerWechat + '\'' +
-                ", ownerQq='" + ownerQq + '\'' +
-                ", bankName='" + bankName + '\'' +
-                ", bankAccount='" + bankAccount + '\'' +
-                ", products='" + products + '\'' +
-                ", material='" + material + '\'' +
-                ", comProperty='" + comProperty + '\'' +
-                ", regCapital=" + regCapital +
-                ", addCapital='" + addCapital + '\'' +
-                ", comScale='" + comScale + '\'' +
-                ", foundingTime=" + foundingTime +
-                ", runTime=" + runTime +
                 ", induType='" + induType + '\'' +
-                ", induCode='" + induCode + '\'' +
-                ", businessLicense='" + businessLicense + '\'' +
-                ", propagandaPicture='" + propagandaPicture + '\'' +
-                ", licStarttime=" + licStarttime +
-                ", licEndtime=" + licEndtime +
-                ", registerType='" + registerType + '\'' +
-                ", orgCode='" + orgCode + '\'' +
-                ", mainProducts='" + mainProducts + '\'' +
-                ", businessScope='" + businessScope + '\'' +
-                ", contact='" + contact + '\'' +
-                ", conPhone='" + conPhone + '\'' +
-                ", conWechat='" + conWechat + '\'' +
-                ", conQq='" + conQq + '\'' +
-                ", conAddress='" + conAddress + '\'' +
-                ", postcode='" + postcode + '\'' +
+                ", ownerLaw='" + ownerLaw + '\'' +
+                ", ownerPhone='" + ownerPhone + '\'' +
+                ", foundingTime='" + foundingTime + '\'' +
+                ", runTime='" + runTime + '\'' +
                 ", comAddress='" + comAddress + '\'' +
+                ", addrPark='" + addrPark + '\'' +
                 ", comTele='" + comTele + '\'' +
+                ", regCapital='" + regCapital + '\'' +
+                ", comScale='" + comScale + '\'' +
+                ", unifyCode='" + unifyCode + '\'' +
+                ", comSource='" + comSource + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", businessLicense='" + businessLicense + '\'' +
                 ", comWeb='" + comWeb + '\'' +
                 ", comServer='" + comServer + '\'' +
                 ", comDemand='" + comDemand + '\'' +
-                ", addrPark='" + addrPark + '\'' +
-                ", comSynopsis='" + comSynopsis + '\'' +
-                ", parkBuildId='" + parkBuildId + '\'' +
-                ", parkBuildName='" + parkBuildName + '\'' +
-                ", creditPoints=" + creditPoints +
-                ", creditUpdateTime=" + creditUpdateTime +
-                ", comType='" + comType + '\'' +
-                ", isJoinActivity='" + isJoinActivity + '\'' +
-                ", checkStatus='" + checkStatus + '\'' +
-                ", checkTime=" + checkTime +
-                ", comSource='" + comSource + '\'' +
                 ", affiliatedPark='" + affiliatedPark + '\'' +
-                ", affiliatedName='" + affiliatedName + '\'' +
-                ", browseNumber='" + browseNumber + '\'' +
+                ", comProperty='" + comProperty + '\'' +
+                ", comSynopsis='" + comSynopsis + '\'' +
+                ", propagandaPicture='" + propagandaPicture + '\'' +
+                ", mainProducts='" + mainProducts + '\'' +
+                ", creditPoints='" + creditPoints + '\'' +
+                ", creditUpdateTime='" + creditUpdateTime + '\'' +
+                ", comAdmin='" + comAdmin + '\'' +
+                ", recordStatus='" + recordStatus + '\'' +
+                ", checkStatus='" + checkStatus + '\'' +
+                ", createdTime='" + createdTime + '\'' +
                 ", creatorAccount='" + creatorAccount + '\'' +
-                ", modifierAccount='" + modifierAccount + '\'' +
-                ", createdTime=" + createdTime +
-                ", modifiedTime=" + modifiedTime +
-                ", recordStatus=" + recordStatus +
+                ", comId='" + comId + '\'' +
                 '}';
     }
 }

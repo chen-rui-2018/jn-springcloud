@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import { setToken, setUserInfo } from '@/util/auth'
 export default {
   data() {
     return {
@@ -61,29 +62,19 @@ export default {
         },
         dataFlag: false,
         callback: function(res) {
-          if (res.code == "0000") {
-            sessionStorage.token = res.data;
-            sessionStorage.setItem("account", _this.loginform.account);
+          if (res.code === "0000") {
+            setToken(res.data);
             _this.api.get({
               url: "getUserPersonInfo",
-              data: {
-                account: _this.loginform.account
-              },
-              dataFlag: false,
               callback: function(res) {
                 if (res.code === "0000") {
-                  sessionStorage.setItem("userInfo", JSON.stringify(res.data));
+                  setUserInfo(JSON.stringify(res.data))
                   _this.$router.push({
-                    // path: "/home",
-                    path: window.sessionStorage.getItem("PresetRoute")
-                    // query: { account: _this.loginform.account }
+                    path: window.sessionStorage.getItem("PresetRoute") || '/'
                   });
-                } else {
-                  _this.$message.error(res.result);
                 }
               }
-            });
-            // _this.api.setToken(res.data);
+            })
           } else {
             _this.$message.error(res.result);
           }

@@ -96,31 +96,59 @@ export default {
     },
     // 弹出选择机构对话框
     checkOrganization(item) {
-      if (item.label === "服务专员认证") {
+      if (
+        item.label === "投资人认证" ||
+        item.label === "服务专员认证" ||
+        item.label === "服务机构认证" ||
+        item.label === "升级员工" ||
+        item.label === "升级企业"
+      ) {
         this.api.get({
-          url: "getUserApprovalStatus",
-          // data: { orgName: "" },
+          url: "getJoinParkStatus",
           callback: res => {
+            console.log(res);
             if (res.code == "0000") {
-              console.log(res);
-              if (res.data.approvalDesc === "未认证") {
-                this.orgArr = [];
-                this.organizationForm.orgName = "";
-                this.organizationForm.orgId = "";
-                this.centerDialogVisible = true;
-                this.query();
-              } else if(res.data.approvalDesc === "认证不通过"){
-                 this.$router.push({ path: item.path });
-              }else{
-                 this.$router.push({ path: item.path,query:{ isConceal:'1'} });//是否隐藏发送按钮
-                // this.$router.push({ path: item.path ,query});
+              if (res.data.code !== "0") {
+                this.$message.error(res.data.message);
+                return false;
+              } else {
+                if (item.label === "服务专员认证") {
+                  this.api.get({
+                    url: "getUserApprovalStatus",
+                    callback: res => {
+                      if (res.code == "0000") {
+                        if (
+                          res.data.approvalDesc === "未认证" ||
+                          res.data.approvalDesc === "认证不通过"
+                        ) {
+                          this.orgArr = [];
+                          this.organizationForm.orgName = "";
+                          this.organizationForm.orgId = "";
+                          this.centerDialogVisible = true;
+                          this.query();
+                        } else {
+                          this.$router.push({
+                            path: item.path,
+                            query: { isConceal: "1" }
+                          }); //是否隐藏发送按钮
+                          // this.$router.push({ path: item.path ,query});
+                        }
+                      } else {
+                        this.$message.error(res.result);
+                      }
+                    }
+                  });
+                } else {
+                  this.$router.push({ path: item.path });
+                }
               }
             } else {
               this.$message.error(res.result);
+              return false;
             }
           }
         });
-      } else {
+      }else{
         this.$router.push({ path: item.path });
       }
     },
@@ -134,7 +162,7 @@ export default {
             query: {
               orgId: this.organizationForm.orgId,
               businessArea: this.businessArea,
-              approvalDesc:'未认证'
+              approvalDesc: "未认证"
             }
           });
         } else {

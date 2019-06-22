@@ -110,7 +110,11 @@
         <!--对账用户通知表-->
         <!-- <table tableName="tb_pay_reconciliation_notice_user" ></table>-->
         <!--对账标识表-->
-        <table tableName="tb_pay_reconciliation_ident" ></table>
+        <!-- <table tableName="tb_pay_reconciliation_ident" ></table>-->
+         <!--对账接口表-->
+        <table tableName="tb_pay_reconciliation_interface" ></table>
+
+
     </context>
 
 

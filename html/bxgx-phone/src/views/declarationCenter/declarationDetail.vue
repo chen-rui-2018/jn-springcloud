@@ -27,19 +27,20 @@
             <span>附件: 暂无</span>
           </a>
         </div>
-        <div v-else  class="accessory" v-for="(item,index) in fileList" :key="index">
-          <a :href="item.filePath">
-            <span>附件{{item.fileName}}</span>
+        <div v-else  class="accessory" v-for="(item,index) in fileList" :key="index" @click="download(item.filePath)">
+          <!-- <a :href="item.filePath"> {{item.fileName}}-->
+            <span>附件：{{item.fileName}}</span>
             <span>下载<i class="iconfont icon-jiantou"></i></span>
-          </a>
+          <!-- </a> -->
         </div>
       </div>
-      <div class="declaration_consult" @click="$router.push({path: '/guest/pd/consult'})"> 咨询 </div>
+      <div class="declaration_consult" @click="goConsult" v-if="isShow===1">预约申报</div>
     </div>
   </div>
 </div>
 </template>
 <script>
+import axios from 'axios'
 export default {
   data () {
     return {
@@ -52,9 +53,10 @@ export default {
   filters: {
     time (time) {
       if (time) {
-        // return time.split("T")[0]
-        let dateee = new Date(time).toJSON()
-        return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+        let timeArr = time.split('.')[0].split('T')
+        return timeArr[0] + ' ' + timeArr[1]
+        /* let dateee = new Date(time).toJSON()
+        return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '') */
       }
     }
   },
@@ -64,7 +66,6 @@ export default {
       this.isShow = this.$route.query.isShow
     }
     this.getDetail()
-    this.addView()
   },
   methods: {
     getDetail () {
@@ -76,23 +77,52 @@ export default {
             this.detailData = res.data
             if (res.data.fileUrl !== '') {
               this.fileList = JSON.parse(res.data.fileUrl)
+            } else {
+              this.$vux.toast.text(res.result)
             }
           }
         }
       })
     },
-    addView () {
+    download (item) {
+      axios.get(`${this.api.host}${this.api.apiURL.downLoadAttachment}`, {
+        params: {
+          title: item.title,
+          url: item.url
+        },
+        headers: {
+          token: sessionStorage.token
+        }
+      })
+        .then(res => {
+          window.location.href = res.request.responseURL
+        })
+    },
+    goConsult () {
+      let myDate = new Date()
+      let myDateStr = myDate.getFullYear() + '' + (myDate.getMonth() + 1 > 10 ? myDate.getMonth() + 1 : '0' + (myDate.getMonth() + 1)) + '' + myDate.getDate() + '' + (myDate.getHours() > 10 ? myDate.getHours() : '0' + myDate.getHours()) + (myDate.getMinutes() > 10 ? myDate.getMinutes() : '0' + myDate.getMinutes()) + (myDate.getSeconds() > 10 ? myDate.getSeconds() : '0' + myDate.getSeconds())
+      let time = new Date(this.detailData.preliminaryDeadline).toJSON()
+      let deadline = new Date(+new Date(time) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '').replace(/[^0-9]/ig, '')
       this.api.get({
-        url: 'trafficVolume',
-        data: {id: this.id},
-        callback: res => {
+        url: 'getUserExtension',
+        data: { },
+        callback: (res) => {
           if (res.code === '0000') {
-            // this.detailData = res.data
+            if (res.data.roleCode === 'COM_ADMIN' || res.data.roleCode === 'COM_CONTACTS') {
+              if (myDateStr < deadline) {
+                this.$router.push({path: '/guest/pd/consult', query: {id: this.id, title: this.detailData.titleName}})
+              } else {
+                this.$vux.toast.text('您申报的项目已经截止', 'middle')
+              }
+            } else {
+              this.$vux.toast.text('只有企业管理员和企业联系人才可以进行预约申报！！')
+            }
+          } else {
+            this.$vux.toast.text(res.result)
           }
         }
       })
     }
-
   }
 }
 </script>
@@ -188,17 +218,11 @@ export default {
           padding-bottom: 10px;
         }
         .accessory{
-          a{
             display: flex;
             justify-content: space-between;
             font-size: 26px;
             border-bottom: 2px solid #efefef;
             color:#333333;
-          }
-          a:visited{
-            text-decoration: none;
-            color:#333333;
-          }
           &:last-child{
             border-bottom: none;
           }
@@ -209,6 +233,12 @@ export default {
           span:nth-child(2){
             color:#999999;
             font-size: 22px;
+          }
+          span:nth-child(1){
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            width: 77%;
           }
         }
       }

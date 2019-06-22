@@ -143,8 +143,8 @@
             // 格式化表头设置key对应指标上otherColumn的数据
             this.formatColumn(tab)
             // 把otherColumns的对象根据指标id挂载到树形指标上面
-            this.formatTreeOtherColumnData(tab)
-            this.sortTree(tab.targetList, 'orderNumber')
+            // this.formatTreeOtherColumnData(tab)
+            // this.sortTree(tab.targetList, 'orderNumber')
           }
         })
       },
@@ -183,25 +183,25 @@
           value: 'inputFormatModel',
           width: !this.isMobile ? 600 : ''
         })
-        if (!this.isMobile) {
-          if (tab.hasOwnProperty('otherColumn')) {
-            for (const key in tab.otherColumn) {
-              if (tab.otherColumn.hasOwnProperty(key) && key) {
-                let text
-                if (key.length === 6) {
-                  text = key.substring(0, 4) + '年' + key.substring(4, 6) + '月'
-                } else {
-                  text = key + '年'
-                }
-                tab.columns.push({
-                  text: text,
-                  value: key,
-                  width: 160
-                })
-              }
-            }
-          }
-        }
+        // if (!this.isMobile) {
+        //   if (tab.hasOwnProperty('otherColumn')) {
+        //     for (const key in tab.otherColumn) {
+        //       if (tab.otherColumn.hasOwnProperty(key) && key) {
+        //         let text
+        //         if (key.length === 6) {
+        //           text = key.substring(0, 4) + '年' + key.substring(4, 6) + '月'
+        //         } else {
+        //           text = key + '年'
+        //         }
+        //         tab.columns.push({
+        //           text: text,
+        //           value: key,
+        //           width: 160
+        //         })
+        //       }
+        //     }
+        //   }
+        // }
       },
       changeDepartment(el) {
         this.loadingTab = true
@@ -246,14 +246,12 @@
           for (const key in otherColumn) {
             if (otherColumn.hasOwnProperty(key) && key) {
               this.$set(target, key, [])
-              if (otherColumn[key]) {
-                for (const column of otherColumn[key]) {
-                  if (target.id === column.targetId) {
-                    target[key].push({
-                      value: column.value || '-',
-                      label: column.formName
-                    })
-                  }
+              for (const column of otherColumn[key]) {
+                if (target.id === column.targetId) {
+                  target[key].push({
+                    value: column.value || '-',
+                    label: column.formName
+                  })
                 }
               }
             }

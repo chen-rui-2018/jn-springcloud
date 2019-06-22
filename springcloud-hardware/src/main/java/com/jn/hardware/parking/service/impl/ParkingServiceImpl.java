@@ -389,7 +389,8 @@ public class ParkingServiceImpl implements ParkingService {
                 if(doorCarInParkingParam.getCarinlist()!=null) {
                     String  inString = doorCarInParkingParam.getCarinlist().replaceAll(ParkingCompanyEnum.REPLACE_ALL.getCode(),"\"");
                     inString = inString.replaceAll(ParkingCompanyEnum.REPLACE_PAY_DATE_U.getCode(),ParkingCompanyEnum.REPLACE_PAY_DATE_L.getCode());
-                    logger.info("\n转换完成后的出场信息字符串inString:"+inString);
+                    inString = inString.replaceAll(ParkingCompanyEnum.REPLACE_ALL_SLASH.getCode(),"\\\\\\\\");
+                    logger.info("\n转换完成后的入场信息字符串inString:"+inString);
                     list = JsonStringToObjectUtil.jsonToObject(inString, new TypeReference<List<DoorCarInParkingShow>>() {});
                 }
                 info.setCarinlist(list);
@@ -414,7 +415,9 @@ public class ParkingServiceImpl implements ParkingService {
                 logger.info("\n车场入场信息录入失败，失败原因：{}",ParkingExceptionEnum.DOOR_CAR_PARKING_SIGNNATURE.getMessage());
             }
         }catch (Exception e){
-            logger.info("车场入场信息录入失败，失败原因：{}");
+            doorResult.getHead().setStatus(e.getMessage());
+            doorResult.getHead().setMessage(e.getMessage());
+            logger.info("车场入场信息录入失败，失败原因：{}"+e.getMessage());
             e.printStackTrace();
         }
         return doorResult;
@@ -441,7 +444,8 @@ public class ParkingServiceImpl implements ParkingService {
 
                     String  outString = doorCarOutParkingParam.getCaroutlist().replaceAll(ParkingCompanyEnum.REPLACE_ALL.getCode(),"\"");
                     outString = outString.replaceAll(ParkingCompanyEnum.REPLACE_PAY_DATE_U.getCode(),ParkingCompanyEnum.REPLACE_PAY_DATE_L.getCode());
-                    logger.info("\n转换完成后的出场信息字符串inString:"+outString);;
+                    outString = outString.replaceAll(ParkingCompanyEnum.REPLACE_ALL_SLASH.getCode(),"\\\\\\\\");
+                    logger.info("\n转换完成后的出场信息字符串inString:"+outString);
                     list = JsonStringToObjectUtil.jsonToObject(outString, new TypeReference<List<DoorCarOutParkingShow>>() {});
                 }
                 info.setParkId(parkId);
@@ -467,7 +471,9 @@ public class ParkingServiceImpl implements ParkingService {
                 logger.info("\n车场出场信息录入失败，失败原因：{}",ParkingExceptionEnum.DOOR_CAR_PARKING_SIGNNATURE.getMessage());
             }
         }catch (Exception e){
-            logger.info("车场出场信息录入失败，失败原因：{}");
+            doorResult.getHead().setStatus(e.getMessage());
+            doorResult.getHead().setMessage(e.getMessage());
+            logger.info("车场出场信息录入失败，失败原因：{}"+e.getMessage());
             e.printStackTrace();
         }
 

@@ -260,6 +260,7 @@ public class MeterRulesServiceImpl implements MeterRulesService {
         rules.setCreatorAccount(user.getAccount());
         rules.setRuleName(priceRuleVO.getRuleName());
         rules.setRuleDesc(priceRuleVO.getRuleDesc());
+        rules.setIsDefaultUse(priceRuleVO.getIsDefaultUse());
         priceRulesMapper.insertSelective(rules);
 
         //保存规则
@@ -413,12 +414,12 @@ public class MeterRulesServiceImpl implements MeterRulesService {
         Integer result = 0;
         //通过id作废之前的数据，并获取出其关系进行重新关联
         TbElectricPriceruleCompany record = new TbElectricPriceruleCompany();
-        record.setRecordStatus(new Byte(MeterConstants.VALID));
+        record.setRecordStatus(new Byte(MeterConstants.INVALID));
         TbElectricPriceruleCompanyCriteria priceruleCompanyCriteria = new TbElectricPriceruleCompanyCriteria();
         priceruleCompanyCriteria.or().andRecordStatusEqualTo(new Byte(MeterConstants.VALID))
                 .andIdEqualTo(id);
         List<TbElectricPriceruleCompany> records = priceruleCompanyMapper.selectByExample(priceruleCompanyCriteria);
-        priceruleCompanyCriteria.or().andRecordStatusEqualTo(new Byte(MeterConstants.INVALID))
+        priceruleCompanyCriteria.or().andRecordStatusEqualTo(new Byte(MeterConstants.VALID))
                 .andIdEqualTo(id);
         priceruleCompanyMapper.updateByExampleSelective(record, priceruleCompanyCriteria);
 

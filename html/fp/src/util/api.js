@@ -1,6 +1,6 @@
 ﻿import axios from "axios"
 import { BASE_URL } from './url'
-import { getToken, setToken, removeToken, removeUserInfo, getIbpsToken } from '@/util/auth'
+import { getToken, setToken, removeToken, removeUserInfo, getIbpsToken, removeIbpsToken } from '@/util/auth'
 
 axios.defaults.withCredentials = true // 让ajax携带cookie
 const verifyToken = () => {
@@ -275,6 +275,7 @@ export default {
         getDataStatistics:"springcloud-enterprise/guest/MarketIndexController/getDataStatistics",//获取企业，机构，活动，服务专员数量
         queryOnlineInfo:"springcloud-enterprise/pd/online/queryOnlineInfo",//通过公告ID和登录人查询预约信息
         integrationList:"springcloud-park/guest/park/notice/web/integrationList",//PC端整合接口
+        getIndustryForMarket:"springcloud-enterprise/guest/serviceMarket/industryManage/getIndustryForMarket",//PC端整合接口
     },
     setToken: function (obj) {   //设置token在请求头上面
         // axios.interceptors.request.use(function (config) {
@@ -312,6 +313,7 @@ export default {
                 if(response.data.code == "index"){
                   removeToken()
                   removeUserInfo()
+                  removeIbpsToken()
                   location.href="#/";
                   return
                 }
@@ -392,6 +394,7 @@ export default {
                 if(response.data.code == "index"){
                   removeToken()
                   removeUserInfo()
+                  removeIbpsToken()
                   location.href="#login";
                   return
                 }

@@ -23,7 +23,7 @@ export default {}
     background-color: #fff;
     align-items: stretch;
     .target-frame-l {
-      max-height: 500px;
+      max-height: 700px;
       overflow: auto;
       width: 30%;
       padding: 10px;

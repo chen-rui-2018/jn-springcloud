@@ -5,7 +5,7 @@
   align-items: center;
 }
 
-@mixin flex ($h:center, $v:center, $d:colum) {
+@mixin flex ($h:center, $v:center, $d: row) {
   display: flex;
   justify-content: $h;
   align-items: $v;

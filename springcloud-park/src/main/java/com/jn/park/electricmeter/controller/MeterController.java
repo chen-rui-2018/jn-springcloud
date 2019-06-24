@@ -3,6 +3,7 @@ package com.jn.park.electricmeter.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.company.model.ServiceCompany;
+import com.jn.hardware.api.ElectricMeterClient;
 import com.jn.park.electricmeter.model.*;
 import com.jn.park.electricmeter.service.MeterCalcCostService;
 import com.jn.park.electricmeter.service.MeterRulesService;
@@ -42,8 +43,8 @@ public class MeterController extends BaseController {
     private MeterRulesService meterRulesService;
     @Autowired
     private MeterCalcCostService meterCalcCostService;
-
-
+    @Autowired
+    private ElectricMeterClient electricMeterClient;
 
     private static Logger logger = LoggerFactory.getLogger(MeterTimerController.class);
 
@@ -187,9 +188,9 @@ public class MeterController extends BaseController {
             @ApiImplicitParam(name = "companyId" ,value = "企业id",type = "String" ,example = "1",required = true),
             @ApiImplicitParam(name = "day" ,value = "计算日期",type = "Date" ,example = "1",required = true)
     })
-    public Result calcCostEverdayByHandler(String companyId,Date day){
+    public Result calcCostEverdayByHandler(@RequestBody CompanyFailModelParam param){
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        return meterCalcCostService.calcCostEverdayByHandler( user,  companyId,  day);
+        return meterCalcCostService.calcCostEverdayByHandler( user,  param.getCompanyId(),  param.getDay());
     }
 
     //电表业主维护
@@ -287,6 +288,22 @@ public class MeterController extends BaseController {
     public Result yearElectric(){
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         return meterService.yearElectric(user);
+    }
+
+
+
+    @ControllerLog(doAction = "查询电表的使用状态")
+    @ApiOperation(value = "查询电表的使用状态", notes = "查询电表的使用状态")
+    @GetMapping(path = "/getMeterStatus")
+    public Result getMeterStatus(String meterCode){
+        return electricMeterClient.getElectricMeterStatus(meterCode);
+    }
+
+    @ControllerLog(doAction = "通过电表号，日期，小时采集数据")
+    @ApiOperation(value = "通过电表号，日期，小时采集数据", notes = "通过电表号，日期，小时采集数据")
+    @GetMapping(path = "/dealAllFailByDealHourAndDealDateAndMeterCode")
+    public Result dealAllFailByDealHourAndDealDateAndMeterCode(Date dealDate,String dealHour,String meterCode){
+        return meterService.dealAllFailByDealHourAndDealDateAndMeterCode( dealDate,dealHour,meterCode);
     }
 
 }

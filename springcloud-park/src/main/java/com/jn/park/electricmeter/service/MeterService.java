@@ -135,5 +135,8 @@ public interface MeterService {
     Result yearElectric(User user);
 
 
-
+    /**
+     * 通过仪表号和日期，小时；重新采集数据
+     */
+    Result dealAllFailByDealHourAndDealDateAndMeterCode(Date dealDate,String dealHour,String meterCode);
 }

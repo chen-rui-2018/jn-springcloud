@@ -108,8 +108,12 @@ public class MeterServiceImpl implements MeterService {
                     //采集成功后，保存数据
                     ElectricOrWaterConditionShow showBeans= (ElectricOrWaterConditionShow)cResult.getData();
 
-                    List<ElectricMeterWaterOrElectricShow> dataList =showBeans.getData();
 
+                    if(showBeans == null ){
+                        saveFailLog(cResult,hour,dealDate);
+                        continue;
+                    }
+                    List<ElectricMeterWaterOrElectricShow> dataList =showBeans.getData();
                     logger.info("采集到的数据：{},批次号为：{},第{}表",dataList.toString(),taskBatch,index);
                     Result saveResult =  saveData(dataList,dealDate,  hour , taskBatch);
                     if(saveResult !=null  && saveResult.getCode().equals(GlobalConstants.SUCCESS_CODE)){
@@ -174,46 +178,57 @@ public class MeterServiceImpl implements MeterService {
                 collectionData = getDataFromHardwareByPage(parameter);
                 //如果采集到的数据，返回的是一次信息，也抛出异常
                 if(! collectionData.getCode().equals(GlobalConstants.SUCCESS_CODE)){
+                    throw new JnSpringCloudException(MeterExceptionEnums.COLLECTION_DATA_ISNOT_SUCCESS);
+                }
+
+                ElectricOrWaterConditionShow page= (ElectricOrWaterConditionShow) collectionData.getData();
+                if(page.getData() == null || page.getData().size()==0){
                     throw new JnSpringCloudException(MeterExceptionEnums.COLLECTION_DATA_ISNOT_EXIST);
                 }
             }catch(Exception e){
                 //没有采集成功就进行下一次循环
-
+                logger.info("采集异常,{}",e);
+                //不重试
                 //是否已经达到一定次数
-                if(loopGetData == MeterConstants.LOOP_NUM){
-                    result.setCode(MeterExceptionEnums.COLLECTION_DATA_DEAL_FAIL.getCode());
-                    result.setData(parameter.toString());
-                    result.setResult("数据采集失败！！！");
-                    break;
-                }
-                loopGetData+=1;
-                try{
-                    //失败后睡眠
-                    Thread.sleep(MeterConstants.SLEEP_TIME*loopGetData);
-                }catch (InterruptedException ex){
-                    e.printStackTrace();
-                }
-                continue;
+//                if(loopGetData == MeterConstants.LOOP_NUM){
+//                    result.setCode(MeterExceptionEnums.COLLECTION_DATA_DEAL_FAIL.getCode());
+//                    result.setData(parameter.toString());
+//                    result.setResult("数据采集失败！！！");
+//                    break;
+//                }
+
+ //               loopGetData+=1;
+//                try{
+//                    //失败后睡眠
+//                    Thread.sleep(MeterConstants.SLEEP_TIME*loopGetData);
+//                }catch (InterruptedException ex){
+//                    e.printStackTrace();
+//                }
+//                continue;
+                break;
             }
 
             //采集成功,处理数据到集合
             if(collectionData.getCode().equals(GlobalConstants.SUCCESS_CODE)){
                 //取出数据
                 ElectricOrWaterConditionShow page= (ElectricOrWaterConditionShow) collectionData.getData();
-                dataList.addAll(page.getData());
-                pageIndex +=1;
-                if(pageIndex>Integer.parseInt(page.getPages())){
-                    //数据采集完成，没有下一页了
-                    result.setCode(GlobalConstants.SUCCESS_CODE);
-                    ElectricOrWaterConditionShow showBean = new ElectricOrWaterConditionShow();
-                    showBean.setData(dataList);
-                    result.setData(showBean);
-                    result.setResult("数据采集成功！！！");
-                    isNotOver = false;
-                }else{
-                    //设置参数,下一页，
-                    parameter.setPage(pageIndex);
+                if(page.getData() != null && page.getData().size()>0){
+                    dataList.addAll(page.getData());
+                    pageIndex +=1;
+                    if(pageIndex>Integer.parseInt(page.getPages())){
+                        //数据采集完成，没有下一页了
+                        result.setCode(GlobalConstants.SUCCESS_CODE);
+                        ElectricOrWaterConditionShow showBean = new ElectricOrWaterConditionShow();
+                        showBean.setData(dataList);
+                        result.setData(showBean);
+                        result.setResult("数据采集成功！！！");
+                        isNotOver = false;
+                    }else{
+                        //设置参数,下一页，
+                        parameter.setPage(pageIndex);
+                    }
                 }
+
             }
         }
         return result;
@@ -410,6 +425,10 @@ public class MeterServiceImpl implements MeterService {
                 if (cResult != null && cResult.getCode().equals(GlobalConstants.SUCCESS_CODE)) {
                     //采集成功后，保存数据
                     ElectricOrWaterConditionShow showBeans = (ElectricOrWaterConditionShow) cResult.getData();
+
+                    if(showBeans == null){
+                        throw new JnSpringCloudException(MeterExceptionEnums.COLLECTION_DATA_ISNOT_EXIST);
+                    }
                     List<ElectricMeterWaterOrElectricShow> dataList = showBeans.getData();
                     logger.info("采集到的数据：{},批次号为：{},第{}表",dataList.toString(),taskBatch,index);
                     Result saveResult =  saveData(dataList,dealDate,  dealHour , taskBatch);
@@ -479,6 +498,10 @@ public class MeterServiceImpl implements MeterService {
                         if (cResult != null && cResult.getCode().equals(GlobalConstants.SUCCESS_CODE)) {
                             //采集成功后，保存数据
                             ElectricOrWaterConditionShow showBeans = (ElectricOrWaterConditionShow) cResult.getData();
+
+                            if(showBeans == null ){
+                                throw new JnSpringCloudException(MeterExceptionEnums.COLLECTION_DATA_ISNOT_EXIST);
+                            }
                             List<ElectricMeterWaterOrElectricShow> dataList = showBeans.getData();
                             logger.info("采集到的数据：{},批次号为：{},第{}表",dataList.toString(),taskBatch,index);
                             Result saveResult =  saveData(dataList,dealDate,  dealHour , taskBatch);
@@ -787,6 +810,71 @@ public class MeterServiceImpl implements MeterService {
         return newResult;
     }
 
+    /**
+     * 按照电表号采集数据
+     * @param dealDate
+     * @param dealHour
+     * @param meterCode
+     * @return
+     */
+    public Result dealAllFailByDealHourAndDealDateAndMeterCode(Date dealDate,String dealHour,String meterCode){
+        //检测这条数据是失败的数据
+        Result result = new Result();
+        String dealDateStr = DateUtils.formatDate(dealDate,"yyyy-MM-dd");
+        String startTime = "";
+        if(Integer.valueOf(dealHour) <10){
+            startTime=dealDateStr+" "+"0"+dealHour+":00:00";
+        }else {
+            startTime =dealDateStr+" "+dealHour+":00:00";
+        }
+        ElectricMeterDataCollectionParam parameter = getParameter();
+        parameter.setStartTime(startTime);
+        parameter.setCode(meterCode);
+        String taskBatch =UUID.randomUUID().toString().replaceAll("-","");
+        Result cResult = collectionData(parameter, dealDate, dealHour);
 
+        if (cResult != null && cResult.getCode().equals(GlobalConstants.SUCCESS_CODE)) {
+            //采集成功后，保存数据
+            ElectricOrWaterConditionShow showBeans = (ElectricOrWaterConditionShow) cResult.getData();
+
+            if(showBeans == null){
+                //throw new JnSpringCloudException(MeterExceptionEnums.COLLECTION_DATA_ISNOT_EXIST);
+                result.setData("采集的数据为空");
+                return result;
+            }
+            List<ElectricMeterWaterOrElectricShow> dataList = showBeans.getData();
+            logger.info("采集到的数据：{},批次号为：{},第{}表",dataList.toString(),taskBatch);
+            Result saveResult =  saveData(dataList,dealDate,  dealHour , taskBatch);
+            if(saveResult !=null  && saveResult.getCode().equals(GlobalConstants.SUCCESS_CODE)){
+                TbElectricReadingFailLog readingFailLog = new TbElectricReadingFailLog();
+                readingFailLog.setRecordStatus(new Byte(MeterConstants.INVALID));
+                readingFailLog.setStatus(new Byte(MeterConstants.SUCCESS));
+                try{
+                    updateData(taskBatch);
+                }catch(Exception e){
+                    logger.info("{}",e);
+                    logger.info("任务批次号为{}更新失败",taskBatch);
+                    result.setData("更新失败");
+                    return result;
+                }
+                TbElectricReadingFailLogCriteria failLogCriteria = new TbElectricReadingFailLogCriteria();
+                failLogCriteria.or().andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andStatusEqualTo(new Byte(MeterConstants.FAIL))
+                        .andDealDateEqualTo(dealDate).andDealHourEqualTo(new Byte(dealHour));
+                failLogMapper.updateByExampleSelective(readingFailLog, failLogCriteria);
+            }else if(saveResult.getCode().equals("0")){
+                logger.info("主键重复，已经正确入库了,编号为{}",meterCode);
+            }else {
+                result.setData("采集失败");
+                return result;
+            }
+
+        } else {
+            //不在记录日志
+            result.setData("采集失败");
+            return result;
+        }
+        result.setData(1);
+        return result;
+    }
 
 }

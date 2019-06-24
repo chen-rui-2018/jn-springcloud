@@ -95,4 +95,9 @@ public class MeterConstants {
      * 没电的状态
      */
     public final static String OBJ_TYPE="1";
+
+    /**
+     * 默认的计价规则
+     */
+    public final static String IS_DEFAULT_PRICE_RULE="1";
 }

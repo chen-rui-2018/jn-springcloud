@@ -1799,7 +1799,7 @@ public class DataUploadServiceImpl implements DataUploadService {
             logger.info("结束回调,返回结果，【{}】", dealyResult.toString());
 
             //插入朱成的逻辑
-            targetDao.insertDataUploadResultSet(fillId);
+            //targetDao.insertDataUploadResultSet(fillId);
 
         }else{
 
@@ -1830,7 +1830,7 @@ public class DataUploadServiceImpl implements DataUploadService {
                 tbDataReportingTaskMapper.updateByExampleSelective(taskUpdate,taskUpdateExamp);
 
                 //插入朱成的逻辑
-                targetDao.insertDataUploadResultSet(fillId);
+                //targetDao.insertDataUploadResultSet(fillId);
             }
         }
 

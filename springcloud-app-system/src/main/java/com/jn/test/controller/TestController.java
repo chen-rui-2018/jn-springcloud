@@ -83,7 +83,7 @@ public class TestController extends BaseController {
     private DownLoadClient downLoadClient;
     @RequestMapping(value = "/guest/test4")
     public Result<String> downLoad() {
-        DownLoad downLoad = new DownLoad("http://192.168.10.45:2020/group1/M00/00/00/wKgKLVwJHT2Abtp3AAQdy_tf4s4411.png",Boolean.TRUE);
+        DownLoad downLoad = new DownLoad("http://192.168.10.46:2020/group1/M00/00/00/wKgKLVwJHT2Abtp3AAQdy_tf4s4411.png",Boolean.TRUE);
         ResponseEntity<byte[]> responseEntity = this.downLoadClient.downLoad(downLoad);
         byte[] bytes = responseEntity.getBody();
         File dir = new File("D:\\test");

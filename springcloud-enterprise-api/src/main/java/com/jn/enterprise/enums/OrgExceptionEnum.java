@@ -40,6 +40,7 @@ public enum OrgExceptionEnum  implements CodeAndMsg {
     ORG_ID_IS_NOT_EXIST("5020527","机构id在系统中不存在"),
     ORG_DATA_MOVE_FAIL("5020528","迁移机构数据至机构表失败"),
     UPDATE_ACCOUNT_ORG_INFO_FAIL("5020529","更新用户所属机构信息失败"),
+    CURRENT_ACCOUNT_NOT_ALLOW_INVESTOR("5020530","当前用户已加入其它机构或企业，不能被邀请"),
     ;
 
     /**

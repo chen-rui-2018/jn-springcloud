@@ -706,6 +706,57 @@
 
     </select>
 
+    <select id="getUseDefualtPriceCompany"  parameterType="java.util.Date">
+            insert into tb_electric_pricerule_company_in_day
+            select
+            concat(CURDATE(),p.companyId),
+            t.id as rule_id,
+            t.rule_name asrule_name,
+            p.companyId as company_id,
+            #{ dealDate,jdbcType=DATE} day,
+            '1' as record_status,
+            'systemTimer' as creator_account,
+             SYSDATE() as created_time,
+            'systemTimer' modifier_account,
+            SYSDATE() as modified_time,
+            p.companyName as company_name
+            from (
+            SELECT
+                company_id as companyId,
+                company_name as companyName
+            FROM
+                tb_electric_meter_info
+            WHERE
+                company_id IN (
+                SELECT
+                    company_id
+                FROM
+                    tb_electric_meter_company_day
+                WHERE
+                    record_status = 1
+                    AND DAY =#{ dealDate,jdbcType=DATE}
 
+                    AND company_id != ''
+                    AND company_id IS NOT NULL
+                    AND company_id NOT IN ( SELECT company_id FROM tb_electric_pricerule_company_in_day WHERE record_status = 1 AND DAY =#{ dealDate,jdbcType=DATE} )	group by company_id
+                    )
+                GROUP BY
+                company_id,
+                company_name
+
+                ) p
+
+                left join (
+                select rule_name,
+                rule_desc,
+                record_status,
+                creator_account,
+                created_time,
+                modifier_account,
+                modified_time,
+                is_default_use
+                from tb_electric_price_rules t where t.is_default_use=1
+                )  t on 1=1
+    </select>
 
 </mapper>

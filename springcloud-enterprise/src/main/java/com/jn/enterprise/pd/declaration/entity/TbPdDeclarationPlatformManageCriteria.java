@@ -655,6 +655,136 @@ public class TbPdDeclarationPlatformManageCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andIsTalentServiceIsNull() {
+            addCriterion("is_talent_service is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsTalentServiceIsNotNull() {
+            addCriterion("is_talent_service is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsTalentServiceEqualTo(String value) {
+            addCriterion("is_talent_service =", value, "isTalentService");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsTalentServiceNotEqualTo(String value) {
+            addCriterion("is_talent_service <>", value, "isTalentService");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsTalentServiceGreaterThan(String value) {
+            addCriterion("is_talent_service >", value, "isTalentService");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsTalentServiceGreaterThanOrEqualTo(String value) {
+            addCriterion("is_talent_service >=", value, "isTalentService");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsTalentServiceLessThan(String value) {
+            addCriterion("is_talent_service <", value, "isTalentService");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsTalentServiceLessThanOrEqualTo(String value) {
+            addCriterion("is_talent_service <=", value, "isTalentService");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsTalentServiceLike(String value) {
+            addCriterion("is_talent_service like", value, "isTalentService");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsTalentServiceNotLike(String value) {
+            addCriterion("is_talent_service not like", value, "isTalentService");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsTalentServiceIn(List<String> values) {
+            addCriterion("is_talent_service in", values, "isTalentService");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsTalentServiceNotIn(List<String> values) {
+            addCriterion("is_talent_service not in", values, "isTalentService");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsTalentServiceBetween(String value1, String value2) {
+            addCriterion("is_talent_service between", value1, value2, "isTalentService");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsTalentServiceNotBetween(String value1, String value2) {
+            addCriterion("is_talent_service not between", value1, value2, "isTalentService");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortIsNull() {
+            addCriterion("sort is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortIsNotNull() {
+            addCriterion("sort is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortEqualTo(Integer value) {
+            addCriterion("sort =", value, "sort");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortNotEqualTo(Integer value) {
+            addCriterion("sort <>", value, "sort");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortGreaterThan(Integer value) {
+            addCriterion("sort >", value, "sort");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortGreaterThanOrEqualTo(Integer value) {
+            addCriterion("sort >=", value, "sort");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortLessThan(Integer value) {
+            addCriterion("sort <", value, "sort");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortLessThanOrEqualTo(Integer value) {
+            addCriterion("sort <=", value, "sort");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortIn(List<Integer> values) {
+            addCriterion("sort in", values, "sort");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortNotIn(List<Integer> values) {
+            addCriterion("sort not in", values, "sort");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortBetween(Integer value1, Integer value2) {
+            addCriterion("sort between", value1, value2, "sort");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortNotBetween(Integer value1, Integer value2) {
+            addCriterion("sort not between", value1, value2, "sort");
+            return (Criteria) this;
+        }
+
         public Criteria andRecordStatusIsNull() {
             addCriterion("record_status is null");
             return (Criteria) this;

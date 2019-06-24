@@ -159,23 +159,11 @@
             </li>
           </ul> -->
         </div>
-        <!-- <div class="parkInfo w">
+        <div class="parkInfo w">
           <ul class="infoUl">
-            <li>
-              <img src="@/../static/img1/diqiu.png" alt="">
-              <p class="color3">地理优势</p>
-            </li>
-            <li>
-              <img src="@/../static/img1/guihuasheji.png" alt="">
-              <p class="color3">规划定位</p>
-            </li>
-            <li>
-              <img src="@/../static/img1/qiyexinxiguanli_huaban.png" alt="">
-              <p class="color3">基础设施</p>
-            </li>
-            <li>
-              <img src="@/../static/img1/xiaochengxu.png" alt="">
-              <p class="color3">招商优势</p>
+            <li v-for="(i,k) in advantages" :key="k" @click="$router.push({path:'/parkAdvantage',query:{activeName:i.actiName}})">
+              <img :src='"@/../static/img1/"+i.id+".png"' alt="">
+              <p class="color3">{{i.name}}</p>
             </li>
           </ul>
           <div class="infoMes">
@@ -196,7 +184,7 @@
               </span>
             </div>
           </div>
-        </div> -->
+        </div>
       </div>
     </div>
     <div class="enterpriseList w">
@@ -270,6 +258,12 @@ export default {
         { id: "biomedicine", name: "生物医药" },
         { id: "new_materials_energy", name: "新材料与新能源" },
         { id: "intelligence_equipment", name: "智能制造与高端装备制造" }
+      ],
+      advantages: [
+        { id: "diqiu", name: "地理优势",actiName:'1' },
+        { id: "guihuasheji", name: "规划定位",actiName:'2' },
+        { id: "qiyexinxiguanli_huaban", name: "基础设施" ,actiName:'3'},
+        { id: "xiaochengxu", name: "招商优势" ,actiName:'4'}
       ],
       enterpriseList: [],
       noticeList: [],

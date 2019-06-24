@@ -36,7 +36,7 @@
               </li>
               <!-- <li>
                 <router-link to="/compassView" class="router-link" :class="{'ru-active':$route.path == '/compassView'}">行政审批</router-link>
-              </!--> 
+              </li>  -->
               <!-- <li>
                 <router-link to="/investment" class="router-link" :class="{'ru-active':$route.path == '/investment'}">招商引资</router-link>
               </li> -->

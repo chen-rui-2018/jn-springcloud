@@ -52,7 +52,7 @@
           <i class="el-icon-arrow-right"></i>
         </div>
         <el-tabs v-model="activeName" @tab-click="handleClick">
-          <el-tab-pane label="园区资讯" name="first">
+          <el-tab-pane label="资讯中心" name="first">
             <div class="noticeList">
               <ul>
                 <li class="noticeLi pointer" v-if="k<4" v-for="(i,k) in noticeList" :key="k" @click="$router.push({path:'/announcementDetails',query:{noticeId:i.id}})">

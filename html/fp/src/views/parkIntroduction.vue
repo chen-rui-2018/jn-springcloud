@@ -311,7 +311,7 @@ export default {
           }
           .liBerif {
             margin: 20px 0;
-            height: 35px;
+            height: 38px;
             // display: -webkit-box;
             // -webkit-box-orient: vertical;
             // -webkit-line-clamp: 2;
@@ -322,6 +322,7 @@ export default {
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 2;
             overflow: hidden;
+            font-size: 14px;
           }
           .liDetail {
             padding: 8px 20px;

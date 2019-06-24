@@ -554,17 +554,17 @@ export default {
         this.warnerOptions = data.data.map(item => ({ id: item.id, label: item.creatorAccount }))
       })
     },
-    sortTree(tree, keys2) {
+    sortTree(tree, keys) {
       for (let i = 0, length = tree.length; i < length; i++) {
         for (let j = i + 1; j < length; j++) {
-          if (Number(tree[i][keys2]) > Number(tree[j][keys2])) {
+          if (Number(tree[i][keys]) > Number(tree[j][keys])) {
             const temp = tree[j]
             tree[j] = tree[i]
             tree[i] = temp
           }
         }
         if (tree[i].hasOwnProperty('children') && tree[i].children && tree[i].children.length > 0) {
-          this.sortTree(tree[i].children, keys2)
+          this.sortTree(tree[i].children, keys)
         }
       }
     },

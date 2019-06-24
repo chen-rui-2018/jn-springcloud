@@ -6,6 +6,8 @@ import java.util.Date;
 public class TbServiceOrgTemp implements Serializable {
     private String orgId;
 
+    private String originalId;
+
     private String orgAccount;
 
     private String orgName;
@@ -66,6 +68,14 @@ public class TbServiceOrgTemp implements Serializable {
 
     public void setOrgId(String orgId) {
         this.orgId = orgId == null ? null : orgId.trim();
+    }
+
+    public String getOriginalId() {
+        return originalId;
+    }
+
+    public void setOriginalId(String originalId) {
+        this.originalId = originalId == null ? null : originalId.trim();
     }
 
     public String getOrgAccount() {
@@ -289,6 +299,7 @@ public class TbServiceOrgTemp implements Serializable {
         }
         TbServiceOrgTemp other = (TbServiceOrgTemp) that;
         return (this.getOrgId() == null ? other.getOrgId() == null : this.getOrgId().equals(other.getOrgId()))
+            && (this.getOriginalId() == null ? other.getOriginalId() == null : this.getOriginalId().equals(other.getOriginalId()))
             && (this.getOrgAccount() == null ? other.getOrgAccount() == null : this.getOrgAccount().equals(other.getOrgAccount()))
             && (this.getOrgName() == null ? other.getOrgName() == null : this.getOrgName().equals(other.getOrgName()))
             && (this.getOrgRegisterTime() == null ? other.getOrgRegisterTime() == null : this.getOrgRegisterTime().equals(other.getOrgRegisterTime()))
@@ -322,6 +333,7 @@ public class TbServiceOrgTemp implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getOrgId() == null) ? 0 : getOrgId().hashCode());
+        result = prime * result + ((getOriginalId() == null) ? 0 : getOriginalId().hashCode());
         result = prime * result + ((getOrgAccount() == null) ? 0 : getOrgAccount().hashCode());
         result = prime * result + ((getOrgName() == null) ? 0 : getOrgName().hashCode());
         result = prime * result + ((getOrgRegisterTime() == null) ? 0 : getOrgRegisterTime().hashCode());
@@ -358,6 +370,7 @@ public class TbServiceOrgTemp implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", orgId=").append(orgId);
+        sb.append(", originalId=").append(originalId);
         sb.append(", orgAccount=").append(orgAccount);
         sb.append(", orgName=").append(orgName);
         sb.append(", orgRegisterTime=").append(orgRegisterTime);

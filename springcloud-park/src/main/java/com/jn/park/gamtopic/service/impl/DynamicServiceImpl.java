@@ -454,7 +454,11 @@ public class DynamicServiceImpl implements DynamicService {
                 for(UserExtensionInfo user : userList){
                     if(show.getCreatorAccount().equals(user.getAccount())){
                         show.setAvatar(user.getAvatar());
-                        show.setNickName(user.getNickName());
+                        if (user.getNickName()==null || user.getNickName()==""){
+                            show.setNickName(hidePhoneNumber(user.getAccount()));
+                        }else{
+                            show.setNickName(user.getNickName());
+                        }
                     }
                 }
             }
@@ -477,7 +481,11 @@ public class DynamicServiceImpl implements DynamicService {
                 for(UserExtensionInfo user : userList){
                     if(show.getCreatorAccount().equals(user.getAccount())){
                         show.setAvatar(user.getAvatar());
-                        show.setNickName(user.getNickName());
+                        if (user.getNickName()==null || user.getNickName()==""){
+                            show.setNickName(hidePhoneNumber(user.getAccount()));
+                        }else{
+                            show.setNickName(user.getNickName());
+                        }
                     }
                 }
             }
@@ -500,7 +508,11 @@ public class DynamicServiceImpl implements DynamicService {
                 for(UserExtensionInfo user : userList){
                     if(show.getCreatorAccount().equals(user.getAccount())){
                         show.setAvatar(user.getAvatar());
-                        show.setNickName(user.getNickName());
+                        if (user.getNickName()==null || user.getNickName()==""){
+                           show.setNickName(hidePhoneNumber(user.getAccount()));
+                        }else{
+                            show.setNickName(user.getNickName());
+                        }
                         show.setCompanyName(user.getCompanyName());
                         if(StringUtils.isNotBlank(show.getImgString())){
                             String imgs = show.getImgString();
@@ -539,4 +551,18 @@ public class DynamicServiceImpl implements DynamicService {
         }
         return dynamicList;
     }
+
+    /**
+     *隐藏电话号码,将电话号码的中间四位设为*
+     * @param phone
+     * @return
+     */
+    private String  hidePhoneNumber(String phone){
+        String regex = "^[1][3,4,5,7,8][0-9]{9}$";
+        if(phone.matches(regex)){
+           phone = phone.replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2");
+        }
+        return phone;
+    }
+
 }

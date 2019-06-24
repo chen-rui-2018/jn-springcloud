@@ -89,10 +89,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        propaganda
+                        service_org
                     </contexts>
                     <tableNames>
-                        tb_propaganda
+                        tb_service_org_temp
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

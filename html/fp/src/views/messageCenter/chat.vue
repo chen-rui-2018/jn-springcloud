@@ -10,7 +10,7 @@
         </div>
         <div ref="chatMain" class="chat-main">
           <div class="no-more" v-if="messageList.length > 0 && noMore">没有更多消息了</div>
-          <div class="no-more" v-if="messageList.length === 0">暂无消息</div>
+          <div class="no-more" v-if="!loading && messageList.length === 0">暂无消息</div>
           <div class="tc" v-if="loading">
             <i class="el-icon-loading"></i>
             <span>正在加载...</span>
@@ -53,6 +53,7 @@
         </div>
         <div v-else class="app-chat-footer">
           <el-input
+            ref="mobileInput"
             v-model="message"
             type="textarea"
             :rows="1"
@@ -100,7 +101,70 @@
   import messageRow from './common/messageRow'
   import sockHttp from '@/util/sockHttp'
   import { WS_URL } from '@/util/url'
-  const _isIos = isIos()
+  const _isIos = isIos()// 监听输入框的软键盘弹起和收起事件
+  // 获取到焦点元素滚动到可视区
+  function activeElementScrollIntoView(activeElement, delay) {
+    const editable = activeElement.getAttribute('contenteditable')
+    // 输入框、textarea或富文本获取焦点后没有将该元素滚动到可视区
+    console.dir(activeElement.tagName)
+    if (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA') {
+      setTimeout(function () {
+        activeElement.scrollIntoView();
+      }, delay)
+    }
+  }
+  function listenKeybord($input) {
+    // 判断设备类型
+    const judgeDeviceType = function () {
+      const ua = window.navigator.userAgent.toLocaleLowerCase();
+      const isIOS = /iphone|ipad|ipod/.test(ua);
+      const isAndroid = /android/.test(ua);
+      return {
+        isIOS: isIOS,
+        isAndroid: isAndroid
+      }
+    }()
+    if (judgeDeviceType.isIOS) {
+      // IOS 键盘弹起：IOS 和 Android 输入框获取焦点键盘弹起
+      $input.addEventListener('focus', function () {
+        console.log('IOS 键盘弹起啦！');
+        // IOS 键盘弹起后操作
+        activeElementScrollIntoView($input, 100);
+      }, false)
+
+      // IOS 键盘收起：IOS 点击输入框以外区域或点击收起按钮，输入框都会失去焦点，键盘会收起，
+      $input.addEventListener('blur', () => {
+        console.log('IOS 键盘收起啦！');
+        // IOS 键盘收起后操作
+        // 微信浏览器版本6.7.4+IOS12会出现键盘收起后，视图被顶上去了没有下来
+        const wechatInfo = window.navigator.userAgent.match(/MicroMessenger\/([\d\.]+)/i);
+        if (!wechatInfo) return;
+        const wechatVersion = wechatInfo[1];
+        const version = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/);
+
+        if (+wechatVersion.replace(/\./g, '') >= 674 && +version[1] >= 12) {
+          window.scrollTo(0, Math.max(document.body.clientHeight, document.documentElement.clientHeight));
+        }
+      })
+    }
+
+    // Andriod 键盘收起：Andriod 键盘弹起或收起页面高度会发生变化，以此为依据获知键盘收起
+    if (judgeDeviceType.isAndroid) {
+      let originHeight = document.documentElement.clientHeight || document.body.clientHeight;
+
+      window.addEventListener('resize', function () {
+        const resizeHeight = document.documentElement.clientHeight || document.body.clientHeight;
+        if (originHeight < resizeHeight) {
+          console.log('Android 键盘收起啦！');
+        } else {
+          console.log('Android 键盘弹起啦！');
+          // Android 键盘弹起后操作
+          activeElementScrollIntoView($input, 100);
+        }
+        originHeight = resizeHeight;
+      }, false)
+    }
+  }
   export default {
     name: "Chat",
     components: {
@@ -210,12 +274,18 @@
       }
     },
     methods: {
+      handleKeyBoard() {
+        const input = this.$refs.mobileInput.$el.getElementsByTagName('textarea')[0]
+        listenKeybord(input)
+      },
       init() {
         /*  1.app路由要求传参发送人账号fromUser, 接收人账号toUser, 发送人昵称nickName(仅用于对话框显示与xxx在聊天)
          *  2.pc端路由参数可以只有发送人账号fromUser, 因为pc端有联系人列表
          */
         this.setWindowHeight()
-
+        if (this.$store.state.isMobile) {
+          this.handleKeyBoard()
+        }
         if (this.$route.query.fromUser) {
           this.userListParam.fromUser = this.param.fromUser = this.$route.query.fromUser
         } else {
@@ -244,8 +314,6 @@
             ])
           // 注册滚动加载历史消息事件
           this.checkHistoryMessage()
-          this.androidInputBugFix()
-          this.iosInputBugFix()
         }
       },
       scrollToBottom() {
@@ -265,41 +333,6 @@
           this.html.classList.add('h-100')
           this.body.classList.add('h-100')
         }
-      },
-      androidInputBugFix(){
-        // .container 设置了 overflow 属性, 导致 Android 手机下输入框获取焦点时, 输入法挡住输入框的 bug
-        // 解决方法:
-        // 0. .container 去掉 overflow 属性, 但此 demo 下会引发别的问题
-        // 1. 参考 http://stackoverflow.com/questions/23757345/android-does-not-correctly-scroll-on-input-focus-if-not-body-element
-        //    Android 手机下, input 或 textarea 元素聚焦时, 主动滚一把
-        if (/Android/gi.test(navigator.userAgent)) {
-          window.addEventListener('resize', function () {
-            // alert('触发了resize')
-            if (document.activeElement.tagName == 'INPUT' || document.activeElement.tagName == 'TEXTAREA') {
-              window.setTimeout(function () {
-                document.activeElement.scrollIntoViewIfNeeded();
-              }, 200);
-            }
-          })
-        }
-      },
-      iosInputBugFix() {
-        /**
-         * 修复页面在ios下被键盘定期后的错位bug
-         */
-        window.addEventListener('blur', () => {
-          // alert('blur');
-          setTimeout(() => {
-            if (document.hasFocus()) {
-              let activeElName = document.activeElement.tagName.toLowerCase();
-              if (activeElName === 'input' || activeElName === 'textarea') {
-                return;
-              }
-            }
-            window.scrollTo(0, document.documentElement.clientHeight);
-          }, 250)
-
-        }, true);
       },
       getFromUserInfo() {
         return new Promise(resolve => {

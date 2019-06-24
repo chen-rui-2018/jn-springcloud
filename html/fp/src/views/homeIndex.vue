@@ -34,9 +34,9 @@
               <li>
                 <router-link to="/parkIntroduction" class="router-link" :class="{'ru-active':$route.path == '/parkIntroduction'}">园区介绍</router-link>
               </li>
-              <li>
+              <!-- <li>
                 <router-link to="/compassView" class="router-link" :class="{'ru-active':$route.path == '/compassView'}">行政审批</router-link>
-              </li>
+              </!--> 
               <!-- <li>
                 <router-link to="/investment" class="router-link" :class="{'ru-active':$route.path == '/investment'}">招商引资</router-link>
               </li> -->
@@ -47,20 +47,23 @@
                   <p class="pointer" @click="$router.push({path:'/actiCenter'})">活动中心</p>
                   <p class="pointer" @click="$router.push({path:'/tfindex'})">科技金融</p>
                   <p class="pointer" @click="$router.push({path:'/recruitmentList'})">人力资源</p>
+                  <p class="pointer" @click="$router.push({path:'/compassView'})">行政审批</p>
+                  <p class="pointer" @click="$router.push({path:'/declarationCenter'})">申报中心</p>
+                  <p class="pointer" @click="$router.push({path:'/serMatHp'})">服务超市</p>
                 </div>
               </li>
               <li>
                 <router-link to="/talentsService" class="router-link" :class="{'ru-active':$route.path == '/talentsService'}">人才服务</router-link>
               </li>
-              <li>
+              <!-- <li>
                 <router-link to="/declarationCenter" class="router-link" :class="{'ru-active':$route.path == '/declarationCenter'}">申报中心</router-link>
-              </li>
+              </li> -->
               <li>
                 <router-link to="/incubatorEnterprises" class="router-link" :class="{'ru-active':$route.path == '/incubatorEnterprises'}">孵化企业</router-link>
               </li>
-              <li>
+              <!-- <li>
                 <router-link to="/serMatHp" class="router-link" :class="{'ru-active':$route.path == '/serMatHp'}">服务超市</router-link>
-              </li>
+              </li> -->
             </ul>
             <!-- <div class="enterMenu" v-if="showMenuFlag">
               <p>政策中心</p>

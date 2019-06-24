@@ -100,15 +100,15 @@ export default {
     clearInterval(this._interval)
   },
   methods: {
-    dispatch (c, b) {
-      try {
-        var a = document.createEvent('Event')
-        a.initEvent(b, true, true)
-        c.dispatchEvent(a)
-      } catch (d) {
-        // alert(d)
-      }
-    },
+    // dispatch (c, b) {
+    //   try {
+    //     var a = document.createEvent('Event')
+    //     a.initEvent(b, true, true)
+    //     c.dispatchEvent(a)
+    //   } catch (d) {
+    //     // alert(d)
+    //   }
+    // },
     actiDel () {
       let _this = this
       this.api.post({
@@ -164,8 +164,8 @@ export default {
             if (_this.$route.query.isMini) {
 
             } else {
-              _this.dispatch(document.queryselector('.attention'), 'click')
-              document.queryselector('.attention').click(_this.actiForm.actiLike)
+              // _this.dispatch(document.queryselector('.attention'), 'click')
+              // document.queryselector('.attention').click(_this.actiForm.actiLike)
               let action = 'handleLike'
               window.webkit.messageHandlers.jsToOc.postMessage(action, _this.actiForm.actiLike)
             }
@@ -197,8 +197,8 @@ export default {
             if (_this.$route.query.isMini) {
 
             } else {
-              _this.dispatch(document.queryselector('.attention'), 'click')
-              document.queryselector('.attention').click(_this.actiForm.actiLike)
+              // _this.dispatch(document.queryselector('.attention'), 'click')
+              // document.queryselector('.attention').click(_this.actiForm.actiLike)
               let action = 'cancelLike'
               window.webkit.messageHandlers.jsToOc.postMessage(action, _this.actiForm.actiLike)
             }

@@ -68,7 +68,11 @@
             <!-- <span>{{regCapital}}</span> -->
           </el-form-item>
           <el-form-item label="企业规模(人):" lass="inline" prop="comScale" class="brLine">
-            <el-input v-model="businessForm.comScale" clearable></el-input>
+            <!-- <el-input v-model="businessForm.comScale" clearable></el-input> -->
+            <el-select v-model="businessForm.comScale" placeholder="请选择企业规模" clearable>
+              <el-option v-for="item in typeList" :key="item.codeName" :label="item.codeValue" :value="item.codeName">
+              </el-option>
+            </el-select>
             <!-- <span>{{comScale}}</span> -->
           </el-form-item>
         </div>
@@ -77,8 +81,8 @@
             <el-input v-model="businessForm.unifyCode" clearable></el-input>
             <!-- <span>{{unifyCode}}</span> -->
           </el-form-item>
-          <el-form-item label="企业性质:" lass="inline" prop="comProperty">
-            <el-select v-model="businessForm.comProperty" multiple placeholder="请选择企业性质" clearable :multiple-limit=3>
+          <el-form-item label="企业性质:" lass="inline" prop="comPropertys">
+            <el-select v-model="businessForm.comPropertys" multiple placeholder="请选择企业性质" clearable :multiple-limit=3>
               <el-option v-for="item in comPropertyOptions" :key="item.id" :label="item.preValue" :value="item.id">
               </el-option>
             </el-select>
@@ -229,8 +233,9 @@ export default {
       comPropertyOptions: [],
       induTypeOptions: [],
       userAccount: "",
+      typeList:[],
       businessForm: {
-        comProperty: [],
+        comPropertys: [],
         affiliatedPark: "",
         comServer: "", //我的服务
         comDemand: "", //我的需求
@@ -287,8 +292,8 @@ export default {
           { validator: checkNumber, trigger: "blur" }
         ],
         comScale: [
-          { required: true, message: "请输入企业规模", trigger: "blur" },
-          { validator: checkComScale, trigger: "blur" }
+          { required: true, message: "请选择企业规模", trigger: "change" }
+          // { validator: checkComScale, trigger: "blur" }
         ],
         unifyCode: [
           { required: true, message: "请输入统一社会信用代码", trigger: "blur" }
@@ -311,7 +316,7 @@ export default {
         comAddress: [
           { required: true, message: "请输入注册地址", trigger: "blur" }
         ],
-        comProperty: [
+        comPropertys: [
           { required: true, message: "请选择企业性质", trigger: "change" }
         ],
         avatar: [
@@ -336,6 +341,7 @@ export default {
     this.selectIndustryList();
     this.getComPropertyOptions();
     this.getParkList();
+    this.getInviteType();
   },
   methods: {
     submitCompany(formName) {
@@ -366,7 +372,7 @@ export default {
               regCapital: _this.businessForm.regCapital,
               comScale: _this.businessForm.comScale,
               unifyCode: _this.businessForm.unifyCode,
-              comProperty: _this.businessForm.comProperty.join(','),
+              comPropertys: _this.businessForm.comPropertys,
               affiliatedPark: _this.businessForm.affiliatedPark,
               comSource: _this.businessForm.comSource,
               comServer: _this.businessForm.comServer,
@@ -383,11 +389,28 @@ export default {
                 _this.$refs["businessForm"].resetFields();
               } else {
                 _this.$message.error(res.result);
-                _this.businessForm.comProperty.split(',')
+                // _this.businessForm.comProperty.split(',')
                 return false;
               }
             }
           });
+        }
+      });
+    },
+    //企业规模
+     getInviteType() {
+      let _this = this;
+      this.api.get({
+        url: "getInviteType",
+        data: {
+          groupId: "companyScale"
+        },
+        callback: function(res) {
+          if (res.code == "0000") {
+            _this.typeList = res.data;
+          } else {
+            _this.$message.error(res.result);
+          }
         }
       });
     },

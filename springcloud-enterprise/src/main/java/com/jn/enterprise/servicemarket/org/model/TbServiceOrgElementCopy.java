@@ -1,32 +1,35 @@
 package com.jn.enterprise.servicemarket.org.model;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 
 public class TbServiceOrgElementCopy implements Serializable {
+    @ApiModelProperty(value = "主键id")
     private String id;
-
+    @ApiModelProperty(value = "机构ID")
     private String orgId;
-
+    @ApiModelProperty(value = "员工总人数")
     private Integer staffCount;
-
+    @ApiModelProperty(value = "执业人员人数")
     private Integer professionNum;
-
+    @ApiModelProperty(value = "本科学历人数")
     private Integer bachelorNum;
-
+    @ApiModelProperty(value = "硕士学历人数")
     private Integer masterNum;
-
+    @ApiModelProperty(value = "博士学历人数")
     private Integer doctorNum;
-
+    @ApiModelProperty(value = "海归员工数")
     private Integer returneeNum;
-
+    @ApiModelProperty(value = "创建时间")
     private String createdTime;
-
+    @ApiModelProperty(value = "创建人")
     private String creatorAccount;
-
+    @ApiModelProperty(value = "修改时间")
     private String modifiedTime;
-
+    @ApiModelProperty(value = "修改人")
     private String modifierAccount;
-
+    @ApiModelProperty(value = "是否删除")
     private String recordStatus;
 
     private static final long serialVersionUID = 1L;

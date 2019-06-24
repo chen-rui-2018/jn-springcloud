@@ -131,10 +131,18 @@ public class CareServiceImpl implements CareService {
         CareDetailsVo vo = new CareDetailsVo();
         CareUserDetails userDetails =  careDao.findCareDetails(param.getParamAccount(),currentAccount);
         Result<UserExtensionInfo> result =  userExtensionClient.getUserExtension(param.getParamAccount());
+        if(userDetails == null){
+            userDetails = new CareUserDetails();
+            userDetails.setCareNum("0");
+            userDetails.setFansNum("0");
+            userDetails.setLikedNum(careDao.findLikeNum(param.getParamAccount()));
+        }
         if(result.getData()!=null){
+            userDetails.setAccount(param.getParamAccount());
             userDetails.setAvatar(result.getData().getAvatar());
             userDetails.setNickName(result.getData().getNickName());
         };
+
         vo.setUserDetails(userDetails);
         PaginationData<List<DynamicWebShow>> dynamicList =  dynamicService.findDynamicByAccount(param,currentAccount);
         vo.setDnmamicList(dynamicList);

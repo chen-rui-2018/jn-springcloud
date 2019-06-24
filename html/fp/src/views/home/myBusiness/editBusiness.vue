@@ -41,7 +41,7 @@
           </el-form-item>
         </div>
         <div style="display:flex">
-          <el-form-item label="企业官网地址:" >
+          <el-form-item label="企业官网地址:" class="br">
             <el-input v-model="businessForm.comWeb" clearable></el-input>
           </el-form-item>
           <!-- <el-form-item label="落地时间:" prop="runTime">
@@ -68,7 +68,10 @@
             <el-input v-model="businessForm.regCapital" clearable></el-input>
           </el-form-item>
           <el-form-item label="企业规模（人）:" class="br" prop="comScale">
-            <el-input v-model="businessForm.comScale" clearable></el-input>
+             <el-select v-model="businessForm.comScale" clearable placeholder="请选择企业规模">
+              <el-option v-for="item in comScaleOptions" :key="item.codeValue" :label="item.codeValue" :value="item.codeValue"></el-option>
+            </el-select>
+            <!-- <el-input v-model="businessForm.comScale" clearable></el-input> -->
           </el-form-item>
         </div>
         <div style="display:flex">
@@ -76,8 +79,8 @@
             <el-input v-model="businessForm.unifyCode" clearable></el-input>
             <!-- <span>{{unifyCode}}</span> -->
           </el-form-item>
-          <el-form-item label="企业性质:" prop="comProperty">
-            <el-select v-model="businessForm.comProperty" :multiple-limit='3' multiple clearable placeholder="请选择企业性质">
+          <el-form-item label="企业性质:" prop="comPropertys">
+            <el-select v-model="businessForm.comPropertys" :multiple-limit='3' multiple clearable placeholder="请选择企业性质">
               <el-option v-for="item in comPropertyOptions" :key="item.id" :label="item.preValue" :value="item.id"></el-option>
             </el-select>
             <!-- <span>{{comType}}</span> -->
@@ -187,6 +190,7 @@ export default {
       }
     };
     return {
+      comScaleOptions:[],
       loading:false,
       baseUrl:this.api.host,
       parkList:[],
@@ -218,7 +222,7 @@ export default {
       auth_time: 0,
       businessForm: {
         checkCode:undefined,
-        comProperty: [],
+        comPropertys: [],
         affiliatedPark: "",
         comServer: "", //我的服务
         comDemand: "", //我的需求
@@ -292,7 +296,7 @@ export default {
         comAddress: [
           { required: true, message: "请输入注册地址", trigger: "blur" }
         ],
-        comProperty: [
+        comPropertys: [
           { required: true, message: "请选择企业性质", trigger: "change" }
         ],
         avatar: [
@@ -318,8 +322,27 @@ export default {
     this.getComPropertyOptions();
     this.init();
     this.getParkList()
+    this.getInviteType()
   },
   methods: {
+    //企业规模
+     getInviteType() {
+      let _this = this;
+      this.api.get({
+        url: "getInviteType",
+        data: {
+          groupId: "companyScale"
+        },
+        callback: function(res) {
+          if (res.code == "0000") {
+            _this.comScaleOptions = res.data;
+          } else {
+            _this.$message.error(res.result);
+          }
+        }
+      });
+    },
+
     goIndex(){
            this.$router.push({path:'/myBusiness/index'})
     },
@@ -369,7 +392,8 @@ export default {
           //    return false
           // }
           this.loading=true
-          this.businessForm.comProperty = this.businessForm.comProperty.join(',')
+          // console.log(this.businessForm)
+          // this.businessForm.comProperty = this.businessForm.comProperty.join(',')
          this.api.post({
               url: "updateCompanyInfo",
               data: this.businessForm,
@@ -382,7 +406,7 @@ export default {
                   });
                 this.$router.push({path:'/myBusiness/index'})
                 } else {
-                   this.businessForm.comProperty = this.businessForm.comProperty.split(',');
+                  //  this.businessForm.comProperty = this.businessForm.comProperty.split(',');
                   this.$message.error(res.result);
                   return false;
                 }
@@ -451,8 +475,8 @@ export default {
               // 数组去重
               _this.fileList = Array.from(new Set(fileListArr))
             }
-            if( res.data.comProperty){
-              _this.businessForm.comProperty = res.data.comProperty.split(',');
+            if( res.data.comPropertys){
+              _this.businessForm.comPropertys = res.data.comPropertys;
             }
           }
         }

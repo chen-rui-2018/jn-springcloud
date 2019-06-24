@@ -1,5 +1,5 @@
 <template>
-  <div class="finaInstitution w">
+  <div class="finaInstitution w" v-loading="finaloading">
     <div class="serverOrgMenu">
       <span class="pointer" @click="$router.push({path:'/tfindex'})">首页</span>
       <span>/</span>
@@ -71,8 +71,8 @@
         <i class="iconfont icon-sousuo" @click="handleSearchList"></i>
       </div>
     </div>
-    <div class="serverOrgContent" v-loading="finaloading">
-      <div v-if="serverAgent.length==0">
+    <div class="serverOrgContent">
+      <div v-if="serverAgent.length==0&&!finaloading">
         <nodata></nodata>
       </div>
       <ul v-else>

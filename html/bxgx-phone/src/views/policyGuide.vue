@@ -60,7 +60,7 @@ export default {
 
       policyClass: [],
       page: 1,
-      row: 5,
+      row: 8,
       policyCenterList: [],
       policyClassCode: ''
     }

@@ -60,6 +60,8 @@
         '已支付'
     WHEN '2' THEN
         '待支付'
+    WHEN '3' THEN
+      '已撤销'
     ELSE
         '支付异常'
     END paymentState,
@@ -170,6 +172,8 @@ and obj_id = #{payBill.objId,jdbcType=VARCHAR}
         '已支付'
         WHEN '2' THEN
         '待支付'
+        WHEN '3' THEN
+        '已撤销'
         ELSE
         '支付异常'
         END paymentState,

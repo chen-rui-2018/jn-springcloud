@@ -536,20 +536,24 @@ export default {
     justify-content: space-between;
     .el-carousel {
       // height: 391px;
-      // overflow: hidden;
+      overflow: hidden;
+      text-align: right;
     }
     .el-carousel__container {
       height: 350px;
     }
-    .el-carousel__indicators--outside{
-      height: 41px;
+    .el-carousel__indicators--outside {
+      height: 40px;
+      position: relative;
+      display: inline-block;
+      left: 0;
+      bottom: 0;
     }
     .el-carousel__indicator {
       padding: 14px 4px;
     }
     .el-carousel__indicator:nth-child(1) {
-      margin-left: 476px;
-      // margin-left: 400px;
+      // margin-left: 476px;
     }
     .el-carousel__button {
       width: 12px;

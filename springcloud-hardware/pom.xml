@@ -39,8 +39,6 @@
             <groupId>com.dingtalk</groupId>
             <artifactId>lippi</artifactId>
             <version>1.5</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/src/main/webapp/WEB-INF/lib/lippi-oapi-encrpt.jar</systemPath>
         </dependency>
 
     </dependencies>

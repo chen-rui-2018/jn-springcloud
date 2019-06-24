@@ -57,4 +57,11 @@ public interface CareDao {
      */
     List<CareUserShow> findCompanyCareList(@Param("account") String account);
 
+    /**
+     * 获取点赞数
+     * @param account
+     * @return
+     */
+    String findLikeNum(@Param("account") String account);
+
 }

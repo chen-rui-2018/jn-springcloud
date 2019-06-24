@@ -115,7 +115,7 @@ public class UserUpgradeServiceImpl implements UserUpgradeService {
         companyCheckParam.setComPropertys(null);
 
         // 调用IBPS启动流程
-        String bpmnDefId = ibpsDefIdConfig.getUpdateCompanyInfo();
+        String bpmnDefId = ibpsDefIdConfig.getUpgradeCompany();
         IBPSResult ibpsResult = IBPSUtils.startWorkFlow(bpmnDefId, account, companyCheckParam);
 
         if (ibpsResult == null || !ibpsResult.getState().equals("200")) {

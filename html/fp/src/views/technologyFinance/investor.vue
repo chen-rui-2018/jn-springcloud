@@ -266,6 +266,7 @@ export default {
       padding-right: 40px;
       border: 1px solid #eee;
       border-radius: 5px;
+      background: #fff;
 
       > input {
         border: 0;

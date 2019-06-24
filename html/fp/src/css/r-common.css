@@ -104,4 +104,8 @@
   font-size: 12px;
   color: #999;
 }
+
+.app .el-tabs--border-card > .el-tabs__content {
+  padding: 0;
+}
 /*# sourceMappingURL=r-common.css.map */

@@ -97,10 +97,10 @@ public class ReconciliationInterface {
 
 		//TODO 支付宝还没有商户号可以测试,后期需要加上
 		// 支付宝
-		/*ReconciliationInterface alipay = new ReconciliationInterface();
+		ReconciliationInterface alipay = new ReconciliationInterface();
 		alipay.setInterfaceCode(PayWayEnum.ALIPAY.getCode());
 		alipay.setInterfaceName(PayWayEnum.ALIPAY.getMessage());
-		list.add(alipay);*/
+		list.add(alipay);
 		return list;
 
 	}

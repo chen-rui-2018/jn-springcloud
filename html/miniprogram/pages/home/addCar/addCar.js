@@ -1,14 +1,18 @@
 import request from './../../../utils/http'
+var app = getApp()
 Page({
   data: {
     nvabarData: {
       title: '我的爱车',
     },
-    carLicense:''
+    carLicense:'',
+    imgBaseUrl:""
   },
 
   onLoad: function (options) {
-    
+    this.setData({
+      imgBaseUrl:app.globalData.imgBaseUrl
+    })
    },
   onReady: function () { },
   onShow: function () { },

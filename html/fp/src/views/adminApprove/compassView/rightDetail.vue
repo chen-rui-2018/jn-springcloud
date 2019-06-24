@@ -57,17 +57,18 @@
                     <el-form-item label="实施依据：">
                       <div class="table_item_cont">
                         <!-- <span v-if="isWord&&word&&word.length>135" class="66">{{word|word}} </span> -->
-                        <span v-html="powerDetail.settingBasis"></span>
+                        <span v-if="powerDetail.settingBasis===null">暂无</span>
+                        <span v-html="powerDetail.settingBasis" v-else></span>
                         <!-- <span @click="isWord=!isWord" v-show="isWord&&word&&word.length>135" class="pack_up">[点击展开]</span>
                         <span @click="isWord=!isWord" v-show="isWord===false&&word&&word.length>135" class="pack_up">[点击收起]</span> -->
                       </div> 
                     </el-form-item>
                   </div>
-                  <div class="baseIfor_table_item full_line">
+                  <!-- <div class="baseIfor_table_item full_line">
                     <el-form-item label="权力来源：">
                       <span class="table_item_cont">{{powerDetail.comeFrom===null?'暂无':powerDetail.level}}</span>
                     </el-form-item>
-                  </div>
+                  </div> -->
                   <div class="baseIfor_table_item full_line">
                     <el-form-item label="备注：">
                       <span class="table_item_cont">{{ powerDetail.notes===null?'暂无':powerDetail.notes}}</span>
@@ -87,11 +88,12 @@
                 <el-table-column
                   label="业务序号"
                   width="180"
+                   type="index"
                   align="center"
                   >
-                  <template slot-scope="scope">
+                 <!--  <template slot-scope="scope">
                     <span @click="goservedetail(scope.row.id)">{{scope.row.id}} </span>
-                  </template>
+                  </template> -->
                 </el-table-column>
                 <el-table-column
                   label="业务名称"
@@ -321,7 +323,7 @@ export default {
                 .el-form-item__content{
                   line-height: 1;
                   background-color: #fff;
-                  padding: 10px 0;
+                  padding: 12px 0;
                 }
                 .table_item_cont{
                   

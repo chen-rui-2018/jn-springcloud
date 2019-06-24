@@ -70,10 +70,12 @@ public class Notify4WxPayController extends Notify4BasePay {
 			String xmlResult = IOUtils.toString(request.getInputStream(), request.getCharacterEncoding());
 			WxPayService wxPayService = new WxPayServiceImpl();
 			WxPayOrderNotifyResult result = WxPayOrderNotifyResult.fromXML(xmlResult);
+			_log.info("微信回调参数 result = {}",result.toString());
 			Map<String, Object> payContext = new HashMap();
 			payContext.put("parameters", result);
 			// 验证业务数据是否正确,验证通过后返回PayOrder和WxPayConfig对象
 			if(!verifyWxPayParams(payContext)) {
+				_log.info("====== 结束微信支付回调通知 ======");
 				return WxPayNotifyResponse.fail((String) payContext.get("retMsg"));
 			}
 			PayOrder payOrder = (PayOrder) payContext.get("payOrder");
@@ -104,11 +106,13 @@ public class Notify4WxPayController extends Notify4BasePay {
 			//出现业务错误
 			_log.error(e, "微信回调结果异常,异常原因");
 			_log.info("{}请求数据result_code=FAIL", logPrefix);
-			_log.info("err_code:", e.getErrCode());
-			_log.info("err_code_des:", e.getErrCodeDes());
+			_log.info("微信错误码 err_code:", e.getErrCode());
+			_log.info("微信错误描述 err_code_des:", e.getErrCodeDes());
+			_log.info("====== 结束微信支付回调通知 ======");
 			return WxPayNotifyResponse.fail(e.getMessage());
 		} catch (Exception e) {
 			_log.error(e, "微信回调结果异常,异常原因");
+			_log.info("====== 结束微信支付回调通知 ======");
 			return WxPayNotifyResponse.fail(e.getMessage());
 		}
 	}

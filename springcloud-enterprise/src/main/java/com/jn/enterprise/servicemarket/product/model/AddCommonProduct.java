@@ -122,4 +122,20 @@ public class AddCommonProduct implements Serializable {
     public void setProductDetails(String productDetails) {
         this.productDetails = productDetails;
     }
+
+    @Override
+    public String toString() {
+        return "AddCommonProduct{" +
+                "serialNumber='" + serialNumber + '\'' +
+                ", productName='" + productName + '\'' +
+                ", referPrice='" + referPrice + '\'' +
+                ", signoryId='" + signoryId + '\'' +
+                ", signoryName='" + signoryName + '\'' +
+                ", serviceCycle='" + serviceCycle + '\'' +
+                ", pictureUrl='" + pictureUrl + '\'' +
+                ", productType='" + productType + '\'' +
+                ", advisorAccount='" + advisorAccount + '\'' +
+                ", productDetails='" + productDetails + '\'' +
+                '}';
+    }
 }

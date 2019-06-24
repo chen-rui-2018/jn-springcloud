@@ -1,0 +1,3 @@
+<view>
+  <web-view src="{{url}}?token={{token}}"></web-view>
+</view>

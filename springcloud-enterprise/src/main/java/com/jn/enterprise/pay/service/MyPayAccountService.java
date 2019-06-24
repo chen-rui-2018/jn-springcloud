@@ -71,4 +71,11 @@ public interface MyPayAccountService {
      * @return
      */
     Result createPayAccountBook(PayAccountBookCreateParam payAccountBookCreateParam,User user);
+
+    /**
+     * 自动扣费
+     * @param payAutoDeduParam,user
+     * @return
+     */
+    Result automaticDeduction(PayAutoDeduParam payAutoDeduParam,User user);
 }

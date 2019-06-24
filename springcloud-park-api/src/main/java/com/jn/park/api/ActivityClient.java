@@ -3,6 +3,7 @@ package com.jn.park.api;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.park.activity.model.ActivityApplyListParam;
+import com.jn.park.activity.model.ActivityContent;
 import com.jn.park.activity.model.CompanyActivityApplyParam;
 import com.jn.park.activity.model.CompanyActivityApplyShow;
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -45,4 +46,25 @@ public interface ActivityClient {
      */
     @RequestMapping(value = "/api/activity/getCompanyActivityApplyInfo", method = RequestMethod.POST)
     Result<List<CompanyActivityApplyShow>> getCompanyActivityApplyInfo(@RequestBody CompanyActivityApplyParam param);
+
+    /**
+     * 获取举办活动总数
+     * @return
+     */
+    @RequestMapping(value = "/api/activity/getActivityHistoryNum", method = RequestMethod.POST)
+    Result<Integer> getActivityHistoryNum();
+
+    /**
+     * 活动结束回调方法
+     * @return
+     */
+    @RequestMapping(value = "/api/activity/activityEndByTimedTask", method = RequestMethod.POST)
+    Result<Integer> activityEndByTimedTask(@RequestBody ActivityContent activity);
+
+    /**
+     * 活动消息自动推送回调方法
+     * @return
+     */
+    @RequestMapping(value = "/api/activity/activitySendMessageByTimedTask", method = RequestMethod.POST)
+    Result<Integer> activitySendMessageByTimedTask(@RequestBody ActivityContent activity);
 }

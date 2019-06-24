@@ -8,7 +8,7 @@
         <el-tab-pane label="调研结果" name="third"/>
       </el-tabs>
       <!-- Tab -->
-      <el-tabs v-model="tabName" type="border-card">
+      <el-tabs v-model="tabName" type="border-card" @tab-click="handleTab">
         <el-tab-pane class="total" label="汇总统计" name="total">
           <!-- 汇总统计 -->
           <div v-for="(item,index) in examList" :key="index" class="examList">
@@ -212,6 +212,7 @@ export default {
       tableData: [],
       listQuery: {
         projectId: this.$route.query.id,
+        // researchMethod: this.$route.query.researchMethod,
         name: '',
         page: 1,
         rows: 10
@@ -242,6 +243,10 @@ export default {
     },
     // 单人统计
     init2() {
+      // if (this.$route.query.researchMethod === 1) {
+      //   // 匿名时
+      //   return false
+      // }
       api('hr/train/surveyResultList', this.listQuery).then(res => {
         if (res.data.code === '0000') {
           this.tableData = res.data.data.rows
@@ -265,6 +270,11 @@ export default {
       }
       if (this.activeName === 'third') {
         this.$router.push({ path: 'invest-result', query: { id: this.$route.query.id }})
+      }
+    },
+    handleTab() {
+      if (this.tabName === 'single') {
+        this.isDetail = false
       }
     },
     // 表格分页功能

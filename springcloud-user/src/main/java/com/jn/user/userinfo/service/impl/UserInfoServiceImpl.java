@@ -17,6 +17,7 @@ import com.jn.system.model.SysRole;
 import com.jn.system.model.User;
 import com.jn.user.config.UserServiceConfig;
 import com.jn.user.enums.HomeRoleEnum;
+import com.jn.user.enums.RecordStatusEnum;
 import com.jn.user.enums.UserExtensionExceptionEnum;
 import com.jn.user.model.*;
 import com.jn.user.userinfo.dao.TbUserPersonMapper;
@@ -359,15 +360,17 @@ public class UserInfoServiceImpl implements UserInfoService {
             objects = PageHelper.startPage(affiliateParam.getPage(),
                     affiliateParam.getRows() == 0 ? 15 : affiliateParam.getRows(), true);
         }
-        //数据状态正常  0:删除  1：正常
-        byte recordStatus=1;
         TbUserPersonCriteria example=new TbUserPersonCriteria();
-        example.createCriteria().andAffiliateCodeEqualTo(affiliateParam.getAffiliateCode())
-                .andRecordStatusEqualTo(recordStatus);
+        if(StringUtils.isNotBlank(affiliateParam.getName())){
+            example.createCriteria().andAffiliateCodeEqualTo(affiliateParam.getAffiliateCode())
+                    .andNameLike("%"+affiliateParam.getName()+"%")
+                    .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        }else{
+            example.createCriteria().andAffiliateCodeEqualTo(affiliateParam.getAffiliateCode())
+                    .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        }
         List<TbUserPerson> userPersonList = tbUserPersonMapper.selectByExample(example);
         return getPaginationData(objects, userPersonList);
-
-
     }
 
 

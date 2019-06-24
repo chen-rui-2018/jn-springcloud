@@ -14,6 +14,8 @@ import java.util.Date;
  */
 @ApiModel(value = "RequireReceivedDetails", description = "我收到的需求详情")
 public class RequireReceivedDetails implements Serializable {
+    @ApiModelProperty(value = "需求id")
+    private String id;
     @ApiModelProperty(value = "企业名称")
     private String companyName;
     @ApiModelProperty(value = "需求单号")
@@ -54,13 +56,20 @@ public class RequireReceivedDetails implements Serializable {
     @ApiModelProperty(value = "[科技金融]资金需求说明")
     private String fundsReqDesc;
     @ApiModelProperty(value = "[科技金融]资金需求日期")
-    private Date expectedDate;
+    private String expectedDate;
 
     @ApiModelProperty(value = "评价分数")
     private String ratingScore;
     @ApiModelProperty(value = "评价描述")
     private String evaluationDesc;
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getCompanyName() {
         return companyName;
@@ -214,11 +223,11 @@ public class RequireReceivedDetails implements Serializable {
         this.fundsReqDesc = fundsReqDesc;
     }
 
-    public Date getExpectedDate() {
+    public String getExpectedDate() {
         return expectedDate;
     }
 
-    public void setExpectedDate(Date expectedDate) {
+    public void setExpectedDate(String expectedDate) {
         this.expectedDate = expectedDate;
     }
 
@@ -241,7 +250,8 @@ public class RequireReceivedDetails implements Serializable {
     @Override
     public String toString() {
         return "RequireReceivedDetails{" +
-                "companyName='" + companyName + '\'' +
+                "id='" + id + '\'' +
+                ", companyName='" + companyName + '\'' +
                 ", reqNum='" + reqNum + '\'' +
                 ", issueTime=" + issueTime +
                 ", orgName='" + orgName + '\'' +
@@ -260,7 +270,9 @@ public class RequireReceivedDetails implements Serializable {
                 ", financingPeriod='" + financingPeriod + '\'' +
                 ", actualLoanAmount='" + actualLoanAmount + '\'' +
                 ", fundsReqDesc='" + fundsReqDesc + '\'' +
-                ", expectedDate=" + expectedDate +
+                ", expectedDate='" + expectedDate + '\'' +
+                ", ratingScore='" + ratingScore + '\'' +
+                ", evaluationDesc='" + evaluationDesc + '\'' +
                 '}';
     }
 }

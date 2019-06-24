@@ -1,7 +1,7 @@
 <template>
   <div class="menu-wrapper">
 
-    <!-- <el-submenu v-if="item.children && item.children.length >= 1&&item.children[1].label!=='服务顾问认证'" :index="item.id + ''">
+    <!-- <el-submenu v-if="item.children && item.children.length >= 1&&item.children[1].label!=='服务专员认证'" :index="item.id + ''">
       <template slot="title">
         <i class="el-icon-menu"/>
         <span slot="title">{{ item.label }}</span>
@@ -21,7 +21,7 @@
       <span slot="title">{{ item.label }}</span>
     </el-menu-item>
     <!-- 选择机构对话框 -->
-    <el-dialog title="申请顾问" :visible.sync="centerDialogVisible" width="460px;" :modal-append-to-body="false" center>
+    <el-dialog title="申请专员" :visible.sync="centerDialogVisible" width="460px;" :modal-append-to-body="false" center>
       <el-form :model="organizationForm" ref="organizationForm" label-width="80px" class="demo-dynamic">
         <el-form-item prop="orgId" label="服务机构" :rules="[
       { required: true, message: '请输入你要申请入驻的机构', trigger: 'change' },
@@ -96,31 +96,59 @@ export default {
     },
     // 弹出选择机构对话框
     checkOrganization(item) {
-      if (item.label === "服务顾问认证") {
+      if (
+        item.label === "投资人认证" ||
+        item.label === "服务专员认证" ||
+        item.label === "服务机构认证" ||
+        item.label === "升级员工" ||
+        item.label === "升级企业"
+      ) {
         this.api.get({
-          url: "getUserApprovalStatus",
-          // data: { orgName: "" },
+          url: "getJoinParkStatus",
           callback: res => {
+            console.log(res);
             if (res.code == "0000") {
-              console.log(res);
-              if (res.data.approvalDesc === "未认证") {
-                this.orgArr = [];
-                this.organizationForm.orgName = "";
-                this.organizationForm.orgId = "";
-                this.centerDialogVisible = true;
-                this.query();
-              } else if(res.data.approvalDesc === "认证不通过"){
-                 this.$router.push({ path: item.path });
-              }else{
-                 this.$router.push({ path: item.path,query:{ isConceal:'1'} });//是否隐藏发送按钮
-                // this.$router.push({ path: item.path ,query});
+              if (res.data.code !== "0") {
+                this.$message.error(res.data.message);
+                return false;
+              } else {
+                if (item.label === "服务专员认证") {
+                  this.api.get({
+                    url: "getUserApprovalStatus",
+                    callback: res => {
+                      if (res.code == "0000") {
+                        if (
+                          res.data.approvalDesc === "未认证" ||
+                          res.data.approvalDesc === "认证不通过"
+                        ) {
+                          this.orgArr = [];
+                          this.organizationForm.orgName = "";
+                          this.organizationForm.orgId = "";
+                          this.centerDialogVisible = true;
+                          this.query();
+                        } else {
+                          this.$router.push({
+                            path: item.path,
+                            query: { isConceal: "1" }
+                          }); //是否隐藏发送按钮
+                          // this.$router.push({ path: item.path ,query});
+                        }
+                      } else {
+                        this.$message.error(res.result);
+                      }
+                    }
+                  });
+                } else {
+                  this.$router.push({ path: item.path });
+                }
               }
             } else {
               this.$message.error(res.result);
+              return false;
             }
           }
         });
-      } else {
+      }else{
         this.$router.push({ path: item.path });
       }
     },
@@ -134,7 +162,7 @@ export default {
             query: {
               orgId: this.organizationForm.orgId,
               businessArea: this.businessArea,
-              approvalDesc:'未认证'
+              approvalDesc: "未认证"
             }
           });
         } else {

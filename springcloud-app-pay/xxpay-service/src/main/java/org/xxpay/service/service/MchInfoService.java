@@ -1,25 +1,20 @@
 package org.xxpay.service.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.xxpay.dal.dao.mapper.MchInfoMapper;
 import org.xxpay.dal.dao.model.MchInfo;
 
 /**
- * @Description:
- * @author dingzhiwei jmdhappy@126.com
- * @date 2017-07-05
- * @version V1.0
- * @Copyright: www.xxpay.org
+ * @ClassName：商户信息service层
+ * @Descript：
+ * @Author： hey
+ * @Date： Created on 2019/6/5 10:05
+ * @Version： v1.0
+ * @Modified By:
  */
-@Component
-public class MchInfoService {
+public interface MchInfoService {
 
-    @Autowired
-    private MchInfoMapper mchInfoMapper;
-
-    public MchInfo selectMchInfo(String mchId) {
-        return mchInfoMapper.selectByPrimaryKey(mchId);
-    }
-
+    /**
+     * 根据商户ID获取商户信息
+     * @param mchId
+    * */
+    MchInfo selectMchInfo(String mchId);
 }

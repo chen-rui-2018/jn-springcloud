@@ -46,54 +46,54 @@
             <div
               v-if="typeof scope.row['inputFormatModel'] === 'object' && column.value === 'inputFormatModel'"
               class="target-row">
-              <el-row v-for="(ruleRow, index) in scope.row['inputFormatModel']" :key="index" class="target-bg">
-                <el-col v-for="(item, itemIndex) in ruleRow" :key="itemIndex" :span="18" class="target-bg-cell">
-                  <el-row v-if="item.formType === '0'" :gutter="10" type="flex" align="middle">
-                    <el-col :span="leftCol">{{ item.formName }}</el-col>
-                    <el-col :span="24 - leftCol">
+              <div v-for="(ruleRow, index) in scope.row['inputFormatModel']" :key="index" class="target-bg">
+                <div v-for="(item, itemIndex) in ruleRow" :key="itemIndex" class="target-bg-cell">
+                  <div v-if="item.formType === '0'" :class="{app: isMobile, pc: !isMobile}" class="target-left-row">
+                    <div class="target-left-row-title" :class="{app: isMobile, pc: !isMobile}">{{ item.formName }}</div>
+                    <div class="target-left-row-form" :class="{app: isMobile, pc: !isMobile}">
                       <el-input
                         :disabled="isReported === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])"
                         v-model="item.value"
                         :class="{'isMobile': isMobile}"
                         class="target-input"/>
-                    </el-col>
-                  </el-row>
-                  <el-row v-if="item.formType === '1'" :gutter="10" type="flex" align="middle">
-                    <el-col :span="leftCol">{{ item.formName }}</el-col>
-                    <el-col :span="24 - leftCol">
+                    </div>
+                  </div>
+                  <div v-if="item.formType === '1'" :class="{app: isMobile, pc: !isMobile}" class="target-left-row">
+                    <div class="target-left-row-title" :class="{app: isMobile, pc: !isMobile}">{{ item.formName }}</div>
+                    <div class="target-left-row-form" :class="{app: isMobile, pc: !isMobile}">
                       <el-input :disabled="isReported === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])" v-model="item.value" type="textarea"/>
-                    </el-col>
-                  </el-row>
-                  <el-row v-else-if="item.formType === '2'" :gutter="10" type="flex" align="middle">
-                    <el-col :span="leftCol">{{ item.formName }}</el-col>
-                    <el-col :span="24 - leftCol">
+                    </div>
+                  </div>
+                  <div v-else-if="item.formType === '2'" :class="{app: isMobile, pc: !isMobile}" class="target-left-row">
+                    <div class="target-left-row-title" :class="{app: isMobile, pc: !isMobile}">{{ item.formName }}</div>
+                    <div class="target-left-row-form" :class="{app: isMobile, pc: !isMobile}">
                       <el-input-number
                         :disabled="isReported === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])"
                         :min="0"
                         v-model="item.value"
                         :class="{'isMobile': isMobile}"
                         class="target-input"/>
-                    </el-col>
-                  </el-row>
-                  <el-row v-else-if="item.formType === '3'" :gutter="10" type="flex" align="middle">
-                    <el-col :span="leftCol">{{ item.formName }}</el-col>
-                    <el-col :span="24 - leftCol">
+                    </div>
+                  </div>
+                  <div v-else-if="item.formType === '3'" :class="{app: isMobile, pc: !isMobile}" class="target-left-row">
+                    <div class="target-left-row-title" :class="{app: isMobile, pc: !isMobile}">{{ item.formName }}</div>
+                    <div class="target-left-row-form" :class="{app: isMobile, pc: !isMobile}">
                       <el-radio-group v-model="item.value" :disabled="isReported === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])">
                         <el-radio v-for="name in item.choiceOption.split(',')" :key="name" :label="name" :name="name"/>
                       </el-radio-group>
-                    </el-col>
-                  </el-row>
-                  <el-row v-else-if="item.formType === '4'" :gutter="10" type="flex" align="middle">
-                    <el-col :span="leftCol">{{ item.formName }}</el-col>
-                    <el-col :span="24 - leftCol">
+                    </div>
+                  </div>
+                  <div v-else-if="item.formType === '4'" :class="{app: isMobile, pc: !isMobile}" class="target-left-row">
+                    <div class="target-left-row-title" :class="{app: isMobile, pc: !isMobile}">{{ item.formName }}</div>
+                    <div class="target-left-row-form" :class="{app: isMobile, pc: !isMobile}">
                       <el-checkbox-group v-model="item.value" :disabled="isReported === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])">
                         <el-checkbox v-for="name in item.choiceOption.split(',')" :key="name" :label="name" :name="name"/>
                       </el-checkbox-group>
-                    </el-col>
-                  </el-row>
-                  <el-row v-else-if="item.formType === '5'" :gutter="10" type="flex" align="middle">
-                    <el-col :span="leftCol">{{ item.formName }}</el-col>
-                    <el-col :span="24 - leftCol">
+                    </div>
+                  </div>
+                  <div v-else-if="item.formType === '5'" :class="{app: isMobile, pc: !isMobile}" class="target-left-row">
+                    <div class="target-left-row-title" :class="{app: isMobile, pc: !isMobile}">{{ item.formName }}</div>
+                    <div class="target-left-row-form" :class="{app: isMobile, pc: !isMobile}">
                       <el-upload
                         :disabled="isReported === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])"
                         :on-error="handleError"
@@ -110,14 +110,14 @@
                         <div v-if="isReported === 0 && item.fileList.length === 0">暂无附件</div>
                         <div slot="tip" class="el-upload__tip" v-if="isReported !== 0">只能上传jpg/png文件，且不超过20M</div>
                       </el-upload>
-                    </el-col>
-                  </el-row>
-                </el-col>
-                <el-col v-if="scope.row.isMuiltRow === '0' && (isReported === 1 && modelType === 0 || (isReported === 1 && modelType === 1 && scope.row['hasJurisdiction']))" :span="6" style="text-align: right">
+                    </div>
+                  </div>
+                </div>
+                <div v-if="scope.row.isMuiltRow === '0' && (isReported === 1 && modelType === 0 || (isReported === 1 && modelType === 1 && scope.row['hasJurisdiction']))" :class="{app: isMobile, pc: !isMobile}" class="target-right-row">
                   <el-button size="mini" type="primary" icon="el-icon-plus" @click="addMultipleForm(scope.row['inputFormatModel'], index)"/>
                   <el-button v-if="index !== 0" size="mini" type="warning" icon="el-icon-minus" @click="deleteMultipleForm(scope.row['inputFormatModel'], index)"/>
-                </el-col>
-              </el-row>
+                </div>
+              </div>
             </div>
             <div v-else-if="typeof scope.row[column.value] === 'object' && column.value !== 'inputFormatModel'" class="target-row">
               <div v-for="(item, index) in scope.row[column.value]" :key="index" class="other-column">
@@ -137,6 +137,7 @@
 <script>
 import { deepClone, isMobile } from '@/util'
 import treeToArray from './eval'
+import { getToken } from '@/util/auth'
 export default {
   name: 'TreeTable',
   props: {
@@ -172,14 +173,14 @@ export default {
     }
   },
   created() {
-    this.leftCol = !this.isMobile ? 6 : 4
+    this.leftCol = !this.isMobile ? 4 : 4
   },
   data() {
     return {
       leftCol: null,
       isMobile: isMobile(),
       headers: {
-        token: sessionStorage.token
+        token: getToken()
       },
       getRowKeys(row) {
         return row.id;
@@ -369,28 +370,62 @@ export default {
       flex: 1;
     }
   }
+  .target-left-row {
+    @include flex($h: flex-start);
+    flex-wrap: wrap;
+    .target-left-row-title {
+      &.pc {
+        width: 120px;
+        flex: none;
+      }
+      &.app {
+        min-width: 160px;
+        width: 80px;
+        margin-bottom: 12px;
+      }
+    }
+    .target-left-row-form {
+      &.pc {
+        flex: 1;
+      }
+      &.app {
+        width: 100%;
+      }
+    }
+  }
+  .target-right-row {
+    &.pc {
+      flex: none;
+      margin-left: 12px;
+    }
+    &.app {
+      width: 100%;
+      margin-top: 12px;
+    }
+  }
   .target-row {
     .target-bg {
       margin-top: 20px;
       border-bottom: 1px solid $gray;
+      padding-bottom: 12px;
+      @include flex($h: flex-start);
+      flex-wrap: wrap;
       &:last-of-type {
         border-bottom: none;
+        padding-bottom: 0;
       }
       &:first-of-type {
         margin-top: 0;
       }
       .target-bg-cell {
-        margin-bottom: 20px;
+        flex: 1;
         &:last-of-type {
           margin-bottom: 0;
         }
       }
   }
     .target-input {
-      width: 220px;
-      &.isMobile {
-        width:130px;
-      }
+      width: 100%;
     }
     .other-column {
       padding: 10px;

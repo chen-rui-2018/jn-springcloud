@@ -33,4 +33,12 @@ public class UserInfoQueryParam implements Serializable {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
+    @Override
+    public String toString() {
+        return "UserInfoQueryParam{" +
+                "nickName='" + nickName + '\'' +
+                ", phone='" + phone + '\'' +
+                '}';
+    }
 }

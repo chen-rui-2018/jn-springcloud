@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.jn.park.asset.entity.TbRoomOrdersBill">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="enterprise_id" jdbcType="VARCHAR" property="enterpriseId" />
     <result column="lease_enterprise" jdbcType="VARCHAR" property="leaseEnterprise" />
     <result column="contact_name" jdbcType="VARCHAR" property="contactName" />
     <result column="contact_phone" jdbcType="VARCHAR" property="contactPhone" />
@@ -84,9 +85,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, order_id, lease_enterprise, contact_name, contact_phone, bill_create_time, rooms, 
-    bill_init_sum, bill_status, bill_sum, bill_confirm_time, bill_confirm_name, start_time, 
-    end_time, bill_cycle, pay_sum, pay_time, explain_, creator_account, create_time, 
+    id, order_id, enterprise_id, lease_enterprise, contact_name, contact_phone, bill_create_time, 
+    rooms, bill_init_sum, bill_status, bill_sum, bill_confirm_time, bill_confirm_name, 
+    start_time, end_time, bill_cycle, pay_sum, pay_time, explain_, creator_account, create_time, 
     modifier_account, modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.asset.entity.TbRoomOrdersBillCriteria" resultMap="BaseResultMap">
@@ -120,22 +121,22 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.park.asset.entity.TbRoomOrdersBill">
-    insert into tb_room_orders_bill (id, order_id, lease_enterprise, 
-      contact_name, contact_phone, bill_create_time, 
-      rooms, bill_init_sum, bill_status, 
-      bill_sum, bill_confirm_time, bill_confirm_name, 
-      start_time, end_time, bill_cycle, 
-      pay_sum, pay_time, explain_, 
-      creator_account, create_time, modifier_account, 
-      modified_time)
-    values (#{id,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, #{leaseEnterprise,jdbcType=VARCHAR}, 
-      #{contactName,jdbcType=VARCHAR}, #{contactPhone,jdbcType=VARCHAR}, #{billCreateTime,jdbcType=DATE}, 
-      #{rooms,jdbcType=VARCHAR}, #{billInitSum,jdbcType=DECIMAL}, #{billStatus,jdbcType=TINYINT}, 
-      #{billSum,jdbcType=DECIMAL}, #{billConfirmTime,jdbcType=DATE}, #{billConfirmName,jdbcType=VARCHAR}, 
-      #{startTime,jdbcType=DATE}, #{endTime,jdbcType=DATE}, #{billCycle,jdbcType=VARCHAR}, 
-      #{paySum,jdbcType=TINYINT}, #{payTime,jdbcType=TIMESTAMP}, #{explain,jdbcType=VARCHAR}, 
-      #{creatorAccount,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP})
+    insert into tb_room_orders_bill (id, order_id, enterprise_id, 
+      lease_enterprise, contact_name, contact_phone, 
+      bill_create_time, rooms, bill_init_sum, 
+      bill_status, bill_sum, bill_confirm_time, 
+      bill_confirm_name, start_time, end_time, 
+      bill_cycle, pay_sum, pay_time, 
+      explain_, creator_account, create_time, 
+      modifier_account, modified_time)
+    values (#{id,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, #{enterpriseId,jdbcType=VARCHAR}, 
+      #{leaseEnterprise,jdbcType=VARCHAR}, #{contactName,jdbcType=VARCHAR}, #{contactPhone,jdbcType=VARCHAR}, 
+      #{billCreateTime,jdbcType=DATE}, #{rooms,jdbcType=VARCHAR}, #{billInitSum,jdbcType=DECIMAL}, 
+      #{billStatus,jdbcType=TINYINT}, #{billSum,jdbcType=DECIMAL}, #{billConfirmTime,jdbcType=DATE}, 
+      #{billConfirmName,jdbcType=VARCHAR}, #{startTime,jdbcType=DATE}, #{endTime,jdbcType=DATE}, 
+      #{billCycle,jdbcType=VARCHAR}, #{paySum,jdbcType=TINYINT}, #{payTime,jdbcType=TIMESTAMP}, 
+      #{explain,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.asset.entity.TbRoomOrdersBill">
     insert into tb_room_orders_bill
@@ -145,6 +146,9 @@
       </if>
       <if test="orderId != null">
         order_id,
+      </if>
+      <if test="enterpriseId != null">
+        enterprise_id,
       </if>
       <if test="leaseEnterprise != null">
         lease_enterprise,
@@ -213,6 +217,9 @@
       </if>
       <if test="orderId != null">
         #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="enterpriseId != null">
+        #{enterpriseId,jdbcType=VARCHAR},
       </if>
       <if test="leaseEnterprise != null">
         #{leaseEnterprise,jdbcType=VARCHAR},
@@ -291,6 +298,9 @@
       <if test="record.orderId != null">
         order_id = #{record.orderId,jdbcType=VARCHAR},
       </if>
+      <if test="record.enterpriseId != null">
+        enterprise_id = #{record.enterpriseId,jdbcType=VARCHAR},
+      </if>
       <if test="record.leaseEnterprise != null">
         lease_enterprise = #{record.leaseEnterprise,jdbcType=VARCHAR},
       </if>
@@ -360,6 +370,7 @@
     update tb_room_orders_bill
     set id = #{record.id,jdbcType=VARCHAR},
       order_id = #{record.orderId,jdbcType=VARCHAR},
+      enterprise_id = #{record.enterpriseId,jdbcType=VARCHAR},
       lease_enterprise = #{record.leaseEnterprise,jdbcType=VARCHAR},
       contact_name = #{record.contactName,jdbcType=VARCHAR},
       contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
@@ -389,6 +400,9 @@
     <set>
       <if test="orderId != null">
         order_id = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="enterpriseId != null">
+        enterprise_id = #{enterpriseId,jdbcType=VARCHAR},
       </if>
       <if test="leaseEnterprise != null">
         lease_enterprise = #{leaseEnterprise,jdbcType=VARCHAR},
@@ -456,6 +470,7 @@
   <update id="updateByPrimaryKey" parameterType="com.jn.park.asset.entity.TbRoomOrdersBill">
     update tb_room_orders_bill
     set order_id = #{orderId,jdbcType=VARCHAR},
+      enterprise_id = #{enterpriseId,jdbcType=VARCHAR},
       lease_enterprise = #{leaseEnterprise,jdbcType=VARCHAR},
       contact_name = #{contactName,jdbcType=VARCHAR},
       contact_phone = #{contactPhone,jdbcType=VARCHAR},

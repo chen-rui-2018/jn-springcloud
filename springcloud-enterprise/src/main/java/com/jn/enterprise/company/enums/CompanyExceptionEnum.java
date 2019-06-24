@@ -12,6 +12,9 @@ import com.jn.common.api.CodeAndMsg;
 public enum CompanyExceptionEnum implements CodeAndMsg {
     NETWORK_ANOMALY("5020901", "网络异常，请稍后重试。"),
     USER_LOGIN_IS_INVALID("5020503","登录已失效，请重新登录"),
+    UPDATE_COMPANY_INFO_ERROR("5020570","企业信息保存失败"),
+    COMPANY_ADMIN_GET_ERROR("5020571","企业管理员信息获取失败"),
+    DELETE_COMPANY_TEMP_ERROR("5020572","删除企业临时表数据失败"),
     USER_IS_COMPANY_EXIST("5020580","该用户已是员工账号或有待处理的企业邀请，不能再次邀请"),
     USER_IS_NOT_EXIST("5020581","用户不存在"),
     USER_IS_NOT_COMPANY_ADMIN("5020582","用户不是企业管理员"),
@@ -30,8 +33,10 @@ public enum CompanyExceptionEnum implements CodeAndMsg {
     GET_USER_EXTENSION_INFO_ERROR("5020595","获取用户信息发生错误"),
     UPDATE_USER_EXTENSION_INFO_ERROR("5020596","更新用户信息发生错误"),
     COMPANY_ADMIN_LEAVE_ERROR("5020597","企业管理员不能离开企业"),
+    UPGRADE_COMPANY_PROPERTY_GT_THREE("5020598","企业性质为空或超过3条"),
 
     CALL_SYSTEM_SERVICE_ERROR("5020401","调用system服务出错"),
+    CALL_USER_SERVICE_ERROR("5020402","调用user服务出错"),
     ;
     /**
      * 编码

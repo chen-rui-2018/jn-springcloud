@@ -18,6 +18,7 @@ package com.jn.reconciliation;
 import com.jn.reconciliation.biz.*;
 import com.jn.reconciliation.enums.BatchStatusEnum;
 import com.jn.reconciliation.service.PayReconciliationCheckBatchService;
+import com.jn.reconciliation.service.ReconciliationInterfaceService;
 import com.jn.reconciliation.service.impl.ReconciliationInterface;
 import com.jn.reconciliation.utils.DateUtil;
 import com.jn.reconciliation.vo.ReconciliationEntityVo;
@@ -28,6 +29,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.xxpay.common.util.MySeq;
 import org.xxpay.dal.dao.entity.reconciliation.TbPayReconciliationCheckBatch;
+import org.xxpay.dal.dao.entity.reconciliation.TbPayReconciliationInterface;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -59,6 +61,9 @@ public class ReconciliationTask {
 	private PayReconciliationCheckBatchService batchService;
 	@Autowired
 	private ReconciliationNoticeBiz reconciliationNoticeBiz;
+	@Autowired
+	private ReconciliationInterfaceService reconciliationInterfaceService;
+
 
 	@Scheduled(cron = "0 15 10 * * ?")
 	public void taskRun() {
@@ -72,13 +77,13 @@ public class ReconciliationTask {
 
 
 			@SuppressWarnings("rawtypes")
-			// 获取全部有效的对账接口(目前是写死了，可以做持久化到数据库，再查出来)
-			List reconciliationInterList = ReconciliationInterface.getInterface();
+			// 获取全部有效的对账接口
+			List<TbPayReconciliationInterface> reconciliationInterList  = reconciliationInterfaceService.getEffectiveList();
 
 			// 根据不同的渠道发起对账
 			for (int num = 0; num < reconciliationInterList.size(); num++) {
 				// 判断接口是否正确
-				ReconciliationInterface reconciliationInter = (ReconciliationInterface) reconciliationInterList.get(num);
+				TbPayReconciliationInterface reconciliationInter = (TbPayReconciliationInterface) reconciliationInterList.get(num);
 				if (reconciliationInter == null) {
 					logger.info("对账接口信息" + reconciliationInter + "为空");
 					continue;
@@ -105,7 +110,7 @@ public class ReconciliationTask {
 				File file = null;
 				try {
 					logger.info("ReconciliationFileDownBiz,对账文件下载开始");
-					file = fileDownBiz.downReconciliationFile(interfaceCode, billDate);
+					file = fileDownBiz.downReconciliationFile(reconciliationInter, billDate);
 					if (file == null) {
 						continue;
 					}

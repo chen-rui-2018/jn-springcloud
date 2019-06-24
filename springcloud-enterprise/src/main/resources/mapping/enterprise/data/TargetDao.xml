@@ -157,12 +157,21 @@
         ,
         t.calling_time = SYSDATE()
         where
-        t.task_batch=#{taskBatch}
-        <if test="fillId !=null">
+        1=1
+        <if test="taskBatch !=null and taskBatch !=''">
+            and t.task_batch=#{taskBatch}
+        </if>
+        <if test="fillId !=null and fillId !=''">
             and w.fill_id = #{fillId}
         </if>
-        and t.file_type =#{fileType}
+
+        <if test="fileType !=null and fileType !=''">
+            and t.file_type =#{fileType}
+        </if>
+
         and t.is_overdue=1
+
+        and t.status !=0
     </update>
 
 
@@ -638,7 +647,7 @@
         t.is_overdue=1,
         t.overdue_days=ceiling(
         datediff(SYSDATE(),t.fill_in_form_deadline)- (select warning_before_days from tb_data_reporting_snapshot_model p where p.task_batch = t.task_batch)
-        )
+        )+1
         where t.status !=0
         and t.fill_in_form_deadline &lt; SYSDATE()
 
@@ -1057,18 +1066,18 @@
 
     <select id="getExcel" resultType="com.jn.enterprise.data.model.CompanyTree">
         select
-        task_batch taskbatch,
-        model_id modelid,
-        tab_id tabid,
-        tab_name tabname,
-        target_id targetid,
-        target_name targetname,
-        parent_id parentid,
-        form_id formid,
-        form_name formname,
-        unit unit,
-        DATA DATA,
-        sum_val sumval
+        task_batch as taskbatch,
+        model_id as modelid,
+        tab_id as tabid,
+        tab_name as tabname,
+        target_id as targetid,
+        target_name as targetname,
+        parent_id as parentid,
+        form_id as formid,
+        form_name as formname,
+        unit as unit,
+        DATA as DATA,
+        sum_val as sumval
          from view_data_model_data_sum
         where task_batch=#{taskbatch} and model_id=#{modelid}
     </select>
@@ -1123,4 +1132,80 @@
         group by year order by year asc
 
     </select>
+
+    <!--朱成的插入数据上报结果集语句儿-->
+    <insert id="insertDataUploadResultSet" parameterType="java.lang.String">
+        insert into tb_data_reporting_result
+            SELECT
+                t.task_batch,
+                case when t.file_type = 0 then '企业'
+                   when t.file_type = 1 then '园管委会'
+              else '其他' end file_type,
+                t.fill_in_form_id,
+                t.fill_in_form_name,
+              t.form_time,
+                case when t.status = 0 then '已上报'
+                         when t.status = 1 then '未上报'
+                         when t.status = 2 then '草稿'
+              else '其他'  end status,
+                t.model_id,
+                T4.tab_create_type,
+                t2.tab_id,
+                t4.tab_name,
+                t3.target_id,
+                t3.target_name,
+                T5.FORM_ID,
+                T5.form_name,
+                t3.parent_id,
+                t3.unit,
+                GROUP_CONCAT(t2.DATA separator ':') data,
+            case when  replace(replace(GROUP_CONCAT(t2.DATA separator ':'),';',''),':','') regexp '^[0-9]+$' = 1 then sum(t2.sum_val)  else GROUP_CONCAT(t2.DATA separator ':') end  sum_val
+            ,replace(GROUP_CONCAT(t2.DATA),',','') regexp '^[0-9]+$' is_number
+            FROM tb_data_reporting_task t
+            INNER JOIN
+            (
+            select model_id,fill_id,tab_id,target_id,form_id,GROUP_CONCAT(data separator ';') data
+            ,case when  replace(GROUP_CONCAT(DATA),',','') regexp '^[0-9]+$' = 1 then sum(DATA) else GROUP_CONCAT(DATA ) end  sum_val
+            from tb_data_reporting_task_data
+            where fill_id = #{fillId}
+            group by  model_id,fill_id,tab_id,target_id,form_id
+            ) t2 ON t.fill_id = t2.fill_id
+            INNER JOIN tb_data_reporting_snapshot_target t3 ON t.task_batch = t3.task_batch
+            AND t2.target_id = t3.target_id
+            and t3.record_status = 1
+            INNER JOIN tb_data_reporting_snapshot_model_tab t4 ON t.task_batch = t4.task_batch
+            AND t2.tab_id = t4.tab_id
+            INNER JOIN tb_data_reporting_snapshot_target_group T5
+            ON t.task_batch = t5.task_batch
+            AND t2.target_id = t5.target_id
+            AND T2.FORM_ID = T5.FORM_ID
+            and t5.record_status = 1
+            where  t.record_status = 1
+            and t.fill_id =#{fillId}
+            GROUP BY
+                t.task_batch,
+                case when t.file_type = 0 then '企业'
+                   when t.file_type = 1 then '园管委会'
+              else '其他' end,
+                t.fill_in_form_id,
+                t.fill_in_form_name,
+              t.form_time,
+                case when t.status = 0 then '已上报'
+                         when t.status = 1 then '未上报'
+                         when t.status = 2 then '草稿'
+              else '其他'  end ,
+                T4.tab_create_type,
+                t.model_id,
+                t2.tab_id,
+                t4.tab_name,
+                t3.target_id,
+                t3.target_name,
+                T5.FORM_ID,
+                T5.form_name,
+                t3.parent_id,
+                t3.unit
+            ORDER BY
+                t2.tab_id,t3.order_number,t5.order_number
+
+    </insert>
 </mapper>

@@ -149,7 +149,7 @@ public class EmployeeBasicInfoAdd implements Serializable {
     @ApiModelProperty(value = "是否删除（0标记删除，1正常）")
     private Byte recordStatus;
 
-    @ApiModelProperty(value = "员工状态(1在职，2医疗期)")
+    @ApiModelProperty(value = "员工状态(1在职，2医疗期,3退休,4离职)")
     @NotNull(message = "员工状态不能为空")
     private Byte employStatus;
     @ApiModelProperty(value = "用户Id")

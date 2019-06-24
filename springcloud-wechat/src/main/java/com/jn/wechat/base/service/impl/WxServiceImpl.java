@@ -153,6 +153,7 @@ public class WxServiceImpl implements WxService {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            throw new JnSpringCloudException(WxExceptionEnums.GET_ACCESS_TOKEN_FAIL);
         }
 
         logger.info("获取access_token接口返回值{}：",accessTokenString);

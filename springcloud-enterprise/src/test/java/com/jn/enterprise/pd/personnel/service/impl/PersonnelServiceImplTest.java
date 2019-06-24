@@ -1,11 +1,14 @@
 package com.jn.enterprise.pd.personnel.service.impl;
 
+import cn.hutool.json.JSONUtil;
+import com.alibaba.druid.support.json.JSONUtils;
 import com.jn.SpringCloudEnterpriseApplication;
 import com.jn.common.model.PaginationData;
 import com.jn.enterprise.model.PersonnelProject;
 import com.jn.enterprise.pd.personnel.service.PersonnelService;
 import com.jn.enterprise.servicemarket.comment.model.Rating;
 import com.jn.enterprise.servicemarket.comment.model.RatingParameter;
+import com.jn.park.hatch.api.HatchhomeConfigClient;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,6 +43,10 @@ public class PersonnelServiceImplTest {
     @Autowired
     private PersonnelService personnelService;
 
+    @Autowired
+    private HatchhomeConfigClient hatchhomeConfigClient;
+
+
     private String id;
     private String account;
 
@@ -57,13 +64,26 @@ public class PersonnelServiceImplTest {
             personnelProject.setType("1");
             personnelProject.setStepId((short) 8060);
             personnelProject.setCreateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2019-04-10 15:21:32"));
-            PaginationData getData = personnelService.selectByPersonnelProjectList(personnelProject);
-            List<PersonnelProject> data =  ( List<PersonnelProject>)getData.getRows();
-            logger.info("获取人才申报数据{}",data);
+            List<PersonnelProject> personnelProjects = personnelService.selectByPersonnelProjectList(personnelProject);
+            logger.info("获取人才申报数据{}");
         } catch (ParseException e) {
             e.printStackTrace();
             logger.info("获取人才申报数据异常");
         }
 
     }
+
+    @Test
+    public void updateEnrolmentActivit() {
+        logger.info("凌晨4点执行执行,更新在孵企业（团队）报名活动项");
+        hatchhomeConfigClient.updateEnrolmentActivit();
+    }
+
+    @Test
+    public void updatePolicyDeclarate() {
+        logger.info("凌晨4点执行执行,更新在孵企业（团队）政策申报项");
+        hatchhomeConfigClient.updatePolicyDeclarate();
+    }
+
+
 }

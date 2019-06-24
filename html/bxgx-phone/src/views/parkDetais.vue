@@ -29,6 +29,8 @@ export default {
         callback: res => {
           if (res.code === '0000') {
             this.noticeDetail = res.data
+          } else {
+            this.$vux.toast.text(res.result)
           }
         }
       })
@@ -55,9 +57,10 @@ export default {
      font-size: 24px;
      color:#A2A2A2;
  }
- .anContent{
-     font-size: 26px;
-     color:#666;
- }
+//  .anContent{
+//      font-size: 26px;
+//      color:#666;
+//      max-width:100%
+//  }
 }
 </style>

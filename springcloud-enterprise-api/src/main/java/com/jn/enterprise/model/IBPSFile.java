@@ -1,5 +1,8 @@
 package com.jn.enterprise.model;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 
 /**
@@ -9,12 +12,13 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
+@ApiModel(value = "IBPSFile",description = "IBPS文件格式展示")
 public class IBPSFile implements Serializable {
-
+    @ApiModelProperty(value = "文件id")
     private String id;
-
+    @ApiModelProperty(value = "文件名称")
     private String fileName;
-
+    @ApiModelProperty(value = "文件路径")
     private String filePath;
 
     public String getId() {

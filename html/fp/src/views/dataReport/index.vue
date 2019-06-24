@@ -211,7 +211,8 @@
         return y + '/'+ m + '/' + d
       },
       formatDate(time) {
-        const date = new Date(time)
+        const str = time.substr(0, 10)
+        const date = new Date(str)
         const y = date.getFullYear()
         const m = date.getMonth() + 1
         const d = date.getDate()
@@ -293,12 +294,16 @@
         this.toFillData(item, type)
       },
       toFillData(item, type) {
+        let query = {
+          fileId: item.fillId,
+          type: type
+        }
+        if (this.$route.query.iframe) {
+          query.iframe = 1
+        }
         this.$router.push({
           path:'/servicemarket/product/productService/report',
-          query:{
-            fileId: item.fillId,
-            type: type
-          }
+          query: query
         })
       },
       formatReported(item) {

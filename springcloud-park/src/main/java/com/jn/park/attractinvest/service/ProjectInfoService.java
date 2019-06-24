@@ -1,5 +1,8 @@
 package com.jn.park.attractinvest.service;
 
+import com.jn.park.attractinvest.vo.ProjectInfoVo;
+import com.jn.system.model.User;
+
 /**
  * 项目管理service
  *
@@ -19,4 +22,12 @@ public interface ProjectInfoService {
      * 项目管理，拟制合同状态不正常提醒功能
      */
     void projectRemind();
+
+    /**
+     * 企业入驻流程后置处理
+     *
+     * @param projectInfoVo
+     * @param user          当前用户
+     */
+    void enterpriseEnterHandle(ProjectInfoVo projectInfoVo, User user);
 }

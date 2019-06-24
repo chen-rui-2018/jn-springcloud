@@ -27,6 +27,7 @@
       <el-table-column label="岗位名称" align="center" prop="postName" />
       <el-table-column label="岗位类型" align="center" prop="postTypeName" />
       <el-table-column label="创建时间" align="center" min-width="120" prop="createdTime"/>
+      <el-table-column label="等级" align="center" prop="rank"/>
       <el-table-column label="状态" align="center" prop="recordStatus">
         <template slot-scope="scope">
           <span :class="scope.row.recordStatus==1 ? 'text-green' : 'text-red'">{{ scope.row.recordStatus | statusFilter }}</span>
@@ -51,16 +52,20 @@
         <el-form-item label="岗位名称" prop="postName">
           <el-input v-model.trim="postform.postName" maxlength="20" clearable/>
         </el-form-item>
-        <el-form-item label="岗位类型" prop="postTypeId">
+        <el-form-item label="岗位类型">
           <el-select v-model="postform.postTypeId" placeholder="请选择" class="filter-item" clearable>
             <el-option v-for="(item,index) in postTypeNameOptions" :key="index" :label="item.label" :value="item.value" />
           </el-select>
+        </el-form-item>
+        <el-form-item label="等级" prop="rank">
+          <el-input v-model="postform.rank" maxlength="10" clearable/>
         </el-form-item>
         <el-form-item label="状态" prop="recordStatus">
           <el-select v-model="postform.recordStatus" placeholder="请选择" class="filter-item" >
             <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
+
       </el-form>
       <div slot="footer" class="dialog-footer" align="center">
         <el-button :disabled="isDisabled" type="primary" @click="dialogStatus==='新增岗位'?createPostData():updateData()">提交</el-button>
@@ -115,6 +120,14 @@ export default {
         }
       }
     }
+    var checkRank = (rule, value, callback) => {
+      const reg = /^[1-9][0-9]*$/
+      if (!reg.test(value)) {
+        callback('请输入大于0的数字')
+      } else {
+        callback()
+      }
+    }
     return {
       postTypeNameOptions: [],
       isDisabled: false,
@@ -123,7 +136,8 @@ export default {
         id: '',
         postName: undefined,
         postTypeId: undefined,
-        recordStatus: undefined
+        recordStatus: undefined,
+        rank: undefined
       },
       dialogStatus: '',
       postdialogFormVisible: false,
@@ -149,7 +163,9 @@ export default {
           { required: true, message: '请输入岗位名称', trigger: 'blur' },
           { validator: checkAccount, trigger: 'blur' }
         ],
-        postTypeId: [{ required: true, message: '请选择岗位类型', trigger: 'change' }],
+        rank: [{ required: true, message: '请输入等级', trigger: 'blur' },
+          { validator: checkRank, trigger: 'blur' }
+        ],
         recordStatus: [{ required: true, message: '请选择状态', trigger: 'change' }]
       }
     }
@@ -208,6 +224,7 @@ export default {
       //   添加默认数据
       this.dialogStatus = '编辑岗位'
       this.postform.id = row.id
+      this.postform.rank = row.rank
       this.postform.postName = row.postName
       this.postform.recordStatus = row.recordStatus.toString()
       this.postform.postTypeId = row.postTypeId
@@ -282,6 +299,7 @@ export default {
       this.postform.postName = undefined
       this.postform.recordStatus = undefined
       this.postform.postTypeId = undefined
+      this.postform.rank = undefined
       this.dialogStatus = '新增岗位'
       this.postdialogFormVisible = true
       this.$nextTick(() => {

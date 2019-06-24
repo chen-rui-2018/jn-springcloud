@@ -21,8 +21,8 @@
 }
 .search .icon-search{
   position: absolute;
-  left:40%;
-  top:50rpx;
+  left:16%;
+  top:47rpx;
 }
 .search input{
   background-color: #fff;

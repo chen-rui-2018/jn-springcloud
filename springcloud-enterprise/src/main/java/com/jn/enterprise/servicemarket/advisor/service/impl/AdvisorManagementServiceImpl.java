@@ -7,6 +7,10 @@ import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.GlobalConstants;
 import com.jn.common.util.StringUtils;
+import com.jn.enterprise.common.enums.CommonExceptionEnum;
+import com.jn.enterprise.company.service.CompanyService;
+import com.jn.enterprise.company.vo.InviteUpgradeStatusVO;
+import com.jn.enterprise.company.vo.UpgradeStatusVO;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
 import com.jn.enterprise.enums.OrgExceptionEnum;
 import com.jn.enterprise.enums.RecordStatusEnum;
@@ -83,6 +87,9 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
     @Autowired
     private InvestorService investorService;
 
+    @Autowired
+    private CompanyService companyService;
+
 
     /**
      * 是否删除 0：删除  1：有效
@@ -104,6 +111,13 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
     @ServiceLog(doAction = "邀请顾问")
     @Transactional(rollbackFor = Exception.class)
     public int inviteAdvisor(String registerAccount,String loginAccount) {
+        //判断当前用户是否可以认证
+        InviteUpgradeStatusVO joinParkStatus = companyService.getJoinParkStatus(loginAccount);
+        String allowStatus="0";
+        if(!StringUtils.equals(allowStatus,joinParkStatus.getCode())){
+            logger.warn(joinParkStatus.getMessage());
+            throw new JnSpringCloudException(CommonExceptionEnum.UPGRADE_COMMON, loginAccount + joinParkStatus.getInviteMessage());
+        }
         //1.判断当前登录用户是否为机构管理员
         judgeAccountIsOrgManage(loginAccount);
         //2.判断被邀请顾问是否为普通用户，非普通用户不能被邀请
@@ -120,13 +134,11 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
             logger.warn("当前账号{}在服务机构表中不存在",loginAccount);
             throw new JnSpringCloudException(AdvisorExceptionEnum.SERVICE_ORG_NOT_EXIST);
         }
-        List<String>approvalStatus=new ArrayList<>(8);
-        approvalStatus.add(ApprovalStatusEnum.APPROVAL_NOT_PASSED.getValue());
-        approvalStatus.add(ApprovalStatusEnum.LIFTED.getValue());
         TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
         example.createCriteria().andOrgIdEqualTo(serviceOrgInfo.getOrgId())
                 .andAdvisorAccountEqualTo(registerAccount)
-                .andApprovalStatusNotIn(approvalStatus);
+                .andApprovalStatusNotIn(Arrays.asList(ApprovalStatusEnum.APPROVAL_NOT_PASSED.getValue(),ApprovalStatusEnum.LIFTED.getValue()))
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         List<TbServiceAdvisor> tbServiceAdvisorList = tbServiceAdvisorMapper.selectByExample(example);
         //不存在当前机构和顾问关联的数据（审核状态为非解除状态）
         if(tbServiceAdvisorList.isEmpty()){
@@ -164,11 +176,15 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
         String messageConnectName="机构邀请";
         //消息一级类别 （0：个人动态，1：企业空间）
         int oneSort=0;
+        //消息一级分类名称 （0：个人动态，1：企业空间）
+        String messageOneSortName="个人动态";
         //消息二级类别（1：个人动态，2：企业订单，3：信息发布动态，4：交费提醒，5：访客留言，6：数据上报提醒，7：机构邀请，8：企业邀请，9：机构邀请，10：私人订单）
         int twoSort=7;
+        //个人动态，2：企业订单，3：信息发布动态，4：交费提醒，5：访客留言，6：数据上报提醒，7：机构邀请，8：企业邀请，9：机构邀请，10：私人订单
+        String messageTowSortName="机构邀请";
         //3.调用消息接口，往消息接口添加一条邀请信息
         AddMessageModel addMessageModel = getAddMessageModel(registerAccount, loginAccount, messageTitle,
-                messageContent, messageConnect,messageConnectName, oneSort, twoSort);
+                messageContent, messageConnect,messageConnectName, oneSort,messageOneSortName, twoSort,messageTowSortName);
         return messageClient.addMessage(addMessageModel);
     }
 
@@ -183,7 +199,7 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
      */
     @ServiceLog(doAction = "")
     private AddMessageModel getAddMessageModel(String acceptAccount, String sendAccount, String messageTitle,String messageContent,
-                                               String messageConnect,String messageConnectName, int oneSort, int twoSort) {
+                                               String messageConnect,String messageConnectName, int oneSort,String messageOneSortName,int twoSort,String messageTowSortName) {
         AddMessageModel addMessageModel=new AddMessageModel();
         //消息标题
         addMessageModel.setMessageTitle(messageTitle);
@@ -199,8 +215,12 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
         addMessageModel.setMessageSender(sendAccount);
         //消息一级类别（0：个人动态，1：企业空间）
         addMessageModel.setMessageOneSort(oneSort);
+        //消息一级类别名称（0：个人动态，1：企业空间）
+        addMessageModel.setMessageOneSortName(messageOneSortName);
         //消息二级类别（0：私人订单，1：信用动态，2：园区通知，3：消费汇总，4：收入汇总，5，付款通知，6：企业订单，7：信息发布动态，8：交费提醒，9：访客留言，10：数据上报提醒  11.机构邀请）
         addMessageModel.setMessageTowSort(twoSort);
+        //消息二级类别名称（0：私人订单，1：信用动态，2：园区通知，3：消费汇总，4：收入汇总，5，付款通知，6：企业订单，7：信息发布动态，8：交费提醒，9：访客留言，10：数据上报提醒  11.机构邀请）
+        addMessageModel.setMessageTowSortName(messageTowSortName);
         //创建人账号
         addMessageModel.setCreatorAccount(sendAccount);
         return addMessageModel;
@@ -214,7 +234,7 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
     private void judgeAccountIsOrgManage(String loginAccount) {
         List<String> accountList=new ArrayList<>(8);
         accountList.add(loginAccount);
-        String roleName="机构管理员";
+        String roleName=HomeRoleEnum.ORG_ADMIN.getCode();
         List<UserRoleInfo> userRoleInfoList = orgColleagueService.getUserRoleInfoList(accountList, roleName);
         if(userRoleInfoList.isEmpty() || !StringUtils.equals(roleName, userRoleInfoList.get(0).getRoleName())){
             logger.warn("当前账号:[{}]不是{},不能邀请顾问",loginAccount,roleName);
@@ -341,18 +361,18 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
         List<TbServiceAdvisor> tbServiceAdvisorList= tbServiceAdvisorMapper.selectByExample(example);
         List<AdvisorManagementShow>resultList=new ArrayList<>(16);
         for(TbServiceAdvisor advisor:tbServiceAdvisorList){
-            if(ApprovalTypeEnum.PENDING.getCode().equals(advisor.getApprovalStatus())){
+            if(ApprovalTypeEnum.PENDING.getValue().equals(advisor.getApprovalStatus())){
                 //审批状态为"待审核"
-                advisor.setApprovalStatus(ApprovalTypeEnum.PENDING.getMessage());
-            }else if(ApprovalTypeEnum.APPROVAL_NOT_PASSED.getCode().equals(advisor.getApprovalStatus())){
+                advisor.setApprovalStatus(ApprovalTypeEnum.PENDING.getCode());
+            }else if(ApprovalTypeEnum.APPROVAL_NOT_PASSED.getValue().equals(advisor.getApprovalStatus())){
                 //审批状态为"审批不通过"
-                advisor.setApprovalStatus(ApprovalTypeEnum.APPROVAL_NOT_PASSED.getMessage());
-            }else if(ApprovalTypeEnum.NO_FEEDBACK.getCode().equals(advisorManagementParam.getApprovalStatus())){
+                advisor.setApprovalStatus(ApprovalTypeEnum.APPROVAL_NOT_PASSED.getCode());
+            }else if(ApprovalTypeEnum.NO_FEEDBACK.getValue().equals(advisor.getApprovalStatus())){
                 //审批状态为"未反馈"
-                advisor.setApprovalStatus(ApprovalTypeEnum.NO_FEEDBACK.getMessage());
-            }else if(ApprovalTypeEnum.REJECTED.getCode().equals(advisorManagementParam.getApprovalStatus())){
+                advisor.setApprovalStatus(ApprovalTypeEnum.NO_FEEDBACK.getCode());
+            }else if(ApprovalTypeEnum.REJECTED.getValue().equals(advisor.getApprovalStatus())){
                 //审批状态为"已拒绝"
-                advisor.setApprovalStatus(ApprovalTypeEnum.REJECTED.getMessage());
+                advisor.setApprovalStatus(ApprovalTypeEnum.REJECTED.getCode());
             }
             AdvisorManagementShow advisorManagementShow=new AdvisorManagementShow();
             BeanUtils.copyProperties(advisor, advisorManagementShow);
@@ -401,7 +421,8 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
                     Result<SysRole> addSysRoleResult = systemClient.getRoleByName(HomeRoleEnum.ORG_ADVISER.getCode());
                     Result<SysRole> delSysRoleResult = systemClient.getRoleByName(HomeRoleEnum.NORMAL_USER.getCode());
                     if(addSysRoleResult==null ||addSysRoleResult.getData()==null || delSysRoleResult==null || delSysRoleResult.getData()==null){
-                        logger.warn("添加机构顾问角色失败，失败原因：无法获取“机构顾问”、“普通用户”角色信息，请确认系统服务是否正常，且“机构顾问”、“普通用户”角色在系统中存在");
+                        logger.warn("添加机构顾问角色失败，失败原因：无法获取“{}”、“普通用户”角色信息，请确认系统服务是否正常，且“{}”、“普通用户”角色在系统中存在"
+                                ,HomeRoleEnum.ORG_ADVISER.getCode(),HomeRoleEnum.ORG_ADVISER.getCode());
                         throw new JnSpringCloudException(AdvisorExceptionEnum.NETWORK_ANOMALY);
                     }
                     User user=new User();
@@ -410,11 +431,11 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
                     if(booleanResult.getData()==true){
                         return responseNum;
                     }else{
-                        logger.warn("审批顾问填写信息失败，失败原因：更新用户角色为“机构顾问”失败");
+                        logger.warn("审批顾问填写信息失败，失败原因：更新用户角色为“{}”失败",HomeRoleEnum.ORG_ADVISER.getCode());
                         throw new JnSpringCloudException(AdvisorExceptionEnum.NETWORK_ANOMALY);
                     }
                 }else{
-                    logger.warn("审批顾问填写信息成功,更新用户角色为机构顾问失败");
+                    logger.warn("审批顾问填写信息成功,更新用户角色为{}失败",HomeRoleEnum.ORG_ADVISER.getCode());
                     throw new JnSpringCloudException(OrgExceptionEnum.NETWORK_ANOMALY);
                 }
             }else{
@@ -443,7 +464,7 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
     @ServiceLog(doAction = "把顾问账号的角色设置为机构账号")
     private Boolean setAdvisorRole(String advisorAccount) {
         //获取机构顾问角色id
-        String roleName="机构顾问";
+        String roleName=HomeRoleEnum.ORG_ADVISER.getCode();
         Result<SysRole> sysRoleData = systemClient.getRoleByName(roleName);
         if(sysRoleData==null || sysRoleData.getData()==null){
             logger.warn("审批顾问填写信息,获取机构顾问角色id失败");
@@ -470,12 +491,21 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
             logger.warn("当前账号{}在服务机构表中不存在",loginAccount);
             throw new JnSpringCloudException(AdvisorExceptionEnum.SERVICE_ORG_NOT_EXIST);
         }
-        //判断顾问表中是否已存在当前机构和顾问关联的数据（状态为已拒绝（value="3"））
+        //判断顾问表中是否已存在当前机构和顾问关联的数据（状态为已拒绝（value="3"）），或者已删除的数据
         TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
-        example.createCriteria().andOrgIdEqualTo(serviceOrgInfo.getOrgId())
+        //根据状态查询
+        TbServiceAdvisorCriteria.Criteria criteriaStatus = example.createCriteria();
+        criteriaStatus.andOrgIdEqualTo(serviceOrgInfo.getOrgId())
                 .andAdvisorAccountEqualTo(advisorAccount)
                 .andApprovalStatusEqualTo(ApprovalStatusEnum.REFUSED.getValue())
                 .andRecordStatusEqualTo(RECORD_STATUS);
+        //根据已删除查询
+        TbServiceAdvisorCriteria.Criteria criteriaDel = example.createCriteria();
+        criteriaDel.andOrgIdEqualTo(serviceOrgInfo.getOrgId())
+                .andAdvisorAccountEqualTo(advisorAccount)
+                .andRecordStatusEqualTo(RecordStatusEnum.DELETE.getValue());
+        example.or(criteriaStatus);
+        example.or(criteriaDel);
         long existNum = tbServiceAdvisorMapper.countByExample(example);
         //没有数据
         if(existNum==0){

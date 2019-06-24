@@ -5,8 +5,9 @@
 
 
     <select id="selectByJobNumber" parameterType="map" resultType="com.jn.hr.employee.model.DirectlyLeader">
-        select id, job_number, direct_leader_level, direct_leadership, direct_leader_name, direct_leader_level_name,
-    direct_leadership_name from tb_manpower_directly_leader
+        select id, job_number jobNumber, direct_leader_level directLeaderLevel, direct_leadership directLeadership,
+         direct_leader_name directLeaderName, direct_leader_level_name directLeaderLevelName,
+    direct_leadership_name directLeadershipName from tb_manpower_directly_leader
          where job_number=#{jobNumber}
     </select>
 
@@ -29,5 +30,10 @@
             )
         </foreach>
     </insert>
+    <select id="selectAllDirectlyLeaderToMap" resultType="com.jn.hr.employee.model.DirectlyLeader">
+        select id, job_number jobNumber, direct_leader_level directLeaderLevel, direct_leadership directLeadership,
+         direct_leader_name directLeaderName, direct_leader_level_name directLeaderLevelName,
+        direct_leadership_name directLeadershipName from tb_manpower_directly_leader
+    </select>
 
 </mapper>

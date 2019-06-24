@@ -15,6 +15,8 @@ import java.io.Serializable;
 public class ParkingRecordRampParam implements Serializable {
     @ApiModelProperty(value = "停车记录ID",example = "5895425")
     private String parkingId;
+    @ApiModelProperty(value = "同步过来的消息id",example = "5895425")
+    private String messageId;
     @ApiModelProperty(value = "车牌",example = "苏A00001")
     private String carLicense;
     @ApiModelProperty(value = "入场时间 yyyy-MM-dd HH:mm:ss",example = "2019-01-24 10:00:10")
@@ -25,6 +27,14 @@ public class ParkingRecordRampParam implements Serializable {
     private String gateId;
     @ApiModelProperty(value = "停车状态1-入场,0离场",example = "1")
     private String parkingStatus;
+
+    public String getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
+    }
 
     public String getParkingId() {
         return parkingId;
@@ -72,5 +82,18 @@ public class ParkingRecordRampParam implements Serializable {
 
     public void setParkingStatus(String parkingStatus) {
         this.parkingStatus = parkingStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "ParkingRecordRampParam{" +
+                "parkingId='" + parkingId + '\'' +
+                ", messageId='" + messageId + '\'' +
+                ", carLicense='" + carLicense + '\'' +
+                ", admissionTime='" + admissionTime + '\'' +
+                ", departureTime='" + departureTime + '\'' +
+                ", gateId='" + gateId + '\'' +
+                ", parkingStatus='" + parkingStatus + '\'' +
+                '}';
     }
 }

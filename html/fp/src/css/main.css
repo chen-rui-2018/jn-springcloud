@@ -4,6 +4,11 @@
   padding: 0;
 }
 
+body {
+  /* 解决侧边滑动引起界面抖动 */
+  overflow-y: scroll;
+}
+
 ul {
   list-style: none;
 }
@@ -436,12 +441,22 @@ img {
 .actiTrain .actiContent .actiTab .allActiUl > li .actiInfo > .actiNameItem {
   color: #222;
   font-size: 16px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .actiCenter .actiContent .actiTab .allActiUl > li .actiInfo .actiTimer,
 .actiTrain .actiContent .actiTab .allActiUl > li .actiInfo .actiTimer {
   text-indent: -10px;
   margin: 10px 0 5px 18px;
+}
+
+.actiCenter .actiContent .actiTab .allActiUl > li .actiInfo .actiAddress,
+.actiTrain .actiContent .actiTab .allActiUl > li .actiInfo .actiAddress {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .actiCenter .actiContent .actiTab .allActiUl li:nth-child(4n),
@@ -575,6 +590,29 @@ img {
 
 /* 活动详情 */
 /* 服务超市-服务机构，服务产品 */
+.serverOrg .el-tabs__nav-wrap::after,
+.serverPro .el-tabs__nav-wrap::after,
+.serverCon .el-tabs__nav-wrap::after,
+.quickSearch .el-tabs__nav-wrap::after,
+.aboutUs .el-tabs__nav-wrap::after,
+.finaInstitution .el-tabs__nav-wrap::after,
+.finaPro .el-tabs__nav-wrap::after,
+.companyProfile .el-tabs__nav-wrap::after {
+  height: 1px;
+}
+
+.serverOrg .el-tabs__item,
+.serverPro .el-tabs__item,
+.serverCon .el-tabs__item,
+.quickSearch .el-tabs__item,
+.aboutUs .el-tabs__item,
+.finaInstitution .el-tabs__item,
+.finaPro .el-tabs__item,
+.companyProfile .el-tabs__item {
+  height: 50px !important;
+  line-height: 50px !important;
+}
+
 .serverOrg .loginTip,
 .serverPro .loginTip,
 .serverCon .loginTip,
@@ -1060,6 +1098,17 @@ img {
   margin-bottom: 5px;
 }
 
+.serverOrg .serverOrgContent > ul > li .orgCon .conContent .right1,
+.serverPro .serverOrgContent > ul > li .orgCon .conContent .right1,
+.serverCon .serverOrgContent > ul > li .orgCon .conContent .right1,
+.quickSearch .serverOrgContent > ul > li .orgCon .conContent .right1,
+.aboutUs .serverOrgContent > ul > li .orgCon .conContent .right1,
+.finaInstitution .serverOrgContent > ul > li .orgCon .conContent .right1,
+.finaPro .serverOrgContent > ul > li .orgCon .conContent .right1,
+.companyProfile .serverOrgContent > ul > li .orgCon .conContent .right1 {
+  margin-left: 20px;
+}
+
 .serverOrg .serverOrgContent > ul > li .orgCon .conContent .right1 > p,
 .serverPro .serverOrgContent > ul > li .orgCon .conContent .right1 > p,
 .serverCon .serverOrgContent > ul > li .orgCon .conContent .right1 > p,
@@ -1068,7 +1117,7 @@ img {
 .finaInstitution .serverOrgContent > ul > li .orgCon .conContent .right1 > p,
 .finaPro .serverOrgContent > ul > li .orgCon .conContent .right1 > p,
 .companyProfile .serverOrgContent > ul > li .orgCon .conContent .right1 > p {
-  margin-bottom: 5px;
+  margin-top: 4px;
 }
 
 .serverOrg .serverOrgContent > ul > li .orgCon .conContent .right1 .el-rate,
@@ -1130,6 +1179,22 @@ img {
 .finaInsDetail,
 .finaProDetail {
   padding-top: 65px;
+}
+
+.serverOrgDetail .el-tabs__nav-wrap::after,
+.serverProDetail .el-tabs__nav-wrap::after,
+.serverConDetail .el-tabs__nav-wrap::after,
+.quickSearch .el-tabs__nav-wrap::after,
+.finaInsDetail .el-tabs__nav-wrap::after,
+.finaProDetail .el-tabs__nav-wrap::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background-color: #e4e7ed;
+  z-index: 1;
 }
 
 .serverOrgDetail .loginTip,
@@ -1300,8 +1365,9 @@ img {
 .finaInsDetail .agentInfo .agent2 .agent2Info .lastP,
 .finaProDetail .agentInfo .agent2 .agent2Info .lastP {
   position: absolute;
-  margin-top: 20px;
-  margin-left: 630px;
+  right: 0;
+  bottom: 20px;
+  bottom: -8px;
 }
 
 .serverOrgDetail .agentInfo .agent2 .agent2Info .lastP > span,
@@ -1310,7 +1376,7 @@ img {
 .quickSearch .agentInfo .agent2 .agent2Info .lastP > span,
 .finaInsDetail .agentInfo .agent2 .agent2Info .lastP > span,
 .finaProDetail .agentInfo .agent2 .agent2Info .lastP > span {
-  margin-right: 20px;
+  margin-left: 20px;
 }
 
 .serverOrgDetail .agentDel,
@@ -1372,7 +1438,12 @@ img {
 .quickSearch .agentDel .agentDelCon > .zhankai,
 .finaInsDetail .agentDel .agentDelCon > .zhankai,
 .finaProDetail .agentDel .agentDelCon > .zhankai {
-  width: 30px;
+  position: absolute;
+  right: 25px;
+  top: 30px;
+  font-size: 14px;
+  z-index: 2;
+  text-align: center;
 }
 
 .serverOrgDetail .agentDel .agentDelCon .basicInfo .table-orgspace,
@@ -1459,6 +1530,7 @@ img {
   color: #666;
   background-color: #f8f8f8;
   font-size: 13px;
+  width: 146px;
 }
 
 .serverOrgDetail .agentDel .agentDelCon .basicInfo .table-orgspace .table-orgspace-detail,
@@ -1520,6 +1592,15 @@ img {
   font-size: 13px;
 }
 
+.serverOrgDetail .agentDel .agentDelCon .basicInfo .table-orgspace-title,
+.serverProDetail .agentDel .agentDelCon .basicInfo .table-orgspace-title,
+.serverConDetail .agentDel .agentDelCon .basicInfo .table-orgspace-title,
+.quickSearch .agentDel .agentDelCon .basicInfo .table-orgspace-title,
+.finaInsDetail .agentDel .agentDelCon .basicInfo .table-orgspace-title,
+.finaProDetail .agentDel .agentDelCon .basicInfo .table-orgspace-title {
+  width: 146px;
+}
+
 .serverOrgDetail .agentDel .agentDelCon .businessinfo .table-orgspace-title,
 .serverProDetail .agentDel .agentDelCon .businessinfo .table-orgspace-title,
 .serverConDetail .agentDel .agentDelCon .businessinfo .table-orgspace-title,
@@ -1527,6 +1608,15 @@ img {
 .finaInsDetail .agentDel .agentDelCon .businessinfo .table-orgspace-title,
 .finaProDetail .agentDel .agentDelCon .businessinfo .table-orgspace-title {
   width: 146px;
+}
+
+.serverOrgDetail .agentDel .agentDelCon .contactInfo .table-orgspace-title.ta_c,
+.serverProDetail .agentDel .agentDelCon .contactInfo .table-orgspace-title.ta_c,
+.serverConDetail .agentDel .agentDelCon .contactInfo .table-orgspace-title.ta_c,
+.quickSearch .agentDel .agentDelCon .contactInfo .table-orgspace-title.ta_c,
+.finaInsDetail .agentDel .agentDelCon .contactInfo .table-orgspace-title.ta_c,
+.finaProDetail .agentDel .agentDelCon .contactInfo .table-orgspace-title.ta_c {
+  width: auto;
 }
 
 .serverOrgDetail .agentDel .agentDelCon .honor,
@@ -1919,7 +2009,6 @@ img {
 .finaProDetail .agentCon .serConsultant .list-imgleft .list-item,
 .finaProDetail .agentCon .serEvaluation .list-imgleft .list-item {
   padding: 20px 0;
-  padding-top: 10px;
   border-bottom: 1px solid #eee;
 }
 
@@ -2079,7 +2168,7 @@ img {
 .finaProDetail .agentCon .serConsultant .list-imgleft .list-item .detail-contact.inner-product,
 .finaProDetail .agentCon .serEvaluation .list-imgleft .list-item .detail-contact.inner-product {
   color: #999;
-  width: 240px;
+  width: 340px;
 }
 
 .serverOrgDetail .agentCon .serverPro .list-imgleft .list-item .detail-contact,
@@ -2123,7 +2212,7 @@ img {
 .finaProDetail .agentCon .serverPro .list-imgleft .list-item .detail-evaluate.inner-product,
 .finaProDetail .agentCon .serConsultant .list-imgleft .list-item .detail-evaluate.inner-product,
 .finaProDetail .agentCon .serEvaluation .list-imgleft .list-item .detail-evaluate.inner-product {
-  width: 420px;
+  width: 320px;
   color: #999;
 }
 
@@ -2147,6 +2236,7 @@ img {
 .finaProDetail .agentCon .serEvaluation .list-imgleft .list-item .detail-evaluate {
   display: inline-block;
   vertical-align: middle;
+  margin-left: 20px;
 }
 
 .serverOrgDetail .agentCon .serverPro .list-imgleft .list-item .detail-count,
@@ -2167,9 +2257,7 @@ img {
 .finaProDetail .agentCon .serverPro .list-imgleft .list-item .detail-count,
 .finaProDetail .agentCon .serConsultant .list-imgleft .list-item .detail-count,
 .finaProDetail .agentCon .serEvaluation .list-imgleft .list-item .detail-count {
-  width: 150px;
-  display: inline-block;
-  vertical-align: top;
+  margin-top: 40px;
 }
 
 .serverOrgDetail .agentCon .serverPro .list-imgleft .list-item .orgBtn,
@@ -2196,6 +2284,27 @@ img {
   border: 1px solid #00a041;
   border-radius: 4px;
   cursor: pointer;
+}
+
+.serverOrgDetail .agentCon .serverPro .list-imgleft .list-item:nth-child(1),
+.serverOrgDetail .agentCon .serConsultant .list-imgleft .list-item:nth-child(1),
+.serverOrgDetail .agentCon .serEvaluation .list-imgleft .list-item:nth-child(1),
+.serverProDetail .agentCon .serverPro .list-imgleft .list-item:nth-child(1),
+.serverProDetail .agentCon .serConsultant .list-imgleft .list-item:nth-child(1),
+.serverProDetail .agentCon .serEvaluation .list-imgleft .list-item:nth-child(1),
+.serverConDetail .agentCon .serverPro .list-imgleft .list-item:nth-child(1),
+.serverConDetail .agentCon .serConsultant .list-imgleft .list-item:nth-child(1),
+.serverConDetail .agentCon .serEvaluation .list-imgleft .list-item:nth-child(1),
+.quickSearch .agentCon .serverPro .list-imgleft .list-item:nth-child(1),
+.quickSearch .agentCon .serConsultant .list-imgleft .list-item:nth-child(1),
+.quickSearch .agentCon .serEvaluation .list-imgleft .list-item:nth-child(1),
+.finaInsDetail .agentCon .serverPro .list-imgleft .list-item:nth-child(1),
+.finaInsDetail .agentCon .serConsultant .list-imgleft .list-item:nth-child(1),
+.finaInsDetail .agentCon .serEvaluation .list-imgleft .list-item:nth-child(1),
+.finaProDetail .agentCon .serverPro .list-imgleft .list-item:nth-child(1),
+.finaProDetail .agentCon .serConsultant .list-imgleft .list-item:nth-child(1),
+.finaProDetail .agentCon .serEvaluation .list-imgleft .list-item:nth-child(1) {
+  padding-top: 10px;
 }
 
 .serverOrgDetail .agentCon .serConsultant .list-imgleft-container,
@@ -2456,6 +2565,9 @@ img {
 .finaProDetail .agentCon .actiConsultation .allActiUl > li .actiInfo > .actiNameItem {
   color: #222;
   font-size: 16px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .serverOrgDetail .agentCon .actiConsultation .allActiUl > li .actiInfo .actiTimer,
@@ -2466,6 +2578,17 @@ img {
 .finaProDetail .agentCon .actiConsultation .allActiUl > li .actiInfo .actiTimer {
   text-indent: -10px;
   margin: 10px 0 5px 18px;
+}
+
+.serverOrgDetail .agentCon .actiConsultation .allActiUl > li .actiInfo .actiAddress,
+.serverProDetail .agentCon .actiConsultation .allActiUl > li .actiInfo .actiAddress,
+.serverConDetail .agentCon .actiConsultation .allActiUl > li .actiInfo .actiAddress,
+.quickSearch .agentCon .actiConsultation .allActiUl > li .actiInfo .actiAddress,
+.finaInsDetail .agentCon .actiConsultation .allActiUl > li .actiInfo .actiAddress,
+.finaProDetail .agentCon .actiConsultation .allActiUl > li .actiInfo .actiAddress {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .serverOrgDetail .agentCon .actiConsultation .allActiUl li:nth-child(4n),
@@ -2549,7 +2672,7 @@ img {
 
 .portalIndex .header .headerContainer .nav,
 .enterpriseservice .header .headerContainer .nav {
-  width: 600px;
+  width: 700px;
   height: 37.6px;
   margin: 0 auto;
 }
@@ -2660,7 +2783,7 @@ img {
 
 .portalIndex .banner .quickEnter > ul,
 .enterpriseservice .banner .quickEnter > ul {
-  padding: 0 300px;
+  padding: 0 100px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -3510,6 +3633,9 @@ img {
 .enterpriseservice .popularActi .acti .actiUl > li .actiInfo > .actiNameItem {
   color: #222;
   font-size: 16px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .portalIndex .popularActi .acti .actiUl > li .actiInfo .actiTimer,
@@ -3719,6 +3845,7 @@ img {
   text-align: left;
   font-size: 13px;
   color: #b6b6b6;
+  margin: 10px 0;
 }
 
 .portalIndex .enterpriseinfo .enterPriseCon .con1 .conInfo > img,
@@ -3891,12 +4018,13 @@ img {
 
 .portalIndex .enterprisesPark .enterPark > ul li p,
 .enterpriseservice .enterprisesPark .enterPark > ul li p {
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
 .portalIndex .enterprisesPark .enterPark > ul li img,
 .enterpriseservice .enterprisesPark .enterPark > ul li img {
   width: 50px;
+  height: 50px;
 }
 
 .portalIndex .enterprisesPark .enterPark > ul .li1Div,

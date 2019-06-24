@@ -2,6 +2,8 @@ package com.jn.common.util;
 
 import com.jn.common.util.encryption.EncryptUtil;
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -30,6 +32,9 @@ import java.util.Map;
 @Component
 @RefreshScope
 public class CallOtherSwaggerUtils {
+
+
+
 
     /**
      * ibps.swagger的链接
@@ -67,6 +72,9 @@ public class CallOtherSwaggerUtils {
      * token失效时间
      */
     private static int TIME = 60 * 60 * 2;
+
+
+    private static final Logger logger= LoggerFactory.getLogger(CallOtherSwaggerUtils.class);
 
     /**
      * swagger util
@@ -107,7 +115,7 @@ public class CallOtherSwaggerUtils {
                 result = RestTemplateUtil.request(url + curl, method, param, dynamicHeaders, mediaType);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("连接IBPS通信异常",e);
         }
         return result;
     }
@@ -135,8 +143,8 @@ public class CallOtherSwaggerUtils {
                 dynamicHeaders.put("X-Authorization-access_token", token);
                 result = RestTemplateUtil.request(url + curl, method, jsonObject, dynamicHeaders);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        }catch (Exception e) {
+            logger.error("连接IBPS通信异常",e);
         }
         return result;
     }

@@ -23,6 +23,12 @@
   border-radius:21px;
   color:#666666;
 }
+.date .textActi{
+  padding:10rpx 16rpx;
+  background:rgba(236,252,242,1);
+  color:#07AB50;
+  border: 1rpx solid #8ad0b9
+}
 .select_date{
   display: flex;
   justify-content: space-around;

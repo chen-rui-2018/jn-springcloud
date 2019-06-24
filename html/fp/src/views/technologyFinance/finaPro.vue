@@ -1,5 +1,5 @@
 <template>
-  <div class="finaInstitution w">
+  <div class="finaInstitution w" v-loading="finaloading">
     <div class="serverOrgMenu">
       <span class="pointer" @click="$router.push({path:'/tfindex'})">首页</span>
       <span>/</span>
@@ -84,7 +84,8 @@
     </div>
     <div class="serverOrgFilter mainBorder clearfix">
       <div class="filLeft fl">
-        共有<i class="mainColor">{{total}}</i>个符合条件的结果
+        共有
+        <i class="mainColor">{{total}}</i>个符合条件的结果
       </div>
       <div class="filRight fr">
         <input type="text" placeholder="搜索关键字" v-model="keyW">
@@ -92,24 +93,30 @@
       </div>
     </div>
     <div class="serverOrgContent" id="serverOrgContent">
-      <ul>
+       <div v-if="serverAgent.length==0&&!finaloading">
+        <nodata></nodata>
+      </div>
+      <ul v-else>
         <li class="clearfix" v-for="(i,k) in serverAgent" :key='k'>
           <div class="orgImg fl pointer" @click="handleOrgDel(i.productId)">
             <img v-if="i.pictureUrl" :src="i.pictureUrl" alt="">
             <img v-else src="@/../static/img/product.png" alt="">
           </div>
-          <div class="orgCon fl">
+          <div class="orgCon fl pointer" @click="handleOrgDel(i.productId)">
             <div class="conTil">{{i.productName}}</div>
             <div class="conContent clearfix color3">
               <div class="left1 fl">
                 <p>服务机构：
                   <span class="mainColor">{{i.orgName}}</span>
                 </p>
-                <p>参考利率范围：<span class="mainColor">{{i.refRateMin}}-{{i.refRateMax}}</span></p>
+                <p>参考利率范围：
+                  <span class="mainColor">{{i.refRateMin}}%-{{i.refRateMax}}%</span>
+                </p>
                 <p>贷款期限:
                   <span class="mainColor">{{i.loanTermMin}}-{{i.loanTermMax}}</span>笔交易</p>
-                  <p>担保方式：{{i.assureMethodName}}</p>
-                  <p>贷款额度：<span class="mainColor">{{i.loanAmountMin}}-{{i.loanAmountMax}}</span>万元</p>
+                <p>担保方式：{{i.assureMethodName}}</p>
+                <p>贷款额度：
+                  <span class="mainColor">{{i.loanAmountMin}}-{{i.loanAmountMax}}</span>万元</p>
               </div>
               <div class="right1 fl">
                 <p>
@@ -117,7 +124,8 @@
                   </el-rate>
                   <span class="mainColor">{{i.ratingNum}}</span>条评价</p>
                 <p style="text-align:center">
-                  累计<span class="mainColor">{{i.transactionNum}}</span>笔交易
+                  累计
+                  <span class="mainColor">{{i.transactionNum}}</span>&nbsp;笔交易
                 </p>
               </div>
             </div>
@@ -133,37 +141,39 @@
       </el-pagination>
     </div>
     <!-- 提需求 -->
-    <template v-if="finaProVisible">
+    <template v-loading="finaProVisible">
       <el-dialog :visible.sync="finaProVisible" width="600px" :modal-append-to-body=false :lock-scroll="false">
         <div v-if="islogin">
           <el-form ref="financialProform" :rules="rules" :model="financialProform" label-position="right" label-width="150px" style="max-width:500px;">
-          <el-form-item label="融资金额(万元):" prop="financingAmount">
-            <el-input v-model.trim="financialProform.financingAmount" placeholder="请输入融资金额" maxlength="100" clearable/>
-          </el-form-item>
-          <el-form-item label="融资期限(月):" prop="financingPeriod">
-            <el-select v-model="financialProform.financingPeriod" placeholder="请选择" style="width:100%">
-              <el-option v-for="(item,index) in options" :key="index" :label="item.label" :value="item.value" />
-              <!-- <el-option value="3个月及以下"/>
+            <el-form-item label="融资金额(万元):" prop="financingAmount">
+              <el-input v-model.trim="financialProform.financingAmount" placeholder="请输入融资金额" maxlength="100" clearable/>
+            </el-form-item>
+            <el-form-item label="融资期限(月):" prop="financingPeriod">
+              <el-select v-model="financialProform.financingPeriod" placeholder="请选择" style="width:100%">
+                <el-option v-for="(item,index) in options" :key="index" :label="item.label" :value="item.value" />
+                <!-- <el-option value="3个月及以下"/>
               <el-option value="6个月及以下"/>
               <el-option value="12个月及以下"/>
               <el-option value="36个月及以下"/>
               <el-option value="36个月以上"/> -->
-            </el-select>
-          </el-form-item>
+              </el-select>
+            </el-form-item>
 
-          <el-form-item label="资金需求日期:" prop="expectedDate">
-            <el-input v-model.trim="financialProform.expectedDate" placeholder="请输入需求日期，如2019-04-10" maxlength="100" clearable/>
-          </el-form-item>
-          <el-form-item label="资金需求说明:" prop="fundsReqDesc">
-            <el-input v-model.trim="financialProform.fundsReqDesc" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
-          </el-form-item>
-        </el-form>
-        <div class="demandLine"></div>
-        <div class="demandDia" @click="demandDia()">提交需求</div>
+            <el-form-item label="资金需求日期:" prop="expectedDate">
+              <!-- <el-input v-model.trim="financialProform.expectedDate" placeholder="请输入需求日期，如2019-04-10" maxlength="100" clearable/> -->
+              <el-date-picker v-model="financialProform.expectedDate" type="date" placeholder="选择日期" style="width:100%" value-format="yyyy-MM-dd">
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item label="资金需求说明:" prop="fundsReqDesc">
+              <el-input v-model.trim="financialProform.fundsReqDesc" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
+            </el-form-item>
+          </el-form>
+          <div class="demandLine"></div>
+          <div class="demandDia" @click="demandDia()">提交需求</div>
         </div>
-         <div v-else class="loginTip">
+        <div v-else class="loginTip">
           你还未
-          <span class="mainColor pointer" @click="$router.push({path:'/login'})">登录</span>
+          <span class="mainColor pointer" @click="goLogin">登录</span>
           /
           <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
           企业账号
@@ -173,18 +183,23 @@
   </div>
 </template>
 <script>
+import nodata from "../common/noData.vue";
 export default {
+  components: {
+    nodata
+  },
   data() {
     return {
-      islogin:true,
-      guaranteeMode:[],
-      assureMethodCode:'',
-      onlineLoan:'',
-      policyProduct:'',
-      loanTermMax:'',
-      loanTermMin:'',
-      loanAmountMax:'',
-      loanAmountMin:'',
+      finaloading:false,
+      islogin: true,
+      guaranteeMode: [],
+      assureMethodCode: "",
+      onlineLoan: "",
+      policyProduct: "",
+      loanTermMax: "",
+      loanTermMin: "",
+      loanAmountMax: "",
+      loanAmountMin: "",
       total: 0,
       currentPage1: 1,
       row: 3,
@@ -192,9 +207,9 @@ export default {
       serverAgent: [],
       sortTypes: "",
       keyW: "",
-      industrySector:"",
-      developmentStage:"",
-      companyNature:"",
+      industrySector: "",
+      developmentStage: "",
+      companyNature: "",
       colorFlag: "",
       filterFlag1: "",
       filterFlag2: "",
@@ -207,7 +222,7 @@ export default {
       flag4: true,
       flag5: true,
       showFlag: true,
-      finaProVisible:false,
+      finaProVisible: false,
       financialProform: {
         financingAmount: "",
         financingPeriod: "",
@@ -226,7 +241,11 @@ export default {
           { required: true, message: "请选择融资期限", trigger: "change" }
         ],
         expectedDate: [
-          { required: true, message: "请输入需求日期，格式为xxxx-yy-rr", trigger: "blur" }
+          {
+            required: true,
+            message: "请输入需求日期，格式为xxxx-yy-rr",
+            trigger: "blur"
+          }
         ]
       },
       options: [
@@ -295,7 +314,7 @@ export default {
         {
           value: 8,
           label: "500万及以下",
-           loanAmountMax: 500,
+          loanAmountMax: 500,
           loanAmountMin: ""
         },
         {
@@ -308,7 +327,7 @@ export default {
           value: 10,
           label: "1000万及以上",
           loanAmountMax: "",
-          loanAmountMin: 1000,
+          loanAmountMin: 1000
         }
       ],
       options2: [
@@ -316,43 +335,47 @@ export default {
           value: 11,
           label: "3个月及以下",
           loanTermMax: 3,
-          loanTermMin: "",
+          loanTermMin: ""
         },
         {
           value: 1,
           label: "6个月及以下",
           loanTermMax: 6,
-          loanTermMin: "",
+          loanTermMin: ""
         },
         {
           value: 2,
           label: "12个月及以下",
-           loanTermMax: 12,
-          loanTermMin: "",
+          loanTermMax: 12,
+          loanTermMin: ""
         },
         {
           value: 3,
           label: "36个月及以下",
           loanTermMax: 36,
-          loanTermMin: "",
+          loanTermMin: ""
         },
         {
           value: 4,
           label: "36个月以上",
           loanTermMax: "",
-          loanTermMin: 36,
+          loanTermMin: 36
         }
-      ],
+      ]
     };
   },
   mounted() {
     this.initList();
-    this.getAssureType()
+    this.getAssureType();
   },
   methods: {
-      //判断是否登录
+    goLogin() {
+      window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
+      this.$router.push({ path: "/login" });
+    },
+    //判断是否登录
     isLogin() {
-      if (!sessionStorage.userInfo) {
+      if (!this.getToken()) {
         this.islogin = false;
       }
     },
@@ -371,6 +394,9 @@ export default {
     },
     //提交需求
     demandDia() {
+      // if(!this.financialProform.financingPeriod){
+      //   return
+      // }
       let _this = this;
       let max = this.arr[this.financialProform.financingPeriod].loanTermMax;
       let min = this.arr[this.financialProform.financingPeriod].loanTermMin;
@@ -398,11 +424,7 @@ export default {
     },
     //提需求
     raiseDemand(i) {
-      // if (!sessionStorage.userInfo) {
-      //   this.$message.error("请先登录");
-      //   return;
-      // }
-      this.isLogin()
+      this.isLogin();
       this.finaProVisible = true;
       this.financialProform.expectedDate = "";
       this.financialProform.financingAmount = "";
@@ -413,35 +435,38 @@ export default {
       this.financialProform.productId = i.productId;
       this.financialProform.productName = i.productName;
     },
-    handleFilter1(i,j,k) {
-       if(j!=''){
-        this.loanTermMax=j
-      } else{
-        this.loanTermMin=k
+    handleFilter1(i, j, k) {
+      if (j != "") {
+        this.loanTermMax = j;
+        this.loanTermMin = "";
+      } else {
+        this.loanTermMin = k;
+        this.loanTermMax = "";
       }
       this.filterFlag1 = i;
       this.initList();
     },
     handleFilter2(i) {
-      this.assureMethodCode=`${i}`,
-      this.filterFlag2 = i;
+      (this.assureMethodCode = `${i}`), (this.filterFlag2 = i);
       this.initList();
     },
     handleFilter3(i) {
-      this.onlineLoan=i
+      this.onlineLoan = i;
       this.filterFlag3 = i;
       this.initList();
     },
     handleFilter4(i) {
-      this.policyProduct=i
+      this.policyProduct = i;
       this.filterFlag4 = i;
       this.initList();
     },
-    handleFilter5(i,j,k) {
-      if(j!=''){
-        this.loanAmountMax=j
-      } else{
-        this.loanAmountMin=k
+    handleFilter5(i, j, k) {
+      if (j != "") {
+        this.loanAmountMax = j;
+        this.loanAmountMin = "";
+      } else {
+        this.loanAmountMin = k;
+        this.loanAmountMax = "";
       }
       this.filterFlag5 = i;
       this.initList();
@@ -453,7 +478,10 @@ export default {
     },
     //跳转详情页
     handleOrgDel(productId) {
-      this.$router.push({ path: "finaProDetail", query: { productId: productId } });
+      this.$router.push({
+        path: "finaProDetail",
+        query: { productId: productId }
+      });
     },
     handleSizeChange(val) {
       //改变每页显示多少条的回调函数
@@ -468,24 +496,25 @@ export default {
     },
     //金融产品列表
     initList() {
+      this.finaloading=true
       let _this = this;
       let data = {
-          needPage:1,
-          page: _this.page,
-          rows: _this.row,
-          keyWord:_this.keyW,
-          assureMethodCode:_this.assureMethodCode,
-          loanAmountMin:_this.loanAmountMin,
-          loanAmountMax:_this.loanAmountMax,
-          loanTermMax:_this.loanTermMax,
-          loanTermMin:_this.loanTermMin,
-          onlineLoan:_this.onlineLoan,
-          policyProduct:_this.policyProduct,
-        }
+        needPage: 1,
+        page: _this.page,
+        rows: _this.row,
+        keyWord: _this.keyW,
+        assureMethodCode: _this.assureMethodCode,
+        loanAmountMin: _this.loanAmountMin,
+        loanAmountMax: _this.loanAmountMax,
+        loanTermMax: _this.loanTermMax,
+        loanTermMin: _this.loanTermMin,
+        onlineLoan: _this.onlineLoan,
+        policyProduct: _this.policyProduct
+      };
       this.api.get({
         url: "getFinancialProList",
         data: data,
-        dataFlag:true,
+        dataFlag: true,
         callback: function(res) {
           if (res.code == "0000") {
             _this.serverAgent = res.data.rows;
@@ -493,55 +522,54 @@ export default {
           } else {
             _this.$message.error(res.result);
           }
+          _this.finaloading=false
         }
       });
     },
     //金融产品担保方式
-   getAssureType() {
+    getAssureType() {
       let _this = this;
-      let data = {}
+      let data = {};
       this.api.get({
         url: "getAssureType",
         data: data,
-        dataFlag:true,
+        dataFlag: true,
         callback: function(res) {
           if (res.code == "0000") {
-            _this.guaranteeMode=res.data
+            _this.guaranteeMode = res.data;
           } else {
             _this.$message.error(res.result);
           }
         }
       });
-    },
-
-
+    }
   }
 };
 </script>
 <style lang="scss">
-.finaInstitution{
-  padding-top:65px;
-   .icon-sousuo {
-        background: #00a041;
-        color: #fff;
-        border-top-right-radius: 5px;
-        border-bottom-right-radius: 5px
+.finaInstitution {
+  padding-top: 65px;
+  .icon-sousuo {
+    background: #00a041;
+    color: #fff;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+  #serverOrgContent {
+    .conTil {
+      margin-bottom: 15px;
+    }
+    .left1 {
+      > p {
+        margin-bottom: 3px;
       }
-  #serverOrgContent{
-   .conTil{
-     margin-bottom:15px;
-   }
-   .left1{
-     >p{
-       margin-bottom: 3px;
-     }
-   }
-   .conContent{
-     font-size: 13px;
-   }
+    }
+    .conContent {
+      font-size: 13px;
+    }
   }
 
-   .demandDia {
+  .demandDia {
     background: #ecfcf2;
     padding: 8px 10px;
     width: 80px;
@@ -551,8 +579,8 @@ export default {
     text-align: center;
     cursor: pointer;
     color: #00a041;
- }
-.demandLine {
+  }
+  .demandLine {
     height: 1px;
     width: 600px;
     position: relative;
@@ -560,6 +588,6 @@ export default {
     background: #eee;
     margin-bottom: 20px;
     margin-top: 10px;
-}
+  }
 }
 </style>

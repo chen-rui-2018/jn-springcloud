@@ -1,7 +1,6 @@
 package com.jn.hr.increase.entity;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class TbManpowerIncreaseDetailedCriteria {
@@ -185,52 +184,62 @@ public class TbManpowerIncreaseDetailedCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andInsuredMonthEqualTo(Date value) {
+        public Criteria andInsuredMonthEqualTo(String value) {
             addCriterion("insured_month =", value, "insuredMonth");
             return (Criteria) this;
         }
 
-        public Criteria andInsuredMonthNotEqualTo(Date value) {
+        public Criteria andInsuredMonthNotEqualTo(String value) {
             addCriterion("insured_month <>", value, "insuredMonth");
             return (Criteria) this;
         }
 
-        public Criteria andInsuredMonthGreaterThan(Date value) {
+        public Criteria andInsuredMonthGreaterThan(String value) {
             addCriterion("insured_month >", value, "insuredMonth");
             return (Criteria) this;
         }
 
-        public Criteria andInsuredMonthGreaterThanOrEqualTo(Date value) {
+        public Criteria andInsuredMonthGreaterThanOrEqualTo(String value) {
             addCriterion("insured_month >=", value, "insuredMonth");
             return (Criteria) this;
         }
 
-        public Criteria andInsuredMonthLessThan(Date value) {
+        public Criteria andInsuredMonthLessThan(String value) {
             addCriterion("insured_month <", value, "insuredMonth");
             return (Criteria) this;
         }
 
-        public Criteria andInsuredMonthLessThanOrEqualTo(Date value) {
+        public Criteria andInsuredMonthLessThanOrEqualTo(String value) {
             addCriterion("insured_month <=", value, "insuredMonth");
             return (Criteria) this;
         }
 
-        public Criteria andInsuredMonthIn(List<Date> values) {
+        public Criteria andInsuredMonthLike(String value) {
+            addCriterion("insured_month like", value, "insuredMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andInsuredMonthNotLike(String value) {
+            addCriterion("insured_month not like", value, "insuredMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andInsuredMonthIn(List<String> values) {
             addCriterion("insured_month in", values, "insuredMonth");
             return (Criteria) this;
         }
 
-        public Criteria andInsuredMonthNotIn(List<Date> values) {
+        public Criteria andInsuredMonthNotIn(List<String> values) {
             addCriterion("insured_month not in", values, "insuredMonth");
             return (Criteria) this;
         }
 
-        public Criteria andInsuredMonthBetween(Date value1, Date value2) {
+        public Criteria andInsuredMonthBetween(String value1, String value2) {
             addCriterion("insured_month between", value1, value2, "insuredMonth");
             return (Criteria) this;
         }
 
-        public Criteria andInsuredMonthNotBetween(Date value1, Date value2) {
+        public Criteria andInsuredMonthNotBetween(String value1, String value2) {
             addCriterion("insured_month not between", value1, value2, "insuredMonth");
             return (Criteria) this;
         }
@@ -302,6 +311,146 @@ public class TbManpowerIncreaseDetailedCriteria {
 
         public Criteria andJobNumberNotBetween(String value1, String value2) {
             addCriterion("job_number not between", value1, value2, "jobNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeIdIsNull() {
+            addCriterion("scheme_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeIdIsNotNull() {
+            addCriterion("scheme_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeIdEqualTo(String value) {
+            addCriterion("scheme_id =", value, "schemeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeIdNotEqualTo(String value) {
+            addCriterion("scheme_id <>", value, "schemeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeIdGreaterThan(String value) {
+            addCriterion("scheme_id >", value, "schemeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeIdGreaterThanOrEqualTo(String value) {
+            addCriterion("scheme_id >=", value, "schemeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeIdLessThan(String value) {
+            addCriterion("scheme_id <", value, "schemeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeIdLessThanOrEqualTo(String value) {
+            addCriterion("scheme_id <=", value, "schemeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeIdLike(String value) {
+            addCriterion("scheme_id like", value, "schemeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeIdNotLike(String value) {
+            addCriterion("scheme_id not like", value, "schemeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeIdIn(List<String> values) {
+            addCriterion("scheme_id in", values, "schemeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeIdNotIn(List<String> values) {
+            addCriterion("scheme_id not in", values, "schemeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeIdBetween(String value1, String value2) {
+            addCriterion("scheme_id between", value1, value2, "schemeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeIdNotBetween(String value1, String value2) {
+            addCriterion("scheme_id not between", value1, value2, "schemeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeNameIsNull() {
+            addCriterion("scheme_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeNameIsNotNull() {
+            addCriterion("scheme_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeNameEqualTo(String value) {
+            addCriterion("scheme_name =", value, "schemeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeNameNotEqualTo(String value) {
+            addCriterion("scheme_name <>", value, "schemeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeNameGreaterThan(String value) {
+            addCriterion("scheme_name >", value, "schemeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeNameGreaterThanOrEqualTo(String value) {
+            addCriterion("scheme_name >=", value, "schemeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeNameLessThan(String value) {
+            addCriterion("scheme_name <", value, "schemeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeNameLessThanOrEqualTo(String value) {
+            addCriterion("scheme_name <=", value, "schemeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeNameLike(String value) {
+            addCriterion("scheme_name like", value, "schemeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeNameNotLike(String value) {
+            addCriterion("scheme_name not like", value, "schemeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeNameIn(List<String> values) {
+            addCriterion("scheme_name in", values, "schemeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeNameNotIn(List<String> values) {
+            addCriterion("scheme_name not in", values, "schemeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeNameBetween(String value1, String value2) {
+            addCriterion("scheme_name between", value1, value2, "schemeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchemeNameNotBetween(String value1, String value2) {
+            addCriterion("scheme_name not between", value1, value2, "schemeName");
             return (Criteria) this;
         }
 

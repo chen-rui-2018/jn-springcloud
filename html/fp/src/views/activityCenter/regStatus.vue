@@ -19,7 +19,6 @@
         <ul class="clearfix">
           <li class="pointer" v-for="(i,k) in statusList" :key="k" @click="handleInfo(i.account)">
             <div class="imgItem"><img :src="i.avatar" alt=""></div>
-
             <p class="p1">{{i.name}}
               <i v-if="i.sex==0" class="iconfont icon-xingbienv"></i>
               <i v-if="i.sex==1" class="iconfont icon-xingbienan"></i>
@@ -65,10 +64,6 @@ export default {
       this.init();
     },
     handleInfo(account) {
-      if (!sessionStorage.userInfo) {
-        this.$message.error("请先登录");
-        return;
-      }
       this.$router.push({
         path: "regData",
         query: { account: account, activityId: this.$route.query.activityId }

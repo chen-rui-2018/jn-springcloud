@@ -144,13 +144,9 @@ public class DataUploadController  extends BaseController {
     @PostMapping(path = "/company/setStatisticsListUrgeCompany")
     @ApiOperation(value = "园区内部数据列表催报",notes = "返回催报结果,正常结果为1")
     @RequiresPermissions("/data/company/setStatisticsListUrgeCompany")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name="taskBatch",value = "任务批次",dataType = "String",paramType = "query",example = "001",required = true),
-            @ApiImplicitParam(name="fillId",value = "填报Id",dataType = "String",paramType = "query",example = "001")
-    })
-    public Result<Integer> setStatisticsListUrgeCompany(String taskBatch,String fillId){
+    public Result<Integer> setStatisticsListUrgeCompany(@RequestBody UrgeParamModel model){
         User user = (User)SecurityUtils.getSubject().getPrincipal();
-        Integer num = uploadService.setStatisticsListUrgeCompany(taskBatch,fillId,user);
+        Integer num = uploadService.setStatisticsListUrgeCompany(model.getTaskBatch(),model.getFillId(),user);
         return new Result(num);
     }
 
@@ -189,7 +185,8 @@ public class DataUploadController  extends BaseController {
 
     })
     public Result importData(@RequestParam("formTime") String formTime,@RequestParam("fillId") String fillId,@RequestParam("modelId") String modelId, @RequestParam("file") MultipartFile file){
-        Integer result = uploadService.importData(file,formTime,fillId,modelId);
+        User user = (User)SecurityUtils.getSubject().getPrincipal();
+        Integer result = uploadService.importData(file,formTime,fillId,modelId,user);
         return new Result(result);
     }
 
@@ -221,34 +218,31 @@ public class DataUploadController  extends BaseController {
     @ApiOperation(value = "纵向树形指标导出模式",notes = "返回excel文件")
     @RequiresPermissions("/data/garden/getCompanyExcel")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="taskbatch",value = "任务批次",dataType = "String",paramType = "query",example = "6745d724836540ff9fc661337c36020a"),
-            @ApiImplicitParam(name="modelid",value = "模板ID",dataType = "String",paramType = "query",example = "e12f8f4bd1d94c068917955ed258617b"),
+            @ApiImplicitParam(name="taskbatch",value = "任务批次",dataType = "String",paramType = "query",example = "31ce09c584f943f6862f78fa38a72efb"),
+            @ApiImplicitParam(name="modelid",value = "模板ID",dataType = "String",paramType = "query",example = "3a43589cc6f74b65a4c2cd1f42ab2ca5"),
 
     })
     public void getCompanyExcel(String taskbatch, String modelid, HttpServletRequest req,
                                     HttpServletResponse resp)throws IOException {
         List<CompanyTree> list = targetDao.getExcel(taskbatch,modelid);
         POICompany company = new POICompany();
-       company.getTable(list,req,resp);
+        company.getTable(list,req,resp);
 
     }
-
 
     @ControllerLog(doAction = "数据上报-园区数据上报统计-指标描述导出模式")
     @GetMapping(path = "/garden/getDescribeExcel")
     @ApiOperation(value = "指标描述导出模式",notes = "返回excel文件")
     @RequiresPermissions("/data/garden/getDescribeExcel")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="taskbatch",value = "任务批次",dataType = "String",paramType = "query",example = "6745d724836540ff9fc661337c36020a"),
-            @ApiImplicitParam(name="modelid",value = "模板ID",dataType = "String",paramType = "query",example = "e12f8f4bd1d94c068917955ed258617b"),
-
+            @ApiImplicitParam(name="taskbatch",value = "任务批次",dataType = "String",paramType = "query",example = "31ce09c584f943f6862f78fa38a72efb"),
+            @ApiImplicitParam(name="modelid",value = "模板ID",dataType = "String",paramType = "query",example = "3a43589cc6f74b65a4c2cd1f42ab2ca5"),
     })
     public void getDescribeExcel(String taskbatch, String modelid, HttpServletRequest req,
                                 HttpServletResponse resp)throws IOException {
         List<CompanyTree> list = targetDao.getExcel(taskbatch,modelid);
-        POIDescribe de = new POIDescribe();
-        de.getDescribeTable(list,req,resp);
-
+        POIDescribe describe = new POIDescribe();
+        describe.getDescribeTable(list,req,resp);
     }
 
     @ControllerLog(doAction = "数据上报-园区数据上报统计-科技园模板")
@@ -256,8 +250,8 @@ public class DataUploadController  extends BaseController {
     @ApiOperation(value = "科技园模板",notes = "返回excel文件")
     @RequiresPermissions("/data/garden/getScienceExcel")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="taskbatch",value = "任务批次",dataType = "String",paramType = "query",example = "6745d724836540ff9fc661337c36020a"),
-            @ApiImplicitParam(name="modelid",value = "模板ID",dataType = "String",paramType = "query",example = "e12f8f4bd1d94c068917955ed258617b"),
+            @ApiImplicitParam(name="taskbatch",value = "任务批次",dataType = "String",paramType = "query",example = "31ce09c584f943f6862f78fa38a72efb"),
+            @ApiImplicitParam(name="modelid",value = "模板ID",dataType = "String",paramType = "query",example = "3a43589cc6f74b65a4c2cd1f42ab2ca5"),
 
     })
     public void getScienceExcel(String taskbatch, String modelid, HttpServletRequest req,
@@ -265,7 +259,6 @@ public class DataUploadController  extends BaseController {
         List<CompanyTree> list = targetDao.getExcel(taskbatch,modelid);
         POIScience science = new POIScience();
         science.getScienceTable(list,req,resp);
-
     }
 
     @ControllerLog(doAction = "数据上报-园区数据上报统计-科技园模板表头")
@@ -273,16 +266,14 @@ public class DataUploadController  extends BaseController {
     @ApiOperation(value = "科技园模板表头",notes = "返回excel文件")
     @RequiresPermissions("/data/garden/getScienceHeaderExcel")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="taskbatch",value = "任务批次",dataType = "String",paramType = "query",example = "6745d724836540ff9fc661337c36020a"),
-            @ApiImplicitParam(name="modelid",value = "模板ID",dataType = "String",paramType = "query",example = "e12f8f4bd1d94c068917955ed258617b"),
-
+            @ApiImplicitParam(name="taskbatch",value = "任务批次",dataType = "String",paramType = "query",example = "31ce09c584f943f6862f78fa38a72efb"),
+            @ApiImplicitParam(name="modelid",value = "模板ID",dataType = "String",paramType = "query",example = "3a43589cc6f74b65a4c2cd1f42ab2ca5"),
     })
     public void getScienceHeaderExcel(String taskbatch, String modelid, HttpServletRequest req,
                                 HttpServletResponse resp)throws IOException {
         List<CompanyTree> list = targetDao.getExcel(taskbatch,modelid);
         POIScienceHeader header = new POIScienceHeader();
         header.getScienceHeaderTable(list,req,resp);
-
     }
 
 }

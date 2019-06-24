@@ -8,7 +8,7 @@
         <el-tab-pane label="问卷结果" name="third"/>
       </el-tabs>
       <!-- Tab -->
-      <el-tabs v-model="tabName" type="border-card">
+      <el-tabs v-model="tabName" type="border-card" @tab-click="handleTab">
         <el-tab-pane class="total" label="汇总统计" name="total">
           <!-- 汇总统计 -->
           <div v-for="(item,index) in examList" :key="index" class="examList">
@@ -281,6 +281,11 @@ export default {
       }
       if (this.activeName === 'third') {
         this.$router.push({ path: 'question-result', query: { id: this.$route.query.id }})
+      }
+    },
+    handleTab() {
+      if (this.tabName === 'single') {
+        this.isDetail = false
       }
     }
   }

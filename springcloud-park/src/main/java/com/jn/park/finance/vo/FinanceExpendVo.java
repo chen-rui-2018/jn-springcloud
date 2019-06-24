@@ -69,4 +69,15 @@ public class FinanceExpendVo implements Serializable {
     public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName;
     }
+
+    @Override
+    public String toString() {
+        return "FinanceExpendVo{" +
+                "costHappendTime='" + costHappendTime + '\'' +
+                ", cost='" + cost + '\'' +
+                ", costAfterTypeName='" + costAfterTypeName + '\'' +
+                ", modifiedTime='" + modifiedTime + '\'' +
+                ", departmentName='" + departmentName + '\'' +
+                '}';
+    }
 }

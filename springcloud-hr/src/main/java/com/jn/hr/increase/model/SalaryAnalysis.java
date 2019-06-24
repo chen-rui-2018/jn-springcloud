@@ -58,8 +58,17 @@ public class SalaryAnalysis extends BaseRowModel implements Serializable{
 	@ApiModelProperty(value = "增长人数")
 	private String lastNumber;
 
-	@ApiModelProperty(value = "薪资组成")
-	private List<SalaryKeyValue> salaryComposition;
+	@ApiModelProperty(value = "各项补贴占比")
+	private List<SalaryKeyValue> subsidyProportion;
+	
+	@ApiModelProperty(value = "基础工资占比")
+	private List<SalaryKeyValue> basicWageProportion;
+	
+	@ApiModelProperty(value = "社保公积金缴纳占比")
+	private List<SalaryKeyValue> socialSecurityProportion;
+	
+	@ApiModelProperty(value = "各项扣款占比")
+	private List<SalaryKeyValue> deductionProportion;
 	
 	@ApiModelProperty(value = "人力成本")
 	private List<SalaryKeyValue> laborCosts;
@@ -69,14 +78,37 @@ public class SalaryAnalysis extends BaseRowModel implements Serializable{
 	
 	@ApiModelProperty(value = "部门人数")
 	private List<SalaryKeyValue> departmentNumber;
-	
-	
-	public List<SalaryKeyValue> getSalaryComposition() {
-		return salaryComposition;
+
+	public List<SalaryKeyValue> getSubsidyProportion() {
+		return subsidyProportion;
 	}
 
-	public void setSalaryComposition(List<SalaryKeyValue> salaryComposition) {
-		this.salaryComposition = salaryComposition;
+	public void setSubsidyProportion(List<SalaryKeyValue> subsidyProportion) {
+		this.subsidyProportion = subsidyProportion;
+	}
+
+	public List<SalaryKeyValue> getBasicWageProportion() {
+		return basicWageProportion;
+	}
+
+	public void setBasicWageProportion(List<SalaryKeyValue> basicWageProportion) {
+		this.basicWageProportion = basicWageProportion;
+	}
+
+	public List<SalaryKeyValue> getSocialSecurityProportion() {
+		return socialSecurityProportion;
+	}
+
+	public void setSocialSecurityProportion(List<SalaryKeyValue> socialSecurityProportion) {
+		this.socialSecurityProportion = socialSecurityProportion;
+	}
+
+	public List<SalaryKeyValue> getDeductionProportion() {
+		return deductionProportion;
+	}
+
+	public void setDeductionProportion(List<SalaryKeyValue> deductionProportion) {
+		this.deductionProportion = deductionProportion;
 	}
 
 	public List<SalaryKeyValue> getLaborCosts() {

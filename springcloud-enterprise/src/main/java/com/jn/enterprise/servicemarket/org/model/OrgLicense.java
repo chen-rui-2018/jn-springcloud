@@ -37,7 +37,7 @@ public class OrgLicense implements Serializable {
     @ApiModelProperty(value = "颁发时间 yyyy-MM-dd",example = "2017-01-01")
     private String awardTime;
 
-    @ApiModelProperty(value = "颁发部门",example = "长沙工商管理局")
+    @ApiModelProperty(value = "颁发部门",example = "江苏工商管理局")
     private String awardDepart;
 
     @ApiModelProperty(value = "证书类型：1营业执照2执业资质3其他",example = "1")

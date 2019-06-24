@@ -4,8 +4,9 @@
     <!--对他人的需求列表查询-->
     <select id="getRequireOtherList" resultType="com.jn.enterprise.servicemarket.require.model.RequireInfoList">
         SELECT
-            sr.`req_num` AS "reqNum"			                        <!--需求单号-->
-            ,sr.`org_id_` AS "orgId"				                        <!--机构id-->
+            sr.id as "id"                                               <!--需求id-->
+            ,sr.`req_num` AS "reqNum"			                        <!--需求单号-->
+            ,sr.`org_id_` AS "orgId"				                    <!--机构id-->
             ,sr.`org_name`AS "orgName"			                        <!--机构名称-->
             ,sr.`business_id` AS "businessId"		                    <!--领域id-->
             ,sr.`business_area` AS "businessArea"		                <!--领域名称-->
@@ -17,6 +18,7 @@
             ,CASE sr.`status`
             WHEN '1' THEN "待处理"
             WHEN '2' THEN "已处理"
+            when '-1' then "已撤销"
             ELSE '--'
             END AS  "status"				      <!--需求状态-->
             ,CASE sr.handle_result
@@ -61,13 +63,14 @@
             and sr.handle_result='1'  <!--对接成功-->
             and sr.is_comment='1' <!--已点评-->
         </if>
-        order by sr.issue_account desc
+        order by sr.`created_time` desc, sr.issue_account desc
     </select>
 
     <!--我收到的需求列表查询-->
     <select id="getRequireReceivedList" resultType="com.jn.enterprise.servicemarket.require.model.RequireInfoList">
         SELECT
-        sr.`req_num` AS "reqNum"			                          <!--需求单号-->
+        sr.id as "id"                                                 <!--需求id-->
+        ,sr.`req_num` AS "reqNum"			                          <!--需求单号-->
         ,sr.`org_id_` AS "orgId"				                      <!--机构id-->
         ,sr.`org_name`AS "orgName"			                          <!--机构名称-->
         ,sr.`business_id` AS "businessId"		                      <!--领域id-->
@@ -80,6 +83,7 @@
         ,CASE sr.`status`
         WHEN '1' THEN "待处理"
         WHEN '2' THEN "已处理"
+        when '-1' then "已撤销"
         ELSE '--'
         END AS  "status"				              <!--需求状态-->
         ,CASE sr.handle_result
@@ -144,7 +148,7 @@
             and sr.handle_result='1'  <!--对接成功-->
             and sr.is_comment='1' <!--已点评-->
         </if>
-        order by sr.issue_account desc
+        order by sr.`created_time` desc ,sr.issue_account desc
     </select>
 
     <!--需求管理列表查询（后台门户管理）-->
@@ -201,10 +205,11 @@
         </if>
         ORDER BY sr.`issue_time` DESC
     </select>
-
+    <!--需求详情（后台门户管理）-->
     <select id="getPortalRequireDetails" resultType="com.jn.enterprise.servicemarket.require.model.RequirePortalDetails">
         SELECT
-        sr.req_num AS "reqNum"					                  <!--需求单号-->
+        sr.id as "id"                                             <!--需求id-->
+        ,sr.req_num AS "reqNum"					                  <!--需求单号-->
         ,sr.`business_area` AS "businessArea"			          <!--领域名称-->
         ,sr.`org_name` AS "orgName"					              <!--机构名称-->
         ,IFNULL(sr.`advisor_name`,"未指定") AS "advisorName"	      <!--顾问名称-->

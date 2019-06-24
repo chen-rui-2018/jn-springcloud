@@ -303,11 +303,19 @@ export function isExternal(path) {
 
 export function isMobile() {
   const userAgentInfo = navigator.userAgent
-  const Agents = ["Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod"]
+  const Agents = ['Android', 'iPhone', 'SymbianOS', 'Windows Phone', 'iPad', 'iPod']
   return Agents.some(str =>{
     return userAgentInfo.indexOf(str) > 0
   })
 }
+export function isIos() {
+  const userAgentInfo = navigator.userAgent
+  const Agents = ['iPhone', 'iPad', 'iPod']
+  return Agents.some(str =>{
+    return userAgentInfo.indexOf(str) > 0
+  })
+}
+
 export function isArray (obj) {
   if (Object.prototype.toString.call(obj) === '[object Object]') {
     return 'Object'

@@ -11,7 +11,7 @@
               <span >{{addScienceData.signoryName}} </span>
             </el-form-item>
       
-            <el-form-item label="服务顾问：" >
+            <el-form-item label="服务专员：" >
               <el-select v-model="addScienceData.advisorAccount" placeholder="请选择">
                 <el-option :label="counseloritem.advisorName" :value="counseloritem.advisorAccount" v-for="(counseloritem,counselorindex) in counselorList" :key="counselorindex">
                 </el-option>
@@ -136,6 +136,33 @@
                 </el-input>
               </div>
             </el-form-item>
+            <el-form-item label="申请条件：">
+              <div class="content_textarea">
+                <el-input
+                  type="textarea"
+                  placeholder="请输入产品的申请条件"
+                  v-model="addFinancialProduct.applyCondition">
+                </el-input>
+              </div>
+            </el-form-item>
+            <el-form-item label="提交材料：">
+              <div class="content_textarea">
+                <el-input
+                  type="textarea"
+                  placeholder="请输入产品所需的提交材料"
+                  v-model="addFinancialProduct.submitMaterial">
+                </el-input>
+              </div>
+            </el-form-item>
+            <el-form-item label="适用客户：">
+              <div class="content_textarea">
+                <el-input
+                  type="textarea"
+                  placeholder="请输入产品的所适用的客户类型"
+                  v-model="addFinancialProduct.applicableCust">
+                </el-input>
+              </div>
+            </el-form-item>
         </el-form>
       </div>
       <div class="submit" @click="submit">提交申请</div>
@@ -143,6 +170,7 @@
   </div>
 </template>
 <script>
+import { getToken } from '@/util/auth'
 export default {
   data () {
     return {
@@ -162,7 +190,7 @@ export default {
       },
       loading:false,
       counselorList:[],
-      headers:{token: sessionStorage.token},
+      headers:{token: getToken()},
       fileList:[],
       businessType:'',
       LoanTypeList:[],//金融产品贷款类别
@@ -315,7 +343,7 @@ export default {
         }
       })
     },
-    //顾问列表获取
+    //专员列表获取
     getServiceConsultantList(){
       let _this = this;
       this.api.get({
@@ -358,8 +386,8 @@ export default {
                _this.loading=false 
               _this.$router.go(-1)
             }else{
+              _this.loading=false 
              _this.$message.error(res.result)
-             _this.loading=false 
             }
           }
         }) 

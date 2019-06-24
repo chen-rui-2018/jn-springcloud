@@ -7,7 +7,9 @@
     <result column="park_name" jdbcType="VARCHAR" property="parkName" />
     <result column="main_picture" jdbcType="VARCHAR" property="mainPicture" />
     <result column="minor_picture" jdbcType="VARCHAR" property="minorPicture" />
+    <result column="short_introduce" jdbcType="VARCHAR" property="shortIntroduce" />
     <result column="park_state" jdbcType="VARCHAR" property="parkState" />
+    <result column="show_order" jdbcType="INTEGER" property="showOrder" />
     <result column="is_enter" jdbcType="VARCHAR" property="isEnter" />
     <result column="record_status" jdbcType="VARCHAR" property="recordStatus" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
@@ -77,8 +79,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id_, parent_id, park_name, main_picture, minor_picture, park_state, is_enter, record_status, 
-    creator_account, created_time, modifier_account, modified_time
+    id_, parent_id, park_name, main_picture, minor_picture, short_introduce, park_state, 
+    show_order, is_enter, record_status, creator_account, created_time, modifier_account, 
+    modified_time
   </sql>
   <sql id="Blob_Column_List">
     park_introduce
@@ -133,15 +136,17 @@
   </delete>
   <insert id="insert" parameterType="com.jn.park.park.entity.TbPark">
     insert into tb_park (id_, parent_id, park_name, 
-      main_picture, minor_picture, park_state, 
-      is_enter, record_status, creator_account, 
-      created_time, modifier_account, modified_time, 
-      park_introduce)
+      main_picture, minor_picture, short_introduce, 
+      park_state, show_order, is_enter, 
+      record_status, creator_account, created_time, 
+      modifier_account, modified_time, park_introduce
+      )
     values (#{id,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, #{parkName,jdbcType=VARCHAR}, 
-      #{mainPicture,jdbcType=VARCHAR}, #{minorPicture,jdbcType=VARCHAR}, #{parkState,jdbcType=VARCHAR}, 
-      #{isEnter,jdbcType=VARCHAR}, #{recordStatus,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
-      #{parkIntroduce,jdbcType=LONGVARCHAR})
+      #{mainPicture,jdbcType=VARCHAR}, #{minorPicture,jdbcType=VARCHAR}, #{shortIntroduce,jdbcType=VARCHAR}, 
+      #{parkState,jdbcType=VARCHAR}, #{showOrder,jdbcType=INTEGER}, #{isEnter,jdbcType=VARCHAR}, 
+      #{recordStatus,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{parkIntroduce,jdbcType=LONGVARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.park.entity.TbPark">
     insert into tb_park
@@ -161,8 +166,14 @@
       <if test="minorPicture != null">
         minor_picture,
       </if>
+      <if test="shortIntroduce != null">
+        short_introduce,
+      </if>
       <if test="parkState != null">
         park_state,
+      </if>
+      <if test="showOrder != null">
+        show_order,
       </if>
       <if test="isEnter != null">
         is_enter,
@@ -202,8 +213,14 @@
       <if test="minorPicture != null">
         #{minorPicture,jdbcType=VARCHAR},
       </if>
+      <if test="shortIntroduce != null">
+        #{shortIntroduce,jdbcType=VARCHAR},
+      </if>
       <if test="parkState != null">
         #{parkState,jdbcType=VARCHAR},
+      </if>
+      <if test="showOrder != null">
+        #{showOrder,jdbcType=INTEGER},
       </if>
       <if test="isEnter != null">
         #{isEnter,jdbcType=VARCHAR},
@@ -252,8 +269,14 @@
       <if test="record.minorPicture != null">
         minor_picture = #{record.minorPicture,jdbcType=VARCHAR},
       </if>
+      <if test="record.shortIntroduce != null">
+        short_introduce = #{record.shortIntroduce,jdbcType=VARCHAR},
+      </if>
       <if test="record.parkState != null">
         park_state = #{record.parkState,jdbcType=VARCHAR},
+      </if>
+      <if test="record.showOrder != null">
+        show_order = #{record.showOrder,jdbcType=INTEGER},
       </if>
       <if test="record.isEnter != null">
         is_enter = #{record.isEnter,jdbcType=VARCHAR},
@@ -288,7 +311,9 @@
       park_name = #{record.parkName,jdbcType=VARCHAR},
       main_picture = #{record.mainPicture,jdbcType=VARCHAR},
       minor_picture = #{record.minorPicture,jdbcType=VARCHAR},
+      short_introduce = #{record.shortIntroduce,jdbcType=VARCHAR},
       park_state = #{record.parkState,jdbcType=VARCHAR},
+      show_order = #{record.showOrder,jdbcType=INTEGER},
       is_enter = #{record.isEnter,jdbcType=VARCHAR},
       record_status = #{record.recordStatus,jdbcType=VARCHAR},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
@@ -307,7 +332,9 @@
       park_name = #{record.parkName,jdbcType=VARCHAR},
       main_picture = #{record.mainPicture,jdbcType=VARCHAR},
       minor_picture = #{record.minorPicture,jdbcType=VARCHAR},
+      short_introduce = #{record.shortIntroduce,jdbcType=VARCHAR},
       park_state = #{record.parkState,jdbcType=VARCHAR},
+      show_order = #{record.showOrder,jdbcType=INTEGER},
       is_enter = #{record.isEnter,jdbcType=VARCHAR},
       record_status = #{record.recordStatus,jdbcType=VARCHAR},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
@@ -333,8 +360,14 @@
       <if test="minorPicture != null">
         minor_picture = #{minorPicture,jdbcType=VARCHAR},
       </if>
+      <if test="shortIntroduce != null">
+        short_introduce = #{shortIntroduce,jdbcType=VARCHAR},
+      </if>
       <if test="parkState != null">
         park_state = #{parkState,jdbcType=VARCHAR},
+      </if>
+      <if test="showOrder != null">
+        show_order = #{showOrder,jdbcType=INTEGER},
       </if>
       <if test="isEnter != null">
         is_enter = #{isEnter,jdbcType=VARCHAR},
@@ -366,7 +399,9 @@
       park_name = #{parkName,jdbcType=VARCHAR},
       main_picture = #{mainPicture,jdbcType=VARCHAR},
       minor_picture = #{minorPicture,jdbcType=VARCHAR},
+      short_introduce = #{shortIntroduce,jdbcType=VARCHAR},
       park_state = #{parkState,jdbcType=VARCHAR},
+      show_order = #{showOrder,jdbcType=INTEGER},
       is_enter = #{isEnter,jdbcType=VARCHAR},
       record_status = #{recordStatus,jdbcType=VARCHAR},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
@@ -382,7 +417,9 @@
       park_name = #{parkName,jdbcType=VARCHAR},
       main_picture = #{mainPicture,jdbcType=VARCHAR},
       minor_picture = #{minorPicture,jdbcType=VARCHAR},
+      short_introduce = #{shortIntroduce,jdbcType=VARCHAR},
       park_state = #{parkState,jdbcType=VARCHAR},
+      show_order = #{showOrder,jdbcType=INTEGER},
       is_enter = #{isEnter,jdbcType=VARCHAR},
       record_status = #{recordStatus,jdbcType=VARCHAR},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},

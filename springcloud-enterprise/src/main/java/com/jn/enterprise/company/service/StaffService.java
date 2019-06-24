@@ -96,4 +96,11 @@ public interface StaffService {
      */
     Integer setOrCancelContact(String account, String curAccount, boolean isSet);
 
+    /**
+     * 判断账号是否有权限升级企业员工
+     * @param account
+     * @return
+     */
+    boolean checkUserIsCompanyStaff(String account);
+
 }

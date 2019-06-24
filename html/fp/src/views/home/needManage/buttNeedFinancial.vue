@@ -17,19 +17,19 @@
               <span>{{receiveDetail.issueTime|time}}</span>
             </el-form-item>
             <el-form-item label="融资金额：">
-              <span >{{receiveDetail.financingAmount}}</span>
+              <span >{{receiveDetail.financingAmount}}万元</span>
             </el-form-item>
             <el-form-item label="融资期限：">
-              <span>{{receiveDetail.financingPeriod}}</span>
+              <span>{{receiveDetail.financingPeriod}}个月</span>
             </el-form-item>
             <el-form-item label="资金需求日期：">
-              <span>{{receiveDetail.expectedDate}}</span>
+              <span>{{receiveDetail.expectedDate|time}}</span>
             </el-form-item>
             <el-form-item label="意向机构：">
-              <span>{{receiveDetail.serviceCycle}}</span>
+              <span>{{receiveDetail.orgName}}</span>
             </el-form-item>
             <el-form-item label="意向产品：">
-              <div>{{receiveDetail.orgName}}</div>
+              <div>{{receiveDetail.productName}}</div>
             </el-form-item>
             <el-form-item label="资金需求说明：">
               <div>{{receiveDetail.fundsReqDesc}}</div>
@@ -47,7 +47,7 @@
               { required: true, message: '合同总金额不能为空',trigger: 'blur'},
               { type: 'number', message: '合同总金额必须为数字值'}
         ]">
-              <el-input v-model.number="sendData.actualLoanAmount" placeholder="请填写合同总金额"></el-input>
+              <el-input v-model.number="sendData.actualLoanAmount" placeholder="请填写合同总金额"><template slot="append">万元</template></el-input>
             </el-form-item>
             <el-form-item label="对接结果：" >
               <el-radio-group v-model="sendData.handleResult">
@@ -67,8 +67,11 @@
             <el-upload
               :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
               list-type="picture-card"
+              :limit="1"
+              :on-exceed="handleExceed"
               :on-success="homePageuploadsuccess"
               :headers="headers"
+              :on-remove="deletHome"
               :file-list="fileList"
               >
               <i class="el-icon-plus"></i>
@@ -78,6 +81,9 @@
               <el-upload
                 :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
                 list-type="picture-card"
+                :limit="1"
+                :on-exceed="handleExceed"
+                :on-remove="deletEnd"
                 :on-success="endPageuploadsuccess"
                 :headers="headers"
                 :file-list="fileList2"
@@ -92,12 +98,13 @@
   </div>
 </template>
 <script>
+import { getToken } from '@/util/auth'
 export default {
   data () {
     return {
       baseUrl:this.api.host,
       receiveDetail:{},
-      headers:{token: sessionStorage.token},
+      headers:{token: getToken()},
       fileList:[],
       fileList2:[],
       sendData:{
@@ -145,8 +152,10 @@ export default {
       data: this.sendData,
       callback: function(res) {
         if (res.code == "0000") {
-            _this.$message.success("对接成功")
+            _this.$message.success("操作成功")
             _this.$router.go(-1)
+          }else{
+            _this.$message.error(res.result)
           }
         }
       })
@@ -154,9 +163,18 @@ export default {
     homePageuploadsuccess(file, fileList){
       this.sendData.contractHomePage=file.data
     },
+    deletHome(file, fileList){
+      this.sendData.contractHomePage=""
+    },
     endPageuploadsuccess(file, fileList){
       this.sendData.contractEndPage=file.data
-    }
+    },
+     deletEnd(file, fileList){
+      this.sendData.contractEndPage=""
+    },
+    handleExceed(files, fileList) {
+      this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件`);
+    },
   }
 }
 </script>

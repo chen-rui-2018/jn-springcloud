@@ -16,6 +16,8 @@ public enum ActivityEnum implements CodeAndMsg {
     ACTIVITY_ORDER_APPLY("apply_num","按照报名数排序"),
     ACTIVITY_ORDER_PARTIC("partic_num","活动参加人数"),
     ACTIVITY_ORDER_START_TIME("acti_start_time","按照活动开始时间排序"),
+
+    ACTIVITY_STATUS_END("3","活动结束"),
     ;
 
 

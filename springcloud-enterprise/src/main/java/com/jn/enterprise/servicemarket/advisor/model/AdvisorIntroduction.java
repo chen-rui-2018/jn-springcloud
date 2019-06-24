@@ -24,7 +24,7 @@ public class AdvisorIntroduction  implements Serializable {
     @ApiModelProperty(value = "所属机构名称")
     private String orgName;
     @ApiModelProperty(value = "从业年限")
-    private Double workingYears;
+    private Float workingYears;
     @ApiModelProperty(value = "执业资质")
     private String practiceQualification;
     @ApiModelProperty(value = "业务擅长")
@@ -76,11 +76,11 @@ public class AdvisorIntroduction  implements Serializable {
         this.orgName = orgName;
     }
 
-    public Double getWorkingYears() {
+    public Float getWorkingYears() {
         return workingYears;
     }
 
-    public void setWorkingYears(Double workingYears) {
+    public void setWorkingYears(Float workingYears) {
         this.workingYears = workingYears;
     }
 

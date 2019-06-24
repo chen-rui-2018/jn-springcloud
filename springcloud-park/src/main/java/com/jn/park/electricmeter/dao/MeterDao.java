@@ -190,21 +190,21 @@ public interface MeterDao {
      * @param companyid
      * @return
      */
-    List<ConditionElectro> todayelectro(@Param("companyid") String companyid);
+    List<ConditionElectro> todayElectric(@Param("companyid") String companyid);
 
     /**
      * 当月用电情况
      * @param companyid
      * @return
      */
-    List<ConditionElectro> monthelectro(@Param("companyid") String companyid);
+    List<ConditionElectro> monthElectric(@Param("companyid") String companyid);
 
     /**
      * 今年用电情况
      * @param companyid
      * @return
      */
-    List<YearElectro> yearelectro(@Param("companyid") String companyid);
+    List<YearElectro> yearElectric(@Param("companyid") String companyid);
 
     /**
      * 获取使用默认计价规则的企业

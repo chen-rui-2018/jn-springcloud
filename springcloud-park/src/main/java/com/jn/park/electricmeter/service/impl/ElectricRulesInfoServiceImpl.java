@@ -103,7 +103,7 @@ public class ElectricRulesInfoServiceImpl implements ElectricRulesInfoService {
 
 
             }
-            if(monitorFlag||true){
+            if(monitorFlag){
                 typeCode.append(",").append(typeCodeArr[i]);
                 actualVal.append(",").append(valArr[i]);
             }

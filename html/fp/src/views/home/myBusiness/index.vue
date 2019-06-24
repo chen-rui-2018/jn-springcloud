@@ -22,7 +22,7 @@
           </el-form-item>
         </div>
         <div style="display:flex">
-          <el-form-item label="产业领域:" class="">
+          <el-form-item label="主营行业:" class="">
             <span>{{induTypeName}}</span>
           </el-form-item>
           <el-form-item label="法人:" class="borr">
@@ -38,9 +38,12 @@
           </el-form-item>
         </div>
         <div style="display:flex">
-          <el-form-item label="落地时间:" class="">
-            <span>{{runTime}}</span>
+           <el-form-item label="所属园区:" >
+            <span>{{affiliatedName}}</span>
           </el-form-item>
+          <!-- <el-form-item label="落地时间:" class="">
+            <span>{{runTime}}</span>
+          </el-form-item> -->
           <el-form-item label="注册地址:" class="borr">
             <span>{{comAddress}}</span>
           </el-form-item>
@@ -70,9 +73,7 @@
           </el-form-item>
         </div>
         <div style="display:flex">
-          <el-form-item label="所属园区:" class=" borb">
-            <span>{{affiliatedName}}</span>
-          </el-form-item>
+
           <el-form-item label="企业官网地址:" class=" borb borr">
             <span>{{comWeb}}</span>
           </el-form-item>
@@ -122,7 +123,7 @@ export default {
       induTypeName: "", //行业分类ID(产业领域、所属行业)
       ownerLaw: "", //法人
       comTele: "", //固定电话
-      runTime: "", //落地时间
+      // runTime: "", //落地时间
       unifyCode: "", //统一社会信用代码
       comAddress: "", //注册地址
       addrPark: "", //公司园区地址-实际经营地址
@@ -140,8 +141,10 @@ export default {
   },
   created() {
     this.getParkList();
+
   },
   mounted() {
+    this.getUserExtension()
     let initArr = JSON.parse(sessionStorage.menuItems);
     initArr.forEach(v => {
       if (v.label === "我的企业") {
@@ -161,9 +164,23 @@ export default {
       }
     });
 
-    this.init();
   },
   methods: {
+       //获取我的所属企业编码
+  getUserExtension(){
+      this.api.get({
+        url: "getUserExtension",
+        data: {},
+        callback: (res)=> {
+          if (res.code == "0000") {
+           this.companyCode=res.data.companyCode
+            this.init();
+          } else {
+            this.$message.error(res.result);
+          }
+        }
+      });
+  },
     //所属园区
     getParkList() {
       let _this = this;
@@ -183,7 +200,7 @@ export default {
       let _this = this;
       _this.api.get({
         url: "getCompanyDetailByAccountOrCompanyId",
-        data: { accountOrCompanyId: sessionStorage.companyCode },
+        data: { accountOrCompanyId: this.companyCode },
         callback: function(res) {
           _this.loading = false;
           if (res.code == "0000") {
@@ -198,7 +215,7 @@ export default {
             _this.comPropertyName = res.data.comPropertyName;
             _this.ownerLaw = res.data.ownerLaw;
             _this.comTele = res.data.comTele;
-            _this.runTime = res.data.runTime;
+            // _this.runTime = res.data.runTime;
             _this.unifyCode = res.data.unifyCode;
             _this.comAddress = res.data.comAddress;
             _this.addrPark = res.data.addrPark;
@@ -255,7 +272,7 @@ export default {
       // this.$router.push({ path: "/home" });
     },
     toEditBusiness() {
-      this.$router.push({ name: "editBusiness" });
+      this.$router.push({ name: "editBusiness",query:{accountOrCompanyId: this.companyCode } });
     }
   }
 };

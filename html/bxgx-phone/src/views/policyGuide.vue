@@ -1,7 +1,11 @@
 <template>
   <div class="approvalGuide">
-    <div class="approvalGuide_search">
+    <!-- <div class="approvalGuide_search">
       <search v-model="policySearch" ref="search" @keyup.enter.native="searchEnterFun"></search>
+    </div> -->
+    <div class="declarationCenter_search">
+      <i class="weui-icon-search" v-if="policySearch===''"></i>
+      <input type="text" placeholder="搜索" v-model="policySearch" @change="searchEnterFun">
     </div>
     <div class="approvalGuide_main">
       <div class="approvalGuide_tab">
@@ -56,7 +60,7 @@ export default {
 
       policyClass: [],
       page: 1,
-      row: 5,
+      row: 8,
       policyCenterList: [],
       policyClassCode: ''
     }
@@ -132,6 +136,7 @@ export default {
     },
     // 政策中心首页
     getPolicyCenterList () {
+      this.page = 1
       let _this = this
       this.api.get({
         url: 'getPolicyCenterList',
@@ -148,6 +153,8 @@ export default {
           if (res.code === '0000') {
             _this.policyCenterList = res.data.rows
             _this.total = res.data.total
+          } else {
+            _this.$vux.toast.text(res.result)
           }
         }
       })
@@ -161,6 +168,8 @@ export default {
         callback: function (res) {
           if (res.code === '0000') {
             _this.policyClass = res.data
+          } else {
+            _this.$vux.toast.text(res.result)
           }
         }
       })
@@ -172,49 +181,72 @@ export default {
 <style lang="scss">
 .approvalGuide {
   overflow: scroll;
-
-  .approvalGuide_search {
+  .declarationCenter_search {
     position: fixed;
     z-index: 10;
-    // top: 105px;
     width: 100%;
-    .weui-search-bar {
-      padding: 28px 32px;
+    background-color: #f5f5f5;
+    padding: 0 35px;
+    display: flex;
+    input::placeholder {
+      text-align: center;
+      font-size: 21px;
     }
-    .vux-search-box {
-      position: fixed;
-      top: 105px !important;
+    input {
+      height: 60px;
+      width: 100%;
+      margin: 22px 0;
+      border-radius: 30px;
+      padding: 0 40px;
     }
-    .weui-search-bar__input {
-      height: 63px;
-      line-height: 63px;
-      // border-radius: 30px;
-    }
-    .weui-icon-search {
-      line-height: 63px;
-    }
-    .weui-icon-clear {
-      line-height: 0.8rem;
-    }
-    .weui-search-bar.weui-search-bar_focusing .weui-search-bar__cancel-btn {
-      display: flex;
-      align-items: center;
-    }
-    .weui-search-bar__box {
-      padding: 0 70px;
-      .weui-icon-search {
-        left: 20px;
-      }
-      .weui-search-bar__input {
-        padding: 0;
-      }
+    i {
+      position: absolute;
+      top: 37%;
+      right: 54%;
     }
   }
+  // .approvalGuide_search {
+  //   position: fixed;
+  //   z-index: 10;
+  //   // top: 105px;
+  //   width: 100%;
+  //   .weui-search-bar {
+  //     padding: 28px 32px;
+  //   }
+  //   .vux-search-box {
+  //     position: fixed;
+  //     // top: 105px !important;
+  //   }
+  //   .weui-search-bar__input {
+  //     height: 63px;
+  //     line-height: 63px;
+  //     // border-radius: 30px;
+  //   }
+  //   .weui-icon-search {
+  //     line-height: 63px;
+  //   }
+  //   .weui-icon-clear {
+  //     line-height: 0.8rem;
+  //   }
+  //   .weui-search-bar.weui-search-bar_focusing .weui-search-bar__cancel-btn {
+  //     display: flex;
+  //     align-items: center;
+  //   }
+  //   .weui-search-bar__box {
+  //     padding: 0 70px;
+  //     .weui-icon-search {
+  //       left: 20px;
+  //     }
+  //     .weui-search-bar__input {
+  //       padding: 0;
+  //     }
+  //   }
+  // }
   .approvalGuide_main {
     .approvalGuide_tab {
       // margin-top: 110px;
       position: fixed;
-      top: 113px;
+      top: 103px;
       width: 100%;
       z-index: 20;
       background-color: #fff;
@@ -312,8 +344,10 @@ export default {
       li {
         border-bottom: 1px solid #eee;
         padding: 30px;
-        .tit{
+        .tit {
           font-weight: bold;
+          height: 32px;
+          line-height: 32px;
         }
         .tit,
         .info {
@@ -324,12 +358,18 @@ export default {
           span {
             font-size: 30px;
           }
-          span:nth-child(1){
-            width: 80%;
+          span:nth-child(1) {
+            width: 70%;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
           }
           span:nth-child(2) {
-            width: 20%;
+            width: 25%;
             color: #00a041;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
           }
         }
         p {

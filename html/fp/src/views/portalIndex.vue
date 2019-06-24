@@ -52,7 +52,7 @@
           <i class="el-icon-arrow-right"></i>
         </div>
         <el-tabs v-model="activeName" @tab-click="handleClick">
-          <el-tab-pane label="园区公告" name="first">
+          <el-tab-pane label="园区资讯" name="first">
             <div class="noticeList">
               <ul>
                 <li class="noticeLi pointer" v-if="k<4" v-for="(i,k) in noticeList" :key="k" @click="$router.push({path:'/announcementDetails',query:{noticeId:i.id}})">
@@ -125,7 +125,7 @@
             <div class="swiper-wrapper">
               <div class="swiper-slide" style="width:100%" v-for="(item,index) in enterpriseList" :key="index">
                 <ul class="parkUl w clearfix">
-                  <li class="fl pointer" v-for="(i,k) in item" :key="k" @click="$router.push({path:'/parkIntroductionChild',query:{id:i.id}})">
+                  <li class="fl pointer" v-for="(i,k) in item" :key="k" :data-path="`/parkIntroductionChild?id=${i.id}`">
                     <div class="imgItem">
                       <img :src="i.mainPicture" alt="">
                     </div>
@@ -134,7 +134,7 @@
                       <div class="liBerif">
                         {{i.shortIntroduce}}
                       </div>
-                      <div class="liDetail mainBorder pointer" :data-path="`/parkIntroductionChild?id=${i.id}`">了解详情</div>
+                      <div class="liDetail mainBorder pointer" @click="$router.push({path:'/parkIntroductionChild',query:{id:i.id}})">了解详情</div>
                     </div>
                   </li>
                 </ul>
@@ -315,7 +315,10 @@ export default {
         },
         on: {
           click: function(e) {
-            let path = e.path[0].getAttribute("data-path");
+            if(e.path[2].getAttribute("data-path") == null){
+                return
+            }
+            let path = e.path[2].getAttribute("data-path");
             _this.$router.push(path);
           }
         },

@@ -1085,7 +1085,7 @@ export default {
             width: 57.4%;
             > ul {
               > li {
-                padding: 9px 33px;
+                padding: 8px 33px;
                 border: 1px solid #dedede;
                 float: left;
                 margin-right: 20px;

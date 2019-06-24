@@ -2,10 +2,10 @@
   <div :class="classObj" class="app-wrapper">
     <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside"/>
     <!-- 左侧导航栏结构 -->
-    <sidebar class="sidebar-container"/>
+    <!-- <sidebar class="sidebar-container"/> -->
     <!-- 右边主体部分 -->
     <div class="main-container">
-      <navbar/>
+      <!-- <navbar/> -->
       <!-- <tags-view :flag-num="flagNum"/> -->
       <app-main style="height: 100%;" @goBack="goBack"/>
     </div>

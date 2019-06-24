@@ -115,7 +115,7 @@
         <i class="el-icon-plus" />
       </el-upload> -->
       <!-- <p>已选择的图片</p> -->
-      <el-upload :headers="headers" :show-file-list="false" :multiple="false" :on-change="changeImg" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload" :action="baseURL+'springcloud-app-fastdfs/upload/fastUpload'" class="avatar-uploader">
+      <el-upload :headers="{token: $store.getters.token}" :show-file-list="false" :multiple="false" :on-change="changeImg" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload" :action="baseURL+'springcloud-app-fastdfs/upload/fastUpload'" class="avatar-uploader">
         <img v-if="imageUrl" :src="imageUrl" class="avatar">
         <i v-else class="el-icon-plus avatar-uploader-icon" />
       </el-upload>
@@ -261,7 +261,6 @@ export default {
     }
   },
   mounted() {
-    // console.log(this.$route.query.activityId)
     // console.log(this.$route.query.disabled)
     if (this.$route.query.disabled) {
       this.disabledEditorFlag = true
@@ -292,7 +291,7 @@ export default {
     getEndtime() {},
     getStarttime() {},
     selecteType(value) {
-      console.log(value)
+      // console.log(value)
       this.activityForm.actiType = value
       // this.activityForm.typeId = value
     },
@@ -308,7 +307,7 @@ export default {
     onEditorChange({ editor, html, text }) {
       // 编辑器文本发生变化
       // this.content可以实时获取到当前编辑器内的文本内容
-      console.log(this.content)
+      // console.log(this.content)
     },
     handleClick() {
       if (this.disabledEditorFlag) {
@@ -324,7 +323,6 @@ export default {
       }
       this.dialogPosterVisible = true
       paramApi(`${this.GLOBAL.parkUrl}activity/activityType/findActivityType`, this.activityForm.actiType, 'typeId').then(res => {
-        console.log(res)
         if (res.data.code === this.GLOBAL.code) {
           if (res.data.data.templateList.length > 0) {
             this.templateImgList = res.data.data.templateList
@@ -437,7 +435,6 @@ export default {
       this.$refs['activityForm'].validate(valid => {
         if (valid) {
           api(`${this.GLOBAL.parkUrl}activity/saveActivityDraft`, data, 'post').then(res => {
-            console.log(res)
             if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '保存草稿成功',
@@ -560,7 +557,7 @@ export default {
       //   return
       // }
       this.activityForm.actiDetail = this.$refs.ue.getUEContent()
-      console.log(this.activityForm.actiDetail)
+      // console.log(this.activityForm.actiDetail)
       // if (!this.activityForm.actiDetail) {
       //   this.$message({
       //     message: '活动详情不能为空',

@@ -234,7 +234,7 @@
           <div class="preview-form">
             <el-button type="primary" @click="previewForm">预览</el-button>
           </div>
-          <el-tabs v-loading="previewing" v-if="!previewing" type="border-card">
+          <el-tabs v-loading="previewing" v-if="!previewing" type="border-card" style="width: 100%">
             <el-tab-pane v-for="(tab, formIndex) in formData.tabs" :key="formIndex" :label="tab.tabName">
               <tree-table v-if="tab.treeTableData" :data="tab.treeTableData" :columns="tab.columns" border expand-all/>
             </el-tab-pane>
@@ -1065,7 +1065,7 @@ export default {
               tab.columns = this.columns.concat([{
                 text: tabClumnTypeOption[tabClumnType.toString()],
                 value: 'inputFormatModel',
-                width: 600
+                width: 400
               }], tabClumnTargetShowList)
 
               // 把渲染表单规则挂载到已经勾选的各个结构指标

@@ -6,7 +6,7 @@
               <div class="swiper-slide"> <img src="@/assets/image/talents.png" alt=""> </div>
           </div>
           <div class="swiper-pagination"></div>
-         
+
       </div>
     </div>
     <div class="talentsService_cont">
@@ -29,7 +29,7 @@
           <p>
             <span class="iconfont icon-deng"> </span>
               汇集常用申报平台，便于企业快速查阅和进入。包含了各类科技项目、企业资质、产品认定、人才计划申报、资金兑现、 技术合同登记等业务申报系统。
-            <span >查看详情<span class="el-icon-d-arrow-right"></span> </span> 
+            <span >查看详情<span class="el-icon-d-arrow-right"></span> </span>
           </p>
           <div>
             <img src="@/assets/image/platform.png" alt="">
@@ -44,57 +44,17 @@
         </div>
         <div class="perennial_list">
           <ul>
-            <li @click="goelse(perennialList[0].linkAddress)">
-              <!-- <a :href="perennialList[0].linkAddress"> -->
-                <div class="list_cont">
-                  <p><img src="@/assets/image/perennial.png" alt=""> </p>
-                  <!-- <p>{{item.title}}</p>
-                  <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
-                  <p>收益：<span>{{item.profit}}</span> </p>
-                  <p>价格：{{item.price}}</p> -->
-                  <p>{{perennialList[0].platformTitle}} </p>
-                  <p>平台功能：{{perennialList[0].remark}}</p>
-                </div>
-                <div class="list_view"><span>我要申报</span> </div>
-              <!-- </a> -->
-            </li>
-            <li @click="goelse(perennialList[1].linkAddress)">
-              <!-- <a :href="perennialList[1].linkAddress" target="_blank"> -->
-                <div class="list_cont">
-                  <p><img src="@/assets/image/jsrcgz.png" alt=""> </p>
-                  <p>{{perennialList[1].platformTitle}}</p>
-                  <p>平台功能：{{perennialList[1].remark}}</p>
-                </div>
-                <div class="list_view"><span>我要申报</span> </div>
-              <!-- </a> -->
-            </li>
-            <li @click="goelse(perennialList[2].linkAddress)">
-              <!-- <a :href="perennialList[2].linkAddress" target="_blank"> -->
-                <div class="list_cont">
-                  <p><img src="@/assets/image/njrc_kjdjzj22.png" alt=""> </p>
-                  <!-- <p>{{item.title}}</p>
-                  <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
-                  <p>收益：<span>{{item.profit}}</span> </p>
-                  <p>价格：{{item.price}}</p> -->
-                  <p>{{perennialList[2].platformTitle}}</p>
-                  <p>平台功能：{{perennialList[2].remark}}</p>
-                </div>
-                <div class="list_view"><span>我要申报</span> </div>
-              <!-- </a> -->
-            </li>
-            <li @click="goelse(perennialList[3].linkAddress)">
-              <!-- <a :href="perennialList[3].linkAddress" target="_blank"> -->
-                <div class="list_cont">
-                  <p><img src="@/assets/image/njrc_cxxqyj.png" alt=""> </p>
-                  <!-- <p>{{item.title}}</p>
-                  <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
-                  <p>收益：<span>{{item.profit}}</span> </p>
-                  <p>价格：{{item.price}}</p> -->
-                  <p>{{perennialList[3].platformTitle}}</p>
-                  <p>平台功能：{{perennialList[3].remark}}</p>
-                </div>
-                <div class="list_view"><span>我要申报</span> </div>
-              <!-- </a> -->
+            <li
+              v-if="index <= 3"
+              v-for="(item, index) in perennialList"
+              :key="index"
+              @click="goelse(item.linkAddress)">
+              <div class="list_cont">
+                <p><img :src="imgList[index]" alt=""> </p>
+                <p>{{item.platformTitle}} </p>
+                <p>平台功能：{{item.remark}}</p>
+              </div>
+              <div class="list_view"><span>我要申报</span> </div>
             </li>
           </ul>
         </div>
@@ -129,7 +89,7 @@
               </el-tab-pane>
             </el-tabs>
           </div>
-          
+
         </div>
       </div>
       <!-- 分页 -->
@@ -149,9 +109,14 @@
 </template>
 <script>
 import { getToken } from '@/util/auth'
+import imgSrc1 from '@/assets/image/perennial.png'
+import imgSrc2 from '@/assets/image/jsrcgz.png'
+import imgSrc3 from '@/assets/image/njrc_kjdjzj22.png'
+import imgSrc4 from '@/assets/image/njrc_cxxqyj.png'
 export default {
    data () {
       return {
+        imgList: [imgSrc1, imgSrc2, imgSrc3, imgSrc4],
         total:1,
         typeList:[],//区类型
         talentsList:[],
@@ -174,7 +139,7 @@ export default {
       time(time){
         if(time){
           let dateee = new Date(time).toJSON();
-          return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '') 
+          return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
           // return time.split("T")[0]
         }
       },
@@ -214,7 +179,7 @@ export default {
                 return
               }
             }else{
-              _this.$message.error(res.result)              
+              _this.$message.error(res.result)
             }
           }
         })
@@ -255,7 +220,7 @@ export default {
               })
               _this.typeList = typelist;
             }else{
-              _this.$message.error(res.result)              
+              _this.$message.error(res.result)
             }
           }
         });
@@ -277,7 +242,7 @@ export default {
               _this.talentsList = res.data.rows;
               _this.total=res.data.total
             }else{
-              _this.$message.error(res.result)              
+              _this.$message.error(res.result)
             }
           }
         });
@@ -297,7 +262,7 @@ export default {
               // console.log(res)
               _this.perennialList = res.data.rows;
             }else{
-              _this.$message.error(res.result)              
+              _this.$message.error(res.result)
             }
           }
         });
@@ -328,7 +293,7 @@ export default {
                 return
               }
             }else{
-              _this.$message.error(res.result)              
+              _this.$message.error(res.result)
             }
           }
         })
@@ -454,7 +419,7 @@ export default {
         padding: 15px 0;
         font-size: 12px;
         .el-breadcrumb__item:last-child .el-breadcrumb__inner a{
-          color:#00a041;  
+          color:#00a041;
         }
       }
       // 申报平台
@@ -534,9 +499,9 @@ export default {
               border: solid 1px #eeeeee;
               transition:all .3s ease 0s;
               &:hover{
-                box-shadow: 0px 0px 14px 4px rgba(0, 0, 0, 0.09);                
+                box-shadow: 0px 0px 14px 4px rgba(0, 0, 0, 0.09);
               }
-              
+
               &:last-child{
                 margin-right: 0;
               }
@@ -545,9 +510,9 @@ export default {
                 color:#797979;
                 font-size: 12px;
                 p{
-                  margin: 7px 0; 
+                  margin: 7px 0;
                   &:last-child{
-                    // margin-bottom: 
+                    // margin-bottom:
                   }
                 }
                 p:nth-child(1){
@@ -665,7 +630,7 @@ export default {
                       padding-right: 121px;
                     }
                   }
-                  
+
                 }
               }
               .list_cont_check{
@@ -711,7 +676,7 @@ export default {
         .el-select .el-input__inner:focus{
           border-color:#00a041;
         }
-        
+
       }
     }
   }

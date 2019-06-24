@@ -91,13 +91,6 @@ export default {
   //       }, 0);
   //   }
   // },
-  beforeRouteEnter(to, from, next) {
-    this.$store.dispatch('getMenuItems')
-    store.dispatch('getMenuItems')
-      .then(() => {
-        next()
-      })
-  },
   mounted() {
     let _this = this
     bus.$on("getUserinfoF", res => {

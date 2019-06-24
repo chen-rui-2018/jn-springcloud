@@ -1,5 +1,5 @@
 <template>
-  <div class="serverPro w" style="padding-top:65px;">
+  <div class="serverPro w" style="padding-top:65px;" v-loading="proloading">
     <div class="serverOrgMenu">
       <span class="pointer" @click="$router.push({path:'/serMatHp'})">首页</span>
       <span>/</span>
@@ -38,8 +38,8 @@
         <i class="iconfont icon-sousuo" @click="handleSearchList"></i>
       </div>
     </div>
-    <div class="serverOrgContent" v-loading="proloading">
-      <div v-if="serverProList.length==0">
+    <div class="serverOrgContent">
+      <div v-if="serverProList.length==0&&!proloading">
         <nodata></nodata>
       </div>
       <ul v-else>

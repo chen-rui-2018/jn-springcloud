@@ -1,5 +1,5 @@
 <template>
-  <div class="serverCon w">
+  <div class="serverCon w" v-loading="conloading">
     <div class="serverOrgMenu">
       <span class="pointer" @click="$router.push({path:'/serMatHp'})">首页</span>
       <span>/</span>
@@ -32,8 +32,8 @@
         <i class="iconfont icon-sousuo" @click="handleSearchList"></i>
       </div>
     </div>
-    <div class="serverOrgContent" v-loading="conloading">
-      <div v-if="serverConList.length==0">
+    <div class="serverOrgContent">
+      <div v-if="serverConList.length==0&&!conloading">
         <nodata></nodata>
       </div>
       <!-- <div v-else> -->
@@ -210,25 +210,6 @@ export default {
         }
       });
     },
-    // selectIndustryList() {
-    //   let _this = this;
-    //   this.api.get({
-    //     url: "selectIndustryProductList",
-    //     data: {},
-    //     callback: function(res) {
-    //       if (res.code == "0000") {
-    //         // for (let it in res.data) {
-    //         //   if (res.data[it].preType == "0") {
-    //         //     _this.businessArea.push(res.data[it]);
-    //         //   }
-    //         // }
-    //         _this.businessArea = res.data;
-    //       } else {
-    //         _this.$message.error(res.result);
-    //       }
-    //     }
-    //   });
-    // }
      getIndustryForMarket() {
       let _this = this;
       this.api.get({

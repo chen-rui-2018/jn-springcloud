@@ -87,8 +87,8 @@ export default {
       margin-top:20px;
       padding:20px;
       // max-width:100%
-      width: 100%;
-      overflow: hidden;
+      // width: 100%;
+      // overflow: hidden;
   }
 }
 </style>

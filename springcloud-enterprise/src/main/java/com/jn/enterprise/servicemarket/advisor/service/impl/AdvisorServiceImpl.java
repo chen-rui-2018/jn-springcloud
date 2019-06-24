@@ -22,6 +22,7 @@ import com.jn.enterprise.servicemarket.industryarea.service.IndustryService;
 import com.jn.enterprise.servicemarket.product.model.AdvisorProductInfo;
 import com.jn.enterprise.servicemarket.product.model.AdvisorProductQuery;
 import com.jn.enterprise.servicemarket.product.service.ServiceProductService;
+import com.jn.enterprise.utils.IBPSFileUtils;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
@@ -264,12 +265,24 @@ public class AdvisorServiceImpl implements AdvisorService {
         if(moreUserExtension!=null &&  moreUserExtension.getData()!=null){
             List<UserExtensionInfo>userExtensionInfoList= moreUserExtension.getData();
             for(ServiceRating serviceRating:serviceRatingInfo){
+                //处理产品图片
+                serviceRating.setPictureUrl(IBPSFileUtils.getFilePath(serviceRating.getPictureUrl()));
                 for(UserExtensionInfo userExtensionInfo:userExtensionInfoList){
                     if(StringUtils.equals(serviceRating.getEvaluationAccount(),userExtensionInfo.getAccount())){
                         //头像
                         serviceRating.setEvaluationAvatar(userExtensionInfo.getAvatar());
                         //姓名
                         serviceRating.setEvaluationName(userExtensionInfo.getName());
+                        //处理账号
+                        String advisorAccount = serviceRating.getEvaluationAccount();
+                        int length=advisorAccount.length();
+                        String subAccount="";
+                        if(length>4){
+                            subAccount=advisorAccount.substring(0, 3)+"***"+advisorAccount.substring(length-2, length);
+                        }else if(advisorAccount.length()>0){
+                            subAccount=advisorAccount.substring(0, 1)+"***"+advisorAccount.substring(length-2, length);
+                        }
+                        serviceRating.setEvaluationAccount(subAccount);
                         break;
                     }
                 }

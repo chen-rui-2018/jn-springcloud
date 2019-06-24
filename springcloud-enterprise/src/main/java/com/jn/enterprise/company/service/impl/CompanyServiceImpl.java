@@ -132,6 +132,7 @@ public class CompanyServiceImpl implements CompanyService {
             if (filePathList != null && !filePathList.isEmpty()) {
                 String[] strings = new String[filePathList.size()];
                 serviceEnterpriseCompany.setPropagandaPicture(filePathList.toArray(strings));
+                serviceEnterpriseCompany.setProImgs(null);
             }
             serviceEnterpriseCompany.setAvatar(IBPSFileUtils.getFilePath(serviceEnterpriseCompany.getAvatar()));
             serviceEnterpriseCompany.setBusinessLicense(IBPSFileUtils.getFilePath(serviceEnterpriseCompany.getBusinessLicense()));
@@ -182,23 +183,12 @@ public class CompanyServiceImpl implements CompanyService {
         for (TbServiceCompany t:tbServiceCompanies) {
             ServiceCompany company = new ServiceCompany();
             BeanUtils.copyProperties(t,company);
-            company = setCompanyInfo(company);
-
-            // 处理图片格式
-            List<String> filePathList = IBPSFileUtils.getFilePath2List(t.getPropagandaPicture());
-            if (filePathList != null && !filePathList.isEmpty()) {
-                String[] strings = new String[filePathList.size()];
-                company.setPropagandaPicture(filePathList.toArray(strings));
-            }
-            company.setBusinessLicense(IBPSFileUtils.getFilePath(t.getBusinessLicense()));
-            company.setAvatar(IBPSFileUtils.getFilePath(t.getAvatar()));
-
+            company = setCompanyDataInfo(t, company);
             companies.add(company);
         }
         PaginationData<List<ServiceCompany>> data = new PaginationData(companies, objects.getTotal());
         return data;
     }
-
 
     @Override
     @ServiceLog(doAction = "根据用户账号查询企业信息（用户为企业管理员）")
@@ -224,18 +214,7 @@ public class CompanyServiceImpl implements CompanyService {
         TbServiceCompany tbServiceCompany = tbServiceCompanies.get(0);
         ServiceCompany company = new ServiceCompany();
         BeanUtils.copyProperties(tbServiceCompany, company);
-        company = setCompanyInfo(company);
-
-        // 处理图片格式
-        company.setAvatar(IBPSFileUtils.getFilePath(tbServiceCompany.getAvatar()));
-        company.setBusinessLicense(IBPSFileUtils.getFilePath(tbServiceCompany.getBusinessLicense()));
-        List<String> filePathList = IBPSFileUtils.getFilePath2List(tbServiceCompany.getPropagandaPicture());
-        if (filePathList != null && !filePathList.isEmpty()) {
-            String[] strings = new String[filePathList.size()];
-            company.setPropagandaPicture(filePathList.toArray(strings));
-        }
-
-        return setCompanyDateInfo(tbServiceCompany, company);
+        return setCompanyDataInfo(tbServiceCompany, company);
     }
 
     @ServiceLog(doAction = "根据用户账号查询企业信息（用户为企业管理员）,携带当前登录用户")
@@ -325,6 +304,7 @@ public class CompanyServiceImpl implements CompanyService {
         logger.info("[编辑企业信息] " + ibpsResult.getMessage());
         return 1;
     }
+
     @ServiceLog(doAction = "获取企业详情")
     @Override
     public CompanyDetailsVo getCompanyDetails(String companyId,String account) {
@@ -336,6 +316,25 @@ public class CompanyServiceImpl implements CompanyService {
             logger.info("企业信息不存在!");
             return vo;
         }
+
+        TbServicePreferCriteria preferCriteria = new TbServicePreferCriteria();
+        preferCriteria.createCriteria().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        List<TbServicePrefer> tbServicePrefers = tbServicePreferMapper.selectByExample(preferCriteria);
+
+        //企业性质名称返回
+        if(StringUtils.isNotEmpty(show.getComProperty())){
+            String[] comPropertys = show.getComProperty().split(",");
+            List<String> comPropertyNameList = new ArrayList<>();
+            for (String str : comPropertys) {
+                for (TbServicePrefer prefer : tbServicePrefers) {
+                    if (StringUtils.equals(prefer.getId(), str)) {
+                        comPropertyNameList.add(prefer.getPreValue());
+                    }
+                }
+            }
+            show.setComPropertyName(StringUtils.join(comPropertyNameList, ","));
+        }
+
         // 处理图片格式
         show.setAvatar(IBPSFileUtils.getFilePath(show.getAvatar()));
 
@@ -423,6 +422,7 @@ public class CompanyServiceImpl implements CompanyService {
     public Result<Boolean> saveComment(CommentAddParam commentAddParam){
         return commentClient.commentActivity(commentAddParam);
     }
+
     public static List<Map<String,String>> addressResolution(String address){
         String regex="(?<province>[^省]+自治区|.*?省|.*?行政区|.*?市)(?<city>[^市]+自治州|.*?地区|.*?行政单位|.+盟|市辖区|.*?市|.*?县)(?<county>[^县]+县|.+区|.+市|.+旗|.+海域|.+岛)?(?<town>[^区]+区|.+镇)?(?<village>.*)";
         Matcher m= Pattern.compile(regex).matcher(address);
@@ -503,6 +503,7 @@ public class CompanyServiceImpl implements CompanyService {
         BeanUtils.copyProperties(data, companyContact);
         return companyContact;
     }
+
     @ServiceLog(doAction = "获取企业信息(关注企业列表展示)")
     @Override
     public CompanyInfoModel getCompanyInfo(String companyId,String account) {
@@ -552,8 +553,7 @@ public class CompanyServiceImpl implements CompanyService {
         TbServiceCompany tbServiceCompany = tbServiceCompanyMapper.selectByPrimaryKey(comId);
         BeanUtils.copyProperties(tbServiceCompany, company);
 
-        company = setCompanyDateInfo(tbServiceCompany, company);
-        company = setCompanyInfo(company);
+        company = setCompanyDataInfo(tbServiceCompany, company);
         return company;
     }
 
@@ -688,6 +688,7 @@ public class CompanyServiceImpl implements CompanyService {
     private ServiceCompany setCompanyInfo (ServiceCompany company) {
         //查询企业字段数据
         TbServicePreferCriteria preferCriteria = new TbServicePreferCriteria();
+        preferCriteria.createCriteria().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         List<TbServicePrefer> tbServicePrefers = tbServicePreferMapper.selectByExample(preferCriteria);
 
         // 行业领域
@@ -717,12 +718,12 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     /**
-     * 处理企业日期字段
+     * 数据处理
      * @param tbServiceCompany
      * @param company
      * @return
      */
-    private ServiceCompany setCompanyDateInfo (TbServiceCompany tbServiceCompany, ServiceCompany company) {
+    private ServiceCompany setCompanyDataInfo (TbServiceCompany tbServiceCompany, ServiceCompany company) {
         if(null != tbServiceCompany.getFoundingTime()){
             company.setFoundingTime(DateUtils.formatDate(tbServiceCompany.getFoundingTime(),PATTERN));
         }
@@ -744,7 +745,14 @@ public class CompanyServiceImpl implements CompanyService {
         if(null != tbServiceCompany.getModifiedTime()){
             company.setModifiedTime(DateUtils.formatDate(tbServiceCompany.getModifiedTime(),PATTERN_DETAIL));
         }
-        return company;
+        List<String> filePathList = IBPSFileUtils.getFilePath2List(tbServiceCompany.getPropagandaPicture());
+        if (filePathList != null && !filePathList.isEmpty()) {
+            String[] strings = new String[filePathList.size()];
+            company.setPropagandaPicture(filePathList.toArray(strings));
+        }
+        company.setBusinessLicense(IBPSFileUtils.getFilePath(tbServiceCompany.getBusinessLicense()));
+        company.setAvatar(IBPSFileUtils.getFilePath(tbServiceCompany.getAvatar()));
+        return setCompanyInfo(company);
     }
 
 }

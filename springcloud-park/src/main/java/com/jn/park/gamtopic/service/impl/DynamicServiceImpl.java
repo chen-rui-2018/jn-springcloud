@@ -429,7 +429,11 @@ public class DynamicServiceImpl implements DynamicService {
                 for(UserExtensionInfo user : userList){
                     if(show.getAccount().equals(user.getAccount())){
                         show.setAvatar(user.getAvatar());
-                        show.setNickName(user.getNickName());
+                        if (user.getNickName()==null || user.getNickName()==""){
+                            show.setNickName(hidePhoneNumber(user.getAccount()));
+                        }else{
+                            show.setNickName(user.getNickName());
+                        }
                         show.setSignature(user.getSignature());
                     }
                 }
@@ -542,7 +546,11 @@ public class DynamicServiceImpl implements DynamicService {
                 for(UserExtensionInfo user : userList){
                     if(show.getCreatorAccount().equals(user.getAccount())){
                         show.setAvatar(user.getAvatar());
-                        show.setNickName(user.getNickName());
+                        if (user.getNickName()==null || user.getNickName()==""){
+                            show.setNickName(hidePhoneNumber(user.getAccount()));
+                        }else{
+                            show.setNickName(user.getNickName());
+                        }
                         show.setPhone(user.getPhone());
                         show.setSex(user.getSex());
                     }

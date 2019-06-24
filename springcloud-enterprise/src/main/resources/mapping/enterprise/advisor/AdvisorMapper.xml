@@ -116,14 +116,15 @@
         ,sr.product_id_ AS "productId"                              <!-- 服务产品id-->
         ,sr.`product_name` AS "productName"				            <!-- 服务产品名称-->
         ,sp.`picture_url` AS "pictureUrl"				            <!-- 服务产品图片-->
-        ,CONCAT_WS('****', SUBSTRING(sr.`evaluator_account`, 1, 4),
-        SUBSTRING(sr.`evaluator_account`, 9, 3)) AS "evaluationAccount" <!-- 评价人账号-->
+        ,sr.`evaluator_account` AS "evaluationAccount"              <!-- 评价人账号-->
         ,DATE_FORMAT(sr.`created_time`,'%Y-%m-%d %H:%i:%s') AS "evaluationTime"<!-- 评价时间-->
         ,sr.`evaluation_desc` AS "evaluationDesc"			        <!-- 评价描述-->
         ,IFNULL(AVG(sr.`attitude_score`),0) AS "evaluationScore"	<!-- 评价分数-->
         FROM  tb_service_rating sr
         LEFT JOIN tb_service_product sp
         ON sr.`product_id_`=sp.`product_id_`
+        where 1=1
+        and sr.record_status=1
         GROUP BY sr.`org_id_`,sr.`org_name`,sr.`advisor_account`,sr.`advisor_name`,
         sr.product_id_,sr.`product_name`, sp.`picture_url`,sr.`evaluator_account`,
         sr.`created_time`,sr.`evaluation_desc`
@@ -181,6 +182,8 @@
         FROM  tb_service_rating sr
         LEFT JOIN tb_service_product sp
         ON sr.`product_id_`=sp.`product_id_`
+        where 1=1
+        and sr.record_status=1
         GROUP BY sr.`org_id_`,sr.`org_name`,sr.`advisor_account`,sr.`advisor_name`,
         sr.product_id_,sr.`product_name`, sp.`picture_url`,sr.`evaluator_account`,
         sr.`created_time`,sr.`evaluation_desc`

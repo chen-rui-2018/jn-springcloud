@@ -41,6 +41,12 @@ import java.util.Date;
     @ApiModelProperty(value="所属平台名称")
     private String subordinatePlatformName;
 
+    @ApiModelProperty(value = "是否属于人才服务（1：是，2：否）")
+    private String isTalentService;
+
+    @ApiModelProperty(value = "排序")
+    private Integer sort;
+
     @ApiModelProperty(value="状态（1：草稿，2：已发布，3：已下架）")
     private Byte status;
 
@@ -176,5 +182,43 @@ import java.util.Date;
 
     public void setAccountAndPassword(String accountAndPassword) {
         this.accountAndPassword = accountAndPassword;
+    }
+
+    public String getIsTalentService() {
+        return isTalentService;
+    }
+
+    public void setIsTalentService(String isTalentService) {
+        this.isTalentService = isTalentService;
+    }
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
+    }
+
+    @Override
+    public String toString() {
+        return "DeclarationPlatformModel{" +
+                "id='" + id + '\'' +
+                ", platformTitle='" + platformTitle + '\'' +
+                ", linkAddress='" + linkAddress + '\'' +
+                ", remark='" + remark + '\'' +
+                ", businessConsult='" + businessConsult + '\'' +
+                ", systemSupport='" + systemSupport + '\'' +
+                ", subordinatePlatformName='" + subordinatePlatformName + '\'' +
+                ", isTalentService='" + isTalentService + '\'' +
+                ", sort=" + sort +
+                ", status=" + status +
+                ", recordStatus=" + recordStatus +
+                ", creatorAccount='" + creatorAccount + '\'' +
+                ", createdTime=" + createdTime +
+                ", modifierAccount='" + modifierAccount + '\'' +
+                ", modifiedTime=" + modifiedTime +
+                ", accountAndPassword='" + accountAndPassword + '\'' +
+                '}';
     }
 }

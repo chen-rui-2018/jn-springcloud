@@ -28,7 +28,7 @@ public class CareUserDetails implements Serializable {
     private String  likedNum;
     @ApiModelProperty(value="关注状态-(0:未关注--1:已关注)")
     private String  careStatus;
-    @ApiModelProperty(value="关注状态-(0:个人账号--1:企业账号)")
+    @ApiModelProperty(value="账号类型-(0:个人账号--1:企业账号)")
     private String  identity;
 
     public String getIdentity() {

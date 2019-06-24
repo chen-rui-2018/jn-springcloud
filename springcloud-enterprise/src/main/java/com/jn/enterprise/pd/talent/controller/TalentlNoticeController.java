@@ -5,8 +5,10 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.enterprise.pd.declaration.enums.ExceptionStatusEnums;
+import com.jn.enterprise.pd.declaration.model.DeclarationPlatformModel;
 import com.jn.enterprise.pd.talent.entity.TbPdTalentServiceNotice;
 import com.jn.enterprise.pd.talent.entity.TbPdTalentServiceRange;
+import com.jn.enterprise.pd.talent.model.TalentNoticePlatformParam;
 import com.jn.enterprise.pd.talent.service.TalentNoticeService;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
@@ -16,6 +18,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -74,5 +77,14 @@ public class TalentlNoticeController extends BaseController {
         Assert.notNull(id, ExceptionStatusEnums.NOTICE_ID_NOT_NULL.getMessage());
         talentNoticeService.updateTrafficVolume(id);
         return new Result();
+    }
+
+    @ControllerLog(doAction = "人才服务-首页申报平台查询")
+    @ApiOperation(value = "人才服务-首页申报平台查询", notes = "人才服务-首页申报平台查询")
+    @RequestMapping(value = "/queryPlatformInfo" ,method = RequestMethod.POST)
+    public Result<List<DeclarationPlatformModel>> queryPlatformInfo(@RequestBody @Validated TalentNoticePlatformParam talentNoticePlatformParam) {
+        Assert.notNull(talentNoticePlatformParam.getIsTalentService(),"是否属于人才服务入參不能为空！");
+        PaginationData<List<DeclarationPlatformModel>> data = talentNoticeService.queryPlatformInfo(talentNoticePlatformParam);
+        return new Result(data);
     }
 }

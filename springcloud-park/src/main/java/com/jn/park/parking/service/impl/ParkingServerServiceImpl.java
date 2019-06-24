@@ -347,8 +347,8 @@ public class ParkingServerServiceImpl implements ParkingServerService {
         }
         int i = parkingRecordMapper.updateParkingRecordByRamp(parkingRecordRampParam);
         logger.info("处理道尔推送车辆出场数据成功，响应条数：-- {}",i);
-        String s = sb.toString();
-        return s.substring(0,s.length()-1);
+        String s = carList.size()==i?sb.toString():"";
+        return s==""?"":s.substring(0,s.length()-1);
     }
 
 }

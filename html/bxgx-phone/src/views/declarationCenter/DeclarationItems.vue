@@ -41,7 +41,8 @@ export default {
         rows: 10,
         sortType: '1',
         titleName: ''
-      }
+      },
+      isShow: 1
     }
   },
   filters: {
@@ -65,17 +66,18 @@ export default {
     }
   },
   mounted () {
+    this.isShow = this.$route.query.isShow
     this.getTypeList()
     this.getdeclarationList()
     this.scrollBottom()
   },
   methods: {
     goDetail (id) {
-      if (this.isShow === 1) {
-        this.$router.push({path: '/guest/pd/declarationDetail', query: {id: id}})
-      } else {
-        this.$router.push({path: '/guest/pd/declarationDetail', query: {id: id, isShow: '0'}})
-      }
+      // if (this.isShow === 1) {
+      this.$router.push({path: '/guest/pd/declarationDetail', query: {id: id, isShow: this.isShow}})
+      // } else {
+      //   this.$router.push({path: '/guest/pd/declarationDetail', query: {id: id, isShow: '0'}})
+      // }
     },
     gosearch () {
       this.getdeclarationList()

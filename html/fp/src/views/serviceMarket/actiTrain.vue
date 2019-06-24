@@ -1,5 +1,5 @@
 <template>
-    <div class="actiTrain">
+    <div class="actiTrain" v-loading="actiloading">
         <div class="trainContent">
             <div class="actiContent">
                 <div class="actiNav">
@@ -52,8 +52,8 @@
                         <i class="iconfont icon-sousuo" @click="handleSearchList"></i>
                     </div>
                 </div>
-                <div class="actiTab" v-loading="actiloading">
-                    <div v-if="actiListSlim.length==0">
+                <div class="actiTab">
+                    <div v-if="actiListSlim.length==0&&!actiloading">
                         <nodata></nodata>
                     </div>
                     <div v-else>

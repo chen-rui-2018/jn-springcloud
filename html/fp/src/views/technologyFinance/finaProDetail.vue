@@ -479,6 +479,7 @@ export default {
         // font-size: 13px;
         line-height: 20px;
         margin-top: 5px;
+        color:unset;
       }
     }
     .d4 {

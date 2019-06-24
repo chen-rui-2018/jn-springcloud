@@ -143,22 +143,24 @@
             // 格式化表头设置key对应指标上otherColumn的数据
             this.formatColumn(tab)
             // 把otherColumns的对象根据指标id挂载到树形指标上面
-            // this.formatTreeOtherColumnData(tab)
-            // this.sortTree(tab.targetList, 'orderNumber')
+            this.formatTreeOtherColumnData(tab)
+            this.sortTree(tab.targetList, 'orderNumber')
           }
         })
       },
-      sortTree(tree, key) {
+      sortTree(tree, keys2) {
         for (let i = 0, length = tree.length; i < length; i++) {
           for (let j = i + 1; j < length; j++) {
-            if (tree[i][key] > tree[j][key]) {
-              const temp = tree[j]
-              tree[j] = tree[i]
-              tree[i] = temp
+            if (tree[i].hasOwnProperty(keys2) && tree[j].hasOwnProperty(keys2) && tree[i][keys2] && tree[j][keys2]) {
+              if (Number(tree[i][keys2]) > Number(tree[j][keys2])) {
+                const temp = tree[j]
+                tree[j] = tree[i]
+                tree[i] = temp
+              }
             }
           }
-          if (tree[i].children && tree[i].children.length > 0) {
-            this.sortTree(tree[i].children, key)
+          if (tree[i].hasOwnProperty('children') && tree[i].children && tree[i].children.length > 0) {
+            this.sortTree(tree[i].children, keys2)
           }
         }
       },
@@ -180,28 +182,27 @@
         text += parseInt((date.getMonth() + 1)) + '月'
         tab.columns.push({
           text: text,
-          value: 'inputFormatModel',
-          width: !this.isMobile ? 600 : ''
+          value: 'inputFormatModel'
         })
-        // if (!this.isMobile) {
-        //   if (tab.hasOwnProperty('otherColumn')) {
-        //     for (const key in tab.otherColumn) {
-        //       if (tab.otherColumn.hasOwnProperty(key) && key) {
-        //         let text
-        //         if (key.length === 6) {
-        //           text = key.substring(0, 4) + '年' + key.substring(4, 6) + '月'
-        //         } else {
-        //           text = key + '年'
-        //         }
-        //         tab.columns.push({
-        //           text: text,
-        //           value: key,
-        //           width: 160
-        //         })
-        //       }
-        //     }
-        //   }
-        // }
+        if (!this.isMobile) {
+          if (tab.hasOwnProperty('otherColumn') && tab.otherColumn) {
+            Object.keys(tab.otherColumn).forEach(keys => {
+              if (tab.otherColumn.hasOwnProperty(keys) && keys) {
+                let text
+                if (keys.length === 6) {
+                  text = keys.substring(0, 4) + '年' + keys.substring(4, 6) + '月'
+                } else {
+                  text = keys + '年'
+                }
+                tab.columns.push({
+                  text: text,
+                  value: keys,
+                  width: 160
+                })
+              }
+            })
+          }
+        }
       },
       changeDepartment(el) {
         this.loadingTab = true
@@ -229,34 +230,34 @@
           } else {
             this.$set(list, 'hasJurisdiction', false)
           }
-          if (list.hasOwnProperty('children') && list.children.length > 0) {
+          if (list.hasOwnProperty('children') && list.children && list.children.length > 0) {
             this.formatTreeJurisdiction(list.children, departmentId)
           }
         }
       },
       formatTreeOtherColumnData(tab) {
         // 递归选中的指标树节点和获取到的累计列对象数组比对，寻找对应的累计列数据，并挂载到指标节点中
-        if (tab.hasOwnProperty('otherColumn')) {
+        if (tab.hasOwnProperty('otherColumn') && tab.otherColumn) {
           this.treeOtherColumnMerge(tab.targetList, tab.otherColumn)
         }
       },
       treeOtherColumnMerge(treeData, otherColumn) {
         // 其他表格列的值（上期值比对）挂载到树形指标，跟着指标循环的时候显示
         for (const target of treeData) {
-          for (const key in otherColumn) {
-            if (otherColumn.hasOwnProperty(key) && key) {
-              this.$set(target, key, [])
-              for (const column of otherColumn[key]) {
+          Object.keys(otherColumn).forEach(keys1 => {
+            this.$set(target, keys1, [])
+            if (otherColumn.hasOwnProperty(keys1) && keys1 && otherColumn[keys1]) {
+              for (const column of otherColumn[keys1]) {
                 if (target.id === column.targetId) {
-                  target[key].push({
+                  target[keys1].push({
                     value: column.value || '-',
                     label: column.formName
                   })
                 }
               }
             }
-          }
-          if (target.hasOwnProperty('children') && target.children.length > 0) {
+          })
+          if (target.hasOwnProperty('children') && target.children && target.children.length > 0) {
             this.treeOtherColumnMerge(target.children, otherColumn)
           }
         }
@@ -298,7 +299,7 @@
               return a['orderNumber'] - b['orderNumber']
             })
           }
-          if (target.hasOwnProperty('children') && target.children.length > 0) {
+          if (target.hasOwnProperty('children') && target.children && target.children.length > 0) {
             this.treeMerge(formModels, target.children)
           }
         }
@@ -366,7 +367,7 @@
               }
             }
           }
-          if (target.hasOwnProperty('children') && target.children.length > 0) {
+          if (target.hasOwnProperty('children') && target.children && target.children.length > 0) {
             this.checkInputFormatModel(target.children, resolve, reject)
           }
         }
@@ -434,7 +435,7 @@
                 this.flatteningInputList.push(item)
               })
             })
-            if (form.hasOwnProperty('children') && form.children.length > 0) {
+            if (form.hasOwnProperty('children') && form.children && form.children.length > 0) {
               this.setOrderAndFormatInputList(form.children)
             }
           }

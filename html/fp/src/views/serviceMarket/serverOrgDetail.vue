@@ -20,7 +20,7 @@
           <div class="agent2Info fl color2" style="width:80%">
             <p>客户偏好：
               <span v-for="(item1,k1) in serverOrgDetailList.developmentStage" :key="k1">{{item1.orgTraitName}},</span>
-              <span v-for="(item2,k2) in serverOrgDetailList.industrySector" :key="k2">{{item2.orgTraitName}}</span>
+              <span v-for="(item2,k2) in serverOrgDetailList.industrySector" :key="k2 + item2">{{item2.orgTraitName}}</span>
             </p>
             <p>业务擅长：{{serverOrgDetailList.orgSpeciality}}</p>
             <p>咨询电话：

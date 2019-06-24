@@ -231,20 +231,7 @@ export default {
       // console.log(data)
       var collect = this.$echarts.init(document.getElementById('pieChart'))
       if (data.length > 0) {
-        console.log(data)
-        var bar = 'inner'
-        var isFlag = false
-        data.forEach(v => {
-          if (v.value === 100) {
-            isFlag = true
-            // data = [v]
-          }
-        })
-        if (isFlag) {
-          bar = 'center'
-        } else {
-          bar = 'inner'
-        }
+        // console.log(data)
         collect.hideLoading()
         const option = {
           color: ['#fdb409', '#81ca3f', '#2181da'],
@@ -260,21 +247,22 @@ export default {
             icon: 'circle',
             data: ['已完成', '已开始', '未开始']
           },
-          grid: {
-            left: 10
-          },
+          // grid: {
+          //   left: 10,
+          //   right: 50
+          // },
           series: [
             {
               label: {
                 normal: {
-                  position: bar,
-                  textStyle: {
-                    fontSize: 16
-                  },
-                  color: '#fff',
-                  verticalAlign: 'middle',
+                  position: 'outside',
+                  //   textStyle: {
+                  //     fontSize: 16
+                  //   },
+                  //   color: '#fff',
+                  //   verticalAlign: 'middle',
                   formatter: function(value) {
-                    return value.data.value + '%'
+                    return value.data.name + value.data.value + '%'
                     // if (value.data.value === '0') {
                     //   return value.data.value
                     // } else {
@@ -283,7 +271,7 @@ export default {
                   }
                 }
               },
-              stillShowZeroSum: false,
+              // stillShowZeroSum: false,
               type: 'pie',
               radius: '60%',
               center: ['60%', 'center'],

@@ -21,7 +21,7 @@
           <el-table-column prop="salaryName" label="薪资待遇" align="center"> </el-table-column>
           <el-table-column prop="num" label="招聘人数  (名)" align="center"> </el-table-column>
           <el-table-column prop="typeName" label="招聘类型" align="center"> </el-table-column>
-          <el-table-column prop="createdTime" label="发布时间" align="center"> </el-table-column>
+          <el-table-column prop="createdTime" label="发布时间" align="center" min-width="120"> </el-table-column>
           <el-table-column label="状态" align="center">
               <template slot-scope="scope">
              <span v-if="scope.row.approvalStatus==='0'">未审批</span>

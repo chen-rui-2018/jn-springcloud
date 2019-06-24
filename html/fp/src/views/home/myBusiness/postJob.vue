@@ -2,6 +2,7 @@
   <div class="postJobProduct" v-loading="loading">
     <div class="ordinary_title font16">
       <div>发布招聘</div>
+      <div @click="goBack">返回</div>
     </div>
     <div class="ordinary_content">
       <el-form
@@ -126,6 +127,9 @@ export default {
     this.getCompensation();
   },
   methods: {
+     goBack() {
+      this.$router.push({ name: "recruitmentManagement" });
+    },
       // 禁止输入小数和负数
     BlurText(e){
         let boolean=new RegExp("^[1-9][0-9]*$").test(e.target.value)
@@ -191,11 +195,26 @@ export default {
 <style lang="scss">
 .postJobProduct {
   width: 100%;
-  .ordinary_title {
+.ordinary_title {
     background-color: #fff;
-
-    padding: 24px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 17px;
+    // font-size: 13px;
     border-radius: 5px;
+    div:nth-child(2) {
+      width: 50px;
+      height: 26px;
+      background: rgba(236, 252, 242, 1);
+      border: 1px solid rgba(65, 215, 135, 1);
+      border-radius: 4px;
+      text-align: center;
+      line-height: 26px;
+      font-size: 12px;
+      color: #00a041;
+      cursor: pointer;
+    }
   }
   .ordinary_content {
     margin-top: 14px;

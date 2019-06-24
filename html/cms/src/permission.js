@@ -3,9 +3,10 @@ import store from './store'
 import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'// progress bar style
-import { getToken } from '@/utils/auth' // getToken from cookie
+import { getToken, setToken } from '@/utils/auth' // getToken from cookie
 
 NProgress.configure({ showSpinner: false })// NProgress Configuration
+import { urlSearch } from '@/utils/index'
 
 // permission judge function
 function hasPermission(roles, permissionRoles) {
@@ -17,6 +18,11 @@ const whiteList = ['/login', '/auth-redirect', '/answerHome']// no redirect whit
 
 router.beforeEach((to, from, next) => {
   NProgress.start() // start progress bar
+  const token = urlSearch.token
+  if (token) {
+    setToken(token)
+    next()
+  }
   if (getToken()) { // determine if there has token
     /* has token*/
     if (to.path === '/login') {

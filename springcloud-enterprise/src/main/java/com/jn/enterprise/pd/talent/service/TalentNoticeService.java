@@ -1,8 +1,12 @@
 package com.jn.enterprise.pd.talent.service;
 
 import com.jn.common.model.PaginationData;
+import com.jn.enterprise.pd.declaration.model.DeclarationPlatformModel;
 import com.jn.enterprise.pd.talent.entity.TbPdTalentServiceNotice;
 import com.jn.enterprise.pd.talent.entity.TbPdTalentServiceRange;
+import com.jn.enterprise.pd.talent.model.TalentNoticePlatformParam;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -47,6 +51,14 @@ public interface TalentNoticeService {
      * @return
      */
     void updateTrafficVolume(String id);
+
+    /**
+     * 人才服务-首页申报平台查询
+     *
+     * @param
+     * @return
+     */
+    PaginationData<List<DeclarationPlatformModel>> queryPlatformInfo(TalentNoticePlatformParam talentNoticePlatformParam);
 
 
 }

@@ -14,7 +14,13 @@
     <div class="en-body">
       <el-tabs type="border-card" style="background-color: #f5f5f5">
         <el-tab-pane label="本月上报数据">
-          <div v-loading="willFillListLoading" v-if="willFillList.length === 0" class="no-data">暂无数据</div>
+          <div
+            v-loading="willFillListLoading"
+            v-if="willFillList.length === 0"
+            class="show-no-data">
+            <no-data></no-data>
+          </div>
+<!--          <div v-loading="willFillListLoading" v-if="willFillList.length === 0" class="no-data">暂无数据</div>-->
           <div v-else>
             <div class="en-card-bg">
               <div
@@ -70,8 +76,17 @@
               </el-input>
             </div>
           </div>
-          <div v-loading="filledListLoading" v-if="filledList.length === 0" style="padding: 10px" class="no-data">暂无数据</div>
-          <div v-if="filledListSearchResult.length === 0 && filledList.length > 0" style="padding: 10px" class="no-data">暂无筛选结果，换个搜索条件试试吧</div>
+          <div
+            v-loading="filledListLoading"
+            v-if="filledList.length === 0"
+            class="show-no-data">
+            <no-data></no-data>
+          </div>
+          <div
+            v-if="filledListSearchResult.length === 0 && filledList.length > 0"
+            class="show-no-data">
+            <no-data title="暂无筛选结果，换个搜索条件试试吧"></no-data>
+          </div>
           <div v-else>
             <div class="en-card-bg">
               <div
@@ -130,10 +145,10 @@
 <script>
   import { isMobile } from '@/util'
   import Swiper from 'swiper'
+  import noData from '../common/noData'
   export default {
-    name: "reportEntry",
-    mounted() {
-
+    components: {
+      noData
     },
     activated() {
       this.$nextTick(() => {
@@ -143,7 +158,7 @@
     data() {
       return {
         willFillListLoading: true,
-        filledListLoading: true,
+        filledListLoading: false,
         isMobile: isMobile(),
         searchFilled: '',
         adUrls: [],
@@ -196,7 +211,8 @@
         return y + '/'+ m + '/' + d
       },
       formatDate(time) {
-        const date = new Date(time)
+        const str = time.substr(0, 10)
+        const date = new Date(str)
         const y = date.getFullYear()
         const m = date.getMonth() + 1
         const d = date.getDate()
@@ -278,12 +294,16 @@
         this.toFillData(item, type)
       },
       toFillData(item, type) {
+        let query = {
+          fileId: item.fillId,
+          type: type
+        }
+        if (this.$route.query.iframe) {
+          query.iframe = 1
+        }
         this.$router.push({
           path:'/servicemarket/product/productService/report',
-          query:{
-            fileId: item.fillId,
-            type: type
-          }
+          query: query
         })
       },
       formatReported(item) {
@@ -300,7 +320,7 @@
               class: 'en-info'
             }
           }
-        } else if (status === 1){
+        } else {
           return {
             title: '我要补报',
             class: 'en-warning'
@@ -358,6 +378,7 @@
     .search-row {
       @include flex($h:space-between);
       flex-wrap: wrap;
+      margin-bottom: 10px;
     }
     .en-card {
       width: 25%;
@@ -470,10 +491,8 @@
       margin: 20px auto;
       text-align: right;
     }
-    .no-data {
-      @include flex-center;
-      font-size: 16px;
-      height: 400px;
+    .show-no-data {
+
     }
   }
   .isMobile {

@@ -138,6 +138,8 @@ export default {
           if (res.code == "0000") {
             _this.pladformList = res.data.rows;
             _this.total=res.data.total
+          }else{
+            _this.$message.error(res.result)
           }
         }
       });
@@ -151,6 +153,8 @@ export default {
           // console.log(res);
           if (res.code == "0000") {
             _this.platformType = res.data;
+          }else{
+            _this.$message.error(res.result)
           }
         }
       });
@@ -174,6 +178,7 @@ export default {
 
 <style lang="scss">
   .talentPlatform{
+    padding-top: 67px;
     // margin-top: 230px;
     .talentPlatform_content{
       width: 1190px;

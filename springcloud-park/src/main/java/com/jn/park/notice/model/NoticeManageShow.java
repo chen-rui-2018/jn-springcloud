@@ -153,4 +153,24 @@ public class NoticeManageShow implements Serializable {
     public void setPublishName(String publishName) {
         this.publishName = publishName;
     }
+
+    @Override
+    public String toString() {
+        return "NoticeManageShow{" +
+                "noticeId='" + noticeId + '\'' +
+                ", noticeSerial='" + noticeSerial + '\'' +
+                ", noticeTitle='" + noticeTitle + '\'' +
+                ", startTime='" + startTime + '\'' +
+                ", endTime='" + endTime + '\'' +
+                ", homePopup='" + homePopup + '\'' +
+                ", homeShow='" + homeShow + '\'' +
+                ", platformType='" + platformType + '\'' +
+                ", platformName='" + platformName + '\'' +
+                ", noticeDetails='" + noticeDetails + '\'' +
+                ", sortField='" + sortField + '\'' +
+                ", publishName='" + publishName + '\'' +
+                ", createdTime='" + createdTime + '\'' +
+                ", noticeStatus='" + noticeStatus + '\'' +
+                '}';
+    }
 }

@@ -39,7 +39,10 @@
       <el-dialog :visible.sync="increaseStaffAddFormVisible" title="增减员计划" width="750px">
         <el-form ref="increaseStaffAddForm" :rules="increaseStaffAddFormRules" :model="increaseStaffAddFromData" label-width="150px">
           <el-form-item label="姓名" prop="jobNumber" class="inline">
+            <multi-cascader-ext ref="assessmentObjectRef" v-model="increaseStaffAddFromData.jobNumberList" :data="deptEmployeeList" :only-last="true" :show-leaf-label="true" style="width: 350px" @change="nameSel"/>
+            <!--
             <el-cascader-multi ref="assessmentObjectRef" v-model="increaseStaffAddFromData.jobNumberList" :data="deptEmployeeList" :only-last="true" :show-leaf-label="true" style="width: 350px" @change="nameSel"/>
+-->
             <!--<el-input v-model="increaseStaffAddFromData.name" type="textarea" style="width: 350px;" readonly="readonly"/>
             <el-button type="text" @click="openStaffNamePage">选择</el-button>-->
           </el-form-item>
@@ -132,10 +135,11 @@
 import {
   api, apiGet
 } from '@/api/hr/common'
+import multiCascaderExt from '@/components/MultiCascaderExt2/multi-cascader-ext.vue'
 
 import UE from '@/components/ue.vue'
 export default {
-  components: { UE },
+  components: { UE, multiCascaderExt },
   data() {
     return {
       increaseStaffAddFormRules: {
@@ -252,41 +256,21 @@ export default {
       this.socialInsuranceBasePageVisibleVisible = false
     },
     saveSocialInsuranceBase(obj) { // 保存修改社保基数
-      this.insuranceBaseData.schemeId = this.selInsuredScheme.schemeId
-      this.insuranceBaseData.schemeName = this.selInsuredScheme.schemeName
-      const insuredSchemeDetailedList = []
+      this.socialInsuranceBasePageVisibleVisible = false
+      this.accumulationFundPageVisibleVisible = false
       if (obj === 'reserve') { // 公积金
         this.increaseStaffAddFromReserveBaseData = ''
         this.reserveBasePageInit.forEach(e => {
           this.increaseStaffAddFromReserveBaseData = this.increaseStaffAddFromReserveBaseData + e.label + ':' + e.value + ','
-          insuredSchemeDetailedList.push(
-            { defaultCardinalNumber: e.value,
-              projectId: e.key })
         })
         this.increaseStaffAddFromReserveBaseData = this.increaseStaffAddFromReserveBaseData.substr(0, this.increaseStaffAddFromReserveBaseData.length - 1)
       } else { // 社保
         this.socialInsuranceBaseData = ''
         this.socialInsuranceBasePageInit.forEach(e => {
           this.socialInsuranceBaseData = this.socialInsuranceBaseData + e.label + ':' + e.value + ','
-          insuredSchemeDetailedList.push(
-            { defaultCardinalNumber: e.value,
-              projectId: e.key })
         })
         this.socialInsuranceBaseData = this.socialInsuranceBaseData.substr(0, this.socialInsuranceBaseData.length - 1)
       }
-      this.insuranceBaseData.insuredSchemeDetailedList = insuredSchemeDetailedList
-      api('hr/SalaryWelfareManagement/updateInsuredCardinalNumber', this.insuranceBaseData).then(res => {
-        if (res.data.code === '0000') {
-          this.$message({
-            message: '修改成功',
-            type: 'success'
-          })
-          this.socialInsuranceBasePageVisibleVisible = false
-          this.accumulationFundPageVisibleVisible = false
-        } else {
-          this.$message.error('社保基数修改失败')
-        }
-      })
     },
     initInsuranceBase(insuredSchemeDetailedList) {
       let index = 1
@@ -300,7 +284,14 @@ export default {
             label: e.projectName + '基数',
             key: e.projectId,
             prop: 'defaultCardinalNumber' + index,
-            value: e.defaultCardinalNumber
+            value: e.defaultCardinalNumber,
+            // 额外属性
+            projectId: e.projectId,
+            projectName: e.projectName,
+            defaultCardinalNumber: e.defaultCardinalNumber,
+            corporateContributionRatio: e.corporateContributionRatio,
+            individualContributionRatio: e.individualContributionRatio,
+            projectType: e.projectType
           })
           index = index + 1
           // 回显
@@ -310,7 +301,13 @@ export default {
             label: e.projectName + '基数',
             key: e.projectId,
             prop: 'defaultCardinalNumber' + index,
-            value: e.defaultCardinalNumber
+            value: e.defaultCardinalNumber,
+            projectId: e.projectId,
+            projectName: e.projectName,
+            defaultCardinalNumber: e.defaultCardinalNumber,
+            corporateContributionRatio: e.corporateContributionRatio,
+            individualContributionRatio: e.individualContributionRatio,
+            projectType: e.projectType
           })
           index = index + 1
           // 回显
@@ -328,7 +325,7 @@ export default {
     insuredProgrammeIdSel(val) {
       this.selInsuredScheme.schemeId = val
       const param = {
-        rows: 10000,
+        rows: 100000,
         page: 1,
         schemeId: val
       }
@@ -383,7 +380,6 @@ export default {
       })
         .then(() => {
           api('hr/SalaryWelfareManagement/deleteAttritionPlan', row).then(res => {
-            debugger
             if (res.data.code === '0000') {
               this.$message({
                 message: res.data.data,
@@ -418,6 +414,32 @@ export default {
         insuredProgrammeId: this.increaseStaffAddFromData.insuredProgrammeId,
         jobNumber: this.increaseStaffAddFromData.jobNumber
       }
+      const insuredSchemeDetailedList = []
+      this.socialInsuranceBasePageInit.forEach(e => {
+        this.socialInsuranceBaseData = this.socialInsuranceBaseData + e.label + ':' + e.value + ','
+        insuredSchemeDetailedList.push(
+          {
+            projectId: e.projectId,
+            projectName: e.projectName,
+            defaultCardinalNumber: e.value,
+            corporateContributionRatio: e.corporateContributionRatio,
+            individualContributionRatio: e.individualContributionRatio,
+            projectType: e.projectType
+          })
+      })
+      this.reserveBasePageInit.forEach(e => {
+        this.socialInsuranceBaseData = this.socialInsuranceBaseData + e.label + ':' + e.value + ','
+        insuredSchemeDetailedList.push(
+          {
+            projectId: e.projectId,
+            projectName: e.projectName,
+            defaultCardinalNumber: e.value,
+            corporateContributionRatio: e.corporateContributionRatio,
+            individualContributionRatio: e.individualContributionRatio,
+            projectType: e.projectType
+          })
+      })
+      param.insuredSchemeDetailedList = insuredSchemeDetailedList
       this.$refs['increaseStaffAddForm'].validate(valid => {
         if (valid) {
           api('hr/SalaryWelfareManagement/addOrDeleteAttritionPlan', param).then(res => {

@@ -100,6 +100,16 @@ public class ColleagueController extends BaseController {
         return userExtensionClient.saveOrUpdateUserInfo(userInfo);
     }
 
+    @TxTransaction(isStart = true)
+    @ControllerLog(doAction = "离开企业")
+    @ApiOperation(value = "离开企业", notes = "企业管理员不能离开企业，返回数据响应条数")
+    @RequestMapping(value = "/leaveCompany",method = RequestMethod.POST)
+    @RequiresPermissions("/enterprise/ColleagueController/leaveCompany")
+    public Result<Integer> leaveCompany(){
+        User user = checkUserValid();
+        return new Result(staffService.leaveCompany(user.getAccount()));
+    }
+
     /**
      * 判断当前账号是否有效
      * @return

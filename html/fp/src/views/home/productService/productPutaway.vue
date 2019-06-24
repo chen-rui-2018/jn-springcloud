@@ -1,5 +1,5 @@
 <template>
-  <div class="productPutaway"  >
+  <div class="productPutaway" v-loading="loading">
     <div class="putaway_title">
       <div>{{this.$route.meta.title}}</div>
       <div @click="$router.go(-1)">返回列表</div>
@@ -9,11 +9,11 @@
         <el-form label-position="right" label-width="100px" >
           <div :model="productDetail" class="">
             <el-form-item label="业务领域：">
-              <span>非科技金融</span>
+              <span>{{businessTypeName}}</span>
             </el-form-item>
           </div>
           <div>
-            <el-form-item label="服务顾问：">
+            <el-form-item label="服务专员：">
               <el-select v-model="advisorAccount" multiple placeholder="请选择">
                 <el-option :label="counseloritem.advisorName" :value="counseloritem.advisorAccount" v-for="(counseloritem,counselorindex) in counselorList" :key="counselorindex">
                 </el-option>
@@ -28,7 +28,7 @@
             </el-form-item>
           </div>
           <div class="">
-            <el-form-item label="产品编号">
+            <el-form-item label="产品编号：">
               <span>{{productDetail.serialNumber}}</span>
             </el-form-item>
           </div>
@@ -49,7 +49,7 @@
           </div>
           <div class="">
             <el-form-item label="产品描述：">
-              <div>{{productDetail.productDetails}}</div>
+              <div v-html="productDetail.productDetails"></div>
             </el-form-item>
           </div>
         </el-form>
@@ -154,16 +154,17 @@
 export default {
   data () {
     return {
-      // loading:true,
       productDetail:{},//产品详情
-      counselorList:[],//服务顾问列表
+      counselorList:[],//服务专员列表
       productName:'',//产品名称
       // territory:0,
       productNameList:[],//产品名称列表
       advisorAccount:'',
       orgId:'',
-      templateId:0,
-      businessType:''
+      templateId:'',
+      businessType:'',
+      businessTypeName:"",
+      loading:false
     }
   },
   mounted () {
@@ -180,8 +181,8 @@ export default {
       data: {orgId:this.orgId},
       callback: function(res) {
         if (res.code == "0000") {
-            // console.log(res)
           _this.businessType= res.data.businessType
+          _this.businessTypeName= res.data.businessTypeName
           if(_this.businessType=='technology_finance'){
             _this.getShelfProductList()
           }else{
@@ -200,7 +201,6 @@ export default {
       data: {orgId:this.orgId},
       callback: function(res) {
         if (res.code == "0000") {
-          // console.log(res)
           if(res.data.length!=0){
             _this.productNameList= res.data
             _this.templateId=res.data[0].productId
@@ -215,7 +215,7 @@ export default {
       })
       
     },
-    // 获取服务顾问列表（非科技金融）
+    // 获取服务专员列表（非科技金融）
     getServiceConsultantList(){
       let _this = this;
       this.api.get({
@@ -271,6 +271,7 @@ export default {
     },
     //上架
     submit(){
+      this.loading=true
       if(this.businessType=='technology_finance'){
         let _this = this
         this.api.post({
@@ -281,8 +282,12 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
+              _this.loading=false
               _this.$message.success("上架成功")
               _this.$router.back(-1)
+            }else{
+            _this.loading=false 
+             _this.$message.error(res.result)
             }
           }
         })
@@ -298,8 +303,12 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
+              _this.loading=false
               _this.$message.success("上架成功")
               _this.$router.back(-1)
+            }else{
+               _this.loading=false 
+             _this.$message.error(res.result)
             }
           }
         })

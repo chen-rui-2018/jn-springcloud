@@ -17,15 +17,12 @@
           ,sp.policy_title as "policyTitle"                     <!--政策标题-->
           ,sp.policy_issu_num as "policyIssuNum"                <!--政策颁发编号-->
           ,sp.read_num as "readNum"                             <!--阅读次数-->
+          ,sp.policy_content as "policyContent"                 <!--政策详情-->
           ,date_format(sp.release_date,'%Y-%m-%d') as "releaseDate" <!--发布日期-->
           ,sp.status as  "status"                               <!--状态-->
           ,sp.support_method as "supportMethod"                 <!--支持方式-->
           ,sp.support_industry as "supportIndustry"             <!--支持产业-->
           ,sp.issue_unit as "issueUnit"                         <!--发文单位-->
-          ,case when spd.policy_content!=null and spd.policy_content!=''
-            then concat(substring(spd.policy_content,100),'...')
-           else null
-            end as "briefContent"                               <!--简要内容-->
           ,sp.is_policy_diagram as "isPolicyDiagram"            <!--有无关联政策图解(0：无    1：有)-->
           ,sp.relation_policy_diagram_id as "relationPolicyDiagramId"<!--关联的政策图解id-->
           ,sp.is_policy_original as "isPolicyOriginal"          <!--有无关联政策原文(0：无    1：有)-->
@@ -74,7 +71,8 @@
         ,sp.support_method as "supportMethod"                 <!--支持方式-->
         ,sp.support_industry as "supportIndustry"             <!--支持产业-->
         ,sp.issue_unit as "issueUnit"                         <!--发文单位-->
-        ,spd.policy_content as "policyContent"                <!--政策内容-->
+        ,sp.policy_content as "policyContent"                 <!--政策内容-->
+        ,sp.file_url as "fileUrl"                             <!--附件url-->
         from tb_policy sp
         left join tb_policy_details spd
         on sp.policy_id=spd.policy_id

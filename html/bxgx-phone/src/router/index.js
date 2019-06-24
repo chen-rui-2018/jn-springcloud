@@ -1,11 +1,65 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import { urlSearch } from '../utils/index'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
-
+    {
+      path: '/investment',
+      name: 'investment',
+      component: () => import('@/views/investment'),
+      meta: {title: '招商引资'}
+    },
+    {
+      path: '/parkProfile',
+      name: 'parkProfile',
+      component: () => import('@/views/investment/parkProfile'),
+      meta: {title: '园区概况'}
+    },
+    {
+      path: '/investmentPolicy',
+      name: 'investmentPolicy',
+      component: () => import('@/views/investment/investmentPolicy/index'),
+      meta: {title: '招商政策'}
+    },
+    {
+      path: '/investmentPolicyDetail',
+      name: 'investmentPolicyDetail',
+      component: () => import('@/views/investment/investmentPolicy/detail'),
+      meta: {title: '招商政策详情'}
+    },
+    {
+      path: '/investmentDynamic',
+      name: 'investmentDynamic',
+      component: () => import('@/views/investment/investmentDynamic/index'),
+      meta: {title: '招商动态'}
+    },
+    {
+      path: '/investmentDynamicDetail',
+      name: 'investmentDynamicDetail',
+      component: () => import('@/views/investment/investmentDynamic/detail'),
+      meta: {title: '招商动态详情'}
+    },
+    {
+      path: '/investmentInfo',
+      name: 'investmentInfo',
+      component: () => import('@/views/investment/investmentInfo/index'),
+      meta: {title: '招商信息'}
+    },
+    {
+      path: '/investmentInfoDetail',
+      name: 'investmentInfoDetail',
+      component: () => import('@/views/investment/investmentInfo/detail'),
+      meta: {title: '招商信息详情'}
+    },
+    {
+      path: '/parkDetails',
+      name: 'parkDetails',
+      component: () => import('@/views/investment/parkDetails'),
+      meta: {title: '园区信息详情'}
+    },
     {
       path: '/actiDetail',
       name: 'actiDetail',
@@ -25,6 +79,12 @@ export default new Router({
       component: () => import('@/views/administrative/powerDetail')
     },
     {
+      path: '/guest/portal/sp/power/text',
+      name: 'text',
+      meta: {title: '实施依据详情'},
+      component: () => import('@/views/administrative/text')
+    },
+    {
       path: '/guest/portal/sp/power/serviceDetail',
       name: 'serviceDetail',
       meta: {title: '服务详情'},
@@ -41,6 +101,12 @@ export default new Router({
       name: 'declarationCenter',
       meta: {title: '申报中心'},
       component: () => import('@/views/declarationCenter/declarationCenter')
+    },
+    {
+      path: '/guest/pd/DeclarationItems',
+      name: 'declarationItems',
+      meta: {title: '即时申报项目'},
+      component: () => import('@/views/declarationCenter/DeclarationItems')
     },
     {
       path: '/guest/pd/declarationPlatform',
@@ -127,6 +193,12 @@ export default new Router({
       meta: {title: '考勤明细'}
     },
     {
+      path: '/electricInfo',
+      name: 'electricInfo',
+      component: () => import('@/views/electricInfo'),
+      meta: {title: '我的用电情况'}
+    },
+    {
       path: '/parkDetais',
       name: 'parkDetais',
       component: () => import('@/views/parkDetais'),
@@ -149,6 +221,46 @@ export default new Router({
       name: 'policyDetails',
       component: () => import('@/views/policyDetails'),
       meta: {title: '政策详情'}
+    },
+    {
+      path: '/enterpriseInformationList',
+      name: 'enterpriseInformationList',
+      component: () => import('@/views/enterpriseInformation/index'),
+      meta: {title: '企业资讯'}
+    },
+    {
+      path: '/enterpriseInformation',
+      name: 'enterpriseInformation',
+      component: () => import('@/views/enterpriseInformation/detail'),
+      meta: {title: '企业资讯详情'}
+    },
+    {
+      path: '/parkNotice',
+      name: 'parkNotice',
+      component: () => import('@/views/parkNotice/index'),
+      meta: {title: '园区公告'}
+    },
+    {
+      path: '/parkNoticeDetail',
+      name: 'parkNoticeDetail',
+      component: () => import('@/views/parkNotice/detail'),
+      meta: {title: '园区公告详情'}
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: () => import('@/views/register'),
+      meta: {title: '注册'}
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  const token = urlSearch.token
+  if (token) {
+    sessionStorage.setItem('token', token)
+  }
+  next()
+})
+
+export default router

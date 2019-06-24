@@ -42,16 +42,7 @@ public class ElectricClientController implements ElectricMeterClient {
     @Value(value = "${electric.scopes}")
     private String  scopes;
 
-    /**
-     * 获取电表平台access_token接口
-     * @param electricAccessTokenParam 实体类参数
-     * @return
-     */
-    @Override
-    public Result<ElectricAccessTokenShow> getElectricMeterAccessToken( @RequestBody ElectricAccessTokenParam electricAccessTokenParam) {
-       Result result = electricMeterService.getElectricMeterAccessToken(electricAccessTokenParam);
-       return result;
-    }
+
     /**
      * 定时刷新电表平台token
      *
@@ -59,12 +50,7 @@ public class ElectricClientController implements ElectricMeterClient {
      */
     @Override
     public Result<ElectricAccessTokenShow> getElectricMeterAccessToken() {
-        ElectricAccessTokenParam electricAccessTokenParam = new ElectricAccessTokenParam();
-        electricAccessTokenParam.setGrant_type(grant_type);
-        electricAccessTokenParam.setUsername(username);
-        electricAccessTokenParam.setPassword(password);
-        electricAccessTokenParam.setScopes(scopes);
-        return electricMeterService.getElectricMeterAccessToken(electricAccessTokenParam);
+         return electricMeterService.getElectricMeterAccessToken();
 
     }
 
@@ -94,7 +80,7 @@ public class ElectricClientController implements ElectricMeterClient {
      * @return
      */
     @Override
-    public Result<ElectricMeterStatusShow> getElectricMeterStatus(@ApiParam(name = "code",value = "仪表编号",example = "10086",required = true) String code) {
+    public Result<ElectricMeterStatusShow> getElectricMeterStatus(@RequestBody String code) {
         return electricMeterService.getElectricMeterStatus(code);
     }
 

@@ -40,7 +40,8 @@
     </div> -->
     <div class="graphicCon w">
       <div class="serverOrgMenu">
-        <span class="pointer" @click="$router.push({path:'/policyCenter'})">首页/</span>
+        <span class="pointer" @click="$router.push({path:'/enterpriseservice'})">企业服务/</span>
+        <span class="pointer" @click="$router.push({path:'/policyCenter'})">政策中心/</span>
         <span class="mainColor agent">政策指南详情</span>
       </div>
       <div class="agentInfo">
@@ -54,18 +55,26 @@
                 <span>级别：
                   <i class="mainColor">{{getGuideDetal.policyLevelName}}</i>
                 </span>
-                <span>支持方式：<i v-if="getGuideDetal.supportMethod=='1'">奖励</i><i v-if="getGuideDetal.supportMethod=='2'">其他</i></span>
+                <span>支持方式：
+                  <i v-if="getGuideDetal.supportMethod=='1'">奖励</i>
+                  <i v-if="getGuideDetal.supportMethod=='2'">其他</i>
+                </span>
                 <span>发文单位：{{getGuideDetal.issueUnit}}</span>
               </p>
               <p>
                 <span>分类：{{getGuideDetal.policyClassName}}</span>
-                <span>支持产业：<i v-if="getGuideDetal.supportIndustry=='1'">奖励</i><i v-if="getGuideDetal.supportIndustry=='2'">其他</i></span>
+                <span>支持产业：
+                  <i v-if="getGuideDetal.supportIndustry=='1'">奖励</i>
+                  <i v-if="getGuideDetal.supportIndustry=='2'">其他</i>
+                </span>
               </p>
             </div>
             <div class="agent2Info fr">
               <p class="lastP color3">
                 <span>阅读量：{{getGuideDetal.readNum}}</span>
-                <span>发布时间：<i class="mainColor">{{getGuideDetal.releaseDate}}</i></span>
+                <span>发布时间：
+                  <i class="mainColor">{{getGuideDetal.releaseDate}}</i>
+                </span>
               </p>
             </div>
           </div>
@@ -88,8 +97,7 @@
               </div>
             </div>
             <div class="agent2 color2" v-if="zankaiFlag">
-              <div class="agent2Con">
-                {{getGuideDetal.policyContent}}
+              <div class="agent2Con" v-html="getGuideDetal.policyContent">
               </div>
               <!-- <div class="agent2Con" v-else>
                             暂无内容！
@@ -102,17 +110,17 @@
   </div>
 </template>
 <script>
-import userInfo from '.././common/userInfoData'
+import userInfo from ".././common/userInfoData";
 export default {
   components: {
-      userInfo
-    },
+    userInfo
+  },
   data() {
     return {
       zankaiFlag: true,
-      show4:false,
-      searchData:'',
-      getGuideDetal:'',
+      show4: false,
+      searchData: "",
+      getGuideDetal: ""
     };
   },
   mounted() {
@@ -129,7 +137,7 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-            _this.getGuideDetal=res.data
+            _this.getGuideDetal = res.data;
           } else {
             _this.$message.error(res.result);
           }
@@ -350,7 +358,7 @@ export default {
         .agentImg {
           //   width: 150px;
           //   height: 120px;
-          span{
+          span {
             display: inline-block;
             width: 200px;
           }
@@ -395,9 +403,9 @@ export default {
         .agent2 {
           padding: 10px 0;
           .agent2Con {
-            height: 150px;
-            width: 80%;
-            overflow: hidden;
+            max-height: 400px;
+            // width: 80%;
+            overflow: auto;
             // white-space: nowrap;
             // text-overflow: ellipsis;
           }

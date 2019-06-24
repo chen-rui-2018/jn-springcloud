@@ -1,9 +1,11 @@
 package com.jn.enterprise.technologyfinancial.investors.controller;
 
+import com.codingapi.tx.annotation.TxTransaction;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
+import com.jn.enterprise.company.model.ServiceCompany;
 import com.jn.enterprise.enums.InvestorExceptionEnum;
 import com.jn.enterprise.technologyfinancial.investors.model.*;
 import com.jn.enterprise.technologyfinancial.investors.service.InvestorService;
@@ -58,7 +60,7 @@ public class InvestorController extends BaseController {
     }
 
     @ControllerLog(doAction = "查询所属单位")
-    @ApiOperation(value = "查询所属单位")
+    @ApiOperation(value = "查询所属单位",notes = "投资人只能选择科技金融机构")
     @RequestMapping(value = "/guest/technologyFinancial/investorController/getAffiliationUnit",method = RequestMethod.GET)
     public Result<PaginationData<List<AffiliationUnitShow>>> getAffiliationUnit(@Validated  AffiliationUnitInfoParam affiliationUnitInfoParam){
         PaginationData result= investorService.getAffiliationUnit(affiliationUnitInfoParam);
@@ -102,6 +104,20 @@ public class InvestorController extends BaseController {
     public Result<Integer> addInvestorRole(String investorAccount){
         Assert.notNull(investorAccount,InvestorExceptionEnum.INVESTOR_ACCOUNT_NOT_NULL.getMessage());
         int resNum = investorService.addInvestorRole(investorAccount);
+        logger.info("-----------添加投资人角色成功，数据响应条数：{}----------",resNum);
+        return  new Result(resNum);
+    }
+
+    @ControllerLog(doAction = "投资人认证流程后置处理")
+    @ApiOperation(value = "投资人认证流程后置处理", notes = "设置投资人认证申请人角色为投资人")
+    @RequestMapping(value = "/technologyFinancial/investorController/setAccountRoleToInvestor", method = RequestMethod.POST)
+    @RequiresPermissions("/technologyFinancial/investorController/setAccountRoleToInvestor")
+    @TxTransaction(isStart = true)
+    public Result<Integer> setAccountRoleToInvestor(@Validated @RequestBody InvestorInfoWorkFlow  investorInfoWorkFlow) {
+        logger.info("进入投资人认证流程后置处理API,入参：{}",investorInfoWorkFlow.toString());
+        Assert.notNull(investorInfoWorkFlow,InvestorExceptionEnum.INVESTOR_PARAM_NOT_NULL.getMessage());
+        Assert.notNull(investorInfoWorkFlow.getInvestorAccount(),InvestorExceptionEnum.INVESTOR_ACCOUNT_NOT_NULL.getMessage());
+        int resNum = investorService.addInvestorRole(investorInfoWorkFlow.getInvestorAccount());
         logger.info("-----------添加投资人角色成功，数据响应条数：{}----------",resNum);
         return  new Result(resNum);
     }

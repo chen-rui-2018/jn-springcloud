@@ -99,7 +99,7 @@
           </el-form-item>
           <el-form-item label="通知人员" label-width="80px">
             <!-- <el-button type="primary" @click="selectStaff">选择</el-button> -->
-            <el-cascader-multi ref="cascader" v-model="checkList" :data="options" :only-last="true" :show-leaf-label="true" @change="getEList" />
+            <multi-cascader-ext ref="cascader" v-model="checkList" :data="options" :only-last="true" :show-leaf-label="true" clearable @change="getEList"/>
           </el-form-item>
           <!-- <el-form-item label-width="80px">
             <el-tree
@@ -122,7 +122,9 @@
 
 <script>
 import { api, apiGet } from '@/api/hr/train'
+import multiCascaderExt from '@/components/MultiCascaderExt2/multi-cascader-ext.vue'
 export default {
+  components: { multiCascaderExt },
   data() {
     return {
       listLoading: false,
@@ -274,14 +276,14 @@ export default {
       }, [])
     },
     confirmSend() {
+      if (this.messageForm.employeeBasicInfoList.length === 0) {
+        this.$message.error('请选择通知人员!')
+        return false
+      }
       this.dialogFormVisible = false
       api('hr/train/list/emailList', this.messageForm).then(res => {
         if (res.data.code === '0000') {
           this.$message.success('邮件发送成功')
-          // 重置
-          // const obj = {}
-          // obj.stopPropagation = () => {}
-          // this.$refs.cascader.clearValue(this.options)
           this.init()
         } else {
           this.$message.error(res.data.result)
@@ -290,6 +292,7 @@ export default {
     },
     // 人员列表
     selectStaff() {
+      this.checkList = []
       apiGet('hr/employeeBasicInfo/selectDepartEmployee', {}).then(res => {
         if (res.data.code === '0000') {
           this.options = JSON.parse(res.data.data)

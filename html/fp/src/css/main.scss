@@ -2,7 +2,10 @@
   margin: 0;
   padding: 0;
 }
-
+body {
+  /* 解决侧边滑动引起界面抖动 */
+  overflow-y:scroll;
+}
 // .el-input__inner {
 //   -webkit-appearance: none;
 //   background-color: #fff;
@@ -123,7 +126,8 @@ img {
 }
 
 /* 活动中心开始 */
-.actiCenter,.actiTrain {
+.actiCenter,
+.actiTrain {
   .actiContent {
     width: 1190px;
     margin: 0 auto;
@@ -131,6 +135,7 @@ img {
     .actiNav {
       margin: 20px 0;
       font-size: 13px;
+      font-weight: bold;
 
       a:last-child {
         color: #00a041;
@@ -266,7 +271,7 @@ img {
 
       .actiSearch {
         width: 200px;
-        height: 35px;
+        height: 38px;
         line-height: 35px;
         text-align: center;
         padding-right: 40px;
@@ -277,6 +282,32 @@ img {
           border: 0;
           height: 100%;
           width: 80%;
+        }
+
+        input::-webkit-input-placeholder {
+          /* WebKit browsers*/
+          color: #999;
+          font-size: 13px;
+        }
+
+        input:-moz-placeholder {
+          /* Mozilla Firefox 4 to 18*/
+          color: #999;
+          font-size: 13px;
+        }
+
+
+        input::-moz-placeholder {
+          /* Mozilla Firefox 19+*/
+          color: #999;
+          font-size: 13px;
+        }
+
+
+        input:-ms-input-placeholder {
+          /* Internet Explorer 10+*/
+          color: #999;
+          font-size: 13px;
         }
 
         input,
@@ -356,7 +387,7 @@ img {
                   float: left;
                   width: 18px;
                   height: 18px;
-                  border: 1px solid #ccc;
+                  // border: 1px solid #ccc;
                   border-radius: 50%;
                   margin-left: -10px;
 
@@ -391,11 +422,19 @@ img {
             >.actiNameItem {
               color: #222;
               font-size: 16px;
+              overflow:hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
             }
 
             .actiTimer {
               text-indent: -10px;
               margin: 10px 0 5px 18px;
+            }
+            .actiAddress{
+              overflow:hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
             }
           }
         }
@@ -461,7 +500,7 @@ img {
                     float: left;
                     width: 22px;
                     height: 22px;
-                    border: 1px solid #ccc;
+                    // border: 1px solid #ccc;
                     border-radius: 50%;
                     margin-left: -10px;
 
@@ -533,7 +572,22 @@ img {
 .quickSearch,
 .aboutUs,
 .finaInstitution,
-.finaPro,.companyProfile {
+.finaPro,
+.companyProfile {
+  .el-tabs__nav-wrap::after {
+    height: 1px;
+  }
+
+  .el-tabs__item {
+    height: 50px !important;
+    line-height: 50px !important;
+  }
+
+  .loginTip {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 15px;
+  }
 
   // .el-rate__icon.el-icon-star-on{
   //   color:#00a041 !important;
@@ -618,6 +672,32 @@ img {
     padding: 10px;
     font-size: 13px;
 
+    input::-webkit-input-placeholder {
+      /* WebKit browsers*/
+      color: #999;
+      font-size: 13px;
+    }
+
+    input:-moz-placeholder {
+      /* Mozilla Firefox 4 to 18*/
+      color: #999;
+      font-size: 13px;
+    }
+
+
+    input::-moz-placeholder {
+      /* Mozilla Firefox 19+*/
+      color: #999;
+      font-size: 13px;
+    }
+
+
+    input:-ms-input-placeholder {
+      /* Internet Explorer 10+*/
+      color: #999;
+      font-size: 13px;
+    }
+
     .filLeft {
       margin-top: 10px;
       color: #797979;
@@ -635,7 +715,7 @@ img {
 
     .filRight {
       width: 200px;
-      height: 35px;
+      height: 36px;
       line-height: 35px;
       text-align: center;
       padding-right: 40px;
@@ -690,12 +770,13 @@ img {
         border-bottom: 1px solid #eee;
 
         .orgImg {
-          width: 200px;
-          height: 130px;
+          width: 198px;
+          height: 128px;
 
           >img {
             width: 100%;
             height: 100%;
+            border-radius: 7px;
           }
         }
 
@@ -722,9 +803,9 @@ img {
 
             .right1 {
 
-              // margin-left: 40px;
+              margin-left: 20px;
               >p {
-                margin-bottom: 5px;
+                margin-top: 4px;
               }
 
               .el-rate {
@@ -769,6 +850,23 @@ img {
 .finaInsDetail,
 .finaProDetail {
   padding-top: 65px;
+
+  .el-tabs__nav-wrap::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #e4e7ed;
+    z-index: 1;
+  }
+
+  .loginTip {
+    text-align: center;
+    font-size: 15px;
+    margin-bottom: 20px;
+  }
 
   table {
     border-collapse: collapse;
@@ -827,12 +925,13 @@ img {
       font-size: 13px;
 
       .agentImg {
-        width: 150px;
-        height: 120px;
+        width: 198px;
+        height: 128px;
 
         >img {
           width: 100%;
           height: 100%;
+          border-radius: 7px;
         }
       }
 
@@ -845,11 +944,14 @@ img {
 
         .lastP {
           position: absolute;
-          margin-top: 20px;
-          margin-left: 630px;
+          // margin-top: 20px;
+          // margin-left: 630px;
+          right: 0;
+          bottom:20px;
+          bottom: -8px;
 
           >span {
-            margin-right: 20px;
+            margin-left: 20px;
           }
         }
       }
@@ -883,7 +985,13 @@ img {
       }
 
       >.zhankai {
-        width: 30px;
+        // width: 30px;
+        position: absolute;
+        right: 25px;
+        top: 30px;
+        font-size: 14px;
+        z-index: 2;
+        text-align: center;
       }
 
       .basicInfo,
@@ -904,6 +1012,7 @@ img {
             color: #666;
             background-color: #f8f8f8;
             font-size: 13px;
+            width: 146px;
           }
 
           .table-orgspace-detail {
@@ -920,10 +1029,19 @@ img {
           }
         }
       }
-
+      .basicInfo{
+        .table-orgspace-title {
+          width: 146px;
+        }
+      }
       .businessinfo {
         .table-orgspace-title {
           width: 146px;
+        }
+      }
+      .contactInfo{
+        .table-orgspace-title.ta_c{
+          width: auto;
         }
       }
 
@@ -1113,7 +1231,7 @@ img {
 
         .list-item {
           padding: 20px 0;
-          padding-top: 10px;
+          // padding-top: 10px;
           border-bottom: 1px solid #eee;
 
           .list-imgleft-container.product {
@@ -1125,6 +1243,7 @@ img {
             >img {
               width: 100%;
               height: 100%;
+              border-radius: 7px;
             }
           }
 
@@ -1152,7 +1271,7 @@ img {
 
           .detail-contact.inner-product {
             color: #999;
-            width: 240px;
+            width: 340px;
           }
 
           .detail-contact {
@@ -1162,19 +1281,21 @@ img {
           }
 
           .detail-evaluate.inner-product {
-            width: 420px;
+            width: 320px;
             color: #999;
           }
 
           .detail-evaluate {
             display: inline-block;
             vertical-align: middle;
+            margin-left:20px;
           }
 
           .detail-count {
-            width: 150px;
-            display: inline-block;
-            vertical-align: top;
+            // width: 150px;
+            // display: inline-block;
+            // vertical-align: top;
+            margin-top: 40px;
           }
 
           .orgBtn {
@@ -1187,24 +1308,29 @@ img {
             cursor: pointer;
           }
         }
+        .list-item:nth-child(1){
+          padding-top:10px;
+        }
       }
     }
 
     .serConsultant {
       .list-imgleft-container {
-        width: 130px;
-        height: 130px;
+        width: 120px;
+        height: 128px;
         display: inline-block;
         vertical-align: middle;
 
         >img {
           width: 100%;
           height: 100%;
+          border-radius: 4px;
         }
       }
 
       .detail-contact .text-of {
         width: 270px;
+        color: #999;
       }
 
       .text-of {
@@ -1218,9 +1344,9 @@ img {
       }
 
       .top-title.inner-consultant {
-        font-size: 18px;
+        font-size: 15px;
         cursor: pointer;
-        color: #333;
+        color: #222;
       }
 
       .top-title {
@@ -1335,11 +1461,19 @@ img {
             >.actiNameItem {
               color: #222;
               font-size: 16px;
+              overflow:hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
             }
 
             .actiTimer {
               text-indent: -10px;
               margin: 10px 0 5px 18px;
+            }
+            .actiAddress{
+              overflow:hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
             }
           }
         }
@@ -1356,6 +1490,12 @@ img {
 /* 门户首页、企业服务 */
 .portalIndex,
 .enterpriseservice {
+  .loginTip {
+    text-align: center;
+    font-size: 15px;
+    margin-bottom: 20px;
+  }
+
   .avaP {
     float: right;
     color: #00a041;
@@ -1408,7 +1548,7 @@ img {
       }
 
       .nav {
-        width: 600px;
+        width: 700px;
         height: 37.6px;
         margin: 0 auto;
 
@@ -1422,6 +1562,7 @@ img {
             text-align: center;
             // line-height: 52px;
             // padding: 0 50px;
+            // width: 100px;
             width: 100px;
 
           }
@@ -1608,7 +1749,7 @@ img {
       background-color: rgba(0, 0, 0, 0.5);
 
       >ul {
-        padding: 0 300px;
+        padding: 0 100px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -2156,7 +2297,10 @@ img {
 
             >.actiNameItem {
               color: #222;
-              font-size: 14px;
+              font-size: 16px;
+              overflow:hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
             }
 
             .actiTimer {
@@ -2233,7 +2377,7 @@ img {
 
   .districtGardens {
     .card {
-      margin-top: 40px;
+      padding: 40px 0;
 
       .cardUl {
 
@@ -2325,9 +2469,14 @@ img {
         width: 416px;
         display: inline-block;
 
-        >img {
+        .con1Img {
           width: 416px;
           height: 232px;
+
+          >img {
+            width: 100%;
+            height: 100%;
+          }
         }
 
         .conTit1 {
@@ -2341,6 +2490,7 @@ img {
           text-align: left;
           font-size: 13px;
           color: #b6b6b6;
+          margin: 10px 0;
 
           >img {
             width: 53px;
@@ -2440,8 +2590,9 @@ img {
               font-size: 12px;
               margin-top: 5px;
             }
-            .sp1{
-              margin-left:10px;
+
+            .sp1 {
+              margin-left: 10px;
             }
           }
 
@@ -2472,6 +2623,7 @@ img {
         flex-wrap: wrap;
         justify-content: center;
         align-items: center;
+
         li {
           flex: 23%;
           // width: 185px;
@@ -2479,16 +2631,18 @@ img {
           // padding: 50px 0;
           margin-bottom: 40px;
           opacity: 0;
+
           // display: inline-block;
           // float: left;
           // border: 1px solid #fff;
           // margin-right: 30px;
           p {
-            margin-top: 20px;
+            margin-top: 30px;
           }
 
           img {
             width: 50px;
+            height: 50px;
           }
         }
 

@@ -1,6 +1,7 @@
 // http.js
-const baseUrl = 'http://192.168.10.31:1101'
+const baseUrl = 'https://njbxq.mynatapp.cc'
 const wechatPath = 'https://njbxq.mynatapp.cc/springcloud-wechat-miniprogram/'
+const imgBaseUrl = 'https://njbxq.mynatapp.cc/h5/imgs/'
 class WxHttp {
   constructor() {
     // 设置 post、put 默认 Content-Type
@@ -15,10 +16,6 @@ class WxHttp {
       wx.login({
         success: res => {
           // 发送 res.code 到后台换取 openId, sessionKey, unionId
-          wx.setStorage({
-            key: 'wxcode',
-            data: res.code
-          })
           resolve(res.code)
           // console.log(res)
         },
@@ -35,10 +32,9 @@ class WxHttp {
       if (!token) {
         this.login()
           .then(loginData => {
-            const wxcode = loginData.code
+            const wxcode = loginData
             let userInfo = wx.getStorageSync('userInfo')
             userInfo = userInfo ? JSON.parse(userInfo) : userInfo
-            console.dir(userInfo)
             wx.request({
               url: wechatPath + 'guest/mini/user/checkCodeAndGetToken',
               method: 'POST',
@@ -49,7 +45,6 @@ class WxHttp {
               header: this.header,
               success: (res) => {
                 if (res.data.code === '0000') {
-                  console.dir(res)
                   const token = res.data.data
                   wx.setStorage({
                     key: 'token',
@@ -93,6 +88,7 @@ class WxHttp {
       const _operationRequest = requestData => {
         this.getToken()
           .then(() => {
+            requestData.header.token = this.header.token
             wx.request({
               url: baseUrl + requestData.url, // 仅为示例，并非真实的接口地址
               method: requestData.method,
@@ -120,5 +116,9 @@ class WxHttp {
   }
 }
 
-export { baseUrl, wechatPath }
+export {
+  baseUrl,
+  wechatPath,
+  imgBaseUrl
+}
 export default new WxHttp()

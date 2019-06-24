@@ -141,3 +141,15 @@ export function updateEmployeeFileAttachment(query) {
     data: query
   })
 }
+
+// 下载员工档案附件
+export function downloadEmployeeFileAttachment(query) {
+  let params = ''
+  for (const i in query) {
+    params += `&${i}=${query[i]}`
+  }
+  return request({
+    url: baseurl + `hr/employeeFile/downloadEmployeeFileAttachment?q=a${params}`,
+    method: 'get'
+  })
+}

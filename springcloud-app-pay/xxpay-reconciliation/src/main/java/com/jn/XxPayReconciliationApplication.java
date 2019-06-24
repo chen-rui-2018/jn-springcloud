@@ -1,8 +1,10 @@
 package com.jn;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.netflix.feign.EnableFeignClients;
 
 /**
  * 支付对账
@@ -12,8 +14,10 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  * @Version： v1.0
  * @Modified By:
  */
+@EnableFeignClients
 @EnableDiscoveryClient
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages={"org.xxpay","com.jn"})
+@MapperScan("org.xxpay.**.dao")
 public class XxPayReconciliationApplication {
 
     public static void main(String[] args) {

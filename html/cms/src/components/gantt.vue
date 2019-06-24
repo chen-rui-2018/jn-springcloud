@@ -17,16 +17,26 @@ export default {
     }
   },
 
-  mounted: function() {
+  mounted() {
+    const _this = this
+    setTimeout(function() {
+      gantt.init(_this.$refs.gantt)
+      gantt.parse(_this.$props.tasks)
+      gantt.config.readonly = true
+    }, 200)
     gantt.config.subscales = [
       {
         unit: 'year',
         step: 1,
-        date: '%Y'
+        date: '%Y' + '年'
       }
     ]
-    gantt.init(this.$refs.gantt)
-    gantt.parse(this.$props.tasks)
+    // this.$nextTick(() => {
+    // gantt.init(this.$refs.gantt)
+    // gantt.parse(this.$props.tasks)
+    // gantt.config.readonly = true
+    // gantt.init('gantt_here')
+    // })
   }
 }
 </script>

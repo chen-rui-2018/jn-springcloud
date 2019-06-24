@@ -84,15 +84,20 @@ public class MeterConstants {
     /**
      * 有电的状态
      */
-    public final static String SWITCH_GET_ELEC="5";
+    public final static String SWITCH_GET_ELEC="4";
 
     /**
      * 没电的状态
      */
-    public final static String SWITCH_NOT_ELEC="4";
+    public final static String SWITCH_NOT_ELEC="5";
 
     /**
      * 没电的状态
      */
     public final static String OBJ_TYPE="1";
+
+    /**
+     * 默认的计价规则
+     */
+    public final static String IS_DEFAULT_PRICE_RULE="1";
 }

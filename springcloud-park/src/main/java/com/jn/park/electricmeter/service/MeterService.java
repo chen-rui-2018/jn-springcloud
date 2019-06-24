@@ -1,22 +1,13 @@
 package com.jn.park.electricmeter.service;
 
 import com.jn.common.model.Result;
-import com.jn.hardware.model.electricmeter.ElectricMeterDataCollectionParam;
 import com.jn.hardware.model.electricmeter.ElectricMeterWaterOrElectricShow;
+import com.jn.park.electricmeter.entity.TbElectricMeterInfo;
 import com.jn.park.electricmeter.model.MeterInfoModel;
 import com.jn.park.electricmeter.model.TrendChartPageParam;
 import com.jn.park.electricmeter.model.TrendChartParam;
-import com.jn.system.log.annotation.ControllerLog;
-import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Date;
@@ -113,4 +104,39 @@ public interface MeterService {
      * @return
      */
     Result trendChart(TrendChartParam param);
+
+    /**
+     * 根据设备编码找到唯一设备
+     * @param code
+     * @return
+     */
+    TbElectricMeterInfo getByCode(String code);
+
+
+    /**
+     * 今日用电情况
+     * @param user
+     * @return
+     */
+    Result todayElectric(User user);
+
+    /**
+     * 本月用电情况
+     * @param user
+     * @return
+     */
+    Result monthElectric(User user);
+
+    /**
+     * 今年用电情况
+     * @param user
+     * @return
+     */
+    Result yearElectric(User user);
+
+
+    /**
+     * 通过仪表号和日期，小时；重新采集数据
+     */
+    Result dealAllFailByDealHourAndDealDateAndMeterCode(Date dealDate,String dealHour,String meterCode);
 }

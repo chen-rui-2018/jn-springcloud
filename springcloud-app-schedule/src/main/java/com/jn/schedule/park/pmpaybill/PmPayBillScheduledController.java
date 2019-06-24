@@ -1,7 +1,6 @@
 package com.jn.schedule.park.pmpaybill;
 
 
-import com.jn.park.api.BusinessAdClient;
 import com.jn.park.api.PmPayBillServiceClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,12 +25,12 @@ public class PmPayBillScheduledController {
     private static Logger logger = LoggerFactory.getLogger(PmPayBillScheduledController.class);
 
     /**
-     * 每月初1号凌晨两点生成物业费缴费单
+     * 每季度第一天凌晨,为企业生成物业费账单
      */
-    @Scheduled(cron = " 0 0 2 1 * ? ")
-    public void autoGeneratePmPayBillDeatils() {
-        logger.info("每月初1号凌晨两点生成物业费缴费单");
-        pmPayBillServiceClient.autoGeneratePmPayBillDeatils();
+    @Scheduled(cron = " 0 0 1  1 1,4,7,10 ? ")
+    public void createPmPayBillByQuarter() {
+        logger.info("每季度第一天凌晨,为企业生成物业费账单");
+        pmPayBillServiceClient.createPmPayBillByQuarter();
     }
 
     /**
@@ -42,16 +41,6 @@ public class PmPayBillScheduledController {
         //更新会议状态
         logger.info("每月初1号凌晨两点生成物业费缴费单");
         pmPayBillServiceClient.updatePmPayBillItemExpireStatus();
-    }
-
-    /**
-     * 没半小时执行一次物业费缴费账单发送功能
-     */
-    @Scheduled(cron = " 0 0/30 * * * ? ")
-    public void generatePmBill() {
-        //更新会议状态
-        logger.info("每月初1号凌晨两点生成物业费缴费单");
-        pmPayBillServiceClient.generatePmBill();
     }
 
 }

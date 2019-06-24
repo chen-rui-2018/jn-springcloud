@@ -1,5 +1,4 @@
-
-import {CreateHeader} from "./../../../utils/require"
+import request from "./../../../utils/http"
 const date = new Date()
 Page({
   data: {
@@ -18,65 +17,63 @@ Page({
   },
   onLoad: function (options) {
     this.setData({
-      sendData:{
-        meetingRoomId:options.id
-      }
+      "sendData.meetingRoomId":options.id
     })
-    
    },
   onReady: function () { },
   onShow: function () {
-    CreateHeader()
-    .then(header=>{
-      this.data.token=header.token
-      this.getRoomDetail()
-      this.getMeetingList()
-    })
+    this.getRoomDetail()
+    this.getMeetingList()
    },
   onUnload: function () { },
-  onPullDownRefresh: function () { },
+  onPullDownRefresh: function () { 
+    this.onShow( )
+  },
   onReachBottom: function () { },
    // 会议室详情
   getRoomDetail(){
-    wx.request({
-      url: 'http://192.168.10.31:1101/springcloud-oa/oa/oaMeetingRoom/selectById?id='+this.data.sendData.meetingRoomId,
-      data:{} ,
-      header: {'content-type':'application/json','token':this.data.token},
+    request.send({
+      url: '/springcloud-oa/oa/oaMeetingRoom/selectById?id='+this.data.sendData.meetingRoomId,
+      data: {},
       method: 'POST',
-      dataType: 'json',
-      success: (res)=>{
-        // console.log(res)
-        if(res.data.code==='0000'){
-          this.setData({
-            meetingDetail:res.data.data,
-          })
-        }
-      },
-      fail: ()=>{},
-      complete: ()=>{}
-    });
+    }).then(res=>{
+      if(res.data.code==='0000'){
+        this.setData({
+          meetingDetail:res.data.data,
+        })
+      }
+    })
   },
   getMeetingList(){
-    wx.request({
-      url: 'http://192.168.10.31:1101/springcloud-oa/oa/oaMeetingRoom/orderList',
-      data:this.data.sendData ,
-      header: {'content-type':'application/json','token':this.data.token},
+    request.send({
+      url: '/springcloud-oa/oa/oaMeetingRoom/orderList',
+      data: this.data.sendData,
       method: 'POST',
-      dataType: 'json',
-      success: (res)=>{
-        if(res.data.code==='0000'){
-          this.setData({
-            meetingList:res.data.data.rows[0].meetingList,
-          })
-          res.data.data.rows[0].meetingList.forEach(ele => {
-            /* ele.starTime=ele.starTime.split('8') */
-            // console.log(ele.starTime)
-          });
+    }).then(res=>{
+      this.setData({
+        meetingList:res.data.data.rows[0].meetingList,
+      })
+      this.data.meetingList.forEach(ele => {
+        let starMinute=ele.startTime.split(":")
+        let endMinute=ele.endTime.split(":")
+        let meetingTime=((endMinute[0]*60+endMinute[1]*1)-(starMinute[0]*60+starMinute[1]*1))/60
+        ele.meetingTime=meetingTime.toFixed(2)
+        if(ele.meetingStatus==="0"){
+          ele.isMeetingStatus="待开始"
+        }else if(ele.meetingStatus==="1"){
+          ele.isMeetingStatus="进行中" 
+        }else if(ele.meetingStatus==="2"){
+          ele.isMeetingStatus="已完成" 
+        }else if(ele.meetingStatus==="3"){
+          ele.isMeetingStatus="已取消" 
+        }else{
+          ele.isMeetingStatus="暂无" 
         }
-      },
-      fail: ()=>{},
-      complete: ()=>{}
-    });
+      })
+      this.setData({
+        meetingList:this.data.meetingList
+      })
+    })
   },
   goAttendence(e){
     wx.navigateTo({

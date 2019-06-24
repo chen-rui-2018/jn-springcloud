@@ -10,9 +10,9 @@
             <i class="el-icon-search"></i>
           </div>
           <div class="headerRight fr">
-            <div class="search">
+            <!-- <div class="search">
               <i class="el-icon-search" @click="show4=true" style="font-size:20px"></i>
-            </div>
+            </div> -->
             <!-- <div class="navlogin" v-if="this.$route.name!=='actiManagent'">
               <a @click="$router.push({path:'/login'})">登录</a>
               <span class="line">|</span>
@@ -23,10 +23,10 @@
           <div class="nav">
             <ul class="posA clearfix">
               <!-- <li :class="{'active':$route.path==i.path}" v-for="(i,k) in liArr" :key="k" @click="$router.push({path:i.path})">{{i.name}}</li> -->
-              <li :class="{'activeB':$route.path=='/tfindex'}" @click="$router.push({path:'/tfindex'})">首页</li>
-              <li :class="{'activeB':$route.path=='/investor'||$route.path=='/investorDetail'}" @click="$router.push({path:'/investor'})">投资人</li>
+              <li :class="{'activeB':$route.path=='/tfindex'}" @click="$router.push({path:'/tfindex'})">首页</li>            
               <li :class="{'activeB':$route.path=='/finaPro'||$route.path=='/finaProDetail'}" @click="$router.push({path:'/finaPro'})">金融产品</li>
               <li :class="{'activeB':$route.path=='/finaInstitution'||$route.path=='/finaInsDetail'}" @click="$router.push({path:'/finaInstitution'})">金融机构</li>
+              <li :class="{'activeB':$route.path=='/investor'||$route.path=='/investorDetail'}" @click="$router.push({path:'/investor'})">投资人</li>
             </ul>
           </div>
         </div>

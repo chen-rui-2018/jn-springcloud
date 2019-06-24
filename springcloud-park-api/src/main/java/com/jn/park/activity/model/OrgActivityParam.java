@@ -46,4 +46,13 @@ public class OrgActivityParam extends Page implements Serializable {
     public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
+
+    @Override
+    public String toString() {
+        return "OrgActivityParam{" +
+                "startTime='" + startTime + '\'' +
+                ", endTime='" + endTime + '\'' +
+                ", timeInterval='" + timeInterval + '\'' +
+                '}';
+    }
 }

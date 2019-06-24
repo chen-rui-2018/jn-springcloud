@@ -21,15 +21,19 @@ public class IncreaseDetailed implements Serializable{
 	private String id;
 	
 	@ApiModelProperty(value = "参保月份")
-	@DateTimeFormat(pattern = "yyyy-MM")
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM")
-    private Date insuredMonth;
+    private String insuredMonth;
 
 	@ApiModelProperty(value = "工号")
     private String jobNumber;
 
 	@ApiModelProperty(value = "项目id")
     private String projectId;
+	
+	@ApiModelProperty(value = "方案Id")
+    private String schemeId;
+	
+	@ApiModelProperty(value = "方案名称")
+    private String schemeName;
 
 	@ApiModelProperty(value = "默认基数")
     private Integer defaultCardinalNumber;
@@ -46,6 +50,22 @@ public class IncreaseDetailed implements Serializable{
 	@ApiModelProperty(value = "参保人数")
 	private Integer number;
 
+	public String getSchemeId() {
+		return schemeId;
+	}
+
+	public void setSchemeId(String schemeId) {
+		this.schemeId = schemeId;
+	}
+
+	public String getSchemeName() {
+		return schemeName;
+	}
+
+	public void setSchemeName(String schemeName) {
+		this.schemeName = schemeName;
+	}
+
 	public Integer getNumber() {
 		return number;
 	}
@@ -61,12 +81,12 @@ public class IncreaseDetailed implements Serializable{
 	public void setId(String id) {
 		this.id = id;
 	}
-
-	public Date getInsuredMonth() {
+	
+	public String getInsuredMonth() {
 		return insuredMonth;
 	}
 
-	public void setInsuredMonth(Date insuredMonth) {
+	public void setInsuredMonth(String insuredMonth) {
 		this.insuredMonth = insuredMonth;
 	}
 

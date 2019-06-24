@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
 import com.jn.park.enums.GamTopicExceptionEnum;
 import com.jn.park.feedback.model.FeedbackVO;
@@ -22,6 +23,9 @@ import com.jn.park.gamtopic.model.GamTopicParam;
 import com.jn.park.gamtopic.model.GamTopicVO;
 import com.jn.park.gamtopic.service.GamTopicService;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.User;
+import com.jn.user.api.UserExtensionClient;
+import com.jn.user.model.UserExtensionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -52,6 +56,9 @@ public class GamTopicServiceImpl implements GamTopicService {
     private GamTopicMapper gamTopicMapper;
     @Autowired
     private TbFileImgMapper tbFileImgMapper;
+    @Autowired
+    private UserExtensionClient userExtensionClient;
+
 
     /**
      * 话题状态 1有效0无效
@@ -97,10 +104,23 @@ public class GamTopicServiceImpl implements GamTopicService {
     @Override
     @ServiceLog(doAction = "获得当前用户话题列表")
     public PaginationData<List<GamTopicVO>> getMyGamTopicList(Page page, String account){
+        Result<UserExtensionInfo> userResult = userExtensionClient.getUserExtension(account);
+        String nikeName="";
+        if(userResult.getData()!=null){
+            nikeName = userResult.getData().getNickName();
+        }
         GamTopicParam gamTopicParam = new GamTopicParam();
         gamTopicParam.setCreatorAcount(account);
         BeanUtils.copyProperties(page,gamTopicParam);
-        return getGamTopicListByParam(gamTopicParam);
+        PaginationData<List<GamTopicVO>> data = getGamTopicListByParam(gamTopicParam);
+        List<GamTopicVO> list = data .getRows();
+        if(list != null && !list.isEmpty()){
+            for(GamTopicVO vo : list){
+                vo.setNikeName(nikeName);
+            }
+        }
+        data.setRows(list);
+        return data;
     }
 
     @Override
@@ -125,24 +145,26 @@ public class GamTopicServiceImpl implements GamTopicService {
         ) {
             ids.add(tppic.getTopicId());
         }
-        TbFileImgCriteria imgCriteria = new TbFileImgCriteria();
-        imgCriteria.createCriteria().andTopicIdIn(ids);
-        List<TbFileImg> tbFileImgs = tbFileImgMapper.selectByExample(imgCriteria);
-        for (GamTopicVO tppic: gamTopicVOS
-        ) {
-            for (TbFileImg img:tbFileImgs
+        if(ids != null && !ids.isEmpty()) {
+            TbFileImgCriteria imgCriteria = new TbFileImgCriteria();
+            imgCriteria.createCriteria().andTopicIdIn(ids);
+            List<TbFileImg> tbFileImgs = tbFileImgMapper.selectByExample(imgCriteria);
+            for (GamTopicVO tppic : gamTopicVOS
             ) {
-                if(StringUtils.equals(tppic.getTopicId(),img.getTopicId())){
-                    FileImg i = new FileImg();
-                    BeanUtils.copyProperties(img,i);
-                    List<FileImg> imgs = tppic.getImgs();
-                    if(imgs!=null){
-                        imgs.add(i);
-                        tppic.setImgs(imgs);
-                    }else{
-                        List<FileImg> fl = new ArrayList<>(4);
-                        fl.add(i);
-                        tppic.setImgs(fl);
+                for (TbFileImg img : tbFileImgs
+                ) {
+                    if (StringUtils.equals(tppic.getTopicId(), img.getTopicId())) {
+                        FileImg i = new FileImg();
+                        BeanUtils.copyProperties(img, i);
+                        List<FileImg> imgs = tppic.getImgs();
+                        if (imgs != null) {
+                            imgs.add(i);
+                            tppic.setImgs(imgs);
+                        } else {
+                            List<FileImg> fl = new ArrayList<>(4);
+                            fl.add(i);
+                            tppic.setImgs(fl);
+                        }
                     }
                 }
             }

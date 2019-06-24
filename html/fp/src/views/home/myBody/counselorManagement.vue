@@ -1,8 +1,8 @@
 <template>
   <div class="counselorManagement">
     <div class="ordinary_title font16">
-      <div>顾问管理</div>
-      <div @click="toInviteAdviser">邀请顾问</div>
+      <div>专员管理</div>
+      <div @click="toInviteAdviser" v-show="isShow">邀请专员</div>
     </div>
     <div class="ordinary_main">
       <div class="search">
@@ -12,7 +12,7 @@
           <span :class="approvalStatus==='noFeedBack'?'active':''" @click="noFeedback ">未反馈</span>
           <span :class="approvalStatus==='rejected'?'active':''" @click="denied ">已拒绝</span>
         </div>
-        <el-input placeholder="请输入顾问姓名" v-model="advisorName" clearable>
+        <el-input placeholder="请输入专员姓名" v-model="advisorName" clearable>
           <el-button slot="append" icon="el-icon-search" @click="initList()"></el-button>
         </el-input>
       </div>
@@ -29,23 +29,23 @@
           <el-table-column prop="graduatedSchool" label="毕业学校" align="center"> </el-table-column>
           <el-table-column prop="approvalStatus" label="邀请状态" align="center">
             <template slot-scope="scope">
-              <span v-if="scope.row.approvalStatus==='1'">待审批</span>
-              <span v-if="scope.row.approvalStatus==='3'">审批不通过</span>
-              <span v-if="scope.row.approvalStatus==='0'">未反馈</span>
-              <span v-if="scope.row.approvalStatus==='-1'">已拒绝</span>
+              <span v-if="scope.row.approvalStatus==='pending'">待审批</span>
+              <span v-if="scope.row.approvalStatus==='approvalNotPassed'">审批不通过</span>
+              <span v-if="scope.row.approvalStatus==='noFeedBack'">未反馈</span>
+              <span v-if="scope.row.approvalStatus==='rejected'">已拒绝</span>
               <!-- <span v-if="scope.row.approvalStatus==='-1'">未接受</span>
               <span v-if="scope.row.approvalStatus==='-1'">审批通过</span> -->
             </template>
           </el-table-column>
           <el-table-column label="操作" align="center" width="120">
             <template slot-scope="scope">
-              <el-button v-if="scope.row.approvalStatus==='1'" size="mini" type="text" @click="handleConsent( scope.row)"
+              <el-button v-if="scope.row.approvalStatus==='pending'" size="mini" type="text" @click="handleConsent( scope.row)"
                 class="mainColor"><span>审批</span>
               </el-button>
-              <el-button v-if="scope.row.approvalStatus==='-1'" size="mini" type="text" @click="handleAgainInvite( scope.row)"
+              <el-button v-if="scope.row.approvalStatus==='rejected'" size="mini" type="text" @click="handleAgainInvite( scope.row)"
                 class="redColor"><span>再次邀请</span>
               </el-button>
-              <el-button v-if="scope.row.approvalStatus==='3'" size="mini" type="text" @click="handleDetails( scope.row)"
+              <el-button size="mini" type="text" @click="handleDetails( scope.row)"
                 class="mainColor"><span>详情</span>
               </el-button>
             </template>
@@ -64,6 +64,7 @@
 export default {
   data() {
     return {
+      isShow:false,
       page: 1,
       rows: 10,
       total: 0,
@@ -73,15 +74,27 @@ export default {
     };
   },
   mounted() {
+    if(this.$route.query.approvalStatus){
+      this.approvalStatus=this.$route.query.approvalStatus
+    }
+     let initArr = JSON.parse(sessionStorage.menuItems);
+    initArr.forEach(v => {
+      if (v.label === "我的机构") {
+        v.resourcesList.forEach(i => {
+          if (i.resourcesName === "邀请专员") {
+            this.isShow = true;
+          }
+        });
+      }
+    });
     this.initList();
   },
   methods: {
     //   跳转到详情页
     handleDetails(row) {
-      console.log(row);
       this.$router.push({
         name: "advisoryDetails",
-        query: { account: row.advisorAccount }
+        query: { account: row.advisorAccount,approvalStatus: this.approvalStatus}
       });
     },
     // 再次邀请
@@ -139,9 +152,8 @@ export default {
         })
         .catch(() => {});
     },
-    // 点击审批 跳转到审批顾问页面
+    // 点击审批 跳转到审批专员页面
     handleConsent(row) {
-      console.log(row);
       this.$router.push({
         name: "approveAdvisory",
         query: { advisorAccount: row.advisorAccount }
@@ -191,7 +203,6 @@ export default {
         // dataFlag:true,
         callback: function(res) {
           if (res.code == "0000") {
-            console.log(res);
             _this.recruitmentTable = res.data.rows;
             _this.total = res.data.total;
           } else {

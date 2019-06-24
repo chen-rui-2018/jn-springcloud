@@ -24,6 +24,8 @@ public class WebServiceProductInfo implements Serializable {
     @ApiModelProperty(value = "产品名称")
     private String productName;
     @ApiModelProperty(value ="机构名称")
+    private String orgId;
+    @ApiModelProperty(value ="机构名称")
     private String orgName;
     @ApiModelProperty(value = "顾问名称")
     private String advisorName;
@@ -53,6 +55,14 @@ public class WebServiceProductInfo implements Serializable {
     private String commentNum;
     @ApiModelProperty(value = "同类型产品特色产品数")
     private String featureNum;
+
+    public String getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
+    }
 
     public String getSameTypeNum() {
         return sameTypeNum;
@@ -204,5 +214,31 @@ public class WebServiceProductInfo implements Serializable {
 
     public void setEvaluationNumber(String evaluationNumber) {
         this.evaluationNumber = evaluationNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "WebServiceProductInfo{" +
+                "productId='" + productId + '\'' +
+                ", serialNumber='" + serialNumber + '\'' +
+                ", signoryId='" + signoryId + '\'' +
+                ", productName='" + productName + '\'' +
+                ", orgId='" + orgId + '\'' +
+                ", orgName='" + orgName + '\'' +
+                ", advisorName='" + advisorName + '\'' +
+                ", referPrice='" + referPrice + '\'' +
+                ", serviceCycle='" + serviceCycle + '\'' +
+                ", pictureUrl='" + pictureUrl + '\'' +
+                ", productDetails='" + productDetails + '\'' +
+                ", serviceDetails='" + serviceDetails + '\'' +
+                ", transactionsNumber=" + transactionsNumber +
+                ", viewCount=" + viewCount +
+                ", evaluationScore='" + evaluationScore + '\'' +
+                ", evaluationNumber='" + evaluationNumber + '\'' +
+                ", upShelfOrgNumber='" + upShelfOrgNumber + '\'' +
+                ", sameTypeNum='" + sameTypeNum + '\'' +
+                ", commentNum='" + commentNum + '\'' +
+                ", featureNum='" + featureNum + '\'' +
+                '}';
     }
 }

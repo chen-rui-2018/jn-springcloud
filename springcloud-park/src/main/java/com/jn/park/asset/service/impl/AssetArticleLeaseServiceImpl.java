@@ -4,13 +4,13 @@ import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
 import com.jn.park.asset.dao.AssetArticleLeaseDao;
 import com.jn.park.asset.dao.TbAssetArticleLeaseMapper;
 import com.jn.park.asset.dao.TbAssetArticleLeaseOrdersMapper;
-import com.jn.park.asset.entity.TbAssetArticleLease;
-import com.jn.park.asset.entity.TbAssetArticleLeaseCriteria;
-import com.jn.park.asset.entity.TbAssetArticleLeaseOrders;
+import com.jn.park.asset.dao.TbAssetInformationMapper;
+import com.jn.park.asset.entity.*;
 import com.jn.park.asset.enums.AssetExceptionEnum;
 import com.jn.park.asset.enums.AssetStatusEnums;
 import com.jn.park.asset.enums.LeaseStatusEnums;
@@ -19,6 +19,8 @@ import com.jn.park.asset.model.AssetArticleLeaseModel;
 import com.jn.park.asset.service.AssetArticleLeaseService;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
+import com.jn.user.api.UserExtensionClient;
+import com.jn.user.model.UserExtensionInfo;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +46,11 @@ public class AssetArticleLeaseServiceImpl implements AssetArticleLeaseService {
     private TbAssetArticleLeaseMapper tbAssetArticleLeaseMapper;
     @Autowired
     private TbAssetArticleLeaseOrdersMapper tbAssetArticleLeaseOrdersMapper;
+    @Autowired
+    private UserExtensionClient userExtensionClient;
+    @Autowired
+    private TbAssetInformationMapper tbAssetInformationMapper;
+
 
 
     /**
@@ -53,9 +60,16 @@ public class AssetArticleLeaseServiceImpl implements AssetArticleLeaseService {
      */
     @Override
     @ServiceLog(doAction = "根据资产编号获取物品租赁详细信息")
-    public AssetArticleLeaseModel getArticleLease(String assetNumber) {
+    public AssetArticleLeaseModel getArticleLease(String assetNumber,String account) {
         AssetArticleLeaseModel assetArticleLeaseModel = assetArticleLeaseDao.getArticleLease(assetNumber);
-        assetArticleLeaseModel.setBarCode(assetArticleLeaseModel.getAssetNumber());
+        //设置租借资料
+        UserExtensionInfo userExtension = getUserExtension(account);
+        assetArticleLeaseModel.setLeaseEnterprise(userExtension.getCompanyName());
+        assetArticleLeaseModel.setContactName(userExtension.getName());
+        assetArticleLeaseModel.setContactPhone(userExtension.getPhone());
+        //设置条形码
+        String barCode = assetArticleLeaseModel.getAssetNumber().substring(7);
+        assetArticleLeaseModel.setBarCode(barCode);
         return assetArticleLeaseModel;
     }
 
@@ -63,35 +77,41 @@ public class AssetArticleLeaseServiceImpl implements AssetArticleLeaseService {
     @Override
     @ServiceLog(doAction = "企业填写租借资料")
     public String leaseWriter(String assetNumber, String leaseEnterprise, String contactName, String contactPhone, java.sql.Date startTime, String time,User user) {
-        //填写租借企业资料
-        AssetArticleLeaseModel articleLease = assetArticleLeaseDao.getArticleLease(assetNumber);
-        articleLease.setLeaseEnterprise(leaseEnterprise);
-        articleLease.setContactName(contactName);
-        articleLease.setContactPhone(contactPhone);
-        articleLease.setStartTime(startTime);
+        TbAssetInformationCriteria tbAssetInformationCriteria = new TbAssetInformationCriteria();
+        tbAssetInformationCriteria.createCriteria().andAssetNumberEqualTo(assetNumber);
+        List<TbAssetInformation> tbAssetInformations = tbAssetInformationMapper.selectByExample(tbAssetInformationCriteria);
+        if (tbAssetInformations.isEmpty()){
+            throw new JnSpringCloudException(new Result("-1","资产信息不存在"));
+        }
+        //资产信息
+        TbAssetInformation tbAssetInformation = tbAssetInformations.get(0);
+        //获取租借企业id
+        UserExtensionInfo userExtension = getUserExtension(user.getAccount());
+        tbAssetInformation.setLeaseEnterpriseId(userExtension.getCompanyCode());
+        tbAssetInformation.setLeaseEnterpriseName(userExtension.getCompanyName());
+        tbAssetInformation.setLeaseContactName(contactName);
+        tbAssetInformation.setLeaseContactPhone(contactPhone);
+        tbAssetInformation.setLeaseStartTime(startTime);
+        //租借申请时间
+        tbAssetInformation.setLeaseApplyTime(new Date());
         //计算结束时间
         Calendar cal = Calendar.getInstance();
         cal.setTime(startTime);
         cal.add(Calendar.DAY_OF_MONTH,+Integer.parseInt(time));
         Date calTime = cal.getTime();
         java.sql.Date endTime=new java.sql.Date(calTime.getTime());
-        articleLease.setEndTime(endTime);
+        tbAssetInformation.setLeaseEndTime(endTime);
         //判断租借时间是否大于最短租期
-        int days = (int) ((articleLease.getEndTime().getTime() - articleLease.getStartTime().getTime()) / (1000*3600*24)+1);
+        int days = (int) ((tbAssetInformation.getLeaseEndTime().getTime() - tbAssetInformation.getLeaseStartTime().getTime()) / (1000*3600*24));
         //最短租借时间
-        int leaseTime = Integer.parseInt(articleLease.getLeaseTime());
+        int leaseTime = Integer.parseInt(tbAssetInformation.getLeaseTime());
         if (leaseTime > days){
             throw new JnSpringCloudException(AssetExceptionEnum.TIME_NOT_AFTER_LEASE_TIME);
         }
-        TbAssetArticleLease tbAssetArticleLease = new TbAssetArticleLease();
-        BeanUtils.copyProperties(articleLease,tbAssetArticleLease);
-        tbAssetArticleLease.setApplyTime(new Date());
-        TbAssetArticleLeaseCriteria example  = new TbAssetArticleLeaseCriteria();
-        example.createCriteria().andAssetNumberEqualTo(tbAssetArticleLease.getAssetNumber());
         //更新租借企业资料
-        tbAssetArticleLeaseMapper.updateByExampleSelective(tbAssetArticleLease, example);
+        tbAssetInformationMapper.updateByPrimaryKeySelective(tbAssetInformation);
         //新增租赁订单
-        return addLeaseOrders(assetNumber,user);
+        return addLeaseOrders(tbAssetInformation.getId(),user);
     }
 
     /**
@@ -114,43 +134,44 @@ public class AssetArticleLeaseServiceImpl implements AssetArticleLeaseService {
 
     /**
      * 新增租赁订单
-     * @param assetNumber
+     * @param id
      * @param user
      * @return
      */
-    private String addLeaseOrders(String assetNumber, User user) {
-        AssetArticleLeaseModel articleLease = assetArticleLeaseDao.getArticleLease(assetNumber);
-        if (articleLease != null){
+    private String addLeaseOrders(String id, User user) {
+        TbAssetInformation tbAssetInformation = tbAssetInformationMapper.selectByPrimaryKey(id);
+        if (tbAssetInformation != null){
             TbAssetArticleLeaseOrders tbAssetArticleLeaseOrders = new TbAssetArticleLeaseOrders();
             //生成订单编号
             String ordersNumber = getOrderIdByTime();
             tbAssetArticleLeaseOrders.setId(ordersNumber);
-            tbAssetArticleLeaseOrders.setAssetNumber(articleLease.getAssetNumber());
-            tbAssetArticleLeaseOrders.setArticleId(articleLease.getId());
-            tbAssetArticleLeaseOrders.setArticleName(articleLease.getName());
-            tbAssetArticleLeaseOrders.setTypeId(articleLease.getTypeId());
-            tbAssetArticleLeaseOrders.setAssetType(articleLease.getAssetType());
-            tbAssetArticleLeaseOrders.setSpecification(articleLease.getSpecification());
-            tbAssetArticleLeaseOrders.setArticleUrl(articleLease.getImgUrl());
-            tbAssetArticleLeaseOrders.setArticleIntroduction(articleLease.getArticleIntroduction());
-            tbAssetArticleLeaseOrders.setLeaseEnterprise(articleLease.getLeaseEnterprise());
-            tbAssetArticleLeaseOrders.setContactName(articleLease.getContactName());
-            tbAssetArticleLeaseOrders.setContactPhone(articleLease.getContactPhone());
-            tbAssetArticleLeaseOrders.setLeaseCash(articleLease.getLeaseCash());
-            tbAssetArticleLeaseOrders.setLeasePrice(articleLease.getLeasePrice());
-            tbAssetArticleLeaseOrders.setStartTime(articleLease.getStartTime());
-            tbAssetArticleLeaseOrders.setEndTime(articleLease.getEndTime());
+            tbAssetArticleLeaseOrders.setAssetNumber(tbAssetInformation.getAssetNumber());
+            tbAssetArticleLeaseOrders.setArticleId(tbAssetInformation.getId());
+            tbAssetArticleLeaseOrders.setArticleName(tbAssetInformation.getAssetName());
+            tbAssetArticleLeaseOrders.setTypeId(tbAssetInformation.getTypeId());
+            tbAssetArticleLeaseOrders.setAssetType(tbAssetInformation.getAssetType());
+            tbAssetArticleLeaseOrders.setSpecification(tbAssetInformation.getSpecification());
+            tbAssetArticleLeaseOrders.setArticleUrl(tbAssetInformation.getImgUrl());
+            tbAssetArticleLeaseOrders.setArticleIntroduction(tbAssetInformation.getAssetExplain());
+            tbAssetArticleLeaseOrders.setLeaseEnterpriseId(tbAssetInformation.getLeaseEnterpriseId());
+            tbAssetArticleLeaseOrders.setLeaseEnterprise(tbAssetInformation.getLeaseEnterpriseName());
+            tbAssetArticleLeaseOrders.setContactName(tbAssetInformation.getLeaseContactName());
+            tbAssetArticleLeaseOrders.setContactPhone(tbAssetInformation.getLeaseContactPhone());
+            tbAssetArticleLeaseOrders.setLeaseCash(tbAssetInformation.getLeaseCash());
+            tbAssetArticleLeaseOrders.setLeasePrice(tbAssetInformation.getLeasePrice());
+            tbAssetArticleLeaseOrders.setStartTime(tbAssetInformation.getLeaseStartTime());
+            tbAssetArticleLeaseOrders.setEndTime(tbAssetInformation.getLeaseEndTime());
             //未付款
             tbAssetArticleLeaseOrders.setPaymentStatus(Byte.parseByte(PayStatusEnums.NONPAYMENT.getCode()));
             //订单创建者
             tbAssetArticleLeaseOrders.setCreatorAccount(user.getAccount());
             tbAssetArticleLeaseOrders.setRecordStatus(Byte.parseByte(AssetStatusEnums.EFFECTIVE.getCode()));
             //计算开始时间和结束时间的相差天数
-            int days = (int) ((articleLease.getEndTime().getTime() - articleLease.getStartTime().getTime()) / (1000*3600*24)+1);
+            int days = (int) ((tbAssetInformation.getLeaseEndTime().getTime() - tbAssetInformation.getLeaseStartTime().getTime()) / (1000*3600*24));
             //计算总共需要付款的金额
             BigDecimal day = new BigDecimal(String.valueOf(days));
-            BigDecimal price = new BigDecimal(articleLease.getLeasePrice().toString());
-            BigDecimal cash = new BigDecimal(articleLease.getLeaseCash().toString());
+            BigDecimal price = new BigDecimal(tbAssetInformation.getLeasePrice().toString());
+            BigDecimal cash = new BigDecimal(tbAssetInformation.getLeaseCash().toString());
             BigDecimal paySum = day.multiply(price).add(cash);
             tbAssetArticleLeaseOrders.setPaySum(paySum);
             //订单创建时间
@@ -176,5 +197,21 @@ public class AssetArticleLeaseServiceImpl implements AssetArticleLeaseService {
             result += random.nextInt(10);
         }
         return newDate + result;
+    }
+
+
+    /**
+     * 获取用户企业信息
+     * @param account
+     * @return
+     */
+    public UserExtensionInfo getUserExtension(String account){
+        //获取当前用户的信息
+        Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(account);
+        UserExtensionInfo data = userExtension.getData();
+        if (data == null){
+            throw new JnSpringCloudException(new Result("-1","获取用户企业信息失败"));
+        }
+        return data;
     }
 }

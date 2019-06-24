@@ -6,6 +6,7 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
+import com.jn.common.util.encryption.EncryptUtil;
 import com.jn.system.api.SystemClient;
 import com.jn.system.common.enums.SysExceptionEnums;
 import com.jn.system.common.enums.SysStatusEnums;
@@ -25,7 +26,6 @@ import com.jn.system.user.model.SysUserAdd;
 import com.jn.system.user.service.SysUserService;
 import com.jn.system.vo.SysDictKeyValue;
 import com.jn.system.vo.SysUserRoleVO;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +35,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.schema.Collections;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -147,7 +149,7 @@ public class SystemController extends BaseController implements SystemClient {
     @ControllerLog(doAction = "添加用户")
     public Result<User> addSysUser(@Validated @RequestBody User user) {
         user.setId(UUID.randomUUID().toString());
-        user.setPassword(DigestUtils.md5Hex(user.getPassword()));
+        user.setPassword(EncryptUtil.encryptSha256(user.getPassword()));
         user.setRecordStatus(Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode()));
         SysUserAdd SysUserAdd = new SysUserAdd();
         BeanUtils.copyProperties(user, SysUserAdd);
@@ -194,6 +196,19 @@ public class SystemController extends BaseController implements SystemClient {
     @ControllerLog(doAction = "通过用户账号,获取用户信息")
     public Result<List<User>> getUserInfoByAccount(@RequestBody List<String> accountList) {
         List<User> userList = sysUserService.getUserInfoByAccount(accountList);
+        return new Result<>(userList);
+    }
+
+    /**
+     * 通过用户id获取用户信息,传多id,返回多个用户信息
+     *
+     * @param ids 用户id集合
+     * @return
+     */
+    @Override
+    @ControllerLog(doAction = "通过用户id获取用户信息,传多id,返回多个用户信息")
+    public Result<List<User>> getUserInfoByIds(@RequestBody List<String> ids) {
+        List<User> userList = sysUserService.selectUserByIds(ids.toArray(new String[ids.size()]));
         return new Result<>(userList);
     }
 

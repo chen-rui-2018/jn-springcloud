@@ -15,8 +15,7 @@
  */
 package com.jn.reconciliation.service.impl;
 
-import com.jn.reconciliation.enums.PayWayEnum;
-import com.jn.reconciliation.enums.PublicStatusEnum;
+import org.xxpay.common.enumm.PayWayEnum;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,18 +91,15 @@ public class ReconciliationInterface {
 
 		// 微信支付
 		ReconciliationInterface weixin = new ReconciliationInterface();
-		weixin.setInterfaceCode(PayWayEnum.WEIXIN.name());
-		weixin.setInterfaceName(PayWayEnum.WEIXIN.getDesc());
-		weixin.setStatus(PublicStatusEnum.ACTIVE.name());
-		weixin.setBillDay(1);
+		weixin.setInterfaceCode(PayWayEnum.WX.getCode());
+		weixin.setInterfaceName(PayWayEnum.WX.getMessage());
 		list.add(weixin);
 
+		//TODO 支付宝还没有商户号可以测试,后期需要加上
 		// 支付宝
 		ReconciliationInterface alipay = new ReconciliationInterface();
-		alipay.setInterfaceCode(PayWayEnum.ALIPAY.name());
-		alipay.setInterfaceName(PayWayEnum.ALIPAY.getDesc());
-		alipay.setStatus(PublicStatusEnum.ACTIVE.name());
-		alipay.setBillDay(1);
+		alipay.setInterfaceCode(PayWayEnum.ALIPAY.getCode());
+		alipay.setInterfaceName(PayWayEnum.ALIPAY.getMessage());
 		list.add(alipay);
 		return list;
 

@@ -1,7 +1,7 @@
 <template>
   <div class="groupingEnergyStatistics">
     <div class="building">
-      <div><span>当日楼宇能耗统计</span> </div>
+      <div><span>当日楼宇能耗统计(千瓦时)</span> </div>
       <div id="build" style="width:100%;height:400px;" />
       <div class="table-d">
         <table border="0" cellspacing="1" cellpadding="0">
@@ -21,7 +21,7 @@
       </div>
     </div>
     <div class="building">
-      <div><span>当日分类设备能耗趋势</span></div>
+      <div><span>当日分类设备能耗趋势(千瓦时)</span></div>
       <div id="equipment" style="width:100%;height:400px;" />
     </div>
   </div>
@@ -142,6 +142,7 @@ export default {
         var publicArr = [] // 公共用电
         var airArr = [] // 空调用电
         var floorArr = [] // 楼层用电
+        var enterpriseArr = []// 企业用电
         data.data.forEach(val => {
           xArr.push(val.dealDateValue)
           if (val.type === '1') {
@@ -150,6 +151,8 @@ export default {
             airArr.push(val.bValue)
           } else if (val.type === '3') {
             floorArr.push(val.bValue)
+          } else if (val.type === '0') {
+            enterpriseArr.push(val.bValue)
           }
         })
         xArr = Array.from(new Set(xArr))
@@ -169,7 +172,7 @@ export default {
             trigger: 'axis'
           },
           legend: {
-            data: ['公共照明', '空调用电', '楼层用电']
+            data: ['企业用电', '公共照明', '空调用电', '楼层用电']
           },
           // grid: {
           //   left: '3%',
@@ -189,6 +192,21 @@ export default {
           },
           series: [
             {
+              name: '企业用电',
+              type: 'line',
+              itemStyle: {
+                normal: {
+                  color: 'rgb(255, 155, 121)', // 这点颜色
+                  lineStyle: {
+                    color: 'rgb(255, 155, 121)' // 折线颜色
+                  }
+                }
+              },
+              // stack: '总量',
+              data: enterpriseArr
+              // data: [120, 132, 101, 134, 90, 230, 210]
+            },
+            {
               name: '公共照明',
               type: 'line',
               itemStyle: {
@@ -200,22 +218,22 @@ export default {
                 }
               },
               // stack: '总量',
-              // data: publicArr
-              data: [120, 132, 101, 134, 90, 230, 210]
+              data: publicArr
+              // data: [120, 132, 101, 134, 90, 230, 210]
             },
             {
               name: '空调用电',
               type: 'line',
               // stack: '总量',
-              // data: airArr
-              data: [220, 182, 191, 234, 290, 330, 310]
+              data: airArr
+              // data: [220, 182, 191, 234, 290, 330, 310]
             },
             {
               name: '楼层用电',
               type: 'line',
               // stack: '总量',
-              // data: floorArr
-              data: [320, 332, 301, 334, 390, 330, 320]
+              data: floorArr
+              // data: [320, 332, 301, 334, 390, 330, 320]
             }
           ]
         }

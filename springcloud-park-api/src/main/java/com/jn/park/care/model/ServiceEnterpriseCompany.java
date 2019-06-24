@@ -202,6 +202,18 @@ public class ServiceEnterpriseCompany implements Serializable {
     private String[] propagandaPicture;
 
 
+    @ApiModelProperty(value = "关注状态 0:未关注,1:已关注")
+    private String attentionStatus;
+
+
+    public String getAttentionStatus() {
+        return attentionStatus;
+    }
+
+    public void setAttentionStatus(String attentionStatus) {
+        this.attentionStatus = attentionStatus;
+    }
+
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
@@ -758,6 +770,7 @@ public class ServiceEnterpriseCompany implements Serializable {
                 ", creatorAccount='" + creatorAccount + '\'' +
                 ", createdTime='" + createdTime + '\'' +
                 ", propagandaPicture=" + Arrays.toString(propagandaPicture) +
+                ", attentionStatus='" + attentionStatus + '\'' +
                 '}';
     }
 }

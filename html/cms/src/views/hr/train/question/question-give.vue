@@ -2,7 +2,7 @@
   <div class="invest-give">
     <el-card>
       <!-- 标题 -->
-      <el-tabs v-model="activeName">
+      <el-tabs v-model="activeName" @tab-click="tabsCLick">
         <el-tab-pane label="编辑问卷" name="first"/>
         <el-tab-pane label="发放问卷" name="second"/>
         <el-tab-pane label="问卷结果" name="third"/>
@@ -196,7 +196,7 @@ export default {
     return {
       activeName: 'second',
       // 二维码
-      appSrc: 'http://localhost:9527/#/hr/train/question/question-page',
+      appSrc: window.location.host + '/#/hr/train/question/question-page',
       // 提交数据
       formData: {
         effectiveTimeEnd: '',
@@ -215,7 +215,7 @@ export default {
         researchProject: this.$route.query.researchProject,
         surveyDimensional: 'static/QrCode/qr.jpg',
         surveyUrl:
-          'http://localhost:9527/#/hr/train/question/question-page?projectId=' +
+          window.location.host + '/#/hr/train/question/question-page?projectId=' +
           this.$route.query.id
       }
     }
@@ -281,6 +281,12 @@ export default {
     },
     // 保存
     save() {
+      if (this.formData.researchMethod === 1) {
+        // 匿名时
+        this.formData.isShowJobNumber = 2
+        this.formData.isShowName = 2
+        this.formData.isShowPhone = 2
+      }
       api('hr/train/quest/sendInvestiageQuest', this.formData).then(res => {
         if (res.data.code === '0000') {
           this.$message.success('保存成功！')
@@ -305,6 +311,17 @@ export default {
     },
     isActive(route) {
       return route.path === this.$route.path
+    },
+    tabsCLick(item) {
+      if (this.activeName === 'first') {
+        this.$router.push({ path: 'question-edit', query: { id: this.$route.query.id }})
+      }
+      if (this.activeName === 'second') {
+        this.$router.push({ path: 'question-give', query: { id: this.$route.query.id }})
+      }
+      if (this.activeName === 'third') {
+        this.$router.push({ path: 'question-result', query: { id: this.$route.query.id }})
+      }
     }
   }
 }

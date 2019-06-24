@@ -764,6 +764,76 @@ public class TbElectricEnergyControlPushLogCriteria {
             addCriterion("modified_time not between", value1, value2, "modifiedTime");
             return (Criteria) this;
         }
+
+        public Criteria andAcceptPhoneIsNull() {
+            addCriterion("accept_phone is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcceptPhoneIsNotNull() {
+            addCriterion("accept_phone is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcceptPhoneEqualTo(String value) {
+            addCriterion("accept_phone =", value, "acceptPhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcceptPhoneNotEqualTo(String value) {
+            addCriterion("accept_phone <>", value, "acceptPhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcceptPhoneGreaterThan(String value) {
+            addCriterion("accept_phone >", value, "acceptPhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcceptPhoneGreaterThanOrEqualTo(String value) {
+            addCriterion("accept_phone >=", value, "acceptPhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcceptPhoneLessThan(String value) {
+            addCriterion("accept_phone <", value, "acceptPhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcceptPhoneLessThanOrEqualTo(String value) {
+            addCriterion("accept_phone <=", value, "acceptPhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcceptPhoneLike(String value) {
+            addCriterion("accept_phone like", value, "acceptPhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcceptPhoneNotLike(String value) {
+            addCriterion("accept_phone not like", value, "acceptPhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcceptPhoneIn(List<String> values) {
+            addCriterion("accept_phone in", values, "acceptPhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcceptPhoneNotIn(List<String> values) {
+            addCriterion("accept_phone not in", values, "acceptPhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcceptPhoneBetween(String value1, String value2) {
+            addCriterion("accept_phone between", value1, value2, "acceptPhone");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcceptPhoneNotBetween(String value1, String value2) {
+            addCriterion("accept_phone not between", value1, value2, "acceptPhone");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

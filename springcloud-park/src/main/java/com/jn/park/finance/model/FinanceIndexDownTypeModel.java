@@ -37,4 +37,12 @@ public class FinanceIndexDownTypeModel implements Serializable {
     public void setFinanceName(String financeName) {
         this.financeName = financeName;
     }
+
+    @Override
+    public String toString() {
+        return "FinanceIndexDownTypeModel{" +
+                "financeId=" + financeId +
+                ", financeName='" + financeName + '\'' +
+                '}';
+    }
 }

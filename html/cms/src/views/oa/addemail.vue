@@ -3,10 +3,10 @@
     <div class="header">{{ title }}</div>
     <el-form ref="emailForm" :model="emailForm" :rules="rules">
       <div style="display:flex">
-        <el-form-item id="setheight" label="编号" class="inline ">
+        <!-- <el-form-item id="setheight" label="编号" class="inline ">
           <span>{{ emailForm.workOrderNum }}</span>
-        </el-form-item>
-        <el-form-item label="邮件标题" prop="title" class="inline">
+        </el-form-item> -->
+        <el-form-item label="邮件标题" prop="title" class="inline emailTitle">
           <el-input :disabled="title==='一键Email详情'" v-model="emailForm.title" clearable placeholder="请输入邮件标题" maxlength="20" />
         </el-form-item>
       </div>
@@ -182,7 +182,7 @@ export default {
       userNames: [],
       userNamesOptions: [],
       emailForm: {
-        workOrderNum: '',
+        // workOrderNum: '',
         title: '',
         isDelay: '1',
         emailContent: '',
@@ -449,12 +449,14 @@ export default {
             // var data = res.data.data
             console.log(res)
             this.emailForm.title = res.data.data.title
-            this.emailForm.workOrderNum = res.data.data.workOrderNum
+            // this.emailForm.workOrderNum = res.data.data.workOrderNum
             this.emailForm.delaySendTime = res.data.data.delaySendTime
             this.emailForm.isDelay = res.data.data.isDelay
             this.emailForm.sendStatus = res.data.data.sendStatus
-            this.userNames = res.data.data.receiverList
-            this.userData = this.userNames
+            if (res.data.data.receiverList) {
+              this.userNames = res.data.data.receiverList
+              this.userData = this.userNames
+            }
             this.sendTime = res.data.data.sendTime
             this.emailForm.attachment = res.data.data.attachment
             if (res.data.data.attachment) {
@@ -472,8 +474,6 @@ export default {
             this.$message.error(res.data.result)
           }
         })
-      } else {
-        this.emailForm.workOrderNum = query.workOrderNum
       }
     }
   }
@@ -513,6 +513,11 @@ export default {
   }
   .el-input--medium {
     width: 300px;
+  }
+  .emailTitle{
+    .el-input--medium {
+    width: 480px;
+  }
   }
   .el-form-item__content {
     flex: 1;

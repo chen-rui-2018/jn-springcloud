@@ -36,4 +36,12 @@ public class FinanceIndexVo implements Serializable {
     public void setState(String state) {
         this.state = state;
     }
+
+    @Override
+    public String toString() {
+        return "FinanceIndexVo{" +
+                "ratio='" + ratio + '\'' +
+                ", state='" + state + '\'' +
+                '}';
+    }
 }

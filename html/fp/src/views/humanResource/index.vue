@@ -113,20 +113,20 @@
               </div>
             </div>
 
-            <div class="orgBtn fr mainColor" @click="getRecruitDetails(i.id),detailFlag=i.id">
+            <div class="orgBtn fr mainColor" @click.stop="getRecruitDetails(i.id),detailFlag=i.id">
               了解详情
             </div>
-            <div class="orgBtn orgBtn1 fr mainColor">
+            <div class="orgBtn orgBtn1 fr mainColor" @click="onlineContat(i.comId)">
               在线联系
             </div>
             <!-- 详情弹框 -->
             <div class="detailRes" v-if="detailFlag==i.id">
-              <el-card>
-                <div class="detail">招聘详情</div>
-                <p class="p1">企业名称：{{humanDetail.comName}}</p>
-                <p class="p1">发布时间：{{humanDetail.createdTime}}</p>
-                <p class="p1">岗位详情：{{humanDetail.details}}</p>
-              </el-card>
+              <!-- <el-card> -->
+              <div class="detail">招聘详情</div>
+              <p class="p1">企业名称：{{humanDetail.comName}}</p>
+              <p class="p1">发布时间：{{humanDetail.createdTime}}</p>
+              <p  v-html="humanDetail.details">岗位详情：</p>
+              <!-- </el-card> -->
             </div>
           </li>
         </ul>
@@ -145,6 +145,17 @@
          <p class="p1">{{humanDetail.details}}</p>
       </el-dialog>
     </template> -->
+    <template v-if="concatVisible">
+      <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :append-to-body="true" :lock-scroll="false">
+        <div class="loginTip" style="text-align:center;padding-bottom:20px">
+          你还未
+          <span class="mainColor pointer" @click="goLogin">登录</span>
+          /
+          <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+          账号
+        </div>
+      </el-dialog>
+    </template>
   </div>
 </template>
 <script>
@@ -153,6 +164,7 @@ import bus from "@/util/bus";
 export default {
   data() {
     return {
+      concatVisible: false,
       detailFlag: "",
       sousuo: false,
       searchData: "",
@@ -189,6 +201,44 @@ export default {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
   },
   methods: {
+    goLogin() {
+      window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
+      this.$router.push({ path: "/login" });
+    },
+    //在线联系
+    onlineContat(id) {
+      if (!this.getUserInfo()) {
+        this.concatVisible = true;
+        return;
+      }
+      this.api.get({
+        url: "getCompanyContactAccount",
+        data: {
+          comId: id
+        },
+        callback: res => {
+          if (res.code == "0000") {
+            // this.typeList = res.data;
+            if (
+              JSON.parse(this.getUserInfo()).account == res.data.account
+            ) {
+              this.$message.error("当前登录的账号跟聊天对象一样");
+              return;
+            }
+            this.$router.push({
+              path: "/chat",
+              query: {
+                fromUser: JSON.parse(this.getUserInfo()).account,
+                toUser: res.data.account,
+                nickName: res.data.nickName
+              }
+            });
+          } else {
+            this.$message.error(res.result);
+          }
+        }
+      });
+    },
     handleFil(v) {
       this.type = v;
       this.actiFilflag = v;
@@ -255,7 +305,8 @@ export default {
           searchFiled: _this.searchFiled,
           type: _this.type,
           sortTypes: _this.sortTypes,
-          comId:_this.$route.query.comId
+          comId: _this.$route.query.comId,
+          whereTypes: _this.whereTypes
         },
         callback: function(res) {
           if (res.code == "0000") {
@@ -269,7 +320,6 @@ export default {
     },
     //企业招聘详情
     getRecruitDetails(id) {
-      this.humanDelVisible = true;
       let _this = this;
       this.api.get({
         url: "getRecruitDetails",
@@ -301,12 +351,57 @@ export default {
           }
         }
       });
+    },
+    //获取招聘类型
+    getCompanyContactAccount() {
+      let _this = this;
+      this.api.get({
+        url: "getCompanyContactAccount",
+        data: {
+          comId: "recruitType"
+        },
+        callback: function(res) {
+          if (res.code == "0000") {
+            _this.typeList = res.data;
+          } else {
+            _this.$message.error(res.result);
+          }
+        }
+      });
     }
   }
 };
 </script>
 <style lang="scss">
 .humanSource {
+  .loginTip {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 15px;
+  }
+  input::-webkit-input-placeholder {
+    /* WebKit browsers*/
+    color: #999;
+    font-size: 13px;
+  }
+
+  input:-moz-placeholder {
+    /* Mozilla Firefox 4 to 18*/
+    color: #999;
+    font-size: 13px;
+  }
+
+  input::-moz-placeholder {
+    /* Mozilla Firefox 19+*/
+    color: #999;
+    font-size: 13px;
+  }
+
+  input:-ms-input-placeholder {
+    /* Internet Explorer 10+*/
+    color: #999;
+    font-size: 13px;
+  }
   #lastLi {
     float: right;
     margin-top: -26px;
@@ -737,18 +832,22 @@ export default {
     width: 400px;
     position: absolute;
     right: 95px;
-    top: 66px;
+    top: -80px;
+    z-index: 3;
     text-align: left;
+    padding: 20px 30px;
+    background: #fff;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.5);
     .detail {
       margin-bottom: 10px;
       color: #333;
     }
-    p {
+    .p1 {
       font-size: 13px;
     }
-    .el-card__body {
-      padding: 20px 30px;
-    }
+    // .el-card__body {
+    // padding: 20px 30px;
+    // }
   }
 }
 </style>

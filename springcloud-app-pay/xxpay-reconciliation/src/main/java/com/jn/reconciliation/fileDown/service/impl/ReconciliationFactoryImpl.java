@@ -3,19 +3,24 @@ package com.jn.reconciliation.fileDown.service.impl;
 import com.jn.reconciliation.fileDown.service.FileDown;
 import com.jn.reconciliation.fileDown.service.ReconciliationFactory;
 import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
+import org.springframework.stereotype.Service;
+import org.xxpay.dal.dao.entity.reconciliation.TbPayReconciliationInterface;
 
 import java.io.File;
 import java.util.Date;
 
+
 /**
- * @ClassName：
+ * @ClassName：账单工厂
  * @Descript：
  * @Author： hey
- * @Date： Created on 2019/5/22 11:36
+ * @Date： Created on 2019/5/20 15:54
  * @Version： v1.0
  * @Modified By:
  */
-public class ReconciliationFactoryImpl implements ReconciliationFactory {
+@Service
+public class ReconciliationFactoryImpl implements ReconciliationFactory , BeanFactoryAware {
     private BeanFactory beanFactory;
 
     /**
@@ -27,7 +32,7 @@ public class ReconciliationFactoryImpl implements ReconciliationFactory {
     public Object getService(String payInterface) {
         return beanFactory.getBean(payInterface);
     }
-
+    @Override
     public void setBeanFactory(BeanFactory beanFactory) {
         this.beanFactory = beanFactory;
     }
@@ -35,16 +40,16 @@ public class ReconciliationFactoryImpl implements ReconciliationFactory {
     /**
      * 账单下载
      *
-     * @param payInterface
-     *            支付渠道
+     * @param reconciliationInter
+     *            支付接口信息
      *
      * @param billDate
      *            账单日
      */
     @Override
-    public File fileDown(String payInterface, Date billDate) throws Exception {
+    public File fileDown(TbPayReconciliationInterface reconciliationInter, Date billDate) throws Exception {
         // 找到具体的FileDown实现，做向上转型
-        FileDown fileDown = (FileDown) this.getService(payInterface);
-        return fileDown.fileDown(billDate);
+        FileDown fileDown = (FileDown) this.getService(reconciliationInter.getInterfaceCode() + "FileDown");
+        return fileDown.fileDown(reconciliationInter,billDate);
     }
 }

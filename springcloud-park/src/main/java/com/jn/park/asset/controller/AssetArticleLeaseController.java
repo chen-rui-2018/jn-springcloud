@@ -17,6 +17,7 @@ import com.jn.system.model.User;
 import io.swagger.annotations.*;
 import org.apache.ibatis.annotations.Param;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -45,6 +46,7 @@ public class AssetArticleLeaseController {
     @ControllerLog(doAction = "物品租赁列表")
     @ApiOperation(value = "物品租赁列表",notes = "返回可租赁的资产列表(可搜索)")
     @GetMapping(value = "/articleLeaseList")
+    @RequiresPermissions("/asset/lease/articleLeaseList")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "name",value = "搜索关键字",example = "空调")
     })
@@ -62,18 +64,22 @@ public class AssetArticleLeaseController {
     @ControllerLog(doAction = "获取物品租赁详细信息")
     @ApiOperation(value = "获取物品租赁详细信息",notes = "根据资产编号获取物品详细信息")
     @GetMapping(value = "/getArticleLease")
+    @RequiresPermissions("/asset/lease/getArticleLease")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "assetNumber",value = "资产编号",example = "577555965931421696")
     })
     public Result<AssetArticleLeaseModel> getArticleLease (String assetNumber){
         Assert.notNull(assetNumber,"资产编号不能为空");
-        AssetArticleLeaseModel assetArticleLeaseModel = assetArticleLeaseService.getArticleLease(assetNumber);
+        //获取登录信息
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        AssetArticleLeaseModel assetArticleLeaseModel = assetArticleLeaseService.getArticleLease(assetNumber,user.getAccount());
         return new Result<>(assetArticleLeaseModel);
     }
 
     @ControllerLog(doAction = "租借资料填写")
     @ApiOperation(value = "租借资料填写",notes = "租借企业资料填写")
     @PostMapping(value = "/leaseWriter")
+    @RequiresPermissions("/asset/lease/leaseWriter")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "assetNumber",value = "资产编号",example = "577555965931421696",required = true),
             @ApiImplicitParam(name = "leaseEnterprise",value = "租借企业",example = "美的",required = true),
@@ -96,6 +102,7 @@ public class AssetArticleLeaseController {
     @ControllerLog(doAction = "支付订单")
     @ApiOperation(value = "支付订单",notes = "支付订单")
     @GetMapping(value = "/getPayOrders")
+    @RequiresPermissions("/asset/lease/getPayOrders")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id",value = "订单编号",example = "2019050417220960019")
     })
@@ -109,6 +116,7 @@ public class AssetArticleLeaseController {
     @ControllerLog(doAction = "物品租赁历史列表")
     @ApiOperation(value = "物品租赁历史列表",notes = "获取物品租赁历史列表")
     @GetMapping(value = "/LeaseOrdersList")
+    @RequiresPermissions("/asset/lease/LeaseOrdersList")
     public Result<PaginationData<List<AssetArticleLeaseOrdersModel>>> getArticleLeaseOrdersList(Page page){
         //获取登录信息
         User user=(User) SecurityUtils.getSubject().getPrincipal();
@@ -124,6 +132,7 @@ public class AssetArticleLeaseController {
     @ControllerLog(doAction = "物品租借详情")
     @ApiOperation(value = "物品租借详情",notes = "根据订单编号获取租借详情")
     @GetMapping(value = "/getLeaseOrders")
+    @RequiresPermissions("/asset/lease/getLeaseOrders")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id",value = "订单编号",example = "2019050417220960019")
     })
@@ -136,6 +145,7 @@ public class AssetArticleLeaseController {
     @ControllerLog(doAction = "归还")
     @ApiOperation(value = "归还",notes = "归还")
     @GetMapping(value = "/giveBack")
+    @RequiresPermissions("/asset/lease/giveBack")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id",value = "订单编号",example = "2019050417220960019"),
     })
@@ -144,37 +154,5 @@ public class AssetArticleLeaseController {
         return new Result<>(assetArticleLeaseOrdersModel);
     }
 
-    @ControllerLog(doAction = "确认归还")
-    @ApiOperation(value = "确认归还",notes = "确认归还")
-    @GetMapping(value = "/returnArticle")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id",value = "订单编号",example = "2019050417220960019"),
-    })
-    public Result returnArticle(String id){
-        assetArticleLeaseOrdersService.returnArticle(id);
-        return new Result();
-    }
-
-    @ControllerLog(doAction = "确认交付")
-    @ApiOperation(value = "确认交付",notes = "确认交付")
-    @GetMapping(value = "/deliveryArticle")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id",value = "订单编号",example = "2019050417220960019"),
-    })
-    public Result deliveryArticle(String id){
-        assetArticleLeaseOrdersService.deliveryArticle(id);
-        return new Result();
-    }
-
-    @ControllerLog(doAction = "取消订单")
-    @ApiOperation(value = "取消订单",notes = "取消订单")
-    @GetMapping(value = "/cancelOrder")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "orderId",value = "订单编号",example = "2019050811515490657"),
-    })
-    public Result cancelOrder(String orderId){
-        assetArticleLeaseOrdersService.cancelOrder(orderId);
-        return new Result();
-    }
 
 }

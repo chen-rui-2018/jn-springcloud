@@ -3,8 +3,8 @@
     <!-- 标题 -->
     <el-tabs v-model="activeName">
       <el-tab-pane label="编辑问卷" name="first"/>
-      <el-tab-pane label="发放问卷" name="second"/>
-      <el-tab-pane label="问卷结果" name="third"/>
+      <el-tab-pane :disabled="true" label="发放问卷" name="second"/>
+      <el-tab-pane :disabled="true" label="问卷结果" name="third"/>
     </el-tabs>
     <!-- 试题名称 -->
     <ExamTitle ref="examTitle" :is-add="true"/>

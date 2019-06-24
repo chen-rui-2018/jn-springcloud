@@ -20,14 +20,6 @@ import java.util.List;
 public interface ElectricMeterClient {
     /**
      * 获取电表平台token
-     * @param electricAccessTokenParam 实体类参数
-     * @return
-     */
-    @RequestMapping(value = "/api/hardware/electric/getElectricMeterAccessToken")
-    Result getElectricMeterAccessToken(@RequestBody ElectricAccessTokenParam electricAccessTokenParam);
-    /**
-     * 定时刷新获取电表平台token
-     *
      * @return
      */
     @RequestMapping(value = "/api/hardware/electric/getElectricAccessToken")
@@ -52,7 +44,7 @@ public interface ElectricMeterClient {
      * @return
      */
     @RequestMapping(value = "/api/hardware/electric/getElectricMeterStatus")
-    Result<ElectricMeterStatusShow> getElectricMeterStatus(@ApiParam(name = "code",value = "仪表编号",example = "10086",required = true) String code);
+    Result<ElectricMeterStatusShow> getElectricMeterStatus(@RequestBody String code);
     /**
      *仪表的开关操作
      * @param electricMeterSwitchParam

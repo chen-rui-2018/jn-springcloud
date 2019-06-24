@@ -112,4 +112,20 @@ public class FinanceRecordsFindAllVo implements Serializable {
     public void setLeadrEarlyWarning(String leadrEarlyWarning) {
         this.leadrEarlyWarning = leadrEarlyWarning;
     }
+
+
+    @Override
+    public String toString() {
+        return "FinanceRecordsFindAllVo{" +
+                "name='" + name + '\'' +
+                ", flowType='" + flowType + '\'' +
+                ", creatorAccount='" + creatorAccount + '\'' +
+                ", departmentName='" + departmentName + '\'' +
+                ", deadline='" + deadline + '\'' +
+                ", createState='" + createState + '\'' +
+                ", financerSure='" + financerSure + '\'' +
+                ", earlyWarning='" + earlyWarning + '\'' +
+                ", leadrEarlyWarning='" + leadrEarlyWarning + '\'' +
+                '}';
+    }
 }

@@ -160,4 +160,24 @@ public class PolicyInfoEditParam implements Serializable {
     public void setPolicyContent(String policyContent) {
         this.policyContent = policyContent;
     }
+
+    @Override
+    public String toString() {
+        return "PolicyInfoEditParam{" +
+                "policyId='" + policyId + '\'' +
+                ", policyTitle='" + policyTitle + '\'' +
+                ", policyLevelCode='" + policyLevelCode + '\'' +
+                ", policyLevelName='" + policyLevelName + '\'' +
+                ", policyClassCode='" + policyClassCode + '\'' +
+                ", policyClassName='" + policyClassName + '\'' +
+                ", thematicType='" + thematicType + '\'' +
+                ", supportMethod='" + supportMethod + '\'' +
+                ", supportIndustry='" + supportIndustry + '\'' +
+                ", issueUnit='" + issueUnit + '\'' +
+                ", status='" + status + '\'' +
+                ", isPolicyDiagram='" + isPolicyDiagram + '\'' +
+                ", relationPolicyDiagramId='" + relationPolicyDiagramId + '\'' +
+                ", policyContent='" + policyContent + '\'' +
+                '}';
+    }
 }

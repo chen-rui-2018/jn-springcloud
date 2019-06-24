@@ -68,20 +68,28 @@ public class PayChannel4WxController{
      */
     @RequestMapping(value = "/pay/channel/wx")
     public String doWxPayReq(@RequestParam String jsonParam) {
+        String logPrefix = "【微信支付统一下单】";
+        _log.info("###### 开始接收" + logPrefix + "请求  ######");
+        _log.info("创建订单请求参数  jsonParam(加密) = {}", jsonParam);
         try{
-            JSONObject paramObj = JSON.parseObject(new String(MyBase64.decode(jsonParam)));
+            //解密请求参数
+            jsonParam = new String(MyBase64.decode(jsonParam));
+            _log.info(" 请求参数解密后   jsonParam(解密后) = {}", jsonParam);
+            JSONObject paramObj = JSON.parseObject(jsonParam);
             PayOrder payOrder = paramObj.getObject("payOrder", PayOrder.class);
             String tradeType = paramObj.getString("tradeType");
-            String logPrefix = "【微信支付统一下单】";
             String mchId = payOrder.getMchId();
             String channelId = payOrder.getChannelId();
             MchInfo mchInfo = mchInfoService.selectMchInfo(mchId);
-            String resKey = mchInfo == null ? "" : mchInfo.getResKey();
-            if("".equals(resKey)) {
-                return XXPayUtil.makeRetFail(XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_FAIL, "", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0001));
+            String resKey = mchInfo.getResKey();
+            if(StringUtils.isBlank(resKey)) {
+                _log.info(" 运营平台的商户响应密钥为空！ 商户ID ： {}",mchId);
+                _log.info("###### 结束" + logPrefix + "请求  ######");
+                return XXPayUtil.makeRetFail(XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_FAIL, "商户的响应密钥为空！", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0001));
             }
             //获取支付渠道信息
             PayChannel payChannel = payChannelService.selectPayChannel(channelId, mchId);
+            _log.info(" 根据channelId(支付渠道ID) = {}，mchId(商户ID) = {}   获取支付渠道信息： {}",channelId,mchId,payChannel.toString());
             //获取微信支付配置
             WxPayConfig wxPayConfig = WxPayUtil.getWxPayConfig(payChannel.getParam(), tradeType, wxPayProperties.getCertRootPath(), wxPayProperties.getNotifyUrl());
             //封装参数并且请求微信支付
@@ -92,7 +100,7 @@ public class PayChannel4WxController{
             WxPayUnifiedOrderResult wxPayUnifiedOrderResult;
             try {
                 wxPayUnifiedOrderResult = wxPayService.unifiedOrder(wxPayUnifiedOrderRequest);
-                _log.info("{} >>> 下单成功", logPrefix);
+                _log.info("{} >>> 下单成功   ", logPrefix);
 
                 //更新订单状态
                 int result = payOrderService.updateStatus4Ing(payOrderId, wxPayUnifiedOrderResult.getPrepayId());
@@ -138,17 +146,25 @@ public class PayChannel4WxController{
                         break;
                     }
                     case PayConstant.WxConstant.TRADE_TYPE_JSPAI : {
-                        Map<String, String> payInfo = new HashMap<>();
+                        Map<String, String> payInfoMap = new HashMap<>();
                         String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
                         String nonceStr = String.valueOf(System.currentTimeMillis());
+                        //=================此map用来签名=================================
+                        payInfoMap.put("appId", wxPayUnifiedOrderResult.getAppid());
+                        payInfoMap.put("timeStamp", timestamp);
+                        payInfoMap.put("nonceStr", nonceStr);
+                        payInfoMap.put("package", "prepay_id=" + wxPayUnifiedOrderResult.getPrepayId());
+                        payInfoMap.put("signType", WxPayConstants.SignType.MD5);
 
+                        //=========此JSON用来返回前台参数================
                         orderInfo.put("appId", wxPayUnifiedOrderResult.getAppid());
                         // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
                         orderInfo.put("timeStamp", timestamp);
                         orderInfo.put("nonceStr", nonceStr);
                         orderInfo.put("packageValue", "prepay_id=" + wxPayUnifiedOrderResult.getPrepayId());
                         orderInfo.put("signType", WxPayConstants.SignType.MD5);
-                        orderInfo.put("paySign", SignUtils.createSign(payInfo, wxPayConfig.getMchKey(), null));
+                        //生成签名
+                        orderInfo.put("paySign", SignUtils.createSign(payInfoMap, wxPayConfig.getMchKey(), null));
                         break;
                     }
                     case PayConstant.WxConstant.TRADE_TYPE_MWEB : {
@@ -159,18 +175,21 @@ public class PayChannel4WxController{
                 }
 
                 map.put("orderInfo",orderInfo.toJSONString());
+                _log.info("###### " + logPrefix + "处理完成  ######");
                 return XXPayUtil.makeRetData(map, resKey);
             } catch (WxPayException e) {
-                _log.error(e, "下单失败");
+                _log.error(e, logPrefix + "下单失败");
                 //出现业务错误
                 _log.info("{}下单返回失败", logPrefix);
-                _log.info("err_code:{}", e.getErrCode());
-                _log.info("err_code_des:{}", e.getErrCodeDes());
+                _log.info("微信错误码  err_code:{}", e.getErrCode());
+                _log.info("微信错误描述 err_code_des:{}", e.getErrCodeDes());
+                _log.info("###### 结束" + logPrefix + "请求  ######");
                 return XXPayUtil.makeRetData(XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_SUCCESS, "", PayConstant.RETURN_VALUE_FAIL, "0111", "调用微信支付失败," + e.getErrCode() + ":" + e.getErrCodeDes()), resKey);
             }
         }catch (Exception e) {
             _log.error(e, "微信支付统一下单异常");
-            return XXPayUtil.makeRetFail(XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_FAIL, "", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0001));
+            _log.info("###### 结束" + logPrefix + "请求  ######");
+            return XXPayUtil.makeRetFail(XXPayUtil.makeRetMap(PayConstant.RETURN_VALUE_FAIL, "微信支付统一下单异常", PayConstant.RETURN_VALUE_FAIL, PayEnum.ERR_0010));
         }
     }
 

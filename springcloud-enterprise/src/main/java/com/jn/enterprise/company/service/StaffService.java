@@ -54,6 +54,13 @@ public interface StaffService {
     Integer reviewStaff(ReviewStaffParam reviewStaffParam, String curAccount);
 
     /**
+     * 离开企业
+     * @param curAccount 账号
+     * @return
+     */
+    Integer leaveCompany(String curAccount);
+
+    /**
      * 接受邀请
      * @param acceptInviteParam 入参
      * @return
@@ -88,5 +95,12 @@ public interface StaffService {
      * @return
      */
     Integer setOrCancelContact(String account, String curAccount, boolean isSet);
+
+    /**
+     * 判断账号是否有权限升级企业员工
+     * @param account
+     * @return
+     */
+    boolean checkUserIsCompanyStaff(String account);
 
 }

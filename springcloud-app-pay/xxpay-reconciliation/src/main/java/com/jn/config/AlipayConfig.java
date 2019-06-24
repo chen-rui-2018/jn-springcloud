@@ -1,11 +1,13 @@
 package com.jn.config;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 /**
- * TODO：未添加类描述
  *
  * @Author： hey
  * @Date： Created on 2019/05/23 11:08
@@ -19,45 +21,60 @@ import org.springframework.stereotype.Component;
 public class AlipayConfig {
 
     /**
-     * 合作身份者ID，签约账号
+     * 支付网关
      */
-    private String partner;
-
-    /**
-     * 支付宝提供给商户的服务接入网关URL(新)
-     */
-    private  String url;
-
+    private String url;
     /**
      * 文件存放路径
      */
-    private  String dir;
-
-    /**
-     * MD5密钥，安全检验码，由数字和字母组成的32位字符串，查看地址：https://b.alipay.com/order/pidAndKey.htm
-    * */
-    private  String key;
-
+    private String dir;
     /**
      * 加密方式
      * */
-    private  String signType;
-    /**
-     *  调试用，创建TXT日志文件夹路径，见AlipayCore.java类中的logResult(String sWord)打印方法。
-    * */
-    private  String logPath;
+    private String signType;
     /**
      * 字符编码格式
      * */
-    private  String charset ;
+    private String charset ;
+    /**
+     * 字符格式
+    * */
+    private String format;
+    /**
+     * 私钥 pkcs8格式的
+    * */
+    private String privateKey;
+    /**
+     * 支付宝公钥
+     * */
+    private String publicKey;
+    /**
+     * 应用ID
+     * */
+    private String appId;
+    /**
+     *  是否沙箱环境,1:沙箱,0:正式环境
+    * */
+    private Short isSandbox = 0;
 
-    public String getPartner() {
-        return partner;
+    /**
+     * 初始化支付宝配置
+     * @param configParam
+     * @return
+     */
+    public AlipayConfig init(String configParam) {
+        Assert.notNull(configParam, "init alipay config error");
+        JSONObject paramObj = JSON.parseObject(configParam);
+        this.setAppId(paramObj.getString("appid"));
+        this.setPrivateKey(paramObj.getString("private_key"));
+        this.setPublicKey(paramObj.getString("alipay_public_key"));
+        this.setIsSandbox(paramObj.getShortValue("isSandbox"));
+        if(this.getIsSandbox() == 1) {
+            this.setUrl("https://openapi.alipaydev.com/gateway.do");
+        }
+        return this;
     }
 
-    public void setPartner(String partner) {
-        this.partner = partner;
-    }
 
     public String getUrl() {
         return url;
@@ -75,14 +92,6 @@ public class AlipayConfig {
         this.dir = dir;
     }
 
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
     public String getSignType() {
         return signType;
     }
@@ -91,19 +100,51 @@ public class AlipayConfig {
         this.signType = signType;
     }
 
-    public String getLogPath() {
-        return logPath;
-    }
-
-    public void setLogPath(String logPath) {
-        this.logPath = logPath;
-    }
-
     public String getCharset() {
         return charset;
     }
 
     public void setCharset(String charset) {
         this.charset = charset;
+    }
+
+    public String getFormat() {
+        return format;
+    }
+
+    public void setFormat(String format) {
+        this.format = format;
+    }
+
+    public String getPrivateKey() {
+        return privateKey;
+    }
+
+    public void setPrivateKey(String privateKey) {
+        this.privateKey = privateKey;
+    }
+
+    public String getPublicKey() {
+        return publicKey;
+    }
+
+    public void setPublicKey(String publicKey) {
+        this.publicKey = publicKey;
+    }
+
+    public String getAppId() {
+        return appId;
+    }
+
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
+
+    public Short getIsSandbox() {
+        return isSandbox;
+    }
+
+    public void setIsSandbox(Short isSandbox) {
+        this.isSandbox = isSandbox;
     }
 }

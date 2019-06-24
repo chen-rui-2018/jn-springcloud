@@ -1,10 +1,10 @@
 <template>
     <div class="policyDetails">
         <div class="policyTitle">
-            <div class="anTitle">《{{getGuideDetal.policyTitle}}》</div>
+            <p class="anTitle">《{{getGuideDetal.policyTitle}}》</p>
             <div class="anTime">
                 <span>{{getGuideDetal.releaseDate}}</span>
-                <span>{{getGuideDetal.readNum}}浏览</span>
+                <span>{{getGuideDetal.readNum}}人浏览</span>
             </div>
             <div class="level">
                 <span>级别：{{getGuideDetal.policyLevelName}}</span>
@@ -13,7 +13,7 @@
                 <span>发文单位：{{getGuideDetal.issueUnit}}</span>
             </div>
         </div>
-        <div class="anContent">{{getGuideDetal.policyContent}}</div>
+        <div class="anContent" v-html="getGuideDetal.policyContent"></div>
     </div>
 </template>
 <script>
@@ -33,11 +33,13 @@ export default {
       this.api.get({
         url: 'getPolicyDetails',
         data: {
-          policyId: '4ad121d89a3241d5ba30731b3b91dfd2'
+          policyId: this.$route.query.policyId
         },
         callback: function (res) {
           if (res.code === '0000') {
             _this.getGuideDetal = res.data
+          } else {
+            _this.$vux.toast.text(res.result)
           }
         }
       })
@@ -47,7 +49,7 @@ export default {
 </script>
 <style lang="scss">
 .policyDetails {
-  padding-top: 130px;
+  // padding-top: 130px;
   background: #f5f5f5;
   .policyTitle,.anContent {
     // margin-top: 20px;
@@ -59,6 +61,7 @@ export default {
       font-size: 34px;
       padding:20px;
       font-weight: bold;
+      line-height: 50px;
   }
   .anTime{
       display: flex;
@@ -73,18 +76,19 @@ export default {
       padding:20px;
       font-size: 24px;
       color:#666;
+      font-weight: bold;
       >span{
           margin-right:30px;
           display: inline-block;
-          line-height: 35px;
+          line-height: 40px;
       }
   }
   .anContent{
       margin-top:20px;
       padding:20px;
-      color:#333;
-      font-size: 26px;
-      line-height: 40px;
+      // max-width:100%
+      // width: 100%;
+      // overflow: hidden;
   }
 }
 </style>

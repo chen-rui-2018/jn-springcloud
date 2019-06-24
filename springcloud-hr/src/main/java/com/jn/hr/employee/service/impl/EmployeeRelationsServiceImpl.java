@@ -81,7 +81,7 @@ public class EmployeeRelationsServiceImpl implements EmployeeRelationsService {
         if(tbManpowerEmployeeBasicInfo == null){
             throw new JnSpringCloudException(EmployeeRelationsExceptionEnum.EMPLOYEE_NOT_EXISTS);
         }
-        tbManpowerEmployeeBasicInfo.setEmployStatus(Byte.parseByte(EmployStatusEnum.JOB_3.getCode()));
+        tbManpowerEmployeeBasicInfo.setEmployStatus(Byte.parseByte(EmployStatusEnum.RETIRE.getCode()));
         logger.info("【员工关系-退休管理（更新员工状态为退休）】更新员工状态入參【{}】",JSONObject.toJSON(tbManpowerEmployeeBasicInfo));
         int i = tbManpowerEmployeeBasicInfoMapper.updateByPrimaryKeySelective(tbManpowerEmployeeBasicInfo);
         if(i == 0){
@@ -101,7 +101,7 @@ public class EmployeeRelationsServiceImpl implements EmployeeRelationsService {
         if(tbManpowerEmployeeBasicInfo == null){
             throw new JnSpringCloudException(EmployeeRelationsExceptionEnum.EMPLOYEE_NOT_EXISTS);
         }
-        tbManpowerEmployeeBasicInfo.setEmployStatus(Byte.parseByte(EmployStatusEnum.JOB_4.getCode()));
+        tbManpowerEmployeeBasicInfo.setEmployStatus(Byte.parseByte(EmployStatusEnum.LEAVE.getCode()));
         logger.info("【员工关系-离职管理（更新员工状态为离职）】更新员工状态入參【{}】",JSONObject.toJSON(tbManpowerEmployeeBasicInfo));
         int i = tbManpowerEmployeeBasicInfoMapper.updateByPrimaryKeySelective(tbManpowerEmployeeBasicInfo);
         if(i == 0){

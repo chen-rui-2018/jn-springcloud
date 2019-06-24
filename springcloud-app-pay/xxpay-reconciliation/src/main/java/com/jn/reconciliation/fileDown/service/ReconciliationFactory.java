@@ -15,25 +15,28 @@
  */
 package com.jn.reconciliation.fileDown.service;
 
+import org.xxpay.dal.dao.entity.reconciliation.TbPayReconciliationInterface;
+
 import java.io.File;
 import java.util.Date;
 
 /**
- * 该接口是用来对外开放的银行相关业务接口
- *
- * 龙果学院：www.roncoo.com
- * 
- * @author：shenjialong
+ * @ClassName：该接口是用来对外开放的银行相关业务接口
+ * @Descript：
+ * @Author： hey
+ * @Date： Created on 2019/5/20 15:54
+ * @Version： v1.0
+ * @Modified By:
  */
 public interface ReconciliationFactory {
 
 	/**
 	 * 对账文件下载
 	 * 
-	 * @param payInterface
+	 * @param reconciliationInter
 	 * @param billDate
 	 * @return
 	 */
-	File fileDown(String payInterface, Date billDate) throws Exception;
+	File fileDown(TbPayReconciliationInterface reconciliationInter, Date billDate) throws Exception;
 
 }

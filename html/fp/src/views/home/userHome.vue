@@ -15,14 +15,14 @@
                     </div>
                 </div>
             </div> -->
-      
+
       <div v-if="editFlag">
         <div class="mainColor setTit">个人资料</div>
         <div class="setphone">
           <div class="setdistance">
             <span class="textRight mg">头&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;像：</span>
             <img v-if="userData.avatar" :src="userData.avatar" class="imageItem" alt="">
-            <img v-else src="@/../static/img/头像.png" class="imageItem" alt="">
+            <img v-else src="@/../static/img/touxiang.png" class="imageItem" alt="">
           </div>
           <div class="setdistance">
             <span class="textRight mg">昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称：</span>
@@ -37,7 +37,8 @@
           <div class="setdistance">
             <span class="textRight mg">性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别：</span>
             <span v-if="userData.sex==1">男</span>
-            <span v-else>女</span>
+            <span v-else-if="userData.sex==0">女</span>
+            <span v-else>无</span>
           </div>
           <div class="setdistance">
             <span class="textRight mg">个性签名：</span>
@@ -49,14 +50,18 @@
             <template v-if="userData.hobbys!=null&&userData.hobbys.length>0">
               <span class="hobbySel" v-for="(i,k) in userData.hobbys" :key='k'>{{i}}</span>
             </template>
-            <template v-else><span>无</span></template>
+            <template v-else>
+              <span>无</span>
+            </template>
           </div>
           <div class="setdistance" style="margin-top:30px">
             <span class="textRight mg">职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;业：</span>
             <template v-if="userData.jobs!=null&&userData.hobbys.length>0">
-            <span class="hobbySel" v-if="userData.jobs.length>0" v-for="(i,k) in userData.jobs" :key='k'>{{i}}</span>
+              <span class="hobbySel" v-if="userData.jobs.length>0" v-for="(i,k) in userData.jobs" :key='k'>{{i}}</span>
             </template>
-            <template v-else><span>无</span></template>
+            <template v-else>
+              <span>无</span>
+            </template>
           </div>
           <el-button type="success" class="editBtn" @click="editClick">编&nbsp;&nbsp;辑</el-button>
         </div>
@@ -66,7 +71,7 @@
         <div class="setphone pr">
           <div class="setdistance uploadImgItem">
             <span class="textRight mg">选择文件：</span>
-            <el-upload class="avatar-uploader avatarImg" :show-file-list="false" action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload" :on-success="handleAvaSuccess" :headers="headers" :before-upload="beforeAvaUpload" style="display:inline-block">
+            <el-upload class="avatar-uploader avatarImg" :show-file-list="false" :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'" :on-success="handleAvaSuccess" :headers="headers" :before-upload="beforeAvaUpload" style="display:inline-block">
               <img v-if="avarUrl" :src="avarUrl" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
@@ -106,7 +111,7 @@
             <div>
               <ul class="selUl clearfix">
                 <li v-for="item in options" :key="item.tagId" @click="changeAH(item)">
-                  <i class="iconfont icon-web_xuanzhong" v-if="item.flag" ></i>
+                  <i class="iconfont icon-web_xuanzhong" v-if="item.flag"></i>
                   <i class="iconfont icon-weixuanzhongkuang" v-else></i>
                   <span>{{item.tagVaule}}</span>
                 </li>
@@ -149,11 +154,13 @@
   </el-container>
 </template>
 <script>
-import bus from '@/util/bus'
+import { getToken } from "@/util/auth";
+import bus from "@/util/bus";
 export default {
-  props:['userData'],
+  props: ["userData"],
   data() {
     return {
+      baseUrl: this.api.host,
       signature: "",
       oldPassword: "",
       newPassword: "",
@@ -168,55 +175,56 @@ export default {
       value5: [],
       value11: [],
       headers: {
-        token: sessionStorage.token
-      }
+        token: getToken()
+      },
+      userAccount: ""
     };
   },
   created() {
     this.getTagCodeList();
   },
   methods: {
-    editClick(){
-      this.editFlag=false;
+    editClick() {
+      this.editFlag = false;
       this.init();
     },
-    init(){
+    init() {
       this.nickName = this.userData.nickName;
+      this.avarUrl = this.userData.avatar;
       this.name = this.userData.name;
       // this.name = this.userData.name;
       this.sexFlag = this.userData.sex;
       this.signature = this.userData.signature;
       this.value11 = [];
       this.value5 = [];
-      for(let it in this.userData.hobbys){
-        for(let it1 in this.options){
-          if(this.userData.hobbys[it] == this.options[it1].tagVaule){
+      for (let it in this.userData.hobbys) {
+        for (let it1 in this.options) {
+          if (this.userData.hobbys[it] == this.options[it1].tagVaule) {
             this.options[it1].flag = true;
-            this.value11.push(this.options[it1].tagId)
+            this.value11.push(this.options[it1].tagId);
           }
         }
       }
-      for(let it in this.userData.jobs){
-        for(let it1 in this.options1){
-          if(this.userData.jobs[it] == this.options1[it1].tagVaule){
-            this.value5.push(this.options1[it1].tagId)
+      for (let it in this.userData.jobs) {
+        for (let it1 in this.options1) {
+          if (this.userData.jobs[it] == this.options1[it1].tagVaule) {
+            this.value5.push(this.options1[it1].tagId);
           }
         }
       }
-      
     },
     cancelEd() {
-      for(let it of this.options){
-        it.flag=false
-        }
-        this.editFlag = true,
-        this.avarUrl = "",
-        this.nickName = "",
-        this.name = "",
-        this.sexFlag = "",
-        this.value5 = [],
-        this.value11 = [],
-        this.signature = ""
+      for (let it of this.options) {
+        it.flag = false;
+      }
+      (this.editFlag = true),
+        (this.avarUrl = ""),
+        (this.nickName = ""),
+        (this.name = ""),
+        (this.sexFlag = ""),
+        (this.value5 = []),
+        (this.value11 = []),
+        (this.signature = "");
     },
     editSave() {
       if (!this.nickName) {
@@ -236,7 +244,7 @@ export default {
           company: "",
           hobbys: _this.value11,
           jobs: _this.value5,
-          name:_this.name,
+          name: _this.name,
           nickName: _this.nickName,
           sex: _this.sexFlag,
           signature: _this.signature
@@ -246,7 +254,8 @@ export default {
             _this.$message.success("保存成功");
             _this.editFlag = true;
             // _this.cancelEd();
-            bus.$emit('getUserinfoF')
+            bus.$emit("getUserinfoF");
+            bus.$emit("upUserData");
           } else {
             _this.$message.error(res.result);
           }
@@ -268,8 +277,8 @@ export default {
       }
       for (let it of e) {
         for (let it1 of this.options) {
-          if(it1.tagId == it){
-            it1.flag = true
+          if (it1.tagId == it) {
+            it1.flag = true;
           }
         }
       }
@@ -293,7 +302,7 @@ export default {
     submit() {
       let psw = /^(?!^\d+$)(?!^[A-Za-z]+$)(?!^[^A-Za-z0-9]+$)(?!^.*[\u4E00-\u9FA5].*$)^\S{8,16}$/;
       if (!psw.test(this.oldPassword)) {
-        this.$message.error("请先输入旧密码");
+        this.$message.error("旧密码校验错误");
         return;
       }
       if (!psw.test(this.newPassword)) {
@@ -306,11 +315,16 @@ export default {
         this.$message.error("两次输入的密码不一致");
         return;
       }
+      if (this.getUserInfo()) {
+        _this.userAccount = JSON.parse(this.getUserInfo()).account;
+      } else{
+        _this.userAccount=''
+      }
       let _this = this;
       this.api.post({
         url: "modifyUserPassword",
         data: {
-          account: _this.$route.query.account,
+          account: _this.userAccount,
           newPassword: _this.newPassword,
           // newPasswordB: _this.newPasswordB,
           oldPassword: _this.oldPassword
@@ -319,9 +333,9 @@ export default {
         callback: function(res) {
           if (res.code == "0000") {
             _this.$message.success("修改密码成功");
-            _this.oldPassword = "",
-              _this.newPassword = "",
-              _this.newPasswordB = ""
+            (_this.oldPassword = ""),
+              (_this.newPassword = ""),
+              (_this.newPasswordB = "");
           } else {
             _this.$message.error(res.result);
           }
@@ -337,11 +351,11 @@ export default {
         data: {},
         callback: function(res) {
           if (res.code == "0000") {
-            for(let it in res.data){
+            for (let it in res.data) {
               res.data[it].flag = false;
-              if(res.data[it].tagType == '0'){
+              if (res.data[it].tagType == "0") {
                 _this.options.push(res.data[it]);
-              }else{
+              } else {
                 _this.options1.push(res.data[it]);
               }
             }
@@ -447,7 +461,7 @@ export default {
     vertical-align: middle;
   }
   .avatarImg .avatar-uploader-icon {
-    border:2px dashed #eee;
+    border: 2px dashed #eee;
     font-size: 28px;
     color: #8c939d;
     width: 100px;
@@ -487,4 +501,3 @@ export default {
   }
 }
 </style>
-

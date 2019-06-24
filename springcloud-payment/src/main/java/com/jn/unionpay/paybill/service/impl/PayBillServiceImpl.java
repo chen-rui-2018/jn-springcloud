@@ -164,12 +164,6 @@ public class PayBillServiceImpl implements PayBillService {
             logger.error("创建缴费账单：参数时间转换错误。{}",e.getMessage(),e);
             throw new JnSpringCloudException(PayBillExceptionEnum.TIME_CONVERSION_ERROR);
         }
-        Result<ServiceCompany> companyDetailByAccount = companyClient.getCompanyDetailByAccountOrCompanyId(paymentBillModel.getBillObjId());
-        if(companyDetailByAccount.getData()!=null){
-            tbPaymentBill.setBillObjType(PayBillEnum.BILL_OBJ_TYPE_IS_COMPANY.getCode());
-        }else{
-            tbPaymentBill.setBillObjType(PayBillEnum.BILL_OBJ_TYPE_IS_INDIVIDUAL.getCode());
-        }
         tbPaymentBill.setBillStatus(PayBillEnum.BILL_ORDER_IS_NOT_PAY.getCode());
         tbPaymentBill.setCreatorAccount(paymentBillModel.getBillCreateAccount());
         tbPaymentBill.setCreatedTime(new Date());
@@ -260,7 +254,7 @@ public class PayBillServiceImpl implements PayBillService {
             set.add(bill.getOrderId());
         }
 
-        if(createPayReqModel.getPaySum().compareTo(totalAmount)!=0){
+        if(createPayReqModel.getPaySum().compareTo(totalAmount.setScale(2, BigDecimal.ROUND_HALF_UP))!=0){
             throw new JnSpringCloudException(PayBillExceptionEnum.PAY_ORDER_AMOUNT_IS_ERROR);
         }
 
@@ -324,12 +318,12 @@ public class PayBillServiceImpl implements PayBillService {
         paymentOrder.setOrderObjName(user.getAccount());
         paymentOrder.setBillIds(billId);
         paymentOrder.setOrderNum(DateUtils.formatDate(new Date(),"yyyyMMdd")+(new Random().nextInt(899999)+100000));
-        paymentOrder.setOrderAmount(totalAmount.setScale(2).doubleValue());
+        paymentOrder.setOrderAmount(totalAmount.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue());
         paymentOrder.setOrderStatus(PayBillEnum.BILL_ORDER_IS_NOT_PAY.getCode());
         paymentOrder.setPayType(createPayReqModel.getChannelId());
         paymentOrder.setCreatedTime(new Date());
         paymentOrder.setCreatorAccount(user.getAccount());
-        paymentOrder.setPayAmount((StringUtils.equals(USE_POINT,NOT_USER_POINT)&&pointDeductionVO.getDeductionTotalAmount()!=null)?(totalAmount.setScale(2).doubleValue()-pointDeductionVO.getDeductionTotalAmount()):totalAmount.setScale(2).doubleValue());
+        paymentOrder.setPayAmount((StringUtils.equals(USE_POINT,NOT_USER_POINT)&&pointDeductionVO.getDeductionTotalAmount()!=null)?(totalAmount.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue()-pointDeductionVO.getDeductionTotalAmount()):totalAmount.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue());
         paymentOrder.setIntegralAmount((StringUtils.equals(USE_POINT,NOT_USER_POINT)&&pointDeductionVO.getDeductionTotalAmount()!=null)?pointDeductionVO.getDeductionTotalAmount():0);
         paymentOrder.setRecordStatus(new Byte(PayBillEnum.BILL_STATE_NOT_DELETE.getCode()));
         logger.info("统一支付接口，发起支付下单开始。");
@@ -473,7 +467,6 @@ public class PayBillServiceImpl implements PayBillService {
 
 
     public Boolean callBackBusiness(TbPaymentBill bill,PayOrderNotify payOrderNotify){
-        //TODO jiangyl 判断账单类型，并回调各业务侧接口处理业务数据。
         String billType = bill.getBillType();
         if(StringUtils.equals(billType,PayTypeEnum.PAYMENT_ORDER_TYPE_PARKING_FEE.getCode())||StringUtils.equals(billType, PayTypeEnum.PAYMENT_ORDER_TYPE_PARKING_MONTH.getCode())){
             PaymentBillCallBack paymentBillCallBack = new PaymentBillCallBack();
@@ -616,8 +609,8 @@ public class PayBillServiceImpl implements PayBillService {
         TbPaymentBillCriteria billCriteria = new TbPaymentBillCriteria();
         billCriteria.createCriteria().andBillNumEqualTo(billId).andRecordStatusEqualTo(new Byte(PayBillEnum.BILL_STATE_NOT_DELETE.getCode()));
         List<TbPaymentBill> tbPaymentBills = tbPaymentBillMapper.selectByExample(billCriteria);
-        if(null == tbPaymentBills && tbPaymentBills.size() != 0){
-            throw new JnSpringCloudException(PayBillExceptionEnum.BILL_PAY_ORDER_IS_NOT_EXIT);
+        if(null == tbPaymentBills || tbPaymentBills.size() == 0){
+            return true;
         }
         TbPaymentBill tbPaymentBill = tbPaymentBills.get(0);
         tbPaymentBill.setBillStatus(PayBillEnum.PAYMENT_BILL_IS_DELETE.getCode());

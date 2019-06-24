@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.oa.schedule.dao.ScheduleMapper">
 
-  <select id="list" resultType="com.jn.oa.schedule.model.Schedule" parameterType="com.jn.oa.schedule.model.ScheduleQuery">
+  <select id="list" resultType="com.jn.oa.model.Schedule" parameterType="com.jn.oa.schedule.model.ScheduleQuery">
           SELECT
             id,
             start_time AS `date`,

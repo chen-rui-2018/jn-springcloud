@@ -81,6 +81,7 @@ public class ParkServiceImpl implements ParkService {
     @ServiceLog(doAction = " 园区管理-获取园区名")
     public List<ParkName> getParkName() {
         TbParkCriteria tbParkCriteria = new TbParkCriteria();
+        tbParkCriteria.setOrderByClause("show_order asc");
         List<TbPark> list = tbParkMapper.selectByExample(tbParkCriteria);
         List<ParkName> parkList = new ArrayList<>();
         for (TbPark vo:list
@@ -90,6 +91,8 @@ public class ParkServiceImpl implements ParkService {
             parkName.setId(vo.getId());
             parkName.setParkName(vo.getParkName());
             parkName.setMainPicture(vo.getMainPicture());
+            parkName.setShortIntroduce(vo.getShortIntroduce());
+            parkName.setShowOrder(vo.getShowOrder());
             parkList.add(parkName);
         }
         return parkList;
@@ -111,6 +114,8 @@ public class ParkServiceImpl implements ParkService {
         for (TbPark general:list) {
             parkGeneral.setParkIntroduce(general.getParkIntroduce());
             parkGeneral.setMainPicture(general.getMainPicture());
+            parkGeneral.setShortIntroduce(general.getShortIntroduce());
+            parkGeneral.setShowOrder(general.getShowOrder());
         }
         return parkGeneral;
     }

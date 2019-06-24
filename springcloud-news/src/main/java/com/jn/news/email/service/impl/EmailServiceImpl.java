@@ -2,6 +2,7 @@ package com.jn.news.email.service.impl;
 
 import com.jn.common.enums.CommonExceptionEnum;
 import com.jn.common.exception.JnSpringCloudException;
+import com.jn.news.config.NewsSwitchProperties;
 import com.jn.news.email.enums.EmailExceptionEnum;
 import com.jn.news.email.service.EmailService;
 import com.jn.news.email.utils.EmailComposeMessageHeaderUtil;
@@ -39,6 +40,8 @@ public class EmailServiceImpl implements EmailService {
 
     @Autowired
     private JavaMailSender mailSender;
+    @Autowired
+    private NewsSwitchProperties newsSwitchProperties;
 
     /**
      * 模板引擎对象
@@ -58,12 +61,19 @@ public class EmailServiceImpl implements EmailService {
     @Value("${spring.mail.username}")
     private String sender;
 
+    //文本分割设置为false，否则文件名称过长，附件会异常
+    static {
+        System.setProperty("mail.mime.splitlongparameters", "false");
+    }
+
     /**
      * 邮件发送（非模板邮件，支持纯文本、html类型邮件）
      * @param emailVo
      */
     @Override
     public void sendEmail(EmailVo emailVo) {
+        //判断是否邮件发送状态，如果是关闭状态则发送至配置的测试邮箱地址
+        this.emailSwitchJudge(emailVo);
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         //消息处理助手对象
         MimeMessageHelper helper = null;
@@ -84,10 +94,12 @@ public class EmailServiceImpl implements EmailService {
         }
         try {
             mailSender.send(mimeMessage);
+            logger.info("\n邮件发送成功,标题:【{}】,收件箱:【{}】",emailVo.getEmailSubject(),emailVo.getEmail());
         } catch (MailException e) {
             logger.error("邮件发送异常：",e);
             throw new JnSpringCloudException(CommonExceptionEnum.EMAIL_ERROR);
         }
+
     }
 
     /**
@@ -96,6 +108,8 @@ public class EmailServiceImpl implements EmailService {
      */
     @Override
     public void sendEmailByTemplate(EmailVo emailVo) throws JnSpringCloudException{
+        //判断是否邮件发送状态，如果是关闭状态则发送至配置的测试邮箱地址
+        this.emailSwitchJudge(emailVo);
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         try {
             //邮件内容
@@ -130,6 +144,7 @@ public class EmailServiceImpl implements EmailService {
         //发送邮件
         try {
             mailSender.send(mimeMessage);
+            logger.info("\n模板邮件发送成功,标题:【{}】,收件箱:【{}】",emailVo.getEmailSubject(),emailVo.getEmail());
         } catch (MailException e) {
             logger.error("模板邮件发送异常：",e);
             throw new JnSpringCloudException(CommonExceptionEnum.EMAIL_ERROR);
@@ -150,6 +165,39 @@ public class EmailServiceImpl implements EmailService {
                 }
             }
         }
+    }
+
+    /**
+     * 判断邮件发送状态，如果是关闭状态,则判断邮箱地址是否在配置的测试地址中，没有配置则默认取配置的测试地址的第一个邮箱
+     * @param emailVo
+     * @return
+     */
+    public EmailVo emailSwitchJudge(EmailVo emailVo) {
+        //防止发送邮件不走mq，故在此判断是否开启邮件发送
+        logger.info("\n判断邮件发送开关状态,状态是:【{}】",newsSwitchProperties.getEmail());
+        if(!newsSwitchProperties.getEmail()) {
+            logger.info("\n邮件发送开关未开启,如有需要请向组长申请开启,测试环境测试可在配置中心springcloud-news文件中配置白名单.");
+            //关闭状态，设置邮件接收人
+            if(StringUtils.isBlank(newsSwitchProperties.getEmailAddress())) {
+                throw new JnSpringCloudException(EmailExceptionEnum.EMAIL_SWITCH_NOTNULL_EMAILADDRESS);
+            }
+            String[] emails = emailVo.getEmail().split(",");
+            StringBuffer newEmailBuffer = new StringBuffer();
+            String newEmail;
+            for(String email : emails){
+                if(newsSwitchProperties.getEmailAddress().indexOf(email)>=0) {
+                    newEmailBuffer.append(email);
+                    newEmailBuffer.append(",");
+                }
+            }
+            if(newEmailBuffer.length() == 0) {
+                newEmail = emails[0];
+            }else {
+                newEmail = newEmailBuffer.substring(0,newEmailBuffer.length()-1);
+            }
+            emailVo.setEmail(newEmail);
+        }
+        return emailVo;
     }
 
 }

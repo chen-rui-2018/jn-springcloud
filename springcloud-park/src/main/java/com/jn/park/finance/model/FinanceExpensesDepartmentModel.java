@@ -71,4 +71,15 @@ public class FinanceExpensesDepartmentModel extends Page implements Serializable
     public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
+
+
+    @Override
+    public String toString() {
+        return "FinanceExpensesDepartmentModel{" +
+                "departmentId='" + departmentId + '\'' +
+                ", departmentName='" + departmentName + '\'' +
+                ", startTime='" + startTime + '\'' +
+                ", endTime='" + endTime + '\'' +
+                '}';
+    }
 }

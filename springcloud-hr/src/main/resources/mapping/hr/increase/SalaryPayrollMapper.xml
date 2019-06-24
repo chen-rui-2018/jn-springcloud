@@ -8,46 +8,71 @@
     <if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
             and t1.name like concat('%',#{name},'%')
     </if>
-    <if test="@org.apache.commons.lang.StringUtils@isNotBlank(department)">
-            and department=#{department}
+    order by account_entry_time desc
+  </select>
+  
+  <select id="selectByJobNumberAndMonth" parameterType="com.jn.hr.increase.model.SalaryPayrollAdd" resultType="com.jn.hr.increase.model.SalaryPayrollVo">
+    select * from tb_manpower_salary_payroll t1
+    where 1=1
+    <if test="@org.apache.commons.lang.StringUtils@isNotBlank(idCard)">
+             and id_card=#{idCard}
+    </if>
+    <if test="@org.apache.commons.lang.StringUtils@isNotBlank(accountEntryTime)">
+            and account_entry_time=#{accountEntryTime}
     </if>
   </select>
   
   <select id="selectByWage" parameterType="map" resultType="com.jn.hr.increase.model.SalaryPayrollVo">
     select sum(temp.number) as number,
+       sum(temp.deserve_wage) deserveWage,
        sum(temp.basic_wage) basicWage,
        sum(temp.seniority_wage) seniorityWage,
-       sum(temp.technical_allowance) technicalAllowance,
-       sum(temp.duty_allowance) dutyAllowance,
-       sum(temp.work_subsidy) workSubsidy,
-       sum(temp.education_allowance) educationAllowance,
        sum(temp.professional_title_allowance) professionalTitleAllowance,
+       sum(temp.technical_allowance) technicalAllowance,
+       sum(temp.education_allowance) educationAllowance,
+       sum(temp.work_allowance) workAllowance,
+       sum(temp.duty_allowance) dutyAllowance,
        sum(temp.special_subsidy) specialSubsidy,
-       sum(temp.meal_subsidy) mealSubsidy,
-       sum(temp.deserve_wage) deserveWage,
-       sum(temp.pending_socialpooling_Insurance) pendingSocialpoolingInsurance,
-       sum(temp.pending_providentfund) pendingProvidentfund,
-       sum(temp.canteen_meal_fee) canteenMealFee,
-       sum(temp.pending_personal_tax) pendingPersonalTax,
+       sum(temp.job_allowance) jobAllowance,
+       sum(temp.composite_subsidy) compositeSubsidy,
+       sum(temp.season_bonus) seasonBonus,
+       sum(temp.year_end_bonus) yearEndBonus,
+       sum(temp.work_excitation) workExcitation,
+       sum(temp.overtime_cost) overtimeCost,
+       sum(temp.on_duty_cost) onDutyCost,
+       sum(temp.business_car_subsidy) businessCarSubsidy,
+       sum(temp.delay_cost) delayCost,
+       sum(temp.reward_wage) rewardWage,
+       sum(temp.other_wage) otherWage,
+       sum(temp.pension_wage) pensionWage,
+       sum(temp.unemployment_wage) unemploymentWage,
+       sum(temp.medical_wage) medicalWage,
+       sum(temp.major_illness_wage) majorIllnessWage,
+       sum(temp.unit_society_wage) unitSocietyWage,
+       sum(temp.provident_fund) providentFund,
+       sum(temp.unit_provident_fund) unitProvidentFund,
        sum(temp.union_fee) unionFee,
-       sum(temp.real_wage) realWage
-       from (select basic_wage,
-               seniority_wage,
-               technical_allowance,
-               duty_allowance,
-               work_subsidy,
-               education_allowance,
-               professional_title_allowance,
-               special_subsidy,
-               meal_subsidy,
-               deserve_wage,
-               pending_socialpooling_Insurance,
-               pending_providentfund,
-               canteen_meal_fee,
-               pending_personal_tax,
-               union_fee,
-               real_wage,
-               1 number,
+       sum(temp.meal_fee) mealFee,
+       sum(temp.leave_fee) leaveFee,
+       sum(temp.sick_leave_fee) sickLeaveFee,
+       sum(temp.penalty_fee) penaltyFee,
+       sum(temp.deduction_one) deductionOne,
+       sum(temp.deduction_two) deductionTwo,
+       sum(temp.pending_personal_tax) pendingPersonalTax,
+       sum(temp.real_wage) realWage 
+       from (select deserve_wage, basic_wage, seniority_wage, 
+      professional_title_allowance, technical_allowance, 
+      education_allowance, work_allowance, duty_allowance, 
+      special_subsidy, job_allowance, composite_subsidy, 
+      season_bonus, year_end_bonus, work_excitation, 
+      overtime_cost, on_duty_cost, business_car_subsidy,
+      delay_cost, reward_wage, other_wage, 
+      pension_wage, unemployment_wage, medical_wage, 
+      major_illness_wage, unit_society_wage, provident_fund, 
+      unit_provident_fund, union_fee, meal_fee, 
+      leave_fee, sick_leave_fee, penalty_fee, 
+      deduction_one, deduction_two, pending_personal_tax, 
+      real_wage, 1 number,
                substring(account_entry_time, 1, 7) account_entry_time
           from tb_manpower_salary_payroll t1
          where 1 = 1
@@ -97,26 +122,52 @@
   
   <insert id="insertBatch" parameterType="java.util.List">     
        insert into tb_manpower_salary_payroll
-        ( id, name, job_number, 
-      department, basic_wage, seniority_wage, 
-      technical_allowance, duty_allowance, work_subsidy, 
-      education_allowance, professional_title_allowance, 
-      special_subsidy, meal_subsidy, deserve_wage, 
-      pending_socialpooling_Insurance, pending_providentfund, 
-      pending_personal_tax, canteen_meal_fee, union_fee, 
-      real_wage, account_entry_time
+        (id, serial_number, issuing_unit, 
+      name, department, id_card, 
+      personnel_category, deserve_wage, basic_wage, 
+      seniority_wage, professional_title_allowance, 
+      technical_allowance, education_allowance, work_allowance, 
+      duty_allowance, special_subsidy, job_allowance, 
+      composite_subsidy, basic_wage_total, season_bonus, 
+      year_end_bonus, salary_total, work_excitation, 
+      overtime_cost, on_duty_cost, overtime_total, 
+      business_car_subsidy, site_overtime_subsidy, 
+      walk_door_bouns, demolition_subsidy, demolition_subsidy_total, 
+      delay_cost, reward_wage, other_one_total, 
+      other_wage, deserve_wage_total, pension_wage, 
+      unemployment_wage, medical_wage, major_illness_wage, 
+      personal_social_security_wageTotal, unit_society_wage, 
+      provident_fund, unit_provident_fund, union_fee, 
+      meal_fee, leave_fee, sick_leave_fee, 
+      penalty_fee, deduction_one_wage_total, deduction_one, 
+      deduction_two, deduction_two_wage_total, pending_personal_tax, 
+      real_wage, deposit_personal_account, account_entry_time, 
+      creator_account, created_time, modifier_account, 
+      modified_time
         ) values
         <foreach collection="list" item="item" index="index" separator=",">
-            (
-            #{item.id}, #{item.name}, #{item.jobNumber}, 
-      #{item.department}, #{item.basicWage}, #{item.seniorityWage}, 
-      #{item.technicalAllowance}, #{item.dutyAllowance}, #{item.workSubsidy}, 
-      #{item.educationAllowance}, #{item.professionalTitleAllowance}, 
-      #{item.specialSubsidy}, #{item.mealSubsidy}, #{item.deserveWage}, 
-      #{item.pendingSocialpoolingInsurance}, #{item.pendingProvidentfund}, 
-      #{item.pendingPersonalTax}, #{item.canteenMealFee}, #{item.unionFee}, 
-      #{item.realWage}, #{item.accountEntryTime}
-            )
+            (#{item.id}, #{item.serialNumber}, #{item.issuingUnit}, 
+      #{item.name}, #{item.department}, #{item.idCard}, 
+      #{item.personnelCategory}, #{item.deserveWage}, #{item.basicWage}, 
+      #{item.seniorityWage}, #{item.professionalTitleAllowance}, 
+      #{item.technicalAllowance}, #{item.educationAllowance}, #{item.workAllowance}, 
+      #{item.dutyAllowance}, #{item.specialSubsidy}, #{item.jobAllowance}, 
+      #{item.compositeSubsidy}, #{item.basicWageTotal}, #{item.seasonBonus}, 
+      #{item.yearEndBonus}, #{item.salaryTotal}, #{item.workExcitation}, 
+      #{item.overtimeCost}, #{item.onDutyCost}, #{item.overtimeTotal}, 
+      #{item.businessCarSubsidy}, #{item.siteOvertimeSubsidy}, 
+      #{item.walkDoorBouns}, #{item.demolitionSubsidy}, #{item.demolitionSubsidyTotal}, 
+      #{item.delayCost}, #{item.rewardWage}, #{item.otherOneTotal}, 
+      #{item.otherWage}, #{item.deserveWageTotal}, #{item.pensionWage}, 
+      #{item.unemploymentWage}, #{item.medicalWage}, #{item.majorIllnessWage}, 
+      #{item.personalSocialSecurityWageTotal}, #{item.unitSocietyWage}, 
+      #{item.providentFund}, #{item.unitProvidentFund}, #{item.unionFee}, 
+      #{item.mealFee}, #{item.leaveFee}, #{item.sickLeaveFee}, 
+      #{item.penaltyFee}, #{item.deductionOneWageTotal}, #{item.deductionOne}, 
+      #{item.deductionTwo}, #{item.deductionTwoWageTotal}, #{item.pendingPersonalTax}, 
+      #{item.realWage}, #{item.depositPersonalAccount}, #{item.accountEntryTime}, 
+      #{item.creatorAccount}, #{item.createdTime}, #{item.modifierAccount}, 
+      #{item.modifiedTime})
         </foreach>
   </insert>
 

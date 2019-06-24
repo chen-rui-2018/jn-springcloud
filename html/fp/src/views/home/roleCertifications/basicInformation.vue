@@ -1,7 +1,7 @@
 <template>
-  <div class="basicInformation">
+  <div class="basicInformation" v-loading="loading">
     <div class="investorCertification-header font16">
-      <div>服务机构认证</div>
+      <div>{{title}}</div>
     </div>
     <el-main style="padding:0 25px;text-align:left;background:#fff;">
       <div class="investorCertification-content">
@@ -18,7 +18,7 @@
           <div class="basicInfo pr">
             <div class="setdistance uploadImgItem">
               <!-- <span class="textRight mg">照片：</span> -->
-              <el-upload class="avatar-uploader avatarImg" :show-file-list="false" action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
+              <el-upload class="avatar-uploader avatarImg" :show-file-list="false" :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
                 :on-success="handleAvaSuccess" :headers="headers" :before-upload="beforeAvaUpload" style="display:inline-block">
                 <img v-if="OrgBasicForm.orgLogo" :src="OrgBasicForm.orgLogo" class="avatar">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -40,23 +40,33 @@
                 <el-date-picker v-model="OrgBasicForm.orgRegisterTime" value-format="yyyy-MM-dd" type="date"
                   placeholder="选择日期"></el-date-picker>
               </el-form-item>
-              <el-form-item label="机构简介:" prop="orgSynopsis" class="myPersonalProfile">
-                <el-input v-model="OrgBasicForm.orgSynopsis" type="textarea" autosize placeholder="请填写机构简介,限500字"
-                  clearable></el-input>
-              </el-form-item>
-              <el-form-item label="主营业务:" prop="orgBusiness" class="myPersonalProfile">
-                <el-input v-model="OrgBasicForm.orgBusiness" type="textarea" autosize placeholder="请填写主营业务,限500字"
-                  clearable></el-input>
-              </el-form-item>
-              <el-form-item label="业务擅长:" prop="orgSpeciality" class="investorMainAreaList">
-                <el-select v-model="OrgBasicForm.orgSpeciality" multiple :multiple-limit='num1' placeholder="请选择业务擅长">
+              <el-form-item label="业务领域:" prop="businessType" class=" maxWidth">
+                <el-select v-model="OrgBasicForm.businessType" placeholder="请选择业务领域">
                   <el-option v-for="(val,index) in orgSpecialityOptions" :key="index" :label="val.preValue" :value="val.id"></el-option>
                 </el-select>
+              </el-form-item>
+              <el-form-item label="机构简介:" prop="orgSynopsis" class="myPersonalProfile">
+                <el-input v-model="OrgBasicForm.orgSynopsis" type="textarea" maxlength="1000" show-word-limit autosize
+                  placeholder="请填写机构简介,限1000字" clearable></el-input>
+              </el-form-item>
+              <el-form-item label="核心服务:" prop="orgBusiness" class="myPersonalProfile">
+                <el-input v-model="OrgBasicForm.orgBusiness" type="textarea" maxlength="500" show-word-limit autosize
+                  placeholder="请填写核心服务,限500字" clearable></el-input>
+              </el-form-item>
+              <el-form-item label="业务擅长:" prop="orgSpeciality" class="investorMainAreaList">
+                <el-input v-model="OrgBasicForm.orgSpeciality" placeholder="请输入业务擅长" clearable></el-input>
+                <!-- <el-select v-model="OrgBasicForm.orgSpeciality" multiple :multiple-limit='num1' placeholder="请选择业务擅长">
+                  <el-option v-for="(val,index) in orgSpecialityOptions" :key="index" :label="val.preValue" :value="val.id"></el-option>
+                </el-select> -->
               </el-form-item>
               <el-form-item label="客户偏好:" prop="position">
                 <!-- <el-input v-model="OrgBasicForm.orgBusiness" placeholder="请选择您主要客户群体的以下特征,最多分别选3项" clearable></el-input> -->
                 <span class="curtomer">请选择您主要客户群体的以下特征,最多分别选3项</span>
               </el-form-item>
+              <div class="xian">
+                <hr>
+              </div>
+
               <el-form-item label="行业领域:" prop="industrySector" class="investorMainAreaList">
                 <el-select v-model="OrgBasicForm.industrySector" multiple :multiple-limit='num' placeholder="请选择行业领域">
                   <el-option v-for="(val,index) in industrySectorOptions" :key="index" :label="val.preValue" :value="val.id"></el-option>
@@ -67,22 +77,17 @@
                   <el-option v-for="item in developmentStageOptions" :key="item.id" :label="item.preValue" :value="item.id"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="企业性质:" prop="companyNature" class="investorMainAreaList">
+              <!-- <el-form-item label="企业性质:" prop="companyNature" class="investorMainAreaList">
                 <el-select v-model="OrgBasicForm.companyNature" :multiple-limit='num' multiple placeholder="请选择企业性质">
                   <el-option v-for="item in companyNatureOptions" :key="item.id" :label="item.preValue" :value="item.id"></el-option>
                 </el-select>
-              </el-form-item>
+              </el-form-item> -->
             </el-form>
           </div>
         </div>
         <div v-show="status==1">
           <div class="licensesInfo pr">
-            <el-form :rules="licensesRules" :model="licensesForm" label-width="110px" ref="licensesForm">
-              <el-form-item label="业务领域:" prop="businessType" class="businessType">
-                <el-select v-model="licensesForm.businessType" placeholder="请选择业务领域">
-                  <el-option v-for="(val,index) in orgSpecialityOptions" :key="index" :label="val.preValue" :value="val.id"></el-option>
-                </el-select>
-              </el-form-item>
+            <el-form :model="licensesForm"   label-width="110px" ref="licensesForm">
               <el-form-item label="营业执照:">
                 <span class="curtomer">请填写营业执照信息。附件请上传证书照片，单个文件不超过1M</span>
               </el-form-item>
@@ -92,30 +97,19 @@
                     <span>企业营业执照</span>
                   </template>
                 </el-table-column>
-                <el-table-column align="center" label="颁发时间">
-                  <template slot-scope="scope">
-                    <el-date-picker v-model="licenseList[scope.$index].awardTime" type="date" value-format="yyyy-MM-dd"
-                      placeholder="请选择颁发时间"></el-date-picker>
-                  </template>
-                </el-table-column>
-                <el-table-column align="center" label="主管部门">
-                  <template slot-scope="scope">
-                    <el-input v-model="licenseList[scope.$index].awardDepart" placeholder="请输入主管部门" maxlength='20'
-                      clearable></el-input>
-                  </template>
-                </el-table-column>
                 <el-table-column align="center" label="上传附件">
-                  <template>
+                  <template slot-scope="scope">
                     <el-upload class="avatar-uploader avatarImg" :show-file-list="false" :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
                       :on-success="handlelicense" :headers="headers" :before-upload="beforelicense" style="display:inline-block">
-                      <img v-if="fileUrl" :src="fileUrl" class="avatar">
+                      <img v-if="licenseList[scope.$index].fileUrl" :src="licenseList[scope.$index].fileUrl" class="avatar">
+
                       <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
                   </template>
                 </el-table-column>
               </el-table>
               <el-form-item label="其它资质/荣誉:" class="otherInfo">
-                <span class="curtomer">附件请上传相关资质荣誉证书照片，单个文件不超过1M</span> <span class="otherOperation mainColor pr smailSize cancel"
+                <span class="curtomer">附件请上传相关资质荣誉证书照片，单个文件不超过1M</span> <span class="otherOperation mainColor cur smailSize cancel"
                   @click="cancelOtherList" v-if="isShowOtherList">取&nbsp;消</span>
                 <span class="otherOperation mainColor cur smailSize" @click="addOtherList('otherForm')">
                   <i class="el-icon-plus"></i>
@@ -123,7 +117,7 @@
                 </span>
               </el-form-item>
               <div class="marBtn" v-if="!isShowOtherList">
-                <el-table :data="otherList" style="width: 100%">
+                <el-table :data="otherList" style="width: 98%">
                   <el-table-column prop="certName" label="资质荣誉名称" align="center"></el-table-column>
                   <el-table-column label="特色标签" align="center">
                     <template>
@@ -131,7 +125,7 @@
                     </template>
                   </el-table-column>
                   <el-table-column prop="awardTime" align="center" label="颁发时间"></el-table-column>
-                  <el-table-column prop="awardDepart" align="center" label="主管部门"></el-table-column>
+                  <el-table-column prop="awardDepart" align="center" label="颁发部门"></el-table-column>
                   <el-table-column align="center" label="附件">
                     <template slot-scope="scope">
                       <span v-if="scope.row.fileUrl" class="themeColor smallSize cur" @click="lookPoster(scope.row)">点击查看</span>
@@ -152,11 +146,11 @@
                   <el-form-item label="资质荣誉名称:" prop="certName">
                     <el-input v-model="otherForm.certName" placeholder="请输入资质荣誉名称" clearable></el-input>
                   </el-form-item>
-                  <el-form-item label="颁发时间:">
+                  <el-form-item label="颁发时间:" prop="awardTime" >
                     <el-date-picker v-model="otherForm.awardTime" type="date" value-format="yyyy-MM-dd" placeholder="请选择颁发时间"></el-date-picker>
                   </el-form-item>
-                  <el-form-item label="主管部门:">
-                    <el-input v-model="otherForm.awardDepart" placeholder="请输入主管部门" maxlength='20' clearable></el-input>
+                  <el-form-item label="颁发部门:" prop="awardDepart">
+                    <el-input v-model="otherForm.awardDepart" placeholder="请输入颁发部门" maxlength='20' clearable></el-input>
                   </el-form-item>
                   <el-form-item label="附件:" class="otherAccessory">
                     <label slot="label">附&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;件:</label>
@@ -178,38 +172,44 @@
                 <!-- <el-input v-model="OrgBasicForm.orgName" placeholder="请输入机构名称" clearable></el-input> -->
               </el-form-item>
               <el-form-item label="员工总人数（缴纳公积金）:" class="orientation teamForm" prop="staffCount">
-                <el-input v-model="teamForm.staffCount"  placeholder="请填写人数" @blur="BlurText($event)"></el-input><span class="person">人</span>
+                <el-input v-model="teamForm.staffCount" placeholder="请填写人数" @blur="BlurText($event)"></el-input><span
+                  class="person">人</span>
               </el-form-item>
               <div>
                 <el-form-item label="执业人员人数：" class="orientation dis" prop="professionNum">
-                  <el-input v-model="teamForm.professionNum" @blur="BlurText($event)" placeholder="请填写人数"></el-input><span class="person">人</span>
+                  <el-input v-model="teamForm.professionNum" @blur="BlurText($event)" placeholder="请填写人数"></el-input><span
+                    class="person">人</span>
                 </el-form-item>
                 <span>占总人数比&nbsp;<i class="mainColor">{{teamForm.professionNum?((teamForm.professionNum/teamForm.staffCount)*100).toFixed(2):''}}</i>&nbsp;</span>%
               </div>
               <div>
                 <el-form-item label="本科人员人数：" class="orientation dis" prop="bachelorNum">
-                  <el-input v-model="teamForm.bachelorNum" @blur="BlurText($event)" placeholder="请填写人数"></el-input><span class="person">人</span>
+                  <el-input v-model="teamForm.bachelorNum" @blur="BlurText($event)" placeholder="请填写人数"></el-input><span
+                    class="person">人</span>
                 </el-form-item>
                 <span>占总人数比&nbsp;<i class="mainColor">{{teamForm.bachelorNum?((teamForm.bachelorNum/teamForm.staffCount)*100).toFixed(2):''}}</i>&nbsp;</span>%
               </div>
               <div>
                 <el-form-item label="硕士人员人数：" class="orientation dis" prop="masterNum">
-                  <el-input v-model="teamForm.masterNum" @blur="BlurText($event)" placeholder="请填写人数"></el-input><span class="person">人</span>
+                  <el-input v-model="teamForm.masterNum" @blur="BlurText($event)" placeholder="请填写人数"></el-input><span
+                    class="person">人</span>
                 </el-form-item>
                 <span>占总人数比&nbsp;<i class="mainColor">{{teamForm.masterNum?((teamForm.masterNum/teamForm.staffCount)*100).toFixed(2):''}}</i>&nbsp;</span>%
               </div>
               <div>
                 <el-form-item label="博士人员人数：" class="orientation dis" prop="doctorNum">
-                  <el-input v-model="teamForm.doctorNum" @blur="BlurText($event)" placeholder="请填写人数"></el-input><span class="person">人</span>
+                  <el-input v-model="teamForm.doctorNum" @blur="BlurText($event)" placeholder="请填写人数"></el-input><span
+                    class="person">人</span>
                 </el-form-item>
                 <span>占总人数比&nbsp;<i class="mainColor">{{teamForm.doctorNum?((teamForm.doctorNum/teamForm.staffCount)*100).toFixed(2):''}}</i>&nbsp;</span>%
               </div>
-              <div>
+              <!-- <div>
                 <el-form-item label="海归人员人数：" class="orientation dis" prop="returneeNum">
-                  <el-input v-model="teamForm.returneeNum" @blur="BlurText($event)" placeholder="请填写人数"></el-input><span class="person">人</span>
+                  <el-input v-model="teamForm.returneeNum" @blur="BlurText($event)" placeholder="请填写人数"></el-input><span
+                    class="person">人</span>
                 </el-form-item>
                 <span>占总人数比&nbsp;<i class="mainColor">{{teamForm.returneeNum?((teamForm.returneeNum/teamForm.staffCount)*100).toFixed(2):''}}</i>&nbsp;</span>%
-              </div>
+              </div> -->
             </el-form>
           </div>
           <div class="kernelInfo">
@@ -225,7 +225,7 @@
             </el-form>
             <div>
               <div class="marBtn" v-if="!isShowKernelList">
-                <el-table :data="kernelList" style="width: 100%">
+                <el-table :data="kernelList" style="width: 98%">
                   <el-table-column prop="conName" label="姓名" align="center"></el-table-column>
                   <el-table-column label="职务" align="center" prop="conPosition">
                   </el-table-column>
@@ -249,7 +249,8 @@
                   </el-form-item>
                   <el-form-item label="职务:">
                     <label slot="label">职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;务:</label>
-                    <el-input v-model="kernelForm.conPosition" placeholder="请输入职务"  type="text" maxlength="20" show-word-limit clearable></el-input>
+                    <el-input v-model="kernelForm.conPosition" placeholder="请输入职务" type="text" maxlength="20"
+                      show-word-limit clearable></el-input>
                   </el-form-item>
                   <el-form-item label="从业起始年份:">
                     <el-date-picker v-model="kernelForm.conTime" type="month" value-format="yyyy-MM" placeholder="从业起始年份"></el-date-picker>
@@ -269,40 +270,40 @@
         </div>
         <div v-show="status==3">
           <div class="licensesInfo pr">
-           <el-form :rules="contactRules" :model="contactForm" label-width="100px" class="otherForm" ref="contactForm">
-            <el-form-item label="办公地址:" class="address" prop="orgProvince">
-              <el-select v-model="contactForm.orgProvince" @change="choseProvince" placeholder="省级地区">
-                <el-option v-for="item in province" :key="item.id" :label="item.value" :value="item.id">
-                </el-option>
-              </el-select>
-              <el-select v-model="contactForm.orgCity" @change="choseCity" placeholder="市级地区">
-                <el-option v-for="item in shi1" :key="item.id" :label="item.value" :value="item.id">
-                </el-option>
-              </el-select>
-              <el-select v-model="contactForm.orgArea" @change="choseBlock" placeholder="区级地区">
-                <el-option v-for="item in qu1" :key="item.id" :label="item.value" :value="item.id">
-                </el-option>
-              </el-select>
-            </el-form-item>
-             <el-form-item prop="orgAddress" class="orgAddressInfo">
-              <el-input v-model="contactForm.orgAddress" placeholder="请填写详细地址" clearable></el-input>
-            </el-form-item>
-             <el-form-item label="咨询电话:" prop="orgPhone">
-              <el-input v-model="contactForm.orgPhone" placeholder="请输入咨询电话" clearable></el-input>
-            </el-form-item>
-              <el-form-item label="机构网址:" prop="orgWeb">
-              <el-input v-model="contactForm.orgWeb" placeholder="请输入机构网址" clearable></el-input>
-            </el-form-item>
-             <el-form-item label="联系人姓名:" prop="conName">
-              <el-input v-model="contactForm.conName" placeholder="请输入联系人姓名" clearable></el-input>
-            </el-form-item>
-            <el-form-item label="联系人手机:" prop="conPhone">
-              <el-input v-model="contactForm.conPhone" placeholder="请输入联系人手机" clearable></el-input>
-            </el-form-item>
-            <el-form-item label="联系人邮箱:" prop="conEmail">
-              <el-input v-model="contactForm.conEmail" placeholder="请输入联系人邮箱" clearable></el-input>
-            </el-form-item>
-          </el-form>
+            <el-form :rules="contactRules" :model="contactForm" label-width="100px" class="otherForm" ref="contactForm">
+              <el-form-item label="办公地址:" class="address" prop="orgProvince">
+                <el-select v-model="contactForm.orgProvince" @change="choseProvince" placeholder="省级地区">
+                  <el-option v-for="item in province" :key="item.id" :label="item.value" :value="item.value">
+                  </el-option>
+                </el-select>
+                <el-select v-model="contactForm.orgCity" @change="choseCity" placeholder="市级地区">
+                  <el-option v-for="item in shi1" :key="item.id" :label="item.value" :value="item.value">
+                  </el-option>
+                </el-select>
+                <el-select v-model="contactForm.orgArea" @change="choseBlock" placeholder="区级地区">
+                  <el-option v-for="item in qu1" :key="item.id" :label="item.value" :value="item.value">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item prop="orgAddress" class="orgAddressInfo">
+                <el-input v-model="contactForm.orgAddress" placeholder="请填写详细地址" clearable></el-input>
+              </el-form-item>
+              <el-form-item label="咨询电话:" prop="orgPhone">
+                <el-input v-model="contactForm.orgPhone" placeholder="请输入咨询电话" maxlength="12" clearable></el-input>
+              </el-form-item>
+              <el-form-item label="机构网址:">
+                <el-input v-model="contactForm.orgWeb" placeholder="请输入机构网址" clearable></el-input>
+              </el-form-item>
+              <el-form-item label="联系人姓名:" prop="conName">
+                <el-input v-model="contactForm.conName" placeholder="请输入联系人姓名" clearable></el-input>
+              </el-form-item>
+              <el-form-item label="联系人手机:" prop="conPhone">
+                <el-input v-model="contactForm.conPhone" placeholder="请输入联系人手机" maxlength="11" clearable></el-input>
+              </el-form-item>
+              <el-form-item label="联系人邮箱:" prop="conEmail">
+                <el-input v-model="contactForm.conEmail" placeholder="请输入联系人邮箱" clearable></el-input>
+              </el-form-item>
+            </el-form>
 
           </div>
 
@@ -312,8 +313,8 @@
         </div>
       </div>
     </el-main>
-    <el-dialog :visible.sync="dialogVisible" width="50%">
-      <img :src="otherPhoto" alt="图片" style="width:100%">
+    <el-dialog :visible.sync="dialogVisible" width="50%" :modal-append-to-body="false">
+      <img :src="otherPhoto" alt="图片" style="width:100%;height:200px;">
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">返 回</el-button>
       </span>
@@ -321,13 +322,53 @@
   </div>
 </template>
 <script>
+import { getToken } from '@/util/auth'
 import axios from "axios";
 export default {
   data() {
+    var checkPhone = (rule, value, callback) => {
+      const reg = /^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\d{8}$/;
+      if (!reg.test(value)) {
+        callback("请输入正确的手机号码");
+      } else {
+        callback();
+      }
+    };
+     var checkOrgName = (rule, value, callback) => {
+        if (this.title === '编辑机构') {
+           this.api.get({
+              url: "orgNameIsExist",
+              data: {orgName :this.OrgBasicForm.orgName,searchType:'update',orgId:this.OrgBasicForm.orgId},
+              callback: res => {
+                console.log(res)
+                if (res.data == "orgNameExist") {
+                    callback('机构名称已存在,请重新输入');
+                } else {
+                  callback();
+                }
+
+              }
+            });
+        } else {
+           this.api.get({
+              url: "orgNameIsExist",
+              data: {orgName :this.OrgBasicForm.orgName,searchType:'add',orgId:''},
+              callback: res => {
+              if (res.data == "orgNameExist") {
+                    callback('机构名称已存在,请重新输入');
+                } else {
+                  callback();
+                }
+              }
+            });
+      }
+    }
     return {
-      baseUrl:this.api.host,
-      num1:1,
-      btnText:'保存并继续',
+      title: "服务机构认证",
+      loading: false,
+      baseUrl: this.api.host,
+      num1: 1,
+      btnText: "保存并继续",
       showBtn: false,
       isShowKernelList: false,
       kernelList: [],
@@ -335,9 +376,9 @@ export default {
       otherPhoto: "",
       dialogVisible: false,
       isShowOtherList: false,
-      fileUrl: "",
+      // fileUrl: "",
       licensesForm: {
-        businessType: ""
+        // businessType: ""
       },
       kernelText: "添加核心服务团队人员",
       otherText: "添加其它资质/荣誉",
@@ -347,10 +388,16 @@ export default {
       orgSpecialityOptions: [],
       industrySectorOptions: [],
       developmentStageOptions: [],
-      companyNatureOptions: [],
+      // companyNatureOptions: [],
       disabled: false,
       orgOptions: [],
-      licenseList: [{}],
+      licenseList: [
+        {
+          // awardTime: "",
+          // awardDepart: "",
+          fileUrl: ""
+        }
+      ],
       otherForm: {
         id: 0,
         certType: "3",
@@ -370,27 +417,27 @@ export default {
       },
       teamForm: {
         staffCount: "", //员工总人数
-        returneeNum: "", //海归员工人数
+        // returneeNum: "", //海归员工人数
         professionNum: "", //执业人员人数
         masterNum: "", //硕士学历人数
         doctorNum: "", //博士学历人数
         bachelorNum: "" //本科学历人数
       },
-      contactForm:{
-        orgProvince:'',
-        orgCity:'',
-        orgArea:'',
-        orgAddress:'',
-        orgPhone:'',
-        orgWeb:'',
-        conName:'',
-        conPhone:'',
-        conEmail:''
+      contactForm: {
+        orgProvince: "",
+        orgCity: "",
+        orgArea: "",
+        orgAddress: "",
+        orgPhone: "",
+        orgWeb: "",
+        conName: "",
+        conPhone: "",
+        conEmail: ""
       },
       OrgBasicForm: {
         businessType: "",
         licenses: [], //机构资质集合
-        companyNature: [], //客户偏好-企业性质
+        // companyNature: [], //客户偏好-企业性质
         developmentStage: [], //客户偏好-发展阶段
         industrySector: [], //客户偏好-行业领域
         orgBusiness: "", //主营业务
@@ -398,23 +445,23 @@ export default {
         orgLogo: "", //机构LOGO
         orgName: "", //..机构名称
         orgRegisterTime: "", //注册时间
-        orgSpeciality: [], //业务擅长
+        orgSpeciality: '', //业务擅长
         orgSynopsis: "", //机构简介
         staffCount: "", //员工总人数
-        returneeNum: "", //海归员工人数
+        // returneeNum: "", //海归员工人数
         professionNum: "", //执业人员人数
         masterNum: "", //硕士学历人数
         doctorNum: "", //博士学历人数
         bachelorNum: "", //本科学历人数
-         orgProvince:'',//省
-        orgCity:'',//市
-        orgArea:'',//区
-        orgAddress:'',//详细地址
-        orgPhone:'',//机构咨询电话
-        orgWeb:'',//机构网址
-        conName:'',//联系人名字
-        conPhone:'',//联系人电话
-        conEmail:''//联系人邮箱
+        orgProvince: "", //省
+        orgCity: "", //市
+        orgArea: "", //区
+        orgAddress: "", //详细地址
+        orgPhone: "", //机构咨询电话
+        orgWeb: "", //机构网址
+        conName: "", //联系人名字
+        conPhone: "", //联系人电话
+        conEmail: "" //联系人邮箱
       },
       investorMainAreaOptions: [],
       investorMainRoundOptions: [],
@@ -429,11 +476,11 @@ export default {
       block: "",
       // avarUrl: "",
       headers: {
-        token: sessionStorage.token
+        token: getToken()
       },
       rules: {
         orgSpeciality: [
-          { required: true, message: "请选择业务擅长", trigger: "change" }
+          { required: true, message: "请输入业务擅长", trigger: "blur" }
         ],
         orgCode: [
           {
@@ -448,28 +495,40 @@ export default {
         orgSynopsis: [
           { required: true, message: "请填写机构简介", trigger: "blur" }
         ],
-        orgBusiness: [{ required: true, message: "主营业务", trigger: "blur" }],
+        orgBusiness: [
+          { required: true, message: "请填写核心服务", trigger: "blur" }
+        ],
         industrySector: [
           { required: true, message: "请选择行业领域", trigger: "change" }
         ],
         developmentStage: [
           { required: true, message: "请选择发展阶段", trigger: "change" }
         ],
-        companyNature: [
-          { required: true, message: "请选择企业性质", trigger: "change" }
-        ],
-        orgName: [
-          { required: true, message: "请填写机构名称", trigger: "blur" }
-        ]
-      },
-      licensesRules: {
-        businessType: [
+         businessType: [
           { required: true, message: "请选择业务领域", trigger: "change" }
+        ],
+        // companyNature: [
+        //   { required: true, message: "请选择企业性质", trigger: "change" }
+        // ],
+        orgName: [
+          { required: true, message: "请填写机构名称", trigger: "blur" },
+          { validator: checkOrgName, trigger: "blur" }
         ]
       },
+      // licensesRules: {
+      //   businessType: [
+      //     { required: true, message: "请选择业务领域", trigger: "change" }
+      //   ]
+      // },
       otherFormRules: {
         certName: [
           { required: true, message: "请填写资质荣誉名称", trigger: "blur" }
+        ],
+        awardTime: [
+          { required: true, message: "请选择颁发时间", trigger: "change" }
+        ],
+        awardDepart: [
+          { required: true, message: "请填写颁发部门", trigger: "blur" }
         ]
       },
       kernelRules: {
@@ -501,9 +560,9 @@ export default {
         professionNum: [
           { required: true, message: "请填写执业人员人数", trigger: "blur" }
         ],
-        returneeNum: [
-          { required: true, message: "请填写海归人员人数", trigger: "blur" }
-        ],
+        // returneeNum: [
+        //   { required: true, message: "请填写海归人员人数", trigger: "blur" }
+        // ],
         staffCount: [
           { required: true, message: "请填写员工总人数", trigger: "blur" }
         ]
@@ -517,10 +576,14 @@ export default {
           }
         ]
       },
-      contactRules:{
-         conEmail: [
+      contactRules: {
+        conEmail: [
           { required: true, message: "请填写邮箱", trigger: "blur" },
-          { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+          {
+            type: "email",
+            message: "请输入正确的邮箱地址",
+            trigger: ["blur", "change"]
+          }
         ],
         conName: [
           {
@@ -530,17 +593,23 @@ export default {
           }
         ],
         conPhone: [
-          { required: true, message: "请输入联系人电话", trigger: "blur" }
+          { required: true, message: "请输入联系人手机", trigger: "blur" },
+          { validator: checkPhone, trigger: "blur" }
         ],
-         orgPhone: [
+        orgPhone: [
           { required: true, message: "请输入咨询电话", trigger: "blur" }
+          //  { validator: checkTel, trigger: 'blur' }
         ],
-        orgWeb: [
-          { required: true, message: "请输入机构网址", trigger: "blur" }
+        // orgWeb: [
+        //   // { required: true, message: "请输入机构网址", trigger: "blur" }
+        //   // { validator: checkWeb, trigger: 'blur' }
+        // ],
+        orgProvince: [
+          { required: true, message: "请选择省份", trigger: "change" }
         ],
-        orgProvince: [{ required: true, message: "请选择省份", trigger: "change" }],
-        orgAddress: [{ required: true, message: "请填写详细地址", trigger: "blur" }]
-
+        orgAddress: [
+          { required: true, message: "请填写详细地址", trigger: "blur" }
+        ]
       }
     };
   },
@@ -548,14 +617,79 @@ export default {
     this.getCityData();
     this.selectIndustryList();
   },
+  mounted() {
+    this.init();
+  },
   methods: {
-    // 禁止输入小数和负数
-    BlurText(e){
-        let boolean=new RegExp("^[1-9][0-9]*$").test(e.target.value)
-        if(!boolean){
-          this.$message.warning('请输入正整数')
-          e.target.value=''
+    init() {
+      if (this.$route.query.title) {
+        this.title = this.$route.query.title;
+        this.OrgBasicForm.orgId=this.$route.query.orgId
+        // this.btnText="保存修改"
+
+      this.api.get({
+        url: "getActivityDetailsFm",
+        data: { orgId: this.$route.query.orgId },
+        callback: (res)=> {
+          console.log(res);
+          if (res.data) {
+              this.OrgBasicForm.orgName=res.data.orgName
+              this.OrgBasicForm.orgCode=res.data.orgCode
+              this.OrgBasicForm.orgRegisterTime=res.data.orgRegisterTime
+              this.OrgBasicForm.orgSynopsis=res.data.orgSynopsis
+              this.OrgBasicForm.orgBusiness=res.data.orgBusiness
+              this.OrgBasicForm.orgSpeciality=res.data.orgSpeciality
+              this.OrgBasicForm.businessType=res.data.businessType
+              this.teamForm.staffCount=res.data.staffCount
+              this.teamForm.professionNum=res.data.professionNum
+              this.teamForm.masterNum=res.data.masterNum
+              this.teamForm.doctorNum=res.data.doctorNum
+              this.teamForm.bachelorNum=res.data.bachelorNum
+              this.contactForm.orgProvince=res.data.orgProvince
+              this.contactForm.orgCity=res.data.orgCity
+              this.contactForm.orgArea=res.data.orgArea
+              this.contactForm.orgAddress=res.data.orgAddressDetail
+              this.contactForm.orgPhone=res.data.orgPhone
+              this.contactForm.orgWeb=res.data.orgWeb
+              this.contactForm.conName=res.data.conName
+              this.contactForm.conPhone=res.data.conPhone
+              this.contactForm.conEmail=res.data.conEmail
+              if(res.data.developmentStage){
+                res.data.developmentStage.forEach(v=>{
+                    this.OrgBasicForm.developmentStage.push(v.orgTraitId)
+                })
+                 this.OrgBasicForm.developmentStage=Array.from(new Set( this.OrgBasicForm.developmentStage))
+              }
+             if(res.data.industrySector){
+               res.data.industrySector.forEach(r=>{
+                    this.OrgBasicForm.industrySector.push(r.orgTraitId)
+                })
+                 this.OrgBasicForm.industrySector=Array.from(new Set( this.OrgBasicForm.industrySector))
+             }
+              this.OrgBasicForm.orgLogo=res.data.orgLogo
+              this.licenseList[0].fileUrl=res.data.orgLicensesUrl
+              if(res.data.honorLicense){
+                this.otherList=res.data.honorLicense
+              }
+              if(res.data.orgTeams){
+                this.kernelList=res.data.orgTeams
+              }
+              this.choseProvince(this.contactForm.orgProvince)
+              this.choseCity(this.contactForm.orgCity)
+          }
         }
+      });
+      }
+
+
+    },
+    // 禁止输入小数和负数
+    BlurText(e) {
+      let boolean = new RegExp("^[1-9][0-9]*$").test(e.target.value);
+      if (!boolean) {
+        this.$message.warning("请输入正整数");
+        e.target.value = "";
+      }
     },
     // 查看图片
     lookPoster(row) {
@@ -588,20 +722,20 @@ export default {
           }
         });
       } else if (this.investorCertificationTitle == "机构资质") {
-        this.$refs["licensesForm"].validate(valid => {
-          if (valid) {
-            if (!this.fileUrl) {
-              this.$message.error("请上传企业营业执照照片");
-              return;
-            }
-            this.status = 2;
+
+
+        if (!this.licenseList[0].fileUrl) {
+          this.$message.error("请上传企业营业执照照片");
+          return;
+        }
+        this.status = 2;
             this.investorCertificationTitle = "团队信息";
-            this.OrgBasicForm.businessType = this.licensesForm.businessType;
-            this.licenseList = this.licenseList.map(item =>
-              item.fileUrl
-                ? item
-                : Object.assign(item, { fileUrl: this.fileUrl })
-            );
+            // this.OrgBasicForm.businessType = this.licensesForm.businessType;
+            // this.licenseList = this.licenseList.map(item =>
+            //   item.fileUrl
+            //     ? item
+            //     : Object.assign(item, { fileUrl: this.fileUrl })
+            // );
             this.licenseList = this.licenseList.map(item =>
               item.isFeatures ? item : Object.assign(item, { isFeatures: "0" })
             );
@@ -617,63 +751,65 @@ export default {
               this.otherList
             );
             console.log(this.OrgBasicForm);
-          } else {
-            return false;
-          }
-        });
+
       } else if (this.investorCertificationTitle == "团队信息") {
         this.$refs["teamForm"].validate(valid => {
           if (valid) {
-            if(this.kernelList.length==0||this.kernelList.length<3){
+            if (this.kernelList.length == 0 || this.kernelList.length < 3) {
               this.$message.error("请添加至少3条核心服务团队人员信息");
               return;
             }
-            this.OrgBasicForm.staffCount=this.teamForm.staffCount
-            this.OrgBasicForm.returneeNum=this.teamForm.returneeNum
-            this.OrgBasicForm.professionNum=this.teamForm.professionNum
-            this.OrgBasicForm.masterNum=this.teamForm.masterNum
-            this.OrgBasicForm.doctorNum=this.teamForm.doctorNum
-            this.OrgBasicForm.bachelorNum=this.teamForm.bachelorNum
-            this.OrgBasicForm.orgTeams=this.kernelList
+            this.OrgBasicForm.staffCount = this.teamForm.staffCount;
+            // this.OrgBasicForm.returneeNum = this.teamForm.returneeNum;
+            this.OrgBasicForm.professionNum = this.teamForm.professionNum;
+            this.OrgBasicForm.masterNum = this.teamForm.masterNum;
+            this.OrgBasicForm.doctorNum = this.teamForm.doctorNum;
+            this.OrgBasicForm.bachelorNum = this.teamForm.bachelorNum;
+            this.OrgBasicForm.orgTeams = this.kernelList;
             this.status = 3;
             this.investorCertificationTitle = "联系方式";
-            this.btnText="保存并认证"
+            if(this.title==='编辑机构'){
+              this.btnText = "保存修改";
+            }else{
+               this.btnText = "保存并认证";
+            }
           } else {
             return false;
           }
         });
-      }else if (this.investorCertificationTitle == "联系方式") {
+      } else if (this.investorCertificationTitle == "联系方式") {
         this.$refs["contactForm"].validate(valid => {
           if (valid) {
-           console.log(this.contactForm)
-            this.OrgBasicForm.orgProvince=this.contactForm.orgProvince
-            this.OrgBasicForm.orgCity=this.contactForm.orgCity
-            this.OrgBasicForm.orgArea=this.contactForm.orgArea
-            this.OrgBasicForm.orgAddress=this.contactForm.orgAddress
-            this.OrgBasicForm.orgPhone=this.contactForm.orgPhone
-            this.OrgBasicForm.orgWeb=this.contactForm.orgWeb
-            this.OrgBasicForm.conName=this.contactForm.conName
-            this.OrgBasicForm.conPhone=this.contactForm.conPhone
-            this.OrgBasicForm.conEmail=this.contactForm.conEmail
-            console.log(this.OrgBasicForm)
-             this.api.post({
-        url: "saveOrUpdateOrgDetail",
-        data: this.OrgBasicForm,
-        callback: (res) =>{
-          if (res.code == "0000") {
-          this.$message({
-                  message: "提交成功",
-                  type: "success"
-                });
-           this.$router.push({
-        path: "/home"
-      });
-          } else {
-            this.$message.error(res.result);
-          }
-        }
-      });
+            this.loading = true;
+            this.OrgBasicForm.orgProvince = this.contactForm.orgProvince;
+            this.OrgBasicForm.orgCity = this.contactForm.orgCity;
+            this.OrgBasicForm.orgArea = this.contactForm.orgArea;
+            this.OrgBasicForm.orgAddress = this.contactForm.orgAddress;
+            this.OrgBasicForm.orgPhone = this.contactForm.orgPhone;
+            this.OrgBasicForm.orgWeb = this.contactForm.orgWeb;
+            this.OrgBasicForm.conName = this.contactForm.conName;
+            this.OrgBasicForm.conPhone = this.contactForm.conPhone;
+            this.OrgBasicForm.conEmail = this.contactForm.conEmail;
+            this.api.post({
+              url: "saveOrUpdateOrgDetail",
+              data: this.OrgBasicForm,
+              callback: res => {
+                 this.loading = false;
+                if (res.code == "0000") {
+                  this.$message({
+                    message: "操作成功,请等待后台审核",
+                    type: "success"
+                  });
+                  this.$router.push({
+                    path: "/home"
+                  });
+                } else {
+                  this.$message.error(res.result);
+                  return false
+                }
 
+              }
+            });
           } else {
             return false;
           }
@@ -694,8 +830,6 @@ export default {
                 this.industrySectorOptions.push(res.data[it]);
               } else if (res.data[it].preType == "2") {
                 this.developmentStageOptions.push(res.data[it]);
-              } else {
-                this.companyNatureOptions.push(res.data[it]);
               }
             }
           } else {
@@ -715,7 +849,7 @@ export default {
       this.kernelForm.conSpeciality = row.conSpeciality;
       this.kernelForm.conTime = row.conTime;
       this.isShowKernelList = true;
-         this.showBtn=true
+      this.showBtn = true;
       this.kernelText = "保存并更新";
     },
     // 删除核心团队人员
@@ -741,7 +875,7 @@ export default {
     cancelKernelList() {
       this.isShowKernelList = false;
       this.kernelText = "添加核心服务团队人员";
-      this.showBtn=false
+      this.showBtn = false;
     },
     // // 添加核心团队人员
     addKernelList() {
@@ -754,7 +888,7 @@ export default {
         this.kernelForm.conTime = "";
         this.isShowKernelList = true;
         this.kernelText = "保存并更新";
-        this.showBtn=true
+        this.showBtn = true;
       } else {
         this.$refs["kernelForm"].validate(valid => {
           if (valid) {
@@ -778,7 +912,7 @@ export default {
                 conQuali: this.kernelForm.conQuali
               });
             }
-            this.showBtn=false
+            this.showBtn = false;
             this.isShowKernelList = false;
             this.kernelText = "添加核心服务团队人员";
           } else {
@@ -795,6 +929,7 @@ export default {
       this.otherForm.id = row.id;
       this.otherForm.fileUrl = row.fileUrl;
       this.isShowOtherList = true;
+      this.showBtn=true
       this.otherText = "保存并更新";
     },
     // 删除其它资质/荣誉
@@ -819,6 +954,15 @@ export default {
     cancelOtherList() {
       this.isShowOtherList = false;
       this.otherText = "添加其它资质/荣誉";
+       this.showBtn = false
+        this.otherForm.fileUrl = "";
+        this.otherForm.certName = "";
+        this.otherForm.awardDepart = "";
+        this.otherForm.id = 0;
+        this.otherForm.awardTime = "";
+        // this.isShowOtherList = true;
+        // this.showBtn = true;
+        // this.otherText = "保存并更新";
     },
     // // 添加其它荣誉资质表单
     addOtherList(otherForm) {
@@ -829,10 +973,15 @@ export default {
         this.otherForm.id = 0;
         this.otherForm.awardTime = "";
         this.isShowOtherList = true;
+        this.showBtn = true;
         this.otherText = "保存并更新";
       } else {
-        this.$refs[otherForm].validate(valid => {
+        this.$refs['otherForm'].validate(valid => {
           if (valid) {
+            if(!this.otherForm.fileUrl){
+               this.$message.error("请上传附件");
+          return;
+            }
             if (this.otherForm.id != 0) {
               let otherFormObj = this.otherForm.id;
               this.otherList[otherFormObj - 1] = {
@@ -853,6 +1002,7 @@ export default {
             }
             this.isShowOtherList = false;
             this.otherText = "添加其它资质/荣誉";
+            this.showBtn = false
           } else {
             return false;
           }
@@ -917,12 +1067,14 @@ export default {
     // 选省
     choseProvince: function(e) {
       for (var index2 in this.province) {
-        if (e === this.province[index2].id) {
+        if (e === this.province[index2].value) {
           this.contactForm.orgProvince = this.province[index2].value;
           this.shi1 = this.province[index2].children;
-          this.contactForm.orgCity = this.province[index2].children[0].value
+          this.contactForm.orgCity = this.province[index2].children[0].value;
           this.qu1 = this.province[index2].children[0].children;
-           this.contactForm.orgArea = this.province[index2].children[0].children[0].value
+          this.contactForm.orgArea = this.province[
+            index2
+          ].children[0].children[0].value;
           this.E = this.qu1[0].id;
         }
       }
@@ -930,10 +1082,10 @@ export default {
     // 选市
     choseCity: function(e) {
       for (var index3 in this.city) {
-        if (e === this.city[index3].id) {
+        if (e === this.city[index3].value) {
           this.contactForm.orgCity = this.city[index3].value;
           this.qu1 = this.city[index3].children;
-          this.contactForm.orgArea = this.city[index3].children[0].value
+          this.contactForm.orgArea = this.city[index3].children[0].value;
           this.E = this.qu1[0].id;
         }
       }
@@ -941,14 +1093,14 @@ export default {
     // // 选区
     choseBlock: function(e) {
       for (var index4 in this.qu1) {
-        if (e === this.qu1[index4].id) {
+        if (e === this.qu1[index4].value) {
           this.contactForm.orgArea = this.qu1[index4].value;
         }
       }
     },
     beforeAvaUpload(file) {
-      const isJPG = file.type === "image/jpeg"||file.type === "image/png";
-      const isLt2M = file.size / 1024/1024 < 1;
+      const isJPG = file.type === "image/jpeg" || file.type === "image/png";
+      const isLt2M = file.size / 1024 / 1024 < 1;
 
       if (!isJPG) {
         this.$message.error("上传头像图片只能是 JPG或png 格式!");
@@ -963,8 +1115,8 @@ export default {
       this.OrgBasicForm.orgLogo = file.data;
     },
     beforelicense(file) {
-      const isJPG = file.type === "image/jpeg"||file.type === "image/png";
-      const isLt2M = file.size / 1024 /1024<1;
+      const isJPG = file.type === "image/jpeg" || file.type === "image/png";
+      const isLt2M = file.size / 1024 / 1024 < 1;
 
       if (!isJPG) {
         this.$message.error("上传图片只能是 JPG或png 格式!");
@@ -976,22 +1128,34 @@ export default {
       }
     },
     handlelicense(file) {
-      this.fileUrl = file.data;
-      console.log(this.fileUrl)
+      this.licenseList[0].fileUrl = file.data;
+      // console.log(this.fileUrl)
     },
     handleOtherSuccess(file) {
       this.otherForm.fileUrl = file.data;
-    },
+    }
   }
 };
 </script>
 <style lang="scss">
-  .el-tooltip__popper.is-dark{
-    max-width: 260px;
+.el-tooltip__popper.is-dark {
+  max-width: 260px;
 }
 .basicInformation {
-  .orgAddressInfo{
-     .el-input__inner{
+  .xian {
+    margin-left: 65px;
+    margin-bottom: 20px;
+    hr {
+      height: 1px;
+      border: none;
+      background: #dcdfe6;
+    }
+  }
+  .orgAddressInfo {
+    .el-input {
+      width: 460px !important;
+    }
+    .el-input__inner {
       width: 460px;
     }
   }
@@ -1044,6 +1208,7 @@ export default {
       .otherAvatar {
         width: 96px;
         height: 96px;
+        vertical-align: inherit;
       }
     }
   }
@@ -1173,6 +1338,7 @@ export default {
   .el-table__header {
     border-right: 1px solid rgba(65, 215, 135, 1);
     border-left: 1px solid rgba(65, 215, 135, 1);
+    table-layout: auto;
   }
   .cancel {
     margin-left: 15px;
@@ -1261,7 +1427,7 @@ export default {
     .el-select {
       width: unset;
     }
-    .el-input{
+    .el-input {
       width: 150px;
     }
   }

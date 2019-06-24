@@ -15,15 +15,15 @@
                         </div>
                     </div>
                     <!-- 如果需要分页器 -->
-                    <div class="swiper-pagination"></div>
+                    <!-- <div class="swiper-pagination"></div> -->
 
                     <!-- 如果需要导航按钮 -->
-                    <div class="swiper-button-prev">
+                    <!-- <div class="swiper-button-prev">
                         <i class="iconfont icon-leftarrow pointer"></i>
                     </div>
                     <div class="swiper-button-next">
                         <i class="iconfont icon-rightarrow pointer"></i>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -53,7 +53,8 @@
                             <h4>申请入驻</h4>
                             <p>电话：{{i.phone}}</p>
                         </div>
-                        <a class="footLi pointer" href="http://112.94.22.222:2383/ibps-platform-portal/login.jsp?response_type=code&redirect_uri=http%3A%2F%2F112.94.22.222%3A2384%2Fibps%2Fplatform%2Fconsole%2Fmain.htm&client_id=test">申请入驻</a>
+                        <a class="footLi pointer" :href='ibpsUrl+"ibps-platform-portal/login.jsp?response_type=code&redirect_uri=http%3A%2F%2F112.94.22.222%3A2384%2Fibps%2Fplatform%2Fconsole%2Fmain.htm&client_id=test"'>申请入驻</a>
+                        <!-- <a class="footLi pointer" href="http://112.94.22.222:2383/ibps-platform-portal/login.jsp?response_type=code&redirect_uri=http%3A%2F%2F112.94.22.222%3A2384%2Fibps%2Fplatform%2Fconsole%2Fmain.htm&client_id=test">申请入驻</a> -->
                     </li>
                 </ul>
             </div>
@@ -66,13 +67,15 @@
 </template>
 <script>
 import swiper from "swiper";
+import { IBPS_URL } from '@/util/url'
 export default {
   data() {
     return {
       page: 1,
       rows: 8,
       total:0,
-      incubatorList:[]
+      incubatorList:[],
+      ibpsUrl:IBPS_URL
     };
   },
   mounted() {
@@ -179,6 +182,7 @@ export default {
   .incubatorNav {
     padding: 15px 0;
     font-size: 13px;
+    font-weight: bold;
   }
   .incubatorCon {
     margin-bottom: 50px;

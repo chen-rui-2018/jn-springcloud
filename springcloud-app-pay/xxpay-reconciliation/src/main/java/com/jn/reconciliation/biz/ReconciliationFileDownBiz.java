@@ -21,16 +21,18 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.xxpay.dal.dao.entity.reconciliation.TbPayReconciliationInterface;
 
 import java.io.File;
 import java.util.Date;
 
 /**
- * 对账文件下载业务逻辑.
- *
- * 龙果学院：www.roncoo.com
- * 
- * @author：shenjialong
+ * @ClassName：对账文件下载业务逻辑.
+ * @Descript：
+ * @Author： hey
+ * @Date： Created on 2019/5/20 15:54
+ * @Version： v1.0
+ * @Modified By:
  */
 @Component("reconciliationFileDownBiz")
 public class ReconciliationFileDownBiz {
@@ -44,35 +46,35 @@ public class ReconciliationFileDownBiz {
 	/**
 	 * 请求下载对账文件 .
 	 * 
-	 * @param interfaceCode
-	 *            支付渠道
+	 * @param reconciliationInter
+	 *           对账接口实体
 	 * @param billDate
 	 *            账单日
 	 * @return
 	 */
-	public File downReconciliationFile(String interfaceCode, Date billDate) {
+	public File downReconciliationFile(TbPayReconciliationInterface reconciliationInter, Date billDate) {
 
 		// 支付渠道编码
-		if (StringUtils.isBlank(interfaceCode)) {
+		if (StringUtils.isBlank(reconciliationInter.getInterfaceCode())) {
 			LOG.info("支付渠道编码为空");
 			return null;
 		}
 
 		// 对账单下载
-		return this.downFile(interfaceCode, billDate);
+		return this.downFile(reconciliationInter, billDate);
 	}
 
 	/**
 	 * 下载文件
 	 * 
-	 * @param interfaceCode
-	 *            接口编码
+	 * @param reconciliationInter
+	 * 	            对账接口实体
 	 * @param billDate
 	 *            业务对账文件的获取时间
 	 */
-	private File downFile(String interfaceCode, Date billDate) {
+	private File downFile(TbPayReconciliationInterface reconciliationInter, Date billDate) {
 
-		LOG.info("银行渠道编号[" + interfaceCode + "],进入下载业务对账文件操作>>>");
+		LOG.info("银行渠道编号[" + reconciliationInter.getInterfaceCode() + "],进入下载业务对账文件操作>>>");
 
 		try {
 			File file = null;
@@ -82,7 +84,7 @@ public class ReconciliationFileDownBiz {
 				try {
 					downloadTrytimes++;
 					// 使用工厂模式
-					file = reconciliationFactory.fileDown(interfaceCode, billDate);
+					file = reconciliationFactory.fileDown(reconciliationInter, billDate);
 				} catch (Exception e) {
 					LOG.error("下载账单文件失败", e);
 					Thread.sleep(10000);

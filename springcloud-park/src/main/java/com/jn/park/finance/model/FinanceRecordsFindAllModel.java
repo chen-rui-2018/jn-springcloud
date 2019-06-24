@@ -87,4 +87,17 @@ public class FinanceRecordsFindAllModel extends Page implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+
+
+    @Override
+    public String toString() {
+        return "FinanceRecordsFindAllModel{" +
+                "createState='" + createState + '\'' +
+                ", financerSure='" + financerSure + '\'' +
+                ", departmentId='" + departmentId + '\'' +
+                ", creatorAccount='" + creatorAccount + '\'' +
+                ", name='" + name + '\'' +
+                ", orderByClause='" + orderByClause + '\'' +
+                '}';
+    }
 }

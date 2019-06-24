@@ -6,9 +6,10 @@
     <div class="loginBox">
       <el-form ref="loginform" :model="loginform">
         <input type="text" placeholder="请输入手机号码" v-model.trim="loginform.account">
-        <input type="password" placeholder="请输入密码" v-model.trim="loginform.password"  @keyup="keyFun($event)">
+        <input type="password" placeholder="请输入密码" v-model.trim="loginform.password" @keyup="keyFun($event)">
         <span class="forgetPass" @click="handleForpsw">忘记密码？</span>
-        <el-button plain style="width:100%;height:40px;line-height:14px;border:1px solid #41d787;color:#00a041;background:#ecfcf2;font-size:14px;" @click="loginForm('loginform')" >登&nbsp;录</el-button>
+        <el-button plain style="width:100%;height:40px;line-height:14px;border:1px solid #41d787;color:#00a041;background:#ecfcf2;font-size:14px;"
+          @click="loginForm('loginform')">登&nbsp;录</el-button>
         <div class="returnBack" @click="$router.push({path:'/'})">返回首页</div>
         <span class="register" @click="handleRester">立即注册</span>
       </el-form>
@@ -17,6 +18,7 @@
 </template>
 
 <script>
+import { setToken, setUserInfo } from '@/util/auth'
 export default {
   data() {
     return {
@@ -37,10 +39,10 @@ export default {
     handleRester() {
       this.$router.push({ path: "register" });
     },
-    keyFun(e){
-      if(e.keyCode === 13){
-        this.loginForm()
-      } 
+    keyFun(e) {
+      if (e.keyCode === 13) {
+        this.loginForm();
+      }
     },
     loginForm() {
       if (!this.loginform.account) {
@@ -60,35 +62,26 @@ export default {
         },
         dataFlag: false,
         callback: function(res) {
-          if (res.code == "0000") {
-            sessionStorage.token = res.data;
-            sessionStorage.setItem("account",_this.loginform.account);
+          if (res.code === "0000") {
+            setToken(res.data);
             _this.api.get({
               url: "getUserPersonInfo",
-              data: {
-                account: _this.loginform.account
-              },
-              dataFlag: false,
               callback: function(res) {
                 if (res.code === "0000") {
-                 sessionStorage.setItem('userInfo', JSON.stringify(res.data))
+                  setUserInfo(JSON.stringify(res.data))
                   _this.$router.push({
-                    // path: "/home",
-                    path: window.sessionStorage.getItem('PresetRoute'),
-                    // query: { account: _this.loginform.account }
+                    path: window.sessionStorage.getItem("PresetRoute") || '/'
                   });
-                } else {
-                  _this.$message.error(res.result);
                 }
               }
-            });
-            // _this.api.setToken(res.data);
+            })
           } else {
             _this.$message.error(res.result);
           }
         }
-      })
-    }
+      });
+    },
+
   }
 };
 </script>
@@ -101,7 +94,6 @@ export default {
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: -1;
   background: url("../../../static/img/beijing.png") 100% 100% / 100% 100%
     no-repeat;
   .loginLogo {
@@ -115,7 +107,7 @@ export default {
     }
   }
   .loginBox {
-    background: rgba(255, 255, 255, .95);
+    background: rgba(255, 255, 255, 0.95);
     padding: 45px 75px;
     width: 266px;
     height: 185px;
@@ -141,7 +133,7 @@ export default {
       color: #b7b7b7;
       font-size: 12px;
     }
-    input:focus{
+    input:focus {
       border-color: #00a041;
     }
     // .el-form-item:nth-child(2) {
@@ -168,8 +160,8 @@ export default {
     .returnBack {
       font-size: 13px;
       position: absolute;
-      left:20px;
-      bottom:10px;
+      left: 20px;
+      bottom: 10px;
       cursor: pointer;
     }
   }

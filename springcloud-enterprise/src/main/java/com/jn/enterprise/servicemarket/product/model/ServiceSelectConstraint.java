@@ -98,4 +98,18 @@ public class ServiceSelectConstraint extends Page implements Serializable {
     public void setOrgType(String orgType) {
         this.orgType = orgType;
     }
+
+    @Override
+    public String toString() {
+        return "ServiceSelectConstraint{" +
+                "productType='" + productType + '\'' +
+                ", status='" + status + '\'' +
+                ", signoryName='" + signoryName + '\'' +
+                ", orgName='" + orgName + '\'' +
+                ", productName='" + productName + '\'' +
+                ", startTime='" + startTime + '\'' +
+                ", endTime='" + endTime + '\'' +
+                ", orgType='" + orgType + '\'' +
+                '}';
+    }
 }

@@ -42,27 +42,24 @@
                 <span v-if="item.titleType===3">[ 主观题 ]</span>&nbsp;&nbsp;
                 <span v-if="item.isShowAnswer===1">(必答)</span>
               </p>
-              <div v-if="item.titleType === 1" style="padding-left:26px;">
+              <div v-if="item.titleType === 1 || item.titleType === 2" style="padding-left:26px;">
                 <p
                   v-for="(item2,index2) of item.titleOptionList"
                   :key="index2"
                   style="font-size:14px;"
                 >
-                  <el-radio v-model="item.answerList[0].optionAnswer" :label="upperCase[index2]"/>&nbsp;&nbsp;
+                  <el-radio
+                    v-if="item.titleType === 1"
+                    v-model="item.answerList[0].optionAnswer"
+                    :label="upperCase[index2]"
+                  />&nbsp;&nbsp;
+                  <el-checkbox
+                    v-if="item.titleType === 2"
+                    v-model="item.multipleAnswer[index2]"
+                    :label="upperCase[index2]"
+                  />&nbsp;&nbsp;
                   <span>{{ item2.optionName }}</span>
                 </p>
-              </div>
-              <div v-if="item.titleType === 2" style="padding-left:26px;">
-                <el-checkbox-group v-model="item.answerList[0].optionAnswer">
-                  <p
-                    v-for="(item2,index2) of item.titleOptionList"
-                    :key="index2"
-                    style="font-size:14px;"
-                  >
-                    <el-checkbox :label="upperCase[index2]"/>&nbsp;&nbsp;
-                    <span>{{ item2.optionName }}</span>
-                  </p>
-                </el-checkbox-group>
               </div>
               <el-input
                 v-if="item.titleType === 3"
@@ -169,6 +166,9 @@ export default {
               this.$message.success('保存成功！')
               this.isEntry = false
               this.examList = res.data.data.questionList
+              this.examList.forEach(item => {
+                item['multipleAnswer'] = []
+              })
             } else {
               this.$message.error(res.data.result)
             }
@@ -178,6 +178,17 @@ export default {
     },
     // 提交问卷
     submit() {
+      this.examList.forEach(item => {
+        if (item.titleType === 2) {
+          const answer = []
+          item.multipleAnswer.forEach((item2, index2) => {
+            if (item2) {
+              answer.push(this.upperCase[index2])
+            }
+          })
+          item.answerList[0].optionAnswer = answer.join(',')
+        }
+      })
       const data = {
         projectId: this.$route.query.projectId,
         name: this.userData.name,

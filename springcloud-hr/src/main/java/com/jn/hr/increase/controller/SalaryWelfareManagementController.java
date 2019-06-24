@@ -181,7 +181,7 @@ public class SalaryWelfareManagementController extends BaseController{
 		String fileName = "工资条"+ DateUtils.formatDate(new Date(),"yyyy-MM-dd HH:mm:ss");
         String sheetName = "工资条";
         Sheet sheet1 = new Sheet(1, 0, SalaryPayrollVo.class); 
-		HrExcelUtil.writeWithMultiHead(pageList.getRows(), fileName, sheet1, sheetName);
+		HrExcelUtil.writeWithMultiHead(pageList.getRows(), fileName, sheet1, sheetName,response);
 
 //        ExcelUtil.writeExcelWithCol(response, fileName, sheetName, exportTitle, exportColName, pageList.getRows());
 	}
@@ -359,8 +359,8 @@ public class SalaryWelfareManagementController extends BaseController{
 	public Result<String> stopInsurance(@Validated @RequestBody IncreaseStaffAdd increaseStaffAdd){
 		Assert.notNull(increaseStaffAdd.getInsuredMonth(),"减员月份不能为空");
 		User user = (User) SecurityUtils.getSubject().getPrincipal();
-		welfareManagrmentService.stopInsurance(increaseStaffAdd, user);
-		return new Result();
+		String str = welfareManagrmentService.stopInsurance(increaseStaffAdd, user);
+		return new Result(str);
 	}
 	
 	@ControllerLog(doAction = "自主参保方案页面")

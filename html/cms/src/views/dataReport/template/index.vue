@@ -557,12 +557,10 @@ export default {
     sortTree(tree, keys2) {
       for (let i = 0, length = tree.length; i < length; i++) {
         for (let j = i + 1; j < length; j++) {
-          if (tree[i].hasOwnProperty(keys2) && tree[j].hasOwnProperty(keys2) && tree[i][keys2] && tree[j][keys2]) {
-            if (Number(tree[i][keys2]) > Number(tree[j][keys2])) {
-              const temp = tree[j]
-              tree[j] = tree[i]
-              tree[i] = temp
-            }
+          if (Number(tree[i][keys2]) > Number(tree[j][keys2])) {
+            const temp = tree[j]
+            tree[j] = tree[i]
+            tree[i] = temp
           }
         }
         if (tree[i].hasOwnProperty('children') && tree[i].children && tree[i].children.length > 0) {
@@ -737,8 +735,7 @@ export default {
       this.getModelData(id)
         .then(data => {
           if (data.code === '0000') {
-            this.formData = data.data
-            const formData = this.formData
+            const formData = data.data
             formData.modelType = formData.modelType.toString()
             formData.recordStatus = formData.recordStatus.toString()
             // 图片和附件上传的回显
@@ -802,6 +799,7 @@ export default {
               formData.taskCreateTime = this.formatDate(formData.taskCreateTime)
               formData.filllInFormDeadline = this.formatDate(formData.filllInFormDeadline)
             }
+            this.formData = formData
           } else {
             this.$message.error(data.result)
           }

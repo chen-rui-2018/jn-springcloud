@@ -49,7 +49,7 @@
               <div v-for="(ruleRow, index) in scope.row['inputFormatModel']" :key="index" class="target-bg">
                 <div v-for="(item, itemIndex) in ruleRow" :key="itemIndex" class="target-bg-cell">
                   <div v-if="item.formType === '0'" :class="{app: isMobile, pc: !isMobile}" class="target-left-row">
-                    <div class="target-left-row-title" :class="{app: isMobile, pc: !isMobile}">{{ item.formName }}</div>
+                    <div class="target-left-row-title" :class="{app: isMobile, pc: !isMobile, empty: !item.formName}">{{ item.formName }}</div>
                     <div class="target-left-row-form" :class="{app: isMobile, pc: !isMobile}">
                       <el-input
                         :disabled="isReported === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])"
@@ -382,7 +382,11 @@ export default {
         min-width: 160px;
         width: 80px;
         margin-bottom: 12px;
+        &.empty {
+          margin-bottom: 0;
+        }
       }
+
     }
     .target-left-row-form {
       &.pc {
@@ -408,8 +412,6 @@ export default {
       margin-top: 20px;
       border-bottom: 1px solid $gray;
       padding-bottom: 12px;
-      @include flex($h: flex-start);
-      flex-wrap: wrap;
       &:last-of-type {
         border-bottom: none;
         padding-bottom: 0;
@@ -418,9 +420,12 @@ export default {
         margin-top: 0;
       }
       .target-bg-cell {
-        flex: 1;
+        margin: 20px 0;
+        &:first-of-type {
+          margin-top: 0;
+        }
         &:last-of-type {
-          margin-bottom: 0;
+          margin: 0;
         }
       }
   }

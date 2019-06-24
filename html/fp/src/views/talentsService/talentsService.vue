@@ -285,7 +285,6 @@ export default {
       //跳转页面
       gotalentplatform(){
         if(getToken()){
-          // this.$router.push({name:'talentPlatform'})
           this.api.get({
           url: "getUserExtension",
           data: { },
@@ -538,10 +537,9 @@ export default {
                   font-size: 14px;
                   margin-top: 18px;
                   line-height: 24px;
-                  display: -webkit-box;
-                  -webkit-box-orient: vertical;
-                  -webkit-line-clamp: 1;
                   overflow: hidden;
+                  text-overflow:ellipsis;
+                  white-space: nowrap;
                   // height: 48px;
                 }
                 p:nth-child(4){

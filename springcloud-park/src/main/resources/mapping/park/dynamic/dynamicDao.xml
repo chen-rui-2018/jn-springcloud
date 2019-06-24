@@ -179,7 +179,7 @@
         left join tb_file_img t2 on t1.topic_id = t2.topic_id
         where t1.topic_status = "1" and t1.record_status = 1 and
         t1.creator_account in (
-          select  tpc.receive_account from  tb_person_care tpc where tpc.care_account = #{account}
+          select  tpc.receive_account from  tb_person_care tpc where tpc.care_account = #{account} and tpc.record_status = 1
         )
         group by t1.topic_id  order by t1.created_time desc
 

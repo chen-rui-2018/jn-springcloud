@@ -494,7 +494,7 @@ public class DynamicServiceImpl implements DynamicService {
             accountList.add(show.getCreatorAccount());
         }
         Result<List<UserExtensionInfo>> result = userExtensionClient.getMoreUserExtension(accountList);
-        if(!result.getData().isEmpty()){
+        if( result.getData()!=null && !result.getData().isEmpty()){
             List<UserExtensionInfo> userList = result.getData();
             for(DynamicWebShow show : dynamicList){
                 for(UserExtensionInfo user : userList){

@@ -16,11 +16,13 @@
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
     <result column="account_and_password" jdbcType="VARCHAR" property="accountAndPassword" />
+    <result column="is_talent_service" jdbcType="VARCHAR" property="isTalentService" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
   </resultMap>
 
   <sql id="Base_Column_List">
     id, platform_title, link_address, remark, business_consult, system_support, subordinate_platform_name, 
-    status, record_status, creator_account, created_time, modifier_account, modified_time,account_and_password
+    status, record_status, creator_account, created_time, modifier_account, modified_time,account_and_password,is_talent_service,sort
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.pd.declaration.model.DeclarationPlatformModel" resultMap="BaseResultMap">
     select
@@ -37,6 +39,8 @@
     A.created_time as createdTime,
     A.modifier_account as modifierAccount,
     A.modified_time as modifiedTime,
+    A.is_talent_service as isTalentService,
+    A.sort as sort,
     B.account_and_password as accountAndPassword
     from tb_pd_declaration_platform_manage A
     LEFT JOIN tb_pd_declaration_platform_memorandum B
@@ -50,7 +54,7 @@
       and A.platform_title like CONCAT('%', #{platformTitle}, '%')
     </if>
     GROUP BY A.id
-    order by A.created_time desc
+    order by A.sort asc ,A.created_time desc
   </select>
 
 </mapper>

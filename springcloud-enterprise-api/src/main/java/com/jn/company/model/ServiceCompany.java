@@ -138,6 +138,8 @@ public class ServiceCompany implements Serializable {
     private String modifiedTime;
     @ApiModelProperty(value = "企业宣传图片")
     private String[] propagandaPicture;
+    @ApiModelProperty(value = "企业性质数组")
+    private String[] comPropertys;
     @ApiModelProperty(value = "关注用户数及当前用户关注状态")
     private CareUserDetails careUserDetails;
 
@@ -629,6 +631,14 @@ public class ServiceCompany implements Serializable {
         this.propagandaPicture = propagandaPicture;
     }
 
+    public String[] getComPropertys() {
+        return comPropertys;
+    }
+
+    public void setComPropertys(String[] comPropertys) {
+        this.comPropertys = comPropertys;
+    }
+
     public CareUserDetails getCareUserDetails() {
         return careUserDetails;
     }
@@ -701,6 +711,7 @@ public class ServiceCompany implements Serializable {
                 ", createdTime='" + createdTime + '\'' +
                 ", modifiedTime='" + modifiedTime + '\'' +
                 ", propagandaPicture=" + Arrays.toString(propagandaPicture) +
+                ", comPropertys=" + Arrays.toString(comPropertys) +
                 ", careUserDetails=" + careUserDetails +
                 '}';
     }

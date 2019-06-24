@@ -52,17 +52,17 @@
               <p>ADMINISTRATIVE&nbsp;EXAMINATIO</p>
               <img src="@/../static/img/right-arrow.png" alt="">
             </li> -->
-             <li @click="$router.push({path:'/declarationCenter'})">
+            <li @click="$router.push({path:'/declarationCenter'})">
               <span>申报中心</span>
               <p>DECLARE&nbsp;CENTER</p>
               <img src="@/../static/img/right-arrow.png" alt="">
             </li>
-             <li @click="$router.push({path:'/policyCenter'})">
+            <li @click="$router.push({path:'/policyCenter'})">
               <span>政策中心</span>
               <p>POLICY&nbsp;CENTERE</p>
               <img src="@/../static/img/right-arrow.png" alt="">
             </li>
-             <li @click="$router.push({path:'/actiCenter'})">
+            <li @click="$router.push({path:'/actiCenter'})">
               <span>活动中心</span>
               <p>ACTIVITY&nbsp;CENTERE</p>
               <img src="@/../static/img/right-arrow.png" alt="">
@@ -194,7 +194,7 @@
           <i class="iconfont icon-leftarrow pointer" @click="leftPage"></i>
           <i class="iconfont icon-rightarrow pointer" @click="rightPage"></i>
           <ul class="actiUl clearfix">
-            <li v-for="(i,k) in actiListSlim" :key="k" class="pointer"  @click="$router.push({ path: '/actiDetail', query: { activityId: i.id } })">
+            <li v-for="(i,k) in actiListSlim" :key="k" class="pointer" @click="$router.push({ path: '/actiDetail', query: { activityId: i.id } })">
               <div class="postImgItem" @mouseenter.stop="show1=i.id,show11=i.id" @mouseleave.stop="show1='',show11=''">
                 <img :src="i.actiPosterUrl" :class="{'poIm':show1==i.id}" class="postImg pointer" alt="活动海报图片">
                 <img src="@/../static/img/组 40.png" :class="{'poIm':show11==i.id}" class="postImg1 pointer" alt="活动海报图片">
@@ -299,7 +299,7 @@
                     <div class="pointer" v-for="(item,index) in investorInfoList" :key="index" v-if="index<2" @click="$router.push({path:'investorDetail',query:{investorAccount:item.investorAccount}})">
                       <a href="javascript:;">
                         <div class="info_img">
-                          <div ><img v-if="item.avatar" :src="item.avatar" alt=""> <img v-else src="@/../static/img/larImg.png" alt=""></div>
+                          <div><img v-if="item.avatar" :src="item.avatar" alt=""> <img v-else src="@/../static/img/larImg.png" alt=""></div>
                         </div>
                         <div class="info_all">
                           <div class="info_name">
@@ -315,7 +315,7 @@
                     </div>
                   </li>
                   <li class="conselor_mid">
-                    <div v-for="(item2,index2) in investorInfoList" :key="index2" v-if="index2>1&&index2<10" class="conselor_mid_list"  @click="$router.push({path:'investorDetail',query:{investorAccount:item2.investorAccount}})">
+                    <div v-for="(item2,index2) in investorInfoList" :key="index2" v-if="index2>1&&index2<10" class="conselor_mid_list" @click="$router.push({path:'investorDetail',query:{investorAccount:item2.investorAccount}})">
                       <a href="javascript:;">
                         <div class="info_img"><img :src="item2.avatar" alt=""></div>
                         <div class="info_all">
@@ -761,14 +761,14 @@ export default {
     },
     //判断是否登录
     isLogin() {
-      const token=this.getToken()
+      const token = this.getToken();
       if (!token) {
         this.islogin = false;
       }
     },
     //在线联系
     onlineContat(orgAccount, orgName) {
-      const userInfo=this.getUserInfo()
+      const userInfo = this.getUserInfo();
       // console.log(JSON.parse(userInfo))
       if (!userInfo) {
         this.concatVisible = true;
@@ -797,9 +797,7 @@ export default {
         callback: res => {
           if (res.code == "0000") {
             // this.typeList = res.data;
-            if (
-              JSON.parse(this.getUserInfo()).account == res.data.account
-            ) {
+            if (JSON.parse(this.getUserInfo()).account == res.data.account) {
               this.$message.error("当前登录的账号跟聊天对象一样");
               return;
             }
@@ -1491,8 +1489,8 @@ export default {
   .policyCenter {
     .paging {
       overflow: hidden;
-      margin-top:50px;
-      padding-bottom:20px;
+      margin-top: 50px;
+      padding-bottom: 20px;
       .swiper-container {
         padding: 40px 0;
       }
@@ -1550,6 +1548,10 @@ export default {
             text-align: left;
             .rightTit {
               font-size: 14px;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              height: 20px;
             }
             > p {
               margin-top: 20px;

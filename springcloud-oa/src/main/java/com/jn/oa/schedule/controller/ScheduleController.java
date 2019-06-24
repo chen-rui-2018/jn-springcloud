@@ -2,7 +2,7 @@ package com.jn.oa.schedule.controller;
 
 import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
-import com.jn.oa.schedule.model.Schedule;
+import com.jn.oa.model.Schedule;
 import com.jn.oa.schedule.model.ScheduleEdit;
 import com.jn.oa.schedule.model.ScheduleQuery;
 import com.jn.oa.schedule.service.ScheduleService;

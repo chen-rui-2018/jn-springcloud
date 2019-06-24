@@ -610,9 +610,20 @@ export default {
     //用户提需求
     demandDia() {
       let _this = this;
-      // if(!this.financialProform.financingPeriod){
-      //   return
-      // }
+      if(this.financialProform.financingAmount == ''){
+        _this.$message.error("请输入融资金额");
+        return
+      }
+      if(this.financialProform.financingPeriod == ''){
+        _this.$message.error("请选择融资期限");
+        return
+      }
+      
+      if(this.financialProform.expectedDate == ''){
+        _this.$message.error("请选择日期");
+        return
+      }
+      
       let max = this.arr[this.financialProform.financingPeriod].loanTermMax;
       let min = this.arr[this.financialProform.financingPeriod].loanTermMin;
       this.api.post({
@@ -1255,13 +1266,13 @@ export default {
               }
               > .finaContent {
                 .finaPhone {
-                  font-size: 15px;
+                  font-size: 13px;
                 }
               }
               .finaAddress {
                 text-indent: -35px;
                 margin-left: 35px;
-                font-size: 15px;
+                font-size: 13px;
               }
             }
             > .finaPP {

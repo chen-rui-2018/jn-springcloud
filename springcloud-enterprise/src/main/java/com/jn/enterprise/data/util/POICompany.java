@@ -4,10 +4,10 @@ import com.jn.enterprise.data.model.CompanyTree;
 import com.jn.enterprise.data.tool.GetCompanyTree;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
-import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,16 +24,17 @@ public class POICompany {
     public static void getTable(List<CompanyTree> list,HttpServletRequest req,
                                 HttpServletResponse resp)throws IOException{
 
-        String fileName = DateFormatUtils.format(new Date(),"yyyyMMddHHmm") +".xls"; //设置文件名
-        resp.setHeader("Content-disposition", "attachment;filename=" + new String(fileName.getBytes("gb2312"), "ISO8859-1"));//设置文件头编码格式
-        resp.setContentType("APPLICATION/OCTET-STREAM;charset=UTF-8");//设置类型
+        String fileName = DateFormatUtils.format(new Date(),"yyyyMMddHHmm"); //设置文件名
+        resp.addHeader("Content-Disposition", "attachment;filename=" +fileName+ ".xlsx");//设置文件头编码格式
+        resp.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");//设置类型
         resp.setDateHeader("Expires", 0);//设置日期头
         //转换成树形
         GetCompanyTree getCompanyTree = new GetCompanyTree();
         List<Map> treeList = getCompanyTree.buildPackage(list);
-        //构建HSSFWorkBook
-        HSSFWorkbook wb = new HSSFWorkbook();
-        HSSFCellStyle headstyle = wb.createCellStyle();
+        //构建XSSFWorkBook
+        Workbook wb = new XSSFWorkbook();
+        // 生成一个样式
+        XSSFCellStyle headstyle=((XSSFWorkbook) wb).createCellStyle();
         headstyle.setAlignment(HorizontalAlignment.CENTER);// 左右居中
         headstyle.setVerticalAlignment(VerticalAlignment.CENTER);// 上下居中
         headstyle.setLocked(true);
@@ -56,13 +57,12 @@ public class POICompany {
                 }
             }
         }
-        //文件名
-        HSSFSheet sheet = wb.createSheet(fileName);
+        Sheet sheet = wb.createSheet();
         //表头设置
-        HSSFRow headrow = sheet.createRow(0);
+        Row headrow = sheet.createRow(0);
         headrow.createCell(0).setCellValue("指标名称");
         headrow.createCell(1).setCellValue("单位");
-        HSSFCell cell = headrow.createCell(2);
+        Cell cell = headrow.createCell(2);
         cell.setCellValue("指标值");
         cell.setCellStyle(headstyle);
 
@@ -75,7 +75,7 @@ public class POICompany {
         //填充数据
         int rowlen = 1;
         for (int i = 0; i < treeList.size(); i++) {
-            HSSFRow row = sheet.createRow(rowlen);
+            Row row = sheet.createRow(rowlen);
             HashMap map = (HashMap) treeList.get(i);
             Set set = map.keySet();
             Iterator iterator = set.iterator();
@@ -84,7 +84,7 @@ public class POICompany {
             row.createCell(0).setCellValue(key);
             rowlen++;
             for (CompanyTree child2 : children) {
-                HSSFRow row1 = sheet.createRow(rowlen);
+                Row row1 = sheet.createRow(rowlen);
                 row1.createCell(0).setCellValue(child2.getFormname());
                 row1.createCell(1).setCellValue(child2.getUnit());
 
@@ -96,7 +96,6 @@ public class POICompany {
                         row1.createCell(2 + j).setCellValue(str1[j]);
                     }
                 }
-
                 row1.createCell(2 + lenth).setCellValue(child2.getSumval());
                 rowlen++;
             }

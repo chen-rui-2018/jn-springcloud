@@ -175,73 +175,73 @@ public class TbParkingRecordCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andAreaIdIsNull() {
-            addCriterion("area_id_ is null");
+        public Criteria andMessageIdIsNull() {
+            addCriterion("message_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andAreaIdIsNotNull() {
-            addCriterion("area_id_ is not null");
+        public Criteria andMessageIdIsNotNull() {
+            addCriterion("message_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andAreaIdEqualTo(String value) {
-            addCriterion("area_id_ =", value, "areaId");
+        public Criteria andMessageIdEqualTo(String value) {
+            addCriterion("message_id =", value, "messageId");
             return (Criteria) this;
         }
 
-        public Criteria andAreaIdNotEqualTo(String value) {
-            addCriterion("area_id_ <>", value, "areaId");
+        public Criteria andMessageIdNotEqualTo(String value) {
+            addCriterion("message_id <>", value, "messageId");
             return (Criteria) this;
         }
 
-        public Criteria andAreaIdGreaterThan(String value) {
-            addCriterion("area_id_ >", value, "areaId");
+        public Criteria andMessageIdGreaterThan(String value) {
+            addCriterion("message_id >", value, "messageId");
             return (Criteria) this;
         }
 
-        public Criteria andAreaIdGreaterThanOrEqualTo(String value) {
-            addCriterion("area_id_ >=", value, "areaId");
+        public Criteria andMessageIdGreaterThanOrEqualTo(String value) {
+            addCriterion("message_id >=", value, "messageId");
             return (Criteria) this;
         }
 
-        public Criteria andAreaIdLessThan(String value) {
-            addCriterion("area_id_ <", value, "areaId");
+        public Criteria andMessageIdLessThan(String value) {
+            addCriterion("message_id <", value, "messageId");
             return (Criteria) this;
         }
 
-        public Criteria andAreaIdLessThanOrEqualTo(String value) {
-            addCriterion("area_id_ <=", value, "areaId");
+        public Criteria andMessageIdLessThanOrEqualTo(String value) {
+            addCriterion("message_id <=", value, "messageId");
             return (Criteria) this;
         }
 
-        public Criteria andAreaIdLike(String value) {
-            addCriterion("area_id_ like", value, "areaId");
+        public Criteria andMessageIdLike(String value) {
+            addCriterion("message_id like", value, "messageId");
             return (Criteria) this;
         }
 
-        public Criteria andAreaIdNotLike(String value) {
-            addCriterion("area_id_ not like", value, "areaId");
+        public Criteria andMessageIdNotLike(String value) {
+            addCriterion("message_id not like", value, "messageId");
             return (Criteria) this;
         }
 
-        public Criteria andAreaIdIn(List<String> values) {
-            addCriterion("area_id_ in", values, "areaId");
+        public Criteria andMessageIdIn(List<String> values) {
+            addCriterion("message_id in", values, "messageId");
             return (Criteria) this;
         }
 
-        public Criteria andAreaIdNotIn(List<String> values) {
-            addCriterion("area_id_ not in", values, "areaId");
+        public Criteria andMessageIdNotIn(List<String> values) {
+            addCriterion("message_id not in", values, "messageId");
             return (Criteria) this;
         }
 
-        public Criteria andAreaIdBetween(String value1, String value2) {
-            addCriterion("area_id_ between", value1, value2, "areaId");
+        public Criteria andMessageIdBetween(String value1, String value2) {
+            addCriterion("message_id between", value1, value2, "messageId");
             return (Criteria) this;
         }
 
-        public Criteria andAreaIdNotBetween(String value1, String value2) {
-            addCriterion("area_id_ not between", value1, value2, "areaId");
+        public Criteria andMessageIdNotBetween(String value1, String value2) {
+            addCriterion("message_id not between", value1, value2, "messageId");
             return (Criteria) this;
         }
 
@@ -1732,6 +1732,76 @@ public class TbParkingRecordCriteria {
 
         public Criteria andRecordStatusNotBetween(Byte value1, Byte value2) {
             addCriterion("record_status not between", value1, value2, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaIdIsNull() {
+            addCriterion("area_id_ is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaIdIsNotNull() {
+            addCriterion("area_id_ is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaIdEqualTo(String value) {
+            addCriterion("area_id_ =", value, "areaId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaIdNotEqualTo(String value) {
+            addCriterion("area_id_ <>", value, "areaId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaIdGreaterThan(String value) {
+            addCriterion("area_id_ >", value, "areaId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaIdGreaterThanOrEqualTo(String value) {
+            addCriterion("area_id_ >=", value, "areaId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaIdLessThan(String value) {
+            addCriterion("area_id_ <", value, "areaId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaIdLessThanOrEqualTo(String value) {
+            addCriterion("area_id_ <=", value, "areaId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaIdLike(String value) {
+            addCriterion("area_id_ like", value, "areaId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaIdNotLike(String value) {
+            addCriterion("area_id_ not like", value, "areaId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaIdIn(List<String> values) {
+            addCriterion("area_id_ in", values, "areaId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaIdNotIn(List<String> values) {
+            addCriterion("area_id_ not in", values, "areaId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaIdBetween(String value1, String value2) {
+            addCriterion("area_id_ between", value1, value2, "areaId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaIdNotBetween(String value1, String value2) {
+            addCriterion("area_id_ not between", value1, value2, "areaId");
             return (Criteria) this;
         }
     }

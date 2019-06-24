@@ -99,7 +99,6 @@ $bg-gray: #f3f3f3;
         .chat-win-cell {
           width: 100%;
           height: 100%;
-          overflow: hidden;
           box-sizing: border-box;
           background-color: #fff;
         }

@@ -1,4 +1,4 @@
-<template>
+1<template>
   <div class="policyCenter0">
     <!-- <div class="techHeah">
       <div id="header" class="header" :class="{'headerw':showFF}">
@@ -128,7 +128,7 @@
             </el-input>
           </div> -->
         </div>
-        <el-tabs v-model="activeName" @tab-click="handleClick">
+        <el-tabs v-model="activeName" @tab-click="handleClick" class="tabBox">
           <el-tab-pane label="政策一览" name="first">
             <ul class="fir">
               <li class="clearfix" v-for="(i,k) in policyCenterList" :key="k">
@@ -163,7 +163,7 @@
           </el-tab-pane>
           <el-tab-pane label="图解政策" name="second">
             <ul class="finaUl clearfix">
-              <li class="mainBorder pointer" v-for="(i,k) in policyCenterList" :key="k" @click="$router.push({path:'/graphicPolicy',query:{policyId:i.policyId}})">
+              <li class="mainBorder pointer" v-for="(i,k) in policyCenterList" :key="k" @click="$router.push({path:'/graphicPolicy',query:{policyId:i.policyId,isPolicyOriginal:i.isPolicyOriginal}})">
                 <!-- <img src="@/../static/img/midBan.png" alt=""> -->
                 <div class="finaProItem pointer">
                   <img :src="i.policyDiagramUrl" alt="">
@@ -190,8 +190,8 @@
                   <img :src="i.policyDiagramUrl" alt="">
                 </div>
                 <div class="finaDiv1">
-                  <div class="finaContent">
-                    <p>图解：
+                  <div class="finaContent color4">
+                    <p>图解：{{i.policyTitle}}
                     </p>
                   </div>
                 </div>
@@ -267,7 +267,8 @@ export default {
       row: 8,
       total: 0,
       arrYear: [],
-      yearBefore: ""
+      yearBefore: "",
+      scroll_top: 0
     };
   },
   mounted() {
@@ -295,7 +296,6 @@ export default {
       }
     },
     handleClick(tab) {
-      console.log(tab);
       if (tab.name == "second") {
         this.tableType = "diagramPolicy";
         this.getPolicyCenterList();
@@ -360,21 +360,44 @@ export default {
     },
     //筛选政策级别
     handleFilter(i) {
-      (this.policyLevelCode = `${i}`), (this.filterFlag = i);
+      if(this.filterFlag == i){
+        return
+      }
+      // document.documentElement.scrollTop = document.getElementsByClassName("tabBox")[0].offsetTop;
+      this.scrollTopAnimate()
+      this.policyLevelCode = `${i}`;
+      this.filterFlag = i;
       this.getPolicyCenterList();
     },
     //筛选政策分类
     handleFilter1(i) {
-      (this.policyClassCode = `${i}`), (this.filterFlag1 = i);
+      if(this.filterFlag1 == i){
+        return
+      }
+      // document.documentElement.scrollTop = document.getElementsByClassName("tabBox")[0].offsetTop
+      this.scrollTopAnimate()
+      this.policyClassCode = `${i}`;
+      this.filterFlag1 = i;
       this.getPolicyCenterList();
     },
     //筛选政策类型
     handleFilter2(i) {
-      (this.policyType = i), (this.filterFlag2 = i);
+       if(this.filterFlag2 == i){
+        return
+      }
+      // document.documentElement.scrollTop = document.getElementsByClassName("tabBox")[0].offsetTop
+      this.scrollTopAnimate()
+      this.policyType = i;
+      this.filterFlag2 = i;
       this.getPolicyCenterList();
     },
     //筛选发布时间
     handleFilter3(i) {
+      if(this.filterFlag3 == i){
+        return
+      }
+      // document.documentElement.scrollTop = document.getElementsByClassName("tabBox")[0].offsetTop
+      this.scrollTopAnimate()
       if (i == "1") {
         this.yearBefore = "1";
         this.filterFlag3 = i;
@@ -384,6 +407,45 @@ export default {
         this.yearBefore = "";
       }
       this.getPolicyCenterList();
+    },
+    getScrollTop(){ //滚动条在Y轴上的滚动距离
+    　　var scrollTop = 0, bodyScrollTop = 0, documentScrollTop = 0;
+    　　if(document.body){
+    　　　　bodyScrollTop = document.body.scrollTop;
+    　　}
+    　　if(document.documentElement){
+    　　　　documentScrollTop = document.documentElement.scrollTop;
+    　　}
+    　　scrollTop = (bodyScrollTop - documentScrollTop > 0) ? bodyScrollTop : documentScrollTop;
+    　　return scrollTop;
+    },
+    getScrollHeight(){ //文档的总高度
+    　　var scrollHeight = 0, bodyScrollHeight = 0, documentScrollHeight = 0;
+    　　if(document.body){
+    　　　　bodyScrollHeight = document.body.scrollHeight;
+    　　}
+    　　if(document.documentElement){
+    　　　　documentScrollHeight = document.documentElement.scrollHeight;
+    　　}
+    　　scrollHeight = (bodyScrollHeight - documentScrollHeight > 0) ? bodyScrollHeight : documentScrollHeight;
+    　　return scrollHeight;
+    },
+    getWindowHeight(){ //浏览器视口的高度
+    　　var windowHeight = 0;
+    　　if(document.compatMode == "CSS1Compat"){
+    　　　　windowHeight = document.documentElement.clientHeight;
+    　　}else{
+    　　　　windowHeight = document.body.clientHeight;
+    　　}
+    　　return windowHeight;
+    },
+    scrollTopAnimate(){
+      let times = setInterval(()=>{
+        document.documentElement.scrollTop = this.getScrollTop() + 10;
+        if(this.getScrollTop() + this.getWindowHeight() == this.getScrollHeight() || this.getScrollTop() >= document.getElementsByClassName("tabBox")[0].offsetTop - 100){
+          clearInterval(times)
+    　　}
+      },1)
     },
     //政策中心首页
     getPolicyCenterList() {
@@ -867,9 +929,14 @@ export default {
           > .finaDiv1 {
             padding: 10px 20px;
             > .finaTit {
-              font-size: 18px;
+              font-size: 16px;
               color: #222;
               margin-bottom: 15px;
+              display: -webkit-box;
+              -webkit-box-orient: vertical;
+              -webkit-line-clamp: 2;
+              overflow: hidden;
+              height: 42px;
             }
             .finaContent {
               // margin: 10px 0;

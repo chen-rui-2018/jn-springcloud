@@ -385,7 +385,7 @@ export default {
 <style lang="scss" scoped>
   @import '~@/assets/styles/common';
   .investment {
-    padding-top: 150px;
+    padding-top: 30px;
     @include image($url:'~@/assets/image/investment-bg.png', $bg: #fff);
     .tc-row {
       padding: 20px;
@@ -528,7 +528,7 @@ export default {
       }
     }
     .investment-banner {
-      margin: 40px auto 16px;
+      margin: 0 auto 16px;
       .swiper-img {
         width: 100%;
         border-radius: 16px;

@@ -1,6 +1,6 @@
 package com.jn.oa.schedule.dao;
 
-import com.jn.oa.schedule.model.Schedule;
+import com.jn.oa.model.Schedule;
 import com.jn.oa.schedule.model.ScheduleQuery;
 
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.jn.oa.schedule.service;
 
-import com.jn.oa.schedule.model.Schedule;
+import com.jn.oa.model.Schedule;
 import com.jn.oa.schedule.model.ScheduleEdit;
 import com.jn.oa.schedule.model.ScheduleQuery;
 import com.jn.system.model.User;
@@ -49,4 +49,11 @@ public interface ScheduleService {
      * @return
      */
     Schedule getScheduleById(String id);
+
+    /**
+     * 日程管理定时提醒功能
+     *
+     * @param schedule
+     */
+    void scheduleRemind(Schedule schedule);
 }

@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.jn.system.dept.entity.TbSysPost">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="post_name" jdbcType="VARCHAR" property="postName" />
+    <result column="rank" jdbcType="INTEGER" property="rank" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
@@ -70,8 +71,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, post_name, creator_account, created_time, record_status, post_type_id, modifier_account, 
-    modified_time
+    id, post_name, rank, creator_account, created_time, record_status, post_type_id, 
+    modifier_account, modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.system.dept.entity.TbSysPostCriteria" resultMap="BaseResultMap">
     select
@@ -104,12 +105,14 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.system.dept.entity.TbSysPost">
-    insert into tb_sys_post (id, post_name, creator_account, 
-      created_time, record_status, post_type_id, 
-      modifier_account, modified_time)
-    values (#{id,jdbcType=VARCHAR}, #{postName,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{createdTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=TINYINT}, #{postTypeId,jdbcType=VARCHAR}, 
-      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
+    insert into tb_sys_post (id, post_name, rank, 
+      creator_account, created_time, record_status, 
+      post_type_id, modifier_account, modified_time
+      )
+    values (#{id,jdbcType=VARCHAR}, #{postName,jdbcType=VARCHAR}, #{rank,jdbcType=INTEGER}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=TINYINT}, 
+      #{postTypeId,jdbcType=VARCHAR}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.system.dept.entity.TbSysPost">
     insert into tb_sys_post
@@ -119,6 +122,9 @@
       </if>
       <if test="postName != null">
         post_name,
+      </if>
+      <if test="rank != null">
+        rank,
       </if>
       <if test="creatorAccount != null">
         creator_account,
@@ -145,6 +151,9 @@
       </if>
       <if test="postName != null">
         #{postName,jdbcType=VARCHAR},
+      </if>
+      <if test="rank != null">
+        #{rank,jdbcType=INTEGER},
       </if>
       <if test="creatorAccount != null">
         #{creatorAccount,jdbcType=VARCHAR},
@@ -181,6 +190,9 @@
       <if test="record.postName != null">
         post_name = #{record.postName,jdbcType=VARCHAR},
       </if>
+      <if test="record.rank != null">
+        rank = #{record.rank,jdbcType=INTEGER},
+      </if>
       <if test="record.creatorAccount != null">
         creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       </if>
@@ -208,6 +220,7 @@
     update tb_sys_post
     set id = #{record.id,jdbcType=VARCHAR},
       post_name = #{record.postName,jdbcType=VARCHAR},
+      rank = #{record.rank,jdbcType=INTEGER},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       record_status = #{record.recordStatus,jdbcType=TINYINT},
@@ -223,6 +236,9 @@
     <set>
       <if test="postName != null">
         post_name = #{postName,jdbcType=VARCHAR},
+      </if>
+      <if test="rank != null">
+        rank = #{rank,jdbcType=INTEGER},
       </if>
       <if test="creatorAccount != null">
         creator_account = #{creatorAccount,jdbcType=VARCHAR},
@@ -248,6 +264,7 @@
   <update id="updateByPrimaryKey" parameterType="com.jn.system.dept.entity.TbSysPost">
     update tb_sys_post
     set post_name = #{postName,jdbcType=VARCHAR},
+      rank = #{rank,jdbcType=INTEGER},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       record_status = #{recordStatus,jdbcType=TINYINT},

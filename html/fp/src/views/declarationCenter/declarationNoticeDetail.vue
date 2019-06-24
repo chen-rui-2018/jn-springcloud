@@ -15,21 +15,24 @@
       </div>
       <!-- 大标题 -->
       <div class="right_headline">
-        <p class="detail_maintitle">【{{detailList.rangeName}}】{{detailList.titleName}}
+        <p class="detail_maintitle">【{{rangeId|type}}】{{detailList.titleName}}
           <span @click="goappointment">预约申报</span>
-          <span @click="telephone">联系电话</span>
+          <!-- <span @click="telephone">联系电话</span> -->
         </p>
         <!-- 附件下载 -->
         <div class="accessory_dowload">
           <div class="accessory">
             <div class="accessory_right">
               <div class="accessory_detail">
-                <span>附件下载：</span>
-                <a v-if="fileList.length===0" href="javascript:;">暂无</a>
-                <a  :href="item.filePath" v-for="(item,index) in fileList " :key="index">附件{{index+1}}  {{item.fileName}}</a>
+                <div>附件下载：</div>
+                <div>
+                  <a v-if="fileList.length===0" href="javascript:;">暂无</a>
+                  <a  :href="item.filePath" v-for="(item,index) in fileList " :key="index">附件{{index+1}}  {{item.fileName}}</a>
+                </div>
               </div>
               <p>
-                <span>截止日期：{{detailList.deadline|time}}</span>
+                <span>最终日期：{{detailList.deadline|time}}</span>
+                <span v-if="detailList.preliminaryDeadline!=null">初审截止时间：{{detailList.preliminaryDeadline|time}}</span>
               </p>
               <p style="margin-top:5px">
                 <span >申报部门：{{detailList.timeNode}}</span>
@@ -51,26 +54,26 @@
         :modal-append-to-body="false"
         :lock-scroll="false" :visible.sync="appointmentVisible" width="616px">
           <el-form :model="appointment" label-position="left" label-width="100px" :rules="rules">
-            <el-form-item label="预约项："  prop="appointmentItemName"> 
+            <!-- <el-form-item label="预约项："  prop="appointmentItemName"> 
               <el-input v-model="appointment.appointmentItemName" placeholder="请输入内容   默认填入当前企业名称"></el-input>
+            </el-form-item> -->
+             <el-form-item label="申报项目：" prop="declareItem">
+              <el-input v-model="appointment.declareItem" placeholder="请输入内容   默认填入企业联系人电话"></el-input>
             </el-form-item>
-            <el-form-item label="预约人：" prop="contactName">
+             <el-form-item label="申报企业：" prop="declareEnterprise">
+              <el-input v-model="appointment.declareEnterprise" placeholder="请输入内容   默认填入企业联系人电话"></el-input>
+            </el-form-item>
+            <el-form-item label="企业联系人:" prop="contactName">
               <el-input v-model="appointment.contactName" placeholder="请输入内容   默认填入企业联系人姓名"></el-input>
             </el-form-item>
             <el-form-item label="联系电话：" prop="contactPhone">
               <el-input v-model="appointment.contactPhone" placeholder="请输入内容   默认填入企业联系人电话"></el-input>
             </el-form-item>
-            <el-form-item label="电子邮箱：" prop="email">
+           <!--  <el-form-item label="电子邮箱：" prop="email">
               <el-input v-model="appointment.email" placeholder="请输入内容   默认填入企业联系人电话"></el-input>
-            </el-form-item>
-            <el-form-item label="申报企业：" prop="declareEnterprise">
-              <el-input v-model="appointment.declareEnterprise" placeholder="请输入内容   默认填入企业联系人电话"></el-input>
-            </el-form-item>
-            <el-form-item label="申报名称：" prop="declareItem">
-              <el-input v-model="appointment.declareItem" placeholder="请输入内容   默认填入企业联系人电话"></el-input>
-            </el-form-item>
+            </el-form-item> -->
             <!-- 附件 -->
-            <el-form-item label="附件：" class="upload" v-if="appointment.fileUrl===''">
+            <el-form-item label="附件：" class="upload" v-if="isUp">
               <el-upload
                 :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
                 :on-success="uploadsuccess"
@@ -92,7 +95,7 @@
               </div>
             </el-form-item>
           </el-form>
-          <div slot="footer" class="dialog-footer" v-if="appointment.fileUrl===''">
+          <div slot="footer" class="dialog-footer" v-if="isUp">
             <el-button @click="submit">提  交</el-button>
             <el-button type="primary" @click="appointmentVisible = false">取  消</el-button>
           </div>
@@ -117,6 +120,7 @@ export default {
       fileList:[],
       baseUrl: this.api.host,
       id:'',
+      rangeId:"",
       appointmentVisible:false,
       telephoneVisible:false,
       detailList:{},
@@ -155,6 +159,7 @@ export default {
          { required: true, message: '内容不能为空'}
        ]
       },
+      isUp:true
     }
   },
   filters: {
@@ -164,10 +169,24 @@ export default {
         let dateee = new Date(time).toJSON();
         return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
       }
-    }
+    },
+    type(rangeId){
+        if(rangeId==='1'){
+          return '白下高新区'
+        }else if(rangeId==='2'){
+          return '秦淮区'
+        }else if(rangeId==='3'){
+          return '南京市'
+        }else if(rangeId==='4'){
+          return '江苏省'
+        }else if(rangeId==='5'){
+          return '国家'
+        }
+      }
   },
   created () {
     this.id=this.$route.query.id
+    this.rangeId=this.$route.query.rangeId
     this.appointment.appointmentItemId=this.$route.query.id
     this.getdeclaration()
     this. addPageviews()
@@ -211,36 +230,60 @@ export default {
     },
     //去预约
     goappointment(){
+      let myDate = new Date()
+      let myDateStr=myDate.getFullYear()+""+(myDate.getMonth()+1>10?myDate.getMonth()+1:'0'+(myDate.getMonth()+1))+""+myDate.getDate()+""+(myDate.getHours()>10?myDate.getHours():'0'+myDate.getHours())+(myDate.getMinutes()>10?myDate.getMinutes():'0'+myDate.getMinutes())+(myDate.getSeconds()>10?myDate.getSeconds():'0'+myDate.getSeconds())
+      let time= new Date(this.detailList.preliminaryDeadline).toJSON()
+      let deadline=new Date(+new Date(time) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '').replace(/[^0-9]/ig,"")
       if(this.headers.token){
         this.api.get({
-          url: "queryOnlineInfo",
-          data: {appointmentItemId:this.id },
+          url: "getUserExtension",
+          data: { },
           callback: (res)=> {
             if (res.code == "0000") {
-              this.appointment=res.data
-              this.appointmentVisible=true
-              this.$message.success("亲，你已经预约过了哦！")
-            }else if(res.code==='5011208'){
-              this.appointmentVisible=true
-              let _this = this;
-              this.api.get({
-                url: "getUserExtension",
-                data: { },
-                callback: function(res) {
-                  if (res.code == "0000") {
-                  _this.appointment.contactName= res.data.nickName
-                  _this.appointment.contactPhone= res.data.phone
-                  _this.appointment.email= res.data.email
-                  _this.appointment.declareEnterprise= res.data.companyName
-                  }
+              // console.log(res.data.roleCode)
+              if(res.data.roleCode==="COM_ADMIN"||res.data.roleCode==="COM_CONTACTS"){
+                if(myDateStr<deadline){
+                  this.api.get({
+                    url: "queryOnlineInfo",
+                    data: {appointmentItemId:this.id },
+                    callback: (res)=> {
+                        if (res.code == "0000") {
+                          this.appointment=res.data
+                          this.appointment.declareItem=res.data.appointmentItemName
+                          this.isUp=false
+                        this.appointmentVisible=true
+                        this.$message.success("亲，你已经预约过了哦！")
+                      }else if(res.code==='5011208'){
+                        this.appointmentVisible=true
+                        let _this = this;
+                        this.api.get({
+                          url: "getUserExtension",
+                          data: { },
+                          callback: function(res) {
+                            if (res.code == "0000") {
+                              _this.appointment.declareItem=_this.detailList.titleName
+                              _this.appointment.contactName= res.data.nickName
+                              _this.appointment.contactPhone= res.data.phone
+                              _this.appointment.email= res.data.email
+                              _this.appointment.declareEnterprise= res.data.companyName
+                              _this.appointment.fileUrl= res.data.fileUrl
+                            }
+                          }
+                        });
+                      }else {
+                        this.$message.error(res.result)
+                      }
+                    }
+                  })
+                }else{
+                  this.$message.error("您申报的项目已经截止")
                 }
-              });
-            }else {
-              this.$message.error(res.result)
+              }else{
+                this.$message.error("您暂时没有预约申报的权限")
+              }
             }
           }
-        })
-        
+        });
       }else{
         //跳转到等录页面
         this.$confirm('亲，您需要登录后才能预约哦！', '提示', {

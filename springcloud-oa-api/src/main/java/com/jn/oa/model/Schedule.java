@@ -1,4 +1,4 @@
-package com.jn.oa.schedule.model;
+package com.jn.oa.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;

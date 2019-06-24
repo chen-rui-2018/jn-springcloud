@@ -20,7 +20,7 @@
         </el-breadcrumb>
       </div>
        <!-- 申报平台 -->
-      <div class="declaration_platform">
+    <!--   <div class="declaration_platform">
         <div class="platform_titile">
           <div>申报平台</div>
           <div @click="gotalentplatform">MORE <span class="el-icon-arrow-right"></span></div>
@@ -35,24 +35,70 @@
             <img src="@/assets/image/platform.png" alt="">
           </div>
         </div>
-      </div>
-      <!-- 常年申报数据暂定 -->
+      </div> -->
+      <!-- 申报平台 -->
       <div class="perennial_declare">
         <div class="perennial_titile">
-          <div>常年申报</div>
-          <div>MORE <span class="el-icon-arrow-right"></span></div>
+          <div>申报平台</div>
+          <div @click="gotalentplatform">MORE <span class="el-icon-arrow-right"></span></div>
         </div>
         <div class="perennial_list">
           <ul>
-            <li v-for="(item,index) in perennialList" :key="index">
-              <div class="list_cont">
-                <p><img src="@/assets/image/perennial.png" alt=""> </p>
-                <p>{{item.title}}</p>
-                <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
-                <p>收益：<span>{{item.profit}}</span> </p>
-                <p>价格：{{item.price}}</p>
-              </div>
-              <div class="list_view"><span>查看详情</span> </div>
+            <li>
+              <a href="http://112.94.22.222:2383/ibps-platform-portal/login.jsp" target="_blank">
+                <div class="list_cont">
+                  <p><img src="@/assets/image/perennial.png" alt=""> </p>
+                  <!-- <p>{{item.title}}</p>
+                  <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
+                  <p>收益：<span>{{item.profit}}</span> </p>
+                  <p>价格：{{item.price}}</p> -->
+                  <p>高层次创业人才引进计划高层次创业人才引进计划高层次创业人才引进计划高层次创业人才引进计划</p>
+                  <p>平台功能：高层次创业人才引进计划</p>
+                </div>
+              </a>
+              <div class="list_view"><span>我要申报</span> </div>
+            </li>
+            <li>
+              <a href="http://xmsb.jsrcgz.gov.cn/" target="_blank">
+                <div class="list_cont">
+                  <p><img src="@/assets/image/jsrcgz.png" alt=""> </p>
+                  <!-- <p>{{item.title}}</p>
+                  <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
+                  <p>收益：<span>{{item.profit}}</span> </p>
+                  <p>价格：{{item.price}}</p> -->
+                  <p>江苏省“双创计划”</p>
+                  <p>平台功能：江苏省双创计划</p>
+                </div>
+                <div class="list_view"><span>我要申报</span> </div>
+              </a>
+            </li>
+            <li>
+              <a href="http://49.65.0.223:85/njrc_cxxqyj.jsp" target="_blank">
+                <div class="list_cont">
+                  <p><img src="@/assets/image/njrc_kjdjzj22.png" alt=""> </p>
+                  <!-- <p>{{item.title}}</p>
+                  <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
+                  <p>收益：<span>{{item.profit}}</span> </p>
+                  <p>价格：{{item.price}}</p> -->
+                  <p>创新型企业家培育计划</p>
+                  <p>平台功能：创新型企业家培育计划</p>
+                </div>
+                <div class="list_view"><span>我要申报</span> </div>
+              </a>
+            </li>
+            <li>
+              <a href="http://49.65.0.223:85/njrc_kjdjzj.jsp " target="_blank">
+                <div class="list_cont">
+                  <p><img src="@/assets/image/njrc_cxxqyj.png" alt=""> </p>
+                  <!-- <p>{{item.title}}</p>
+                  <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
+                  <p>收益：<span>{{item.profit}}</span> </p>
+                  <p>价格：{{item.price}}</p> -->
+                  <p>科技顶尖专家集聚计划</p>
+                  <p>平台功能：科技顶尖专家集聚计划</p>
+                </div>
+                <div class="list_view"><span>我要申报</span> </div>
+              </a>
             </li>
           </ul>
         </div>
@@ -106,7 +152,7 @@
   </div>
 </template>
 <script>
-import { getToken, removeToken } from '@/util/auth'
+import { getToken } from '@/util/auth'
 export default {
    data () {
       return {
@@ -179,6 +225,8 @@ export default {
                 name:'全部'
               })
               _this.typeList = typelist;
+            }else{
+              _this.$message.error(res.result)              
             }
           }
         });
@@ -199,6 +247,8 @@ export default {
               // console.log(res)
               _this.talentsList = res.data.rows;
               _this.total=res.data.total
+            }else{
+              _this.$message.error(res.result)              
             }
           }
         });
@@ -216,6 +266,8 @@ export default {
             if (res.code == "0000") {
               // console.log(res)
               _this.perennialList = res.data.rows;
+            }else{
+              _this.$message.error(res.result)              
             }
           }
         });
@@ -233,7 +285,23 @@ export default {
       //跳转页面
       gotalentplatform(){
         if(getToken()){
-          this.$router.push({name:'talentPlatform'})
+          this.api.get({
+          url: "getUserExtension",
+          data: { },
+          callback: (res)=> {
+            if (res.code == "0000") {
+              // console.log(res.data.roleCode)
+              if(res.data.roleCode==="COM_ADMIN"||res.data.roleCode==="COM_CONTACTS"){
+                this.$router.push({name:'talentPlatform'})
+              }else{
+                this.$message.error("只有企业管理员和企业联系人才可以进申报平台！！")
+                return
+              }
+            }else{
+              _this.$message.error(res.result)              
+            }
+          }
+        })
         }else{
           this.$confirm('亲，您需要登录后才能访问以下界面哦！', '提示', {
             confirmButtonText: '去登陆',
@@ -421,6 +489,7 @@ export default {
           div:nth-child(2){
             font-size: 12px;
             color:#00a041;
+            cursor: pointer;
           }
         }
         .perennial_list{
@@ -445,11 +514,14 @@ export default {
                 color:#797979;
                 font-size: 12px;
                 p{
-                  margin-top: 7px; 
+                  margin: 7px 0; 
+                  &:last-child{
+                    // margin-bottom: 
+                  }
                 }
                 p:nth-child(1){
                   width:100%;
-                  height: 78px;
+                  height: 100px;
                   border-bottom: 1px solid #eeeeee;
                   padding: 11px 0;
                   margin-top: 0;
@@ -465,11 +537,10 @@ export default {
                   font-size: 14px;
                   margin-top: 18px;
                   line-height: 24px;
-                  display: -webkit-box;
-                  -webkit-box-orient: vertical;
-                  -webkit-line-clamp: 2;
                   overflow: hidden;
-                  height: 48px;
+                  text-overflow:ellipsis;
+                  white-space: nowrap;
+                  // height: 48px;
                 }
                 p:nth-child(4){
                  span{

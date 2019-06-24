@@ -6,7 +6,8 @@ Page({
   },
   onLoad: function (options) {
     this.setData({
-      id:options.id
+      id:options.id,
+      token:wx.getStorageSync("token")
     })
   },
  onReady: function () { },

@@ -21,8 +21,8 @@
       <div class="declaration_centerList">
         <!-- <div class="declaration_titile">申报中心列表</div> -->
         <div class="declaration_titile">
-          <div>申报中心列表</div>
-          <div @click="isPage=!isPage">MORE <span class="el-icon-arrow-right"></span></div>
+          <div>即时申报项目</div>
+          <div @click="showpaging">MORE <span class="el-icon-arrow-right"></span></div>
         </div>
         <div class="declaration_list">
           <!-- 筛选 -->
@@ -38,23 +38,31 @@
             <el-tabs v-model="rangeId" @tab-click="switchto">
               <el-tab-pane  v-for="(typeitem,typeindex) in typeList" :key="typeindex">
                 <div slot="label" :name="typeitem.id">{{typeitem.name}}</div>
-                <div class="lists" v-for="(centeritem,centerindex) in centerList" :key="centerindex" >
+                <div class="lists" v-for="(centeritem,centerindex) in centerList" :key="centerindex" @click="gonoticedetail(centeritem)" >
                   <div class="list_cont_left">
                     <p>【{{centeritem.rangeId|type}}】{{centeritem.titleName}}</p> 
-                    <p><span>发布日期：{{centeritem.createdTime|time}}</span><!-- <span>状态：<span class="fontcolor">{{centeritem.isRoofPlacement|isRoof}}</span> --></span></p>
+                    <p>
+                      <span>发布日期：{{centeritem.createdTime|time}}</span>
+                      <span>状态：<span class="fontcolor">{{centeritem.isRoofPlacement|isRoof}}</span>
+                      </span>
+                    </p>
                     <p>申报部门：{{centeritem.timeNode}}</p>
-                    <p>截止时间：<span class="fontcolor">{{centeritem.deadline|time}}</span></p>
+                    <p>
+                      <!-- <span ></span> -->
+                      <span>最终截止时间：{{centeritem.deadline|time}}</span>
+                      <span v-if="centeritem.preliminaryDeadline!=null">初审截止时间：<span >{{centeritem.preliminaryDeadline|time}}</span>
+                      </span>
+                    </p>
                   </div>
-                  <div class="list_cont_check" @click="gonoticedetail(centeritem.id)"> <span>查看详情</span> </div>
+                  <div class="list_cont_check" @click="gonoticedetail(centeritem)"> <span>查看详情</span> </div>
                 </div>
               </el-tab-pane>
             </el-tabs>
           </div>
-          
         </div>
       </div>
       <!-- 分页 -->
-      <div class="paging" v-if="isPage">
+      <div class="paging" ref="paging" id="paging" v-show="isPage" >
         <el-pagination
           background
           @size-change="handleSizeChange"
@@ -66,7 +74,7 @@
         </el-pagination>
       </div>
       <!-- 申报平台 -->
-      <div class="declaration_platform">
+      <div class="declaration_platform" id="declaration_platform">
         <div class="platform_titile">
           <div>申报平台</div>
           <div @click="goplatform">MORE <span class="el-icon-arrow-right"></span></div>
@@ -103,7 +111,6 @@
           </ul>
         </div>
       </div>
-      
     </div><!-- 版心 -->
   </div>
 </template>
@@ -180,6 +187,8 @@ export default {
                 name:'全部'
               })
               _this.typeList = typelist;
+            }else{
+              _this.$message.error(res.result)              
             }
           }
         });
@@ -200,6 +209,8 @@ export default {
               // console.log(res)
               _this.centerList = res.data.rows;
               _this.total=res.data.total
+            }else{
+              _this.$message.error(res.result)              
             }
           }
         });
@@ -217,6 +228,8 @@ export default {
             if (res.code == "0000") {
               // console.log(res)
               _this.perennialList = res.data.rows;
+            }else{
+              _this.$message.error(res.result)              
             }
           }
         });
@@ -226,16 +239,41 @@ export default {
         this.sortType=val
         this.getdeclarationcenterList()
       },
+      showpaging(){
+        this.isPage=!this.isPage
+        if(this.isPage===true){
+          this.$nextTick(()=>{
+            document.documentElement.scrollTop=this.$refs.paging.offsetTop-300;
+          })
+        }
+      },
       //切换区
       switchto(){
         this.getdeclarationcenterList()
       },
       goplatform(){
         if(getToken()){
-          this.$router.push({name:'declarationPlatform'})
+          // this.$router.push({name:'declarationPlatform'})
+          this.api.get({
+          url: "getUserExtension",
+          data: { },
+          callback: (res)=> {
+            if (res.code == "0000") {
+              // console.log(res.data.roleCode)
+              if(res.data.roleCode==="COM_ADMIN"||res.data.roleCode==="COM_CONTACTS"){
+                this.$router.push({name:'declarationPlatform'})
+              }else{
+                this.$message.error("只有企业管理员和企业联系人才可以进申报平台！！")
+                return
+              }
+            }else{
+              _this.$message.error(res.result)              
+            }
+          }
+        })
         }else{
           this.$confirm('亲，您需要登录后才能访问以下界面哦！', '提示', {
-            confirmButtonText: '去登陆',
+            confirmButtonText: '去登录',
             cancelButtonText: '留在当前页面',
             type: 'warning',
             center: true
@@ -246,8 +284,8 @@ export default {
           })
         }
       },
-      gonoticedetail(id){
-        this.$router.push({path:'/declarationNoticeDetail',query:{id:id}})
+      gonoticedetail(item){
+        this.$router.push({path:'/declarationNoticeDetail',query:{id:item.id,rangeId:item.rangeId}})
       },
       handleSizeChange(val) {
       // console.log(`每页 ${val} 条`);
@@ -264,6 +302,7 @@ export default {
 </script>
 
 <style lang="scss">
+
   .declarationCenter{
     // margin-top: 230px;
     .banner{
@@ -465,11 +504,10 @@ export default {
                   font-size: 14px;
                   margin-top: 18px;
                   line-height: 24px;
-                  display: -webkit-box;
-                  -webkit-box-orient: vertical;
-                  -webkit-line-clamp: 2;
                   overflow: hidden;
-                  height: 48px;
+                  text-overflow:ellipsis;
+                  white-space: nowrap;
+                  // height: 48px;
 
                 }
                 p:nth-child(4){
@@ -554,6 +592,7 @@ export default {
               border-bottom: solid 1px #eeeeee;
               padding-bottom: 15px;
               margin-top: 30px;
+              cursor: pointer;
               .list_cont_left{
                 color:#999999;
                 font-size: 12px;
@@ -570,7 +609,11 @@ export default {
                       padding-right: 121px;
                     }
                   }
-                  
+                  &:nth-child(4){
+                    span{
+                      padding-right: 98px;
+                    }
+                  }
                 }
               }
               .list_cont_check{

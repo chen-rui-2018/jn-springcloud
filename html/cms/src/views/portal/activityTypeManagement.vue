@@ -246,7 +246,6 @@ export default {
       this.$refs['activityTypeForm'].validate(valid => {
         if (valid) {
           api(`${this.GLOBAL.parkUrl}activity/activityType/add`, this.activityTypeForm, 'post').then((res) => {
-            console.log(res)
             if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '新增成功',

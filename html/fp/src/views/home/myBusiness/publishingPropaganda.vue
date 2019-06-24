@@ -32,9 +32,18 @@
               :value="item.propagandaTypeCode" @click.native="selecteStatus(item)" />
           </el-select>
         </el-form-item>
-        <el-form-item label="宣传详情:" prop="propagandaDetails">
-          <el-input type="textarea" v-model="publicityForm.propagandaDetails" placeholder="宣传详情宣传详情"></el-input>
+          <el-form-item
+          label="宣传详情:"
+          prop="propagandaDetails"
+          class="ue"
+        >
+          <div class="editor-container">
+            <UE ref="ue" :default-msg="defaultMsg" :config="config" />
+          </div>
         </el-form-item>
+        <!-- <el-form-item label="宣传详情:" prop="propagandaDetails">
+          <el-input type="textarea" v-model="publicityForm.propagandaDetails" placeholder="宣传详情宣传详情"></el-input>
+        </el-form-item> -->
         <el-form-item label="宣传海报:">
           <el-upload :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'" :headers="headers" :show-file-list="false"
             :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
@@ -81,10 +90,17 @@
   </div>
 </template>
 <script>
-import { getToken, removeToken } from '@/util/auth'
+import { getToken } from '@/util/auth'
+import UE from '@/components/ue.vue'
 export default {
+   components: { UE },
   data() {
     return {
+       defaultMsg: '',
+      config: {
+        initialFrameWidth: '100%',
+        initialFrameHeight: 300
+      },
       radio:undefined,
       loading: false,
       baseUrl: this.api.host,
@@ -153,9 +169,9 @@ export default {
         // propagandaType: [
         //   { required: true, message: "请选择宣传类型", trigger: "change" }
         // ],
-        propagandaDetails: [
-          { required: true, message: "请填写宣传详情", trigger: "blur" }
-        ]
+        // propagandaDetails: [
+        //   { required: true, message: "请填写宣传详情", trigger: "blur" }
+        // ]
       }
     };
   },
@@ -323,10 +339,8 @@ export default {
     },
     submitForm(publicityForm) {
       this.isDisabled = true;
-      console.log(this.publicityForm.posterUrl);
       this.$refs[publicityForm].validate(valid => {
         if (valid) {
-          console.log(this.publicityForm);
           if (
             new Date(this.publicityForm.effectiveDate) <=
             new Date(this.currentTime)
@@ -335,11 +349,6 @@ export default {
             this.isDisabled = false;
             return;
           }
-          //  if(new Date(this.publicityForm.effectiveDate)>= new Date(this.publicityForm.invalidDate)){
-          //   this.$message.error('失效日期必须大于生效日期,请重新选择')
-          //   this.isDisabled=false
-          //   return
-          // }
           if (!this.publicityForm.posterUrl) {
             this.$message.error("请选择海报图片");
             this.isDisabled = false;
@@ -354,6 +363,11 @@ export default {
             this.$message.error("请选择宣传费用");
             this.isDisabled = false;
             return;
+          }
+               this.publicityForm.propagandaDetails = this.$refs.ue.getUEContent()
+               if(!this.publicityForm.propagandaDetails ){
+            this.$message.error('请填写宣传详情');
+            return
           }
           this.loading = true;
           this.api.post({
@@ -541,5 +555,17 @@ export default {
       margin-bottom: 17px;
     }
   }
+  .ue{
+        .el-form-item__content,
+      .el-select {
+        width: 100%;
+      }
+      .el-form-item__content{
+        line-height: 22px;
+      }
+      .edui-default .edui-editor-bottomContainer{
+        display: none;
+      }
+      }
 }
 </style>

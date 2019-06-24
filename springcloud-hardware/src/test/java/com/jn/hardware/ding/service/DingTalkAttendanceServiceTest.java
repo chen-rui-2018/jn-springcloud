@@ -76,7 +76,9 @@ public class DingTalkAttendanceServiceTest {
                     ",176005420021472913" +
                     ",061838443733317635" +
                     ",06084024281089553" +
-                    ",181642044421752203" );
+                    ",181642044421752203" +
+                    ",044553590430629984"
+            );
             leaveStatusListParam.setStart_time(formatter.parse("2019-03-01 00:00:00").getTime());
             leaveStatusListParam.setEnd_time(new Date().getTime());
             leaveStatusListParam.setOffset(0L);
@@ -97,7 +99,7 @@ public class DingTalkAttendanceServiceTest {
     @Test
     public void getLeaveApproveDuration() {
         LeaveApproveDurationParam leaveApproveDurationParam = new LeaveApproveDurationParam();
-        leaveApproveDurationParam.setUserid("176005420021472913");
+        leaveApproveDurationParam.setUserid("044553590430629984");
         leaveApproveDurationParam.setFrom_date("2019-06-01 00:00:00");
         leaveApproveDurationParam.setTo_date(formatter.format(new Date()));
 
@@ -106,4 +108,12 @@ public class DingTalkAttendanceServiceTest {
     }
 
 
+    /**
+     * 获取TOKEN
+     * */
+    @Test
+    public void getToken() {
+        String token = dingTalkInRedisConfigStorage.getAccessToken();
+        logger.info("================== token ==========：{}",token);
+    }
 }

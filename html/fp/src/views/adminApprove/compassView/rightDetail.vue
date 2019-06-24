@@ -64,11 +64,11 @@
                       </div> 
                     </el-form-item>
                   </div>
-                  <div class="baseIfor_table_item full_line">
+                  <!-- <div class="baseIfor_table_item full_line">
                     <el-form-item label="权力来源：">
                       <span class="table_item_cont">{{powerDetail.comeFrom===null?'暂无':powerDetail.level}}</span>
                     </el-form-item>
-                  </div>
+                  </div> -->
                   <div class="baseIfor_table_item full_line">
                     <el-form-item label="备注：">
                       <span class="table_item_cont">{{ powerDetail.notes===null?'暂无':powerDetail.notes}}</span>

@@ -504,11 +504,10 @@ export default {
                   font-size: 14px;
                   margin-top: 18px;
                   line-height: 24px;
-                  display: -webkit-box;
-                  -webkit-box-orient: vertical;
-                  -webkit-line-clamp: 2;
                   overflow: hidden;
-                  height: 48px;
+                  text-overflow:ellipsis;
+                  white-space: nowrap;
+                  // height: 48px;
 
                 }
                 p:nth-child(4){

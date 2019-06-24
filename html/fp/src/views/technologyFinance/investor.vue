@@ -1,5 +1,5 @@
 <template>
-  <div class="investor w" id="investor">
+  <div class="investor w" id="investor" v-loading="investorLoading">
     <div class="investorMenu">
       <span class="pointer" @click="$router.push({path:'/tfindex'})">首页</span>
       <span>/</span>
@@ -28,8 +28,8 @@
         <i class="iconfont icon-sousuo" @click="handleSearchList"></i>
       </div>
     </div>
-    <div class="investorContent" v-loading="investorLoading">
-      <div v-if="investorInfoList.length==0">
+    <div class="investorContent">
+      <div v-if="investorInfoList.length==0&&!investorLoading">
         <nodata></nodata>
       </div>
       <ul v-else>

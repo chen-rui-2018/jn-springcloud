@@ -1,38 +1,40 @@
 <template>
   <div id="app" :class="{'h-100': $store.state.isMobile}" @click="closeM">
-    <!--    <router-view></router-view>-->
-    <div class="right_nav" v-if="($route.name=='serMatHp'||$route.name=='portalIndex'||$route.name=='enterpriseservice')||$route.name=='investment' && $store.state.hiddenNav">
-      <ul>
-        <li @click="isVisibility=true">
-          <div class="right_nav_slide">
-            <i class="iconfont icon-menu1"></i>
-          </div>
-        </li>
-        <li>
-          <div class="right_nav_tel" @mouseenter="telShow=true" @mouseleave="telShow=false">
-            <i class="iconfont icon-phone"></i>
-          </div>
-        </li>
-        <li>
-          <div class="weixin" @mouseenter="show=true" @mouseleave="show=false">
-            <i class="iconfont icon-weixin2"></i>
-          </div>
-        </li>
-        <li>
-          <div class="online_service">
-            <i class="iconfont icon-kefu"></i>
-          </div>
-        </li>
-        <li @click="toTop">
-          <div class="to_top">
-            <i class="iconfont icon-top1"></i>
-          </div>
-        </li>
-      </ul>
-      <!--  -->
-      <transition enter-active-class='animated fadeIn' leave-active-class='animated fadeOut' name='fade'>
-        <span class="weixin_img" v-if="show"><img src="@/../static/img/xiaocehngxu.png" alt=""> </span>
-        <span class="tel_img" v-if="telShow">
+    <div class="s-wrapper">
+      <div class="s-content">
+        <!--    <router-view></router-view>-->
+        <div class="right_nav" v-if="($route.name=='serMatHp'||$route.name=='portalIndex'||$route.name=='enterpriseservice')||$route.name=='investment' && $store.state.hiddenNav">
+          <ul>
+            <li @click="isVisibility=true">
+              <div class="right_nav_slide">
+                <i class="iconfont icon-menu1"></i>
+              </div>
+            </li>
+            <li>
+              <div class="right_nav_tel" @mouseenter="telShow=true" @mouseleave="telShow=false">
+                <i class="iconfont icon-phone"></i>
+              </div>
+            </li>
+            <li>
+              <div class="weixin" @mouseenter="show=true" @mouseleave="show=false">
+                <i class="iconfont icon-weixin2"></i>
+              </div>
+            </li>
+            <li>
+              <div class="online_service">
+                <i class="iconfont icon-kefu"></i>
+              </div>
+            </li>
+            <li @click="toTop">
+              <div class="to_top">
+                <i class="iconfont icon-top1"></i>
+              </div>
+            </li>
+          </ul>
+          <!--  -->
+          <transition enter-active-class='animated fadeIn' leave-active-class='animated fadeOut' name='fade'>
+            <span class="weixin_img" v-if="show"><img src="@/../static/img/xiaocehngxu.png" alt=""> </span>
+            <span class="tel_img" v-if="telShow">
           <span> <img src="@/../static/img/andriod.png" alt="">
             <span>android</span>
           </span>
@@ -40,55 +42,59 @@
             <span>ios</span>
           </span>
         </span>
-      </transition>
-    </div>
-    <!-- 网站导航侧边 -->
-    <div class="serve_slide" v-if="$route.name=='serMatHp'||$route.name=='portalIndex'||$route.name=='enterpriseservice'||$route.name=='investment'">
-      <el-dialog :visible.sync="isVisibility" :lock-scroll="false">
-        <div class="slide_nav">
-          <p @click="$router.push({path:'/'})">首页</p>
-          <p @click="$router.push({path:'/parkIntroduction'})">园区介绍</p>
-          <!-- <p @click="$router.push({path:'/compassView'})">行政审批</p> -->
-          <!-- <p >智慧党建</p> -->
-          <p @click="$router.push({path:'/enterpriseservice'})">企业服务</p>
-          <div class="slide_nav_fence">
-            <ul>
-              <!-- <li @click="$router.push({path:'/talentsService'})">人才服务</li> -->
-              <li @click="$router.push({path:'/policyCenter'})">政策中心</li>
-              <li @click="$router.push({path:'/actiCenter'})">活动中心</li>
-              <li @click="$router.push({path:'/tfindex'})">科技金融</li>
-              <li @click="$router.push({path:'/recruitmentList'})">人力资源</li>
-              <!-- <li @click="$router.push({path:'/incubatorEnterprises'})">孵化企业</li> -->
-              <li @click="$router.push({path:'/compassView'})">行政审批</li>
-              <li @click="$router.push({path:'/declarationCenter'})">申报中心</li>
-              <li @click="$router.push({path:'/serMatHp'})">服务超市</li>
-            </ul>
-          </div>
-          <p @click="$router.push({path:'/talentsService'})" style="margin-top:30px">人才服务</p>
-          <!-- <p @click="$router.push({path:'/declarationCenter'})">申报中心</p> -->
-          <p @click="$router.push({path:'/incubatorEnterprises'})">孵化企业</p>
-          <!-- <p @click="$router.push({path:'/serMatHp'})">服务超市</p> -->
+          </transition>
         </div>
+        <!-- 网站导航侧边 -->
+        <div class="serve_slide" v-if="$route.name=='serMatHp'||$route.name=='portalIndex'||$route.name=='enterpriseservice'||$route.name=='investment'">
+          <el-dialog :visible.sync="isVisibility" :lock-scroll="false">
+            <div class="slide_nav">
+              <p @click="$router.push({path:'/'})">首页</p>
+              <p @click="$router.push({path:'/parkIntroduction'})">园区介绍</p>
+              <!-- <p @click="$router.push({path:'/compassView'})">行政审批</p> -->
+              <!-- <p >智慧党建</p> -->
+              <p @click="$router.push({path:'/enterpriseservice'})">企业服务</p>
+              <div class="slide_nav_fence">
+                <ul>
+                  <!-- <li @click="$router.push({path:'/talentsService'})">人才服务</li> -->
+                  <li @click="$router.push({path:'/policyCenter'})">政策中心</li>
+                  <li @click="$router.push({path:'/actiCenter'})">活动中心</li>
+                  <li @click="$router.push({path:'/tfindex'})">科技金融</li>
+                  <li @click="$router.push({path:'/recruitmentList'})">人力资源</li>
+                  <!-- <li @click="$router.push({path:'/incubatorEnterprises'})">孵化企业</li> -->
+                  <li @click="$router.push({path:'/compassView'})">行政审批</li>
+                  <li @click="$router.push({path:'/declarationCenter'})">申报中心</li>
+                  <li @click="$router.push({path:'/serMatHp'})">服务超市</li>
+                </ul>
+              </div>
+              <p @click="$router.push({path:'/talentsService'})" style="margin-top:30px">人才服务</p>
+              <!-- <p @click="$router.push({path:'/declarationCenter'})">申报中心</p> -->
+              <p @click="$router.push({path:'/incubatorEnterprises'})">孵化企业</p>
+              <!-- <p @click="$router.push({path:'/serMatHp'})">服务超市</p> -->
+            </div>
 
-        <div class="personal_center ">
-          <p @click="$router.push({path:'/home'})">用户中心</p>
-          <p @click="$router.push({path:'/parkNotice'})">消息中心</p>
+            <div class="personal_center ">
+              <p @click="$router.push({path:'/home'})">用户中心</p>
+              <p @click="$router.push({path:'/parkNotice'})">消息中心</p>
+            </div>
+          </el-dialog>
         </div>
-      </el-dialog>
+        <!-- <app-header v-if="$route.name=='actiCenter'||$route.name=='actiDetail'||$route.name=='regData'||$route.name=='regStatus'||$route.name=='actiManagent'||$route.name=='peoDec'"></app-header> -->
+        <!-- <ser-header v-if="$route.name=='actiTrain'||$route.name=='index'"></ser-header>z -->
+        <!--  <adminApprove-header v-if="$route.name=='compassView'||$route.name=='rightDetail'||$route.name=='serviceDetail'||$route.name=='declarationCenter'||$route.name=='declarationPlatform'||$route.name=='declarationNoticeDetail'||$route.name=='declarationCenter'||$route.name=='talentsService'||$route.name=='talentPlatform'||$route.name=='talentsServiceDetail'"></adminApprove-header> -->
+        <app-header v-if="$route.name=='actiDetail'||$route.name=='regData'||$route.name=='regStatus'"></app-header>
+
+        <ser-header v-if="$route.name=='actiTrain'||$route.name=='actiTrainDetail'||$route.name=='actiTrainStatus'||$route.name=='serverOrg'||$route.name=='actiTrainData'||$route.name=='serverOrgDetail'||$route.name=='serverPro'||$route.name=='serverProDetail'||$route.name=='serverCon'||$route.name=='serverConDetail'||$route.name=='quickSearch'||$route.name=='aboutUs'"></ser-header>
+        <technology-Header v-if="$route.name=='investor'||$route.name=='investorDetail'||$route.name=='finaInstitution'||$route.name=='finaInsDetail'||$route.name=='finaPro'||$route.name=='finaProDetail'"></technology-Header>
+
+        <!-- <ser-header v-if="$route.name=='actiTrain'||$route.name=='serverOrg'||$route.name=='serverOrgDetail'||$route.name=='serverPro'||$route.name=='serverProDetail'||$route.name=='serverCon'||$route.name=='serverConDetail'||$route.name=='quickSearch'||$route.name=='aboutUs'"></ser-header> -->
+        <!-- <technology-Header v-if="$route.name=='investor'||$route.name=='investorDetail'||$route.name=='finaInstitution'||$route.name=='finaInsDetail'"></technology-Header> -->
+
+        <router-view class="routView" />
+      </div>
+      <div class="s-footer">
+        <app-footer v-cloak v-if="$route.name!=='login'&&$route.name!=='register'&&$route.name!=='forgetPsw'&& $store.state.hiddenNav"></app-footer>
+      </div>
     </div>
-    <!-- <app-header v-if="$route.name=='actiCenter'||$route.name=='actiDetail'||$route.name=='regData'||$route.name=='regStatus'||$route.name=='actiManagent'||$route.name=='peoDec'"></app-header> -->
-    <!-- <ser-header v-if="$route.name=='actiTrain'||$route.name=='index'"></ser-header>z -->
-    <!--  <adminApprove-header v-if="$route.name=='compassView'||$route.name=='rightDetail'||$route.name=='serviceDetail'||$route.name=='declarationCenter'||$route.name=='declarationPlatform'||$route.name=='declarationNoticeDetail'||$route.name=='declarationCenter'||$route.name=='talentsService'||$route.name=='talentPlatform'||$route.name=='talentsServiceDetail'"></adminApprove-header> -->
-    <app-header v-if="$route.name=='actiDetail'||$route.name=='regData'||$route.name=='regStatus'"></app-header>
-
-    <ser-header v-if="$route.name=='actiTrain'||$route.name=='actiTrainDetail'||$route.name=='actiTrainStatus'||$route.name=='serverOrg'||$route.name=='actiTrainData'||$route.name=='serverOrgDetail'||$route.name=='serverPro'||$route.name=='serverProDetail'||$route.name=='serverCon'||$route.name=='serverConDetail'||$route.name=='quickSearch'||$route.name=='aboutUs'"></ser-header>
-    <technology-Header v-if="$route.name=='investor'||$route.name=='investorDetail'||$route.name=='finaInstitution'||$route.name=='finaInsDetail'||$route.name=='finaPro'||$route.name=='finaProDetail'"></technology-Header>
-
-    <!-- <ser-header v-if="$route.name=='actiTrain'||$route.name=='serverOrg'||$route.name=='serverOrgDetail'||$route.name=='serverPro'||$route.name=='serverProDetail'||$route.name=='serverCon'||$route.name=='serverConDetail'||$route.name=='quickSearch'||$route.name=='aboutUs'"></ser-header> -->
-    <!-- <technology-Header v-if="$route.name=='investor'||$route.name=='investorDetail'||$route.name=='finaInstitution'||$route.name=='finaInsDetail'"></technology-Header> -->
-
-    <router-view class="routView" />
-    <app-footer v-cloak v-if="$route.name!=='login'&&$route.name!=='register'&&$route.name!=='forgetPsw'&& $store.state.hiddenNav"></app-footer>
   </div>
 </template>
 
@@ -170,6 +176,19 @@ export default {
 </script>
 
 <style lang="scss">
+  .s-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  .s-content {
+    flex: 1;
+  }
+
+  .s-footer {
+    flex: 0;
+  }
 /* 引入全局样式 */
 @import url(./css/animate.css);
 @import url(./css/main.css);

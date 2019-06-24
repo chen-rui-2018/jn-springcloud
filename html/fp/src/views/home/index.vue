@@ -103,6 +103,8 @@ export default {
             next()
           })
       }
+    } else {
+      next()
     }
   },
   mounted() {

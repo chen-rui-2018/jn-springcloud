@@ -46,70 +46,72 @@
             <div
               v-if="typeof scope.row['inputFormatModel'] === 'object' && column.value === 'inputFormatModel'"
               class="target-row">
-              <div v-for="(ruleRow, index) in scope.row['inputFormatModel']" :key="index" class="target-bg">
-                <div v-for="(item, itemIndex) in ruleRow" :key="itemIndex" class="target-bg-cell">
-                  <div v-if="item.formType === '0'" :class="{app: isMobile, pc: !isMobile}" class="target-left-row">
-                    <div class="target-left-row-title" :class="{app: isMobile, pc: !isMobile, empty: !item.formName}">{{ item.formName }}</div>
-                    <div class="target-left-row-form" :class="{app: isMobile, pc: !isMobile}">
-                      <el-input
-                        :disabled="isReported === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])"
-                        v-model="item.value"
-                        :class="{'isMobile': isMobile}"
-                        class="target-input"/>
+              <div v-for="(ruleRow, index) in scope.row['inputFormatModel']" :key="index" :class="{app: isMobile, pc: !isMobile, center: scope.row['inputFormatModel'][index].length === 1}" class="target-bg">
+                <div class="target-bg-left">
+                  <div v-for="(item, itemIndex) in ruleRow" :key="itemIndex" class="target-bg-cell">
+                    <div v-if="item.formType === '0'" :class="{app: isMobile, pc: !isMobile}" class="target-left-row">
+                      <div class="target-left-row-title" :class="{app: isMobile, pc: !isMobile, empty: !item.formName}">{{ item.formName }}</div>
+                      <div class="target-left-row-form" :class="{app: isMobile, pc: !isMobile}">
+                        <el-input
+                          :disabled="isReported === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])"
+                          v-model="item.value"
+                          :class="{'isMobile': isMobile}"
+                          class="target-input"/>
+                      </div>
                     </div>
-                  </div>
-                  <div v-if="item.formType === '1'" :class="{app: isMobile, pc: !isMobile}" class="target-left-row">
-                    <div class="target-left-row-title" :class="{app: isMobile, pc: !isMobile}">{{ item.formName }}</div>
-                    <div class="target-left-row-form" :class="{app: isMobile, pc: !isMobile}">
-                      <el-input :disabled="isReported === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])" v-model="item.value" type="textarea"/>
+                    <div v-if="item.formType === '1'" :class="{app: isMobile, pc: !isMobile}" class="target-left-row">
+                      <div class="target-left-row-title" :class="{app: isMobile, pc: !isMobile}">{{ item.formName }}</div>
+                      <div class="target-left-row-form" :class="{app: isMobile, pc: !isMobile}">
+                        <el-input :disabled="isReported === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])" v-model="item.value" type="textarea"/>
+                      </div>
                     </div>
-                  </div>
-                  <div v-else-if="item.formType === '2'" :class="{app: isMobile, pc: !isMobile}" class="target-left-row">
-                    <div class="target-left-row-title" :class="{app: isMobile, pc: !isMobile}">{{ item.formName }}</div>
-                    <div class="target-left-row-form" :class="{app: isMobile, pc: !isMobile}">
-                      <el-input-number
-                        :disabled="isReported === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])"
-                        :min="0"
-                        v-model="item.value"
-                        :class="{'isMobile': isMobile}"
-                        class="target-input"/>
+                    <div v-else-if="item.formType === '2'" :class="{app: isMobile, pc: !isMobile}" class="target-left-row">
+                      <div class="target-left-row-title" :class="{app: isMobile, pc: !isMobile}">{{ item.formName }}</div>
+                      <div class="target-left-row-form" :class="{app: isMobile, pc: !isMobile}">
+                        <el-input-number
+                          :disabled="isReported === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])"
+                          :min="0"
+                          v-model="item.value"
+                          :class="{'isMobile': isMobile}"
+                          class="target-input"/>
+                      </div>
                     </div>
-                  </div>
-                  <div v-else-if="item.formType === '3'" :class="{app: isMobile, pc: !isMobile}" class="target-left-row">
-                    <div class="target-left-row-title" :class="{app: isMobile, pc: !isMobile}">{{ item.formName }}</div>
-                    <div class="target-left-row-form" :class="{app: isMobile, pc: !isMobile}">
-                      <el-radio-group v-model="item.value" :disabled="isReported === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])">
-                        <el-radio v-for="name in item.choiceOption.split(',')" :key="name" :label="name" :name="name"/>
-                      </el-radio-group>
+                    <div v-else-if="item.formType === '3'" :class="{app: isMobile, pc: !isMobile}" class="target-left-row">
+                      <div class="target-left-row-title" :class="{app: isMobile, pc: !isMobile}">{{ item.formName }}</div>
+                      <div class="target-left-row-form" :class="{app: isMobile, pc: !isMobile}">
+                        <el-radio-group v-model="item.value" :disabled="isReported === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])">
+                          <el-radio v-for="name in item.choiceOption.split(',')" :key="name" :label="name" :name="name"/>
+                        </el-radio-group>
+                      </div>
                     </div>
-                  </div>
-                  <div v-else-if="item.formType === '4'" :class="{app: isMobile, pc: !isMobile}" class="target-left-row">
-                    <div class="target-left-row-title" :class="{app: isMobile, pc: !isMobile}">{{ item.formName }}</div>
-                    <div class="target-left-row-form" :class="{app: isMobile, pc: !isMobile}">
-                      <el-checkbox-group v-model="item.value" :disabled="isReported === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])">
-                        <el-checkbox v-for="name in item.choiceOption.split(',')" :key="name" :label="name" :name="name"/>
-                      </el-checkbox-group>
+                    <div v-else-if="item.formType === '4'" :class="{app: isMobile, pc: !isMobile}" class="target-left-row">
+                      <div class="target-left-row-title" :class="{app: isMobile, pc: !isMobile}">{{ item.formName }}</div>
+                      <div class="target-left-row-form" :class="{app: isMobile, pc: !isMobile}">
+                        <el-checkbox-group v-model="item.value" :disabled="isReported === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])">
+                          <el-checkbox v-for="name in item.choiceOption.split(',')" :key="name" :label="name" :name="name"/>
+                        </el-checkbox-group>
+                      </div>
                     </div>
-                  </div>
-                  <div v-else-if="item.formType === '5'" :class="{app: isMobile, pc: !isMobile}" class="target-left-row">
-                    <div class="target-left-row-title" :class="{app: isMobile, pc: !isMobile}">{{ item.formName }}</div>
-                    <div class="target-left-row-form" :class="{app: isMobile, pc: !isMobile}">
-                      <el-upload
-                        :disabled="isReported === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])"
-                        :on-error="handleError"
-                        :headers="headers"
-                        :on-remove="(file, fileList) => { return handleRemove(file, fileList, item)}"
-                        :before-upload="beforeUpload"
-                        :on-success="(res, file, fileList) => { return uploadDone(res, file, fileList, item)}"
-                        :on-exceed="handleExceed"
-                        :limit="1"
-                        :action="api.host+'springcloud-app-fastdfs/upload/fastUpload'"
-                        :file-list="item.fileList"
-                        list-type="picture">
-                        <el-button size="small" type="primary" v-if="isReported !== 0">点击上传</el-button>
-                        <div v-if="isReported === 0 && item.fileList.length === 0">暂无附件</div>
-                        <div slot="tip" class="el-upload__tip" v-if="isReported !== 0">只能上传jpg/png文件，且不超过20M</div>
-                      </el-upload>
+                    <div v-else-if="item.formType === '5'" :class="{app: isMobile, pc: !isMobile}" class="target-left-row">
+                      <div class="target-left-row-title" :class="{app: isMobile, pc: !isMobile}">{{ item.formName }}</div>
+                      <div class="target-left-row-form" :class="{app: isMobile, pc: !isMobile}">
+                        <el-upload
+                          :disabled="isReported === 0 || (modelType === 1 && !scope.row['hasJurisdiction'])"
+                          :on-error="handleError"
+                          :headers="headers"
+                          :on-remove="(file, fileList) => { return handleRemove(file, fileList, item)}"
+                          :before-upload="beforeUpload"
+                          :on-success="(res, file, fileList) => { return uploadDone(res, file, fileList, item)}"
+                          :on-exceed="handleExceed"
+                          :limit="1"
+                          :action="api.host+'springcloud-app-fastdfs/upload/fastUpload'"
+                          :file-list="item.fileList"
+                          list-type="picture">
+                          <el-button size="small" type="primary" v-if="isReported !== 0">点击上传</el-button>
+                          <div v-if="isReported === 0 && item.fileList.length === 0">暂无附件</div>
+                          <div slot="tip" class="el-upload__tip" v-if="isReported !== 0">只能上传jpg/png文件，且不超过20M</div>
+                        </el-upload>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -398,6 +400,7 @@ export default {
     }
   }
   .target-right-row {
+    flex: none;
     &.pc {
       flex: none;
       margin-left: 12px;
@@ -409,9 +412,14 @@ export default {
   }
   .target-row {
     .target-bg {
+      @include flex($h: flex-start, $v: flex-start);
+      flex-wrap: wrap;
       margin-top: 20px;
       border-bottom: 1px solid $gray;
       padding-bottom: 12px;
+      &.center {
+        align-items: center;
+      }
       &:last-of-type {
         border-bottom: none;
         padding-bottom: 0;
@@ -419,13 +427,17 @@ export default {
       &:first-of-type {
         margin-top: 0;
       }
-      .target-bg-cell {
-        margin: 20px 0;
-        &:first-of-type {
-          margin-top: 0;
-        }
-        &:last-of-type {
-          margin: 0;
+      .target-bg-left {
+        flex: 1;
+        .target-bg-cell {
+          flex: 1;
+          margin: 20px 0;
+          &:first-of-type {
+            margin-top: 0;
+          }
+          &:last-of-type {
+            margin: 0;
+          }
         }
       }
   }

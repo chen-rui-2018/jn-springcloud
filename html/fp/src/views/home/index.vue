@@ -91,6 +91,20 @@ export default {
   //       }, 0);
   //   }
   // },
+  beforeRouteEnter(to, from, next) {
+    if (store.state.menuItems.length === 0) {
+      let menuItems = sessionStorage.getItem('menuItems')
+      if (menuItems) {
+        store.commit('setInfo', {key: 'menuItems', data: JSON.parse(menuItems)})
+        next()
+      } else {
+        store.dispatch('getMenuItems')
+          .then(() => {
+            next()
+          })
+      }
+    }
+  },
   mounted() {
     let _this = this
     bus.$on("getUserinfoF", res => {

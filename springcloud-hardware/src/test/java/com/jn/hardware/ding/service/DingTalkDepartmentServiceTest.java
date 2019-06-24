@@ -4,8 +4,8 @@ import com.jn.common.model.Result;
 import com.jn.hardware.api.DingTalkClient;
 import com.jn.hardware.model.dingtalk.user.DepartmentDetailsInfoParam;
 import com.jn.hardware.model.dingtalk.user.DepartmentDetailsInfoResult;
-import com.jn.hardware.model.dingtalk.user.DepartmentUserInfoParam;
-import com.jn.hardware.model.dingtalk.user.DepartmentUserInfoResult;
+import com.jn.hardware.model.dingtalk.user.DepartmentListParam;
+import com.jn.hardware.model.dingtalk.user.DepartmentListResult;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,6 +32,19 @@ public class DingTalkDepartmentServiceTest {
     @Before
     public void setUp() throws Exception {
 
+    }
+
+
+    /**
+     * 获取部门列表
+     * */
+    @Test
+    public void getDepartmentList() {
+
+        DepartmentListParam departmentListParam = new DepartmentListParam();
+        Result<DepartmentListResult> result = dingTalkClient.getDepartmentList(departmentListParam);
+
+        logger.info("\n获取部门列表：{}",result);
     }
 
     /**

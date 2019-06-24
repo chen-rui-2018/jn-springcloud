@@ -3,7 +3,7 @@
      <div class="banner" ref="banner">
       <div class="swiper-container">
           <div class="swiper-wrapper">
-              <div class="swiper-slide"> <img src="@/assets/image/talents.png" alt=""> </div>
+              <div class="swiper-slide"> <img src="@/assets/image/park_adv.jpg" alt=""> </div>
           </div>
           <div class="swiper-pagination"></div>
       </div>
@@ -117,7 +117,7 @@ export default {
 </script>
 <style lang="scss">
   .parkAdvantage{
-    padding-top: 65px;
+    // padding-top: 65px;
     .banner{
       position: relative;
       .swiper-button-prev, .swiper-button-next{
@@ -171,6 +171,9 @@ export default {
         background: #fff;
         opacity: 1;
       }
+    }
+    .el-tabs__header{
+      margin: 15px 0;
     }
     .retract{
       text-indent: 2em;

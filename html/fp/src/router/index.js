@@ -85,14 +85,6 @@ const router= new Router({
           name: 'parkIntroductionChild'
         },
         {
-          path: '/parkAdvantage',
-          component: resolve => require(['@/views/parkAdvantage'], resolve),
-          meta: {
-            title: '园区优势'
-          },
-          name: 'parkAdvantage'
-        },
-        {
           path: '/enterpriseservice',
           component: resolve => require(['@/views/enterpriseservice'], resolve),
           meta: {
@@ -171,6 +163,14 @@ const router= new Router({
             title: '人才服务详情'
           },
           name: 'talentsServiceDetail'
+        },
+        {
+          path: '/parkAdvantage',
+          component: resolve => require(['@/views/parkAdvantage'], resolve),
+          meta: {
+            title: '园区优势'
+          },
+          name: 'parkAdvantage'
         },
         {
           path: 'messageCenter',
@@ -578,6 +578,7 @@ const router= new Router({
               },
               component: resolve => require(['@/views/home/iframe'], resolve)
             },
+
             {
               path: '/upgradeStaff',
               name: 'upgradeStaff',

@@ -141,7 +141,7 @@ export default {
   computed: {
     isCenter() {
       const list =
-        "enterpriseservice,investment,serMatHp,tfindex,actiCenter,incubatorEnterprises,compassView,declarationCenter,talentsService,academicExchange,policyCenter,recruitmentList,profileDetails,noticeList";
+        "enterpriseservice,investment,serMatHp,tfindex,actiCenter,incubatorEnterprises,compassView,declarationCenter,talentsService,academicExchange,policyCenter,recruitmentList,profileDetails,noticeList,parkAdvantage";
       return this.$route.matched.some(item => {
         if (item.name) {
           return list.indexOf(item.name) == -1;

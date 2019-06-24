@@ -120,13 +120,6 @@
       init() {
         // 获取表单原始数据
         this.getInitData()
-          .then(() => {
-            // 格式化树形指标、表头和otherColumns
-            return this.formatFormData()
-          })
-          .then(() => {
-            this.loadingTab = false
-          })
         // this.getPcAd()
         //   .then(() => {
         //     new Swiper('#advertisement', {
@@ -135,29 +128,14 @@
         //     })
         //   })
       },
-      formatFormData() {
-        return new Promise(resolve => {
-          for (const tab of this.formData.tabs) {
-            // 填报格式根据指标id挂载到树形指标上面
-            this.formatInputFormatModel(tab)
-            // 格式化表头设置key对应指标上otherColumn的数据
-            this.formatColumn(tab)
-            // 把otherColumns的对象根据指标id挂载到树形指标上面
-            this.formatTreeOtherColumnData(tab)
-            this.sortTree(tab.targetList, 'orderNumber')
-          }
-        })
-      },
       sortTree(tree, keys2) {
         for (let i = 0, length = tree.length; i < length; i++) {
           for (let j = i + 1; j < length; j++) {
-            if (tree[i].hasOwnProperty(keys2) && tree[j].hasOwnProperty(keys2) && tree[i][keys2] && tree[j][keys2]) {
-              if (Number(tree[i][keys2]) > Number(tree[j][keys2])) {
-                const temp = tree[j]
-                tree[j] = tree[i]
-                tree[i] = temp
-              }
-            }
+            if (Number(tree[i][keys2]) > Number(tree[j][keys2])) {
+              const temp = tree[j]
+              tree[j] = tree[i]
+              tree[i] = temp
+             }
           }
           if (tree[i].hasOwnProperty('children') && tree[i].children && tree[i].children.length > 0) {
             this.sortTree(tree[i].children, keys2)
@@ -168,11 +146,11 @@
         // 填报格式合并到树指标
         this.treeMerge(tab.inputList, tab.targetList)
       },
-      formatColumn(tab) {
+      formatColumn(tab, formData) {
         // 整合表头
         tab.columns = !this.isMobile ? deepClone(this.columns) : deepClone(this.appColumns)
         // 如果是PC端才有上期填报值的表头
-        const formTime = this.formData.taskInfo.formTime
+        const formTime = formData.taskInfo.formTime
         const date = new Date(formTime.substring(0, 4) + '-' + formTime.substring(4, 6))
         const tabColumnType = tab.tabColumnType
         let text = date.getFullYear() + '年'
@@ -295,9 +273,7 @@
           }
           // 同一行的指标按按排序升序
           for (const list of target.inputFormatModel) {
-            list.sort((a, b) => {
-              return a['orderNumber'] - b['orderNumber']
-            })
+            this.sortTree(list, 'orderNumber')
           }
           if (target.hasOwnProperty('children') && target.children && target.children.length > 0) {
             this.treeMerge(formModels, target.children)
@@ -463,24 +439,35 @@
             },
             callback: res => {
               if (res.code === "0000") {
-                this.formData = res.data
-                this.isReported = this.formData.taskInfo.status
-                this.formData.tabs.sort((a, b) => {
-                  return a['orderNumber'] - b['orderNumber']
-                })
+                const formData  = res.data
+                const tabs = formData.tabs
+                this.sortTree(formData.tabs, 'orderNumber')
+                for (const tab of tabs) {
+                  this.sortTree(tab.targetList, 'orderNumber')
+                }
+                this.isReported = formData.taskInfo.status
                 const departmentId = this.formDataListTitle[0].departmentId
                 this.departmentStatus = this.formDataListTitle[0].status
-                this.formData.departmentId = departmentId
-                if (this.formData.modelType === 1) {
-                  const gardenFiller = this.formData.gardenFiller
+                formData.departmentId = departmentId
+                if (formData.modelType === 1) {
+                  const gardenFiller = formData.gardenFiller
                   if (gardenFiller) {
                     this.formDataListTitle = this.formDataListTitle.concat(gardenFiller)
                   }
-                  for (const tab of  this.formData.tabs) {
+                  for (const tab of  formData.tabs) {
                     this.formatTreeJurisdiction(tab.targetList, departmentId)
                   }
                 }
-                resolve()
+                for (const tab of formData.tabs) {
+                  // 填报格式根据指标id挂载到树形指标上面
+                  this.formatInputFormatModel(tab)
+                  // 格式化表头设置key对应指标上otherColumn的数据
+                  this.formatColumn(tab, formData)
+                  // 把otherColumns的对象根据指标id挂载到树形指标上面
+                  this.formatTreeOtherColumnData(tab)
+                }
+                this.formData = formData
+                this.loadingTab = false
               } else {
                 this.$message.error(res.result)
                 reject(res.result)

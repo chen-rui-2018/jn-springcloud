@@ -11,7 +11,7 @@
     <div class="declaration_list">
       <div class="declaration_titile">
         <div>即时申报项目</div>
-        <div @click="$router.push({path:'/guest/pd/DeclarationItems'})">MORE <span class="iconfont icon-jiantou"></span></div>
+        <div @click="goItems">MORE <span class="iconfont icon-jiantou"></span></div>
       </div>
       <div class="declaration_list_tab">
         <ul >
@@ -134,6 +134,9 @@ export default {
     // this.scrollBottom()
   },
   methods: {
+    goItems () {
+      this.$router.push({path: '/guest/pd/DeclarationItems', query: {isShow: this.isShow}})
+    },
     goDetail (id) {
       if (this.isShow === 1) {
         this.api.get({

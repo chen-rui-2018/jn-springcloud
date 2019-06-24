@@ -2,6 +2,7 @@
   <div class="editProduct" v-loading="loading">
     <div class="ordinary_title">
       <div class="font16">编辑招聘</div>
+      <div @click="goBack">返回</div>
     </div>
     <div class="ordinary_content">
        <el-form :model="jobForm" :rules="rules" ref="jobForm" label-width="120px" class="postJobInfo">
@@ -92,6 +93,9 @@ export default {
     this.initList()
   },
   methods: {
+     goBack() {
+      this.$router.push({ name: "recruitmentManagement" });
+    },
     getInvite(){
      this.api.get({
                   url:'getInviteType',
@@ -169,12 +173,33 @@ this.api.get({
   .editProduct{
     width: 100%;
 
-    .ordinary_title{
-      background-color: #fff;
+    // .ordinary_title{
+    //   background-color: #fff;
 
-      padding:24px 28px;
-      border-radius: 5px;
+    //   padding:24px 28px;
+    //   border-radius: 5px;
+    // }
+     .ordinary_title {
+    background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 17px;
+    // font-size: 13px;
+    border-radius: 5px;
+    div:nth-child(2) {
+      width: 50px;
+      height: 26px;
+      background: rgba(236, 252, 242, 1);
+      border: 1px solid rgba(65, 215, 135, 1);
+      border-radius: 4px;
+      text-align: center;
+      line-height: 26px;
+      font-size: 12px;
+      color: #00a041;
+      cursor: pointer;
     }
+  }
     .ordinary_content{
         margin-top:14px;
         background: #fff;

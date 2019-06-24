@@ -20,7 +20,7 @@
         </el-breadcrumb>
       </div>
        <!-- 申报平台 -->
-    <!--   <div class="declaration_platform">
+      <!--   <div class="declaration_platform">
         <div class="platform_titile">
           <div>申报平台</div>
           <div @click="gotalentplatform">MORE <span class="el-icon-arrow-right"></span></div>
@@ -44,61 +44,57 @@
         </div>
         <div class="perennial_list">
           <ul>
-            <li>
-              <a href="http://112.94.22.222:2383/ibps-platform-portal/login.jsp" target="_blank">
+            <li @click="goelse(perennialList[0].linkAddress)">
+              <!-- <a :href="perennialList[0].linkAddress"> -->
                 <div class="list_cont">
                   <p><img src="@/assets/image/perennial.png" alt=""> </p>
                   <!-- <p>{{item.title}}</p>
                   <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
                   <p>收益：<span>{{item.profit}}</span> </p>
                   <p>价格：{{item.price}}</p> -->
-                  <p>高层次创业人才引进计划高层次创业人才引进计划高层次创业人才引进计划高层次创业人才引进计划</p>
-                  <p>平台功能：高层次创业人才引进计划</p>
-                </div>
-              </a>
-              <div class="list_view"><span>我要申报</span> </div>
-            </li>
-            <li>
-              <a href="http://xmsb.jsrcgz.gov.cn/" target="_blank">
-                <div class="list_cont">
-                  <p><img src="@/assets/image/jsrcgz.png" alt=""> </p>
-                  <!-- <p>{{item.title}}</p>
-                  <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
-                  <p>收益：<span>{{item.profit}}</span> </p>
-                  <p>价格：{{item.price}}</p> -->
-                  <p>江苏省“双创计划”</p>
-                  <p>平台功能：江苏省双创计划</p>
+                  <p>{{perennialList[0].platformTitle}} </p>
+                  <p>平台功能：{{perennialList[0].remark}}</p>
                 </div>
                 <div class="list_view"><span>我要申报</span> </div>
-              </a>
+              <!-- </a> -->
             </li>
-            <li>
-              <a href="http://49.65.0.223:85/njrc_cxxqyj.jsp" target="_blank">
+            <li @click="goelse(perennialList[1].linkAddress)">
+              <!-- <a :href="perennialList[1].linkAddress" target="_blank"> -->
+                <div class="list_cont">
+                  <p><img src="@/assets/image/jsrcgz.png" alt=""> </p>
+                  <p>{{perennialList[1].platformTitle}}</p>
+                  <p>平台功能：{{perennialList[1].remark}}</p>
+                </div>
+                <div class="list_view"><span>我要申报</span> </div>
+              <!-- </a> -->
+            </li>
+            <li @click="goelse(perennialList[2].linkAddress)">
+              <!-- <a :href="perennialList[2].linkAddress" target="_blank"> -->
                 <div class="list_cont">
                   <p><img src="@/assets/image/njrc_kjdjzj22.png" alt=""> </p>
                   <!-- <p>{{item.title}}</p>
                   <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
                   <p>收益：<span>{{item.profit}}</span> </p>
                   <p>价格：{{item.price}}</p> -->
-                  <p>创新型企业家培育计划</p>
-                  <p>平台功能：创新型企业家培育计划</p>
+                  <p>{{perennialList[2].platformTitle}}</p>
+                  <p>平台功能：{{perennialList[2].remark}}</p>
                 </div>
                 <div class="list_view"><span>我要申报</span> </div>
-              </a>
+              <!-- </a> -->
             </li>
-            <li>
-              <a href="http://49.65.0.223:85/njrc_kjdjzj.jsp " target="_blank">
+            <li @click="goelse(perennialList[3].linkAddress)">
+              <!-- <a :href="perennialList[3].linkAddress" target="_blank"> -->
                 <div class="list_cont">
                   <p><img src="@/assets/image/njrc_cxxqyj.png" alt=""> </p>
                   <!-- <p>{{item.title}}</p>
                   <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
                   <p>收益：<span>{{item.profit}}</span> </p>
                   <p>价格：{{item.price}}</p> -->
-                  <p>科技顶尖专家集聚计划</p>
-                  <p>平台功能：科技顶尖专家集聚计划</p>
+                  <p>{{perennialList[3].platformTitle}}</p>
+                  <p>平台功能：{{perennialList[3].remark}}</p>
                 </div>
                 <div class="list_view"><span>我要申报</span> </div>
-              </a>
+              <!-- </a> -->
             </li>
           </ul>
         </div>
@@ -202,6 +198,39 @@ export default {
       this.getperennialList()//常年申报
     },
     methods: {
+      goelse(url){
+        if(getToken()){
+          this.api.get({
+          url: "getUserExtension",
+          data: { },
+          callback: (res)=> {
+            if (res.code == "0000") {
+              // console.log(res.data.roleCode)
+              if(res.data.roleCode==="COM_ADMIN"||res.data.roleCode==="COM_CONTACTS"){
+                // this.$router.push({name:'talentPlatform'})
+                window.location.href=url
+              }else{
+                this.$message.error("只有企业管理员和企业联系人才可以进申报平台！！")
+                return
+              }
+            }else{
+              _this.$message.error(res.result)              
+            }
+          }
+        })
+        }else{
+          this.$confirm('亲，您需要登录后才能访问以下界面哦！', '提示', {
+            confirmButtonText: '去登陆',
+            cancelButtonText: '留在当前页面',
+            type: 'warning',
+            center: true
+          }).then(() => {
+             window.sessionStorage.setItem("PresetRoute", this.$route.fullPath)
+             this.$router.push({path:"/login"})
+          }).catch(() => {
+          })
+        }
+      },
       //区类型获取
       getdeclarationcentertype(){
         let _this = this;
@@ -256,11 +285,12 @@ export default {
       //常年申报列表
       getperennialList(){
         let _this = this;
-        this.api.get({
-          url: "list",
+        this.api.post({
+          url: "queryPlatformInfo",
           data: {
             page:1,
-            rows:4
+            rows:4,
+            isTalentService:1
           },
           callback: function(res) {
             if (res.code == "0000") {
@@ -496,10 +526,11 @@ export default {
           margin-top: 25px;
           ul{
             display: flex;
+            justify-content: space-between;
             li{
               cursor: pointer;
-              width:25%;
-              margin-right: 35px;
+              width:23%;
+              // margin-right: 35px;
               border: solid 1px #eeeeee;
               transition:all .3s ease 0s;
               &:hover{

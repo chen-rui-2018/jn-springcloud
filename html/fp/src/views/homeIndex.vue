@@ -36,7 +36,7 @@
               </li>
               <!-- <li>
                 <router-link to="/compassView" class="router-link" :class="{'ru-active':$route.path == '/compassView'}">行政审批</router-link>
-              </!--> 
+              </li>  -->
               <!-- <li>
                 <router-link to="/investment" class="router-link" :class="{'ru-active':$route.path == '/investment'}">招商引资</router-link>
               </li> -->
@@ -141,7 +141,7 @@ export default {
   computed: {
     isCenter() {
       const list =
-        "enterpriseservice,investment,serMatHp,tfindex,actiCenter,incubatorEnterprises,compassView,declarationCenter,talentsService,academicExchange,policyCenter,recruitmentList,profileDetails,noticeList";
+        "enterpriseservice,investment,serMatHp,tfindex,actiCenter,incubatorEnterprises,compassView,declarationCenter,talentsService,academicExchange,policyCenter,recruitmentList,profileDetails,noticeList,parkAdvantage";
       return this.$route.matched.some(item => {
         if (item.name) {
           return list.indexOf(item.name) == -1;

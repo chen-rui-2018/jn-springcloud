@@ -61,4 +61,8 @@ public interface PayClient {
     @ApiOperation(value = "统一缴费-支付回调接口")
     @RequestMapping(value = "/api/payment/payBill/payCallBack", method = RequestMethod.POST)
     Result payCallBack(@RequestBody PayOrderNotify callBackParam);
+
+    @ApiOperation(value = "我的账单-账单状态变更（已撤回）,各业务调用",notes = "我的账单-账单状态变更（已撤回）,各业务调用")
+    @RequestMapping(value = "/api/payment/payBill/cancelBill",method = RequestMethod.POST)
+    Result cancelBill( @RequestParam(value = "billId") String billId);
 }

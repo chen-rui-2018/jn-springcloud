@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
@@ -96,5 +97,15 @@ public class PayServerController extends BaseController implements PayClient {
         logger.info("进入-支付回调接口，param:{}", JSONObject.toJSONString(callBackParam));
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         return new Result(myPayBillService.payCallBack(callBackParam,user));
+    }
+
+    @Override
+    @ControllerLog(doAction = "我的账单-账单状态变更（已撤回）,各业务调用")
+    public Result cancelBill(@RequestParam(value = "billId") String billId) {
+        logger.info("我的账单-账单状态变更（已撤回）,各业务调用，param:{}", JSONObject.toJSONString(billId));
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        Assert.notNull(billId,"账单编号不能为空");
+        return myPayBillService.cancelBill(billId,user);
     }
 }

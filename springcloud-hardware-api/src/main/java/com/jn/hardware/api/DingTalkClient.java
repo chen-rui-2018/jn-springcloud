@@ -2,10 +2,7 @@ package com.jn.hardware.api;
 
 import com.jn.common.model.Result;
 import com.jn.hardware.model.dingtalk.attendance.*;
-import com.jn.hardware.model.dingtalk.user.DepartmentListParam;
-import com.jn.hardware.model.dingtalk.user.DepartmentListResult;
-import com.jn.hardware.model.dingtalk.user.DepartmentUserInfoParam;
-import com.jn.hardware.model.dingtalk.user.DepartmentUserInfoResult;
+import com.jn.hardware.model.dingtalk.user.*;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -68,4 +65,21 @@ public interface DingTalkClient {
      */
     @RequestMapping(value = "/api/hardware/dingTalk/getLeaveApproveDuration")
     Result<LeaveApproveDurationResult> getLeaveApproveDuration(@RequestBody @Validated LeaveApproveDurationParam leaveApproveduRationParam);
+
+    /**
+     * 获取用户详情
+     * @param userInfoParam
+     * @return
+     */
+    @RequestMapping(value = "/api/hardware/dingTalk/getUserInfo")
+    Result<UserDetailsInfoResult> getUserInfo(@RequestBody @Validated UserDetailsInfoParam userInfoParam);
+
+    /**
+     * 获取部门详情
+     * @param departmentDetailsInfoParam
+     * @return
+     */
+    @RequestMapping(value = "/api/hardware/dingTalk/getDepartmentDetails")
+    Result<DepartmentDetailsInfoResult> getDepartmentDetails(@RequestBody @Validated DepartmentDetailsInfoParam departmentDetailsInfoParam);
+
 }

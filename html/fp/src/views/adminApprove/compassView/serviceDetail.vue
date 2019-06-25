@@ -310,6 +310,9 @@ export default {
             _this.loading=false
             _this.seviceDetail = res.data;
             _this.word=_this.seviceDetail.dealConditions
+          }else{
+            _this.loading=false
+            _this.$message.error(res.result)
           }
         }
       });
@@ -336,6 +339,8 @@ export default {
           if (res.code == "0000") {
             _this.messageVisible = false
             _this.$message.success("留言成功")
+          }else{
+            _this.$message.error(res.result)
           }
         }
       });

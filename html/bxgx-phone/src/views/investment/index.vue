@@ -206,12 +206,14 @@ export default {
       width: 100%;
       font-size: 32px;
       font-weight:bold;
-      color:rgba(34,34,34,1);
-      @include clamp(1);
+      color: rgba(34,34,34,1);
+      overflow: hidden;
+      text-overflow:ellipsis;
+      white-space: nowrap;
     }
     .card-list-text {
       width: 100%;
-      height: 108px;
+      height: 100px;
       line-height: 36px;
       margin: 20px 0 10px;
       @include clamp(3);

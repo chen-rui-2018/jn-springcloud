@@ -763,14 +763,11 @@ export default {
           .liBerif {
             margin: 20px 0;
             height: 35px;
-            // display: -webkit-box;
-            // -webkit-box-orient: vertical;
-            // -webkit-line-clamp: 2;
-            // overflow: hidden;
-            // width: 100%;
             text-overflow: ellipsis;
             display: -webkit-box;
+            /*! autoprefixer: off */
             -webkit-box-orient: vertical;
+            /*! autoprefixer: on */
             -webkit-line-clamp: 2;
             overflow: hidden;
           }
@@ -991,13 +988,11 @@ export default {
           .liBerif {
             margin: 20px 0;
             height: 35px;
-            // display: -webkit-box;
-            // -webkit-box-orient: vertical;
-            // -webkit-line-clamp: 2;
-            // overflow: hidden;
             text-overflow: ellipsis;
             display: -webkit-box;
+            /*! autoprefixer: off */
             -webkit-box-orient: vertical;
+            /*! autoprefixer: on */
             -webkit-line-clamp: 2;
             overflow: hidden;
           }

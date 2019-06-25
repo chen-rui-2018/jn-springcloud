@@ -107,6 +107,29 @@ public class MiniProgramRegistersServiceImpl implements MiniProgramRegistersServ
     }
 
     /**
+     * 根据OpenId判断OpenId是否已绑定
+     * @param openId
+     * @param registerTypeEnum
+     * @return
+     */
+    @ServiceLog(doAction = "根据OpenId判断OpenId是否已绑定")
+    @Override
+    public String openIdIsBindingAccount(String openId, RegisterTypeEnum registerTypeEnum) {
+        logger.info("进入根据OpenId判断OpenId是否已绑定API,请求入参：{}",openId);
+        //校验openId和unionId的长度是否正常
+        checkOpenIdAndUnionIdLength(openId,"");
+        //判断openId在系统中是否存在
+        long existNum = existNumOpenId(openId,registerTypeEnum);
+        if(existNum==0){
+            logger.info("根据OpenId判断OpenId是否已绑定查询成功，当前openId：[{}]没有绑定账号",openId);
+            return "";
+        }else{
+            //openId在系统汇中已经存在，返回绑定的账号
+            return isBindingAccountByOpenId(openId,registerTypeEnum);
+        }
+    }
+
+    /**
      * 保存或修改微信公众号信息
      * @param weChatRequestParam
      * @param existNum

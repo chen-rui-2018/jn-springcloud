@@ -20,6 +20,7 @@ public enum MiniProgramRegisterExceptionEnum implements CodeAndMsg {
     OPEN_ID_FORMAT_ERROR("3020517","openId格式不正确,openId长度为28位"),
     UNION_ID_FORMAT_ERROR("3020518","unionId格式不正确,unionId长度为29位"),
     REGISTER_OR_BIDING_ERROR("3020518","注册并绑定异常，跨服务获取用户信息失败"),
+    OPEN_ID_IS_NOT_NULL("3020519","openId不能为空"),
     ;
     private String code;
     private String message;

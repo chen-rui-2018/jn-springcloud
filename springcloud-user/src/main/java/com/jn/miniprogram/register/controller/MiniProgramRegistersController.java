@@ -50,6 +50,14 @@ public class MiniProgramRegistersController extends BaseController {
         return new Result(miniprogramRegistersService.isBindingAccountByOpenId(weChatRequestParam, RegisterTypeEnum.SMALL_PROGRAM));
     }
 
+    @ControllerLog(doAction = "根据OpenId判断OpenId是否已绑定")
+    @ApiOperation(value = "根据OpenId判断OpenId是否已绑定")
+    @RequestMapping(value = "/openIdIsBindingAccount",method = RequestMethod.POST)
+    public Result<String> openIdIsBindingAccount(@RequestBody String openId) {
+        logger.info("----进入判断OpenId是否已绑定API,入参：{}----",openId);
+        Assert.notNull(openId, MiniProgramRegisterExceptionEnum.OPEN_ID_IS_NOT_NULL.getMessage());
+        return new Result(miniprogramRegistersService.openIdIsBindingAccount(openId, RegisterTypeEnum.SMALL_PROGRAM));
+    }
 
     @ControllerLog(doAction = "发送短信验证码")
     @ApiOperation(value = "发送短信验证码")

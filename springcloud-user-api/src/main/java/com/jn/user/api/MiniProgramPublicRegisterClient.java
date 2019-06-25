@@ -1,10 +1,8 @@
 package com.jn.user.api;
 
 import com.jn.common.model.Result;
-import com.jn.system.log.annotation.ControllerLog;
 import com.jn.user.model.RegisterInfoParam;
 import com.jn.user.model.WeChatRequestParam;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,22 +16,21 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @modified By:
  */
 @FeignClient("springcloud-user")
-public interface MiniProgramRegisterClient {
+public interface MiniProgramPublicRegisterClient {
     /**
      * 判断OpenId是否已绑定
      * @param weChatRequestParam  微信用户信息
      * @return
      */
-    @RequestMapping(value = "/api/miniProgramRegister/isBindingAccountByOpenId", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/miniProgramPublicController/isBindingAccountByOpenId", method = RequestMethod.POST)
     Result isBindingAccountByOpenId(@RequestBody @Validated WeChatRequestParam weChatRequestParam);
-
 
     /**
      * 根据OpenId判断OpenId是否已绑定
      * @param openId
      * @return
      */
-    @RequestMapping(value = "/api/miniProgramRegister/openIdIsBindingAccount", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/miniProgramPublicController/openIdIsBindingAccount", method = RequestMethod.POST)
     Result<String> openIdIsBindingAccount(@RequestBody String openId);
 
     /**
@@ -41,7 +38,7 @@ public interface MiniProgramRegisterClient {
      * @param registerInfoParam
      * @return
      */
-    @RequestMapping(value = "/api/miniProgramRegister/registerAndBinding")
+    @RequestMapping(value = "/api/miniProgramPublicController/registerAndBinding")
     Result registerAndBinding(@RequestBody @Validated RegisterInfoParam registerInfoParam);
 
     /**
@@ -49,6 +46,6 @@ public interface MiniProgramRegisterClient {
      * @param account
      * @return
      */
-    @RequestMapping(value = "/api/miniProgramRegister/getOpenIdByAccount")
+    @RequestMapping(value = "/api/miniProgramPublicController/getOpenIdByAccount")
     Result getOpenIdByAccount(@RequestBody String account);
 }

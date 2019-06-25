@@ -128,7 +128,10 @@ export default {
       }
     }
   },
-  mounted() {
+  // mounted() {
+  //   this.init()
+  // },
+  created() {
     this.init()
   },
   methods: {
@@ -183,25 +186,20 @@ export default {
         if (res.data.code === this.GLOBAL.code) {
           this.detailData = res.data.data
           if (res.data.data) {
+            this.tasks = { data: [] }
+            var tasksData = { data: [] }
+            tasksData.data = []
             res.data.data.forEach((v, i) => {
-              this.tasks.data.push({
-                // $index: 0,
-                // $level: 0,
-                // $no_end: false,
-                // $no_start: false,
-                // $rendered_type: 'task',
-                // $source: [],
-                // $target: [],
+              tasksData.data.push({
                 text: v.taskName,
                 id: i + 1,
-                // start_date: this.reverseString(v.planStartTime),
                 start_date: new Date(v.planStartTime),
-                // end_date: this.reverseString(v.planStopTime),
                 duration: ((new Date(v.planStopTime).getTime() - new Date(v.planStartTime).getTime()) / 3600 / 1000 / 24) + 1,
-                // duration: 20,
                 progress: Number(v.nowadaysProgress.split('%')[0]) / 100
               })
             })
+            this.tasks = tasksData
+            console.log(this.tasks)
           }
           // console.log(this.tasks.data)
         } else {
@@ -540,8 +538,11 @@ export default {
               }
               .gantt_task_scale{
                 height: 74px!important;
+                // width: 100%!important;
                 >div:nth-child(1){
                   div{
+                    text-align: left;
+                     margin-left: 324px;
                      width: 100%!important;
                   }
                 }
@@ -598,7 +599,7 @@ export default {
   }
 .gantt_data_area{
   height: unset !important;
-  width: 100%!important;
+  // width: 100%!important;
   >div{
     width: 100%!important;
   }
@@ -608,7 +609,7 @@ export default {
   border:none;
 }
 .gantt_task_scale{
-  width: 100% !important;
+  // width: 100% !important;
 }
 // .gantt_bars_area{
 //   // >div{

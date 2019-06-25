@@ -143,6 +143,7 @@
               <el-checkbox label="0">短信</el-checkbox>
               <el-checkbox label="1">邮件</el-checkbox>
               <el-checkbox label="2">app</el-checkbox>
+              <el-checkbox label="3">微信</el-checkbox>
             </el-checkbox-group>
           </el-form-item>
         </target-row>

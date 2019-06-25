@@ -2,7 +2,7 @@
   <div class="publishingProduct" v-loading="loading">
     <div class="ordinary_title font16">
       <div>发布宣传</div>
-      <div @click="toEnterprisePropaganda">返回</div>
+      <div @click="$router.go(-1)">返回</div>
     </div>
     <div class="ordinary_content">
       <el-form :model="publicityForm" :rules="rules" ref="publicityForm" label-width="124px" class="postJobInfo">
@@ -299,9 +299,6 @@ export default {
         });
       });
     },
-    toEnterprisePropaganda() {
-      this.$router.push({ name: "enterprisePropaganda" });
-    },
     handleExceed(files, fileList) {
       this.$message.warning(`只能上传一张海报图片`);
     },
@@ -380,7 +377,8 @@ export default {
                   message: "操作成功,请等待审核",
                   type: "success"
                 });
-                this.$router.push({ name: "enterprisePropaganda" });
+                this.$router.go(-1)
+                // this.$router.push({ name: "enterprisePropaganda" });
                 this.$refs[publicityForm].resetFields();
                 this.publicityForm.posterUrl = "";
                 this.priceIndex = undefined;

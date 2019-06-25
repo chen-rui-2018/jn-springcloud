@@ -1,7 +1,7 @@
 <template>
   <div class="enterpriseProduct" v-loading="loading">
     <div class="ordinary_title">
-      <div class="font16">企业宣传</div>
+      <div class="font16">{{this.$route.meta.title}}</div>
       <div @click="toPublishingPropaganda">发布宣传</div>
     </div>
     <div class="ordinary_main">

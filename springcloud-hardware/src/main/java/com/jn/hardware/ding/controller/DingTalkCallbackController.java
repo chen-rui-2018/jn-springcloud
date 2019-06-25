@@ -64,6 +64,7 @@ public class DingTalkCallbackController {
             dingTalkEncryptor = new DingTalkEncryptor(dingTalkProperties.getAddressBookToken(),dingTalkProperties.getAddressBookAeskey(), dingTalkProperties.getCorpId());
             String encrypt = JSON.parseObject(encryptJson).getString("encrypt");
             plainText = dingTalkEncryptor.getDecryptMsg(addressBookCallback.getSignature(), addressBookCallback.getTimestamp(), addressBookCallback.getNonce(), encrypt);
+            logger.info("钉钉通讯录事件回调 解密encryptJson：【{}】 ",plainText);
         } catch (DingTalkEncryptException e) {
             logger.error("setp1 对encrypt进行解密失败 ",e);
             logger.info("======结束钉钉通讯录事件回调通知 ======");
@@ -74,6 +75,7 @@ public class DingTalkCallbackController {
         /**  step 2 对从encrypt解密出来的明文进行处理**/
         JSONObject plainTextJson = JSONObject.parseObject(plainText);
         AddressBookNotice addressBookNotice = plainTextJson.toJavaObject(AddressBookNotice.class);
+        logger.info("钉钉通讯录事件回调 JSON转对象addressBookNotice：【{}】 ",addressBookNotice);
         switch (addressBookNotice.getEventType()) {
             //TODO 调用接口
             case EventTypeConstant.USER_ADD_ORG :
@@ -109,6 +111,7 @@ public class DingTalkCallbackController {
         json.putAll(jsonMap);
         try {
             response.getWriter().append(json.toString());
+            logger.info("钉钉通讯录事件回调 响应钉钉的信息：【{}】 ",json.toString());
         } catch (IOException e) {
             logger.error(" 返回信息给钉钉失败",e);
             logger.info("======结束钉钉通讯录事件回调通知 ======");

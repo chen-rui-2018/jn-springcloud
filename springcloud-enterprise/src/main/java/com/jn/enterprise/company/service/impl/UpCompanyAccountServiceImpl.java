@@ -148,19 +148,19 @@ public class UpCompanyAccountServiceImpl implements UpCompanyAccountService {
                 // 只有新增时才创建账本
                 if (companyIsAdd) {
                     logger.info("[企业后置脚本] 新增企业调度创建企业账本接口");
-                    //TODO 4.创建企业的账本信息-延迟调度 huxw
-//                    PayAccountBookCreateParam payAccountBookCreateParam = new PayAccountBookCreateParam();
-//                    payAccountBookCreateParam.setComAdmin(comAdmin);
-//                    payAccountBookCreateParam.setEnterId(companyId);
-//
-//                    Delay delay = new Delay();
-//                    delay.setServiceId(applicationName);
-//                    delay.setServiceUrl("/api/payment/payAccount/createPayAccountBook");
-//                    delay.setTtl("30");
-//                    delay.setDataString(JSONObject.toJSONString(payAccountBookCreateParam));
-//                    logger.info("开始回调");
-//                    Result<Boolean> delayResult = delaySendMessageClient.delaySend(delay);
-//                    logger.info("结束回调,返回结果，【{}】", delayResult.toString());
+                    // 4.创建企业的账本信息-延迟调度 huxw
+                    PayAccountBookCreateParam payAccountBookCreateParam = new PayAccountBookCreateParam();
+                    payAccountBookCreateParam.setComAdmin(comAdmin);
+                    payAccountBookCreateParam.setEnterId(companyId);
+
+                    Delay delay = new Delay();
+                    delay.setServiceId(applicationName);
+                    delay.setServiceUrl("/api/payment/payAccount/createPayAccountBook");
+                    delay.setTtl("30");
+                    delay.setDataString(JSONObject.toJSONString(payAccountBookCreateParam));
+                    logger.info("开始回调");
+                    Result<Boolean> delayResult = delaySendMessageClient.delaySend(delay);
+                    logger.info("结束回调,返回结果，【{}】", delayResult.toString());
                 }
             } else {
                 logger.warn("[企业后置脚本] 添加/修改企业信息失败");

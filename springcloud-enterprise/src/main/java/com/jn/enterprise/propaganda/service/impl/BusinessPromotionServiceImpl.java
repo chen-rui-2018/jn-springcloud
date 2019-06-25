@@ -138,7 +138,7 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
     public PaginationData getBusinessPromotionList(BusinessPromotionListParam businessPromotionListParam,String loginAccount) {
         //判断当前用户是否为超级管理员，超级管理员可查看全部，非超级管理员只能查看自己发布的宣传信息
         String creator=loginAccount;
-        if(isSuperAdmin(loginAccount)){
+        if(StringUtils.isNotBlank(loginAccount)&& isSuperAdmin(loginAccount)){
             //超级管理员，查询全部
             creator="";
         }

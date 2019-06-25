@@ -5,7 +5,7 @@
       <div class="business_nav">
         <div @click="toBasicInformation" v-show="isEditBody">编辑机构</div>
         <div @click="toCounselorManagement" v-show="isCounselor">专员管理</div>
-        <div @click="toEnterprisePropaganda" v-show="isPublicity">企业宣传</div>
+        <div @click="toEnterprisePropaganda" v-show="isPublicity">机构宣传</div>
       </div>
 
     </div>
@@ -268,7 +268,7 @@ export default {
       this.$router.push({ name: "agencyColleaguesList" });
     },
     toEnterprisePropaganda() {
-      this.$router.push({ name: "enterprisePropaganda" });
+      this.$router.push({ name: "organizationPropaganda" });
     },
     toRecruitmentManagement() {
       this.$router.push({ name: "recruitmentManagement" });

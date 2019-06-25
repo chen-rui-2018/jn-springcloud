@@ -1,6 +1,8 @@
 package com.jn.user.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.jn.system.vo.SysUserRoleVO;
+import com.jn.user.vo.SysRoleVO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -68,6 +70,8 @@ public class UserExtensionInfo implements Serializable {
     private String roleName;
     @ApiModelProperty(value = "角色编码")
     private String roleCode;
+    @ApiModelProperty(value = "角色列表")
+    private List<SysRoleVO> sysRole;
     @ApiModelProperty(value = "创建人")
     private String creatorAccount;
     @ApiModelProperty(value = "创建时间")
@@ -84,32 +88,6 @@ public class UserExtensionInfo implements Serializable {
     private List<String> hobbys;
     @ApiModelProperty(value = "职业")
     private List<String>jobs;
-
-    private static final long serialVersionUID = 1L;
-
-    public String getRoleCode() {
-        return roleCode;
-    }
-
-    public void setRoleCode(String roleCode) {
-        this.roleCode = roleCode;
-    }
-
-    public String getRoleName() {
-        return roleName;
-    }
-
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
-    }
-
-    public String getRegistrationId() {
-        return registrationId;
-    }
-
-    public void setRegistrationId(String registrationId) {
-        this.registrationId = registrationId;
-    }
 
     public String getId() {
         return id;
@@ -247,20 +225,20 @@ public class UserExtensionInfo implements Serializable {
         this.graduatedSchool = graduatedSchool;
     }
 
-    public String getPosition() {
-        return position;
-    }
-
-    public void setPosition(String position) {
-        this.position = position;
-    }
-
     public String getAvatar() {
         return avatar;
     }
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
     }
 
     public String getUserType() {
@@ -285,6 +263,38 @@ public class UserExtensionInfo implements Serializable {
 
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
+    }
+
+    public String getRegistrationId() {
+        return registrationId;
+    }
+
+    public void setRegistrationId(String registrationId) {
+        this.registrationId = registrationId;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
+    public String getRoleCode() {
+        return roleCode;
+    }
+
+    public void setRoleCode(String roleCode) {
+        this.roleCode = roleCode;
+    }
+
+    public List<SysRoleVO> getSysRole() {
+        return sysRole;
+    }
+
+    public void setSysRole(List<SysRoleVO> sysRole) {
+        this.sysRole = sysRole;
     }
 
     public String getCreatorAccount() {
@@ -371,6 +381,7 @@ public class UserExtensionInfo implements Serializable {
                 ", registrationId='" + registrationId + '\'' +
                 ", roleName='" + roleName + '\'' +
                 ", roleCode='" + roleCode + '\'' +
+                ", sysRole=" + sysRole +
                 ", creatorAccount='" + creatorAccount + '\'' +
                 ", createdTime=" + createdTime +
                 ", modifierAccount='" + modifierAccount + '\'' +

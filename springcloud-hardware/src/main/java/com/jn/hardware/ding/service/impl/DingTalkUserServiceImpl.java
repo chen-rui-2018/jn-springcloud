@@ -45,9 +45,9 @@ public class DingTalkUserServiceImpl implements DingTalkUserService {
         String accessToken = dingTalkInRedisConfigStorage.getAccessToken();
         map.add("access_token", accessToken);
         map.add("lang", departmentUserInfoParam.getLang());
-        map.add("department_id",departmentUserInfoParam.getDepartment_id());
-        map.add("offset",departmentUserInfoParam.getOffset());
-        map.add("size",departmentUserInfoParam.getSize());
+        map.add("department_id",departmentUserInfoParam.getDepartmentId());
+        map.add("offset",departmentUserInfoParam.getOffset().toString());
+        map.add("size",departmentUserInfoParam.getSize().toString());
         if(null!=departmentUserInfoParam.getDepartmentUserOrder()) {
             map.add("order",departmentUserInfoParam.getDepartmentUserOrder().getCode());
         }

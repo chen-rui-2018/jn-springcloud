@@ -37,9 +37,9 @@ public class DingTalkUserServiceTest {
     @Test
     public void getDepartUserByPage() {
         DepartmentUserInfoParam departmentUserInfoParam = new DepartmentUserInfoParam();
-        departmentUserInfoParam.setDepartment_id("61060184");
-        departmentUserInfoParam.setOffset("1");
-        departmentUserInfoParam.setSize("10");
+        departmentUserInfoParam.setDepartmentId("61060184");
+        departmentUserInfoParam.setOffset(1L);
+        departmentUserInfoParam.setSize(10L);
 
         Result<DepartmentUserInfoResult> result = dingTalkClient.getDepartUserByPage(departmentUserInfoParam);
         logger.info("\n分页获取部门用户详情：{}",result);

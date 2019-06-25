@@ -204,12 +204,11 @@ export default {
     }
     .card-list-title {
       width: 100%;
+      height: 30px;
       font-size: 32px;
       font-weight:bold;
       color: rgba(34,34,34,1);
-      overflow: hidden;
-      text-overflow:ellipsis;
-      white-space: nowrap;
+      @include clamp(1);
     }
     .card-list-text {
       width: 100%;

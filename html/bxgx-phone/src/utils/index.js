@@ -20,7 +20,7 @@ const urlSearch = new UrlSearch()
 function isMobile () {
   const userAgentInfo = navigator.userAgent
   const Agents = ['Android', 'iPhone', 'SymbianOS', 'Windows Phone', 'iPad', 'iPod']
-  return Agents.some(str =>{
+  return Agents.some(str => {
     return userAgentInfo.indexOf(str) > 0
   })
 }

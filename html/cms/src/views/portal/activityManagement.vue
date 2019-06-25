@@ -172,7 +172,6 @@ export default {
       })
         .then(() => {
           apiName(url, parameter, mothed).then(res => {
-            console.log(res)
             if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: successTooltip,

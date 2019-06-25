@@ -276,6 +276,7 @@ export default {
         queryOnlineInfo:"springcloud-enterprise/pd/online/queryOnlineInfo",//通过公告ID和登录人查询预约信息
         integrationList:"springcloud-park/guest/park/notice/web/integrationList",//PC端整合接口
         getIndustryForMarket:"springcloud-enterprise/guest/serviceMarket/industryManage/getIndustryForMarket",//PC端整合接口
+        queryPlatformInfo:"springcloud-enterprise/guest/pd/talentNotice/queryPlatformInfo",//人才服务-首页申报平台查询
     },
     setToken: function (obj) {   //设置token在请求头上面
         // axios.interceptors.request.use(function (config) {

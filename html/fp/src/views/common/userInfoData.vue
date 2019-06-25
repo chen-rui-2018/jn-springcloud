@@ -157,6 +157,7 @@ export default {
       removeToken();
       removeUserInfo();
       removeIbpsToken();
+      sessionStorage.removeItem('menuItems');
       this.$router.push({ path: "/" });
       // this.islogin();
       this.isLogin=false

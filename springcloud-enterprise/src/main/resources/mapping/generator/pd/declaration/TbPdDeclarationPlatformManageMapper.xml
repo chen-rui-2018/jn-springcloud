@@ -10,6 +10,8 @@
     <result column="system_support" jdbcType="VARCHAR" property="systemSupport" />
     <result column="subordinate_platform_name" jdbcType="VARCHAR" property="subordinatePlatformName" />
     <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="is_talent_service" jdbcType="CHAR" property="isTalentService" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
@@ -76,7 +78,8 @@
   </sql>
   <sql id="Base_Column_List">
     id, platform_title, link_address, remark, business_consult, system_support, subordinate_platform_name, 
-    status, record_status, creator_account, created_time, modifier_account, modified_time
+    status, is_talent_service, sort, record_status, creator_account, created_time, modifier_account, 
+    modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationPlatformManageCriteria" resultMap="BaseResultMap">
     select
@@ -109,26 +112,25 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationPlatformManage">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into tb_pd_declaration_platform_manage (platform_title, link_address, remark, 
-      business_consult, system_support, subordinate_platform_name, 
-      status, record_status, creator_account, 
+    insert into tb_pd_declaration_platform_manage (id, platform_title, link_address, 
+      remark, business_consult, system_support, 
+      subordinate_platform_name, status, is_talent_service, 
+      sort, record_status, creator_account, 
       created_time, modifier_account, modified_time
       )
-    values (#{platformTitle,jdbcType=VARCHAR}, #{linkAddress,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
-      #{businessConsult,jdbcType=VARCHAR}, #{systemSupport,jdbcType=VARCHAR}, #{subordinatePlatformName,jdbcType=VARCHAR}, 
-      #{status,jdbcType=TINYINT}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=VARCHAR}, #{platformTitle,jdbcType=VARCHAR}, #{linkAddress,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{businessConsult,jdbcType=VARCHAR}, #{systemSupport,jdbcType=VARCHAR}, 
+      #{subordinatePlatformName,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{isTalentService,jdbcType=CHAR}, 
+      #{sort,jdbcType=INTEGER}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
       #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationPlatformManage">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_pd_declaration_platform_manage
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
       <if test="platformTitle != null">
         platform_title,
       </if>
@@ -150,6 +152,12 @@
       <if test="status != null">
         status,
       </if>
+      <if test="isTalentService != null">
+        is_talent_service,
+      </if>
+      <if test="sort != null">
+        sort,
+      </if>
       <if test="recordStatus != null">
         record_status,
       </if>
@@ -167,6 +175,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
       <if test="platformTitle != null">
         #{platformTitle,jdbcType=VARCHAR},
       </if>
@@ -187,6 +198,12 @@
       </if>
       <if test="status != null">
         #{status,jdbcType=TINYINT},
+      </if>
+      <if test="isTalentService != null">
+        #{isTalentService,jdbcType=CHAR},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=INTEGER},
       </if>
       <if test="recordStatus != null">
         #{recordStatus,jdbcType=TINYINT},
@@ -238,6 +255,12 @@
       <if test="record.status != null">
         status = #{record.status,jdbcType=TINYINT},
       </if>
+      <if test="record.isTalentService != null">
+        is_talent_service = #{record.isTalentService,jdbcType=CHAR},
+      </if>
+      <if test="record.sort != null">
+        sort = #{record.sort,jdbcType=INTEGER},
+      </if>
       <if test="record.recordStatus != null">
         record_status = #{record.recordStatus,jdbcType=TINYINT},
       </if>
@@ -268,6 +291,8 @@
       system_support = #{record.systemSupport,jdbcType=VARCHAR},
       subordinate_platform_name = #{record.subordinatePlatformName,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=TINYINT},
+      is_talent_service = #{record.isTalentService,jdbcType=CHAR},
+      sort = #{record.sort,jdbcType=INTEGER},
       record_status = #{record.recordStatus,jdbcType=TINYINT},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
@@ -301,6 +326,12 @@
       <if test="status != null">
         status = #{status,jdbcType=TINYINT},
       </if>
+      <if test="isTalentService != null">
+        is_talent_service = #{isTalentService,jdbcType=CHAR},
+      </if>
+      <if test="sort != null">
+        sort = #{sort,jdbcType=INTEGER},
+      </if>
       <if test="recordStatus != null">
         record_status = #{recordStatus,jdbcType=TINYINT},
       </if>
@@ -328,6 +359,8 @@
       system_support = #{systemSupport,jdbcType=VARCHAR},
       subordinate_platform_name = #{subordinatePlatformName,jdbcType=VARCHAR},
       status = #{status,jdbcType=TINYINT},
+      is_talent_service = #{isTalentService,jdbcType=CHAR},
+      sort = #{sort,jdbcType=INTEGER},
       record_status = #{recordStatus,jdbcType=TINYINT},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},

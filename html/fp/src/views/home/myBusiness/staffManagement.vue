@@ -23,7 +23,7 @@
           <el-table-column prop="name" label="真实姓名" align="center"> </el-table-column>
           <el-table-column prop="phone" label="联系手机" align="center"> </el-table-column>
           <el-table-column prop="birthday" label="出生年月" align="center"> </el-table-column>
-          <el-table-column prop="checkTime" label="申请日期" align="center"> </el-table-column>
+          <el-table-column prop="checkTime" label="申请日期" align="center" min-width="120"> </el-table-column>
           <el-table-column prop="statusShow" label="邀请状态" align="center">
                <!-- <template  slot-scope="scope"> -->
                  <!-- <span v-if="scope.row.statusShow==='0'">待审批</span>

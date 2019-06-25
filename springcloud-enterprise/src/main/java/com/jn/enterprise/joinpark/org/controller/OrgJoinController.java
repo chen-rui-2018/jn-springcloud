@@ -3,6 +3,7 @@ package com.jn.enterprise.joinpark.org.controller;
 import com.codingapi.tx.annotation.TxTransaction;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
+import com.jn.company.model.IBPSResult;
 import com.jn.enterprise.enums.OrgExceptionEnum;
 import com.jn.enterprise.joinpark.org.service.OrgJoinService;
 import com.jn.enterprise.servicemarket.advisor.model.OrgNameIsExistParam;
@@ -42,10 +43,10 @@ public class OrgJoinController {
     @RequiresPermissions("/orgJoinPark/saveOrUpdateOrgDetail")
     @RequestMapping(value = "/saveOrUpdateOrgDetail",method = RequestMethod.POST)
     public Result<Integer> saveOrUpdateOrgDetail(@RequestBody @Validated OrgDetailParameter orgDetailParameter) {
+        logger.info("进入保存/修改机构认证信息API,入参信息：{}",orgDetailParameter.toString());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
-        int i = orgJoinService.saveOrUpdateOrgDetail(orgDetailParameter,user.getAccount());
-        logger.info("保存/修改机构认证信息成功，响应条数{}",i);
-        return new Result(i);
+        IBPSResult ibpsResult = orgJoinService.saveOrUpdateOrgDetail(orgDetailParameter, user.getAccount());
+        return new Result(ibpsResult);
     }
 
 

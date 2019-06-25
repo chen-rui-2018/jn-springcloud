@@ -424,11 +424,14 @@ img {
 .actiCenter .actiContent .actiTab .allActiUl > li .actiNum > span,
 .actiTrain .actiContent .actiTab .allActiUl > li .actiNum > span {
   float: right;
+  color: #00a041;
 }
 
-.actiCenter .actiContent .actiTab .allActiUl > li .actiNum > span .icon-xihuan,
-.actiTrain .actiContent .actiTab .allActiUl > li .actiNum > span .icon-xihuan {
+.actiCenter .actiContent .actiTab .allActiUl > li .actiNum > span .icon-miaojiesellerlike,
+.actiTrain .actiContent .actiTab .allActiUl > li .actiNum > span .icon-miaojiesellerlike {
   margin-right: 5px;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .actiCenter .actiContent .actiTab .allActiUl > li .actiInfo,
@@ -502,11 +505,18 @@ img {
 .actiCenter .actiContent .actiTab .verticalUl > li .verticalMiddle .xihuan,
 .actiTrain .actiContent .actiTab .verticalUl > li .verticalMiddle .xihuan {
   margin: 15px 0;
+  color: #00a041;
+}
+
+.actiCenter .actiContent .actiTab .verticalUl > li .verticalMiddle .el-icon-time,
+.actiTrain .actiContent .actiTab .verticalUl > li .verticalMiddle .el-icon-time {
+  color: #999;
 }
 
 .actiCenter .actiContent .actiTab .verticalUl > li .verticalMiddle .location,
 .actiTrain .actiContent .actiTab .verticalUl > li .verticalMiddle .location {
   margin: 18px 0;
+  color: #999;
 }
 
 .actiCenter .actiContent .actiTab .verticalUl > li .verticalMiddle .actiNum > i,

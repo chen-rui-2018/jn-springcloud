@@ -13,6 +13,7 @@ import com.jn.miniprogram.register.entity.TbWechatUserInfoCriteria;
 import com.jn.miniprogram.register.enums.RegisterTypeEnum;
 import com.jn.system.api.SystemClient;
 import com.jn.system.model.User;
+import com.jn.user.enums.IsConCornEnum;
 import com.jn.user.enums.RecordStatusEnum;
 import com.jn.user.enums.UserExtensionExceptionEnum;
 import com.jn.user.model.RegisterInfoParam;
@@ -104,6 +105,53 @@ public class MiniProgramRegistersServiceImpl implements MiniProgramRegistersServ
             logger.warn("微信注册枚举:{}系统不识别",registerTypeEnum.getMessage());
             throw new JnSpringCloudException(UserExtensionExceptionEnum.REGISTER_TYPE_NOT_ALLOW);
         }
+    }
+
+    /**
+     * 用户关注/取消关注服务号
+     * @param weChatRequestParam
+     */
+    @ServiceLog(doAction = "用户关注/取消关注服务号")
+    @Override
+    public int concernOrCancelWeChat(WeChatRequestParam weChatRequestParam) {
+        logger.info("进入用户关注/取消关注服务号API,请求入参：{}",weChatRequestParam.toString());
+        //校验openId和unionId的长度是否正常
+        checkOpenIdAndUnionIdLength(weChatRequestParam.getOpenId(),weChatRequestParam.getUnionId());
+        //校验关注时间和关注标识
+        if(weChatRequestParam.getIsConcern()==null){
+            logger.info("用户关注/取消关注服务号的是否关注标志不能为空");
+            throw new JnSpringCloudException(MiniProgramRegisterExceptionEnum.IS_CONCERN_NOT_NULL);
+        }
+        if(StringUtils.equals(weChatRequestParam.getIsConcern().getCode(), IsConCornEnum.CORN.getCode())
+                && StringUtils.isBlank(weChatRequestParam.getSubscribeTime())){
+            logger.info("用户关注/取消关注服务号的关注时间不能为空");
+            throw new JnSpringCloudException(MiniProgramRegisterExceptionEnum.SUBSCRIBE_TIME_NOT_NULL);
+        }
+        TbWechatPublicUserInfo publicUserInfo=new TbWechatPublicUserInfo();
+        BeanUtils.copyProperties(weChatRequestParam, publicUserInfo);
+        //id
+        publicUserInfo.setId(UUID.randomUUID().toString());
+        //是否删除
+        publicUserInfo.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
+        //是否关注
+        publicUserInfo.setIsConcern(weChatRequestParam.getIsConcern().getCode());
+
+        TbWechatPublicUserInfoCriteria example = new TbWechatPublicUserInfoCriteria();
+        example.createCriteria().andOpenIdEqualTo(weChatRequestParam.getOpenId())
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        long existNum = tbWechatPublicUserInfoMapper.countByExample(example);
+        if(existNum==0){
+            //openId不存在则新增
+            //创建时间
+            publicUserInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
+            return tbWechatPublicUserInfoMapper.insertSelective(publicUserInfo);
+        }else{
+            //openId在系统中存在更新数据
+            //更新时间
+            publicUserInfo.setModifiedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
+            return tbWechatPublicUserInfoMapper.updateByExampleSelective(publicUserInfo, example);
+        }
+
     }
 
     /**

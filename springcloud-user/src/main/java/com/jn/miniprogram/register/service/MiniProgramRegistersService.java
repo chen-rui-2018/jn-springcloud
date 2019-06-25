@@ -20,6 +20,14 @@ public interface MiniProgramRegistersService {
     String isBindingAccountByOpenId(WeChatRequestParam weChatRequestParam, RegisterTypeEnum registerTypeEnum);
 
     /**
+     * 用户关注/取消关注服务号
+     * @param weChatRequestParam
+     */
+    int concernOrCancelWeChat(WeChatRequestParam weChatRequestParam);
+
+
+
+    /**
      * 根据OpenId判断OpenId是否已绑定
      * @param openId
      * @return

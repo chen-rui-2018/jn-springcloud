@@ -23,13 +23,13 @@ public class SpMessageModel implements Serializable {
     @ApiModelProperty(value = "主键",example = "1")
     private String id;
 
-    @ApiModelProperty(value = "咨询名称（企业名+联系人)",example = "深圳君南信息系统-陈先生")
+    @ApiModelProperty(value = "咨询名称（企业名+联系人)",example = "信息系统-陈先生")
     private String title;
 
     @ApiModelProperty(value = "来源的业务ID",example = "559447847364198400")
     private String fromBusiId;
 
-    @ApiModelProperty(value = "公司名称(默认填入当前企业名称",example = "深圳君南信息系统")
+    @ApiModelProperty(value = "公司名称(默认填入当前企业名称",example = "信息系统")
     private String companyName;
 
     @ApiModelProperty(value = "联系人姓名(默认填入企业联系人姓名)",example = "陈先生")

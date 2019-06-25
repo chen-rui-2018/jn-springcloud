@@ -335,21 +335,21 @@ export default {
     width: 100%;
     // 大标题
     .putaway_title{
-      background-color: #fff;
+       background-color: #fff;
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding:17px;
-      font-size: 13px;
+      font-size: 16px;
       border-radius: 5px;
       div:nth-child(2){
         background-color: #ecfcf2;
         border-radius: 5px;
         border: solid 2px #41d787;
         padding:8px 11px;
-        font-size: 12px;
-        cursor: pointer;
+        font-size: 14px;
         color:#00a041;
+        cursor: pointer;
       }
     }
     // 主体

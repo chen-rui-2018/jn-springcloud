@@ -1,5 +1,7 @@
 package com.jn.hardware.model.dingtalk.attendance;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -18,34 +20,36 @@ public class LeaveStatusList implements Serializable {
     /**
      * 是否有更多数据
     * */
-    private  Boolean has_more;
+    @JsonProperty("has_more")
+    private  Boolean hasMore;
 
     /**
      * 是否有更多数据
      * */
-    private List<LeaveStatusInfo> leave_status;
+    @JsonProperty("leave_status")
+    private List<LeaveStatusInfo> leaveStatus;
 
-    public Boolean getHas_more() {
-        return has_more;
+    public Boolean getHasMore() {
+        return hasMore;
     }
 
-    public void setHas_more(Boolean has_more) {
-        this.has_more = has_more;
+    public void setHasMore(Boolean hasMore) {
+        this.hasMore = hasMore;
     }
 
-    public List<LeaveStatusInfo> getLeave_status() {
-        return leave_status;
+    public List<LeaveStatusInfo> getLeaveStatus() {
+        return leaveStatus;
     }
 
-    public void setLeave_status(List<LeaveStatusInfo> leave_status) {
-        this.leave_status = leave_status;
+    public void setLeaveStatus(List<LeaveStatusInfo> leaveStatus) {
+        this.leaveStatus = leaveStatus;
     }
 
     @Override
     public String toString() {
         return "LeaveStatusList{" +
-                "has_more=" + has_more +
-                ", leave_status=" + leave_status +
+                "hasMore=" + hasMore +
+                ", leaveStatus=" + leaveStatus +
                 '}';
     }
 }

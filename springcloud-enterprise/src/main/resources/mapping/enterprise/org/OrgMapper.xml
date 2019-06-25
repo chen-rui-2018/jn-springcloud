@@ -36,14 +36,14 @@
             ,(select count(1)
                from tb_service_require t
                where t.org_id_ = a.org_id_
-               and t.record_status = '1'
+               and t.record_status = 1
                and t.handle_result = '1' ) as "transactionNum" <!-- 累计交易笔数 -->
             ,(SELECT IFNULL(AVG(t.`attitude_score`), 0)
                 FROM tb_service_rating t
-                WHERE t.org_id_ = a.org_id_)  AS "attitudeScore" <!-- 评价得分 -->
+                WHERE t.org_id_ = a.org_id_ and t.record_status=1)  AS "attitudeScore" <!-- 评价得分 -->
             ,(SELECT COUNT(1)
                 FROM tb_service_rating t
-                WHERE t.org_id_ = a.org_id_)  AS "evaluationNum"  <!-- 评价次数 -->
+                WHERE t.org_id_ = a.org_id_ and t.record_status=1)  AS "evaluationNum"  <!-- 评价次数 -->
                 from tb_service_org a
                 left join tb_service_org_info i
                 on a.org_id_ = i.org_id_

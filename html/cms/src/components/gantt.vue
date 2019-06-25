@@ -12,7 +12,7 @@ export default {
     tasks: {
       type: Object,
       default() {
-        return { data: [], links: [] }
+        return { data: [] }
       }
     }
   },
@@ -20,10 +20,16 @@ export default {
   mounted() {
     const _this = this
     setTimeout(function() {
-      gantt.init(_this.$refs.gantt)
-      gantt.parse(_this.$props.tasks)
-      gantt.config.readonly = true
-    }, 200)
+      _this.$nextTick(() => {
+        console.log(_this.$props.tasks)
+        gantt.init(_this.$refs.gantt)
+        gantt.parse(_this.$props.tasks)
+        gantt.config.readonly = true
+      })
+    // gantt.init(_this.$refs.gantt)
+    // gantt.parse(_this.$props.tasks)
+    // gantt.config.readonly = true
+    }, 300)
     gantt.config.subscales = [
       {
         unit: 'year',

@@ -1,5 +1,7 @@
 package com.jn.hardware.model.dingtalk.attendance;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 
 /**
@@ -17,22 +19,26 @@ public class LeaveStatusInfo implements Serializable {
     /**
      * 请假单位：“percent_day”表示天，“percent_hour”表示小时
     * */
-    private String duration_unit;
+    @JsonProperty("duration_unit")
+    private String durationUnit;
 
     /**
      * 假期时长*100，例如用户请假时长为1天，该值就等于100
      * */
-    private String duration_percent;
+    @JsonProperty("duration_percent")
+    private String durationPercent;
 
     /**
      * 请假开始时间，时间戳
      * */
-    private String start_time;
+    @JsonProperty("start_time")
+    private Long startTime;
 
     /**
      * 请假结束时间，时间戳
      * */
-    private String end_time;
+    @JsonProperty("end_time")
+    private Long endTime;
 
     /**
      * 用户id
@@ -40,36 +46,36 @@ public class LeaveStatusInfo implements Serializable {
     private String userid;
 
 
-    public String getDuration_unit() {
-        return duration_unit;
+    public String getDurationUnit() {
+        return durationUnit;
     }
 
-    public void setDuration_unit(String duration_unit) {
-        this.duration_unit = duration_unit;
+    public void setDurationUnit(String durationUnit) {
+        this.durationUnit = durationUnit;
     }
 
-    public String getDuration_percent() {
-        return duration_percent;
+    public String getDurationPercent() {
+        return durationPercent;
     }
 
-    public void setDuration_percent(String duration_percent) {
-        this.duration_percent = duration_percent;
+    public void setDurationPercent(String durationPercent) {
+        this.durationPercent = durationPercent;
     }
 
-    public String getStart_time() {
-        return start_time;
+    public Long getStartTime() {
+        return startTime;
     }
 
-    public void setStart_time(String start_time) {
-        this.start_time = start_time;
+    public void setStartTime(Long startTime) {
+        this.startTime = startTime;
     }
 
-    public String getEnd_time() {
-        return end_time;
+    public Long getEndTime() {
+        return endTime;
     }
 
-    public void setEnd_time(String end_time) {
-        this.end_time = end_time;
+    public void setEndTime(Long endTime) {
+        this.endTime = endTime;
     }
 
     public String getUserid() {
@@ -83,10 +89,10 @@ public class LeaveStatusInfo implements Serializable {
     @Override
     public String toString() {
         return "LeaveStatusInfo{" +
-                "duration_unit='" + duration_unit + '\'' +
-                ", duration_percent='" + duration_percent + '\'' +
-                ", start_time='" + start_time + '\'' +
-                ", end_time='" + end_time + '\'' +
+                "durationUnit='" + durationUnit + '\'' +
+                ", durationPercent='" + durationPercent + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
                 ", userid='" + userid + '\'' +
                 '}';
     }

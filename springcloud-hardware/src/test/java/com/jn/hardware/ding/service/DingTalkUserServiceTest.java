@@ -37,7 +37,7 @@ public class DingTalkUserServiceTest {
     @Test
     public void getDepartUserByPage() {
         DepartmentUserInfoParam departmentUserInfoParam = new DepartmentUserInfoParam();
-        departmentUserInfoParam.setDepartment_id("61060184");
+        departmentUserInfoParam.setDepartmentId("61060184");
         departmentUserInfoParam.setOffset(1L);
         departmentUserInfoParam.setSize(10L);
 

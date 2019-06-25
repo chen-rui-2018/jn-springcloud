@@ -279,6 +279,7 @@ img {
   padding-right: 40px;
   border: 1px solid #eee;
   border-radius: 5px;
+  background: #fff;
 }
 
 .actiCenter .actiContent .allActi .actiSearch > input,
@@ -911,6 +912,7 @@ img {
   padding-right: 40px;
   border: 1px solid #eee;
   border-radius: 5px;
+  background: #fff;
 }
 
 .serverOrg .serverOrgFilter .filRight > input,

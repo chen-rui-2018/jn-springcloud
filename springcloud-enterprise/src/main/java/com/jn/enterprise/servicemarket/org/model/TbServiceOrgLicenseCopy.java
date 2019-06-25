@@ -10,7 +10,7 @@ public class TbServiceOrgLicenseCopy implements Serializable {
 
     private String certName;
 
-    private Date awardTime;
+    private String awardTime;
 
     private String awardDepart;
 
@@ -56,11 +56,11 @@ public class TbServiceOrgLicenseCopy implements Serializable {
         this.certName = certName == null ? null : certName.trim();
     }
 
-    public Date getAwardTime() {
+    public String getAwardTime() {
         return awardTime;
     }
 
-    public void setAwardTime(Date awardTime) {
+    public void setAwardTime(String awardTime) {
         this.awardTime = awardTime;
     }
 

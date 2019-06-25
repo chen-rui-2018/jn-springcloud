@@ -165,6 +165,14 @@ const router= new Router({
           name: 'talentsServiceDetail'
         },
         {
+          path: '/parkAdvantage',
+          component: resolve => require(['@/views/parkAdvantage'], resolve),
+          meta: {
+            title: '园区优势'
+          },
+          name: 'parkAdvantage'
+        },
+        {
           path: 'messageCenter',
           component: resolve => require(['@/views/messageCenter/index'], resolve),
           meta: {
@@ -570,6 +578,7 @@ const router= new Router({
               },
               component: resolve => require(['@/views/home/iframe'], resolve)
             },
+
             {
               path: '/upgradeStaff',
               name: 'upgradeStaff',

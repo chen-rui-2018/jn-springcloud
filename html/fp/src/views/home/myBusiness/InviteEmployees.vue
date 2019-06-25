@@ -2,6 +2,7 @@
   <div class="inviteProduct" v-loading="loading">
     <div class="ordinary_title">
       <div class="font16">邀请员工</div>
+      <div @click="goBack">返回</div>
     </div>
     <div class="ordinary_content">
       <el-form label-width="120px" class="postJobInfo">
@@ -56,6 +57,9 @@ export default {
     };
   },
   methods: {
+     goBack() {
+      this.$router.push({ name: "staffManagement" });
+    },
     // 获取邀请员工信息
     getStaffInfo() {
       this.api.get({
@@ -140,11 +144,27 @@ export default {
     margin-right: 20px;
     color: #999;
   }
-  // width: 100%;
+  
   .ordinary_title {
     background-color: #fff;
-    padding: 24px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 17px;
+    // font-size: 13px;
     border-radius: 5px;
+    div:nth-child(2) {
+      width: 50px;
+      height: 26px;
+      background: rgba(236, 252, 242, 1);
+      border: 1px solid rgba(65, 215, 135, 1);
+      border-radius: 4px;
+      text-align: center;
+      line-height: 26px;
+      font-size: 12px;
+      color: #00a041;
+      cursor: pointer;
+    }
   }
   .ordinary_content {
     margin-top: 14px;

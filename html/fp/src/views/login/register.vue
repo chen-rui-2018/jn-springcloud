@@ -69,8 +69,8 @@ export default {
             if(res.data=='fail'){
               _this.$message.error("当前账号已注册");
               return
-            } 
-          } 
+            }
+          }
         }
       });
     },
@@ -197,7 +197,6 @@ export default {
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: -1;
   background: url("../../../static/img/beijing.png") 100% 100% / 100% 100%
     no-repeat;
   .loginLogo {

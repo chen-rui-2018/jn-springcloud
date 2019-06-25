@@ -235,10 +235,7 @@ public class QuestInvestigateController extends BaseController {
 	@ApiOperation(value = "web端/app 新增答题记录", notes = "[问卷调查]web端-答题页面功能")
 	@RequestMapping(value = "/addAnswerInfoQuest", method = RequestMethod.POST)
 	public Result addAnswerInfoQuest(@Validated @RequestBody ResultAnswerAdd resultAnswerAdd) {
-		// 设置答题卡编号
-		if (StringUtils.isBlank(resultAnswerAdd.getId())) {
-			resultAnswerAdd.setId(UUID.randomUUID().toString());
-		}
+		
 		investigateService.addAnswerInfo(resultAnswerAdd);
 		return new Result();
 	}

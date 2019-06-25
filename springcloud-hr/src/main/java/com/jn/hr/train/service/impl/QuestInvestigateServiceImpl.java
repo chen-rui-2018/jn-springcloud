@@ -486,10 +486,6 @@ public class QuestInvestigateServiceImpl implements QuestInvestigateService {
 	@Transactional(rollbackFor = Exception.class)
 	public void deleteInvestiage(Investigate investigaDel, User user) {
 		String projectId = investigaDel.getProjectId();
-		// // 查询问卷
-		// TbManpowerTrainQuestInvestiga tbInvestigate =
-		// selectQuestInvestigate(projectId);
-		// if (null != tbInvestigate) {
 		// 逻辑删除问卷
 		TbManpowerTrainQuestInvestiga tbInvestiga = new TbManpowerTrainQuestInvestiga();
 		BeanUtils.copyProperties(investigaDel, tbInvestiga);
@@ -499,7 +495,6 @@ public class QuestInvestigateServiceImpl implements QuestInvestigateService {
 		tbInvestiga.setRecordStatus(Byte.parseByte(HrStatusEnums.DELETED.getCode()));
 		tbInvestiga.setProjectId(projectId);
 		tbQuestInvestigaMapper.updateByPrimaryKeySelective(tbInvestiga);
-		// }
 		logger.info("[问卷调查] 删除问卷成功,projectId:{}", investigaDel.getProjectId());
 
 	}
@@ -517,9 +512,6 @@ public class QuestInvestigateServiceImpl implements QuestInvestigateService {
 	@Transactional(rollbackFor = Exception.class)
 	public void endInvestiage(Investigate investigaDel, User user) {
 		String projectId = investigaDel.getProjectId();
-		// TbManpowerTrainInvestiga tbHrinvestiage =
-		// selectQuestInvestigate(projectId);
-		// if (null != tbHrinvestiage) {
 		TbManpowerTrainQuestInvestiga tbInvestiga = new TbManpowerTrainQuestInvestiga();
 		BeanUtils.copyProperties(investigaDel, tbInvestiga);
 		String userAccount = user.getAccount();
@@ -528,7 +520,6 @@ public class QuestInvestigateServiceImpl implements QuestInvestigateService {
 		tbInvestiga.setStatus(Byte.parseByte(InvestigateStatusEnums.HAS_END.getCode()));
 		tbInvestiga.setProjectId(projectId);
 		tbQuestInvestigaMapper.updateByPrimaryKeySelective(tbInvestiga);
-		// }
 		logger.info("[问卷调查] 结束问卷成功,projectId:{}", investigaDel.getProjectId());
 	}
 
@@ -828,6 +819,10 @@ public class QuestInvestigateServiceImpl implements QuestInvestigateService {
 	@ServiceLog(doAction = "新建答题信息")
 	@Transactional(rollbackFor = Exception.class)
 	public void addAnswerInfo(ResultAnswerAdd resultAnswerAdd) {
+		// 设置答题卡编号
+		if (StringUtils.isBlank(resultAnswerAdd.getId())) {
+			resultAnswerAdd.setId(UUID.randomUUID().toString());
+		}
 		TbManpowerTrainQuestSurveyResult tbResult = new TbManpowerTrainQuestSurveyResult();
 		BeanUtils.copyProperties(resultAnswerAdd, tbResult);
 		if (null == tbResult.getSubmitTime()) {

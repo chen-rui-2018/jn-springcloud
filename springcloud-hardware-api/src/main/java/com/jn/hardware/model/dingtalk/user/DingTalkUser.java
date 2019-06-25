@@ -17,26 +17,95 @@ import java.util.List;
 public class DingTalkUser implements Serializable {
     private static final long serialVersionUID = 8434878660437106838L;
 
+    /**
+     * 员工id
+    * */
     private String userid;
+    /**
+     * 员工在当前开发者企业账号范围内的唯一标识，系统生成，固定值，不会改变
+    * */
     private String unionid;
+    /**
+     *
+    * */
     private String openId;
+    /**
+     * 手机号
+     * */
     private String mobile;
+    /**
+     * 分机号
+     * */
     private String tel;
+    /**
+     * 办公地点
+     * */
     private String workPlace;
+    /**
+     * 备注
+     * */
     private String remark;
-    private String order;
-    private String isAdmin;
-    private String isBoss;
-    private String isHide;
-    private String isLeader;
+    /**
+     * 表示人员在此部门中的排序，列表是按order的倒序排列输出的，即从大到小排列输出的
+     * （钉钉管理后台里面调整了顺序的话order才有值）
+     * */
+    private Long order;
+    /**
+     * 是否是企业的管理员，true表示是，false表示不是
+     * */
+    private Boolean isAdmin;
+    /**
+     * 是否为企业的老板，true表示是，false表示不是
+     * */
+    private Boolean isBoss;
+    /**
+     * 是否隐藏号码，true表示是，false表示不是
+     * */
+    private Boolean isHide;
+    /**
+     * 是否是部门的主管，true表示是，false表示不是
+     * */
+    private Boolean isLeader;
+    /**
+     * 员工名称
+     * */
     private String name;
-    private String active;
+    /**
+     * 表示该用户是否激活了钉钉
+     * */
+    private Boolean active;
+    /**
+     * 成员所属部门id列表
+     * */
     private List<Integer> department;
+    /**
+     * 职位信息
+     * */
     private String position;
+    /**
+     * 员工的邮箱
+     * */
     private String email;
+    /**
+     * 头像url
+     * */
     private String avatar;
+    /**
+     * 员工工号
+     * */
     private String jobnumber;
+    /**
+     * 扩展属性，可以设置多种属性（但手机上最多只能显示10个扩展属性，具体显示哪些属性，请到OA管理后台->设置->通讯录信息设置和OA管理后台->设置->手机端显示信息设置）
+     * */
     private String extattr;
+    /**
+     * 	入职时间
+    * */
+    private Long hiredDate;
+    /**
+     * 国家地区码
+    * */
+    private String stateCode;
 
     public String getUserid() {
         return userid;
@@ -52,6 +121,14 @@ public class DingTalkUser implements Serializable {
 
     public void setUnionid(String unionid) {
         this.unionid = unionid;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 
     public String getMobile() {
@@ -86,44 +163,44 @@ public class DingTalkUser implements Serializable {
         this.remark = remark;
     }
 
-    public String getOrder() {
+    public Long getOrder() {
         return order;
     }
 
-    public void setOrder(String order) {
+    public void setOrder(Long order) {
         this.order = order;
     }
 
-    public String getIsAdmin() {
+    public Boolean getIsAdmin() {
         return isAdmin;
     }
 
-    public void setIsAdmin(String isAdmin) {
-        this.isAdmin = isAdmin;
+    public void setIsAdmin(Boolean admin) {
+        isAdmin = admin;
     }
 
-    public String getIsBoss() {
+    public Boolean getIsBoss() {
         return isBoss;
     }
 
-    public void setIsBoss(String isBoss) {
-        this.isBoss = isBoss;
+    public void setIsBoss(Boolean boss) {
+        isBoss = boss;
     }
 
-    public String getIsHide() {
+    public Boolean getIsHide() {
         return isHide;
     }
 
-    public void setIsHide(String isHide) {
-        this.isHide = isHide;
+    public void setIsHide(Boolean hide) {
+        isHide = hide;
     }
 
-    public String getIsLeader() {
+    public Boolean getIsLeader() {
         return isLeader;
     }
 
-    public void setIsLeader(String isLeader) {
-        this.isLeader = isLeader;
+    public void setIsLeader(Boolean leader) {
+        isLeader = leader;
     }
 
     public String getName() {
@@ -134,11 +211,11 @@ public class DingTalkUser implements Serializable {
         this.name = name;
     }
 
-    public String getActive() {
+    public Boolean getActive() {
         return active;
     }
 
-    public void setActive(String active) {
+    public void setActive(Boolean active) {
         this.active = active;
     }
 
@@ -190,12 +267,20 @@ public class DingTalkUser implements Serializable {
         this.extattr = extattr;
     }
 
-    public String getOpenId() {
-        return openId;
+    public Long getHiredDate() {
+        return hiredDate;
     }
 
-    public void setOpenId(String openId) {
-        this.openId = openId;
+    public void setHiredDate(Long hiredDate) {
+        this.hiredDate = hiredDate;
+    }
+
+    public String getStateCode() {
+        return stateCode;
+    }
+
+    public void setStateCode(String stateCode) {
+        this.stateCode = stateCode;
     }
 
     @Override
@@ -208,19 +293,21 @@ public class DingTalkUser implements Serializable {
                 ", tel='" + tel + '\'' +
                 ", workPlace='" + workPlace + '\'' +
                 ", remark='" + remark + '\'' +
-                ", order='" + order + '\'' +
-                ", isAdmin='" + isAdmin + '\'' +
-                ", isBoss='" + isBoss + '\'' +
-                ", isHide='" + isHide + '\'' +
-                ", isLeader='" + isLeader + '\'' +
+                ", order=" + order +
+                ", isAdmin=" + isAdmin +
+                ", isBoss=" + isBoss +
+                ", isHide=" + isHide +
+                ", isLeader=" + isLeader +
                 ", name='" + name + '\'' +
-                ", active='" + active + '\'' +
+                ", active=" + active +
                 ", department=" + department +
                 ", position='" + position + '\'' +
                 ", email='" + email + '\'' +
                 ", avatar='" + avatar + '\'' +
                 ", jobnumber='" + jobnumber + '\'' +
                 ", extattr='" + extattr + '\'' +
+                ", hiredDate=" + hiredDate +
+                ", stateCode='" + stateCode + '\'' +
                 '}';
     }
 }

@@ -9,61 +9,19 @@
           </div>
           <div class="perennial_list">
             <ul>
-              <li>
-                <a href="http://112.94.22.222:2383/ibps-platform-portal/login.jsp" target="_blank">
+              <li v-for="(item, index) in perennialList" :key="index" @click="goelse(item.linkAddress)">
+                <!-- <a :href="item.linkAddress"> -->
                   <div class="list_cont">
-                    <p><img src="@/assets/image/perennial.png" alt=""> </p>
+                    <p><img :src="imgList[index]" alt=""> </p>
                     <!-- <p>{{item.title}}</p>
                     <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
                     <p>收益：<span>{{item.profit}}</span> </p>
                     <p>价格：{{item.price}}</p> -->
-                    <p>高层次创业人才引进计划高层次创业人才引进计划高层次创业人才引进计划高层次创业人才引进计划</p>
-                    <p>平台功能：高层次创业人才引进计划</p>
-                  </div>
-                </a>
-                <div class="list_view"><span>我要申报</span> </div>
-              </li>
-              <li>
-                <a href="http://xmsb.jsrcgz.gov.cn/" target="_blank">
-                  <div class="list_cont">
-                    <p><img src="@/assets/image/jsrcgz.png" alt=""> </p>
-                    <!-- <p>{{item.title}}</p>
-                    <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
-                    <p>收益：<span>{{item.profit}}</span> </p>
-                    <p>价格：{{item.price}}</p> -->
-                    <p>江苏省“双创计划”</p>
-                    <p>平台功能：江苏省双创计划</p>
+                    <p>{{item.platformTitle}}</p>
+                    <p>平台功能：{{item.remark}}</p>
                   </div>
                   <div class="list_view"><span>我要申报</span> </div>
-                </a>
-              </li>
-              <li>
-                <a href="http://49.65.0.223:85/njrc_cxxqyj.jsp" target="_blank">
-                  <div class="list_cont">
-                    <p><img src="@/assets/image/njrc_kjdjzj22.png" alt=""> </p>
-                    <!-- <p>{{item.title}}</p>
-                    <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
-                    <p>收益：<span>{{item.profit}}</span> </p>
-                    <p>价格：{{item.price}}</p> -->
-                    <p>创新型企业家培育计划</p>
-                    <p>平台功能：创新型企业家培育计划</p>
-                  </div>
-                  <div class="list_view"><span>我要申报</span> </div>
-                </a>
-              </li>
-              <li>
-                <a href="http://49.65.0.223:85/njrc_kjdjzj.jsp " target="_blank">
-                  <div class="list_cont">
-                    <p><img src="@/assets/image/njrc_cxxqyj.png" alt=""> </p>
-                    <!-- <p>{{item.title}}</p>
-                    <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
-                    <p>收益：<span>{{item.profit}}</span> </p>
-                    <p>价格：{{item.price}}</p> -->
-                    <p>科技顶尖专家集聚计划</p>
-                    <p>平台功能：科技顶尖专家集聚计划</p>
-                  </div>
-                  <div class="list_view"><span>我要申报</span> </div>
-                </a>
+                <!-- </a> -->
               </li>
             </ul>
           </div>
@@ -117,12 +75,17 @@
 </template>
 <script>
 import {Tab, TabItem, Scroller, LoadMore} from 'vux'
+import imgSrc1 from '@/assets/image/perennial.png'
+import imgSrc2 from '@/assets/image/jsrcgz.png'
+import imgSrc3 from '@/assets/image/njrc_kjdjzj22.png'
+import imgSrc4 from '@/assets/image/njrc_cxxqyj.png'
 export default {
   components: {
     Tab, TabItem, Scroller, LoadMore
   },
   data () {
     return {
+      imgList: [imgSrc1, imgSrc2, imgSrc3, imgSrc4],
       perennialList: [],
       typeList: [],
       talentsList: [],
@@ -186,12 +149,33 @@ export default {
         }
       }
     },
+    goelse (url) {
+      this.api.get({
+        url: 'getUserExtension',
+        data: { },
+        callback: (res) => {
+          if (res.code === '0000') {
+            if (res.data !== null) {
+              if (res.data.roleCode === 'COM_ADMIN' || res.data.roleCode === 'COM_CONTACTS') {
+                window.location.href = url
+              } else {
+                this.$vux.toast.text('只有企业管理员和企业联系人才可以进申报平台！！')
+              }
+            }
+          } else {
+            this.$vux.toast.text(res.result)
+          }
+        }
+      })
+    },
+    // 申报平台列表
     getperennialList () {
       this.api.get({
-        url: 'perennialList',
+        url: 'queryPlatformInfo',
         data: {
           page: 1,
-          rows: 4
+          rows: 4,
+          isTalentService: 1
         },
         callback: res => {
           if (res.code === '0000') {

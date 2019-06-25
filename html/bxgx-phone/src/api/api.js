@@ -79,7 +79,8 @@ export default {
     addOrEditMemorandum: 'springcloud-enterprise/pd/declaration/addOrEditMemorandum', // 申报平台备忘录
     fastUpload: 'springcloud-app-fastdfs/upload/fastUpload', // 上传文件
     queryOnlineInfo: 'springcloud-enterprise/pd/online/queryOnlineInfo', // 通过公告ID和登录人查询预约信息
-    getUserExtension: 'springcloud-user/user/userInfo/getUserExtension'
+    getUserExtension: 'springcloud-user/user/userInfo/getUserExtension',
+    queryPlatformInfo: 'springcloud-enterprise/guest/pd/talentNotice/queryPlatformInfo'// 人才服务-首页申报平台查询
 
   },
   setToken: function (obj) {

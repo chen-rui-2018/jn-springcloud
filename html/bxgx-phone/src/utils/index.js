@@ -17,6 +17,14 @@ function UrlSearch () {
 }
 const urlSearch = new UrlSearch()
 
+function isMobile () {
+  const userAgentInfo = navigator.userAgent
+  const Agents = ['Android', 'iPhone', 'SymbianOS', 'Windows Phone', 'iPad', 'iPod']
+  return Agents.some(str => {
+    return userAgentInfo.indexOf(str) > 0
+  })
+}
+
 function initJsBridge (readyCallback) {
   const u = navigator.userAgent
   const isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1 // android终端
@@ -72,21 +80,15 @@ function initJsBridge (readyCallback) {
 }
 function linkTo (data) {
   const { appPath, callBack } = data
-  const WebViewJavascriptBridge = window.WebViewJavascriptBridge
-  if (WebViewJavascriptBridge) {
+  if (isMobile()) {
     initJsBridge(() => {
-      const isHttp = /^(https?|ftp|file):\/\/.+$/.test(appPath)
-      if (isHttp) {
-        WebViewJavascriptBridge.callHandler('goNative', {
-          'url': appPath
-        }, function (response) {
-          if (callBack) {
-            callBack(response)
-          }
-        })
-      } else {
-        router.push(appPath)
-      }
+      window.WebViewJavascriptBridge.callHandler('goNative', {
+        'url': appPath
+      }, function (response) {
+        if (callBack) {
+          callBack(response)
+        }
+      })
     })
   } else {
     router.push(data)

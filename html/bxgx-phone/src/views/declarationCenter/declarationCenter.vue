@@ -49,14 +49,16 @@
       <div class="perennial_list">
         <ul>
           <li v-for="(item,index) in perennialList" :key="index">
-            <div class="list_cont">
-              <p><img src="@/assets/image/perennial.png" alt=""> </p>
-              <p>{{item.title}}</p>
-              <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
-              <p>收益：<span>{{item.profit}}</span> </p>
-              <p>价格：{{item.price}}</p>
-            </div>
-            <div class="list_view"><span>查看详情</span> </div>
+            <a :href="item.linkAddress">
+              <div class="list_cont">
+                <p><img src="@/assets/image/perennial.png" alt=""> </p>
+                <p>{{item.title}}</p>
+                <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
+                <p>收益：<span>{{item.profit}}</span> </p>
+                <p>价格：{{item.price}}</p>
+              </div>
+              <div class="list_view"><span>查看详情</span> </div>
+            </a>
           </li>
         </ul>
       </div>

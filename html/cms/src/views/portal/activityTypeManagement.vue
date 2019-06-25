@@ -193,7 +193,10 @@ export default {
       this.loadingUpFlag = false
       if (event.code === '0000') {
         this.templateList.push(event.data)
-        this.$message(event.result)
+        if (this.templateList) {
+          this.$refs['activityTypeForm'].clearValidate('templateList')
+        }
+        this.$message.success('上传成功')
       } else {
         this.$refs.upload.uploadFiles.splice(this.$refs.upload.uploadFiles.length - 1, 1)
         this.$message.error(event.result)

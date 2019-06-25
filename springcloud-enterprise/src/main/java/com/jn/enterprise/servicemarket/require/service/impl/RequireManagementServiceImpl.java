@@ -570,6 +570,8 @@ public class RequireManagementServiceImpl implements RequireManagementService {
         TbServiceRequire tbServiceRequire = getTbServiceRequire(reqNum);
         RequireReceivedDetails requireReceivedDetails=new RequireReceivedDetails();
         BeanUtils.copyProperties(tbServiceRequire, requireReceivedDetails);
+        //需求描述
+        requireReceivedDetails.setRequireDetail(tbServiceRequire.getReqDetail());
         //融资期限设置
         if(StringUtils.isNotBlank(tbServiceRequire.getFinancingPeriodMax()+"")){
             logger.info("需求详情（我收到的需求）,融资期限：{}",tbServiceRequire.getFinancingPeriodMax()+"");

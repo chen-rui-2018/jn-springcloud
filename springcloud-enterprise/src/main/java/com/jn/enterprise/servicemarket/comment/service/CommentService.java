@@ -1,9 +1,10 @@
 package com.jn.enterprise.servicemarket.comment.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.enterprise.servicemarket.comment.model.*;
-
-import java.util.List;
+import com.jn.enterprise.servicemarket.comment.model.CommentParameter;
+import com.jn.enterprise.servicemarket.comment.model.RatingDetail;
+import com.jn.enterprise.servicemarket.comment.model.RatingParameter;
+import com.jn.enterprise.servicemarket.comment.model.ReceiveRatingParameter;
 
 /**
  * @author： jiangyl
@@ -33,7 +34,7 @@ public interface CommentService {
      * @param id 需求id
      * @return
      */
-    RatingDetail getRatingCommentDetail(String id);
+    RatingDetail getRatingCommentDetail(String id, String account);
 
     /**
      * 保存评价信息

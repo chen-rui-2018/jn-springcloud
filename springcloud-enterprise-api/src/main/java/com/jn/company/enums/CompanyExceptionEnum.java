@@ -14,6 +14,7 @@ public enum CompanyExceptionEnum implements CodeAndMsg {
     COMPANY_INFO_NOT_EXIST("5020501","企业信息不存在"),
     COMPANY_ID_INFO_NOT_NULL("5020502","企业ID或用户账号不能为空"),
     USER_LOGIN_IS_INVALID("5020503","登录已失效，请重新登录"),
+    DATE_CONVERT_ERROR("5020504","日期转换出错"),
 
     ;
 

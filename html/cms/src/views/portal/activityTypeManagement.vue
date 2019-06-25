@@ -44,7 +44,7 @@
     <!-- 弹出的新增活动类型对话框 -->
     <template v-if="activityTypedialogFormVisible">
       <el-dialog :visible.sync="activityTypedialogFormVisible" :title="dialogStatus" width="650px">
-        <el-form ref="activityTypeForm" :model="activityTypeForm" label-position="right" label-width="80px">
+        <el-form ref="activityTypeForm" :model="activityTypeForm" :rules="rules" label-position="right" label-width="100px">
           <el-form-item label="类型名称:" prop="typeName">
             <el-input v-model.trim="activityTypeForm.typeName" maxlength="20" clearable style="width:350px"/>
           </el-form-item>
@@ -65,7 +65,7 @@
             </div>
             <el-upload
               ref="upload"
-              :headers="headers"
+              :headers="{token: $store.getters.token}"
               :on-success="progressU"
               :before-upload="progressULod"
               :on-preview="handlePictureCardPreview"
@@ -127,6 +127,17 @@ import { getToken } from '@/utils/auth'
 export default {
   data() {
     return {
+      rules: {
+        typeName: [
+          { required: true, message: '请输入类型名称', trigger: 'blur' }
+        ],
+        typeStatus: [
+          { required: true, message: '请选择状态', trigger: 'change' }
+        ],
+        templateList: [
+          { required: true, message: '请选择海报图片', trigger: 'change' }
+        ]
+      },
       baseUrl: process.env.BASE_API,
       loadingUpFlag: false,
       headers: {
@@ -190,7 +201,7 @@ export default {
     },
     handleCancel() {},
     handleRemove(file, fileList) {
-      console.log(file, fileList)
+      // console.log(file, fileList)
     },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url
@@ -198,13 +209,11 @@ export default {
     },
     handleFileTotal(row) {
       this.moduleNumDialogVisible = true
-      console.log(row)
       this.moduleList[0].typeName = row.typeName
       this.moduleList[0].typeStatus = row.typeStatus
       this.moduleList[0].fileTotal = row.fileTotal
       // const data = { typeId: row.typeId }
       paramApi(`${this.GLOBAL.parkUrl}activity/activityType/findActivityType`, row.typeId, 'typeId').then(res => {
-        console.log(res)
         if (res.data.code === this.GLOBAL.code) {
           if (res.data.data.templateList.length > 0) {
             this.templateImgList = res.data.data.templateList
@@ -235,7 +244,6 @@ export default {
       this.$refs['activityTypeForm'].validate(valid => {
         if (valid) {
           api(`${this.GLOBAL.parkUrl}activity/activityType/add`, this.activityTypeForm, 'post').then((res) => {
-            console.log(res)
             if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '新增成功',
@@ -386,7 +394,6 @@ export default {
     initList() {
       this.listLoading = true
       api(`${this.GLOBAL.parkUrl}activity/activityType/findActivityTypeList`, this.listQuery, 'post').then(res => {
-        console.log(res)
         if (res.data.code === this.GLOBAL.code) {
           this.typeList = res.data.data.rows
           this.total = res.data.data.total

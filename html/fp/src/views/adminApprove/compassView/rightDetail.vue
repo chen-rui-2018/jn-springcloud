@@ -56,22 +56,22 @@
                   <div class="baseIfor_table_gist">
                     <el-form-item label="实施依据：">
                       <div class="table_item_cont">
-                        <span v-if="isWord&&word&&word.length>135" class="66">{{word|word}} </span>
-                        <span v-else class="55">{{word}}</span>
-                        <span @click="isWord=!isWord" v-show="isWord&&word&&word.length>135" class="pack_up">[点击展开]</span>
-                        <span @click="isWord=!isWord" v-show="isWord===false&&word&&word.length>135" class="pack_up">[点击收起]</span>
+                        <!-- <span v-if="isWord&&word&&word.length>135" class="66">{{word|word}} </span> -->
+                        <span v-if="powerDetail.settingBasis===null">暂无</span>
+                        <span v-html="powerDetail.settingBasis" v-else></span>
+                        <!-- <span @click="isWord=!isWord" v-show="isWord&&word&&word.length>135" class="pack_up">[点击展开]</span>
+                        <span @click="isWord=!isWord" v-show="isWord===false&&word&&word.length>135" class="pack_up">[点击收起]</span> -->
                       </div> 
                     </el-form-item>
                   </div>
-                  <div class="baseIfor_table_item full_line">
+                  <!-- <div class="baseIfor_table_item full_line">
                     <el-form-item label="权力来源：">
                       <span class="table_item_cont">{{powerDetail.comeFrom===null?'暂无':powerDetail.level}}</span>
-                      <!-- <span class="table_item_cont"></span> -->
                     </el-form-item>
-                  </div>
+                  </div> -->
                   <div class="baseIfor_table_item full_line">
-                    <el-form-item label="备       注：">
-                      <span class="table_item_cont">{{ powerDetail.notes===null?'暂无':powerDetail.level}}</span>
+                    <el-form-item label="备注：">
+                      <span class="table_item_cont">{{ powerDetail.notes===null?'暂无':powerDetail.notes}}</span>
                     </el-form-item>
                   </div>
                 </el-form>
@@ -88,11 +88,12 @@
                 <el-table-column
                   label="业务序号"
                   width="180"
+                   type="index"
                   align="center"
                   >
-                  <template slot-scope="scope">
+                 <!--  <template slot-scope="scope">
                     <span @click="goservedetail(scope.row.id)">{{scope.row.id}} </span>
-                  </template>
+                  </template> -->
                 </el-table-column>
                 <el-table-column
                   label="业务名称"
@@ -190,6 +191,7 @@ export default {
 </script>
 <style lang="scss">
   .rightDetail{
+    padding-top: 67px;
     .right_content{
       width: 1190px;
       margin: 0 auto;
@@ -307,7 +309,7 @@ export default {
                 }
               }
               .baseIfor_table_gist{
-                // background-color: #f8f8f8;
+                background-color: #f8f8f8;
                 width: 100%;
                 .el-form-item{
                   align-items: center;
@@ -316,12 +318,12 @@ export default {
                 .el-form-item__label{
                   width: 14.5%;
                   // line-height: 1;
-                  background-color: #f8f8f8;
+                  // background-color: #f8f8f8;
                 }
                 .el-form-item__content{
                   line-height: 1;
                   background-color: #fff;
-                  padding: 10px 0;
+                  padding: 12px 0;
                 }
                 .table_item_cont{
                   

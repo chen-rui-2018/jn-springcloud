@@ -3,7 +3,7 @@
 
     <el-container>
       <el-aside width="200px">
-        <el-tree v-loading="departmentListLoading" :data="departmentList" :expand-on-click-node="false" :props="defaultProps" default-expand-all @node-click="handleNodeClick"/>
+        <el-tree v-loading="departmentListLoading" :highlight-current="true" :data="departmentList" :expand-on-click-node="false" :props="defaultProps" default-expand-all @node-click="handleNodeClick"/>
       </el-aside>
       <el-main>
 
@@ -295,6 +295,9 @@ export default {
       this.$router.push({ name: 'employeeBasicInfoAdd', query: { title: '新增员工花名册' }})
     },
     exportExcel() {
+      if (!this.listQuery.departmentId) {
+        this.listQuery.departmentId = ''
+      }
       exportEmployeeBasicInfo(this.listQuery).then(res => {
         console.log('导出。。。')
         window.location.href = res.request.responseURL
@@ -339,6 +342,9 @@ export default {
     initList() {
       console.log('查询员工花名册。。。')
       this.listLoading = true
+      if (!this.listQuery.departmentId) {
+        this.listQuery.departmentId = ''
+      }
       list(this.listQuery).then(res => {
         if (res.data.code === '0000') {
           this.employeeBasicInfoList = res.data.data.rows

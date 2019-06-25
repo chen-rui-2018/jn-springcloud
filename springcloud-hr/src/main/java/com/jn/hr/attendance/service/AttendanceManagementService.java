@@ -57,7 +57,7 @@ public interface AttendanceManagementService {
 	public void updateScheduDetailist(List<AttendanceSchedulPage> attendanceSchedulPage,User user);
 	
 	//根据用户id与考勤年月查询历史考勤列表
-	public List<AttendanceManagementApiVo> selectAttendanceManagementByUserId(AttendanceManagement attendanceManagement);
+	public List<AttendanceManagementApiVo> selectAttendanceManagementByUserId(AttendanceManagement attendanceManagement,String userId);
 	
 	//根据部门id与考勤年月查询历史考勤列表
 	public AttendanceManageApiVo selectAttendanceManagementByDepartmentId(AttendanceManagement attendanceManagement);

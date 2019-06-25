@@ -49,4 +49,13 @@ public class PolicyManagementParam extends Page implements Serializable {
     public void setNeedPage(String needPage) {
         this.needPage = needPage;
     }
+
+    @Override
+    public String toString() {
+        return "PolicyManagementParam{" +
+                "status='" + status + '\'' +
+                ", policyTitle='" + policyTitle + '\'' +
+                ", needPage='" + needPage + '\'' +
+                '}';
+    }
 }

@@ -303,11 +303,19 @@ export function isExternal(path) {
 
 export function isMobile() {
   const userAgentInfo = navigator.userAgent
-  const Agents = ["Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod"]
+  const Agents = ['Android', 'iPhone', 'SymbianOS', 'Windows Phone', 'iPad', 'iPod']
   return Agents.some(str =>{
     return userAgentInfo.indexOf(str) > 0
   })
 }
+export function isIos() {
+  const userAgentInfo = navigator.userAgent
+  const Agents = ['iPhone', 'iPad', 'iPod']
+  return Agents.some(str =>{
+    return userAgentInfo.indexOf(str) > 0
+  })
+}
+
 export function isArray (obj) {
   if (Object.prototype.toString.call(obj) === '[object Object]') {
     return 'Object'
@@ -336,4 +344,24 @@ export function getDateString (str) {
   let sec = date.getSeconds()
   sec = sec > 9 ? sec : '0' + sec
   return year + '-' + month + '-' + day + ' ' + hour + ':' + min + ':' + sec
+}
+function UrlSearch () {
+  var name, value
+  var str = location.href // 取得整个地址栏
+  var num = str.indexOf('?')
+  str = str.substr(num + 1) // 取得所有参数   stringvar.substr(start [, length ]
+
+  var arr = str.split('&') // 各个参数放到数组里
+  for (var i = 0; i < arr.length; i++) {
+    num = arr[i].indexOf('=')
+    if (num > 0) {
+      name = arr[i].substring(0, num)
+      value = arr[i].substr(num + 1)
+      this[name] = value
+    }
+  }
+}
+const urlSearch = new UrlSearch()
+export {
+  urlSearch
 }

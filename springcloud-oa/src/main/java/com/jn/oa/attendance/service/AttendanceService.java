@@ -5,6 +5,7 @@ import com.jn.common.model.Result;
 import com.jn.hr.model.*;
 import com.jn.oa.attendance.entity.TbOaAttendance;
 import com.jn.oa.attendance.model.AttendanceAdd;
+import com.jn.oa.attendance.model.AttendanceLocation;
 import com.jn.oa.attendance.model.AttendancePage;
 import com.jn.oa.attendance.vo.AttendanceResultVo;
 import com.jn.oa.attendance.vo.AttendanceVo;
@@ -86,7 +87,7 @@ public interface AttendanceService {
      * @param attendanceManagement
      * @return
      */
-    Result<List<AttendanceManageApiVo>> selectAttendanceManagementByDepartmentId(AttendanceManagement attendanceManagement);
+    Result<AttendanceManageApiVo> selectAttendanceManagementByDepartmentId(AttendanceManagement attendanceManagement);
 
     /**
      * 根据用户id查询用户考勤接口
@@ -95,4 +96,12 @@ public interface AttendanceService {
      * @return
      */
     Result<AttendanceOverTimeApiVo> selectByUserIdAndTime(AttendanceOverTime attendanceOverTime);
+
+    /**
+     * 根据经纬度查询距离与是否能进行打卡
+     * @param longitude
+     * @param latitude
+     * @return
+     */
+    AttendanceLocation selectLocation(String longitude,String latitude);
 }

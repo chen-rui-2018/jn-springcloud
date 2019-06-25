@@ -22,10 +22,13 @@ public class TbPdDeclarationNoticeManage implements Serializable {
     /*@ApiModelProperty("所属平台名称")*/
     private String subordinatePlatformName;
 
-    /*@ApiModelProperty("截止时间")*/
+    /*@ApiModelProperty("")*/
+    private Date preliminaryDeadline;
+
+    /*@ApiModelProperty("最终截止时间")*/
     private Date deadline;
 
-    /*@ApiModelProperty("截止描述")*/
+    /*@ApiModelProperty("申报部门")*/
     private String timeNode;
 
     /*@ApiModelProperty("是否置顶（1：置顶，2：不置顶）")*/
@@ -33,9 +36,6 @@ public class TbPdDeclarationNoticeManage implements Serializable {
 
     /*@ApiModelProperty("联系电话配置")*/
     private String contactPhoneConfiguration;
-
-    /*@ApiModelProperty("公告内容")*/
-    private String announcementContent;
 
     /*@ApiModelProperty("浏览次数")*/
     private Integer browseTimes;
@@ -60,6 +60,12 @@ public class TbPdDeclarationNoticeManage implements Serializable {
 
     /*@ApiModelProperty("最新更新时间")*/
     private Date modifiedTime;
+
+    /*@ApiModelProperty("公告简介")*/
+    private String briefIntroduct;
+
+    /*@ApiModelProperty("公告内容")*/
+    private String announcementContent;
 
     private static final long serialVersionUID = 1L;
 
@@ -111,6 +117,14 @@ public class TbPdDeclarationNoticeManage implements Serializable {
         this.subordinatePlatformName = subordinatePlatformName == null ? null : subordinatePlatformName.trim();
     }
 
+    public Date getPreliminaryDeadline() {
+        return preliminaryDeadline;
+    }
+
+    public void setPreliminaryDeadline(Date preliminaryDeadline) {
+        this.preliminaryDeadline = preliminaryDeadline;
+    }
+
     public Date getDeadline() {
         return deadline;
     }
@@ -141,14 +155,6 @@ public class TbPdDeclarationNoticeManage implements Serializable {
 
     public void setContactPhoneConfiguration(String contactPhoneConfiguration) {
         this.contactPhoneConfiguration = contactPhoneConfiguration == null ? null : contactPhoneConfiguration.trim();
-    }
-
-    public String getAnnouncementContent() {
-        return announcementContent;
-    }
-
-    public void setAnnouncementContent(String announcementContent) {
-        this.announcementContent = announcementContent == null ? null : announcementContent.trim();
     }
 
     public Integer getBrowseTimes() {
@@ -215,6 +221,22 @@ public class TbPdDeclarationNoticeManage implements Serializable {
         this.modifiedTime = modifiedTime;
     }
 
+    public String getBriefIntroduct() {
+        return briefIntroduct;
+    }
+
+    public void setBriefIntroduct(String briefIntroduct) {
+        this.briefIntroduct = briefIntroduct == null ? null : briefIntroduct.trim();
+    }
+
+    public String getAnnouncementContent() {
+        return announcementContent;
+    }
+
+    public void setAnnouncementContent(String announcementContent) {
+        this.announcementContent = announcementContent == null ? null : announcementContent.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -233,11 +255,11 @@ public class TbPdDeclarationNoticeManage implements Serializable {
             && (this.getRangeName() == null ? other.getRangeName() == null : this.getRangeName().equals(other.getRangeName()))
             && (this.getSubordinatePlatformId() == null ? other.getSubordinatePlatformId() == null : this.getSubordinatePlatformId().equals(other.getSubordinatePlatformId()))
             && (this.getSubordinatePlatformName() == null ? other.getSubordinatePlatformName() == null : this.getSubordinatePlatformName().equals(other.getSubordinatePlatformName()))
+            && (this.getPreliminaryDeadline() == null ? other.getPreliminaryDeadline() == null : this.getPreliminaryDeadline().equals(other.getPreliminaryDeadline()))
             && (this.getDeadline() == null ? other.getDeadline() == null : this.getDeadline().equals(other.getDeadline()))
             && (this.getTimeNode() == null ? other.getTimeNode() == null : this.getTimeNode().equals(other.getTimeNode()))
             && (this.getIsRoofPlacement() == null ? other.getIsRoofPlacement() == null : this.getIsRoofPlacement().equals(other.getIsRoofPlacement()))
             && (this.getContactPhoneConfiguration() == null ? other.getContactPhoneConfiguration() == null : this.getContactPhoneConfiguration().equals(other.getContactPhoneConfiguration()))
-            && (this.getAnnouncementContent() == null ? other.getAnnouncementContent() == null : this.getAnnouncementContent().equals(other.getAnnouncementContent()))
             && (this.getBrowseTimes() == null ? other.getBrowseTimes() == null : this.getBrowseTimes().equals(other.getBrowseTimes()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getFileUrl() == null ? other.getFileUrl() == null : this.getFileUrl().equals(other.getFileUrl()))
@@ -245,7 +267,9 @@ public class TbPdDeclarationNoticeManage implements Serializable {
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
-            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()));
+            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
+            && (this.getBriefIntroduct() == null ? other.getBriefIntroduct() == null : this.getBriefIntroduct().equals(other.getBriefIntroduct()))
+            && (this.getAnnouncementContent() == null ? other.getAnnouncementContent() == null : this.getAnnouncementContent().equals(other.getAnnouncementContent()));
     }
 
     @Override
@@ -258,11 +282,11 @@ public class TbPdDeclarationNoticeManage implements Serializable {
         result = prime * result + ((getRangeName() == null) ? 0 : getRangeName().hashCode());
         result = prime * result + ((getSubordinatePlatformId() == null) ? 0 : getSubordinatePlatformId().hashCode());
         result = prime * result + ((getSubordinatePlatformName() == null) ? 0 : getSubordinatePlatformName().hashCode());
+        result = prime * result + ((getPreliminaryDeadline() == null) ? 0 : getPreliminaryDeadline().hashCode());
         result = prime * result + ((getDeadline() == null) ? 0 : getDeadline().hashCode());
         result = prime * result + ((getTimeNode() == null) ? 0 : getTimeNode().hashCode());
         result = prime * result + ((getIsRoofPlacement() == null) ? 0 : getIsRoofPlacement().hashCode());
         result = prime * result + ((getContactPhoneConfiguration() == null) ? 0 : getContactPhoneConfiguration().hashCode());
-        result = prime * result + ((getAnnouncementContent() == null) ? 0 : getAnnouncementContent().hashCode());
         result = prime * result + ((getBrowseTimes() == null) ? 0 : getBrowseTimes().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getFileUrl() == null) ? 0 : getFileUrl().hashCode());
@@ -271,6 +295,8 @@ public class TbPdDeclarationNoticeManage implements Serializable {
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
+        result = prime * result + ((getBriefIntroduct() == null) ? 0 : getBriefIntroduct().hashCode());
+        result = prime * result + ((getAnnouncementContent() == null) ? 0 : getAnnouncementContent().hashCode());
         return result;
     }
 
@@ -286,11 +312,11 @@ public class TbPdDeclarationNoticeManage implements Serializable {
         sb.append(", rangeName=").append(rangeName);
         sb.append(", subordinatePlatformId=").append(subordinatePlatformId);
         sb.append(", subordinatePlatformName=").append(subordinatePlatformName);
+        sb.append(", preliminaryDeadline=").append(preliminaryDeadline);
         sb.append(", deadline=").append(deadline);
         sb.append(", timeNode=").append(timeNode);
         sb.append(", isRoofPlacement=").append(isRoofPlacement);
         sb.append(", contactPhoneConfiguration=").append(contactPhoneConfiguration);
-        sb.append(", announcementContent=").append(announcementContent);
         sb.append(", browseTimes=").append(browseTimes);
         sb.append(", status=").append(status);
         sb.append(", fileUrl=").append(fileUrl);
@@ -299,6 +325,8 @@ public class TbPdDeclarationNoticeManage implements Serializable {
         sb.append(", createdTime=").append(createdTime);
         sb.append(", modifierAccount=").append(modifierAccount);
         sb.append(", modifiedTime=").append(modifiedTime);
+        sb.append(", briefIntroduct=").append(briefIntroduct);
+        sb.append(", announcementContent=").append(announcementContent);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

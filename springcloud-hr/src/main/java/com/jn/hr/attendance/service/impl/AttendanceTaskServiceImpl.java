@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -35,6 +37,7 @@ import com.jn.oa.vo.LeaveApiVo;
 @Service
 public class AttendanceTaskServiceImpl implements AttendanceTaskService {
 
+	private static final Logger logger = LoggerFactory.getLogger(AttendanceTaskServiceImpl.class);
 	@Autowired
 	OaClient oaClient;
 	@Autowired
@@ -126,8 +129,12 @@ public class AttendanceTaskServiceImpl implements AttendanceTaskService {
 			attendanceManageList.add(attendanceManagementAdd);
 		}
 
+		logger.info("[考勤定时任务]插入条数为：" + attendanceManageList.size());
+		
 		try {
-			attendanceManagementMapper.insertBatch(attendanceManageList);
+			if(attendanceManageList.size() != 0){
+				attendanceManagementMapper.insertBatch(attendanceManageList);
+			}
 		} catch (DuplicateKeyException e) {
 
 		}

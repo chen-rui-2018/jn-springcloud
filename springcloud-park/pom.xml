@@ -92,7 +92,7 @@
                         parking
                     </contexts>
                     <tableNames>
-                        tb_parking_preferential
+                        tb_parking_record
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

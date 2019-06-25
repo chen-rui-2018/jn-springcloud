@@ -51,6 +51,14 @@ public class FinancialProductController extends BaseController {
         PaginationData investorInfoList = financialProductService.getFinancialProductList(financialProductListParam);
         return  new Result(investorInfoList);
     }
+    @ControllerLog(doAction = "机构下金融产品列表查询")
+    @ApiOperation(value = "机构下金融产品列表查询")
+    @RequestMapping(value = "/guest/technologyFinancial/financialProductController/getOrgFinancialProductList",method = RequestMethod.GET)
+    public Result<PaginationData<List<FinancialProductListInfo>>> getOrgFinancialProductList(@Validated FinancialOrgProductParam financialOrgProductParam){
+        PaginationData investorInfoList = financialProductService.getOrgFinancialProductList(financialOrgProductParam);
+        return  new Result(investorInfoList);
+    }
+
 
     @ControllerLog(doAction = "金融产品详情")
     @ApiOperation(value = "金融产品详情")
@@ -63,8 +71,7 @@ public class FinancialProductController extends BaseController {
 
     @ControllerLog(doAction = "金融产品贷款类别")
     @ApiOperation(value = "金融产品贷款类别")
-    @RequiresPermissions("/technologyFinancial/financialProductController/getFinancialProductLoanType")
-    @RequestMapping(value = "/technologyFinancial/financialProductController/getFinancialProductLoanType",method = RequestMethod.GET)
+    @RequestMapping(value = "/guest/technologyFinancial/financialProductController/getFinancialProductLoanType",method = RequestMethod.GET)
     public Result<List<FinancialProductLoanType>> getFinancialProductLoanType(){
         List<FinancialProductLoanType> financialProductLoanTypeList = financialProductService.getFinancialProductLoanType();
         return  new Result(financialProductLoanTypeList);
@@ -72,8 +79,7 @@ public class FinancialProductController extends BaseController {
 
     @ControllerLog(doAction = "金融产品担保方式")
     @ApiOperation(value = "金融产品担保方式")
-    @RequiresPermissions("/technologyFinancial/financialProductController/getFinancialProductAssureType")
-    @RequestMapping(value = "/technologyFinancial/financialProductController/getFinancialProductAssureType",method = RequestMethod.GET)
+    @RequestMapping(value = "/guest/technologyFinancial/financialProductController/getFinancialProductAssureType",method = RequestMethod.GET)
     public Result<List<FinancialProductAssureType>> getFinancialProductAssureType(){
         List<FinancialProductAssureType> financialProductAssureTypeList = financialProductService.getFinancialProductAssureType();
         return  new Result(financialProductAssureTypeList);

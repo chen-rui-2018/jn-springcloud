@@ -4,16 +4,6 @@
 
 <script>
 import echarts from 'echarts'
-
-// require('echarts/theme/macarons') // echarts theme
-// echarts相关
-// let echarts = require('echarts/lib/echarts');
-// require('echarts/lib/chart/bar');
-// require('echarts/lib/component/tooltip');
-// require('echarts/lib/component/toolbox');
-// require('echarts/lib/component/legend');
-// require('echarts/lib/component/markLine');
-
 import { debounce } from '@/utils'
 
 export default {
@@ -38,7 +28,7 @@ export default {
     },
     height: {
       type: String,
-      default: '300px'
+      default: '350px'
     }
   },
   data() {
@@ -91,20 +81,18 @@ export default {
             color: '#ccc'
           }
         },
-        // tooltip: {
-        //   trigger: 'item',
-        //   formatter: '{a} <br/>{b}: {c} ({d}%)'
-        // },
         tooltip: {
-          trigger: 'axis',
-          axisPointer: { // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-          }
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c} ({d}%)'
         },
-
+        // color: ['#f9a84f', '#e2d859', '#b5dd66', '#aaf7b8', '#8fdcff', '#7b97ff', '#9473ff', '#BA55D3', '#DDA0DD'],
         legend: {
+          type: 'scroll',
           orient: 'vertical',
           x: 'left',
+          right: 10,
+          top: 40,
+          bottom: 20,
           data: this.names
         },
         toolbox: {
@@ -114,7 +102,7 @@ export default {
             dataView: {
               show: true,
               readOnly: false,
-              title: '数据视图',
+              title: '表格',
               optionToContent: function(opt) {
                 const seriesData = opt.series[0].data // 折线图数据
                 let tdBodys = '' // 数据
@@ -128,9 +116,6 @@ export default {
                 return table
               }
             }
-            // magicType : {show: true, type: ['line', 'bar']},
-            // restore : {show: true}
-            // saveAsImage : {show: true}
           }
         },
         calculable: true,
@@ -138,16 +123,17 @@ export default {
           {
             name: this.title,
             type: 'pie',
-            radius: ['50%', '70%'],
-            avoidLabelOverlap: false,
+            radius: '55%',
+            center: ['60%', '50%'],
+            // startAngle: 270, // 设置起始坐标
+            // clockwise: false, // 逆时针旋转
             data: this.listData,
             animationEasing: 'cubicInOut',
             animationDuration: 2600,
             label: {
               normal: {
                 show: false,
-                position: 'center',
-                formatter: '{b}: {c}元({d}%)'
+                position: 'center'
               },
               emphasis: {
                 show: true,
@@ -159,10 +145,16 @@ export default {
             },
             labelLine: {
               normal: {
-                show: false,
-                formatter: '{b}: {c}元({d}%)'
+                show: false
               }
             }
+            /* itemStyle: {
+              emphasis: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
+            }*/
           }
         ]
       })

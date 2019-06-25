@@ -20,10 +20,14 @@
       </el-form-item>
       <el-form-item label="考核对象" prop="assessmentObject" class="inline">
         <!--最后子节点支持多选  only-last="true" -->
-        <el-cascader-multi ref="assessmentObjectRef" v-model="assessment.assessmentObjectList" :data="deptEmployeeList" :show-leaf-label="true" style="width: 620px" @change="assessmentObjectSel"/>
+
+        <multi-cascader-ext ref="assessmentObjectRef" v-model="assessment.assessmentObjectList" :data="deptEmployeeList" :only-last="true" :show-leaf-label="true" style="width: 620px" @change="assessmentObjectSel"/>
+
       </el-form-item>
       <el-form-item label="考核人" prop="assessmentPeople" class="inline">
+        <!--<el-cascader-multi ref="assessmentPeopleRef" v-model="assessment.assessmentPeopleList" :data="deptEmployeeList" :show-leaf-label="true" only-last="true" style="width: 620px" @change="assessmentPeopleSel"/>-->
         <el-cascader
+          ref="assessmentPeopleRef"
           :options="deptEmployeeList"
           v-model="assessmentPeopleArr"
           change-on-select
@@ -44,9 +48,13 @@
 import {
   api, apiGet
 } from '@/api/hr/common'
+import {
+  findNodeById
+} from '@/api/hr/util'
+import multiCascaderExt from '@/components/MultiCascaderExt2/multi-cascader-ext.vue'
 import UE from '@/components/ue.vue'
 export default {
-  components: { UE },
+  components: { UE, multiCascaderExt },
   data() {
     return {
       // 新部门员工树
@@ -80,6 +88,7 @@ export default {
         assessmentObjectList: [],
         assessmentJobNumber: '',
         assessmentObjectJobNumber: '',
+        assessmentPeopleList: [],
         assessmentObject: '',
         templateName: '',
         assessmentPeople: ''
@@ -104,7 +113,8 @@ export default {
         assessmentTime: [{ required: true, message: '请选择考核时间', trigger: 'change' }],
         assessmentObject: [{ required: true, message: '请选择考核对象', trigger: 'change' }],
         assessmentPeople: [{ required: true, message: '请选择考核人', trigger: 'change' }]
-      }
+      },
+      nodes: []
     }
   },
   watch: {
@@ -121,8 +131,8 @@ export default {
       const selectedNodes = this.$refs['assessmentObjectRef'].selectedNodes
       this.assessment.assessmentObject = ''
       for (let i = 0; i < selectedNodes.length; i++) {
-        if (!selectedNodes.flag) {
-          this.assessment.assessmentObject = this.assessment.assessmentObject + selectedNodes[i].value + ','
+        if (!selectedNodes[i].flag) {
+          this.assessment.assessmentObject = this.assessment.assessmentObject + selectedNodes[i].jobNumber + ','
         }
       }
       if (this.assessment.assessmentObject.length > 0) {
@@ -130,13 +140,34 @@ export default {
       }
       console.log(this.assessment.assessmentObject)
     },
-    assessmentPeopleSel(val) {
-      this.assessment.assessmentPeople = this.assessmentPeopleArr[this.assessmentPeopleArr.length - 1]
+    setChild(nodes, children) {
+      children.forEach(item => {
+        nodes.push({
+          'id': item.id,
+          'label': item.label,
+          'parentId': item.parentId,
+          'jobNumber': item.jobNumber,
+          'flag': item.flag
+        })
+        if (item.children && item.children.length > 0) {
+          this.setChild(nodes, item.children)
+        }
+      })
+    },
+    assessmentPeopleSel() {
+      const assessmentPeopleId = this.assessmentPeopleArr[this.assessmentPeopleArr.length - 1]
+      const currNode = findNodeById(this.nodes, assessmentPeopleId)
+      if (!currNode.flag) {
+        this.assessment.assessmentPeople = currNode.jobNumber
+        console.log('考核人')
+        console.log(this.assessment.assessmentPeople)
+      }
     },
     getDeptEmployeeList() {
       apiGet('hr/employeeBasicInfo/selectDepartEmployee', {}).then(res => {
         if (res.data.code === '0000') {
-          this.deptEmployeeList = res.data.data
+          this.deptEmployeeList = JSON.parse(res.data.data)
+          this.setChild(this.nodes, this.deptEmployeeList)
         } else {
           this.$message.error(res.data.result)
         }
@@ -154,6 +185,11 @@ export default {
     // 新增提交表单
     submitForm() {
       this.isDisabled = true
+      if (this.assessment.assessmentEndTime === '' || this.assessment.assessmentStartTime === '') {
+        alert('请填写考核起止时间')
+        this.isDisabled = false
+        return false
+      }
       if (new Date(this.assessment.assessmentEndTime.replace(/-/g, '\/')) < new Date()) {
         alert('失效时间必须大于当前时间,请重新选择')
         this.isDisabled = false

@@ -35,7 +35,7 @@ public class DownloadTokenController {
     /**
      * 获取文件下载的权限
      *
-     * @param filePath 文件链接地址 eg.http://192.168.10.45:2020/group1/M00/00/00/wKgKLVvazSeAGLAxAAMmpEcA_IM580.png
+     * @param filePath 文件链接地址 eg.http://192.168.10.46:2020/group1/M00/00/00/wKgKLVvazSeAGLAxAAMmpEcA_IM580.png
      * @return token  然后在文件链接地址后面加上token=XXXXXXX&ts=XXXXXXX
      * @throws IOException
      */

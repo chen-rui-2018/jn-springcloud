@@ -80,6 +80,8 @@ public class RecruitServiceImpl implements RecruitService {
                 recruitDetails.setCareStatus("1");
             }
         }
+        // 处理图片格式
+        recruitDetails.setComAvatar(IBPSFileUtils.getFilePath(recruitDetails.getComAvatar()));
         return recruitDetails;
     }
 
@@ -266,7 +268,11 @@ public class RecruitServiceImpl implements RecruitService {
             throw new JnSpringCloudException(RecruitExceptionEnum.RECRUIT_STATUS_ERROR);
         }
 
-        checkRecruitExist(serviceRecruitUnderParam.getId());
+        // 判断企业信息是否已通过审核
+        RecruitVO recruitVO = checkRecruitExist(serviceRecruitUnderParam.getId());
+        if (!recruitVO.getApprovalStatus().equals(RecruitDataTypeEnum.APPROVAL_STATUS_PASS.getCode())) {
+            throw new JnSpringCloudException(RecruitExceptionEnum.RECRUIT_APPROVAL_STATUS_NOT_PASS);
+        }
 
         TbServiceRecruit sr = new TbServiceRecruit();
         BeanUtils.copyProperties(serviceRecruitUnderParam,sr);

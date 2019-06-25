@@ -3,6 +3,7 @@ const path = require('path')
 const config = require('../config')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const packageConfig = require('../package.json')
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 exports.assetsPath = function(_path) {
   const assetsSubDirectory =
@@ -59,6 +60,7 @@ exports.cssLoaders = function(options) {
 
     return loaders
   }
+
   // https://vue-loader.vuejs.org/en/configurations/extract-css.html
   return {
     css: generateLoaders(),

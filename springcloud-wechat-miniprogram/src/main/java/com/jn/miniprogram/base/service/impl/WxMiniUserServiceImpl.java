@@ -56,14 +56,14 @@ public class WxMiniUserServiceImpl implements WxMiniUserService {
     @ServiceLog(doAction = "用code换取openid、session_key.")
     public WxMiniJscode2SessionResult getSessionInfo(String code) {
         String result = wxMiniHttpClientService.get(String.format(JSCODE_TO_SESSION_URL,wxMiniProperties.getAppId(), wxMiniProperties.getSecret(),code));
+        //openid、session_key关键信息不不打印在日志中
+        logger.info("\n小程序登陆凭证校验入参code：【{}】",code);
         WxMiniJscode2SessionResult wxMiniJscode2SessionResult;
         try {
             wxMiniJscode2SessionResult = JacksonJsonTransformUtil.jsonToObject(result,new TypeReference<WxMiniJscode2SessionResult>(){});
         } catch (IOException e) {
-            throw new JnSpringCloudException(WxExceptionEnums.JSON_PROCESS_FAL);
+            throw new JnSpringCloudException(WxExceptionEnums.WX_LOGIN_CODE_CHECK_FAIL);
         }
-        //openid、session_key关键信息不不打印在日志中
-        logger.info("\n凭证校验校验成功，入参code：{}",code);
         return wxMiniJscode2SessionResult;
     }
 
@@ -80,7 +80,7 @@ public class WxMiniUserServiceImpl implements WxMiniUserService {
         try {
             return JacksonJsonTransformUtil.jsonToObject(WxMiniCryptUtil.decrypt(sessionKey, encryptedData, ivStr),new TypeReference<WxMiniUserInfo>(){});
         } catch (IOException e) {
-            throw new JnSpringCloudException(WxExceptionEnums.JSON_PROCESS_FAL);
+            throw new JnSpringCloudException(WxExceptionEnums.GET_ENCRYPT_USER_INFO_FAIL);
         }
     }
 
@@ -120,8 +120,9 @@ public class WxMiniUserServiceImpl implements WxMiniUserService {
         registerInfoParam.setPhone(wxMiniRegisterUserGetTokenParam.getPhone());
         registerInfoParam.setOpenId(wxMiniJscode2SessionResult.getOpenid());
         Result<String> result = miniProgramRegisterClient.registerAndBinding(registerInfoParam);
+        logger.info("\n调用User服务注册绑定小程序用户信息入参：【{}】,出参：【{}】",registerInfoParam,result);
         if(null != result && GlobalConstants.SUCCESS_CODE.equals(result.getCode())) {
-            result.setData(getTokenByAccount(result.getCode()));
+            result.setData(getTokenByAccount(result.getData()));
         }else {
             //设置注册失败的code，描述使用接口返回的描述信息
             throw new JnSpringCloudException(WxExceptionEnums.WX_USER_REGISTER_FAIL,result.getResult());
@@ -145,7 +146,7 @@ public class WxMiniUserServiceImpl implements WxMiniUserService {
         if(null != result && GlobalConstants.SUCCESS_CODE.equals(result.getCode())) {
             return result.getData();
         }
-        return "";
+        throw new JnSpringCloudException(WxExceptionEnums.WX_GET_TOKEN_FAIL,result.getResult());
     }
 
 }

@@ -3,7 +3,6 @@ package com.jn.enterprise.company.controller;
 import com.codingapi.tx.annotation.TxTransaction;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
-import com.jn.enterprise.company.entity.TbServiceCompany;
 import com.jn.enterprise.company.model.ServiceCompany;
 import com.jn.enterprise.company.service.UpCompanyAccountService;
 import com.jn.system.log.annotation.ControllerLog;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 升级企业账号控制层
@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @modified By:
  **/
 @Api(tags = "用户中心-我的企业-升级企业账号")
+@ApiIgnore
 @RestController
 @RequestMapping("/enterprise/UpCompanyAccount")
 public class UpCompanyAccountController extends BaseController {

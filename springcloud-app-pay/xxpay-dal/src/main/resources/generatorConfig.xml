@@ -90,7 +90,7 @@
         </javaModelGenerator>
 
         <!-- 生成映射文件的包名和位置 -->
-        <sqlMapGenerator targetPackage="org.xxpay.dal.dao.generator.reconciliation"
+        <sqlMapGenerator targetPackage="org.xxpay.dal.dao.mapper.generator.reconciliation"
                          targetProject="src/main/resources">
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
@@ -102,14 +102,21 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
         <!--对账批次表-->
-        <table tableName="tb_pay_reconciliation_check_batch" ></table>
-        <!--对账差错暂存池-->
-        <!--对 <table tableName="tb_pay_reconciliation_mistake_scratch_pool" ></table>-->
-         <!--对账差错池-->
-        <!--对 <table tableName="tb_pay_reconciliation_mistake" ></table>-->
+        <!--<table tableName="tb_pay_reconciliation_check_batch" ></table>-->
+       <!--对账差错暂存池-->
+        <!--<table tableName="tb_pay_reconciliation_mistake_scratch_pool" ></table>-->
+        <!--对账差错池-->
+        <!-- <table tableName="tb_pay_reconciliation_mistake" ></table>-->
+        <!--对账用户通知表-->
+        <!-- <table tableName="tb_pay_reconciliation_notice_user" ></table>-->
+        <!--对账标识表-->
+        <!-- <table tableName="tb_pay_reconciliation_ident" ></table>-->
+         <!--对账接口表-->
+        <table tableName="tb_pay_reconciliation_interface" ></table>
 
-     </context>
+
+    </context>
 
 
 
- </generatorConfiguration>
+</generatorConfiguration>

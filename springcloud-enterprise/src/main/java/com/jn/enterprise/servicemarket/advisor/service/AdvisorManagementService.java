@@ -23,9 +23,10 @@ public interface AdvisorManagementService {
     /**
      * 顾问管理
      * @param advisorManagementParam  顾问管理查询页面入参（顾问姓名，审批状态）
+     * @param loginAccount 当前登录用户账号
      * @return
      */
-    PaginationData getAdvisorManagementInfo(AdvisorManagementParam advisorManagementParam);
+    PaginationData getAdvisorManagementInfo(AdvisorManagementParam advisorManagementParam,String loginAccount);
 
     /**
      * 审批顾问填写信息

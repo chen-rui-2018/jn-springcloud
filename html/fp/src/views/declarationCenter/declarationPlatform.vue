@@ -30,12 +30,14 @@
                   <el-form v-for="(item,index) in pladformList" :key="index">
                     <div class="full_line" >
                       <el-form-item label="平台名称">
+                        <a :href="item.linkAddress" target="_blank">
                         <div class="table_item_cont"><span>{{item.platformTitle}}</span> <span class="el-icon-d-arrow-right"></span></div>
+                        </a>
                       </el-form-item>
                     </div>
                     <div class="full_line">
                       <el-form-item label="平台功能">
-                        <div class="table_item_cont">{{item.remark}}</div>
+                        <div class="table_item_cont">{{item.remark===''?"暂无":item.remark}}</div>
                       </el-form-item>
                     </div>
                     <div class="full_line">
@@ -43,11 +45,18 @@
                         <div class="table_item_cont" v-html="item.businessConsult"></div>
                       </el-form-item>
                     </div>
-                    <div class="full_line">
+                    <!-- <div class="full_line">
                       <el-form-item label="系统支持">
                         <div class="table_item_cont system_support" v-html="item.systemSupport">
-                          <!-- <div>邮箱：xxxx@sipac.gov.cn</div>
-                          <div>电话：<span>13866666666</span></div> -->
+                        </div>
+                      </el-form-item>
+                    </div> -->
+                    <div class="full_line" v-if="id!='1'">
+                      <el-form-item label="账号密码">
+                        <div class="table_item_cont ">
+                          <textarea placeholder="在此输入账号密码作为备忘信息,例：admin/123(限50字)" maxlength="50" v-model="item.accountAndPassword" @input="changeap(item.accountAndPassword,item.id)">
+                            {{item.accountAndPassword}}
+                          </textarea>
                         </div>
                       </el-form-item>
                     </div>
@@ -82,7 +91,9 @@ export default {
       pladformList:[],
       page:1,
       rows:3,
-      total:0
+      total:0,
+      accountAndPassword:'',
+      platformId:''
     }
   },
   filters: {
@@ -93,6 +104,24 @@ export default {
     this.getPlatformList()//列表数据
      },
   methods: {
+    changeap(accountAndPassword,id){
+      this.platformId=id
+      this.accountAndPassword=accountAndPassword
+        let _this = this;
+        this.api.post({
+          url: "addOrEditMemorandum",
+          data: {
+            accountAndPassword:this.accountAndPassword,
+            platformId:this.platformId
+           },
+           dataFlag:true,
+          callback: function(res) {
+            // console.log(res);
+            if (res.code == "0000") {
+            }
+          }
+        });
+    },
     getPlatformList(){
       let _this = this;
       this.api.get({
@@ -107,6 +136,11 @@ export default {
           if (res.code == "0000") {
             _this.pladformList = res.data.rows;
             _this.total=res.data.total
+          }else{
+            _this.$message.error(res.result)
+            setTimeout(() => {
+              this.$router.go(-1)
+            }, 1000)
           }
         }
       });
@@ -120,6 +154,11 @@ export default {
           // console.log(res);
           if (res.code == "0000") {
             _this.platformType = res.data;
+          }else{
+            _this.$message.error(res.result)
+            setTimeout(() => {
+              this.$router.go(-1)
+            }, 1000)
           }
         }
       });
@@ -142,6 +181,7 @@ export default {
 </script>
 <style lang="scss">
   .declarationPlatform{
+    padding-top: 67px;
     // margin-top: 230px;
     .declarationPlatform_content{
       width: 1190px;
@@ -227,8 +267,24 @@ export default {
                   padding: 10px 0 10px 10px;
                   display: flex;
                   align-items: center;
+                  textarea{
+                      height: 14px;
+                      width:80%;
+                      outline:none;
+                      border:none;
+                      resize: none;
+                      overflow-y:hidden;
+                      font-size: 14px;
+                      &::placeholder{
+                        font-size:12px
+                      }
+                    }
+                    textarea:focus{
+                      border:none;
+                    }
                   .table_item_cont{
                     padding: 0px 12px;
+                    width:100%;
                     div{
                       line-height: 1;
                       padding: 6px 0;

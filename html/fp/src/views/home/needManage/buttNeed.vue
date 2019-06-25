@@ -19,7 +19,7 @@
           </div>
           <div>
             <el-form-item label="发布时间：">
-              <span>{{receiveDetail.issueTime}}</span>
+              <span>{{receiveDetail.issueTime|time}}</span>
             </el-form-item>
           </div>
           <div class="">
@@ -28,7 +28,7 @@
             </el-form-item>
           </div>
           <div>
-            <el-form-item label="意向顾问：">
+            <el-form-item label="意向专员：">
               <span>{{receiveDetail.advisorName}}</span>
             </el-form-item>
           </div>
@@ -82,10 +82,13 @@
           </div>
           <el-form-item label="合同首页：" >
             <el-upload
-              action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
+              :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
               list-type="picture-card"
               :on-success="homePageuploadsuccess"
               :headers="headers"
+              :limit="1"
+              :on-exceed="handleExceed"
+              :on-remove="deletHome"
               :file-list="fileList"
               >
               <i class="el-icon-plus"></i>
@@ -93,10 +96,13 @@
           </el-form-item>
             <el-form-item label="合同尾页：">
               <el-upload
-              action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
-              list-type="picture-card"
+              :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
+              
               :on-success="endPageuploadsuccess"
               :headers="headers"
+              :limit="1"
+              :on-exceed="handleExceed"
+              :on-remove="deletEnd"
               :file-list="fileList2"
               >
               <i class="el-icon-plus"></i>
@@ -109,11 +115,13 @@
   </div>
 </template>
 <script>
+import { getToken } from '@/util/auth'
 export default {
   data () {
     return {
+      baseUrl: this.api.host,
       receiveDetail:{},
-      headers:{token: sessionStorage.token},
+      headers:{token: getToken()},
       fileList:[],
       fileList2:[],
       sendData:{
@@ -125,6 +133,14 @@ export default {
         isTechnology: 0,
         reqNum: '',
         resultDetail: '',
+      }
+    }
+  },
+  filters: {
+    time(time){
+      if(time){
+        let dateee = new Date(time).toJSON();
+        return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
       }
     }
   },
@@ -154,8 +170,10 @@ export default {
       data: this.sendData,
       callback: function(res) {
         if (res.code == "0000") {
-            _this.$message.success("对接成功")
+            _this.$message.success("操作成功")
             _this.$router.go(-1)
+          }else{
+            _this.$message.error(res.result)
           }
         }
       })
@@ -163,9 +181,18 @@ export default {
     homePageuploadsuccess(file, fileList){
       this.sendData.contractHomePage=file.data
     },
+    deletHome(file, fileList){
+      this.sendData.contractHomePage=""
+    },
     endPageuploadsuccess(file, fileList){
       this.sendData.contractEndPage=file.data
-    }
+    },
+    deletEnd(file, fileList){
+      this.sendData.contractEndPage=""
+    },
+    handleExceed(files, fileList) {
+      this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件`);
+    },
   }
 }
 </script>

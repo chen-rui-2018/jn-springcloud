@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.excel.metadata.Sheet;
 import com.alibaba.excel.support.ExcelTypeEnum;
 import com.jn.common.controller.BaseController;
 import com.jn.common.exception.JnSpringCloudException;
@@ -33,6 +34,7 @@ import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.excel.ExcelUtil;
+import com.jn.hr.common.util.HrExcelUtil;
 import com.jn.hr.increase.enums.SalaryManagementExceptionEnums;
 import com.jn.hr.increase.model.IncreaseStaff;
 import com.jn.hr.increase.model.IncreaseStaffAdd;
@@ -164,24 +166,34 @@ public class SalaryWelfareManagementController extends BaseController{
     @RequiresPermissions("/hr/SalaryWelfareManagement/exportPayroll")
 	@ApiOperation(value = "导出工资条信息", notes = "导出工资条信息")
     @RequestMapping(value = "/exportPayroll", method = RequestMethod.GET)
-	public void exportPayroll(@Validated @RequestBody SalaryPayrollPage salaryPayrollPage, HttpServletResponse response){
+	public void exportPayroll(SalaryPayrollPage salaryPayrollPage, HttpServletResponse response){
 		salaryPayrollPage.setPage(1);
 		salaryPayrollPage.setRows(200000);
 		PaginationData<List<SalaryPayrollVo>> pageList = salaryManagementService.exportPayroll(salaryPayrollPage);
-		String exportTitle = "姓名,工号,部门,工资档次及金额,园区工龄工资,技术岗位津贴,职务津贴,工作性补贴,学历津贴,职称津贴,专项补贴,餐补,应发工资,代扣社会统筹保险,代扣公积金,扣个税,食堂餐费,工会会费,实发工资,入账日期";
-		String exportColName = "name,jobNumber,department,basicWage,seniorityWage,technicalAllowance,dutyAllowance,workSubsidy,educationAllowance,professionalTitleAllowance,specialSubsidy," +
-		         "mealSubsidy,deserveWage,pendingSocialpoolingInsurance,pendingProvidentfund,pendingPersonalTax,canteenMealFee,unionFee,realWage,entryTime";
-        String fileName = "工资条"+ DateUtils.formatDate(new Date(),"yyyy-MM-dd HH:mm:ss");
+//		String exportTitle = "发放单位,姓名,身份证,人员类别,应付工资,基本工资,本单位工龄工资,职称津贴,技术岗位津贴,学历津贴,工作性津贴,职务津贴,专项补贴,岗位津贴,"
+//				+ "综合补贴,季度奖,年终奖,任期激励,加班费,值班费,公务用车补贴,现场加班补助,走户奖,拆迁补贴,误餐费,奖励金,其他奖金,养老金,失业保险金,医疗保险金,大病统筹,单位社会保险,公积金,单位公积金,"
+//				+ "工会会费,餐费,事假扣除费,病假扣除费,扣罚金,其他扣费1,其他扣费2,个人所得税,实发工资,入账年月";
+//		String exportColName = "issuingUnit,name,idCard,personnelCategory,deserveWage,basicWage,seniorityWage,professionalTitleAllowance,technicalAllowance,educationAllowance,workAllowance," 
+//				+ "dutyAllowance,specialSubsidy,jobAllowance,compositeSubsidy,seasonBonus,yearEndBonus,workExcitation,overtimeCost,onDutyCost,businessCarSubsidy,siteOvertimeSubsidy,walkDoorBouns,"
+//				+ "demolitionSubsidy,delayCost,rewardWage,otherWage,pensionWage,unemploymentWage,medicalWage,majorIllnessWage,unitSocietyWage,providentFund,unitProvidentFund,unionFee,mealFee,"
+//				+ "leave,sickLeave,penaltyFee,deductionOne,deductionTwo,pendingPersonalTax,realWage,accountEntryTime";
+        
+		String fileName = "工资条"+ DateUtils.formatDate(new Date(),"yyyy-MM-dd HH:mm:ss");
         String sheetName = "工资条";
-        ExcelUtil.writeExcelWithCol(response, fileName, sheetName, exportTitle, exportColName, pageList.getRows());
+        Sheet sheet1 = new Sheet(1, 0, SalaryPayrollVo.class); 
+		HrExcelUtil.writeWithMultiHead(pageList.getRows(), fileName, sheet1, sheetName,response);
+
+//        ExcelUtil.writeExcelWithCol(response, fileName, sheetName, exportTitle, exportColName, pageList.getRows());
 	}
+	
 	
 	@ControllerLog(doAction = "修改工资条")
     @RequiresPermissions("/hr/SalaryWelfareManagement/updatePayroll")
 	@ApiOperation(value = "修改工资条", notes = "修改工资条")
     @RequestMapping(value = "/updatePayroll", method = RequestMethod.POST)
 	public Result<String> updatePayroll(@Validated @RequestBody SalaryPayrollPage salaryPayrollPage){
-		String str = salaryManagementService.updatePayroll(salaryPayrollPage);
+		User user = (User) SecurityUtils.getSubject().getPrincipal();
+		String str = salaryManagementService.updatePayroll(salaryPayrollPage,user);
 		return new Result(str);
 	}
 	
@@ -302,7 +314,7 @@ public class SalaryWelfareManagementController extends BaseController{
 	@RequestMapping(value = "/updateInsuredCardinalNumber", method = RequestMethod.POST)
 	public Result<String> updateInsuredCardinalNumber(@Validated @RequestBody InsuredSchemeAdd insuredSchemeAdd){
 		User user = (User) SecurityUtils.getSubject().getPrincipal();
-		String str = welfareManagrmentService.updateInsurancescheme(insuredSchemeAdd, user);
+		String str = welfareManagrmentService.updateInsuredCardinalNumber(insuredSchemeAdd, user);
 		return new Result(str);
 	}
 	
@@ -345,9 +357,10 @@ public class SalaryWelfareManagementController extends BaseController{
 	@ApiOperation(value = "停止参保", notes = "停止参保")
 	@RequestMapping(value = "/stopInsurance", method = RequestMethod.POST)
 	public Result<String> stopInsurance(@Validated @RequestBody IncreaseStaffAdd increaseStaffAdd){
+		Assert.notNull(increaseStaffAdd.getInsuredMonth(),"减员月份不能为空");
 		User user = (User) SecurityUtils.getSubject().getPrincipal();
-		welfareManagrmentService.stopInsurance(increaseStaffAdd, user);
-		return new Result();
+		String str = welfareManagrmentService.stopInsurance(increaseStaffAdd, user);
+		return new Result(str);
 	}
 	
 	@ControllerLog(doAction = "自主参保方案页面")

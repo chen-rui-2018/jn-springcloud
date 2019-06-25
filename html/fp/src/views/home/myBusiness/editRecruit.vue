@@ -1,7 +1,8 @@
 <template>
-  <div class="editProduct">
+  <div class="editProduct" v-loading="loading">
     <div class="ordinary_title">
-      <div>编辑招聘</div>
+      <div class="font16">编辑招聘</div>
+      <div @click="goBack">返回</div>
     </div>
     <div class="ordinary_content">
        <el-form :model="jobForm" :rules="rules" ref="jobForm" label-width="120px" class="postJobInfo">
@@ -31,8 +32,11 @@
   <el-form-item label="招聘人数(名):" prop="num">
     <el-input v-model="jobForm.num"></el-input>
   </el-form-item>
-  <el-form-item label="招聘详情:" prop="details">
-    <el-input type="textarea" v-model="jobForm.details"  placeholder="宣传详情宣传详情"></el-input>
+  <el-form-item label="招聘详情:" prop="details" class="ue">
+     <div class="editor-container">
+            <UE ref="ue" :default-msg="defaultMsg" :config="config" />
+          </div>
+    <!-- <el-input type="textarea" v-model="jobForm.details"  placeholder="宣传详情宣传详情"></el-input> -->
   </el-form-item>
  <div class="business_footer" @click="submitForm('jobForm')">
         保存修改
@@ -42,9 +46,17 @@
   </div>
 </template>
 <script>
+import UE from '@/components/ue.vue'
 export default {
-  data () {
+   components: { UE },
+  data() {
     return {
+      loading:false,
+       defaultMsg: '',
+      config: {
+        initialFrameWidth: '100%',
+        initialFrameHeight: 300
+      },
       typeOptions:[],
       salaryOptions:[],
         searchData:'',
@@ -69,9 +81,9 @@ export default {
           type: [
             {  required: true, message: '请选择招聘类型', trigger: 'change' }
           ],
-          details: [
-            { required: true, message: '请填写招聘详情', trigger: 'blur' }
-          ]
+          // details: [
+          //   { required: true, message: '请填写招聘详情', trigger: 'blur' }
+          // ]
         }
     }
   },
@@ -81,6 +93,9 @@ export default {
     this.initList()
   },
   methods: {
+     goBack() {
+      this.$router.push({ name: "recruitmentManagement" });
+    },
     getInvite(){
      this.api.get({
                   url:'getInviteType',
@@ -105,11 +120,19 @@ this.api.get({
      submitForm(jobForm) {
         this.$refs[jobForm].validate((valid) => {
           if (valid) {
-           this.jobForm.num=Number(this.jobForm.num)
+
+              this.jobForm.details = this.$refs.ue.getUEContent()
+          if(!this.jobForm.details ){
+            this.$message.error('请填写招聘详情');
+            return
+          }
+            this.jobForm.num=Number(this.jobForm.num)
+            this.loading=true
                 this.api.post({
                   url:'editRecruitDetails',
                  data:this.jobForm,
                  callback:(res=>{
+                   this.loading=false
                    if(res.code==='0000'){
                        this.$message({
                 message: '编辑成功',
@@ -135,7 +158,8 @@ this.api.get({
                      console.log(res)
                 this.jobForm.post=res.data.post
                 this.jobForm.num=res.data.num
-                this.jobForm.details=res.data.details
+                this.defaultMsg=res.data.details
+                // this.jobForm.details=res.data.details
                 this.jobForm.salary=res.data.salary
                 this.jobForm.type=res.data.type
                   })
@@ -148,13 +172,34 @@ this.api.get({
 <style lang="scss">
   .editProduct{
     width: 100%;
-    .ordinary_title{
-      background-color: #fff;
 
-      padding:24px 28px;
-      font-size: 13px;
-      border-radius: 5px;
+    // .ordinary_title{
+    //   background-color: #fff;
+
+    //   padding:24px 28px;
+    //   border-radius: 5px;
+    // }
+     .ordinary_title {
+    background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 17px;
+    // font-size: 13px;
+    border-radius: 5px;
+    div:nth-child(2) {
+      width: 50px;
+      height: 26px;
+      background: rgba(236, 252, 242, 1);
+      border: 1px solid rgba(65, 215, 135, 1);
+      border-radius: 4px;
+      text-align: center;
+      line-height: 26px;
+      font-size: 12px;
+      color: #00a041;
+      cursor: pointer;
     }
+  }
     .ordinary_content{
         margin-top:14px;
         background: #fff;
@@ -187,5 +232,17 @@ this.api.get({
     margin-bottom: 17px;
   }
     }
+     .ue{
+        .el-form-item__content,
+      .el-select {
+        width: 100%!important;
+      }
+      .el-form-item__content{
+        line-height: 22px;
+      }
+      .edui-default .edui-editor-bottomContainer{
+        display: none;
+      }
+      }
   }
 </style>

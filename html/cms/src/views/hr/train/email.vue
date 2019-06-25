@@ -9,6 +9,9 @@
           </el-form-item>
           <el-form-item label="邮件内容">
             <div class="editor-container">
+              <div v-show="false" id="vueQrEmint">
+                <vue-qr :size="191" :margin="0" :auto-color="true" :dot-scale="1" :text="returnData.surveyUrl" />
+              </div>
               <UE ref="ue" :default-msg="formData.emailContent" :config="config"/>
             </div>
           </el-form-item>
@@ -40,14 +43,19 @@ export default {
         initialFrameHeight: 150,
         autoFloatEnabled: false
       },
+      returnData: {
+        surveyUrl: ''
+      },
+      vueQrEmintDom: '',
       appSrc:
-        'http://localhost:9527/#/hr/train/investigation/invest-page?projectId=' +
+        window.location.host + '/#/hr/train/investigation/invest-page?projectId=' +
         this.$route.query.projectId,
       formData: {
         emailSubject: '',
         emailContent: '',
         emailList: ''
-      }
+      },
+      qrHtml: ''
     }
   },
   created() {
@@ -64,23 +72,24 @@ export default {
       }
       api('hr/train/loginInvestiage', data).then(res => {
         if (res.data.code === '0000') {
+          const vm = this
           const returnData = res.data.data
           this.formData = Object.assign(this.formData, returnData)
           this.formData.emailSubject =
             '【考试通知】-请参加"' + returnData.researchProject + '"考试'
-          this.formData.emailContent =
-            '你好！<br/>邀请你参加"在职测试"考试，您可以点击下面的考试链接或者扫描二维码直接参加考试<br/>点击链接参加考试：<a href="' +
-            returnData.surveyUrl +
-            '" style="color:purple;cursor:pointer;">' +
-            returnData.surveyUrl +
-            '</a><br/>或者扫描二维码参加考试：<div class="maImg"><vue-qr :logo-src="' +
-            returnData.surveyDimensional +
-            '" :size="88" :margin="0" :auto-color="true" :dot-scale="1" :text="' +
-            this.appSrc +
-            '" /></div>'
+          // this.formData.emailContent =
+          //   '你好！<br/>邀请你参加"在职测试"考试，您可以点击下面的考试链接或者扫描二维码直接参加考试<br/>点击链接参加考试：<a href="' +
+          //   returnData.surveyUrl +
+          //   '" style="color:purple;cursor:pointer;">' +
+          //   returnData.surveyUrl +
+          //   '</a><br/>或者扫描二维码参加考试：<div class="maImg" v-html="this.qrHtml"></div>'
           // this.$nextTick(() => {
-          //     document.getElementById("ma").appendChild('<vue-qr :logo-src="'+returnData.surveyDimensional+'" :size="88" :margin="0" :auto-color="true" :dot-scale="1" :text="'+this.appSrc+'" />')
+          //   this.qrHtml = '<vue-qr :logo-src="' + returnData.surveyDimensional + '" :size="88" :margin="0" :auto-color="true" :dot-scale="1" :text="' + this.appSrc + '" />'
           // })
+          window.setTimeout(function() {
+            vm.vueQrEmintDom = document.getElementById('vueQrEmint').innerHTML // 创建一个隐藏元素
+            vm.formData.emailContent = '你好！<br/>邀请你参加"在职测试"考试，您可以点击下面的考试链接或者扫描二维码直接参加考试<br/>点击链接参加考试：<a href="' + returnData.surveyUrl + '" style="color:purple;cursor:pointer;">' + returnData.surveyUrl + '</a><br/>或者扫描二维码参加考试：<br/><br/>' + vm.vueQrEmintDom
+          }, 100)
         } else {
           this.$message.error(res.data.result)
         }
@@ -105,7 +114,8 @@ export default {
           if (latestView) {
             this.$router.push('investigation/invest-analysis')
           } else {
-            this.$router.push('/')
+            // this.$router.push('/')
+            this.$router.push('investigation/invest-analysis')
           }
         }
       })

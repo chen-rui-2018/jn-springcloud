@@ -4,5 +4,11 @@
     "cell": "./../../templates/cell/cell",
     "sub-button": "./../../templates/sub-button/sub-button",
     "uploader": "./../../templates/uploader/uploader"
-  }
+  },
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black",
+  "navigationBarTitleText": "维保登记",
+  "backgroundColor": "#eeeeee",
+  "backgroundTextStyle": "light",
+  "enablePullDownRefresh": true
 }

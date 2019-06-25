@@ -12,7 +12,20 @@
           ,sp.issue_platform as "issuePlatform"
           ,date_format(sp.effective_date,'%Y/%m/%d')as "effectiveDate"
           ,date_format(sp.invalid_date,'%Y/%m/%d')as "invalidDate"
-          ,sp.approval_status as "approvalStatus"
+            <if test="bpp.approvalStatus!=null and bpp.approvalStatus!=''">
+                ,#{bpp.approvalStatus} as "approvalStatus"
+            </if>
+            <if test="bpp.approvalStatus==null or bpp.approvalStatus==''">
+            ,case when sp.approval_status=0 and sp.is_pay=0 and sp.status=0 then "0"
+            when sp.approval_status=1 and sp.is_pay=0 and sp.status=0 then "1"
+            when sp.approval_status=3 then "3"
+            when sp.approval_status=2 and sp.is_pay=0 and sp.status=0 then "4"
+            when sp.approval_status=2 and sp.is_pay=1 and sp.status=0 then "5"
+            when sp.approval_status=2 and sp.is_pay=1 and sp.status=1 then "6"
+            when sp.approval_status=2 then "2"
+            when sp.record_status=0 then "7"
+            end  as "approvalStatus"
+            </if>
           ,sp.propaganda_area as "propagandaArea"
           ,sp.poster_url as "posterUrl"
           ,sp.propaganda_fee as "propagandaFee"
@@ -67,7 +80,7 @@
         <if test="bpp.approvalStatus!=7"><!--不是已撤销-->
             and sp.record_status=1
         </if>
-        order by sp.sort,sp.created_time desc
+        order by sp.created_time desc,sp.sort
     </select>
 
     <!--企业宣传详情-->

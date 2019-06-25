@@ -7,13 +7,16 @@
       sum(late),sum(leave_early) leave_early,sum(start_miss_card) start_miss_card, 
      sum(end_miss_card)  end_miss_card,sum(absenteeism) absenteeism,sum(compassionate_leave) compassionate_leave, 
       sum(sick_leave) sick_leave, sum(marriage_holiday) marriage_holiday,sum(funeral_leave) funeral_leave, 
-     sum(maternity_leave) maternity_leave,sum(annual_leave) annual_leave FROM tb_manpower_attendance_management t1
+     sum(maternity_leave) maternity_leave,sum(annual_leave) annual_leave,attendance_date FROM tb_manpower_attendance_management t1
 		where 1=1
 		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(department)">
 			and t1.department = #{department,jdbcType=VARCHAR}
 		</if>
-		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
-			and t1.department_id = #{departmentId,jdbcType=VARCHAR}
+		<if test="departmentIds!=null and departmentIds.size>0">
+			and t1.department_id in
+			<foreach collection="departmentIds" item="depart" open="(" close=")" separator=",">
+				#{depart}
+			</foreach>
 		</if>
 		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
 			and t1.name like concat('%',#{name},'%')
@@ -33,7 +36,7 @@
       sum(late),sum(leave_early) leave_early,sum(start_miss_card) start_miss_card, 
      sum(end_miss_card)  end_miss_card,sum(absenteeism) absenteeism,sum(compassionate_leave) compassionate_leave, 
       sum(sick_leave) sick_leave, sum(marriage_holiday) marriage_holiday,sum(funeral_leave) funeral_leave, 
-     sum(maternity_leave) maternity_leave,sum(annual_leave) annual_leave FROM tb_manpower_attendance_management t1
+     sum(maternity_leave) maternity_leave,sum(annual_leave) annual_leave,attendance_date FROM tb_manpower_attendance_management t1
 		where 1=1
 		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(department)">
 			and t1.department = #{department,jdbcType=VARCHAR}
@@ -51,23 +54,22 @@
 	</select>
 	
 	<insert id="insertBatch" parameterType="java.util.List">
-        insert into tb_manpower_attendance_management
-        (id, job_number, department_id, department, 
-      name, user_id, attendance, 
-      late, leave_early, start_miss_card, 
-      end_miss_card, absenteeism, compassionate_leave, 
-      sick_leave, marriage_holiday, funeral_leave, 
-      maternity_leave, annual_leave, attendance_date
-        ) values
-        <foreach collection="list" item="item" index="index" separator=",">
-            (
-            #{item.id}, #{item.jobNumber}, #{item.departmentId}, #{item.department}, 
-      #{item.name}, #{item.userId}, #{item.attendance}, 
-      #{item.late}, #{item.leaveEarly}, #{item.startMissCard}, 
-      #{item.endMissCard}, #{item.absenteeism}, #{item.compassionateLeave}, 
-      #{item.sickLeave}, #{item.marriageHoliday}, #{item.funeralLeave}, 
-      #{item.maternityLeave}, #{item.annualLeave}, #{item.attendanceDate}
-            )
+         insert into tb_manpower_attendance_management (id, job_number, user_id, 
+      department_id, department, name, 
+      attendance, late, leave_early, 
+      start_miss_card, end_miss_card, absenteeism, 
+      compassionate_leave, sick_leave, marriage_holiday, 
+      funeral_leave, maternity_leave, annual_leave, 
+      attendance_date)
+    values
+    <foreach collection="list" item="item" index="index" separator=","> 
+    (#{item.id}, #{item.jobNumber}, #{item.userId}, 
+      #{item.departmentId}, #{item.department}, #{item.name}, 
+      #{item.attendance}, #{item.late}, #{item.leaveEarly}, 
+      #{item.startMissCard}, #{item.endMissCard}, #{item.absenteeism}, 
+      #{item.compassionateLeave}, #{item.sickLeave}, #{item.marriageHoliday}, 
+      #{item.funeralLeave}, #{item.maternityLeave}, #{item.annualLeave}, 
+      #{item.attendanceDate})
         </foreach>
     </insert>
 </mapper>

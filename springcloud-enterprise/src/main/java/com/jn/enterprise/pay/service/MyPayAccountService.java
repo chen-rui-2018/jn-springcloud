@@ -8,6 +8,8 @@ import com.jn.pay.vo.PayAccountBookMoneyRecordVo;
 import com.jn.pay.vo.PayAccountBookRecordVo;
 import com.jn.system.model.SysDictInvoke;
 import com.jn.system.model.User;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -55,4 +57,25 @@ public interface MyPayAccountService {
      * @return
      */
     PayAccountBook queryPayAccountBookMoney(PayAccountBookMoney payAccountBookMoney);
+
+    /**
+     * 线下预缴充值
+     * @param payUnderAdvancePaymentParam,user
+     * @return
+     */
+    Result underAdvancePayment(PayUnderAdvancePaymentParam payUnderAdvancePaymentParam,User user);
+
+    /**
+     * 创建账户和账本
+     * @param payAccountBookCreateParam,user
+     * @return
+     */
+    Result createPayAccountBook(PayAccountBookCreateParam payAccountBookCreateParam,User user);
+
+    /**
+     * 自动扣费
+     * @param payAutoDeduParam,user
+     * @return
+     */
+    Result automaticDeduction(PayAutoDeduParam payAutoDeduParam,User user);
 }

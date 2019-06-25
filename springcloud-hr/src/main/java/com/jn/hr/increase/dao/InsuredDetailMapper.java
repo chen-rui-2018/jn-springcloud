@@ -26,6 +26,8 @@ public interface InsuredDetailMapper {
 	@MapKey("jobNumber")
 	Map<String,InsuredDetaild> map(InsuredDetaildPage insuredDetaildPage);
 	
+	InsuredDetaild selectByJobNumberAndMonth(InsuredDetaild insuredDetaild);
+	
 	List<InsuredDetaild> list(InsuredDetaildPage insuredDetaildPage);
 	
 	@MapKey("schemeId")

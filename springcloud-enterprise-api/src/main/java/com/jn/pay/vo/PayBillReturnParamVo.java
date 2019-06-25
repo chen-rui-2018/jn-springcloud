@@ -48,11 +48,14 @@ public class PayBillReturnParamVo implements Serializable {
     @ApiModelProperty(value="对象名称")
     private String objName;
 
-    @ApiModelProperty(value="支付状态（如 1:已支付、2:待支付）")
+    @ApiModelProperty(value="支付状态（如 1:已支付、2:待支付、2:已撤销）")
     private String paymentState;
 
     @ApiModelProperty(value="账本类型ID")
     private String acBookType;
+
+    @ApiModelProperty(value="缴费类型")
+    private String payType;
 
     @ApiModelProperty(value="创建时间")
     @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
@@ -190,5 +193,13 @@ public class PayBillReturnParamVo implements Serializable {
 
     public void setRecordStatus(String recordStatus) {
         this.recordStatus = recordStatus;
+    }
+
+    public String getPayType() {
+        return payType;
+    }
+
+    public void setPayType(String payType) {
+        this.payType = payType;
     }
 }

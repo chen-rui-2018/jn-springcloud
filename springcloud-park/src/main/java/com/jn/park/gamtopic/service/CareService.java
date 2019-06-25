@@ -75,5 +75,13 @@ public interface CareService {
      * @param serviceEnterpriseCompany
      * @return
      */
-    List<ServiceEnterpriseCompany> getCompanyNewList(List<ServiceEnterpriseCompany> serviceEnterpriseCompany);
+    List<ServiceEnterpriseCompany> getCompanyNewList(List<ServiceEnterpriseCompany> serviceEnterpriseCompany,String account);
+
+    /**
+     * 获取用户的关注的企业列表
+     * @param page
+     * @param account
+     * @return
+     */
+    PaginationData<List<CareUserShow>> findCompanyCareList(Page page,String account);
 }

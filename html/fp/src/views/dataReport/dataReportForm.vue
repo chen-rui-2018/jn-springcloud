@@ -37,13 +37,15 @@
     },
     data() {
       return {
+        departmentStatus: '',
         submitting: false,
         isMobile: isMobile(),
         loadingFormData: true,
         loadingTab: true,
         formDataListTitle: [{
-          name: '企业',
-          id: ''
+          departmentName: '全部',
+          departmentId: null,
+          status: 0
         }],
         formData: {},
         columns: [ // 表头
@@ -93,8 +95,23 @@
             this.formatColumn(tab)
             // 把otherColumns的对象根据指标id挂载到树形指标上面
             this.formatTreeOtherColumnData(tab)
+            this.sortTree(tab.targetList, 'orderNumber')
           }
         })
+      },
+      sortTree(tree, key) {
+        for (let i = 0, length = tree.length; i < length; i++) {
+          for (let j = i + 1; j < length; j++) {
+            if (tree[i][key] > tree[j][key]) {
+              const temp = tree[j]
+              tree[j] = tree[i]
+              tree[i] = temp
+            }
+          }
+          if (tree[i].children && tree[i].children.length > 0) {
+            this.sortTree(tree[i].children, key)
+          }
+        }
       },
       formatInputFormatModel(tab) {
         // 填报格式合并到树指标
@@ -136,6 +153,7 @@
         }
       },
       changeDepartment(el) {
+        this.loadingTab = true
         // 表格中有来自不同部门的指标，tab查看指定部门时，不属于该部门的是没有权限填报的，所以根据填报格式的部门id和当前部门的id比对来设置权限
         const index = Number(el.index)
         const departmentId = this.formDataListTitle[index].departmentId
@@ -154,10 +172,15 @@
         for (const list of arr) {
           if (departmentId === list.departmentId) {
             this.$set(list, 'hasJurisdiction', true)
+          } else {
+            this.$set(list, 'hasJurisdiction', false)
           }
           if (list.hasOwnProperty('children') && list.children.length > 0) {
             this.formatTreeJurisdiction(list.children, departmentId)
           }
+          this.$nextTick(() => {
+            this.loadingTab = false
+          })
         }
       },
       formatTreeOtherColumnData(tab) {
@@ -351,27 +374,34 @@
                 _this.formData.tabs.sort((a, b) => {
                   return a['orderNumber'] - b['orderNumber']
                 })
-                if ( _this.formData.modelType === 1) {
-                  _this.loadingFormData = false
-                  _this.formDataListTitle = _this.formData.gardenFiller
+                if (_this.formData.modelType === 1) {
+                  const gardenFiller = _this.formData.gardenFiller
+                  const departmentId = _this.formDataListTitle[0].departmentId
+                  const departmentStatus = _this.formDataListTitle[0].status
+                  if (gardenFiller) {
+                    _this.formDataListTitle = _this.formDataListTitle.concat(gardenFiller)
+                  }
                   for (const tab of  _this.formData.tabs) {
-                    const departmentId = _this.formDataListTitle[0].departmentId
                     _this.formatTreeJurisdiction(tab.targetList, departmentId)
                   }
+                  _this.departmentStatus = departmentStatus
+                  _this.formData.departmentId = departmentId
                 }
-                _this.formDataListTitle.forEach(item => {
-                  const status  = item.status
-                  const gardenExamineStatus = item.gardenExamineStatus
-                  if(status === 0){
-                    if(gardenExamineStatus === 1){
-                      item.departmentName += '(待审核)'
-                    }else if(gardenExamineStatus === 0){
-                      item.departmentName += '(审核通过)'
+                _this.formDataListTitle.forEach((item, index) => {
+                  if (index !== 0) {
+                    const status  = item.status
+                    const gardenExamineStatus = item.gardenExamineStatus
+                    if(status === 0){
+                      if(gardenExamineStatus === 1){
+                        item.departmentName += '(待审核)'
+                      }else if(gardenExamineStatus === 0){
+                        item.departmentName += '(审核通过)'
+                      }else{
+                        item.departmentName += '(审核不通过)'
+                      }
                     }else{
-                      item.departmentName += '(审核不通过)'
+                      item.departmentName += '(未填报)'
                     }
-                  }else{
-                    item.departmentName += '(未填报)'
                   }
                 })
                 _this.formData.departmentId = _this.formDataListTitle[0].departmentId
@@ -380,6 +410,8 @@
                 _this.$message.error(res.result)
                 reject()
               }
+              _this.loadingFormData = false
+              _this.loadingTab = false
             }
           })
         })

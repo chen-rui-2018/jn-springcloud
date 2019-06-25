@@ -1,9 +1,12 @@
 package com.jn.hardware.parking.service.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
+import com.jn.common.util.GlobalConstants;
 import com.jn.common.util.RestTemplateUtil;
 import com.jn.common.util.StringUtils;
+import com.jn.hardware.config.ParkingDrUrlProperties;
 import com.jn.hardware.enums.ParkingCompanyEnum;
 import com.jn.hardware.enums.ParkingExceptionEnum;
 import com.jn.hardware.model.parking.*;
@@ -23,7 +26,7 @@ import java.util.List;
 
 
 /**
- * TODO：未添加类描述
+ * 导致接口实现类
  *
  * @Author： cm
  * @Date： Created on 2019/4/17 17:22
@@ -34,6 +37,8 @@ import java.util.List;
 public class ParkingServiceImpl implements ParkingService {
 
     private final Logger logger = LoggerFactory.getLogger(ParkingServiceImpl.class);
+    @Autowired
+    private ParkingDrUrlProperties parkingDrUrlProperties;
     @Autowired
     private ParkingClient parkingClient;
 
@@ -47,16 +52,18 @@ public class ParkingServiceImpl implements ParkingService {
      */
     @Override
     public Result getTemporaryCarParkingFee(TemporaryCarParkingFeeRequest temporaryCarParkingFeeRequest) {
+        logger.info("\n临停预缴费信息(场内缴费)查询接口入参【{}】",temporaryCarParkingFeeRequest);
         Result result=new Result();
         String url = "";
         if(ParkingCompanyEnum.ALL_COMPANY.getCode().equals(temporaryCarParkingFeeRequest.getParkingCompanyId())) {
             result.setCode(ParkingExceptionEnum.MISSING_PARK_ID.getCode());
-            result.setResult("临停预缴费信息查询必须明确哪个硬件公司(parkingCompanyId).");
+            result.setResult("\n临停预缴费信息查询必须明确哪个硬件公司(parkingCompanyId).");
         }else if(ParkingCompanyEnum.DOOR_COMPANY.getCode().equals(temporaryCarParkingFeeRequest.getParkingCompanyId())) {
             //调用道尔硬件接口
-            url = String.format(ParkingService.GET_DOOR_TEMPORARYCAR_PARKINGFEE_URL,temporaryCarParkingFeeRequest.getDoorTemporaryCarParkingFeeRequest().getParkid()
+            url = String.format(parkingDrUrlProperties.getDoorTemporarycarParkingfeeUrl(),temporaryCarParkingFeeRequest.getDoorTemporaryCarParkingFeeRequest().getParkid()
             ,temporaryCarParkingFeeRequest.getDoorTemporaryCarParkingFeeRequest().getParkid(),temporaryCarParkingFeeRequest.getDoorTemporaryCarParkingFeeRequest().getCarNo());
             String responseString = RestTemplateUtil.get(url);
+            logger.info("\n临停预缴费信息(场内缴费)查询，道尔接口地址：【{}】,响应：【{}】",url,responseString);
             DoorResult<DoorTemporaryCarParkingFeeResponse> doorResult = JsonStringToObjectUtil.jsonToObject(responseString,new TypeReference<DoorResult<DoorTemporaryCarParkingFeeResponse>>(){});
             if(DoorResult.SUCCESS_CODE.equals(doorResult.getHead().getStatus())) {
                 result.setData(doorResult.getBody());
@@ -64,12 +71,12 @@ public class ParkingServiceImpl implements ParkingService {
                 result.setCode(ParkingExceptionEnum.DOOR_COMPANY_EXCEPTION.getCode());
                 result.setResult(doorResult.getHead().getMessage());
             }
-            logger.info("\n道尔的临停预缴费信息(场内缴费)查询结果{}",doorResult);
         }else {
             result.setCode(ParkingExceptionEnum.MISSING_PARK_ID.getCode());
             result.setResult(ParkingExceptionEnum.MISSING_PARK_ID.getMessage());
             logger.info("\n道尔的临停预缴费信息(场内缴费)查询失败，原因：{}",ParkingExceptionEnum.MISSING_PARK_ID.getMessage());
         }
+        logger.info("\n临停预缴费信息(场内缴费),返回结果【{}】",result);
         return result;
     }
 
@@ -80,6 +87,7 @@ public class ParkingServiceImpl implements ParkingService {
      */
     @Override
     public Result savePaymentCarParkingFee(PaymentCarParkingFeeRequest paymentCarParkingFeeRequest) {
+        logger.info("\n保存停车场缴费信息入参【{}】",paymentCarParkingFeeRequest);
         Result result=new Result();
         String url = "";
         String jsonData = "";
@@ -88,13 +96,14 @@ public class ParkingServiceImpl implements ParkingService {
             result.setResult("保存临停预缴费信息必须明确哪个硬件公司(parkingCompanyId).");
         }else if(ParkingCompanyEnum.DOOR_COMPANY.getCode().equals(paymentCarParkingFeeRequest.getParkingCompanyId())) {
             //调用道尔硬件接口路径
-            url = String.format(ParkingService.POST_DOOR_SAVE_PAYMENT_CARPARKINGFEE_URL,paymentCarParkingFeeRequest.getDoorPaymentCarParkingFeeRequest().getParkid());
+            url = String.format(parkingDrUrlProperties.getDoorSavePaymentCarparkingfeeUrl(),paymentCarParkingFeeRequest.getDoorPaymentCarParkingFeeRequest().getParkid());
             //接口调用的入参
             DoorPaymentCarParkingFeeRequest  doorpayment = paymentCarParkingFeeRequest.getDoorPaymentCarParkingFeeRequest();
             if(doorpayment!= null){
                 jsonData = JsonStringToObjectUtil.objectToJson(doorpayment);
             }
             String responseString = RestTemplateUtil.post(url,jsonData);
+            logger.info("\n保存停车场缴费信息,调用道尔接口入参：【{}】,响应结果{}",jsonData,responseString);
             DoorResult doorResult = JsonStringToObjectUtil.jsonToObject(responseString,new TypeReference<DoorResult>(){});
             if(DoorResult.SUCCESS_CODE.equals(doorResult.getHead().getStatus())) {
                 result.setData(doorResult.getBody());
@@ -102,12 +111,12 @@ public class ParkingServiceImpl implements ParkingService {
                 result.setCode(ParkingExceptionEnum.DOOR_COMPANY_EXCEPTION.getCode());
                 result.setResult(doorResult.getHead().getMessage());
             }
-            logger.info("\n临停预缴费信息(场内缴费) 保存结果{}",doorResult);
         }else {
             result.setCode(ParkingExceptionEnum.MISSING_PARK_ID.getCode());
             result.setResult(ParkingExceptionEnum.MISSING_PARK_ID.getMessage());
-            logger.info("\n临停预缴费信息(场内缴费)保存失败，原因：{}",ParkingExceptionEnum.MISSING_PARK_ID.getMessage());
+            logger.info("\n保存停车场缴费信息失败，原因：{}",ParkingExceptionEnum.MISSING_PARK_ID.getMessage());
         }
+        logger.info("\n保存停车场缴费信息失败,返回结果【{}】",result);
         return result;
     }
 
@@ -118,7 +127,7 @@ public class ParkingServiceImpl implements ParkingService {
      */
     @Override
     public Result saveParkingMonthlyRentCard(ParkingMonthlyRentCardUnite parkingMonthlyRentCardUnite) {
-
+        logger.info("\n月租卡开户信息保存入参:【{}】",parkingMonthlyRentCardUnite);
         Result result=new Result();
         String url = "";
         String jsonData = "";
@@ -127,7 +136,7 @@ public class ParkingServiceImpl implements ParkingService {
             result.setResult("月租卡开户信息保存必须明确哪个硬件公司(parkingCompanyId).");
         }else if(ParkingCompanyEnum.DOOR_COMPANY.getCode().equals(parkingMonthlyRentCardUnite.getParkingCompanyId())) {
             //调用道尔硬件接口路径
-            url = String.format(ParkingService.POST_DOOR_SAVE_MONTHLY_RENT_CARD_URL,parkingMonthlyRentCardUnite.getAreaId());
+            url = String.format(parkingDrUrlProperties.getDoorSaveMonthlyRentCardUrl(),parkingMonthlyRentCardUnite.getAreaId());
             //接口调用的入参
             DoorParkingMonthlyRentCardParam doorRentCard = new DoorParkingMonthlyRentCardParam();
             doorRentCard.setParkid(parkingMonthlyRentCardUnite.getAreaId());
@@ -147,6 +156,7 @@ public class ParkingServiceImpl implements ParkingService {
                 jsonData = JsonStringToObjectUtil.objectToJson(doorRentCard);
             }
             String responseString = RestTemplateUtil.post(url,jsonData);
+            logger.info("\n月租卡开户信息保存,调用道尔接口入参：【{}】,出参:【{}】",jsonData,responseString);
             DoorResult<DoorParkingMonthlyRentCardShow> doorResult = JsonStringToObjectUtil.jsonToObject(responseString,new TypeReference<DoorResult<DoorParkingMonthlyRentCardShow>>(){});
             if(DoorResult.SUCCESS_CODE.equals(doorResult.getHead().getStatus())) {
                 result.setData(doorResult.getBody());
@@ -160,6 +170,7 @@ public class ParkingServiceImpl implements ParkingService {
             result.setResult(ParkingExceptionEnum.MISSING_PARK_ID.getMessage());
             logger.info("\n月租卡开户信息保存 保存失败，原因：{}",ParkingExceptionEnum.MISSING_PARK_ID.getMessage());
         }
+        logger.info("\n月租卡开户信息保存,返回结果【{}】",result);
         return result;
     }
 
@@ -170,6 +181,7 @@ public class ParkingServiceImpl implements ParkingService {
      */
     @Override
     public Result findParkingMonthlyRentCard(ParkingMonthlyCardInfoRequest parkingMonthlyCardInfoRequest) {
+        logger.info("\n月租卡信息查询入参:【{}】",parkingMonthlyCardInfoRequest);
         Result result=new Result();
         String url = "";
         if(ParkingCompanyEnum.ALL_COMPANY.getCode().equals(parkingMonthlyCardInfoRequest.getParkingCompanyId())) {
@@ -177,7 +189,7 @@ public class ParkingServiceImpl implements ParkingService {
             result.setResult("月租卡信息查询必须明确哪个硬件公司(parkingCompanyId).");
         }else if(ParkingCompanyEnum.DOOR_COMPANY.getCode().equals(parkingMonthlyCardInfoRequest.getParkingCompanyId())) {
             //调用道尔硬件接口
-            url = String.format(ParkingService.GET_DOOR_FIND_MONTHLY_RENT_CARD_URL
+            url = String.format(parkingDrUrlProperties.getDoorFindMonthlyRentCardUrl()
                     ,parkingMonthlyCardInfoRequest.getDoorParkingMonthlyCardParam().getParkid()
                     ,parkingMonthlyCardInfoRequest.getDoorParkingMonthlyCardParam().getParkid()
                     ,parkingMonthlyCardInfoRequest.getDoorParkingMonthlyCardParam().getCarNo()
@@ -185,7 +197,7 @@ public class ParkingServiceImpl implements ParkingService {
                     ,parkingMonthlyCardInfoRequest.getDoorParkingMonthlyCardParam().getPageNo()
                     ,parkingMonthlyCardInfoRequest.getDoorParkingMonthlyCardParam().getPageSize());
             String responseString = RestTemplateUtil.get(url);
-            logger.info("responseString"+responseString);
+            logger.info("\n月租卡信息查询,道尔接口地址：【{}】,响应【{}】",url,responseString);
             DoorResult<List<DoorParkingMonthlyCardInfo>> doorResult = JsonStringToObjectUtil.jsonToObject(responseString,new TypeReference<DoorResult<List<DoorParkingMonthlyCardInfo>>>(){});
            if(doorResult==null ){
                doorResult = JsonStringToObjectUtil.jsonToObject(responseString,new TypeReference<DoorResult>(){});
@@ -201,7 +213,7 @@ public class ParkingServiceImpl implements ParkingService {
                 result.setCode(ParkingExceptionEnum.DOOR_COMPANY_EXCEPTION.getCode());
                 result.setResult(doorResult.getHead().getMessage());
             }
-            logger.info("\n月租卡信息 查询结果{}",doorResult);
+            logger.info("\n月租卡信息,返回结果【{}】",doorResult);
         }else {
             result.setCode(ParkingExceptionEnum.MISSING_PARK_ID.getCode());
             result.setResult(ParkingExceptionEnum.MISSING_PARK_ID.getMessage());
@@ -217,6 +229,7 @@ public class ParkingServiceImpl implements ParkingService {
      */
     @Override
     public Result saveMonthlyRentalCardRenewalFee(MonthlyRentalCardRenewalFeeRequset monthlyRentalCardRenewalFeeRequset) {
+        logger.info("\n月租卡续费信息保存入参:【{}】",monthlyRentalCardRenewalFeeRequset);
         Result result=new Result();
         String url = "";
         String jsonData = "";
@@ -225,13 +238,14 @@ public class ParkingServiceImpl implements ParkingService {
             result.setResult("月租卡续费信息保存必须明确哪个硬件公司(parkingCompanyId).");
         }else if(ParkingCompanyEnum.DOOR_COMPANY.getCode().equals(monthlyRentalCardRenewalFeeRequset.getParkingCompanyId())) {
             //调用道尔硬件接口路径
-            url = String.format(ParkingService.POST_DOOR_MONTHLY_RENTAL_CARD_RENEWALFEE_URL,monthlyRentalCardRenewalFeeRequset.getDoorMonthlyRentalCardRenewalFeeParam().getParkid());
+            url = String.format(parkingDrUrlProperties.getDoorSaveMonthlyRentalCardRenewalfeeUrl(),monthlyRentalCardRenewalFeeRequset.getDoorMonthlyRentalCardRenewalFeeParam().getParkid());
             //接口调用的入参
             DoorMonthlyRentalCardRenewalFeeParam doorRentCard = monthlyRentalCardRenewalFeeRequset.getDoorMonthlyRentalCardRenewalFeeParam();
             if(doorRentCard!= null){
                 jsonData = JsonStringToObjectUtil.objectToJson(doorRentCard);
             }
             String responseString = RestTemplateUtil.post(url,jsonData);
+            logger.info("\n月租卡续费信息保存，道尔接口入参：【{}】,响应结果{}",jsonData,responseString);
             DoorResult  doorResult = JsonStringToObjectUtil.jsonToObject(responseString,new TypeReference<DoorResult>(){});
             if(DoorResult.SUCCESS_CODE.equals(doorResult.getHead().getStatus())) {
                 result.setData(doorResult.getBody());
@@ -239,7 +253,6 @@ public class ParkingServiceImpl implements ParkingService {
                 result.setCode(ParkingExceptionEnum.DOOR_COMPANY_EXCEPTION.getCode());
                 result.setResult(doorResult.getHead().getMessage());
             }
-            logger.info("\n月租卡续费信息保存 保存结果{}",doorResult);
         }else {
             result.setCode(ParkingExceptionEnum.MISSING_PARK_ID.getCode());
             result.setResult(ParkingExceptionEnum.MISSING_PARK_ID.getMessage());
@@ -255,6 +268,7 @@ public class ParkingServiceImpl implements ParkingService {
      */
     @Override
     public Result  findMonthlyRentCardRateInfo(MonthyRentalCardRateRequest monthyRentalCardRateRequest) {
+        logger.info("\n月租信息获取(含费率)入参:【{}】",monthyRentalCardRateRequest);
         Result result=new Result();
         String url = "";
         if(ParkingCompanyEnum.ALL_COMPANY.getCode().equals(monthyRentalCardRateRequest.getParkingCompanyId())) {
@@ -262,9 +276,10 @@ public class ParkingServiceImpl implements ParkingService {
             result.setResult("月租信息获取(含费率)查询必须明确哪个硬件公司(parkingCompanyId).");
         }else if(ParkingCompanyEnum.DOOR_COMPANY.getCode().equals(monthyRentalCardRateRequest.getParkingCompanyId())) {
             //调用道尔硬件接口
-            url = String.format(ParkingService.GET_DOOR_MONTHLYRENTCARD_RATEINFO_URL,monthyRentalCardRateRequest.getDoorMonthlyRentCardRateParam().getParkid()
+            url = String.format(parkingDrUrlProperties.getDoorFindMonthlyrentcardRateinfoUrl(),monthyRentalCardRateRequest.getDoorMonthlyRentCardRateParam().getParkid()
                     ,monthyRentalCardRateRequest.getDoorMonthlyRentCardRateParam().getParkid(),monthyRentalCardRateRequest.getDoorMonthlyRentCardRateParam().getCarNo());
             String responseString = RestTemplateUtil.get(url);
+            logger.info("\n月租信息获取(含费率)信息(场内缴费)，道尔接口地址：【{}】,响应结果{}",url,responseString);
             DoorResult<DoorMonthlyRentCardRateInfo> doorResult = JsonStringToObjectUtil.jsonToObject(responseString,new TypeReference<DoorResult<DoorMonthlyRentCardRateInfo>>(){});
             if(DoorResult.SUCCESS_CODE.equals(doorResult.getHead().getStatus())) {
                 result.setData(doorResult.getBody());
@@ -272,7 +287,6 @@ public class ParkingServiceImpl implements ParkingService {
                 result.setCode(ParkingExceptionEnum.DOOR_COMPANY_EXCEPTION.getCode());
                 result.setResult(doorResult.getHead().getMessage());
             }
-            logger.info("\n月租信息获取(含费率)信息(场内缴费)查询结果{}",doorResult);
         }else {
             result.setCode(ParkingExceptionEnum.MISSING_PARK_ID.getCode());
             result.setResult(ParkingExceptionEnum.MISSING_PARK_ID.getMessage());
@@ -288,6 +302,7 @@ public class ParkingServiceImpl implements ParkingService {
      */
     @Override
     public Result cancelMonthlyRentAccount(CancelMonthlyRentAccountRequest cancelMonthlyRentAccountRequest) {
+        logger.info("\n月租卡销户操作入参:【{}】",cancelMonthlyRentAccountRequest);
         Result result=new Result();
         String url = "";
         String jsonData = "";
@@ -296,13 +311,14 @@ public class ParkingServiceImpl implements ParkingService {
             result.setResult("注销月租卡存必须明确哪个硬件公司(parkingCompanyId).");
         }else if(ParkingCompanyEnum.DOOR_COMPANY.getCode().equals(cancelMonthlyRentAccountRequest.getParkingCompanyId())) {
             //调用道尔硬件接口路径
-            url = String.format(ParkingService.POST_DOOR_CANCEL_MONTHLYRENT_ACCOUNT_URL, cancelMonthlyRentAccountRequest.getDoorCancelMonthlyRentAccountParam().getParkid());
+            url = String.format(parkingDrUrlProperties.getDoorCancelMonthlyrentAccountUrl(), cancelMonthlyRentAccountRequest.getDoorCancelMonthlyRentAccountParam().getParkid());
             //接口调用的入参
             DoorCancelMonthlyRentAccountParam doorRentCard = cancelMonthlyRentAccountRequest.getDoorCancelMonthlyRentAccountParam();
             if(doorRentCard!= null){
                 jsonData = JsonStringToObjectUtil.objectToJson(doorRentCard);
             }
             String responseString = RestTemplateUtil.post(url,jsonData);
+            logger.info("\n注销月租卡，道尔接口入参：【{}】,返回结果{}",jsonData,responseString);
             DoorResult  doorResult = JsonStringToObjectUtil.jsonToObject(responseString,new TypeReference<DoorResult>(){});
             if(DoorResult.SUCCESS_CODE.equals(doorResult.getHead().getStatus())) {
                 result.setData(doorResult.getBody());
@@ -310,7 +326,6 @@ public class ParkingServiceImpl implements ParkingService {
                 result.setCode(ParkingExceptionEnum.DOOR_COMPANY_EXCEPTION.getCode());
                 result.setResult(doorResult.getHead().getMessage());
             }
-            logger.info("\n注销月租卡 注销结果{}",doorResult);
         }else {
             result.setCode(ParkingExceptionEnum.MISSING_PARK_ID.getCode());
             result.setResult(ParkingExceptionEnum.MISSING_PARK_ID.getMessage());
@@ -326,6 +341,7 @@ public class ParkingServiceImpl implements ParkingService {
      */
     @Override
     public Result findParkingSpaceAmount(ParkingSpaceAmountRequest parkingSpaceAmountRequest) {
+        logger.info("\n车场车位查询入参:【{}】",parkingSpaceAmountRequest);
         Result result=new Result();
         String url = "";
         if(ParkingCompanyEnum.ALL_COMPANY.getCode().equals(parkingSpaceAmountRequest.getParkingCompanyId())) {
@@ -333,10 +349,10 @@ public class ParkingServiceImpl implements ParkingService {
             result.setResult("车场车位查询 必须明确哪个硬件公司(parkingCompanyId).");
         }else if(ParkingCompanyEnum.DOOR_COMPANY.getCode().equals(parkingSpaceAmountRequest.getParkingCompanyId())) {
             //调用道尔硬件接口
-            url = String.format(ParkingService.POST_DOOR_PARKINGSPACE_AMOUNT_URL,parkingSpaceAmountRequest.getParkid()
+            url = String.format(parkingDrUrlProperties.getDoorParkingspaceAmountUrl(),parkingSpaceAmountRequest.getParkid()
                     ,parkingSpaceAmountRequest.getParkid());
             String responseString = RestTemplateUtil.get(url);
-            logger.info("responseString"+responseString);
+            logger.info("\n车场车位查询,道尔接口地址:【{}】,响应结果{}",url,responseString);
             DoorResult<DoorParkingSpaceAmountShow> doorResult = JsonStringToObjectUtil.jsonToObject(responseString,new TypeReference<DoorResult<DoorParkingSpaceAmountShow>>(){});
             if(DoorResult.SUCCESS_CODE.equals(doorResult.getHead().getStatus())) {
                 result.setData(doorResult.getBody());
@@ -344,7 +360,6 @@ public class ParkingServiceImpl implements ParkingService {
                 result.setCode(ParkingExceptionEnum.DOOR_COMPANY_EXCEPTION.getCode());
                 result.setResult(doorResult.getHead().getMessage());
             }
-            logger.info("\n车场车位查询 查询结果{}",doorResult);
         }else {
             result.setCode(ParkingExceptionEnum.MISSING_PARK_ID.getCode());
             result.setResult(ParkingExceptionEnum.MISSING_PARK_ID.getMessage());
@@ -374,16 +389,24 @@ public class ParkingServiceImpl implements ParkingService {
                 if(doorCarInParkingParam.getCarinlist()!=null) {
                     String  inString = doorCarInParkingParam.getCarinlist().replaceAll(ParkingCompanyEnum.REPLACE_ALL.getCode(),"\"");
                     inString = inString.replaceAll(ParkingCompanyEnum.REPLACE_PAY_DATE_U.getCode(),ParkingCompanyEnum.REPLACE_PAY_DATE_L.getCode());
+                    inString = inString.replaceAll(ParkingCompanyEnum.REPLACE_ALL_SLASH.getCode(),"\\\\\\\\");
+                    logger.info("\n转换完成后的入场信息字符串inString:"+inString);
                     list = JsonStringToObjectUtil.jsonToObject(inString, new TypeReference<List<DoorCarInParkingShow>>() {});
                 }
                 info.setCarinlist(list);
                 info.setParkId(parkId);
                 Result<String> result  = parkingClient.carJoinParking(info);
-                doorResult.getHead().setStatus(DoorResult.SUCCESS_CODE);
-                String ids = result.getData()!=null?result.getData():"";
-                DoorInOutParkingShow show = new DoorInOutParkingShow();
-                show.setIds(ids);
-                doorResult.setBody(show);
+                if(!result.getCode().equals(GlobalConstants.SUCCESS_CODE)){
+                    doorResult.getHead().setStatus(result.getCode());
+                    doorResult.getHead().setMessage(result.getResult());
+                    throw new JnSpringCloudException(ParkingExceptionEnum.DOOR_CAR_PARKING_IN,result.getResult());
+                }else{
+                    doorResult.getHead().setStatus(DoorResult.SUCCESS_CODE);
+                    String ids = result.getData() != null ? result.getData() : "";
+                    DoorInOutParkingShow show = new DoorInOutParkingShow();
+                    show.setIds(ids);
+                    doorResult.setBody(show);
+                }
             }else {
                 DoorHeadResult headResult = new DoorHeadResult();
                 headResult.setStatus(ParkingExceptionEnum.DOOR_CAR_PARKING_SIGNNATURE.getCode());
@@ -392,7 +415,9 @@ public class ParkingServiceImpl implements ParkingService {
                 logger.info("\n车场入场信息录入失败，失败原因：{}",ParkingExceptionEnum.DOOR_CAR_PARKING_SIGNNATURE.getMessage());
             }
         }catch (Exception e){
-            logger.info("车场入场信息录入失败，失败原因：{}");
+            doorResult.getHead().setStatus(e.getMessage());
+            doorResult.getHead().setMessage(e.getMessage());
+            logger.info("车场入场信息录入失败，失败原因：{}"+e.getMessage());
             e.printStackTrace();
         }
         return doorResult;
@@ -416,18 +441,28 @@ public class ParkingServiceImpl implements ParkingService {
                 DoorCarOutParkingInfo info = new DoorCarOutParkingInfo();
                 List<DoorCarOutParkingShow> list= new ArrayList<DoorCarOutParkingShow>();
                 if(doorCarOutParkingParam.getCaroutlist()!=null) {
+
                     String  outString = doorCarOutParkingParam.getCaroutlist().replaceAll(ParkingCompanyEnum.REPLACE_ALL.getCode(),"\"");
                     outString = outString.replaceAll(ParkingCompanyEnum.REPLACE_PAY_DATE_U.getCode(),ParkingCompanyEnum.REPLACE_PAY_DATE_L.getCode());
+                    outString = outString.replaceAll(ParkingCompanyEnum.REPLACE_ALL_SLASH.getCode(),"\\\\\\\\");
+                    logger.info("\n转换完成后的出场信息字符串inString:"+outString);
                     list = JsonStringToObjectUtil.jsonToObject(outString, new TypeReference<List<DoorCarOutParkingShow>>() {});
                 }
                 info.setParkId(parkId);
                 info.setCaroutlist(list);
                 Result<String> result  = parkingClient.carOutParking(info);
-                doorResult.getHead().setStatus(DoorResult.SUCCESS_CODE);
-                String ids = result.getData()!=null?result.getData():"";
-                DoorInOutParkingShow show = new DoorInOutParkingShow();
-                show.setIds(ids);
-                doorResult.setBody(show);
+                if(!result.getCode().equals(GlobalConstants.SUCCESS_CODE)){
+                    doorResult.getHead().setStatus(result.getCode());
+                    doorResult.getHead().setMessage(result.getResult());
+                    throw new JnSpringCloudException(ParkingExceptionEnum.DOOR_CAR_PARKING_OUT,result.getResult());
+                }else {
+                    doorResult.getHead().setStatus(DoorResult.SUCCESS_CODE);
+                    String ids = result.getData()!=null?result.getData():"";
+                    DoorInOutParkingShow show = new DoorInOutParkingShow();
+                    show.setIds(ids);
+                    doorResult.setBody(show);
+                }
+
             }else {
                 DoorHeadResult headResult = new DoorHeadResult();
                 headResult.setStatus(ParkingExceptionEnum.DOOR_CAR_PARKING_SIGNNATURE.getCode());
@@ -436,12 +471,16 @@ public class ParkingServiceImpl implements ParkingService {
                 logger.info("\n车场出场信息录入失败，失败原因：{}",ParkingExceptionEnum.DOOR_CAR_PARKING_SIGNNATURE.getMessage());
             }
         }catch (Exception e){
-            logger.info("车场出场信息录入失败，失败原因：{}");
+            doorResult.getHead().setStatus(e.getMessage());
+            doorResult.getHead().setMessage(e.getMessage());
+            logger.info("车场出场信息录入失败，失败原因：{}"+e.getMessage());
             e.printStackTrace();
         }
 
         return doorResult;
     }
+
+
     /**
      * @param text
      * @return 传统的MD5加密方式，与客户端加密方法相同

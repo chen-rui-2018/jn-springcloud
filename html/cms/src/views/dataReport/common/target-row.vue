@@ -27,17 +27,18 @@ export default {
   $gray: #ccc;
   .table-row {
     width: 100%;
-    @include  flex;
+    @include  flex($v: stretch);
     border: 1px solid $gray;
     .row-l {
-      width: 160px;
+      width: 10%;
       padding: 10px;
       @include flex-center;
       border-right: $gray;
       color: #A8A8A8;
     }
     .row-r {
-      width: calc(100% - 160px);
+      @include flex($v: flex-start, $d: column);
+      width: 90%;
       padding: 20px;
       font-size: 14px;
       background-color: #fff;

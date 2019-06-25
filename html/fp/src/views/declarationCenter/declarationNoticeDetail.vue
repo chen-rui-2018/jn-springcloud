@@ -15,20 +15,28 @@
       </div>
       <!-- 大标题 -->
       <div class="right_headline">
-        <p class="detail_maintitle">【{{detailList.rangeName}}】{{detailList.titleName}}
+        <p class="detail_maintitle">【{{rangeId|type}}】{{detailList.titleName}}
           <span @click="goappointment">预约申报</span>
-          <span @click="telephone">联系电话</span>
+          <!-- <span @click="telephone">联系电话</span> -->
         </p>
         <!-- 附件下载 -->
         <div class="accessory_dowload">
           <div class="accessory">
-            <span>附件下载:</span>
             <div class="accessory_right">
-              <a href="javascript:;">附件一  企业发展沙龙活动承办须知.docx</a>
-              <a href="javascript:;">附件一  企业发展沙龙活动承办须知.docx</a>
+              <div class="accessory_detail">
+                <div>附件下载：</div>
+                <div>
+                  <a v-if="fileList.length===0" href="javascript:;">暂无</a>
+                  <a  :href="item.filePath" v-for="(item,index) in fileList " :key="index">附件{{index+1}}  {{item.fileName}}</a>
+                </div>
+              </div>
               <p>
-                <span>反馈表递交截止日期{{detailList.deadline|time}}</span>
-                <span>阅读量: {{detailList.browseTimes}}次 <span>发布时间: {{detailList.createdTime|time}}</span></span>
+                <span>最终日期：{{detailList.deadline|time}}</span>
+                <span v-if="detailList.preliminaryDeadline!=null">初审截止时间：{{detailList.preliminaryDeadline|time}}</span>
+              </p>
+              <p style="margin-top:5px">
+                <span >申报部门：{{detailList.timeNode}}</span>
+                <span>阅读量：{{detailList.browseTimes}}次 <span>发布时间：{{detailList.createdTime|time}}</span></span>
               </p>
             </div>
           </div>
@@ -42,39 +50,42 @@
       </div>
       <!-- 在线预约弹窗 -->
       <div class="online_appointment">
-        <el-dialog title="在线预约" :visible.sync="appointmentVisible" width="616px" >
+        <el-dialog title="在线预约"
+        :modal-append-to-body="false"
+        :lock-scroll="false" :visible.sync="appointmentVisible" width="616px">
           <el-form :model="appointment" label-position="left" label-width="100px" :rules="rules">
-            <el-form-item label="预约项："  prop="appointmentItemName"> 
+            <!-- <el-form-item label="预约项："  prop="appointmentItemName"> 
               <el-input v-model="appointment.appointmentItemName" placeholder="请输入内容   默认填入当前企业名称"></el-input>
+            </el-form-item> -->
+             <el-form-item label="申报项目：" prop="declareItem">
+              <el-input v-model="appointment.declareItem" placeholder="请输入内容   默认填入企业联系人电话"></el-input>
             </el-form-item>
-            <el-form-item label="预约人：" prop="contactName">
+             <el-form-item label="申报企业：" prop="declareEnterprise">
+              <el-input v-model="appointment.declareEnterprise" placeholder="请输入内容   默认填入企业联系人电话"></el-input>
+            </el-form-item>
+            <el-form-item label="企业联系人:" prop="contactName">
               <el-input v-model="appointment.contactName" placeholder="请输入内容   默认填入企业联系人姓名"></el-input>
             </el-form-item>
             <el-form-item label="联系电话：" prop="contactPhone">
               <el-input v-model="appointment.contactPhone" placeholder="请输入内容   默认填入企业联系人电话"></el-input>
             </el-form-item>
-            <el-form-item label="电子邮箱：" prop="email">
+           <!--  <el-form-item label="电子邮箱：" prop="email">
               <el-input v-model="appointment.email" placeholder="请输入内容   默认填入企业联系人电话"></el-input>
-            </el-form-item>
-            <el-form-item label="申报企业：" prop="declareEnterprise">
-              <el-input v-model="appointment.declareEnterprise" placeholder="请输入内容   默认填入企业联系人电话"></el-input>
-            </el-form-item>
-            <el-form-item label="申报名称：" prop="declareItem">
-              <el-input v-model="appointment.declareItem" placeholder="请输入内容   默认填入企业联系人电话"></el-input>
-            </el-form-item>
+            </el-form-item> -->
             <!-- 附件 -->
-            <el-form-item label="附件：" class="upload" >
+            <el-form-item label="附件：" class="upload" v-if="isUp">
               <el-upload
-                action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
-                list-type="picture-card"
+                :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
                 :on-success="uploadsuccess"
                 :headers="headers"
-                :file-list="fileList"
-                >
-                <i class="el-icon-plus"></i>
+                :file-list="fileList">
+                <el-button size="small" type="primary">点击上传</el-button>
               </el-upload>
+              请上传联合审批表
             </el-form-item>
-
+            <el-form-item label="附件：" class="upload" v-else>
+              <a :href="appointment.fileUrl">联合审批表下载</a>
+            </el-form-item>
             <el-form-item label="备注：">
               <div class="content_textarea">
                 <textarea v-model="appointment.remark" :placeholder="contentPlaceholder" maxlength="500" onchange="this.value=this.value.substring(0, 500)" onkeydown="this.value=this.value.substring(0, 500)" onkeyup="this.value=this.value.substring(0, 500)" 
@@ -84,7 +95,7 @@
               </div>
             </el-form-item>
           </el-form>
-          <div slot="footer" class="dialog-footer">
+          <div slot="footer" class="dialog-footer" v-if="isUp">
             <el-button @click="submit">提  交</el-button>
             <el-button type="primary" @click="appointmentVisible = false">取  消</el-button>
           </div>
@@ -92,7 +103,8 @@
       </div>
       <!-- 联系电话 -->
       <div class="telephone">
-        <el-dialog title="联系电话" :visible.sync="telephoneVisible" width="30%" center>
+        <el-dialog :append-to-body="true"
+        :lock-scroll="false" title="联系电话" :visible.sync="telephoneVisible" width="30%" center>
           <span>电话号码</span>
         </el-dialog>
       </div>
@@ -100,11 +112,15 @@
   </div>
 </template>
 <script>
+import {getToken} from "@/util/auth"
 // 上传附件待完成，等待后台
 export default {
   data () {
     return {
+      fileList:[],
+      baseUrl: this.api.host,
       id:'',
+      rangeId:"",
       appointmentVisible:false,
       telephoneVisible:false,
       detailList:{},
@@ -121,7 +137,7 @@ export default {
         declareEnterprise:"",//申报企业
         declareItem:""//申报项目名称
       },
-      headers:{token: sessionStorage.token},
+      headers:{token: getToken()},
       fileList:[],
       rules:{
         appointmentItemName:[
@@ -142,7 +158,8 @@ export default {
        declareItem:[
          { required: true, message: '内容不能为空'}
        ]
-      }
+      },
+      isUp:true
     }
   },
   filters: {
@@ -152,10 +169,24 @@ export default {
         let dateee = new Date(time).toJSON();
         return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
       }
-    }
+    },
+    type(rangeId){
+        if(rangeId==='1'){
+          return '白下高新区'
+        }else if(rangeId==='2'){
+          return '秦淮区'
+        }else if(rangeId==='3'){
+          return '南京市'
+        }else if(rangeId==='4'){
+          return '江苏省'
+        }else if(rangeId==='5'){
+          return '国家'
+        }
+      }
   },
   created () {
     this.id=this.$route.query.id
+    this.rangeId=this.$route.query.rangeId
     this.appointment.appointmentItemId=this.$route.query.id
     this.getdeclaration()
     this. addPageviews()
@@ -171,9 +202,11 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-            // console.log(res)
-            _this.detailList = res.data;
+            _this.detailList = res.data
             _this.appointment. appointmentItemName= res.data.titleName;
+            if(res.data.fileUrl!==''){
+              _this.fileList=JSON.parse(res.data.fileUrl)
+            }
           }
         }
       });
@@ -197,48 +230,102 @@ export default {
     },
     //去预约
     goappointment(){
-      this.appointmentVisible=true
-      // this.headers=sessionStorage.getItem("token")
-      if(sessionStorage.getItem("token")){
-        let _this = this;
+      let myDate = new Date()
+      let myDateStr=myDate.getFullYear()+""+(myDate.getMonth()+1>10?myDate.getMonth()+1:'0'+(myDate.getMonth()+1))+""+myDate.getDate()+""+(myDate.getHours()>10?myDate.getHours():'0'+myDate.getHours())+(myDate.getMinutes()>10?myDate.getMinutes():'0'+myDate.getMinutes())+(myDate.getSeconds()>10?myDate.getSeconds():'0'+myDate.getSeconds())
+      let time= new Date(this.detailList.preliminaryDeadline).toJSON()
+      let deadline=new Date(+new Date(time) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '').replace(/[^0-9]/ig,"")
+      if(this.headers.token){
         this.api.get({
           url: "getUserExtension",
           data: { },
-          callback: function(res) {
+          callback: (res)=> {
             if (res.code == "0000") {
-            _this.appointment.contactName= res.data.nickName
-            _this.appointment.contactPhone= res.data.phone
-            _this.appointment.email= res.data.email
-            _this.appointment.declareEnterprise= res.data.companyName
+              // console.log(res.data.roleCode)
+              if(res.data!==null){
+                if(res.data.roleCode==="COM_ADMIN"||res.data.roleCode==="COM_CONTACTS"){
+                  if(myDateStr<deadline){
+                    this.api.get({
+                      url: "queryOnlineInfo",
+                      data: {appointmentItemId:this.id },
+                      callback: (res)=> {
+                          if (res.code == "0000") {
+                            this.appointment=res.data
+                            this.appointment.declareItem=res.data.appointmentItemName
+                            this.isUp=false
+                          this.appointmentVisible=true
+                          this.$message.success("亲，你已经预约过了哦！")
+                        }else if(res.code==='5011208'){
+                          this.appointmentVisible=true
+                          let _this = this;
+                          this.api.get({
+                            url: "getUserExtension",
+                            data: { },
+                            callback: function(res) {
+                              if (res.code == "0000") {
+                                _this.appointment.declareItem=_this.detailList.titleName
+                                _this.appointment.contactName= res.data.nickName
+                                _this.appointment.contactPhone= res.data.phone
+                                _this.appointment.email= res.data.email
+                                _this.appointment.declareEnterprise= res.data.companyName
+                                _this.appointment.fileUrl= res.data.fileUrl
+                              }
+                            }
+                          });
+                        }else {
+                          this.$message.error(res.result)
+                        }
+                      }
+                    })
+                  }else{
+                    this.$message.error("您申报的项目已经截止")
+                  }
+                }else{
+                  this.$message.error("只有企业管理员和企业联系人才可以进申报平台,您暂时没有权限！！")
+                }
+              }else{
+                this.$message.error("只有企业管理员和企业联系人才可以进申报平台,您暂时没有权限！！")
+              }
             }
           }
         });
       }else{
         //跳转到等录页面
-        this.$router.push({
-          name:'login'
+        this.$confirm('亲，您需要登录后才能预约哦！', '提示', {
+          confirmButtonText: '去登陆',
+          cancelButtonText: '留在当前页面',
+          type: 'warning',
+          center: true
+        }).then(() => {
+            window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
+            this.$router.push({ path: "/login" });
+        }).catch(() => {
         })
       }
     },
     uploadsuccess(file, fileList){
-      // console.log(file)
-      // console.log(fileList)
       this.appointment.fileUrl=file.data
+    },
+    uploaderror(err, file, fileLis){
+      console.log(err)
     },
     //提交
     submit(){
-      let _this = this;
-        this.api.post({
-          url: "appointment",
-          data: this.appointment,
-          callback: function(res) {
-            if (res.code == "0000") {
-              // console.log(res)
-              _this.$message.success("预约成功")
-              _this.appointmentVisible=false
+      if(this.appointment.fileUrl!=""){
+        let _this = this;
+          this.api.post({
+            url: "appointment",
+            data: this.appointment,
+            callback: function(res) {
+              if (res.code == "0000") {
+                // console.log(res)
+                _this.$message.success("预约成功")
+                _this.appointmentVisible=false
+              }
             }
-          }
-        });
+          });
+      }else{
+        this.$message.error("请上传附件")
+      }
     },
     // 电话号码
     telephone(){
@@ -249,6 +336,7 @@ export default {
 </script>
 <style lang="scss">
   .declarationNoticeDetail{
+    padding-top: 67px;
     .declarationNoticeDetail_content{
       width: 1190px;
       margin: 0 auto;
@@ -302,6 +390,9 @@ export default {
             .accessory_right{
               margin-left: 7px;
               flex:1;
+              .accessory_detail{
+                display: flex;
+              }
               a{
                 display: block;
                 color:#00a041;
@@ -310,6 +401,7 @@ export default {
               p{
                 display: flex;
                 justify-content: space-between;
+               
                 span{
                   font-size: 12px;
                   color:#666666;
@@ -370,7 +462,7 @@ export default {
         .content_textarea{
               // border: 1px solid #DCDFE6;
               // border-radius: 5px;
-              textarea{outline: none;}
+          textarea{outline: none;}
           textarea{
             padding: 8px 15px;
             resize: none;

@@ -1,0 +1,246 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+		<title>GHAGENT DEMO</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf8" />
+		<link rel="stylesheet" type="text/css" href="ghAgent/css/ghStandardAgentUi.css" />
+		<link rel="stylesheet" type="text/css" href="ghAgent/css/alertDilog.css" />
+		<link rel="stylesheet" type="text/css" href="ghAgent/css/iccomingTelEnter.css" />
+		<script type="text/javascript" src="ghAgent/ghAgent.js"charset="utf8"></script>
+		<script type="text/javascript" src="ghAgent/ghStandardAgentUi.js"charset="utf8"></script>
+
+	</head>
+	<body>
+	<div class="page-box">
+		<ul class="top-bar">
+			<li><label>分机号码：</label>
+				<div class="select-box">
+					<input type="text" id='extension' value="" onfocus="setExtension()" onkeyup="inputExtension()"  class="input wd-12" autocomplete="off">
+					<ul class="select-item" id="extensionSelect">
+						<li class="extensionValue" value="8001" onclick="selectExtension(this)">8001</li>
+						<li class="extensionValue" value="8002" onclick="selectExtension(this)">8002</li>
+						<li class="extensionValue" value="8003" onclick="selectExtension(this)">8003</li>
+						<li class="extensionValue" value="8004" onclick="selectExtension(this)">8004</li>
+						<li class="extensionValue" value="8005" onclick="selectExtension(this)">8005</li>
+					</ul>
+				</div>
+
+			</li>
+			<li><label>登陆工号：</label><input type="text"  id='agentId' value="200" class="input wd-12"></li>
+			<li><label>用户姓名：</label><input type="text" id='agentName' value="张三" class="input wd-12"></li>
+			<li><label>登陆组号：</label><input type="text" id='groupId' value="1" class="input wd-12"></li>
+			<li><label>坐席级别：</label><input type="text" id='levelId' value="1" class="input wd-12"></li>
+			<input type='checkbox' id='rightId' title="班长权限" style="display: none">
+			<li><button class="btn info" id="login" onclick="connectACDAndLogin()">登陆坐席</button></li>
+			<li><button class="btn info" id="logout" onclick="disconnectACDAndLogout()" style="display:none;">登出坐席</button></li>
+			<li><span id="optionOKDesc" style="color:green;"></span></li>
+			<li><span id="optionNGDesc" style="color:red;">......请登录.....</span></li>
+		</ul>
+		<!--来电插件-->
+		<div id="mySoftphone" style='width:100%'></div>
+		<div class="info-box">
+			<!--来电信息-->
+			<ul class="calledInfo">
+				<li><span class="name">当前来电号码:</span><span class="value"  id='currentCallShow'></span></li>
+				<li><span class="name">当前被叫号码:</span><span class="value" id='calledNumberShow'></span></li>
+				<li><span class="name">地区:</span><span class="value" id='callerOwenShow'></span></li>
+				<li><span class="name">联系方式:</span><span class="value" id='phoneShow'></span></li>
+			</ul>
+
+			<!--历史信息-->
+			<div class="his-content">
+				<div id="historyDesc" class="his-tip">历史信息 (<span id="historyNum">0</span>)</div>
+				<span style="display: none;color: red;padding-left: 40px;font-size: 18px" id="detailLoad">加载中......</span>
+				<table class="table">
+					<thead><th>序号</th><th>问题编号</th><th>业务模块</th><th>处理状态</th><th>问题标题</th><th>时间</th><th>详情</th></thead>
+					<tbody id="history" style="display:none;"></tbody>
+				</table>
+				</div>
+			</div>
+		</div>
+
+		<!--来电录入-->
+		<div class="form-box">
+			<ul>
+				<li>
+					<label class="must-input">问题标题：</label>
+					<input class="input" type="text" id='quesTitle' placeholder="请输入标题，不超过100字">
+				</li>
+				<li>
+					<label class="must-input">业务模块：</label>
+					<select id='serviceModule'>
+						<option value="service_consulting">系统咨询</option>
+						<option value="complaints_suggestions">投诉建议处理</option>
+					</select>
+				</li>
+				<li class="wd">
+					<label class="must-input">问题描述：</label>
+					<textarea rows="3" id='quesDetails' placeholder="请输入简要的问题描述，不超过300字"></textarea>
+				</li>
+				<li>
+					<label class="must-input">客户类型：</label>
+					<select id='clientType'>
+						<option value="1">个人</option>
+						<option value="2">企业</option>
+					</select>
+				</li>
+				<li>
+					<label class="must-input">客户姓名：</label>
+					<input class="input" id='custName' type="text" placeholder="请输入客户姓名">
+				</li>
+				<li>
+					<label class="must-input">联系方式：</label>
+					<input class="input" id='contactWay' type="text" placeholder="请输入客户联系方式">
+				</li>
+				<li class="wd text-center">
+					<button class="btn info" id="submitButton" onclick="submit()">提交</button>
+					<span style="padding-left: 20px;color: red;display: none;font-size: 18px" id="submitDesc">加载中......</span>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<!--服务器连接信息-->
+	<table align='left' style="display:none">
+		<tr style="display:none" >
+			<td>
+				CTI服务器地址:<input type='text' value='112.94.22.222' id='serverIp' size='20'>
+				CTI服务器端口:<input type='text' value='13000' id='serverPort' size='6'>
+				<input type='button' value='连接服务器' onclick='connectACD()'/>
+				<input type='button' value='断开服务器' onclick='disconnectACD()'/>
+			</td>
+		</tr>
+		<tr style="display:none">
+			<td>
+				<textarea id='logArea' rows='20' cols='80'></textarea>
+				<br/><br/>
+				<input type='button' value='清除日志信息' onclick='clearLog()'>
+			</td>
+		</tr>
+	</table>
+
+
+	    <!--来电弹出框-->
+		<div class="popLayer">
+			<div class="popBox">
+				<div class="title">当前来电</div>
+				<div class="close">
+					<a href="javascript:void(0)" onclick="closeBox()">关闭</a>
+				</div>
+				<div class="content">
+					<div class="form-box">
+						<ul>
+							<li class="wd">
+								<label>当前来电号码:</label>
+								<input class="input" type="text"  id='currentCall' readonly="true">
+							</li>
+							<li class="wd">
+								<label>当前被叫号码:</label>
+								<input class="input" type="text" id='calledNumber' readonly="true">
+							</li>
+							<li class="wd">
+								<label>来电归属地:</label>
+								<input class="input" type="text" id='callerOwen' readonly="true">
+							</li>
+							<li class="wd">
+								<table class="table">
+									<thead><th>序号</th><th>名称</th><th>性别</th><th>用户账户</th><th>邮箱</th><th >手机号</th></thead>
+									<tbody id="userData"></tbody>
+								</table>
+							</li>
+							<li class="wd text-center">
+								<button class="btn info" onclick="okSubmit()">提交</button>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="content" id="userInfo" style="display: none">
+
+				</div>
+				<div id="commit" style="padding: 50px;display: none" >
+					<button type="button" style="width: 100px;height: 50px"  onclick="okSubmit()"  value="确定">确定</button>
+				</div>
+			</div>
+		</div>
+
+
+		<!--问题详情弹出框-->
+		<div class="quesLayer">
+			<div class="quesBox">
+				<div class="title">问题详情</div>
+				<div class="close">
+					<a href="javascript:void(0)" onclick="closeQuesBox()">X</a>
+				</div>
+				<div class="content">
+					<div class="form-box">
+						<ul>
+							<li>
+								<label>问题标题：</label>
+								<span id='quesTitleShow'></span>
+								<span class="state" id="status"></span>
+							</li>
+							<li class="wd">
+								<label >问题描述：</label>
+								<div class="describe">
+									<div>
+										<span id='quesDetailsShow'></span>
+										<img src="" alt="" class="img" style="display: none" id='quesUrlShow'>
+									</div>
+								</div>
+							</li>
+							<li>
+								<label>客户姓名：</label>
+								<span id='custNameShow'></span>
+							</li>
+							<li>
+								<label>联系方式：</label>
+								<span id='contactWayShow'></span>
+							</li>
+							<li>
+								<label>业务模块：</label>
+								<span id='serviceModuleName'>停车扣费</span>
+							</li>
+							<li>
+								<label>提交日期：</label>
+								<span id='createdTime' ></span>
+							</li>
+							<li class="wd">
+								<div class="process-box" id="historyDetails">
+									<div class="process-title">问题处理记录</div>
+									<div class="box-item">
+										<div class="item">
+											<div class="tle">客服中心</div>
+											<div class="info">1233</div>
+										</div>
+										<div class="item">
+											<div class="tle">客服中心</div>
+											<div class="info">123</div>
+										</div>
+										<div class="item">
+											<div class="tle">客服中心</div>
+											<div class="info">1233</div>
+											<div class="img-box">
+												<img src="" alt="">
+											</div>
+										</div>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+
+		<div class="audiocontent" id="audiocontent">
+		<audio id="mySound" >
+			浏览器不支持audio标签(browser nonsupport)
+		</audio>
+		</div>
+	<script type="text/javascript" src="monitor/jquery.min.js" charset="utf8"></script>
+	<script type="text/javascript" src="monitor/jquery.cookie.js" charset="utf8"></script>
+	<script type="text/javascript" src="monitor/iccomingTelEnter.js"charset="utf8"></script>
+	</body>
+</html>

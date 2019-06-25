@@ -2,6 +2,7 @@ package com.jn.api;
 
 import java.util.List;
 
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import com.jn.hr.model.AttendanceOverTime;
 import com.jn.hr.model.AttendanceOverTimeApiVo;
 import com.jn.hr.model.VacationManagement;
 import com.jn.system.log.annotation.ControllerLog;
+import com.jn.system.model.User;
 
 @RestController
 public class HrController extends BaseController implements HrClient{
@@ -32,15 +34,16 @@ public class HrController extends BaseController implements HrClient{
 
         @ControllerLog(doAction = "根据用户id与考勤年月查询历史考勤列表")
 		public Result<List<AttendanceManagementApiVo>> selectAttendanceManagementByUserId(@Validated @RequestBody  AttendanceManagement attendanceManagement){
-	    	Assert.notNull(attendanceManagement.getUserId(),"用户ID不能为空");
+        	User user = (User) SecurityUtils.getSubject().getPrincipal();
 			Assert.notNull(attendanceManagement.getAttendanceMonth(),"考勤月份不能为空");
-	    	List<AttendanceManagementApiVo> list = attendanceManagementService.selectAttendanceManagementByUserId(attendanceManagement);
+	    	List<AttendanceManagementApiVo> list = attendanceManagementService.selectAttendanceManagementByUserId(attendanceManagement,user.getId());
 			return new Result(list);
 		}
 	    
 	    @ControllerLog(doAction = "根据部门id与考勤年月查询历史考勤列表")
 		public Result<AttendanceManageApiVo> selectAttendanceManagementByDepartmentId(@Validated @RequestBody  AttendanceManagement attendanceManagement){
 	    	Assert.notNull(attendanceManagement.getAttendanceMonth(),"考勤月份不能为空");
+	    	Assert.notNull(attendanceManagement.getDepartmentId(),"部门id不能为空");
 	    	AttendanceManageApiVo attendanceManage  = attendanceManagementService.selectAttendanceManagementByDepartmentId(attendanceManagement);
 			return new Result(attendanceManage);
 		}

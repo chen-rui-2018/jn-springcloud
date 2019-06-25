@@ -16,14 +16,15 @@
       <!-- 大标题 -->
       <div class="right_headline">
         <p>{{seviceDetail.name}}
-          <span v-if="seviceDetail.contactQqGroup!=null&&seviceDetail.contactQqGroup!=''">q群咨询</span>
+          <span @click="getQQ" v-show="seviceDetail.contactQqGroup!=null&&seviceDetail.contactQqGroup!=''">q群咨询</span>
           <span @click="messageVisible = true">我要留言</span>
-          <span v-if="seviceDetail.isContactOnline==='1'">在线咨询</span>
+          <span v-show="seviceDetail.isContactOnline==='1'">在线咨询</span>
         </p>
       </div>
       <!-- 我要留言弹窗 -->
       <div class="message">
-        <el-dialog title="我要留言" :visible.sync="messageVisible" width="616px" >
+        <el-dialog title="我要留言" :visible.sync="messageVisible" width="616px"
+:modal-append-to-body=false>
           <el-form :model="messageform" label-position="left" label-width="100px" :rules="rules" >
             <el-form-item label="企业名称：" prop="firmName" > 
               <el-input v-model="messageform.firmName" placeholder="请输入内容   默认填入当前企业名称"></el-input>
@@ -78,7 +79,7 @@
                   </div>
                   <div class="baseIfor_table_item">
                     <el-form-item label="受理时间：">
-                      <span class="table_item_cont">{{seviceDetail.dealTime|time}}</span>
+                      <span class="table_item_cont">{{seviceDetail.dealTime}}</span>
                     </el-form-item>
                   </div>
                   <div class="baseIfor_table_item">
@@ -88,14 +89,14 @@
                   </div>
                   <div class="baseIfor_table_item">
                     <el-form-item label="在线受理地址：">
-                      <a :href="dealUrl" target="_blank">
-                        <div class="onlineaddr" @click="handleview">点击查看</div>
+                      <a :href="seviceDetail.dealUrl" target="_blank">
+                        <div class="onlineaddr">点击查看</div>
                       </a>
                     </el-form-item>
                   </div>
                   <div class="baseIfor_table_item">
                     <el-form-item label="联系电话：">
-                      <span class="table_item_cont">>{{seviceDetail.linkPhone}}</span>
+                      <span class="table_item_cont">{{seviceDetail.linkPhone}}</span>
                     </el-form-item>
                   </div>
                   <div class="baseIfor_table_item">
@@ -134,7 +135,7 @@
                     label="材料样本"
                     >
                     <template slot-scope="scope">
-                      <a :href="'http://112.94.22.222:2381/ibps'+scope.row.sample">{{scope.row.sampleName}}</a>
+                      <a :href="scope.row.sample">{{scope.row.sampleName}}</a>
                     </template>
                   </el-table-column>
                   <el-table-column
@@ -178,10 +179,10 @@
               <div>
                   <div class="guide_base"><span></span><span>依据</span></div>
                   <div class="table_item_cont">
-                    <span v-if="isWord&&word.length>135" class="66">{{word|word}} </span>
-                    <span v-else class="55">{{word}}</span>
-                    <span @click="isWord=!isWord" v-show="isWord&&word.length>135" class="pack_up">[点击展开]</span>
-                    <span @click="isWord=!isWord" v-show="isWord===false&&word.length>135" class="pack_up">[点击收起]</span>
+                    <!-- <span v-if="isWord&&word.length>135" class="66">{{word|word}} </span> -->
+                    <span v-html="seviceDetail.dealConditions"></span>
+                    <!-- <span @click="isWord=!isWord" v-show="isWord&&word.length>135" class="pack_up">[点击展开]</span>
+                    <span @click="isWord=!isWord" v-show="isWord===false&&word.length>135" class="pack_up">[点击收起]</span> -->
                   </div>
                   <div class="guide_base"><span></span><span>办理流程</span></div>
                   <div v-html="seviceDetail.flowPic" class="flowPic"></div>
@@ -198,7 +199,7 @@
                 </div>
               </template>
               <div class="baseIfor_table">
-                <span>{{seviceDetail.dealConditions}} </span>
+                <span v-html="seviceDetail.dealConditions"> </span>
               </div>
             </el-collapse-item>
           </el-collapse>
@@ -288,6 +289,14 @@ export default {
     this.getSeviceDetailList()
   },
   methods: {
+    getQQ(){
+      this.$alert('QQ群号', this.seviceDetail.contactQqGroup, {
+        confirmButtonText: '确定',
+        callback: action => {
+          
+        }
+      })
+    },
     getSeviceDetailList(){
       let _this = this;
       this.api.get({
@@ -296,7 +305,7 @@ export default {
           id:this.messageform.id
          },
         callback: function(res) {
-          console.log(res);
+          // console.log(res);
           if (res.code == "0000") {
             _this.loading=false
             _this.seviceDetail = res.data;
@@ -306,9 +315,9 @@ export default {
       });
     },
     // 获取在线办理地址
-    handleview(){
-      this.dealUrl=`http://192.168.10.31:1101/springcloud-park/guest/portal/sp/power/getDealUrl?id=${this.messageform.id}`
-    },
+    // handleview(){
+    //   this.dealUrl=`${this.api.host}springcloud-park/guest/portal/sp/power/getDealUrl?id=${this.messageform.id}`
+    // },
     counselnum(){
       this.residuenum=500-this.messageform.content.length
     },
@@ -337,6 +346,7 @@ export default {
 </script>
 <style lang="scss">
   .serviceDetail{
+    padding-top: 67px;
     // 我要留言弹窗
     .message{
       .el-dialog__body{
@@ -460,6 +470,12 @@ export default {
           background-color: #00a041;
           color:#FFF;
           border: solid 1px #00a041;
+        }
+        span:nth-child(3){
+          background-color: #00a041;
+          color:#FFF;
+          border: solid 1px #00a041;
+              margin-right: 12px;
         }
       }
     }
@@ -643,7 +659,9 @@ export default {
       padding-left: 10px;
     }
     // 办理流程
-    .flowPic{}
+    .flowPic{
+      text-align: center;
+    }
   }
 </style>
 

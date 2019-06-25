@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.common.util.Assert;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.common.util.cache.RedisCacheFactory;
@@ -27,7 +28,9 @@ import com.jn.enterprise.propaganda.model.*;
 import com.jn.enterprise.propaganda.service.BusinessPromotionService;
 import com.jn.enterprise.servicemarket.org.model.UserRoleInfo;
 import com.jn.enterprise.servicemarket.org.service.OrgColleagueService;
+import com.jn.enterprise.utils.IBPSFileUtils;
 import com.jn.enterprise.utils.IBPSUtils;
+import com.jn.park.utils.HtmlUtils;
 import com.jn.paybill.api.PayBillClient;
 import com.jn.paybill.model.PaymentBillModel;
 import com.jn.system.log.annotation.ServiceLog;
@@ -135,7 +138,7 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
     public PaginationData getBusinessPromotionList(BusinessPromotionListParam businessPromotionListParam,String loginAccount) {
         //判断当前用户是否为超级管理员，超级管理员可查看全部，非超级管理员只能查看自己发布的宣传信息
         String creator=loginAccount;
-        if(isSuperAdmin(loginAccount)){
+        if(StringUtils.isNotBlank(loginAccount)&& isSuperAdmin(loginAccount)){
             //超级管理员，查询全部
             creator="";
         }
@@ -158,12 +161,15 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
         List<BusinessPromotionListShow> resultList = businessPromotionMapper.getBusinessPromotionList(businessPromotionListParam,creator);
         for(BusinessPromotionListShow pShow:resultList){
             //设置宣传摘要
-            String replaceDetails=pShow.getPropagandaDetails().replaceAll("</?[^>]+>","");
+            String replaceDetails= HtmlUtils.getBriefIntroduction(pShow.getPropagandaDetails());
             if(StringUtils.isNotBlank(replaceDetails)){
-                String propagandaSummaries=replaceDetails.substring(0,replaceDetails.length()>100?100:replaceDetails.length()-1);
+                String propagandaSummaries=replaceDetails.substring(0,replaceDetails.length()>100?100:replaceDetails.length());
                 propagandaSummaries=replaceDetails.length()>100?propagandaSummaries+"......":propagandaSummaries;
                 pShow.setPropagandaSummaries(propagandaSummaries);
             }
+
+            // 处理图片格式
+            pShow.setPosterUrl(IBPSFileUtils.getFilePath(pShow.getPosterUrl()));
         }
         return  new PaginationData(resultList, objects == null ? 0 : objects.getTotal());
     }
@@ -196,7 +202,13 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
     @Override
     public BusinessPromotionDetailsShow getBusinessPromotionDetails(String propagandaId) {
         businessPromotionMapper.addClickNumById(propagandaId);
-        return businessPromotionMapper.getBusinessPromotionDetails(propagandaId);
+        BusinessPromotionDetailsShow businessPromotionDetails = businessPromotionMapper.getBusinessPromotionDetails(propagandaId);
+
+        // 处理图片格式
+        if (businessPromotionDetails != null) {
+            businessPromotionDetails.setPosterUrl(IBPSFileUtils.getFilePath(businessPromotionDetails.getPosterUrl()));
+        }
+        return businessPromotionDetails;
     }
 
     /**
@@ -418,33 +430,11 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
         }
         //redis中没有数据，从数据库获取
         List<TbServiceCode> tbServiceCodeList = getTbServiceCodeList();
-        //判断当前用户是否为超级管理员
-        if(isSuperAdmin(loginAccount)){
-            //查询全部用户类型返回
-            result=setPropagandaTypeShowInfo(tbServiceCodeList);
-            //把查询出的值放到redis中
-            cache.put(loginAccount, result);
-            return result;
-        }else{
-            //获取当前用户与宣传相关的角色
-            List<String>accountList=new ArrayList<>();
-            accountList.add(loginAccount);
-            List<UserRoleInfo> roleInfoList = orgColleagueService.getUserRoleInfoList(accountList, "宣传");
-            if(roleInfoList.isEmpty()|| StringUtils.isBlank(roleInfoList.get(0).getRoleName())){
-                logger.warn("获取宣传类型失败，当前用户[account:{}]没有企业宣传相关权限",loginAccount);
-                throw new JnSpringCloudException(BusinessPromotionExceptionEnum.ACCOUNT_CAN_NOT_ALLOW_PROPAGANDA);
-            }
-            UserRoleInfo userRoleInfo = roleInfoList.get(0);
-            //用户是企业相关角色，返回企业相关宣传类型和APP启动宣传类型
-            String business="企业";
-            if(!userRoleInfo.getRoleName().contains(business)){
-                business=userRoleInfo.getRoleName();
-            }
-            setPropagandaShowInfo(tbServiceCodeList, business, result);
-            //把查询出的值放到redis中
-            cache.put(loginAccount, result);
-            return result;
-        }
+        //查询全部用户类型返回
+        result=setPropagandaTypeShowInfo(tbServiceCodeList);
+        //把查询出的值放到redis中
+        cache.put(loginAccount, result);
+        return result;
     }
 
     /**
@@ -771,16 +761,19 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
             //修改时间
             bpw.setModifiedTime(DateUtils.formatDate(tbPropaganda.getModifiedTime(), PATTERN));
         }
+
+        // 处理图片格式
+        bpw.setPosterUrl(IBPSFileUtils.uploadFile2Json(loginAccount, bpw.getPosterUrl()));
+
         //启动工作流
         IBPSResult ibpsResult = IBPSUtils.startWorkFlow(businessPromotionProcessId, loginAccount, bpw);
         String okStatus="200";
         //启动工作流成功
         if(okStatus.equals(ibpsResult.getState())){
             logger.info("宣传编码为：[{}]的宣传信息审批流程启动成功,流程实例id为：[{}]",tbPropaganda.getPropagandaCode(),ibpsResult.getData());
-            //逻辑删除数据表中的数据（传递的数据）
-            tbPropaganda=new TbPropaganda();
-            tbPropaganda.setRecordStatus(RecordStatusEnum.DELETE.getValue());
-            tbPropagandaMapper.updateByExampleSelective(tbPropaganda, example);
+            //删除数据表中的数据（传递的数据）
+            int resNum = tbPropagandaMapper.deleteByExample(example);
+            logger.info("企业宣传提交审核删除原有数据成功，数据响应条数：{}",resNum);
         }
         return ibpsResult;
     }

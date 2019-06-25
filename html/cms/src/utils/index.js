@@ -238,6 +238,24 @@ export function getTime(type) {
   }
 }
 
+export function fnSetTreeData(arr) {
+  const data = [...arr]
+  let tree = data.filter((father) => {
+    const branchArr = data.filter((child) => {
+      if (father.id === child.pid) child._hasParent = true
+      return father.id === child.pid
+    })
+    if (branchArr.length > 0) {
+      father.children = branchArr
+    }
+    return !father._hasParent
+  })
+  tree = tree.filter((item) => {
+    return !item._hasParent
+  })
+  return tree
+}
+
 export function debounce(func, wait, immediate) {
   let timeout, args, context, timestamp, result
 
@@ -257,7 +275,6 @@ export function debounce(func, wait, immediate) {
       }
     }
   }
-
   return function(...args) {
     context = this
     timestamp = +new Date()
@@ -299,4 +316,24 @@ export function uniqueArr(arr) {
 
 export function isExternal(path) {
   return /^(https?:|mailto:|tel:)/.test(path)
+}
+function UrlSearch() {
+  var name, value
+  var str = location.href // 取得整个地址栏
+  var num = str.indexOf('?')
+  str = str.substr(num + 1) // 取得所有参数   stringvar.substr(start [, length ]
+
+  var arr = str.split('&') // 各个参数放到数组里
+  for (var i = 0; i < arr.length; i++) {
+    num = arr[i].indexOf('=')
+    if (num > 0) {
+      name = arr[i].substring(0, num)
+      value = arr[i].substr(num + 1)
+      this[name] = value
+    }
+  }
+}
+const urlSearch = new UrlSearch()
+export {
+  urlSearch
 }

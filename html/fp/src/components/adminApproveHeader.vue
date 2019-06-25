@@ -14,7 +14,7 @@
                   <li class="active_header" :class="{'liActiv':isActClass===true}" >首页</li>
                     <li @click='$router.push({path:"/serverOrg"})'> 服务机构</li>
                     <li @click='$router.push({path:"/serverPro"})'>服务产品</li>
-                    <li @click='$router.push({path:"/serverCon"})'>服务顾问</li>
+                    <li @click='$router.push({path:"/serverCon"})'>服务专员</li>
                     <li @click='$router.push({path:"/actiTrain"})'>活动培训</li>
                     <li @click='$router.push({path:"/aboutUs"})'>关于我们</li>
                 </div>
@@ -45,7 +45,7 @@
                 <el-select v-model="select" slot="prepend" placeholder="产品" @visible-change="changeselectShow">
                   <el-option label="机构" value="1"></el-option>
                   <el-option label="产品" value="2"></el-option>
-                  <el-option label="顾问" value="3"></el-option>
+                  <el-option label="专员" value="3"></el-option>
                   <el-option label="活动" value="3"></el-option>
                 </el-select>
                 <el-button slot="append" icon="el-icon-search">搜索 </el-button>

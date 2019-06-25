@@ -3,6 +3,8 @@
         <div class="incubatorNav">
             <span class="pointer" @click="$router.push({path:'/'})">首页</span>
             <span>/</span>
+            <span class="pointer" @click="$router.push({path:'/academicExchange'})">学术科技</span>
+            <span>/</span>
             <span class="mainColor">学术科技详情</span>
         </div>
         <div class="announcement1 pr">
@@ -65,6 +67,8 @@ export default {
   padding-top: 65px;
   .incubatorNav {
     padding: 15px 0;
+    font-weight: bold;
+    font-size: 13px;
   }
   .announcement1 {
     // text-align: center;
@@ -97,7 +101,7 @@ export default {
     }
   }
   .announcement2 {
-      color: #333;
+      // color: #333;
       margin-bottom:50px;
     .title {
       margin: 10px 0;

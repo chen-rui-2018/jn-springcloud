@@ -155,17 +155,17 @@ public class MessageListController extends BaseController {
     }
 
 
-    @ControllerLog(doAction = "修改已读状态")
-    @ApiOperation(value = "修改已读状态",notes = "修改已读状态", httpMethod = "POST")
+    @ControllerLog(doAction = "修改为已读状态")
+    @ApiOperation(value = "修改为已读状态",notes = "将消息修改为已读状态", httpMethod = "POST")
     @PostMapping(value = "/updateIsReadStatus")
     @RequiresPermissions("/message/list/updateIsReadStatus")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id",value = "消息ID",dataType = "String",paramType = "query")
-    })
-    public Result updateIsReadStatus(String id){
-
-        messageListService.updateIsReadStatus(id);
-        return new Result(new Result<>());
+    @ApiImplicitParam(name = "id",value = "消息ID",dataType = "String",paramType = "query")
+    public Result<String> updateIsReadStatus(String id){
+        if(StringUtils.isBlank(id)){
+            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"请输入消息ID");
+        }
+        String updateIsReadStatus = messageListService.updateIsReadStatus(id);
+        return new Result(updateIsReadStatus);
     }
 
 

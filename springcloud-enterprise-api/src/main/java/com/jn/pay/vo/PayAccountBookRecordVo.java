@@ -20,7 +20,7 @@ public class PayAccountBookRecordVo extends PayAccountBookMoneyRecord implements
     @ApiModelProperty(value="月份")
     private String month;
 
-    @ApiModelProperty(value="账本类型【1：电费，2：物业费，3：维修费，4：房租费，5：物品租赁费，6：停车费，7：车位费，8：水费，9：宣传费，10：体检费】")
+    @ApiModelProperty(value="账本类型【ELECTRIC:电费，PROPERTY:物业费，REPAIR:维修费，ROOM_LEASE:房租费，GOODS_LEASE:物品租赁费，TEMPORARY_PARKING:停车费，PARKING_LEASE:车位费，WATER:水费，PROMOTION:宣传费，HEALTH:体检费】")
     private String acBookType;
 
     public static long getSerialVersionUID() {

@@ -39,8 +39,8 @@ public enum PayEnum {
     ERR_0115("0115", "价格不对"),
     ERR_0116("0116", "物品数量不对"),
     ERR_0117("0117", "过程返回255"),
-    ERR_0118("0118", "DB错误");
-
+    ERR_0118("0118", "DB错误"),
+    ERR_0019("0019", "支付下单异常");
     private String code;
     private String message;
 

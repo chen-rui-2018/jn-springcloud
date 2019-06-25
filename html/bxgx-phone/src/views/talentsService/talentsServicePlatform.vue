@@ -21,6 +21,10 @@
             <p>
               <span>系统支持：</span>
               <span v-html="item.systemSupport"></span></p>
+            <p v-if="sendData.subordinatePlatformName!='1'">
+              <span>账号密码：</span>
+              <span><input type="text" v-model="item.accountAndPassword" @input="changeap(item.accountAndPassword,item.id)" placeholder="输入账号密码,例：admin/123(限50字)" maxlength="50"></span>
+              </p>
             <p>{{item.remark}} </p>
           </li>
         </ul>
@@ -44,7 +48,9 @@ export default {
         subordinatePlatformName: '1'
       },
       platFormList: [],
-      total: 0
+      total: 0,
+      accountAndPassword: '',
+      platformId: ''
     }
   },
   mounted () {
@@ -52,6 +58,25 @@ export default {
     this.getPlatformList()
   },
   methods: {
+    changeap (accountAndPassword, id) {
+      this.platformId = id
+      this.accountAndPassword = accountAndPassword
+      this.api.post({
+        url: 'addOrEditMemorandum',
+        data: {
+          accountAndPassword: this.accountAndPassword,
+          platformId: this.platformId
+        },
+        dataFlag: true,
+        callback: (res) => {
+          // console.log(res);
+          if (res.code === '0000') {
+          } else {
+            this.$vux.toast.text(res.result, 'middle')
+          }
+        }
+      })
+    },
     scrollBottom () {
       // let _this = this
       window.onscroll = () => {
@@ -68,6 +93,8 @@ export default {
                 if (res.code === '0000') {
                   this.platFormList.push(...res.data.rows)
                   // console.log(...res.data.rows)
+                } else {
+                  this.$vux.toast.text(res.result, 'middle')
                 }
               }
             })
@@ -83,6 +110,8 @@ export default {
           if (res.code === '0000') {
             // console.log(res)
             this.typeList = res.data
+          } else {
+            this.$vux.toast.text(res.result)
           }
         }
       })
@@ -96,6 +125,8 @@ export default {
           if (res.code === '0000') {
             this.platFormList = res.data.rows
             this.total = res.data.total
+          } else {
+            this.$vux.toast.text(res.result)
           }
         }
       })
@@ -111,7 +142,7 @@ export default {
 <style lang="scss">
   .talentsServicePlatform{
     .banner{
-      padding-top: 105px;
+      // padding-top: 105px;
       img{
         width:100%;
       }
@@ -195,6 +226,17 @@ export default {
             p:nth-child(4){
               padding-top: 30px;
               color:#333333;
+              display: flex;
+              span:nth-child(1){
+                width:25%;
+              }
+              span:nth-child(2){
+                color:#666666;
+                width:70%;
+              }
+               input{
+                width:100%
+              }
             }
 
           }

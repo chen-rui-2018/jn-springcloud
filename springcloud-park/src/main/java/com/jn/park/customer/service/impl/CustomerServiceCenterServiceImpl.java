@@ -225,10 +225,20 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
                         throw new JnSpringCloudException(CustomerCenterExceptionEnum.NETWORK_ANOMALY);
                     }
                     for(TbClientRolePersonInfo personInfo:rolePersonInfoList){
-                        if(StringUtils.equals(StringUtils.join(userIds,","), personInfo.getUserId())){
-                            historyShow.setOptionDeptId(personInfo.getRoleId());
-                            historyShow.setOptionDeptName(personInfo.getRoleName());
-                            break;
+                        if(StringUtils.equals(CUSTER_CENTER, result.getTaskName())){
+                            historyShow.setOptionDeptName(CUSTER_CENTER);
+                        }else if(StringUtils.equals(EXECUTE_PERSON, result.getTaskName())){
+                            //把数值转换为字符串，以逗号分隔
+                            String joinUserId = StringUtils.join(userIds, ",");
+                            String[] reverseUserIds = ArraysReverse(userIds.toArray(new String[userIds.size()]));
+                            //反转userId
+                            String revUserId = StringUtils.join(reverseUserIds,",");
+                            if(StringUtils.equals(joinUserId, personInfo.getUserId())
+                                    || StringUtils.equals(revUserId, personInfo.getUserId())){
+                                historyShow.setOptionDeptId(personInfo.getRoleId());
+                                historyShow.setOptionDeptName(personInfo.getRoleName());
+                                break;
+                            }
                         }
                     }
                 }else{
@@ -263,6 +273,22 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
         }
         customerVo.setExecuteHistoryShowList(executeHistoryShowList);
         return customerVo;
+    }
+
+    /**
+     * 反转数组元素
+     * @param resource 初始数组
+     * @return
+     */
+    @ServiceLog(doAction = "反转数组元素")
+    private String[] ArraysReverse(String [] resource){
+        String[] target = new String[resource.length];
+        int n = resource.length - 1;
+        for (int i = 0; i < resource.length; i++) {
+            target[n] = resource[i];
+            n--;
+        }
+        return target;
     }
 
     /**
@@ -492,9 +518,15 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
     private List<ConsultationCustomerListShow> getCustomerCenterList(String loginAccount) {
         TbClientServiceCenterCriteria example=new TbClientServiceCenterCriteria();
         //流程实例id为空或为null的不被查询
-        example.createCriteria().andCreatorAccountEqualTo(loginAccount).andProcessInsIdIsNotNull()
-                .andProcessInsIdNotEqualTo("")
-                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        if(StringUtils.isBlank(loginAccount)){
+            example.createCriteria().andProcessInsIdIsNotNull()
+                    .andProcessInsIdNotEqualTo("")
+                    .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        }else{
+            example.createCriteria().andCreatorAccountLike("%"+loginAccount+"%").andProcessInsIdIsNotNull()
+                    .andProcessInsIdNotEqualTo("")
+                    .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        }
         example.setOrderByClause("created_time desc");
         List<TbClientServiceCenter> tbClientServiceCenterList = tbClientServiceCenterMapper.selectByExample(example);
         if(tbClientServiceCenterList.isEmpty()){
@@ -504,10 +536,28 @@ public class CustomerServiceCenterServiceImpl implements CustomerServiceCenterSe
             for(TbClientServiceCenter tbClientServiceCenter:tbClientServiceCenterList){
                 ConsultationCustomerListShow customerListShow=new ConsultationCustomerListShow();
                 BeanUtils.copyProperties(tbClientServiceCenter, customerListShow);
+                customerListShow.setUserAccount(tbClientServiceCenter.getCreatorAccount());
                 customerListShow.setCreatedTime(DateUtils.formatDate(tbClientServiceCenter.getCreatedTime(),PATTERN));
                 resultList.add(customerListShow);
             }
             return resultList;
         }
     }
+
+    /**
+     * 查询用户来电历史信息
+     * @param calledPhoneHistoryParam
+     * @return
+     */
+    @ServiceLog(doAction = "查询用户来电历史信息")
+    @Override
+    public PaginationData getUserCalledHistory(CalledPhoneHistoryParam calledPhoneHistoryParam) {
+        ConsultationCustomerListParam param=new ConsultationCustomerListParam();
+        param.setNeedPage("1");
+        param.setPage(calledPhoneHistoryParam.getPage());
+        param.setRows(calledPhoneHistoryParam.getRows());
+        //若没有输入手机号，默认查询20条用户信息，按时间倒序排序,若有输入手机号，默认查询该手机号的20条历史信息
+        return consultationCustomerList(param, calledPhoneHistoryParam.getSearchPhone());
+    }
+
 }

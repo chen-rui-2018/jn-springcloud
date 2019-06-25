@@ -32,14 +32,14 @@ public class WxMiniUserController {
     /**
      * 获取token
      */
-    @ControllerLog(doAction = "1、小程序登陆凭证校验,2、新增/修改微信用户信息,3、已绑定账号则返回token，未绑定token为空")
+    @ControllerLog(doAction = "小程序登陆凭证校验,返回Token")
     @ApiOperation(value = "登陆凭证校验,返回Token", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/checkCodeAndGetToken")
     public Result<String> checkCodeAndGetToken(@Validated @RequestBody WxMiniGetTokenParam wxMiniGetTokenParam) {
         return wxMiniUserService.checkCodeAndGetToken(wxMiniGetTokenParam);
     }
 
-    @ControllerLog(doAction = "1、小程序登陆凭证校验,2、注册绑定微信用户信息,3、返回token")
+    @ControllerLog(doAction = "小程序注册绑定微信用户信息,返回token")
     @ApiOperation(value = "注册绑定微信用户信息，返回token", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/registerUserAndGetToken")
     public Result<String> registerUserAndGetToken(@Validated @RequestBody WxMiniRegisterUserGetTokenParam wxMiniRegisterUserGetTokenParam) {

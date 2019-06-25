@@ -6,11 +6,13 @@ import com.jn.common.util.RestTemplateUtil;
 import com.jn.miniprogram.base.enums.WxExceptionEnums;
 import com.jn.miniprogram.base.service.WxMiniHttpClientService;
 import com.jn.miniprogram.base.service.WxWithAccessToken;
+import com.jn.miniprogram.base.utils.QrcodeRestTemplateUtil;
 import com.jn.miniprogram.base.utils.json.JacksonJsonTransformUtil;
 import com.jn.system.log.annotation.ServiceLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 
@@ -50,7 +52,7 @@ public class WxMiniHttpClientServiceImpl implements WxMiniHttpClientService {
         try {
             return this.post(url,JacksonJsonTransformUtil.objectToJson(postObj));
         } catch (JsonProcessingException e) {
-            throw new JnSpringCloudException(WxExceptionEnums.JSON_PROCESS_FAL);
+            throw new JnSpringCloudException(WxExceptionEnums.JSON_PROCESS_FAIL);
         }
 
     }
@@ -67,22 +69,28 @@ public class WxMiniHttpClientServiceImpl implements WxMiniHttpClientService {
         try {
             return this.postRequestReturnInputStream(url,JacksonJsonTransformUtil.objectToJson(postParam));
         } catch (JsonProcessingException e) {
-            throw new JnSpringCloudException(WxExceptionEnums.JSON_PROCESS_FAL);
+            throw new JnSpringCloudException(WxExceptionEnums.JSON_PROCESS_FAIL);
         }
     }
 
     @Override
     @ServiceLog(doAction = "POST请求微信api接口.")
     public InputStream postRequestReturnInputStream(String url, String postParam) {
-        return null;
-        //return RestTemplateUtil.postRequestReturnInputStream(wxWithAccessToken.withAccessToken(url),postParam);
+        try {
+            return QrcodeRestTemplateUtil.postRequestReturnInputStream(wxWithAccessToken.withAccessToken(url),postParam);
+        } catch (IOException e) {
+            throw new JnSpringCloudException(WxExceptionEnums.GET_WX_MINI_QR_CODE_FAIL);
+        }
     }
 
     @Override
     @ServiceLog(doAction = "GET请求微信api接口,URL为完整接口地址.")
     public InputStream getRequestReturnInputStream(String url) {
-        return null;
-        //return RestTemplateUtil.getRequestReturnInputStream(wxWithAccessToken.withAccessToken(url));
+        try {
+            return QrcodeRestTemplateUtil.getRequestReturnInputStream(wxWithAccessToken.withAccessToken(url));
+        } catch (IOException e) {
+            throw new JnSpringCloudException(WxExceptionEnums.GET_WX_MINI_QR_CODE_FAIL);
+        }
     }
 
     @Override

@@ -79,12 +79,6 @@ public class OrgDetailUpdateParameter implements Serializable {
             ,example = "['gufenqiye','fazhanqi']")
     private String[] developmentStage;
 
-    @NotNull(message = "企业性质不能为空")
-    @ApiModelProperty(value = "客户偏好-企业性质[数组][企业字典表type=3的，即企业性质类型。数据从【服务超市-机构字典】接口获取(id)]"
-            ,notes = "企业字典表type=3的，即企业性质类型。数据从【服务超市-机构字典】接口获取(id)"
-            ,example = "['guoyouqiye','minyingqiye']")
-    private String[] companyNature;
-
     @ApiModelProperty(value = "机构资质集合")
     @NotNull(message = "机构资质列表不能为空")
     private List<OrgLicense> licenses;
@@ -261,14 +255,6 @@ public class OrgDetailUpdateParameter implements Serializable {
         this.developmentStage = developmentStage;
     }
 
-    public String[] getCompanyNature() {
-        return companyNature;
-    }
-
-    public void setCompanyNature(String[] companyNature) {
-        this.companyNature = companyNature;
-    }
-
     public List<OrgLicense> getLicenses() {
         return licenses;
     }
@@ -430,7 +416,6 @@ public class OrgDetailUpdateParameter implements Serializable {
                 ", orgSpeciality=" + Arrays.toString(orgSpeciality) +
                 ", industrySector=" + Arrays.toString(industrySector) +
                 ", developmentStage=" + Arrays.toString(developmentStage) +
-                ", companyNature=" + Arrays.toString(companyNature) +
                 ", licenses=" + licenses +
                 ", businessType='" + businessType + '\'' +
                 ", staffCount=" + staffCount +

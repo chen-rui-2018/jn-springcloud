@@ -25,22 +25,22 @@
         </div>
         <div class="quickEnter">
           <ul>
-            <li>
-              <span>人才申报</span>
-              <p>PEOPLE&nbsp;DECLARE</p>
+             <li @click="$router.push({path:'/talentsService'})">
+              <span>人才服务</span>
+              <p>THE&nbsp;TALENT&nbsp;SERVICE</p>
               <img src="@/../static/img/right-arrow.png" alt="">
             </li>
-            <li>
-              <span>高新企业</span>
-              <p>HIGH-TECH&nbsp;ENTERPRISE</p>
+            <li @click="$router.push({path:'/declarationCenter'})">
+              <span>申报中心</span>
+              <p>DECLARE&nbsp;CENTER</p>
               <img src="@/../static/img/right-arrow.png" alt="">
             </li>
-            <li>
+            <li @click="$router.push({path:'/incubatorEnterprises'})">
               <span>孵化企业</span>
               <p>INCUBATION&nbsp;ENTERPRISE</p>
               <img src="@/../static/img/right-arrow.png" alt="">
             </li>
-            <li>
+            <li @click="$router.push({path:'/compassView'})">
               <span>行政审批</span>
               <p>ADMINISTRATIVE&nbsp;EXAMINATIO</p>
               <img src="@/../static/img/right-arrow.png" alt="">
@@ -49,24 +49,23 @@
         </div>
       </div>
       <div class="popularActi w" ref="popularActi" data-class="bottom" style="padding-bottom: 20px;">
-        <div ref="acti11" data-class="bottom">
-          <div class="tit color2">园区概况</div>
-          <div class="eng mainColor">PARK PROFILE</div>
-          <div class="line"></div>
-        </div>
+        <router-link to="/parkProfile">
+          <div ref="acti11" data-class="bottom">
+            <div class="tit color2">园区概况</div>
+            <div class="eng mainColor">PARK PROFILE</div>
+            <div class="line"></div>
+          </div>
+        </router-link>
       </div>
-      <div class="flex-center">
+      <div class="flex-center op-0" ref="arrowDown" data-class="bottom">
         <arrow-down line></arrow-down>
       </div>
       <div class="park-info op-0" ref="park-info" data-class="bottom1">
-        <div class="park-poster">
-          <img src="@/../static/img/banner11.png" alt="">
-        </div>
+        <div class="park-poster" :style="{backgroundImage: 'url(' + basicInfo.mainPicture + ')'}"></div>
         <div class="park-desc">
           <span v-if="!showMore">{{ parkDesc | formatParkDesc}}</span>
           <span v-else>{{ parkDesc }}</span>
-<!--          <div v-html="basicHtml"></div>-->
-          <more-btn v-if="!showMore" class="more-desc" @click.native="showMore = true"></more-btn>
+          <more-btn v-if="!showMore && parkDesc.length > 100" class="more-desc" @click.native="showMore = true"></more-btn>
         </div>
       </div>
       <div class="park-film op-0" ref="park-film" data-class="bottom1">
@@ -83,30 +82,41 @@
           </div>
         </div>
         <div class="film-show">
-          <video src="" width="100%" poster="@/../static/img/banner11.png"></video>
+          <video src="" width="100%" poster="@/../static/img/investment-film.png"></video>
 <!--          <img src="@/../static/img/banner11.png" alt="">-->
           <div class="film-play"></div>
           <div class="green-frame"></div>
         </div>
       </div>
 
-      <div class="policyCenter pd-b-n w" ref="policyCenter" data-class="bottom1">
-        <div ref="poCenter1" data-class="bottom">
-          <div class="tit color2 pr">招商政策</div>
-          <div class="eng mainColor">INVESTMENT POLICY</div>
-          <div class="line"></div>
-        </div>
+      <div
+        v-if="businessAdPolicy.length > 0"
+        class="policyCenter pd-b-n w"
+        ref="policyCenter"
+        data-class="bottom1">
+        <router-link to="/investmentPolicy">
+          <div ref="poCenter1" data-class="bottom">
+            <div class="tit color2 pr">招商政策</div>
+            <div class="eng mainColor">INVESTMENT POLICY</div>
+            <div class="line"></div>
+          </div>
+        </router-link>
         <div class="paging w pr" ref="poCenter2" data-class="bottom">
           <div class="swiper-container">
             <div class="swiper-wrapper">
               <div
                 v-for="(list, listIndex) in businessAdPolicy"
+                :key="listIndex"
                 class="swiper-slide"
               >
                 <ul class="page1 clearfix" data-class="bottom">
                   <li
                     v-for="(item, index) in list"
-                    data-class="left">
+                    :key="index"
+                    class="pointer"
+                    data-class="left"
+                    @click="$router.push({path:'/investmentPolicyDetail',query:{ id: item.id }})"
+                  >
                     <div class="left1">N</div>
                     <div class="right1">
                       <div class="rightTit color1">{{ item.title }}</div>
@@ -129,21 +139,28 @@
             <div class="swiper-button-next"></div>
           </div>
         </div>
-        <div class="districtGardens w" ref="districtGardens" data-class="bottom1">
-          <div ref="disGardens" data-class="bottom">
-            <div class="tit color2">招商动态</div>
-            <div class="eng mainColor">MERCHANTS DYNAMIC</div>
-            <div class="line"></div>
-          </div>
+        <div
+          v-if="businessAdDynamic.length > 0"
+          class="districtGardens w"
+          ref="districtGardens"
+          data-class="bottom1">
+          <router-link to="/investmentDynamic">
+            <div ref="disGardens" data-class="bottom">
+              <div class="tit color2">招商动态</div>
+              <div class="eng mainColor">MERCHANTS DYNAMIC</div>
+              <div class="line"></div>
+            </div>
+          </router-link>
           <div class="more-garden">
             <div
               v-for="(item, index) in businessAdDynamic"
               :key="index"
               class="more-garden-card"
+              @click="$router.push({ path:'/investmentDynamicDetail',query:{ id: item.id } })"
             >
               <div class="more-garden-card-cell">
                 <img class="more-garden-img" :src="item.adCover" alt=""/>
-                <div class="more-garden-desc">{{ item.content || '暂无'}}</div>
+                <div class="more-garden-desc">{{ item.title }}</div>
                 <div class="more-garden-footer">
                   <span class="more-garden-date">{{ item.startTime }}</span>
                   <more-btn></more-btn>
@@ -169,35 +186,45 @@
             class="multi-park">
             <div class="multi-park-title">
               <div class="fw-title">{{ row.parkName }}</div>
-              <div class="gray-tips">查看更多</div>
+              <router-link :to="'/investmentInfo?parkId=' + row.id" class="gray-tips">查看更多</router-link>
             </div>
             <div class="multi-park-content">
               <div
                 v-for="(item, index) in row.list"
                 :key="index"
                 :class="{small: index !== 0}"
-                class="multi-park-card">
+                class="multi-park-card"
+              >
                 <div class="multi-park-card-cell">
-                  <img :src="item.adCover"  alt="">
-                  <div v-if="index !== 0" class="multi-park-desc">
-                    <div class="fw-title">{{ item.title }}</div>
-                    <div class="gray-tips">{{ item.subTitle }}</div>
-                    <div class="tag-list">
-                      <div class="tag-btn">
-                        <el-tag
-                          v-for="(tag, tagIndex) in item.adFlag.split(',')"
-                          v-if="tagIndex < 2"
-                          :key="tagIndex"
-                          class="tag-text"
-                          type="success"
-                          size="mini"
-                          color="#ECFCF2"
-                        >{{ tag }}</el-tag>
-                        <div v-if="item.adFlag.split(',').length >= 2">...</div>
+                  <router-link
+                    v-if="index === 0"
+                    :to="'/parkDetails?id=' + row.id">
+                    <img :src="item.adCover"  alt=""/>
+                  </router-link>
+                  <img v-else :src="item.adCover"  alt=""/>
+                  <router-link
+                    v-if="index !== 0"
+                    :to="'/investmentInfoDetail?id=' + item.id">
+                    <div class="multi-park-desc">
+                      <div class="fw-title">{{ item.title }}</div>
+                      <div class="gray-tips">{{ item.subTitle }}</div>
+                      <div class="tag-list">
+                        <div class="tag-btn">
+                          <el-tag
+                            v-for="(tag, tagIndex) in item.adFlag.split(',')"
+                            v-if="tagIndex < 2"
+                            :key="tagIndex"
+                            class="tag-text"
+                            type="success"
+                            size="mini"
+                            color="#ECFCF2"
+                          >{{ tag }}</el-tag>
+                          <div v-if="item.adFlag.split(',').length >= 2">...</div>
+                        </div>
+                        <div class="method-btn">立即考察</div>
                       </div>
-                      <div class="method-btn">立即考察</div>
                     </div>
-                  </div>
+                  </router-link>
                 </div>
               </div>
             </div>
@@ -227,14 +254,14 @@
         show3: false,
         show4: false,
         showMore: false,
-        parkDesc: '南京白下高新技术产业园区位于南京市东部风景秀丽的紫金山脚下，毗邻南京理工大学。园区自2001年成立以来，先后被批准为国家大学科南京白下高新技术产业园区位于南京市东部风景秀丽的紫金山脚下，毗邻南京理工大学。园区自2001年成立以来，先后被批准为国家大学科',
+        parkDesc: '为充分发挥省级高新区服务管理及品牌优势，形成市场、政府“两只手”齐发力，使社会园区开发建设更快、产业集聚更优、经济效益更好，入驻企业更满意，秦淮区委、区政府启动高新区创新转型的秦淮实践。经历了三个阶段的改革创新。',
         activeNames: ["1"],
         searchData:'',
         showBtn:false,
         sw:'1',
         nodeList: [],
         bannerList: [],
-        basicHtml: '',
+        basicInfo: '',
         businessAdDynamic: [],
         businessAdPolicy: [],
         parkList: [],
@@ -249,7 +276,12 @@
     },
     filters: {
       formatParkDesc(str) {
-        return  str.substring(0, 112) + '...'
+        const num = 100
+        if (str.length > num) {
+          return  str.substring(0, num) + '...'
+        } else {
+          return  str
+        }
       }
     },
     methods: {
@@ -259,7 +291,7 @@
             url: 'basic',
             callback: (res) => {
               if (res.code === "0000") {
-                this.basicHtml = res.data.parkIntroduce
+                this.basicInfo = res.data
                 resolve()
               } else {
                 this.$message.error(res.result)
@@ -423,13 +455,13 @@
             this.parkList.forEach((item, index) => {
               this.getPartDetail(item.id)
                 .then((data) => {
-                  data.rows.unshift({
+                  const rows = data.rows
+                 rows.unshift({
                     adCover: item.mainPicture
                   })
-                  this.$set(item, 'list', data.rows)
+                  this.$set(item, 'list',rows)
                 })
             })
-            console.dir(this.parkList)
             this.$nextTick(() => {
               this.loadingParkList = true
             })
@@ -444,8 +476,6 @@
             this.formatScrollTop()
             window.addEventListener("scroll", this.handleScroll);
             new swiper(".swiper-container", {
-              direction: "horizontal", // 垂直切换选项
-              loop: true, // 循环模式选项
               // 如果需要分页器
               pagination: {
                 el: ".swiper-pagination"
@@ -476,11 +506,10 @@
             callback: (res) => {
               if (res.code === "0000") {
                 this.bannerList = res.data.rows
-                console.dir(this.bannerList)
                 resolve()
               } else {
-                reject()
                 this.$message.error(res.result)
+                reject()
               }
             }
           })
@@ -500,9 +529,10 @@
         width: 800px;
         margin: 0 auto;
         .park-poster {
-          img {
-            width: 100%;
-          }
+          width: 800px;
+          height: 307px;
+          background-size: cover;
+          background-repeat: no-repeat;
         }
         .park-desc {
           margin-top: 10px;
@@ -535,7 +565,7 @@
         }
         .film-desc-content {
           margin-top: 20px;
-          line-height: 18px;
+          line-height: 26px;
         }
         .square-angle-bg {
           @include flex($h: flex-end);
@@ -561,7 +591,7 @@
         position: relative;
         .green-frame {
           width: 368px;
-          height: 286px;
+          height: 354px;
           position: absolute;
           left: -34px;
           top: 50%;
@@ -580,7 +610,8 @@
           height: $size;
           position: absolute;
           left: 112px;
-          top: 137px;
+          top: 50%;
+          transform: translateY(-50%);
           @include image('~@/../static/img/film-play.png');
           transition: .3s;
           cursor: pointer;
@@ -596,6 +627,7 @@
       flex-wrap: wrap;
       @include flex;
       .more-garden-card {
+        width: 300px;
         box-sizing: border-box;
         padding: 20px;
         .more-garden-card-cell {
@@ -616,16 +648,15 @@
             border-radius: 50%;
           }
           .more-garden-desc {
-            height: 66px;
+            height: 48px;
             margin-top: 35px;
             text-align: left;
-            text-indent: 2em;
             font-size: 12px;
             color: #666;
             overflow: hidden;
             text-overflow:ellipsis;//文本溢出显示省略号
             display: -webkit-box;
-            -webkit-line-clamp: 4;
+            -webkit-line-clamp: 3;
             -webkit-box-orient: vertical;
           }
           .more-garden-footer {
@@ -681,6 +712,7 @@
             width: 100%;
             margin-top: -1px;
             display: block;
+            height: 285px;
           }
           .multi-park-desc {
             .fw-title {
@@ -914,6 +946,9 @@
               width: 278px;
               text-align: left;
               .rightTit {
+                overflow: hidden;
+                text-overflow:ellipsis;
+                white-space: nowrap;
                 font-size: 14px;
               }
               > p {

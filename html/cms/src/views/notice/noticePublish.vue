@@ -73,6 +73,7 @@
       <div class="btn-row">
         <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
         <el-button @click="resetForm('ruleForm')">重置</el-button>
+        <el-button @click="$router.go(-1)">返回上一页</el-button>
       </div>
     </div>
   </div>

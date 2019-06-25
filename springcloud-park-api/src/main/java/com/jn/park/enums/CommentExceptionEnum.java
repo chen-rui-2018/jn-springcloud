@@ -16,6 +16,7 @@ public enum CommentExceptionEnum  implements CodeAndMsg {
     APPLY_ROOT_ID_NOT_NULL("4020241","活动id/服务id不能为空"),
     CURRENT_ACCOUNT_HAVE_LIKE("4020242","当前用户已点赞，请勿重复操作"),
     CURRENT_ACCOUNT_HAVE_CANCEL_LIKE("4020243","当前用户已取消点赞，请勿重复操作"),
+    NOT_ALLOW_COMMENT("4020244","当前需求对接结果非“对接成功”,不允许评价"),
     ;
     /**
      * 编码

@@ -23,17 +23,16 @@ export default {}
     background-color: #fff;
     align-items: stretch;
     .target-frame-l {
-      max-height: 500px;
+      max-height: 700px;
       overflow: auto;
-      width: 200px;
+      width: 30%;
       padding: 10px;
       flex: none;
     }
     .target-frame-r {
       min-height: 100%;
-      width: 100%;
+      width: 70%;
       padding: 15px;
-      flex: 1;
       border-left: 1px solid $gray;
       .target-row {
         margin: 5px auto;

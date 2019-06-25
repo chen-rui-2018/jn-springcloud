@@ -61,9 +61,9 @@
     <div class="serverOrgFilter mainBorder clearfix">
       <div class="filLeft fl">排序：
         <span @click="handleFil('')" :class="{'active2':colorFlag == ''}">综合</span>
-        <span @click="handleFil('popularity')" :class="{'active2':colorFlag == 'popularity'}">关注</span>
-        <span @click="handleFil('popularity')" :class="{'active2':colorFlag == 'popularity'}">浏览量</span>
-        <span @click="handleFil('serviceNum')" :class="{'active2':colorFlag == 'serviceNum'}">留言</span>
+        <!-- <span @click="handleFil('popularity')" :class="{'active2':colorFlag == 'popularity'}">关注</span> -->
+        <span @click="handleFil('browse_number')" :class="{'active2':colorFlag == 'browse_number'}">浏览量</span>
+        <!-- <span @click="handleFil('serviceNum')" :class="{'active2':colorFlag == 'serviceNum'}">留言</span> -->
       </div>
       <div class="filRight fr">
         <input type="text" placeholder="搜索关键字" v-model="comName">
@@ -77,7 +77,7 @@
             <!-- <img src="@/../static/img/ins1.png" alt=""> -->
             <img :src="i.avatar" alt="">
           </div>
-          <div class="orgCon fl">
+          <div class="orgCon pointer fl" @click="handleOrgDel(i.id)">
             <div class="conTil">{{i.comName}}</div>
             <div class="conContent clearfix color3">
               <div class="left1 fl">
@@ -90,8 +90,9 @@
               </div>
               <div class="right1 fl">
                 <p>
-                  <i class="el-icon-view">{{i.browseNumber}}</i>
-                  <i class="iconfont icon-liuyan1">{{i.commentNumber}}</i>
+                  <i class="el-icon-view">&nbsp;{{i.browseNumber}}</i>
+                  <i class="iconfont icon-liuyan1"></i>
+                  <span style="font-size:14px;">&nbsp;{{i.commentNumber}}</span>
                 </p>
               </div>
             </div>
@@ -102,7 +103,8 @@
                 <i class="mainColor">{{i.careUser}}</i>人关注</span>
             </p>
             <p>
-              <a class="attention">+关注</a>
+              <a class="attention" v-if="i.attentionStatus=='0'" @click="handleAttention(i.id)">+关注</a>
+              <a class="attention" v-if="i.attentionStatus=='1'" @click="cancelAttention(i.id)">取消关注</a>
               <a @click="$router.push({path:'/recruitmentList',query:{comId:i.id}})">热招职位</a>
             </p>
           </div>
@@ -113,12 +115,26 @@
       <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
       </el-pagination>
     </div>
+      <template v-if="concatVisible">
+      <el-dialog :visible.sync="concatVisible" width="530px" top="30vh" :append-to-body="true" :lock-scroll="false">
+        <div class="loginTip" style="text-align:center;padding-bottom:20px">
+          你还未
+          <span class="mainColor pointer" @click="goLogin">登录</span>
+          /
+          <span class="mainColor pointer" @click="$router.push({path:'/register'})">注册</span>
+          账号
+        </div>
+      </el-dialog>
+    </template>
   </div>
 </template>
 <script>
+import { getToken } from '@/util/auth'
 export default {
   data() {
     return {
+      concatVisible:false,
+      attentionStatus: "0",
       total: 0,
       currentPage1: 1,
       row: 3,
@@ -145,41 +161,117 @@ export default {
         { name: "招商企业", id: "2" }
       ],
       parkList: [],
-      // affiliatedPark: "",
+      affiliatedPark: "",
       comSource: "",
       comType: "",
       comName: "",
       induType: "",
-      orderByClause: ""
+      orderByClause: "",
+      token: ""
     };
+  },
+  created() {
+    this.token = getToken();
   },
   mounted() {
     this.getParkList();
     this.selectIndustryList();
+    // this.getCompanyList();
+    if (this.$route.query.id) {
+      this.induType = this.$route.query.id;
+      this.filterFlag1 = this.$route.query.id;
+    //   this.getParkList();
+    // this.selectIndustryList();
     this.getCompanyList();
+    } else {
+    //   this.getParkList();
+    // this.selectIndustryList();
+    this.getCompanyList();
+    }
   },
   methods: {
+    goLogin() {
+      window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
+      this.$router.push({ path: "/login" });
+    },
+    //关注
+    handleAttention(id) {
+      if (getToken()) {
+        this.api.post({
+          url: "addCareOperate",
+          data: {
+            account: id,
+            receiveType: 2
+          },
+          // dataFlag:true,
+          callback: res => {
+            if (res.code == "0000") {
+              // _this.parkList = res.data;
+              this.$message.success('关注成功');
+              this.getCompanyList()
+            } else {
+              this.$message.error(res.result);
+            }
+          }
+        });
+      } else {
+        this.concatVisible=true;
+        return;
+      }
+    },
+    //取消关注
+    cancelAttention(id) {
+      if (getToken()) {
+        this.api.post({
+          url: "cancelCareOperate",
+          data: {
+            account: id
+          },
+          dataFlag: true,
+          callback: res => {
+            if (res.code == "0000") {
+              this.$message.success('取消关注成功');
+              // _this.parkList = res.data;
+              this.getCompanyList()
+            } else {
+              this.$message.error(res.result);
+            }
+          }
+        });
+      } else {
+        this.concatVisible=true;
+        return;
+      }
+    },
     widFun(i) {
+      
       let doc = document.getElementsByClassName(i);
       let num = 0;
       for (let it of doc) {
-        num += it.offsetWidth * 1;
+        num += it.offsetWidth * 1 + this.getStyle(it,'marginLeft');
       }
-      // console.log(num);
       if (num >= 860) {
         return true;
       } else {
         return false;
       }
     },
+    getStyle(obj,attr){   
+      if(obj.currentStyle){   	
+        return obj.currentStyle[attr].split('px')[0] * 1;   
+      }   
+      else{   	
+        return document.defaultView.getComputedStyle(obj,null)[attr].split('px')[0] * 1;   	
+      }   
+    },     
     //排序
     handleFil(i) {
       this.colorFlag = i;
       this.orderByClause = i;
       this.page = 1;
-      this.getCompanyList()
+      this.getCompanyList();
     },
-    //领域搜索
+    //园区搜索
     handleFilter(i) {
       this.affiliatedPark = i;
       this.filterFlag = i;
@@ -204,14 +296,14 @@ export default {
     handleOrgDel(id) {
       this.$router.push({ path: "profileDetails", query: { id: id } });
     },
+    //改变每页显示多少条的回调函数
     handleSizeChange(val) {
-      //改变每页显示多少条的回调函数
       this.row = val;
       this.page = 1;
       this.getCompanyList();
     },
+    //改变当前页码的回调函数
     handleCurrentChange(val) {
-      //改变当前页码的回调函数
       this.page = val;
       this.getCompanyList();
     },
@@ -223,16 +315,16 @@ export default {
         data: {
           page: _this.page,
           rows: _this.row,
-          affiliatedPark: _this.$route.query.id,
+          affiliatedPark: _this.affiliatedPark,
           comSource: _this.comSource,
           comType: _this.comType,
           comName: _this.comName,
           induType: _this.induType,
-          orderByClause: _this.orderByClause,
+          orderByClause: _this.orderByClause
         },
         callback: function(res) {
           if (res.code == "0000") {
-            _this.CompanyList = res.data.rows.data;
+            _this.CompanyList = res.data.rows;
             _this.total = res.data.total;
           } else {
             _this.$message.error(res.result);
@@ -308,6 +400,11 @@ export default {
 <style lang="scss" scoped>
 .companyProfile {
   padding-top: 65px;
+  .loginTip{
+    text-align: center;
+    margin-bottom:20px;
+    font-size: 15px;
+  }
   .serverOrgContent {
     .orgBtn1 {
       p {
@@ -337,11 +434,13 @@ export default {
         margin-bottom: 20px;
       }
     }
+    .el-icon-view,
     .iconfont {
-      font-size: 13px;
+      font-size: 14px;
     }
     .icon-liuyan1 {
       margin-left: 20px;
+      // font-size: 16px;
     }
   }
 }

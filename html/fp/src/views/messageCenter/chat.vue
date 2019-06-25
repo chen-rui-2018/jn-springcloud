@@ -2,14 +2,15 @@
   <div class="message-chat">
     <div class="chat-win">
       <div v-if="$route.query.toUser" class="chat-win-cell">
-        <div class="chat-header">
+        <div class="chat-header" v-if="$store.state.hiddenNav">
           <div class="chat-back">
             <i class="el-icon-arrow-left"></i>
           </div>
-          <div class="chat-title">{{ toUserNickName }}的对话</div>
+          <div class="chat-title">与 {{ toUserNickName }} 的对话</div>
         </div>
         <div ref="chatMain" class="chat-main">
-          <div class="no-more" v-if="noMore">没有更多消息了</div>
+          <div class="no-more" v-if="messageList.length > 0 && noMore">没有更多消息了</div>
+          <div class="no-more" v-if="!loading && messageList.length === 0">暂无消息</div>
           <div class="tc" v-if="loading">
             <i class="el-icon-loading"></i>
             <span>正在加载...</span>
@@ -25,7 +26,7 @@
               :on-delete="deleteMessage"
               :on-resend="() => { reSend(item) }"
               :type="item.msgType === '0000'|| item.sendId === param.fromUser ? 'right' : 'left'"
-              :url="item.content.url"
+              :url="item.sendId === param.fromUser ? url : toUrl"
               :status="item.status"
             />
           </div>
@@ -52,6 +53,7 @@
         </div>
         <div v-else class="app-chat-footer">
           <el-input
+            ref="mobileInput"
             v-model="message"
             type="textarea"
             :rows="1"
@@ -73,14 +75,12 @@
           :key="item.id"
           class="friend-chat"
           @click="tabChat(item)">
-          <avatar class="flex-none" size="small"></avatar>
+          <avatar :url="item.content.url" class="flex-none" size="small"></avatar>
           <div class="friend-row">
             <div class="friend-info">
               <div class="friend-name">{{ item.content.nickName }}</div>
               <div class="chat-time">
                 {{ item.createTime | formatTime }}
-                <!--                  <span>星期二</span>-->
-                <!--                  <span>10:32</span>-->
               </div>
             </div>
             <div class="message-content">
@@ -95,10 +95,76 @@
 </template>
 
 <script>
-  import { isArray, getDateString } from '@/util'
+  import { getUserInfo } from '@/util/auth'
+  import { isArray, getDateString, isIos } from '@/util'
   import avatar from './common/avatar'
   import messageRow from './common/messageRow'
   import sockHttp from '@/util/sockHttp'
+  import { WS_URL } from '@/util/url'
+  const _isIos = isIos()// 监听输入框的软键盘弹起和收起事件
+  // 获取到焦点元素滚动到可视区
+  function activeElementScrollIntoView(activeElement, delay) {
+    const editable = activeElement.getAttribute('contenteditable')
+    // 输入框、textarea或富文本获取焦点后没有将该元素滚动到可视区
+    console.dir(activeElement.tagName)
+    if (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA') {
+      setTimeout(function () {
+        activeElement.scrollIntoView();
+      }, delay)
+    }
+  }
+  function listenKeybord($input) {
+    // 判断设备类型
+    const judgeDeviceType = function () {
+      const ua = window.navigator.userAgent.toLocaleLowerCase();
+      const isIOS = /iphone|ipad|ipod/.test(ua);
+      const isAndroid = /android/.test(ua);
+      return {
+        isIOS: isIOS,
+        isAndroid: isAndroid
+      }
+    }()
+    if (judgeDeviceType.isIOS) {
+      // IOS 键盘弹起：IOS 和 Android 输入框获取焦点键盘弹起
+      $input.addEventListener('focus', function () {
+        console.log('IOS 键盘弹起啦！');
+        // IOS 键盘弹起后操作
+        activeElementScrollIntoView($input, 100);
+      }, false)
+
+      // IOS 键盘收起：IOS 点击输入框以外区域或点击收起按钮，输入框都会失去焦点，键盘会收起，
+      $input.addEventListener('blur', () => {
+        console.log('IOS 键盘收起啦！');
+        // IOS 键盘收起后操作
+        // 微信浏览器版本6.7.4+IOS12会出现键盘收起后，视图被顶上去了没有下来
+        const wechatInfo = window.navigator.userAgent.match(/MicroMessenger\/([\d\.]+)/i);
+        if (!wechatInfo) return;
+        const wechatVersion = wechatInfo[1];
+        const version = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/);
+
+        if (+wechatVersion.replace(/\./g, '') >= 674 && +version[1] >= 12) {
+          window.scrollTo(0, Math.max(document.body.clientHeight, document.documentElement.clientHeight));
+        }
+      })
+    }
+
+    // Andriod 键盘收起：Andriod 键盘弹起或收起页面高度会发生变化，以此为依据获知键盘收起
+    if (judgeDeviceType.isAndroid) {
+      let originHeight = document.documentElement.clientHeight || document.body.clientHeight;
+
+      window.addEventListener('resize', function () {
+        const resizeHeight = document.documentElement.clientHeight || document.body.clientHeight;
+        if (originHeight < resizeHeight) {
+          console.log('Android 键盘收起啦！');
+        } else {
+          console.log('Android 键盘弹起啦！');
+          // Android 键盘弹起后操作
+          activeElementScrollIntoView($input, 100);
+        }
+        originHeight = resizeHeight;
+      }, false)
+    }
+  }
   export default {
     name: "Chat",
     components: {
@@ -124,6 +190,7 @@
           rows: 500
         },
         url: '',
+        toUrl: '',
         nickName: '',
         toUserNickName: '',
         loading: false,
@@ -132,13 +199,22 @@
         noMore: false,
         tempMessageList: [],
         loaded: false,
-        lastMessageSendTime: ''
+        lastMessageSendTime: '',
+        html: null,
+        body: null,
+        isIos: isIos()
       }
     },
     mounted() {
       this.$nextTick(
         this.init()
       )
+    },
+    destroyed() {
+      if (this.$store.state.isMobile) {
+        this.html.classList.remove('h-100')
+        this.body.classList.remove('h-100')
+      }
     },
     watch: {
       '$route'() {
@@ -153,8 +229,9 @@
           return ''
         }
         let td = new Date()
+        const time = _isIos ? d.replace(/-/g,"/") : d
         td = new Date(td.getFullYear(), td.getMonth(), td.getDate())
-        let od = new Date(d)
+        let od = new Date(time)
         const year = od.getFullYear()
         let mon = od.getMonth() + 1
         mon = mon > 9 ? mon : '0' + mon
@@ -172,22 +249,23 @@
         if (xc < -2) {
           if (xc < -7) {
             if (year === new Date().getFullYear()) {
-              tips = mon + '-' + day + ' ' + hour + ':' + min
+              return tips = mon + '-' + day + ' ' + hour + ':' + min
             } else {
-              tips = year + '-' + mon + '-' + day + ' ' + hour + ':' + min
+              return tips = year + '-' + mon + '-' + day + ' ' + hour + ':' + min
+
             }
           } else {
             tips = -xc + '天前'
           }
-        } else if (xc < -1) {
+        } else if (xc === -2) {
           tips = '前天'
-        } else if (xc < 0) {
+        } else if (xc === -1) {
           tips = '昨天'
         } else if (xc === 0) {
           tips = ''
-        } else if (xc < 2) {
+        } else if (xc === 1) {
           tips = '明天'
-        } else if (xc < 3) {
+        } else if (xc === 2) {
           tips = '后天'
         } else {
           tips = xc + '天后'
@@ -196,18 +274,32 @@
       }
     },
     methods: {
+      handleKeyBoard() {
+        const input = this.$refs.mobileInput.$el.getElementsByTagName('textarea')[0]
+        listenKeybord(input)
+      },
       init() {
         /*  1.app路由要求传参发送人账号fromUser, 接收人账号toUser, 发送人昵称nickName(仅用于对话框显示与xxx在聊天)
          *  2.pc端路由参数可以只有发送人账号fromUser, 因为pc端有联系人列表
          */
-        const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
-        this.param.fromUser = this.$route.query.fromUser || userInfo.account
+        this.setWindowHeight()
+        if (this.$store.state.isMobile) {
+          this.handleKeyBoard()
+        }
+        if (this.$route.query.fromUser) {
+          this.userListParam.fromUser = this.param.fromUser = this.$route.query.fromUser
+        } else {
+          const userInfoString = getUserInfo()
+          if (userInfoString) {
+            const userInfo = JSON.parse(userInfoString)
+            this.userListParam.fromUser = this.param.fromUser = userInfo.account
+          }
+        }
         if (!this.param.fromUser) {
           this.$message.error('缺少发送人账号')
           return
         }
         this.toUserNickName = this.$route.query.nickName
-        this.userListParam.fromUser = this.param.fromUser = this.$route.query.fromUser
         this.getFromUserInfo()
           .then(() => {
             this.connect()
@@ -222,7 +314,24 @@
             ])
           // 注册滚动加载历史消息事件
           this.checkHistoryMessage()
-
+        }
+      },
+      scrollToBottom() {
+        setTimeout(() => {
+          document.body.scrollTop = document.documentElement.scrollHeight * 2
+        },300)
+      },
+      scrollToTop() {
+        setTimeout(() => {
+          document.body.scrollTop = 0
+        }, 4)
+      },
+      setWindowHeight() {
+        if (this.$store.state.isMobile) {
+          this.html = document.getElementsByTagName('html')[0]
+          this.body = document.getElementsByTagName('body')[0]
+          this.html.classList.add('h-100')
+          this.body.classList.add('h-100')
         }
       },
       getFromUserInfo() {
@@ -230,9 +339,8 @@
           this.api.get({
             url: "getUserPersonInfo",
             data: {
-              account: this.$route.query.fromUser
+              account: this.param.fromUser
             },
-            dataFlag: false,
             callback:(res) => {
               if (res.code === "0000") {
                 const data = res.data
@@ -330,6 +438,15 @@
                 }
                 if (historyList && historyList.length > 0) {
                   this.param.id = historyList[0].id
+                  if (!this.toUrl) {
+                    for (let i = historyList.length - 1; i >= 0; i--) {
+                      const item = historyList[i]
+                      if (item.content.fromUser === this.param.toUser) {
+                        this.toUrl = item.content.url
+                        break
+                      }
+                    }
+                  }
                 }
                 resolve()
               } else {
@@ -368,7 +485,7 @@
           alert("您的浏览器版本太低，请升级浏览器版本！")
           return
         }
-        const wsUrl = "ws://192.168.10.31:8888/websocket"
+        const wsUrl = WS_URL + '/websocket'
         const token = "IM_123_qwe**_X_Q"
         this.websocket = new WebSocket(wsUrl + "/" + this.param.fromUser + "/" + token + "?accessToken=123qwe")
         //连接成功建立的回调方法
@@ -398,6 +515,7 @@
                 // console.dir(isMine)
                 // 如果不是自己发的，那么就接收，并放到消息列表
                 if (!isMine) {
+                  this.toUrl = data.content.url
                   this.timeShowFilter(data)
                   vm.messageList.push(data)
                   this.setScrollTop()
@@ -431,7 +549,7 @@
       },
       tabChat(item) {
         this.$router.push({
-          path: '/messageCenter/chat',
+          path: '/chat',
           query: {
             toUser: item.sendId,
             fromUser: this.param.fromUser,
@@ -478,11 +596,11 @@
 
       .chat-main {
         height: 400px;
-        padding: 20px;
         margin-top: 2px;
         background-color: #fff;
+        padding: 16px 16px 54px;
         overflow: auto;
-
+        -webkit-overflow-scrolling: touch;
         .date-tips {
           display: inline-block;
           width: 90px;

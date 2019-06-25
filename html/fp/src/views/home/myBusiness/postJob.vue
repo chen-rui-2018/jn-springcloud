@@ -1,7 +1,8 @@
 <template>
-  <div class="postJobProduct">
-    <div class="ordinary_title">
+  <div class="postJobProduct" v-loading="loading">
+    <div class="ordinary_title font16">
       <div>发布招聘</div>
+      <div @click="goBack">返回</div>
     </div>
     <div class="ordinary_content">
       <el-form
@@ -15,7 +16,7 @@
           label="招聘岗位:"
           prop="post"
         >
-          <el-input v-model="jobForm.post"></el-input>
+          <el-input v-model="jobForm.post" clearable></el-input>
         </el-form-item>
         <el-form-item
           label="薪资待遇:"
@@ -24,6 +25,7 @@
           <el-select
             v-model="jobForm.salary"
             placeholder="请选择薪资待遇"
+            clearable
           >
             <el-option
               v-for="item in salaryOptions"
@@ -41,6 +43,7 @@
           <el-select
             v-model="jobForm.type"
             placeholder="请选择类型"
+            clearable
           >
             <el-option
               v-for="item in typeOptions"
@@ -55,17 +58,21 @@
           label="招聘人数(名):"
           prop="num"
         >
-          <el-input v-model="jobForm.num"></el-input>
+          <el-input v-model="jobForm.num" @blur="BlurText($event)" clearable></el-input>
         </el-form-item>
         <el-form-item
           label="招聘详情:"
           prop="details"
+          class="ue"
         >
-          <el-input
+          <!-- <el-input
             type="textarea"
             v-model="jobForm.details"
-            placeholder="宣传详情宣传详情"
-          ></el-input>
+            placeholder="招聘详情"
+          ></el-input> -->
+          <div class="editor-container">
+            <UE ref="ue" :default-msg="defaultMsg" :config="config" />
+          </div>
         </el-form-item>
         <div
           class="business_footer"
@@ -78,9 +85,17 @@
   </div>
 </template>
 <script>
+import UE from '@/components/ue.vue'
 export default {
+   components: { UE },
   data() {
     return {
+      loading:false,
+       defaultMsg: '',
+      config: {
+        initialFrameWidth: '100%',
+        initialFrameHeight: 300
+      },
       typeOptions: [],
       salaryOptions: [],
       searchData: "",
@@ -101,9 +116,9 @@ export default {
         type: [
           { required: true, message: "请选择招聘类型", trigger: "change" }
         ],
-        details: [
-          { required: true, message: "请填写招聘详情", trigger: "blur" }
-        ]
+        // details: [
+        //   { required: true, message: "请填写招聘详情", trigger: "blur" }
+        // ]
       }
     };
   },
@@ -112,6 +127,17 @@ export default {
     this.getCompensation();
   },
   methods: {
+     goBack() {
+      this.$router.push({ name: "recruitmentManagement" });
+    },
+      // 禁止输入小数和负数
+    BlurText(e){
+        let boolean=new RegExp("^[1-9][0-9]*$").test(e.target.value)
+        if(!boolean){
+          this.$message.warning('请输入正整数')
+          e.target.value=''
+        }
+    },
     getInvite() {
       this.api.get({
         url: "getInviteType",
@@ -133,20 +159,27 @@ export default {
     submitForm(jobForm) {
       this.$refs[jobForm].validate(valid => {
         if (valid) {
-          this.jobForm.num = Number(this.jobForm.num);
+           this.jobForm.details = this.$refs.ue.getUEContent()
+          if(!this.jobForm.details ){
+            this.$message.error('请填写招聘详情');
+            return
+          }
+               this.jobForm.num = Number(this.jobForm.num);
+     this.loading=true
           this.api.post({
             url: "postJob",
             data: this.jobForm,
             callback: res => {
-              console.log(res);
+              this.loading=false
               if (res.code === "0000") {
+
                 this.$message({
-                  message: "发布成功",
+                  message: "操作成功",
                   type: "success"
                 });
                 this.$router.push({ name: "recruitmentManagement" });
               } else {
-                this.$message.error("发布失败" + res.result);
+                this.$message.error("操作失败" + res.result);
               }
             }
           });
@@ -162,12 +195,26 @@ export default {
 <style lang="scss">
 .postJobProduct {
   width: 100%;
-  .ordinary_title {
+.ordinary_title {
     background-color: #fff;
-
-    padding: 24px 28px;
-    font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 17px;
+    // font-size: 13px;
     border-radius: 5px;
+    div:nth-child(2) {
+      width: 50px;
+      height: 26px;
+      background: rgba(236, 252, 242, 1);
+      border: 1px solid rgba(65, 215, 135, 1);
+      border-radius: 4px;
+      text-align: center;
+      line-height: 26px;
+      font-size: 12px;
+      color: #00a041;
+      cursor: pointer;
+    }
   }
   .ordinary_content {
     margin-top: 14px;
@@ -185,6 +232,18 @@ export default {
         width: 348px;
         min-height: 100px !important;
         background: #fff;
+      }
+      .ue{
+        .el-form-item__content,
+      .el-select {
+        width: 100%;
+      }
+      .el-form-item__content{
+        line-height: 22px;
+      }
+      .edui-default .edui-editor-bottomContainer{
+        display: none;
+      }
       }
     }
     .business_footer {

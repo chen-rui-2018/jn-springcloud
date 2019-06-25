@@ -26,10 +26,28 @@
       </div>
       <!-- 所有类别 -->
       <div class="all_cate clearfix">
-          <div class="fl all" @click="changename('')"><span :class="{'isSlect_all':name===''}">所有类别：</span></div>
-        <ul>
-          <li v-for="(item,index) in allCateList" :key="index" @click="changename(item.id)"><span :class="{'isSlect_cate':item.id===name}">{{item.name}}</span></li>
-        </ul>
+        <!-- <div class="fl all" @click="changename('')"><span :class="{'isSlect_all':name===''}">所有类别：</span></div> -->
+        <div class="all_cate_box clearfix">
+          <div>省级：</div>
+          <ul>
+            <!-- <li style="font-size:14px">省级：</li> -->
+            <li v-for="(item,index) in allCateList[0]" :key="index" @click="changename(item.id)"><span :class="{'isSlect_cate':item.id===name}">{{item.name}}</span></li>
+          </ul>
+        </div>
+        <div class="all_cate_box clearfix">
+          <div>市级：</div>
+          <ul>
+            <!-- <li style="font-size:14px">市级：</li> -->
+            <li v-for="(item,index) in allCateList[1]" :key="index" @click="changename(item.id)"><span :class="{'isSlect_cate':item.id===name}">{{item.name}}</span></li>
+          </ul>
+        </div>
+        <div class="all_cate_box clearfix">
+          <div>区级：</div>
+          <ul>
+            <!-- <li style="font-size:14px">区级：</li> -->
+            <li v-for="(item,index) in allCateList[2]" :key="index" @click="changename(item.id)"><span :class="{'isSlect_cate':item.id===name}">{{item.name}}</span></li>
+          </ul>
+        </div>
       </div>
       <!-- 直接审批 -->
       <div>
@@ -141,7 +159,6 @@ export default {
           name:this.name
          },
         callback: function(res) {
-          // console.log(res);
           if (res.code == "0000") {
             _this.allCateList = res.data;
           }
@@ -170,9 +187,14 @@ export default {
     },
     //改变name
     changename(name){
-      this.name=name
-      this.loading=true
-      this.getPowerList()
+      if(this.name===name){
+        this.name=''
+        this.getPowerList()
+      }else{
+        this.name=name
+        this.loading=true
+        this.getPowerList()
+      }
     },
     //搜索
     handlesearch(){
@@ -283,6 +305,12 @@ export default {
       border: 1px solid #eeeeee;
       padding:16px;
       font-size: 12px;
+      .all_cate_box{
+        div{
+          float: left;
+          line-height: 45px;
+        }
+      }
       .all{
         width:8.3%;
         border-bottom: 1px solid #eeeeee;

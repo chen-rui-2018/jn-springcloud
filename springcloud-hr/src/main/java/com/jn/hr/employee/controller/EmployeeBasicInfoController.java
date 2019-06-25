@@ -1,6 +1,7 @@
 package com.jn.hr.employee.controller;
 
 import com.alibaba.excel.support.ExcelTypeEnum;
+import com.alibaba.fastjson.JSON;
 import com.jn.common.controller.BaseController;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
@@ -216,7 +217,40 @@ public class EmployeeBasicInfoController extends BaseController {
     @GetMapping(value = "/selectDepartEmployee")
     public Result selectDepartEmployee() {
         List<TreeModel> teeList=employeeBasicInfoService.selectDepartEmployee();
-        return new Result(teeList);
+        String str= JSON.toJSONString(teeList);
+        str=str.replaceAll(",\"children\":\\[]","");
+        str=str.replaceAll("\"children\":\\[],","");
+        return new Result(str);
     }
+    @ControllerLog(doAction = "校验员工号码是否存在")
+    @RequiresPermissions("/hr/employeeBasicInfo/checkPhoneExist")
+    @ApiOperation(value = "校验员工号码是否存在", notes = "校验员工号码是否存在")
+    @GetMapping(value = "/checkPhoneExist")
+    public Result checkPhoneExist(@RequestParam("phone") String phone,@RequestParam(value="id",required = false) String id){
+        Assert.notNull(phone,"号码不能为空");
+        boolean flag= employeeBasicInfoService.checkPhoneExist(phone,id);
+        return new Result(flag);
+    }
+    @ControllerLog(doAction = "校验员工邮箱是否存在")
+    @RequiresPermissions("/hr/employeeBasicInfo/checkMailboxExist")
+    @ApiOperation(value = "校验员工邮箱是否存在", notes = "校验员工邮箱是否存在")
+    @GetMapping(value = "/checkMailboxExist")
+    public Result checkMailboxExist(@RequestParam("mailbox") String mailbox,@RequestParam(value="id",required = false) String id){
+        Assert.notNull(mailbox,"邮箱不能为空");
+        boolean flag= employeeBasicInfoService.checkMailboxExist(mailbox,id);
+        return new Result(flag);
+    }
+    @ControllerLog(doAction = "校验员工证件号码是否存在")
+    @RequiresPermissions("/hr/employeeBasicInfo/checkCertificateNumberExist")
+    @ApiOperation(value = "校验员工证件号码是否存在", notes = "校验员工证件号码是否存在")
+    @GetMapping(value = "/checkCertificateNumberExist")
+    public Result checkCertificateNumberExist(@RequestParam("certificateNumber") String certificateNumber,
+                                              @RequestParam(value="id",required = false) String id){
+        Assert.notNull(certificateNumber,"证件号码不能为空");
+        boolean flag= employeeBasicInfoService.checkCertificateNumberExist(certificateNumber,id);
+        return new Result(flag);
+    }
+
+
 
 }

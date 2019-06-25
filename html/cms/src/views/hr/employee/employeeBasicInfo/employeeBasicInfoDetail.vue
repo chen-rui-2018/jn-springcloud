@@ -243,6 +243,8 @@
                 <el-option label="请选择" value=""/>
                 <el-option label="在职" value="1"/>
                 <el-option label="医疗期" value="2"/>
+                <el-option label="退休" value="3"/>
+                <el-option label="离职" value="4"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -1302,10 +1304,6 @@ export default {
   .form-content {
     background-color: white;
     border-radius: 10px;
-    position: absolute;
-    top: 280px;
-    left: 36px;
-    right: 36px;
     .con-hr {
       color: #e4e4e4;
       margin-left: 20px;

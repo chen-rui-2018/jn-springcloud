@@ -24,7 +24,9 @@ public class TbManpowerLeaveManagement implements Serializable {
 
     private String remark;
 
-    private Byte approvalStatus;
+    private Byte status;
+
+    private String department;
 
     private static final long serialVersionUID = 1L;
 
@@ -108,12 +110,20 @@ public class TbManpowerLeaveManagement implements Serializable {
         this.remark = remark == null ? null : remark.trim();
     }
 
-    public Byte getApprovalStatus() {
-        return approvalStatus;
+    public Byte getStatus() {
+        return status;
     }
 
-    public void setApprovalStatus(Byte approvalStatus) {
-        this.approvalStatus = approvalStatus;
+    public void setStatus(Byte status) {
+        this.status = status;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department == null ? null : department.trim();
     }
 
     @Override
@@ -138,7 +148,8 @@ public class TbManpowerLeaveManagement implements Serializable {
             && (this.getFinalWorkDate() == null ? other.getFinalWorkDate() == null : this.getFinalWorkDate().equals(other.getFinalWorkDate()))
             && (this.getSalarySettlementDate() == null ? other.getSalarySettlementDate() == null : this.getSalarySettlementDate().equals(other.getSalarySettlementDate()))
             && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
-            && (this.getApprovalStatus() == null ? other.getApprovalStatus() == null : this.getApprovalStatus().equals(other.getApprovalStatus()));
+            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
+            && (this.getDepartment() == null ? other.getDepartment() == null : this.getDepartment().equals(other.getDepartment()));
     }
 
     @Override
@@ -155,7 +166,8 @@ public class TbManpowerLeaveManagement implements Serializable {
         result = prime * result + ((getFinalWorkDate() == null) ? 0 : getFinalWorkDate().hashCode());
         result = prime * result + ((getSalarySettlementDate() == null) ? 0 : getSalarySettlementDate().hashCode());
         result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
-        result = prime * result + ((getApprovalStatus() == null) ? 0 : getApprovalStatus().hashCode());
+        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        result = prime * result + ((getDepartment() == null) ? 0 : getDepartment().hashCode());
         return result;
     }
 
@@ -175,7 +187,8 @@ public class TbManpowerLeaveManagement implements Serializable {
         sb.append(", finalWorkDate=").append(finalWorkDate);
         sb.append(", salarySettlementDate=").append(salarySettlementDate);
         sb.append(", remark=").append(remark);
-        sb.append(", approvalStatus=").append(approvalStatus);
+        sb.append(", status=").append(status);
+        sb.append(", department=").append(department);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

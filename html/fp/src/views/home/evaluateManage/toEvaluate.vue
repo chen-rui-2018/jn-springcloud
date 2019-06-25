@@ -15,12 +15,12 @@
               <span>{{sevaluateDetail.reqNum}} </span>
             </el-form-item>
             <el-form-item label="发布时间：">
-              <span>{{sevaluateDetail.issueTime}}</span>
+              <span>{{sevaluateDetail.issueTime|time}}</span>
             </el-form-item>
             <el-form-item label="意向机构：">
               <span class="greenColor">{{sevaluateDetail.orgName}}</span>
             </el-form-item>
-            <el-form-item label="意向顾问：">
+            <el-form-item label="意向专员：">
               <span>{{sevaluateDetail.advisorName}} </span>
             </el-form-item>
             <el-form-item label="意向产品：">
@@ -39,7 +39,7 @@
               <div>{{sevaluateDetail.reqDetail}}</div>
             </el-form-item>
             <el-form-item label="合同总金额：">
-              <div>{{sevaluateDetail.contractAmount}}</div>
+              <div>{{sevaluateDetail.contractAmount}}万元</div>
             </el-form-item>
             <el-form-item label="结果描述：">
               <div> {{sevaluateDetail.resultDetail}}</div>
@@ -70,10 +70,10 @@
               <span>{{sevaluateDetail.reqNum}}</span>
             </el-form-item>
             <el-form-item label="发布时间：">
-              <span>{{sevaluateDetail.issueTime}}</span>
+              <span>{{sevaluateDetail.issueTime|time}}</span>
             </el-form-item>
             <el-form-item label="融资金额：">
-              <span >{{sevaluateDetail.financingAmount}}</span>
+              <span >{{sevaluateDetail.financingAmount}}万元</span>
             </el-form-item>
             <el-form-item label="融资期限：">
               <span>{{sevaluateDetail.financingPeriod}} </span>
@@ -99,8 +99,8 @@
             <el-form-item label="联系人邮箱：">
               <span>{{sevaluateDetail.reqEmail}}</span>
             </el-form-item>
-            <el-form-item label="实际贷款金额（万元）：">
-              <span>{{sevaluateDetail.actualLoanAmount}}</span>
+            <el-form-item label="实际贷款金额：">
+              <span>{{sevaluateDetail.actualLoanAmount}}万元</span>
             </el-form-item>
             <el-form-item label="结果描述">
               <span>{{sevaluateDetail.serviceCycle}}</span>
@@ -139,6 +139,14 @@ export default {
       }
     }
   },
+  filters: {
+    time(time){
+      if(time){
+        let dateee = new Date(time).toJSON();
+        return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+      }
+    }
+  },
   mounted () {
     this.sendData.id =this.$route.query.id
     this.businessId=this.$route.query.businessId
@@ -166,6 +174,8 @@ export default {
         if (res.code == "0000") {
           _this.$message.success("评价成功")
           _this.$router.go(-1)
+          }else{
+            _this.$message.error(res.result)
           }
         }
       })

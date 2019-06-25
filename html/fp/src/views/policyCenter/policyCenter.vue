@@ -1,4 +1,4 @@
-<template>
+1<template>
   <div class="policyCenter0">
     <!-- <div class="techHeah">
       <div id="header" class="header" :class="{'headerw':showFF}">
@@ -57,59 +57,61 @@
         <span class="mainColor">政策中心</span>
       </div>
       <div class="serverOrgNav w mainBorder" v-if="tableType=='allPolicy'">
-        <div class="nav1 clearfix">
-          <div class="nav1Tit fl">政策级别：</div>
-          <ul class="nav1Ul fl clearfix" style="width:auto;">
-            <li :class="{'active0':filterFlag == ''}" @click="handleFilter('')">不限</li>
-          </ul>
-          <ul class="nav1Ul fl clearfix" :class="{'sh':!flag1}">
-            <li class="wid1" v-for="(i,k) in policyLevel" :key='k' @click="handleFilter(i.policyLevelCode)" :class="{'active0':filterFlag == i.policyLevelCode}">{{i.policyLevelName}}</li>
-          </ul>
-          <div class="fr" v-if="widFun('wid1')">
-            <i class="el-icon-arrow-down" v-if="flag1" @click="flag1 = !flag1"></i>
-            <i class="el-icon-arrow-up" v-else @click="flag1 = !flag1"></i>
+        <div class="policynav">
+          <div class="nav1 clearfix">
+            <div class="nav1Tit fl">政策级别：</div>
+            <ul class="nav1Ul fl clearfix" style="width:auto;">
+              <li :class="{'active0':filterFlag == ''}" @click="handleFilter('')">不限</li>
+            </ul>
+            <ul class="nav1Ul fl clearfix" :class="{'sh':!flag1}">
+              <li class="wid1" v-for="(i,k) in policyLevel" :key='k' @click="handleFilter(i.policyLevelCode)" :class="{'active0':filterFlag == i.policyLevelCode}">{{i.policyLevelName}}</li>
+            </ul>
+            <div class="fr" v-if="widFun('wid1')">
+              <i class="el-icon-arrow-down" v-if="flag1" @click="flag1 = !flag1"></i>
+              <i class="el-icon-arrow-up" v-else @click="flag1 = !flag1"></i>
+            </div>
           </div>
-        </div>
-        <div class="nav1 clearfix">
-          <div class="nav1Tit fl">政策分类：</div>
-          <!-- <div class="fl" :class="{'active':filterFlag1 == ''}" @click="handleFilter1('')">不限</div> -->
-          <ul class="nav1Ul fl clearfix" style="width:auto;">
-            <li :class="{'active0':filterFlag1 == ''}" @click="handleFilter1('')">不限</li>
-          </ul>
-          <ul class="nav1Ul fl clearfix" :class="{'sh':!flag2}">
-            <li class="wid2" v-for="(i,k) in policyClass" :key='k' @click="handleFilter1(i.policyClassCode)" :class="{'active0':filterFlag1 == i.policyClassCode}">{{i.policyClassName}}</li>
-          </ul>
-          <div class="fr" v-if="widFun('wid2')">
-            <i class="el-icon-arrow-down" v-if="flag2" @click="flag2 = !flag2"></i>
-            <i class="el-icon-arrow-up" v-else @click="flag2 = !flag2"></i>
+          <div class="nav1 clearfix">
+            <div class="nav1Tit fl">政策分类：</div>
+            <!-- <div class="fl" :class="{'active':filterFlag1 == ''}" @click="handleFilter1('')">不限</div> -->
+            <ul class="nav1Ul fl clearfix" style="width:auto;">
+              <li :class="{'active0':filterFlag1 == ''}" @click="handleFilter1('')">不限</li>
+            </ul>
+            <ul class="nav1Ul fl clearfix" :class="{'sh':!flag2}">
+              <li class="wid2" v-for="(i,k) in policyClass" :key='k' @click="handleFilter1(i.policyClassCode)" :class="{'active0':filterFlag1 == i.policyClassCode}">{{i.policyClassName}}</li>
+            </ul>
+            <div class="fr" v-if="widFun('wid2')">
+              <i class="el-icon-arrow-down" v-if="flag2" @click="flag2 = !flag2"></i>
+              <i class="el-icon-arrow-up" v-else @click="flag2 = !flag2"></i>
+            </div>
           </div>
-        </div>
-        <div class="nav1 clearfix">
-          <div class="nav1Tit fl">政策类型：</div>
-          <ul class="nav1Ul fl clearfix" :class="{'sh':!flag3}">
-            <li class="wid3" @click="handleFilter2('0')" :class="{'active0':filterFlag2 == '0'}">普通政策</li>
-            <li class="wid3" @click="handleFilter2('1')" :class="{'active0':filterFlag2 == '1'}">图解政策</li>
-          </ul>
-          <div class="fr" v-if="widFun('wid3')">
-            <i class="el-icon-arrow-down" v-if="flag3" @click="flag3 = !flag3"></i>
-            <i class="el-icon-arrow-up" v-else @click="flag3 = !flag3"></i>
+          <div class="nav1 clearfix">
+            <div class="nav1Tit fl">政策类型：</div>
+            <ul class="nav1Ul fl clearfix" :class="{'sh':!flag3}">
+              <li class="wid3" @click="handleFilter2('0')" :class="{'active0':filterFlag2 == '0'}">普通政策</li>
+              <li class="wid3" @click="handleFilter2('1')" :class="{'active0':filterFlag2 == '1'}">图解政策</li>
+            </ul>
+            <div class="fr" v-if="widFun('wid3')">
+              <i class="el-icon-arrow-down" v-if="flag3" @click="flag3 = !flag3"></i>
+              <i class="el-icon-arrow-up" v-else @click="flag3 = !flag3"></i>
+            </div>
           </div>
-        </div>
-        <div class="nav1 nav2 clearfix">
-          <div class="nav1Tit fl">发布时间：</div>
-          <ul class="nav1Ul fl clearfix" style="width:auto">
-            <li :class="{'active0':filterFlag3 == ''}" @click="handleFilter3('')">不限</li>
-          </ul>
-          <ul class="nav1Ul fl clearfix" :class="{'sh':!flag4}">
-            <li class="wid4" v-for="(i,k) in arrYear" v-if='k<9' :key='k' @click="handleFilter3(i)" :class="{'active0':filterFlag3 == i}">{{i}}年</li>
-            <li class="wid4" id="lastLi" @click="handleFilter3('1')" :class="{'active0':filterFlag3 == '1'}">{{arrYear[arrYear.length-1]}}年及以前</li>
-          </ul>
-          <!-- <ul class="nav1Ul fl clearfix" style="width:auto">
+          <div class="nav1 nav2 clearfix">
+            <div class="nav1Tit fl">发布时间：</div>
+            <ul class="nav1Ul fl clearfix" style="width:auto">
+              <li :class="{'active0':filterFlag3 == ''}" @click="handleFilter3('')">不限</li>
+            </ul>
+            <ul class="nav1Ul fl clearfix" :class="{'sh':!flag4}">
+              <li class="wid4" v-for="(i,k) in arrYear" v-if='k<9' :key='k' @click="handleFilter3(i)" :class="{'active0':filterFlag3 == i}">{{i}}年</li>
+              <li class="wid4" id="lastLi" @click="handleFilter3('1')" :class="{'active0':filterFlag3 == '1'}">{{arrYear[arrYear.length-1]}}年及以前</li>
+            </ul>
+            <!-- <ul class="nav1Ul fl clearfix" style="width:auto">
             <li @click="handleFilter3('1')" :class="{'active':filterFlag3 == '1'}">{{arrYear[arrYear.length-1]}}年及以前</li>
           </ul> -->
-          <div class="fr" v-if="widFun('wid4')">
-            <i class="el-icon-arrow-down" v-if="flag4" @click="flag4 = !flag4"></i>
-            <i class="el-icon-arrow-up" v-else @click="flag4 = !flag4"></i>
+            <div class="fr" v-if="widFun('wid4')">
+              <i class="el-icon-arrow-down" v-if="flag4" @click="flag4 = !flag4"></i>
+              <i class="el-icon-arrow-up" v-else @click="flag4 = !flag4"></i>
+            </div>
           </div>
         </div>
       </div>
@@ -126,11 +128,11 @@
             </el-input>
           </div> -->
         </div>
-        <el-tabs v-model="activeName" @tab-click="handleClick">
+        <el-tabs v-model="activeName" @tab-click="handleClick" class="tabBox">
           <el-tab-pane label="政策一览" name="first">
             <ul class="fir">
               <li class="clearfix" v-for="(i,k) in policyCenterList" :key="k">
-                <div class="fir1 fl pointer" @click="$router.push({path:'/policyGuide',query:{policyId:i.policyId}})">
+                <div class="fir1 fl pointer" @click="godetails(i)">
                   <h3 class="color4">{{i.policyTitle}}</h3>
                   <p class="p1">
                     <span>阅读次数：
@@ -154,16 +156,16 @@
                   <p>发文单位：{{i.issueUnit}}</p>
                   <div class="firInfo">{{i.briefContent}}</div>
                 </div>
-                <div class="fir2 fr mainColor" v-if="i.isPolicyDiagram" @click="$router.push({path:'/graphicPolicy',query:{policyId:i.relationPolicyDiagramId,policyTitle:i.policyTitle}})">图解</div>
+                <div class="fir2 fr mainColor" v-if="i.isPolicyDiagram=='1'" @click="$router.push({path:'/graphicPolicy',query:{policyId:i.relationPolicyDiagramId,policyTitle:i.policyTitle}})">图解</div>
               </li>
             </ul>
 
           </el-tab-pane>
           <el-tab-pane label="图解政策" name="second">
             <ul class="finaUl clearfix">
-              <li class="mainBorder" v-for="(i,k) in policyCenterList" :key="k">
+              <li class="mainBorder pointer" v-for="(i,k) in policyCenterList" :key="k" @click="$router.push({path:'/graphicPolicy',query:{policyId:i.policyId,isPolicyOriginal:i.isPolicyOriginal}})">
                 <!-- <img src="@/../static/img/midBan.png" alt=""> -->
-                <div class="finaProItem pointer" @click="$router.push({path:'/graphicPolicy',query:{policyId:i.policyId}})">
+                <div class="finaProItem pointer">
                   <img :src="i.policyDiagramUrl" alt="">
                 </div>
                 <div class="finaDiv1">
@@ -182,14 +184,14 @@
           </el-tab-pane>
           <el-tab-pane label="一号专题" name="third">
             <ul class="policyUl11 clearfix">
-              <li class="mainBorder" v-for="(i,k) in policyCenterList" :key="k">
+              <li class="mainBorder pointer" v-for="(i,k) in policyCenterList" :key="k" @click="$router.push({path:'/policyGuide',query:{policyId:i.policyId}})">
                 <!-- <img src="@/../static/img/midBan.png" alt=""> -->
                 <div class="finaProItem">
-                  <img src="" alt="">
+                  <img :src="i.policyDiagramUrl" alt="">
                 </div>
                 <div class="finaDiv1">
-                  <div class="finaContent">
-                    <p>图解：
+                  <div class="finaContent color4">
+                    <p>图解：{{i.policyTitle}}
                     </p>
                   </div>
                 </div>
@@ -198,10 +200,10 @@
           </el-tab-pane>
           <el-tab-pane label="民营专题" name="fourth">
             <ul class="policyUl22 clearfix">
-              <li class="mainBorder" v-for="(i,k) in policyCenterList" :key="k">
+              <li class="mainBorder pointer" v-for="(i,k) in policyCenterList" :key="k" @click="$router.push({path:'/policyGuide',query:{policyId:i.policyId}})">
                 <!-- <img src="@/../static/img/midBan.png" alt=""> -->
                 <div class="finaProItem">
-                  <img src="" alt="">
+                  <img :src="i.policyDiagramUrl" alt="">
                 </div>
                 <div class="finaDiv1">
                   <div class="finaTit mainColor">{{i.policyTitle}}</div>
@@ -231,11 +233,11 @@
 </template>
 <script>
 import swiper from "swiper";
-import userInfo from '.././common/userInfoData'
+import userInfo from ".././common/userInfoData";
 export default {
-   components: {
-      userInfo
-    },
+  components: {
+    userInfo
+  },
   data() {
     return {
       sousuo: false,
@@ -265,7 +267,8 @@ export default {
       row: 8,
       total: 0,
       arrYear: [],
-      yearBefore: ""
+      yearBefore: "",
+      scroll_top: 0
     };
   },
   mounted() {
@@ -279,8 +282,20 @@ export default {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
   },
   methods: {
+    godetails(i) {
+      if (this.policyType == "1") {
+        this.$router.push({
+          path: "/graphicPolicy",
+          query: { policyId: i.policyId }
+        });
+      } else {
+        this.$router.push({
+          path: "/policyGuide",
+          query: { policyId: i.policyId }
+        });
+      }
+    },
     handleClick(tab) {
-      console.log(tab);
       if (tab.name == "second") {
         this.tableType = "diagramPolicy";
         this.getPolicyCenterList();
@@ -345,30 +360,92 @@ export default {
     },
     //筛选政策级别
     handleFilter(i) {
-      (this.policyLevelCode = `${i}`), (this.filterFlag = i);
+      if(this.filterFlag == i){
+        return
+      }
+      // document.documentElement.scrollTop = document.getElementsByClassName("tabBox")[0].offsetTop;
+      this.scrollTopAnimate()
+      this.policyLevelCode = `${i}`;
+      this.filterFlag = i;
       this.getPolicyCenterList();
     },
     //筛选政策分类
     handleFilter1(i) {
-      (this.policyClassCode = `${i}`), (this.filterFlag1 = i);
+      if(this.filterFlag1 == i){
+        return
+      }
+      // document.documentElement.scrollTop = document.getElementsByClassName("tabBox")[0].offsetTop
+      this.scrollTopAnimate()
+      this.policyClassCode = `${i}`;
+      this.filterFlag1 = i;
       this.getPolicyCenterList();
     },
     //筛选政策类型
     handleFilter2(i) {
-      (this.policyType = i), (this.filterFlag2 = i);
+       if(this.filterFlag2 == i){
+        return
+      }
+      // document.documentElement.scrollTop = document.getElementsByClassName("tabBox")[0].offsetTop
+      this.scrollTopAnimate()
+      this.policyType = i;
+      this.filterFlag2 = i;
       this.getPolicyCenterList();
     },
     //筛选发布时间
     handleFilter3(i) {
+      if(this.filterFlag3 == i){
+        return
+      }
+      // document.documentElement.scrollTop = document.getElementsByClassName("tabBox")[0].offsetTop
+      this.scrollTopAnimate()
       if (i == "1") {
         this.yearBefore = "1";
         this.filterFlag3 = i;
       } else {
         this.releaseDate = `${i}`;
         this.filterFlag3 = i;
-        this.yearBefore=''
+        this.yearBefore = "";
       }
       this.getPolicyCenterList();
+    },
+    getScrollTop(){ //滚动条在Y轴上的滚动距离
+    　　var scrollTop = 0, bodyScrollTop = 0, documentScrollTop = 0;
+    　　if(document.body){
+    　　　　bodyScrollTop = document.body.scrollTop;
+    　　}
+    　　if(document.documentElement){
+    　　　　documentScrollTop = document.documentElement.scrollTop;
+    　　}
+    　　scrollTop = (bodyScrollTop - documentScrollTop > 0) ? bodyScrollTop : documentScrollTop;
+    　　return scrollTop;
+    },
+    getScrollHeight(){ //文档的总高度
+    　　var scrollHeight = 0, bodyScrollHeight = 0, documentScrollHeight = 0;
+    　　if(document.body){
+    　　　　bodyScrollHeight = document.body.scrollHeight;
+    　　}
+    　　if(document.documentElement){
+    　　　　documentScrollHeight = document.documentElement.scrollHeight;
+    　　}
+    　　scrollHeight = (bodyScrollHeight - documentScrollHeight > 0) ? bodyScrollHeight : documentScrollHeight;
+    　　return scrollHeight;
+    },
+    getWindowHeight(){ //浏览器视口的高度
+    　　var windowHeight = 0;
+    　　if(document.compatMode == "CSS1Compat"){
+    　　　　windowHeight = document.documentElement.clientHeight;
+    　　}else{
+    　　　　windowHeight = document.body.clientHeight;
+    　　}
+    　　return windowHeight;
+    },
+    scrollTopAnimate(){
+      let times = setInterval(()=>{
+        document.documentElement.scrollTop = this.getScrollTop() + 10;
+        if(this.getScrollTop() + this.getWindowHeight() == this.getScrollHeight() || this.getScrollTop() >= document.getElementsByClassName("tabBox")[0].offsetTop - 100){
+          clearInterval(times)
+    　　}
+      },1)
     },
     //政策中心首页
     getPolicyCenterList() {
@@ -632,11 +709,12 @@ export default {
       }
     }
     .serverOrgNav {
-      padding: 0 20px;
       font-size: 13px;
       margin-bottom: 20px;
       text-align: center;
-
+      .policynav {
+        padding: 0 20px;
+      }
       .nav1 {
         padding: 15px 0;
         border-bottom: 1px solid #eee;
@@ -699,6 +777,7 @@ export default {
         position: absolute;
         right: 265px;
         top: 5px;
+        font-size: 15px;
         // z-index:4;
       }
       .filRight {
@@ -712,11 +791,35 @@ export default {
         position: absolute;
         right: 0;
         z-index: 3;
+        background: #fff;
 
         > input {
           border: 0;
           height: 100%;
           width: 95%;
+        }
+        input::-webkit-input-placeholder {
+          /* WebKit browsers*/
+          color: #999;
+          font-size: 13px;
+        }
+
+        input:-moz-placeholder {
+          /* Mozilla Firefox 4 to 18*/
+          color: #999;
+          font-size: 13px;
+        }
+
+        input::-moz-placeholder {
+          /* Mozilla Firefox 19+*/
+          color: #999;
+          font-size: 13px;
+        }
+
+        input:-ms-input-placeholder {
+          /* Internet Explorer 10+*/
+          color: #999;
+          font-size: 13px;
         }
 
         input,
@@ -827,9 +930,14 @@ export default {
           > .finaDiv1 {
             padding: 10px 20px;
             > .finaTit {
-              font-size: 18px;
+              font-size: 16px;
               color: #222;
               margin-bottom: 15px;
+              display: -webkit-box;
+              -webkit-box-orient: vertical;
+              -webkit-line-clamp: 2;
+              overflow: hidden;
+              height: 42px;
             }
             .finaContent {
               // margin: 10px 0;
@@ -847,9 +955,10 @@ export default {
           > .finaProItem {
             width: 280px;
             height: 150px;
+            overflow: hidden;
             > img {
               width: 100%;
-              height: 100%;
+              // height: 100%;
             }
           }
         }

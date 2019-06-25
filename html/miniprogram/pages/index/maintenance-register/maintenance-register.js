@@ -14,10 +14,7 @@ Page({
       message: '',
       imgUrl: []
     },
-    mainTainData: {},
-    navbarData: {
-      title: '维保登记',
-    }
+    mainTainData: {}
   },
   /**
    * 生命周期函数--监听页面加载
@@ -72,8 +69,7 @@ Page({
                 'content-type': 'multipart/form-data',
                 'token': token
               },
-              // url: 'http://112.94.22.222:8000/springcloud-app-fastdfs/upload/fastUpload',
-              url: 'http://112.94.22.222:8000/springcloud-app-fastdfs/guest/upload/fastUpload',
+              url: baseUrl + '/springcloud-app-fastdfs/guest/upload/fastUpload',
               filePath: tempFilePath,
               name: 'file',
               success: (res) => {
@@ -146,12 +142,16 @@ Page({
         if (res.data.code === '0000') {
           wx.showToast({
             title: '提交成功',
-            icon: 'success'
+            icon: 'success',
+            duration: 2000
           })
-          // 关闭当前页面，跳转到应用内的某个页面。
-          wx.redirectTo({
-            url: 'pages/index/maintenance/maintenance'
-          })
+          setTimeout(() => {
+            // 关闭当前页面，跳转到应用内的某个页面。
+            wx.redirectTo({
+              url: '/pages/index/maintenance/maintenance'
+            })
+          }, 2500)
+         
         } else {
           wx.showToast({
             title: res.data.result,

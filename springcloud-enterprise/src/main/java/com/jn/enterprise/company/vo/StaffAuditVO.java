@@ -25,25 +25,11 @@ public class StaffAuditVO implements Serializable {
     private String comId;
     @ApiModelProperty(value = "企业名称")
     private String comName;
+    @ApiModelProperty(value = "加入方式（0升级员工 1企业邀请）")
+    private String joinPattern;
     @ApiModelProperty(value = "提交审核时间")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date inviteTime;
-
-    public String getComId() {
-        return comId;
-    }
-
-    public void setComId(String comId) {
-        this.comId = comId;
-    }
-
-    public String getComName() {
-        return comName;
-    }
-
-    public void setComName(String comName) {
-        this.comName = comName;
-    }
 
     public String getStaffId() {
         return staffId;
@@ -61,6 +47,30 @@ public class StaffAuditVO implements Serializable {
         this.account = account;
     }
 
+    public String getComId() {
+        return comId;
+    }
+
+    public void setComId(String comId) {
+        this.comId = comId;
+    }
+
+    public String getComName() {
+        return comName;
+    }
+
+    public void setComName(String comName) {
+        this.comName = comName;
+    }
+
+    public String getJoinPattern() {
+        return joinPattern;
+    }
+
+    public void setJoinPattern(String joinPattern) {
+        this.joinPattern = joinPattern;
+    }
+
     public Date getInviteTime() {
         return inviteTime;
     }
@@ -76,6 +86,7 @@ public class StaffAuditVO implements Serializable {
                 ", account='" + account + '\'' +
                 ", comId='" + comId + '\'' +
                 ", comName='" + comName + '\'' +
+                ", joinPattern='" + joinPattern + '\'' +
                 ", inviteTime=" + inviteTime +
                 '}';
     }

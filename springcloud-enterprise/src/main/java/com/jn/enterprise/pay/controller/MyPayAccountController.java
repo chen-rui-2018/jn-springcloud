@@ -6,7 +6,10 @@ import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.enterprise.pay.service.MyPayAccountService;
 import com.jn.enterprise.pay.service.MyPayBillService;
+import com.jn.pay.model.PayAccountBookCreateParam;
 import com.jn.pay.model.PayAccountBookParam;
+import com.jn.pay.model.PayCheckReminder;
+import com.jn.pay.model.PayUnderAdvancePaymentParam;
 import com.jn.pay.vo.PayAccountAndAccountBookVo;
 import com.jn.pay.vo.PayAccountBookMoneyRecordVo;
 import com.jn.pay.vo.PayAccountBookRecordVo;
@@ -97,4 +100,27 @@ public class MyPayAccountController extends BaseController {
         return new Result(data);
     }
 
+    @ControllerLog(doAction = "我的账本-线下预缴充值")
+    @ApiOperation(value = "我的账本-线下预缴充值",notes = "我的账本-线下预缴充值")
+    @RequestMapping(value = "/underAdvancePayment",method = RequestMethod.POST)
+    @RequiresPermissions("/payment/payAccount/underAdvancePayment")
+    public Result underAdvancePayment(@RequestBody @Validated PayUnderAdvancePaymentParam payUnderAdvancePaymentParam){
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        Assert.notNull(payUnderAdvancePaymentParam.getAcBookId(),"账本ID不能为空");
+        Assert.notNull(payUnderAdvancePaymentParam.getRechargeAmount(),"充值金额不能为空");
+        return myPayAccountService.underAdvancePayment(payUnderAdvancePaymentParam,user);
+    }
+
+    @ControllerLog(doAction = "我的账本-创建账户和账本【企业注册时调用】")
+    @ApiOperation(value = "我的账本-创建账户和账本【企业注册时调用】",notes = "我的账本-创建账户和账本【企业注册时调用】")
+    @RequestMapping(value = "/createPayAccountBook",method = RequestMethod.POST)
+    @RequiresPermissions("/payment/payAccount/createPayAccountBook")
+    public Result createPayAccountBook(@RequestBody @Validated PayAccountBookCreateParam payAccountBookCreateParam){
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        Assert.notNull(payAccountBookCreateParam.getEnterId(),"企业ID不能为空");
+        Assert.notNull(payAccountBookCreateParam.getComAdmin(),"企业管理员账号不能为空");
+        return myPayAccountService.createPayAccountBook(payAccountBookCreateParam,user);
+    }
 }

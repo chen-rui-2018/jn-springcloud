@@ -31,6 +31,9 @@ public class TbPdTalentServiceNotice implements Serializable {
     /*@ApiModelProperty("是否置顶（1：置顶，2：不置顶）")*/
     private Byte isRoofPlacement;
 
+    /*@ApiModelProperty("公告简介")*/
+    private String briefIntroduct;
+
     /*@ApiModelProperty("公告内容")*/
     private String announcementContent;
 
@@ -132,6 +135,14 @@ public class TbPdTalentServiceNotice implements Serializable {
         this.isRoofPlacement = isRoofPlacement;
     }
 
+    public String getBriefIntroduct() {
+        return briefIntroduct;
+    }
+
+    public void setBriefIntroduct(String briefIntroduct) {
+        this.briefIntroduct = briefIntroduct == null ? null : briefIntroduct.trim();
+    }
+
     public String getAnnouncementContent() {
         return announcementContent;
     }
@@ -225,6 +236,7 @@ public class TbPdTalentServiceNotice implements Serializable {
             && (this.getDeadline() == null ? other.getDeadline() == null : this.getDeadline().equals(other.getDeadline()))
             && (this.getTimeNode() == null ? other.getTimeNode() == null : this.getTimeNode().equals(other.getTimeNode()))
             && (this.getIsRoofPlacement() == null ? other.getIsRoofPlacement() == null : this.getIsRoofPlacement().equals(other.getIsRoofPlacement()))
+            && (this.getBriefIntroduct() == null ? other.getBriefIntroduct() == null : this.getBriefIntroduct().equals(other.getBriefIntroduct()))
             && (this.getAnnouncementContent() == null ? other.getAnnouncementContent() == null : this.getAnnouncementContent().equals(other.getAnnouncementContent()))
             && (this.getBrowseTimes() == null ? other.getBrowseTimes() == null : this.getBrowseTimes().equals(other.getBrowseTimes()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
@@ -249,6 +261,7 @@ public class TbPdTalentServiceNotice implements Serializable {
         result = prime * result + ((getDeadline() == null) ? 0 : getDeadline().hashCode());
         result = prime * result + ((getTimeNode() == null) ? 0 : getTimeNode().hashCode());
         result = prime * result + ((getIsRoofPlacement() == null) ? 0 : getIsRoofPlacement().hashCode());
+        result = prime * result + ((getBriefIntroduct() == null) ? 0 : getBriefIntroduct().hashCode());
         result = prime * result + ((getAnnouncementContent() == null) ? 0 : getAnnouncementContent().hashCode());
         result = prime * result + ((getBrowseTimes() == null) ? 0 : getBrowseTimes().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
@@ -276,6 +289,7 @@ public class TbPdTalentServiceNotice implements Serializable {
         sb.append(", deadline=").append(deadline);
         sb.append(", timeNode=").append(timeNode);
         sb.append(", isRoofPlacement=").append(isRoofPlacement);
+        sb.append(", briefIntroduct=").append(briefIntroduct);
         sb.append(", announcementContent=").append(announcementContent);
         sb.append(", browseTimes=").append(browseTimes);
         sb.append(", status=").append(status);

@@ -1,5 +1,5 @@
 <!--pages/meeting/meetingPerson/meetingPerson.wxml-->
-<nav-bar navbar-data='{{nvabarData}}'></nav-bar>
+<!-- <nav-bar navbar-data='{{nvabarData}}'></nav-bar> -->
 <view class="meetingtitle" hover-class="none" hover-stop-propagation="false">
   <form bindsubmit="bindFormSubmit" >
     <view class="section">

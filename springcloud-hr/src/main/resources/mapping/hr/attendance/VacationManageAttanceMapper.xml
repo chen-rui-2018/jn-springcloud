@@ -8,9 +8,12 @@
 		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
             and t2.`name` like concat('%',#{name},'%')
         </if>
-		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
-            and t2.department_id=#{departmentId}
-        </if>
+    <if test="departmentIds!=null and departmentIds.size>0">
+        and t2.department_id in
+        <foreach collection="departmentIds" item="depart" open="(" close=")" separator=",">
+            #{depart}
+        </foreach>
+    </if>
      order by job_number desc
   </select>
   

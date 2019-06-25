@@ -38,7 +38,7 @@ public class QrcodeUploadFileToFastdfs {
         MultipartFile multipartFile = MultipartFileUtil.from(file,null);
         Result<String> result;
         try {
-            result = uploadClient.uploadFile(multipartFile,Boolean.FALSE,null);
+            result = uploadClient.uploadFile(multipartFile,Boolean.FALSE,"");
         } catch (IOException e) {
             throw new JnSpringCloudException(WxExceptionEnums.FAST_DFS_UPLOAD_FAIL);
         }

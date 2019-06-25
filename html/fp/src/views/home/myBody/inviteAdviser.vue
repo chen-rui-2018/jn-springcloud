@@ -1,13 +1,14 @@
 <template>
-  <div class="inviteAdviser">
-    <div class="ordinary_title">
-      <div>邀请顾问</div>
+  <div class="inviteAdviser" v-loading="loading">
+    <div class="ordinary_title font16">
+      <div>邀请专员</div>
+       <div @click="$router.push({name:'counselorManagement'})">返回</div>
     </div>
     <div class="ordinary_content">
        <el-form label-width="120px" class="postJobInfo">
   <el-form-item label="员工账号:" prop="post" class="staffAccount">
-    <el-input placeholder="请输入员工账号" v-model="searchFiled" clearable>
-          <el-button slot="append" icon="el-icon-search" @click="getStaffInfo"></el-button>
+    <el-input placeholder="请输入员工账号" v-model="searchFiled" clearable @keyup.enter.native="getStaffInfo">
+          <el-button slot="append" icon="el-icon-search" @click="getStaffInfo" ></el-button>
         </el-input>
   </el-form-item>
   <el-form-item label="昵称:">
@@ -33,7 +34,7 @@
     <span v-for="(item, index) in jobs" :key="index" class="hobbys">{{item}}</span>
   </el-form-item>
  <div class="business_footer" @click="submitForm()">
-        邀请该顾问
+        邀请该专员
   </div>
 </el-form>
     </div>
@@ -43,6 +44,7 @@
 export default {
   data () {
     return {
+      loading:false,
       hobbys:[],
         searchFiled:'',
         nickName:'',
@@ -54,7 +56,7 @@ export default {
     }
   },
   methods: {
-    // 获取邀请顾问信息
+    // 获取邀请专员信息
       getStaffInfo(){
           if(!this.searchFiled){
               this.$message.error('请输入员工账号');
@@ -63,14 +65,16 @@ export default {
      url:'echoUserInfo',
      data:{registerAccount  :this.searchFiled },
      callback:(res=>{
-         console.log(res)
-         this.nickName=res.data.nickName
-         this.name=res.data.name
-         this.sex=res.data.sex
-         this.account=res.data.account
-         this.jobs=res.data.jobs
-         this.signature=res.data.signature
-         this.hobbys=res.data.hobbys
+         if(res.data){
+
+           this.nickName=res.data.nickName
+           this.name=res.data.name
+           this.sex=res.data.sex
+           this.account=res.data.account
+           this.jobs=res.data.jobs
+           this.signature=res.data.signature
+           this.hobbys=res.data.hobbys
+         }
      })
  })
       },
@@ -79,15 +83,16 @@ export default {
          this.$message.error('请输入员工账号');
          return
        }
+       this.loading=true
       this.api.post({
      url:'inviteAdvisor',
      data:{registerAccount:this.searchFiled},
      dataFlag:true,
      callback:(res=>{
-         console.log(res)
+       this.loading=false
           if (res.code == "0000") {
              this.$message({
-                message: '发送邀请成功',
+                message: '操作成功',
                 type: 'success'
               })
                 this.$router.push({name:'counselorManagement'})
@@ -118,22 +123,49 @@ export default {
         height: 33px;
         line-height: 33px;
       }
+       .el-form-item__content,.el-select{
+                width: 266px;
+            }
     }
     .hobbys{
     padding: 5px 15px;
     background: #f7f7f7;
+    display: inline-block;
+    line-height: 20px;
+    margin-bottom: 15px;
     border: 1px solid #eee;
     border-radius: 3px;
     margin-right: 20px;
     color: #999;
     }
-    .ordinary_title{
-      background-color: #fff;
-
-      padding:24px 28px;
-      font-size: 13px;
-      border-radius: 5px;
+    .ordinary_title {
+    background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 17px;
+    // font-size: 13px;
+    border-radius: 5px;
+    div:nth-child(2) {
+      width: 50px;
+      height: 26px;
+      background: rgba(236, 252, 242, 1);
+      border: 1px solid rgba(65, 215, 135, 1);
+      border-radius: 4px;
+      text-align: center;
+      line-height: 26px;
+      font-size: 12px;
+      color: #00a041;
+      cursor: pointer;
     }
+  }
+    // .ordinary_title{
+    //   background-color: #fff;
+
+    //   padding:24px 28px;
+    //   // font-size: 13px;
+    //   border-radius: 5px;
+    // }
     .ordinary_content{
         margin-top:14px;
         background: #fff;
@@ -146,18 +178,8 @@ export default {
     border-left: 0;
         }
         .postJobInfo{
-            // width: 50%;
-            // margin: 0 auto;
-            margin-left:300px;
-
-            .el-form-item__content,.el-select{
-                width: 266px;
-            }
-            .hobbies{
-               .el-form-item__content,.el-select{
-                width:100%;
-            }
-            }
+            width: 50%;
+            margin: 0 auto;
              .el-textarea__inner{
                  width: 348px;
                 min-height: 100px !important;

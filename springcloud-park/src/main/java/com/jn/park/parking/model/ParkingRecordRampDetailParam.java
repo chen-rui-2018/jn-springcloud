@@ -19,6 +19,8 @@ public class ParkingRecordRampDetailParam implements Serializable {
     private String gateId;
     @ApiModelProperty(value = "停车记录id",example = "23w2")
     private String parkingId;
+    @ApiModelProperty(value = "同步过来的消息id",example = "5895425")
+    private String messageId;
     @ApiModelProperty(value = "车牌",example = "苏A00001")
     private String carLicense;
     @ApiModelProperty(value = "入场时间")
@@ -27,6 +29,14 @@ public class ParkingRecordRampDetailParam implements Serializable {
     private Date departureTime;
     @ApiModelProperty(value = "创建时间")
     private Date createdTime;
+
+    public String getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
+    }
 
     public String getGateId() {
         return gateId;
@@ -74,5 +84,18 @@ public class ParkingRecordRampDetailParam implements Serializable {
 
     public void setCreatedTime(Date createdTime) {
         this.createdTime = createdTime;
+    }
+
+    @Override
+    public String toString() {
+        return "ParkingRecordRampDetailParam{" +
+                "gateId='" + gateId + '\'' +
+                ", parkingId='" + parkingId + '\'' +
+                ", messageId='" + messageId + '\'' +
+                ", carLicense='" + carLicense + '\'' +
+                ", admissionTime=" + admissionTime +
+                ", departureTime=" + departureTime +
+                ", createdTime=" + createdTime +
+                '}';
     }
 }

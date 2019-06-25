@@ -29,8 +29,8 @@ public enum MeterExceptionEnums implements CodeAndMsg {
     METER_INFO_EXIST("4010217","电表信息已经存在"),
     LINK_ID_ERROR("4010218","关系不存在"),
     METER_INFO_NOT_FOUND("4010219","电表信息不存在"),
-    COMPANY_BALANCE_NOT_FOUND("4010220","企业余额获取失败")
-            ;
+    COMPANY_BALANCE_NOT_FOUND("4010220","企业余额获取失败"),
+    DEFAULT_PRICE_ERROR("4010221","默认计价规则已经存在，如需修改默认计价规则，请先作废原有的默认计价规则！")     ;
 
 
     private String  code;
@@ -42,11 +42,11 @@ public enum MeterExceptionEnums implements CodeAndMsg {
     }
     @Override
     public String getCode() {
-        return null;
+        return code;
     }
 
     @Override
     public String getMessage() {
-        return null;
+        return message;
     }
 }

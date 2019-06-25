@@ -67,4 +67,15 @@ public class ActivitySlimQuery extends Page implements Serializable {
     public void setOrderBy(String orderBy) {
         this.orderBy = orderBy;
     }
+
+    @Override
+    public String toString() {
+        return "ActivitySlimQuery{" +
+                "typeId='" + typeId + '\'' +
+                ", keyWord='" + keyWord + '\'' +
+                ", startTime='" + startTime + '\'' +
+                ", endTime='" + endTime + '\'' +
+                ", orderBy='" + orderBy + '\'' +
+                '}';
+    }
 }

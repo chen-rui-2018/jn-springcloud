@@ -12,6 +12,7 @@
     <result column="invite_status" jdbcType="VARCHAR" property="inviteStatus" />
     <result column="inviter_account" jdbcType="VARCHAR" property="inviterAccount" />
     <result column="invite_time" jdbcType="TIMESTAMP" property="inviteTime" />
+    <result column="join_pattern" jdbcType="VARCHAR" property="joinPattern" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
@@ -78,8 +79,8 @@
   </sql>
   <sql id="Base_Column_List">
     id, com_id, com_name, account, check_status, check_account, check_time, invite_status, 
-    inviter_account, invite_time, created_time, creator_account, modified_time, modifier_account, 
-    record_status
+    inviter_account, invite_time, join_pattern, created_time, creator_account, modified_time, 
+    modifier_account, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.company.entity.TbServiceCompanyStaffCriteria" resultMap="BaseResultMap">
     select
@@ -115,15 +116,15 @@
     insert into tb_service_company_staff (id, com_id, com_name, 
       account, check_status, check_account, 
       check_time, invite_status, inviter_account, 
-      invite_time, created_time, creator_account, 
-      modified_time, modifier_account, record_status
-      )
+      invite_time, join_pattern, created_time, 
+      creator_account, modified_time, modifier_account, 
+      record_status)
     values (#{id,jdbcType=VARCHAR}, #{comId,jdbcType=VARCHAR}, #{comName,jdbcType=VARCHAR}, 
       #{account,jdbcType=VARCHAR}, #{checkStatus,jdbcType=VARCHAR}, #{checkAccount,jdbcType=VARCHAR}, 
       #{checkTime,jdbcType=TIMESTAMP}, #{inviteStatus,jdbcType=VARCHAR}, #{inviterAccount,jdbcType=VARCHAR}, 
-      #{inviteTime,jdbcType=TIMESTAMP}, #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}
-      )
+      #{inviteTime,jdbcType=TIMESTAMP}, #{joinPattern,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{recordStatus,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.company.entity.TbServiceCompanyStaff">
     insert into tb_service_company_staff
@@ -157,6 +158,9 @@
       </if>
       <if test="inviteTime != null">
         invite_time,
+      </if>
+      <if test="joinPattern != null">
+        join_pattern,
       </if>
       <if test="createdTime != null">
         created_time,
@@ -204,6 +208,9 @@
       </if>
       <if test="inviteTime != null">
         #{inviteTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="joinPattern != null">
+        #{joinPattern,jdbcType=VARCHAR},
       </if>
       <if test="createdTime != null">
         #{createdTime,jdbcType=TIMESTAMP},
@@ -261,6 +268,9 @@
       <if test="record.inviteTime != null">
         invite_time = #{record.inviteTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.joinPattern != null">
+        join_pattern = #{record.joinPattern,jdbcType=VARCHAR},
+      </if>
       <if test="record.createdTime != null">
         created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       </if>
@@ -293,6 +303,7 @@
       invite_status = #{record.inviteStatus,jdbcType=VARCHAR},
       inviter_account = #{record.inviterAccount,jdbcType=VARCHAR},
       invite_time = #{record.inviteTime,jdbcType=TIMESTAMP},
+      join_pattern = #{record.joinPattern,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
@@ -332,6 +343,9 @@
       <if test="inviteTime != null">
         invite_time = #{inviteTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="joinPattern != null">
+        join_pattern = #{joinPattern,jdbcType=VARCHAR},
+      </if>
       <if test="createdTime != null">
         created_time = #{createdTime,jdbcType=TIMESTAMP},
       </if>
@@ -361,6 +375,7 @@
       invite_status = #{inviteStatus,jdbcType=VARCHAR},
       inviter_account = #{inviterAccount,jdbcType=VARCHAR},
       invite_time = #{inviteTime,jdbcType=TIMESTAMP},
+      join_pattern = #{joinPattern,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},

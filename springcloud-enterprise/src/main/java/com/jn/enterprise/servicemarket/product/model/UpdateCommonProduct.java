@@ -90,4 +90,17 @@ public class UpdateCommonProduct implements Serializable {
     public void setProductDetails(String productDetails) {
         this.productDetails = productDetails;
     }
+
+    @Override
+    public String toString() {
+        return "UpdateCommonProduct{" +
+                "productId='" + productId + '\'' +
+                ", serialNumber='" + serialNumber + '\'' +
+                ", productName='" + productName + '\'' +
+                ", referPrice='" + referPrice + '\'' +
+                ", serviceCycle='" + serviceCycle + '\'' +
+                ", pictureUrl='" + pictureUrl + '\'' +
+                ", productDetails='" + productDetails + '\'' +
+                '}';
+    }
 }

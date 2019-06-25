@@ -108,6 +108,7 @@ export default {
         },
         calculable: true,
         toolbox: {
+          right: 30,
           show: true,
           feature: {
             mark: { show: true },

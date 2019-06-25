@@ -10,7 +10,7 @@ public interface TbPayReconciliationMistakeMapper {
 
     int deleteByExample(TbPayReconciliationMistakeCriteria example);
 
-    int deleteByPrimaryKey(String id);
+    int deleteByPrimaryKey(Integer id);
 
     int insert(TbPayReconciliationMistake record);
 
@@ -18,7 +18,7 @@ public interface TbPayReconciliationMistakeMapper {
 
     List<TbPayReconciliationMistake> selectByExample(TbPayReconciliationMistakeCriteria example);
 
-    TbPayReconciliationMistake selectByPrimaryKey(String id);
+    TbPayReconciliationMistake selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") TbPayReconciliationMistake record, @Param("example") TbPayReconciliationMistakeCriteria example);
 

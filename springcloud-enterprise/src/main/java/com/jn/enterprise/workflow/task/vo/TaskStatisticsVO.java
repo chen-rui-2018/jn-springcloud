@@ -27,6 +27,12 @@ public class TaskStatisticsVO implements Serializable {
     @ApiModelProperty(value = "总数")
     private Integer totalNum;
 
+    public TaskStatisticsVO() {
+        this.warnNum = 0;
+        this.earlyWarnNum = 0;
+        this.normalNum = 0;
+    }
+
     public Integer getWarnNum() {
         return warnNum;
     }

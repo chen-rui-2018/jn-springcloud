@@ -173,6 +173,8 @@
         </table>
         <table tableName="tb_service_org">
         </table>
+        <table tableName="tb_service_org_temp">
+        </table>
     </context>
     <!--服务产品-->
     <context id="service_product">
@@ -1106,6 +1108,8 @@
         </javaClientGenerator>
 
         <table tableName="tb_pay_check_reminder">
+        </table>
+        <table tableName="tb_pay_account_book">
         </table>
     </context>
 </generatorConfiguration>

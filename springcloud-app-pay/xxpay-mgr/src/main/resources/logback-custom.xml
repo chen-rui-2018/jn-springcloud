@@ -48,7 +48,7 @@
 
 
 
-    <logger name="com.jn" additivity="true" level="INFO">
+    <logger name="org.xxpay" additivity="true" level="INFO">
         <appender-ref ref="MY_INFO_FILE"/>
         <appender-ref ref="KAFKA"/>
     </logger>

@@ -110,7 +110,7 @@ public class CustomerServiceCenterManageController extends BaseController {
         //获取当前登录用户基本信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         if(user==null || user.getAccount()==null){
-            logger.warn("处理任务获取当前登录用户信息失败");
+            logger.warn("问题处理获取当前登录用户信息失败");
             return new Result(CustomerCenterExceptionEnum.NETWORK_ANOMALY.getCode(),CustomerCenterExceptionEnum.NETWORK_ANOMALY.getMessage());
         }
         int resNum=manageService.complete(ibpsCompleteCustomerParam,user.getAccount());

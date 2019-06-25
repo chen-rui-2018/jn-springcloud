@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.pmpaybill.dao.PmPayBillItemMapper">
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        INSERT INTO `tb_pm_pay_bill_item` (
+            `id`,
+            `bill_id`,
+            `company_id`,
+            `company_name`,
+            `company_address`,
+            `calc_mode`,
+            `pay_period`,
+            `bill_acount`,
+            `fee_amount`,
+            `fee_reason`,
+            `total_amount`,
+            `last_pay_time`,
+            `pay_status`,
+            `is_expire`,
+            `pay_type`,
+            `generate_status`,
+            `derate_state`,
+            `send_pay_bill`,
+            `created_time`
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.id,jdbcType=VARCHAR},
+            #{item.billId,jdbcType=VARCHAR},
+            #{item.companyId,jdbcType=VARCHAR},
+            #{item.companyName,jdbcType=VARCHAR},
+            #{item.companyAddress,jdbcType=VARCHAR},
+            #{item.calcMode,jdbcType=TINYINT},
+            #{item.payPeriod,jdbcType=VARCHAR},
+            #{item.billAcount,jdbcType=DECIMAL},
+            #{item.feeAmount,jdbcType=DECIMAL},
+            #{item.feeReason,jdbcType=VARCHAR},
+            #{item.totalAmount,jdbcType=DECIMAL},
+            #{item.lastPayTime,jdbcType=TIMESTAMP},
+            #{item.payStatus,jdbcType=TINYINT},
+            #{item.isExpire,jdbcType=TINYINT},
+            #{item.payType,jdbcType=TINYINT},
+            #{item.generateStatus,jdbcType=TINYINT},
+            #{item.derateState,jdbcType=TINYINT},
+            #{item.sendPayBill,jdbcType=TINYINT},
+            now()
+            )
+        </foreach>
+    </insert>
+
+    <update id="updatePmPayBillItemExpireStatus">
+       UPDATE tb_pm_pay_bill_item
+        SET is_expire = '0'
+        WHERE
+            date_format(now(), '%y-%m') = date_format(last_pay_time, '%y-%m')
+        AND pay_status = '0'
+    </update>
+
+    <update id="updateBatchItemSendStatus" parameterType="java.util.List">
+        update tb_pm_pay_bill_item
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="send_pay_bill =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id=#{item.id} then #{item.sendPayBill}
+                </foreach>
+            </trim>
+            <trim prefix="generate_status =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id=#{item.id} then #{item.generateStatus}
+                </foreach>
+            </trim>
+            <trim prefix="derate_state =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id=#{item.id} then #{item.derateState}
+                </foreach>
+            </trim>
+        </trim>
+        where id in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item.id,jdbcType=BIGINT}
+        </foreach>
+    </update>
+</mapper>

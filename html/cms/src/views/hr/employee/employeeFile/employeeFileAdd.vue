@@ -34,7 +34,7 @@
 
           <el-col :span="12">
             <el-form-item label="责任人：" prop="personLiable">
-              <el-input v-model.trim="addForm.personLiable" style="width: 200px" placeholder="请输入责任人" clearable/>
+              <el-input v-model.trim="addForm.personLiable" disabled style="width: 200px" placeholder="请输入责任人" clearable/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -84,8 +84,8 @@ export default {
       rules: {
         regDepartment: [{ required: true, message: '请输入登记部门', trigger: 'blur' }, { validator: checkName, trigger: 'blur' }],
         symbol: [{ required: true, message: '请输入文号', trigger: 'blur' }],
-        titleName: [{ required: true, message: '请输入题名', trigger: 'blur' }],
-        personLiable: [{ required: true, message: '请输入责任人', trigger: 'blur' }, { validator: checkName, trigger: 'blur' }]
+        titleName: [{ required: true, message: '请输入题名', trigger: 'blur' }]/*,
+        personLiable: [{ required: true, message: '请输入责任人', trigger: 'blur' }, { validator: checkName, trigger: 'blur' }]*/
       },
       addForm: {
         classId: '',
@@ -182,6 +182,7 @@ export default {
       this.title = query.title
       this.addForm.classId = query.classId
       this.addForm.nodeName = query.nodeName
+      this.addForm.personLiable = localStorage.getItem('userName')
       if (query.fileId) {
         this.addForm.fileId = query.fileId
         getEmployeeFile(query.fileId).then(res => {

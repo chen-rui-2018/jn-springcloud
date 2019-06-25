@@ -1,8 +1,8 @@
 <template>
-  <div class="staffProduct">
-    <div class="ordinary_title">
+  <div class="staffProduct" v-loading="loading">
+    <div class="ordinary_title font16">
       <div>员工管理</div>
-      <div @click="toInviteEmployees">邀请员工</div>
+      <div @click="toInviteEmployees" v-show="isShow">邀请员工</div>
     </div>
     <div class="ordinary_main">
       <div class="search">
@@ -23,7 +23,7 @@
           <el-table-column prop="name" label="真实姓名" align="center"> </el-table-column>
           <el-table-column prop="phone" label="联系手机" align="center"> </el-table-column>
           <el-table-column prop="birthday" label="出生年月" align="center"> </el-table-column>
-          <el-table-column prop="checkTime" label="申请日期" align="center"> </el-table-column>
+          <el-table-column prop="checkTime" label="申请日期" align="center" min-width="120"> </el-table-column>
           <el-table-column prop="statusShow" label="邀请状态" align="center">
                <!-- <template  slot-scope="scope"> -->
                  <!-- <span v-if="scope.row.statusShow==='0'">待审批</span>
@@ -32,7 +32,7 @@
                  <span v-if="scope.row.statusShow==='3'">已拒绝</span> -->
             <!-- </template> -->
             </el-table-column>
-          <el-table-column label="操作" align="center" >
+          <el-table-column label="操作" align="center" v-if="status===''||status==='0'">
             <template slot-scope="scope" >
               <el-button
               v-if="scope.row.statusShow==='待审批'"
@@ -46,12 +46,12 @@
                 type="text"
                 @click="handleRefuse( scope.row)" class="redColor"><span>拒绝</span>
               </el-button>
-              <el-button
+              <!-- <el-button
                v-if="scope.row.statusShow==='已拒绝'"
                 size="mini"
                 type="text"
                 @click="handleAgainInvite( scope.row)" class="greenColor"><span>再次邀请</span>
-              </el-button>
+              </el-button> -->
             </template>
           </el-table-column>
         </el-table>
@@ -67,6 +67,8 @@
 export default {
   data () {
     return {
+      loading:false,
+      isShow:false,
       page:1,
       rows:10,
       total:0,
@@ -76,40 +78,50 @@ export default {
     }
   },
   mounted(){
+     let initArr = JSON.parse(sessionStorage.menuItems);
+    initArr.forEach(v => {
+      if (v.label === "我的企业") {
+        v.resourcesList.forEach(i => {
+          if (i.resourcesName === "邀请员工") {
+            this.isShow = true;
+          }
+        });
+      }
+    });
     this.initList()
   },
   methods: {
     // 再次邀请
-    handleAgainInvite(row){
-        let _this = this;
-        this.$confirm(`此操作将再次发送邀请, 是否继续?`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-      this.api.post({
-        url: "inviteStaffAgain",
-        data: {staffId:row.staffId},
-        dataFlag:true,
-        callback: function(res) {
-          console.log(res)
-          if (res.code == "0000") {
-             _this.$message({
-                message: '操作成功',
-                type: 'success'
-              })
-            _this.initList()
-          }else{
-             this.$message.error('操作失败')
-          }
-        }
-      });
-    })
-        .catch(() => {
+    // handleAgainInvite(row){
+    //     let _this = this;
+    //     this.$confirm(`此操作将再次发送邀请, 是否继续?`, '提示', {
+    //     confirmButtonText: '确定',
+    //     cancelButtonText: '取消',
+    //     type: 'warning'
+    //   })
+    //     .then(() => {
+    //   this.api.post({
+    //     url: "inviteStaffAgain",
+    //     data: {staffId:row.staffId},
+    //     dataFlag:true,
+    //     callback: function(res) {
+    //       console.log(res)
+    //       if (res.code == "0000") {
+    //          _this.$message({
+    //             message: '操作成功',
+    //             type: 'success'
+    //           })
+    //         _this.initList()
+    //       }else{
+    //          this.$message.error('操作失败')
+    //       }
+    //     }
+    //   });
+    // })
+    //     .catch(() => {
 
-        })
-    },
+    //     })
+    // },
     // 拒绝
     handleRefuse(row){
      let _this = this;
@@ -204,18 +216,15 @@ _this.$message({
     },
     initList(){
       let _this = this;
+      this.loading=true
       this.api.get({
         url: "getStaffList",
         data: {page:this.page,rows:this.rows,status:this.status,searchFiled:this.searchFiled,needPage:'1'},
         // dataFlag:true,
         callback: function(res) {
+          _this.loading=false
           if (res.code == "0000") {
-            console.log(res)
             _this.recruitmentTable = res.data.rows;
-            // for (let it in _this.serverAgent) {
-            //   _this.serverAgent[it].attitudeScore =
-            //     _this.serverAgent[it].attitudeScore * 1;
-            // }
             _this.total = res.data.total;
           } else {
             _this.$message.error(res.result);
@@ -236,7 +245,7 @@ _this.$message({
       justify-content: space-between;
       align-items: center;
       padding:17px;
-      font-size: 13px;
+      // font-size: 13px;
       border-radius: 5px;
       div:nth-child(2){
                 width:88px;
@@ -286,7 +295,7 @@ line-height: 26px;
         .el-input-group{
           // width:24%;
               position: absolute;
-    width: 26%;
+    width: 29%;
     top: -5px;
     right: 0px;
         }

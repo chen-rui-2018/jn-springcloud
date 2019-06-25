@@ -8,15 +8,14 @@ import org.xxpay.dal.dao.entity.reconciliation.TbPayReconciliationMistakeScratch
 import org.xxpay.dal.dao.mapper.PayReconciliationMistakeScratchPoolMapper;
 import org.xxpay.dal.dao.mapper.generator.reconciliation.TbPayReconciliationMistakeScratchPoolMapper;
 
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @ClassName：对账暂存池接口实现类
  * @Descript：
  * @Author： hey
- * @Date： Created on 2019/5/21 10:29
+ * @Date： Created on 2019/5/20 15:54
  * @Version： v1.0
  * @Modified By:
  */
@@ -37,7 +36,10 @@ public class PayReconciliationMistakeScratchPoolServiceImpl implements PayReconc
      */
     @Override
     public void savaListDate(List<TbPayReconciliationMistakeScratchPool> scratchPoolList) {
+        //创建时间
+        Date createTime = new Date();
         for (TbPayReconciliationMistakeScratchPool record : scratchPoolList) {
+            record.setCreateTime(createTime);
             tbPayReconciliationMistakeScratchPoolMapper.insert(record);
         }
     }

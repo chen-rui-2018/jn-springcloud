@@ -117,11 +117,11 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
     @Transactional(rollbackFor = Exception.class)
     public int inviteAdvisor(String registerAccount,String loginAccount) {
         //判断当前用户是否可以认证
-        InviteUpgradeStatusVO joinParkStatus = companyService.getJoinParkStatus(loginAccount);
+        InviteUpgradeStatusVO joinParkStatus = companyService.getJoinParkStatus(registerAccount);
         String allowStatus="0";
         if(!StringUtils.equals(allowStatus,joinParkStatus.getCode())){
             logger.warn(joinParkStatus.getMessage());
-            throw new JnSpringCloudException(CommonExceptionEnum.UPGRADE_COMMON, loginAccount + joinParkStatus.getInviteMessage());
+            throw new JnSpringCloudException(CommonExceptionEnum.UPGRADE_COMMON, registerAccount + joinParkStatus.getInviteMessage());
         }
         //1.判断当前登录用户是否为机构管理员，且业务领域为非科技金融
         judgeAccountIsOrgManage(loginAccount);

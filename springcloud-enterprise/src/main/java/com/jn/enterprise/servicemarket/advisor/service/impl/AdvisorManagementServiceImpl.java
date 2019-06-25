@@ -90,6 +90,11 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
     @Autowired
     private CompanyService companyService;
 
+    /**
+     * 科技金融业务领域
+     */
+    private static final String BUSINESS_TECHNOLOGY="technology_finance";
+
 
     /**
      * 是否删除 0：删除  1：有效
@@ -118,7 +123,7 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
             logger.warn(joinParkStatus.getMessage());
             throw new JnSpringCloudException(CommonExceptionEnum.UPGRADE_COMMON, loginAccount + joinParkStatus.getInviteMessage());
         }
-        //1.判断当前登录用户是否为机构管理员
+        //1.判断当前登录用户是否为机构管理员，且业务领域为非科技金融
         judgeAccountIsOrgManage(loginAccount);
         //2.判断被邀请顾问是否为普通用户，非普通用户不能被邀请
         String roleName="普通用户";
@@ -232,9 +237,21 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
      */
     @ServiceLog(doAction = "判断登录用户是否为机构管理员")
     private void judgeAccountIsOrgManage(String loginAccount) {
+        String roleName=HomeRoleEnum.ORG_ADMIN.getCode();
+        TbServiceOrgCriteria example=new TbServiceOrgCriteria();
+        example.createCriteria().andOrgAccountEqualTo(loginAccount)
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        List<TbServiceOrg> serviceOrgList = tbServiceOrgMapper.selectByExample(example);
+        if(serviceOrgList.isEmpty()){
+            logger.warn("当前账号:[{}]不是{},不能邀请顾问",loginAccount,roleName);
+            throw new JnSpringCloudException(AdvisorExceptionEnum.ACCOUNT_NOT_ORG_MANAGE);
+        }
+        if(StringUtils.equals(serviceOrgList.get(0).getBusinessType(),BUSINESS_TECHNOLOGY)){
+            logger.warn("当前用户所在机构为科技金融机构，不能邀请专员");
+            throw new JnSpringCloudException(AdvisorExceptionEnum.BUSINESS_TECHNOLOGY_NOT_ALLOW);
+        }
         List<String> accountList=new ArrayList<>(8);
         accountList.add(loginAccount);
-        String roleName=HomeRoleEnum.ORG_ADMIN.getCode();
         List<UserRoleInfo> userRoleInfoList = orgColleagueService.getUserRoleInfoList(accountList, roleName);
         if(userRoleInfoList.isEmpty() || !StringUtils.equals(roleName, userRoleInfoList.get(0).getRoleName())){
             logger.warn("当前账号:[{}]不是{},不能邀请顾问",loginAccount,roleName);

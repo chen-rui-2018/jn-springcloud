@@ -456,6 +456,14 @@ const router= new Router({
               component: resolve => require(['@/views/home/myBusiness/enterprisePropaganda'], resolve)
             },
             {
+              path: '/myBusiness/organizationPropaganda',
+              name: 'organizationPropaganda',
+              meta: {
+                title: '机构宣传'
+              },
+              component: resolve => require(['@/views/home/myBusiness/enterprisePropaganda'], resolve)
+            },
+            {
               path: '/myBusiness/publishingPropaganda',
               name: 'publishingPropaganda',
               meta: {

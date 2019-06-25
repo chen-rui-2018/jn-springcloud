@@ -1,3 +1,4 @@
+import router from '../router'
 function UrlSearch () {
   var name, value
   var str = location.href // 取得整个地址栏
@@ -15,24 +16,23 @@ function UrlSearch () {
   }
 }
 const urlSearch = new UrlSearch()
+
 function initJsBridge (readyCallback) {
-  var u = navigator.userAgent
-  var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1 // android终端
-  var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) // ios终端
-  // var WebViewJavascriptBridge
+  const u = navigator.userAgent
+  const isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1 // android终端
+  const isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) // ios终端
+
   // 注册jsbridge
   function connectWebViewJavascriptBridge (callback) {
     if (isAndroid) {
-      if (window.WebViewJavascriptBridge) {
-        alert('isAndroid')
-        callback(window.WebViewJavascriptBridge)
+      const WebViewJavascriptBridge = window.WebViewJavascriptBridge
+      if (WebViewJavascriptBridge) {
+        callback(WebViewJavascriptBridge)
       } else {
         document.addEventListener(
           'WebViewJavascriptBridgeReady'
           , function () {
-            alert('isAndroid123')
-            alert('WebViewJavascriptBridge')
-            callback(window.WebViewJavascriptBridge)
+            callback(WebViewJavascriptBridge)
           },
           false
         )
@@ -41,14 +41,15 @@ function initJsBridge (readyCallback) {
     }
 
     if (isiOS) {
-      if (window.WebViewJavascriptBridge) {
-        return callback(window.WebViewJavascriptBridge)
+      const WebViewJavascriptBridge = window.WebViewJavascriptBridge
+      if (WebViewJavascriptBridge) {
+        return callback(WebViewJavascriptBridge)
       }
       if (window.WVJBCallbacks) {
         return window.WVJBCallbacks.push(callback)
       }
       window.WVJBCallbacks = [callback]
-      var WVJBIframe = document.createElement('iframe')
+      const WVJBIframe = document.createElement('iframe')
       WVJBIframe.style.display = 'none'
       WVJBIframe.src = 'https://__bridge_loaded__'
       document.documentElement.appendChild(WVJBIframe)
@@ -69,7 +70,31 @@ function initJsBridge (readyCallback) {
     readyCallback()
   })
 }
+function linkTo (data) {
+  const { appPath, callBack } = data
+  const WebViewJavascriptBridge = window.WebViewJavascriptBridge
+  if (WebViewJavascriptBridge) {
+    initJsBridge(() => {
+      const isHttp = /^(https?|ftp|file):\/\/.+$/.test(appPath)
+      if (isHttp) {
+        WebViewJavascriptBridge.callHandler('goNative', {
+          'url': appPath
+        }, function (response) {
+          if (callBack) {
+            callBack(response)
+          }
+        })
+      } else {
+        router.push(appPath)
+      }
+    })
+  } else {
+    router.push(data)
+  }
+}
+
 export {
   urlSearch,
-  initJsBridge
+  initJsBridge,
+  linkTo
 }

@@ -295,7 +295,8 @@ export default {
           line-height: 27px;
           text-align: center;
           border-left: 1px solid #eee;
-          border-radius: 0px 5px 5px 0px;
+          border-radius: 0px 4px 4px 0px;
+          padding: 0 10px;
         }
       }
       .special_cont{

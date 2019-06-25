@@ -21,6 +21,7 @@ public enum UserExtensionExceptionEnum implements CodeAndMsg {
     USER_DATA_MULTIPLE_ERROR("3020508","用户数据存在多条，请联系管理员"),
     SEARCH_PARAM_NOT_NULL("3020509","查询入参不能为空"),
     BIRTHDAY_FORMAT_ERROR("3020510","出生年月传参格式错误"),
+    REGISTER_TYPE_NOT_ALLOW("3020511","微信注册枚举系统不识别"),
     ;
     /**
      * 编码

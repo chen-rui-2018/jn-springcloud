@@ -16,24 +16,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 
 /**
- * 微信小程序注册绑定
+ * 微信公众号注册绑定
  * @Author: yangph
  * @Date: 2019/3/19 14:09
  * @Version v1.0
  * @modified By:
  */
-@Api(tags = "微信小程序注册绑定")
+@Api(tags = "微信公众号注册绑定")
 @RestController
-@RequestMapping("/api/miniProgramRegister")
-public class MiniProgramController extends BaseController implements MiniProgramRegisterClient {
+@RequestMapping("/api/miniProgramPublicController")
+public class MiniProgramPublicController extends BaseController implements MiniProgramRegisterClient {
     /**
      * 日志组件
      */
-    private static final Logger logger= LoggerFactory.getLogger(MiniProgramController.class);
+    private static final Logger logger= LoggerFactory.getLogger(MiniProgramPublicController.class);
 
     @Autowired
     private MiniProgramRegistersService miniprogramRegistersService;
@@ -45,7 +48,7 @@ public class MiniProgramController extends BaseController implements MiniProgram
     @Override
     public Result<String> isBindingAccountByOpenId(@RequestBody @Validated WeChatRequestParam weChatRequestParam) {
         logger.info("----进入判断OpenId是否已绑定API,入参：{}----",weChatRequestParam.toString());
-        return new Result(miniprogramRegistersService.isBindingAccountByOpenId(weChatRequestParam,RegisterTypeEnum.SMALL_PROGRAM));
+        return new Result(miniprogramRegistersService.isBindingAccountByOpenId(weChatRequestParam, RegisterTypeEnum.PUBLIC_NUMBER));
     }
 
 
@@ -56,7 +59,7 @@ public class MiniProgramController extends BaseController implements MiniProgram
     @Override
     public Result<String> registerAndBinding(@RequestBody @Validated RegisterInfoParam registerInfoParam) {
         logger.info("----进入注册并绑定的API,入参：{}----",registerInfoParam.toString());
-        return new Result(miniprogramRegistersService.registerAndBinding(registerInfoParam,RegisterTypeEnum.SMALL_PROGRAM));
+        return new Result(miniprogramRegistersService.registerAndBinding(registerInfoParam,RegisterTypeEnum.PUBLIC_NUMBER));
     }
 
     @ControllerLog(doAction = "根据账号获取openId")
@@ -66,6 +69,6 @@ public class MiniProgramController extends BaseController implements MiniProgram
     public Result<String> getOpenIdByAccount(@RequestBody String account) {
         Assert.notNull(account, MiniProgramRegisterExceptionEnum.PHONE_NUMBER_CANNOT_EMPTY.getMessage());
         logger.info("----进入根据账号获取openId的API,入参：{}----",account);
-        return new Result(miniprogramRegistersService.getOpenIdByAccount(account, RegisterTypeEnum.SMALL_PROGRAM));
+        return new Result(miniprogramRegistersService.getOpenIdByAccount(account,RegisterTypeEnum.PUBLIC_NUMBER));
     }
 }

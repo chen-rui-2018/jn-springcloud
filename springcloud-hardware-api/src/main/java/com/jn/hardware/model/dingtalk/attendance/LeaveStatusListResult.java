@@ -1,6 +1,7 @@
 package com.jn.hardware.model.dingtalk.attendance;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.jn.hardware.model.dingtalk.BaseResult;
 
 import java.io.Serializable;
@@ -26,8 +27,11 @@ public class LeaveStatusListResult extends BaseResult implements Serializable {
      * 请假状态列表
     * */
     private LeaveStatusList result;
-
-    private String  request_id;
+    /**
+     * 请求ID
+    * */
+    @JsonProperty("request_id")
+    private String  requestId;
 
 
     public Boolean getSuccess() {
@@ -45,12 +49,13 @@ public class LeaveStatusListResult extends BaseResult implements Serializable {
     public void setResult(LeaveStatusList result) {
         this.result = result;
     }
-    public String getRequest_id() {
-        return request_id;
+
+    public String getRequestId() {
+        return requestId;
     }
 
-    public void setRequest_id(String request_id) {
-        this.request_id = request_id;
+    public void setRequestId(String requestId) {
+        this.requestId = requestId;
     }
 
     @Override
@@ -58,7 +63,7 @@ public class LeaveStatusListResult extends BaseResult implements Serializable {
         return "LeaveStatusListResult{" +
                 "success=" + success +
                 ", result=" + result +
-                ", request_id='" + request_id + '\'' +
+                ", requestId='" + requestId + '\'' +
                 '}';
     }
 }

@@ -21,17 +21,17 @@ public class DepartmentUserInfoResult extends BaseResult implements Serializable
     /**
      * 在分页查询时返回，代表是否还有下一页更多数据
      */
-    private String hasMore;
+    private Boolean hasMore;
     /**
      * 用户列表信息
      */
     private List<DingTalkUser> userlist;
 
-    public String getHasMore() {
+    public Boolean getHasMore() {
         return hasMore;
     }
 
-    public void setHasMore(String hasMore) {
+    public void setHasMore(Boolean hasMore) {
         this.hasMore = hasMore;
     }
 
@@ -46,7 +46,7 @@ public class DepartmentUserInfoResult extends BaseResult implements Serializable
     @Override
     public String toString() {
         return "DepartmentUserInfoResult{" +
-                "hasMore='" + hasMore + '\'' +
+                "hasMore=" + hasMore +
                 ", userlist=" + userlist +
                 '}';
     }

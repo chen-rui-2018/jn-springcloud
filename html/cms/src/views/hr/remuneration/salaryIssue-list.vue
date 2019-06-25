@@ -467,7 +467,8 @@ export default {
       listLoading: false,
       listQuery: {
         page: 1,
-        rows: 10
+        rows: 10,
+        name: ''
       },
       code: {
         groupCode: 'platform_type',
@@ -571,8 +572,9 @@ export default {
       })
     },
     handleExport() {
-      const param = {
-        name: this.listQuery.name
+      const param = {}
+      if (this.listQuery.name !== '') {
+        param.name = this.listQuery.name
       }
       exportExcelByObj('hr/SalaryWelfareManagement/exportPayroll', param).then(res => {
         window.location.href = res.request.responseURL

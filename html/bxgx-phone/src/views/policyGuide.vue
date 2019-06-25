@@ -375,7 +375,7 @@ export default {
         p {
           font-size: 26px;
           color: #666;
-          height: 70px;
+          height: 75px;
           display: -webkit-box;
           -webkit-box-orient: vertical;
           -webkit-line-clamp: 2;

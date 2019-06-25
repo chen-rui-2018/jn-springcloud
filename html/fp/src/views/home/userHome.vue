@@ -47,7 +47,7 @@
           </div>
           <div class="setdistance">
             <span class="textRight mg">爱好兴趣：</span>
-            <template v-if="userData.hobbys!=null&&userData.hobbys.length>0">
+            <template v-if="userData&&userData.hobbys!=null&&userData.hobbys.length>0">
               <span class="hobbySel" v-for="(i,k) in userData.hobbys" :key='k'>{{i}}</span>
             </template>
             <template v-else>
@@ -56,8 +56,8 @@
           </div>
           <div class="setdistance" style="margin-top:30px">
             <span class="textRight mg">职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;业：</span>
-            <template v-if="userData.jobs!=null&&userData.hobbys.length>0">
-              <span class="hobbySel" v-if="userData.jobs.length>0" v-for="(i,k) in userData.jobs" :key='k'>{{i}}</span>
+            <template v-if="userData&&userData.jobs!=null&&userData.hobbys.length>0">
+              <span class="hobbySel" v-if="userData&&userData.jobs.length>0" v-for="(i,k) in userData.jobs" :key='k'>{{i}}</span>
             </template>
             <template v-else>
               <span>无</span>

@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard-editor-container" style="height: 1000px">
+  <div class="dashboard-editor-container" style="height: 1350px">
     <el-form :inline="true" :model="listQuery" class="filter-bar">
       <el-form-item label="月份">
         <el-date-picker v-model="listQuery.accountEntryTime" value-format="yyyy-MM" type="month" placeholder="选择月份" style="width: 200px;"/>

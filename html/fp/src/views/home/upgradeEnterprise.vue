@@ -348,10 +348,10 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           if (
-            new Date(this.businessForm.runTime) <
-            new Date(this.businessForm.foundingTime)
+            new Date(this.businessForm.foundingTime) >
+            new Date()
           ) {
-            this.$message.error("落地时间须大于注册时间");
+            this.$message.error("注册时间须小于当前时间");
             return false;
           }
           this.loading = true;
@@ -434,10 +434,10 @@ export default {
       this.$refs["businessForm"].validate(valid => {
         if (valid) {
           if (
-            new Date(this.businessForm.runTime) <
+            new Date() <
             new Date(this.businessForm.foundingTime)
           ) {
-            this.$message.error("落地时间须大于注册时间");
+            this.$message.error("注册时间须小于当前时间");
             return false;
           }
           let _this = this;

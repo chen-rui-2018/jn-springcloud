@@ -184,10 +184,6 @@ public class MeterController extends BaseController {
     @ApiOperation(value = "手动调用定时计价接口，进行指定企业的电费和电量计算",notes = "手动调用定时计价接口，进行指定企业的电费和电量计算", httpMethod = "POST")
     @PostMapping(value = "/calcCostEverdayByHandler")
     @RequiresPermissions("/meter/calcCostEverdayByHandler")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "companyId" ,value = "企业id",type = "String" ,example = "1",required = true),
-            @ApiImplicitParam(name = "day" ,value = "计算日期",type = "Date" ,example = "1",required = true)
-    })
     public Result calcCostEverdayByHandler(@RequestBody CompanyFailModelParam param){
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         return meterCalcCostService.calcCostEverdayByHandler( user,  param.getCompanyId(),  param.getDay());
@@ -306,4 +302,10 @@ public class MeterController extends BaseController {
         return meterService.dealAllFailByDealHourAndDealDateAndMeterCode( dealDate,dealHour,meterCode);
     }
 
+
+    @ControllerLog(doAction = "企业每日的计价规则维护接口")
+    @GetMapping(path = "/setRulesInDayForCompany")
+    public void setRulesInDayForCompany(){
+        meterRulesService.setRulesInDayForCompany();
+    }
 }

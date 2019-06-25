@@ -1,13 +1,15 @@
 // pages/home/aboutUs/aboutUs.js
+var app = getApp()
 Page({
   data: {
-    url:"http://112.94.22.222:8002/#/actiDetail",
+    url:"",
     id:""
   },
   onLoad: function (options) {
     this.setData({
       id:options.id,
-      token:wx.getStorageSync("token")
+      token:wx.getStorageSync("token"),
+      url:app.globalData.h5Url+"actiDetail"
     })
   },
  onReady: function () { },

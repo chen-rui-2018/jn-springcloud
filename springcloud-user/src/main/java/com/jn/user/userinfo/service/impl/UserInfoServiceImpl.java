@@ -15,6 +15,7 @@ import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.SysRole;
 import com.jn.system.model.User;
+import com.jn.user.config.UserServiceConfig;
 import com.jn.user.enums.HomeRoleEnum;
 import com.jn.user.enums.RecordStatusEnum;
 import com.jn.user.enums.UserExtensionExceptionEnum;
@@ -32,7 +33,6 @@ import com.jn.user.usertag.entity.TbTagCode;
 import com.jn.user.usertag.entity.TbTagCodeCriteria;
 import com.jn.user.usertag.entity.TbUserTag;
 import com.jn.user.usertag.entity.TbUserTagCriteria;
-import com.jn.user.vo.SysRoleVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -77,6 +77,9 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Autowired
     private SystemClient systemClient;
+
+    @Autowired
+    private UserServiceConfig userServiceConfig;
 
     @Value(value = "${user.outhrache.information.expire}")
     private int expire;
@@ -624,22 +627,23 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (systemClientUser == null || systemClientUser.getData() == null) {
             logger.warn("调用system服务查询用户不存在，account：{}", userExtensionInfo.getAccount());
         } else {
+            // 门户首页可展示的角色串
+            String homeRoleStr = userServiceConfig.getHomeRoleStr();
+
             User curUser = systemClientUser.getData();
             List<SysRole> sysRoleList = curUser.getSysRole();
-            List<SysRoleVO> sysRoleVOList = new ArrayList<>();
-
-            if (sysRoleList != null && !sysRoleList.isEmpty()) {
-                for (SysRole sysRole : sysRoleList) {
-                    SysRoleVO role = new SysRoleVO();
-                    BeanUtils.copyProperties(sysRole, role);
-                    HomeRoleEnum homeRole = EnumUtil.getByCode(sysRole.getRoleName(), HomeRoleEnum.class);
-                    if (homeRole != null) {
-                        role.setRoleCode(homeRole.getMessage());
+            for (SysRole sysRole : sysRoleList) {
+                if (sysRole != null) {
+                    if (homeRoleStr.contains(sysRole.getRoleName())) {
+                        userExtensionInfo.setRoleName(sysRole.getRoleName());
+                        HomeRoleEnum homeRole = EnumUtil.getByCode(sysRole.getRoleName(), HomeRoleEnum.class);
+                        if (homeRole != null) {
+                            userExtensionInfo.setRoleCode(homeRole.getMessage());
+                        }
+                        break;
                     }
-                    sysRoleVOList.add(role);
                 }
             }
-            userExtensionInfo.setSysRole(sysRoleVOList);
         }
         return userExtensionInfo;
     }

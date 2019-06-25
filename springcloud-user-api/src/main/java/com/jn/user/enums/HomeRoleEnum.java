@@ -21,6 +21,10 @@ public enum HomeRoleEnum implements CodeAndMsg {
     COM_ADMIN("企业管理员","COM_ADMIN"),
     COM_CONTACTS("企业联系人","COM_CONTACTS"),
     COM_EMPLOYEE("企业员工","COM_EMPLOYEE"),
+
+    CUSTOMER_SERVICE("客服专员","CUSTOMER_SERVICE"),
+    SYSTEMATIC_CONSULTATION("系统咨询处理","SYSTEMATIC_CONSULTATION"),
+    COMPLAINT_SUGGESTIONS("投诉建议处理","COMPLAINT_SUGGESTIONS"),
     ;
 
     /**

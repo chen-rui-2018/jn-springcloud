@@ -1,5 +1,7 @@
 package com.jn.hardware.model.dingtalk.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.io.Serializable;
 
 /**
@@ -10,6 +12,7 @@ import java.io.Serializable;
  * @Version： v1.0
  * @Modified By:
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UserRole implements Serializable {
 
     private static final long serialVersionUID = -3221605523568091268L;

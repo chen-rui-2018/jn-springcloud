@@ -4,7 +4,7 @@ import com.jn.hardware.enums.dingtalk.DepartmentUserOrderEnum;
 import com.jn.hardware.model.dingtalk.BaseResult;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.Size;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -24,10 +24,10 @@ public class DepartmentUserInfoParam extends BaseResult implements Serializable 
     private String lang="";
     @NotBlank(message = "部门id不能为空")
     private String department_id;
-    @NotBlank(message = "offset不能为空，与size参数同时设置时才生效，此参数代表偏移量,偏移量从0开始")
-    private String offset;
-    @Size(min = 1,max = 100,message="分页大小，与offset参数同时设置时才生效，最小1，最大100条")
-    private String size;
+    @NotNull(message = "offset不能为空，与size参数同时设置时才生效，此参数代表偏移量,偏移量从0开始")
+    private Long offset;
+    @NotNull(message="分页大小不能为空，与offset参数同时设置时才生效，最小1，最大100条")
+    private Long size;
     /**
      * 支持分页查询，部门成员的排序规则，默认 是按自定义排序；
      * entry_asc：代表按照进入部门的时间升序，
@@ -54,19 +54,19 @@ public class DepartmentUserInfoParam extends BaseResult implements Serializable 
         this.department_id = department_id;
     }
 
-    public String getOffset() {
+    public Long getOffset() {
         return offset;
     }
 
-    public void setOffset(String offset) {
+    public void setOffset(Long offset) {
         this.offset = offset;
     }
 
-    public String getSize() {
+    public Long getSize() {
         return size;
     }
 
-    public void setSize(String size) {
+    public void setSize(Long size) {
         this.size = size;
     }
 
@@ -83,8 +83,8 @@ public class DepartmentUserInfoParam extends BaseResult implements Serializable 
         return "DepartmentUserInfoParam{" +
                 "lang='" + lang + '\'' +
                 ", department_id='" + department_id + '\'' +
-                ", offset='" + offset + '\'' +
-                ", size='" + size + '\'' +
+                ", offset=" + offset +
+                ", size=" + size +
                 ", departmentUserOrder=" + departmentUserOrder +
                 '}';
     }

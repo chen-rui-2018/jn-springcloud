@@ -52,11 +52,6 @@ public class WxAuthController {
 
     public static final String WX_OPENID_KEY = "wx:openid:";
 
-    /**
-     * 微信服务号绑定用户页面
-     */
-    private static final String REGISTER_URL = "https://screan.bxgxq.com/#/register";
-
     @RequestMapping("/checkIsBindingUser")
     public void checkIsBindingUser(HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
         String requestURI = httpRequest.getRequestURI();
@@ -98,7 +93,7 @@ public class WxAuthController {
                         StringBuffer stringBuffer = new StringBuffer();
                         String userFlag = UUID.randomUUID().toString();
                         wxInRedisConfigStorage.setCacheValue(WX_OPENID_KEY+userFlag,openId,12*60*60);
-                        stringBuffer.append(REGISTER_URL).append("?").append("targetUrl=").append(targetUrl).append("&userFlag=").append(userFlag);
+                        stringBuffer.append(wxProperties.getRegisterUrl()).append("?").append("targetUrl=").append(targetUrl).append("&userFlag=").append(userFlag);
                         httpResponse.sendRedirect(stringBuffer.toString());
                     }
                 } catch (IOException e) {

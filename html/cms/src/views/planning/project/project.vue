@@ -122,7 +122,7 @@ export default {
   components: { projectGrid },
   data() {
     return {
-      ibpsUrl: this.GLOBAL.ibpsUrl,
+      ibpsUrl: process.env.IBPS_URL,
       listLoading: false,
       dataList: [
         // {

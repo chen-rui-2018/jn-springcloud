@@ -294,7 +294,7 @@ export default {
         this.api.get({
           url: "addpageviews",
           data: {
-            id:this.id
+            id:item.id
           },
           callback: (res)=> {
             if(res.code==='0000'){

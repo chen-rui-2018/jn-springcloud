@@ -76,7 +76,7 @@
             <el-tabs v-model="rangeId"  @tab-click="switchto">
               <el-tab-pane v-for="(typeitem,typeindex) in typeList" :key="typeindex" >
                 <div slot="label" :name="typeitem.id">{{typeitem.name}}</div>
-                <div class="lists" v-for="(talentsitem,talentsindex) in talentsList" :key="talentsindex" >
+                <div class="lists" v-for="(talentsitem,talentsindex) in talentsList" :key="talentsindex" @click="gotalentdetail(talentsitem.id)">
                   <div class="list_cont_left">
                     <p><span>【{{talentsitem.rangeId|type}}】</span>{{talentsitem.noticeTitle}}</p>
                     <!-- <p v-show="talentsitem.rangeId=5">{{talentsitem.noticeTitle}} </p> -->
@@ -613,6 +613,7 @@ export default {
               border-bottom: solid 1px #eeeeee;
               padding-bottom: 15px;
               margin-top: 30px;
+              cursor: pointer;
               .list_cont_left{
                 color:#999999;
                 font-size: 12px;

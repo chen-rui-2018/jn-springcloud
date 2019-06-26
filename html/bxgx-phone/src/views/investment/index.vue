@@ -205,6 +205,7 @@ export default {
     .card-list-title {
       width: 100%;
       height: 30px;
+      line-height: 30px;
       font-size: 32px;
       font-weight:bold;
       color: rgba(34,34,34,1);

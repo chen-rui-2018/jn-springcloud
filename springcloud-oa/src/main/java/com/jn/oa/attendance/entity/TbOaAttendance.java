@@ -6,35 +6,39 @@ import java.util.Date;
 public class TbOaAttendance implements Serializable {
     private String id;
 
-    private String attendanceUser;
+    private String groupId;
 
-    private Date signInAttendanceTime;
+    private String planId;
 
-    private String signInAttendancePlatform;
+    private String recordId;
 
-    private String signInLongitude;
+    private Date workDate;
 
-    private String signInLatitude;
+    private String userId;
 
-    private String signInAttendanceIp;
+    private String userName;
 
-    private Date signOutAttendanceTime;
+    private String checkType;
 
-    private String signOutAttendancePlatform;
+    private String timeResult;
 
-    private String signOutLongitude;
+    private String locationResult;
 
-    private String signOutLatitude;
+    private String approveId;
 
-    private String signOutAttendanceIp;
+    private String procInstId;
 
-    private String creatorAccount;
+    private Date baseCheckTime;
 
-    private Date createdTime;
+    private Date userCheckTime;
 
-    private String modifierAccount;
+    private String sourceType;
 
-    private Date modifiedTime;
+    private String corpId;
+
+    private String departmentId;
+
+    private String departmentName;
 
     private static final long serialVersionUID = 1L;
 
@@ -46,124 +50,140 @@ public class TbOaAttendance implements Serializable {
         this.id = id == null ? null : id.trim();
     }
 
-    public String getAttendanceUser() {
-        return attendanceUser;
+    public String getGroupId() {
+        return groupId;
     }
 
-    public void setAttendanceUser(String attendanceUser) {
-        this.attendanceUser = attendanceUser == null ? null : attendanceUser.trim();
+    public void setGroupId(String groupId) {
+        this.groupId = groupId == null ? null : groupId.trim();
     }
 
-    public Date getSignInAttendanceTime() {
-        return signInAttendanceTime;
+    public String getPlanId() {
+        return planId;
     }
 
-    public void setSignInAttendanceTime(Date signInAttendanceTime) {
-        this.signInAttendanceTime = signInAttendanceTime;
+    public void setPlanId(String planId) {
+        this.planId = planId == null ? null : planId.trim();
     }
 
-    public String getSignInAttendancePlatform() {
-        return signInAttendancePlatform;
+    public String getRecordId() {
+        return recordId;
     }
 
-    public void setSignInAttendancePlatform(String signInAttendancePlatform) {
-        this.signInAttendancePlatform = signInAttendancePlatform == null ? null : signInAttendancePlatform.trim();
+    public void setRecordId(String recordId) {
+        this.recordId = recordId == null ? null : recordId.trim();
     }
 
-    public String getSignInLongitude() {
-        return signInLongitude;
+    public Date getWorkDate() {
+        return workDate;
     }
 
-    public void setSignInLongitude(String signInLongitude) {
-        this.signInLongitude = signInLongitude == null ? null : signInLongitude.trim();
+    public void setWorkDate(Date workDate) {
+        this.workDate = workDate;
     }
 
-    public String getSignInLatitude() {
-        return signInLatitude;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setSignInLatitude(String signInLatitude) {
-        this.signInLatitude = signInLatitude == null ? null : signInLatitude.trim();
+    public void setUserId(String userId) {
+        this.userId = userId == null ? null : userId.trim();
     }
 
-    public String getSignInAttendanceIp() {
-        return signInAttendanceIp;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setSignInAttendanceIp(String signInAttendanceIp) {
-        this.signInAttendanceIp = signInAttendanceIp == null ? null : signInAttendanceIp.trim();
+    public void setUserName(String userName) {
+        this.userName = userName == null ? null : userName.trim();
     }
 
-    public Date getSignOutAttendanceTime() {
-        return signOutAttendanceTime;
+    public String getCheckType() {
+        return checkType;
     }
 
-    public void setSignOutAttendanceTime(Date signOutAttendanceTime) {
-        this.signOutAttendanceTime = signOutAttendanceTime;
+    public void setCheckType(String checkType) {
+        this.checkType = checkType == null ? null : checkType.trim();
     }
 
-    public String getSignOutAttendancePlatform() {
-        return signOutAttendancePlatform;
+    public String getTimeResult() {
+        return timeResult;
     }
 
-    public void setSignOutAttendancePlatform(String signOutAttendancePlatform) {
-        this.signOutAttendancePlatform = signOutAttendancePlatform == null ? null : signOutAttendancePlatform.trim();
+    public void setTimeResult(String timeResult) {
+        this.timeResult = timeResult == null ? null : timeResult.trim();
     }
 
-    public String getSignOutLongitude() {
-        return signOutLongitude;
+    public String getLocationResult() {
+        return locationResult;
     }
 
-    public void setSignOutLongitude(String signOutLongitude) {
-        this.signOutLongitude = signOutLongitude == null ? null : signOutLongitude.trim();
+    public void setLocationResult(String locationResult) {
+        this.locationResult = locationResult == null ? null : locationResult.trim();
     }
 
-    public String getSignOutLatitude() {
-        return signOutLatitude;
+    public String getApproveId() {
+        return approveId;
     }
 
-    public void setSignOutLatitude(String signOutLatitude) {
-        this.signOutLatitude = signOutLatitude == null ? null : signOutLatitude.trim();
+    public void setApproveId(String approveId) {
+        this.approveId = approveId == null ? null : approveId.trim();
     }
 
-    public String getSignOutAttendanceIp() {
-        return signOutAttendanceIp;
+    public String getProcInstId() {
+        return procInstId;
     }
 
-    public void setSignOutAttendanceIp(String signOutAttendanceIp) {
-        this.signOutAttendanceIp = signOutAttendanceIp == null ? null : signOutAttendanceIp.trim();
+    public void setProcInstId(String procInstId) {
+        this.procInstId = procInstId == null ? null : procInstId.trim();
     }
 
-    public String getCreatorAccount() {
-        return creatorAccount;
+    public Date getBaseCheckTime() {
+        return baseCheckTime;
     }
 
-    public void setCreatorAccount(String creatorAccount) {
-        this.creatorAccount = creatorAccount == null ? null : creatorAccount.trim();
+    public void setBaseCheckTime(Date baseCheckTime) {
+        this.baseCheckTime = baseCheckTime;
     }
 
-    public Date getCreatedTime() {
-        return createdTime;
+    public Date getUserCheckTime() {
+        return userCheckTime;
     }
 
-    public void setCreatedTime(Date createdTime) {
-        this.createdTime = createdTime;
+    public void setUserCheckTime(Date userCheckTime) {
+        this.userCheckTime = userCheckTime;
     }
 
-    public String getModifierAccount() {
-        return modifierAccount;
+    public String getSourceType() {
+        return sourceType;
     }
 
-    public void setModifierAccount(String modifierAccount) {
-        this.modifierAccount = modifierAccount == null ? null : modifierAccount.trim();
+    public void setSourceType(String sourceType) {
+        this.sourceType = sourceType == null ? null : sourceType.trim();
     }
 
-    public Date getModifiedTime() {
-        return modifiedTime;
+    public String getCorpId() {
+        return corpId;
     }
 
-    public void setModifiedTime(Date modifiedTime) {
-        this.modifiedTime = modifiedTime;
+    public void setCorpId(String corpId) {
+        this.corpId = corpId == null ? null : corpId.trim();
+    }
+
+    public String getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(String departmentId) {
+        this.departmentId = departmentId == null ? null : departmentId.trim();
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName == null ? null : departmentName.trim();
     }
 
     @Override
@@ -179,21 +199,23 @@ public class TbOaAttendance implements Serializable {
         }
         TbOaAttendance other = (TbOaAttendance) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getAttendanceUser() == null ? other.getAttendanceUser() == null : this.getAttendanceUser().equals(other.getAttendanceUser()))
-            && (this.getSignInAttendanceTime() == null ? other.getSignInAttendanceTime() == null : this.getSignInAttendanceTime().equals(other.getSignInAttendanceTime()))
-            && (this.getSignInAttendancePlatform() == null ? other.getSignInAttendancePlatform() == null : this.getSignInAttendancePlatform().equals(other.getSignInAttendancePlatform()))
-            && (this.getSignInLongitude() == null ? other.getSignInLongitude() == null : this.getSignInLongitude().equals(other.getSignInLongitude()))
-            && (this.getSignInLatitude() == null ? other.getSignInLatitude() == null : this.getSignInLatitude().equals(other.getSignInLatitude()))
-            && (this.getSignInAttendanceIp() == null ? other.getSignInAttendanceIp() == null : this.getSignInAttendanceIp().equals(other.getSignInAttendanceIp()))
-            && (this.getSignOutAttendanceTime() == null ? other.getSignOutAttendanceTime() == null : this.getSignOutAttendanceTime().equals(other.getSignOutAttendanceTime()))
-            && (this.getSignOutAttendancePlatform() == null ? other.getSignOutAttendancePlatform() == null : this.getSignOutAttendancePlatform().equals(other.getSignOutAttendancePlatform()))
-            && (this.getSignOutLongitude() == null ? other.getSignOutLongitude() == null : this.getSignOutLongitude().equals(other.getSignOutLongitude()))
-            && (this.getSignOutLatitude() == null ? other.getSignOutLatitude() == null : this.getSignOutLatitude().equals(other.getSignOutLatitude()))
-            && (this.getSignOutAttendanceIp() == null ? other.getSignOutAttendanceIp() == null : this.getSignOutAttendanceIp().equals(other.getSignOutAttendanceIp()))
-            && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
-            && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
-            && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
-            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()));
+            && (this.getGroupId() == null ? other.getGroupId() == null : this.getGroupId().equals(other.getGroupId()))
+            && (this.getPlanId() == null ? other.getPlanId() == null : this.getPlanId().equals(other.getPlanId()))
+            && (this.getRecordId() == null ? other.getRecordId() == null : this.getRecordId().equals(other.getRecordId()))
+            && (this.getWorkDate() == null ? other.getWorkDate() == null : this.getWorkDate().equals(other.getWorkDate()))
+            && (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
+            && (this.getUserName() == null ? other.getUserName() == null : this.getUserName().equals(other.getUserName()))
+            && (this.getCheckType() == null ? other.getCheckType() == null : this.getCheckType().equals(other.getCheckType()))
+            && (this.getTimeResult() == null ? other.getTimeResult() == null : this.getTimeResult().equals(other.getTimeResult()))
+            && (this.getLocationResult() == null ? other.getLocationResult() == null : this.getLocationResult().equals(other.getLocationResult()))
+            && (this.getApproveId() == null ? other.getApproveId() == null : this.getApproveId().equals(other.getApproveId()))
+            && (this.getProcInstId() == null ? other.getProcInstId() == null : this.getProcInstId().equals(other.getProcInstId()))
+            && (this.getBaseCheckTime() == null ? other.getBaseCheckTime() == null : this.getBaseCheckTime().equals(other.getBaseCheckTime()))
+            && (this.getUserCheckTime() == null ? other.getUserCheckTime() == null : this.getUserCheckTime().equals(other.getUserCheckTime()))
+            && (this.getSourceType() == null ? other.getSourceType() == null : this.getSourceType().equals(other.getSourceType()))
+            && (this.getCorpId() == null ? other.getCorpId() == null : this.getCorpId().equals(other.getCorpId()))
+            && (this.getDepartmentId() == null ? other.getDepartmentId() == null : this.getDepartmentId().equals(other.getDepartmentId()))
+            && (this.getDepartmentName() == null ? other.getDepartmentName() == null : this.getDepartmentName().equals(other.getDepartmentName()));
     }
 
     @Override
@@ -201,21 +223,23 @@ public class TbOaAttendance implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getAttendanceUser() == null) ? 0 : getAttendanceUser().hashCode());
-        result = prime * result + ((getSignInAttendanceTime() == null) ? 0 : getSignInAttendanceTime().hashCode());
-        result = prime * result + ((getSignInAttendancePlatform() == null) ? 0 : getSignInAttendancePlatform().hashCode());
-        result = prime * result + ((getSignInLongitude() == null) ? 0 : getSignInLongitude().hashCode());
-        result = prime * result + ((getSignInLatitude() == null) ? 0 : getSignInLatitude().hashCode());
-        result = prime * result + ((getSignInAttendanceIp() == null) ? 0 : getSignInAttendanceIp().hashCode());
-        result = prime * result + ((getSignOutAttendanceTime() == null) ? 0 : getSignOutAttendanceTime().hashCode());
-        result = prime * result + ((getSignOutAttendancePlatform() == null) ? 0 : getSignOutAttendancePlatform().hashCode());
-        result = prime * result + ((getSignOutLongitude() == null) ? 0 : getSignOutLongitude().hashCode());
-        result = prime * result + ((getSignOutLatitude() == null) ? 0 : getSignOutLatitude().hashCode());
-        result = prime * result + ((getSignOutAttendanceIp() == null) ? 0 : getSignOutAttendanceIp().hashCode());
-        result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
-        result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
-        result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
-        result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
+        result = prime * result + ((getGroupId() == null) ? 0 : getGroupId().hashCode());
+        result = prime * result + ((getPlanId() == null) ? 0 : getPlanId().hashCode());
+        result = prime * result + ((getRecordId() == null) ? 0 : getRecordId().hashCode());
+        result = prime * result + ((getWorkDate() == null) ? 0 : getWorkDate().hashCode());
+        result = prime * result + ((getUserId() == null) ? 0 : getUserId().hashCode());
+        result = prime * result + ((getUserName() == null) ? 0 : getUserName().hashCode());
+        result = prime * result + ((getCheckType() == null) ? 0 : getCheckType().hashCode());
+        result = prime * result + ((getTimeResult() == null) ? 0 : getTimeResult().hashCode());
+        result = prime * result + ((getLocationResult() == null) ? 0 : getLocationResult().hashCode());
+        result = prime * result + ((getApproveId() == null) ? 0 : getApproveId().hashCode());
+        result = prime * result + ((getProcInstId() == null) ? 0 : getProcInstId().hashCode());
+        result = prime * result + ((getBaseCheckTime() == null) ? 0 : getBaseCheckTime().hashCode());
+        result = prime * result + ((getUserCheckTime() == null) ? 0 : getUserCheckTime().hashCode());
+        result = prime * result + ((getSourceType() == null) ? 0 : getSourceType().hashCode());
+        result = prime * result + ((getCorpId() == null) ? 0 : getCorpId().hashCode());
+        result = prime * result + ((getDepartmentId() == null) ? 0 : getDepartmentId().hashCode());
+        result = prime * result + ((getDepartmentName() == null) ? 0 : getDepartmentName().hashCode());
         return result;
     }
 
@@ -226,21 +250,23 @@ public class TbOaAttendance implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", attendanceUser=").append(attendanceUser);
-        sb.append(", signInAttendanceTime=").append(signInAttendanceTime);
-        sb.append(", signInAttendancePlatform=").append(signInAttendancePlatform);
-        sb.append(", signInLongitude=").append(signInLongitude);
-        sb.append(", signInLatitude=").append(signInLatitude);
-        sb.append(", signInAttendanceIp=").append(signInAttendanceIp);
-        sb.append(", signOutAttendanceTime=").append(signOutAttendanceTime);
-        sb.append(", signOutAttendancePlatform=").append(signOutAttendancePlatform);
-        sb.append(", signOutLongitude=").append(signOutLongitude);
-        sb.append(", signOutLatitude=").append(signOutLatitude);
-        sb.append(", signOutAttendanceIp=").append(signOutAttendanceIp);
-        sb.append(", creatorAccount=").append(creatorAccount);
-        sb.append(", createdTime=").append(createdTime);
-        sb.append(", modifierAccount=").append(modifierAccount);
-        sb.append(", modifiedTime=").append(modifiedTime);
+        sb.append(", groupId=").append(groupId);
+        sb.append(", planId=").append(planId);
+        sb.append(", recordId=").append(recordId);
+        sb.append(", workDate=").append(workDate);
+        sb.append(", userId=").append(userId);
+        sb.append(", userName=").append(userName);
+        sb.append(", checkType=").append(checkType);
+        sb.append(", timeResult=").append(timeResult);
+        sb.append(", locationResult=").append(locationResult);
+        sb.append(", approveId=").append(approveId);
+        sb.append(", procInstId=").append(procInstId);
+        sb.append(", baseCheckTime=").append(baseCheckTime);
+        sb.append(", userCheckTime=").append(userCheckTime);
+        sb.append(", sourceType=").append(sourceType);
+        sb.append(", corpId=").append(corpId);
+        sb.append(", departmentId=").append(departmentId);
+        sb.append(", departmentName=").append(departmentName);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

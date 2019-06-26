@@ -1,0 +1,36 @@
+.mainBox{
+    width: 5120x;
+    height: 1536px;
+    background: url(../image/bg.png) 100% 100% / 100% 100% no-repeat;
+}
+.navBg{
+    width: 100%;
+    height: 130px;
+    background: url(../image/nav.png) 100% 100% / 100% 100% no-repeat;
+}
+.content{
+    display: flex;
+    justify-content: space-between;
+    /* align-items: center; */
+    padding:0 50px;
+}
+.conLeft{
+    width: 70%;
+    /* background: #00a041; */
+}
+.conRight{
+    width:28%;
+    /* background: blue; */
+}
+.leftUl{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.leftLi{
+    width: 400px;
+    height: 360px;
+    background: url(../image/square2.png) 100% 100% / 100% 100% no-repeat;
+    margin-right: 40px;
+}

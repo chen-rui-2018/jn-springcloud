@@ -17,6 +17,11 @@ function UrlSearch () {
 }
 const urlSearch = new UrlSearch()
 
+const hexToDec = str => {
+  str = str.replace(/\\/g, '%')
+  return unescape(str)
+}
+
 function initJsBridge (readyCallback) {
   const u = navigator.userAgent
   const isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1 // android终端
@@ -97,5 +102,6 @@ export {
   urlSearch,
   linkTo,
   isMobile,
-  initJsBridge
+  initJsBridge,
+  hexToDec
 }

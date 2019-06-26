@@ -68,8 +68,7 @@ public class CommentController extends BaseController {
     @RequiresPermissions("/serviceMarket/comment/getRatingCommentDetail")
     public Result<RatingDetail> getRatingCommentDetail(@ApiParam(name="id",value = "需求/评价id",required = true,example = "2cc20cc10c4b4d608f5a05728b86d888")@RequestParam(value = "id") String id){
         Assert.notNull(id, OrgExceptionEnum.COMMENT_ID_IS_NOT_NULL.getMessage());
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        RatingDetail ratingCommentDetail = commentService.getRatingCommentDetail(id, user.getAccount());
+        RatingDetail ratingCommentDetail = commentService.getRatingCommentDetail(id);
         return new Result<>(ratingCommentDetail);
     }
 

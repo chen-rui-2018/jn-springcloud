@@ -17,19 +17,10 @@ function UrlSearch () {
 }
 const urlSearch = new UrlSearch()
 
-function isMobile () {
-  const userAgentInfo = navigator.userAgent
-  const Agents = ['Android', 'iPhone', 'SymbianOS', 'Windows Phone', 'iPad', 'iPod']
-  return Agents.some(str => {
-    return userAgentInfo.indexOf(str) > 0
-  })
-}
-
 function initJsBridge (readyCallback) {
   const u = navigator.userAgent
   const isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1 // android终端
   const isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) // ios终端
-
   // 注册jsbridge
   function connectWebViewJavascriptBridge (callback) {
     if (isAndroid) {
@@ -78,25 +69,33 @@ function initJsBridge (readyCallback) {
     readyCallback()
   })
 }
+
+function isMobile () {
+  const userAgentInfo = navigator.userAgent
+  const Agents = ['Android', 'iPhone', 'SymbianOS', 'Windows Phone', 'iPad', 'iPod']
+  return Agents.some(str => {
+    return userAgentInfo.indexOf(str) > 0
+  })
+}
 function linkTo (data) {
-  const { appPath, callBack } = data
-  if (isMobile()) {
-    initJsBridge(() => {
-      window.WebViewJavascriptBridge.callHandler('goNative', {
-        'url': appPath
-      }, function (response) {
-        if (callBack) {
-          callBack(response)
-        }
-      })
-    })
-  } else {
-    router.push(data)
-  }
+  router.push(data)
+  // const { appPath, callBack } = data
+  // if (isMobile()) {
+  //   window.WebViewJavascriptBridge.callHandler('goNative', {
+  //     'url': appPath
+  //   }, function (response) {
+  //     if (callBack) {
+  //       callBack(response)
+  //     }
+  //   })
+  // } else {
+  //   router.push(data)
+  // }
 }
 
 export {
   urlSearch,
-  initJsBridge,
-  linkTo
+  linkTo,
+  isMobile,
+  initJsBridge
 }

@@ -421,14 +421,29 @@ img {
   margin-left: 10px;
 }
 
-.actiCenter .actiContent .actiTab .allActiUl > li .actiNum > span,
-.actiTrain .actiContent .actiTab .allActiUl > li .actiNum > span {
+.actiCenter .actiContent .actiTab .allActiUl > li .actiNum > p,
+.actiTrain .actiContent .actiTab .allActiUl > li .actiNum > p {
   float: right;
   color: #00a041;
 }
 
-.actiCenter .actiContent .actiTab .allActiUl > li .actiNum > span .icon-miaojiesellerlike,
-.actiTrain .actiContent .actiTab .allActiUl > li .actiNum > span .icon-miaojiesellerlike {
+.actiCenter .actiContent .actiTab .allActiUl > li .actiNum > p > img,
+.actiTrain .actiContent .actiTab .allActiUl > li .actiNum > p > img {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+.actiCenter .actiContent .actiTab .allActiUl > li .actiNum > p > span,
+.actiTrain .actiContent .actiTab .allActiUl > li .actiNum > p > span {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.actiCenter .actiContent .actiTab .allActiUl > li .actiNum > p .icon-miaojiesellerlike,
+.actiTrain .actiContent .actiTab .allActiUl > li .actiNum > p .icon-miaojiesellerlike {
   margin-right: 5px;
   display: inline-block;
   vertical-align: middle;
@@ -506,6 +521,20 @@ img {
 .actiTrain .actiContent .actiTab .verticalUl > li .verticalMiddle .xihuan {
   margin: 15px 0;
   color: #00a041;
+}
+
+.actiCenter .actiContent .actiTab .verticalUl > li .verticalMiddle .xihuan > img,
+.actiTrain .actiContent .actiTab .verticalUl > li .verticalMiddle .xihuan > img {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.actiCenter .actiContent .actiTab .verticalUl > li .verticalMiddle .xihuan > span,
+.actiTrain .actiContent .actiTab .verticalUl > li .verticalMiddle .xihuan > span {
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .actiCenter .actiContent .actiTab .verticalUl > li .verticalMiddle .el-icon-time,
@@ -2540,21 +2569,44 @@ img {
   margin-left: 10px;
 }
 
-.serverOrgDetail .agentCon .actiConsultation .allActiUl > li .actiNum > span,
-.serverProDetail .agentCon .actiConsultation .allActiUl > li .actiNum > span,
-.serverConDetail .agentCon .actiConsultation .allActiUl > li .actiNum > span,
-.quickSearch .agentCon .actiConsultation .allActiUl > li .actiNum > span,
-.finaInsDetail .agentCon .actiConsultation .allActiUl > li .actiNum > span,
-.finaProDetail .agentCon .actiConsultation .allActiUl > li .actiNum > span {
+.serverOrgDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p,
+.serverProDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p,
+.serverConDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p,
+.quickSearch .agentCon .actiConsultation .allActiUl > li .actiNum > p,
+.finaInsDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p,
+.finaProDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p {
   float: right;
 }
 
-.serverOrgDetail .agentCon .actiConsultation .allActiUl > li .actiNum > span .icon-xihuan,
-.serverProDetail .agentCon .actiConsultation .allActiUl > li .actiNum > span .icon-xihuan,
-.serverConDetail .agentCon .actiConsultation .allActiUl > li .actiNum > span .icon-xihuan,
-.quickSearch .agentCon .actiConsultation .allActiUl > li .actiNum > span .icon-xihuan,
-.finaInsDetail .agentCon .actiConsultation .allActiUl > li .actiNum > span .icon-xihuan,
-.finaProDetail .agentCon .actiConsultation .allActiUl > li .actiNum > span .icon-xihuan {
+.serverOrgDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p > img,
+.serverProDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p > img,
+.serverConDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p > img,
+.quickSearch .agentCon .actiConsultation .allActiUl > li .actiNum > p > img,
+.finaInsDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p > img,
+.finaProDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p > img {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+.serverOrgDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p > span,
+.serverProDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p > span,
+.serverConDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p > span,
+.quickSearch .agentCon .actiConsultation .allActiUl > li .actiNum > p > span,
+.finaInsDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p > span,
+.finaProDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p > span {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.serverOrgDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p .icon-xihuan,
+.serverProDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p .icon-xihuan,
+.serverConDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p .icon-xihuan,
+.quickSearch .agentCon .actiConsultation .allActiUl > li .actiNum > p .icon-xihuan,
+.finaInsDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p .icon-xihuan,
+.finaProDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p .icon-xihuan {
   margin-right: 5px;
 }
 

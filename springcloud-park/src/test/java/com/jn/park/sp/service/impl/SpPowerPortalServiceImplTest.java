@@ -83,7 +83,6 @@ public class SpPowerPortalServiceImplTest {
         spMessageModel.setCompanyName("企业");
         spMessageModel.setConcatName("陈先生");
         spMessageModel.setConcatPhone("12342132131");
-        spMessageModel.setTitle("企业+陈先生");
         spMessageModel.setMessage("第六条 县级以上绿化委员会应当组织本地区各单位积极开展义务植树的宣传教育工作，增强公民履行植树义务的意识，推动全社会义务植树和造林绿化事业的发展");
 
     }

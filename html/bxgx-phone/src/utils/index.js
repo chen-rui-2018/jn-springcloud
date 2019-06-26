@@ -83,19 +83,18 @@ function isMobile () {
   })
 }
 function linkTo (data) {
-  router.push(data)
-  // const { appPath, callBack } = data
-  // if (isMobile()) {
-  //   window.WebViewJavascriptBridge.callHandler('goNative', {
-  //     'url': appPath
-  //   }, function (response) {
-  //     if (callBack) {
-  //       callBack(response)
-  //     }
-  //   })
-  // } else {
-  //   router.push(data)
-  // }
+  const { appPath, callBack } = data
+  if (isMobile()) {
+    window.WebViewJavascriptBridge.callHandler('goNative', {
+      'url': appPath
+    }, function (response) {
+      if (callBack) {
+        callBack(response)
+      }
+    })
+  } else {
+    router.push(data)
+  }
 }
 
 export {

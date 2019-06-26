@@ -22,6 +22,6 @@ public abstract class AbstractHandler implements WxMessageHandleService {
     /**
      * 关注/取关公众号 保存微信用户信息至数据库
      */
-    protected String USER_CLIENT_CONCERNORCANCELWECHAT_URL = "springcloud-user";
+    protected String USER_CLIENT_CONCERNORCANCELWECHAT_URL = "/api/miniProgramPublicController/concernOrCancelWeChat";
 
 }

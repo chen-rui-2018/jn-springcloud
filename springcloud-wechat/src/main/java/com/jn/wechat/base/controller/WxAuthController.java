@@ -50,8 +50,6 @@ public class WxAuthController {
     @Autowired
     private WxInRedisConfigStorage wxInRedisConfigStorage;
 
-    public static final String WX_OPENID_KEY = "wx:openid:";
-
     @RequestMapping("/checkIsBindingUser")
     public void checkIsBindingUser(HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
         String requestURI = httpRequest.getRequestURI();
@@ -92,7 +90,7 @@ public class WxAuthController {
                         //重定向绑定手机页面
                         StringBuffer stringBuffer = new StringBuffer();
                         String userFlag = UUID.randomUUID().toString();
-                        wxInRedisConfigStorage.setCacheValue(WX_OPENID_KEY+userFlag,openId,12*60*60);
+                        wxInRedisConfigStorage.setCacheValue(WxInRedisConfigStorage.WX_OPENID_KEY+userFlag,openId,12*60*60);
                         stringBuffer.append(wxProperties.getRegisterUrl()).append("?").append("targetUrl=").append(targetUrl).append("&userFlag=").append(userFlag);
                         httpResponse.sendRedirect(stringBuffer.toString());
                     }

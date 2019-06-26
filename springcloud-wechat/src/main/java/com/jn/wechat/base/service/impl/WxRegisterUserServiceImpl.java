@@ -33,7 +33,7 @@ public class WxRegisterUserServiceImpl implements WxRegisterUserService {
     @Override
     public void registerBinding(WxUserRegisterBindingParam wxUserRegisterBindingParam) {
         RegisterInfoParam registerInfoParam = new RegisterInfoParam();
-        String openid = wxInRedisConfigStorage.getCacheValue(wxUserRegisterBindingParam.getUserFlag());
+        String openid = wxInRedisConfigStorage.getCacheValue(WxInRedisConfigStorage.WX_OPENID_KEY+wxUserRegisterBindingParam.getUserFlag());
         if(StringUtils.isBlank(openid)) {
             throw new JnSpringCloudException(WxExceptionEnums.GET_OPENID_FAIL);
         }

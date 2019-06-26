@@ -21,6 +21,8 @@ public class WxInRedisConfigStorage {
 
     private static final String ACCESS_TOKEN_KEY = "wx:access_token:";
 
+    public static final String WX_OPENID_KEY = "wx:openid:";
+
     /**
      * 只能取NX或者XX，如果取NX，则只有当key不存在是才进行set，如果取XX，则只有当key已经存在时才进行set
      */

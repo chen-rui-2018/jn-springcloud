@@ -695,6 +695,76 @@ public class TbOaLeaveCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andApplicantNameIsNull() {
+            addCriterion("applicant_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplicantNameIsNotNull() {
+            addCriterion("applicant_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplicantNameEqualTo(String value) {
+            addCriterion("applicant_name =", value, "applicantName");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplicantNameNotEqualTo(String value) {
+            addCriterion("applicant_name <>", value, "applicantName");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplicantNameGreaterThan(String value) {
+            addCriterion("applicant_name >", value, "applicantName");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplicantNameGreaterThanOrEqualTo(String value) {
+            addCriterion("applicant_name >=", value, "applicantName");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplicantNameLessThan(String value) {
+            addCriterion("applicant_name <", value, "applicantName");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplicantNameLessThanOrEqualTo(String value) {
+            addCriterion("applicant_name <=", value, "applicantName");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplicantNameLike(String value) {
+            addCriterion("applicant_name like", value, "applicantName");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplicantNameNotLike(String value) {
+            addCriterion("applicant_name not like", value, "applicantName");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplicantNameIn(List<String> values) {
+            addCriterion("applicant_name in", values, "applicantName");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplicantNameNotIn(List<String> values) {
+            addCriterion("applicant_name not in", values, "applicantName");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplicantNameBetween(String value1, String value2) {
+            addCriterion("applicant_name between", value1, value2, "applicantName");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplicantNameNotBetween(String value1, String value2) {
+            addCriterion("applicant_name not between", value1, value2, "applicantName");
+            return (Criteria) this;
+        }
+
         public Criteria andApplicantIsNull() {
             addCriterion("applicant is null");
             return (Criteria) this;
@@ -962,6 +1032,76 @@ public class TbOaLeaveCriteria {
 
         public Criteria andTotalHourNotBetween(String value1, String value2) {
             addCriterion("total_hour not between", value1, value2, "totalHour");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizationNameIsNull() {
+            addCriterion("organization_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizationNameIsNotNull() {
+            addCriterion("organization_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizationNameEqualTo(String value) {
+            addCriterion("organization_name =", value, "organizationName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizationNameNotEqualTo(String value) {
+            addCriterion("organization_name <>", value, "organizationName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizationNameGreaterThan(String value) {
+            addCriterion("organization_name >", value, "organizationName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizationNameGreaterThanOrEqualTo(String value) {
+            addCriterion("organization_name >=", value, "organizationName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizationNameLessThan(String value) {
+            addCriterion("organization_name <", value, "organizationName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizationNameLessThanOrEqualTo(String value) {
+            addCriterion("organization_name <=", value, "organizationName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizationNameLike(String value) {
+            addCriterion("organization_name like", value, "organizationName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizationNameNotLike(String value) {
+            addCriterion("organization_name not like", value, "organizationName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizationNameIn(List<String> values) {
+            addCriterion("organization_name in", values, "organizationName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizationNameNotIn(List<String> values) {
+            addCriterion("organization_name not in", values, "organizationName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizationNameBetween(String value1, String value2) {
+            addCriterion("organization_name between", value1, value2, "organizationName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizationNameNotBetween(String value1, String value2) {
+            addCriterion("organization_name not between", value1, value2, "organizationName");
             return (Criteria) this;
         }
 

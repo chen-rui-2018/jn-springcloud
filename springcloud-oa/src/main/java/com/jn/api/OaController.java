@@ -4,14 +4,12 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.oa.api.OaClient;
 import com.jn.oa.attendance.service.AttendanceService;
+import com.jn.oa.dingTalk.service.DingTalkUserService;
 import com.jn.oa.email.service.EmailService;
 import com.jn.oa.item.service.WorkPlanService;
 import com.jn.oa.leave.service.LeaveService;
 import com.jn.oa.meeting.service.MeetingService;
-import com.jn.oa.model.Attendance;
-import com.jn.oa.model.Email;
-import com.jn.oa.model.Leave;
-import com.jn.oa.model.Schedule;
+import com.jn.oa.model.*;
 import com.jn.oa.multiDeptOffice.service.MultiDeptOfficeService;
 import com.jn.oa.schedule.service.ScheduleService;
 import com.jn.oa.vo.AttendanceApiVo;
@@ -57,6 +55,9 @@ public class OaController extends BaseController implements OaClient {
 
     @Autowired
     private ScheduleService scheduleService;
+
+    @Autowired
+    private DingTalkUserService dingTalkUserService;
 
     /**
      * 定时十分钟通知会议申请人
@@ -183,6 +184,20 @@ public class OaController extends BaseController implements OaClient {
         scheduleService.scheduleRemind(Schedule);
         return null;
     }
+    /**
+     * 钉钉修改用户通讯录回调
+     *
+     * @param addressBookNotice
+     * @return
+     */
+    @Override
+    @ControllerLog(doAction = "钉钉修改用户通讯录回调")
+    public Result updateOrInsertDingTalkUser(@RequestBody AddressBookNotice addressBookNotice) {
+        dingTalkUserService.updateOrInsertDingTalkUser(addressBookNotice);
+        return new Result();
+    }
+
+
 
 
 }

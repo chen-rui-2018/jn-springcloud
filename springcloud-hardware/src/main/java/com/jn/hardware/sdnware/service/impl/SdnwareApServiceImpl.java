@@ -12,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @ClassName：：Sdnware无线AP ：区域人数统计（热力）相关接口实现类
  * @Descript：
@@ -41,8 +44,9 @@ public class SdnwareApServiceImpl implements SdnwareApService {
         //url 加上userId
         String url = String.format(SdnwareApService.GET_HEAT_URL,sdnwareApProperties.getUserId());
         logger.info("\n获取区域人数统计（热力）, 请求地址:【{}】      ",url);
-        HeatResult notice = restTemplate.getForObject(url, HeatResult.class);
-        String resultJson =  RestTemplateUtil.get(url);
+        Map<String,String> dynamicHeaders = new HashMap<>(16);
+        dynamicHeaders.put("Accept", "text/plain");
+        String resultJson =  RestTemplateUtil.get(url,dynamicHeaders);
         logger.info("\n获取区域人数统计（热力）,接口响应:【{}】",resultJson);
         HeatResult heatResult = JsonStringToObjectUtil.jsonToObject(resultJson,new TypeReference<HeatResult>(){});
         logger.info("\n获取区域人数统计（热力）,响应结果heatResult:【{}】",heatResult);

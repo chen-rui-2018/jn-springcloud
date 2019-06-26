@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.jn.hardware.model.sdnware.BaseResult;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @ClassName：无线AP ：区域人数统计（热力）出参实体类
@@ -19,15 +20,15 @@ public class HeatResult extends BaseResult implements Serializable {
     private static final long serialVersionUID = -6836014367870618550L;
 
     /**
-     * 区域人数统计（热力）实体类
+     * 区域人数统计（热力）集合实体类
     * */
-    private HeatMessage message;
+    private List<HeatMessage> message;
 
-    public HeatMessage getMessage() {
+    public List<HeatMessage> getMessage() {
         return message;
     }
 
-    public void setMessage(HeatMessage message) {
+    public void setMessage(List<HeatMessage> message) {
         this.message = message;
     }
 

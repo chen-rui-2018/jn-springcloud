@@ -90,7 +90,7 @@ export default {
   components: { PieChart, BarChart, Gantt },
   data() {
     return {
-      ibpsUrl: this.GLOBAL.ibpsUrl,
+      ibpsUrl: process.env.IBPS_URL,
       position: 'inner',
       detailData: [],
       currentDay: '',

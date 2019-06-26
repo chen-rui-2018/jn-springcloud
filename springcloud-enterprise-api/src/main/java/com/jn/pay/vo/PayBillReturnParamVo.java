@@ -48,7 +48,7 @@ public class PayBillReturnParamVo implements Serializable {
     @ApiModelProperty(value="对象名称")
     private String objName;
 
-    @ApiModelProperty(value="支付状态（如 1:已支付、2:待支付）")
+    @ApiModelProperty(value="支付状态（如 1:已支付、2:待支付、2:已撤销）")
     private String paymentState;
 
     @ApiModelProperty(value="账本类型ID")

@@ -279,6 +279,10 @@ export default {
     },
     // 调研页面
     jumpPage() {
+      if (this.formData.status === 0) {
+        this.$message.warning('请完善发放问卷信息保存后再打开！')
+        return false
+      }
       this.$router.push({
         name: 'invest-page',
         query: { projectId: this.$route.query.id }
@@ -299,6 +303,12 @@ export default {
         this.formData.isShowJobNumber = 2
         this.formData.isShowName = 2
         this.formData.isShowPhone = 2
+      } else {
+        // 实名
+        if (this.formData.isShowJobNumber === 2 & this.formData.isShowName === 2 & this.formData.isShowPhone === 2) {
+          this.$message.error('实名时请务必选择一项实名信息！')
+          return false
+        }
       }
       api('hr/train/sendInvestiage', this.formData).then(res => {
         if (res.data.code === '0000') {

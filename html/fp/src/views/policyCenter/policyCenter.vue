@@ -791,6 +791,7 @@ export default {
         position: absolute;
         right: 0;
         z-index: 3;
+        background: #fff;
 
         > input {
           border: 0;

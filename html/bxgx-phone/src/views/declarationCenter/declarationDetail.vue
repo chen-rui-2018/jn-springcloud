@@ -93,16 +93,21 @@ export default {
         headers: {
           token: sessionStorage.token
         }
+      }).then(res => {
+        window.location.href = res.request.responseURL
       })
-        .then(res => {
-          window.location.href = res.request.responseURL
-        })
     },
     goConsult () {
       let myDate = new Date()
       let myDateStr = myDate.getFullYear() + '' + (myDate.getMonth() + 1 > 10 ? myDate.getMonth() + 1 : '0' + (myDate.getMonth() + 1)) + '' + myDate.getDate() + '' + (myDate.getHours() > 10 ? myDate.getHours() : '0' + myDate.getHours()) + (myDate.getMinutes() > 10 ? myDate.getMinutes() : '0' + myDate.getMinutes()) + (myDate.getSeconds() > 10 ? myDate.getSeconds() : '0' + myDate.getSeconds())
       let time = new Date(this.detailData.preliminaryDeadline).toJSON()
-      let deadline = new Date(+new Date(time) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '').replace(/[^0-9]/ig, '')
+      let dateArr = time.split('.')[0].split('T')[0].split('-')
+      let timeArr = time.split('.')[0].split('T')[1].split(':')
+      let deadline = dateArr[0] + dateArr[1] + dateArr[2] + timeArr[0] + timeArr[1] + timeArr[2]
+      // let deadline = new Date(+new Date(time) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '').replace(/[^0-9]/ig, '')
+      // console.log(deadline)
+      // console.log(deadline)
+
       this.api.get({
         url: 'getUserExtension',
         data: { },

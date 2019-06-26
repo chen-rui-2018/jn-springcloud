@@ -53,30 +53,30 @@ export default {
         this.$message.error("请输入密码");
         return;
       }
-      let _this = this;
       this.api.post({
         url: "loginURL",
         data: {
-          account: _this.loginform.account,
-          password: _this.loginform.password
+          account: this.loginform.account,
+          password: this.loginform.password
         },
         dataFlag: false,
-        callback: function(res) {
+        callback: res => {
           if (res.code === "0000") {
             setToken(res.data);
-            _this.api.get({
+            this.$store.dispatch('getMenuItems')
+            this.api.get({
               url: "getUserPersonInfo",
-              callback: function(res) {
+              callback: res => {
                 if (res.code === "0000") {
                   setUserInfo(JSON.stringify(res.data))
-                  _this.$router.push({
+                  this.$router.push({
                     path: window.sessionStorage.getItem("PresetRoute") || '/'
                   });
                 }
               }
             })
           } else {
-            _this.$message.error(res.result);
+            this.$message.error(res.result);
           }
         }
       });

@@ -1,5 +1,7 @@
 package com.jn.hardware.model.dingtalk.attendance;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 
 /**
@@ -17,20 +19,14 @@ public class LeaveApproveDurationInfo implements Serializable {
     /**
      * 请假时长（单位分钟）
      * */
-    private String duration_in_minutes;
+    @JsonProperty("duration_in_minutes")
+    private String durationInMinutes;
 
-    public String getDuration_in_minutes() {
-        return duration_in_minutes;
+    public String getDurationInMinutes() {
+        return durationInMinutes;
     }
 
-    public void setDuration_in_minutes(String duration_in_minutes) {
-        this.duration_in_minutes = duration_in_minutes;
-    }
-
-    @Override
-    public String toString() {
-        return "LeaveApproveDurationInfo{" +
-                "duration_in_minutes='" + duration_in_minutes + '\'' +
-                '}';
+    public void setDurationInMinutes(String durationInMinutes) {
+        this.durationInMinutes = durationInMinutes;
     }
 }

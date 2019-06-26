@@ -5,7 +5,7 @@
       <div class="business_nav">
         <div @click="toBasicInformation" v-show="isEditBody">编辑机构</div>
         <div @click="toCounselorManagement" v-show="isCounselor">专员管理</div>
-        <div @click="toEnterprisePropaganda" v-show="isPublicity">企业宣传</div>
+        <div @click="toEnterprisePropaganda" v-show="isPublicity">机构宣传</div>
       </div>
 
     </div>
@@ -137,7 +137,7 @@
         </div>
       </el-form>
     </div>
-    <el-dialog :visible.sync="dialogVisible" :append-to-body="true" width="50%">
+    <el-dialog :visible.sync="dialogVisible" :append-to-body="true" width="39%">
       <img :src="photoUrl" alt="图片" style="width:100%">
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">返 回</el-button>
@@ -268,7 +268,7 @@ export default {
       this.$router.push({ name: "agencyColleaguesList" });
     },
     toEnterprisePropaganda() {
-      this.$router.push({ name: "enterprisePropaganda" });
+      this.$router.push({ name: "organizationPropaganda" });
     },
     toRecruitmentManagement() {
       this.$router.push({ name: "recruitmentManagement" });

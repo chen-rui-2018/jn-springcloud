@@ -27,20 +27,25 @@
               select re.id as "id",
                    re.req_num as "reqNum",
                    date_format(re.issue_time,'%Y-%m-%d %H:%i:%S') as "issueTime",
-                  re.contract_amount as "contractAmount",
+                   re.contract_amount as "contractAmount",
                    re.req_name as "reqName",re.req_phone as "reqPhone",
                    re.req_email as "reqEmail",re.req_detail as "reqDetail",
-                   re.contract_amount as "financingAmount",
+                   re.contract_amount as "contractAmount",
+                   re.financing_amount as "financingAmount",
                    re.actual_loan_amount as "actualLoanAmount",
                    re.financing_period_max as "financingPeriod",
                    re.expected_date as "expectedDate",
                    re.result_detail as "resultDetail",
                    re.is_comment as "isComment",
                    re.funds_req_desc as "fundsReqDesc",
-                   info.con_name as "conName",info.con_phone as "conPhone",
-                   info.con_email as "conEmail",re.org_name as "orgName",
-                   re.advisor_name as "advisorName", re.product_name as "productName",
-                   ra.attitude_score as "attitudeScore", ra.evaluation_desc as "evaluationDesc"
+                   info.con_name as "conName",
+                   info.con_phone as "conPhone",
+                   info.con_email as "conEmail",
+                   re.org_name as "orgName",
+                   re.advisor_name as "advisorName",
+                   re.product_name as "productName",
+                   ra.attitude_score as "attitudeScore",
+                   ra.evaluation_desc as "evaluationDesc"
                 from tb_service_require re <!-- 需求表 -->
                 left join tb_service_org_info info on re.org_id_ = info.org_id_
                 left join tb_service_rating ra <!-- 评价表 --> on ra.require_id   = re.id

@@ -143,6 +143,7 @@
               <el-checkbox label="0">短信</el-checkbox>
               <el-checkbox label="1">邮件</el-checkbox>
               <el-checkbox label="2">app</el-checkbox>
+              <el-checkbox label="3">微信</el-checkbox>
             </el-checkbox-group>
           </el-form-item>
         </target-row>
@@ -234,7 +235,7 @@
           <div class="preview-form">
             <el-button type="primary" @click="previewForm">预览</el-button>
           </div>
-          <el-tabs v-loading="previewing" v-if="!previewing" type="border-card">
+          <el-tabs v-loading="previewing" v-if="!previewing" type="border-card" style="width: 100%">
             <el-tab-pane v-for="(tab, formIndex) in formData.tabs" :key="formIndex" :label="tab.tabName">
               <tree-table v-if="tab.treeTableData" :data="tab.treeTableData" :columns="tab.columns" border expand-all/>
             </el-tab-pane>
@@ -554,19 +555,17 @@ export default {
         this.warnerOptions = data.data.map(item => ({ id: item.id, label: item.creatorAccount }))
       })
     },
-    sortTree(tree, keys2) {
+    sortTree(tree, keys) {
       for (let i = 0, length = tree.length; i < length; i++) {
         for (let j = i + 1; j < length; j++) {
-          if (tree[i].hasOwnProperty(keys2) && tree[j].hasOwnProperty(keys2) && tree[i][keys2] && tree[j][keys2]) {
-            if (Number(tree[i][keys2]) > Number(tree[j][keys2])) {
-              const temp = tree[j]
-              tree[j] = tree[i]
-              tree[i] = temp
-            }
+          if (Number(tree[i][keys]) > Number(tree[j][keys])) {
+            const temp = tree[j]
+            tree[j] = tree[i]
+            tree[i] = temp
           }
         }
         if (tree[i].hasOwnProperty('children') && tree[i].children && tree[i].children.length > 0) {
-          this.sortTree(tree[i].children, keys2)
+          this.sortTree(tree[i].children, keys)
         }
       }
     },
@@ -737,8 +736,7 @@ export default {
       this.getModelData(id)
         .then(data => {
           if (data.code === '0000') {
-            this.formData = data.data
-            const formData = this.formData
+            const formData = data.data
             formData.modelType = formData.modelType.toString()
             formData.recordStatus = formData.recordStatus.toString()
             // 图片和附件上传的回显
@@ -802,6 +800,7 @@ export default {
               formData.taskCreateTime = this.formatDate(formData.taskCreateTime)
               formData.filllInFormDeadline = this.formatDate(formData.filllInFormDeadline)
             }
+            this.formData = formData
           } else {
             this.$message.error(data.result)
           }
@@ -1065,7 +1064,7 @@ export default {
               tab.columns = this.columns.concat([{
                 text: tabClumnTypeOption[tabClumnType.toString()],
                 value: 'inputFormatModel',
-                width: 600
+                width: 400
               }], tabClumnTargetShowList)
 
               // 把渲染表单规则挂载到已经勾选的各个结构指标

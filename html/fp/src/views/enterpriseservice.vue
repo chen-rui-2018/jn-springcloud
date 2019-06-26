@@ -549,19 +549,25 @@
               <el-input v-model.trim="serverProform.requireDetail" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
             </el-form-item>
           </el-form>
-          <div class="demandLine"></div>
-          <div class="serverTip mainColor">市场提醒：请务必在线订购，线下交易无法享受市场交易安全保障</div>
-          <div class="demandDia" @click="demandDia1()" style="   display: inline-block;
+          <div class="demandLine" style=" height: 1px;
+    width: 530px;
+    position: relative;
+    left: -20px;
+    background: #eee;
+    margin-bottom: 20px;
+    margin-top: 10px;"></div>
+          <div class="serverTip mainColor" style="display:inline-block;font-size:12px">市场提醒：请务必在线订购，线下交易无法享受市场交易安全保障</div>
+          <div class="demandDia" @click="demandDia1()" style=" display: inline-block;
     background: #ecfcf2;
     padding: 8px 10px;
     width: 80px;
-        margin-left: 200px;
-    margin-top: 20px;
+    margin: 0 auto;
     border: 1px solid #00a041;
     border-radius: 4px;
     text-align: center;
     cursor: pointer;
     color: #00a041;
+    margin-left: 20px;
     font-size: 12px;">提交需求</div>
         </div>
         <div v-else class="loginTip" style="text-align:center;padding-bottom:20px">
@@ -661,7 +667,7 @@ export default {
           { required: true, message: "请选择融资期限", trigger: "change" }
         ],
         expectedDate: [
-          { required: true, message: "请输入需求日期", trigger: "blur" }
+          { required: true, message: "请选择需求日期", trigger: "blur" }
         ]
       },
       detailFlag: "",
@@ -834,31 +840,32 @@ export default {
     },
     //用户提交需求
     demandDia() {
-      // if(!this.financialProform.financingPeriod){
-      //   return
-      // }
-      let _this = this;
-      let max = this.arr[this.financialProform.financingPeriod].loanTermMax;
-      let min = this.arr[this.financialProform.financingPeriod].loanTermMin;
-      this.api.post({
-        url: "userDemandTechnology",
-        data: {
-          expectedDate: _this.financialProform.expectedDate,
-          financingAmount: _this.financialProform.financingAmount,
-          financingPeriodMax: max,
-          financingPeriodMin: min,
-          productId: _this.financialProform.productId,
-          productName: _this.financialProform.productName,
-          fundsReqDesc: _this.financialProform.fundsReqDesc
-        },
-        callback: function(res) {
-          if (res.code == "0000") {
-            _this.$message.success("提交需求成功");
-            _this.financialProVisible = false;
-          } else {
-            _this.$message.error(res.result);
-            _this.financialProVisible = false;
-          }
+      this.$refs["financialProform"].validate(valid => {
+        if (valid) {
+          let _this = this;
+          let max = this.arr[this.financialProform.financingPeriod].loanTermMax;
+          let min = this.arr[this.financialProform.financingPeriod].loanTermMin;
+          this.api.post({
+            url: "userDemandTechnology",
+            data: {
+              expectedDate: _this.financialProform.expectedDate,
+              financingAmount: _this.financialProform.financingAmount,
+              financingPeriodMax: max,
+              financingPeriodMin: min,
+              productId: _this.financialProform.productId,
+              productName: _this.financialProform.productName,
+              fundsReqDesc: _this.financialProform.fundsReqDesc
+            },
+            callback: function(res) {
+              if (res.code == "0000") {
+                _this.$message.success("提交需求成功");
+                _this.financialProVisible = false;
+              } else {
+                _this.$message.error(res.result);
+                _this.financialProVisible = false;
+              }
+            }
+          });
         }
       });
     },
@@ -1565,7 +1572,9 @@ export default {
             .policyCon {
               height: 50px;
               display: -webkit-box;
+              /*! autoprefixer: off */
               -webkit-box-orient: vertical;
+              /*! autoprefixer: on */
               -webkit-line-clamp: 3;
               overflow: hidden;
             }

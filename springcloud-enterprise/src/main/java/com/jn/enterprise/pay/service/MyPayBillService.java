@@ -120,4 +120,11 @@ public interface MyPayBillService {
      * @return
      */
     Result callbackServiceSide(PayCallbackServiceSideParam payCallbackServiceSideParam,User user);
+
+    /**
+     * 我的账单-修改账单状态（已撤销）
+     * @param billId
+     * @return
+     */
+    Result cancelBill(String billId,User user);
 }

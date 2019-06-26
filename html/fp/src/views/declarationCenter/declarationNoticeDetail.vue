@@ -189,7 +189,7 @@ export default {
     this.rangeId=this.$route.query.rangeId
     this.appointment.appointmentItemId=this.$route.query.id
     this.getdeclaration()
-    this. addPageviews()
+    // this. addPageviews()
   },
   methods: {
     //详情数据
@@ -207,23 +207,25 @@ export default {
             if(res.data.fileUrl!==''){
               _this.fileList=JSON.parse(res.data.fileUrl)
             }
+          }else{
+             _this.$message.error(res.result)    
           }
         }
       });
     },
     //阅读量增加
-    addPageviews(){
-       let _this = this;
-      this.api.get({
-        url: "addpageviews",
-        data: {
-          id:this.id
-        },
-        callback: function(res) {
+    // addPageviews(){
+    //    let _this = this;
+    //   this.api.get({
+    //     url: "addpageviews",
+    //     data: {
+    //       id:this.id
+    //     },
+    //     callback: function(res) {
           
-        }
-      });
-    },
+    //     }
+    //   });
+    // },
     // 文本域字数显示
     counselnum(){
       this.residuenum=500-this.appointment.remark.length
@@ -241,45 +243,49 @@ export default {
           callback: (res)=> {
             if (res.code == "0000") {
               // console.log(res.data.roleCode)
-              if(res.data.roleCode==="COM_ADMIN"||res.data.roleCode==="COM_CONTACTS"){
-                if(myDateStr<deadline){
-                  this.api.get({
-                    url: "queryOnlineInfo",
-                    data: {appointmentItemId:this.id },
-                    callback: (res)=> {
-                        if (res.code == "0000") {
-                          this.appointment=res.data
-                          this.appointment.declareItem=res.data.appointmentItemName
-                          this.isUp=false
-                        this.appointmentVisible=true
-                        this.$message.success("亲，你已经预约过了哦！")
-                      }else if(res.code==='5011208'){
-                        this.appointmentVisible=true
-                        let _this = this;
-                        this.api.get({
-                          url: "getUserExtension",
-                          data: { },
-                          callback: function(res) {
-                            if (res.code == "0000") {
-                              _this.appointment.declareItem=_this.detailList.titleName
-                              _this.appointment.contactName= res.data.nickName
-                              _this.appointment.contactPhone= res.data.phone
-                              _this.appointment.email= res.data.email
-                              _this.appointment.declareEnterprise= res.data.companyName
-                              _this.appointment.fileUrl= res.data.fileUrl
+              if(res.data!==null){
+                if(res.data.roleCode==="COM_ADMIN"||res.data.roleCode==="COM_CONTACTS"){
+                  if(myDateStr<deadline){
+                    this.api.get({
+                      url: "queryOnlineInfo",
+                      data: {appointmentItemId:this.id },
+                      callback: (res)=> {
+                          if (res.code == "0000") {
+                            this.appointment=res.data
+                            this.appointment.declareItem=res.data.appointmentItemName
+                            this.isUp=false
+                          this.appointmentVisible=true
+                          this.$message.success("亲，你已经预约过了哦！")
+                        }else if(res.code==='5011208'){
+                          this.appointmentVisible=true
+                          let _this = this;
+                          this.api.get({
+                            url: "getUserExtension",
+                            data: { },
+                            callback: function(res) {
+                              if (res.code == "0000") {
+                                  _this.appointment.declareItem=_this.detailList.titleName
+                                  _this.appointment.contactName= res.data.nickName
+                                  _this.appointment.contactPhone= res.data.phone
+                                  _this.appointment.email= res.data.email
+                                  _this.appointment.declareEnterprise= res.data.companyName
+                                  _this.appointment.fileUrl= res.data.fileUrl
+                              }
                             }
-                          }
-                        });
-                      }else {
-                        this.$message.error(res.result)
+                          });
+                        }else {
+                          this.$message.error(res.result)
+                        }
                       }
-                    }
-                  })
+                    })
+                  }else{
+                    this.$message.error("您申报的项目已经截止")
+                  }
                 }else{
-                  this.$message.error("您申报的项目已经截止")
+                  this.$message.error("只有企业管理员和企业联系人才可以进申报平台,您暂时没有权限！！")
                 }
               }else{
-                this.$message.error("您暂时没有预约申报的权限")
+                this.$message.error("只有企业管理员和企业联系人才可以进申报平台,您暂时没有权限！！")
               }
             }
           }

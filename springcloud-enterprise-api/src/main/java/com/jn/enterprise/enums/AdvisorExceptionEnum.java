@@ -46,6 +46,8 @@ public enum AdvisorExceptionEnum implements CodeAndMsg {
     CURRENT_ACCOUNT_NOT_ORG_GROUP("5020532","当前登录用户不是机构用户"),
     CURRENT_ACCOUNT_NOT_COMMENT_PERSON("5020533","当前用户非普通用户,不能被邀请"),
     ADVISOR_BASE_INFO_NOT_EXIST("5020534","前用户基本信息在系统中不存在，请添加专员基本信息"),
+    GET_ACCOUNT_EXTENSION_INFO_FAIL("5020535","获取当请登录用户信息失败"),
+    BUSINESS_TECHNOLOGY_NOT_ALLOW("5020536","科技金融机构不允许邀请专员"),
     ;
 
     /**

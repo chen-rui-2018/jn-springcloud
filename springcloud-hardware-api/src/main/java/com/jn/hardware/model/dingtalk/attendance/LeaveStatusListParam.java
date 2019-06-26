@@ -1,5 +1,6 @@
 package com.jn.hardware.model.dingtalk.attendance;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
@@ -20,20 +21,23 @@ public class LeaveStatusListParam implements Serializable {
     /**
      * 查询用户id列表，支持最多100个用户的批量查询 示例值：123,121
     * */
+    @JsonProperty("userid_list")
     @NotBlank(message = "待查询用户id列表不能为空！，示例值：123,121 ")
-    private String userid_list;
+    private String useridList;
 
     /**
      * 开始时间(UNIX时间戳)，支持最多180天的查询 ,示例值：1538323200000
      * */
+    @JsonProperty("start_time")
     @NotNull(message = "开始时间(UNIX时间戳) 不能为空!")
-    private Long start_time;
+    private Long startTime;
 
     /**
      * 结束时间(UNIX时间戳)，支持最多180天的查询时间 示例值：1538323200000
     * */
+    @JsonProperty("end_time")
     @NotNull(message = "结束时间(UNIX时间戳) 不能为空!")
-    private Long end_time;
+    private Long endTime;
 
     /**
      * 分页偏移，非负整数 示例值：0
@@ -47,28 +51,28 @@ public class LeaveStatusListParam implements Serializable {
     @NotNull(message = "分页大小不能为空! 正整数，最大20")
     private Long size;
 
-    public String getUserid_list() {
-        return userid_list;
+    public String getUseridList() {
+        return useridList;
     }
 
-    public void setUserid_list(String userid_list) {
-        this.userid_list = userid_list;
+    public void setUseridList(String useridList) {
+        this.useridList = useridList;
     }
 
-    public Long getStart_time() {
-        return start_time;
+    public Long getStartTime() {
+        return startTime;
     }
 
-    public void setStart_time(Long start_time) {
-        this.start_time = start_time;
+    public void setStartTime(Long startTime) {
+        this.startTime = startTime;
     }
 
-    public Long getEnd_time() {
-        return end_time;
+    public Long getEndTime() {
+        return endTime;
     }
 
-    public void setEnd_time(Long end_time) {
-        this.end_time = end_time;
+    public void setEndTime(Long endTime) {
+        this.endTime = endTime;
     }
 
     public Long getOffset() {
@@ -90,9 +94,9 @@ public class LeaveStatusListParam implements Serializable {
     @Override
     public String toString() {
         return "LeaveStatusListParam{" +
-                "userid_list='" + userid_list + '\'' +
-                ", start_time=" + start_time +
-                ", end_time=" + end_time +
+                "useridList='" + useridList + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
                 ", offset=" + offset +
                 ", size=" + size +
                 '}';

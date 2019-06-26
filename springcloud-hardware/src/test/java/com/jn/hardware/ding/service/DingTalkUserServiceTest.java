@@ -4,6 +4,8 @@ import com.jn.common.model.Result;
 import com.jn.hardware.api.DingTalkClient;
 import com.jn.hardware.model.dingtalk.user.DepartmentUserInfoParam;
 import com.jn.hardware.model.dingtalk.user.DepartmentUserInfoResult;
+import com.jn.hardware.model.dingtalk.user.UserDetailsInfoParam;
+import com.jn.hardware.model.dingtalk.user.UserDetailsInfoResult;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,20 +29,35 @@ public class DingTalkUserServiceTest {
     @Autowired
     private DingTalkClient dingTalkClient;
 
-    private DepartmentUserInfoParam departmentUserInfoParam;
-
     @Before
     public void setUp() throws Exception {
-        departmentUserInfoParam = new DepartmentUserInfoParam();
-        departmentUserInfoParam.setDepartment_id("61060184");
-        departmentUserInfoParam.setOffset("1");
-        departmentUserInfoParam.setSize("10");
+
     }
 
     @Test
     public void getDepartUserByPage() {
+        DepartmentUserInfoParam departmentUserInfoParam = new DepartmentUserInfoParam();
+        departmentUserInfoParam.setDepartmentId("61060184");
+        departmentUserInfoParam.setOffset(1L);
+        departmentUserInfoParam.setSize(10L);
+
         Result<DepartmentUserInfoResult> result = dingTalkClient.getDepartUserByPage(departmentUserInfoParam);
         logger.info("\n分页获取部门用户详情：{}",result);
         assertThat(anything(),anything());
     }
+
+    @Test
+    public void getUserInfo() {
+        UserDetailsInfoParam userInfoParam = new UserDetailsInfoParam();
+        userInfoParam.setUserid("0452075464668030");
+        Result<UserDetailsInfoResult> result = dingTalkClient.getUserInfo(userInfoParam);
+        logger.info("\n获取用户详情：{}",result);
+        logger.info("：getIsAdmin  : {}, getIsBoss : {},getIsHide : {}, getIsSenior : {}",result.getData().getIsAdmin()
+                , result.getData().getIsBoss()
+                ,result.getData().getIsHide()
+                ,result.getData().getIsSenior());
+        assertThat(anything(),anything());
+    }
+
+
 }

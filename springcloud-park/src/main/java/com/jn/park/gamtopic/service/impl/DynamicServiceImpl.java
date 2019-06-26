@@ -429,7 +429,11 @@ public class DynamicServiceImpl implements DynamicService {
                 for(UserExtensionInfo user : userList){
                     if(show.getAccount().equals(user.getAccount())){
                         show.setAvatar(user.getAvatar());
-                        show.setNickName(user.getNickName());
+                        if (user.getNickName()==null || user.getNickName()==""){
+                            show.setNickName(hidePhoneNumber(user.getAccount()));
+                        }else{
+                            show.setNickName(user.getNickName());
+                        }
                         show.setSignature(user.getSignature());
                     }
                 }
@@ -454,7 +458,11 @@ public class DynamicServiceImpl implements DynamicService {
                 for(UserExtensionInfo user : userList){
                     if(show.getCreatorAccount().equals(user.getAccount())){
                         show.setAvatar(user.getAvatar());
-                        show.setNickName(user.getNickName());
+                        if (user.getNickName()==null || user.getNickName()==""){
+                            show.setNickName(hidePhoneNumber(user.getAccount()));
+                        }else{
+                            show.setNickName(user.getNickName());
+                        }
                     }
                 }
             }
@@ -477,7 +485,11 @@ public class DynamicServiceImpl implements DynamicService {
                 for(UserExtensionInfo user : userList){
                     if(show.getCreatorAccount().equals(user.getAccount())){
                         show.setAvatar(user.getAvatar());
-                        show.setNickName(user.getNickName());
+                        if (user.getNickName()==null || user.getNickName()==""){
+                            show.setNickName(hidePhoneNumber(user.getAccount()));
+                        }else{
+                            show.setNickName(user.getNickName());
+                        }
                     }
                 }
             }
@@ -494,13 +506,17 @@ public class DynamicServiceImpl implements DynamicService {
             accountList.add(show.getCreatorAccount());
         }
         Result<List<UserExtensionInfo>> result = userExtensionClient.getMoreUserExtension(accountList);
-        if(!result.getData().isEmpty()){
+        if( result.getData()!=null && !result.getData().isEmpty()){
             List<UserExtensionInfo> userList = result.getData();
             for(DynamicWebShow show : dynamicList){
                 for(UserExtensionInfo user : userList){
                     if(show.getCreatorAccount().equals(user.getAccount())){
                         show.setAvatar(user.getAvatar());
-                        show.setNickName(user.getNickName());
+                        if (user.getNickName()==null || user.getNickName()==""){
+                           show.setNickName(hidePhoneNumber(user.getAccount()));
+                        }else{
+                            show.setNickName(user.getNickName());
+                        }
                         show.setCompanyName(user.getCompanyName());
                         if(StringUtils.isNotBlank(show.getImgString())){
                             String imgs = show.getImgString();
@@ -530,7 +546,11 @@ public class DynamicServiceImpl implements DynamicService {
                 for(UserExtensionInfo user : userList){
                     if(show.getCreatorAccount().equals(user.getAccount())){
                         show.setAvatar(user.getAvatar());
-                        show.setNickName(user.getNickName());
+                        if (user.getNickName()==null || user.getNickName()==""){
+                            show.setNickName(hidePhoneNumber(user.getAccount()));
+                        }else{
+                            show.setNickName(user.getNickName());
+                        }
                         show.setPhone(user.getPhone());
                         show.setSex(user.getSex());
                     }
@@ -539,4 +559,18 @@ public class DynamicServiceImpl implements DynamicService {
         }
         return dynamicList;
     }
+
+    /**
+     *隐藏电话号码,将电话号码的中间四位设为*
+     * @param phone
+     * @return
+     */
+    private String  hidePhoneNumber(String phone){
+        String regex = "^[1][3,4,5,7,8][0-9]{9}$";
+        if(phone.matches(regex)){
+           phone = phone.replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2");
+        }
+        return phone;
+    }
+
 }

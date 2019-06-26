@@ -128,7 +128,10 @@ export default {
       }
     }
   },
-  mounted() {
+  // mounted() {
+  //   this.init()
+  // },
+  created() {
     this.init()
   },
   methods: {
@@ -183,25 +186,20 @@ export default {
         if (res.data.code === this.GLOBAL.code) {
           this.detailData = res.data.data
           if (res.data.data) {
+            this.tasks = { data: [] }
+            var tasksData = { data: [] }
+            tasksData.data = []
             res.data.data.forEach((v, i) => {
-              this.tasks.data.push({
-                // $index: 0,
-                // $level: 0,
-                // $no_end: false,
-                // $no_start: false,
-                // $rendered_type: 'task',
-                // $source: [],
-                // $target: [],
+              tasksData.data.push({
                 text: v.taskName,
                 id: i + 1,
-                // start_date: this.reverseString(v.planStartTime),
                 start_date: new Date(v.planStartTime),
-                // end_date: this.reverseString(v.planStopTime),
                 duration: ((new Date(v.planStopTime).getTime() - new Date(v.planStartTime).getTime()) / 3600 / 1000 / 24) + 1,
-                // duration: 20,
                 progress: Number(v.nowadaysProgress.split('%')[0]) / 100
               })
             })
+            this.tasks = tasksData
+            console.log(this.tasks)
           }
           // console.log(this.tasks.data)
         } else {
@@ -231,20 +229,7 @@ export default {
       // console.log(data)
       var collect = this.$echarts.init(document.getElementById('pieChart'))
       if (data.length > 0) {
-        console.log(data)
-        var bar = 'inner'
-        var isFlag = false
-        data.forEach(v => {
-          if (v.value === 100) {
-            isFlag = true
-            // data = [v]
-          }
-        })
-        if (isFlag) {
-          bar = 'center'
-        } else {
-          bar = 'inner'
-        }
+        // console.log(data)
         collect.hideLoading()
         const option = {
           color: ['#fdb409', '#81ca3f', '#2181da'],
@@ -260,21 +245,22 @@ export default {
             icon: 'circle',
             data: ['已完成', '已开始', '未开始']
           },
-          grid: {
-            left: 10
-          },
+          // grid: {
+          //   left: 10,
+          //   right: 50
+          // },
           series: [
             {
               label: {
                 normal: {
-                  position: bar,
-                  textStyle: {
-                    fontSize: 16
-                  },
-                  color: '#fff',
-                  verticalAlign: 'middle',
+                  position: 'outside',
+                  //   textStyle: {
+                  //     fontSize: 16
+                  //   },
+                  //   color: '#fff',
+                  //   verticalAlign: 'middle',
                   formatter: function(value) {
-                    return value.data.value + '%'
+                    return value.data.name + value.data.value + '%'
                     // if (value.data.value === '0') {
                     //   return value.data.value
                     // } else {
@@ -283,7 +269,7 @@ export default {
                   }
                 }
               },
-              stillShowZeroSum: false,
+              // stillShowZeroSum: false,
               type: 'pie',
               radius: '60%',
               center: ['60%', 'center'],
@@ -552,8 +538,11 @@ export default {
               }
               .gantt_task_scale{
                 height: 74px!important;
+                // width: 100%!important;
                 >div:nth-child(1){
                   div{
+                    text-align: left;
+                     margin-left: 324px;
                      width: 100%!important;
                   }
                 }
@@ -610,7 +599,7 @@ export default {
   }
 .gantt_data_area{
   height: unset !important;
-  width: 100%!important;
+  // width: 100%!important;
   >div{
     width: 100%!important;
   }
@@ -620,7 +609,7 @@ export default {
   border:none;
 }
 .gantt_task_scale{
-  width: 100% !important;
+  // width: 100% !important;
 }
 // .gantt_bars_area{
 //   // >div{

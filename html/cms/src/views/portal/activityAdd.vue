@@ -2,7 +2,7 @@
   <div id="queditor">
     <el-form ref="activityForm" :model="activityForm" :rules="rules" :disabled="disabledEditorFlag" label-width="200px">
       <el-form-item label="排序" prop="actiOrder">
-        <el-input v-model="activityForm.actiOrder" style="width: 205px;"/>
+        <el-input v-model="activityForm.actiOrder" style="width: 205px;" />
       </el-form-item>
       <el-form-item label="首页展示" prop="isIndex" class="setHeight">
         <el-radio-group v-model="activityForm.isIndex">
@@ -115,7 +115,7 @@
         <i class="el-icon-plus" />
       </el-upload> -->
       <!-- <p>已选择的图片</p> -->
-      <el-upload :headers="headers" :show-file-list="false" :multiple="false" :on-change="changeImg" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload" class="avatar-uploader" action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload">
+      <el-upload :headers="{token: $store.getters.token}" :show-file-list="false" :multiple="false" :on-change="changeImg" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload" :action="baseURL+'springcloud-app-fastdfs/upload/fastUpload'" class="avatar-uploader">
         <img v-if="imageUrl" :src="imageUrl" class="avatar">
         <i v-else class="el-icon-plus avatar-uploader-icon" />
       </el-upload>
@@ -149,13 +149,12 @@ import { getToken } from '@/utils/auth'
 //   publishActivity,
 //   getActivityDetailsForManage
 // } from '@/api/portalManagement/activity'
-import {
-  api, paramApi
-} from '@/api/axios'
+import { api, paramApi } from '@/api/axios'
 export default {
   components: { UE },
   data() {
     return {
+      baseURL: process.env.BASE_API,
       // disabled: false,
       headers: {
         token: getToken()
@@ -191,9 +190,7 @@ export default {
         actiCoOrganizer: ''
       },
       rules: {
-        actiOrder: [
-          { required: true, message: '请输入排序', trigger: 'blur' }
-        ],
+        actiOrder: [{ required: true, message: '请输入排序', trigger: 'blur' }],
         isIndex: [
           { required: true, message: '请选择首页是否展示', trigger: 'change' }
         ],
@@ -228,10 +225,18 @@ export default {
           { required: true, message: '请输入主办单位', trigger: 'blur' }
         ],
         showApplyNum: [
-          { required: true, message: '请选择是否展示报名人数', trigger: 'change' }
+          {
+            required: true,
+            message: '请选择是否展示报名人数',
+            trigger: 'change'
+          }
         ],
         applyCheck: [
-          { required: true, message: '请选择报名是否需要审批', trigger: 'change' }
+          {
+            required: true,
+            message: '请选择报名是否需要审批',
+            trigger: 'change'
+          }
         ],
         actiNumber: [
           { required: true, message: '请输入活动人数', trigger: 'blur' }
@@ -260,7 +265,6 @@ export default {
     }
   },
   mounted() {
-    // console.log(this.$route.query.activityId)
     // console.log(this.$route.query.disabled)
     if (this.$route.query.disabled) {
       this.disabledEditorFlag = true
@@ -277,7 +281,11 @@ export default {
       // const data = {
       //   activityId: this.$route.query.activityId
       // }
-      paramApi(`${this.GLOBAL.parkUrl}activity/getActivityDetailsForManage`, this.$route.query.activityId, 'activityId').then(res => {
+      paramApi(
+        `${this.GLOBAL.parkUrl}activity/getActivityDetailsForManage`,
+        this.$route.query.activityId,
+        'activityId'
+      ).then(res => {
         if (res.data.code === this.GLOBAL.code) {
           this.activityForm = res.data.data
           this.defaultMsg = this.activityForm.actiDetail
@@ -291,7 +299,7 @@ export default {
     getEndtime() {},
     getStarttime() {},
     selecteType(value) {
-      console.log(value)
+      // console.log(value)
       this.activityForm.actiType = value
       // this.activityForm.typeId = value
     },
@@ -307,7 +315,7 @@ export default {
     onEditorChange({ editor, html, text }) {
       // 编辑器文本发生变化
       // this.content可以实时获取到当前编辑器内的文本内容
-      console.log(this.content)
+      // console.log(this.content)
     },
     handleClick() {
       if (this.disabledEditorFlag) {
@@ -322,8 +330,11 @@ export default {
         return
       }
       this.dialogPosterVisible = true
-      paramApi(`${this.GLOBAL.parkUrl}activity/activityType/findActivityType`, this.activityForm.actiType, 'typeId').then(res => {
-        console.log(res)
+      paramApi(
+        `${this.GLOBAL.parkUrl}activity/activityType/findActivityType`,
+        this.activityForm.actiType,
+        'typeId'
+      ).then(res => {
         if (res.data.code === this.GLOBAL.code) {
           if (res.data.data.templateList.length > 0) {
             this.templateImgList = res.data.data.templateList
@@ -351,6 +362,9 @@ export default {
     confirm() {
       this.dialogPosterVisible = false
       this.activityForm.actiPosterUrl = this.imageUrl
+      if (this.activityForm.actiPosterUrl) {
+        this.$refs['activityForm'].clearValidate('actiPosterUrl')
+      }
     },
     handleAvatarSuccess(res, file) {
       this.imageUrl = res.data
@@ -374,7 +388,11 @@ export default {
       }
     },
     getActivityType() {
-      api(`${this.GLOBAL.parkUrl}guest/activity/findActivityTypeList`, '', 'post').then(res => {
+      api(
+        `${this.GLOBAL.parkUrl}guest/activity/findActivityTypeList`,
+        '',
+        'post'
+      ).then(res => {
         if (res.data.code === this.GLOBAL.code) {
           res.data.data.rows.forEach(val => {
             this.typeOptions.push({
@@ -410,7 +428,8 @@ export default {
       this.activityForm.parkId = row.parkId
       this.activityForm.showApplyNum = row.showApplyNum
     },
-    saveDrafts() { // 保存草稿
+    saveDrafts() {
+      // 保存草稿
       // if (!this.activityForm.actiName) {
       //   this.$message({
       //     message: '活动名称不能为空',
@@ -435,8 +454,11 @@ export default {
       // })
       this.$refs['activityForm'].validate(valid => {
         if (valid) {
-          api(`${this.GLOBAL.parkUrl}activity/saveActivityDraft`, data, 'post').then(res => {
-            console.log(res)
+          api(
+            `${this.GLOBAL.parkUrl}activity/saveActivityDraft`,
+            data,
+            'post'
+          ).then(res => {
             if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '保存草稿成功',
@@ -452,7 +474,8 @@ export default {
         }
       })
     },
-    release() { // 发布活动
+    release() {
+      // 发布活动
       // if (this.activityForm.actiOrder === 'undefined') {
       //   this.$message({
       //     message: '排序不能为空',
@@ -559,7 +582,7 @@ export default {
       //   return
       // }
       this.activityForm.actiDetail = this.$refs.ue.getUEContent()
-      console.log(this.activityForm.actiDetail)
+      // console.log(this.activityForm.actiDetail)
       // if (!this.activityForm.actiDetail) {
       //   this.$message({
       //     message: '活动详情不能为空',
@@ -586,7 +609,11 @@ export default {
         if (valid) {
           this.activityForm.actiStatus = 2
           // this.activityForm.actiStatus = 2
-          api(`${this.GLOBAL.parkUrl}activity/publishActivity`, data, 'post').then(res => {
+          api(
+            `${this.GLOBAL.parkUrl}activity/publishActivity`,
+            data,
+            'post'
+          ).then(res => {
             // console.log(res)
             if (res.data.code === this.GLOBAL.code) {
               this.$message({
@@ -603,7 +630,8 @@ export default {
         }
       })
     },
-    goBack() { // 返回
+    goBack() {
+      // 返回
       this.$emit('goBack')
     }
   }
@@ -611,8 +639,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.btns{
-  margin-left:200px;
+.btns {
+  margin-left: 200px;
 }
 ul {
   list-style: none;
@@ -635,14 +663,14 @@ ul {
   align-items: center;
   .el-icon-plus {
     font-weight: bold;
-    position:absolute;
-    left:54px;
-    top:54px;
+    position: absolute;
+    left: 54px;
+    top: 54px;
   }
-  img{
+  img {
     width: 100%;
     height: 100%;
-    z-index: 2
+    z-index: 2;
   }
 }
 .avatar-uploader .el-upload {
@@ -702,14 +730,15 @@ ul {
 }
 </style>
 <style lang="scss" >
-#queditor{
- .el-form-item--medium .el-form-item__content, .el-form-item--medium  {
-    line-height: 22px ;
+#queditor {
+  .el-form-item--medium .el-form-item__content,
+  .el-form-item--medium {
+    line-height: 22px;
+  }
 }
-}
-.setHeight{
-  >div{
-    line-height:36px !important;
+.setHeight {
+  > div {
+    line-height: 36px !important;
   }
 }
 </style>

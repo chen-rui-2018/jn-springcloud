@@ -16,7 +16,6 @@ Page({
   },
 
   onLoad: function (options) {
-    
     this.setData({
       imgBaseUrl:app.globalData.imgBaseUrl
     })
@@ -68,7 +67,7 @@ Page({
               _this.setData({
                 carList:[],
               })
-              _this.onLoad()
+              _this.onShow()
               wx.showToast({
                 title: '删除成功',
                 icon:'none',

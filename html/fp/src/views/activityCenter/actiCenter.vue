@@ -81,8 +81,9 @@
                 </ul>
               </div>
               <i>{{item.applyNum}}/{{item.actiNumber}}</i>
-              <span>
-                <i class="iconfont icon-miaojiesellerlike"></i>{{item.actiLike}}</span>
+              <p>
+                <!-- <i class="iconfont icon-miaojiesellerlike"></i> -->
+                <img src="@/../static/img/xin.png" alt=""><span>{{item.actiLike}}</span></p>
             </div>
           </li>
         </ul>
@@ -94,7 +95,8 @@
             <div class="verticalMiddle fl">
               <h3 class="verticalTit">{{item.actiName}}</h3>
               <div class="xihuan">
-                <i class="iconfont icon-miaojiesellerlike"></i>
+                <!-- <i class="iconfont icon-miaojiesellerlike"></i> -->
+                <img src="@/../static/img/xin.png" alt="">
                 <span>{{item.actiLike}}</span>
               </div>
               <p>

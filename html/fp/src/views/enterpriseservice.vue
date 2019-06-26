@@ -1572,7 +1572,9 @@ export default {
             .policyCon {
               height: 50px;
               display: -webkit-box;
+              /*! autoprefixer: off */
               -webkit-box-orient: vertical;
+              /*! autoprefixer: on */
               -webkit-line-clamp: 3;
               overflow: hidden;
             }

@@ -337,6 +337,9 @@ public class OrgServiceImpl implements OrgService {
                 }else{
                     OrgLicense orgLicense=new OrgLicense();
                     BeanUtils.copyProperties(serviceOrgLicense, orgLicense);
+                    if(serviceOrgLicense.getAwardTime()!=null){
+                        orgLicense.setAwardTime(DateUtils.formatDate(serviceOrgLicense.getAwardTime(),"yyyy-MM"));
+                    }
                     honorLicense.add(orgLicense);
                 }
             }

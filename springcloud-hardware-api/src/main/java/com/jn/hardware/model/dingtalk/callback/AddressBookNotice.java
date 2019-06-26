@@ -2,6 +2,7 @@ package com.jn.hardware.model.dingtalk.callback;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.jn.hardware.enums.dingtalk.AddressBookEventTypeEnum;
 
 import java.io.Serializable;
 import java.util.List;
@@ -21,8 +22,7 @@ public class AddressBookNotice implements Serializable {
     /**
      *事件类型
     * */
-    @JsonProperty("EventType")
-    private String eventType;
+    private AddressBookEventTypeEnum eventType;
 
     /**
      *时间戳
@@ -48,11 +48,11 @@ public class AddressBookNotice implements Serializable {
     @JsonProperty("CorpId")
     private String corpId;
 
-    public String getEventType() {
+    public AddressBookEventTypeEnum getEventType() {
         return eventType;
     }
 
-    public void setEventType(String eventType) {
+    public void setEventType(AddressBookEventTypeEnum eventType) {
         this.eventType = eventType;
     }
 
@@ -91,7 +91,7 @@ public class AddressBookNotice implements Serializable {
     @Override
     public String toString() {
         return "AddressBookNotice{" +
-                "eventType='" + eventType + '\'' +
+                "eventType=" + eventType +
                 ", timeStamp='" + timeStamp + '\'' +
                 ", userId=" + userId +
                 ", deptId=" + deptId +

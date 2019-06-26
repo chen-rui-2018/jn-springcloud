@@ -1,81 +1,81 @@
 <template>
-    <div class="incubatorEnterprises">
-        <div class="enterpriseBan">
-            <div class="bannerEnt pr">
-                <div class="swiper-container">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide" style="width:100%">
-                            <img src="@/../static/img/createspace.png" alt="">
-                        </div>
-                        <div class="swiper-slide" style="width:100%">
-                            <img src="@/../static/img/createspace.png" alt="">
-                        </div>
-                        <div class="swiper-slide" style="width:100%">
-                            <img src="@/../static/img/createspace.png" alt="">
-                        </div>
-                    </div>
-                    <!-- 如果需要分页器 -->
-                    <!-- <div class="swiper-pagination"></div> -->
+  <div class="incubatorEnterprises">
+    <div class="enterpriseBan">
+      <div class="bannerEnt pr">
+        <div class="swiper-container">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide" style="width:100%">
+              <img src="@/../static/img/createspace.png" alt="">
+            </div>
+            <div class="swiper-slide" style="width:100%">
+              <img src="@/../static/img/createspace.png" alt="">
+            </div>
+            <div class="swiper-slide" style="width:100%">
+              <img src="@/../static/img/createspace.png" alt="">
+            </div>
+          </div>
+          <!-- 如果需要分页器 -->
+          <!-- <div class="swiper-pagination"></div> -->
 
-                    <!-- 如果需要导航按钮 -->
-                    <!-- <div class="swiper-button-prev">
+          <!-- 如果需要导航按钮 -->
+          <!-- <div class="swiper-button-prev">
                         <i class="iconfont icon-leftarrow pointer"></i>
                     </div>
                     <div class="swiper-button-next">
                         <i class="iconfont icon-rightarrow pointer"></i>
                     </div> -->
-                </div>
-            </div>
         </div>
-        <div class="enterpriseCon w">
-            <div class="incubatorNav">
-                <span class="pointer" @click="$router.push({path:'/'})">首页</span>
-                <span>/</span>
-                <span class="mainColor">孵化企业</span>
-            </div>
-            <div class="incubatorCon">
-                <ul class="conul clearfix">
-                    <li class="conLi mainBorder fl" v-for="(i,k) in incubatorList" :key="k">
-                        <h3 class="liTit ct">{{i.incubatorName}}</h3>
-                        <div class="tit1">
-                            <h4>空间特色</h4>
-                            <p v-html="i.spatialCharacter"></p>
-                        </div>
-                        <div class="tit1">
-                            <h4>入驻标准</h4>
-                            <p v-html="i.entryCriteria"></p>
-                        </div>
-                        <div class="tit1">
-                            <h4>数据特色</h4>
-                            <p v-html="i.advantageIntroduct"></p>
-                        </div>
-                        <div class="tit1 tit2">
-                            <h4>申请入驻</h4>
-                            <p>电话：{{i.phone}}</p>
-                        </div>
-                        <a class="footLi pointer" :href='ibpsUrl+"ibps-platform-portal/login.jsp?response_type=code&redirect_uri=http%3A%2F%2F112.94.22.222%3A2384%2Fibps%2Fplatform%2Fconsole%2Fmain.htm&client_id=test"'>申请入驻</a>
-                        <!-- <a class="footLi pointer" href="http://112.94.22.222:2383/ibps-platform-portal/login.jsp?response_type=code&redirect_uri=http%3A%2F%2F112.94.22.222%3A2384%2Fibps%2Fplatform%2Fconsole%2Fmain.htm&client_id=test">申请入驻</a> -->
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="pagination-container">
-            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[8, 16, 24, 32]" :page-size="rows" layout="total,prev, pager, next,sizes" :total="total">
-            </el-pagination>
-        </div>
+      </div>
     </div>
+    <div class="enterpriseCon w">
+      <div class="incubatorNav">
+        <span class="pointer" @click="$router.push({path:'/'})">首页</span>
+        <span>/</span>
+        <span class="mainColor">孵化企业</span>
+      </div>
+      <div class="incubatorCon">
+        <ul class="conul">
+          <li class="conLi mainBorder pr" v-for="(i,k) in incubatorList" :key="k">
+            <h3 class="liTit ct">{{i.incubatorName}}</h3>
+            <div class="tit1">
+              <h4>空间特色</h4>
+              <p v-html="i.spatialCharacter"></p>
+            </div>
+            <div class="tit1">
+              <h4>入驻标准</h4>
+              <p v-html="i.entryCriteria"></p>
+            </div>
+            <div class="tit1">
+              <h4>数据特色</h4>
+              <p v-html="i.advantageIntroduct"></p>
+            </div>
+            <div class="tit1 tit2">
+              <h4>申请入驻</h4>
+              <p>电话：{{i.phone}}</p>
+            </div>
+            <a class="footLi pointer" :href='ibpsUrl+"ibps-platform-portal/login.jsp?response_type=code&redirect_uri=http%3A%2F%2F112.94.22.222%3A2384%2Fibps%2Fplatform%2Fconsole%2Fmain.htm&client_id=test"'>申请入驻</a>
+            <!-- <a class="footLi pointer" href="http://112.94.22.222:2383/ibps-platform-portal/login.jsp?response_type=code&redirect_uri=http%3A%2F%2F112.94.22.222%3A2384%2Fibps%2Fplatform%2Fconsole%2Fmain.htm&client_id=test">申请入驻</a> -->
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="pagination-container">
+      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[3, 6, 9, 12]" :page-size="rows" layout="total,prev, pager, next,sizes" :total="total">
+      </el-pagination>
+    </div>
+  </div>
 </template>
 <script>
 import swiper from "swiper";
-import { IBPS_URL } from '@/util/url'
+import { IBPS_URL } from "@/util/url";
 export default {
   data() {
     return {
       page: 1,
-      rows: 8,
-      total:0,
-      incubatorList:[],
-      ibpsUrl:IBPS_URL
+      rows: 3,
+      total: 0,
+      incubatorList: [],
+      ibpsUrl: IBPS_URL
     };
   },
   mounted() {
@@ -120,25 +120,25 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
-              _this.incubatorList=res.data.rows
-              _this.total=res.data.total
+            _this.incubatorList = res.data.rows;
+            _this.total = res.data.total;
           } else {
             _this.$message.error(res.result);
           }
         }
       });
     },
-     handleSizeChange(val) {
+    handleSizeChange(val) {
       //改变每页显示多少条的回调函数
       this.rows = val;
       this.page = 1;
-      this. getIncubatorList();
+      this.getIncubatorList();
     },
     handleCurrentChange(val) {
       //改变当前页码的回调函数
       this.page = val;
-      this. getIncubatorList();
-    },
+      this.getIncubatorList();
+    }
   }
 };
 </script>
@@ -187,14 +187,25 @@ export default {
   .incubatorCon {
     margin-bottom: 50px;
     .conul {
+      display: flex;
+      // justify-content: space-between;
+      justify-content:flex-start;
+      // align-items: center;
+      flex-wrap: wrap;
+      display: -webkit-flex;
     }
     .conLi {
-      margin-right: 20px;
-      width: 23%;
+      margin-right: 35px;
+      // margin-bottom:30px;
+      width: 31%;
+      padding-bottom: 36px;
     }
-    .conLi:nth-child(4n) {
+    .conLi:nth-child(3n) {
       margin-right: 0;
     }
+    // .conLi:nth-child(4n) {
+    //   margin-right: 0;
+    // }
     .liTit {
       font-size: 15px;
       padding: 10px;
@@ -203,7 +214,7 @@ export default {
     .tit1 {
       padding: 0 10px;
     }
-    .tit2{
+    .tit2 {
       margin-bottom: 10px;
     }
     h4 {
@@ -217,7 +228,10 @@ export default {
       line-height: 20px;
     }
     .footLi {
-      display: block;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      // display: block;
       height: 36px;
       line-height: 36px;
       font-size: 13px;
@@ -227,8 +241,8 @@ export default {
         no-repeat;
     }
   }
-  .pagination-container{
-      margin-bottom:50px;
+  .pagination-container {
+    margin-bottom: 50px;
   }
 }
 </style>

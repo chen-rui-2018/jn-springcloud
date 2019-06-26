@@ -170,16 +170,16 @@ export default {
           data: { },
           callback: (res)=> {
             if (res.code == "0000") {
-              // console.log(res.data.roleCode)
-              if(res.data.roleCode==="COM_ADMIN"||res.data.roleCode==="COM_CONTACTS"){
-                // this.$router.push({name:'talentPlatform'})
-                window.location.href=url
-              }else{
-                this.$message.error("只有企业管理员和企业联系人才可以进申报平台！！")
-                return
+              if(res.data!==null){
+                if(res.data.roleCode==="COM_ADMIN"||res.data.roleCode==="COM_CONTACTS"){
+                  window.location.href=url
+                }else{
+                  this.$message.error("只有企业管理员和企业联系人才可以进申报平台！！")
+                  return
+                }
               }
             }else{
-              _this.$message.error(res.result)
+              this.$message.error(res.result)
             }
           }
         })
@@ -285,7 +285,6 @@ export default {
           data: { },
           callback: (res)=> {
             if (res.code == "0000") {
-              // console.log(res.data.roleCode)
               if(res.data.roleCode==="COM_ADMIN"||res.data.roleCode==="COM_CONTACTS"){
                 this.$router.push({name:'talentPlatform'})
               }else{

@@ -1112,6 +1112,8 @@ public class OrgServiceImpl implements OrgService {
     public  void moveTempOrgInfoToFormal(TbServiceOrgCopy tbServiceOrgCopy) {
         TbServiceOrg tbServiceOrg=new TbServiceOrg();
         BeanUtils.copyProperties(tbServiceOrgCopy, tbServiceOrg);
+        //审批状态改为审批通过  状态(0：未审核[审核中] 1：审核通过  2：审核不通过)
+        tbServiceOrg.setOrgStatus(ApprovalStatusEnum.APPROVAL.getValue());
         tbServiceOrg.setOrgRegisterTime(DateUtils.parseDate(tbServiceOrgCopy.getOrgRegisterTime()));
         tbServiceOrg.setCreatedTime(DateUtils.parseDate(tbServiceOrgCopy.getCreatedTime()));
         tbServiceOrg.setCheckTime(DateUtils.parseDate(tbServiceOrgCopy.getCheckTime()));
@@ -1165,6 +1167,8 @@ public class OrgServiceImpl implements OrgService {
         TbServiceOrg tbServiceOrg =new TbServiceOrg();
         BeanUtils.copyProperties(tbServiceOrgCopy, tbServiceOrg);
         tbServiceOrg.setOrgId(tbServiceOrgCopy.getOriginalId());
+        //审批状态改为审批通过  状态(0：未审核[审核中] 1：审核通过  2：审核不通过)
+        tbServiceOrg.setOrgStatus(ApprovalStatusEnum.APPROVAL.getValue());
         tbServiceOrg.setOrgRegisterTime(DateUtils.parseDate(tbServiceOrgCopy.getOrgRegisterTime()));
         tbServiceOrg.setCreatedTime(DateUtils.parseDate(tbServiceOrgCopy.getCreatedTime()));
         tbServiceOrg.setCheckTime(DateUtils.parseDate(tbServiceOrgCopy.getCheckTime()));

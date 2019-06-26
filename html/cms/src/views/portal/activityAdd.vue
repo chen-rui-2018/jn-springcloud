@@ -607,6 +607,13 @@ export default {
       // })
       this.$refs['activityForm'].validate(valid => {
         if (valid) {
+          if (
+            new Date(this.activityForm.applyEndTime) >
+            new Date(this.activityForm.actiStartTime)
+          ) {
+            this.$message.error('活动报名时间不能大于活动开始时间')
+            return false
+          }
           this.activityForm.actiStatus = 2
           // this.activityForm.actiStatus = 2
           api(

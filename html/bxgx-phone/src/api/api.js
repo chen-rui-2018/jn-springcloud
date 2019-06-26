@@ -31,7 +31,7 @@ export default {
     talentsDetail: 'springcloud-enterprise/guest/pd/talentNotice/selectByTalentNotice', // 人才服务详情
     talentsVolume: 'springcloud-enterprise/guest/pd/talentNotice/trafficVolume', // 人才服务访问量
     // loginURL: 'springcloud-app-system/login',
-
+    registerUrl: 'springcloud-wechat/guest/wx/user/registerBinding',
     // 工作计划管理
     getWorkList: 'springcloud-oa/oa/workPlan/list', // 获取工作计划管理列表
     getItemAll: 'springcloud-oa/oa/workPlan/getItemAll', // 获取所有项目信息

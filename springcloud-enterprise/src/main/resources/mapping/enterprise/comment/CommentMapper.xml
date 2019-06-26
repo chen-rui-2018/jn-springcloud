@@ -3,10 +3,24 @@
 <mapper namespace="com.jn.enterprise.servicemarket.comment.dao.CommentMapper">
     <select id="getGiveMeCommentList" parameterType="com.jn.enterprise.servicemarket.comment.model.ReceiveRatingParameter"
             resultType="com.jn.enterprise.servicemarket.comment.model.Rating">
-        SELECT r.id AS "id",r.org_name AS "orgName",r.advisor_name AS "advisorName",
-        r.product_name AS "productName",date_format(re.issue_time,'%Y-%m-%d %H:%i:%S')  AS "issueTime",date_format(re.handle_time,'%Y-%m-%d %H:%i:%S') AS "handleTime",
-        date_format(r.created_time,'%Y-%m-%d %H:%i:%S') AS "commentTime",re.is_comment AS "isComment",re.org_telephone as "orgTelephone"
-        FROM tb_service_rating r LEFT JOIN tb_service_require re ON r.require_id = re.id left join tb_service_org o on r.org_id_ = o.org_id_
+        SELECT
+        r.id AS "id"
+        ,r.org_name AS "orgName"
+        ,r.advisor_name AS "advisorName"
+        ,r.product_name AS "productName"
+        ,date_format(re.issue_time,'%Y-%m-%d %H:%i:%S')  AS "issueTime"
+        ,date_format(re.handle_time,'%Y-%m-%d %H:%i:%S') AS "handleTime"
+        ,date_format(r.created_time,'%Y-%m-%d %H:%i:%S') AS "commentTime"
+        ,re.is_comment AS "isComment"
+        ,re.org_telephone as "orgTelephone"
+        ,o.business_type as "businessId"
+        FROM tb_service_rating r
+        LEFT JOIN tb_service_require re
+        ON r.require_id = re.id
+        and re.record_status=1
+        left join tb_service_org o
+        on r.org_id_ = o.org_id_
+        and o.record_status=1
         where r.record_status = '1'
         <if test="issueAccount != null and issueAccount != ''">
             and re.issue_account =  #{issueAccount}

@@ -8,6 +8,7 @@ import com.jn.enterprise.company.dao.TbServiceCompanyMapper;
 import com.jn.enterprise.company.dao.TbServiceCompanyModifyMapper;
 import com.jn.enterprise.company.entity.TbServiceCompany;
 import com.jn.enterprise.company.entity.TbServiceCompanyCriteria;
+import com.jn.enterprise.company.entity.TbServiceCompanyModify;
 import com.jn.enterprise.company.enums.CompanyDataEnum;
 import com.jn.enterprise.company.enums.CompanyExceptionEnum;
 import com.jn.enterprise.company.model.ServiceCompany;
@@ -138,7 +139,11 @@ public class UpCompanyAccountServiceImpl implements UpCompanyAccountService {
                 }
                 logger.info("[企业后置脚本] 调用用户服务 修改用户所属企业 接口 用户账号:{}", comAdmin);
 
-                int i = tbServiceCompanyModifyMapper.deleteByPrimaryKey(serviceCompany.getId());
+                TbServiceCompanyModify companyModify = new TbServiceCompanyModify();
+                companyModify.setId(serviceCompany.getId());
+                companyModify.setCheckStatus(CompanyDataEnum.COMPANY_CHECK_STATUS_PASS.getCode());
+                companyModify.setRecordStatus(RecordStatusEnum.DELETE.getValue());
+                int i = tbServiceCompanyModifyMapper.updateByPrimaryKeySelective(companyModify);
                 if (i != 1) {
                     logger.warn("[企业后置脚本] 删除企业临时表数据失败");
                     throw new JnSpringCloudException(CompanyExceptionEnum.DELETE_COMPANY_TEMP_ERROR);

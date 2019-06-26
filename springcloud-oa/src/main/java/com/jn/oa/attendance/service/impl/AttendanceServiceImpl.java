@@ -77,7 +77,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Transactional(rollbackFor = Exception.class)
     @ServiceLog(doAction = "考勤签到/签退")
     public AttendanceResultVo attendance(AttendanceAdd  attendanceAdd, User user) {
-        TbOaAttendance tbOaAttendance=new TbOaAttendance();
+        /* TbOaAttendance tbOaAttendance=new TbOaAttendance();
         BeanUtils.copyProperties(attendanceAdd, tbOaAttendance);
 
         //查询改用户当天签到列表
@@ -155,6 +155,9 @@ public class AttendanceServiceImpl implements AttendanceService {
         }
         attendanceResultVo.setMinute(result.getData().getMinute());
         return attendanceResultVo;
+
+         */
+        return null;
     }
 
 

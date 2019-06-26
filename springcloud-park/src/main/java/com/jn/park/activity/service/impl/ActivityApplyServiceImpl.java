@@ -99,7 +99,7 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
     public void quickApply(String activityId, String account) {
         //校验是否可以报名/取消报名
         checkIsApply(activityId);
-        //获取用户拓展信息，判断信息是否完整，若不完整，需要完善信息
+        /*//获取用户拓展信息，判断信息是否完整，若不完整，需要完善信息
         Result<UserExtensionInfo> list = userExtensionClient.getUserExtension(account);
         //判断人员头像、名称、性别、公司名称、岗位名称是否都有
         UserExtensionInfo userExtension = list.getData();
@@ -112,7 +112,7 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         if (StringUtils.isBlank(applyUserInfo.getName())|| StringUtils.isBlank(applyUserInfo.getSex())) {
             //用户信息不完善，跳转到信息完善页
             throw new JnSpringCloudException(ActivityExceptionEnum.INCOMPLETE_INFORMATION);
-        }
+        }*/
         //根据id和account，通过状态（0：取消报名，1：报名成功））查询用户信息是否已存在
         boolean existApplyFlag = existApplyInfo(activityId, account);
         //判断是否已报名，主要是防止重复报名/取消报名

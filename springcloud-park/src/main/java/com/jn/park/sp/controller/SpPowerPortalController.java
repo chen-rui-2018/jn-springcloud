@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,7 +36,7 @@ public class SpPowerPortalController extends BaseController {
     @ApiOperation(value = "我要留言", notes = "进行留言")
     @RequestMapping(value = "/SpMessage",method = RequestMethod.POST)
     @RequiresPermissions("/portal/sp/power/SpMessage")
-    public Result SpMessage( SpMessageModel spMessageModel){
+    public Result SpMessage(@RequestBody SpMessageModel spMessageModel){
         //获取登录信息
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         spMessageModel.setId(UUID.randomUUID().toString());

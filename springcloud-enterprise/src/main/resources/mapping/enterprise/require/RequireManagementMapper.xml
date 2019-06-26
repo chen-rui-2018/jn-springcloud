@@ -123,8 +123,6 @@
             and sp.record_status='1'                  <!--数据状态为有效-->
             and sp.status='1'                         <!--审核状态为有效-->
           )
-          and sr.advisor_account is null              <!--机构管理员或联系人只能查看没有意向顾问的需求-->
-          and sr.advisor_name is null
         </if>
         <if test="requireReceivedParam.intentProduct!=null and requireReceivedParam.intentProduct!=''"> <!--意向产品-->
             and (sr.product_id_ like CONCAT('%', #{requireReceivedParam.intentProduct}, '%') or sr.product_name like CONCAT('%', #{requireReceivedParam.intentProduct}, '%'))

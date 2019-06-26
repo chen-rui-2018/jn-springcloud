@@ -135,8 +135,8 @@ export default {
   },
   filters: {
     wrapNumber(str) {
-      if (!str) {
-        return "";
+      if (!str || !arguments[0]) {
+        return '';
       }
       return str.replace(/\d+/g, function() {
         return `<span style="color: #00a041">${arguments[0]}</span>`;
@@ -312,28 +312,30 @@ export default {
     },
     getMessage() {
       for (const key in this.messageData) {
-        this.api.get({
-          url: "getMessageList",
-          data: {
-            isRead: 0,
-            messageTowTort: this.messageData[key].messageTowTort
-          },
-          callback: res => {
-            if (res.code === "0000") {
-              if (res.data && res.data.rows && res.data.rows.length > 0) {
-                // this.messageData[key].data = res.data.rows
-                this.messageData[key].data = [res.data.rows[0]];
-                this.messageData[key].data.forEach(item => {
-                  item.messageConnect = JSON.parse(item.messageConnect);
-                });
+        if (this.messageData.hasOwnProperty(key) && key) {
+          this.api.get({
+            url: "getMessageList",
+            data: {
+              isRead: 0,
+              messageTowTort: this.messageData[key].messageTowTort
+            },
+            callback: res => {
+              if (res.code === "0000") {
+                if (res.data && res.data.rows && res.data.rows.length > 0 && res.data.rows[0]) {
+                  // this.messageData[key].data = res.data.rows
+                  this.messageData[key].data = [res.data.rows[0]];
+                  this.messageData[key].data.forEach(item => {
+                    item.messageConnect = JSON.parse(item.messageConnect);
+                  });
+                } else {
+                  this.messageData[key].data = [];
+                }
               } else {
-                this.messageData[key].data = [];
+                this.$message.error(res.result);
               }
-            } else {
-              this.$message.error(res.result);
             }
-          }
-        });
+          });
+        }
       }
     },
     getCardData() {

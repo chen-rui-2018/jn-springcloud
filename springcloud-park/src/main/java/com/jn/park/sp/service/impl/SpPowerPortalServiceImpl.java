@@ -236,6 +236,7 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
         }
         tbSpMessage.setCreatorAccount(user.getAccount());
         tbSpMessage.setCreateTime(new Date());
+        tbSpMessage.setTitle(tbSpMessage.getCompanyName() + "-" + tbSpMessage.getConcatName() + "的咨询");
         int insert = tbSpMessageMapper.insert(tbSpMessage);
         logger.info("【添加】添加留言成功,对应ID为{}",tbSpMessage.getId());
         return insert;

@@ -21,7 +21,7 @@
             </ul>
         </div>
         <div class="pagination-container">
-            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[3, 6, 9, 12]" :page-size="rows" layout="total,prev, pager, next,sizes" :total="total">
+            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[10, 20, 30, 40]" :page-size="rows" layout="total,prev, pager, next,sizes" :total="total">
             </el-pagination>
         </div>
     </div>
@@ -31,7 +31,7 @@ export default {
   data() {
     return {
       page: 1,
-      rows: 3,
+      rows: 10,
       total: 0,
       noticeList: []
     };

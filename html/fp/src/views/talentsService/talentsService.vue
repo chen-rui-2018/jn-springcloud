@@ -76,7 +76,7 @@
             <el-tabs v-model="rangeId"  @tab-click="switchto">
               <el-tab-pane v-for="(typeitem,typeindex) in typeList" :key="typeindex" >
                 <div slot="label" :name="typeitem.id">{{typeitem.name}}</div>
-                <div class="lists" v-for="(talentsitem,talentsindex) in talentsList" :key="talentsindex" >
+                <div class="lists" v-for="(talentsitem,talentsindex) in talentsList" :key="talentsindex" @click="gotalentdetail(talentsitem.id)">
                   <div class="list_cont_left">
                     <p><span>【{{talentsitem.rangeId|type}}】</span>{{talentsitem.noticeTitle}}</p>
                     <!-- <p v-show="talentsitem.rangeId=5">{{talentsitem.noticeTitle}} </p> -->
@@ -170,16 +170,16 @@ export default {
           data: { },
           callback: (res)=> {
             if (res.code == "0000") {
-              // console.log(res.data.roleCode)
-              if(res.data.roleCode==="COM_ADMIN"||res.data.roleCode==="COM_CONTACTS"){
-                // this.$router.push({name:'talentPlatform'})
-                window.location.href=url
-              }else{
-                this.$message.error("只有企业管理员和企业联系人才可以进申报平台！！")
-                return
+              if(res.data!==null){
+                if(res.data.roleCode==="COM_ADMIN"||res.data.roleCode==="COM_CONTACTS"){
+                  window.location.href=url
+                }else{
+                  this.$message.error("只有企业管理员和企业联系人才可以进申报平台！！")
+                  return
+                }
               }
             }else{
-              _this.$message.error(res.result)
+              this.$message.error(res.result)
             }
           }
         })
@@ -285,7 +285,6 @@ export default {
           data: { },
           callback: (res)=> {
             if (res.code == "0000") {
-              // console.log(res.data.roleCode)
               if(res.data.roleCode==="COM_ADMIN"||res.data.roleCode==="COM_CONTACTS"){
                 this.$router.push({name:'talentPlatform'})
               }else{
@@ -614,6 +613,7 @@ export default {
               border-bottom: solid 1px #eeeeee;
               padding-bottom: 15px;
               margin-top: 30px;
+              cursor: pointer;
               .list_cont_left{
                 color:#999999;
                 font-size: 12px;

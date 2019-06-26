@@ -84,6 +84,10 @@ public class UserDetailsInfoResult extends BaseResult implements Serializable {
      * 	用户所在角色列表
     * */
     private List<UserRole> roles;
+    /**
+     * 手机号码
+    * */
+    private String mobile;
 
     public String getUserid() {
         return userid;
@@ -213,9 +217,17 @@ public class UserDetailsInfoResult extends BaseResult implements Serializable {
         this.roles = roles;
     }
 
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
     @Override
     public String toString() {
-        return "UserInfoResult{" +
+        return "UserDetailsInfoResult{" +
                 "userid='" + userid + '\'' +
                 ", unionid='" + unionid + '\'' +
                 ", name='" + name + '\'' +
@@ -232,6 +244,7 @@ public class UserDetailsInfoResult extends BaseResult implements Serializable {
                 ", jobnumber='" + jobnumber + '\'' +
                 ", isSenior=" + isSenior +
                 ", roles=" + roles +
+                ", mobile='" + mobile + '\'' +
                 '}';
     }
 }

@@ -291,7 +291,19 @@ export default {
         }
       },
       gonoticedetail(item){
-        this.$router.push({path:'/declarationNoticeDetail',query:{id:item.id,rangeId:item.rangeId}})
+        this.api.get({
+          url: "addpageviews",
+          data: {
+            id:item.id
+          },
+          callback: (res)=> {
+            if(res.code==='0000'){
+              this.$router.push({path:'/declarationNoticeDetail',query:{id:item.id,rangeId:item.rangeId}})
+            }else{
+              this.$message.error(res.result)
+            }
+          }
+        });
       },
       handleSizeChange(val) {
       // console.log(`每页 ${val} 条`);

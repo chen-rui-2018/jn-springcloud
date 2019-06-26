@@ -337,6 +337,9 @@ public class OrgServiceImpl implements OrgService {
                 }else{
                     OrgLicense orgLicense=new OrgLicense();
                     BeanUtils.copyProperties(serviceOrgLicense, orgLicense);
+                    if(serviceOrgLicense.getAwardTime()!=null){
+                        orgLicense.setAwardTime(DateUtils.formatDate(serviceOrgLicense.getAwardTime(),"yyyy-MM"));
+                    }
                     honorLicense.add(orgLicense);
                 }
             }
@@ -1062,6 +1065,9 @@ public class OrgServiceImpl implements OrgService {
                 tbServiceOrgLicense.setId(UUID.randomUUID().toString());
                 //原来的orgId
                 tbServiceOrgLicense.setOrgId(tbServiceOrgCopy.getOriginalId());
+                if(licenseCopy.getAwardTime()!=null){
+                    tbServiceOrgLicense.setAwardTime(DateUtils.parseDate(licenseCopy.getAwardTime()));
+                }
                 logger.info("机构资质数据：{}",tbServiceOrgLicense.toString());
                 tbServiceOrgLicense.setModifiedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
                 tbServiceOrgLicense.setCreatedTime(DateUtils.parseDate(tbServiceOrgCopy.getTb_service_org_info().getCreatedTime()));
@@ -1109,6 +1115,8 @@ public class OrgServiceImpl implements OrgService {
     public  void moveTempOrgInfoToFormal(TbServiceOrgCopy tbServiceOrgCopy) {
         TbServiceOrg tbServiceOrg=new TbServiceOrg();
         BeanUtils.copyProperties(tbServiceOrgCopy, tbServiceOrg);
+        //审批状态改为审批通过  状态(0：未审核[审核中] 1：审核通过  2：审核不通过)
+        tbServiceOrg.setOrgStatus(ApprovalStatusEnum.APPROVAL.getValue());
         tbServiceOrg.setOrgRegisterTime(DateUtils.parseDate(tbServiceOrgCopy.getOrgRegisterTime()));
         tbServiceOrg.setCreatedTime(DateUtils.parseDate(tbServiceOrgCopy.getCreatedTime()));
         tbServiceOrg.setCheckTime(DateUtils.parseDate(tbServiceOrgCopy.getCheckTime()));
@@ -1162,6 +1170,8 @@ public class OrgServiceImpl implements OrgService {
         TbServiceOrg tbServiceOrg =new TbServiceOrg();
         BeanUtils.copyProperties(tbServiceOrgCopy, tbServiceOrg);
         tbServiceOrg.setOrgId(tbServiceOrgCopy.getOriginalId());
+        //审批状态改为审批通过  状态(0：未审核[审核中] 1：审核通过  2：审核不通过)
+        tbServiceOrg.setOrgStatus(ApprovalStatusEnum.APPROVAL.getValue());
         tbServiceOrg.setOrgRegisterTime(DateUtils.parseDate(tbServiceOrgCopy.getOrgRegisterTime()));
         tbServiceOrg.setCreatedTime(DateUtils.parseDate(tbServiceOrgCopy.getCreatedTime()));
         tbServiceOrg.setCheckTime(DateUtils.parseDate(tbServiceOrgCopy.getCheckTime()));

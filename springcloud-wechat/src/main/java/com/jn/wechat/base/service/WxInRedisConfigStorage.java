@@ -22,6 +22,15 @@ public class WxInRedisConfigStorage {
     private static final String ACCESS_TOKEN_KEY = "wx:access_token:";
 
     /**
+     * 只能取NX或者XX，如果取NX，则只有当key不存在是才进行set，如果取XX，则只有当key已经存在时才进行set
+     */
+    private static String NXXX = "NX";
+    /**
+     * 只能取EX或者PX，代表数据过期时间的单位，EX代表秒，PX代表毫秒。
+     */
+    private static String EXPX = "EX";
+
+    /**
      * 获取access_token
      * @return
      */
@@ -40,4 +49,24 @@ public class WxInRedisConfigStorage {
         jedis.setex(ACCESS_TOKEN_KEY, expiresInSeconds-1000,accessToken);
     }
 
+    /**
+     * 缓存数据
+     * @param key
+     * @param value
+     * @param expiresInSeconds
+     */
+    public void setCacheValue(String key,String value,int expiresInSeconds) {
+        Jedis jedis = jedisFactory.getJedis();
+        jedis.set(key,value,NXXX, EXPX, expiresInSeconds);
+    }
+
+    /**
+     * 取缓存数据
+     * @param key
+     * @return
+     */
+    public String getCacheValue(String key) {
+        Jedis jedis = jedisFactory.getJedis();
+        return jedis.get(key);
+    }
 }

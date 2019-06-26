@@ -68,7 +68,7 @@
         <if test="code != null and code != ''">
             and t.code = #{code}
         </if>
-
+        ORDER BY index_order ASC
     </select>
 
     <select id="selectChilds" parameterType="java.lang.String" resultType="com.jn.park.sp.vo.SpPowerVo">

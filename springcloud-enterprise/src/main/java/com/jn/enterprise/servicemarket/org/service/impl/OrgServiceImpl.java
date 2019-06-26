@@ -1065,6 +1065,9 @@ public class OrgServiceImpl implements OrgService {
                 tbServiceOrgLicense.setId(UUID.randomUUID().toString());
                 //原来的orgId
                 tbServiceOrgLicense.setOrgId(tbServiceOrgCopy.getOriginalId());
+                if(licenseCopy.getAwardTime()!=null){
+                    tbServiceOrgLicense.setAwardTime(DateUtils.parseDate(licenseCopy.getAwardTime()));
+                }
                 logger.info("机构资质数据：{}",tbServiceOrgLicense.toString());
                 tbServiceOrgLicense.setModifiedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
                 tbServiceOrgLicense.setCreatedTime(DateUtils.parseDate(tbServiceOrgCopy.getTb_service_org_info().getCreatedTime()));

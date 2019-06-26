@@ -1,5 +1,6 @@
 package com.jn.enterprise.technologyfinancial.financial.product.dao;
 
+import com.jn.enterprise.technologyfinancial.financial.product.model.FinancialOrgProductParam;
 import com.jn.enterprise.technologyfinancial.financial.product.model.FinancialProductDetails;
 import com.jn.enterprise.technologyfinancial.financial.product.model.FinancialProductListInfo;
 import com.jn.enterprise.technologyfinancial.financial.product.model.FinancialProductListParam;
@@ -31,4 +32,12 @@ public interface FinancialProductMapper {
      * @return
      */
     FinancialProductDetails getFinancialProductDetails(@Param("productId") String productId,@Param("businessArea")String businessArea);
+
+    /**
+     * 机构下科技金融产品列表
+     * @param financialOrgProductParam
+     * @param businessAreaId
+     * @return
+     */
+    List<FinancialProductListInfo> getOrgFinancialProductList(@Param("financialParam") FinancialOrgProductParam financialOrgProductParam,@Param("businessAreaId") String businessAreaId);
 }

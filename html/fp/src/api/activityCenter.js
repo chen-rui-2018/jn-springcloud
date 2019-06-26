@@ -1,6 +1,6 @@
 import axios from 'axios'
 import api from '@/util/api'
-import { getToken, removeToken } from '@/util/auth'
+import { getToken } from '@/util/auth'
 const baseURL = api.host + 'springcloud-park/'
 // 设置默认的基准路径
 axios.defaults.baseURL = baseURL

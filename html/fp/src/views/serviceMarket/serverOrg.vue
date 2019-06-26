@@ -1,5 +1,5 @@
 <template>
-  <div class="serverOrg w">
+  <div class="serverOrg w" v-loading="loading">
     <div class="serverOrgMenu">
       <span class="pointer" @click="$router.push({path:'/serMatHp'})">首页</span>
       <span>/</span>
@@ -87,44 +87,44 @@
         <i class="iconfont icon-sousuo" @click="handleSearchList"></i>
       </div>
     </div>
-    <div class="serverOrgContent" v-loading="loading">
-      <div v-if="serverAgent.length==0">
+    <div class="serverOrgContent">
+      <div v-if="serverAgent.length==0 && !loading">
         <nodata></nodata>
       </div>
       <!-- <div v-else> -->
-        <ul v-else>
-          <li class="clearfix" v-for="(i,k) in serverAgent" :key='k'>
-            <div class="orgImg fl pointer" @click="handleOrgDel(i.orgId)">
-              <!-- <img src="@/../static/img/ins1.png" alt=""> -->
-              <img :src="i.orgLogo" alt="">
-            </div>
-            <div class="orgCon fl">
-              <div class="conTil">{{i.orgName}}</div>
-              <div class="conContent clearfix color3">
-                <div class="left1 fl">
-                  <p>电话：
-                    <span class="mainColor">{{i.orgPhone}}</span>
-                  </p>
-                  <p>地址：{{i.orgAddress}}</p>
-                  <p>累计
-                    <span class="mainColor">{{i.transactionNum}}</span>&nbsp;笔交易</p>
-                </div>
-                <div class="right1 fl">
-                  <p>
-                    <el-rate v-model="i.attitudeScore*1" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
-                    </el-rate>
-                    <span class="mainColor">{{i.evaluationNum}}</span>条评价</p>
-                  <p>
-                    {{i.attitudeScore}}分
-                  </p>
-                </div>
+      <ul v-else>
+        <li class="clearfix" v-for="(i,k) in serverAgent" :key='k'>
+          <div class="orgImg fl pointer" @click="handleOrgDel(i.orgId)">
+            <!-- <img src="@/../static/img/ins1.png" alt=""> -->
+            <img :src="i.orgLogo" alt="">
+          </div>
+          <div class="orgCon fl pointer" @click="handleOrgDel(i.orgId)">
+            <div class="conTil">{{i.orgName}}</div>
+            <div class="conContent clearfix color3">
+              <div class="left1 fl">
+                <p>电话：
+                  <span class="mainColor">{{i.orgPhone}}</span>
+                </p>
+                <p>地址：{{i.orgAddress}}</p>
+                <p>累计
+                  <span class="mainColor">{{i.transactionNum}}</span>&nbsp;笔交易</p>
+              </div>
+              <div class="right1 fl">
+                <p>
+                  <el-rate v-model="i.attitudeScore*1" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" score-template="{value}">
+                  </el-rate>
+                  <span class="mainColor">{{i.evaluationNum}}</span>条评价</p>
+                <p>
+                  {{i.attitudeScore}}分
+                </p>
               </div>
             </div>
-            <div class="orgBtn fr mainColor pointer" @click="onlineContat(i.orgAccount,i.orgName)">
-              <a href="javascript:;">在线联系</a>
-            </div>
-          </li>
-        </ul>
+          </div>
+          <div class="orgBtn fr mainColor pointer" @click="onlineContat(i.orgAccount,i.orgName)">
+            <a href="javascript:;">在线联系</a>
+          </div>
+        </li>
+      </ul>
       <!-- </div> -->
     </div>
     <div class="pagination-container">
@@ -184,7 +184,8 @@ export default {
   },
   mounted() {
     this.selectIndustryList();
-    this.businessAreaList();
+    // this.businessAreaList();
+    this.getIndustryForMarket();
     if (this.$route.query.searchData) {
       this.keyW = this.$route.query.searchData;
       this.initList();
@@ -234,21 +235,22 @@ export default {
     },
     //领域搜索
     handleFilter(i) {
-      (this.businessType = `${i}`), (this.filterFlag = i);
+      this.businessType = `${i}`;
+      this.filterFlag = i;
       this.initList();
     },
     handleFilter1(i) {
-      (this.industrySector = `${i}`),
-        // this.industrySector=[]
-        // this.industrySector.push(i);
-        (this.filterFlag1 = i);
+      this.industrySector = `${i}`;
+      // this.industrySector=[]
+      // this.industrySector.push(i);
+      this.filterFlag1 = i;
       this.initList();
     },
     handleFilter2(i) {
-      (this.developmentStage = `${i}`),
-        // this.developmentStage=[]
-        // this.developmentStage.push(i);
-        (this.filterFlag2 = i);
+      this.developmentStage = `${i}`;
+      // this.developmentStage=[]
+      // this.developmentStage.push(i);
+      this.filterFlag2 = i;
       this.initList();
     },
     handleFilter3(i) {
@@ -339,18 +341,32 @@ export default {
       });
     },
     //业务领域
-    businessAreaList() {
+    // businessAreaList() {
+    //   let _this = this;
+    //   this.api.get({
+    //     url: "selectIndustryProductList",
+    //     data: {},
+    //     callback: function(res) {
+    //       if (res.code == "0000") {
+    //         // for (let it in res.data) {
+    //         //   if (res.data[it].preType == "0") {
+    //         //     _this.businessArea.push(res.data[it]);
+    //         //   }
+    //         // }
+    //         _this.businessArea = res.data;
+    //       } else {
+    //         _this.$message.error(res.result);
+    //       }
+    //     }
+    //   });
+    // },
+    getIndustryForMarket() {
       let _this = this;
       this.api.get({
-        url: "selectIndustryProductList",
+        url: "getIndustryForMarket",
         data: {},
         callback: function(res) {
           if (res.code == "0000") {
-            // for (let it in res.data) {
-            //   if (res.data[it].preType == "0") {
-            //     _this.businessArea.push(res.data[it]);
-            //   }
-            // }
             _this.businessArea = res.data;
           } else {
             _this.$message.error(res.result);

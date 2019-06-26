@@ -6,14 +6,17 @@ import com.jn.common.model.Result;
 import com.jn.common.util.GlobalConstants;
 import com.jn.common.util.RestTemplateUtil;
 import com.jn.common.util.StringUtils;
+import com.jn.common.util.lock.LockAnnotation;
 import com.jn.hardware.electricmeter.service.ElectricMeterService;
 import com.jn.hardware.electricmeter.service.ElectricRedisConfigStorage;
 import com.jn.hardware.enums.ElectricMeterEnum;
 import com.jn.hardware.model.electricmeter.*;
+import com.jn.hardware.server.ElectricClientController;
 import com.jn.hardware.util.JsonStringToObjectUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -38,13 +41,28 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
 
      @Autowired
      ElectricRedisConfigStorage redisConfigStorage;
+
+     @Value(value = "${electric.grant.type}")
+     private String  grant_type;
+     @Value(value = "${electric.username}")
+     private String  username;
+     @Value(value = "${electric.password}")
+     private String  password;
+     @Value(value = "${electric.scopes}")
+     private String  scopes;
     /**
      * 获取电表access_token
-     * @param electricAccessTokenParam
+     *
      * @return
      */
+    @LockAnnotation(lockPrefix = "electricMeter-getToken",timeOut = 20,tryCount = 3,tryTime = 500L)
     @Override
-    public Result<ElectricAccessTokenShow> getElectricMeterAccessToken(ElectricAccessTokenParam electricAccessTokenParam) {
+    public Result<ElectricAccessTokenShow> getElectricMeterAccessToken() {
+        ElectricAccessTokenParam electricAccessTokenParam = new ElectricAccessTokenParam();
+        electricAccessTokenParam.setGrant_type(grant_type);
+        electricAccessTokenParam.setUsername(username);
+        electricAccessTokenParam.setPassword(password);
+        electricAccessTokenParam.setScopes(scopes);
         logger.info("\n获取电表access_token,入参：【{}】",electricAccessTokenParam);
         Result result= new Result();
         ElectricResult<ElectricAccessTokenShow> electricResult = new ElectricResult();
@@ -101,6 +119,10 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
             result.setCode(electricResult.getCode());
             result.setResult(electricResult.getMsg());
             logger.info("获取电表平台建筑信息失败,失败原因:【{}】",electricResult.getMsg());
+            //如果编号为无效的令牌则重新进行令牌获取操作
+            if(electricResult.getCode().equals(ElectricMeterEnum.ELECTRIC_TOKEN_INVALID.getCode())){
+                getElectricMeterAccessToken();
+            }
         }
         return result;
     }
@@ -133,6 +155,10 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
             result.setCode(electricResult.getCode());
             result.setResult(electricResult.getMsg());
             logger.info("获取建筑下的仪表信息息失败,失败原因:【{}】",electricResult.getMsg());
+            //如果编号为无效的令牌则重新进行令牌获取操作
+            if(electricResult.getCode().equals(ElectricMeterEnum.ELECTRIC_TOKEN_INVALID.getCode())){
+                getElectricMeterAccessToken();
+            }
         }
 
         return result;
@@ -164,6 +190,10 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
             result.setCode(electricResult.getCode());
             result.setResult(electricResult.getMsg());
             logger.info("获取建筑下的仪表信息息失败,失败原因:【{}】",electricResult.getMsg());
+            //如果编号为无效的令牌则重新进行令牌获取操作
+            if(electricResult.getCode().equals(ElectricMeterEnum.ELECTRIC_TOKEN_INVALID.getCode())){
+                getElectricMeterAccessToken();
+            }
         }
         return result;
     }
@@ -187,6 +217,10 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
            ElectricResult electricResult = JsonStringToObjectUtil.jsonToObject(switchSting, new TypeReference<ElectricResult>() {});
            result.setCode(electricResult.getCode());
            result.setResult(electricResult.getMsg());
+            //如果编号为无效的令牌则重新进行令牌获取操作
+            if(electricResult.getCode().equals(ElectricMeterEnum.ELECTRIC_TOKEN_INVALID.getCode())){
+                getElectricMeterAccessToken();
+            }
         }
         return result;
     }
@@ -226,6 +260,10 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
                 result.setCode(electricResult.getCode());
                 result.setResult(electricResult.getMsg());
                 logger.info("\n空调表数据信息采集失败,失败原因:【{}】",electricResult.getMsg());
+                  //如果编号为无效的令牌则重新进行令牌获取操作
+                  if(electricResult.getCode().equals(ElectricMeterEnum.ELECTRIC_TOKEN_INVALID.getCode())){
+                      getElectricMeterAccessToken();
+                  }
             }
         } else {
             //电表 或 水表数据采集 使用相同的返回实体
@@ -248,6 +286,10 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
                 result.setCode(electricResult.getCode());
                 result.setResult(electricResult.getMsg());
                 logger.info(meterName+"\n数据信息采集失败,失败原因:【{}】",electricResult.getMsg());
+                //如果编号为无效的令牌则重新进行令牌获取操作
+                if(electricResult.getCode().equals(ElectricMeterEnum.ELECTRIC_TOKEN_INVALID.getCode())){
+                    getElectricMeterAccessToken();
+                }
             }
         }
         return result;
@@ -276,6 +318,11 @@ public class ElectricMeterServiceImpl implements ElectricMeterService {
             e.printStackTrace();
         }
         String accessToken = redisConfigStorage.getAccessToken();
+        //如果redis中的token为空 则重新获取token
+        if(StringUtils.isBlank(accessToken)){
+            Result<ElectricAccessTokenShow> result= getElectricMeterAccessToken();
+            accessToken = result.getData().getAccess_token();
+        }
         return accessToken;
 
     }

@@ -307,7 +307,7 @@ export default {
         expectedDate: [
           {
             required: true,
-            message: "请输入需求日期，格式为xxxx-yy-rr",
+            message: "请选择需求日期",
             trigger: "blur"
           }
         ]
@@ -383,32 +383,33 @@ export default {
     },
     //用户提需求
     demandDia() {
-      // if(!this.financialProform.financingPeriod){
-      //   return
-      // }
-      let _this = this;
-      let max = this.arr[this.financialProform.financingPeriod].loanTermMax;
-      let min = this.arr[this.financialProform.financingPeriod].loanTermMin;
-      this.api.post({
-        url: "userDemandTechnology",
-        data: {
-          expectedDate: _this.financialProform.expectedDate,
-          financingAmount: _this.financialProform.financingAmount,
-          financingPeriodMax: max,
-          financingPeriodMin: min,
-          productId: _this.financialProform.productId,
-          productName: _this.financialProform.productName,
-          fundsReqDesc: _this.financialProform.fundsReqDesc
-        },
-        callback: function(res) {
-          if (res.code == "0000") {
-            console.log(res);
-            _this.$message.success("提交需求成功");
-            _this.financialProVisible = false;
-          } else {
-            _this.$message.error(res.result);
-            _this.finaProVisible = false;
-          }
+      this.$refs["financialProform"].validate(valid => {
+        if (valid) {
+          let _this = this;
+          let max = this.arr[this.financialProform.financingPeriod].loanTermMax;
+          let min = this.arr[this.financialProform.financingPeriod].loanTermMin;
+          this.api.post({
+            url: "userDemandTechnology",
+            data: {
+              expectedDate: _this.financialProform.expectedDate,
+              financingAmount: _this.financialProform.financingAmount,
+              financingPeriodMax: max,
+              financingPeriodMin: min,
+              productId: _this.financialProform.productId,
+              productName: _this.financialProform.productName,
+              fundsReqDesc: _this.financialProform.fundsReqDesc
+            },
+            callback: function(res) {
+              if (res.code == "0000") {
+                console.log(res);
+                _this.$message.success("提交需求成功");
+                _this.financialProVisible = false;
+              } else {
+                _this.$message.error(res.result);
+                _this.finaProVisible = false;
+              }
+            }
+          });
         }
       });
     },
@@ -476,9 +477,10 @@ export default {
     .d3 {
       margin-top: 10px;
       p {
-        font-size: 13px;
+        // font-size: 13px;
         line-height: 20px;
         margin-top: 5px;
+        color: unset;
       }
     }
     .d4 {

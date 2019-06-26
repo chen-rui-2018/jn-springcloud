@@ -125,7 +125,7 @@
               <div class="detail">招聘详情</div>
               <p class="p1">企业名称：{{humanDetail.comName}}</p>
               <p class="p1">发布时间：{{humanDetail.createdTime}}</p>
-              <p class="p1" v-html="humanDetail.details">岗位详情：</p>
+              <p  v-html="humanDetail.details">岗位详情：</p>
               <!-- </el-card> -->
             </div>
           </li>
@@ -719,6 +719,7 @@ export default {
       padding-right: 40px;
       border: 1px solid #eee;
       border-radius: 5px;
+      background: #fff;
       > input {
         border: 0;
         height: 100%;
@@ -842,7 +843,7 @@ export default {
       margin-bottom: 10px;
       color: #333;
     }
-    p {
+    .p1 {
       font-size: 13px;
     }
     // .el-card__body {

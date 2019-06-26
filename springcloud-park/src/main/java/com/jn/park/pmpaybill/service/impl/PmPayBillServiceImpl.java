@@ -1,17 +1,11 @@
 package com.jn.park.pmpaybill.service.impl;
 
 import com.jn.common.exception.JnSpringCloudException;
-import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.company.api.CompanyClient;
 import com.jn.company.model.ServiceCompany;
-import com.jn.company.model.ServiceCompanyParam;
-import com.jn.enterprise.enums.RecordStatusEnum;
-import com.jn.park.asset.model.RoomEnterpriseModel;
-import com.jn.park.asset.model.RoomPayOrdersItemModel;
-import com.jn.park.asset.service.RoomInformationService;
 import com.jn.park.parking.service.impl.ParkingAreaServiceImpl;
 import com.jn.park.pmpaybill.dao.*;
 import com.jn.park.pmpaybill.entity.*;
@@ -53,15 +47,6 @@ public class PmPayBillServiceImpl implements PmPayBillService {
 
     @Autowired
     private CompanyClient companyClient;
-
-    @Autowired
-    private PmPayRuleMapper pmPayRuleMapper;
-
-    @Autowired
-    private RoomInformationService roomInformationService;
-
-    @Autowired
-    private PmPayBillMapper pmPayBillMapper;
 
     @Autowired
     private PmPayBillItemMapper pmPayBillItemMapper;
@@ -127,7 +112,8 @@ public class PmPayBillServiceImpl implements PmPayBillService {
             if (StringUtils.equals(GenerateStatusEnums.EXPIRED.getCode(), generateStatus.toString())) {
                 //如果是已生成状态,则直接跳过
                 continue;
-            }else if (tbPmPayBillItem.getTotalAmount().compareTo(BigDecimal.ZERO) == 0){
+            } else if (tbPmPayBillItem.getTotalAmount().compareTo(BigDecimal.ZERO) == 0) {
+                setPmPayBillStatus(tbPmPayBillItem);
                 //如果缴费单的实缴金额为0,则也会直接跳过
                 continue;
             }
@@ -136,11 +122,7 @@ public class PmPayBillServiceImpl implements PmPayBillService {
             Result result = createBill(tbPmPayBillItem);
             if (result != null && StringUtils.equals("0000", result.getCode())) {
                 //设置账单发送状态为已发送
-                tbPmPayBillItem.setSendPayBill(new Byte(SendPayBillEnums.SENTED.getCode()));
-                //设置减免状态为已减免状态
-                tbPmPayBillItem.setDerateState(new Byte(DerateStateEnums.RELIEFED.getCode()));
-                //设置缴费单为已生成状态
-                tbPmPayBillItem.setGenerateStatus(new Byte(GenerateStatusEnums.EXPIRED.getCode()));
+                setPmPayBillStatus(tbPmPayBillItem);
                 logger.info("[物业费管理] 为企业推送物业费账单成功,企业id:{},账单编号:{}",
                         tbPmPayBillItem.getCompanyId(), tbPmPayBillItem.getId());
             } else {
@@ -157,6 +139,20 @@ public class PmPayBillServiceImpl implements PmPayBillService {
         }
 
         logger.info("[物业费管理] 为企业推送物业费账单信息成功");
+    }
+
+    /**
+     * 设置缴费单状态
+     *
+     * @param tbPmPayBillItem
+     */
+    private void setPmPayBillStatus(TbPmPayBillItem tbPmPayBillItem) {
+        //设置账单发送状态为已发送
+        tbPmPayBillItem.setSendPayBill(new Byte(SendPayBillEnums.SENTED.getCode()));
+        //设置减免状态为已减免状态
+        tbPmPayBillItem.setDerateState(new Byte(DerateStateEnums.RELIEFED.getCode()));
+        //设置缴费单为已生成状态
+        tbPmPayBillItem.setGenerateStatus(new Byte(GenerateStatusEnums.EXPIRED.getCode()));
     }
 
     /**
@@ -462,18 +458,6 @@ public class PmPayBillServiceImpl implements PmPayBillService {
     }
 
     /**
-     * 获取账单金额
-     *
-     * @param payPeriod 账期
-     * @return
-     */
-    private BigDecimal getBillAccount(String payPeriod) {
-        String[] split = payPeriod.split("~");
-
-        return null;
-    }
-
-    /**
      * 设置状态
      *
      * @param tbPmPayBillItem
@@ -589,75 +573,6 @@ public class PmPayBillServiceImpl implements PmPayBillService {
     }
 
     /**
-     * 设置缴费单条目物业费信息
-     *
-     * @param tbPmPayBillItemList
-     * @param tbPmPayBillItemPmList
-     * @param serviceCompany
-     * @param companyId
-     * @param tbPmPayBill
-     * @return
-     */
-    private TbPmPayBillItem getTbPmPayBillItem(List<TbPmPayBillItem> tbPmPayBillItemList, List<TbPmPayBillItemPmList> tbPmPayBillItemPmList, ServiceCompany serviceCompany, String companyId, TbPmPayBill tbPmPayBill) {
-        //2.根据企业id,获取企业所有物业收费项
-        List<TbPmPayRule> tbPmPayRuleList = pmPayRuleMapper.getPmRuleByCompanyId(companyId);
-
-        //如果企业要收取的物业项不为空,查询企业房间的租赁信息
-        List<RoomPayOrdersItemModel> rentRoomInfoList = getRoomInfos(companyId, tbPmPayRuleList);
-
-        //设置缴费单条目信息
-        TbPmPayBillItem tbPmPayBillItem = new TbPmPayBillItem();
-        //设置id
-        tbPmPayBillItem.setId(UUID.randomUUID().toString());
-        BigDecimal totalAccount = new BigDecimal(0);
-
-        //5.如果企业的物业收费项不为空,也企业租赁房间信息不为空,计算祖业费用
-        if (tbPmPayRuleList != null && tbPmPayRuleList.size() > 0
-                && rentRoomInfoList != null && rentRoomInfoList.size() > 0) {
-            for (TbPmPayRule tbPmPayRule : tbPmPayRuleList) {
-                for (RoomPayOrdersItemModel roomPayOrdersItemModel : rentRoomInfoList) {
-                    //获取租赁房间面积
-                    BigDecimal roomArea = new BigDecimal(roomPayOrdersItemModel.getRoomArea());
-                    //设置缴费单条目物业费缴费信息
-                    TbPmPayBillItemPmList tbPmPayBillItemPm = new TbPmPayBillItemPmList();
-                    BigDecimal account = setTbPmPayBillItemPmList(tbPmPayRule, tbPmPayBillItem, roomPayOrdersItemModel, tbPmPayBillItemPm);
-                    totalAccount = account.add(totalAccount);
-
-                    tbPmPayBillItemPmList.add(tbPmPayBillItemPm);
-                }
-            }
-        }
-        tbPmPayBillItem.setBillAcount(totalAccount);
-        setTbPmPayBillItem(serviceCompany, tbPmPayBill, tbPmPayBillItem);
-        tbPmPayBillItemList.add(tbPmPayBillItem);
-        return tbPmPayBillItem;
-    }
-
-    /**
-     * 获取企业房租租赁信息
-     *
-     * @param companyId
-     * @param tbPmPayRuleList
-     * @return
-     */
-    private List<RoomPayOrdersItemModel> getRoomInfos(String companyId, List<TbPmPayRule> tbPmPayRuleList) {
-        List<RoomPayOrdersItemModel> rentRoomInfoList = null;
-        if (tbPmPayRuleList != null && tbPmPayRuleList.size() > 0) {
-            //3.根据企业id,获取企业的租房信息
-            List<String> companyIds = new ArrayList<String>(16);
-            companyIds.add(companyId);
-            List<RoomEnterpriseModel> roomEnterpriseModels =
-                    roomInformationService.selectRoomEnterprise(companyIds);
-            if (roomEnterpriseModels != null && roomEnterpriseModels.size() > 0) {
-                //获取企业租房信息
-                RoomEnterpriseModel roomEnterpriseModel = roomEnterpriseModels.get(0);
-                rentRoomInfoList = roomEnterpriseModel.getChildren();
-            }
-        }
-        return rentRoomInfoList;
-    }
-
-    /**
      * 批量插入数据
      *
      * @param tbPmPayBillItemList
@@ -673,81 +588,5 @@ public class PmPayBillServiceImpl implements PmPayBillService {
             logger.info("[物业管理] 企业缴费单物业费详情信息批量插入成功");
         }
     }
-
-    /**
-     * 设置物业费条目详情信息
-     *
-     * @param tbPmPayRule
-     * @param tbPmPayBillItem
-     * @param roomPayOrdersItemModel
-     * @param tbPmPayBillItemPm
-     * @return
-     */
-    private BigDecimal setTbPmPayBillItemPmList(TbPmPayRule tbPmPayRule, TbPmPayBillItem tbPmPayBillItem,
-                                                RoomPayOrdersItemModel roomPayOrdersItemModel,
-                                                TbPmPayBillItemPmList tbPmPayBillItemPm) {
-        //获取物业收费项单价
-        BigDecimal price = tbPmPayRule.getPrice();
-        //获取租赁房间面积
-        BigDecimal roomArea = new BigDecimal(roomPayOrdersItemModel.getRoomArea());
-        //设置id
-        tbPmPayBillItemPm.setId(UUID.randomUUID().toString());
-        //设置缴费条目id
-        tbPmPayBillItemPm.setItemId(tbPmPayBillItem.getId());
-        //设置物业费名称
-        tbPmPayBillItemPm.setPmName(tbPmPayRule.getName());
-        //设置房间地址
-        tbPmPayBillItemPm.setRoomAddress(roomPayOrdersItemModel.getTowerName()
-                + roomPayOrdersItemModel.getFloor() + roomPayOrdersItemModel.getRoomName());
-        //设置租赁面积
-        //tbPmPayBillItemPm.setRentalArea(roomArea);
-        //设置本月缴费金额
-        //BigDecimal account = price.multiply(roomArea).setScale(2, BigDecimal.ROUND_DOWN);
-        //tbPmPayBillItemPm.setTotalAmount(account, tbPmPriceRuleDeatils.getRoomArea());
-        //TODO
-        return null;
-    }
-
-    /**
-     * 设置缴费单条目信息
-     *
-     * @param serviceCompany
-     * @param tbPmPayBill
-     * @param tbPmPayBillItem
-     */
-    private void setTbPmPayBillItem(ServiceCompany serviceCompany, TbPmPayBill tbPmPayBill, TbPmPayBillItem tbPmPayBillItem) {
-        String comName = serviceCompany.getComName();
-        String addrPark = serviceCompany.getAddrPark();
-        //设置缴费单id
-        tbPmPayBillItem.setBillId(tbPmPayBill.getId());
-        //设置企业id
-        tbPmPayBillItem.setCompanyId(serviceCompany.getId());
-        //设置公司名称
-        tbPmPayBillItem.setCompanyName(comName);
-        //设置公司地址
-        tbPmPayBillItem.setCompanyAddress(addrPark);
-        //设置计费方式
-        tbPmPayBillItem.setCalcMode(new Byte(CalcmodeEnums.COMMON.getCode()));
-        //账期
-        tbPmPayBillItem.setPayPeriod(tbPmPayBill.getDealDate());
-        //设置最迟应缴时间
-        tbPmPayBillItem.setLastPayTime(tbPmPayBill.getLastPayTime());
-        //设置为物业费管理
-        tbPmPayBillItem.setPayType(new Byte(PayTypeEnums.PM_BILL.getCode()));
-        //设置减免金额
-        tbPmPayBillItem.setFeeAmount(new BigDecimal(0));
-        //设置实际金额
-        tbPmPayBillItem.setTotalAmount(tbPmPayBillItem.getBillAcount());
-        //判断物业费实际金额,若为零,则设置没已缴
-        if (tbPmPayBillItem.getBillAcount().equals(BigDecimal.ZERO)) {
-            //设置状态
-            setStatus(tbPmPayBillItem, PayStatusEnums.PAYED, GenerateStatusEnums.EXPIRED, DerateStateEnums.NOT_RELIEF, SendPayBillEnums.SENTED);
-        } else {
-            //设置状态
-            setStatus(tbPmPayBillItem, PayStatusEnums.NOT_PAY, GenerateStatusEnums.NOT_GENERATE, DerateStateEnums.NO_RELIEF, SendPayBillEnums.NO_SEND);
-        }
-
-    }
-
 
 }

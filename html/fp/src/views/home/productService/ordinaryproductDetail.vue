@@ -29,7 +29,7 @@
           </div>
           <div>
             <el-form-item label="参考价格：">
-              <span>{{productDetail.referPrice}} </span>
+              <span>{{productDetail.referPrice}}万元 </span>
             </el-form-item>
           </div>
           <div class="">

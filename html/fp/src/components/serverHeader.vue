@@ -108,7 +108,7 @@ export default {
     };
   },
   mounted(){
-   this.getIndustryList()
+  //  this.getIndustryList()
   },
   methods: {
      goSearch(){
@@ -129,27 +129,14 @@ export default {
         this.show3 = false
       }
       
-      console.dir(this.show3)
+      // console.dir(this.show3)
     },
     changeselectShow(val){
       this.sekectShow=val
     },
      handleSelect(key, keyPath) {
-        console.log(key, keyPath);
-      },
-      getIndustryList(){
-      let _this = this;
-      this.api.get({
-        url: "selectIndustryList",
-        data: { },
-        callback: function(res) {
-          // console.log(res);
-          if (res.code == "0000") {
-            _this.industryList = res.data.rows;
-          }
-        }
-      });
-    },
+        // console.log(key, keyPath);
+      }
   }
 };
 </script>

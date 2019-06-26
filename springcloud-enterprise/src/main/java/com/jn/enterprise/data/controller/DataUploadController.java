@@ -144,13 +144,9 @@ public class DataUploadController  extends BaseController {
     @PostMapping(path = "/company/setStatisticsListUrgeCompany")
     @ApiOperation(value = "园区内部数据列表催报",notes = "返回催报结果,正常结果为1")
     @RequiresPermissions("/data/company/setStatisticsListUrgeCompany")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name="taskBatch",value = "任务批次",dataType = "String",paramType = "query",example = "001",required = true),
-            @ApiImplicitParam(name="fillId",value = "填报Id",dataType = "String",paramType = "query",example = "001")
-    })
-    public Result<Integer> setStatisticsListUrgeCompany(String taskBatch,String fillId){
+    public Result<Integer> setStatisticsListUrgeCompany(@RequestBody UrgeParamModel model){
         User user = (User)SecurityUtils.getSubject().getPrincipal();
-        Integer num = uploadService.setStatisticsListUrgeCompany(taskBatch,fillId,user);
+        Integer num = uploadService.setStatisticsListUrgeCompany(model.getTaskBatch(),model.getFillId(),user);
         return new Result(num);
     }
 

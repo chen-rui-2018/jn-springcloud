@@ -102,7 +102,6 @@
                     <el-upload class="avatar-uploader avatarImg" :show-file-list="false" :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
                       :on-success="handlelicense" :headers="headers" :before-upload="beforelicense" style="display:inline-block">
                       <img v-if="licenseList[scope.$index].fileUrl" :src="licenseList[scope.$index].fileUrl" class="avatar">
-
                       <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
                   </template>
@@ -291,7 +290,7 @@
               <el-form-item label="咨询电话:" prop="orgPhone">
                 <el-input v-model="contactForm.orgPhone" placeholder="请输入咨询电话" maxlength="12" clearable></el-input>
               </el-form-item>
-              <el-form-item label="机构网址:" prop="orgWeb">
+              <el-form-item label="机构网址:">
                 <el-input v-model="contactForm.orgWeb" placeholder="请输入机构网址" clearable></el-input>
               </el-form-item>
               <el-form-item label="联系人姓名:" prop="conName">
@@ -313,8 +312,8 @@
         </div>
       </div>
     </el-main>
-    <el-dialog :visible.sync="dialogVisible" width="50%" :modal-append-to-body="false">
-      <img :src="otherPhoto" alt="图片" style="width:100%;height:200px;">
+    <el-dialog :visible.sync="dialogVisible" width="39%" :modal-append-to-body="false">
+      <img :src="otherPhoto" alt="图片" style="width:100%;">
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">返 回</el-button>
       </span>
@@ -334,6 +333,35 @@ export default {
         callback();
       }
     };
+     var checkOrgName = (rule, value, callback) => {
+        if (this.title === '编辑机构') {
+           this.api.get({
+              url: "orgNameIsExist",
+              data: {orgName :this.OrgBasicForm.orgName,searchType:'update',orgId:this.OrgBasicForm.orgId},
+              callback: res => {
+                console.log(res)
+                if (res.data == "orgNameExist") {
+                    callback('机构名称已存在,请重新输入');
+                } else {
+                  callback();
+                }
+
+              }
+            });
+        } else {
+           this.api.get({
+              url: "orgNameIsExist",
+              data: {orgName :this.OrgBasicForm.orgName,searchType:'add',orgId:''},
+              callback: res => {
+              if (res.data == "orgNameExist") {
+                    callback('机构名称已存在,请重新输入');
+                } else {
+                  callback();
+                }
+              }
+            });
+      }
+    }
     return {
       title: "服务机构认证",
       loading: false,
@@ -482,7 +510,8 @@ export default {
         //   { required: true, message: "请选择企业性质", trigger: "change" }
         // ],
         orgName: [
-          { required: true, message: "请填写机构名称", trigger: "blur" }
+          { required: true, message: "请填写机构名称", trigger: "blur" },
+          { validator: checkOrgName, trigger: "blur" }
         ]
       },
       // licensesRules: {
@@ -570,10 +599,10 @@ export default {
           { required: true, message: "请输入咨询电话", trigger: "blur" }
           //  { validator: checkTel, trigger: 'blur' }
         ],
-        orgWeb: [
-          { required: true, message: "请输入机构网址", trigger: "blur" }
-          // { validator: checkWeb, trigger: 'blur' }
-        ],
+        // orgWeb: [
+        //   // { required: true, message: "请输入机构网址", trigger: "blur" }
+        //   // { validator: checkWeb, trigger: 'blur' }
+        // ],
         orgProvince: [
           { required: true, message: "请选择省份", trigger: "change" }
         ],
@@ -720,7 +749,6 @@ export default {
             this.OrgBasicForm.licenses = this.licenseList.concat(
               this.otherList
             );
-            console.log(this.OrgBasicForm);
 
       } else if (this.investorCertificationTitle == "团队信息") {
         this.$refs["teamForm"].validate(valid => {
@@ -952,7 +980,9 @@ export default {
                this.$message.error("请上传附件");
           return;
             }
+            // console.log(this.otherForm)
             if (this.otherForm.id != 0) {
+              // console.log(this.otherForm)
               let otherFormObj = this.otherForm.id;
               this.otherList[otherFormObj - 1] = {
                 id: otherFormObj,
@@ -961,7 +991,9 @@ export default {
                 fileUrl: this.otherForm.fileUrl,
                 awardDepart: this.otherForm.awardDepart
               };
+                // console.log(this.otherList)
             } else {
+              // console.log(234)
               this.otherList.push({
                 id: this.otherList.length + 1,
                 certName: this.otherForm.certName,
@@ -970,6 +1002,7 @@ export default {
                 awardDepart: this.otherForm.awardDepart
               });
             }
+            // console.log(this.otherList)
             this.isShowOtherList = false;
             this.otherText = "添加其它资质/荣誉";
             this.showBtn = false

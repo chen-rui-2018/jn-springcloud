@@ -29,13 +29,13 @@
                 <a href="javascript:void(0);">首页</a>
               </li>
               <li>
-                <a href="javascript:void(0);" @click="$router.push({path:'/investor'})">投资人</a>
-              </li>
-              <li>
                 <a href="javascript:void(0);" @click="$router.push({path:'/finaPro'})">金融产品</a>
               </li>
               <li>
                 <a href="javascript:void(0);" @click="$router.push({path:'/finaInstitution'})">金融机构</a>
+              </li>
+              <li>
+                <a href="javascript:void(0);" @click="$router.push({path:'/investor'})">投资人</a>
               </li>
             </ul>
           </div>
@@ -95,15 +95,6 @@
           <el-card>
             <ul class="techUl">
               <li>
-                <img src="@/../static/img/tech1.png" alt="" style="width:126px;height:95px">
-                <div class="liInfo">
-                  <span>投资人</span>
-                  <p class="mainColor">{{investorsNum}}
-                    <span>名</span>
-                  </p>
-                </div>
-              </li>
-              <li>
                 <img src="@/../static/img/tech2.png" alt="" style="width:137px;height:101px">
                 <div class="liInfo">
                   <span>金融产品</span>
@@ -123,6 +114,15 @@
                   </p>
                 </div>
               </li>
+              <li>
+                <img src="@/../static/img/tech1.png" alt="" style="width:126px;height:95px">
+                <div class="liInfo">
+                  <span>投资人</span>
+                  <p class="mainColor">{{investorsNum}}
+                    <span>名</span>
+                  </p>
+                </div>
+              </li>
             </ul>
           </el-card>
         </div>
@@ -137,8 +137,8 @@
             <ul class="inverUl">
               <li class="clearfix">
                 <div class="liLeft fl">
-                  <div class="intorImgLar" v-if="InvestorInfoList.length > 0">
-                    <img class="pointer" v-if="InvestorInfoList[0].avatar" :src="InvestorInfoList[0].avatar" alt="" @click="$router.push({path:'/investorDetail',query: { investorAccount: InvestorInfoList[0].investorAccount }})">
+                  <div class="intorImgLar">
+                    <img class="pointer" v-if="InvestorInfoList.length > 0" :src="InvestorInfoList[0].avatar" alt="" @click="$router.push({path:'/investorDetail',query: { investorAccount: InvestorInfoList[0].investorAccount }})">
                     <img class="pointer" v-else src="@/../static/img/larImg.png" alt="" @click="$router.push({path:'/investorDetail',query: { investorAccount: InvestorInfoList[0].investorAccount }})">
                   </div>
                   <div class="leftInfo" v-if="InvestorInfoList.length > 0">
@@ -482,7 +482,7 @@ export default {
           { required: true, message: "请选择融资期限", trigger: "change" }
         ],
         expectedDate: [
-          { required: true, message: "请输入需求日期", trigger: "blur" }
+          { required: true, message: "请选择需求日期", trigger: "blur" }
         ]
       }
     };
@@ -499,24 +499,23 @@ export default {
     this.getInvestorInfoList();
     this.getFinancialProList();
     this.selectServiceOrgList();
-    this.selectIndustryList();
   },
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
   },
   methods: {
-     goLogin() {
+    goLogin() {
       window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
       this.$router.push({ path: "/login" });
     },
     //判断是否登录
     isLogin() {
-      if (!sessionStorage.userInfo) {
+      if (!this.getToken()) {
         this.islogin = false;
       }
     },
     handleInvertor() {
-      if (!sessionStorage.userInfo) {
+      if (!this.getToken()) {
         this.concatVisible = true;
         return;
       }
@@ -610,40 +609,50 @@ export default {
     },
     //用户提需求
     demandDia() {
-      let _this = this;
-      // if(!this.financialProform.financingPeriod){
-      //   return
-      // }
-      let max = this.arr[this.financialProform.financingPeriod].loanTermMax;
-      let min = this.arr[this.financialProform.financingPeriod].loanTermMin;
-      this.api.post({
-        url: "userDemandTechnology",
-        data: {
-          expectedDate: _this.financialProform.expectedDate,
-          financingAmount: _this.financialProform.financingAmount,
-          financingPeriodMax: max,
-          financingPeriodMin: min,
-          productId: _this.financialProform.productId,
-          productName: _this.financialProform.productName,
-          fundsReqDesc: _this.financialProform.fundsReqDesc
-        },
-        callback: function(res) {
-          if (res.code == "0000") {
-            _this.$message.success("提交需求成功");
-            _this.financialProVisible = false;
-          } else {
-            _this.$message.error(res.result);
-            _this.financialProVisible = false;
-          }
+      this.$refs["financialProform"].validate(valid => {
+        if (valid) {
+          let _this = this;
+          let max = this.arr[this.financialProform.financingPeriod].loanTermMax;
+          let min = this.arr[this.financialProform.financingPeriod].loanTermMin;
+          this.api.post({
+            url: "userDemandTechnology",
+            data: {
+              expectedDate: _this.financialProform.expectedDate,
+              financingAmount: _this.financialProform.financingAmount,
+              financingPeriodMax: max,
+              financingPeriodMin: min,
+              productId: _this.financialProform.productId,
+              productName: _this.financialProform.productName,
+              fundsReqDesc: _this.financialProform.fundsReqDesc
+            },
+            callback: function(res) {
+              if (res.code == "0000") {
+                _this.$message.success("提交需求成功");
+                _this.financialProVisible = false;
+              } else {
+                _this.$message.error(res.result);
+                _this.financialProVisible = false;
+              }
+            }
+          });
         }
       });
+      // if(this.financialProform.financingAmount == ''){
+      //   _this.$message.error("请输入融资金额");
+      //   return
+      // }
+      // if(this.financialProform.financingPeriod == ''){
+      //   _this.$message.error("请选择融资期限");
+      //   return
+      // }
+
+      // if(this.financialProform.expectedDate == ''){
+      //   _this.$message.error("请选择日期");
+      //   return
+      // }
     },
     //提需求
     raiseDemand(i) {
-      // if (!sessionStorage.userInfo) {
-      //   this.$message.error("请先登录");
-      //   return;
-      // }
       this.isLogin();
       this.financialProVisible = true;
       this.financialProform.expectedDate = "";
@@ -708,22 +717,6 @@ export default {
             _this.ServiceOrgList = res.data.rows;
           } else {
             _this.$message.error(res.result);
-          }
-        }
-      });
-    },
-    //机构字典
-    selectIndustryList() {
-      let _this = this;
-      this.api.get({
-        url: "selectIndustryList",
-        data: {
-          id: "",
-          preType: "0",
-          preValue: ""
-        },
-        callback: function(res) {
-          if (res.code == "0000") {
           }
         }
       });
@@ -1092,7 +1085,7 @@ export default {
             width: 57.4%;
             > ul {
               > li {
-                padding: 9px 33px;
+                padding: 8px 33px;
                 border: 1px solid #dedede;
                 float: left;
                 margin-right: 20px;
@@ -1276,13 +1269,13 @@ export default {
               }
               > .finaContent {
                 .finaPhone {
-                  font-size: 15px;
+                  font-size: 13px;
                 }
               }
               .finaAddress {
                 text-indent: -35px;
                 margin-left: 35px;
-                font-size: 15px;
+                font-size: 13px;
               }
             }
             > .finaPP {

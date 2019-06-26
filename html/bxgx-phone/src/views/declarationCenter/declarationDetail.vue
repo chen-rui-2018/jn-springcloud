@@ -34,8 +34,7 @@
           <!-- </a> -->
         </div>
       </div>
-
-      <div class="declaration_consult" @click="$router.push({path: '/guest/pd/consult',query:{id:id}})">预约申报</div>
+      <div class="declaration_consult" @click="goConsult" v-if="isShow===1">预约申报</div>
     </div>
   </div>
 </div>
@@ -54,14 +53,12 @@ export default {
   filters: {
     time (time) {
       if (time) {
-        // return time.split("T")[0]
-        let dateee = new Date(time).toJSON()
-        return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+        let timeArr = time.split('.')[0].split('T')
+        return timeArr[0] + ' ' + timeArr[1]
+        /* let dateee = new Date(time).toJSON()
+        return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '') */
       }
     }
-  },
-  created () {
-    this.addView()
   },
   mounted () {
     this.id = this.$route.query.id
@@ -80,18 +77,9 @@ export default {
             this.detailData = res.data
             if (res.data.fileUrl !== '') {
               this.fileList = JSON.parse(res.data.fileUrl)
+            } else {
+              this.$vux.toast.text(res.result)
             }
-          }
-        }
-      })
-    },
-    addView () {
-      this.api.get({
-        url: 'trafficVolume',
-        data: {id: this.id},
-        callback: res => {
-          if (res.code === '0000') {
-            // this.detailData = res.data
           }
         }
       })
@@ -105,10 +93,40 @@ export default {
         headers: {
           token: sessionStorage.token
         }
+      }).then(res => {
+        window.location.href = res.request.responseURL
       })
-        .then(res => {
-          window.location.href = res.request.responseURL
-        })
+    },
+    goConsult () {
+      let myDate = new Date()
+      let myDateStr = myDate.getFullYear() + '' + (myDate.getMonth() + 1 > 10 ? myDate.getMonth() + 1 : '0' + (myDate.getMonth() + 1)) + '' + myDate.getDate() + '' + (myDate.getHours() > 10 ? myDate.getHours() : '0' + myDate.getHours()) + (myDate.getMinutes() > 10 ? myDate.getMinutes() : '0' + myDate.getMinutes()) + (myDate.getSeconds() > 10 ? myDate.getSeconds() : '0' + myDate.getSeconds())
+      let time = new Date(this.detailData.preliminaryDeadline).toJSON()
+      let dateArr = time.split('.')[0].split('T')[0].split('-')
+      let timeArr = time.split('.')[0].split('T')[1].split(':')
+      let deadline = dateArr[0] + dateArr[1] + dateArr[2] + timeArr[0] + timeArr[1] + timeArr[2]
+      // let deadline = new Date(+new Date(time) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '').replace(/[^0-9]/ig, '')
+      // console.log(deadline)
+      // console.log(deadline)
+
+      this.api.get({
+        url: 'getUserExtension',
+        data: { },
+        callback: (res) => {
+          if (res.code === '0000') {
+            if (res.data.roleCode === 'COM_ADMIN' || res.data.roleCode === 'COM_CONTACTS') {
+              if (myDateStr < deadline) {
+                this.$router.push({path: '/guest/pd/consult', query: {id: this.id, title: this.detailData.titleName}})
+              } else {
+                this.$vux.toast.text('您申报的项目已经截止', 'middle')
+              }
+            } else {
+              this.$vux.toast.text('只有企业管理员和企业联系人才可以进行预约申报！！')
+            }
+          } else {
+            this.$vux.toast.text(res.result)
+          }
+        }
+      })
     }
   }
 }

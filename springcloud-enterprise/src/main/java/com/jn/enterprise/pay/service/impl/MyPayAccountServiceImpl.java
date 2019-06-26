@@ -95,7 +95,7 @@ public class MyPayAccountServiceImpl implements MyPayAccountService {
             for (PayAccountBookRecordVo tbPayBill : voList) {
                 tbPayBill.setMonth(sdf.format(tbPayBill.getCreatedTime()));
                 for (TbPayAccountBookType tb : list) {
-                    if (tbPayBill.getAcBookType().equals(tb.getAcBookType())) {
+                    if (StringUtils.isNotBlank(tbPayBill.getAcBookType()) && tbPayBill.getAcBookType().equals(tb.getAcBookType())) {
                         tbPayBill.setAcBookType(tb.getAcBookDesc());
                     }
                 }
@@ -264,7 +264,9 @@ public class MyPayAccountServiceImpl implements MyPayAccountService {
         tbPayAccountBook.setAccountId(tbPayAccount.getAccountId());
         tbPayAccountBook.setEntId(payAccountBookCreateParam.getEnterId());
         tbPayAccountBook.setCreatedTime(new Date());
-        tbPayAccountBook.setCreatorAccount(user.getAccount());
+        if(user != null) {
+            tbPayAccountBook.setCreatorAccount(user.getAccount());
+        }
         tbPayAccountBook.setRecordStatus(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
         for (Map.Entry<String, String> entry : map.entrySet()) {
             tbPayAccountBook.setAcBookId(AutoOrderUtil.autoOrderId());

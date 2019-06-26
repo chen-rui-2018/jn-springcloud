@@ -30,6 +30,7 @@ import com.jn.enterprise.servicemarket.org.model.UserRoleInfo;
 import com.jn.enterprise.servicemarket.org.service.OrgColleagueService;
 import com.jn.enterprise.utils.IBPSFileUtils;
 import com.jn.enterprise.utils.IBPSUtils;
+import com.jn.park.utils.HtmlUtils;
 import com.jn.paybill.api.PayBillClient;
 import com.jn.paybill.model.PaymentBillModel;
 import com.jn.system.log.annotation.ServiceLog;
@@ -137,7 +138,7 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
     public PaginationData getBusinessPromotionList(BusinessPromotionListParam businessPromotionListParam,String loginAccount) {
         //判断当前用户是否为超级管理员，超级管理员可查看全部，非超级管理员只能查看自己发布的宣传信息
         String creator=loginAccount;
-        if(isSuperAdmin(loginAccount)){
+        if(StringUtils.isNotBlank(loginAccount)&& isSuperAdmin(loginAccount)){
             //超级管理员，查询全部
             creator="";
         }
@@ -160,7 +161,7 @@ public class BusinessPromotionServiceImpl implements BusinessPromotionService {
         List<BusinessPromotionListShow> resultList = businessPromotionMapper.getBusinessPromotionList(businessPromotionListParam,creator);
         for(BusinessPromotionListShow pShow:resultList){
             //设置宣传摘要
-            String replaceDetails=pShow.getPropagandaDetails().replaceAll("</?[^>]+>","");
+            String replaceDetails= HtmlUtils.getBriefIntroduction(pShow.getPropagandaDetails());
             if(StringUtils.isNotBlank(replaceDetails)){
                 String propagandaSummaries=replaceDetails.substring(0,replaceDetails.length()>100?100:replaceDetails.length());
                 propagandaSummaries=replaceDetails.length()>100?propagandaSummaries+"......":propagandaSummaries;

@@ -885,6 +885,8 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         }
         /**更新账单为线下缴费*/
         tbPayBill.setPaymentAffirm(PaymentBillEnum.BILL_AC_BOOK_CHECK_1.getCode());
+        tbPayBill.setPaymentState(PaymentBillEnum.BILL_ORDER_IS_PAY.getCode());
+        tbPayBill.setPaymentType(PaymentBillEnum.PAY_METHOD_OFFLINE.getCode());
         tbPayBill.setAffirmPart(user.getAccount());
         tbPayBill.setAffirmTime(new Date());
         logger.info("进入【我的账单-线下缴费确认回调各业务侧接口】方法,更新账单为线下缴费入參【{}】",JsonUtil.object2Json(tbPayBill));
@@ -904,6 +906,39 @@ public class MyPayBillServiceImpl implements MyPayBillService {
             }
         }
         return new Result("线下缴费确认成功！");
+    }
+
+    @Override
+    @ServiceLog(doAction = "我的账单-修改账单状态（已撤销）")
+    public Result cancelBill(String billId, User user) {
+        logger.info("进入【我的账单-修改账单状态（已撤销）】方法，入參【{}】",billId);
+        TbPayBill tbPayBill = tbPayBillMapper.selectByPrimaryKey(billId);
+        /**判断账单是否存在*/
+        if(tbPayBill == null){
+            throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_IS_NOT_EXIT);
+        }
+        /**判断账单是否已支付*/
+        if(PaymentBillEnum.BILL_ORDER_IS_PAY.getCode().equals(tbPayBill.getPaymentState())){
+            throw new JnSpringCloudException(PaymentBillExceptionEnum.PAYMENT_STATUS_IS_PAY_2);
+        }
+        /**判断账单是否已撤销*/
+        if(PaymentBillEnum.BILL_ORDER_IS_RESCINDED.getCode().equals(tbPayBill.getPaymentState())){
+            throw new JnSpringCloudException(PaymentBillExceptionEnum.PAYMENT_STATUS_IS_RESCINDED);
+        }
+        /**修改账单状态为已撤销*/
+        logger.info("进入【我的账单-修改账单状态（已撤销）】方法，修改账单状态为已撤销入參【{}】",JsonUtil.object2Json(tbPayBill));
+        tbPayBill.setPaymentState(PaymentBillEnum.BILL_ORDER_IS_RESCINDED.getCode());
+        if(user != null){tbPayBill.setModifierAccount(user.getAccount());}
+        tbPayBill.setModifiedTime(new Date());
+        int i = tbPayBillMapper.updateByPrimaryKeySelective(tbPayBill);
+        logger.info("进入【我的账单-修改账单状态（已撤销）】方法，修改账单状态为已撤销返回结果：",i);
+        if (i > 0){
+            return new Result("账单撤销成功");
+        }
+        Result result = new Result();
+        result.setCode(PaymentBillExceptionEnum.PAYMENT_STATUS_IS_RESCINDED_ERROR.getCode());
+        result.setData(PaymentBillExceptionEnum.PAYMENT_STATUS_IS_RESCINDED_ERROR.getMessage());
+        return result;
     }
 
     /**
@@ -1037,7 +1072,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         if (sendStatus) {
             logger.info("[白下智慧园区]发送邮件成功");
         } else {
-            logger.error("[白下智慧园区]发送you'jin'a失败");
+            logger.error("[白下智慧园区]发送邮件失败");
         }
     }
 }

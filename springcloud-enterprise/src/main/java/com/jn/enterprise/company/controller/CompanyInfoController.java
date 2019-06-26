@@ -2,32 +2,23 @@ package com.jn.enterprise.company.controller;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.exception.JnSpringCloudException;
-import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
-import com.jn.common.util.Assert;
 import com.jn.company.model.ServiceCompany;
-import com.jn.company.model.ServiceCompanyParam;
-import com.jn.company.model.ServiceEnterpriseParam;
 import com.jn.enterprise.company.enums.CompanyExceptionEnum;
 import com.jn.enterprise.company.service.CompanyService;
-import com.jn.enterprise.company.vo.CompanyContactVO;
-import com.jn.enterprise.company.vo.CompanyDetailsVo;
-import com.jn.park.activity.model.ActivityPagingParam;
-import com.jn.park.activity.model.Comment;
-import com.jn.park.activity.model.CommentAddParam;
-import com.jn.park.care.model.ServiceEnterpriseCompany;
+import com.jn.enterprise.company.vo.InviteUpgradeStatusVO;
+import com.jn.enterprise.company.vo.UpgradeStatusVO;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author： huxw
@@ -50,6 +41,18 @@ public class CompanyInfoController extends BaseController {
     public Result<ServiceCompany> getCompanyList(){
         User user = checkUserValid();
         return new Result(companyService.getCurCompanyInfo(user.getAccount()));
+    }
+
+    @ControllerLog(doAction = "查询当前账号是否允许认证")
+    @ApiOperation(value = "查询当前账号是否允许认证")
+    @RequestMapping(value = "/getJoinParkStatus",method = RequestMethod.GET)
+    @RequiresPermissions("/enterprise/company/getJoinParkStatus")
+    public Result<UpgradeStatusVO> getJoinParkStatus(){
+        User user = checkUserValid();
+        InviteUpgradeStatusVO joinParkStatus = companyService.getJoinParkStatus(user.getAccount());
+        UpgradeStatusVO upgradeStatusVO = new UpgradeStatusVO();
+        BeanUtils.copyProperties(joinParkStatus, upgradeStatusVO);
+        return new Result(upgradeStatusVO);
     }
 
     /**

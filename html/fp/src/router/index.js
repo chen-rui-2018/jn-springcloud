@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from '../store'
+import { isMobile } from '@/util'
 import { urlSearch } from '@/util/index'
 import { setToken, getToken, setLastToken, getLastToken } from '@/util/auth'
 import api from '@/util/api'
@@ -59,12 +61,28 @@ const router= new Router({
           name: 'portalIndex',
         },
         {
+          path: '/parkIntroduction',
+          component: resolve => require(['@/views/parkIntroduction'], resolve),
+          meta: {
+            title: '园区介绍'
+          },
+          name: 'parkIntroduction'
+        },
+        {
           path: '/investment',
           component: resolve => require(['@/views/investment'], resolve),
           meta: {
             title: '招商引资'
           },
           name: 'investment'
+        },
+        {
+          path: '/parkIntroductionChild',
+          component: resolve => require(['@/views/parkIntroductionChild'], resolve),
+          meta: {
+            title: '子园区介绍'
+          },
+          name: 'parkIntroductionChild'
         },
         {
           path: '/enterpriseservice',
@@ -145,6 +163,14 @@ const router= new Router({
             title: '人才服务详情'
           },
           name: 'talentsServiceDetail'
+        },
+        {
+          path: '/parkAdvantage',
+          component: resolve => require(['@/views/parkAdvantage'], resolve),
+          meta: {
+            title: '园区优势'
+          },
+          name: 'parkAdvantage'
         },
         {
           path: 'messageCenter',
@@ -430,6 +456,14 @@ const router= new Router({
               component: resolve => require(['@/views/home/myBusiness/enterprisePropaganda'], resolve)
             },
             {
+              path: '/myBusiness/organizationPropaganda',
+              name: 'organizationPropaganda',
+              meta: {
+                title: '机构宣传'
+              },
+              component: resolve => require(['@/views/home/myBusiness/enterprisePropaganda'], resolve)
+            },
+            {
               path: '/myBusiness/publishingPropaganda',
               name: 'publishingPropaganda',
               meta: {
@@ -552,6 +586,7 @@ const router= new Router({
               },
               component: resolve => require(['@/views/home/iframe'], resolve)
             },
+
             {
               path: '/upgradeStaff',
               name: 'upgradeStaff',
@@ -804,8 +839,16 @@ const router= new Router({
           name: 'incubatorEnterprises'
         },
         {
+          path: '/noticeList',
+          component: resolve => require(['@/views/noticeList'], resolve),
+          meta: {
+            title: '公告列表'
+          },
+          name: 'noticeList'
+        },
+        {
           path: '/announcementDetails',
-          component: resolve => require(['@/views/announcementDetails'], resolve),
+          component: resolve => require(['@/views/noticeList/announcementDetails'], resolve),
           meta: {
             title: '公告详情'
           },
@@ -1123,6 +1166,13 @@ router.beforeEach((to, from, next) => {
   const token = urlSearch.token
   if (token) {
     setToken(token)
+  }
+  // 路由iframe字段等于1的时候，去掉导航栏和侧边栏给别的页面嵌入
+  const iframe = urlSearch.iframe
+  if (Number(iframe) === 1 || isMobile()) {
+    store.commit('setHiddenNav', false)
+  } else {
+    store.commit('setHiddenNav', true)
   }
   next()
 })

@@ -20,17 +20,19 @@
       </div>
       <div class="search-row-cell tr">
         <el-button type="primary" size="small" @click="queryData">查询</el-button>
-        <el-button type="primary" size="small" @click="importExcel">下载模板</el-button>
+        <el-button type="primary" size="small" :loading="importing" @click="importExcel">下载模板</el-button>
         <el-button :disabled="tableData.length > 0" type="primary" size="small" style="position: relative">
           <span>导入</span>
           <input v-if="tableData.length === 0" type="file" class="upload-file" @change="upload"/>
         </el-button>
-        <el-button type="primary" size="small" @click="exportExcel">导出</el-button>
+        <el-button :loading="exporting" type="primary" size="small" @click="exportExcel">导出</el-button>
       </div>
     </div>
     <el-table
       :data="tableData"
+      v-loading="loading"
       stripe
+      border
       header-cell-class-name="science-part-table-header"
       style="width: 100%">
       <el-table-column
@@ -38,6 +40,7 @@
         :label="column.text"
         :key="column.value"
         :prop="column.value"
+        :min-width="column.width"
       >
       </el-table-column>
     </el-table>
@@ -55,7 +58,7 @@
 </template>
 
 <script>
-  import { getToken, removeToken } from '@/util/auth'
+  import { getToken } from '@/util/auth'
   import { downloadService, download} from '@/util/downloadService'
   export default {
     name: "sciencePartDataReportEntrance",
@@ -80,7 +83,10 @@
         columns: [],
         formData: null,
         tableData: [],
-        formDataInfo: null
+        formDataInfo: null,
+        loading: false,
+        importing: false,
+        exporting: false
       }
     },
     mounted() {
@@ -111,6 +117,7 @@
         })
       },
       importExcel() {
+        this.importing = true
         downloadService({
           method: 'get',
           url: `springcloud-enterprise/data/garden/getScienceHeaderExcel?modelid=${this.modelId}&taskbatch=${this.taskInfo.taskBatch}`,
@@ -119,15 +126,17 @@
             token: getToken()
           }
         }).then(response => {
-          download(response, '下载模板')
+          download(response.data, '下载模板')
             .then(() => {
+              this.importing = false
               this.$message.success('下载成功')
             })
         }).catch((error) => {
-
+          this.importing = false
         })
       },
       exportExcel() {
+        this.exporting = true
         downloadService({
           method: 'get',
           url: `springcloud-enterprise/data/garden/getScienceExcel?modelid=${this.modelId}&taskbatch=${this.taskInfo.taskBatch}`,
@@ -136,8 +145,9 @@
             token: getToken()
           }
         }).then(response => {
-          download(response, '导出模板')
+          download(response.data, '导出模板')
             .then(() => {
+              this.exporting = false
               this.$message.success('导出成功')
             })
         }).catch((error) => {
@@ -149,10 +159,12 @@
         const rows = data.rows
         for (const key in rows) {
           let obj = {}
-          for (const item of rows[key]) {
-            obj[item.targetId + item.formId] = item.data ? item.data : ''
+          if (rows.hasOwnProperty(key)) {
+            for (const item of rows[key]) {
+              obj[item.targetId + item.formId] = item.data ? item.data : ''
+            }
+            arr.push(obj)
           }
-          arr.push(obj)
         }
         this.tableData = arr
       },
@@ -167,9 +179,14 @@
                 } else {
                   text = target.text
                 }
+                let length = 120
+                if (text) {
+                  length = (text.length + 1) * 16
+                }
                 this.columns.push({
                   text,
-                  value
+                  value,
+                  width: length <= 300 ? length : 300
                 })
               }
             }
@@ -266,6 +283,7 @@
       },
       getData() {
         return new Promise((resolve, reject) => {
+          this.loading = true
           const _this = this
           this.api.post({
             url: `enterpriseGetImportData`,
@@ -278,6 +296,7 @@
                 _this.$message.error(res.result)
                 reject(res.result)
               }
+              _this.loading = false
             }
           })
         })

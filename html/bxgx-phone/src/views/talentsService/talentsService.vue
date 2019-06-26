@@ -1,29 +1,33 @@
 <template>
   <div class="talentsServiceCenter">
         <div class="banner"><img src="@/assets/image/talentsServiceCenter-baner.png" alt=""></div>
-        <!-- 常年申报 -->
+        <!-- 申报平台 -->
         <div class="perennial">
           <div class="perennial_titile">
-            <div>常年申报</div>
-            <div>MORE <span class="iconfont icon-jiantou "></span></div>
+            <div>申报平台</div>
+            <div @click="gotalentplatform">MORE <span class="iconfont icon-jiantou "></span></div>
           </div>
           <div class="perennial_list">
             <ul>
-              <li v-for="(item,index) in perennialList" :key="index">
-                <div class="list_cont">
-                  <p><img src="@/assets/image/perennial.png" alt=""> </p>
-                  <p>{{item.title}}</p>
-                  <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
-                  <p>收益：<span>{{item.profit}}</span> </p>
-                  <p>价格：{{item.price}}</p>
-                </div>
-                <div class="list_view"><span>查看详情</span> </div>
+              <li v-for="(item, index) in perennialList" :key="index" @click="goelse(item.linkAddress)">
+                <!-- <a :href="item.linkAddress"> -->
+                  <div class="list_cont">
+                    <p><img :src="imgList[index]" alt=""> </p>
+                    <!-- <p>{{item.title}}</p>
+                    <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
+                    <p>收益：<span>{{item.profit}}</span> </p>
+                    <p>价格：{{item.price}}</p> -->
+                    <p>{{item.platformTitle}}</p>
+                    <p>平台功能：{{item.remark}}</p>
+                  </div>
+                  <div class="list_view"><span>我要申报</span> </div>
+                <!-- </a> -->
               </li>
             </ul>
           </div>
         </div>
         <!-- 申报平台 -->
-        <div class="talentsService_platform">
+        <!-- <div class="talentsService_platform">
           <div class="platform_titile">
             <div>申报平台</div>
             <div @click="$router.push({path:'/guest/pd/talentNotice/talentsServicePlatform'})">MORE <span class="iconfont icon-jiantou"></span></div>
@@ -38,7 +42,7 @@
               <img src="@/assets/image/platform.png" alt="">
             </div>
           </div>
-        </div>
+        </div> -->
         <div class="before"></div>
         <!-- 申报中心列表 -->
         <div class="talentsService_list">
@@ -71,12 +75,17 @@
 </template>
 <script>
 import {Tab, TabItem, Scroller, LoadMore} from 'vux'
+import imgSrc1 from '@/assets/image/perennial.png'
+import imgSrc2 from '@/assets/image/jsrcgz.png'
+import imgSrc3 from '@/assets/image/njrc_kjdjzj22.png'
+import imgSrc4 from '@/assets/image/njrc_cxxqyj.png'
 export default {
   components: {
     Tab, TabItem, Scroller, LoadMore
   },
   data () {
     return {
+      imgList: [imgSrc1, imgSrc2, imgSrc3, imgSrc4],
       perennialList: [],
       typeList: [],
       talentsList: [],
@@ -131,6 +140,8 @@ export default {
               callback: res => {
                 if (res.code === '0000') {
                   this.talentsList.push(...res.data.rows)
+                } else {
+                  this.$vux.toast.text(res.result, 'middle')
                 }
               }
             })
@@ -138,18 +149,40 @@ export default {
         }
       }
     },
-
+    goelse (url) {
+      this.api.get({
+        url: 'getUserExtension',
+        data: { },
+        callback: (res) => {
+          if (res.code === '0000') {
+            if (res.data !== null) {
+              if (res.data.roleCode === 'COM_ADMIN' || res.data.roleCode === 'COM_CONTACTS') {
+                window.location.href = url
+              } else {
+                this.$vux.toast.text('只有企业管理员和企业联系人才可以进申报平台！！')
+              }
+            }
+          } else {
+            this.$vux.toast.text(res.result)
+          }
+        }
+      })
+    },
+    // 申报平台列表
     getperennialList () {
       this.api.get({
-        url: 'perennialList',
+        url: 'queryPlatformInfo',
         data: {
           page: 1,
-          rows: 4
+          rows: 4,
+          isTalentService: 1
         },
         callback: res => {
           if (res.code === '0000') {
             // console.log(res)
             this.perennialList = res.data.rows
+          } else {
+            this.$vux.toast.text(res.result)
           }
         }
       })
@@ -161,6 +194,8 @@ export default {
         callback: res => {
           if (res.code === '0000') {
             this.typeList = res.data
+          } else {
+            this.$vux.toast.text(res.result)
           }
         }
       })
@@ -175,11 +210,28 @@ export default {
             // console.log(res)
             this.talentsList = res.data.rows
             this.total = res.data.total
+          } else {
+            this.$vux.toast.text(res.result)
           }
         }
       })
     },
-    goplatform () {
+    gotalentplatform () {
+      this.api.get({
+        url: 'getUserExtension',
+        data: { },
+        callback: (res) => {
+          if (res.code === '0000') {
+            if (res.data.roleCode === 'COM_ADMIN' || res.data.roleCode === 'COM_CONTACTS') {
+              this.$router.push({path: '/guest/pd/talentNotice/talentsServicePlatform'})
+            } else {
+              this.$vux.toast.text('只有企业管理员和企业联系人才可以进申报平台！！')
+            }
+          } else {
+            this.$vux.toast.text(res.result)
+          }
+        }
+      })
     },
     changetype (rangeId) {
       this.sendData.rangeId = rangeId
@@ -268,10 +320,9 @@ export default {
                   line-height: 29px;
                   margin-top: 18px;
                   line-height: 26px;
-                  display: -webkit-box;
-                  -webkit-box-orient: vertical;
-                  -webkit-line-clamp: 2;
                   overflow: hidden;
+                  white-space: nowrap;
+                  text-overflow: ellipsis;
                   height: 48px;
 
                 }
@@ -420,10 +471,9 @@ export default {
           .talentsService_cont_left{
             width: 92%;
             .cont_title{
-              display: -webkit-box;
-              -webkit-box-orient: vertical;
-              -webkit-line-clamp: 1;
               overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
               font-size: 26px;
               padding-top: 37px;
               line-height: 28px;

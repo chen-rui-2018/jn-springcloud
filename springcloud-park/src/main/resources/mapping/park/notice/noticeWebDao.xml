@@ -13,7 +13,8 @@
       t2.notice_details as "intro",
       t1.is_stick  as "isStick",
       t1.created_time as "createdTime",
-      t1.modified_time as "modifiedTime"
+      t1.modified_time as "modifiedTime",
+      '1' as "type"
       FROM
       (SELECT
       t.id,
@@ -47,7 +48,8 @@
       t.policy_content as "intro",
       t.is_stick as "isStick",
       t.created_time as "createdTime",
-      t.modified_time  as "modifiedTime"
+      t.modified_time  as "modifiedTime",
+      '2' as "type"
       from tb_policy t
       WHERE t.record_status = 1
       AND t.policy_type = 0
@@ -62,7 +64,8 @@
       t2.acti_detail as "intro",
       t1.is_index as "isStick",
       t1.created_time as "createdTime",
-      t1.modified_time as "modifiedTime"
+      t1.modified_time as "modifiedTime",
+      '3' as "type"
       FROM
       (SELECT
       t.id,
@@ -81,7 +84,7 @@
       FROM tb_activity_detail t)t2
       ON t2.activity_id=t1.id
       ORDER BY t1.is_index DESC , t1.modified_time DESC )) t
-      ORDER BY t.isStick DESC , t.modifiedTime DESC
+      ORDER BY t.type ASC, t.isStick DESC , t.modifiedTime DESC
 
   </select>
 

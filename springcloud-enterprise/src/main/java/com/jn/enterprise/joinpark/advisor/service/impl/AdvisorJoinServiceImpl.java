@@ -1,7 +1,13 @@
 package com.jn.enterprise.joinpark.advisor.service.impl;
 
 import com.jn.common.exception.JnSpringCloudException;
+import com.jn.common.util.StringUtils;
+import com.jn.enterprise.common.enums.CommonExceptionEnum;
+import com.jn.enterprise.company.service.CompanyService;
+import com.jn.enterprise.company.vo.InviteUpgradeStatusVO;
+import com.jn.enterprise.company.vo.UpgradeStatusVO;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
+import com.jn.enterprise.enums.OrgExceptionEnum;
 import com.jn.enterprise.joinpark.advisor.service.AdvisorJoinService;
 import com.jn.enterprise.servicemarket.advisor.model.*;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorEditService;
@@ -28,6 +34,9 @@ public class AdvisorJoinServiceImpl implements AdvisorJoinService {
     private static Logger logger = LoggerFactory.getLogger(AdvisorJoinServiceImpl.class);
     @Autowired
     private AdvisorEditService advisorEditService;
+
+    @Autowired
+    private CompanyService companyService;
     /**
      * 荣誉资质颁发机构长度
      */
@@ -37,6 +46,13 @@ public class AdvisorJoinServiceImpl implements AdvisorJoinService {
     @ServiceLog(doAction = "顾问认证保存/更新")
     @Transactional(rollbackFor = Exception.class)
     public int saveOrUpdateAdvisorDetail(AdvisorDetailParam advisorDetailParam, String account){
+        //判断当前用户是否可以认证
+        InviteUpgradeStatusVO joinParkStatus = companyService.getJoinParkStatus(account);
+        String allowStatus="0";
+        if(!StringUtils.equals(allowStatus,joinParkStatus.getCode())){
+            logger.warn(joinParkStatus.getMessage());
+            throw new JnSpringCloudException(CommonExceptionEnum.UPGRADE_COMMON, account + joinParkStatus.getInviteMessage());
+        }
         AdvisorBaseInfoParam advisorBaseInfoParam=new AdvisorBaseInfoParam();
         //基本信息保存
         BeanUtils.copyProperties(advisorDetailParam, advisorBaseInfoParam);

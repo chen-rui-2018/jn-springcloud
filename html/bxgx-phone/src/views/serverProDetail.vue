@@ -432,14 +432,14 @@ export default {
   .con2 {
     // padding: 22px 36px;
     .pro1 {
-      font-size: 24px;
       h2 {
         color: #333;
         font-weight: bold;
         margin-bottom: 10px;
+        font-size: 24px;
       }
       p {
-        line-height: 40px;
+        // line-height: 40px;
       }
     }
     .referencePrice {

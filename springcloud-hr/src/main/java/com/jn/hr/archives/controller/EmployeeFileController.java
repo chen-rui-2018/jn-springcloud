@@ -204,13 +204,13 @@ public class EmployeeFileController extends BaseController {
     @ControllerLog(doAction = "下载员工档案附件")
     @RequiresPermissions("/hr/employeeFile/downloadEmployeeFileAttachment")
     @ApiOperation(value = "下载员工档案附件", notes = "导入员工档案")
-    @PostMapping(value = "/downloadEmployeeFileAttachment")
-    public ResponseEntity<byte[]> importEmployeeFile(@RequestBody FileAttachment fileAttachment) {
+    @GetMapping(value = "/downloadEmployeeFileAttachment")
+    public ResponseEntity<byte[]> importEmployeeFile(FileAttachment fileAttachment) {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         String fileName = null;
         InputStream is=null;
         try {
-            fileName = new String(fileAttachment.getFileName().getBytes(), "ISO-8859-1");
+            fileName = new String(fileAttachment.getFileName().getBytes(), "ISO-8859-1")+"."+fileAttachment.getFileType();
             HttpHeaders headers = new HttpHeaders();
             headers.add("Content-Type", "application/octet-stream");
             headers.add("Content-Disposition", "attachment;filename=" + fileName);

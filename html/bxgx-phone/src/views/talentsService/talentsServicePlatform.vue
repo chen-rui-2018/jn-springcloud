@@ -71,6 +71,8 @@ export default {
         callback: (res) => {
           // console.log(res);
           if (res.code === '0000') {
+          } else {
+            this.$vux.toast.text(res.result, 'middle')
           }
         }
       })
@@ -91,6 +93,8 @@ export default {
                 if (res.code === '0000') {
                   this.platFormList.push(...res.data.rows)
                   // console.log(...res.data.rows)
+                } else {
+                  this.$vux.toast.text(res.result, 'middle')
                 }
               }
             })
@@ -106,6 +110,8 @@ export default {
           if (res.code === '0000') {
             // console.log(res)
             this.typeList = res.data
+          } else {
+            this.$vux.toast.text(res.result)
           }
         }
       })
@@ -119,6 +125,8 @@ export default {
           if (res.code === '0000') {
             this.platFormList = res.data.rows
             this.total = res.data.total
+          } else {
+            this.$vux.toast.text(res.result)
           }
         }
       })

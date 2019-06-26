@@ -7,47 +7,12 @@
     <!-- v-if="isShow!=1" gosearch-->
   <div class="declarationCenter" :class="{'padding':isShow!=1} ">
     <div class="banner" v-if="isShow===1"><img src="@/assets/image/declarationCenter-baner.png" alt=""></div>
-    <!-- 常年申报 -->
-    <div class="perennial" v-if="isShow===1">
-      <div class="perennial_titile">
-        <div>常年申报</div>
-        <div>MORE <span class="iconfont icon-jiantou "></span></div>
-      </div>
-      <div class="perennial_list">
-        <ul>
-          <li v-for="(item,index) in perennialList" :key="index">
-            <div class="list_cont">
-              <p><img src="@/assets/image/perennial.png" alt=""> </p>
-              <p>{{item.title}}</p>
-              <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
-              <p>收益：<span>{{item.profit}}</span> </p>
-              <p>价格：{{item.price}}</p>
-            </div>
-            <div class="list_view"><span>查看详情</span> </div>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <!-- 申报平台 -->
-    <div class="declaration_platform" v-if="isShow===1">
-      <div class="platform_titile">
-        <div>申报平台</div>
-        <div @click="$router.push({path:'/guest/pd/declarationPlatform'})">MORE <span class="iconfont icon-jiantou"></span></div>
-      </div>
-      <div class="platform_cont" @click="$router.push({path:'/guest/pd/declarationPlatform'})">
-        <p>
-          <span class="iconfont icon-deng"> </span>
-            汇集常用申报平台，便于企业快速查阅和进入。包含了各类科技项目、企业资质、产品认定、人才计划申报、资金兑现、技术合同登记等业务申报系统。
-          <span @touchstart="goplatform">查看详情>><span class="el-icon-d-arrow-right"></span> </span>
-        </p>
-        <div>
-          <img src="@/assets/image/platform.png" alt="">
-        </div>
-      </div>
-    </div>
-    <div class="before" v-if="isShow===1"></div>
-    <!-- 申报中心列表 -->
+     <!-- 申报中心列表 -->
     <div class="declaration_list">
+      <div class="declaration_titile">
+        <div>即时申报项目</div>
+        <div @click="goItems">MORE <span class="iconfont icon-jiantou"></span></div>
+      </div>
       <div class="declaration_list_tab">
         <ul >
           <li :class="{'active':sendData.rangeId===''}" @touchstart="changetype('') ">全部</li>
@@ -64,14 +29,58 @@
           <div class="declaration_cont_left">
             <div class="cont_title"><span class="greenColor">[{{item.rangeId|type}}] </span>{{item.titleName}} </div>
             <div class="cont_detail">
-              <div><span>开始 {{item.createdTime|time}}</span><span>截止 {{item.deadline|time}}</span></div>
+              <div>
+                <span>开始：{{item.createdTime|time}}</span><span>截止：{{item.deadline|time}}</span>
+                </div>
               <span class="greenColor">{{item.isRoofPlacement===1?'置顶':'不置顶'}}</span>
             </div>
+            <div class="cont_depart"><span>申报部门：{{item.timeNode}}</span><span v-if="item.preliminaryDeadline!=null">初审截止时间：{{item.preliminaryDeadline|time}} </span></div>
           </div>
           <div class="declaration_cont_right"><span class="iconfont icon-jiantou"></span> </div>
         </div>
       </div>
     </div>
+    <!-- 常年申报 -->
+    <div class="perennial" v-if="isShow===1">
+      <div class="perennial_titile">
+        <div>常年申报</div>
+        <div>MORE <span class="iconfont icon-jiantou "></span></div>
+      </div>
+      <div class="perennial_list">
+        <ul>
+          <li v-for="(item,index) in perennialList" :key="index">
+            <a :href="item.linkAddress">
+              <div class="list_cont">
+                <p><img src="@/assets/image/perennial.png" alt=""> </p>
+                <p>{{item.title}}</p>
+                <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
+                <p>收益：<span>{{item.profit}}</span> </p>
+                <p>价格：{{item.price}}</p>
+              </div>
+              <div class="list_view"><span>查看详情</span> </div>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- 申报平台 -->
+    <div class="declaration_platform" v-if="isShow===1">
+      <div class="platform_titile">
+        <div>申报平台</div>
+        <div @click="goplatform">MORE <span class="iconfont icon-jiantou"></span></div>
+      </div>
+      <div class="platform_cont" @click="goplatform">
+        <p>
+          <span class="iconfont icon-deng"> </span>
+            汇集常用申报平台，便于企业快速查阅和进入。包含了各类科技项目、企业资质、产品认定、人才计划申报、资金兑现、技术合同登记等业务申报系统。
+          <span @touchstart="goplatform">查看详情>><span class="el-icon-d-arrow-right"></span> </span>
+        </p>
+        <div>
+          <img src="@/assets/image/platform.png" alt="">
+        </div>
+      </div>
+    </div>
+    <div class="before" v-if="isShow===1"></div>
   </div>
 </div>
 </template>
@@ -90,7 +99,7 @@ export default {
       sendData: {
         page: 1,
         rangeId: '',
-        rows: 20,
+        rows: 3,
         sortType: '1',
         titleName: ''
       },
@@ -124,14 +133,37 @@ export default {
     this.getperennialList()// 常年申报
     this.getTypeList()
     this.getdeclarationList()
-    this.scrollBottom()
+    // this.scrollBottom()
   },
   methods: {
+    goItems () {
+      this.$router.push({path: '/guest/pd/DeclarationItems', query: {isShow: this.isShow}})
+    },
     goDetail (id) {
       if (this.isShow === 1) {
-        this.$router.push({path: '/guest/pd/declarationDetail', query: {id: id}})
+        this.api.get({
+          url: 'trafficVolume',
+          data: {id: id},
+          callback: res => {
+            if (res.code === '0000') {
+              this.$router.push({path: '/guest/pd/declarationDetail', query: {id: id}})
+            } else {
+              this.$vux.toast.text(res.result)
+            }
+          }
+        })
       } else {
-        this.$router.push({path: '/guest/pd/declarationDetail', query: {id: id, isShow: '0'}})
+        this.api.get({
+          url: 'trafficVolume',
+          data: {id: id},
+          callback: res => {
+            if (res.code === '0000') {
+              this.$router.push({path: '/guest/pd/declarationDetail', query: {id: id, isShow: '0'}})
+            } else {
+              this.$vux.toast.text(res.result)
+            }
+          }
+        })
       }
     },
     gosearch () {
@@ -152,6 +184,8 @@ export default {
               callback: res => {
                 if (res.code === '0000') {
                   this.declarationList.push(...res.data.rows)
+                } else {
+                  this.$vux.toast.text(res.result, 'middle')
                 }
               }
             })
@@ -170,6 +204,8 @@ export default {
           if (res.code === '0000') {
             // console.log(res)
             this.perennialList = res.data.rows
+          } else {
+            this.$vux.toast.text(res.result)
           }
         }
       })
@@ -181,6 +217,8 @@ export default {
         callback: res => {
           if (res.code === '0000') {
             this.typeList = res.data
+          } else {
+            this.$vux.toast.text(res.result)
           }
         }
       })
@@ -195,11 +233,28 @@ export default {
             // console.log(res)
             this.declarationList = res.data.rows
             this.total = res.data.total
+          } else {
+            this.$vux.toast.text(res.result)
           }
         }
       })
     },
     goplatform () {
+      this.api.get({
+        url: 'getUserExtension',
+        data: { },
+        callback: (res) => {
+          if (res.code === '0000') {
+            if (res.data.roleCode === 'COM_ADMIN' || res.data.roleCode === 'COM_CONTACTS') {
+              this.$router.push({path: '/guest/pd/declarationPlatform'})
+            } else {
+              this.$vux.toast.text('只有企业管理员和企业联系人才可以进申报平台！！')
+            }
+          } else {
+            this.$vux.toast.text(res.result)
+          }
+        }
+      })
     },
     changetype (rangeId) {
       this.sendData.rangeId = rangeId
@@ -251,7 +306,6 @@ export default {
     padding-top: 95px;
   }
   .declarationCenter{
-
     // 常年申报
     .perennial{
       background-color: #fff;
@@ -312,12 +366,10 @@ export default {
                   font-size: 16px;
                   padding-top: 18px;
                   line-height: 29px;
-                  display: -webkit-box;
-                  -webkit-box-orient: vertical;
-                  -webkit-line-clamp: 2;
                   overflow: hidden;
+                  white-space: nowrap;
+                  text-overflow: ellipsis;
                   height: 46px;
-
                 }
                 p:nth-child(4){
                  span{
@@ -404,8 +456,25 @@ export default {
       color:#07ab50;
     }
     .declaration_list{
+      margin-top: 31px;
+        .declaration_titile{
+        margin: 0 31px;
+        display: flex;
+        justify-content: space-between;
+        div:nth-child(1){
+          padding-left: 10px;
+          border-left: 7px solid #00a041;
+          line-height: 1;
+          font-size: 29px;
+        }
+        div:nth-child(2){
+          font-size: 25px;
+          color:#00a041;
+        }
+      }
       .declaration_list_tab{
-        padding: 0 31px;
+        margin: 0 31px;
+        margin-top: 15px;
         ul{
           display: flex;
           justify-content: space-between;
@@ -439,11 +508,20 @@ export default {
           align-items: center;
           .declaration_cont_left{
             width: 92%;
+            .cont_depart{
+              font-size: 23px;
+              color:#333333;
+              display: flex;
+              justify-content: space-between;
+              padding-bottom: 36px;
+              span{
+                // padding-right: 23px;
+              }
+            }
             .cont_title{
-              display: -webkit-box;
-              -webkit-box-orient: vertical;
-              -webkit-line-clamp: 1;
-              overflow: hidden;
+             overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
               font-size: 26px;
               padding-top: 37px;
               line-height: 28px;
@@ -454,8 +532,8 @@ export default {
               display: flex;
               justify-content: space-between;
               padding-top: 36px;
-              padding-bottom: 41px;
-              span{
+              padding-bottom: 36px;
+              span:first-child{
                 padding-right: 23px;
               }
             }

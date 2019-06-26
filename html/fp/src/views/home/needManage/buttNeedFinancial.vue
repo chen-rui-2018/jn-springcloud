@@ -20,7 +20,7 @@
               <span >{{receiveDetail.financingAmount}}万元</span>
             </el-form-item>
             <el-form-item label="融资期限：">
-              <span>{{receiveDetail.financingPeriod|time}}</span>
+              <span>{{receiveDetail.financingPeriod}}个月</span>
             </el-form-item>
             <el-form-item label="资金需求日期：">
               <span>{{receiveDetail.expectedDate|time}}</span>
@@ -98,7 +98,7 @@
   </div>
 </template>
 <script>
-import { getToken, removeToken } from '@/util/auth'
+import { getToken } from '@/util/auth'
 export default {
   data () {
     return {
@@ -152,8 +152,10 @@ export default {
       data: this.sendData,
       callback: function(res) {
         if (res.code == "0000") {
-            _this.$message.success("对接成功")
+            _this.$message.success("操作成功")
             _this.$router.go(-1)
+          }else{
+            _this.$message.error(res.result)
           }
         }
       })

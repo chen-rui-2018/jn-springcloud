@@ -130,6 +130,23 @@ public class CareServiceImpl implements CareService {
     public CareDetailsVo findCareDetails(CareDetailsQueryParam param,String currentAccount) {
         CareDetailsVo vo = new CareDetailsVo();
         CareUserDetails userDetails =  careDao.findCareDetails(param.getParamAccount(),currentAccount);
+        Result<UserExtensionInfo> result =  userExtensionClient.getUserExtension(param.getParamAccount());
+        if(userDetails == null){
+            userDetails = new CareUserDetails();
+            userDetails.setCareNum("0");
+            userDetails.setFansNum("0");
+            userDetails.setLikedNum(careDao.findLikeNum(param.getParamAccount()));
+        }
+        if(result.getData()!=null){
+            userDetails.setAccount(param.getParamAccount());
+            userDetails.setAvatar(result.getData().getAvatar());
+            if (result.getData().getNickName()==null ||result.getData().getNickName()==""){
+                userDetails.setNickName(hidePhoneNumber(param.getParamAccount()));
+            }else{
+                userDetails.setNickName(result.getData().getNickName());
+            }
+        };
+
         vo.setUserDetails(userDetails);
         PaginationData<List<DynamicWebShow>> dynamicList =  dynamicService.findDynamicByAccount(param,currentAccount);
         vo.setDnmamicList(dynamicList);
@@ -214,7 +231,11 @@ public class CareServiceImpl implements CareService {
                 for(UserExtensionInfo user : userList){
                     if(show.getAccount().equals(user.getAccount())){
                         show.setAvatar(user.getAvatar());
-                        show.setNickName(user.getNickName());
+                        if (user.getNickName()==null || user.getNickName()==""){
+                            show.setNickName(hidePhoneNumber(user.getAccount()));
+                        }else{
+                            show.setNickName(user.getNickName());
+                        }
                         show.setCompanyName(user.getCompanyName());
                     }
                 }
@@ -241,5 +262,16 @@ public class CareServiceImpl implements CareService {
         return showList;
 
     }
-
+    /**
+     *隐藏电话号码,将电话号码的中间四位设为*
+     * @param phone
+     * @return
+     */
+    private String  hidePhoneNumber(String phone){
+        String regex = "^[1][3,4,5,7,8][0-9]{9}$";
+        if(phone.matches(regex)){
+            phone = phone.replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2");
+        }
+        return phone;
+    }
 }

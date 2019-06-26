@@ -7,9 +7,13 @@
     <div class="ordinary_main">
       <div class="search">
         <div></div>
-        <el-input placeholder="服务产品名称" v-model="sendData.keyWords">
+        <!-- <el-input placeholder="服务产品名称" v-model="sendData.keyWords">
           <el-button slot="append" icon="el-icon-search" @click="handlesearch"></el-button>
-        </el-input>
+        </el-input> -->
+        <div class="special_search">
+          <input type="text" placeholder="请输入服务产品名称" v-model="sendData.keyWords">
+          <i class="iconfont icon-sousuo" @click="handlesearch"></i>
+        </div>
       </div>
       <div class="ordinary_table">
         <el-table :data="orgProductList" stripe border :header-cell-style="{background:'#f8f8f8',color:'#666666'}" style="width: 100%">
@@ -94,7 +98,7 @@ export default {
   },
   mounted () {
     this.getOrgId()
-    this.getOrgProductList()
+    // this.getOrgProductList()
     let menu=JSON.parse(sessionStorage.menuItems)
     let _this=this
     menu.forEach(v=>{
@@ -119,7 +123,7 @@ export default {
           _this.sendData.orgId= res.data.affiliateCode
           _this.$nextTick(()=>{
             _this.getOrgProductList()
-            _this.getType()
+            // _this.getType()
             })
           }
         }
@@ -234,22 +238,74 @@ export default {
       .search{
         display: flex;
         justify-content: space-between;
-        .el-input-group{
-          width:20%;
+        // .el-input-group{
+        //   width:20%;
+        // }
+        // .el-input__inner{
+        //   height: 27px;
+        //   line-height: 27px;
+        //   border: 1px solid #eee;
+        //   font-size: 12px;
+        // }
+        // .el-input-group__append{
+        //   background-color:#00a041;
+        //   color:#fff;
+        //   border:none;
+        //   font-size: 13px;
+        //   border-bottom: 1px solid #fff;
+        //   i{
+        //     font-size: 17px;
+        //   }
+        // }
+         .special_search {
+        width: 170px;
+        height: 26px;
+        line-height: 26px;
+        text-align: center;
+        padding-right: 40px;
+        border: 1px solid #eee;
+        border-radius: 5px;
+        // position: absolute;
+        z-index: 10;
+        right: 17px;
+        top: 17px;
+        >input {
+          border: 0;
+          width: 80%;
         }
-        .el-input__inner{
-          height: 27px;
-          line-height: 27px;
-          border: 1px solid #eee;
-          font-size: 12px;
+        input,
+        textarea,
+        select,
+        button {
+          text-rendering: auto;
+          color: #333;
+          letter-spacing: normal;
+          word-spacing: normal;
+          text-transform: none;
+          text-indent: 0;
+          text-shadow: none;
+          display: inline-block;
+          text-align: start;
+          margin: 0em;
+          font: 400 12px Arial;
         }
-        .el-input-group__append{
-          background-color:#00a041;
-          color:#fff;
-          border:none;
-          font-size: 13px;
-          // border-bottom: 1px solid #fff;
+        >.icon-sousuo {
+          position: absolute;
+          top: 214px;
+          right: 117px;
+          cursor: pointer;
+          font-size: 20px;
+          display: inline-block;
+          background-color: #00a041;
+          color: #fff;
+          // width: 36px;
+          line-height: 28px;
+          text-align: center;
+          border-left: 1px solid #eee;
+          border-radius: 0px 4px 4px 0px;
+          padding: 0 10px;
         }
+      }
       }
       // 表格
       .ordinary_table{

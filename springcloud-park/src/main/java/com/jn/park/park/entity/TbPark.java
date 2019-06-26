@@ -19,8 +19,14 @@ public class TbPark implements Serializable {
     /*@ApiModelProperty("园区宣传图片（次要 最多五张）")*/
     private String minorPicture;
 
+    /*@ApiModelProperty("园区简短介绍（列表页显示）")*/
+    private String shortIntroduce;
+
     /*@ApiModelProperty("园区的发布状态（0代表未发布，1发布，2失效)")*/
     private String parkState;
+
+    /*@ApiModelProperty("显示顺序（顺序排列）")*/
+    private Integer showOrder;
 
     /*@ApiModelProperty("园区企业入驻情况（0没有，1有，2正在走流程）")*/
     private String isEnter;
@@ -85,12 +91,28 @@ public class TbPark implements Serializable {
         this.minorPicture = minorPicture == null ? null : minorPicture.trim();
     }
 
+    public String getShortIntroduce() {
+        return shortIntroduce;
+    }
+
+    public void setShortIntroduce(String shortIntroduce) {
+        this.shortIntroduce = shortIntroduce == null ? null : shortIntroduce.trim();
+    }
+
     public String getParkState() {
         return parkState;
     }
 
     public void setParkState(String parkState) {
         this.parkState = parkState == null ? null : parkState.trim();
+    }
+
+    public Integer getShowOrder() {
+        return showOrder;
+    }
+
+    public void setShowOrder(Integer showOrder) {
+        this.showOrder = showOrder;
     }
 
     public String getIsEnter() {
@@ -166,7 +188,9 @@ public class TbPark implements Serializable {
             && (this.getParkName() == null ? other.getParkName() == null : this.getParkName().equals(other.getParkName()))
             && (this.getMainPicture() == null ? other.getMainPicture() == null : this.getMainPicture().equals(other.getMainPicture()))
             && (this.getMinorPicture() == null ? other.getMinorPicture() == null : this.getMinorPicture().equals(other.getMinorPicture()))
+            && (this.getShortIntroduce() == null ? other.getShortIntroduce() == null : this.getShortIntroduce().equals(other.getShortIntroduce()))
             && (this.getParkState() == null ? other.getParkState() == null : this.getParkState().equals(other.getParkState()))
+            && (this.getShowOrder() == null ? other.getShowOrder() == null : this.getShowOrder().equals(other.getShowOrder()))
             && (this.getIsEnter() == null ? other.getIsEnter() == null : this.getIsEnter().equals(other.getIsEnter()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
@@ -185,7 +209,9 @@ public class TbPark implements Serializable {
         result = prime * result + ((getParkName() == null) ? 0 : getParkName().hashCode());
         result = prime * result + ((getMainPicture() == null) ? 0 : getMainPicture().hashCode());
         result = prime * result + ((getMinorPicture() == null) ? 0 : getMinorPicture().hashCode());
+        result = prime * result + ((getShortIntroduce() == null) ? 0 : getShortIntroduce().hashCode());
         result = prime * result + ((getParkState() == null) ? 0 : getParkState().hashCode());
+        result = prime * result + ((getShowOrder() == null) ? 0 : getShowOrder().hashCode());
         result = prime * result + ((getIsEnter() == null) ? 0 : getIsEnter().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
@@ -207,7 +233,9 @@ public class TbPark implements Serializable {
         sb.append(", parkName=").append(parkName);
         sb.append(", mainPicture=").append(mainPicture);
         sb.append(", minorPicture=").append(minorPicture);
+        sb.append(", shortIntroduce=").append(shortIntroduce);
         sb.append(", parkState=").append(parkState);
+        sb.append(", showOrder=").append(showOrder);
         sb.append(", isEnter=").append(isEnter);
         sb.append(", recordStatus=").append(recordStatus);
         sb.append(", creatorAccount=").append(creatorAccount);

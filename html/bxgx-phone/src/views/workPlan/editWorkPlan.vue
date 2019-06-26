@@ -340,10 +340,11 @@ export default {
       margin-bottom: 20px;
       display: flex;
       span {
-        margin-right: 1.05rem;
+        padding-top:10px;
+        margin-right: 1.25rem;
       }
       input {
-        font-size: 83%;
+       width: 73%;
       }
     }
     .vux-cell-value {

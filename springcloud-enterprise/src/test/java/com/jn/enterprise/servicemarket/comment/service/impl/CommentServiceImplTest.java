@@ -66,7 +66,7 @@ public class CommentServiceImplTest {
 
     @Test
     public void getRatingCommentDetail1() {
-        RatingDetail ratingCommentDetail = commentService.getRatingCommentDetail(id);
+        RatingDetail ratingCommentDetail = commentService.getRatingCommentDetail(id, "wangsong");
         assertThat(ratingCommentDetail,notNullValue());
     }
 

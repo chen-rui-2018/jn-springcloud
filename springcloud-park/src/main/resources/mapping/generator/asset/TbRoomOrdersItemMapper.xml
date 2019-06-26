@@ -17,7 +17,6 @@
     <result column="shortest_lease" jdbcType="VARCHAR" property="shortestLease" />
     <result column="introduce" jdbcType="VARCHAR" property="introduce" />
     <result column="pay_sum" jdbcType="DECIMAL" property="paySum" />
-    <result column="room_status" jdbcType="TINYINT" property="roomStatus" />
     <result column="quit_penal_sum" jdbcType="DECIMAL" property="quitPenalSum" />
     <result column="explain_" jdbcType="VARCHAR" property="explain" />
     <result column="approval_opinion" jdbcType="VARCHAR" property="approvalOpinion" />
@@ -90,10 +89,9 @@
   </sql>
   <sql id="Base_Column_List">
     id, order_id, room_id, room_name, floor, tower_id, tower_name, room_url, room_area, 
-    lease_price, lease_sum, press_pay, shortest_lease, introduce, pay_sum, room_status, 
-    quit_penal_sum, explain_, approval_opinion, practical_quit_time, lease_apply_status, 
-    quit_apply_status, record_status, creator_account, create_time, modifier_account, 
-    modified_time
+    lease_price, lease_sum, press_pay, shortest_lease, introduce, pay_sum, quit_penal_sum, 
+    explain_, approval_opinion, practical_quit_time, lease_apply_status, quit_apply_status, 
+    record_status, creator_account, create_time, modifier_account, modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.asset.entity.TbRoomOrdersItemCriteria" resultMap="BaseResultMap">
     select
@@ -131,21 +129,19 @@
       tower_name, room_url, room_area, 
       lease_price, lease_sum, press_pay, 
       shortest_lease, introduce, pay_sum, 
-      room_status, quit_penal_sum, explain_, 
-      approval_opinion, practical_quit_time, lease_apply_status, 
-      quit_apply_status, record_status, creator_account, 
-      create_time, modifier_account, modified_time
-      )
+      quit_penal_sum, explain_, approval_opinion, 
+      practical_quit_time, lease_apply_status, quit_apply_status, 
+      record_status, creator_account, create_time, 
+      modifier_account, modified_time)
     values (#{id,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, #{roomId,jdbcType=VARCHAR}, 
       #{roomName,jdbcType=VARCHAR}, #{floor,jdbcType=VARCHAR}, #{towerId,jdbcType=VARCHAR}, 
       #{towerName,jdbcType=VARCHAR}, #{roomUrl,jdbcType=VARCHAR}, #{roomArea,jdbcType=VARCHAR}, 
       #{leasePrice,jdbcType=DECIMAL}, #{leaseSum,jdbcType=DECIMAL}, #{pressPay,jdbcType=VARCHAR}, 
       #{shortestLease,jdbcType=VARCHAR}, #{introduce,jdbcType=VARCHAR}, #{paySum,jdbcType=DECIMAL}, 
-      #{roomStatus,jdbcType=TINYINT}, #{quitPenalSum,jdbcType=DECIMAL}, #{explain,jdbcType=VARCHAR}, 
-      #{approvalOpinion,jdbcType=VARCHAR}, #{practicalQuitTime,jdbcType=DATE}, #{leaseApplyStatus,jdbcType=TINYINT}, 
-      #{quitApplyStatus,jdbcType=TINYINT}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
-      )
+      #{quitPenalSum,jdbcType=DECIMAL}, #{explain,jdbcType=VARCHAR}, #{approvalOpinion,jdbcType=VARCHAR}, 
+      #{practicalQuitTime,jdbcType=DATE}, #{leaseApplyStatus,jdbcType=TINYINT}, #{quitApplyStatus,jdbcType=TINYINT}, 
+      #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.asset.entity.TbRoomOrdersItem">
     insert into tb_room_orders_item
@@ -194,9 +190,6 @@
       </if>
       <if test="paySum != null">
         pay_sum,
-      </if>
-      <if test="roomStatus != null">
-        room_status,
       </if>
       <if test="quitPenalSum != null">
         quit_penal_sum,
@@ -277,9 +270,6 @@
       </if>
       <if test="paySum != null">
         #{paySum,jdbcType=DECIMAL},
-      </if>
-      <if test="roomStatus != null">
-        #{roomStatus,jdbcType=TINYINT},
       </if>
       <if test="quitPenalSum != null">
         #{quitPenalSum,jdbcType=DECIMAL},
@@ -370,9 +360,6 @@
       <if test="record.paySum != null">
         pay_sum = #{record.paySum,jdbcType=DECIMAL},
       </if>
-      <if test="record.roomStatus != null">
-        room_status = #{record.roomStatus,jdbcType=TINYINT},
-      </if>
       <if test="record.quitPenalSum != null">
         quit_penal_sum = #{record.quitPenalSum,jdbcType=DECIMAL},
       </if>
@@ -428,7 +415,6 @@
       shortest_lease = #{record.shortestLease,jdbcType=VARCHAR},
       introduce = #{record.introduce,jdbcType=VARCHAR},
       pay_sum = #{record.paySum,jdbcType=DECIMAL},
-      room_status = #{record.roomStatus,jdbcType=TINYINT},
       quit_penal_sum = #{record.quitPenalSum,jdbcType=DECIMAL},
       explain_ = #{record.explain,jdbcType=VARCHAR},
       approval_opinion = #{record.approvalOpinion,jdbcType=VARCHAR},
@@ -489,9 +475,6 @@
       <if test="paySum != null">
         pay_sum = #{paySum,jdbcType=DECIMAL},
       </if>
-      <if test="roomStatus != null">
-        room_status = #{roomStatus,jdbcType=TINYINT},
-      </if>
       <if test="quitPenalSum != null">
         quit_penal_sum = #{quitPenalSum,jdbcType=DECIMAL},
       </if>
@@ -544,7 +527,6 @@
       shortest_lease = #{shortestLease,jdbcType=VARCHAR},
       introduce = #{introduce,jdbcType=VARCHAR},
       pay_sum = #{paySum,jdbcType=DECIMAL},
-      room_status = #{roomStatus,jdbcType=TINYINT},
       quit_penal_sum = #{quitPenalSum,jdbcType=DECIMAL},
       explain_ = #{explain,jdbcType=VARCHAR},
       approval_opinion = #{approvalOpinion,jdbcType=VARCHAR},

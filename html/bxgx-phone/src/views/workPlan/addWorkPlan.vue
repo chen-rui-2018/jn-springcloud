@@ -9,7 +9,7 @@
         <!-- <x-input title="负责人：" placeholder="请输入内容" v-model="workForm.responsibleUserAccount" required :show-clear="false"></x-input> -->
         <datetime title="开始时间：" v-model="workForm.planStartTime" value-text-align="left" placeholder="请选择开始时间"></datetime>
         <datetime title="截止时间：" v-model="workForm.planEndTime" placeholder="请选择截止时间"  value-text-align="left"></datetime>
-        <x-input title="预计工时："  placeholder="请输入内容" @on-blur="blurText(workForm.planTime)" class="timeStyle" v-model="workForm.planTime" :show-clear="false"></x-input>
+        <x-input title="预计工时：" type="number"  placeholder="请输入内容" @on-blur="blurText(workForm.planTime)" class="timeStyle" v-model="workForm.planTime" :show-clear="false"></x-input>
         <x-textarea title="需求描述：" placeholder="请输入任务需求描述" :max="num" :autosize='true' :show-counter="false" :rows="3"
           v-model="workForm.demandDescribe"></x-textarea>
         <x-textarea title="任务内容：" placeholder="请输入任务内容" :max="num" :autosize='true' :show-counter="false" :rows="3"
@@ -223,6 +223,9 @@ export default {
   padding: 30px;
   .weui-cells {
     margin-top: unset;
+  }
+  .vux-popover{
+    right:1px;
   }
   .workForm {
     padding-top: 1rem;

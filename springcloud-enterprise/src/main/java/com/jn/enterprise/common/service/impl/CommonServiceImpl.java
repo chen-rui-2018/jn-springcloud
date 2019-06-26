@@ -5,6 +5,7 @@ import com.jn.enterprise.common.entity.TbServiceCode;
 import com.jn.enterprise.common.entity.TbServiceCodeCriteria;
 import com.jn.enterprise.common.service.CommonService;
 import com.jn.enterprise.common.vo.CodeVO;
+import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.system.log.annotation.ServiceLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,22 +25,17 @@ import java.util.List;
  */
 @Service
 public class CommonServiceImpl implements CommonService {
-    private static Logger logger = LoggerFactory.getLogger(CommonServiceImpl.class);
 
     @Autowired
     private TbServiceCodeMapper tbServiceCodeMapper;
-
-    /**
-     * 数据状态 1有效
-     */
-    private final static String RECORD_STATUS_VALID = "1";
 
     @Override
     @ServiceLog(doAction = "根据分组ID获取数据列表")
     public List<CodeVO> getCodeList(String groupId) {
         TbServiceCodeCriteria codeCriteria = new TbServiceCodeCriteria();
-        TbServiceCodeCriteria.Criteria criteria = codeCriteria.createCriteria().andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
-        criteria.andGroupIdEqualTo(groupId);
+        codeCriteria.createCriteria().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue())
+                .andGroupIdEqualTo(groupId);
+        codeCriteria.setOrderByClause("created_time ASC");
 
         List<TbServiceCode> codeList = tbServiceCodeMapper.selectByExample(codeCriteria);
         List<CodeVO> dataList = new ArrayList<>(10);

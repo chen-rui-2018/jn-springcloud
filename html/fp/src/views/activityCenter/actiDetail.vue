@@ -56,7 +56,7 @@
             <!-- <span class="resdeadline">报名截止还有&nbsp;{{this.sysTemTime-this.activityDetail.applyEndTime}}</span> -->
           </p>
           <div class="delshare">
-            <el-button type="success" v-if="activityApplyShow=='0'" style="background:#00a040;height:38px;width:110px" round>停止报名</el-button>
+            <el-button type="success" v-if="activityApplyShow=='0'" style="background:#eee;height:38px;width:110px;color:#999;border:none" round>停止报名</el-button>
             <el-button type="success" v-if="activityApplyShow=='1'" style="background:#00a040;height:38px;width:110px" round @click="quickApply(activityDetail.id)">立即报名</el-button>
             <el-button type="success" v-if="activityApplyShow=='2'" style="background:#00a040;height:38px;width:110px" round @click="stopApply(activityDetail.id)">取消报名</el-button>
             <!-- <el-button type="success" class="atten" round icon="iconfont icon-xihuan">&nbsp;关注&nbsp;3</el-button> -->
@@ -608,9 +608,9 @@ export default {
       margin-bottom: 20px;
     }
     .delContent {
-      > p {
-        margin: 50px 0;
-      }
+      // > p {
+      //   margin: 50px 0;
+      // }
     }
   }
   .delmessage {

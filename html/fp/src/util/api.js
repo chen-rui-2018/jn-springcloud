@@ -1,7 +1,8 @@
 ﻿import axios from "axios"
 import { BASE_URL } from './url'
-import { getToken, setToken, removeToken, removeUserInfo, getIbpsToken } from '@/util/auth'
+import { getToken, setToken, removeToken, removeUserInfo, getIbpsToken, removeIbpsToken } from '@/util/auth'
 
+axios.defaults.withCredentials = true // 让ajax携带cookie
 const verifyToken = () => {
   return new Promise((resolve, reject) => {
     const token = getToken()
@@ -66,7 +67,6 @@ export default {
         saveUserInfo:"springcloud-user/user/userInfo/saveUserInfo",//保存用户资料
         getTagCodeList:"springcloud-user/guest/userTag/getTagCodeList",//获取用户字典列表
         findHotProducts:"springcloud-enterprise/guest/servicemarket/product/web/findHotProducts",//热门产品
-        selectIndustryList:"springcloud-enterprise/serviceMarket/industryManage/selectIndustryList",//专员领域列表
         getServiceConsultantList:"springcloud-enterprise/guest/serviceMarket/advisorController/getServiceConsultantList",//机构服务专员
         selectTeamList:"springcloud-enterprise/guest/serviceMarket/industryManage/selectIndustryList",//机构字典
         selectServiceOrgList:"springcloud-enterprise/guest/serviceMarket/org/selectServiceOrgList",//服务机构列表获取
@@ -181,6 +181,7 @@ export default {
         updateCompanyInfo:"springcloud-enterprise/enterprise/company/updateCompanyInfo",//编辑企业
         //我的机构
         inviteAdvisor:"springcloud-enterprise/serviceMarket/advisorManagementController/inviteAdvisor",//邀请专员
+        orgNameIsExist:"springcloud-enterprise/orgJoinPark/orgNameIsExist",//判断机构名称是否已存在
         advisorDetails:"springcloud-enterprise/serviceMarket/advisorManagementController/advisorDetails",//获取邀请专员的资料
         getAdvisorManagementInfo:"springcloud-enterprise/serviceMarket/advisorManagementController/getAdvisorManagementInfo",//获取专员管理列表
         inviteAgain:"springcloud-enterprise/serviceMarket/advisorManagementController/inviteAgain",//再次邀请专员
@@ -200,7 +201,8 @@ export default {
         refuseInvitation:"springcloud-enterprise/serviceMarket/acceptOrgInvitationController/refuseInvitation",//拒绝机构邀请
         getOrgInfoForManage:"springcloud-enterprise/guest/serviceMarket/org/getOrgInfoForManage",//获取服机构信息[机构详情+产品列表](pc/app机构信息)
         // 角色认证
-        getInvestorMainRound:"springcloud-enterprise//guest/technologyFinancial/investorController/getInvestorMainRound",//获取主投领域
+        getInvestorMainRound:"springcloud-enterprise/guest/technologyFinancial/investorController/getInvestorMainRound",//获取主投领域
+        getJoinParkStatus:"springcloud-enterprise/enterprise/company/getJoinParkStatus",//查询当前账号是否允许认证
         getAffiliationUnit:"springcloud-enterprise/guest/technologyFinancial/investorController/getAffiliationUnit",//获取所属单位
         addInvestorInfo:"springcloud-enterprise/technologyFinancial/investorController/addInvestorInfo",//提交投资人认证资料
         saveOrUpdateOrgDetail:"springcloud-enterprise/orgJoinPark/saveOrUpdateOrgDetail",//服务机构认证
@@ -221,8 +223,8 @@ export default {
         getProductSerialNumber:"springcloud-enterprise/servicemarket/product/manage/getProductSerialNumber",//产品编号获取
         updateCommonProduct:"springcloud-enterprise/servicemarket/product/web/updateCommonProduct",
         upShelfFeatureProduct:"springcloud-enterprise/technologyFinancial/financialProductController/upShelfFeatureProduct",//特色科技金融产品添加
-        getFinancialProductAssureType:"springcloud-enterprise/technologyFinancial/financialProductController/getFinancialProductAssureType",//金融产品担保方式
-        getFinancialProductLoanType:"springcloud-enterprise/technologyFinancial/financialProductController/getFinancialProductLoanType",//金融产品贷款类别
+        getFinancialProductAssureType:"springcloud-enterprise/guest/technologyFinancial/financialProductController/getFinancialProductAssureType",//金融产品担保方式
+        getFinancialProductLoanType:"springcloud-enterprise/guest/technologyFinancial/financialProductController/getFinancialProductLoanType",//金融产品贷款类别
         addFeatureService:"springcloud-enterprise/servicemarket/product/web/addFeatureService",//添加特色服务产品(非科技金融)
         modifyFeatureProduct:"springcloud-enterprise/technologyFinancial/financialProductController/modifyFeatureProduct",//编辑特色产品科技金融
         updateFeatureProduct:"springcloud-enterprise/servicemarket/product/web/updateFeatureProduct",//编辑特色产品非科技
@@ -259,14 +261,11 @@ export default {
         getIncubatorList:"springcloud-park/guest/hatch/incubator/list",//众创空间-首页信息查询
         SpAdvertising:"springcloud-park/guest/portal/sp/power/SpAdvertising",//行政审批轮播广告
 
-        SpAdvertising:"springcloud-park/guest/portal/sp/power/SpAdvertising",//行政审批轮播广告
-
         showNoticeList:"springcloud-park/guest/park/notice/web/showNoticeListForPortal",//门户首页展示(轮播)公告列表
         findNoticeDetails:"springcloud-park/guest/park/notice/web/findNoticeDetailsByNoticeId",//公告详情
         getAchievementList:"springcloud-park/guest/IndexController/getAchievementList",//门户首页-成果展览
         achievementDetails:"springcloud-park/guest/IndexController/getAchievementDetails",//成果详情
         getParkDetails:"springcloud-park/guest/portal/park/get",// 根据ID获取对应园区详情
-        getCompanyDetailByAccountOrCompanyId:"springcloud-enterprise/guest/company/getCompanyDetailByAccountOrCompanyId",//根据用户账号查询企业信息
         getCompanyDetails:"springcloud-enterprise/guest/company/getCompanyDetails",//查询企业详情-新版
         getComCommentInfo:"springcloud-enterprise/guest/company/getCommentInfo",//获取评论/留言信息
         getcommentActivity:"springcloud-enterprise/guest/company/commentActivity",//企业留言/留言回复
@@ -275,6 +274,9 @@ export default {
         cancelCareOperate:"springcloud-park/park/manage/care/cancelCareOperate",//用户取消关注操作
         getDataStatistics:"springcloud-enterprise/guest/MarketIndexController/getDataStatistics",//获取企业，机构，活动，服务专员数量
         queryOnlineInfo:"springcloud-enterprise/pd/online/queryOnlineInfo",//通过公告ID和登录人查询预约信息
+        integrationList:"springcloud-park/guest/park/notice/web/integrationList",//PC端整合接口
+        getIndustryForMarket:"springcloud-enterprise/guest/serviceMarket/industryManage/getIndustryForMarket",//PC端整合接口
+        queryPlatformInfo:"springcloud-enterprise/guest/pd/talentNotice/queryPlatformInfo",//人才服务-首页申报平台查询
     },
     setToken: function (obj) {   //设置token在请求头上面
         // axios.interceptors.request.use(function (config) {
@@ -312,6 +314,7 @@ export default {
                 if(response.data.code == "index"){
                   removeToken()
                   removeUserInfo()
+                  removeIbpsToken()
                   location.href="#/";
                   return
                 }
@@ -392,6 +395,7 @@ export default {
                 if(response.data.code == "index"){
                   removeToken()
                   removeUserInfo()
+                  removeIbpsToken()
                   location.href="#login";
                   return
                 }

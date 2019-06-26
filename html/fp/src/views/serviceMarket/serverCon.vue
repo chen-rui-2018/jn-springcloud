@@ -1,5 +1,5 @@
 <template>
-  <div class="serverCon w">
+  <div class="serverCon w" v-loading="conloading">
     <div class="serverOrgMenu">
       <span class="pointer" @click="$router.push({path:'/serMatHp'})">首页</span>
       <span>/</span>
@@ -32,8 +32,8 @@
         <i class="iconfont icon-sousuo" @click="handleSearchList"></i>
       </div>
     </div>
-    <div class="serverOrgContent" v-loading="conloading">
-      <div v-if="serverConList.length==0">
+    <div class="serverOrgContent">
+      <div v-if="serverConList.length==0&&!conloading">
         <nodata></nodata>
       </div>
       <!-- <div v-else> -->
@@ -44,7 +44,7 @@
               <img v-if="i.avatar" :src="i.avatar" alt="">
               <img v-else src="@/../static/img/touxiang.png" alt="">
             </div>
-            <div class="orgCon fl">
+            <div class="orgCon pointer fl" @click="handleConDel(i.orgId,i.advisorAccount)">
               <div class="conTil">{{i.advisorName}}</div>
               <div class="conContent clearfix color3">
                 <div class="left1 fl" id="left1">
@@ -110,7 +110,8 @@ export default {
     };
   },
   mounted() {
-    this.selectIndustryList();
+    // this.selectIndustryList();
+    this.getIndustryForMarket();
     if (this.$route.query.searchData) {
       this.keyWords = this.$route.query.searchData;
       this.initList();
@@ -209,25 +210,20 @@ export default {
         }
       });
     },
-    selectIndustryList() {
+     getIndustryForMarket() {
       let _this = this;
       this.api.get({
-        url: "selectIndustryProductList",
+        url: "getIndustryForMarket",
         data: {},
         callback: function(res) {
           if (res.code == "0000") {
-            // for (let it in res.data) {
-            //   if (res.data[it].preType == "0") {
-            //     _this.businessArea.push(res.data[it]);
-            //   }
-            // }
             _this.businessArea = res.data;
           } else {
             _this.$message.error(res.result);
           }
         }
       });
-    }
+    },
   }
 };
 </script>

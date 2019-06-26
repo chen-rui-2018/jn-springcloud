@@ -21,7 +21,9 @@ public enum CompanyDataEnum implements CodeAndMsg {
     COMPANY_CHECK_STATUS_WAIT("0","审核中"),
 
     // 机构-审核状态
+    ORG_APPROVAL_STATUS_WAIT("0","待审核"),
     ORG_APPROVAL_STATUS("1","审核通过"),
+    ORG_APPROVAL_STATUS_NOT_PASS("2","审核不通过"),
 
     // 服务专员-审核状态
     ADVISOR_APPROVAL_STATUS("2","审核通过"),

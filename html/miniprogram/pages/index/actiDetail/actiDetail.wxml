@@ -1,4 +1,4 @@
 <view>
-  <web-view src="{{url}}?activityId={{id}}"></web-view>
+  <web-view src="{{url}}?activityId={{id}}&token={{token}}&isMini=1"></web-view>
 </view>
 

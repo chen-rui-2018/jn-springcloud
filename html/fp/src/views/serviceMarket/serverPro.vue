@@ -1,5 +1,5 @@
 <template>
-  <div class="serverPro w" style="padding-top:65px;">
+  <div class="serverPro w" style="padding-top:65px;" v-loading="proloading">
     <div class="serverOrgMenu">
       <span class="pointer" @click="$router.push({path:'/serMatHp'})">首页</span>
       <span>/</span>
@@ -29,6 +29,7 @@
       </div>
       <div class="filMid fl">
         筛选：
+        <span :class="{'activeA':filterFlag1 == ''}" @click="handleSort('')">不限</span>
         <span :class="{'activeA':filterFlag1 == '0'}" @click="handleSort('0')">常规服务</span>
         <span :class="{'activeA':filterFlag1 == '1'}" @click="handleSort('1')">特色服务</span>
       </div>
@@ -37,18 +38,18 @@
         <i class="iconfont icon-sousuo" @click="handleSearchList"></i>
       </div>
     </div>
-    <div class="serverOrgContent" v-loading="proloading">
-      <div v-if="serverProList.length==0">
+    <div class="serverOrgContent">
+      <div v-if="serverProList.length==0&&!proloading">
         <nodata></nodata>
       </div>
       <ul v-else>
         <!-- <li class="clearfix" v-for="(i,k) in serverAgent" :key='k'> -->
         <li class="clearfix" v-for="(i,k) in serverProList" :key='k'>
-          <div class="orgImg fl" @click="handleProDel(i.productId,i.signoryId)">
+          <div class="orgImg fl pointer" @click="handleProDel(i.productId,i.signoryId)">
             <img v-if="i.pictureUrl" :src="i.pictureUrl" alt="">
             <img v-else src="@/../static/img/product.png" alt="">
           </div>
-          <div class="orgCon fl">
+          <div class="orgCon fl pointer" @click="handleProDel(i.productId,i.signoryId)">
             <div class="conTil">{{i.productName}}</div>
             <div class="conContent clearfix color3">
               <div class="left1 fl" id="left1">
@@ -137,7 +138,8 @@ export default {
     };
   },
   mounted() {
-    this.selectIndustryList();
+    // this.selectIndustryList();
+    this.getIndustryForMarket();
     if (this.$route.query.searchData) {
       this.keyW = this.$route.query.searchData;
       this.initList();
@@ -258,25 +260,39 @@ export default {
         }
       });
     },
-    selectIndustryList() {
+    // selectIndustryList() {
+    //   let _this = this;
+    //   this.api.get({
+    //     url: "selectIndustryProductList",
+    //     data: {},
+    //     callback: function(res) {
+    //       if (res.code == "0000") {
+    //         // for (let it in res.data) {
+    //         //   if (res.data[it].preType == "0") {
+    //         //     _this.businessArea.push(res.data[it]);
+    //         //   }
+    //         // }
+    //         _this.businessArea = res.data;
+    //       } else {
+    //         _this.$message.error(res.result);
+    //       }
+    //     }
+    //   });
+    // },
+     getIndustryForMarket() {
       let _this = this;
       this.api.get({
-        url: "selectIndustryProductList",
+        url: "getIndustryForMarket",
         data: {},
         callback: function(res) {
           if (res.code == "0000") {
-            // for (let it in res.data) {
-            //   if (res.data[it].preType == "0") {
-            //     _this.businessArea.push(res.data[it]);
-            //   }
-            // }
             _this.businessArea = res.data;
           } else {
             _this.$message.error(res.result);
           }
         }
       });
-    }
+    },
   }
 };
 </script>

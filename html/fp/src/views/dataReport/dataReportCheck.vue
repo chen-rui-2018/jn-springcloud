@@ -12,7 +12,7 @@
 <script>
 import dataReportForm from './dataReportForm'
 import { downloadService, download} from '@/util/downloadService'
-import { getToken, removeToken } from '@/util/auth'
+import { getToken } from '@/util/auth'
 export default {
   name: 'DataReportCheck',
   components: {

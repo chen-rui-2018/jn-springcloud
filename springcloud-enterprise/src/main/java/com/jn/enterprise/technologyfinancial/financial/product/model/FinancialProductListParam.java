@@ -42,6 +42,48 @@ public class FinancialProductListParam extends Page implements Serializable {
     @Pattern(regexp = "^[01]$", message = "{needPage:'默认值只允许为0,1'}")
     @NotNull(message="是否需要分页不能为空")
     private String needPage;
+    @ApiModelProperty(value = "产品类型,0常规 1 特色 不传则返回全部",example = "1")
+    private String productType;
+    @ApiModelProperty(value = "机构id",example = "orgid123456")
+    private String orgId;
+    @ApiModelProperty(value = "参考利率最小值",example = "2.56")
+    @Pattern(regexp = "^^[1-9][0-9]*(\\.[0-9]{1,2})?$",message = "利率最小值符合规范,应为大于等于0的最多两位小数的数值 示例:2.56")
+    private String refRateMin;
+    @ApiModelProperty(value = "参考利率最大值)",example = "2.96")
+    @Pattern(regexp = "^^[1-9][0-9]*(\\.[0-9]{1,2})?$",message = "利率最小值符合规范,应为大于等于0的最多两位小数的数值 示例:2.56")
+    private String refRateMax;
+
+    public String getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
+    }
+
+    public String getProductType() {
+        return productType;
+    }
+
+    public void setProductType(String productType) {
+        this.productType = productType;
+    }
+
+    public String getRefRateMin() {
+        return refRateMin;
+    }
+
+    public void setRefRateMin(String refRateMin) {
+        this.refRateMin = refRateMin;
+    }
+
+    public String getRefRateMax() {
+        return refRateMax;
+    }
+
+    public void setRefRateMax(String refRateMax) {
+        this.refRateMax = refRateMax;
+    }
 
     public String getLoanTermMin() {
         return loanTermMin;
@@ -113,5 +155,24 @@ public class FinancialProductListParam extends Page implements Serializable {
 
     public void setNeedPage(String needPage) {
         this.needPage = needPage;
+    }
+
+    @Override
+    public String toString() {
+        return "FinancialProductListParam{" +
+                "loanTermMin='" + loanTermMin + '\'' +
+                ", loanTermMax='" + loanTermMax + '\'' +
+                ", assureMethodCode='" + assureMethodCode + '\'' +
+                ", onlineLoan='" + onlineLoan + '\'' +
+                ", policyProduct='" + policyProduct + '\'' +
+                ", loanAmountMin='" + loanAmountMin + '\'' +
+                ", loanAmountMax='" + loanAmountMax + '\'' +
+                ", keyWord='" + keyWord + '\'' +
+                ", needPage='" + needPage + '\'' +
+                ", productType='" + productType + '\'' +
+                ", orgId='" + orgId + '\'' +
+                ", refRateMin='" + refRateMin + '\'' +
+                ", refRateMax='" + refRateMax + '\'' +
+                '}';
     }
 }

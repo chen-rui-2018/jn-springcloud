@@ -1,7 +1,7 @@
 <template>
   <div class="enterpriseProduct" v-loading="loading">
     <div class="ordinary_title">
-      <div class="font16">企业宣传</div>
+      <div class="font16">{{this.$route.meta.title}}</div>
       <div @click="toPublishingPropaganda">发布宣传</div>
     </div>
     <div class="ordinary_main">
@@ -57,8 +57,8 @@
         </el-table>
       </div>
     </div>
-    <el-dialog title="海报图片" :visible.sync="dialogVisible" :modal-append-to-body="false" width="50%">
-      <img :src="posterUrl" alt="海报图片" style="width:100%;height:200px;">
+    <el-dialog title="海报图片" :visible.sync="dialogVisible" :modal-append-to-body="false" width="39%">
+      <img :src="posterUrl" alt="海报图片" style="width:100%;">
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">返 回</el-button>
       </span>

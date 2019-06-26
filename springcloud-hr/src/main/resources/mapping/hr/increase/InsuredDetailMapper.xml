@@ -47,9 +47,10 @@
 	
 	<select id="selectBySchemeId" parameterType="com.jn.hr.increase.model.InsuredDetaildPage"
 		resultType="com.jn.hr.increase.model.InsuredDetaild">
-		select count(distinct(scheme_id)) as number,personal_social_security, company_social_security, 
-      personal_accumulation_fund, company_accumulation_fund,scheme_id from tb_manpower_insured_detail t1
+		select count(1) as number,sum(personal_social_security) personalSocialSecurity, sum(company_social_security) companySocialSecurity, 
+      (personal_accumulation_fund) personalAccumulationFund, sum(company_accumulation_fund) companyAccumulationFund,scheme_id from tb_manpower_insured_detail t1
 		where t1.is_effective = 1
+		group by scheme_id desc
 	</select>
 	
 	<select id="selectBySchemeIdNumber" parameterType="java.lang.String" resultType="java.lang.Integer">

@@ -115,12 +115,14 @@ public class OrgManageController extends BaseController {
 
     @TxTransaction(isStart = true)
     @ControllerLog(doAction = "添加机构管理员角色")
-    @ApiOperation(value = "添加机构管理员角色",notes = "机构认证审批通过后，ibps后置处理器调用此接口添加机构顾问角色,返回数据响应条数")
+    @ApiOperation(value = "添加机构管理员角色",notes = "originalId:原有机构id(修改时，旧数据的机构id,新增时可为空),机构认证审批通过后，ibps后置处理器调用此接口添加机构顾问角色,返回数据响应条数")
     @RequiresPermissions("/serviceMarket/org/addOrgRole")
     @RequestMapping(value = "/addOrgRole",method = RequestMethod.POST)
-    public Result<Integer> addOrgRole(String orgAccount){
-        Assert.notNull(orgAccount, OrgExceptionEnum.ACCOUNT_NOT_NULL.getMessage());
-        int resNum = orgService.addOrgRole(orgAccount);
+    public Result<Integer> addOrgRole(@RequestBody TbServiceOrgCopy  tbServiceOrgCopy){
+        Assert.notNull(tbServiceOrgCopy.getOrgAccount(), OrgExceptionEnum.ACCOUNT_NOT_NULL.getMessage());
+        Assert.notNull(tbServiceOrgCopy.getOrgId(),OrgExceptionEnum.ORG_ID_IS_NOT_NULL.getMessage());
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        int resNum = orgService.addOrgRole(tbServiceOrgCopy,user.getAccount());
         logger.info("-----------添加机构管理员角色成功，数据响应条数：{}----------",resNum);
         return  new Result(resNum);
     }
@@ -134,7 +136,8 @@ public class OrgManageController extends BaseController {
         logger.info("机构认证流程后置处理API,入参：{}",tbServiceOrgCopy.toString());
         Assert.notNull(tbServiceOrgCopy,OrgExceptionEnum.ORG_APPLY_PARAM_NOT_NULL.getMessage());
         Assert.notNull(tbServiceOrgCopy.getOrgAccount(),OrgExceptionEnum.ACCOUNT_NOT_NULL.getMessage());
-        int resNum = orgService.addOrgRole(tbServiceOrgCopy.getOrgAccount());
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        int resNum = orgService.addOrgRole(tbServiceOrgCopy,user.getAccount());
         logger.info("-----------添加机构管理员角色成功，数据响应条数：{}----------",resNum);
         return  new Result(resNum);
     }

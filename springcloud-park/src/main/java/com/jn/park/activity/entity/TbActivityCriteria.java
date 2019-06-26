@@ -886,6 +886,216 @@ public class TbActivityCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andActiGuideOrganizerIsNull() {
+            addCriterion("acti_guide_organizer is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiGuideOrganizerIsNotNull() {
+            addCriterion("acti_guide_organizer is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiGuideOrganizerEqualTo(String value) {
+            addCriterion("acti_guide_organizer =", value, "actiGuideOrganizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiGuideOrganizerNotEqualTo(String value) {
+            addCriterion("acti_guide_organizer <>", value, "actiGuideOrganizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiGuideOrganizerGreaterThan(String value) {
+            addCriterion("acti_guide_organizer >", value, "actiGuideOrganizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiGuideOrganizerGreaterThanOrEqualTo(String value) {
+            addCriterion("acti_guide_organizer >=", value, "actiGuideOrganizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiGuideOrganizerLessThan(String value) {
+            addCriterion("acti_guide_organizer <", value, "actiGuideOrganizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiGuideOrganizerLessThanOrEqualTo(String value) {
+            addCriterion("acti_guide_organizer <=", value, "actiGuideOrganizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiGuideOrganizerLike(String value) {
+            addCriterion("acti_guide_organizer like", value, "actiGuideOrganizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiGuideOrganizerNotLike(String value) {
+            addCriterion("acti_guide_organizer not like", value, "actiGuideOrganizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiGuideOrganizerIn(List<String> values) {
+            addCriterion("acti_guide_organizer in", values, "actiGuideOrganizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiGuideOrganizerNotIn(List<String> values) {
+            addCriterion("acti_guide_organizer not in", values, "actiGuideOrganizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiGuideOrganizerBetween(String value1, String value2) {
+            addCriterion("acti_guide_organizer between", value1, value2, "actiGuideOrganizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiGuideOrganizerNotBetween(String value1, String value2) {
+            addCriterion("acti_guide_organizer not between", value1, value2, "actiGuideOrganizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiUndertakeOrganizerIsNull() {
+            addCriterion("acti_undertake_organizer is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiUndertakeOrganizerIsNotNull() {
+            addCriterion("acti_undertake_organizer is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiUndertakeOrganizerEqualTo(String value) {
+            addCriterion("acti_undertake_organizer =", value, "actiUndertakeOrganizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiUndertakeOrganizerNotEqualTo(String value) {
+            addCriterion("acti_undertake_organizer <>", value, "actiUndertakeOrganizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiUndertakeOrganizerGreaterThan(String value) {
+            addCriterion("acti_undertake_organizer >", value, "actiUndertakeOrganizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiUndertakeOrganizerGreaterThanOrEqualTo(String value) {
+            addCriterion("acti_undertake_organizer >=", value, "actiUndertakeOrganizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiUndertakeOrganizerLessThan(String value) {
+            addCriterion("acti_undertake_organizer <", value, "actiUndertakeOrganizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiUndertakeOrganizerLessThanOrEqualTo(String value) {
+            addCriterion("acti_undertake_organizer <=", value, "actiUndertakeOrganizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiUndertakeOrganizerLike(String value) {
+            addCriterion("acti_undertake_organizer like", value, "actiUndertakeOrganizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiUndertakeOrganizerNotLike(String value) {
+            addCriterion("acti_undertake_organizer not like", value, "actiUndertakeOrganizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiUndertakeOrganizerIn(List<String> values) {
+            addCriterion("acti_undertake_organizer in", values, "actiUndertakeOrganizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiUndertakeOrganizerNotIn(List<String> values) {
+            addCriterion("acti_undertake_organizer not in", values, "actiUndertakeOrganizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiUndertakeOrganizerBetween(String value1, String value2) {
+            addCriterion("acti_undertake_organizer between", value1, value2, "actiUndertakeOrganizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiUndertakeOrganizerNotBetween(String value1, String value2) {
+            addCriterion("acti_undertake_organizer not between", value1, value2, "actiUndertakeOrganizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiCoOrganizerIsNull() {
+            addCriterion("acti_co_organizer is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiCoOrganizerIsNotNull() {
+            addCriterion("acti_co_organizer is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiCoOrganizerEqualTo(String value) {
+            addCriterion("acti_co_organizer =", value, "actiCoOrganizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiCoOrganizerNotEqualTo(String value) {
+            addCriterion("acti_co_organizer <>", value, "actiCoOrganizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiCoOrganizerGreaterThan(String value) {
+            addCriterion("acti_co_organizer >", value, "actiCoOrganizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiCoOrganizerGreaterThanOrEqualTo(String value) {
+            addCriterion("acti_co_organizer >=", value, "actiCoOrganizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiCoOrganizerLessThan(String value) {
+            addCriterion("acti_co_organizer <", value, "actiCoOrganizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiCoOrganizerLessThanOrEqualTo(String value) {
+            addCriterion("acti_co_organizer <=", value, "actiCoOrganizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiCoOrganizerLike(String value) {
+            addCriterion("acti_co_organizer like", value, "actiCoOrganizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiCoOrganizerNotLike(String value) {
+            addCriterion("acti_co_organizer not like", value, "actiCoOrganizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiCoOrganizerIn(List<String> values) {
+            addCriterion("acti_co_organizer in", values, "actiCoOrganizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiCoOrganizerNotIn(List<String> values) {
+            addCriterion("acti_co_organizer not in", values, "actiCoOrganizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiCoOrganizerBetween(String value1, String value2) {
+            addCriterion("acti_co_organizer between", value1, value2, "actiCoOrganizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andActiCoOrganizerNotBetween(String value1, String value2) {
+            addCriterion("acti_co_organizer not between", value1, value2, "actiCoOrganizer");
+            return (Criteria) this;
+        }
+
         public Criteria andActiNumberIsNull() {
             addCriterion("acti_number is null");
             return (Criteria) this;

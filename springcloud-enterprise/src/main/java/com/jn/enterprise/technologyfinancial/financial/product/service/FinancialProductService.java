@@ -73,4 +73,11 @@ public interface FinancialProductService {
      */
    int modifyFeatureProduct(FinancialProductModifyParam product,String account);
 
+    /**
+     * 机构下科技金融产品列表
+     * @param financialOrgProductParam
+     * @return
+     */
+    PaginationData  getOrgFinancialProductList(FinancialOrgProductParam financialOrgProductParam);
+
 }

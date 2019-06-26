@@ -276,7 +276,7 @@ export default {
     },
     //评论点赞
     comLike(item) {
-      if (!sessionStorage.userInfo) {
+      if (!this.getToken()) {
         this.concatVisible = true;
         return;
       }
@@ -313,7 +313,7 @@ export default {
     },
     //留言
     leaveMessage(id) {
-      if (!sessionStorage.userInfo) {
+      if (!this.getToken()) {
         this.concatVisible = true;
         return;
       }
@@ -341,7 +341,7 @@ export default {
       if (this.inFlag == i) {
         return;
       }
-      if (!sessionStorage.userInfo) {
+      if (!this.getToken()) {
         this.concatVisible = true;
         return;
       }
@@ -350,10 +350,6 @@ export default {
     },
     //回复评论
     replycom(item) {
-      // if (!sessionStorage.userInfo) {
-      //   this.concatVisible = true;
-      //   return;
-      // }
       this.inFlag = "";
       let _this = this;
       this.api.post({
@@ -375,7 +371,7 @@ export default {
     },
     //在线联系
     onlineContact(id) {
-      if (!sessionStorage.userInfo) {
+      if (!this.getUserInfo()) {
         this.concatVisible = true;
         return;
       }
@@ -388,16 +384,15 @@ export default {
           if (res.code == "0000") {
             // this.typeList = res.data;
             if (
-              JSON.parse(sessionStorage.userInfo).account == res.data.account
+              JSON.parse(this.getUserInfo()).account == res.data.account
             ) {
               this.$message.error("当前登录的账号跟聊天对象一样");
               return;
             }
-            // this.$router.push({path:'/chat',query:{fromUser:sessionStorage.userInfo.account,toUser:res.data.account,nickName:res.data.nickName}})
             this.$router.push({
               path: "/chat",
               query: {
-                fromUser: JSON.parse(sessionStorage.userInfo).account,
+                fromUser: JSON.parse(this.getUserInfo()).account,
                 toUser: res.data.account,
                 nickName: res.data.nickName
               }
@@ -698,7 +693,7 @@ export default {
 
       .honor {
         // padding: 20 0px;
-        font-size: 14px;
+        // font-size: 14px;
 
         > ul {
           > li {

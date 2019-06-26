@@ -5,17 +5,20 @@
 	<select id="list" parameterType="com.jn.hr.train.model.InvestigatePage"
 		resultType="com.jn.hr.train.vo.InvestigatesVo">
 		SELECT
-		t1.project_id,t1.research_project,
-		t1.effective_time_start,t1.effective_time_end,
-		t1.creator_account,t1.`status`,
+		t1.project_id,
+		t1.research_project,
+		t1.effective_time_start,
+		t1.effective_time_end,
+		t1.creator_account,
+		t1.`status`,
 		CASE
 		WHEN t1.`status`=0 THEN '草稿'
 		WHEN t1.`status`=1 THEN '进行中'
-		ELSE '已结束' END statusStr
-		FROM
-		tb_manpower_train_investiga t1
-		WHERE
-		t1.record_status != 0
+		ELSE '已结束' END statusStr,
+		t2.research_method
+		FROM tb_manpower_train_investiga t1 LEFT JOIN tb_manpower_train_research_set t2
+		ON t1.project_id=t2.project_id
+		where  t1.record_status != 0
 		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(researchProject)">
 			and t1.research_project like
 			CONCAT('%',#{researchProject,jdbcType=VARCHAR},'%')
@@ -36,17 +39,19 @@
 	<select id="listQuest" parameterType="com.jn.hr.train.model.InvestigatePage"
 		resultType="com.jn.hr.train.vo.InvestigatesVo">
 		SELECT
-		t1.project_id,t1.research_project,
-		t1.effective_time_start,t1.effective_time_end,
+		t1.project_id,
+		t1.research_project,
+		t1.effective_time_start,
+		t1.effective_time_end,
 		t1.creator_account,t1.`status`,
 		CASE
 		WHEN t1.`status`=0 THEN '草稿'
 		WHEN t1.`status`=1 THEN '进行中'
-		ELSE
-		'已结束' END statusStr
-		FROM tb_manpower_train_quest_investiga t1
-		WHERE
-		t1.record_status != 0
+		ELSE '已结束' END statusStr,
+		t2.research_method
+		FROM tb_manpower_train_quest_investiga t1 LEFT JOIN tb_manpower_train_quest_research_set t2
+		ON t1.project_id=t2.project_id
+		WHERE t1.record_status != 0
 		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(researchProject)">
 			and t1.research_project like
 			CONCAT('%',#{researchProject,jdbcType=VARCHAR},'%')

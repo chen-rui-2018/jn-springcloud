@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { setToken } from '@/util/auth'
+import { setToken, setUserInfo } from '@/util/auth'
 export default {
   data() {
     return {
@@ -53,38 +53,30 @@ export default {
         this.$message.error("请输入密码");
         return;
       }
-      let _this = this;
       this.api.post({
         url: "loginURL",
         data: {
-          account: _this.loginform.account,
-          password: _this.loginform.password
+          account: this.loginform.account,
+          password: this.loginform.password
         },
         dataFlag: false,
-        callback: function(res) {
-          if (res.code == "0000") {
+        callback: res => {
+          if (res.code === "0000") {
             setToken(res.data);
-            sessionStorage.setItem("account", _this.loginform.account);
-            _this.api.get({
+            this.$store.dispatch('getMenuItems')
+            this.api.get({
               url: "getUserPersonInfo",
-              data: {
-                account: _this.loginform.account
-              },
-              dataFlag: false,
-              callback: function(res) {
+              callback: res => {
                 if (res.code === "0000") {
-                  sessionStorage.setItem("userInfo", JSON.stringify(res.data));
-                  _this.$router.push({
-                    path: window.sessionStorage.getItem("PresetRoute")
+                  setUserInfo(JSON.stringify(res.data))
+                  this.$router.push({
+                    path: window.sessionStorage.getItem("PresetRoute") || '/'
                   });
-                } else {
-                  _this.$message.error(res.result);
                 }
               }
-            });
-            // _this.api.setToken(res.data);
+            })
           } else {
-            _this.$message.error(res.result);
+            this.$message.error(res.result);
           }
         }
       });
@@ -102,7 +94,6 @@ export default {
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: -1;
   background: url("../../../static/img/beijing.png") 100% 100% / 100% 100%
     no-repeat;
   .loginLogo {

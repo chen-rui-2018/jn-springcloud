@@ -2,10 +2,12 @@
   margin: 0;
   padding: 0;
 }
-// body {
-//   /* 解决侧边滑动引起界面抖动 */
-//   overflow-y:scroll;
-// }
+
+body {
+  /* 解决侧边滑动引起界面抖动 */
+  overflow-y: scroll;
+}
+
 // .el-input__inner {
 //   -webkit-appearance: none;
 //   background-color: #fff;
@@ -277,6 +279,7 @@ img {
         padding-right: 40px;
         border: 1px solid #eee;
         border-radius: 5px;
+        background: #fff;
 
         >input {
           border: 0;
@@ -404,11 +407,28 @@ img {
               margin-left: 10px;
             }
 
-            >span {
+            >p {
               float: right;
+              color: #00a041;
 
-              .icon-xihuan {
+              >img {
+                width: 12px;
+                height: 12px;
+                display: inline-block;
+                vertical-align: middle;
                 margin-right: 5px;
+              }
+
+              >span {
+                display: inline-block;
+                vertical-align: middle;
+              }
+
+              .icon-miaojiesellerlike {
+                margin-right: 5px;
+                display: inline-block;
+                vertical-align: middle;
+
               }
             }
 
@@ -422,7 +442,7 @@ img {
             >.actiNameItem {
               color: #222;
               font-size: 16px;
-              overflow:hidden;
+              overflow: hidden;
               white-space: nowrap;
               text-overflow: ellipsis;
             }
@@ -431,8 +451,9 @@ img {
               text-indent: -10px;
               margin: 10px 0 5px 18px;
             }
-            .actiAddress{
-              overflow:hidden;
+
+            .actiAddress {
+              overflow: hidden;
               white-space: nowrap;
               text-overflow: ellipsis;
             }
@@ -476,10 +497,29 @@ img {
 
             .xihuan {
               margin: 15px 0;
+              color: #00a041;
+
+              >img {
+                width: 12px;
+                height: 12px;
+                display: inline-block;
+                vertical-align: middle;
+                // margin-right: 5px;
+              }
+
+              >span {
+                display: inline-block;
+                vertical-align: middle;
+              }
+            }
+
+            .el-icon-time {
+              color: #999;
             }
 
             .location {
               margin: 18px 0;
+              color: #999;
             }
 
             .actiNum {
@@ -721,6 +761,7 @@ img {
       padding-right: 40px;
       border: 1px solid #eee;
       border-radius: 5px;
+      background: #fff;
 
       >input {
         border: 0;
@@ -803,7 +844,8 @@ img {
 
             .right1 {
 
-              // margin-left: 40px;
+              margin-left: 20px;
+
               >p {
                 margin-top: 4px;
               }
@@ -947,7 +989,7 @@ img {
           // margin-top: 20px;
           // margin-left: 630px;
           right: 0;
-          bottom:20px;
+          bottom: 20px;
           bottom: -8px;
 
           >span {
@@ -1029,18 +1071,21 @@ img {
           }
         }
       }
-      .basicInfo{
+
+      .basicInfo {
         .table-orgspace-title {
           width: 146px;
         }
       }
+
       .businessinfo {
         .table-orgspace-title {
           width: 146px;
         }
       }
-      .contactInfo{
-        .table-orgspace-title.ta_c{
+
+      .contactInfo {
+        .table-orgspace-title.ta_c {
           width: auto;
         }
       }
@@ -1271,7 +1316,7 @@ img {
 
           .detail-contact.inner-product {
             color: #999;
-            width: 240px;
+            width: 340px;
           }
 
           .detail-contact {
@@ -1281,13 +1326,14 @@ img {
           }
 
           .detail-evaluate.inner-product {
-            width: 420px;
+            width: 320px;
             color: #999;
           }
 
           .detail-evaluate {
             display: inline-block;
             vertical-align: middle;
+            margin-left: 20px;
           }
 
           .detail-count {
@@ -1307,8 +1353,9 @@ img {
             cursor: pointer;
           }
         }
-        .list-item:nth-child(1){
-          padding-top:10px;
+
+        .list-item:nth-child(1) {
+          padding-top: 10px;
         }
       }
     }
@@ -1443,9 +1490,20 @@ img {
               margin-left: 10px;
             }
 
-            >span {
+            >p {
               float: right;
 
+              >img {
+                width: 12px;
+                height: 12px;
+                display: inline-block;
+                vertical-align: middle;
+                margin-right: 5px;
+              }
+             >span{
+              display: inline-block;
+              vertical-align: middle;
+             }
               .icon-xihuan {
                 margin-right: 5px;
               }
@@ -1460,7 +1518,7 @@ img {
             >.actiNameItem {
               color: #222;
               font-size: 16px;
-              overflow:hidden;
+              overflow: hidden;
               white-space: nowrap;
               text-overflow: ellipsis;
             }
@@ -1469,8 +1527,9 @@ img {
               text-indent: -10px;
               margin: 10px 0 5px 18px;
             }
-            .actiAddress{
-              overflow:hidden;
+
+            .actiAddress {
+              overflow: hidden;
               white-space: nowrap;
               text-overflow: ellipsis;
             }
@@ -1547,7 +1606,7 @@ img {
       }
 
       .nav {
-        width: 600px;
+        width: 700px;
         height: 37.6px;
         margin: 0 auto;
 
@@ -1561,6 +1620,7 @@ img {
             text-align: center;
             // line-height: 52px;
             // padding: 0 50px;
+            // width: 100px;
             width: 100px;
 
           }
@@ -1747,7 +1807,7 @@ img {
       background-color: rgba(0, 0, 0, 0.5);
 
       >ul {
-        padding: 0 300px;
+        padding: 0 100px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -2296,7 +2356,7 @@ img {
             >.actiNameItem {
               color: #222;
               font-size: 16px;
-              overflow:hidden;
+              overflow: hidden;
               white-space: nowrap;
               text-overflow: ellipsis;
             }

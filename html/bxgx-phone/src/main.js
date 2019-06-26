@@ -6,7 +6,8 @@ import router from './router'
 import './assets/iconfont/iconfont.css'
 import 'swiper/dist/css/swiper.css'
 import echarts from 'echarts'
-import { XHeader, Selector, Checker, CheckerItem, PopupRadio, Group, Icon, Search, XInput, XTable, Scroller, Popover, Toast, ToastPlugin, LoadMore, PopupPicker, Datetime, XTextarea, Cell, XNumber, XDialog, Tab, TabItem, Swiper, SwiperItem } from 'vux'
+import { LoadingPlugin, XHeader, Selector, Checker, CheckerItem, PopupRadio, Group, Icon, Search, XInput, XTable, Scroller, Popover, Toast, ToastPlugin, LoadMore, PopupPicker, Datetime, XTextarea, Cell, XNumber, XDialog, Tab, TabItem, Swiper, SwiperItem, Loading } from 'vux'
+import { linkTo } from './utils'
 // import BaiduMap from 'vue-baidu-map'
 // import { get, post} from '@/api/http'
 // import MintUI from 'mint-ui'
@@ -16,14 +17,16 @@ import './assets/font-awesome/css/font-awesome.min.css'
 // Vue.prototype.$get = get
 // Vue.prototype.$post = post
 import api from '@/api/api'
+Vue.use(LoadingPlugin)
 Vue.prototype.$echarts = echarts
-
+Vue.prototype.$linkTo = linkTo
 // Vue.use(BaiduMap, {
 //   ak: 'KVelCif7fs2D19DQVz9W6fYEnNbEWE8k'
 // })
 Vue.prototype.api = api
-
+Vue.use(ToastPlugin)
 Vue.component('x-table', XTable)
+Vue.component('loading', Loading)
 Vue.component('popup-radio', PopupRadio)
 Vue.component('icon', Icon)
 Vue.component('swiper', Swiper)

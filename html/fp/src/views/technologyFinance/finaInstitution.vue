@@ -1,5 +1,5 @@
 <template>
-  <div class="finaInstitution w">
+  <div class="finaInstitution w" v-loading="finaloading">
     <div class="serverOrgMenu">
       <span class="pointer" @click="$router.push({path:'/tfindex'})">首页</span>
       <span>/</span>
@@ -34,7 +34,7 @@
             <i class="el-icon-arrow-up" v-else @click="flag3 = !flag3"></i>
           </div>
         </div>
-        <div class="nav1 clearfix">
+        <!-- <div class="nav1 clearfix">
           <div class="nav1Tit fl">企业性质：</div>
           <ul class="nav1Ul fl clearfix" style="width:auto">
             <li :class="{'active1':filterFlag3 == ''}" @click="handleFilter3('')">不限</li>
@@ -46,7 +46,7 @@
             <i class="el-icon-arrow-down" v-if="flag4" @click="flag4 = !flag4"></i>
             <i class="el-icon-arrow-up" v-else @click="flag4 = !flag4"></i>
           </div>
-        </div>
+        </div> -->
         <div class="nav1 nav2 mainColor pointer" style="color:#00a041" @click="showFlag=!showFlag">
           收起
           <i class="el-icon-arrow-up" style="color:#00a041"></i>
@@ -72,13 +72,16 @@
       </div>
     </div>
     <div class="serverOrgContent">
-      <ul>
+      <div v-if="serverAgent.length==0&&!finaloading">
+        <nodata></nodata>
+      </div>
+      <ul v-else>
         <li class="clearfix" v-for="(i,k) in serverAgent" :key='k'>
-          <div class="orgImg fl" @click="handleOrgDel(i.orgId)">
+          <div class="orgImg fl pointer" @click="handleOrgDel(i.orgId)">
             <img :src="i.orgLogo" alt="">
             <!-- <img v-else src="@/../static/img/product.png" alt=""> -->
           </div>
-          <div class="orgCon fl">
+          <div class="orgCon pointer fl" @click="handleOrgDel(i.orgId)">
             <div class="conTil">{{i.orgName}}</div>
             <div class="conContent clearfix color3">
               <div class="left1 fl">
@@ -124,9 +127,14 @@
   </div>
 </template>
 <script>
+import nodata from "../common/noData.vue";
 export default {
+  components: {
+    nodata
+  },
   data() {
     return {
+      finaloading: false,
       concatVisible: false,
       total: 0,
       currentPage1: 1,
@@ -165,15 +173,14 @@ export default {
     },
     //在线联系
     onlineContat(orgAccount, orgName) {
-      if (!sessionStorage.userInfo) {
+      if (!this.getUserInfo()) {
         this.concatVisible = true;
         return;
       }
       this.$router.push({
         path: "/chat",
         query: {
-          fromUser: JSON.parse(sessionStorage.userInfo).account,
-          fromUser: sessionStorage.userInfo.account,
+          fromUser: JSON.parse(this.getUserInfo()).account,
           toUser: orgAccount,
           nickName: orgName
         }
@@ -234,12 +241,13 @@ export default {
     },
     //服务机构列表
     initList() {
+      this.finaloading = true;
       let _this = this;
       let data = {
         businessType: "technology_finance",
         industrySector: _this.industrySector,
         developmentStage: _this.developmentStage,
-        companyNature: _this.companyNature,
+        // companyNature: _this.companyNature,
         page: _this.page,
         rows: _this.row,
         sortTypes: _this.sortTypes,
@@ -261,6 +269,7 @@ export default {
           } else {
             _this.$message.error(res.result);
           }
+          _this.finaloading = false;
         }
       });
     },

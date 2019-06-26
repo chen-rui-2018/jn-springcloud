@@ -18,11 +18,14 @@
       <el-card style="overflow:visible">
         <div class="infotop pr">
           <img class="infoImg" :src="activityDetail.actiPosterUrl" alt="">
+          <i class="iconfont  like" :class="accountIsLike ? 'icon-miaojiesellerlike mainColor' : 'icon-xihuan'" @click="handleLike(activityDetail.id)">&nbsp;
+            <span>{{activityDetail.actiLike}}</span>
+          </i>
           <div class="infotitle">
             <span>{{activityDetail.actiName}}</span>
-            <i class="iconfont  like" :class="accountIsLike ? 'icon-miaojiesellerlike mainColor' : 'icon-xihuan'" @click="handleLike(activityDetail.id)">&nbsp;
+            <!-- <i class="iconfont  like" :class="accountIsLike ? 'icon-miaojiesellerlike mainColor' : 'icon-xihuan'" @click="handleLike(activityDetail.id)">&nbsp;
               <span>{{activityDetail.actiLike}}</span>
-            </i>
+            </i> -->
             <!-- <i class="iconfont like" v-else @click="cancleLike(activityDetail.id)">&nbsp;
               <span>{{this.activityDetail.actiLike}}</span>
             </i> -->
@@ -31,7 +34,7 @@
               <span>{{activityDetail.actiStartTime}}-{{activityDetail.actiEndTime}}</span>
               <i class="iconfont icon-recharge">&nbsp;
                 <span v-if="activityDetail.actiCost=='0.00'">免费</span>
-                <span v-else>收费</span>
+                <span v-else>&nbsp;{{activityDetail.actiCost}}元</span>
               </i>
             </p>
             <div class="delAddress">
@@ -56,7 +59,7 @@
             <!-- <span class="resdeadline">报名截止还有&nbsp;{{this.sysTemTime-this.activityDetail.applyEndTime}}</span> -->
           </p>
           <div class="delshare">
-            <el-button type="success" v-if="activityApplyShow=='0'" style="background:#00a040;height:38px;width:110px" round>停止报名</el-button>
+            <el-button type="success" v-if="activityApplyShow=='0'" style="background:#eee;height:38px;width:110px;color:#999;border:none" round>停止报名</el-button>
             <el-button type="success" v-if="activityApplyShow=='1'" style="background:#00a040;height:38px;width:110px" round @click="quickApply(activityDetail.id)">立即报名</el-button>
             <el-button type="success" v-if="activityApplyShow=='2'" style="background:#00a040;height:38px;width:110px" round @click="stopApply(activityDetail.id)">取消报名</el-button>
             <!-- <el-button type="success" class="atten" round icon="iconfont icon-xihuan">&nbsp;关注&nbsp;3</el-button> -->
@@ -154,7 +157,7 @@
 export default {
   data() {
     return {
-      concatVisible:false,
+      concatVisible: false,
       inFlag: "",
       textarea: "",
       textData: "",
@@ -190,8 +193,8 @@ export default {
     },
     //留言
     leaveMessage(id) {
-      if (!sessionStorage.userInfo) {
-        this.concatVisible=true;
+      if (!this.getToken()) {
+        this.concatVisible = true;
         return;
       }
       let _this = this;
@@ -217,8 +220,8 @@ export default {
       if (this.inFlag == i) {
         return;
       }
-      if (!sessionStorage.userInfo) {
-        this.concatVisible=true;
+      if (!this.getToken()) {
+        this.concatVisible = true;
         return;
       }
       this.textarea = "";
@@ -226,10 +229,6 @@ export default {
     },
     //回复评论
     replycom(item) {
-      // if (!sessionStorage.userInfo) {
-      //   this.concatVisible=true;
-      //   return;
-      // }
       this.inFlag = "";
       let _this = this;
       this.api.post({
@@ -250,8 +249,8 @@ export default {
       });
     },
     comLike(item) {
-      if (!sessionStorage.userInfo) {
-        this.concatVisible=true;
+      if (!this.getToken()) {
+        this.concatVisible = true;
         return;
       }
       //评论点赞
@@ -315,16 +314,16 @@ export default {
     },
     handCheck(id) {
       //跳转报名人列表
-      if (!sessionStorage.userInfo) {
-        this.concatVisible=true;
+      if (!this.getToken()) {
+        this.concatVisible = true;
         return;
       }
       this.$router.push({ path: "actiTrainStatus", query: { activityId: id } });
     },
     quickApply(id) {
       //立即报名
-      if (!sessionStorage.userInfo) {
-        this.concatVisible=true;
+      if (!this.getToken()) {
+        this.concatVisible = true;
         return;
       }
       let _this = this;
@@ -346,8 +345,8 @@ export default {
     },
     stopApply(id) {
       //停止报名
-      if (!sessionStorage.userInfo) {
-        this.concatVisible=true;
+      if (!this.getToken()) {
+        this.concatVisible = true;
         return;
       }
       let _this = this;
@@ -368,8 +367,8 @@ export default {
       });
     },
     handleLike(id) {
-      if (!sessionStorage.userInfo) {
-        this.concatVisible=true;
+      if (!this.getToken()) {
+        this.concatVisible = true;
         return;
       }
       //活动点赞
@@ -491,9 +490,9 @@ export default {
   width: 1190px;
   margin: 0 auto;
   padding-top: 65px;
-  .loginTip{
+  .loginTip {
     text-align: center;
-    margin-bottom:20px;
+    margin-bottom: 20px;
     font-size: 15px;
   }
   .delnav {
@@ -508,6 +507,11 @@ export default {
     }
     .infotop {
       height: 310px;
+      .like {
+        position: absolute;
+        right: 0;
+        font-size: 20px;
+      }
       .infoImg {
         width: 548px;
         height: 323px;
@@ -520,17 +524,17 @@ export default {
         position: absolute;
         left: 537px;
         top: 20px;
-        width: 42%;
+        // width: 42%;
         > span {
           font-size: 22px;
           font-weight: bold;
           color: #2a2a2a;
         }
-        .like {
-          position: absolute;
-          right: -130px;
-          font-size: 20px;
-        }
+        // .like {
+        //   position: absolute;
+        //   right: -130px;
+        //   font-size: 20px;
+        // }
         > p {
           margin-top: 30px;
           .icon-recharge {
@@ -610,9 +614,9 @@ export default {
       margin-bottom: 20px;
     }
     .delContent {
-      > p {
-        margin: 50px 0;
-      }
+      // > p {
+      //   margin: 50px 0;
+      // }
     }
   }
   .delmessage {

@@ -3,6 +3,7 @@ package com.jn.park.notice.service;
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.park.notice.model.NoticeDetailShow;
+import com.jn.park.notice.vo.IntegrationListVo;
 
 import java.util.List;
 
@@ -13,6 +14,13 @@ import java.util.List;
  * @modified By:
  */
 public interface NoticeWebService {
+
+
+    /**
+     * PC端整合接口
+     * @return
+     */
+    List<IntegrationListVo> integrationList();
     /**
      * app首页弹出公告列表
      * @return

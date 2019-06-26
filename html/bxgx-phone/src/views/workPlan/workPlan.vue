@@ -333,7 +333,8 @@ export default {
 // .workPlan{
 .vux-popover {
   padding: 0.096667rem;
-  left: 5.973333rem !important;
+  left:unset!important;
+  right: 0;
 }
 .vux-popover-arrow-down {
   left: 70% !important;

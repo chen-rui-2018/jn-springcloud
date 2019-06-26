@@ -5,7 +5,6 @@
         class="filter-item"
         type="primary"
         icon="el-icon-circle-plus-outline"
-        style="margin-left:10px;"
         @click="handleCreate">新增
       </el-button>
       <el-button class="filter-item" type="primary" @click="handleExport">导出</el-button>
@@ -319,4 +318,33 @@ export default {
       overflow: auto;
     }
 }
+</style>
+<style scoped>
+  .hide-dialog {
+    display: none;
+  }
+
+  .download-template {
+    margin-top: 20px;
+  }
+  .download-template a:hover{
+    color:red
+  }
+  .failure-reason h4{
+    margin: 10px 0;
+    line-height:20px;
+    font-size:14px;
+    color:red;
+
+  }
+  .failure-reason ul{
+    padding:0 0;
+    margin: 0 0;
+  }
+
+  .failure-reason ul li {
+    color: red;
+    line-height:20px;
+  }
+
 </style>

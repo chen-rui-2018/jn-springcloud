@@ -56,4 +56,14 @@ public class FinanceIndexExpendBudgetRatioModel implements Serializable {
     public void setCost(String cost) {
         this.cost = cost;
     }
+
+    @Override
+    public String toString() {
+        return "FinanceIndexExpendBudgetRatioModel{" +
+                "sumExpeng='" + sumExpeng + '\'' +
+                ", budgetnumber='" + budgetnumber + '\'' +
+                ", costftertypename='" + costftertypename + '\'' +
+                ", cost='" + cost + '\'' +
+                '}';
+    }
 }

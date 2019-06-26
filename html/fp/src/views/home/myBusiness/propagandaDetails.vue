@@ -17,8 +17,11 @@
         <el-form-item label="宣传产品:">
           <span>{{propagandaTitle}}</span>
         </el-form-item>
-        <el-form-item label="宣传详情:">
-          <span>{{propagandaDetails}}</span>
+        <el-form-item label="宣传详情:" class="ue">
+           <div class="editor-container">
+            <UE ref="ue" :default-msg="defaultMsg" :config="config" />
+          </div>
+          <!-- <span v-html="propagandaDetails">{{propagandaDetails}}</span> -->
         </el-form-item>
         <el-form-item label="宣传海报:">
           <span v-if="posterUrl" class="posterUrlBtn" @click="lookPoster(posterUrl)">点击查看</span>
@@ -38,13 +41,13 @@
         <el-form-item label="宣传费用（元）:">
           <span>{{propagandaFee}}</span>
         </el-form-item>
-        <div class="business_footer" @click="toEnterprisePropaganda">
+        <div class="business_footer" @click="$router.go(-1)">
           返回
         </div>
       </el-form>
     </div>
-    <el-dialog :modal-append-to-body="false" title="海报图片" :visible.sync="dialogVisible" width="50%">
-      <img :src="posterUrl" alt="海报图片" style="width:100%;height:200px;">
+    <el-dialog :modal-append-to-body="false" title="海报图片" :visible.sync="dialogVisible" width="39%">
+      <img :src="posterUrl" alt="海报图片" style="width:100%;">
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">返 回</el-button>
       </span>
@@ -52,9 +55,16 @@
   </div>
 </template>
 <script>
+import UE from '@/components/ue.vue'
 export default {
+   components: { UE },
   data() {
     return {
+       defaultMsg: '',
+      config: {
+        initialFrameWidth: '100%',
+        initialFrameHeight: 300
+      },
       radio: undefined,
       propagandaAreaArr: [],
       approvalStatus: "",
@@ -64,7 +74,7 @@ export default {
       effectiveDate: "",
       invalidDate: "",
       propagandaTitle: "",
-      propagandaDetails: "",
+      // propagandaDetails: "",
       posterUrl: "",
       propagandaAreaUrl: "",
       propagandaFee: "",
@@ -107,7 +117,7 @@ export default {
             this.effectiveDate = res.data.effectiveDate;
             this.invalidDate = res.data.invalidDate;
             this.propagandaTitle = res.data.propagandaTitle;
-            this.propagandaDetails = res.data.propagandaDetails;
+            this.defaultMsg = res.data.propagandaDetails;
             this.posterUrl = res.data.posterUrl;
             // this.propagandaAreaUrl = res.data.propagandaAreaUrl;
             this.propagandaFee = res.data.propagandaFee;
@@ -178,9 +188,9 @@ export default {
     background: #fff;
     padding: 36px 0px;
     .postJobInfo {
-      // width: 50%;
-      // margin: 0 auto;
-      margin-left: 200px;
+      width: 50%;
+      margin: 0 auto;
+      // margin-left: 200px;
 
       .el-form-item__content,
       .el-select {
@@ -225,5 +235,17 @@ export default {
       }
     }
   }
+   .ue{
+        .el-form-item__content,
+      .el-select {
+        width: 100%!important;
+      }
+      .el-form-item__content{
+        line-height: 22px;
+      }
+      .edui-default .edui-editor-bottomContainer{
+        display: none;
+      }
+      }
 }
 </style>

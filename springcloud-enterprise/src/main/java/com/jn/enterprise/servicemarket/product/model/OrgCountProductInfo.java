@@ -181,4 +181,27 @@ public class OrgCountProductInfo implements Serializable {
     public void setPraiseTotal(Integer praiseTotal) {
         this.praiseTotal = praiseTotal;
     }
+
+    @Override
+    public String toString() {
+        return "OrgCountProductInfo{" +
+                "productId='" + productId + '\'' +
+                ", productName='" + productName + '\'' +
+                ", signoryId='" + signoryId + '\'' +
+                ", signoryName='" + signoryName + '\'' +
+                ", orgName='" + orgName + '\'' +
+                ", advisorName='" + advisorName + '\'' +
+                ", referPrice='" + referPrice + '\'' +
+                ", serviceCycle='" + serviceCycle + '\'' +
+                ", pictureUrl='" + pictureUrl + '\'' +
+                ", transactionsNumber=" + transactionsNumber +
+                ", viewCount=" + viewCount +
+                ", evaluationScore='" + evaluationScore + '\'' +
+                ", evaluationNumber='" + evaluationNumber + '\'' +
+                ", serviceTotal=" + serviceTotal +
+                ", commonTotal=" + commonTotal +
+                ", featureTotal=" + featureTotal +
+                ", praiseTotal=" + praiseTotal +
+                '}';
+    }
 }

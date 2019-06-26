@@ -125,7 +125,7 @@
               <div class="detail">招聘详情</div>
               <p class="p1">企业名称：{{humanDetail.comName}}</p>
               <p class="p1">发布时间：{{humanDetail.createdTime}}</p>
-              <p class="p1" v-html="humanDetail.details">岗位详情：</p>
+              <p  v-html="humanDetail.details">岗位详情：</p>
               <!-- </el-card> -->
             </div>
           </li>
@@ -207,7 +207,7 @@ export default {
     },
     //在线联系
     onlineContat(id) {
-      if (!sessionStorage.userInfo) {
+      if (!this.getUserInfo()) {
         this.concatVisible = true;
         return;
       }
@@ -220,7 +220,7 @@ export default {
           if (res.code == "0000") {
             // this.typeList = res.data;
             if (
-              JSON.parse(sessionStorage.userInfo).account == res.data.account
+              JSON.parse(this.getUserInfo()).account == res.data.account
             ) {
               this.$message.error("当前登录的账号跟聊天对象一样");
               return;
@@ -228,7 +228,7 @@ export default {
             this.$router.push({
               path: "/chat",
               query: {
-                fromUser: JSON.parse(sessionStorage.userInfo).account,
+                fromUser: JSON.parse(this.getUserInfo()).account,
                 toUser: res.data.account,
                 nickName: res.data.nickName
               }
@@ -719,6 +719,7 @@ export default {
       padding-right: 40px;
       border: 1px solid #eee;
       border-radius: 5px;
+      background: #fff;
       > input {
         border: 0;
         height: 100%;
@@ -842,7 +843,7 @@ export default {
       margin-bottom: 10px;
       color: #333;
     }
-    p {
+    .p1 {
       font-size: 13px;
     }
     // .el-card__body {

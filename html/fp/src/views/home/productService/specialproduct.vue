@@ -90,10 +90,14 @@ export default {
   },
   filters: {
     publishstatus(status){
-      if(status==='1'){
-        return '已发布'
-      }else{
-        return '未发布'
+      if(status==='-1'){
+        return '无效'
+      }else if(status==='0'){
+        return '待审核'
+      }else if(status==='1'){
+        return '有效'
+      }else if(status==='2'){
+        return '审核不通过'
       }
     },
      approvestatus(status){
@@ -295,7 +299,8 @@ export default {
           line-height: 27px;
           text-align: center;
           border-left: 1px solid #eee;
-          border-radius: 0px 5px 5px 0px;
+          border-radius: 0px 4px 4px 0px;
+          padding: 0 10px;
         }
       }
       .special_cont{

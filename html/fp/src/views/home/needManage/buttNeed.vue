@@ -59,7 +59,7 @@
           </div>
           <div class="">
             <el-form-item label="合同总金额：">
-              <el-input v-model="sendData.contractAmount" placeholder="请填写合同总金额"></el-input>
+              <el-input v-model="sendData.contractAmount" placeholder="请填写合同总金额"><template slot="append">万元</template></el-input>
             </el-form-item>
           </div>
           <div class="">
@@ -80,28 +80,34 @@
               </el-input>
             </el-form-item>
           </div>
-          <el-form-item label="合同首页：" >
+          <!-- <el-form-item label="合同首页：" >
             <el-upload
               :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
               list-type="picture-card"
               :on-success="homePageuploadsuccess"
               :headers="headers"
+              :limit="1"
+              :on-exceed="handleExceed"
+              :on-remove="deletHome"
               :file-list="fileList"
               >
               <i class="el-icon-plus"></i>
             </el-upload>
           </el-form-item>
-            <el-form-item label="合同尾页：">
-              <el-upload
+          <el-form-item label="合同尾页：">
+            <el-upload
               :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
               list-type="picture-card"
               :on-success="endPageuploadsuccess"
               :headers="headers"
+              :limit="1"
+              :on-exceed="handleExceed"
+              :on-remove="deletEnd"
               :file-list="fileList2"
               >
               <i class="el-icon-plus"></i>
             </el-upload>
-            </el-form-item>
+          </el-form-item> -->
         </el-form>
       </div>
       <div class="buttNeed_submit" @click="submit">提交</div>
@@ -109,7 +115,7 @@
   </div>
 </template>
 <script>
-import { getToken, removeToken } from '@/util/auth'
+import { getToken } from '@/util/auth'
 export default {
   data () {
     return {
@@ -164,8 +170,10 @@ export default {
       data: this.sendData,
       callback: function(res) {
         if (res.code == "0000") {
-            _this.$message.success("对接成功")
+            _this.$message.success("操作成功")
             _this.$router.go(-1)
+          }else{
+            _this.$message.error(res.result)
           }
         }
       })
@@ -173,9 +181,18 @@ export default {
     homePageuploadsuccess(file, fileList){
       this.sendData.contractHomePage=file.data
     },
+    deletHome(file, fileList){
+      this.sendData.contractHomePage=""
+    },
     endPageuploadsuccess(file, fileList){
       this.sendData.contractEndPage=file.data
-    }
+    },
+    deletEnd(file, fileList){
+      this.sendData.contractEndPage=""
+    },
+    handleExceed(files, fileList) {
+      this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件`);
+    },
   }
 }
 </script>

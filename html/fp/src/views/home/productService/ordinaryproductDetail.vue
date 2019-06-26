@@ -29,7 +29,7 @@
           </div>
           <div>
             <el-form-item label="参考价格：">
-              <span>{{productDetail.referPrice}} </span>
+              <span>{{productDetail.referPrice}}万元 </span>
             </el-form-item>
           </div>
           <div class="">
@@ -68,7 +68,7 @@
           </div>
          <div :model="productDetail" class="">
             <el-form-item label="参考利率范围：">
-              <span>{{productDetail.refRateMin}}-{{productDetail.refRateMax}} </span>
+              <span>{{productDetail.refRateMin}}%-{{productDetail.refRateMax}}%</span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
@@ -98,7 +98,7 @@
           </div>
           <div :model="productDetail" class="">
             <el-form-item label="贷款期限：">
-              <span>{{productDetail.loanTermMin}}-{{productDetail.loanTermMax}} </span>
+              <span>{{productDetail.loanTermMin}}个月-{{productDetail.loanTermMax}}个月</span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">

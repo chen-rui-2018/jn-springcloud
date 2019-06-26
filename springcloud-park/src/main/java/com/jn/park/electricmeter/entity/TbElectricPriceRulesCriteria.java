@@ -634,6 +634,76 @@ public class TbElectricPriceRulesCriteria {
             addCriterion("modified_time not between", value1, value2, "modifiedTime");
             return (Criteria) this;
         }
+
+        public Criteria andIsDefaultUseIsNull() {
+            addCriterion("is_default_use is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDefaultUseIsNotNull() {
+            addCriterion("is_default_use is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDefaultUseEqualTo(String value) {
+            addCriterion("is_default_use =", value, "isDefaultUse");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDefaultUseNotEqualTo(String value) {
+            addCriterion("is_default_use <>", value, "isDefaultUse");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDefaultUseGreaterThan(String value) {
+            addCriterion("is_default_use >", value, "isDefaultUse");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDefaultUseGreaterThanOrEqualTo(String value) {
+            addCriterion("is_default_use >=", value, "isDefaultUse");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDefaultUseLessThan(String value) {
+            addCriterion("is_default_use <", value, "isDefaultUse");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDefaultUseLessThanOrEqualTo(String value) {
+            addCriterion("is_default_use <=", value, "isDefaultUse");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDefaultUseLike(String value) {
+            addCriterion("is_default_use like", value, "isDefaultUse");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDefaultUseNotLike(String value) {
+            addCriterion("is_default_use not like", value, "isDefaultUse");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDefaultUseIn(List<String> values) {
+            addCriterion("is_default_use in", values, "isDefaultUse");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDefaultUseNotIn(List<String> values) {
+            addCriterion("is_default_use not in", values, "isDefaultUse");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDefaultUseBetween(String value1, String value2) {
+            addCriterion("is_default_use between", value1, value2, "isDefaultUse");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDefaultUseNotBetween(String value1, String value2) {
+            addCriterion("is_default_use not between", value1, value2, "isDefaultUse");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

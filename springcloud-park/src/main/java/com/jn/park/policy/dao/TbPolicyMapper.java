@@ -16,15 +16,21 @@ public interface TbPolicyMapper {
 
     int insertSelective(TbPolicy record);
 
+    List<TbPolicy> selectByExampleWithBLOBs(TbPolicyCriteria example);
+
     List<TbPolicy> selectByExample(TbPolicyCriteria example);
 
     TbPolicy selectByPrimaryKey(String policyId);
 
     int updateByExampleSelective(@Param("record") TbPolicy record, @Param("example") TbPolicyCriteria example);
 
+    int updateByExampleWithBLOBs(@Param("record") TbPolicy record, @Param("example") TbPolicyCriteria example);
+
     int updateByExample(@Param("record") TbPolicy record, @Param("example") TbPolicyCriteria example);
 
     int updateByPrimaryKeySelective(TbPolicy record);
+
+    int updateByPrimaryKeyWithBLOBs(TbPolicy record);
 
     int updateByPrimaryKey(TbPolicy record);
 }

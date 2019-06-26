@@ -50,8 +50,8 @@
                   placeholder="请填写机构简介,限1000字" clearable></el-input>
               </el-form-item>
               <el-form-item label="核心服务:" prop="orgBusiness" class="myPersonalProfile">
-                <el-input v-model="OrgBasicForm.orgBusiness" type="textarea" maxlength="1000" show-word-limit autosize
-                  placeholder="请填写核心服务,限1000字" clearable></el-input>
+                <el-input v-model="OrgBasicForm.orgBusiness" type="textarea" maxlength="500" show-word-limit autosize
+                  placeholder="请填写核心服务,限500字" clearable></el-input>
               </el-form-item>
               <el-form-item label="业务擅长:" prop="orgSpeciality" class="investorMainAreaList">
                 <el-input v-model="OrgBasicForm.orgSpeciality" placeholder="请输入业务擅长" clearable></el-input>
@@ -97,24 +97,11 @@
                     <span>企业营业执照</span>
                   </template>
                 </el-table-column>
-                <!-- <el-table-column align="center" label="颁发时间">
-                  <template slot-scope="scope">
-                    <el-date-picker v-model="licenseList[scope.$index].awardTime" type="date" value-format="yyyy-MM-dd"
-                      placeholder="请选择颁发时间"></el-date-picker>
-                  </template>
-                </el-table-column>
-                <el-table-column align="center" label="主管部门">
-                  <template slot-scope="scope">
-                    <el-input v-model="licenseList[scope.$index].awardDepart" placeholder="请输入主管部门" maxlength='20'
-                      clearable></el-input>
-                  </template>
-                </el-table-column> -->
                 <el-table-column align="center" label="上传附件">
                   <template slot-scope="scope">
                     <el-upload class="avatar-uploader avatarImg" :show-file-list="false" :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
                       :on-success="handlelicense" :headers="headers" :before-upload="beforelicense" style="display:inline-block">
                       <img v-if="licenseList[scope.$index].fileUrl" :src="licenseList[scope.$index].fileUrl" class="avatar">
-
                       <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
                   </template>
@@ -285,15 +272,15 @@
             <el-form :rules="contactRules" :model="contactForm" label-width="100px" class="otherForm" ref="contactForm">
               <el-form-item label="办公地址:" class="address" prop="orgProvince">
                 <el-select v-model="contactForm.orgProvince" @change="choseProvince" placeholder="省级地区">
-                  <el-option v-for="item in province" :key="item.id" :label="item.value" :value="item.id">
+                  <el-option v-for="item in province" :key="item.id" :label="item.value" :value="item.value">
                   </el-option>
                 </el-select>
                 <el-select v-model="contactForm.orgCity" @change="choseCity" placeholder="市级地区">
-                  <el-option v-for="item in shi1" :key="item.id" :label="item.value" :value="item.id">
+                  <el-option v-for="item in shi1" :key="item.id" :label="item.value" :value="item.value">
                   </el-option>
                 </el-select>
                 <el-select v-model="contactForm.orgArea" @change="choseBlock" placeholder="区级地区">
-                  <el-option v-for="item in qu1" :key="item.id" :label="item.value" :value="item.id">
+                  <el-option v-for="item in qu1" :key="item.id" :label="item.value" :value="item.value">
                   </el-option>
                 </el-select>
               </el-form-item>
@@ -303,7 +290,7 @@
               <el-form-item label="咨询电话:" prop="orgPhone">
                 <el-input v-model="contactForm.orgPhone" placeholder="请输入咨询电话" maxlength="12" clearable></el-input>
               </el-form-item>
-              <el-form-item label="机构网址:" prop="orgWeb">
+              <el-form-item label="机构网址:">
                 <el-input v-model="contactForm.orgWeb" placeholder="请输入机构网址" clearable></el-input>
               </el-form-item>
               <el-form-item label="联系人姓名:" prop="conName">
@@ -325,8 +312,8 @@
         </div>
       </div>
     </el-main>
-    <el-dialog :visible.sync="dialogVisible" width="50%" :modal-append-to-body="false">
-      <img :src="otherPhoto" alt="图片" style="width:100%;height:200px;">
+    <el-dialog :visible.sync="dialogVisible" width="39%" :modal-append-to-body="false">
+      <img :src="otherPhoto" alt="图片" style="width:100%;">
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">返 回</el-button>
       </span>
@@ -346,24 +333,35 @@ export default {
         callback();
       }
     };
-    //  var checkTel = (rule, value, callback) => {
-    //   // const reg = /^0\\d{2,3}-[1-9]\\d{6,7}$/;
-    //    const reg = /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/;
-    //   if (!reg.test(value)) {
-    //     callback("请输入正确的电话格式");
-    //   } else {
-    //     callback();
-    //   }
-    // };
-    //   var checkWeb = (rule, value, callback) => {
-    //   const reg = /^(http|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?$/;
-    //   if (!reg.test(value)) {
-    //     callback("请输入正确的网址");
-    //   } else {
-    //     callback();
-    //   }
-    // };
+     var checkOrgName = (rule, value, callback) => {
+        if (this.title === '编辑机构') {
+           this.api.get({
+              url: "orgNameIsExist",
+              data: {orgName :this.OrgBasicForm.orgName,searchType:'update',orgId:this.OrgBasicForm.orgId},
+              callback: res => {
+                console.log(res)
+                if (res.data == "orgNameExist") {
+                    callback('机构名称已存在,请重新输入');
+                } else {
+                  callback();
+                }
 
+              }
+            });
+        } else {
+           this.api.get({
+              url: "orgNameIsExist",
+              data: {orgName :this.OrgBasicForm.orgName,searchType:'add',orgId:''},
+              callback: res => {
+              if (res.data == "orgNameExist") {
+                    callback('机构名称已存在,请重新输入');
+                } else {
+                  callback();
+                }
+              }
+            });
+      }
+    }
     return {
       title: "服务机构认证",
       loading: false,
@@ -512,7 +510,8 @@ export default {
         //   { required: true, message: "请选择企业性质", trigger: "change" }
         // ],
         orgName: [
-          { required: true, message: "请填写机构名称", trigger: "blur" }
+          { required: true, message: "请填写机构名称", trigger: "blur" },
+          { validator: checkOrgName, trigger: "blur" }
         ]
       },
       // licensesRules: {
@@ -600,10 +599,10 @@ export default {
           { required: true, message: "请输入咨询电话", trigger: "blur" }
           //  { validator: checkTel, trigger: 'blur' }
         ],
-        orgWeb: [
-          { required: true, message: "请输入机构网址", trigger: "blur" }
-          // { validator: checkWeb, trigger: 'blur' }
-        ],
+        // orgWeb: [
+        //   // { required: true, message: "请输入机构网址", trigger: "blur" }
+        //   // { validator: checkWeb, trigger: 'blur' }
+        // ],
         orgProvince: [
           { required: true, message: "请选择省份", trigger: "change" }
         ],
@@ -624,26 +623,58 @@ export default {
     init() {
       if (this.$route.query.title) {
         this.title = this.$route.query.title;
+        this.OrgBasicForm.orgId=this.$route.query.orgId
+        // this.btnText="保存修改"
 
       this.api.get({
-        url: "getMyOrgInfo",
-        data: { account: sessionStorage.getItem("account") },
+        url: "getActivityDetailsFm",
+        data: { orgId: this.$route.query.orgId },
         callback: (res)=> {
           console.log(res);
           if (res.data) {
-              this.OrgBasicForm.orgName=res.data.orgDetailVo.orgName
-              this.OrgBasicForm.orgCode=res.data.orgDetailVo.orgCode
-              this.OrgBasicForm.orgRegisterTime=res.data.orgDetailVo.orgRegisterTime
-              this.OrgBasicForm.orgSynopsis=res.data.orgDetailVo.orgSynopsis
-              this.OrgBasicForm.orgBusiness=res.data.orgDetailVo.orgBusiness
-              this.OrgBasicForm.orgSpeciality=res.data.orgDetailVo.orgSpeciality
-              this.OrgBasicForm.orgLogo=res.data.orgDetailVo.orgLogo
-              this.OrgBasicForm.orgCode=res.data.orgDetailVo.orgCode
-              this.OrgBasicForm.orgCode=res.data.orgDetailVo.orgCode
-              this.OrgBasicForm.orgCode=res.data.orgDetailVo.orgCode
-              this.OrgBasicForm.orgCode=res.data.orgDetailVo.orgCode
-              this.licenseList=res.data.orgDetailVo.orgLicenses
-              this.licenseList=res.data.orgDetailVo.orgLicenses
+              this.OrgBasicForm.orgName=res.data.orgName
+              this.OrgBasicForm.orgCode=res.data.orgCode
+              this.OrgBasicForm.orgRegisterTime=res.data.orgRegisterTime
+              this.OrgBasicForm.orgSynopsis=res.data.orgSynopsis
+              this.OrgBasicForm.orgBusiness=res.data.orgBusiness
+              this.OrgBasicForm.orgSpeciality=res.data.orgSpeciality
+              this.OrgBasicForm.businessType=res.data.businessType
+              this.teamForm.staffCount=res.data.staffCount
+              this.teamForm.professionNum=res.data.professionNum
+              this.teamForm.masterNum=res.data.masterNum
+              this.teamForm.doctorNum=res.data.doctorNum
+              this.teamForm.bachelorNum=res.data.bachelorNum
+              this.contactForm.orgProvince=res.data.orgProvince
+              this.contactForm.orgCity=res.data.orgCity
+              this.contactForm.orgArea=res.data.orgArea
+              this.contactForm.orgAddress=res.data.orgAddressDetail
+              this.contactForm.orgPhone=res.data.orgPhone
+              this.contactForm.orgWeb=res.data.orgWeb
+              this.contactForm.conName=res.data.conName
+              this.contactForm.conPhone=res.data.conPhone
+              this.contactForm.conEmail=res.data.conEmail
+              if(res.data.developmentStage){
+                res.data.developmentStage.forEach(v=>{
+                    this.OrgBasicForm.developmentStage.push(v.orgTraitId)
+                })
+                 this.OrgBasicForm.developmentStage=Array.from(new Set( this.OrgBasicForm.developmentStage))
+              }
+             if(res.data.industrySector){
+               res.data.industrySector.forEach(r=>{
+                    this.OrgBasicForm.industrySector.push(r.orgTraitId)
+                })
+                 this.OrgBasicForm.industrySector=Array.from(new Set( this.OrgBasicForm.industrySector))
+             }
+              this.OrgBasicForm.orgLogo=res.data.orgLogo
+              this.licenseList[0].fileUrl=res.data.orgLicensesUrl
+              if(res.data.honorLicense){
+                this.otherList=res.data.honorLicense
+              }
+              if(res.data.orgTeams){
+                this.kernelList=res.data.orgTeams
+              }
+              this.choseProvince(this.contactForm.orgProvince)
+              this.choseCity(this.contactForm.orgCity)
           }
         }
       });
@@ -718,7 +749,6 @@ export default {
             this.OrgBasicForm.licenses = this.licenseList.concat(
               this.otherList
             );
-            console.log(this.OrgBasicForm);
 
       } else if (this.investorCertificationTitle == "团队信息") {
         this.$refs["teamForm"].validate(valid => {
@@ -736,7 +766,11 @@ export default {
             this.OrgBasicForm.orgTeams = this.kernelList;
             this.status = 3;
             this.investorCertificationTitle = "联系方式";
-            this.btnText = "保存并认证";
+            if(this.title==='编辑机构'){
+              this.btnText = "保存修改";
+            }else{
+               this.btnText = "保存并认证";
+            }
           } else {
             return false;
           }
@@ -758,6 +792,7 @@ export default {
               url: "saveOrUpdateOrgDetail",
               data: this.OrgBasicForm,
               callback: res => {
+                 this.loading = false;
                 if (res.code == "0000") {
                   this.$message({
                     message: "操作成功,请等待后台审核",
@@ -768,8 +803,9 @@ export default {
                   });
                 } else {
                   this.$message.error(res.result);
+                  return false
                 }
-                this.loading = false;
+
               }
             });
           } else {
@@ -944,7 +980,9 @@ export default {
                this.$message.error("请上传附件");
           return;
             }
+            // console.log(this.otherForm)
             if (this.otherForm.id != 0) {
+              // console.log(this.otherForm)
               let otherFormObj = this.otherForm.id;
               this.otherList[otherFormObj - 1] = {
                 id: otherFormObj,
@@ -953,7 +991,9 @@ export default {
                 fileUrl: this.otherForm.fileUrl,
                 awardDepart: this.otherForm.awardDepart
               };
+                // console.log(this.otherList)
             } else {
+              // console.log(234)
               this.otherList.push({
                 id: this.otherList.length + 1,
                 certName: this.otherForm.certName,
@@ -962,6 +1002,7 @@ export default {
                 awardDepart: this.otherForm.awardDepart
               });
             }
+            // console.log(this.otherList)
             this.isShowOtherList = false;
             this.otherText = "添加其它资质/荣誉";
             this.showBtn = false
@@ -1029,7 +1070,7 @@ export default {
     // 选省
     choseProvince: function(e) {
       for (var index2 in this.province) {
-        if (e === this.province[index2].id) {
+        if (e === this.province[index2].value) {
           this.contactForm.orgProvince = this.province[index2].value;
           this.shi1 = this.province[index2].children;
           this.contactForm.orgCity = this.province[index2].children[0].value;
@@ -1044,7 +1085,7 @@ export default {
     // 选市
     choseCity: function(e) {
       for (var index3 in this.city) {
-        if (e === this.city[index3].id) {
+        if (e === this.city[index3].value) {
           this.contactForm.orgCity = this.city[index3].value;
           this.qu1 = this.city[index3].children;
           this.contactForm.orgArea = this.city[index3].children[0].value;
@@ -1055,7 +1096,7 @@ export default {
     // // 选区
     choseBlock: function(e) {
       for (var index4 in this.qu1) {
-        if (e === this.qu1[index4].id) {
+        if (e === this.qu1[index4].value) {
           this.contactForm.orgArea = this.qu1[index4].value;
         }
       }

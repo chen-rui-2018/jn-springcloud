@@ -8,7 +8,6 @@ import com.jn.pay.api.RefundOrderClient;
 import com.jn.pay.model.RefundOrderReq;
 import com.jn.pay.model.RefundOrderRsp;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -119,8 +118,6 @@ public class RefundOrderController extends BaseController implements RefundOrder
         String mchRefundNo = refundOrderReq.getMchRefundNo();
         // 渠道ID
         String channelId = refundOrderReq.getChannelId();
-        // 退款金额（单位分）
-        String amount = refundOrderReq.getAmount().toString();
         // 币种
         String currency = PayConstant.PAY_RMB;
         // 客户端IP
@@ -165,10 +162,11 @@ public class RefundOrderController extends BaseController implements RefundOrder
             errorMessage = "request params[channelId] error.";
             return errorMessage;
         }
-        if(!NumberUtils.isNumber(amount)) {
-            errorMessage = "request params[amount] error.";
+        if(null == refundOrderReq.getAmount() || refundOrderReq.getAmount() <= 0){
+            errorMessage = "request params[amount] error：退款金额必须大于0";
             return errorMessage;
         }
+
         if(StringUtils.isBlank(channelUser)) {
             errorMessage = "request params[channelUser] error.";
             return errorMessage;
@@ -266,8 +264,10 @@ public class RefundOrderController extends BaseController implements RefundOrder
         refundOrder.put("mchId", mchId);
         refundOrder.put("mchRefundNo", mchRefundNo);
         refundOrder.put("channelId", channelId);
-        refundOrder.put("refundAmount", Long.parseLong(amount));    // 退款金额
-        refundOrder.put("payAmount", payAmount);                    // 支付金额
+        // 退款金额
+        refundOrder.put("refundAmount", refundOrderReq.getAmount());
+        // 支付金额
+        refundOrder.put("payAmount", payAmount);
         refundOrder.put("currency", currency);
         refundOrder.put("clientIp", clientIp);
         refundOrder.put("device", device);

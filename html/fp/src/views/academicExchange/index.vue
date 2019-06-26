@@ -54,7 +54,7 @@
         <div class="con2">
           <ul class="fir">
             <li class="clearfix" v-for="(i,k) in achievementList" :key="k">
-              <div class="fir1 fl">
+              <div class="fir1 pointer fl" @click="$router.push({path:'/technologyDetails',query:{achievementId:i.id}})">
                 <h3 class="color4">{{i.title}}</h3>
                 <p class="p1">
                   <span>阅读次数：
@@ -67,10 +67,10 @@
                   <span v-if="i.type=='technology'">科技</span>
                   <span v-if="i.type=='science'">学术</span>
                 </p>
-                <p class="color22" v-html="i.details"></p>
+                <p v-html="i.details"></p>
                 <!-- <div class="firInfo">{{i.briefContent}}</div> -->
               </div>
-              <div class="fir2 fr mainColor" @click="$router.push({path:'/technologyDetails',query:{achievementId:i.id}})">详情</div>
+              <div class="fir2 fr pointer mainColor" @click="$router.push({path:'/technologyDetails',query:{achievementId:i.id}})">详情</div>
             </li>
           </ul>
         </div>

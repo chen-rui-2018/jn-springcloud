@@ -20,7 +20,7 @@
           <div class="agent2Info fl color2">
             <p>客户偏好：
               <span v-for="(item1,k1) in serverOrgDetailList.developmentStage" :key="k1">{{item1.orgTraitName}},</span>
-              <span v-for="(item2,k2) in serverOrgDetailList.industrySector" :key="k2">{{item2.orgTraitName}}</span>
+              <span v-for="(item2,k2) in serverOrgDetailList.industrySector" :key="k2+item2">{{item2.orgTraitName}}</span>
             </p>
             <p>业务擅长：{{serverOrgDetailList.orgSpeciality}}</p>
             <p>咨询电话：
@@ -44,7 +44,8 @@
           <i class="el-icon-arrow-up"></i>
         </div>
         <div class="mainColor shouqi zhankai pointer" v-else @click='zankaiFlag=!zankaiFlag'>
-          展开<i class="el-icon-arrow-down"></i>
+          展开
+          <i class="el-icon-arrow-down"></i>
         </div>
         <el-card>
           <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -66,7 +67,7 @@
                   <tr>
                     <td class="table-orgspace-title">主营业务：</td>
                     <td class="table-orgspace-detail" colspan="4">
-                      <div class="table-orgspace-col">{{serverOrgDetailList.orgBusiness}}</div>
+                      <div v-html="serverOrgDetailList.orgBusiness"></div>
                     </td>
                   </tr>
                   <tr>
@@ -81,7 +82,7 @@
             <el-tab-pane label="工商信息" name="businessinfo">
               <div class="businessinfo" v-if="zankaiFlag">
                 <table class="table-orgspace mainBorder">
-                  <tr>
+                  <!-- <tr>
                     <td class="table-orgspace-title">组织代码机构：</td>
                     <td class="table-orgspace-detail" width="300px" colspan="2">
                       <div>{{serverOrgDetailList.orgCode}}</div>
@@ -123,6 +124,12 @@
                     <td class="table-orgspace-detail" colspan="4">
                       <div class="table-orgspace-col">{{serverOrgDetailList.orgBusinScope}}</div>
                     </td>
+                  </tr> -->
+                  <tr>
+                    <td class="table-orgspace-title">营业执照：</td>
+                    <td class="table-orgspace-detail" colspan="6">
+                      <div class="table-orgspace-col businessImg"><img :src="serverOrgDetailList.orgLicensesUrl" alt=""></div>
+                    </td>
                   </tr>
                 </table>
               </div>
@@ -153,8 +160,7 @@
                         <td class="table-orgspace-title" width="120px;">员工人数：</td>
                         <td class="table-orgspace-detail" width="300px">{{serverOrgDetailList.staffCount}}</td>
                         <td class="table-orgspace-title" width="120px;">执业人员人数：</td>
-                        <td class="table-orgspace-detail" style="width:322px;">{{serverOrgDetailList.professionNum}}
-                          （占比{{(Number(serverOrgDetailList.professionNum/serverOrgDetailList.staffCount)*100).toFixed(0)}}%）
+                        <td class="table-orgspace-detail" style="width:322px;">{{serverOrgDetailList.professionNum}} （占比{{(Number(serverOrgDetailList.professionNum/serverOrgDetailList.staffCount)*100).toFixed(0)}}%）
                         </td>
                       </tr>
                       <tr>
@@ -162,20 +168,23 @@
                         <td class="table-orgspace-detail">{{serverOrgDetailList.bachelorNum}}（占比{{(Number(serverOrgDetailList.bachelorNum/serverOrgDetailList.staffCount)*100).toFixed(0)}}%）
                         </td>
                         <td class="table-orgspace-title">硕士：</td>
-                        <td class="table-orgspace-detail">{{serverOrgDetailList.masterNum}}
-                          （占比{{(Number(serverOrgDetailList.masterNum/serverOrgDetailList.staffCount)*100).toFixed(0)}}%）
+                        <td class="table-orgspace-detail">{{serverOrgDetailList.masterNum}} （占比{{(Number(serverOrgDetailList.masterNum/serverOrgDetailList.staffCount)*100).toFixed(0)}}%）
                         </td>
                       </tr>
-                      <tr>
+                      <!-- <tr>
                         <td class="table-orgspace-title">博士：</td>
                         <td class="table-orgspace-detail">
-                          <!-- <font style="color:#ccc;">{{serverOrgDetailList.doctorNum}}</font> -->
                           {{serverOrgDetailList.doctorNum}}（占比{{(Number(serverOrgDetailList.doctorNum/serverOrgDetailList.staffCount)*100).toFixed(0)}}%）
                         </td>
                         <td class="table-orgspace-title">海归：</td>
                         <td class="table-orgspace-detail">
                           {{serverOrgDetailList.returneeNum}}（占比{{(Number(serverOrgDetailList.returneeNum/serverOrgDetailList.staffCount)*100).toFixed(0)}}%）
-                          <!-- <font style="color:#ccc;">{{serverOrgDetailList.returneeNum}}</font> -->
+                        </td>
+                      </tr> -->
+                      <tr>
+                        <td class="table-orgspace-title">博士：</td>
+                        <td class="table-orgspace-detail" colspan="4">
+                          <div class="table-orgspace-col">{{serverOrgDetailList.doctorNum}}（占比{{(Number(serverOrgDetailList.doctorNum/serverOrgDetailList.staffCount)*100).toFixed(0)}}%）</div>
                         </td>
                       </tr>
                     </tbody>
@@ -333,7 +342,7 @@
                 </div>
                 <!-- 左侧logo end-->
                 <!-- 中间信息 beign -->
-                <div class="list-info-middle inner-product fl">
+                <div class="list-info-middle inner-product pointer fl" @click="$router.push({ path: 'finaProDetail', query: { productId: i.productId } })">
                   <!-- 中间上半部分--标题和标签 begin -->
                   <div class="list-info-top-title">
                     <!-- 头部 begin -->
@@ -369,14 +378,14 @@
                     </div>
                     <!-- 评价 end -->
                     <!-- 交易量 begin -->
-                    
+
                     <!-- 交易量 end -->
                   </div>
                   <!-- 中间上半部分--参考信息、交易均价和交易 end -->
                 </div>
                 <div class="detail-count fr">
-                      <div class="orgBtn fr mainColor pointer" @click="demandRaise(i)">提需求</div>
-                    </div>
+                  <div class="orgBtn fr mainColor pointer" @click="demandRaise(i)">提需求</div>
+                </div>
                 <!-- 中间信息 end -->
                 <div class="clear"></div>
               </li>
@@ -465,8 +474,8 @@
           <span slot="label" v-else>活动资讯(0)</span>
           <div class="actiConsultation">
             <ul class="allActiUl clearfix">
-              <li v-for="(i,k) in serverActiList" :key='k'>
-                <div class="postImgItem pointer" @click="$router.push({ path: 'actiDetail', query: { activityId: i.id } })">
+              <li v-for="(i,k) in serverActiList" :key='k' class="pointer" @click="$router.push({ path: 'actiDetail', query: { activityId: i.id } })">
+                <div class="postImgItem pointer">
                   <img :src="i.actiPosterUrl" class="postImg" alt="活动海报图片">
                 </div>
                 <div class="actiInfo">
@@ -485,13 +494,16 @@
                 <div class="actiNum clearfix">
                   <div class="avatar">
                     <ul>
-                      <!-- <li v-for="(i,k) in item.avatarList" v-if="i<5" :key='k'><img :src="i" alt=""></li> -->
-                      <li></li>
+                      <li v-for="(item,k) in i.avatarList" v-if="k<5" :key='k'><img :src="item" alt=""></li>
+                      <!-- <li></li> -->
                     </ul>
                   </div>
                   <i>{{i.actiNum}}/{{i.actiNumber}}</i>
-                  <span class="mainColor">
-                    <i class="iconfont icon-xihuan"></i>{{i.actiLike}}</span>
+                  <p class="mainColor">
+                    <!-- <i class="iconfont icon-xihuan"></i>{{i.actiLike}} -->
+                    <img src="@/../static/img/xin.png" alt="" style="margin-right:0">
+                    <span>{{i.actiLike}}</span>
+                  </p>
                 </div>
               </li>
             </ul>
@@ -581,9 +593,9 @@ export default {
         productId: "",
         productName: ""
       },
-      productType:'',
-      timeInterval:'0',
-      ratingType:''
+      productType: "",
+      timeInterval: "0",
+      ratingType: ""
     };
   },
   created() {
@@ -594,27 +606,26 @@ export default {
     this.getEvaluationCountInfo();
   },
   methods: {
-     goLogin() {
+    goLogin() {
       window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
       this.$router.push({ path: "/login" });
     },
     //判断是否登录
     isLogin() {
-      if (!sessionStorage.userInfo) {
+      if (!this.getToken()) {
         this.islogin = false;
       }
     },
     //在线联系
     onlineContat(investorAccount, investorName) {
-      if (!sessionStorage.userInfo) {
+      if (!this.getUserInfo()) {
         this.concatVisible = true;
-        return
+        return;
       }
       this.$router.push({
         path: "/chat",
         query: {
-          fromUser: JSON.parse(sessionStorage.userInfo).account,
-          fromUser: sessionStorage.userInfo.account,
+          fromUser: JSON.parse(this.getUserInfo()).account,
           toUser: orgAccount,
           nickName: ogeName
         }
@@ -622,10 +633,6 @@ export default {
     },
     //提需求
     demandRaise(i) {
-      // if (!sessionStorage.userInfo) {
-      //   this.$message.error("请先登录");
-      //   return;
-      // }
       this.isLogin();
       this.serverConVisible = true;
       this.serverProform.productId = i.productId;
@@ -744,9 +751,9 @@ export default {
           if (res.code == "0000") {
             _this.evaCount = res.data;
             _this.total4 = res.data.total;
-            setTimeout(()=>{
-              _this.$refs['tabP'].$children[0].$forceUpdate() 
-            },0)
+            setTimeout(() => {
+              _this.$refs["tabP"].$children[0].$forceUpdate();
+            }, 0);
           } else {
             _this.$message.error(res.result);
           }
@@ -765,7 +772,7 @@ export default {
           isPublicPage: 0,
           page: _this.page4,
           rows: _this.row4,
-          ratingType:_this.ratingType
+          ratingType: _this.ratingType
         },
         callback: function(res) {
           if (res.code == "0000") {
@@ -786,7 +793,7 @@ export default {
           // actiType: "org_activity",
           page: _this.page3,
           rows: _this.row3,
-          timeInterval:_this.timeInterval
+          timeInterval: _this.timeInterval
         },
         callback: function(res) {
           if (res.code == "0000") {
@@ -813,9 +820,9 @@ export default {
           if (res.code == "0000") {
             _this.serverPro = res.data.rows;
             _this.total1 = res.data.total;
-             setTimeout(()=>{
-              _this.$refs['tabP'].$children[0].$forceUpdate() 
-            },0)
+            setTimeout(() => {
+              _this.$refs["tabP"].$children[0].$forceUpdate();
+            }, 0);
           } else {
             _this.$message.error(res.result);
           }
@@ -853,11 +860,24 @@ export default {
   }
 }
 .finaInsDetail {
+  .businessinfo {
+    .businessImg {
+      width: 130px;
+      height: 80px;
+      display: inline-block;
+      vertical-align: middle;
+
+      > img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
   .serverTip {
     display: inline-block;
     font-size: 12px;
   }
-   .el-tabs__item {
+  .el-tabs__item {
     height: 50px;
     line-height: 50px;
   }

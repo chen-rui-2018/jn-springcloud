@@ -40,16 +40,19 @@ export default {
   filters: {
     time (time) {
       if (time) {
-        // return time.split("T")[0]
-        let dateee = new Date(time).toJSON()
-        return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+        let timeArr = time.split('.')[0].split('T')
+        return timeArr[0] + ' ' + timeArr[1]
+        /* let dateee = new Date(time).toJSON()
+        return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '') */
       }
     }
   },
-  mounted () {
+  created () {
     this.id = this.$route.query.id
-    this.getDetail()
     this.addView()
+  },
+  mounted () {
+    this.getDetail()
   },
   methods: {
     getDetail () {
@@ -61,7 +64,11 @@ export default {
             this.detailData = res.data
             if (res.data.fileUrl !== '') {
               this.fileList = JSON.parse(res.data.fileUrl)
+            } else {
+              this.$vux.toast.text(res.result)
             }
+          } else {
+            this.$vux.toast.text(res.result, 'middle')
           }
         }
       })
@@ -73,6 +80,8 @@ export default {
         callback: res => {
           if (res.code === '0000') {
             // this.detailData = res.data
+          } else {
+            this.$vux.toast.text(res.result)
           }
         }
       })

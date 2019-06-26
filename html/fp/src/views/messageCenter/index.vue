@@ -1,6 +1,6 @@
 <template>
-  <div :class="{pd: $store.state.hiddenNav}" class="message-center-bg">
-    <div :class="{pc: !$store.state.isMobile}" class="message-center">
+  <div :class="{pd: $store.state.hiddenNav, 'h-100': $store.state.isMobile }" class="message-center-bg">
+    <div :class="{pc: !$store.state.isMobile, 'h-100': $store.state.isMobile}" class="message-center">
       <div class="nav-tips" v-if="$store.state.hiddenNav">
         <el-breadcrumb separator="/">
           <el-breadcrumb-item>消息中心</el-breadcrumb-item>
@@ -9,7 +9,7 @@
           </el-breadcrumb-item>
         </el-breadcrumb>
       </div>
-      <el-container>
+      <el-container :class="{'h-100': $store.state.isMobile, 'min-height': !$store.state.isMobile}">
         <el-aside style="width: 200px;margin-right: 20px;" v-if="$store.state.hiddenNav">
           <div class="userImg">
             <div class="imgItem">
@@ -58,6 +58,7 @@
 </template>
 
 <script>
+import { getUserInfo } from '@/util/auth'
 export default {
   name: "MessageCenter",
   data() {
@@ -71,7 +72,7 @@ export default {
     }
   },
   mounted() {
-    let userInfo = sessionStorage.getItem("userInfo");
+    let userInfo = getUserInfo();
     if (userInfo) {
       userInfo = JSON.parse(userInfo);
       this.avartImg = userInfo.avatar;
@@ -91,21 +92,13 @@ $bg-gray: #f3f3f3;
     &.app {
       width: 100%;
       height: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
       .message-chat,
       .chat-win {
         width: 100%;
         height: 100%;
-        overflow: hidden;
         .chat-win-cell {
           width: 100%;
           height: 100%;
-          overflow: auto;
-          position: absolute;
-          -webkit-overflow-scrolling: touch;
-          padding: 50px 10px 50px;
           box-sizing: border-box;
           background-color: #fff;
         }
@@ -120,11 +113,10 @@ $bg-gray: #f3f3f3;
           width: 100%;
           height: 100%;
           margin-top: 0;
-          padding: 0;
           box-sizing: border-box;
         }
         .app-chat-footer {
-          position: fixed;
+          position: absolute;
         }
       }
     }
@@ -136,10 +128,10 @@ $bg-gray: #f3f3f3;
 .message-center {
   &.pc {
     width: 1190px;
+    min-height: 500px;
   }
   margin: 0 auto;
-  min-height: 500px;
-  .el-container {
+  .el-container.min-height {
     min-height: 500px;
   }
   .nav-tips {

@@ -2,6 +2,7 @@ package com.jn.enterprise.servicemarket.org.service;
 
 import com.jn.common.model.PaginationData;
 import com.jn.enterprise.model.ServiceOrg;
+import com.jn.enterprise.servicemarket.org.entity.TbServiceOrgTrait;
 import com.jn.enterprise.servicemarket.org.vo.*;
 import com.jn.enterprise.servicemarket.org.model.*;
 
@@ -92,9 +93,10 @@ public interface OrgService {
 
     /**
      * 添加机构管理员角色
-     * @param orgAccount
+     * @param tbServiceOrgCopy
+     * @param loginAccount
      * @return
      */
-    int addOrgRole(String orgAccount);
+    int addOrgRole(TbServiceOrgCopy  tbServiceOrgCopy,String loginAccount);
 
 }

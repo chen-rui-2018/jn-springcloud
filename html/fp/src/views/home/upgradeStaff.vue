@@ -157,9 +157,6 @@ export default {
               }
             }
           });
-        } else {
-          _this.$message.error(res.result);
-          return false;
         }
       });
     },

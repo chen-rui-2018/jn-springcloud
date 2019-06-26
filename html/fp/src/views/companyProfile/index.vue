@@ -77,7 +77,7 @@
             <!-- <img src="@/../static/img/ins1.png" alt=""> -->
             <img :src="i.avatar" alt="">
           </div>
-          <div class="orgCon fl">
+          <div class="orgCon pointer fl" @click="handleOrgDel(i.id)">
             <div class="conTil">{{i.comName}}</div>
             <div class="conContent clearfix color3">
               <div class="left1 fl">
@@ -244,18 +244,26 @@ export default {
       }
     },
     widFun(i) {
+      
       let doc = document.getElementsByClassName(i);
       let num = 0;
       for (let it of doc) {
-        num += it.offsetWidth * 1;
+        num += it.offsetWidth * 1 + this.getStyle(it,'marginLeft');
       }
-      console.log(num);
       if (num >= 860) {
         return true;
       } else {
         return false;
       }
     },
+    getStyle(obj,attr){   
+      if(obj.currentStyle){   	
+        return obj.currentStyle[attr].split('px')[0] * 1;   
+      }   
+      else{   	
+        return document.defaultView.getComputedStyle(obj,null)[attr].split('px')[0] * 1;   	
+      }   
+    },     
     //排序
     handleFil(i) {
       this.colorFlag = i;

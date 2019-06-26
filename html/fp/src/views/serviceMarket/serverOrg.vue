@@ -1,5 +1,5 @@
 <template>
-  <div class="serverOrg w">
+  <div class="serverOrg w" v-loading="loading">
     <div class="serverOrgMenu">
       <span class="pointer" @click="$router.push({path:'/serMatHp'})">首页</span>
       <span>/</span>
@@ -88,13 +88,17 @@
       </div>
     </div>
     <div class="serverOrgContent">
-      <ul>
+      <div v-if="serverAgent.length==0 && !loading">
+        <nodata></nodata>
+      </div>
+      <!-- <div v-else> -->
+      <ul v-else>
         <li class="clearfix" v-for="(i,k) in serverAgent" :key='k'>
-          <div class="orgImg fl" @click="handleOrgDel(i.orgId)">
+          <div class="orgImg fl pointer" @click="handleOrgDel(i.orgId)">
             <!-- <img src="@/../static/img/ins1.png" alt=""> -->
             <img :src="i.orgLogo" alt="">
           </div>
-          <div class="orgCon fl">
+          <div class="orgCon fl pointer" @click="handleOrgDel(i.orgId)">
             <div class="conTil">{{i.orgName}}</div>
             <div class="conContent clearfix color3">
               <div class="left1 fl">
@@ -121,6 +125,7 @@
           </div>
         </li>
       </ul>
+      <!-- </div> -->
     </div>
     <div class="pagination-container">
       <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
@@ -141,9 +146,14 @@
   </div>
 </template>
 <script>
+import nodata from "../common/noData.vue";
 export default {
+  components: {
+    nodata
+  },
   data() {
     return {
+      loading: false,
       concatVisible: false,
       total: 0,
       currentPage1: 1,
@@ -174,7 +184,8 @@ export default {
   },
   mounted() {
     this.selectIndustryList();
-    this.businessAreaList()
+    // this.businessAreaList();
+    this.getIndustryForMarket();
     if (this.$route.query.searchData) {
       this.keyW = this.$route.query.searchData;
       this.initList();
@@ -189,14 +200,14 @@ export default {
     },
     //在线联系
     onlineContat(orgAccount, orgName) {
-      if (!sessionStorage.userInfo) {
+      if (!this.getUserInfo()) {
         this.concatVisible = true;
         return;
       }
       this.$router.push({
         path: "/chat",
         query: {
-          fromUser: JSON.parse(sessionStorage.userInfo).account,
+          fromUser: JSON.parse(this.getUserInfo()).account,
           toUser: orgAccount,
           nickName: orgName
         }
@@ -224,21 +235,22 @@ export default {
     },
     //领域搜索
     handleFilter(i) {
-      (this.businessType = `${i}`), (this.filterFlag = i);
+      this.businessType = `${i}`;
+      this.filterFlag = i;
       this.initList();
     },
     handleFilter1(i) {
-      (this.industrySector = `${i}`),
-        // this.industrySector=[]
-        // this.industrySector.push(i);
-        (this.filterFlag1 = i);
+      this.industrySector = `${i}`;
+      // this.industrySector=[]
+      // this.industrySector.push(i);
+      this.filterFlag1 = i;
       this.initList();
     },
     handleFilter2(i) {
-      (this.developmentStage = `${i}`),
-        // this.developmentStage=[]
-        // this.developmentStage.push(i);
-        (this.filterFlag2 = i);
+      this.developmentStage = `${i}`;
+      // this.developmentStage=[]
+      // this.developmentStage.push(i);
+      this.filterFlag2 = i;
       this.initList();
     },
     handleFilter3(i) {
@@ -268,6 +280,7 @@ export default {
     },
     //服务机构列表
     initList() {
+      this.loading = true;
       let _this = this;
       let data = {
         businessType: _this.businessType,
@@ -294,6 +307,7 @@ export default {
           } else {
             _this.$message.error(res.result);
           }
+          _this.loading = false;
         }
       });
     },
@@ -327,18 +341,32 @@ export default {
       });
     },
     //业务领域
-    businessAreaList() {
+    // businessAreaList() {
+    //   let _this = this;
+    //   this.api.get({
+    //     url: "selectIndustryProductList",
+    //     data: {},
+    //     callback: function(res) {
+    //       if (res.code == "0000") {
+    //         // for (let it in res.data) {
+    //         //   if (res.data[it].preType == "0") {
+    //         //     _this.businessArea.push(res.data[it]);
+    //         //   }
+    //         // }
+    //         _this.businessArea = res.data;
+    //       } else {
+    //         _this.$message.error(res.result);
+    //       }
+    //     }
+    //   });
+    // },
+    getIndustryForMarket() {
       let _this = this;
       this.api.get({
-        url: "selectIndustryProductList",
+        url: "getIndustryForMarket",
         data: {},
         callback: function(res) {
           if (res.code == "0000") {
-            // for (let it in res.data) {
-            //   if (res.data[it].preType == "0") {
-            //     _this.businessArea.push(res.data[it]);
-            //   }
-            // }
             _this.businessArea = res.data;
           } else {
             _this.$message.error(res.result);

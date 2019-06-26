@@ -136,6 +136,33 @@
                 </el-input>
               </div>
             </el-form-item>
+            <el-form-item label="申请条件：">
+              <div class="content_textarea">
+                <el-input
+                  type="textarea"
+                  placeholder="请输入产品的申请条件"
+                  v-model="addFinancialProduct.applyCondition">
+                </el-input>
+              </div>
+            </el-form-item>
+            <el-form-item label="提交材料：">
+              <div class="content_textarea">
+                <el-input
+                  type="textarea"
+                  placeholder="请输入产品所需的提交材料"
+                  v-model="addFinancialProduct.submitMaterial">
+                </el-input>
+              </div>
+            </el-form-item>
+            <el-form-item label="适用客户：">
+              <div class="content_textarea">
+                <el-input
+                  type="textarea"
+                  placeholder="请输入产品的所适用的客户类型"
+                  v-model="addFinancialProduct.applicableCust">
+                </el-input>
+              </div>
+            </el-form-item>
         </el-form>
       </div>
       <div class="submit" @click="submit">提交申请</div>
@@ -359,8 +386,8 @@ export default {
                _this.loading=false 
               _this.$router.go(-1)
             }else{
+              _this.loading=false 
              _this.$message.error(res.result)
-             _this.loading=false 
             }
           }
         }) 
@@ -407,7 +434,7 @@ export default {
         background-color: #ecfcf2;
         border-radius: 5px;
         border: solid 2px #41d787;
-        padding:5px 22px;
+        padding:8px 11px;
         font-size: 14px;
         cursor: pointer;
         color:#00a041;

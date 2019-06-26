@@ -4,6 +4,7 @@ import com.jn.common.channel.MessageSource;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
+import com.jn.common.util.GlobalConstants;
 import com.jn.common.util.StringUtils;
 import com.jn.common.util.cache.RedisCacheFactory;
 import com.jn.common.util.cache.service.Cache;
@@ -13,6 +14,7 @@ import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.SysRole;
 import com.jn.system.model.User;
 import com.jn.system.vo.SysUserRoleVO;
+import com.jn.user.enums.HomeRoleEnum;
 import com.jn.user.enums.RecordStatusEnum;
 import com.jn.user.enums.UserExtensionExceptionEnum;
 import com.jn.user.userinfo.dao.TbUserPersonMapper;
@@ -20,8 +22,6 @@ import com.jn.user.userinfo.entity.TbUserPerson;
 import com.jn.user.userjoin.enums.UserJoinExceptionEnum;
 import com.jn.user.userjoin.model.UserRegister;
 import com.jn.user.userjoin.service.UserJoinService;
-import org.apache.commons.lang.math.RandomUtils;
-import org.apache.poi.ss.formula.functions.T;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -31,7 +31,6 @@ import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.xxpay.common.util.DateUtil;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -110,37 +109,42 @@ public class UserJoinServiceImpl implements UserJoinService {
         user.setPassword(userRegister.getPassword());
         user.setName(userRegister.getPhone());
         Result result = systemClient.addSysUser(user);
-        //给用户添加"普通用户"角色
-        String roleName="普通用户";
-        Result<SysRole> sysRoleResult = systemClient.getRoleByName(roleName);
-        if(sysRoleResult==null ||sysRoleResult.getData()==null){
-            logger.warn("用户注册失败，失败原因：无法获取“普通用户”角色信息，请确认系统服务是否正常，且“普通用户”角色在系统中存在");
-            throw new JnSpringCloudException(UserExtensionExceptionEnum.NETWORK_ANOMALY);
-        }
-        //给用户拓展表添加用户信息
-        TbUserPerson tbUserPerson=new TbUserPerson();
-        BeanUtils.copyProperties(user, tbUserPerson);
-        tbUserPerson.setId(UUID.randomUUID().toString());
-        tbUserPerson.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
-        tbUserPerson.setCreatedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
-        tbUserPerson.setCreatorAccount(user.getPhone());
-        int resNum = tbUserPersonMapper.insertSelective(tbUserPerson);
-        if(resNum==0){
-            logger.warn("用户注册失败，失败原因：添加用户信息到用户扩展信息表失败");
-            throw new JnSpringCloudException(UserExtensionExceptionEnum.NETWORK_ANOMALY);
-        }
-        //更新用户角色
-        SysUserRoleVO sysUserRoleVO=new SysUserRoleVO();
-        Set<String> addRoleId=new HashSet<>();
-        addRoleId.add(sysRoleResult.getData().getId());
-        sysUserRoleVO.setAddRoleId(addRoleId);
-        sysUserRoleVO.setUser(user);
-        Result<Boolean> booleanResult = systemClient.updateUserRole(sysUserRoleVO);
-        if(booleanResult.getData()==true){
+
+        if (result != null && result.getCode() != null && result.getCode().equals(GlobalConstants.SUCCESS_CODE)) {
+            //给用户添加"普通用户"角色
+            String roleName = HomeRoleEnum.NORMAL_USER.getCode();
+            Result<SysRole> sysRoleResult = systemClient.getRoleByName(roleName);
+            if (sysRoleResult == null || sysRoleResult.getData() == null) {
+                logger.warn("用户注册失败，失败原因：无法获取“普通用户”角色信息，请确认系统服务是否正常，且“普通用户”角色在系统中存在");
+                throw new JnSpringCloudException(UserExtensionExceptionEnum.NETWORK_ANOMALY);
+            }
+            //给用户拓展表添加用户信息
+            TbUserPerson tbUserPerson = new TbUserPerson();
+            BeanUtils.copyProperties(user, tbUserPerson);
+            tbUserPerson.setId(UUID.randomUUID().toString());
+            tbUserPerson.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
+            tbUserPerson.setCreatedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
+            tbUserPerson.setCreatorAccount(user.getPhone());
+            int resNum = tbUserPersonMapper.insertSelective(tbUserPerson);
+            if (resNum == 0) {
+                logger.warn("用户注册失败，失败原因：添加用户信息到用户扩展信息表失败");
+                throw new JnSpringCloudException(UserExtensionExceptionEnum.NETWORK_ANOMALY);
+            }
+            //更新用户角色
+            SysUserRoleVO sysUserRoleVO = new SysUserRoleVO();
+            Set<String> addRoleId = new HashSet<>();
+            addRoleId.add(sysRoleResult.getData().getId());
+            sysUserRoleVO.setAddRoleId(addRoleId);
+            sysUserRoleVO.setUser(user);
+            Result<Boolean> booleanResult = systemClient.updateUserRole(sysUserRoleVO);
+            if (booleanResult.getData() == true) {
+                return result;
+            } else {
+                logger.warn("用户注册失败，失败原因：更新用户角色为“普通用户”失败");
+                throw new JnSpringCloudException(UserExtensionExceptionEnum.NETWORK_ANOMALY);
+            }
+        } else {
             return result;
-        }else{
-            logger.warn("用户注册失败，失败原因：更新用户角色为“普通用户”失败");
-            throw new JnSpringCloudException(UserExtensionExceptionEnum.NETWORK_ANOMALY);
         }
     }
 

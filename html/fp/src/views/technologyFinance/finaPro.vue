@@ -1,5 +1,5 @@
 <template>
-  <div class="finaInstitution w">
+  <div class="finaInstitution w" v-loading="finaloading">
     <div class="serverOrgMenu">
       <span class="pointer" @click="$router.push({path:'/tfindex'})">首页</span>
       <span>/</span>
@@ -93,13 +93,16 @@
       </div>
     </div>
     <div class="serverOrgContent" id="serverOrgContent">
-      <ul>
+      <div v-if="serverAgent.length==0&&!finaloading">
+        <nodata></nodata>
+      </div>
+      <ul v-else>
         <li class="clearfix" v-for="(i,k) in serverAgent" :key='k'>
           <div class="orgImg fl pointer" @click="handleOrgDel(i.productId)">
             <img v-if="i.pictureUrl" :src="i.pictureUrl" alt="">
             <img v-else src="@/../static/img/product.png" alt="">
           </div>
-          <div class="orgCon fl">
+          <div class="orgCon fl pointer" @click="handleOrgDel(i.productId)">
             <div class="conTil">{{i.productName}}</div>
             <div class="conContent clearfix color3">
               <div class="left1 fl">
@@ -122,7 +125,7 @@
                   <span class="mainColor">{{i.ratingNum}}</span>条评价</p>
                 <p style="text-align:center">
                   累计
-                  <span class="mainColor">{{i.transactionNum}}</span>笔交易
+                  <span class="mainColor">{{i.transactionNum}}</span>&nbsp;笔交易
                 </p>
               </div>
             </div>
@@ -138,7 +141,7 @@
       </el-pagination>
     </div>
     <!-- 提需求 -->
-    <template v-if="finaProVisible">
+    <template v-loading="finaProVisible">
       <el-dialog :visible.sync="finaProVisible" width="600px" :modal-append-to-body=false :lock-scroll="false">
         <div v-if="islogin">
           <el-form ref="financialProform" :rules="rules" :model="financialProform" label-position="right" label-width="150px" style="max-width:500px;">
@@ -180,9 +183,14 @@
   </div>
 </template>
 <script>
+import nodata from "../common/noData.vue";
 export default {
+  components: {
+    nodata
+  },
   data() {
     return {
+      finaloading: false,
       islogin: true,
       guaranteeMode: [],
       assureMethodCode: "",
@@ -235,7 +243,7 @@ export default {
         expectedDate: [
           {
             required: true,
-            message: "请输入需求日期，格式为xxxx-yy-rr",
+            message: "请选择需求日期",
             trigger: "blur"
           }
         ]
@@ -367,7 +375,7 @@ export default {
     },
     //判断是否登录
     isLogin() {
-      if (!sessionStorage.userInfo) {
+      if (!this.getToken()) {
         this.islogin = false;
       }
     },
@@ -386,40 +394,61 @@ export default {
     },
     //提交需求
     demandDia() {
-      if(!this.financialProform.financingPeriod){
-        return
-      }
       let _this = this;
-      let max = this.arr[this.financialProform.financingPeriod].loanTermMax;
-      let min = this.arr[this.financialProform.financingPeriod].loanTermMin;
-      this.api.post({
-        url: "userDemandTechnology",
-        data: {
-          expectedDate: _this.financialProform.expectedDate,
-          financingAmount: _this.financialProform.financingAmount,
-          financingPeriodMax: max,
-          financingPeriodMin: min,
-          productId: _this.financialProform.productId,
-          productName: _this.financialProform.productName,
-          fundsReqDesc: _this.financialProform.fundsReqDesc
-        },
-        callback: function(res) {
-          if (res.code == "0000") {
-            _this.$message.success("提交需求成功");
-            _this.finaProVisible = false;
-          } else {
-            _this.$message.error(res.result);
-            _this.finaProVisible = false;
-          }
+      this.$refs["financialProform"].validate(valid => {
+        if (valid) {
+          let max = _this.arr[_this.financialProform.financingPeriod].loanTermMax;
+          let min = _this.arr[_this.financialProform.financingPeriod].loanTermMin;
+          this.api.post({
+            url: "userDemandTechnology",
+            data: {
+              expectedDate: _this.financialProform.expectedDate,
+              financingAmount: _this.financialProform.financingAmount,
+              financingPeriodMax: max,
+              financingPeriodMin: min,
+              productId: _this.financialProform.productId,
+              productName: _this.financialProform.productName,
+              fundsReqDesc: _this.financialProform.fundsReqDesc
+            },
+            callback: function(res) {
+              if (res.code == "0000") {
+                _this.$message.success("提交需求成功");
+                _this.finaProVisible = false;
+              } else {
+                _this.$message.error(res.result);
+                _this.finaProVisible = false;
+              }
+            }
+          });
         }
       });
+      // let _this = this;
+      // let max = this.arr[this.financialProform.financingPeriod].loanTermMax;
+      // let min = this.arr[this.financialProform.financingPeriod].loanTermMin;
+      // this.api.post({
+      //   url: "userDemandTechnology",
+      //   data: {
+      //     expectedDate: _this.financialProform.expectedDate,
+      //     financingAmount: _this.financialProform.financingAmount,
+      //     financingPeriodMax: max,
+      //     financingPeriodMin: min,
+      //     productId: _this.financialProform.productId,
+      //     productName: _this.financialProform.productName,
+      //     fundsReqDesc: _this.financialProform.fundsReqDesc
+      //   },
+      //   callback: function(res) {
+      //     if (res.code == "0000") {
+      //       _this.$message.success("提交需求成功");
+      //       _this.finaProVisible = false;
+      //     } else {
+      //       _this.$message.error(res.result);
+      //       _this.finaProVisible = false;
+      //     }
+      //   }
+      // });
     },
     //提需求
     raiseDemand(i) {
-      // if (!sessionStorage.userInfo) {
-      //   this.$message.error("请先登录");
-      //   return;
-      // }
       this.isLogin();
       this.finaProVisible = true;
       this.financialProform.expectedDate = "";
@@ -492,6 +521,7 @@ export default {
     },
     //金融产品列表
     initList() {
+      this.finaloading = true;
       let _this = this;
       let data = {
         needPage: 1,
@@ -517,6 +547,7 @@ export default {
           } else {
             _this.$message.error(res.result);
           }
+          _this.finaloading = false;
         }
       });
     },

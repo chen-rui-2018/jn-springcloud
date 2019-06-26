@@ -28,6 +28,9 @@ public class TbElectricPriceRules implements Serializable {
     /*@ApiModelProperty("更新时间")*/
     private Date modifiedTime;
 
+    /*@ApiModelProperty("是否默认使用的计价规则【只能有一条有效】1默认计价规则 0：正常规则")*/
+    private String isDefaultUse;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -94,6 +97,14 @@ public class TbElectricPriceRules implements Serializable {
         this.modifiedTime = modifiedTime;
     }
 
+    public String getIsDefaultUse() {
+        return isDefaultUse;
+    }
+
+    public void setIsDefaultUse(String isDefaultUse) {
+        this.isDefaultUse = isDefaultUse == null ? null : isDefaultUse.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -113,7 +124,8 @@ public class TbElectricPriceRules implements Serializable {
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
-            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()));
+            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
+            && (this.getIsDefaultUse() == null ? other.getIsDefaultUse() == null : this.getIsDefaultUse().equals(other.getIsDefaultUse()));
     }
 
     @Override
@@ -128,6 +140,7 @@ public class TbElectricPriceRules implements Serializable {
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
+        result = prime * result + ((getIsDefaultUse() == null) ? 0 : getIsDefaultUse().hashCode());
         return result;
     }
 
@@ -145,6 +158,7 @@ public class TbElectricPriceRules implements Serializable {
         sb.append(", createdTime=").append(createdTime);
         sb.append(", modifierAccount=").append(modifierAccount);
         sb.append(", modifiedTime=").append(modifiedTime);
+        sb.append(", isDefaultUse=").append(isDefaultUse);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

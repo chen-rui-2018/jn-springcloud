@@ -8,11 +8,11 @@
     <result column="range_name" jdbcType="VARCHAR" property="rangeName" />
     <result column="subordinate_platform_id" jdbcType="VARCHAR" property="subordinatePlatformId" />
     <result column="subordinate_platform_name" jdbcType="VARCHAR" property="subordinatePlatformName" />
+    <result column="preliminary_deadline" jdbcType="TIMESTAMP" property="preliminaryDeadline" />
     <result column="deadline" jdbcType="TIMESTAMP" property="deadline" />
     <result column="time_node" jdbcType="VARCHAR" property="timeNode" />
     <result column="is_roof_placement" jdbcType="TINYINT" property="isRoofPlacement" />
     <result column="contact_phone_configuration" jdbcType="VARCHAR" property="contactPhoneConfiguration" />
-    <result column="announcement_content" jdbcType="VARCHAR" property="announcementContent" />
     <result column="browse_times" jdbcType="INTEGER" property="browseTimes" />
     <result column="status" jdbcType="TINYINT" property="status" />
     <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
@@ -22,6 +22,9 @@
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
     <result column="brief_introduct" jdbcType="VARCHAR" property="briefIntroduct" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationNoticeManage">
+    <result column="announcement_content" jdbcType="LONGVARCHAR" property="announcementContent" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -83,10 +86,29 @@
   </sql>
   <sql id="Base_Column_List">
     id, title_name, range_id, range_name, subordinate_platform_id, subordinate_platform_name, 
-    deadline, time_node, is_roof_placement, contact_phone_configuration, announcement_content, 
+    preliminary_deadline, deadline, time_node, is_roof_placement, contact_phone_configuration, 
     browse_times, status, file_url, record_status, creator_account, created_time, modifier_account, 
     modified_time, brief_introduct
   </sql>
+  <sql id="Blob_Column_List">
+    announcement_content
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationNoticeManageCriteria" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tb_pd_declaration_notice_manage
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
   <select id="selectByExample" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationNoticeManageCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
@@ -101,9 +123,11 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
     select 
     <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
     from tb_pd_declaration_notice_manage
     where id = #{id,jdbcType=VARCHAR}
   </select>
@@ -120,20 +144,20 @@
   <insert id="insert" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationNoticeManage">
     insert into tb_pd_declaration_notice_manage (id, title_name, range_id, 
       range_name, subordinate_platform_id, subordinate_platform_name, 
-      deadline, time_node, is_roof_placement, 
-      contact_phone_configuration, announcement_content, 
+      preliminary_deadline, deadline, time_node, 
+      is_roof_placement, contact_phone_configuration, 
       browse_times, status, file_url, 
       record_status, creator_account, created_time, 
-      modifier_account, modified_time, brief_introduct
-      )
+      modifier_account, modified_time, brief_introduct, 
+      announcement_content)
     values (#{id,jdbcType=VARCHAR}, #{titleName,jdbcType=VARCHAR}, #{rangeId,jdbcType=VARCHAR}, 
       #{rangeName,jdbcType=VARCHAR}, #{subordinatePlatformId,jdbcType=VARCHAR}, #{subordinatePlatformName,jdbcType=VARCHAR}, 
-      #{deadline,jdbcType=TIMESTAMP}, #{timeNode,jdbcType=VARCHAR}, #{isRoofPlacement,jdbcType=TINYINT}, 
-      #{contactPhoneConfiguration,jdbcType=VARCHAR}, #{announcementContent,jdbcType=VARCHAR}, 
+      #{preliminaryDeadline,jdbcType=TIMESTAMP}, #{deadline,jdbcType=TIMESTAMP}, #{timeNode,jdbcType=VARCHAR}, 
+      #{isRoofPlacement,jdbcType=TINYINT}, #{contactPhoneConfiguration,jdbcType=VARCHAR}, 
       #{browseTimes,jdbcType=INTEGER}, #{status,jdbcType=TINYINT}, #{fileUrl,jdbcType=VARCHAR}, 
       #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{briefIntroduct,jdbcType=VARCHAR}
-      )
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{briefIntroduct,jdbcType=VARCHAR}, 
+      #{announcementContent,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationNoticeManage">
     insert into tb_pd_declaration_notice_manage
@@ -156,6 +180,9 @@
       <if test="subordinatePlatformName != null">
         subordinate_platform_name,
       </if>
+      <if test="preliminaryDeadline != null">
+        preliminary_deadline,
+      </if>
       <if test="deadline != null">
         deadline,
       </if>
@@ -167,9 +194,6 @@
       </if>
       <if test="contactPhoneConfiguration != null">
         contact_phone_configuration,
-      </if>
-      <if test="announcementContent != null">
-        announcement_content,
       </if>
       <if test="browseTimes != null">
         browse_times,
@@ -198,6 +222,9 @@
       <if test="briefIntroduct != null">
         brief_introduct,
       </if>
+      <if test="announcementContent != null">
+        announcement_content,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -218,6 +245,9 @@
       <if test="subordinatePlatformName != null">
         #{subordinatePlatformName,jdbcType=VARCHAR},
       </if>
+      <if test="preliminaryDeadline != null">
+        #{preliminaryDeadline,jdbcType=TIMESTAMP},
+      </if>
       <if test="deadline != null">
         #{deadline,jdbcType=TIMESTAMP},
       </if>
@@ -229,9 +259,6 @@
       </if>
       <if test="contactPhoneConfiguration != null">
         #{contactPhoneConfiguration,jdbcType=VARCHAR},
-      </if>
-      <if test="announcementContent != null">
-        #{announcementContent,jdbcType=VARCHAR},
       </if>
       <if test="browseTimes != null">
         #{browseTimes,jdbcType=INTEGER},
@@ -259,6 +286,9 @@
       </if>
       <if test="briefIntroduct != null">
         #{briefIntroduct,jdbcType=VARCHAR},
+      </if>
+      <if test="announcementContent != null">
+        #{announcementContent,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -289,6 +319,9 @@
       <if test="record.subordinatePlatformName != null">
         subordinate_platform_name = #{record.subordinatePlatformName,jdbcType=VARCHAR},
       </if>
+      <if test="record.preliminaryDeadline != null">
+        preliminary_deadline = #{record.preliminaryDeadline,jdbcType=TIMESTAMP},
+      </if>
       <if test="record.deadline != null">
         deadline = #{record.deadline,jdbcType=TIMESTAMP},
       </if>
@@ -300,9 +333,6 @@
       </if>
       <if test="record.contactPhoneConfiguration != null">
         contact_phone_configuration = #{record.contactPhoneConfiguration,jdbcType=VARCHAR},
-      </if>
-      <if test="record.announcementContent != null">
-        announcement_content = #{record.announcementContent,jdbcType=VARCHAR},
       </if>
       <if test="record.browseTimes != null">
         browse_times = #{record.browseTimes,jdbcType=INTEGER},
@@ -331,7 +361,37 @@
       <if test="record.briefIntroduct != null">
         brief_introduct = #{record.briefIntroduct,jdbcType=VARCHAR},
       </if>
+      <if test="record.announcementContent != null">
+        announcement_content = #{record.announcementContent,jdbcType=LONGVARCHAR},
+      </if>
     </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update tb_pd_declaration_notice_manage
+    set id = #{record.id,jdbcType=VARCHAR},
+      title_name = #{record.titleName,jdbcType=VARCHAR},
+      range_id = #{record.rangeId,jdbcType=VARCHAR},
+      range_name = #{record.rangeName,jdbcType=VARCHAR},
+      subordinate_platform_id = #{record.subordinatePlatformId,jdbcType=VARCHAR},
+      subordinate_platform_name = #{record.subordinatePlatformName,jdbcType=VARCHAR},
+      preliminary_deadline = #{record.preliminaryDeadline,jdbcType=TIMESTAMP},
+      deadline = #{record.deadline,jdbcType=TIMESTAMP},
+      time_node = #{record.timeNode,jdbcType=VARCHAR},
+      is_roof_placement = #{record.isRoofPlacement,jdbcType=TINYINT},
+      contact_phone_configuration = #{record.contactPhoneConfiguration,jdbcType=VARCHAR},
+      browse_times = #{record.browseTimes,jdbcType=INTEGER},
+      status = #{record.status,jdbcType=TINYINT},
+      file_url = #{record.fileUrl,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      brief_introduct = #{record.briefIntroduct,jdbcType=VARCHAR},
+      announcement_content = #{record.announcementContent,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -344,11 +404,11 @@
       range_name = #{record.rangeName,jdbcType=VARCHAR},
       subordinate_platform_id = #{record.subordinatePlatformId,jdbcType=VARCHAR},
       subordinate_platform_name = #{record.subordinatePlatformName,jdbcType=VARCHAR},
+      preliminary_deadline = #{record.preliminaryDeadline,jdbcType=TIMESTAMP},
       deadline = #{record.deadline,jdbcType=TIMESTAMP},
       time_node = #{record.timeNode,jdbcType=VARCHAR},
       is_roof_placement = #{record.isRoofPlacement,jdbcType=TINYINT},
       contact_phone_configuration = #{record.contactPhoneConfiguration,jdbcType=VARCHAR},
-      announcement_content = #{record.announcementContent,jdbcType=VARCHAR},
       browse_times = #{record.browseTimes,jdbcType=INTEGER},
       status = #{record.status,jdbcType=TINYINT},
       file_url = #{record.fileUrl,jdbcType=VARCHAR},
@@ -380,6 +440,9 @@
       <if test="subordinatePlatformName != null">
         subordinate_platform_name = #{subordinatePlatformName,jdbcType=VARCHAR},
       </if>
+      <if test="preliminaryDeadline != null">
+        preliminary_deadline = #{preliminaryDeadline,jdbcType=TIMESTAMP},
+      </if>
       <if test="deadline != null">
         deadline = #{deadline,jdbcType=TIMESTAMP},
       </if>
@@ -391,9 +454,6 @@
       </if>
       <if test="contactPhoneConfiguration != null">
         contact_phone_configuration = #{contactPhoneConfiguration,jdbcType=VARCHAR},
-      </if>
-      <if test="announcementContent != null">
-        announcement_content = #{announcementContent,jdbcType=VARCHAR},
       </if>
       <if test="browseTimes != null">
         browse_times = #{browseTimes,jdbcType=INTEGER},
@@ -422,7 +482,34 @@
       <if test="briefIntroduct != null">
         brief_introduct = #{briefIntroduct,jdbcType=VARCHAR},
       </if>
+      <if test="announcementContent != null">
+        announcement_content = #{announcementContent,jdbcType=LONGVARCHAR},
+      </if>
     </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationNoticeManage">
+    update tb_pd_declaration_notice_manage
+    set title_name = #{titleName,jdbcType=VARCHAR},
+      range_id = #{rangeId,jdbcType=VARCHAR},
+      range_name = #{rangeName,jdbcType=VARCHAR},
+      subordinate_platform_id = #{subordinatePlatformId,jdbcType=VARCHAR},
+      subordinate_platform_name = #{subordinatePlatformName,jdbcType=VARCHAR},
+      preliminary_deadline = #{preliminaryDeadline,jdbcType=TIMESTAMP},
+      deadline = #{deadline,jdbcType=TIMESTAMP},
+      time_node = #{timeNode,jdbcType=VARCHAR},
+      is_roof_placement = #{isRoofPlacement,jdbcType=TINYINT},
+      contact_phone_configuration = #{contactPhoneConfiguration,jdbcType=VARCHAR},
+      browse_times = #{browseTimes,jdbcType=INTEGER},
+      status = #{status,jdbcType=TINYINT},
+      file_url = #{fileUrl,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      brief_introduct = #{briefIntroduct,jdbcType=VARCHAR},
+      announcement_content = #{announcementContent,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationNoticeManage">
@@ -432,11 +519,11 @@
       range_name = #{rangeName,jdbcType=VARCHAR},
       subordinate_platform_id = #{subordinatePlatformId,jdbcType=VARCHAR},
       subordinate_platform_name = #{subordinatePlatformName,jdbcType=VARCHAR},
+      preliminary_deadline = #{preliminaryDeadline,jdbcType=TIMESTAMP},
       deadline = #{deadline,jdbcType=TIMESTAMP},
       time_node = #{timeNode,jdbcType=VARCHAR},
       is_roof_placement = #{isRoofPlacement,jdbcType=TINYINT},
       contact_phone_configuration = #{contactPhoneConfiguration,jdbcType=VARCHAR},
-      announcement_content = #{announcementContent,jdbcType=VARCHAR},
       browse_times = #{browseTimes,jdbcType=INTEGER},
       status = #{status,jdbcType=TINYINT},
       file_url = #{fileUrl,jdbcType=VARCHAR},

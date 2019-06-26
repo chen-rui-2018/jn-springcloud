@@ -12,6 +12,7 @@
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="accept_phone" jdbcType="VARCHAR" property="acceptPhone" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -73,7 +74,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, push_type, push_content, account_id, link_account, record_status, creator_account, 
-    created_time, modifier_account, modified_time
+    created_time, modifier_account, modified_time, accept_phone
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.electricmeter.entity.TbElectricEnergyControlPushLogCriteria" resultMap="BaseResultMap">
     select
@@ -109,11 +110,11 @@
     insert into tb_electric_energy_control_push_log (id, push_type, push_content, 
       account_id, link_account, record_status, 
       creator_account, created_time, modifier_account, 
-      modified_time)
+      modified_time, accept_phone)
     values (#{id,jdbcType=VARCHAR}, #{pushType,jdbcType=TINYINT}, #{pushContent,jdbcType=VARCHAR}, 
       #{accountId,jdbcType=VARCHAR}, #{linkAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
       #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP})
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{acceptPhone,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.electricmeter.entity.TbElectricEnergyControlPushLog">
     insert into tb_electric_energy_control_push_log
@@ -148,6 +149,9 @@
       <if test="modifiedTime != null">
         modified_time,
       </if>
+      <if test="acceptPhone != null">
+        accept_phone,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -179,6 +183,9 @@
       </if>
       <if test="modifiedTime != null">
         #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="acceptPhone != null">
+        #{acceptPhone,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -221,6 +228,9 @@
       <if test="record.modifiedTime != null">
         modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.acceptPhone != null">
+        accept_phone = #{record.acceptPhone,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -237,7 +247,8 @@
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      accept_phone = #{record.acceptPhone,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -272,6 +283,9 @@
       <if test="modifiedTime != null">
         modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="acceptPhone != null">
+        accept_phone = #{acceptPhone,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -285,7 +299,8 @@
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
-      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      accept_phone = #{acceptPhone,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

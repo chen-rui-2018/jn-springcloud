@@ -4,14 +4,14 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.oa.api.OaClient;
 import com.jn.oa.attendance.service.AttendanceService;
+import com.jn.oa.dingTalk.service.DingTalkUserService;
 import com.jn.oa.email.service.EmailService;
 import com.jn.oa.item.service.WorkPlanService;
 import com.jn.oa.leave.service.LeaveService;
 import com.jn.oa.meeting.service.MeetingService;
-import com.jn.oa.model.Attendance;
-import com.jn.oa.model.Email;
-import com.jn.oa.model.Leave;
+import com.jn.oa.model.*;
 import com.jn.oa.multiDeptOffice.service.MultiDeptOfficeService;
+import com.jn.oa.schedule.service.ScheduleService;
 import com.jn.oa.vo.AttendanceApiVo;
 import com.jn.oa.vo.LeaveApiVo;
 import com.jn.system.log.annotation.ControllerLog;
@@ -52,6 +52,12 @@ public class OaController extends BaseController implements OaClient {
 
     @Autowired
     private LeaveService leaveService;
+
+    @Autowired
+    private ScheduleService scheduleService;
+
+    @Autowired
+    private DingTalkUserService dingTalkUserService;
 
     /**
      * 定时十分钟通知会议申请人
@@ -165,6 +171,33 @@ public class OaController extends BaseController implements OaClient {
         List<AttendanceApiVo> result = attendanceService.selectApiAttendanceListByCondition(attendance);
         return new Result(result);
     }
+
+    /**
+     * 日程管理定时提醒功能
+     *
+     * @param Schedule
+     * @return
+     */
+    @Override
+    @ControllerLog(doAction = "日程管理定时提醒功能")
+    public Result scheduleRemind(@RequestBody Schedule Schedule) {
+        scheduleService.scheduleRemind(Schedule);
+        return null;
+    }
+    /**
+     * 钉钉修改用户通讯录回调
+     *
+     * @param addressBookNotice
+     * @return
+     */
+    @Override
+    @ControllerLog(doAction = "钉钉修改用户通讯录回调")
+    public Result updateOrInsertDingTalkUser(@RequestBody AddressBookNotice addressBookNotice) {
+        dingTalkUserService.updateOrInsertDingTalkUser(addressBookNotice);
+        return new Result();
+    }
+
+
 
 
 }

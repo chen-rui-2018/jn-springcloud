@@ -264,4 +264,5 @@ List<CompanyTree> getExcel (@Param("taskbatch") String taskbatch,@Param("modelid
 
     List<InMoneyModel> getValueAndYear(@Param("targetIds") List<TargetAndFormModel> targetIds);
 
+    void insertDataUploadResultSet(@Param("fillId") String fillId);
 }

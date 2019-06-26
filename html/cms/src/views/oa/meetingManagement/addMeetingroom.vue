@@ -198,8 +198,9 @@ export default {
     // 图片上传成功时的函数
     uploadDone(res, file, fileList) {
       if (res.code !== '0000') {
-        this.$message.error(res.result)
+        this.$message.error('上传图片失败')
         this.$refs.upload.uploadFiles.splice(this.$refs.upload.uploadFiles.length - 1, 1)
+        return false
         // this.uploadComplete = false
       }
       this.meetingroomForm.attachmentPaths.push(res.data)

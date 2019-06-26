@@ -50,8 +50,8 @@
                         <div class="agentTil">{{getDetal.policyTitle}}</div>
                     </div>
                     <div class="agent2 clearfix color2">
-                        <div class="agentImg">
-                            政策原文：<span class="mainColor">《》</span>
+                        <div class="agentImg" v-if="this.$route.query.isPolicyOriginal">
+                            政策原文：<span class="mainColor">《{{getDetal.policyDetailsShow}}》</span>
                         </div>
                         <div class="agent2Info fr">
                             <p class="lastP color3">
@@ -357,7 +357,7 @@ export default {
             // margin-left: 630px;
 
             > span {
-              margin-right: 20px;
+              margin-left: 20px;
             }
           }
         }
@@ -388,6 +388,9 @@ export default {
             // overflow: hidden;
             // white-space: nowrap;
             // text-overflow: ellipsis;
+            img{
+              width: 100%;
+            }
           }
           .orgBtn1 {
             font-size: 13px;

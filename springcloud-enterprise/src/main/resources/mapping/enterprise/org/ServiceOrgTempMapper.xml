@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.joinpark.org.dao.ServiceOrgTempMapper">
+    <select id="orgNameIsExist"  resultType="java.lang.Integer">
+    select count(1)
+    from tb_service_org_temp tsot
+    where 1=1
+    and tsot.record_status=1
+    and tsot.org_status!='2'
+    and tsot.org_id_=#{orgId}
+    and tsot.org_name=#{orgName}
+    </select>
+</mapper>

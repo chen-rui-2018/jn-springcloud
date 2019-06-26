@@ -134,12 +134,14 @@ public class Notify4BasePay {
 	 */
 	public void doNotify(PayOrder payOrder,Boolean isFirst) {
 		_log.info(">>>>>> PAY开始回调通知业务系统 <<<<<<");
+		_log.info("请求参数 isFirst = {}  , payOrder = {} ",isFirst,payOrder.toString());
 		// 发起后台通知业务系统
 		JSONObject object = createNotifyInfo(payOrder,isFirst);
 		try {
 			mq4PayNotify.send(object.toJSONString());
 		} catch (Exception e) {
 			_log.error("payOrderId={},sendMessage error.", payOrder != null ? payOrder.getPayOrderId() : "", e);
+			_log.info(">>>>>> PAY结束回调通知业务系统 <<<<<<");
 		}
 		_log.info(">>>>>> PAY回调通知业务系统完成 <<<<<<");
 	}

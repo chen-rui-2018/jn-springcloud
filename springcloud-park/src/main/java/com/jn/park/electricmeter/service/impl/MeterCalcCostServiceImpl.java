@@ -6,6 +6,7 @@ import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.GlobalConstants;
 import com.jn.common.util.StringUtils;
+import com.jn.common.util.bean.BeanHeader;
 import com.jn.company.api.CompanyClient;
 import com.jn.company.model.ServiceCompany;
 import com.jn.news.vo.SmsTemplateVo;
@@ -15,6 +16,7 @@ import com.jn.park.electricmeter.enums.MeterConstants;
 import com.jn.park.electricmeter.enums.MeterExceptionEnums;
 import com.jn.park.electricmeter.exception.ErrorLogException;
 import com.jn.park.electricmeter.service.MeterCalcCostService;
+import com.jn.park.electricmeter.service.MeterService;
 import com.jn.park.property.model.PayCallBackNotify;
 import com.jn.pay.api.PayAccountClient;
 import com.jn.pay.api.PayClient;
@@ -22,6 +24,7 @@ import com.jn.pay.model.*;
 import com.jn.pay.vo.PayBillCreateParamVo;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
+import org.apache.catalina.core.ApplicationContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -30,6 +33,9 @@ import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.ContextLoader;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -78,6 +84,11 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
     @Autowired(required = false)
     private PayClient payClient;
 
+    @Autowired(required = false)
+    private TbElectricMeterInfoMapper tbElectricMeterInfoMapper;
+
+    @Autowired(required = false)
+    private TbElectricPriceruleCompanyMapper tbElectricPriceruleCompanyMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -86,7 +97,7 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
         Result<ServiceCompany> companyInfo =companyClient.getCompanyDetailByAccountOrCompanyId(companyId);
         if(companyInfo.getData() == null){
             logger.info("通过企业id没有找到企业基本信息,入参{}",companyId);
-            throw new ErrorLogException(getErr(account, "企业基本信息找不到", null, companyId, null,dealDate));
+            throw new ErrorLogException(getErr(account, "企业基本信息找不到", null, companyId, "未知的企业名称",dealDate));
         }
         String companyName =companyInfo.getData().getComName();
         logger.info("结束企业id获取企业的基本信息");
@@ -128,6 +139,42 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
                 List<TbElectricReading> readings = meterDao.getDegreeByMeterCode(meterCode,dealDate);
                 logger.info("结束查询一个企业的一块电表一天的读数历史数据");
                 TbElectricMeterDayLog meterDayLog =null;
+                //再次验证是否已经拥有24tiao数据
+                if(readings.size() !=24){
+                    //查询电表
+                    logger.info("这块表，{}，没有24条数据；开始进行重新采集数据",meterCode);
+                    TbElectricMeterInfoCriteria criteria = new TbElectricMeterInfoCriteria();
+                    criteria.or().andMeterCodeEqualTo(meterCode).andRecordStatusEqualTo(new Byte(MeterConstants.VALID));
+                    List<TbElectricMeterInfo>  meters = tbElectricMeterInfoMapper.selectByExample(criteria);
+                    if(meters !=null && meters.size()>0){
+                        logger.info("这块表，{}，没有24条数据；开始进行重新采集数据;他的原始编码为：",meterCode,meters.get(0).getFactoryMeterCode());
+                        //没有24条数据；进行重新采集
+                        if(readings !=null){
+                            for(int i=0;i<24;i++){
+                                //默认没有采集到
+                                boolean isNotExist = true;
+                                for(TbElectricReading reBean : readings){
+                                    if(reBean.getDealHour().equals(String.valueOf(i))){
+                                        isNotExist = false;
+                                        break;
+                                    }
+                                }
+                                //不存在，进行数据重新采集
+                                if(isNotExist){
+                                    MeterService meterService = BeanHeader.getBean(MeterService.class);
+                                    meterService.dealAllFailByDealHourAndDealDateAndMeterCode(dealDate,String.valueOf(i),meters.get(0).getFactoryMeterCode());
+                                }
+                            }
+                        }
+                    }else{
+                        //记录日志，此表的
+                        throw new ErrorLogException(getErr(account, "重新采集数据时，发现"+meterCode+"表信息不存在", null, companyId, companyName,dealDate));
+                    }
+
+                    readings = meterDao.getDegreeByMeterCode(meterCode,dealDate);
+                }
+
+
                 if(readings.size() ==24){
                     logger.info("开始计算一个企业的一块电表一天的电量和电费,企业id:{},电表编码:{}",companyId,meterCode);
                     meterDayLog =calcost(groupLogs,companyName,account,dealDate,companyId, rulesContents,readings );
@@ -257,6 +304,15 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
     public Result calcCostEverdayByHandler(User user, String companyId, Date day ) {
         //所有电表的业主查询处
         Result result = new Result();
+        result.setData("0000");
+        String date = DateUtils.formatDate(day,"yyyy-MM-dd");
+        try{
+            day = DateUtils.parseDate(date,"yyyy-MM-dd");
+        }catch (Exception e){
+            logger.info("日期转换错误");
+            throw new JnSpringCloudException(MeterExceptionEnums.DAY_FORMATE_WRONG);
+        }
+
         List<String> hosters=new ArrayList<>();
         if(StringUtils.isNotBlank(companyId) && day != null){
             hosters =meterDao.getElectricMeterByCompanyId(companyId, day);
@@ -282,6 +338,8 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
             errorLogMapper.updateByExampleSelective(record,criteria);
         }catch(ErrorLogException e){
             result.setData(e.getErr().toString());
+            result.setCode("1");
+            result.setResult(e.getErr().toString());
         }
         return result;
     }

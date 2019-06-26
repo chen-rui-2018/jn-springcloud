@@ -1,6 +1,6 @@
 <template>
   <div class="park-profile">
-    <div class="park-poster" :style="{backgroundImage: 'url(' + basicInfo.mainPicture + ')'}"></div>
+    <img class="park-poster" :src="basicInfo.mainPicture" alt="">
     <div v-html="basicInfo.parkIntroduce"></div>
   </div>
 </template>
@@ -44,18 +44,17 @@ export default {
 <style lang="scss" scoped>
   @import '~@/assets/styles/common';
   .park-profile {
-    padding: 40px;
+    padding: 30px;
     .park-profile-title {
       font-size: 30px;
       color: #333333;
       padding: 30px 0 20px;
     }
     .park-poster {
-      height: 300px;
-      background-size: cover;
-      background-repeat: no-repeat;
-      border-radius: 10px;
-      overflow: hidden;
+      width: 100%;
+      display: block;
+      vertical-align: middle;
+      margin-bottom: 30px;
     }
   }
 </style>

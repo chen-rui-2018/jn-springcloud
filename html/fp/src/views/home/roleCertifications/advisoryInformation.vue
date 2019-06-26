@@ -205,8 +205,8 @@
       </div>
 
     </div>
-    <el-dialog :visible.sync="dialogVisible" width="50%" :modal-append-to-body="false">
-      <img :src="certificatePhoto" alt="图片" style="width:100%;height:200px">
+    <el-dialog :visible.sync="dialogVisible" width="39%" :modal-append-to-body="false">
+      <img :src="certificatePhoto" alt="图片" style="width:100%;">
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">返 回</el-button>
       </span>
@@ -215,7 +215,7 @@
 </template>
 
 <script>
-import { getToken } from '@/util/auth'
+import { getToken, getUserInfo } from '@/util/auth'
 export default {
   data() {
     var checkPhone = (rule, value, callback) => {
@@ -238,6 +238,7 @@ export default {
         callback();
       }
     };
+    const account = JSON.parse(getUserInfo()).account
     return {
       loading:false,
       baseUrl: this.api.host,
@@ -266,7 +267,7 @@ export default {
       honorData: [], //荣誉资质表格数据
       serviceExperienceList: [], //服务经历表格
       basicForm: {
-        advisorAccount: sessionStorage.getItem("account"),
+        advisorAccount: account,
         // businessArea:'',
         businessAreas: [], //业务领域
         personalProfile: "", //个人简介
@@ -280,7 +281,7 @@ export default {
         orgId: ""
       },
       certificateForm: {
-        advisorAccount: sessionStorage.getItem("account"),
+        advisorAccount: account,
         certificateName: "",
         certificateCode: "",
         id: "",
@@ -289,7 +290,7 @@ export default {
         issuingAgency: "" //颁发机构
       },
       projectExperienceListForm: {
-        advisorAccount: sessionStorage.getItem("account"),
+        advisorAccount: account,
         personalDuties: "",
         companyName: "",
         id: "",
@@ -297,7 +298,7 @@ export default {
         projectTime: ""
       },
       experienceListForm: {
-        advisorAccount: sessionStorage.getItem("account"),
+        advisorAccount: account,
         companyName: "",
         position: "",
         id: "",
@@ -745,8 +746,8 @@ export default {
           this.basicForm.businessAreas = query.businessArea.split();
         }
         this.orgId = query.orgId;
-        this.basicForm.advisorAccount = sessionStorage.getItem("account");
-        this.certificateForm.advisorAccount = sessionStorage.getItem("account");
+
+        this.certificateForm.advisorAccount = this.basicForm.advisorAccount = JSON.parse(getUserInfo()).account;
       }
       this.getInit();
     }

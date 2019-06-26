@@ -13,14 +13,14 @@
       <div class="declarationPlatform_cont">
         <ul>
           <li v-for="(item,index) in platFormList " :key="index" >
-            <p>{{item.platformTitle}}</p>
+            <p><a :href="item.linkAddress">{{item.platformTitle}}</a> </p>
             <p>
               <span>业务咨询：</span>
               <span v-html="item.businessConsult"></span>
             </p>
-            <p>
-              <span>系统支持：</span>
-              <span v-html="item.systemSupport"></span></p>
+            <p v-if="sendData.subordinatePlatformName!='1'">
+              <span>账号密码：</span>
+              <span><input type="text" v-model="item.accountAndPassword" @input="changeap(item.accountAndPassword,item.id)" placeholder="输入账号密码,例：admin/123(限50字)" maxlength="50"></span></p>
             <p>{{item.remark}} </p>
           </li>
         </ul>
@@ -45,22 +45,49 @@ export default {
       },
       platFormList: [],
       onFetching: false,
-      total: 0
+      total: 0,
+      platformId: '',
+      accountAndPassword: ''
     }
   },
   mounted () {
     this.getTypeList()
     this.getPlatformList()
+    console.log(sessionStorage.getItem('token'))
   },
   methods: {
+    // 备忘录
+    changeap (accountAndPassword, id) {
+      this.platformId = id
+      this.accountAndPassword = accountAndPassword
+      this.api.post({
+        url: 'addOrEditMemorandum',
+        data: {
+          accountAndPassword: this.accountAndPassword,
+          platformId: this.platformId
+        },
+        dataFlag: true,
+        callback: (res) => {
+          // console.log(res);
+          if (res.code === '0000') {
+          } else {
+            this.$vux.toast.text(res.result, 'middle')
+          }
+        }
+      })
+    },
     getTypeList () {
       this.api.get({
         url: 'platformType',
         data: { },
         callback: res => {
           if (res.code === '0000') {
-            // console.log(res)
             this.typeList = res.data
+          } else {
+            this.$vux.toast.text(res.result)
+            setTimeout(() => {
+              this.$router.go(-1)
+            }, 1000)
           }
         }
       })
@@ -74,6 +101,11 @@ export default {
           if (res.code === '0000') {
             this.platFormList = res.data.rows
             this.total = res.data.total
+          } else {
+            this.$vux.toast.text(res.result)
+            setTimeout(() => {
+              this.$router.go(-1)
+            }, 1000)
           }
         }
       })
@@ -92,6 +124,8 @@ export default {
                   this.onFetching = false
                   this.platFormList.push(...res.data.rows)
                   // console.log(...res.data.rows)
+                } else {
+                  this.$vux.toast.text(res.result, 'middle')
                 }
               }
             })
@@ -167,7 +201,10 @@ export default {
             font-size: 26px;
             p:nth-child(1){
               font-size: 34px;
-              color:#538aef;
+              color:#538AEF;
+              a:visited{color:#538aef;}
+              a:active{color:#538aef;}
+              a{color:#538aef;}
             }
             p:nth-child(2){
               padding-top: 32px;
@@ -188,6 +225,10 @@ export default {
               }
               span:nth-child(2){
                 color:#666666;
+                width:70%;
+              }
+              input{
+                width:100%
               }
             }
             p:nth-child(4){

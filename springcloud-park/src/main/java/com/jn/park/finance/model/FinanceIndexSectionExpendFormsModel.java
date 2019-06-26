@@ -54,4 +54,13 @@ public class FinanceIndexSectionExpendFormsModel implements Serializable {
     public void setCost(BigDecimal cost) {
         this.cost = cost;
     }
+
+    @Override
+    public String toString() {
+        return "FinanceIndexSectionExpendFormsModel{" +
+                "month='" + month + '\'' +
+                ", budgetNumber=" + budgetNumber +
+                ", cost=" + cost +
+                '}';
+    }
 }

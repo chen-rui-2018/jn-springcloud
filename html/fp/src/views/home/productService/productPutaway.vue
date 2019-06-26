@@ -1,5 +1,5 @@
 <template>
-  <div class="productPutaway"  >
+  <div class="productPutaway" v-loading="loading">
     <div class="putaway_title">
       <div>{{this.$route.meta.title}}</div>
       <div @click="$router.go(-1)">返回列表</div>
@@ -75,27 +75,27 @@
           </div>
          <div :model="productDetail" class="">
             <el-form-item label="参考利率范围：">
-              <span>{{productDetail.refRateMin}}-{{productDetail.refRateMax}} </span>
+              <span>{{productDetail.refRateMin}}%-{{productDetail.refRateMax}}%</span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
             <el-form-item label="是否网贷直联：">
-              <span>{{productDetail.isOnlineLoan}} </span>
+              <span>{{productDetail.isOnlineLoan|status}} </span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
             <el-form-item label="是否政策性产品：">
-              <span>{{productDetail.isPolicyPro}}</span>
+              <span>{{productDetail.isPolicyPro|status}}</span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
             <el-form-item label="是否通用产品：">
-              <span>{{productDetail.isGeneralPro}}</span>
+              <span>{{productDetail.isGeneralPro|status}}</span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
             <el-form-item label="是否人民币：">
-              <span>{{productDetail.isRmb}}</span>
+              <span>{{productDetail.isRmb|status}}</span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
@@ -105,7 +105,7 @@
           </div>
           <div :model="productDetail" class="">
             <el-form-item label="贷款期限：">
-              <span>{{productDetail.loanTermMin}}-{{productDetail.loanTermMax}} </span>
+              <span>{{productDetail.loanTermMin}}个月-{{productDetail.loanTermMax}}个月</span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
@@ -115,7 +115,7 @@
           </div>
           <div :model="productDetail" class="">
             <el-form-item label="是否政策性产品：">
-              <span>{{productDetail.isPolicyPro}}</span>
+              <span>{{productDetail.isPolicyPro|status}}</span>
             </el-form-item>
           </div>
           <div :model="productDetail" class="">
@@ -163,7 +163,17 @@ export default {
       orgId:'',
       templateId:'',
       businessType:'',
-      businessTypeName:""
+      businessTypeName:"",
+      loading:false
+    }
+  },
+   filters: {
+    status(status){
+      if(status==="1"){
+        return "是"
+      }else{
+        return "否"
+      }
     }
   },
   mounted () {
@@ -270,6 +280,7 @@ export default {
     },
     //上架
     submit(){
+      this.loading=true
       if(this.businessType=='technology_finance'){
         let _this = this
         this.api.post({
@@ -280,8 +291,12 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
+              _this.loading=false
               _this.$message.success("上架成功")
               _this.$router.back(-1)
+            }else{
+            _this.loading=false 
+             _this.$message.error(res.result)
             }
           }
         })
@@ -297,8 +312,12 @@ export default {
         },
         callback: function(res) {
           if (res.code == "0000") {
+              _this.loading=false
               _this.$message.success("上架成功")
               _this.$router.back(-1)
+            }else{
+               _this.loading=false 
+             _this.$message.error(res.result)
             }
           }
         })
@@ -316,21 +335,21 @@ export default {
     width: 100%;
     // 大标题
     .putaway_title{
-      background-color: #fff;
+       background-color: #fff;
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding:17px;
-      font-size: 13px;
+      font-size: 16px;
       border-radius: 5px;
       div:nth-child(2){
         background-color: #ecfcf2;
         border-radius: 5px;
         border: solid 2px #41d787;
         padding:8px 11px;
-        font-size: 12px;
-        cursor: pointer;
+        font-size: 14px;
         color:#00a041;
+        cursor: pointer;
       }
     }
     // 主体

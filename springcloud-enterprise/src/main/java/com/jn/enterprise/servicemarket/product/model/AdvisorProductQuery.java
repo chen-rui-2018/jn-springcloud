@@ -47,4 +47,13 @@ public class AdvisorProductQuery extends Page implements Serializable {
     public void setPraise(String praise) {
         this.praise = praise;
     }
+
+    @Override
+    public String toString() {
+        return "AdvisorProductQuery{" +
+                "advisorAccount='" + advisorAccount + '\'' +
+                ", productType='" + productType + '\'' +
+                ", praise='" + praise + '\'' +
+                '}';
+    }
 }

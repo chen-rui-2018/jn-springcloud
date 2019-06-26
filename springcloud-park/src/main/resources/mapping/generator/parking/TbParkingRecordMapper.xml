@@ -3,7 +3,7 @@
 <mapper namespace="com.jn.park.parking.dao.TbParkingRecordMapper">
   <resultMap id="BaseResultMap" type="com.jn.park.parking.entity.TbParkingRecord">
     <id column="parking_id_" jdbcType="VARCHAR" property="parkingId" />
-    <result column="area_id_" jdbcType="VARCHAR" property="areaId" />
+    <result column="message_id" jdbcType="VARCHAR" property="messageId" />
     <result column="area_name" jdbcType="VARCHAR" property="areaName" />
     <result column="car_license" jdbcType="VARCHAR" property="carLicense" />
     <result column="account" jdbcType="VARCHAR" property="account" />
@@ -27,6 +27,7 @@
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="area_id_" jdbcType="VARCHAR" property="areaId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -87,10 +88,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    parking_id_, area_id_, area_name, car_license, account, name, phone, admission_time, 
+    parking_id_, message_id, area_name, car_license, account, name, phone, admission_time, 
     start_billing_time, departure_time, payment_time, parking_status, parking_time, due_money, 
     use_integral, deduction_money, actual_money, order_bill_num, pay_time, pay_status, 
-    creator_account, created_time, modifier_account, modified_time, record_status
+    creator_account, created_time, modifier_account, modified_time, record_status, area_id_
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.parking.entity.TbParkingRecordCriteria" resultMap="BaseResultMap">
     select
@@ -123,7 +124,7 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.park.parking.entity.TbParkingRecord">
-    insert into tb_parking_record (parking_id_, area_id_, area_name, 
+    insert into tb_parking_record (parking_id_, message_id, area_name, 
       car_license, account, name, 
       phone, admission_time, start_billing_time, 
       departure_time, payment_time, parking_status, 
@@ -131,8 +132,8 @@
       deduction_money, actual_money, order_bill_num, 
       pay_time, pay_status, creator_account, 
       created_time, modifier_account, modified_time, 
-      record_status)
-    values (#{parkingId,jdbcType=VARCHAR}, #{areaId,jdbcType=VARCHAR}, #{areaName,jdbcType=VARCHAR}, 
+      record_status, area_id_)
+    values (#{parkingId,jdbcType=VARCHAR}, #{messageId,jdbcType=VARCHAR}, #{areaName,jdbcType=VARCHAR}, 
       #{carLicense,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
       #{phone,jdbcType=VARCHAR}, #{admissionTime,jdbcType=TIMESTAMP}, #{startBillingTime,jdbcType=TIMESTAMP}, 
       #{departureTime,jdbcType=TIMESTAMP}, #{paymentTime,jdbcType=TIMESTAMP}, #{parkingStatus,jdbcType=VARCHAR}, 
@@ -140,7 +141,7 @@
       #{deductionMoney,jdbcType=DOUBLE}, #{actualMoney,jdbcType=DOUBLE}, #{orderBillNum,jdbcType=VARCHAR}, 
       #{payTime,jdbcType=TIMESTAMP}, #{payStatus,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, 
       #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
-      #{recordStatus,jdbcType=TINYINT})
+      #{recordStatus,jdbcType=TINYINT}, #{areaId,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.parking.entity.TbParkingRecord">
     insert into tb_parking_record
@@ -148,8 +149,8 @@
       <if test="parkingId != null">
         parking_id_,
       </if>
-      <if test="areaId != null">
-        area_id_,
+      <if test="messageId != null">
+        message_id,
       </if>
       <if test="areaName != null">
         area_name,
@@ -220,13 +221,16 @@
       <if test="recordStatus != null">
         record_status,
       </if>
+      <if test="areaId != null">
+        area_id_,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="parkingId != null">
         #{parkingId,jdbcType=VARCHAR},
       </if>
-      <if test="areaId != null">
-        #{areaId,jdbcType=VARCHAR},
+      <if test="messageId != null">
+        #{messageId,jdbcType=VARCHAR},
       </if>
       <if test="areaName != null">
         #{areaName,jdbcType=VARCHAR},
@@ -297,6 +301,9 @@
       <if test="recordStatus != null">
         #{recordStatus,jdbcType=TINYINT},
       </if>
+      <if test="areaId != null">
+        #{areaId,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.park.parking.entity.TbParkingRecordCriteria" resultType="java.lang.Long">
@@ -311,8 +318,8 @@
       <if test="record.parkingId != null">
         parking_id_ = #{record.parkingId,jdbcType=VARCHAR},
       </if>
-      <if test="record.areaId != null">
-        area_id_ = #{record.areaId,jdbcType=VARCHAR},
+      <if test="record.messageId != null">
+        message_id = #{record.messageId,jdbcType=VARCHAR},
       </if>
       <if test="record.areaName != null">
         area_name = #{record.areaName,jdbcType=VARCHAR},
@@ -383,6 +390,9 @@
       <if test="record.recordStatus != null">
         record_status = #{record.recordStatus,jdbcType=TINYINT},
       </if>
+      <if test="record.areaId != null">
+        area_id_ = #{record.areaId,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -391,7 +401,7 @@
   <update id="updateByExample" parameterType="map">
     update tb_parking_record
     set parking_id_ = #{record.parkingId,jdbcType=VARCHAR},
-      area_id_ = #{record.areaId,jdbcType=VARCHAR},
+      message_id = #{record.messageId,jdbcType=VARCHAR},
       area_name = #{record.areaName,jdbcType=VARCHAR},
       car_license = #{record.carLicense,jdbcType=VARCHAR},
       account = #{record.account,jdbcType=VARCHAR},
@@ -414,7 +424,8 @@
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
-      record_status = #{record.recordStatus,jdbcType=TINYINT}
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      area_id_ = #{record.areaId,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -422,8 +433,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.parking.entity.TbParkingRecord">
     update tb_parking_record
     <set>
-      <if test="areaId != null">
-        area_id_ = #{areaId,jdbcType=VARCHAR},
+      <if test="messageId != null">
+        message_id = #{messageId,jdbcType=VARCHAR},
       </if>
       <if test="areaName != null">
         area_name = #{areaName,jdbcType=VARCHAR},
@@ -494,12 +505,15 @@
       <if test="recordStatus != null">
         record_status = #{recordStatus,jdbcType=TINYINT},
       </if>
+      <if test="areaId != null">
+        area_id_ = #{areaId,jdbcType=VARCHAR},
+      </if>
     </set>
     where parking_id_ = #{parkingId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.park.parking.entity.TbParkingRecord">
     update tb_parking_record
-    set area_id_ = #{areaId,jdbcType=VARCHAR},
+    set message_id = #{messageId,jdbcType=VARCHAR},
       area_name = #{areaName,jdbcType=VARCHAR},
       car_license = #{carLicense,jdbcType=VARCHAR},
       account = #{account,jdbcType=VARCHAR},
@@ -522,7 +536,8 @@
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
-      record_status = #{recordStatus,jdbcType=TINYINT}
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      area_id_ = #{areaId,jdbcType=VARCHAR}
     where parking_id_ = #{parkingId,jdbcType=VARCHAR}
   </update>
 </mapper>

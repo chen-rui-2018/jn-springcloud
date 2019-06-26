@@ -76,12 +76,12 @@
                                 <div class="actiNum clearfix">
                                     <div class="avatar">
                                         <ul>
-                                            <li v-for="(avr,key) in item.avatarList" :key="key"><img :src="avr" alt=""></li>
+                                            <li v-for="(avr,key) in item.avatarList" v-if="k<5" :key="key"><img :src="avr" alt=""></li>
                                         </ul>
                                     </div>
                                     <i>{{item.applyNum}}/{{item.actiNumber}}</i>
                                     <span>
-                                        <i class="iconfont icon-xihuan"></i>{{item.actiLike}}</span>
+                                        <i class="iconfont icon-miaojiesellerlike"></i>{{item.actiLike}}</span>
                                 </div>
                             </li>
                         </ul>
@@ -93,7 +93,7 @@
                                 <div class="verticalMiddle fl">
                                     <h3 class="verticalTit">{{item.actiName}}</h3>
                                     <div class="xihuan">
-                                        <i class="iconfont icon-xihuan"></i>
+                                        <i class="iconfont icon-miaojiesellerlike"></i>
                                         <span>{{item.actiLike}}</span>
                                     </div>
                                     <p>
@@ -107,7 +107,7 @@
                                     <div class="actiNum clearfix">
                                         <div class="avatar">
                                             <ul class="clearfix">
-                                                <li v-for="(avr,key) in item.avatarList" :key="key"><img :src="avr" alt=""></li>
+                                                <li v-for="(avr,key) in item.avatarList" v-if="k<5" :key="key"><img :src="avr" alt=""></li>
                                                 <!-- <li><img src="@/../static/img/heng1.png" alt=""></li> -->
                                             </ul>
                                         </div>

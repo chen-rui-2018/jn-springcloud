@@ -1,5 +1,6 @@
 package com.jn.hardware.model.dingtalk.user;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.jn.hardware.enums.dingtalk.DepartmentUserOrderEnum;
 import com.jn.hardware.model.dingtalk.BaseResult;
 import org.hibernate.validator.constraints.NotBlank;
@@ -22,10 +23,14 @@ public class DepartmentUserInfoParam extends BaseResult implements Serializable 
      * 通讯录语言(默认zh_CN另外支持en_US)
      */
     private String lang="";
+
+    @JsonProperty("department_id")
     @NotBlank(message = "部门id不能为空")
-    private String department_id;
+    private String departmentId;
+
     @NotNull(message = "offset不能为空，与size参数同时设置时才生效，此参数代表偏移量,偏移量从0开始")
     private Long offset;
+
     @NotNull(message="分页大小不能为空，与offset参数同时设置时才生效，最小1，最大100条")
     private Long size;
     /**
@@ -46,12 +51,12 @@ public class DepartmentUserInfoParam extends BaseResult implements Serializable 
         this.lang = lang;
     }
 
-    public String getDepartment_id() {
-        return department_id;
+    public String getDepartmentId() {
+        return departmentId;
     }
 
-    public void setDepartment_id(String department_id) {
-        this.department_id = department_id;
+    public void setDepartmentId(String departmentId) {
+        this.departmentId = departmentId;
     }
 
     public Long getOffset() {
@@ -82,7 +87,7 @@ public class DepartmentUserInfoParam extends BaseResult implements Serializable 
     public String toString() {
         return "DepartmentUserInfoParam{" +
                 "lang='" + lang + '\'' +
-                ", department_id='" + department_id + '\'' +
+                ", departmentId='" + departmentId + '\'' +
                 ", offset=" + offset +
                 ", size=" + size +
                 ", departmentUserOrder=" + departmentUserOrder +

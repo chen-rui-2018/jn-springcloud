@@ -1,12 +1,16 @@
 // pages/home/aboutUs/aboutUs.js
+var app = getApp()
 Page({
   data: {
-    url:"http://112.94.22.222:8002/#/parkDetais",
-    noticeId:""
+    url:"",
+    noticeId:"",
+    token:""
   },
   onLoad: function (options) {
     this.setData({
-      noticeId:options.noticeid
+      noticeId:options.noticeid,
+      token:wx.getStorageSync("token"),
+      url:app.globalData.h5Url+"parkDetais"
     })
   },
  onReady: function () { },

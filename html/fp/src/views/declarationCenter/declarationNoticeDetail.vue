@@ -189,7 +189,7 @@ export default {
     this.rangeId=this.$route.query.rangeId
     this.appointment.appointmentItemId=this.$route.query.id
     this.getdeclaration()
-    this. addPageviews()
+    // this. addPageviews()
   },
   methods: {
     //详情数据
@@ -207,23 +207,25 @@ export default {
             if(res.data.fileUrl!==''){
               _this.fileList=JSON.parse(res.data.fileUrl)
             }
+          }else{
+             _this.$message.error(res.result)    
           }
         }
       });
     },
     //阅读量增加
-    addPageviews(){
-       let _this = this;
-      this.api.get({
-        url: "addpageviews",
-        data: {
-          id:this.id
-        },
-        callback: function(res) {
+    // addPageviews(){
+    //    let _this = this;
+    //   this.api.get({
+    //     url: "addpageviews",
+    //     data: {
+    //       id:this.id
+    //     },
+    //     callback: function(res) {
           
-        }
-      });
-    },
+    //     }
+    //   });
+    // },
     // 文本域字数显示
     counselnum(){
       this.residuenum=500-this.appointment.remark.length
@@ -262,12 +264,12 @@ export default {
                             data: { },
                             callback: function(res) {
                               if (res.code == "0000") {
-                                _this.appointment.declareItem=_this.detailList.titleName
-                                _this.appointment.contactName= res.data.nickName
-                                _this.appointment.contactPhone= res.data.phone
-                                _this.appointment.email= res.data.email
-                                _this.appointment.declareEnterprise= res.data.companyName
-                                _this.appointment.fileUrl= res.data.fileUrl
+                                  _this.appointment.declareItem=_this.detailList.titleName
+                                  _this.appointment.contactName= res.data.nickName
+                                  _this.appointment.contactPhone= res.data.phone
+                                  _this.appointment.email= res.data.email
+                                  _this.appointment.declareEnterprise= res.data.companyName
+                                  _this.appointment.fileUrl= res.data.fileUrl
                               }
                             }
                           });

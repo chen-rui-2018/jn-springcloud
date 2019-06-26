@@ -166,8 +166,8 @@ export default {
             } else {
               // _this.dispatch(document.queryselector('.attention'), 'click')
               // document.queryselector('.attention').click(_this.actiForm.actiLike)
-              let action = 'handleLike'
-              window.webkit.messageHandlers.jsToOc.postMessage(action, _this.actiForm.actiLike)
+              // let action = 'handleLike'
+              window.webkit.messageHandlers.jsToOc.postMessage(_this.actiForm.actiLike)
             }
           } else {
             _this.$vux.toast.text(res.result)
@@ -199,8 +199,8 @@ export default {
             } else {
               // _this.dispatch(document.queryselector('.attention'), 'click')
               // document.queryselector('.attention').click(_this.actiForm.actiLike)
-              let action = 'cancelLike'
-              window.webkit.messageHandlers.jsToOc.postMessage(action, _this.actiForm.actiLike)
+              // let action = 'cancelLike'
+              window.webkit.messageHandlers.jsToOc.postMessage(_this.actiForm.actiLike)
             }
           } else {
             _this.$vux.toast.text(res.result)

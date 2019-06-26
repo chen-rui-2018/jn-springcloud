@@ -56,7 +56,7 @@
             <div class="swiper-wrapper">
               <div class="swiper-slide" style="width:100%" v-for="(item,index) in enterpriseList" :key="index">
                 <ul class="parkUl w clearfix">
-                  <li class="fl pointer" v-for="(i,k) in item" :key="k" :data-path="`/parkIntroductionChild?id=${i.id}`" >
+                  <li class="fl pointer" v-for="(i,k) in item" :key="k" :data-path="`/parkIntroductionChild?id=${i.id}`">
                     <div class="imgItem">
                       <img :src="i.mainPicture" alt="">
                     </div>
@@ -114,8 +114,8 @@ export default {
         },
         on: {
           click: function(e) {
-            if(e.path[2].getAttribute("data-path") == null){
-                return
+            if (e.path[2].getAttribute("data-path") == null) {
+              return;
             }
             let path = e.path[2].getAttribute("data-path");
             _this.$router.push(path);
@@ -209,13 +209,11 @@ export default {
         font-size: 14px;
         line-height: 25px;
         height: 280px;
-        //  display: -webkit-box;
-        //     -webkit-box-orient: vertical;
-        //     -webkit-line-clamp: 11;
-        //     overflow: hidden;
         text-overflow: ellipsis;
         display: -webkit-box;
+        /*! autoprefixer: off */
         -webkit-box-orient: vertical;
+        /*! autoprefixer: on */
         -webkit-line-clamp: 11;
         overflow: hidden;
       }
@@ -312,14 +310,11 @@ export default {
           .liBerif {
             margin: 20px 0;
             height: 38px;
-            // display: -webkit-box;
-            // -webkit-box-orient: vertical;
-            // -webkit-line-clamp: 2;
-            // overflow: hidden;
-
             text-overflow: ellipsis;
             display: -webkit-box;
+            /*! autoprefixer: off */
             -webkit-box-orient: vertical;
+            /*! autoprefixer: on */
             -webkit-line-clamp: 2;
             overflow: hidden;
             font-size: 14px;

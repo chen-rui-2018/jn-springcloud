@@ -27,7 +27,7 @@ public class ElectricMeterController {
         electricMeterClient.getDataFromHardare();
     }
 
-    @Scheduled(cron = "0 0 1 * * ?")
+    @Scheduled(cron = "0 0 8 * * ?")
     public void calcCostEverday(){
         logger.info("进入定时计价的方法");
         electricMeterClient.calcCostEverday();

@@ -41,7 +41,7 @@
         <el-form-item label="宣传费用（元）:">
           <span>{{propagandaFee}}</span>
         </el-form-item>
-        <div class="business_footer" @click="toEnterprisePropaganda">
+        <div class="business_footer" @click="$router.go(-1)">
           返回
         </div>
       </el-form>

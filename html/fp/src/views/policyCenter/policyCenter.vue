@@ -440,12 +440,13 @@ export default {
     　　return windowHeight;
     },
     scrollTopAnimate(){
-      let times = setInterval(()=>{
-        document.documentElement.scrollTop = this.getScrollTop() + 10;
-        if(this.getScrollTop() + this.getWindowHeight() == this.getScrollHeight() || this.getScrollTop() >= document.getElementsByClassName("tabBox")[0].offsetTop - 100){
-          clearInterval(times)
-    　　}
-      },1)
+      document.documentElement.scrollTop = document.getElementsByClassName("tabBox")[0].offsetTop - 100;
+    //   let times = setInterval(()=>{
+    //     document.documentElement.scrollTop = this.getScrollTop() + 10;
+    //     if(this.getScrollTop() + this.getWindowHeight() >= this.getScrollHeight() || this.getScrollTop() >= document.getElementsByClassName("tabBox")[0].offsetTop - 100){
+    //       clearInterval(times)
+    // 　　}
+    //   },1)
     },
     //政策中心首页
     getPolicyCenterList() {

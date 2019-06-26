@@ -1276,6 +1276,13 @@ export default {
                 text-indent: -35px;
                 margin-left: 35px;
                 font-size: 13px;
+                height: 36px;
+                display: -webkit-box;
+                /*! autoprefixer: off */
+                -webkit-box-orient: vertical;
+                /*! autoprefixer: on */
+                -webkit-line-clamp: 2;
+                overflow: hidden;
               }
             }
             > .finaPP {

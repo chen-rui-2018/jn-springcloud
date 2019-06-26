@@ -948,7 +948,7 @@ export default {
       margin: 30px 0 20px;
       .proUl {
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-start;
         li {
           width: 24%;
           margin-right: 30px;

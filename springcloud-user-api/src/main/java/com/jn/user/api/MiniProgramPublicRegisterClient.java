@@ -18,15 +18,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @FeignClient("springcloud-user")
 public interface MiniProgramPublicRegisterClient {
     /**
-     * 判断OpenId是否已绑定
+     * 用户关注/取消关注服务号（根据openId和关注标志对数据进行新增、修改，返回数据响应条数，正常为1）
      * @param weChatRequestParam  微信用户信息
      * @return
      */
-    @RequestMapping(value = "/api/miniProgramPublicController/isBindingAccountByOpenId", method = RequestMethod.POST)
-    Result isBindingAccountByOpenId(@RequestBody @Validated WeChatRequestParam weChatRequestParam);
+    @RequestMapping(value = "/api/miniProgramPublicController/concernOrCancelWeChat", method = RequestMethod.POST)
+    Result<Integer> concernOrCancelWeChat(@RequestBody @Validated WeChatRequestParam weChatRequestParam);
 
     /**
-     * 根据OpenId判断OpenId是否已绑定
+     * 根据OpenId判断OpenId是否已绑定(查询数据库表中是否存在openId，若存在，则再查询是否已绑定账号，若有返回绑定账号，否则返回空)
      * @param openId
      * @return
      */
@@ -34,7 +34,7 @@ public interface MiniProgramPublicRegisterClient {
     Result<String> openIdIsBindingAccount(@RequestBody String openId);
 
     /**
-     * 注册并绑定
+     * 注册并绑定 (若入参手机号在系统中已经存在，则直接把手机号openId绑定，若不存在，系统根据手机号自动注册，然后再把注册的账号和openId绑定)
      * @param registerInfoParam
      * @return
      */

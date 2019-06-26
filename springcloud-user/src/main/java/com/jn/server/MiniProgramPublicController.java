@@ -42,13 +42,12 @@ public class MiniProgramPublicController extends BaseController implements MiniP
     private MiniProgramRegistersService miniprogramRegistersService;
 
 
-    @ControllerLog(doAction = "判断OpenId是否已绑定")
-    @ApiOperation(value = "判断OpenId是否已绑定")
-    @RequestMapping(value = "/isBindingAccountByOpenId",method = RequestMethod.POST)
+    @ControllerLog(doAction = "用户关注/取消关注服务号")
+    @ApiOperation(value = "用户关注/取消关注服务号",notes = "返回数据响应条数，正常为1")
+    @RequestMapping(value = "/concernOrCancelWeChat",method = RequestMethod.POST)
     @Override
-    public Result<String> isBindingAccountByOpenId(@RequestBody @Validated WeChatRequestParam weChatRequestParam) {
-        logger.info("----进入判断OpenId是否已绑定API,入参：{}----",weChatRequestParam.toString());
-        return new Result(miniprogramRegistersService.isBindingAccountByOpenId(weChatRequestParam, RegisterTypeEnum.PUBLIC_NUMBER));
+    public Result<Integer> concernOrCancelWeChat(@RequestBody @Validated WeChatRequestParam weChatRequestParam) {
+        return new Result(miniprogramRegistersService.concernOrCancelWeChat(weChatRequestParam));
     }
 
     @ControllerLog(doAction = "根据OpenId判断OpenId是否已绑定")

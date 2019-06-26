@@ -91,6 +91,13 @@ export default {
     this.getdepartList()
     this.getPoweList()
     this.scrollBottom()
+    if (sessionStorage.getItem('url')) {
+      this.active = sessionStorage.getItem('active') * 1
+      this.sendData.departId = sessionStorage.getItem('departId')
+      this.getPoweList()
+    } else {
+      this.getPoweList()
+    }
   },
   methods: {
     // tab栏
@@ -161,6 +168,9 @@ export default {
     },
     // 去详情
     goPower (id) {
+      sessionStorage.setItem('url', 'powerDetail')
+      sessionStorage.setItem('active', this.active)
+      sessionStorage.setItem('departId', this.sendData.departId)
       this.$router.push({path: '/guest/portal/sp/power/powerDetail', query: {id: id}})
     },
     toggle (index, id) {

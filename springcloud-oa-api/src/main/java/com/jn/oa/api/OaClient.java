@@ -1,10 +1,7 @@
 package com.jn.oa.api;
 
 import com.jn.common.model.Result;
-import com.jn.oa.model.Attendance;
-import com.jn.oa.model.Email;
-import com.jn.oa.model.Leave;
-import com.jn.oa.model.Schedule;
+import com.jn.oa.model.*;
 import com.jn.oa.vo.AttendanceApiVo;
 import com.jn.oa.vo.LeaveApiVo;
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -110,5 +107,13 @@ public interface OaClient {
      */
     @RequestMapping(value = "/api/oa/scheduleRemind", method = RequestMethod.POST)
     Result scheduleRemind(@RequestBody Schedule Schedule);
+
+    /**
+     * 钉钉修改用户通讯录回调
+     * @param addressBookNotice
+     * @return
+     */
+    @RequestMapping(value = "/api/oa/updateOrInsertDingTalkUser", method = RequestMethod.POST)
+    Result updateOrInsertDingTalkUser(@RequestBody AddressBookNotice addressBookNotice);
 
 }

@@ -18,11 +18,14 @@
       <el-card style="overflow:visible">
         <div class="infotop pr">
           <img class="infoImg" :src="activityDetail.actiPosterUrl" alt="">
+          <i class="iconfont  like" :class="accountIsLike ? 'icon-miaojiesellerlike mainColor' : 'icon-xihuan'" @click="handleLike(activityDetail.id)">&nbsp;
+            <span>{{activityDetail.actiLike}}</span>
+          </i>
           <div class="infotitle">
             <span>{{activityDetail.actiName}}</span>
-            <i class="iconfont  like" :class="accountIsLike ? 'icon-miaojiesellerlike mainColor' : 'icon-xihuan'" @click="handleLike(activityDetail.id)">&nbsp;
+            <!-- <i class="iconfont  like" :class="accountIsLike ? 'icon-miaojiesellerlike mainColor' : 'icon-xihuan'" @click="handleLike(activityDetail.id)">&nbsp;
               <span>{{activityDetail.actiLike}}</span>
-            </i>
+            </i> -->
             <!-- <i class="iconfont like" v-else @click="cancleLike(activityDetail.id)">&nbsp;
               <span>{{this.activityDetail.actiLike}}</span>
             </i> -->
@@ -31,7 +34,7 @@
               <span>{{activityDetail.actiStartTime}}-{{activityDetail.actiEndTime}}</span>
               <i class="iconfont icon-recharge">&nbsp;
                 <span v-if="activityDetail.actiCost=='0.00'">免费</span>
-                <span v-else>收费</span>
+                <span v-else>&nbsp;{{activityDetail.actiCost}}元</span>
               </i>
             </p>
             <div class="delAddress">
@@ -154,7 +157,7 @@
 export default {
   data() {
     return {
-      concatVisible:false,
+      concatVisible: false,
       inFlag: "",
       textarea: "",
       textData: "",
@@ -191,7 +194,7 @@ export default {
     //留言
     leaveMessage(id) {
       if (!this.getToken()) {
-        this.concatVisible=true;
+        this.concatVisible = true;
         return;
       }
       let _this = this;
@@ -218,7 +221,7 @@ export default {
         return;
       }
       if (!this.getToken()) {
-        this.concatVisible=true;
+        this.concatVisible = true;
         return;
       }
       this.textarea = "";
@@ -247,7 +250,7 @@ export default {
     },
     comLike(item) {
       if (!this.getToken()) {
-        this.concatVisible=true;
+        this.concatVisible = true;
         return;
       }
       //评论点赞
@@ -312,7 +315,7 @@ export default {
     handCheck(id) {
       //跳转报名人列表
       if (!this.getToken()) {
-        this.concatVisible=true;
+        this.concatVisible = true;
         return;
       }
       this.$router.push({ path: "actiTrainStatus", query: { activityId: id } });
@@ -320,7 +323,7 @@ export default {
     quickApply(id) {
       //立即报名
       if (!this.getToken()) {
-        this.concatVisible=true;
+        this.concatVisible = true;
         return;
       }
       let _this = this;
@@ -343,7 +346,7 @@ export default {
     stopApply(id) {
       //停止报名
       if (!this.getToken()) {
-        this.concatVisible=true;
+        this.concatVisible = true;
         return;
       }
       let _this = this;
@@ -365,7 +368,7 @@ export default {
     },
     handleLike(id) {
       if (!this.getToken()) {
-        this.concatVisible=true;
+        this.concatVisible = true;
         return;
       }
       //活动点赞
@@ -487,9 +490,9 @@ export default {
   width: 1190px;
   margin: 0 auto;
   padding-top: 65px;
-  .loginTip{
+  .loginTip {
     text-align: center;
-    margin-bottom:20px;
+    margin-bottom: 20px;
     font-size: 15px;
   }
   .delnav {
@@ -504,6 +507,11 @@ export default {
     }
     .infotop {
       height: 310px;
+      .like {
+        position: absolute;
+        right: 0;
+        font-size: 20px;
+      }
       .infoImg {
         width: 548px;
         height: 323px;
@@ -516,17 +524,17 @@ export default {
         position: absolute;
         left: 537px;
         top: 20px;
-        width: 42%;
+        // width: 42%;
         > span {
           font-size: 22px;
           font-weight: bold;
           color: #2a2a2a;
         }
-        .like {
-          position: absolute;
-          right: -130px;
-          font-size: 20px;
-        }
+        // .like {
+        //   position: absolute;
+        //   right: -130px;
+        //   font-size: 20px;
+        // }
         > p {
           margin-top: 30px;
           .icon-recharge {

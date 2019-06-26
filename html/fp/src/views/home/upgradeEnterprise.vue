@@ -494,6 +494,9 @@ export default {
     },
     handleAvatarSuccess(res, file) {
       this.businessForm.avatar = res.data;
+      if (this.businessForm.avatar) {
+          this.$refs['businessForm'].clearValidate('avatar')
+        }
     },
     // 文件上传之前的函数
     beforeUpload(file) {
@@ -552,6 +555,9 @@ export default {
     },
     handleBusinessLicenseSuccess(res, file) {
       this.businessForm.businessLicense = res.data;
+      if (this.businessForm.businessLicense) {
+          this.$refs['businessForm'].clearValidate('businessLicense')
+        }
     }
   }
 };

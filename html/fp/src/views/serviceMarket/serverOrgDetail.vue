@@ -586,13 +586,16 @@
                 <div class="actiNum clearfix">
                   <div class="avatar">
                     <ul>
-                      <!-- <li v-for="(i,k) in item.avatarList" v-if="i<5" :key='k'><img :src="i" alt=""></li> -->
-                      <li></li>
+                      <li v-for="(item,k) in i.avatarList" v-if="k<5" :key='k'><img :src="item" alt=""></li>
+                      <!-- <li></li> -->
                     </ul>
                   </div>
                   <i>{{i.actiNum}}/{{i.actiNumber}}</i>
-                  <span class="mainColor">
-                    <i class="iconfont icon-xihuan"></i>{{i.actiLike}}</span>
+                  <p class="mainColor">
+                    <!-- <i class="iconfont icon-xihuan"></i>{{i.actiLike}} -->
+                    <img src="@/../static/img/xin.png" alt="" style="margin-right:0">
+                    <span>{{i.actiLike}}</span>
+                  </p>
                 </div>
               </li>
             </ul>

@@ -170,6 +170,8 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
                         //记录日志，此表的
                         throw new ErrorLogException(getErr(account, "重新采集数据时，发现"+meterCode+"表信息不存在", null, companyId, companyName,dealDate));
                     }
+
+                    readings = meterDao.getDegreeByMeterCode(meterCode,dealDate);
                 }
 
 
@@ -303,6 +305,14 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
         //所有电表的业主查询处
         Result result = new Result();
         result.setData("0000");
+        String date = DateUtils.formatDate(day,"yyyy-MM-dd");
+        try{
+            day = DateUtils.parseDate(date,"yyyy-MM-dd");
+        }catch (Exception e){
+            logger.info("日期转换错误");
+            throw new JnSpringCloudException(MeterExceptionEnums.DAY_FORMATE_WRONG);
+        }
+
         List<String> hosters=new ArrayList<>();
         if(StringUtils.isNotBlank(companyId) && day != null){
             hosters =meterDao.getElectricMeterByCompanyId(companyId, day);

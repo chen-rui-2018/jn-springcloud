@@ -77,12 +77,13 @@
             <div class="actiNum clearfix">
               <div class="avatar">
                 <ul>
-                  <li v-for="(i,k) in item.avatarList" v-if="i<5" :key='k'><img :src="i" alt=""></li>
+                  <li v-for="(i,k) in item.avatarList" v-if="k<5" :key='k'><img :src="i" alt=""></li>
                 </ul>
               </div>
               <i>{{item.applyNum}}/{{item.actiNumber}}</i>
-              <span>
-                <i class="iconfont icon-xihuan"></i>{{item.actiLike}}</span>
+              <p>
+                <!-- <i class="iconfont icon-miaojiesellerlike"></i> -->
+                <img src="@/../static/img/xin.png" alt=""><span>{{item.actiLike}}</span></p>
             </div>
           </li>
         </ul>
@@ -94,7 +95,8 @@
             <div class="verticalMiddle fl">
               <h3 class="verticalTit">{{item.actiName}}</h3>
               <div class="xihuan">
-                <i class="iconfont icon-xihuan"></i>
+                <!-- <i class="iconfont icon-miaojiesellerlike"></i> -->
+                <img src="@/../static/img/xin.png" alt="">
                 <span>{{item.actiLike}}</span>
               </div>
               <p>
@@ -108,7 +110,7 @@
               <div class="actiNum clearfix">
                 <div class="avatar">
                   <ul class="clearfix">
-                    <li v-for="(i,k) in item.avatarList" v-if="i<5" :key='k'><img :src="i" alt=""></li>
+                    <li v-for="(i,k) in item.avatarList" v-if="k<5" :key='k'><img :src="i" alt=""></li>
                     <!-- <li><img src="@/../static/img/heng1.png" alt=""></li>
                     <li><img src="@/../static/img/heng2.png" alt=""></li> -->
                   </ul>

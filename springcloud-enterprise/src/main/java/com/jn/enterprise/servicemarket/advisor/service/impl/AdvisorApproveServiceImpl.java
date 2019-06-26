@@ -1,6 +1,7 @@
 package com.jn.enterprise.servicemarket.advisor.service.impl;
 
 import com.jn.common.util.StringUtils;
+import com.jn.enterprise.enums.RecordStatusEnum;
 import com.jn.enterprise.servicemarket.advisor.controller.AdvisorApproveController;
 import com.jn.enterprise.servicemarket.advisor.model.OrgInfoShow;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorApproveService;
@@ -29,10 +30,12 @@ public class AdvisorApproveServiceImpl implements AdvisorApproveService {
      * 日志组件
      */
     private static Logger logger = LoggerFactory.getLogger(AdvisorApproveController.class);
+
     /**
-     * 是否删除  0：已删除   1：有效
+     * 业务领域：科技金融
      */
-    private static final byte RECORD_STATUS=1;
+    private static final String TECHNOLOGY_FINANCE="technology_finance";
+
 
     @Autowired
     private TbServiceOrgMapper tbServiceOrgMapper;
@@ -48,10 +51,12 @@ public class AdvisorApproveServiceImpl implements AdvisorApproveService {
         TbServiceOrgCriteria example=new TbServiceOrgCriteria();
         if(StringUtils.isBlank(orgName)){
             //orgStatus:状态(0未审核[审核中]1审核通过2审核不通过)  机构名称为空查询全部
-            example.createCriteria().andOrgStatusEqualTo("1").andRecordStatusEqualTo(RECORD_STATUS);
+            example.createCriteria().andOrgStatusEqualTo("1").andBusinessTypeNotEqualTo(TECHNOLOGY_FINANCE)
+                    .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         }else{
             //orgStatus:状态(0未审核[审核中]1审核通过2审核不通过)
-            example.createCriteria().andOrgNameLike("%"+orgName+"%").andOrgStatusEqualTo("1").andRecordStatusEqualTo(RECORD_STATUS);
+            example.createCriteria().andOrgNameLike("%"+orgName+"%").andOrgStatusEqualTo("1")
+                    .andBusinessTypeNotEqualTo(TECHNOLOGY_FINANCE).andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         }
         List<TbServiceOrg> tbServiceOrgList = tbServiceOrgMapper.selectByExample(example);
         if(tbServiceOrgList.isEmpty()){

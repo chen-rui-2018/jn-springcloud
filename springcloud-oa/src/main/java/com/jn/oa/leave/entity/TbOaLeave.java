@@ -22,6 +22,8 @@ public class TbOaLeave implements Serializable {
 
     private Date modifiedTime;
 
+    private String applicantName;
+
     private String applicant;
 
     private Date applicationTime;
@@ -29,6 +31,8 @@ public class TbOaLeave implements Serializable {
     private String reason;
 
     private String totalHour;
+
+    private String organizationName;
 
     private String organization;
 
@@ -108,6 +112,14 @@ public class TbOaLeave implements Serializable {
         this.modifiedTime = modifiedTime;
     }
 
+    public String getApplicantName() {
+        return applicantName;
+    }
+
+    public void setApplicantName(String applicantName) {
+        this.applicantName = applicantName == null ? null : applicantName.trim();
+    }
+
     public String getApplicant() {
         return applicant;
     }
@@ -138,6 +150,14 @@ public class TbOaLeave implements Serializable {
 
     public void setTotalHour(String totalHour) {
         this.totalHour = totalHour == null ? null : totalHour.trim();
+    }
+
+    public String getOrganizationName() {
+        return organizationName;
+    }
+
+    public void setOrganizationName(String organizationName) {
+        this.organizationName = organizationName == null ? null : organizationName.trim();
     }
 
     public String getOrganization() {
@@ -177,10 +197,12 @@ public class TbOaLeave implements Serializable {
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
             && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
+            && (this.getApplicantName() == null ? other.getApplicantName() == null : this.getApplicantName().equals(other.getApplicantName()))
             && (this.getApplicant() == null ? other.getApplicant() == null : this.getApplicant().equals(other.getApplicant()))
             && (this.getApplicationTime() == null ? other.getApplicationTime() == null : this.getApplicationTime().equals(other.getApplicationTime()))
             && (this.getReason() == null ? other.getReason() == null : this.getReason().equals(other.getReason()))
             && (this.getTotalHour() == null ? other.getTotalHour() == null : this.getTotalHour().equals(other.getTotalHour()))
+            && (this.getOrganizationName() == null ? other.getOrganizationName() == null : this.getOrganizationName().equals(other.getOrganizationName()))
             && (this.getOrganization() == null ? other.getOrganization() == null : this.getOrganization().equals(other.getOrganization()))
             && (this.getApprovalStatus() == null ? other.getApprovalStatus() == null : this.getApprovalStatus().equals(other.getApprovalStatus()));
     }
@@ -198,10 +220,12 @@ public class TbOaLeave implements Serializable {
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
+        result = prime * result + ((getApplicantName() == null) ? 0 : getApplicantName().hashCode());
         result = prime * result + ((getApplicant() == null) ? 0 : getApplicant().hashCode());
         result = prime * result + ((getApplicationTime() == null) ? 0 : getApplicationTime().hashCode());
         result = prime * result + ((getReason() == null) ? 0 : getReason().hashCode());
         result = prime * result + ((getTotalHour() == null) ? 0 : getTotalHour().hashCode());
+        result = prime * result + ((getOrganizationName() == null) ? 0 : getOrganizationName().hashCode());
         result = prime * result + ((getOrganization() == null) ? 0 : getOrganization().hashCode());
         result = prime * result + ((getApprovalStatus() == null) ? 0 : getApprovalStatus().hashCode());
         return result;
@@ -222,10 +246,12 @@ public class TbOaLeave implements Serializable {
         sb.append(", createdTime=").append(createdTime);
         sb.append(", modifierAccount=").append(modifierAccount);
         sb.append(", modifiedTime=").append(modifiedTime);
+        sb.append(", applicantName=").append(applicantName);
         sb.append(", applicant=").append(applicant);
         sb.append(", applicationTime=").append(applicationTime);
         sb.append(", reason=").append(reason);
         sb.append(", totalHour=").append(totalHour);
+        sb.append(", organizationName=").append(organizationName);
         sb.append(", organization=").append(organization);
         sb.append(", approvalStatus=").append(approvalStatus);
         sb.append(", serialVersionUID=").append(serialVersionUID);

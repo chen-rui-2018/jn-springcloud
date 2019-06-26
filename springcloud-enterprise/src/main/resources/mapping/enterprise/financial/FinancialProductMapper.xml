@@ -120,6 +120,9 @@
         <if test="financialParam.keyWords !=null and financialParam.keyWords !=''">  <!--关键词-->
             and (sp.product_name like  CONCAT('%', #{financialParam.keyWords}, '%') or sp.org_name like CONCAT('%', #{financialParam.keyWords}, '%'))
         </if>
+        <if test="financialParam.productStatus !=null and financialParam.productStatus !=''">  <!--关键词-->
+            and sp.`status` =#{financialParam.productStatus}
+        </if>
         <if test="financialParam.productType !=null and financialParam.productType !='' ">   <!--产品类型选择-->
             and sp.product_type= #{financialParam.productType}
         </if>

@@ -1137,6 +1137,9 @@ img {
 .finaPro .serverOrgContent > ul > li .orgCon .conContent .left1 > p,
 .companyProfile .serverOrgContent > ul > li .orgCon .conContent .left1 > p {
   margin-bottom: 5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .serverOrg .serverOrgContent > ul > li .orgCon .conContent .right1,
@@ -2688,6 +2691,12 @@ img {
   margin-right: 5px;
 }
 
+.portalIndex .avaP > span,
+.enterpriseservice .avaP > span {
+  display: inline-block;
+  vertical-align: middle;
+}
+
 .portalIndex .el-pagination.is-background .btn-next,
 .portalIndex .el-pagination.is-background .btn-prev,
 .portalIndex .el-pagination.is-background .el-pager li,
@@ -3570,6 +3579,7 @@ img {
 .enterpriseservice .popularActi .acti .actiUl > li {
   float: left;
   width: 280px;
+  height: 340px;
   border: 1px solid #eee;
   margin-right: 20px;
   margin-bottom: 30px;

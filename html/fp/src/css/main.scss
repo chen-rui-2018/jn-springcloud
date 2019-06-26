@@ -839,6 +839,9 @@ img {
 
               >p {
                 margin-bottom: 5px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
               }
             }
 
@@ -1500,10 +1503,12 @@ img {
                 vertical-align: middle;
                 margin-right: 5px;
               }
-             >span{
-              display: inline-block;
-              vertical-align: middle;
-             }
+
+              >span {
+                display: inline-block;
+                vertical-align: middle;
+              }
+
               .icon-xihuan {
                 margin-right: 5px;
               }
@@ -1564,6 +1569,11 @@ img {
       display: inline-block;
       vertical-align: middle;
       margin-right: 5px;
+    }
+
+    >span {
+      display: inline-block;
+      vertical-align: middle;
     }
   }
 
@@ -2242,7 +2252,7 @@ img {
           float: left;
           // display: inline-block;
           width: 280px;
-          // height: 340px;
+          height: 340px;
           border: 1px solid #eee;
           margin-right: 20px;
           margin-bottom: 30px;

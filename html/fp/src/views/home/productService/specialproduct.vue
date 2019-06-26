@@ -288,7 +288,7 @@ export default {
         }
         >.icon-sousuo {
           position: absolute;
-          top: -1px;
+          top: 0;
           right: 0;
           cursor: pointer;
           font-size: 20px;

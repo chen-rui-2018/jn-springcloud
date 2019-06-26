@@ -58,6 +58,7 @@
             </template> -->
           </el-form-item>
           <el-form-item v-loading="loadingUpFlag" label="海报模板:" prop="templateList" style="width:615px;height:280px;overflow:auto">
+            <input v-model="templateList" type="hidden">
             <div v-if="dialogStatus==='编辑活动类型'" class="editModule">
               <ul class="editUl">
                 <li v-for="(i,k) in activityTypeForm.templateList" :key="k"><img :src="i" alt=""><span @click="delImg(k)">x</span></li>
@@ -244,6 +245,7 @@ export default {
     },
     handleAdd() {
       this.isDisabled = true
+      this.activityTypeForm.templateList = this.templateList.join()
       this.$refs['activityTypeForm'].validate(valid => {
         if (valid) {
           api(`${this.GLOBAL.parkUrl}activity/activityType/add`, this.activityTypeForm, 'post').then((res) => {

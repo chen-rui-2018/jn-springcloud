@@ -21,14 +21,14 @@
         <div class="investment-block-title">
           <div
             class="block-title"
-            @click="$linkTo({path:'/parkProfile', appPath: api.host + '#/parkProfile'})"
+            @click="$linkTo({path:'/parkProfile', appPath: api.link + '#/parkProfile'})"
           >南京白下高新技术产业园区</div>
         </div>
         <div class="investment-block-content investment-park">
           <div class="park-profile-desc">{{  parkDesc | formatParkDesc }}</div>
           <div
             class="more-desc main-color"
-            @click="$linkTo({path:'/parkProfile', appPath: api.host + '#/parkProfile'})"
+            @click="$linkTo({path:'/parkProfile', appPath: api.link + '#/parkProfile'})"
           >查看详情</div>
         </div>
       </div>
@@ -42,7 +42,7 @@
             v-for="(item, index) in parkList"
             :key="index"
             class="card-list"
-            @click="$linkTo({path:'/parkDetails', appPath: api.host + '#/parkDetails?id=' + item.id, query:{id: item.id}})"
+            @click="$linkTo({path:'/parkDetails', appPath: api.link + '#/parkDetails?id=' + item.id, query:{id: item.id}})"
           >
             <div class="card-list-poster" :style="{backgroundImage: 'url(' + item.mainPicture + ')'}">
             </div>
@@ -197,19 +197,22 @@ export default {
       }
     }
     .card-list-content {
-      padding: 18px;
+      padding-left: 18px;
       font-size: 28px;
       color:rgba(51,51,51,1);
       flex: 1;
+      width: 285px;
     }
     .card-list-title {
       width: 100%;
-      height: 30px;
-      line-height: 30px;
+      height: 32px;
+      line-height: 32px;
       font-size: 32px;
       font-weight:bold;
       color: rgba(34,34,34,1);
-      @include clamp(1);
+      overflow: hidden;
+      text-overflow:ellipsis;
+      white-space: nowrap;
     }
     .card-list-text {
       width: 100%;

@@ -19,6 +19,7 @@ import com.jn.oa.dingTalk.service.DingTalkAttendanceService;
 import com.jn.oa.dingTalk.service.DingTalkLeaveService;
 import com.jn.oa.leave.dao.TbOaLeaveMapper;
 import com.jn.oa.leave.entity.TbOaLeave;
+import com.jn.oa.leave.entity.TbOaLeaveCriteria;
 import com.jn.system.api.SystemClient;
 import com.jn.system.model.User;
 import com.jn.system.vo.SysDepartmentPostVO;
@@ -134,7 +135,7 @@ public class DingTalkLeaveServiceImpl implements DingTalkLeaveService  {
         for (LeaveStatusInfo leaveStatusInfo:leaveStatusInfos){
 
             TbOaLeave tbOaLeave=new TbOaLeave();
-            tbOaLeave.setId(UUID.randomUUID().toString());
+
 
             //计算请假小时，默认返回的请假时长是乘以100
             long total=0;
@@ -153,8 +154,22 @@ public class DingTalkLeaveServiceImpl implements DingTalkLeaveService  {
 
 
             TbOaDingTalkUser tbOaDingTalkUser=tbOaDingTalkUserMapper.selectByPrimaryKey(leaveStatusInfo.getUserid());
-            tbOaLeave.setApplicantName(tbOaDingTalkUser.getName());
             tbOaLeave.setApplicant(tbOaDingTalkUser.getUserId());
+            tbOaLeave.setApplicantName(tbOaDingTalkUser.getName());
+
+            TbOaLeaveCriteria example=new TbOaLeaveCriteria();
+            TbOaLeaveCriteria.Criteria criteria=example.createCriteria();
+            criteria.andApplicantEqualTo(tbOaDingTalkUser.getUserId()).andStartTimeEqualTo(tbOaLeave.getStartTime()).andEndTimeEqualTo(tbOaLeave.getEndTime());
+
+            List<TbOaLeave> tbOaLeaveList=tbOaLeaveMapper.selectByExample(example);
+            if(tbOaLeaveList!=null&&tbOaLeaveList.size()>0){
+                logger.info("[钉钉用户考勤]批量更新钉钉请假,该请假数据已存在，leaveStatusInfo：{}", JSON.toJSON(leaveStatusInfo));
+                continue;
+            }
+
+
+            tbOaLeave.setId(UUID.randomUUID().toString());
+
 
             //根据用户的手机号查询该用户默认部门信息
             User user=new User();

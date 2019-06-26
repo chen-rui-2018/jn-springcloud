@@ -8,8 +8,9 @@ import com.dingtalk.oapi.lib.aes.DingTalkEncryptor;
 import com.jn.common.util.enums.EnumUtil;
 import com.jn.hardware.config.DingTalkProperties;
 import com.jn.hardware.ding.model.AddressBookCallback;
-import com.jn.hardware.enums.dingtalk.AddressBookEventTypeEnum;
-import com.jn.hardware.model.dingtalk.callback.AddressBookNotice;
+import com.jn.oa.api.OaClient;
+import com.jn.oa.enums.AddressBookEventTypeEnum;
+import com.jn.oa.model.AddressBookNotice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,9 @@ public class DingTalkCallbackController {
 
     @Autowired
     private DingTalkProperties dingTalkProperties;
+
+    @Autowired
+    private OaClient oaClient;
 
     /**
      * 钉钉通讯录事件回调
@@ -80,10 +84,15 @@ public class DingTalkCallbackController {
         //获取事件类型 把其转成对应的枚举类
         String eventType = plainTextJson.getString("EventType");
         AddressBookNotice addressBookNotice = plainTextJson.toJavaObject(AddressBookNotice.class);
-        addressBookNotice.setEventType(EnumUtil.getByCode(eventType,AddressBookEventTypeEnum.class));
+        addressBookNotice.setEventType(EnumUtil.getByCode(eventType, AddressBookEventTypeEnum.class));
         logger.info("钉钉通讯录事件回调 JSON转对象addressBookNotice：【{}】 ",addressBookNotice);
 
-        //TODO 调用业务系统接口
+        //调用业务系统接口
+        try{
+            oaClient.updateOrInsertDingTalkUser(addressBookNotice);
+        }catch (Exception e) {
+            logger.error("钉钉通讯录事件回调--》 调用业务系统接口失败！",e);
+        }
 
 
         /** step 3 对返回信息进行加密 **/
@@ -112,4 +121,5 @@ public class DingTalkCallbackController {
 
         logger.info("======完成处理钉钉通讯录事件回调通知 ======");
     }
+
 }

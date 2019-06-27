@@ -3095,6 +3095,76 @@ public class TbProjectInfoCriteria {
             addCriterion("enter_time not between", value1, value2, "enterTime");
             return (Criteria) this;
         }
+
+        public Criteria andMainTowerIdIsNull() {
+            addCriterion("main_tower_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMainTowerIdIsNotNull() {
+            addCriterion("main_tower_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMainTowerIdEqualTo(String value) {
+            addCriterion("main_tower_id =", value, "mainTowerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMainTowerIdNotEqualTo(String value) {
+            addCriterion("main_tower_id <>", value, "mainTowerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMainTowerIdGreaterThan(String value) {
+            addCriterion("main_tower_id >", value, "mainTowerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMainTowerIdGreaterThanOrEqualTo(String value) {
+            addCriterion("main_tower_id >=", value, "mainTowerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMainTowerIdLessThan(String value) {
+            addCriterion("main_tower_id <", value, "mainTowerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMainTowerIdLessThanOrEqualTo(String value) {
+            addCriterion("main_tower_id <=", value, "mainTowerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMainTowerIdLike(String value) {
+            addCriterion("main_tower_id like", value, "mainTowerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMainTowerIdNotLike(String value) {
+            addCriterion("main_tower_id not like", value, "mainTowerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMainTowerIdIn(List<String> values) {
+            addCriterion("main_tower_id in", values, "mainTowerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMainTowerIdNotIn(List<String> values) {
+            addCriterion("main_tower_id not in", values, "mainTowerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMainTowerIdBetween(String value1, String value2) {
+            addCriterion("main_tower_id between", value1, value2, "mainTowerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMainTowerIdNotBetween(String value1, String value2) {
+            addCriterion("main_tower_id not between", value1, value2, "mainTowerId");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

@@ -1,8 +1,8 @@
 // http.js
-const baseUrl = 'https://njbxq.mynatapp.cc'
-const wechatPath = 'https://njbxq.mynatapp.cc/springcloud-wechat-miniprogram/'
-const imgBaseUrl = 'https://njbxq.mynatapp.cc/h5/imgs/'
-const h5Url="https://22d2325e.cpolar.io/#/"
+const baseUrl = 'https://cms.bxgxq.com'
+const wechatPath = 'https://cms.bxgxq.com/springcloud-wechat-miniprogram/'
+const imgBaseUrl = 'https://m.bxgxq.com/imgs/'
+const h5Url="https://screan.bxgxq.com/#/"
 // http://112.94.22.222:8002/#/
 // https://22d2325e.cpolar.io/#/
 class WxHttp {

@@ -102,8 +102,8 @@
             <el-form-item label="实际贷款金额：">
               <span>{{sevaluateDetail.actualLoanAmount}}万元</span>
             </el-form-item>
-            <el-form-item label="结果描述">
-              <span>{{sevaluateDetail.serviceCycle}}</span>
+            <el-form-item label="结果描述：">
+              <span>{{sevaluateDetail.resultDetail}}</span>
             </el-form-item>  
             <el-form-item label="服务评分："  :rules="{ required: true, message: '评分不能为空', trigger: 'blur' }">
               <el-rate

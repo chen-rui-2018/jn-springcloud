@@ -1,10 +1,14 @@
 package com.jn.enterprise.company.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
+import com.jn.enterprise.company.dao.TbServiceCompanyMapper;
 import com.jn.enterprise.company.dao.TbServiceCompanyModifyMapper;
+import com.jn.enterprise.company.entity.TbServiceCompany;
+import com.jn.enterprise.company.entity.TbServiceCompanyCriteria;
 import com.jn.enterprise.company.entity.TbServiceCompanyModify;
 import com.jn.enterprise.company.enums.CompanyDataEnum;
 import com.jn.enterprise.company.enums.CompanyExceptionEnum;
@@ -12,6 +16,9 @@ import com.jn.enterprise.company.model.ServiceCompany;
 import com.jn.enterprise.company.service.CompanyService;
 import com.jn.enterprise.company.service.UpCompanyAccountService;
 import com.jn.enterprise.enums.RecordStatusEnum;
+import com.jn.pay.model.PayAccountBookCreateParam;
+import com.jn.send.api.DelaySendMessageClient;
+import com.jn.send.model.Delay;
 import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.SysRole;
@@ -35,6 +42,7 @@ import java.util.*;
  * @date： Created on 2019/5/28 19:24
  * @version： v1.0
  * @modified By: huxw
+ * @updateDate 2019-6-27 16:59:22
  **/
 @Service
 public class UpCompanyAccountServiceImpl implements UpCompanyAccountService {
@@ -54,6 +62,12 @@ public class UpCompanyAccountServiceImpl implements UpCompanyAccountService {
     @Autowired
     private UserExtensionClient userExtensionClient;
 
+    @Autowired
+    private TbServiceCompanyMapper tbServiceCompanyMapper;
+
+    @Autowired
+    private DelaySendMessageClient delaySendMessageClient;
+
     @Value("${spring.application.name}")
     private String applicationName;
 
@@ -71,6 +85,7 @@ public class UpCompanyAccountServiceImpl implements UpCompanyAccountService {
         String companyId = serviceCompany.getComId();
         //获取企业名称
         String comName = serviceCompany.getComName();
+        boolean companyIsAdd = isAdd(companyId);
         if (StringUtils.isNotBlank(comAdmin)) {
             Date curDate = new Date();
             serviceCompany.setCheckTime(DateUtils.formatDate(curDate, "yyyy-MM-dd HH:mm:ss"));
@@ -132,6 +147,24 @@ public class UpCompanyAccountServiceImpl implements UpCompanyAccountService {
                     throw new JnSpringCloudException(CompanyExceptionEnum.DELETE_COMPANY_TEMP_ERROR);
                 }
                 logger.info("[企业后置脚本] 已成功将临时表企业数据置为无效");
+
+                // 只有新增时才创建账本
+                if (companyIsAdd) {
+                    logger.info("[企业后置脚本] 新增企业调度创建企业账本接口");
+                    // 4.创建企业的账本信息-延迟调度
+                    PayAccountBookCreateParam payAccountBookCreateParam = new PayAccountBookCreateParam();
+                    payAccountBookCreateParam.setComAdmin(comAdmin);
+                    payAccountBookCreateParam.setEnterId(companyId);
+
+                    Delay delay = new Delay();
+                    delay.setServiceId(applicationName);
+                    delay.setServiceUrl("/api/payment/payAccount/createPayAccountBook");
+                    delay.setTtl("30");
+                    delay.setDataString(JSONObject.toJSONString(payAccountBookCreateParam));
+                    logger.info("开始回调");
+                    Result<Boolean> delayResult = delaySendMessageClient.delaySend(delay);
+                    logger.info("结束回调,返回结果，【{}】", delayResult.toString());
+                }
             } else {
                 logger.warn("[企业后置脚本] 添加/修改企业信息失败");
                 throw new JnSpringCloudException(CompanyExceptionEnum.UPDATE_COMPANY_INFO_ERROR);
@@ -142,4 +175,18 @@ public class UpCompanyAccountServiceImpl implements UpCompanyAccountService {
         }
     }
 
+    /**
+     * 判断企业是否新增
+     * @param comId
+     * @return
+     */
+    private boolean isAdd(String comId) {
+        TbServiceCompanyCriteria companyCriteria = new TbServiceCompanyCriteria();
+        companyCriteria.createCriteria().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue()).andIdEqualTo(comId);
+        List<TbServiceCompany> companyList = tbServiceCompanyMapper.selectByExample(companyCriteria);
+        if (companyList != null && !companyList.isEmpty()) {
+            return false;
+        }
+        return true;
+    }
 }

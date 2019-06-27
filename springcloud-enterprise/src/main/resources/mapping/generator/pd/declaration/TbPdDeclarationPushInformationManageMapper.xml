@@ -5,18 +5,23 @@
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="push_title" jdbcType="VARCHAR" property="pushTitle" />
     <result column="push_content" jdbcType="VARCHAR" property="pushContent" />
+    <result column="receive_enterprise_id" jdbcType="VARCHAR" property="receiveEnterpriseId" />
     <result column="receive_enterprise" jdbcType="VARCHAR" property="receiveEnterprise" />
     <result column="receive_person" jdbcType="VARCHAR" property="receivePerson" />
     <result column="receive_phone" jdbcType="VARCHAR" property="receivePhone" />
     <result column="push_person" jdbcType="VARCHAR" property="pushPerson" />
     <result column="push_time" jdbcType="TIMESTAMP" property="pushTime" />
-    <result column="push_status" jdbcType="TINYINT" property="pushStatus" />
     <result column="push_source" jdbcType="TINYINT" property="pushSource" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="push_id" jdbcType="VARCHAR" property="pushId" />
+    <result column="push_sms" jdbcType="CHAR" property="pushSms" />
+    <result column="push_email" jdbcType="CHAR" property="pushEmail" />
+    <result column="push_wx" jdbcType="CHAR" property="pushWx" />
+    <result column="push_app" jdbcType="CHAR" property="pushApp" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -77,9 +82,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, push_title, push_content, receive_enterprise, receive_person, receive_phone, 
-    push_person, push_time, push_status, push_source, record_status, creator_account, 
-    created_time, modifier_account, modified_time
+    id, push_title, push_content, receive_enterprise_id, receive_enterprise, receive_person, 
+    receive_phone, push_person, push_time, push_source, record_status, creator_account, 
+    created_time, modifier_account, modified_time, push_id, push_sms, push_email, push_wx, 
+    push_app
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationPushInformationManageCriteria" resultMap="BaseResultMap">
     select
@@ -112,31 +118,35 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationPushInformationManage">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into tb_pd_declaration_push_information_manage (push_title, push_content, receive_enterprise, 
+    insert into tb_pd_declaration_push_information_manage (id, push_title, push_content, 
+      receive_enterprise_id, receive_enterprise, 
       receive_person, receive_phone, push_person, 
-      push_time, push_status, push_source, 
-      record_status, creator_account, created_time, 
-      modifier_account, modified_time)
-    values (#{pushTitle,jdbcType=VARCHAR}, #{pushContent,jdbcType=VARCHAR}, #{receiveEnterprise,jdbcType=VARCHAR}, 
+      push_time, push_source, record_status, 
+      creator_account, created_time, modifier_account, 
+      modified_time, push_id, push_sms, 
+      push_email, push_wx, push_app)
+    values (#{id,jdbcType=VARCHAR}, #{pushTitle,jdbcType=VARCHAR}, #{pushContent,jdbcType=VARCHAR}, 
+      #{receiveEnterpriseId,jdbcType=VARCHAR}, #{receiveEnterprise,jdbcType=VARCHAR}, 
       #{receivePerson,jdbcType=VARCHAR}, #{receivePhone,jdbcType=VARCHAR}, #{pushPerson,jdbcType=VARCHAR}, 
-      #{pushTime,jdbcType=TIMESTAMP}, #{pushStatus,jdbcType=TINYINT}, #{pushSource,jdbcType=TINYINT}, 
-      #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
+      #{pushTime,jdbcType=TIMESTAMP}, #{pushSource,jdbcType=TINYINT}, #{recordStatus,jdbcType=TINYINT}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{pushId,jdbcType=VARCHAR}, #{pushSms,jdbcType=CHAR}, 
+      #{pushEmail,jdbcType=CHAR}, #{pushWx,jdbcType=CHAR}, #{pushApp,jdbcType=CHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationPushInformationManage">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_pd_declaration_push_information_manage
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
       <if test="pushTitle != null">
         push_title,
       </if>
       <if test="pushContent != null">
         push_content,
+      </if>
+      <if test="receiveEnterpriseId != null">
+        receive_enterprise_id,
       </if>
       <if test="receiveEnterprise != null">
         receive_enterprise,
@@ -152,9 +162,6 @@
       </if>
       <if test="pushTime != null">
         push_time,
-      </if>
-      <if test="pushStatus != null">
-        push_status,
       </if>
       <if test="pushSource != null">
         push_source,
@@ -174,13 +181,34 @@
       <if test="modifiedTime != null">
         modified_time,
       </if>
+      <if test="pushId != null">
+        push_id,
+      </if>
+      <if test="pushSms != null">
+        push_sms,
+      </if>
+      <if test="pushEmail != null">
+        push_email,
+      </if>
+      <if test="pushWx != null">
+        push_wx,
+      </if>
+      <if test="pushApp != null">
+        push_app,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
       <if test="pushTitle != null">
         #{pushTitle,jdbcType=VARCHAR},
       </if>
       <if test="pushContent != null">
         #{pushContent,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveEnterpriseId != null">
+        #{receiveEnterpriseId,jdbcType=VARCHAR},
       </if>
       <if test="receiveEnterprise != null">
         #{receiveEnterprise,jdbcType=VARCHAR},
@@ -196,9 +224,6 @@
       </if>
       <if test="pushTime != null">
         #{pushTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="pushStatus != null">
-        #{pushStatus,jdbcType=TINYINT},
       </if>
       <if test="pushSource != null">
         #{pushSource,jdbcType=TINYINT},
@@ -217,6 +242,21 @@
       </if>
       <if test="modifiedTime != null">
         #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pushId != null">
+        #{pushId,jdbcType=VARCHAR},
+      </if>
+      <if test="pushSms != null">
+        #{pushSms,jdbcType=CHAR},
+      </if>
+      <if test="pushEmail != null">
+        #{pushEmail,jdbcType=CHAR},
+      </if>
+      <if test="pushWx != null">
+        #{pushWx,jdbcType=CHAR},
+      </if>
+      <if test="pushApp != null">
+        #{pushApp,jdbcType=CHAR},
       </if>
     </trim>
   </insert>
@@ -238,6 +278,9 @@
       <if test="record.pushContent != null">
         push_content = #{record.pushContent,jdbcType=VARCHAR},
       </if>
+      <if test="record.receiveEnterpriseId != null">
+        receive_enterprise_id = #{record.receiveEnterpriseId,jdbcType=VARCHAR},
+      </if>
       <if test="record.receiveEnterprise != null">
         receive_enterprise = #{record.receiveEnterprise,jdbcType=VARCHAR},
       </if>
@@ -252,9 +295,6 @@
       </if>
       <if test="record.pushTime != null">
         push_time = #{record.pushTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.pushStatus != null">
-        push_status = #{record.pushStatus,jdbcType=TINYINT},
       </if>
       <if test="record.pushSource != null">
         push_source = #{record.pushSource,jdbcType=TINYINT},
@@ -274,6 +314,21 @@
       <if test="record.modifiedTime != null">
         modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.pushId != null">
+        push_id = #{record.pushId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pushSms != null">
+        push_sms = #{record.pushSms,jdbcType=CHAR},
+      </if>
+      <if test="record.pushEmail != null">
+        push_email = #{record.pushEmail,jdbcType=CHAR},
+      </if>
+      <if test="record.pushWx != null">
+        push_wx = #{record.pushWx,jdbcType=CHAR},
+      </if>
+      <if test="record.pushApp != null">
+        push_app = #{record.pushApp,jdbcType=CHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -284,18 +339,23 @@
     set id = #{record.id,jdbcType=VARCHAR},
       push_title = #{record.pushTitle,jdbcType=VARCHAR},
       push_content = #{record.pushContent,jdbcType=VARCHAR},
+      receive_enterprise_id = #{record.receiveEnterpriseId,jdbcType=VARCHAR},
       receive_enterprise = #{record.receiveEnterprise,jdbcType=VARCHAR},
       receive_person = #{record.receivePerson,jdbcType=VARCHAR},
       receive_phone = #{record.receivePhone,jdbcType=VARCHAR},
       push_person = #{record.pushPerson,jdbcType=VARCHAR},
       push_time = #{record.pushTime,jdbcType=TIMESTAMP},
-      push_status = #{record.pushStatus,jdbcType=TINYINT},
       push_source = #{record.pushSource,jdbcType=TINYINT},
       record_status = #{record.recordStatus,jdbcType=TINYINT},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      push_id = #{record.pushId,jdbcType=VARCHAR},
+      push_sms = #{record.pushSms,jdbcType=CHAR},
+      push_email = #{record.pushEmail,jdbcType=CHAR},
+      push_wx = #{record.pushWx,jdbcType=CHAR},
+      push_app = #{record.pushApp,jdbcType=CHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -308,6 +368,9 @@
       </if>
       <if test="pushContent != null">
         push_content = #{pushContent,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveEnterpriseId != null">
+        receive_enterprise_id = #{receiveEnterpriseId,jdbcType=VARCHAR},
       </if>
       <if test="receiveEnterprise != null">
         receive_enterprise = #{receiveEnterprise,jdbcType=VARCHAR},
@@ -323,9 +386,6 @@
       </if>
       <if test="pushTime != null">
         push_time = #{pushTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="pushStatus != null">
-        push_status = #{pushStatus,jdbcType=TINYINT},
       </if>
       <if test="pushSource != null">
         push_source = #{pushSource,jdbcType=TINYINT},
@@ -345,6 +405,21 @@
       <if test="modifiedTime != null">
         modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="pushId != null">
+        push_id = #{pushId,jdbcType=VARCHAR},
+      </if>
+      <if test="pushSms != null">
+        push_sms = #{pushSms,jdbcType=CHAR},
+      </if>
+      <if test="pushEmail != null">
+        push_email = #{pushEmail,jdbcType=CHAR},
+      </if>
+      <if test="pushWx != null">
+        push_wx = #{pushWx,jdbcType=CHAR},
+      </if>
+      <if test="pushApp != null">
+        push_app = #{pushApp,jdbcType=CHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -352,18 +427,23 @@
     update tb_pd_declaration_push_information_manage
     set push_title = #{pushTitle,jdbcType=VARCHAR},
       push_content = #{pushContent,jdbcType=VARCHAR},
+      receive_enterprise_id = #{receiveEnterpriseId,jdbcType=VARCHAR},
       receive_enterprise = #{receiveEnterprise,jdbcType=VARCHAR},
       receive_person = #{receivePerson,jdbcType=VARCHAR},
       receive_phone = #{receivePhone,jdbcType=VARCHAR},
       push_person = #{pushPerson,jdbcType=VARCHAR},
       push_time = #{pushTime,jdbcType=TIMESTAMP},
-      push_status = #{pushStatus,jdbcType=TINYINT},
       push_source = #{pushSource,jdbcType=TINYINT},
       record_status = #{recordStatus,jdbcType=TINYINT},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
-      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      push_id = #{pushId,jdbcType=VARCHAR},
+      push_sms = #{pushSms,jdbcType=CHAR},
+      push_email = #{pushEmail,jdbcType=CHAR},
+      push_wx = #{pushWx,jdbcType=CHAR},
+      push_app = #{pushApp,jdbcType=CHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

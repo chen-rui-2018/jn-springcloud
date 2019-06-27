@@ -1,9 +1,8 @@
 <template>
   <div class="approvalGuide">
     <div class="approvalGuide_search">
-      <search
-      v-model="value"
-      ref="search"></search>
+      <i class="weui-icon-search" v-if="sendData.name===''"></i>
+      <input type="text" placeholder="搜索" @change="gosearch" v-model="sendData.name" >
     </div>
         <div class="approvalGuide_main">
           <div class="approvalGuide_tab1">
@@ -177,6 +176,9 @@ export default {
       this.active = index
       this.sendData.departId = id
       this.getPoweList()
+    },
+    gosearch () {
+      this.getPoweList()
     }
   }
 }
@@ -189,38 +191,26 @@ export default {
     .approvalGuide_search{
       position: fixed;
       z-index: 10;
-      // top:105px;
-        width: 100%;
-      .weui-search-bar{
-        padding:28px 32px;
+      width: 100%;
+      background-color: #F5F5F5;
+      padding: 0 35px;
+      display: flex;
+      input::placeholder{
+        text-align: center;
+        font-size: 21px;
       }
-      .vux-search-box{
-        position: fixed;
-        // top:105px !important;
+      input{
+        height: 60px;
+        width:100%;
+        margin: 22px 0;
+        border-radius: 30px;
+        padding: 0 40px;
       }
-      .weui-search-bar__input{
-        height: 63px;
-        line-height: 63px;
-        // border-radius: 30px;
-      }
-      .weui-icon-search{
-        line-height: 63px;
-      }
-       .weui-icon-clear{
-          line-height: 0.8rem;
-       }
-      .weui-search-bar.weui-search-bar_focusing .weui-search-bar__cancel-btn{
-        display: flex;
-        align-items: center;
-      }
-      .weui-search-bar__box{
-        padding:0 70px;
-        .weui-icon-search{
-          left:20px;
-        }
-        .weui-search-bar__input{
-          padding:0;
-        }
+      i{
+        position: absolute;
+        top: 38%;
+        right: 54%;
+        font-size: 21px;
       }
     }
     .approvalGuide_main{
@@ -258,7 +248,7 @@ export default {
           height: auto;
           padding-bottom: 0;
           margin-right: 30px;
-          border-bottom: 2px solid #ccc;
+          border-bottom: 2px solid #e3e3d3;
           .vux-tab-item{
             flex:0 0 auto;
             padding: 23px 0;
@@ -269,7 +259,7 @@ export default {
             }
 
             span{
-            padding-bottom: 27px;
+            padding-bottom: 28px;
             font-size: 23px;
             }
             .active{
@@ -283,13 +273,15 @@ export default {
         }
       }
       .approvalGuide_cont1{
-        margin:30px;
+        padding: 0 0.4rem;
         margin-top: 27%;
         height: 100% ;
         overflow: auto;
         .weui-cells{
           box-shadow: 0px 2px 18px 0px rgba(121, 121, 121, 0.15);
           border-radius: 20px;
+          // padding-left: 10px;
+          // padding-right: 10px;
           .weui-cell{
             padding:19px 28px;
             .vux-label{
@@ -302,7 +294,14 @@ export default {
             }
           }
         }
-
+      .vux-cell-primary{
+        overflow: hidden;
+        p{
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+      }
         .fold_cont {
           overflow: hidden;
           max-height: 0;

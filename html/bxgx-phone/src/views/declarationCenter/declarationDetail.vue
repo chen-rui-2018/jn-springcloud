@@ -28,10 +28,10 @@
           </a>
         </div>
         <div v-else  class="accessory" v-for="(item,index) in fileList" :key="index" @click="download(item.filePath)">
-          <!-- <a :href="item.filePath"> {{item.fileName}}-->
+          <a :href="url" download=""> <!-- {{item.fileName}} -->
             <span>附件：{{item.fileName}}</span>
             <span>下载<i class="iconfont icon-jiantou"></i></span>
-          <!-- </a> -->
+          </a>
         </div>
       </div>
       <div class="declaration_consult" @click="goConsult" v-if="isShow===1">预约申报</div>
@@ -47,7 +47,8 @@ export default {
       id: '',
       detailData: {},
       isShow: 1,
-      fileList: []
+      fileList: [],
+      url: ''
     }
   },
   filters: {
@@ -91,8 +92,18 @@ export default {
           type: 'warn',
           width: '13em'
         })
+        this.url = 'javascript:;'
       } else {
-        window.location.href = item
+        if (item === '') {
+          this.url = 'javascript:;'
+          this.$vux.toast.show({
+            text: '暂不支持下载',
+            type: 'warn',
+            width: '13em'
+          })
+        } else {
+          this.url = item
+        }
       }
     },
     goConsult () {
@@ -236,6 +247,16 @@ export default {
             font-size: 26px;
             border-bottom: 2px solid #efefef;
             color:#333333;
+            // padding:20px 0;
+          a:visited{
+            color:#999999;
+          }
+          a{
+            display: flex;
+            justify-content: space-between;
+            color:#999999;
+            width: 100%;
+          }
           &:last-child{
             border-bottom: none;
           }

@@ -11,10 +11,12 @@
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="applicant_name" jdbcType="VARCHAR" property="applicantName" />
     <result column="applicant" jdbcType="VARCHAR" property="applicant" />
     <result column="application_time" jdbcType="TIMESTAMP" property="applicationTime" />
     <result column="reason" jdbcType="VARCHAR" property="reason" />
     <result column="total_hour" jdbcType="VARCHAR" property="totalHour" />
+    <result column="organization_name" jdbcType="VARCHAR" property="organizationName" />
     <result column="organization" jdbcType="VARCHAR" property="organization" />
     <result column="approval_status" jdbcType="VARCHAR" property="approvalStatus" />
   </resultMap>
@@ -78,7 +80,8 @@
   </sql>
   <sql id="Base_Column_List">
     id_, start_time, end_time, type, record_status, creator_account, created_time, modifier_account, 
-    modified_time, applicant, application_time, reason, total_hour, organization, approval_status
+    modified_time, applicant_name, applicant, application_time, reason, total_hour, organization_name, 
+    organization, approval_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.oa.leave.entity.TbOaLeaveCriteria" resultMap="BaseResultMap">
     select
@@ -114,15 +117,15 @@
     insert into tb_oa_leave (id_, start_time, end_time, 
       type, record_status, creator_account, 
       created_time, modifier_account, modified_time, 
-      applicant, application_time, reason, 
-      total_hour, organization, approval_status
-      )
+      applicant_name, applicant, application_time, 
+      reason, total_hour, organization_name, 
+      organization, approval_status)
     values (#{id,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
       #{type,jdbcType=VARCHAR}, #{recordStatus,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, 
       #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
-      #{applicant,jdbcType=VARCHAR}, #{applicationTime,jdbcType=TIMESTAMP}, #{reason,jdbcType=VARCHAR}, 
-      #{totalHour,jdbcType=VARCHAR}, #{organization,jdbcType=VARCHAR}, #{approvalStatus,jdbcType=VARCHAR}
-      )
+      #{applicantName,jdbcType=VARCHAR}, #{applicant,jdbcType=VARCHAR}, #{applicationTime,jdbcType=TIMESTAMP}, 
+      #{reason,jdbcType=VARCHAR}, #{totalHour,jdbcType=VARCHAR}, #{organizationName,jdbcType=VARCHAR}, 
+      #{organization,jdbcType=VARCHAR}, #{approvalStatus,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.oa.leave.entity.TbOaLeave">
     insert into tb_oa_leave
@@ -154,6 +157,9 @@
       <if test="modifiedTime != null">
         modified_time,
       </if>
+      <if test="applicantName != null">
+        applicant_name,
+      </if>
       <if test="applicant != null">
         applicant,
       </if>
@@ -165,6 +171,9 @@
       </if>
       <if test="totalHour != null">
         total_hour,
+      </if>
+      <if test="organizationName != null">
+        organization_name,
       </if>
       <if test="organization != null">
         organization,
@@ -201,6 +210,9 @@
       <if test="modifiedTime != null">
         #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="applicantName != null">
+        #{applicantName,jdbcType=VARCHAR},
+      </if>
       <if test="applicant != null">
         #{applicant,jdbcType=VARCHAR},
       </if>
@@ -212,6 +224,9 @@
       </if>
       <if test="totalHour != null">
         #{totalHour,jdbcType=VARCHAR},
+      </if>
+      <if test="organizationName != null">
+        #{organizationName,jdbcType=VARCHAR},
       </if>
       <if test="organization != null">
         #{organization,jdbcType=VARCHAR},
@@ -257,6 +272,9 @@
       <if test="record.modifiedTime != null">
         modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.applicantName != null">
+        applicant_name = #{record.applicantName,jdbcType=VARCHAR},
+      </if>
       <if test="record.applicant != null">
         applicant = #{record.applicant,jdbcType=VARCHAR},
       </if>
@@ -268,6 +286,9 @@
       </if>
       <if test="record.totalHour != null">
         total_hour = #{record.totalHour,jdbcType=VARCHAR},
+      </if>
+      <if test="record.organizationName != null">
+        organization_name = #{record.organizationName,jdbcType=VARCHAR},
       </if>
       <if test="record.organization != null">
         organization = #{record.organization,jdbcType=VARCHAR},
@@ -291,10 +312,12 @@
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      applicant_name = #{record.applicantName,jdbcType=VARCHAR},
       applicant = #{record.applicant,jdbcType=VARCHAR},
       application_time = #{record.applicationTime,jdbcType=TIMESTAMP},
       reason = #{record.reason,jdbcType=VARCHAR},
       total_hour = #{record.totalHour,jdbcType=VARCHAR},
+      organization_name = #{record.organizationName,jdbcType=VARCHAR},
       organization = #{record.organization,jdbcType=VARCHAR},
       approval_status = #{record.approvalStatus,jdbcType=VARCHAR}
     <if test="_parameter != null">
@@ -328,6 +351,9 @@
       <if test="modifiedTime != null">
         modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="applicantName != null">
+        applicant_name = #{applicantName,jdbcType=VARCHAR},
+      </if>
       <if test="applicant != null">
         applicant = #{applicant,jdbcType=VARCHAR},
       </if>
@@ -339,6 +365,9 @@
       </if>
       <if test="totalHour != null">
         total_hour = #{totalHour,jdbcType=VARCHAR},
+      </if>
+      <if test="organizationName != null">
+        organization_name = #{organizationName,jdbcType=VARCHAR},
       </if>
       <if test="organization != null">
         organization = #{organization,jdbcType=VARCHAR},
@@ -359,10 +388,12 @@
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      applicant_name = #{applicantName,jdbcType=VARCHAR},
       applicant = #{applicant,jdbcType=VARCHAR},
       application_time = #{applicationTime,jdbcType=TIMESTAMP},
       reason = #{reason,jdbcType=VARCHAR},
       total_hour = #{totalHour,jdbcType=VARCHAR},
+      organization_name = #{organizationName,jdbcType=VARCHAR},
       organization = #{organization,jdbcType=VARCHAR},
       approval_status = #{approvalStatus,jdbcType=VARCHAR}
     where id_ = #{id,jdbcType=VARCHAR}

@@ -95,6 +95,8 @@ public class TbProjectInfo implements Serializable {
 
     private Date enterTime;
 
+    private String mainTowerId;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -457,6 +459,14 @@ public class TbProjectInfo implements Serializable {
         this.enterTime = enterTime;
     }
 
+    public String getMainTowerId() {
+        return mainTowerId;
+    }
+
+    public void setMainTowerId(String mainTowerId) {
+        this.mainTowerId = mainTowerId == null ? null : mainTowerId.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -513,7 +523,8 @@ public class TbProjectInfo implements Serializable {
             && (this.getRemerk() == null ? other.getRemerk() == null : this.getRemerk().equals(other.getRemerk()))
             && (this.getActualTotalAccount() == null ? other.getActualTotalAccount() == null : this.getActualTotalAccount().equals(other.getActualTotalAccount()))
             && (this.getRoomBillId() == null ? other.getRoomBillId() == null : this.getRoomBillId().equals(other.getRoomBillId()))
-            && (this.getEnterTime() == null ? other.getEnterTime() == null : this.getEnterTime().equals(other.getEnterTime()));
+            && (this.getEnterTime() == null ? other.getEnterTime() == null : this.getEnterTime().equals(other.getEnterTime()))
+            && (this.getMainTowerId() == null ? other.getMainTowerId() == null : this.getMainTowerId().equals(other.getMainTowerId()));
     }
 
     @Override
@@ -565,6 +576,7 @@ public class TbProjectInfo implements Serializable {
         result = prime * result + ((getActualTotalAccount() == null) ? 0 : getActualTotalAccount().hashCode());
         result = prime * result + ((getRoomBillId() == null) ? 0 : getRoomBillId().hashCode());
         result = prime * result + ((getEnterTime() == null) ? 0 : getEnterTime().hashCode());
+        result = prime * result + ((getMainTowerId() == null) ? 0 : getMainTowerId().hashCode());
         return result;
     }
 
@@ -619,6 +631,7 @@ public class TbProjectInfo implements Serializable {
         sb.append(", actualTotalAccount=").append(actualTotalAccount);
         sb.append(", roomBillId=").append(roomBillId);
         sb.append(", enterTime=").append(enterTime);
+        sb.append(", mainTowerId=").append(mainTowerId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

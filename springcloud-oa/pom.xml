@@ -50,6 +50,10 @@
             <groupId>com.jn</groupId>
             <artifactId>springcloud-user-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-hardware-api</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -73,7 +77,7 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        notice,item,meeting,email,schedule,attendance,leave,goods
+                        notice,item,meeting,email,schedule,attendance,leave,goods,dingTalk
                     </contexts>
                     <tableNames>
 

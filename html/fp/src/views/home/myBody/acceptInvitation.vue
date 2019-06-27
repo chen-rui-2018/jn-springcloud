@@ -424,6 +424,7 @@ export default {
               message: "操作成功",
               type: "success"
             });
+            this.$router.push({ path: "/home" });
             this.changeStatus();
           } else {
             this.$message.error(res.result);
@@ -450,6 +451,7 @@ export default {
               message: "操作成功,请等待后台审核",
               type: "success"
             });
+            this.$router.push({ path: "/home" });
             this.changeStatus();
 
           } else {

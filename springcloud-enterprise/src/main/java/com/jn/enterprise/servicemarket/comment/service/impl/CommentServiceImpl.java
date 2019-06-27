@@ -103,13 +103,16 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @ServiceLog(doAction = "获取评价页详情")
-    public RatingDetail getRatingCommentDetail(String id, String account){
+    public RatingDetail getRatingCommentDetail(String id){
         RatingDetail ratingDetail = commentMapper.getRatingCommentDetail(id);
-        Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(account);
-        if (userExtension != null && userExtension.getData() != null) {
-            UserExtensionInfo userExtensionInfo = userExtension.getData();
-            if (StringUtils.isNotBlank(userExtensionInfo.getCompanyName())) {
-                ratingDetail.setCompanyName(userExtensionInfo.getCompanyName());
+        if (StringUtils.isNotBlank(ratingDetail.getReqPhone())) {
+            String account = ratingDetail.getReqPhone();
+            Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(account);
+            if (userExtension != null && userExtension.getData() != null) {
+                UserExtensionInfo userExtensionInfo = userExtension.getData();
+                if (StringUtils.isNotBlank(userExtensionInfo.getCompanyName())) {
+                    ratingDetail.setCompanyName(userExtensionInfo.getCompanyName());
+                }
             }
         }
         return ratingDetail;

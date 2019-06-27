@@ -34,7 +34,7 @@ public interface CommentService {
      * @param id 需求id
      * @return
      */
-    RatingDetail getRatingCommentDetail(String id, String account);
+    RatingDetail getRatingCommentDetail(String id);
 
     /**
      * 保存评价信息

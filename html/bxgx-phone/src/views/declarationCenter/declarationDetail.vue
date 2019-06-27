@@ -28,10 +28,10 @@
           </a>
         </div>
         <div v-else  class="accessory" v-for="(item,index) in fileList" :key="index" @click="download(item.filePath)">
-          <!-- <a :href="item.filePath"> {{item.fileName}}-->
+          <a :href="url" download=""> <!-- {{item.fileName}} -->
             <span>附件：{{item.fileName}}</span>
             <span>下载<i class="iconfont icon-jiantou"></i></span>
-          <!-- </a> -->
+          </a>
         </div>
       </div>
       <div class="declaration_consult" @click="goConsult" v-if="isShow===1">预约申报</div>
@@ -40,14 +40,15 @@
 </div>
 </template>
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 export default {
   data () {
     return {
       id: '',
       detailData: {},
       isShow: 1,
-      fileList: []
+      fileList: [],
+      url: ''
     }
   },
   filters: {
@@ -77,25 +78,33 @@ export default {
             this.detailData = res.data
             if (res.data.fileUrl !== '') {
               this.fileList = JSON.parse(res.data.fileUrl)
-            } else {
-              this.$vux.toast.text(res.result)
             }
           }
         }
       })
     },
     download (item) {
-      axios.get(`${this.api.host}${this.api.apiURL.downLoadAttachment}`, {
-        params: {
-          title: item.title,
-          url: item.url
-        },
-        headers: {
-          token: sessionStorage.token
+      alert(navigator.userAgent)
+      // console.log(navigator.userAgent)
+      if (navigator.userAgent.indexOf('iPhone') > -1) {
+        this.$vux.toast.show({
+          text: '当前系统暂不支持下载',
+          type: 'warn',
+          width: '13em'
+        })
+        this.url = 'javascript:;'
+      } else {
+        if (item === '') {
+          this.url = 'javascript:;'
+          this.$vux.toast.show({
+            text: '暂不支持下载',
+            type: 'warn',
+            width: '13em'
+          })
+        } else {
+          this.url = item
         }
-      }).then(res => {
-        window.location.href = res.request.responseURL
-      })
+      }
     },
     goConsult () {
       let myDate = new Date()
@@ -117,10 +126,20 @@ export default {
               if (myDateStr < deadline) {
                 this.$router.push({path: '/guest/pd/consult', query: {id: this.id, title: this.detailData.titleName}})
               } else {
-                this.$vux.toast.text('您申报的项目已经截止', 'middle')
+                // this.$vux.toast.text('您申报的项目已经截止', 'middle')
+                this.$vux.toast.show({
+                  text: '您申报的项目已经截止',
+                  type: 'warn',
+                  width: '13em'
+                })
               }
             } else {
-              this.$vux.toast.text('只有企业管理员和企业联系人才可以进行预约申报！！')
+              // this.$vux.toast.text('只有企业管理员和企业联系人才可以进行预约申报！！')
+              this.$vux.toast.show({
+                text: '只有企业管理员和企业联系人才可以进行预约申报！！',
+                type: 'warn',
+                width: '13em'
+              })
             }
           } else {
             this.$vux.toast.text(res.result)
@@ -228,6 +247,16 @@ export default {
             font-size: 26px;
             border-bottom: 2px solid #efefef;
             color:#333333;
+            // padding:20px 0;
+          a:visited{
+            color:#999999;
+          }
+          a{
+            display: flex;
+            justify-content: space-between;
+            color:#999999;
+            width: 100%;
+          }
           &:last-child{
             border-bottom: none;
           }

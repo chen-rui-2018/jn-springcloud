@@ -76,7 +76,7 @@
             <el-tabs v-model="rangeId"  @tab-click="switchto">
               <el-tab-pane v-for="(typeitem,typeindex) in typeList" :key="typeindex" >
                 <div slot="label" :name="typeitem.id">{{typeitem.name}}</div>
-                <div class="lists" v-for="(talentsitem,talentsindex) in talentsList" :key="talentsindex" >
+                <div class="lists" v-for="(talentsitem,talentsindex) in talentsList" :key="talentsindex" @click="gotalentdetail(talentsitem )">
                   <div class="list_cont_left">
                     <p><span>【{{talentsitem.rangeId|type}}】</span>{{talentsitem.noticeTitle}}</p>
                     <!-- <p v-show="talentsitem.rangeId=5">{{talentsitem.noticeTitle}} </p> -->
@@ -84,7 +84,7 @@
                     <p>最近要求：{{talentsitem.timeNode}}</p>
                     <p v-show="talentsitem.deadline">截止时间：<span class="fontcolor">{{talentsitem.deadline|time}}</span></p>
                   </div>
-                  <div class="list_cont_check" @click="gotalentdetail(talentsitem.id)"> <span>查看详情</span> </div>
+                  <div class="list_cont_check" @click="gotalentdetail(talentsitem)"> <span>查看详情</span> </div>
                 </div>
               </el-tab-pane>
             </el-tabs>
@@ -309,8 +309,20 @@ export default {
         }
       },
       //跳转页面
-      gotalentdetail(id){
-        this.$router.push({path:'/talentsServiceDetail',query:{id:id}})
+      gotalentdetail(item){
+        this.api.get({
+          url: "addtalentviews",
+          data: {
+            id:item.id
+          },
+          callback: (res)=> {
+            if(res.code==='0000'){
+               this.$router.push({path:'/talentsServiceDetail',query:{id:item.id,rangeId:item.rangeId}})
+            }else{
+              this.$message.error(res.result)
+            }
+          }
+        });
       },
       //翻页
       handleSizeChange(val) {
@@ -613,6 +625,7 @@ export default {
               border-bottom: solid 1px #eeeeee;
               padding-bottom: 15px;
               margin-top: 30px;
+              cursor: pointer;
               .list_cont_left{
                 color:#999999;
                 font-size: 12px;

@@ -49,7 +49,7 @@ public class DingTalkUserServiceTest {
     @Test
     public void getUserInfo() {
         UserDetailsInfoParam userInfoParam = new UserDetailsInfoParam();
-        userInfoParam.setUserid("0452075464668030");
+        userInfoParam.setUserid("061838443733317635");
         Result<UserDetailsInfoResult> result = dingTalkClient.getUserInfo(userInfoParam);
         logger.info("\n获取用户详情：{}",result);
         logger.info("：getIsAdmin  : {}, getIsBoss : {},getIsHide : {}, getIsSenior : {}",result.getData().getIsAdmin()

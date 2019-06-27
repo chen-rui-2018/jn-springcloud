@@ -5,6 +5,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
     <!-- <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/> -->
     <title>白下高新智慧园区</title>
+    <script>
+      function initJsBridge (readyCallback) {
+        const u = navigator.userAgent
+        const isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1 // android终端
+        const isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) // ios终端
+        // 注册jsbridge
+        function connectWebViewJavascriptBridge (callback) {
+          if (isAndroid) {
+            const WebViewJavascriptBridge = window.WebViewJavascriptBridge
+            if (WebViewJavascriptBridge) {
+              callback(WebViewJavascriptBridge)
+            } else {
+              document.addEventListener(
+                'WebViewJavascriptBridgeReady'
+                , function () {
+                  callback(WebViewJavascriptBridge)
+                },
+                false
+              )
+            }
+            return
+          }
+
+          if (isiOS) {
+            const WebViewJavascriptBridge = window.WebViewJavascriptBridge
+            if (WebViewJavascriptBridge) {
+              return callback(WebViewJavascriptBridge)
+            }
+            if (window.WVJBCallbacks) {
+              return window.WVJBCallbacks.push(callback)
+            }
+            window.WVJBCallbacks = [callback]
+            const WVJBIframe = document.createElement('iframe')
+            WVJBIframe.style.display = 'none'
+            WVJBIframe.src = 'https://__bridge_loaded__'
+            document.documentElement.appendChild(WVJBIframe)
+            setTimeout(function () {
+              document.documentElement.removeChild(WVJBIframe)
+            }, 0)
+          }
+        }
+
+        // 调用注册方法
+        connectWebViewJavascriptBridge(function (bridge) {
+          if (isAndroid) {
+            bridge.init(function (message, responseCallback) {
+              console.log('JS got a message', message)
+              responseCallback(message)
+            })
+          }
+          readyCallback()
+        })
+      }
+      initJsBridge(function () {})
+    </script>
     <script src="./static/js/flexibleJs/flexible_css.debug.js"></script>
     <script src="./static/js/flexibleJs/flexible.debug.js"></script>
     <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=KVelCif7fs2D19DQVz9W6fYEnNbEWE8k"></script>

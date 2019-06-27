@@ -85,7 +85,7 @@ export default {
       })
     },
     goDetail(row){
-      this.$router.push({path:'/serviceMarket/comment/evaluateDetail',query:{id:row.id,}})
+      this.$router.push({path:'/serviceMarket/comment/evaluateDetail',query:{id:row.id,businessId:row.businessId}})
     },
     confirm(){
       this.getReceivedValuate()

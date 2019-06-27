@@ -27,6 +27,24 @@ public class UpdateCompanyInfoParam implements Serializable {
     @ApiModelProperty(value = "公司园区地址（实际经营地址）")
     private String addrPark;
 
+    @ApiModelProperty(value = "园区楼宇ID")
+    private String parkBuildId;
+
+    @ApiModelProperty(value = "园区楼宇名称")
+    private String parkBuildName;
+
+    public UpdateCompanyInfoParam() {
+    }
+
+    public UpdateCompanyInfoParam(String comId, String affiliatedPark, String addrPark,
+                                  String parkBuildId, String parkBuildName) {
+        this.comId = comId;
+        this.affiliatedPark = affiliatedPark;
+        this.addrPark = addrPark;
+        this.parkBuildId = parkBuildId;
+        this.parkBuildName = parkBuildName;
+    }
+
     public String getComId() {
         return comId;
     }
@@ -51,12 +69,30 @@ public class UpdateCompanyInfoParam implements Serializable {
         this.addrPark = addrPark;
     }
 
+    public String getParkBuildId() {
+        return parkBuildId;
+    }
+
+    public void setParkBuildId(String parkBuildId) {
+        this.parkBuildId = parkBuildId;
+    }
+
+    public String getParkBuildName() {
+        return parkBuildName;
+    }
+
+    public void setParkBuildName(String parkBuildName) {
+        this.parkBuildName = parkBuildName;
+    }
+
     @Override
     public String toString() {
         return "UpdateCompanyInfoParam{" +
                 "comId='" + comId + '\'' +
                 ", affiliatedPark='" + affiliatedPark + '\'' +
                 ", addrPark='" + addrPark + '\'' +
+                ", parkBuildId='" + parkBuildId + '\'' +
+                ", parkBuildName='" + parkBuildName + '\'' +
                 '}';
     }
 }

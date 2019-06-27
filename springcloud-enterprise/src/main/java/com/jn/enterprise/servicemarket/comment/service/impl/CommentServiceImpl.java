@@ -15,8 +15,6 @@ import com.jn.enterprise.servicemarket.comment.entity.TbServiceRating;
 import com.jn.enterprise.servicemarket.comment.enums.HandleResultEnum;
 import com.jn.enterprise.servicemarket.comment.model.*;
 import com.jn.enterprise.servicemarket.comment.service.CommentService;
-import com.jn.enterprise.servicemarket.org.dao.TbServiceOrgMapper;
-import com.jn.enterprise.servicemarket.product.entity.TbServiceProduct;
 import com.jn.enterprise.servicemarket.require.dao.TbServiceRequireMapper;
 import com.jn.enterprise.servicemarket.require.entity.TbServiceRequire;
 import com.jn.enterprise.servicemarket.require.entity.TbServiceRequireCriteria;
@@ -46,11 +44,15 @@ public class CommentServiceImpl implements CommentService {
 
     @Autowired
     private TbServiceRequireMapper requireMapper;
+
     @Autowired
     private CommentMapper commentMapper;
 
     @Autowired
     private TbServiceRatingMapper tbServiceRatingMapper;
+
+    @Autowired
+    private UserExtensionClient userExtensionClient;
 
     /**
      * 需求对接状态 1成功
@@ -103,6 +105,16 @@ public class CommentServiceImpl implements CommentService {
     @ServiceLog(doAction = "获取评价页详情")
     public RatingDetail getRatingCommentDetail(String id){
         RatingDetail ratingDetail = commentMapper.getRatingCommentDetail(id);
+        if (StringUtils.isNotBlank(ratingDetail.getReqPhone())) {
+            String account = ratingDetail.getReqPhone();
+            Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(account);
+            if (userExtension != null && userExtension.getData() != null) {
+                UserExtensionInfo userExtensionInfo = userExtension.getData();
+                if (StringUtils.isNotBlank(userExtensionInfo.getCompanyName())) {
+                    ratingDetail.setCompanyName(userExtensionInfo.getCompanyName());
+                }
+            }
+        }
         return ratingDetail;
     }
 

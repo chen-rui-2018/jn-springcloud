@@ -8,6 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
 /**
  * oa定时调度
  *
@@ -84,5 +90,49 @@ public class OaScheduledController {
         logger.info("执行多部门协同提醒功能");
         oaClient.multiDeptOfficeStatusRemind();
     }
+    /**
+     * 每天凌晨00点执行一次同步钉钉用户数据
+     */
+    @Scheduled(cron = "0 0 0 * * ? ")
+    public void batchInsertDingTalkUser() {
+        //批量更新钉钉考勤
+        logger.info("批量更新钉钉用户表");
+        oaClient.batchInsertDingTalkUser();
+    }
+
+    /**
+     * 每天凌晨00点执行一次同步批量更新钉钉考勤
+     */
+    @Scheduled(cron = "0 0 0 * * ? ")
+    public void batchInsertDingTalkAttendance() {
+        //批量更新钉钉考勤
+        logger.info("批量更新钉钉考勤");
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String workDateTo = now.format(format);
+
+        //减一天
+        now.plusDays(-1);
+        String workDateFrom = now.format(format);
+        oaClient.batchInsertDingTalkAttendance(workDateFrom,workDateTo);
+    }
+    /**
+     * 每天凌晨00点执行一次同步批量更新钉钉考勤（当前时间往后一周的请假）
+     */
+    @Scheduled(cron = "0 0 0 * * ? ")
+    public void batchInsertDingTalkLeave() {
+        LocalDateTime now = LocalDateTime.now();
+        ZoneId zoneId = ZoneId.systemDefault();
+        ZonedDateTime zdt = now.atZone(zoneId);
+        Date workDateFrom = Date.from(zdt.toInstant());
+
+
+        now.plusDays(7);
+        Date workDateTo = Date.from(now.atZone(zoneId).toInstant());
+        //更新会议状态
+        logger.info("批量更新钉钉考勤");
+        oaClient.batchInsertDingTalkLeave(workDateFrom,workDateTo);
+    }
+
 
 }

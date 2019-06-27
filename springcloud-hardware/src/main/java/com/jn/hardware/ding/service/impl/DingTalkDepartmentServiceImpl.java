@@ -41,8 +41,8 @@ public class DingTalkDepartmentServiceImpl implements DingTalkDepartmentService 
         String accessToken = dingTalkInRedisConfigStorage.getAccessToken();
         map.add("access_token", accessToken);
         map.add("id", departmentListParam.getId());
-        if(null != departmentListParam.getFetch_child()){
-            map.add("fetch_child",departmentListParam.getFetch_child().toString());
+        if(null != departmentListParam.getFetchChild()){
+            map.add("fetch_child",departmentListParam.getFetchChild().toString());
         }
         JSONObject jsonObject = RestTemplateUtil.request(DingTalkDepartmentService.GET_DEPARTMENT_LIST_URL, HttpMethod.GET,map,null, MediaType.APPLICATION_FORM_URLENCODED);
         logger.info("\n获取部门列表信息,接口响应:【{}】",jsonObject);

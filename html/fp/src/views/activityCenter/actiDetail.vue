@@ -34,7 +34,7 @@
               <span>{{activityDetail.actiStartTime}}-{{activityDetail.actiEndTime}}</span>
               <i class="iconfont icon-recharge">&nbsp;
                 <span v-if="activityDetail.actiCost=='0.00'">免费</span>
-                <span v-else>收费&nbsp;{{activityDetail.actiCost}}元</span>
+                <span v-else>{{activityDetail.actiCost}}元</span>
               </i>
             </p>
             <div class="delAddress">

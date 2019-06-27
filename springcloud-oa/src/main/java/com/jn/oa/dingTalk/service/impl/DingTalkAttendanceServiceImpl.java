@@ -18,6 +18,7 @@ import com.jn.oa.dingTalk.dao.TbOaDingTalkUserMapper;
 import com.jn.oa.dingTalk.entity.TbOaDingTalkUser;
 import com.jn.oa.dingTalk.service.DingTalkAttendanceService;
 import com.jn.system.api.SystemClient;
+import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import com.jn.system.vo.SysDepartmentPostVO;
 import org.slf4j.Logger;
@@ -25,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -70,6 +72,8 @@ public class DingTalkAttendanceServiceImpl implements DingTalkAttendanceService 
      * @return
      */
     @Override
+    @ServiceLog(doAction ="批量更新钉钉考勤" )
+    @Transactional(rollbackFor = Exception.class)
     public void batchInsertDingTalkAttendance(String workDateFrom,String workDateTo) {
 
         int page=Integer.valueOf(OaDingTalkEnums.PAGE.getCode());
@@ -110,6 +114,7 @@ public class DingTalkAttendanceServiceImpl implements DingTalkAttendanceService 
         if(objects.getPageNum()<(paginationData.getTotal()/objects.getPageSize()+1)){
             //递归查询下一页信息
             objects = PageHelper.startPage(objects.getPageNum()+1, objects.getPageSize());
+            logger.info("[钉钉用户考勤]批量更新钉钉考勤,递归查询下一页查询用户id信息：objects：{}", JSON.toJSON(objects));
             PaginationData<List<String>> data=new PaginationData(dingTalkUserMapper.selectAllDingTalkUserId(null) , objects.getTotal());
             recursionPagingSearchDingTalkUserId(objects,data, workDateFrom, workDateTo);
         }
@@ -120,7 +125,7 @@ public class DingTalkAttendanceServiceImpl implements DingTalkAttendanceService 
 
 
     /**
-     * 递归分页查询
+     * 递归分页查询考勤数据
      * @param clockInListParam
      * @param clockInListResult
      */
@@ -129,8 +134,14 @@ public class DingTalkAttendanceServiceImpl implements DingTalkAttendanceService 
         //在分页查询时返回，先新增当前页的数据
         List<ClockInInfo> clockInInfos=clockInListResult.getData().getRecordresult();
         for (ClockInInfo clockInInfo:clockInInfos){
+            TbOaAttendance tbOaAttendance=tbOaAttendanceMapper.selectByPrimaryKey(clockInInfo.getId());
+            if(tbOaAttendance!=null){
+                logger.info("[钉钉用户考勤]批量更新钉钉考勤,该考勤已存在，clockInInfo：{}", JSON.toJSON(clockInInfo));
+                continue;
+            }
             TbOaAttendance attendance=new TbOaAttendance();
             BeanUtils.copyProperties(clockInInfo,attendance);
+
 
             //将时间戳转换成date
             ZonedDateTime baseCheckTimeZdt=LocalDateTime.ofInstant(Instant.ofEpochMilli(Long.valueOf(clockInInfo.getBaseCheckTime())), ZoneId.systemDefault()).atZone(ZoneId.systemDefault());
@@ -165,6 +176,7 @@ public class DingTalkAttendanceServiceImpl implements DingTalkAttendanceService 
         //判断是否有下一页数据
         if(clockInListResult.getData().getHasMore()){
             clockInListParam.setOffset(clockInListParam.getOffset()+clockInListParam.getLimit());
+            logger.info("[钉钉用户考勤]批量更新钉钉考勤,递归查询下一页考勤数据信息：objects：{}", JSON.toJSON(clockInListParam));
             Result<ClockInListResult> resultList= dingTalkClient.getClockInResultList(clockInListParam);
             //递归分页查询钉钉考勤数据
             recursionPagingSearchAttendance(clockInListParam,resultList);

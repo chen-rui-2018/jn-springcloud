@@ -26,6 +26,10 @@ public class TbWechatPublicUserInfo implements Serializable {
 
     private String language;
 
+    private String subscribeTime;
+
+    private String isConcern;
+
     private Date createdTime;
 
     private String creatorAccount;
@@ -126,6 +130,22 @@ public class TbWechatPublicUserInfo implements Serializable {
         this.language = language == null ? null : language.trim();
     }
 
+    public String getSubscribeTime() {
+        return subscribeTime;
+    }
+
+    public void setSubscribeTime(String subscribeTime) {
+        this.subscribeTime = subscribeTime == null ? null : subscribeTime.trim();
+    }
+
+    public String getIsConcern() {
+        return isConcern;
+    }
+
+    public void setIsConcern(String isConcern) {
+        this.isConcern = isConcern == null ? null : isConcern.trim();
+    }
+
     public Date getCreatedTime() {
         return createdTime;
     }
@@ -189,6 +209,8 @@ public class TbWechatPublicUserInfo implements Serializable {
             && (this.getProvince() == null ? other.getProvince() == null : this.getProvince().equals(other.getProvince()))
             && (this.getCity() == null ? other.getCity() == null : this.getCity().equals(other.getCity()))
             && (this.getLanguage() == null ? other.getLanguage() == null : this.getLanguage().equals(other.getLanguage()))
+            && (this.getSubscribeTime() == null ? other.getSubscribeTime() == null : this.getSubscribeTime().equals(other.getSubscribeTime()))
+            && (this.getIsConcern() == null ? other.getIsConcern() == null : this.getIsConcern().equals(other.getIsConcern()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
@@ -211,6 +233,8 @@ public class TbWechatPublicUserInfo implements Serializable {
         result = prime * result + ((getProvince() == null) ? 0 : getProvince().hashCode());
         result = prime * result + ((getCity() == null) ? 0 : getCity().hashCode());
         result = prime * result + ((getLanguage() == null) ? 0 : getLanguage().hashCode());
+        result = prime * result + ((getSubscribeTime() == null) ? 0 : getSubscribeTime().hashCode());
+        result = prime * result + ((getIsConcern() == null) ? 0 : getIsConcern().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
@@ -236,6 +260,8 @@ public class TbWechatPublicUserInfo implements Serializable {
         sb.append(", province=").append(province);
         sb.append(", city=").append(city);
         sb.append(", language=").append(language);
+        sb.append(", subscribeTime=").append(subscribeTime);
+        sb.append(", isConcern=").append(isConcern);
         sb.append(", createdTime=").append(createdTime);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", modifiedTime=").append(modifiedTime);

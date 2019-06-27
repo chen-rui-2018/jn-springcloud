@@ -3,13 +3,14 @@ package com.jn.oa.dingTalk.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.jn.common.model.Result;
 import com.jn.hardware.api.DingTalkClient;
-import com.jn.hardware.enums.dingtalk.AddressBookEventTypeEnum;
 import com.jn.hardware.model.dingtalk.user.*;
 import com.jn.oa.common.enums.OaDingTalkEnums;
 import com.jn.oa.dingTalk.dao.TbOaDingTalkUserMapper;
 import com.jn.oa.dingTalk.entity.TbOaDingTalkUser;
 import com.jn.oa.dingTalk.service.DingTalkUserService;
+import com.jn.oa.enums.AddressBookEventTypeEnum;
 import com.jn.oa.model.AddressBookNotice;
+import com.jn.system.log.annotation.ServiceLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,7 @@ public class DingTalkServiceImpl implements DingTalkUserService {
      * @return
      */
     @Override
+    @ServiceLog(doAction ="批量更新钉钉用户表" )
     @Transactional(rollbackFor = Exception.class)
     public void batchInsertDingTalkUser() {
         DepartmentListParam departmentListParam=new DepartmentListParam();
@@ -121,7 +123,7 @@ public class DingTalkServiceImpl implements DingTalkUserService {
     public void updateOrInsertDingTalkUser(AddressBookNotice addressBookNotice) {
         logger.info("[钉钉用户]变更钉钉用户信息回调,addressBookNotice{}", JSON.toJSON(addressBookNotice));
 
-        if(AddressBookEventTypeEnum.USER_ADD_ORG.getCode().equals(addressBookNotice.getEventType())){
+        if(AddressBookEventTypeEnum.USER_ADD_ORG.getCode().equals(addressBookNotice.getEventType().getCode())){
             logger.info("[钉钉用户]新增钉钉用户信息回调,addressBookNotice{}", JSON.toJSON(addressBookNotice));
             //钉钉通讯录新增事件
             for(String id:addressBookNotice.getUserId()){
@@ -130,6 +132,7 @@ public class DingTalkServiceImpl implements DingTalkUserService {
                 Result<UserDetailsInfoResult> userDetailsInfoResultResult=dingTalkClient.getUserInfo(userInfoParam);
                 if(userDetailsInfoResultResult!=null&&userDetailsInfoResultResult.getData()!=null){
                     UserDetailsInfoResult result=userDetailsInfoResultResult.getData();
+                    logger.info("[钉钉用户]新增钉钉用户信息回调,查询钉钉对应信息,userInfoParam：{}，result{}", JSON.toJSON(userInfoParam),JSON.toJSON(result));
                     TbOaDingTalkUser user=copyBeanProperty(result);
                     //默认在职
                     user.setStatus(OaDingTalkEnums.JOB_STATUS_ON_JOB.getCode());
@@ -137,7 +140,7 @@ public class DingTalkServiceImpl implements DingTalkUserService {
                 }
             }
 
-        }else if(AddressBookEventTypeEnum.USER_MODIFY_ORG.getCode().equals(addressBookNotice.getEventType())){
+        }else if(AddressBookEventTypeEnum.USER_MODIFY_ORG.getCode().equals(addressBookNotice.getEventType().getCode())){
             logger.info("[钉钉用户]更新钉钉用户信息回调,addressBookNotice{}", JSON.toJSON(addressBookNotice));
             //钉钉通讯录更新事件
             for(String id:addressBookNotice.getUserId()){
@@ -146,6 +149,7 @@ public class DingTalkServiceImpl implements DingTalkUserService {
                 Result<UserDetailsInfoResult> userDetailsInfoResultResult=dingTalkClient.getUserInfo(userInfoParam);
                 if(userDetailsInfoResultResult!=null&&userDetailsInfoResultResult.getData()!=null){
                     UserDetailsInfoResult result=userDetailsInfoResultResult.getData();
+                    logger.info("[钉钉用户]新增钉钉用户信息回调,查询钉钉对应信息,userInfoParam：{}，result{}", JSON.toJSON(userInfoParam),JSON.toJSON(result));
                     TbOaDingTalkUser user=copyBeanProperty(result);
                     //默认在职
                     user.setStatus(OaDingTalkEnums.JOB_STATUS_ON_JOB.getCode());
@@ -153,7 +157,7 @@ public class DingTalkServiceImpl implements DingTalkUserService {
                 }
             }
 
-        }else if(AddressBookEventTypeEnum.USER_LEAVE_ORG.getCode().equals(addressBookNotice.getEventType())){
+        }else if(AddressBookEventTypeEnum.USER_LEAVE_ORG.getCode().equals(addressBookNotice.getEventType().getCode())){
             logger.info("[钉钉用户]离职钉钉用户信息回调,addressBookNotice{}", JSON.toJSON(addressBookNotice));
             //钉钉通讯录离职事件
             for(String id:addressBookNotice.getUserId()){
@@ -162,6 +166,7 @@ public class DingTalkServiceImpl implements DingTalkUserService {
                 Result<UserDetailsInfoResult> userDetailsInfoResultResult=dingTalkClient.getUserInfo(userInfoParam);
                 if(userDetailsInfoResultResult!=null&&userDetailsInfoResultResult.getData()!=null){
                     UserDetailsInfoResult result=userDetailsInfoResultResult.getData();
+                    logger.info("[钉钉用户]新增钉钉用户信息回调,查询钉钉对应信息,userInfoParam：{}，result{}", JSON.toJSON(userInfoParam),JSON.toJSON(result));
                     TbOaDingTalkUser user=copyBeanProperty(result);
                     //修改为离职
                     user.setStatus(OaDingTalkEnums.JOB_STATUS_LEAVE.getCode());

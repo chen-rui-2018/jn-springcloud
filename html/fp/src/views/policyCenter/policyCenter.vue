@@ -440,7 +440,9 @@ export default {
     　　return windowHeight;
     },
     scrollTopAnimate(){
-      document.documentElement.scrollTop = document.getElementsByClassName("tabBox")[0].offsetTop - 100;
+      console.log(document.documentElement.scrollTop)
+      // document.documentElement.scrollTop = document.getElementsByClassName("tabBox")[0].offsetTop - 100;
+      document.documentElement.scrollTop = document.getElementsByClassName("techContent")[0].offsetTop-10;
     //   let times = setInterval(()=>{
     //     document.documentElement.scrollTop = this.getScrollTop() + 10;
     //     if(this.getScrollTop() + this.getWindowHeight() >= this.getScrollHeight() || this.getScrollTop() >= document.getElementsByClassName("tabBox")[0].offsetTop - 100){

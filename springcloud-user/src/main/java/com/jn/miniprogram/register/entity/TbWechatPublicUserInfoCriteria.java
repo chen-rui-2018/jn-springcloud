@@ -875,6 +875,146 @@ public class TbWechatPublicUserInfoCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andSubscribeTimeIsNull() {
+            addCriterion("subscribe_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubscribeTimeIsNotNull() {
+            addCriterion("subscribe_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubscribeTimeEqualTo(String value) {
+            addCriterion("subscribe_time =", value, "subscribeTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubscribeTimeNotEqualTo(String value) {
+            addCriterion("subscribe_time <>", value, "subscribeTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubscribeTimeGreaterThan(String value) {
+            addCriterion("subscribe_time >", value, "subscribeTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubscribeTimeGreaterThanOrEqualTo(String value) {
+            addCriterion("subscribe_time >=", value, "subscribeTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubscribeTimeLessThan(String value) {
+            addCriterion("subscribe_time <", value, "subscribeTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubscribeTimeLessThanOrEqualTo(String value) {
+            addCriterion("subscribe_time <=", value, "subscribeTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubscribeTimeLike(String value) {
+            addCriterion("subscribe_time like", value, "subscribeTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubscribeTimeNotLike(String value) {
+            addCriterion("subscribe_time not like", value, "subscribeTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubscribeTimeIn(List<String> values) {
+            addCriterion("subscribe_time in", values, "subscribeTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubscribeTimeNotIn(List<String> values) {
+            addCriterion("subscribe_time not in", values, "subscribeTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubscribeTimeBetween(String value1, String value2) {
+            addCriterion("subscribe_time between", value1, value2, "subscribeTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubscribeTimeNotBetween(String value1, String value2) {
+            addCriterion("subscribe_time not between", value1, value2, "subscribeTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsConcernIsNull() {
+            addCriterion("is_concern is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsConcernIsNotNull() {
+            addCriterion("is_concern is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsConcernEqualTo(String value) {
+            addCriterion("is_concern =", value, "isConcern");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsConcernNotEqualTo(String value) {
+            addCriterion("is_concern <>", value, "isConcern");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsConcernGreaterThan(String value) {
+            addCriterion("is_concern >", value, "isConcern");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsConcernGreaterThanOrEqualTo(String value) {
+            addCriterion("is_concern >=", value, "isConcern");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsConcernLessThan(String value) {
+            addCriterion("is_concern <", value, "isConcern");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsConcernLessThanOrEqualTo(String value) {
+            addCriterion("is_concern <=", value, "isConcern");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsConcernLike(String value) {
+            addCriterion("is_concern like", value, "isConcern");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsConcernNotLike(String value) {
+            addCriterion("is_concern not like", value, "isConcern");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsConcernIn(List<String> values) {
+            addCriterion("is_concern in", values, "isConcern");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsConcernNotIn(List<String> values) {
+            addCriterion("is_concern not in", values, "isConcern");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsConcernBetween(String value1, String value2) {
+            addCriterion("is_concern between", value1, value2, "isConcern");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsConcernNotBetween(String value1, String value2) {
+            addCriterion("is_concern not between", value1, value2, "isConcern");
+            return (Criteria) this;
+        }
+
         public Criteria andCreatedTimeIsNull() {
             addCriterion("created_time is null");
             return (Criteria) this;

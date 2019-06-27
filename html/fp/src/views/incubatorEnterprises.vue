@@ -53,7 +53,7 @@
               <h4>申请入驻</h4>
               <p>电话：{{i.phone}}</p>
             </div>
-            <a class="footLi pointer" href='https://oa.bxgxq.com/ibps/platform/bpmn/instance/bpmInst/toStart.htm?defId=581462319721086976'>申请入驻</a>
+            <a class="footLi pointer" :href='ibpsUrl+"ibps/platform/bpmn/instance/bpmInst/toStart.htm?defId=581462319721086976"'>申请入驻</a>
             <!-- <a class="footLi pointer" href="http://112.94.22.222:2384/ibps/platform/bpmn/instance/bpmInst/toStart.htm?defId=581462319721086976">申请入驻</a> -->
           </li>
         </ul>

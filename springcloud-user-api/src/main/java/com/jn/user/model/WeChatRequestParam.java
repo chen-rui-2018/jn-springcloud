@@ -1,5 +1,6 @@
 package com.jn.user.model;
 
+import com.jn.user.enums.IsConCornEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -21,7 +22,7 @@ public class WeChatRequestParam implements Serializable {
     @NotNull(message = "openId不能为空")
     private String openId;
     @ApiModelProperty(value = "unionId)")
-    @Size(max=29,message = "unionId最大长度29位")
+    @Size(max=29,message = "请输入正确的29位unionId")
     private String unionId;
     @ApiModelProperty(value = "用户呢称)")
     private String nickName;
@@ -38,6 +39,10 @@ public class WeChatRequestParam implements Serializable {
     private String city;
     @ApiModelProperty(value = "语言)")
     private String language;
+    @ApiModelProperty(value = "关注时间（微信服务号关注时间，为时间戳，微信小程序传空，微信服务号必传）)")
+    private String subscribeTime;
+    @ApiModelProperty(value = "是否关注标志（  CORN('1','关注') ,CANCEL_CORN('0','取消关注')）,微信小程序传空，微信服务号必传)")
+    private IsConCornEnum isConcern;
 
     public String getOpenId() {
         return openId;
@@ -111,6 +116,22 @@ public class WeChatRequestParam implements Serializable {
         this.language = language;
     }
 
+    public String getSubscribeTime() {
+        return subscribeTime;
+    }
+
+    public void setSubscribeTime(String subscribeTime) {
+        this.subscribeTime = subscribeTime;
+    }
+
+    public IsConCornEnum getIsConcern() {
+        return isConcern;
+    }
+
+    public void setIsConcern(IsConCornEnum isConcern) {
+        this.isConcern = isConcern;
+    }
+
     @Override
     public String toString() {
         return "WeChatRequestParam{" +
@@ -123,6 +144,8 @@ public class WeChatRequestParam implements Serializable {
                 ", province='" + province + '\'' +
                 ", city='" + city + '\'' +
                 ", language='" + language + '\'' +
+                ", subscribeTime='" + subscribeTime + '\'' +
+                ", isConcern='" + isConcern + '\'' +
                 '}';
     }
 }

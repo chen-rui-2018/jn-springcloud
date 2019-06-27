@@ -8,6 +8,7 @@ import com.jn.enterprise.company.dao.TbServiceCompanyMapper;
 import com.jn.enterprise.company.dao.TbServiceCompanyModifyMapper;
 import com.jn.enterprise.company.entity.TbServiceCompany;
 import com.jn.enterprise.company.entity.TbServiceCompanyCriteria;
+import com.jn.enterprise.company.entity.TbServiceCompanyModify;
 import com.jn.enterprise.company.enums.CompanyDataEnum;
 import com.jn.enterprise.company.enums.CompanyExceptionEnum;
 import com.jn.enterprise.company.model.ServiceCompany;
@@ -138,30 +139,17 @@ public class UpCompanyAccountServiceImpl implements UpCompanyAccountService {
                 }
                 logger.info("[企业后置脚本] 调用用户服务 修改用户所属企业 接口 用户账号:{}", comAdmin);
 
-                int i = tbServiceCompanyModifyMapper.deleteByPrimaryKey(serviceCompany.getId());
+                TbServiceCompanyModify companyModify = new TbServiceCompanyModify();
+                companyModify.setId(serviceCompany.getId());
+                companyModify.setCheckStatus(CompanyDataEnum.COMPANY_CHECK_STATUS_PASS.getCode());
+                companyModify.setRecordStatus(RecordStatusEnum.DELETE.getValue());
+                int i = tbServiceCompanyModifyMapper.updateByPrimaryKeySelective(companyModify);
                 if (i != 1) {
                     logger.warn("[企业后置脚本] 删除企业临时表数据失败");
                     throw new JnSpringCloudException(CompanyExceptionEnum.DELETE_COMPANY_TEMP_ERROR);
                 }
                 logger.info("[企业后置脚本] 已成功删除临时表企业数据");
 
-                // 只有新增时才创建账本
-                if (companyIsAdd) {
-                    logger.info("[企业后置脚本] 新增企业调度创建企业账本接口");
-                    // 4.创建企业的账本信息-延迟调度 huxw
-                    PayAccountBookCreateParam payAccountBookCreateParam = new PayAccountBookCreateParam();
-                    payAccountBookCreateParam.setComAdmin(comAdmin);
-                    payAccountBookCreateParam.setEnterId(companyId);
-
-                    Delay delay = new Delay();
-                    delay.setServiceId(applicationName);
-                    delay.setServiceUrl("/api/payment/payAccount/createPayAccountBook");
-                    delay.setTtl("30");
-                    delay.setDataString(JSONObject.toJSONString(payAccountBookCreateParam));
-                    logger.info("开始回调");
-                    Result<Boolean> delayResult = delaySendMessageClient.delaySend(delay);
-                    logger.info("结束回调,返回结果，【{}】", delayResult.toString());
-                }
             } else {
                 logger.warn("[企业后置脚本] 添加/修改企业信息失败");
                 throw new JnSpringCloudException(CompanyExceptionEnum.UPDATE_COMPANY_INFO_ERROR);

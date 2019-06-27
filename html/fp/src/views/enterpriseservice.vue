@@ -221,7 +221,7 @@
                 <i>{{i.applyNum}}/{{i.actiNumber}}名</i>
                 <p class="avaP">
                   <!-- <i class="iconfont icon-xihuan"></i>16 -->
-                  <img src="@/../static/img/xin.png" alt="">{{i.actiLike}}
+                  <img src="@/../static/img/xin.png" alt=""><span>{{i.actiLike}}</span>
                 </p>
               </div>
             </li>
@@ -1155,8 +1155,10 @@ export default {
     //活动中心右翻页
     rightPage() {
       if (this.page3 >= Math.ceil(this.total3 / this.rows3)) {
-        this.page3 = 1;
-        this.getActiList();
+        this.$message.error("没有更多数据了");
+        return;
+        // this.page3 = 1;
+        // this.getActiList();
       } else {
         this.page3++;
         this.getActiList();

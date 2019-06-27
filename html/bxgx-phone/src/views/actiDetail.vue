@@ -222,7 +222,7 @@ export default {
         urlFlag: true,
         callback: res => {
           if (res.code === '0000') {
-            // alert(res.result)
+            _this.$vux.toast.text('报名成功')
             _this.activityApplyShow = '2'
             // this.actiDel()
           } else {
@@ -247,7 +247,7 @@ export default {
         callback: function (res) {
           if (res.code === '0000') {
             _this.activityApplyShow = '1'
-            // _this.actiDel()
+            _this.$vux.toast.text('取消报名成功')
           } else {
             _this.$vux.toast.text(res.result)
           }

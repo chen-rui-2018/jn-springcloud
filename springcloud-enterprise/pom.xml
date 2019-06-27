@@ -89,10 +89,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        propaganda
+                        pd-declaration
                     </contexts>
                     <tableNames>
-                        tb_propaganda
+                        tb_pd_declaration_push_information_manage
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

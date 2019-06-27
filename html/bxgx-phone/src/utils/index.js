@@ -17,6 +17,11 @@ function UrlSearch () {
 }
 const urlSearch = new UrlSearch()
 
+const hexToDec = str => {
+  str = str.replace(/\\/g, '%')
+  return unescape(str)
+}
+
 function initJsBridge (readyCallback) {
   const u = navigator.userAgent
   const isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1 // android终端
@@ -78,24 +83,24 @@ function isMobile () {
   })
 }
 function linkTo (data) {
-  router.push(data)
-  // const { appPath, callBack } = data
-  // if (isMobile()) {
-  //   window.WebViewJavascriptBridge.callHandler('goNative', {
-  //     'url': appPath
-  //   }, function (response) {
-  //     if (callBack) {
-  //       callBack(response)
-  //     }
-  //   })
-  // } else {
-  //   router.push(data)
-  // }
+  const { appPath, callBack } = data
+  if (isMobile()) {
+    window.WebViewJavascriptBridge.callHandler('goNative', {
+      'url': appPath
+    }, function (response) {
+      if (callBack) {
+        callBack(response)
+      }
+    })
+  } else {
+    router.push(data)
+  }
 }
 
 export {
   urlSearch,
   linkTo,
   isMobile,
-  initJsBridge
+  initJsBridge,
+  hexToDec
 }

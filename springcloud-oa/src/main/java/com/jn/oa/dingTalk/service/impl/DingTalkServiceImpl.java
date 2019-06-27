@@ -10,6 +10,7 @@ import com.jn.oa.dingTalk.entity.TbOaDingTalkUser;
 import com.jn.oa.dingTalk.service.DingTalkUserService;
 import com.jn.oa.enums.AddressBookEventTypeEnum;
 import com.jn.oa.model.AddressBookNotice;
+import com.jn.system.log.annotation.ServiceLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,7 @@ public class DingTalkServiceImpl implements DingTalkUserService {
      * @return
      */
     @Override
+    @ServiceLog(doAction ="批量更新钉钉用户表" )
     @Transactional(rollbackFor = Exception.class)
     public void batchInsertDingTalkUser() {
         DepartmentListParam departmentListParam=new DepartmentListParam();

@@ -59,7 +59,8 @@
             <span @touchstart="filter('3')" :class="{'greenColor':sendData.sortType==='3'}"><i class="iconfont icon-hot"></i>热度排序</span>
           </div>
           <div class="talentsService_cont_box">
-            <div class="talentsService_cont" v-for="(item,index) in talentsList " :key="index" @click="$router.push({path:'/guest/pd/talentNotice/talentsServiceDetail',query:{id:item.id}}) ">
+            <div class="talentsService_cont" v-for="(item,index) in talentsList " :key="index" @click="goDetail(item.id)">
+
               <div class="talentsService_cont_left">
                 <div class="cont_title"><span class="greenColor">[{{item.rangeId|type}}] </span>{{item.noticeTitle}} </div>
                 <div class="cont_detail">
@@ -126,6 +127,19 @@ export default {
     this.scrollBottom()
   },
   methods: {
+    goDetail (id) {
+      this.api.get({
+        url: 'trafficVolume',
+        data: {id: id},
+        callback: res => {
+          if (res.code === '0000') {
+            this.$router.push({path: '/guest/pd/talentNotice/talentsServiceDetail', query: {id: id}})
+          } else {
+            this.$vux.toast.text(res.result)
+          }
+        }
+      })
+    },
     scrollBottom () {
       window.onscroll = () => {
         var scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight)
@@ -170,7 +184,7 @@ export default {
     },
     // 申报平台列表
     getperennialList () {
-      this.api.get({
+      this.api.post({
         url: 'queryPlatformInfo',
         data: {
           page: 1,
@@ -305,10 +319,11 @@ export default {
                   // height: 107px;
                   border-bottom: 1px solid #eeeeee;
                   padding: 13px 0;
+                  height: 150px;
                   margin-top: 0;
                   img{
                     width: 51%;
-                    // height: 100%;
+                    height: 100%;
                     display: block;
                     margin: auto;
                   }

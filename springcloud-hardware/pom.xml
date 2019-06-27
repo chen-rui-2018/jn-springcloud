@@ -41,6 +41,11 @@
             <artifactId>lippi</artifactId>
             <version>1.5</version>
         </dependency>
+        <!--oa-->
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-oa-api</artifactId>
+        </dependency>
 
     </dependencies>
     <build>

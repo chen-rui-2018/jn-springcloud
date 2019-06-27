@@ -315,6 +315,76 @@ public class TbPdDeclarationPushInformationManageCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andReceiveEnterpriseIdIsNull() {
+            addCriterion("receive_enterprise_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveEnterpriseIdIsNotNull() {
+            addCriterion("receive_enterprise_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveEnterpriseIdEqualTo(String value) {
+            addCriterion("receive_enterprise_id =", value, "receiveEnterpriseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveEnterpriseIdNotEqualTo(String value) {
+            addCriterion("receive_enterprise_id <>", value, "receiveEnterpriseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveEnterpriseIdGreaterThan(String value) {
+            addCriterion("receive_enterprise_id >", value, "receiveEnterpriseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveEnterpriseIdGreaterThanOrEqualTo(String value) {
+            addCriterion("receive_enterprise_id >=", value, "receiveEnterpriseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveEnterpriseIdLessThan(String value) {
+            addCriterion("receive_enterprise_id <", value, "receiveEnterpriseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveEnterpriseIdLessThanOrEqualTo(String value) {
+            addCriterion("receive_enterprise_id <=", value, "receiveEnterpriseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveEnterpriseIdLike(String value) {
+            addCriterion("receive_enterprise_id like", value, "receiveEnterpriseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveEnterpriseIdNotLike(String value) {
+            addCriterion("receive_enterprise_id not like", value, "receiveEnterpriseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveEnterpriseIdIn(List<String> values) {
+            addCriterion("receive_enterprise_id in", values, "receiveEnterpriseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveEnterpriseIdNotIn(List<String> values) {
+            addCriterion("receive_enterprise_id not in", values, "receiveEnterpriseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveEnterpriseIdBetween(String value1, String value2) {
+            addCriterion("receive_enterprise_id between", value1, value2, "receiveEnterpriseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveEnterpriseIdNotBetween(String value1, String value2) {
+            addCriterion("receive_enterprise_id not between", value1, value2, "receiveEnterpriseId");
+            return (Criteria) this;
+        }
+
         public Criteria andReceiveEnterpriseIsNull() {
             addCriterion("receive_enterprise is null");
             return (Criteria) this;
@@ -652,66 +722,6 @@ public class TbPdDeclarationPushInformationManageCriteria {
 
         public Criteria andPushTimeNotBetween(Date value1, Date value2) {
             addCriterion("push_time not between", value1, value2, "pushTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andPushStatusIsNull() {
-            addCriterion("push_status is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPushStatusIsNotNull() {
-            addCriterion("push_status is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPushStatusEqualTo(Byte value) {
-            addCriterion("push_status =", value, "pushStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andPushStatusNotEqualTo(Byte value) {
-            addCriterion("push_status <>", value, "pushStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andPushStatusGreaterThan(Byte value) {
-            addCriterion("push_status >", value, "pushStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andPushStatusGreaterThanOrEqualTo(Byte value) {
-            addCriterion("push_status >=", value, "pushStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andPushStatusLessThan(Byte value) {
-            addCriterion("push_status <", value, "pushStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andPushStatusLessThanOrEqualTo(Byte value) {
-            addCriterion("push_status <=", value, "pushStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andPushStatusIn(List<Byte> values) {
-            addCriterion("push_status in", values, "pushStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andPushStatusNotIn(List<Byte> values) {
-            addCriterion("push_status not in", values, "pushStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andPushStatusBetween(Byte value1, Byte value2) {
-            addCriterion("push_status between", value1, value2, "pushStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andPushStatusNotBetween(Byte value1, Byte value2) {
-            addCriterion("push_status not between", value1, value2, "pushStatus");
             return (Criteria) this;
         }
 
@@ -1092,6 +1102,356 @@ public class TbPdDeclarationPushInformationManageCriteria {
 
         public Criteria andModifiedTimeNotBetween(Date value1, Date value2) {
             addCriterion("modified_time not between", value1, value2, "modifiedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushIdIsNull() {
+            addCriterion("push_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushIdIsNotNull() {
+            addCriterion("push_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushIdEqualTo(String value) {
+            addCriterion("push_id =", value, "pushId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushIdNotEqualTo(String value) {
+            addCriterion("push_id <>", value, "pushId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushIdGreaterThan(String value) {
+            addCriterion("push_id >", value, "pushId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushIdGreaterThanOrEqualTo(String value) {
+            addCriterion("push_id >=", value, "pushId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushIdLessThan(String value) {
+            addCriterion("push_id <", value, "pushId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushIdLessThanOrEqualTo(String value) {
+            addCriterion("push_id <=", value, "pushId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushIdLike(String value) {
+            addCriterion("push_id like", value, "pushId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushIdNotLike(String value) {
+            addCriterion("push_id not like", value, "pushId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushIdIn(List<String> values) {
+            addCriterion("push_id in", values, "pushId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushIdNotIn(List<String> values) {
+            addCriterion("push_id not in", values, "pushId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushIdBetween(String value1, String value2) {
+            addCriterion("push_id between", value1, value2, "pushId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushIdNotBetween(String value1, String value2) {
+            addCriterion("push_id not between", value1, value2, "pushId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushSmsIsNull() {
+            addCriterion("push_sms is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushSmsIsNotNull() {
+            addCriterion("push_sms is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushSmsEqualTo(String value) {
+            addCriterion("push_sms =", value, "pushSms");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushSmsNotEqualTo(String value) {
+            addCriterion("push_sms <>", value, "pushSms");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushSmsGreaterThan(String value) {
+            addCriterion("push_sms >", value, "pushSms");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushSmsGreaterThanOrEqualTo(String value) {
+            addCriterion("push_sms >=", value, "pushSms");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushSmsLessThan(String value) {
+            addCriterion("push_sms <", value, "pushSms");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushSmsLessThanOrEqualTo(String value) {
+            addCriterion("push_sms <=", value, "pushSms");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushSmsLike(String value) {
+            addCriterion("push_sms like", value, "pushSms");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushSmsNotLike(String value) {
+            addCriterion("push_sms not like", value, "pushSms");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushSmsIn(List<String> values) {
+            addCriterion("push_sms in", values, "pushSms");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushSmsNotIn(List<String> values) {
+            addCriterion("push_sms not in", values, "pushSms");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushSmsBetween(String value1, String value2) {
+            addCriterion("push_sms between", value1, value2, "pushSms");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushSmsNotBetween(String value1, String value2) {
+            addCriterion("push_sms not between", value1, value2, "pushSms");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushEmailIsNull() {
+            addCriterion("push_email is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushEmailIsNotNull() {
+            addCriterion("push_email is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushEmailEqualTo(String value) {
+            addCriterion("push_email =", value, "pushEmail");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushEmailNotEqualTo(String value) {
+            addCriterion("push_email <>", value, "pushEmail");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushEmailGreaterThan(String value) {
+            addCriterion("push_email >", value, "pushEmail");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushEmailGreaterThanOrEqualTo(String value) {
+            addCriterion("push_email >=", value, "pushEmail");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushEmailLessThan(String value) {
+            addCriterion("push_email <", value, "pushEmail");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushEmailLessThanOrEqualTo(String value) {
+            addCriterion("push_email <=", value, "pushEmail");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushEmailLike(String value) {
+            addCriterion("push_email like", value, "pushEmail");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushEmailNotLike(String value) {
+            addCriterion("push_email not like", value, "pushEmail");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushEmailIn(List<String> values) {
+            addCriterion("push_email in", values, "pushEmail");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushEmailNotIn(List<String> values) {
+            addCriterion("push_email not in", values, "pushEmail");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushEmailBetween(String value1, String value2) {
+            addCriterion("push_email between", value1, value2, "pushEmail");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushEmailNotBetween(String value1, String value2) {
+            addCriterion("push_email not between", value1, value2, "pushEmail");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushWxIsNull() {
+            addCriterion("push_wx is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushWxIsNotNull() {
+            addCriterion("push_wx is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushWxEqualTo(String value) {
+            addCriterion("push_wx =", value, "pushWx");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushWxNotEqualTo(String value) {
+            addCriterion("push_wx <>", value, "pushWx");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushWxGreaterThan(String value) {
+            addCriterion("push_wx >", value, "pushWx");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushWxGreaterThanOrEqualTo(String value) {
+            addCriterion("push_wx >=", value, "pushWx");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushWxLessThan(String value) {
+            addCriterion("push_wx <", value, "pushWx");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushWxLessThanOrEqualTo(String value) {
+            addCriterion("push_wx <=", value, "pushWx");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushWxLike(String value) {
+            addCriterion("push_wx like", value, "pushWx");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushWxNotLike(String value) {
+            addCriterion("push_wx not like", value, "pushWx");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushWxIn(List<String> values) {
+            addCriterion("push_wx in", values, "pushWx");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushWxNotIn(List<String> values) {
+            addCriterion("push_wx not in", values, "pushWx");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushWxBetween(String value1, String value2) {
+            addCriterion("push_wx between", value1, value2, "pushWx");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushWxNotBetween(String value1, String value2) {
+            addCriterion("push_wx not between", value1, value2, "pushWx");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushAppIsNull() {
+            addCriterion("push_app is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushAppIsNotNull() {
+            addCriterion("push_app is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushAppEqualTo(String value) {
+            addCriterion("push_app =", value, "pushApp");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushAppNotEqualTo(String value) {
+            addCriterion("push_app <>", value, "pushApp");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushAppGreaterThan(String value) {
+            addCriterion("push_app >", value, "pushApp");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushAppGreaterThanOrEqualTo(String value) {
+            addCriterion("push_app >=", value, "pushApp");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushAppLessThan(String value) {
+            addCriterion("push_app <", value, "pushApp");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushAppLessThanOrEqualTo(String value) {
+            addCriterion("push_app <=", value, "pushApp");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushAppLike(String value) {
+            addCriterion("push_app like", value, "pushApp");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushAppNotLike(String value) {
+            addCriterion("push_app not like", value, "pushApp");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushAppIn(List<String> values) {
+            addCriterion("push_app in", values, "pushApp");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushAppNotIn(List<String> values) {
+            addCriterion("push_app not in", values, "pushApp");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushAppBetween(String value1, String value2) {
+            addCriterion("push_app between", value1, value2, "pushApp");
+            return (Criteria) this;
+        }
+
+        public Criteria andPushAppNotBetween(String value1, String value2) {
+            addCriterion("push_app not between", value1, value2, "pushApp");
             return (Criteria) this;
         }
     }

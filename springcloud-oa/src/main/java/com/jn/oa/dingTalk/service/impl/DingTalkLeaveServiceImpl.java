@@ -21,6 +21,7 @@ import com.jn.oa.leave.dao.TbOaLeaveMapper;
 import com.jn.oa.leave.entity.TbOaLeave;
 import com.jn.oa.leave.entity.TbOaLeaveCriteria;
 import com.jn.system.api.SystemClient;
+import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import com.jn.system.vo.SysDepartmentPostVO;
 import org.slf4j.Logger;
@@ -28,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -69,11 +71,13 @@ public class DingTalkLeaveServiceImpl implements DingTalkLeaveService  {
 
 
     /**
-     * 批量更新钉钉考勤
+     * 批量更新钉钉请假
      *
      * @return
      */
     @Override
+    @ServiceLog(doAction ="批量更新钉钉请假" )
+    @Transactional(rollbackFor = Exception.class)
     public void batchInsertDingTalkLeave(Date workDateFrom,Date workDateTo) {
 
         int page=Integer.valueOf(OaDingTalkEnums.PAGE.getCode());

@@ -8,6 +8,7 @@ import com.jn.enterprise.enums.OrgExceptionEnum;
 import com.jn.enterprise.pd.declaration.entity.TbPdDeclarationNoticeManage;
 import com.jn.enterprise.pd.declaration.entity.TbPdDeclarationNoticeRange;
 import com.jn.enterprise.pd.declaration.enums.ExceptionStatusEnums;
+import com.jn.enterprise.pd.declaration.model.DeclarationNoticePushParams;
 import com.jn.enterprise.pd.declaration.model.DeclarationOnlineReservationManageModel;
 import com.jn.enterprise.pd.declaration.service.DeclarationNoticeService;
 import com.jn.enterprise.pd.talent.entity.TbPdTalentServiceNotice;
@@ -80,6 +81,18 @@ public class DeclarationNoticeController extends BaseController {
         Assert.notNull(id, ExceptionStatusEnums.NOTICE_ID_NOT_NULL.getMessage());
         declarationNoticeService.updateTrafficVolume(id);
         return new Result();
+    }
+
+    @ControllerLog(doAction = "公告推送")
+    @ApiOperation(value = "公告推送", notes = "公告推送")
+    @RequestMapping(value = "/noticePush" ,method = RequestMethod.POST)
+    public Result noticePush(@Validated @RequestBody DeclarationNoticePushParams declarationNoticePushParams){
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        Assert.notEmpty(declarationNoticePushParams.getNoticeId(), "公告ID不能为空");
+        Assert.notEmpty(declarationNoticePushParams.getEntId(), "企业ID不能为空");
+        Assert.notEmpty(declarationNoticePushParams.getPushMode(), "推送方式不能为空");
+        return declarationNoticeService.noticePush(declarationNoticePushParams,user);
     }
 
 

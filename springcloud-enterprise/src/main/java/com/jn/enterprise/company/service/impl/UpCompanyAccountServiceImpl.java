@@ -3,6 +3,7 @@ package com.jn.enterprise.company.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
+import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.enterprise.company.dao.TbServiceCompanyMapper;
 import com.jn.enterprise.company.dao.TbServiceCompanyModifyMapper;
@@ -33,27 +34,21 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 升级企业账号服务层实现
- *
  * @author： shaobao
  * @date： Created on 2019/5/28 19:24
  * @version： v1.0
  * @modified By: huxw
+ * @updateDate 2019-6-27 16:59:22
  **/
 @Service
 public class UpCompanyAccountServiceImpl implements UpCompanyAccountService {
-    /**
-     * 日志组件
-     *
-     * @param tbServiceCompany
-     */
-    private static Logger logger = LoggerFactory.getLogger(StaffServiceImpl.class);
+
+    // 日志
+    private static Logger logger = LoggerFactory.getLogger(UpCompanyAccountServiceImpl.class);
 
     @Autowired
     private CompanyService companyService;
@@ -62,13 +57,13 @@ public class UpCompanyAccountServiceImpl implements UpCompanyAccountService {
     private TbServiceCompanyModifyMapper tbServiceCompanyModifyMapper;
 
     @Autowired
-    private TbServiceCompanyMapper tbServiceCompanyMapper;
-
-    @Autowired
     private SystemClient systemClient;
 
     @Autowired
     private UserExtensionClient userExtensionClient;
+
+    @Autowired
+    private TbServiceCompanyMapper tbServiceCompanyMapper;
 
     @Autowired
     private DelaySendMessageClient delaySendMessageClient;
@@ -77,11 +72,11 @@ public class UpCompanyAccountServiceImpl implements UpCompanyAccountService {
     private String applicationName;
 
     /**
-     * 升级企业账号,设置企业申请人为企业管理员
+     * 升级/编辑企业信息后置脚本
      * @param serviceCompany
      */
     @Override
-    @ServiceLog(doAction = "升级企业账号,设置企业申请人为企业管理员")
+    @ServiceLog(doAction = "升级/编辑企业信息后置脚本")
     @Transactional(rollbackFor = Exception.class)
     public void setComApplicantToManager(ServiceCompany serviceCompany) {
         //1.获取企业申请人
@@ -92,6 +87,8 @@ public class UpCompanyAccountServiceImpl implements UpCompanyAccountService {
         String comName = serviceCompany.getComName();
         boolean companyIsAdd = isAdd(companyId);
         if (StringUtils.isNotBlank(comAdmin)) {
+            Date curDate = new Date();
+            serviceCompany.setCheckTime(DateUtils.formatDate(curDate, "yyyy-MM-dd HH:mm:ss"));
             int isSuccess = companyService.saveOrUpdateCompanyInfo(serviceCompany);
             if (isSuccess == 1) {
                 Result<SysRole> result = systemClient.getRoleByName(CompanyDataEnum.COMPANY_ADMIN.getCode());
@@ -141,15 +138,33 @@ public class UpCompanyAccountServiceImpl implements UpCompanyAccountService {
 
                 TbServiceCompanyModify companyModify = new TbServiceCompanyModify();
                 companyModify.setId(serviceCompany.getId());
+                companyModify.setCheckTime(curDate);
                 companyModify.setCheckStatus(CompanyDataEnum.COMPANY_CHECK_STATUS_PASS.getCode());
                 companyModify.setRecordStatus(RecordStatusEnum.DELETE.getValue());
                 int i = tbServiceCompanyModifyMapper.updateByPrimaryKeySelective(companyModify);
                 if (i != 1) {
-                    logger.warn("[企业后置脚本] 删除企业临时表数据失败");
+                    logger.warn("[企业后置脚本] 将临时表企业数据置为无效失败");
                     throw new JnSpringCloudException(CompanyExceptionEnum.DELETE_COMPANY_TEMP_ERROR);
                 }
-                logger.info("[企业后置脚本] 已成功删除临时表企业数据");
+                logger.info("[企业后置脚本] 已成功将临时表企业数据置为无效");
 
+                // 只有新增时才创建账本
+                if (companyIsAdd) {
+                    logger.info("[企业后置脚本] 新增企业调度创建企业账本接口");
+                    // 4.创建企业的账本信息-延迟调度
+                    PayAccountBookCreateParam payAccountBookCreateParam = new PayAccountBookCreateParam();
+                    payAccountBookCreateParam.setComAdmin(comAdmin);
+                    payAccountBookCreateParam.setEnterId(companyId);
+
+                    Delay delay = new Delay();
+                    delay.setServiceId(applicationName);
+                    delay.setServiceUrl("/api/payment/payAccount/createPayAccountBook");
+                    delay.setTtl("30");
+                    delay.setDataString(JSONObject.toJSONString(payAccountBookCreateParam));
+                    logger.info("开始回调");
+                    Result<Boolean> delayResult = delaySendMessageClient.delaySend(delay);
+                    logger.info("结束回调,返回结果，【{}】", delayResult.toString());
+                }
             } else {
                 logger.warn("[企业后置脚本] 添加/修改企业信息失败");
                 throw new JnSpringCloudException(CompanyExceptionEnum.UPDATE_COMPANY_INFO_ERROR);
@@ -174,5 +189,4 @@ public class UpCompanyAccountServiceImpl implements UpCompanyAccountService {
         }
         return true;
     }
-
 }

@@ -88,6 +88,9 @@ public class ProjectInfoVo implements Serializable {
     @ApiModelProperty(value = "备注")
     private String remerk;
 
+    @ApiModelProperty(value = "主体楼宇id")
+    private String mainTowerId;
+
     @ApiModelProperty(value = "企业入驻租赁信息详情")
     private List<TbProjectEnterDetails> tb_project_enter_details;
 
@@ -98,7 +101,8 @@ public class ProjectInfoVo implements Serializable {
                          Date sureTime, String approvalOpioion, String legalPersoner, String legalPhone,
                          String comAdmin, String linker, String linkerPhone, String enterpriseProperty,
                          String industryTypeName, String industryType, Date rentStartTime, Integer rentMonthNum,
-                         Date comEntTime, String remerk, List<TbProjectEnterDetails> tb_project_enter_details) {
+                         Date comEntTime, String remerk, String mainTowerId,
+                         List<TbProjectEnterDetails> tb_project_enter_details) {
         this.id = id;
         this.companyName = companyName;
         this.companyId = companyId;
@@ -118,6 +122,7 @@ public class ProjectInfoVo implements Serializable {
         this.rentMonthNum = rentMonthNum;
         this.comEntTime = comEntTime;
         this.remerk = remerk;
+        this.mainTowerId = mainTowerId;
         this.tb_project_enter_details = tb_project_enter_details;
     }
 
@@ -273,6 +278,14 @@ public class ProjectInfoVo implements Serializable {
         this.remerk = remerk;
     }
 
+    public String getMainTowerId() {
+        return mainTowerId;
+    }
+
+    public void setMainTowerId(String mainTowerId) {
+        this.mainTowerId = mainTowerId;
+    }
+
     public List<TbProjectEnterDetails> getTb_project_enter_details() {
         return tb_project_enter_details;
     }
@@ -280,7 +293,6 @@ public class ProjectInfoVo implements Serializable {
     public void setTb_project_enter_details(List<TbProjectEnterDetails> tb_project_enter_details) {
         this.tb_project_enter_details = tb_project_enter_details;
     }
-
 
     @Override
     public String toString() {
@@ -304,6 +316,7 @@ public class ProjectInfoVo implements Serializable {
                 ", rentMonthNum=" + rentMonthNum +
                 ", comEntTime=" + comEntTime +
                 ", remerk='" + remerk + '\'' +
+                ", mainTowerId='" + mainTowerId + '\'' +
                 ", tb_project_enter_details=" + tb_project_enter_details +
                 '}';
     }

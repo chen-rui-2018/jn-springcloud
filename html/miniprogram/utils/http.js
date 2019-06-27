@@ -2,7 +2,7 @@
 const baseUrl = 'https://njbxq.mynatapp.cc'
 const wechatPath = 'https://njbxq.mynatapp.cc/springcloud-wechat-miniprogram/'
 const imgBaseUrl = 'https://njbxq.mynatapp.cc/h5/imgs/'
-const h5Url="http://112.94.22.222:8002/#/"
+const h5Url="https://22d2325e.cpolar.io/#/"
 // http://112.94.22.222:8002/#/
 // https://22d2325e.cpolar.io/#/
 class WxHttp {

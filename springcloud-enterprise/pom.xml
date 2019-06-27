@@ -93,6 +93,11 @@
                     </contexts>
                     <tableNames>
                         tb_service_org_temp
+                        ,tb_service_org_team_temp
+                        ,tb_service_org_element_temp
+                        ,tb_service_org_info_temp
+                        ,tb_service_org_trait_temp
+                        ,tb_service_org_license_temp
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

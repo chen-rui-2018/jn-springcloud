@@ -4,6 +4,8 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.oa.api.OaClient;
 import com.jn.oa.attendance.service.AttendanceService;
+import com.jn.oa.dingTalk.service.DingTalkAttendanceService;
+import com.jn.oa.dingTalk.service.DingTalkLeaveService;
 import com.jn.oa.dingTalk.service.DingTalkUserService;
 import com.jn.oa.email.service.EmailService;
 import com.jn.oa.item.service.WorkPlanService;
@@ -19,8 +21,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -58,6 +62,12 @@ public class OaController extends BaseController implements OaClient {
 
     @Autowired
     private DingTalkUserService dingTalkUserService;
+
+    @Autowired
+    private DingTalkLeaveService dingTalkLeaveService;
+
+    @Autowired
+    private DingTalkAttendanceService dingTalkAttendanceService;
 
     /**
      * 定时十分钟通知会议申请人
@@ -197,7 +207,41 @@ public class OaController extends BaseController implements OaClient {
         return new Result();
     }
 
+    /**
+     * 批量更新钉钉用户表
+     *
+     * @return
+     */
+    @Override
+    @ControllerLog(doAction = "批量更新钉钉用户表")
+    public Result batchInsertDingTalkUser() {
+        dingTalkUserService.batchInsertDingTalkUser();
+        return new Result();
+    }
 
+    /**
+     * 批量更新钉钉考勤
+     *
+     * @return
+     */
+    @Override
+    @ControllerLog(doAction = "批量更新钉钉考勤")
+    public Result batchInsertDingTalkAttendance(@RequestParam("workDateFrom")String workDateFrom, @RequestParam("workDateTo")String workDateTo) {
+        dingTalkAttendanceService.batchInsertDingTalkAttendance(workDateFrom,workDateTo);
+        return new Result();
+    }
+
+    /**
+     * 批量更新钉钉考请假
+     *
+     * @return
+     */
+    @Override
+    @ControllerLog(doAction = "批量更新钉钉考请假")
+    public Result batchInsertDingTalkLeave(@RequestParam("workDateFrom")Date workDateFrom, @RequestParam("workDateTo")Date workDateTo) {
+        dingTalkLeaveService.batchInsertDingTalkLeave(workDateFrom,workDateTo);
+        return new Result();
+    }
 
 
 }

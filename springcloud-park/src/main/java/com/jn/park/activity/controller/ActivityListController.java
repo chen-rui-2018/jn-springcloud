@@ -72,7 +72,8 @@ public class ActivityListController extends BaseController {
     @RequestMapping(value = "/guest/activity/findOrgActivityList",method = RequestMethod.GET)
     public Result<PaginationData<List<OrgActivityShow>>> findOrgActivityList(@Validated OrgActivityParam query) {
         String activityType ="org_activity";
-        PaginationData  activityTypeList = activityService.findOrgActivityList(query,activityType,Boolean.TRUE);
+        User user = (User)SecurityUtils.getSubject().getPrincipal();
+        PaginationData  activityTypeList = activityService.findOrgActivityList(query,activityType,user==null?"":user.getAccount(),Boolean.TRUE);
         return new Result(activityTypeList);
 
     }

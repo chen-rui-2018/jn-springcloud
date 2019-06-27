@@ -571,7 +571,7 @@ public class ActivityServiceImpl implements ActivityService {
     }
     @ServiceLog(doAction = "查看机构下的活动列表")
     @Override
-    public PaginationData findOrgActivityList(OrgActivityParam query, String activityType, boolean needPage) {
+    public PaginationData findOrgActivityList(OrgActivityParam query, String activityType,String account, boolean needPage) {
         int pageSize = query.getRows() == 0 ? 15 : query.getRows();
         int pageNumber = query.getPage();
         Page<Object> objects = null;
@@ -579,6 +579,33 @@ public class ActivityServiceImpl implements ActivityService {
             objects = PageHelper.startPage(pageNumber,pageSize,true);
         }
         List<OrgActivityShow> activityList =  activityMapper.findOrgActivityList(query.getStartTime(),query.getEndTime(),activityType,query.getTimeInterval());
+        List<String> activityIdList = new ArrayList<>();
+        if (activityList != null && activityList.size() > 0) {
+            for (OrgActivityShow slim : activityList) {
+                activityIdList.add(slim.getId());
+            }
+        }
+        //获得活动报名人信息
+        List<ActivityApplyDetail> activityApplyList = activityApplyService.findApplyAccountList(activityIdList);
+        if (activityList != null && activityList.size() > 0) {
+            for (OrgActivityShow show : activityList) {
+                //当前登录用户是否已报名此活动 0 否 1 是
+                show.setApplyStatus(ActivityEnum.ACTIVITY_NOT_APPLY.getCode());
+                List<String> avatars = new ArrayList<>();
+                if (activityApplyList != null && activityApplyList.size() > 0) {
+                    for (ActivityApplyDetail detail : activityApplyList) {
+                        if (detail.getActivityId().equals(show.getId())) {
+                            //当前活动已报名人的头像列表
+                            avatars.add(detail.getAvatar());
+                            if (account.equals(detail.getAccount())) {
+                                show.setApplyStatus(ActivityEnum.ACTIVITY_IS_APPLY.getCode());
+                            }
+                        }
+                    }
+                }
+                show.setAvatarList(avatars);
+            }
+        }
         return new PaginationData(activityList,objects==null?0:objects.getTotal());
     }
 

@@ -3,7 +3,12 @@ package com.jn.park.parking.service.impl;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
+import com.jn.common.util.GlobalConstants;
 import com.jn.common.util.StringUtils;
+import com.jn.hardware.api.ParkingClient;
+import com.jn.hardware.model.parking.TemporaryCarParkingFeeRequest;
+import com.jn.hardware.model.parking.door.DoorTemporaryCarParkingFeeRequest;
+import com.jn.hardware.model.parking.door.DoorTemporaryCarParkingFeeResponse;
 import com.jn.park.enums.ParkingExceptionEnum;
 import com.jn.park.parking.dao.TbParkingAreaMapper;
 import com.jn.park.parking.dao.TbParkingCarInfoMapper;
@@ -51,7 +56,8 @@ public class ParkingTemporaryServiceImpl implements ParkingTemporaryService {
     private TbParkingSpaceRentalMapper tbParkingSpaceRentalMapper;
     @Autowired
     private PayBillClient payBillClient;
-
+    @Autowired
+    private ParkingClient parkingClient;
 
     @ServiceLog(doAction = "车辆入场请求接口")
     @Override
@@ -112,21 +118,36 @@ public class ParkingTemporaryServiceImpl implements ParkingTemporaryService {
     @ServiceLog(doAction = "计算停车费金额")
     @Override
     public Double calculateParkingAmount(TbParkingRecord parkingRecord){
-        Date nowDate = new Date();
-        long times= (nowDate.getTime() - parkingRecord.getAdmissionTime().getTime())/(1000* 60);
-        TbParkingArea tbParkingArea = tbParkingAreaMapper.selectByPrimaryKey(parkingRecord.getAreaId());
-        if(times > (tbParkingArea.getTempFreeTime()==null?0:tbParkingArea.getTempFreeTime()) ||
-                (parkingRecord.getStartBillingTime()!=null && parkingRecord.getStartBillingTime().getTime()>(tbParkingArea.getTempFreeTime()==null?0:tbParkingArea.getTempFreeTime()))){
-            if(parkingRecord.getStartBillingTime()!=null){
-                times = parkingRecord.getStartBillingTime().getTime() - (tbParkingArea.getTempFreeTime()==null?0:tbParkingArea.getTempFreeTime()) ;
-            }
-            int unit = new Integer(tbParkingArea.getTempPriceUnit());
-            //获取计费时长
-            long c = times%unit == 0 ? (times/unit) : (times/unit)+1;
-            double amount = new BigDecimal(c).multiply(new BigDecimal(Double.toString(tbParkingArea.getTempPrice()))).doubleValue();
-            return new Double((null!=tbParkingArea.getTempPriceTotal()&&tbParkingArea.getTempPriceTotal()<amount)?tbParkingArea.getTempPriceTotal():amount);
+//        Date nowDate = new Date();
+//        long times= (nowDate.getTime() - parkingRecord.getAdmissionTime().getTime())/(1000* 60);
+//        TbParkingArea tbParkingArea = tbParkingAreaMapper.selectByPrimaryKey(parkingRecord.getAreaId());
+//        if(times > (tbParkingArea.getTempFreeTime()==null?0:tbParkingArea.getTempFreeTime()) ||
+//                (parkingRecord.getStartBillingTime()!=null && parkingRecord.getStartBillingTime().getTime()>(tbParkingArea.getTempFreeTime()==null?0:tbParkingArea.getTempFreeTime()))){
+//            if(parkingRecord.getStartBillingTime()!=null){
+//                times = parkingRecord.getStartBillingTime().getTime() - (tbParkingArea.getTempFreeTime()==null?0:tbParkingArea.getTempFreeTime()) ;
+//            }
+//            int unit = new Integer(tbParkingArea.getTempPriceUnit());
+//            //获取计费时长
+//            long c = times%unit == 0 ? (times/unit) : (times/unit)+1;
+//            double amount = new BigDecimal(c).multiply(new BigDecimal(Double.toString(tbParkingArea.getTempPrice()))).doubleValue();
+//            return new Double((null!=tbParkingArea.getTempPriceTotal()&&tbParkingArea.getTempPriceTotal()<amount)?tbParkingArea.getTempPriceTotal():amount);
+//        }else{
+//            return new Double(0);
+//        }
+        TbParkingArea parkingArea = tbParkingAreaMapper.selectByPrimaryKey(parkingRecord.getAreaId());
+        TemporaryCarParkingFeeRequest temporaryCarParkingFeeRequest = new TemporaryCarParkingFeeRequest();
+        DoorTemporaryCarParkingFeeRequest  request = new DoorTemporaryCarParkingFeeRequest();
+        request.setCarNo(parkingRecord.getCarLicense());
+        request.setParkid(parkingArea.getGateId());
+        temporaryCarParkingFeeRequest.setParkingCompanyId("1");
+        temporaryCarParkingFeeRequest.setDoorTemporaryCarParkingFeeRequest(request);
+        Result result =   parkingClient.getTemporaryCarParkingFee(temporaryCarParkingFeeRequest);
+        if(result.getCode().equals(GlobalConstants.SUCCESS_CODE)){
+            DoorTemporaryCarParkingFeeResponse response = (DoorTemporaryCarParkingFeeResponse)result.getData();
+            return Double.valueOf(response.getDiscountAmount());
         }else{
-            return new Double(0);
+            logger.info("\n临时停车费用获取异常{}原因"+result.getResult());
+            throw  new JnSpringCloudException(ParkingExceptionEnum.PARKING_GET_PAYMENT,result.getResult());
         }
     }
 

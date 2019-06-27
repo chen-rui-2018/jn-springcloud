@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.servicemarket.org.dao.TbServiceOrgTeamTempMapper">
+  <resultMap id="BaseResultMap" type="com.jn.enterprise.servicemarket.org.entity.TbServiceOrgTeamTemp">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="org_id_" jdbcType="VARCHAR" property="orgId" />
+    <result column="con_name" jdbcType="VARCHAR" property="conName" />
+    <result column="con_position" jdbcType="VARCHAR" property="conPosition" />
+    <result column="con_quali" jdbcType="VARCHAR" property="conQuali" />
+    <result column="con_time" jdbcType="VARCHAR" property="conTime" />
+    <result column="con_speciality" jdbcType="VARCHAR" property="conSpeciality" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, org_id_, con_name, con_position, con_quali, con_time, con_speciality, created_time, 
+    creator_account, modified_time, modifier_account, record_status
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.enterprise.servicemarket.org.entity.TbServiceOrgTeamTempCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_service_org_team_temp
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_service_org_team_temp
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_service_org_team_temp
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.enterprise.servicemarket.org.entity.TbServiceOrgTeamTempCriteria">
+    delete from tb_service_org_team_temp
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.enterprise.servicemarket.org.entity.TbServiceOrgTeamTemp">
+    insert into tb_service_org_team_temp (id, org_id_, con_name, 
+      con_position, con_quali, con_time, 
+      con_speciality, created_time, creator_account, 
+      modified_time, modifier_account, record_status
+      )
+    values (#{id,jdbcType=VARCHAR}, #{orgId,jdbcType=VARCHAR}, #{conName,jdbcType=VARCHAR}, 
+      #{conPosition,jdbcType=VARCHAR}, #{conQuali,jdbcType=VARCHAR}, #{conTime,jdbcType=VARCHAR}, 
+      #{conSpeciality,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.enterprise.servicemarket.org.entity.TbServiceOrgTeamTemp">
+    insert into tb_service_org_team_temp
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="orgId != null">
+        org_id_,
+      </if>
+      <if test="conName != null">
+        con_name,
+      </if>
+      <if test="conPosition != null">
+        con_position,
+      </if>
+      <if test="conQuali != null">
+        con_quali,
+      </if>
+      <if test="conTime != null">
+        con_time,
+      </if>
+      <if test="conSpeciality != null">
+        con_speciality,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="orgId != null">
+        #{orgId,jdbcType=VARCHAR},
+      </if>
+      <if test="conName != null">
+        #{conName,jdbcType=VARCHAR},
+      </if>
+      <if test="conPosition != null">
+        #{conPosition,jdbcType=VARCHAR},
+      </if>
+      <if test="conQuali != null">
+        #{conQuali,jdbcType=VARCHAR},
+      </if>
+      <if test="conTime != null">
+        #{conTime,jdbcType=VARCHAR},
+      </if>
+      <if test="conSpeciality != null">
+        #{conSpeciality,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.enterprise.servicemarket.org.entity.TbServiceOrgTeamTempCriteria" resultType="java.lang.Long">
+    select count(*) from tb_service_org_team_temp
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_service_org_team_temp
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orgId != null">
+        org_id_ = #{record.orgId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.conName != null">
+        con_name = #{record.conName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.conPosition != null">
+        con_position = #{record.conPosition,jdbcType=VARCHAR},
+      </if>
+      <if test="record.conQuali != null">
+        con_quali = #{record.conQuali,jdbcType=VARCHAR},
+      </if>
+      <if test="record.conTime != null">
+        con_time = #{record.conTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.conSpeciality != null">
+        con_speciality = #{record.conSpeciality,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_service_org_team_temp
+    set id = #{record.id,jdbcType=VARCHAR},
+      org_id_ = #{record.orgId,jdbcType=VARCHAR},
+      con_name = #{record.conName,jdbcType=VARCHAR},
+      con_position = #{record.conPosition,jdbcType=VARCHAR},
+      con_quali = #{record.conQuali,jdbcType=VARCHAR},
+      con_time = #{record.conTime,jdbcType=VARCHAR},
+      con_speciality = #{record.conSpeciality,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=TINYINT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.servicemarket.org.entity.TbServiceOrgTeamTemp">
+    update tb_service_org_team_temp
+    <set>
+      <if test="orgId != null">
+        org_id_ = #{orgId,jdbcType=VARCHAR},
+      </if>
+      <if test="conName != null">
+        con_name = #{conName,jdbcType=VARCHAR},
+      </if>
+      <if test="conPosition != null">
+        con_position = #{conPosition,jdbcType=VARCHAR},
+      </if>
+      <if test="conQuali != null">
+        con_quali = #{conQuali,jdbcType=VARCHAR},
+      </if>
+      <if test="conTime != null">
+        con_time = #{conTime,jdbcType=VARCHAR},
+      </if>
+      <if test="conSpeciality != null">
+        con_speciality = #{conSpeciality,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.servicemarket.org.entity.TbServiceOrgTeamTemp">
+    update tb_service_org_team_temp
+    set org_id_ = #{orgId,jdbcType=VARCHAR},
+      con_name = #{conName,jdbcType=VARCHAR},
+      con_position = #{conPosition,jdbcType=VARCHAR},
+      con_quali = #{conQuali,jdbcType=VARCHAR},
+      con_time = #{conTime,jdbcType=VARCHAR},
+      con_speciality = #{conSpeciality,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=TINYINT}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

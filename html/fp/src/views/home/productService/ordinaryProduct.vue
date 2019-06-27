@@ -237,7 +237,7 @@ export default {
       background-color: #fff;
       padding: 17px;
       border-radius: 5px;
-      
+      position: relative;
       // 输入框
       .search{
         display: flex;
@@ -266,7 +266,7 @@ export default {
         height: 26px;
         line-height: 26px;
         text-align: center;
-        padding-right: 40px;
+        padding-right: 38px;
         border: 1px solid #eee;
         border-radius: 5px;
         // position: absolute;
@@ -295,8 +295,8 @@ export default {
         }
         >.icon-sousuo {
           position: absolute;
-          top: 214px;
-          right: 117px;
+          // top: 214px;
+          // right: 56px;
           cursor: pointer;
           font-size: 20px;
           display: inline-block;

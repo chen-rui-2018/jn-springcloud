@@ -76,7 +76,7 @@
               <span >{{sevaluateDetail.financingAmount}}万元</span>
             </el-form-item>
             <el-form-item label="融资期限：">
-              <span>{{sevaluateDetail.financingPeriod}} </span>
+              <span>{{sevaluateDetail.financingPeriod}}个月</span>
             </el-form-item>
             <el-form-item label="资金需求日期：">
               <span>{{sevaluateDetail.expectedDate}}</span>

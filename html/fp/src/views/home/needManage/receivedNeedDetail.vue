@@ -154,7 +154,7 @@
           </div>
           <div class="">
             <el-form-item label="实际贷款金额：">
-              <span>{{receiveDetail.actualLoanAmount}}</span>
+              <span>{{receiveDetail.actualLoanAmount}}万元</span>
             </el-form-item>
           </div>
           <div class="">

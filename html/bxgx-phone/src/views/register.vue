@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import { urlSearch, hexToDec } from '@/utils'
 export default {
   data () {
     return {
@@ -96,30 +97,30 @@ export default {
     // 点击完成按钮后的操作
     finishRegister () {
       // 手机号
-      const phone = this.phone
-      // 验证码
-      const code = this.code
-      if (code === '' || phone === '') {
-        this.$vux.toast.text('手机号或验证码填写有误请重新填写', 'middle')
-        setTimeout(() => {
-          this.$vux.toast.hide()
-        }, 2000)
-        return
-      }
+      // const phone = this.phone
+      // // 验证码
+      // const code = this.code
+      // if (code === '' || phone === '') {
+      //   this.$vux.toast.text('手机号或验证码填写有误请重新填写', 'middle')
+      //   setTimeout(() => {
+      //     this.$vux.toast.hide()
+      //   }, 2000)
+      //   return
+      // }
       // 注册
       this.api.post({
         url: 'registerUrl',
         data: {
           phoneNo: this.phone,
           phoneCode: this.code,
-          userFlag: this.$route.query.userFlag
+          userFlag: urlSearch.userFlag
         },
         callback: res => {
           if (res.code === '0000') {
             this.$vux.toast.text('注册绑定成功', 'middle')
             setTimeout(() => {
               this.$vux.toast.hide()
-              window.location.href = this.$route.query.targetUrl
+              window.location.href = hexToDec(urlSearch.targetUrl)
             }, 1500)
           } else {
             this.$vux.toast.text(res.result == null ? '验证码错误或验证码已过期' : res.result, 'middle')

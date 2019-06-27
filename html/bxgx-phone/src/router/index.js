@@ -257,6 +257,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   const token = urlSearch.token
+  alert(token)
   if (token) {
     sessionStorage.setItem('token', token)
   }

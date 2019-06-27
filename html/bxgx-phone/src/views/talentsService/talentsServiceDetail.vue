@@ -18,11 +18,11 @@
             <span>附件: 暂无</span>
           </a>
         </div>
-        <div v-else  class="accessory" v-for="(item,index) in fileList" :key="index">
-          <a :href="item.filePath">
+        <div v-else  class="accessory" v-for="(item,index) in fileList" :key="index" @click="download(item.filePath)">
+          <!-- <a :href="item.filePath"> -->
             <span>附件{{item.fileName}}</span>
             <span>下载<i class="iconfont icon-jiantou"></i></span>
-          </a>
+          <!-- </a> -->
         </div>
       </div>
     </div>
@@ -55,6 +55,19 @@ export default {
     this.getDetail()
   },
   methods: {
+    download (item) {
+      alert(navigator.userAgent)
+      // console.log(navigator.userAgent)
+      if (navigator.userAgent.indexOf('iPhone') > -1) {
+        this.$vux.toast.show({
+          text: '当前系统暂不支持下载',
+          type: 'warn',
+          width: '13em'
+        })
+      } else {
+        window.location.href = item
+      }
+    },
     getDetail () {
       this.api.get({
         url: 'talentsDetail',

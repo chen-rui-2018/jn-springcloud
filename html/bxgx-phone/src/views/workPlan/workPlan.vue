@@ -160,7 +160,6 @@ export default {
       this.$router.push({path: 'editWorkStatus', query: {id: item.id, title: '暂停'}})
     },
     toEditWorkPlan (item) {
-      console.log(item)
       this.$router.push({path: 'editWorkPlan', query: {id: item.id}})
     },
     completeWork (item) {

@@ -29,9 +29,11 @@
           <div class="service_detail" v-for="(item,index) in materialList " :key="index">
             <div>
               <span class="hidden">{{item.name}}</span>
-              <span >
-                <a :href="item.sample" v-if="item.sample">下载</a>
-                <span v-else>下载</span>
+              <span @click="download(item.sample)">
+                <a :href="url"  download="">
+                  下载
+                </a>
+                <!-- <span v-else>下载</span> -->
                 <i class="iconfont icon-jiantou"></i>
               </span>
             </div>
@@ -71,7 +73,8 @@ export default {
       id: '',
       serviceDetail: {},
       materialList: [],
-      dealUrl: ''
+      dealUrl: '',
+      url: ''
     }
   },
   mounted () {
@@ -89,6 +92,30 @@ export default {
         onHide () {
         }
       })
+    },
+    download (item) {
+      // alert(navigator.userAgent)
+      // console.log(navigator.userAgent)
+      if (navigator.userAgent.indexOf('iPhone') > -1) {
+        this.$vux.toast.show({
+          text: '当前系统暂不支持下载',
+          type: 'warn',
+          width: '13em'
+        })
+        this.url = 'javascript:;'
+      } else {
+        if (item === '') {
+          // this.$vux.toast.text('暂不支持下载', 'middle')
+          this.$vux.toast.show({
+            text: '暂不支持下载',
+            type: 'warn',
+            width: '13em'
+          })
+          this.url = 'javascript:;'
+        } else {
+          this.url = item
+        }
+      }
     },
     getserviceDetail () {
       this.api.get({
@@ -139,6 +166,7 @@ export default {
           font-size: 35px;
           padding-top: 28px;
           margin-bottom: 17px;
+          font-weight: 600;
         }
       // 基本信息
       .serviceDeail_baseInfo{

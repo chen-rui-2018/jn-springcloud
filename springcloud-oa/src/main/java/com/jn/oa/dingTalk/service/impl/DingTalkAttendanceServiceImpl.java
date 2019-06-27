@@ -18,6 +18,7 @@ import com.jn.oa.dingTalk.dao.TbOaDingTalkUserMapper;
 import com.jn.oa.dingTalk.entity.TbOaDingTalkUser;
 import com.jn.oa.dingTalk.service.DingTalkAttendanceService;
 import com.jn.system.api.SystemClient;
+import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import com.jn.system.vo.SysDepartmentPostVO;
 import org.slf4j.Logger;
@@ -25,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -70,6 +72,8 @@ public class DingTalkAttendanceServiceImpl implements DingTalkAttendanceService 
      * @return
      */
     @Override
+    @ServiceLog(doAction ="批量更新钉钉考勤" )
+    @Transactional(rollbackFor = Exception.class)
     public void batchInsertDingTalkAttendance(String workDateFrom,String workDateTo) {
 
         int page=Integer.valueOf(OaDingTalkEnums.PAGE.getCode());

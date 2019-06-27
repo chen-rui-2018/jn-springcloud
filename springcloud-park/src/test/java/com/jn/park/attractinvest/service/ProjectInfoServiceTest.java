@@ -8,6 +8,7 @@ import com.jn.park.pmpaybill.enums.PmPayBillStatusEnums;
 import com.jn.system.model.User;
 import com.netflix.discovery.converters.Auto;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
@@ -41,39 +42,52 @@ public class ProjectInfoServiceTest {
     }
 
     @Test
+    @Ignore
     public void t003_enterpriseEnterHandle() throws ParseException {
         User user = new User();
         user.setAccount("wangsong");
 
         ProjectInfoVo projectInfoVo = new ProjectInfoVo();
-        projectInfoVo.setId("586229588661633024");
-        projectInfoVo.setCompanyId("586141980900196352");
-        projectInfoVo.setLinker("李四");
-        projectInfoVo.setLinkerPhone("15567899876");
-        projectInfoVo.setLegalPersoner("胡恨三");
-        projectInfoVo.setLegalPhone("18620297197");
-        projectInfoVo.setRentStartTime(DateUtils.parseDate("2019-04-04","yyyy-MM-dd"));
+        projectInfoVo.setId("593546789865390080");
+        projectInfoVo.setCompanyId("9ee2a3d4c79e4caa82060417967cdf31");
+        projectInfoVo.setCompanyName("江苏华星税务师事务所有限公司");
+        projectInfoVo.setLinker("沈学君");
+        projectInfoVo.setLinkerPhone("15367881712");
+        projectInfoVo.setRentStartTime(DateUtils.parseDate("2019-06-26","yyyy-MM-dd"));
         projectInfoVo.setRentMonthNum(12);
-        projectInfoVo.setComAdmin("17316234376");
+        projectInfoVo.setComAdmin("15367881712");
+        projectInfoVo.setMainTowerId("590188353895268352");
 
         List<TbProjectEnterDetails> tbProjectEnterDetailsList = new ArrayList<>(16);
-//        TbProjectEnterDetails tbProjectEnterDetails = new TbProjectEnterDetails();
-//        tbProjectEnterDetails.setEnterTower("金融中心");
-//        tbProjectEnterDetails.setRoomId("586137438523490304");
-//        tbProjectEnterDetails.setRoomArea("1000");
-//        tbProjectEnterDetails.setRoomName("00004");
-//        tbProjectEnterDetails.setRoomUnitPrice(new BigDecimal(30));
-//        tbProjectEnterDetails.setPmUnitPrice(new BigDecimal(0.66));
-//        tbProjectEnterDetailsList.add(tbProjectEnterDetails);
+        TbProjectEnterDetails tbProjectEnterDetails = new TbProjectEnterDetails();
+        tbProjectEnterDetails.setEnterTower("住建集团");
+        tbProjectEnterDetails.setRoomId("585880831726190606");
+        tbProjectEnterDetails.setRoomArea("53.34");
+        tbProjectEnterDetails.setRoomName("2F2014室");
+        tbProjectEnterDetails.setRoomUnitPrice(new BigDecimal(45));
+        tbProjectEnterDetails.setPmUnitPrice(new BigDecimal(1));
+        tbProjectEnterDetails.setTowerId("590188211473481728");
+        tbProjectEnterDetailsList.add(tbProjectEnterDetails);
 
         TbProjectEnterDetails tbProjectEnterDetails1 = new TbProjectEnterDetails();
-        tbProjectEnterDetails1.setEnterTower("金融中心");
-        tbProjectEnterDetails1.setRoomId("586137236341260288");
-        tbProjectEnterDetails1.setRoomArea("100");
-        tbProjectEnterDetails1.setRoomName("00003");
-        tbProjectEnterDetails1.setRoomUnitPrice(new BigDecimal(30));
-        tbProjectEnterDetails1.setPmUnitPrice(new BigDecimal(0.88));
+        tbProjectEnterDetails1.setEnterTower("五号楼C");
+        tbProjectEnterDetails1.setRoomId("585880831726190593");
+        tbProjectEnterDetails1.setRoomArea("117");
+        tbProjectEnterDetails1.setRoomName("816");
+        tbProjectEnterDetails1.setRoomUnitPrice(new BigDecimal(50));
+        tbProjectEnterDetails1.setPmUnitPrice(new BigDecimal(1));
+        tbProjectEnterDetails1.setTowerId("590183128086085632");
         tbProjectEnterDetailsList.add(tbProjectEnterDetails1);
+
+        TbProjectEnterDetails tbProjectEnterDetails2= new TbProjectEnterDetails();
+        tbProjectEnterDetails2.setEnterTower("撇洪沟");
+        tbProjectEnterDetails2.setRoomId("585880831726190608");
+        tbProjectEnterDetails2.setRoomArea("93");
+        tbProjectEnterDetails2.setRoomName("运粮河西侧环境整治项目2栋-2号楼");
+        tbProjectEnterDetails2.setRoomUnitPrice(new BigDecimal(2850));
+        tbProjectEnterDetails2.setPmUnitPrice(new BigDecimal(1));
+        tbProjectEnterDetails2.setTowerId("590188353895268352");
+        tbProjectEnterDetailsList.add(tbProjectEnterDetails2);
 
         projectInfoVo.setTb_project_enter_details(tbProjectEnterDetailsList);
 

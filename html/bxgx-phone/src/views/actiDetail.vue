@@ -22,26 +22,34 @@
     <div class="actiInfo">
       <ul class="applyInfo">
         <li>
-          <img src="@/./assets/images/gerenyonghutouxiang2.png" alt="">
+          <div class="imgItem">
+            <img src="@/./assets/images/gerenyonghutouxiang2.png" alt="">
+          </div>
           <span class="liName">{{actiForm.actiOrganizer}}</span>
         </li>
         <li>
-          <img src="@/./assets/images/free.png" alt="">
+          <div class="imgItem">
+            <img src="@/./assets/images/free.png" alt="">
+          </div>
           <span class="liName" v-if="actiForm.actiCost=='0.00'">免费</span>
-          <span class="liName" v-else>收费</span>
+          <span class="liName" v-else>{{actiForm.actiCost}}元</span>
         </li>
         <li>
-          <img src="@/./assets/images/shijian.png" alt="">
+          <div class="imgItem">
+            <img src="@/./assets/images/shijian.png" alt="">
+          </div>
           <span class="liName">{{actiForm.applyStartTime}}-{{actiForm.applyEndTime}}</span>
         </li>
         <li class="lastLi">
-          <img src="@/./assets/images/renminbi.png" alt="">
+          <div class="imgItem">
+            <img src="@/./assets/images/renminbi.png" alt="">
+          </div>
           <span class="liName">{{actiForm.actiAddress}}</span>
         </li>
       </ul>
       <div class="applyImg">
         <ul class="applyUl clearfix">
-          <li class="applyLi" v-if="activityApplyList!==null&&activityApplyList.length>0,i<5" v-for="(i,k) in activityApplyList" :key="k">
+          <li class="applyLi" v-if="activityApplyList!==null&&activityApplyList.length>0,k<5" v-for="(i,k) in activityApplyList" :key="k">
             <img :src="i.avatar" alt="">
           </li>
           <!-- <li claas="applyline"></li> -->
@@ -61,9 +69,11 @@
     </div>
     <div class="actiFooter">
       <div class="attention">
-        <img src="@/./assets/images/xin.png" v-if="accountIsLike" alt=" " @click="cancelLike(actiForm.id)">
-        <img src="@/./assets/images/guanzhu.png" alt="" v-else @click="handleLike(actiForm.id)">
-        <span class="att1">关注{{actiForm.actiLike}}</span>
+        <div class="attItem">
+          <img src="@/./assets/images/xin.png" v-if="accountIsLike" alt=" " @click="cancelLike(actiForm.id)">
+          <img src="@/./assets/images/guanzhu.png" alt="" v-else @click="handleLike(actiForm.id)">
+        </div>
+        <span class="att1">关注&nbsp;{{actiForm.actiLike}}</span>
       </div>
       <div class="attend ">
         <span class="stopJoin" v-if="activityApplyShow=='0'">停止报名</span>
@@ -94,8 +104,7 @@ export default {
   created () {
     this.actiDel()
   },
-  mounted () {
-  },
+  mounted () {},
   destroyed () {
     clearInterval(this._interval)
   },
@@ -162,12 +171,13 @@ export default {
             _this.accountIsLike = true
             // window.location.href = 'protocol://android?code=toast&data=' + _this.actiForm.actiLike
             if (_this.$route.query.isMini) {
-
             } else {
               // _this.dispatch(document.queryselector('.attention'), 'click')
               // document.queryselector('.attention').click(_this.actiForm.actiLike)
               // let action = 'handleLike'
-              window.webkit.messageHandlers.jsToOc.postMessage(_this.actiForm.actiLike)
+              window.webkit.messageHandlers.jsToOc.postMessage(
+                _this.actiForm.actiLike
+              )
             }
           } else {
             _this.$vux.toast.text(res.result)
@@ -195,12 +205,13 @@ export default {
             // window.location.href =
             //   'protocol://android?code=toast&data=' + _this.actiForm.actiLike
             if (_this.$route.query.isMini) {
-
             } else {
               // _this.dispatch(document.queryselector('.attention'), 'click')
               // document.queryselector('.attention').click(_this.actiForm.actiLike)
               // let action = 'cancelLike'
-              window.webkit.messageHandlers.jsToOc.postMessage(_this.actiForm.actiLike)
+              window.webkit.messageHandlers.jsToOc.postMessage(
+                _this.actiForm.actiLike
+              )
             }
           } else {
             _this.$vux.toast.text(res.result)
@@ -294,7 +305,7 @@ export default {
     // height: 357px;
     // height: 100%;
     width: 100%;
-    background: #00a041;
+    // background: #00a041;
     img {
       height: 100%;
       width: 100%;
@@ -304,6 +315,8 @@ export default {
     padding: 39px;
     color: #42454a;
     font-size: 36px;
+    font-family: "Microsoft YaHei";
+    font-weight: 600;
   }
   .detail {
     text-align: center;
@@ -326,7 +339,7 @@ export default {
       line-height: 66px;
       box-shadow: 0px 2px 18px 0px rgba(121, 121, 121, 0.15);
       border-radius: 5px;
-      color: #666;
+      color: #222;
       font-size: 29px;
       font-weight: 400;
     }
@@ -347,17 +360,35 @@ export default {
         border-bottom: 1px solid #eee;
         font-size: 26px;
         color: #333;
-        img {
+        .imgItem {
+          display: inline-block;
           vertical-align: middle;
-          width: 45px;
-          height: 45px;
+          width: 30px;
+          height: 30px;
+          img {
+            vertical-align: middle;
+            width: 100%;
+            height: 100%;
+          }
         }
         .liName {
           margin-left: 30px;
+          display: inline-block;
+          vertical-align: middle;
         }
       }
       .lastLi {
         border-bottom: none;
+        .imgItem {
+          width: 27px;
+          height: 37px;
+        }
+      }
+      li :nth-child(2) {
+        .imgItem {
+          width: 25px;
+          height: 33px;
+        }
       }
     }
   }
@@ -367,17 +398,17 @@ export default {
     justify-content: space-between;
     align-items: center;
     .applyUl {
-      li {
-        float: left;
-      }
       .applyLi {
+        float: left;
         width: 45px;
         height: 45px;
         border: 1px solid #eee;
         border-radius: 50%;
+        margin-right: 10px;
         img {
           width: 100%;
           height: 100%;
+          border-radius: 50%;
         }
       }
       .applyline {
@@ -408,6 +439,7 @@ export default {
       border-left: 6px solid #00a041;
       font-size: 30px;
       margin-bottom: 30px;
+      font-weight: 600;
     }
     // > p {
     //   line-height: 40px;
@@ -431,6 +463,10 @@ export default {
       //  align-items: center;
       padding: 30px;
       font-size: 26px;
+      .attItem{
+        display: inline-block;
+        vertical-align: middle;
+      }
       img {
         width: 30px;
         height: 28px;
@@ -452,9 +488,9 @@ export default {
         width: 100%;
         text-align: center;
       }
-      .stopJoin{
+      .stopJoin {
         background: #eee;
-        color:#999;
+        color: #999;
       }
     }
     .att1 {

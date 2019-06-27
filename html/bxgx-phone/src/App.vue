@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <administrative-header v-if=" this.$route.name==='workPlan' || this.$route.name==='addWorkPlan'||this.$route.name==='editWorkPlan'||this.$route.name==='editWorkStatus' || this.$route.name==='workPlanDetails'||this.$route.name==='attendanceManagement'||this.$route.name==='attendanceDetails'||this.$route.name==='electricInfo'"></administrative-header>
+    <administrative-header v-if="this.$route.name==='electricInfo'"></administrative-header>
     <router-view/>
   </div>
 </template>

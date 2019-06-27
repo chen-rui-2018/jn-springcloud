@@ -9,7 +9,6 @@
         <span>{{ currentDay }}</span>
       </div>
       <div>
-        <el-button type="primary" round><a :href="ibpsUrl+'560993009357815808.htm'">日报填写</a> </el-button>
         <el-button type="primary" round class="el-radio-group">
           <router-link :to="{path: '/planning/project'}">返回 </router-link>
         </el-button>
@@ -90,7 +89,6 @@ export default {
   components: { PieChart, BarChart, Gantt },
   data() {
     return {
-      ibpsUrl: process.env.IBPS_URL,
       position: 'inner',
       detailData: [],
       currentDay: '',

@@ -89,7 +89,8 @@ export default {
         .baseInfo_title{
           font-size: 35px;
           padding-top: 28px;
-          margin-bottom: 17px;
+          padding-bottom: 17px;
+          font-weight: 600;
         }
       .powerDetail_baseInfo{
         background-color: #fff;

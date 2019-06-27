@@ -234,7 +234,12 @@ export default {
             this.declarationList = res.data.rows
             this.total = res.data.total
           } else {
-            this.$vux.toast.text(res.result)
+            // this.$vux.toast.text(res.result)
+            this.$vux.toast.show({
+              text: res.result,
+              type: 'warn',
+              width: '13em'
+            })
           }
         }
       })
@@ -248,10 +253,20 @@ export default {
             if (res.data.roleCode === 'COM_ADMIN' || res.data.roleCode === 'COM_CONTACTS') {
               this.$router.push({path: '/guest/pd/declarationPlatform'})
             } else {
-              this.$vux.toast.text('只有企业管理员和企业联系人才可以进申报平台！！')
+              // this.$vux.toast.text('只有企业管理员和企业联系人才可以进申报平台！！')
+              this.$vux.toast.show({
+                text: '只有企业管理员和企业联系人才可以进申报平台！！',
+                type: 'warn',
+                width: '13em'
+              })
             }
           } else {
-            this.$vux.toast.text(res.result)
+            // this.$vux.toast.text(res.result)
+            this.$vux.toast.show({
+              text: res.result,
+              type: 'warn',
+              width: '13em'
+            })
           }
         }
       })

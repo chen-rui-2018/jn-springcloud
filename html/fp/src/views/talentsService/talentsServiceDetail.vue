@@ -15,7 +15,7 @@
       </div>
       <!-- 大标题 -->
       <div class="right_headline">
-        <p class="detail_maintitle"><span v-if="talentDetailList.rangeId!='5'">【{{talentDetailList.rangeName}}】</span>{{talentDetailList.noticeTitle}}
+        <p class="detail_maintitle"><span >【{{rangeId|type}}】</span>{{talentDetailList.noticeTitle}}
         </p>
         <!-- 附件下载 -->
         <div class="accessory_dowload">
@@ -48,7 +48,8 @@ export default {
     return {
       id:"",
       talentDetailList:{},
-      fileList:[]
+      fileList:[],
+      rangeId:""
     }
   },
   filters: {
@@ -58,12 +59,25 @@ export default {
         let dateee = new Date(time).toJSON();
         return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '') 
       }
+    },
+    type(rangeId){
+      if(rangeId==='1'){
+        return '人才工作动态'
+      }else if(rangeId==='2'){
+        return '人才服务指南'
+      }else if(rangeId==='3'){
+        return '人才企业培训'
+      }else if(rangeId==='4'){
+        return '人才扶持计划'
+      }else if(rangeId==='5'){
+        return '常见问题'
+      }
     }
   },
   mounted () {
     this.id=this.$route.query.id
+    this.rangeId=this.$route.query.rangeId
     this.getDetailList()
-    this.addtalentviews()
   },
   methods: {
     getDetailList(){
@@ -83,19 +97,7 @@ export default {
         }
       });
     },
-    addtalentviews(){
-      let _this = this;
-      this.api.get({
-        url: "addtalentviews",
-        data: {
-          id:this.id
-        },
-        callback: function(res) {
-          if (res.code == "0000") {
-          }
-        }
-      });
-    },
+
   }
 }
 </script>

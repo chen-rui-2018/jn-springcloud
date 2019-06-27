@@ -98,8 +98,8 @@ export default {
       // 手机号
       const phone = this.phone
       // 验证码
-      const phoneCode = this.code
-      if (phoneCode === '' || phone === '') {
+      const code = this.code
+      if (code === '' || phone === '') {
         this.$vux.toast.text('手机号或验证码填写有误请重新填写', 'middle')
         setTimeout(() => {
           this.$vux.toast.hide()
@@ -110,16 +110,17 @@ export default {
       this.api.post({
         url: 'registerUrl',
         data: {
-          phone: this.phone,
-          phoneCode: this.phoneCode,
-          code: this.code
+          phoneNo: this.phone,
+          phoneCode: this.code,
+          userFlag: this.$route.query.userFlag
         },
         callback: res => {
           if (res.code === '0000') {
             this.$vux.toast.text('注册绑定成功', 'middle')
             setTimeout(() => {
               this.$vux.toast.hide()
-            }, 2000)
+              window.location.href = this.$route.query.targetUrl
+            }, 1500)
           } else {
             this.$vux.toast.text(res.result == null ? '验证码错误或验证码已过期' : res.result, 'middle')
             setTimeout(() => {

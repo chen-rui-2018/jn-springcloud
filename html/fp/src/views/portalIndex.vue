@@ -4,7 +4,7 @@
       <div class="bannerangPark">
         <div class="bannerImg pr">
           <el-carousel indicator-position="outside" @change='changImg' arrow="always">
-            <el-carousel-item v-for="(banner, index) in bannerList" :key="index">
+            <el-carousel-item v-for="(banner, index) in bannerList" :key="index" class="pointer" @click.native="goNewPage(banner.propagandaAreaUrl)">
               <img :src="banner.posterUrl" alt="">
             </el-carousel-item>
           </el-carousel>
@@ -260,10 +260,10 @@ export default {
         { id: "intelligence_equipment", name: "智能制造与高端装备制造" }
       ],
       advantages: [
-        { id: "diqiu", name: "地理优势",actiName:'1' },
-        { id: "guihuasheji", name: "规划定位",actiName:'2' },
-        { id: "qiyexinxiguanli_huaban", name: "基础设施" ,actiName:'3'},
-        { id: "xiaochengxu", name: "招商优势" ,actiName:'4'}
+        { id: "diqiu", name: "地理优势", actiName: "1" },
+        { id: "guihuasheji", name: "规划定位", actiName: "2" },
+        { id: "qiyexinxiguanli_huaban", name: "基础设施", actiName: "3" },
+        { id: "xiaochengxu", name: "招商优势", actiName: "4" }
       ],
       enterpriseList: [],
       noticeList: [],
@@ -294,6 +294,10 @@ export default {
     calrousel.style.height = calrousel.scrollHeight;
   },
   methods: {
+    goNewPage(propagandaAreaUrl) {
+      // let routeData = this.$router.resolve({ path: "http://www.baidu.com/"});
+      window.open(propagandaAreaUrl, "_blank");
+    },
     swiperinit() {
       let _this = this;
       new swiper(".swiper-container", {
@@ -315,8 +319,8 @@ export default {
         },
         on: {
           click: function(e) {
-            if(e.path[2].getAttribute("data-path") == null){
-                return
+            if (e.path[2].getAttribute("data-path") == null) {
+              return;
             }
             let path = e.path[2].getAttribute("data-path");
             _this.$router.push(path);
@@ -408,8 +412,8 @@ export default {
         },
         callback: res => {
           if (res.code === "0000") {
-            res.data.rows = res.data.rows.concat(res.data.rows);
-            res.data.rows = res.data.rows.concat(res.data.rows);
+            // res.data.rows = res.data.rows.concat(res.data.rows);
+            // res.data.rows = res.data.rows.concat(res.data.rows);
             this.bannerList = res.data.rows;
           } else {
             this.$message.error(res.result);

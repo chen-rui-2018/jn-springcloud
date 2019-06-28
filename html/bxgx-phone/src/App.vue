@@ -11,7 +11,7 @@ import administrativeHeader from './components/administrativeHeader'
 
 export default {
   name: 'App',
-  components: {administrativeHeader},
+  components: { administrativeHeader }
 }
 </script>
 <style lang="scss">

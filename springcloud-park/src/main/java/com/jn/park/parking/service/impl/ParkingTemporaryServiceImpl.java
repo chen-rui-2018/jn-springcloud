@@ -141,9 +141,9 @@ public class ParkingTemporaryServiceImpl implements ParkingTemporaryService {
         request.setParkid(parkingArea.getGateId());
         temporaryCarParkingFeeRequest.setParkingCompanyId("1");
         temporaryCarParkingFeeRequest.setDoorTemporaryCarParkingFeeRequest(request);
-        Result result =   parkingClient.getTemporaryCarParkingFee(temporaryCarParkingFeeRequest);
+        Result<DoorTemporaryCarParkingFeeResponse> result =   parkingClient.getTemporaryCarParkingFee(temporaryCarParkingFeeRequest);
         if(result.getCode().equals(GlobalConstants.SUCCESS_CODE)){
-            DoorTemporaryCarParkingFeeResponse response = (DoorTemporaryCarParkingFeeResponse)result.getData();
+            DoorTemporaryCarParkingFeeResponse response = result.getData();
             return Double.valueOf(response.getDiscountAmount());
         }else{
             logger.info("\n临时停车费用获取异常{}原因"+result.getResult());

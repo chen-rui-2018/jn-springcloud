@@ -27,7 +27,7 @@ public interface ParkingClient {
      * @return
      */
     @RequestMapping(value = "/api/hardware/parking/getTemporaryCarParkingFee")
-    Result getTemporaryCarParkingFee(@RequestBody TemporaryCarParkingFeeRequest temporaryCarParkingFeeRequest);
+    Result<DoorTemporaryCarParkingFeeResponse> getTemporaryCarParkingFee(@RequestBody TemporaryCarParkingFeeRequest temporaryCarParkingFeeRequest);
 
     /**
      * 缴费信息保存

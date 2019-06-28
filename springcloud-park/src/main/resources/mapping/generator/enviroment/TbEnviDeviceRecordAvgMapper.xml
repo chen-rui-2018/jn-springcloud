@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.enviroment.dao.TbEnviDeviceRecordAvgMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.enviroment.entity.TbEnviDeviceRecordAvg">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="deal_date" jdbcType="DATE" property="dealDate" />
+    <result column="hour" jdbcType="INTEGER" property="hour" />
+    <result column="hum" jdbcType="VARCHAR" property="hum" />
+    <result column="temper" jdbcType="VARCHAR" property="temper" />
+    <result column="pm25" jdbcType="VARCHAR" property="pm25" />
+    <result column="pm10" jdbcType="VARCHAR" property="pm10" />
+    <result column="park_air_quality" jdbcType="VARCHAR" property="parkAirQuality" />
+    <result column="park_air_quality_level" jdbcType="VARCHAR" property="parkAirQualityLevel" />
+    <result column="city_air_quality" jdbcType="VARCHAR" property="cityAirQuality" />
+    <result column="city_air_quality_level" jdbcType="VARCHAR" property="cityAirQualityLevel" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, deal_date, hour, hum, temper, pm25, pm10, park_air_quality, park_air_quality_level, 
+    city_air_quality, city_air_quality_level, record_status, creator_account, created_time, 
+    modifier_account, modified_time
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.park.enviroment.entity.TbEnviDeviceRecordAvgCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_envi_device_record_avg
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_envi_device_record_avg
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_envi_device_record_avg
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.park.enviroment.entity.TbEnviDeviceRecordAvgCriteria">
+    delete from tb_envi_device_record_avg
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.park.enviroment.entity.TbEnviDeviceRecordAvg">
+    insert into tb_envi_device_record_avg (id, deal_date, hour, 
+      hum, temper, pm25, 
+      pm10, park_air_quality, park_air_quality_level, 
+      city_air_quality, city_air_quality_level, record_status, 
+      creator_account, created_time, modifier_account, 
+      modified_time)
+    values (#{id,jdbcType=VARCHAR}, #{dealDate,jdbcType=DATE}, #{hour,jdbcType=INTEGER}, 
+      #{hum,jdbcType=VARCHAR}, #{temper,jdbcType=VARCHAR}, #{pm25,jdbcType=VARCHAR}, 
+      #{pm10,jdbcType=VARCHAR}, #{parkAirQuality,jdbcType=VARCHAR}, #{parkAirQualityLevel,jdbcType=VARCHAR}, 
+      #{cityAirQuality,jdbcType=VARCHAR}, #{cityAirQualityLevel,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.park.enviroment.entity.TbEnviDeviceRecordAvg">
+    insert into tb_envi_device_record_avg
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="dealDate != null">
+        deal_date,
+      </if>
+      <if test="hour != null">
+        hour,
+      </if>
+      <if test="hum != null">
+        hum,
+      </if>
+      <if test="temper != null">
+        temper,
+      </if>
+      <if test="pm25 != null">
+        pm25,
+      </if>
+      <if test="pm10 != null">
+        pm10,
+      </if>
+      <if test="parkAirQuality != null">
+        park_air_quality,
+      </if>
+      <if test="parkAirQualityLevel != null">
+        park_air_quality_level,
+      </if>
+      <if test="cityAirQuality != null">
+        city_air_quality,
+      </if>
+      <if test="cityAirQualityLevel != null">
+        city_air_quality_level,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="dealDate != null">
+        #{dealDate,jdbcType=DATE},
+      </if>
+      <if test="hour != null">
+        #{hour,jdbcType=INTEGER},
+      </if>
+      <if test="hum != null">
+        #{hum,jdbcType=VARCHAR},
+      </if>
+      <if test="temper != null">
+        #{temper,jdbcType=VARCHAR},
+      </if>
+      <if test="pm25 != null">
+        #{pm25,jdbcType=VARCHAR},
+      </if>
+      <if test="pm10 != null">
+        #{pm10,jdbcType=VARCHAR},
+      </if>
+      <if test="parkAirQuality != null">
+        #{parkAirQuality,jdbcType=VARCHAR},
+      </if>
+      <if test="parkAirQualityLevel != null">
+        #{parkAirQualityLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="cityAirQuality != null">
+        #{cityAirQuality,jdbcType=VARCHAR},
+      </if>
+      <if test="cityAirQualityLevel != null">
+        #{cityAirQualityLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.park.enviroment.entity.TbEnviDeviceRecordAvgCriteria" resultType="java.lang.Long">
+    select count(*) from tb_envi_device_record_avg
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_envi_device_record_avg
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dealDate != null">
+        deal_date = #{record.dealDate,jdbcType=DATE},
+      </if>
+      <if test="record.hour != null">
+        hour = #{record.hour,jdbcType=INTEGER},
+      </if>
+      <if test="record.hum != null">
+        hum = #{record.hum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.temper != null">
+        temper = #{record.temper,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pm25 != null">
+        pm25 = #{record.pm25,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pm10 != null">
+        pm10 = #{record.pm10,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parkAirQuality != null">
+        park_air_quality = #{record.parkAirQuality,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parkAirQualityLevel != null">
+        park_air_quality_level = #{record.parkAirQualityLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cityAirQuality != null">
+        city_air_quality = #{record.cityAirQuality,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cityAirQualityLevel != null">
+        city_air_quality_level = #{record.cityAirQualityLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_envi_device_record_avg
+    set id = #{record.id,jdbcType=VARCHAR},
+      deal_date = #{record.dealDate,jdbcType=DATE},
+      hour = #{record.hour,jdbcType=INTEGER},
+      hum = #{record.hum,jdbcType=VARCHAR},
+      temper = #{record.temper,jdbcType=VARCHAR},
+      pm25 = #{record.pm25,jdbcType=VARCHAR},
+      pm10 = #{record.pm10,jdbcType=VARCHAR},
+      park_air_quality = #{record.parkAirQuality,jdbcType=VARCHAR},
+      park_air_quality_level = #{record.parkAirQualityLevel,jdbcType=VARCHAR},
+      city_air_quality = #{record.cityAirQuality,jdbcType=VARCHAR},
+      city_air_quality_level = #{record.cityAirQualityLevel,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.enviroment.entity.TbEnviDeviceRecordAvg">
+    update tb_envi_device_record_avg
+    <set>
+      <if test="dealDate != null">
+        deal_date = #{dealDate,jdbcType=DATE},
+      </if>
+      <if test="hour != null">
+        hour = #{hour,jdbcType=INTEGER},
+      </if>
+      <if test="hum != null">
+        hum = #{hum,jdbcType=VARCHAR},
+      </if>
+      <if test="temper != null">
+        temper = #{temper,jdbcType=VARCHAR},
+      </if>
+      <if test="pm25 != null">
+        pm25 = #{pm25,jdbcType=VARCHAR},
+      </if>
+      <if test="pm10 != null">
+        pm10 = #{pm10,jdbcType=VARCHAR},
+      </if>
+      <if test="parkAirQuality != null">
+        park_air_quality = #{parkAirQuality,jdbcType=VARCHAR},
+      </if>
+      <if test="parkAirQualityLevel != null">
+        park_air_quality_level = #{parkAirQualityLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="cityAirQuality != null">
+        city_air_quality = #{cityAirQuality,jdbcType=VARCHAR},
+      </if>
+      <if test="cityAirQualityLevel != null">
+        city_air_quality_level = #{cityAirQualityLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.enviroment.entity.TbEnviDeviceRecordAvg">
+    update tb_envi_device_record_avg
+    set deal_date = #{dealDate,jdbcType=DATE},
+      hour = #{hour,jdbcType=INTEGER},
+      hum = #{hum,jdbcType=VARCHAR},
+      temper = #{temper,jdbcType=VARCHAR},
+      pm25 = #{pm25,jdbcType=VARCHAR},
+      pm10 = #{pm10,jdbcType=VARCHAR},
+      park_air_quality = #{parkAirQuality,jdbcType=VARCHAR},
+      park_air_quality_level = #{parkAirQualityLevel,jdbcType=VARCHAR},
+      city_air_quality = #{cityAirQuality,jdbcType=VARCHAR},
+      city_air_quality_level = #{cityAirQualityLevel,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

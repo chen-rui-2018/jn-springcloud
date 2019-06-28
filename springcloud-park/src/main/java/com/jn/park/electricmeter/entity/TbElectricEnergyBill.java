@@ -65,6 +65,12 @@ public class TbElectricEnergyBill implements Serializable {
     /*@ApiModelProperty("缴费账号")*/
     private String paier;
 
+    /*@ApiModelProperty("电表编码")*/
+    private String meterCode;
+
+    /*@ApiModelProperty("电费日期")*/
+    private Date day;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -227,6 +233,22 @@ public class TbElectricEnergyBill implements Serializable {
         this.paier = paier == null ? null : paier.trim();
     }
 
+    public String getMeterCode() {
+        return meterCode;
+    }
+
+    public void setMeterCode(String meterCode) {
+        this.meterCode = meterCode == null ? null : meterCode.trim();
+    }
+
+    public Date getDay() {
+        return day;
+    }
+
+    public void setDay(Date day) {
+        this.day = day;
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -258,7 +280,9 @@ public class TbElectricEnergyBill implements Serializable {
             && (this.getCallTimes() == null ? other.getCallTimes() == null : this.getCallTimes().equals(other.getCallTimes()))
             && (this.getPayStatus() == null ? other.getPayStatus() == null : this.getPayStatus().equals(other.getPayStatus()))
             && (this.getPayTime() == null ? other.getPayTime() == null : this.getPayTime().equals(other.getPayTime()))
-            && (this.getPaier() == null ? other.getPaier() == null : this.getPaier().equals(other.getPaier()));
+            && (this.getPaier() == null ? other.getPaier() == null : this.getPaier().equals(other.getPaier()))
+            && (this.getMeterCode() == null ? other.getMeterCode() == null : this.getMeterCode().equals(other.getMeterCode()))
+            && (this.getDay() == null ? other.getDay() == null : this.getDay().equals(other.getDay()));
     }
 
     @Override
@@ -285,6 +309,8 @@ public class TbElectricEnergyBill implements Serializable {
         result = prime * result + ((getPayStatus() == null) ? 0 : getPayStatus().hashCode());
         result = prime * result + ((getPayTime() == null) ? 0 : getPayTime().hashCode());
         result = prime * result + ((getPaier() == null) ? 0 : getPaier().hashCode());
+        result = prime * result + ((getMeterCode() == null) ? 0 : getMeterCode().hashCode());
+        result = prime * result + ((getDay() == null) ? 0 : getDay().hashCode());
         return result;
     }
 
@@ -314,6 +340,8 @@ public class TbElectricEnergyBill implements Serializable {
         sb.append(", payStatus=").append(payStatus);
         sb.append(", payTime=").append(payTime);
         sb.append(", paier=").append(paier);
+        sb.append(", meterCode=").append(meterCode);
+        sb.append(", day=").append(day);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

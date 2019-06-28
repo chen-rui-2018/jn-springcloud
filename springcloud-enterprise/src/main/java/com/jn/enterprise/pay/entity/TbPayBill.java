@@ -57,6 +57,12 @@ public class TbPayBill implements Serializable {
 
     private String billReceiver;
 
+    private String buildId;
+
+    private String buildName;
+
+    private String meterCode;
+
     private static final long serialVersionUID = 1L;
 
     public String getBillId() {
@@ -267,6 +273,30 @@ public class TbPayBill implements Serializable {
         this.billReceiver = billReceiver == null ? null : billReceiver.trim();
     }
 
+    public String getBuildId() {
+        return buildId;
+    }
+
+    public void setBuildId(String buildId) {
+        this.buildId = buildId == null ? null : buildId.trim();
+    }
+
+    public String getBuildName() {
+        return buildName;
+    }
+
+    public void setBuildName(String buildName) {
+        this.buildName = buildName == null ? null : buildName.trim();
+    }
+
+    public String getMeterCode() {
+        return meterCode;
+    }
+
+    public void setMeterCode(String meterCode) {
+        this.meterCode = meterCode == null ? null : meterCode.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -304,7 +334,10 @@ public class TbPayBill implements Serializable {
             && (this.getAffirmTime() == null ? other.getAffirmTime() == null : this.getAffirmTime().equals(other.getAffirmTime()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
             && (this.getCallbackId() == null ? other.getCallbackId() == null : this.getCallbackId().equals(other.getCallbackId()))
-            && (this.getBillReceiver() == null ? other.getBillReceiver() == null : this.getBillReceiver().equals(other.getBillReceiver()));
+            && (this.getBillReceiver() == null ? other.getBillReceiver() == null : this.getBillReceiver().equals(other.getBillReceiver()))
+            && (this.getBuildId() == null ? other.getBuildId() == null : this.getBuildId().equals(other.getBuildId()))
+            && (this.getBuildName() == null ? other.getBuildName() == null : this.getBuildName().equals(other.getBuildName()))
+            && (this.getMeterCode() == null ? other.getMeterCode() == null : this.getMeterCode().equals(other.getMeterCode()));
     }
 
     @Override
@@ -337,6 +370,9 @@ public class TbPayBill implements Serializable {
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         result = prime * result + ((getCallbackId() == null) ? 0 : getCallbackId().hashCode());
         result = prime * result + ((getBillReceiver() == null) ? 0 : getBillReceiver().hashCode());
+        result = prime * result + ((getBuildId() == null) ? 0 : getBuildId().hashCode());
+        result = prime * result + ((getBuildName() == null) ? 0 : getBuildName().hashCode());
+        result = prime * result + ((getMeterCode() == null) ? 0 : getMeterCode().hashCode());
         return result;
     }
 
@@ -372,6 +408,9 @@ public class TbPayBill implements Serializable {
         sb.append(", recordStatus=").append(recordStatus);
         sb.append(", callbackId=").append(callbackId);
         sb.append(", billReceiver=").append(billReceiver);
+        sb.append(", buildId=").append(buildId);
+        sb.append(", buildName=").append(buildName);
+        sb.append(", meterCode=").append(meterCode);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

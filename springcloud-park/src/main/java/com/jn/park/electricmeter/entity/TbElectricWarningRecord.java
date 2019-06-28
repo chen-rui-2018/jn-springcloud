@@ -41,6 +41,9 @@ public class TbElectricWarningRecord implements Serializable {
     /*@ApiModelProperty("企业名称")*/
     private String companyName;
 
+    /*@ApiModelProperty("电表code")*/
+    private String meterCode;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -139,6 +142,14 @@ public class TbElectricWarningRecord implements Serializable {
         this.companyName = companyName == null ? null : companyName.trim();
     }
 
+    public String getMeterCode() {
+        return meterCode;
+    }
+
+    public void setMeterCode(String meterCode) {
+        this.meterCode = meterCode == null ? null : meterCode.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -162,7 +173,8 @@ public class TbElectricWarningRecord implements Serializable {
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
             && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
-            && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()));
+            && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()))
+            && (this.getMeterCode() == null ? other.getMeterCode() == null : this.getMeterCode().equals(other.getMeterCode()));
     }
 
     @Override
@@ -181,6 +193,7 @@ public class TbElectricWarningRecord implements Serializable {
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
         result = prime * result + ((getCompanyName() == null) ? 0 : getCompanyName().hashCode());
+        result = prime * result + ((getMeterCode() == null) ? 0 : getMeterCode().hashCode());
         return result;
     }
 
@@ -202,6 +215,7 @@ public class TbElectricWarningRecord implements Serializable {
         sb.append(", modifierAccount=").append(modifierAccount);
         sb.append(", modifiedTime=").append(modifiedTime);
         sb.append(", companyName=").append(companyName);
+        sb.append(", meterCode=").append(meterCode);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

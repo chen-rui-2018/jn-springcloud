@@ -31,4 +31,23 @@ public class JsonStringToObjectUtil {
             return null;
         }
     }
+
+    /**
+     * 将对象转换为JSON字符串
+     *
+     * @param value 对象
+     *
+     * @return JSOn字符串
+     */
+    public static String objectToJson(Object value) {
+        if(value == null){
+            return null;
+        }
+        try {
+            return objectMapper.writeValueAsString(value);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

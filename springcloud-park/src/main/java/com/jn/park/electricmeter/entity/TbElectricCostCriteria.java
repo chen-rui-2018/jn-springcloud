@@ -106,6 +106,76 @@ public class TbElectricCostCriteria {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
+        public Criteria andIdIsNull() {
+            addCriterion("id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdIsNotNull() {
+            addCriterion("id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdEqualTo(String value) {
+            addCriterion("id =", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdNotEqualTo(String value) {
+            addCriterion("id <>", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdGreaterThan(String value) {
+            addCriterion("id >", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdGreaterThanOrEqualTo(String value) {
+            addCriterion("id >=", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdLessThan(String value) {
+            addCriterion("id <", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdLessThanOrEqualTo(String value) {
+            addCriterion("id <=", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdLike(String value) {
+            addCriterion("id like", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdNotLike(String value) {
+            addCriterion("id not like", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdIn(List<String> values) {
+            addCriterion("id in", values, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdNotIn(List<String> values) {
+            addCriterion("id not in", values, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdBetween(String value1, String value2) {
+            addCriterion("id between", value1, value2, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdNotBetween(String value1, String value2) {
+            addCriterion("id not between", value1, value2, "id");
+            return (Criteria) this;
+        }
+
         public Criteria andCompanyIdIsNull() {
             addCriterion("company_id is null");
             return (Criteria) this;
@@ -623,6 +693,146 @@ public class TbElectricCostCriteria {
 
         public Criteria andModifiedTimeNotBetween(Date value1, Date value2) {
             addCriterion("modified_time not between", value1, value2, "modifiedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountTypeIsNull() {
+            addCriterion("account_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountTypeIsNotNull() {
+            addCriterion("account_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountTypeEqualTo(String value) {
+            addCriterion("account_type =", value, "accountType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountTypeNotEqualTo(String value) {
+            addCriterion("account_type <>", value, "accountType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountTypeGreaterThan(String value) {
+            addCriterion("account_type >", value, "accountType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountTypeGreaterThanOrEqualTo(String value) {
+            addCriterion("account_type >=", value, "accountType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountTypeLessThan(String value) {
+            addCriterion("account_type <", value, "accountType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountTypeLessThanOrEqualTo(String value) {
+            addCriterion("account_type <=", value, "accountType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountTypeLike(String value) {
+            addCriterion("account_type like", value, "accountType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountTypeNotLike(String value) {
+            addCriterion("account_type not like", value, "accountType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountTypeIn(List<String> values) {
+            addCriterion("account_type in", values, "accountType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountTypeNotIn(List<String> values) {
+            addCriterion("account_type not in", values, "accountType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountTypeBetween(String value1, String value2) {
+            addCriterion("account_type between", value1, value2, "accountType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountTypeNotBetween(String value1, String value2) {
+            addCriterion("account_type not between", value1, value2, "accountType");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeIsNull() {
+            addCriterion("meter_code is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeIsNotNull() {
+            addCriterion("meter_code is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeEqualTo(String value) {
+            addCriterion("meter_code =", value, "meterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeNotEqualTo(String value) {
+            addCriterion("meter_code <>", value, "meterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeGreaterThan(String value) {
+            addCriterion("meter_code >", value, "meterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("meter_code >=", value, "meterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeLessThan(String value) {
+            addCriterion("meter_code <", value, "meterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeLessThanOrEqualTo(String value) {
+            addCriterion("meter_code <=", value, "meterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeLike(String value) {
+            addCriterion("meter_code like", value, "meterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeNotLike(String value) {
+            addCriterion("meter_code not like", value, "meterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeIn(List<String> values) {
+            addCriterion("meter_code in", values, "meterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeNotIn(List<String> values) {
+            addCriterion("meter_code not in", values, "meterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeBetween(String value1, String value2) {
+            addCriterion("meter_code between", value1, value2, "meterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeNotBetween(String value1, String value2) {
+            addCriterion("meter_code not between", value1, value2, "meterCode");
             return (Criteria) this;
         }
     }

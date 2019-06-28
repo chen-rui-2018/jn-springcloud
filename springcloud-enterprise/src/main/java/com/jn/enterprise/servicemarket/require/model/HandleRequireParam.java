@@ -19,16 +19,15 @@ public class HandleRequireParam implements Serializable {
     @NotNull(message = "需求单号不能为空")
     private String reqNum;
     @ApiModelProperty(value = "合同总金额",example = "10")
-    @Pattern(regexp ="[0-9]*",message = "合同总金额只能输入数字")
+    @Pattern(regexp ="[0-9]*|(\\s*)",message = "合同总金额只能输入数字")
     private String contractAmount;
     @ApiModelProperty(value = "对接结果(1:对接成功  2:对接失败  3:企业需求撤销)",example = "1")
     @Pattern(regexp = "^[123]|(\\s*)$", message = "{对接结果:'默认值只允许为1,2,3'}")
     private String handleResult;
     @ApiModelProperty(value = "结果描述",example = "xxx描述")
     private String resultDetail;
-    @ApiModelProperty(value = "实际贷款金额（万元）",required = true,example = "20")
-    @Pattern(regexp ="[0-9]*",message = "实际贷款金额只能输入数字")
-    @NotNull(message = "实际贷款金额不能为空")
+    @ApiModelProperty(value = "实际贷款金额（万元）",example = "20")
+    @Pattern(regexp ="[0-9]*|(\\s*)",message = "实际贷款金额只能输入数字")
     private String actualLoanAmount;
     @ApiModelProperty(value = "合同首页",example = "xxx/home.jpg")
     private String contractHomePage;

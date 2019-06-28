@@ -59,4 +59,10 @@ public class CompanyServerController extends BaseController implements CompanyCl
         return new Result(companyService.updateCompanyInfoAfterPay(updateCompanyInfoParam));
     }
 
+
+    @Override
+    @ControllerLog(doAction = " 查询用户所属的企业信息")
+    public Result<ServiceCompany> getCurCompanyInfo(@RequestBody String account){
+        return new Result<>(companyService.getCurCompanyInfo(account));
+    }
 }

@@ -257,7 +257,7 @@ export default {
               this.$vux.toast.show({
                 text: '只有企业管理员和企业联系人才可以进申报平台！！',
                 type: 'warn',
-                width: '13em'
+                width: '15em'
               })
             }
           } else {
@@ -292,6 +292,9 @@ export default {
 </script>
 
 <style lang="scss">
+.weui-toast__content{
+  font-size: 35px;
+}
   .declarationCenter_search{
     position: fixed;
     z-index: 10;

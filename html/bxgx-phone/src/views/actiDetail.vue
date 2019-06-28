@@ -109,15 +109,6 @@ export default {
     clearInterval(this._interval)
   },
   methods: {
-    // dispatch (c, b) {
-    //   try {
-    //     var a = document.createEvent('Event')
-    //     a.initEvent(b, true, true)
-    //     c.dispatchEvent(a)
-    //   } catch (d) {
-    //     // alert(d)
-    //   }
-    // },
     actiDel () {
       let _this = this
       this.api.post({
@@ -172,9 +163,6 @@ export default {
             // window.location.href = 'protocol://android?code=toast&data=' + _this.actiForm.actiLike
             if (_this.$route.query.isMini) {
             } else {
-              // _this.dispatch(document.queryselector('.attention'), 'click')
-              // document.queryselector('.attention').click(_this.actiForm.actiLike)
-              // let action = 'handleLike'
               window.webkit.messageHandlers.jsToOc.postMessage(
                 _this.actiForm.actiLike
               )
@@ -206,9 +194,6 @@ export default {
             //   'protocol://android?code=toast&data=' + _this.actiForm.actiLike
             if (_this.$route.query.isMini) {
             } else {
-              // _this.dispatch(document.queryselector('.attention'), 'click')
-              // document.queryselector('.attention').click(_this.actiForm.actiLike)
-              // let action = 'cancelLike'
               window.webkit.messageHandlers.jsToOc.postMessage(
                 _this.actiForm.actiLike
               )
@@ -316,7 +301,7 @@ export default {
     color: #42454a;
     font-size: 36px;
     font-family: "Microsoft YaHei";
-    font-weight: 600;
+    font-weight: bold;
   }
   .detail {
     text-align: center;
@@ -430,7 +415,7 @@ export default {
   }
   .fenge {
     height: 20px;
-    background: #fbfbfb;
+    background: #ebebeb;
   }
   .actiDel {
     padding: 30px;
@@ -439,7 +424,7 @@ export default {
       border-left: 6px solid #00a041;
       font-size: 30px;
       margin-bottom: 30px;
-      font-weight: 600;
+      font-weight: bold;
     }
     // > p {
     //   line-height: 40px;

@@ -6,7 +6,12 @@ Vue.component('chart', ECharts)
 // 级联多选
 // import elCascaderMulti from 'el-cascader-multi'
 // Vue.use(elCascaderMulti)
-
+// vue富文本
+import VueQuillEditor from 'vue-quill-editor'
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+Vue.use(VueQuillEditor)
 import echarts from 'echarts'
 Vue.prototype.$echarts = echarts
 import 'normalize.css/normalize.css' // A modern alternative to CSS resets

@@ -472,7 +472,7 @@ public class UserInfoServiceImpl implements UserInfoService {
             tbUserPerson.setCreatorAccount(user.getAccount());
 
             tbUserPerson.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
-            a = tbUserPersonMapper.insert(tbUserPerson);
+            a = tbUserPersonMapper.insertSelective(tbUserPerson);
         }else if(null!=tbUserPeople && tbUserPeople.size()==1){
             //修改
             tbUserPerson.setId(tbUserPeople.get(0).getId());

@@ -20,7 +20,7 @@ public interface ParkingService {
      * @param temporaryCarParkingFeeRequest
      * @return
      */
-    Result getTemporaryCarParkingFee(TemporaryCarParkingFeeRequest temporaryCarParkingFeeRequest);
+    Result<DoorTemporaryCarParkingFeeResponse> getTemporaryCarParkingFee(TemporaryCarParkingFeeRequest temporaryCarParkingFeeRequest);
 
     /**
      * 保存用户停车缴费信息

@@ -84,6 +84,7 @@
   </div>
 </template>
 <script>
+import { getToken } from '@/utils/auth'
 export default {
   data () {
     return {
@@ -143,7 +144,7 @@ export default {
       })
     },
     handleLike (id) {
-      if (!sessionStorage.token) {
+      if (!getToken()) {
         this.$vux.toast.text('请先登录')
         return
       }
@@ -174,7 +175,7 @@ export default {
       })
     },
     cancelLike (id) {
-      if (!sessionStorage.token) {
+      if (!getToken()) {
         this.$vux.toast.text('请先登录')
         return
       }
@@ -205,7 +206,7 @@ export default {
       })
     },
     quickSign (id) {
-      if (!sessionStorage.token) {
+      if (!getToken()) {
         this.$vux.toast.text('请先登录')
         return
       }
@@ -229,7 +230,7 @@ export default {
     },
     // 取消报名
     stopApply (id) {
-      if (!sessionStorage.token) {
+      if (!getToken()) {
         this.$vux.toast.text('请先登录')
         return
       }

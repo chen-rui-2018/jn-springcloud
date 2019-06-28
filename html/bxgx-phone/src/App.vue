@@ -12,31 +12,6 @@ import administrativeHeader from './components/administrativeHeader'
 export default {
   name: 'App',
   components: {administrativeHeader},
-  mounted () {
-    // this.init()
-  },
-  methods: {
-    init () {
-      // this.token = this.$route.query.token
-      // // sessionStorage.setItem('token', this.token)
-      // // console.log()
-      // sessionStorage.token = this.$route.query.token
-      // console.log(sessionStorage.token)
-      this.api.post({
-        url: 'loginURL',
-        data: {
-          account: 'wangsong',
-          password: '123456'
-        },
-        dataFlag: false,
-        callback: function (res) {
-          if (res.code === '0000') {
-            sessionStorage.token = res.data
-          }
-        }
-      })
-    }
-  }
 }
 </script>
 <style lang="scss">

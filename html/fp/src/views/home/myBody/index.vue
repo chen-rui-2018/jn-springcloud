@@ -35,12 +35,12 @@
         </div>
         <div style="display:flex">
           <el-form-item label="服务机构简介:" class="inline">
-            <span class="lh">{{orgSynopsis}}</span>
+            <span>{{orgSynopsis}}</span>
           </el-form-item>
         </div>
         <div style="display:flex">
           <el-form-item label="核心服务:" class="inline border-bottom">
-            <span class="lh">{{orgBusiness}}</span>
+            <span >{{orgBusiness}}</span>
           </el-form-item>
         </div>
       </el-form>
@@ -63,7 +63,7 @@
         <div>企业资质/荣誉</div>
         <div  class="enterpriseQualification ml" v-show="honorLicense.length===0">暂无信息</div>
         <div class="enterpriseQualification" v-for="(item, index) in honorLicense" :key="index">
-          <span class="themeColor smallSize mr">{{item.awardTime?item.awardTime+'日':''}}&nbsp;获得</span>
+          <span class="themeColor smallSize mr" v-show="item.awardTime">{{item.awardTime?item.awardTime+'日':''}}&nbsp;获得</span>
           <div class="itemInfo">
             <div>{{item.certName}}</div>
             <div>颁发部门：{{item.awardDepart}}</div>
@@ -289,7 +289,7 @@ export default {
 <style lang="scss" >
 .myBody {
   .mr {
-    margin-right: 36px;
+    margin-right: 130px;
   }
   .businessLicenseImg {
     display: inline-block;
@@ -315,7 +315,7 @@ export default {
     display: inline-block;
     vertical-align: middle;
     margin: 10px 0px;
-    margin-left: 170px;
+    margin-left: 150px;
   }
   .businessLicense {
     display: inline-block;
@@ -376,7 +376,9 @@ export default {
     }
     .el-form-item__content {
       flex: 1;
-      display: inline-block;
+     line-height: unset;
+      display: flex;
+      align-items: center;
       padding-left: 13px;
       // padding: 15px;
       //   border: 1px solid #ccc;

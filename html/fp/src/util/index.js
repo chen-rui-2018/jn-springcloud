@@ -1,6 +1,7 @@
 /**
  * Created by jiachenpan on 16/11/18.
  */
+const CryptoJS = require("crypto-js");
 
 export function parseTime(time, cFormat) {
   if (arguments.length === 0) {
@@ -345,6 +346,20 @@ export function getDateString (str) {
   sec = sec > 9 ? sec : '0' + sec
   return year + '-' + month + '-' + day + ' ' + hour + ':' + min + ':' + sec
 }
+
+
+const encryptKey = '123!@#avrd59aNJA'
+// 加密方法
+function encrypt(str) {
+  return CryptoJS.AES.encrypt(str, encryptKey).toString()
+}
+
+// 解密方法
+function decrypt(str) {
+  const bytes  = CryptoJS.AES.decrypt(str, encryptKey)
+  return bytes.toString(CryptoJS.enc.Utf8);
+}
+
 function UrlSearch () {
   var name, value
   var str = location.href // 取得整个地址栏
@@ -363,5 +378,7 @@ function UrlSearch () {
 }
 const urlSearch = new UrlSearch()
 export {
-  urlSearch
+  urlSearch,
+  encrypt,
+  decrypt
 }

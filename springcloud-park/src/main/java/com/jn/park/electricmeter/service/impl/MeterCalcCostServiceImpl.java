@@ -241,7 +241,7 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
                     //作废失败的记录日志
                     errorLogMapper.updateByExampleSelective(record,criteria);
                     criteria.or().andCompanyIdEqualTo(companyId).andDayEqualTo(dealDate).andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andMeterCodeIsNull();
-                    errorLogMapper.updateByExample(record,criteria);
+                    errorLogMapper.updateByExampleSelective(record,criteria);
                 }catch (ErrorLogException e){
                     //记录日志
                     if(StringUtils.isNotBlank(userMeterCode)){

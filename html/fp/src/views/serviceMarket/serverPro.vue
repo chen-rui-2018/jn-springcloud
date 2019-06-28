@@ -76,7 +76,7 @@
       </ul>
     </div>
     <div class="pagination-container">
-      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
+      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
       </el-pagination>
     </div>
     <!-- 提需求弹框 -->
@@ -122,7 +122,7 @@ export default {
       keyW: "",
       currentPage1: 1,
       page: 1,
-      row: 5,
+      row: 3,
       total: 0,
       signoryId: "",
       keyWords: "",

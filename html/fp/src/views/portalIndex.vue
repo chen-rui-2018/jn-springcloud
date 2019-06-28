@@ -4,7 +4,7 @@
       <div class="bannerangPark">
         <div class="bannerImg pr">
           <el-carousel indicator-position="outside" @change='changImg' arrow="always">
-            <el-carousel-item v-for="(banner, index) in bannerList" :key="index" class="pointer" @click.native="goNewPage(banner.propagandaAreaUrl)">
+            <el-carousel-item v-for="(banner, index) in bannerList" :key="index" v-if="index<4" class="pointer" @click.native="goNewPage(banner.propagandaAreaUrl)">
               <img :src="banner.posterUrl" alt="">
             </el-carousel-item>
           </el-carousel>

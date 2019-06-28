@@ -17,7 +17,9 @@ public enum WxExceptionEnums implements CodeAndMsg {
     JSON_PROCESS_FAL("1500303","对象参数转换json字符串失败"),
     NOT_FINDE_WX_MSG_HANDLE("1500304","无法找到微信消息的处理类"),
     SEND_TEMPLATE_MSG_FAIL("1500305","发送模板信息异常"),
-    GET_ACCESS_TOKEN_FAIL("1500306","获取access_token失败.")
+    GET_ACCESS_TOKEN_FAIL("1500306","获取access_token失败."),
+    WX_REGISTER_BINDING_FAIL("1500307","微信注册绑定用户失败."),
+    GET_OPENID_FAIL("1500308","获取微信用户标识失败.")
     ;
 
     private String code;

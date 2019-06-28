@@ -20,7 +20,6 @@ class WxHttp {
         success: res => {
           // 发送 res.code 到后台换取 openId, sessionKey, unionId
           resolve(res.code)
-          // console.log(res)
         },
         fail: err => {
           reject(err)
@@ -49,10 +48,7 @@ class WxHttp {
               success: (res) => {
                 if (res.data.code === '0000') {
                   const token = res.data.data
-                  wx.setStorage({
-                    key: 'token',
-                    data: token
-                  })
+                  wx.setStorageSync('token', token)
                   this.header.token = token
                   resolve(res)
                 }
@@ -102,11 +98,10 @@ class WxHttp {
                   wx.removeStorage({
                     key: 'token',
                     success(res) {
-                      // console.log(res)
+                      _operationRequest(requestData)
+                      time++
                     }
                   })
-                  _operationRequest(requestData)
-                  time++
                 } else {
                   resolve(this.response(res))
                 }

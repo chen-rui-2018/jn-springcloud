@@ -25,19 +25,23 @@ Page({
     imgBaseUrl:''
   },
   onLoad: function (options) {
-    this.setData({
-      imgBaseUrl:app.globalData.imgBaseUrl
-    })
+    app.globalData.wxHttp.getToken()
+      .then(() => {
+        this.setData({
+          imgBaseUrl: app.globalData.imgBaseUrl
+        })
+        this.getNotice()
+        this.hotList()
+        this.getBannar()
+      })
    },
   onReady: function () { },
   onShow: function () { 
-    this.getNotice()
-    this.hotList()
-    this.getBannar()
+    
   },
   onHide: function () { },
   onPullDownRefresh: function () {
-    this.onShow()
+    this.onLoad()
   },
   onReachBottom: function () { },
   // 轮播图

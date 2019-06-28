@@ -1111,5 +1111,7 @@
         </table>
         <table tableName="tb_pay_account_book">
         </table>
+        <table tableName="tb_pay_bill">
+        </table>
     </context>
 </generatorConfiguration>

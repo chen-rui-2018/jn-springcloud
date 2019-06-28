@@ -33,6 +33,14 @@ public class TbPayAccountBook implements Serializable {
 
     private String entId;
 
+    private String entName;
+
+    private String buildId;
+
+    private String buildName;
+
+    private String meterCode;
+
     private static final long serialVersionUID = 1L;
 
     public String getAcBookId() {
@@ -147,6 +155,38 @@ public class TbPayAccountBook implements Serializable {
         this.entId = entId == null ? null : entId.trim();
     }
 
+    public String getEntName() {
+        return entName;
+    }
+
+    public void setEntName(String entName) {
+        this.entName = entName == null ? null : entName.trim();
+    }
+
+    public String getBuildId() {
+        return buildId;
+    }
+
+    public void setBuildId(String buildId) {
+        this.buildId = buildId == null ? null : buildId.trim();
+    }
+
+    public String getBuildName() {
+        return buildName;
+    }
+
+    public void setBuildName(String buildName) {
+        this.buildName = buildName == null ? null : buildName.trim();
+    }
+
+    public String getMeterCode() {
+        return meterCode;
+    }
+
+    public void setMeterCode(String meterCode) {
+        this.meterCode = meterCode == null ? null : meterCode.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -172,7 +212,11 @@ public class TbPayAccountBook implements Serializable {
             && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
-            && (this.getEntId() == null ? other.getEntId() == null : this.getEntId().equals(other.getEntId()));
+            && (this.getEntId() == null ? other.getEntId() == null : this.getEntId().equals(other.getEntId()))
+            && (this.getEntName() == null ? other.getEntName() == null : this.getEntName().equals(other.getEntName()))
+            && (this.getBuildId() == null ? other.getBuildId() == null : this.getBuildId().equals(other.getBuildId()))
+            && (this.getBuildName() == null ? other.getBuildName() == null : this.getBuildName().equals(other.getBuildName()))
+            && (this.getMeterCode() == null ? other.getMeterCode() == null : this.getMeterCode().equals(other.getMeterCode()));
     }
 
     @Override
@@ -193,6 +237,10 @@ public class TbPayAccountBook implements Serializable {
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         result = prime * result + ((getEntId() == null) ? 0 : getEntId().hashCode());
+        result = prime * result + ((getEntName() == null) ? 0 : getEntName().hashCode());
+        result = prime * result + ((getBuildId() == null) ? 0 : getBuildId().hashCode());
+        result = prime * result + ((getBuildName() == null) ? 0 : getBuildName().hashCode());
+        result = prime * result + ((getMeterCode() == null) ? 0 : getMeterCode().hashCode());
         return result;
     }
 
@@ -216,6 +264,10 @@ public class TbPayAccountBook implements Serializable {
         sb.append(", modifierAccount=").append(modifierAccount);
         sb.append(", recordStatus=").append(recordStatus);
         sb.append(", entId=").append(entId);
+        sb.append(", entName=").append(entName);
+        sb.append(", buildId=").append(buildId);
+        sb.append(", buildName=").append(buildName);
+        sb.append(", meterCode=").append(meterCode);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

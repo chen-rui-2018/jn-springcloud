@@ -28,6 +28,7 @@
             </if>
           ,sp.propaganda_area as "propagandaArea"
           ,sp.poster_url as "posterUrl"
+          ,sp.propaganda_area_url as "propagandaAreaUrl"
           ,sp.propaganda_fee as "propagandaFee"
           ,sp.status as "status"
           ,sp.view_count as "viewCount"

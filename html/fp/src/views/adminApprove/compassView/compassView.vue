@@ -53,7 +53,7 @@
       <div>
         <!-- 标题 -->
         <div class="direct_approve">
-          <div class="direct_title">直接审批</div>
+          <div class="direct_title">审批范围</div>
           <div class="actiSearch">
             <input type="text" placeholder="输入要搜索的关键字" v-model="search">
             <i class="iconfont icon-sousuo" @click="handlesearch"></i>

@@ -44,22 +44,56 @@ public class WxMenuController {
     public String menuCreateSample() {
         WxMenu menu = new WxMenu();
 
-        WxMenuButton button1 = new WxMenuButton();
+        /*WxMenuButton button1 = new WxMenuButton();
         button1.setType(WxConsts.MenuButtonType.CLICK);
         button1.setName("今日歌曲");
         button1.setKey("V1001_TODAY_MUSIC");
-        menu.getButton().add(button1);
+        menu.getButton().add(button1);*/
 
         WxMenuButton button2 = new WxMenuButton();
-        button2.setName("菜单");
+        button2.setName("园区简介");
         menu.getButton().add(button2);
 
         WxMenuButton button21 = new WxMenuButton();
         button21.setType(WxConsts.MenuButtonType.VIEW);
-        button21.setName("搜索");
-        button21.setUrl("http://www.soso.com/");
+        button21.setName("园区简介");
+        String url = wxService.oauth2buildAuthorizationUrl(
+                "http://2j676w.natappfree.cc/h5/meeting",
+                WxConsts.OAuth2Scope.SNSAPI_BASE, null);
+        button21.setUrl(url);
+        /*button21.setUrl("https://screan.bxgxq.com/#/investment");*/
 
-        WxMenuButton button22 = new WxMenuButton();
+        WxMenuButton button3 = new WxMenuButton();
+        button3.setName("园区资讯");
+        menu.getButton().add(button3);
+
+        WxMenuButton button31 = new WxMenuButton();
+        button31.setType(WxConsts.MenuButtonType.VIEW);
+        button31.setName("园区政策");
+        String url2 = wxService.oauth2buildAuthorizationUrl(
+                "http://2j676w.natappfree.cc/h5/meeting",
+                WxConsts.OAuth2Scope.SNSAPI_BASE, null);
+        button31.setUrl(url2);
+        /*button31.setUrl("https://screan.bxgxq.com/#/policyGuide");*/
+
+        WxMenuButton button32 = new WxMenuButton();
+        button32.setType(WxConsts.MenuButtonType.VIEW);
+        button32.setName("园区公告");
+        /*String url2 = wxService.oauth2buildAuthorizationUrl(
+                "http://92a52v.natappfree.cc/h5/meeting/css/media.css",
+                WxConsts.OAuth2Scope.SNSAPI_USERINFO, null);
+        button23.setUrl(url2);*/
+        button32.setUrl("http://screan.bxgxq.com/#/parkNotice");
+        WxMenuButton button33 = new WxMenuButton();
+        button33.setType(WxConsts.MenuButtonType.VIEW);
+        button33.setName("企业资讯");
+        /*String url2 = wxService.oauth2buildAuthorizationUrl(
+                "http://92a52v.natappfree.cc/h5/meeting/css/media.css",
+                WxConsts.OAuth2Scope.SNSAPI_USERINFO, null);
+        button23.setUrl(url2);*/
+        button33.setUrl("http://screan.bxgxq.com/#/enterpriseInformationList");
+
+        /*WxMenuButton button22 = new WxMenuButton();
         button22.setType(WxConsts.MenuButtonType.VIEW);
         button22.setName("视频");
         button22.setUrl("http://v.qq.com/");
@@ -75,13 +109,12 @@ public class WxMenuController {
         String url = wxService.oauth2buildAuthorizationUrl(
                 "http://iwhcv8.natappfree.cc/springcloud-wechat/guest/wechat/redirect/greet",
                 WxConsts.OAuth2Scope.SNSAPI_USERINFO, null);
-        button24.setUrl(url);
+        button24.setUrl(url);*/
 
         button2.getSub_button().add(button21);
-        button2.getSub_button().add(button22);
-        button2.getSub_button().add(button23);
-        button2.getSub_button().add(button24);
-
+        button3.getSub_button().add(button31);
+        button3.getSub_button().add(button32);
+        button3.getSub_button().add(button33);
         return wxMenuService.menuCreate(menu);
     }
 

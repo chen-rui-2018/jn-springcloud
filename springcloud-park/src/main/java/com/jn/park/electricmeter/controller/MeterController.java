@@ -186,7 +186,7 @@ public class MeterController extends BaseController {
     @RequiresPermissions("/meter/calcCostEverdayByHandler")
     public Result calcCostEverdayByHandler(@RequestBody CompanyFailModelParam param){
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        return meterCalcCostService.calcCostEverdayByHandler( user,  param.getCompanyId(),  param.getDay());
+        return meterCalcCostService.calcCostEverdayByHandler( user,  param.getCompanyId(),  param.getDay(),param.getMeterCode());
     }
 
     //电表业主维护

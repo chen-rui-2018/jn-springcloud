@@ -9,6 +9,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.GlobalConstants;
 import com.jn.common.util.StringUtils;
+import com.jn.company.api.CompanyClient;
 import com.jn.company.model.ServiceCompany;
 import com.jn.enterprise.company.service.CompanyService;
 import com.jn.enterprise.pay.dao.*;
@@ -25,6 +26,7 @@ import com.jn.enterprise.pd.declaration.enums.PdStatusEnums;
 import com.jn.pay.enums.MchIdEnum;
 import com.jn.send.api.DelaySendMessageClient;
 import com.jn.send.model.Delay;
+import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import org.apache.ibatis.annotations.Param;
@@ -45,7 +47,6 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static com.jn.enterprise.pay.enums.PaymentBillEnum.BILL_AC_BOOK_TYPE_1;
 
 /**
  * 我的账单(业务实现层)
@@ -114,6 +115,11 @@ public class MyPayBillServiceImpl implements MyPayBillService {
     @Autowired
     private MessageSource messageSource;
 
+    @Autowired
+    private SystemClient systemClient;
+    @Autowired
+    private CompanyClient companyClient;
+
 
     @ServiceLog(doAction = "我的账单-查询账单信息列表(APP端)")
     @Override
@@ -122,38 +128,37 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         /**获取所有账单该用户账单*/
         PayBill pay = new PayBill();
         List<PayBillReturnParamVo> listBills = new ArrayList<>();
-        pay.setBillReceiver(user.getAccount());
         BeanUtils.copyProperties(payBill, pay);
+        pay.setBillReceiver(user.getAccount());
         listBills = payBillDao.getBillAppList(pay);
         //类型标识
         List<String> list = new ArrayList<>();
         if (listBills.size() > 0) {
-            list.add(listBills.get(0).getAcBookType());
-            String flag = listBills.get(0).getAcBookType();
             for (int i = 0; i < listBills.size(); i++) {
                 //账单类型标识
-                if (!flag.equals(listBills.get(i).getAcBookType())) {
-                    list.add(listBills.get(i).getAcBookType());
-                    flag = listBills.get(i).getAcBookType();
+                list.add(listBills.get(i).getAcBookType());
+            }
+        }
+        //list去重
+        HashSet<String> setList = new HashSet<String>(list);
+        list.clear();
+        list.addAll(setList);
+        for (int i = 0; i < list.size(); i++) {
+            PayBillVo payBillVo = new PayBillVo();
+            String str = list.get(i);
+            //相同类型催缴总次数
+            int total = 0;
+            List<PayBillReturnParamVo> pb = new ArrayList<>();
+            for (int j = 0; j < listBills.size(); j++) {
+                if (str.equals(listBills.get(j).getAcBookType())) {
+                    total += listBills.get(j).getReminderNumber();
+                    pb.add(listBills.get(j));
                 }
             }
-            for (int i = 0; i < list.size(); i++) {
-                PayBillVo payBillVo = new PayBillVo();
-                String str = list.get(i);
-                //相同类型催缴总次数
-                int total = 0;
-                List<PayBillReturnParamVo> pb = new ArrayList<>();
-                for (int j = 0; j < listBills.size(); j++) {
-                    if (str.equals(listBills.get(j).getAcBookType())) {
-                        total += listBills.get(j).getReminderNumber();
-                        pb.add(listBills.get(j));
-                    }
-                }
-                payBillVo.setTotalReminderNumber(total);
-                payBillVo.setPayBillReturnParamVo(pb);
-                payBillVo.setType(str);
-                pbList.add(payBillVo);
-            }
+            payBillVo.setTotalReminderNumber(total);
+            payBillVo.setPayBillReturnParamVo(pb);
+            payBillVo.setType(str);
+            pbList.add(payBillVo);
         }
         PaginationData paginationData = new PaginationData();
         paginationData.setRows(pbList);
@@ -164,12 +169,25 @@ public class MyPayBillServiceImpl implements MyPayBillService {
     @Override
     @ServiceLog(doAction = "我的账单-查询缴费记录")
     public PaginationData<List<PayRecordVo>> billPaymentRecord(PayRecordParam payRecordParam, User user) {
+
         PageHelper.startPage(payRecordParam.getPage(), payRecordParam.getRows());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+        //个人账单查询条件
         TbPayBillCriteria tbPayBillCriteria = new TbPayBillCriteria();
         tbPayBillCriteria.setOrderByClause("created_time desc,payment_state desc");
         TbPayBillCriteria.Criteria criteria = tbPayBillCriteria.createCriteria();
-        criteria.andPaymentStateEqualTo(PaymentBillEnum.BILL_ORDER_IS_PAY.getCode());
+        criteria.andPaymentStateEqualTo(PaymentBillEnum.BILL_ORDER_IS_PAY.getCode()).andObjTypeEqualTo(PaymentBillEnum.BILL_OBJ_TYPE_IS_INDIVIDUAL.getCode()).andObjIdEqualTo(user.getAccount()).andBillExpenseGreaterThan(new BigDecimal("0"));
+
+        //企业账单查询条件
+        Result<ServiceCompany> serviceCompanyResult=companyClient.getCurCompanyInfo(user.getAccount());
+        if(StringUtils.equals(serviceCompanyResult.getCode(),"0000")&&serviceCompanyResult.getData()!=null){
+            logger.info("用户有对应的企业[{}-{}]，可以查到企业相关的缴费记录",serviceCompanyResult.getData().getComName(),serviceCompanyResult.getData().getId());
+            TbPayBillCriteria tbPayBillCriteria2=new TbPayBillCriteria();
+            TbPayBillCriteria.Criteria criteria2 = tbPayBillCriteria2.createCriteria();
+            criteria2.andPaymentStateEqualTo(PaymentBillEnum.BILL_ORDER_IS_PAY.getCode()).andObjTypeEqualTo(PaymentBillEnum.BILL_OBJ_TYPE_IS_COMPANY.getCode()).andObjIdEqualTo(serviceCompanyResult.getData().getId()).andBillExpenseGreaterThan(new BigDecimal("0"));
+            tbPayBillCriteria.or(criteria2);
+        }
+
         List<TbPayBill> tbPayBills = tbPayBillMapper.selectByExample(tbPayBillCriteria);
         //获取每个月份，通过月份组装返回给前端
         List<PayRecordVo> voList = new ArrayList<>();
@@ -364,7 +382,12 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         }
         /**通过账户表的账户ID查询账本信息*/
         logger.info("通过账户表的账户ID查询账本信息,账户ID={}",tbPayAccount.get(0).getAccountId());
-        billCriteria.createCriteria().andAccountIdEqualTo(tbPayAccount.get(0).getAccountId()).andAcBookTypeEqualTo(payBillCreateParamVo.getAcBookType()).andRecordStatusEqualTo(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
+        /**因电费账本是一个账户下有多个，所以需要单独处理查询条件*/
+        if(PaymentBillEnum.BILL_AC_BOOK_TYPE_1.getCode().equals(payBillCreateParamVo.getAcBookType())){
+            billCriteria.createCriteria().andAccountIdEqualTo(tbPayAccount.get(0).getAccountId()).andAcBookTypeEqualTo(payBillCreateParamVo.getAcBookType()).andMeterCodeEqualTo(payBillCreateParamVo.getMeterCode()).andRecordStatusEqualTo(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
+        }else{
+            billCriteria.createCriteria().andAccountIdEqualTo(tbPayAccount.get(0).getAccountId()).andAcBookTypeEqualTo(payBillCreateParamVo.getAcBookType()).andRecordStatusEqualTo(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
+        }
         tbPayAccountBook = tbPayAccountBookMapper.selectByExample(billCriteria);
         if (tbPayAccountBook.size() > Integer.parseInt(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode()) || tbPayAccountBook.size() == Integer.parseInt(PaymentBillEnum.BILL_STATE_DELETE.getCode())) {
             /**查询账本信息异常*/
@@ -437,7 +460,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         }
         /**判断是否是电费账单，如果是电费账单，则直接扣除费用*/
         TbPayAccountBookMoneyRecord tpbmr = new TbPayAccountBookMoneyRecord();
-        if (tbs.getAcBookType().equals(BILL_AC_BOOK_TYPE_1.getCode())) {
+        if (tbs.getAcBookType().equals(PaymentBillEnum.BILL_AC_BOOK_TYPE_1.getCode())) {
             /**比较金额大小即左边比右边数大，返回1，相等返回0，比右边小返回-1*/
             int i = tbPayAccountBook.get(0).getBalance().compareTo(tbs.getBillExpense());
             logger.info("比较金额大小结果：{}", i);
@@ -489,30 +512,42 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         if (null == tb3) {
             throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_IS_NOT_EXIT);
         }
-        if(tb3.getPaymentState().equals(PaymentBillEnum.BILL_ORDER_IS_NOT_PAY.getCode())){
-            //待支付状态，发送待缴短信通知
-            String[] phone={"13265603090"};
-            String[] str = {};
-            sendPaymentNotice("1020",phone,str);
-            //发送待缴邮件
-            String email = "381981766@qq.com,chenmiao@op-mobile.com.cn";
-            String emailSubject=tb3.getBillName();
-            String emailContent = PaymentBillExceptionEnum.PAYMENT_EMAIL_CONTEXT.getMessage();
-            sendPaymentEmail(email ,emailSubject,emailContent);
-        }else if(tb3.getPaymentState().equals(PaymentBillEnum.BILL_ORDER_IS_PAY.getCode())){
-            //已支付状态，发送缴费成功短信通知
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String[] phone={"13265603090"};
-            String[] str = {tpbmr.getBillId(),PaymentBillEnum.BILL_AC_BOOK_TYPE_1.getMessage(),tpbmr.getMoney().toString(),sdf.format(tpbmr.getCreatedTime())};
-            sendPaymentNotice("1021",phone,str);
-            //发送缴费成功通知邮件
-            String email = "624632473@qq.com,wangzy@op-mobile.com.cn";
-            String emailSubject=tb3.getBillName();
-            StringBuffer emailContent = new StringBuffer();
-            emailContent.append("【白下高新区】您好，您已缴费成功，账单号：").append(tpbmr.getBillId()).append(",").append("账单类型：").append(PaymentBillEnum.BILL_AC_BOOK_TYPE_1.getMessage())
-                    .append(",").append("支付金额：").append(tpbmr.getMoney().toString()).append(",").append("缴费时间：").append(sdf.format(tpbmr.getCreatedTime()));
-            sendPaymentEmail(email ,emailSubject,emailContent.toString());
+        User user = new User();
+        user.setAccount(tb3.getBillReceiver());
+        logger.info("【创建账单】开始发送通知,获取用户信息入參【{}】",JsonUtil.object2Json(user));
+        Result<User> user1 = systemClient.getUser(user);
+        logger.info("【创建账单】开始发送通知,获取用户信息返回结果【{}】",JsonUtil.object2Json(user1));
+        if(user1 != null && user1.getData() != null){
+            if(tb3.getPaymentState().equals(PaymentBillEnum.BILL_ORDER_IS_NOT_PAY.getCode())){
+                if (StringUtils.isNotBlank(user1.getData().getPhone())) {
+                    //待支付状态，发送待缴短信通知
+                    sendPaymentNotice("1020",new String[]{user1.getData().getPhone()},new String[]{});
+                }
+                if (StringUtils.isNotBlank(user1.getData().getEmail())) {
+                    //发送待缴邮件
+                    sendPaymentEmail(user1.getData().getEmail(), tb3.getBillName(), PaymentBillExceptionEnum.PAYMENT_EMAIL_CONTEXT.getMessage());
+                }
+
+            }else if(tb3.getPaymentState().equals(PaymentBillEnum.BILL_ORDER_IS_PAY.getCode())) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                //已支付状态，发送缴费成功短信通知
+                if (StringUtils.isNotBlank(user1.getData().getPhone())) {
+                    String[] phone = {user1.getData().getPhone()};
+                    String[] str = {tpbmr.getBillId(), PaymentBillEnum.BILL_AC_BOOK_TYPE_1.getMessage(), tpbmr.getMoney().toString(), sdf.format(tpbmr.getCreatedTime())};
+                    sendPaymentNotice("1021", phone, str);
+                }
+                //发送缴费成功通知邮件
+                if (StringUtils.isNotBlank(user1.getData().getEmail())) {
+                    String email = user1.getData().getEmail();
+                    String emailSubject = tb3.getBillName();
+                    StringBuffer emailContent = new StringBuffer();
+                    emailContent.append("【白下高新区】您好，您已缴费成功，账单号：").append(tpbmr.getBillId()).append(",").append("账单名称：").append(tb3.getBillName())
+                            .append(",").append("支付金额：").append(tpbmr.getMoney().toString()).append(",").append("缴费时间：").append(sdf.format(tpbmr.getCreatedTime()));
+                    sendPaymentEmail(email, emailSubject, emailContent.toString());
+                }
+            }
         }
+
         return result;
     }
 
@@ -586,7 +621,6 @@ public class MyPayBillServiceImpl implements MyPayBillService {
             logger.info("开始调用统一缴费发起支付接口操作");
             PayOrderReq payOrderReq = new PayOrderReq();
             payOrderReq.setMchOrderNo(UUID.randomUUID().toString().replaceAll("-", ""));
-            //payOrderReq.setChannelId(payBIllInitiateParam.getChannelId());
             payOrderReq.setChannelId(createOrderAndPayReqModel.getChannelId());
             payOrderReq.setAmount(Long.parseLong(MoneyUtils.changeY2F(String.valueOf(totalAmount))));
             payOrderReq.setParam1(sb.toString());
@@ -707,6 +741,33 @@ public class MyPayBillServiceImpl implements MyPayBillService {
                 logger.info("调用统一支付下单接口回调，更新账单状态到账单中间表入參【{}】", tbPayBillMiddle.toString());
                 logger.info("调用统一支付下单接口回调，更新账单状态到账单中间表操作结束");
                 logger.info("回调成功，支付状态更新为：已支付");
+
+                /**支付成功发送短信*/
+                for (int i = 0; i < tbPayBills.size(); i++) {
+                    User user1 = new User();
+                    user1.setAccount(tbPayBills.get(i).getBillReceiver());
+                    logger.info("【支付回调成功】开始发送通知,获取用户信息入參【{}】",JsonUtil.object2Json(user1));
+                    Result<User> user2 = systemClient.getUser(user1);
+                    logger.info("【支付回调成功】开始发送通知,获取用户信息返回结果【{}】",JsonUtil.object2Json(user2));
+                    if(user2 != null && user2.getData() != null){
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        //已支付状态，发送缴费成功短信通知
+                        if (StringUtils.isNotBlank(user2.getData().getPhone())) {
+                            String[] phone = {user2.getData().getPhone()};
+                            String[] str = {tbPayBills.get(i).getBillId(), tbPayBills.get(i).getBillName(), tbPayBills.get(i).getBillExpense().toString(), sdf.format(tbPayBills.get(i).getCreatedTime())};
+                            sendPaymentNotice("1021", phone, str);
+                        }
+                        //发送缴费成功通知邮件
+                        if (StringUtils.isNotBlank(user2.getData().getEmail())) {
+                            String email = user2.getData().getEmail();
+                            String emailSubject = tbPayBills.get(i).getBillName();
+                            StringBuffer emailContent = new StringBuffer();
+                            emailContent.append("【白下高新区】您好，您已缴费成功，账单号：").append(tbPayBills.get(i).getBillId()).append(",").append("账单名称：").append(tbPayBills.get(i).getBillName())
+                                    .append(",").append("支付金额：").append(tbPayBills.get(i).getBillExpense().toString()).append(",").append("缴费时间：").append(sdf.format(tbPayBills.get(i).getCreatedTime()));
+                            sendPaymentEmail(email, emailSubject, emailContent.toString());
+                        }
+                    }
+                }
                 return new Result("回调成功，支付状态更新为：已支付");
             } catch (Exception e) {
                 throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_QUERY_ERROR);

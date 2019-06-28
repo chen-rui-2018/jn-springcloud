@@ -46,6 +46,9 @@ public enum PaymentBillExceptionEnum implements CodeAndMsg {
     PAYMENT_STATUS_IS_PAY_2("6020544","账单已支付，无法进行状态变更"),
     PAYMENT_STATUS_IS_RESCINDED("6020545","账单已撤销，无法进行状态变更"),
     PAYMENT_STATUS_IS_RESCINDED_ERROR("6020546","账单撤销失败"),
+    PAYMENT_GET_USER_INFO("6020547","发送通知获取用户信息异常"),
+    PAYMENT_BUILD_ERROR("6020548","请选择相同的楼宇账单进行支付"),
+    PAYMENT_ACCOUNT_BOOK_EXIT("6020549","该账户下已存在账本"),
     ;
     /**
      * 编码

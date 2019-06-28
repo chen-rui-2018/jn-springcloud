@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.park.electricmeter.dao.TbElectricCostMapper">
   <resultMap id="BaseResultMap" type="com.jn.park.electricmeter.entity.TbElectricCost">
-    <id column="company_id" jdbcType="VARCHAR" property="companyId" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="company_id" jdbcType="VARCHAR" property="companyId" />
     <result column="company_name" jdbcType="VARCHAR" property="companyName" />
     <result column="balance" jdbcType="DECIMAL" property="balance" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
@@ -10,6 +11,8 @@
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="account_type" jdbcType="VARCHAR" property="accountType" />
+    <result column="meter_code" jdbcType="VARCHAR" property="meterCode" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -70,8 +73,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    company_id, company_name, balance, record_status, creator_account, created_time, 
-    modifier_account, modified_time
+    id, company_id, company_name, balance, record_status, creator_account, created_time, 
+    modifier_account, modified_time, account_type, meter_code
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.electricmeter.entity.TbElectricCostCriteria" resultMap="BaseResultMap">
     select
@@ -91,11 +94,11 @@
     select 
     <include refid="Base_Column_List" />
     from tb_electric_cost
-    where company_id = #{companyId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_electric_cost
-    where company_id = #{companyId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.park.electricmeter.entity.TbElectricCostCriteria">
     delete from tb_electric_cost
@@ -104,16 +107,21 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.park.electricmeter.entity.TbElectricCost">
-    insert into tb_electric_cost (company_id, company_name, balance, 
-      record_status, creator_account, created_time, 
-      modifier_account, modified_time)
-    values (#{companyId,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, #{balance,jdbcType=DECIMAL}, 
-      #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
+    insert into tb_electric_cost (id, company_id, company_name, 
+      balance, record_status, creator_account, 
+      created_time, modifier_account, modified_time, 
+      account_type, meter_code)
+    values (#{id,jdbcType=VARCHAR}, #{companyId,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, 
+      #{balance,jdbcType=DECIMAL}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{accountType,jdbcType=VARCHAR}, #{meterCode,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.electricmeter.entity.TbElectricCost">
     insert into tb_electric_cost
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
       <if test="companyId != null">
         company_id,
       </if>
@@ -138,8 +146,17 @@
       <if test="modifiedTime != null">
         modified_time,
       </if>
+      <if test="accountType != null">
+        account_type,
+      </if>
+      <if test="meterCode != null">
+        meter_code,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
       <if test="companyId != null">
         #{companyId,jdbcType=VARCHAR},
       </if>
@@ -164,6 +181,12 @@
       <if test="modifiedTime != null">
         #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="accountType != null">
+        #{accountType,jdbcType=VARCHAR},
+      </if>
+      <if test="meterCode != null">
+        #{meterCode,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.park.electricmeter.entity.TbElectricCostCriteria" resultType="java.lang.Long">
@@ -175,6 +198,9 @@
   <update id="updateByExampleSelective" parameterType="map">
     update tb_electric_cost
     <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
       <if test="record.companyId != null">
         company_id = #{record.companyId,jdbcType=VARCHAR},
       </if>
@@ -199,6 +225,12 @@
       <if test="record.modifiedTime != null">
         modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.accountType != null">
+        account_type = #{record.accountType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.meterCode != null">
+        meter_code = #{record.meterCode,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -206,14 +238,17 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update tb_electric_cost
-    set company_id = #{record.companyId,jdbcType=VARCHAR},
+    set id = #{record.id,jdbcType=VARCHAR},
+      company_id = #{record.companyId,jdbcType=VARCHAR},
       company_name = #{record.companyName,jdbcType=VARCHAR},
       balance = #{record.balance,jdbcType=DECIMAL},
       record_status = #{record.recordStatus,jdbcType=TINYINT},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      account_type = #{record.accountType,jdbcType=VARCHAR},
+      meter_code = #{record.meterCode,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -221,6 +256,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.electricmeter.entity.TbElectricCost">
     update tb_electric_cost
     <set>
+      <if test="companyId != null">
+        company_id = #{companyId,jdbcType=VARCHAR},
+      </if>
       <if test="companyName != null">
         company_name = #{companyName,jdbcType=VARCHAR},
       </if>
@@ -242,18 +280,27 @@
       <if test="modifiedTime != null">
         modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="accountType != null">
+        account_type = #{accountType,jdbcType=VARCHAR},
+      </if>
+      <if test="meterCode != null">
+        meter_code = #{meterCode,jdbcType=VARCHAR},
+      </if>
     </set>
-    where company_id = #{companyId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.park.electricmeter.entity.TbElectricCost">
     update tb_electric_cost
-    set company_name = #{companyName,jdbcType=VARCHAR},
+    set company_id = #{companyId,jdbcType=VARCHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
       balance = #{balance,jdbcType=DECIMAL},
       record_status = #{recordStatus,jdbcType=TINYINT},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
-      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
-    where company_id = #{companyId,jdbcType=VARCHAR}
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      account_type = #{accountType,jdbcType=VARCHAR},
+      meter_code = #{meterCode,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

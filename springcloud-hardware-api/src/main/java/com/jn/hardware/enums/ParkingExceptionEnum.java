@@ -17,7 +17,8 @@ public enum ParkingExceptionEnum implements CodeAndMsg {
     DOOR_CAR_OUT_PARKING("1712203", "道尔出场消息推送,发生未知异常。"),
     DOOR_CAR_PARKING_SIGNNATURE("1712204", "动态签名验证失败"),
     DOOR_CAR_PARKING_IN("1712205", "车辆入场信息推送出现异常"),
-    DOOR_CAR_PARKING_OUT("1712206", "车辆出场信息推送出现异常")
+    DOOR_CAR_PARKING_OUT("1712206", "车辆出场信息推送出现异常"),
+    DOOR_CAR_PARKING_NOT_FIND_IN("1712207", "车辆出场信息推送出现异常,没有发现此车辆的入场记录")
     ;
     /**
      * 编码

@@ -1,7 +1,7 @@
 <template>
   <div id="app" :class="{'h-100': $store.state.isMobile}" @click="closeM">
-    <div class="s-wrapper">
-      <div class="s-content">
+    <div :class="{'h-100': $store.state.isMobile}" class="s-wrapper">
+      <div :class="{'h-100': $store.state.isMobile}" class="s-content">
         <!--    <router-view></router-view>-->
         <div class="right_nav" v-if="$store.state.hiddenNav">
           <ul>

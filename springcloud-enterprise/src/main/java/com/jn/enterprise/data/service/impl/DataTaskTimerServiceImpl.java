@@ -1,5 +1,6 @@
 package com.jn.enterprise.data.service.impl;
 
+import com.google.common.collect.Lists;
 import com.jn.common.channel.MessageSource;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
@@ -15,6 +16,7 @@ import com.jn.enterprise.data.enums.DataUploadConstants;
 import com.jn.enterprise.data.enums.DataUploadExceptionEnum;
 import com.jn.enterprise.data.model.WarningTaskModel;
 import com.jn.enterprise.data.service.DataTaskTimerService;
+import com.jn.news.vo.AppSinkVo;
 import com.jn.news.vo.EmailVo;
 import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
@@ -604,11 +606,81 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
                     StringBuilder message=null;
                     //进行提醒
                     if(DataUploadConstants.WARNING_BY_APP.equals(menthod)){
-                        //todo
 
+                        if(taskBean.getFileType().equals(DataUploadConstants.GARDEN_TYPE)){
+                            //查询任务的部门
+                            TbDataReportingGardenFillerCriteria fillerCriteria = new TbDataReportingGardenFillerCriteria();
+                            fillerCriteria.or().andFillIdEqualTo(taskBean.getFillId()).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
+                            List<TbDataReportingGardenFiller> fillers = tbDataReportingGardenFillerMapper.selectByExample(fillerCriteria);
+                            if(fillers !=null && fillers.size()>0){
+                                for(TbDataReportingGardenFiller fillerBean : fillers){
+                                    //查询电话
+                                    TbDataReportingGardenLinkerCriteria  gardenLinkerCriteria = new TbDataReportingGardenLinkerCriteria();
+                                    gardenLinkerCriteria.or().andDepartmentIdEqualTo(fillerBean.getDepartmentId()).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
+                                    List<TbDataReportingGardenLinker> linkers =  tbDataReportingGardenLinkerMapper.selectByExample(gardenLinkerCriteria);
+                                    if(linkers !=null && linkers.size()>0){
+                                        User user;
+                                        String  title="数据上报系统任务预警";
+                                        for(TbDataReportingGardenLinker linkerBean :  linkers){
+                                            //通过预警人账号查询，预警人的email
+                                            String userId = linkerBean.getLinkAccount();
+                                            user = getUserInfo(userId);
+                                            if(user == null ){
+                                                continue;
+                                            }
+                                            if(StringUtils.isNotBlank(user.getEmail())){
+                                                message =new StringBuilder();
+                                                message.append("[数据上报系统] 任务名称 ：").append(taskBean.getTaskName());
+                                                if(taskBean.getInLine() !=0){
+                                                    message.append(",还有").append(taskBean.getInLine()) .append("天逾期！请尽快填报!");
+                                                }else if(taskBean.getOutLine() !=0){
+                                                    message.append(",已经逾期").append(taskBean.getOutLine()) .append("天！请尽快填报!");
+                                                }
+                                                sendApp(message.toString(),user.getId());
+                                                targetDao.updateCalling("",fillId,DataUploadConstants.GARDEN_TYPE);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }else{
+                            TbServiceCompanyCriteria exp = new  TbServiceCompanyCriteria();
+                            exp.or().andIdEqualTo(taskBean.getFillInFormId()).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
+                            List<TbServiceCompany> list =  tbServiceCompanyMapper.selectByExample(exp);
+                            if(list !=null && list.size()>0){
+                                String  title="数据上报系统任务预警";
+                                for(TbServiceCompany  tbServiceCompanyBean : list){
+                                    //String email =tbServiceCompanyBean.getOwnerEmail();
+                                    String userId = tbServiceCompanyBean.getId();
+                                    User user = getUserInfo(userId);
+                                    String email = user.getEmail();
+                                    if(user == null ){
+                                        continue;
+                                    }
+
+                                    if(StringUtils.isNotBlank(user.getEmail())){
+                                        message =new StringBuilder();
+                                        message.append("[数据上报系统] 任务名称 ：").append(taskBean.getTaskName());
+                                        if(taskBean.getInLine() !=0){
+                                            message.append(",还有").append(taskBean.getInLine()) .append("天逾期！请尽快填报!");
+                                        }else if(taskBean.getOutLine() !=0){
+                                            message.append(",已经逾期").append(taskBean.getOutLine()) .append("天！请尽快填报!");
+                                        }
+                                        sendApp(message.toString(),user.getId());
+                                        targetDao.updateCalling("",fillId,DataUploadConstants.COMPANY_TYPE);
+                                    }
+                                }
+                            }
+
+                        }
                     }
+
+                    if(DataUploadConstants.WARNING_BY_WEIXIN.equals(menthod)){
+                        //todo
+                    }
+
                     if(DataUploadConstants.WARNING_BY_EMAIL.equals(menthod)){
-                        String email="";
+
 
                         //园区
                         if(taskBean.getFileType().equals(DataUploadConstants.GARDEN_TYPE)){
@@ -616,7 +688,6 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
                             TbDataReportingGardenFillerCriteria fillerCriteria = new TbDataReportingGardenFillerCriteria();
                             fillerCriteria.or().andFillIdEqualTo(taskBean.getFillId()).andRecordStatusEqualTo(new Byte(DataUploadConstants.VALID));
                             List<TbDataReportingGardenFiller> fillers = tbDataReportingGardenFillerMapper.selectByExample(fillerCriteria);
-
                             if(fillers !=null && fillers.size()>0){
                                 for(TbDataReportingGardenFiller fillerBean : fillers){
 
@@ -632,6 +703,7 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
                                             //通过预警人账号查询，预警人的email
                                             String userId = linkerBean.getLinkAccount();
                                             user = getUserInfo(userId);
+                                            String email=user.getEmail();
                                             if(user == null ){
                                                 continue;
                                             }
@@ -665,6 +737,7 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
                                     //String email =tbServiceCompanyBean.getOwnerEmail();
                                     String userId = tbServiceCompanyBean.getId();
                                     User user = getUserInfo(userId);
+                                    String email = user.getEmail();
                                     if(user == null ){
                                         continue;
                                     }
@@ -688,7 +761,7 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
                     }
 
                     if(DataUploadConstants.WARNING_BY_SMSTEXT.equals(menthod)){
-                        String phone="";
+
                         //园区
                         if(taskBean.getFileType().equals(DataUploadConstants.GARDEN_TYPE)){
                             //查询任务的部门
@@ -712,7 +785,7 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
                                                 continue;
                                             }
                                             if(StringUtils.isNotBlank(user.getPhone())){
-                                                phone  =user.getPhone();
+                                                String phone  =user.getPhone();
                                                 message =new StringBuilder();
                                                 message.append("[数据上报系统]任务名称 ：").append(taskBean.getTaskName());
                                                 if(taskBean.getInLine() !=0){
@@ -737,7 +810,7 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
                             if(list !=null && list.size()>0){
                                 for(TbServiceCompany  tbServiceCompanyBean : list){
                                     if(StringUtils.isNotBlank(tbServiceCompanyBean.getOwnerPhone())){
-                                        phone  = tbServiceCompanyBean.getOwnerPhone();
+                                        String phone  =tbServiceCompanyBean.getOwnerPhone();
                                         message =new StringBuilder();
                                         message.append("[数据上报系统]任务名称 ：").append(taskBean.getTaskName());
                                         if(taskBean.getInLine() !=0){
@@ -767,6 +840,9 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
     private User getUserInfo(String userId){
         //通过预警人账号查询，预警人的手机号码
         User user = new User();
+        if(userId !=null  && ! userId.equals("")){
+            userId = userId.replaceAll("user","");
+        }
         user.setId(userId);
         Result<User> concurentUser = systemClient.getUser(user);
         return concurentUser.getData();
@@ -825,5 +901,31 @@ public class DataTaskTimerServiceImpl implements DataTaskTimerService {
         } else {
             logger.error("[白下智慧园区]数据填报任务提醒邮件送失败,{}", message);
         }
+    }
+
+    /**
+     * APP通知
+     * @param monitorContent
+     * @param getId
+     */
+    private void sendApp(String monitorContent,String getId){
+        AppSinkVo appSinkVo=new AppSinkVo();
+        appSinkVo.setTitle("能耗监控告警提醒");
+        appSinkVo.setContent(monitorContent);
+        appSinkVo.setIds(Lists.newArrayList(getId));
+        appSinkVo.setPushType("DEVICE");
+        appSinkVo.setNoticeType("NOTICE");
+        logger.info("APP推送{}",appSinkVo);
+        messageSource.outputApp().send(MessageBuilder.withPayload(appSinkVo).build());
+
+    }
+
+    /**
+     * 微信通知
+     * @param monitorContent
+     * @param getId
+     */
+    private void sendWeixin(String monitorContent,String getId){
+
     }
 }

@@ -1,13 +1,18 @@
 package com.jn.park.attractinvest.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jn.common.channel.MessageSource;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
+import com.jn.company.api.CompanyClient;
+import com.jn.company.model.UpdateCompanyInfoParam;
 import com.jn.news.vo.EmailVo;
 import com.jn.news.vo.SmsTemplateVo;
 import com.jn.park.api.RoomOrderClient;
+import com.jn.park.asset.dao.TbTowerInformationMapper;
+import com.jn.park.asset.entity.TbTowerInformation;
 import com.jn.park.attractinvest.dao.ProjectInfoMapper;
 import com.jn.park.attractinvest.dao.TbProjectInfoMapper;
 import com.jn.park.attractinvest.domain.ProjectProperties;
@@ -25,12 +30,12 @@ import com.jn.park.pmpaybill.enums.PmPayBillStatusEnums;
 import com.jn.park.pmpaybill.service.PmPayBillService;
 import com.jn.park.pmpaybill.service.PmPriceRuleService;
 import com.jn.park.pmpaybill.vo.PmPriceRuleVo;
+import com.jn.send.api.DelaySendMessageClient;
 import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.SysRole;
 import com.jn.system.model.User;
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,6 +87,15 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
     @Autowired
     private PmPayBillService pmPayBillService;
 
+    @Autowired
+    private TbTowerInformationMapper towerInformationMapper;
+
+    @Autowired
+    private CompanyClient companyClient;
+
+    @Autowired
+    private DelaySendMessageClient delaySendMessageClient;
+
 
     /**
      * 定时更新项目管理拟制合同状态
@@ -120,6 +134,36 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
     @ServiceLog(doAction = "企业入驻流程后置处理")
     @Transactional(rollbackFor = Exception.class)
     public void enterpriseEnterHandle(ProjectInfoVo projectInfoVo, User user) {
+        //企业名称
+        String companyName = projectInfoVo.getCompanyName();
+        //获取企业id
+        String companyId = projectInfoVo.getCompanyId();
+        //企业管理人账号
+        String userAccount = projectInfoVo.getComAdmin();
+        //获取企业主题楼宇
+        String mainTowerId = projectInfoVo.getMainTowerId();
+
+        //获取主体楼宇信息
+        String towerName;
+        if (StringUtils.isNotBlank(mainTowerId) && !StringUtils.equals("0", mainTowerId)) {
+            //获取楼宇信息
+            TbTowerInformation tbTowerInformation = towerInformationMapper.selectByPrimaryKey(mainTowerId);
+            if (tbTowerInformation == null) {
+                logger.error("[招商管理] 获取楼宇信息失败,楼宇id:{}", mainTowerId);
+                throw new JnSpringCloudException(BusinessAdExceptionEnmus.GET_TOWER_INFO_FAILER);
+            }
+
+            towerName = tbTowerInformation.getName();
+        } else {
+            //企业入驻楼宇信息只有一栋楼
+            List<TbProjectEnterDetails> tb_project_enter_details = projectInfoVo.getTb_project_enter_details();
+            mainTowerId = tb_project_enter_details.get(0).getTowerId();
+            towerName = tb_project_enter_details.get(0).getEnterTower();
+        }
+
+        //更新企业的主题楼宇信息
+        updateCompanyInfo(companyId, mainTowerId, towerName);
+
         //项目id
         String id = projectInfoVo.getId();
         //企业联系人
@@ -141,8 +185,7 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
         java.sql.Date leaseStartTime = new java.sql.Date(comStartTime.getTime());
         //租赁月份
         Integer rentMonthNum = projectInfoVo.getRentMonthNum();
-        //企业管理人账号
-        String userAccount = projectInfoVo.getComAdmin();
+
         //物业费规则id
         String pmRuleId = UUID.randomUUID().toString();
 
@@ -183,11 +226,25 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
             logger.info("[项目管理] 为企业插入缴费规则信息成功,企业管理员:{}", userAccount);
 
             //5.生成物业缴费单并将缴费单推送给企业
-            pmPayBillService.createPmBill(projectInfoVo.getCompanyId(), projectInfoVo.getRentStartTime());
+            pmPayBillService.createPmBill(companyId, projectInfoVo.getRentStartTime());
             logger.info("[项目管理] 为企业生成缴费单,并将缴费单推送给企业成功,企业管理员:{}", userAccount);
         }
+    }
 
-
+    /**
+     * 更新企业楼宇信息
+     *
+     * @param companyId   企业id
+     * @param mainTowerId 楼宇id
+     * @param towerName   楼宇名称
+     */
+    private void updateCompanyInfo(String companyId, String mainTowerId, String towerName) {
+        UpdateCompanyInfoParam company = new UpdateCompanyInfoParam();
+        company.setComId(companyId);
+        company.setParkBuildId(mainTowerId);
+        company.setParkBuildName(towerName);
+        companyClient.updateCompanyInfoAfterPay(company);
+        logger.info("[企业入驻] 更新企业楼宇信息成功,企业id:{}", companyId);
     }
 
     /**
@@ -277,7 +334,7 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
         tbPmPriceRuleDeatils.setPmUnitPrice(tbProjectEnterDetails.getPmUnitPrice());
         //设置房间面积
         BigDecimal decimal = new BigDecimal(0);
-        if (StringUtils.isNotBlank(tbProjectEnterDetails.getRoomArea())){
+        if (StringUtils.isNotBlank(tbProjectEnterDetails.getRoomArea())) {
             decimal = new BigDecimal(tbProjectEnterDetails.getRoomArea());
         }
         //房间平方

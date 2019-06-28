@@ -25,12 +25,12 @@ public interface MeterCalcCostService {
     /**
      * 计算一个企业一天的电费和电量
      */
-    void calcCostEverdayBySomeOneCompany(String companyId, Date dealDate, String account) throws ErrorLogException;
+    void calcCostEverdayBySomeOneCompany(String companyId, Date dealDate, String account,String userMeterCode) throws ErrorLogException;
 
     /**
      * 企业手动计价
      */
-    Result calcCostEverdayByHandler(User user, String companyId, Date day );
+    Result calcCostEverdayByHandler(User user, String companyId, Date day ,String meterCode);
 
     /**
      * 设置催缴

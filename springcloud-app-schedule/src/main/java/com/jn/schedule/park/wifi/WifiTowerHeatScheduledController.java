@@ -24,7 +24,7 @@ public class WifiTowerHeatScheduledController {
     private DelaySendMessageClient delaySendMessageClient;
 
 
-    @Scheduled(cron = "0 0/2 * * * ?")
+    @Scheduled(cron = "0 0/30 * * * ?")
     public void  collectionHeatInfo(){
         logger.info("定时采集 wifi热力图信息");
         Delay delay = new Delay();

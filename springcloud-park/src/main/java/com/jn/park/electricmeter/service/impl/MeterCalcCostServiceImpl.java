@@ -66,6 +66,10 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
     private TbElectricMeterDayLogMapper meterDayLogMapper;
 
     @Autowired(required = false)
+    private TbElectricMeterCompanyDayMapper tbElectricMeterCompanyDayMapper;
+
+
+    @Autowired(required = false)
     private TbElectricEnergyDayLogMapper energyDayLogMapper;
     @Autowired(required = false)
     private TbElectricErrorLogMapper errorLogMapper;
@@ -229,6 +233,47 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
                         meterDao.saveGroupLogs(groupLogs);
                         logger.info("结束保存一个企业的电费的分段费用记录");
                     }
+
+                }catch (ErrorLogException e){
+                    //记录日志
+                    if(StringUtils.isNotBlank(userMeterCode)){
+                        TbElectricErrorLog record = e.getErr();
+                        record.setModifiedTime(new Date());
+                        TbElectricErrorLogCriteria criteria = new TbElectricErrorLogCriteria();
+                        criteria.or().andCompanyIdEqualTo(companyId).andDayEqualTo(dealDate).andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andMeterCodeEqualTo(meterCode);
+                        errorLogMapper.updateByExampleSelective(record,criteria);
+                    }else{
+                        saveErrorLog(e.getErr());
+                    }
+
+                    continue;
+                }
+            }
+            //查询账单的条数和电表的个数，在当日是否一致，一致时才是完整的计算出了一个企业当天的价钱
+            //查询出所有的电表
+            TbElectricMeterCompanyDayCriteria companyDayCriteria = new TbElectricMeterCompanyDayCriteria();
+            companyDayCriteria.or().andDayEqualTo(dealDate).andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andCompanyIdEqualTo(companyId);
+            List<TbElectricMeterCompanyDay>  companyDays = tbElectricMeterCompanyDayMapper.selectByExample(companyDayCriteria);
+
+            //查询出所有的账单
+            TbElectricEnergyDayLogCriteria dayLogCriteria = new TbElectricEnergyDayLogCriteria();
+            dayLogCriteria.or().andCompanyIdEqualTo(companyId).andDayEqualTo(dealDate).andRecordStatusEqualTo(new Byte(MeterConstants.VALID));
+            List<TbElectricEnergyDayLog> dayLogs = energyDayLogMapper.selectByExample(dayLogCriteria);
+
+            if(companyDays !=null && dayLogs!=null){
+                if(companyDays.size()==dayLogs.size()){
+
+                    BigDecimal allPrice = new BigDecimal("0");
+                    BigDecimal allDegree = new  BigDecimal("0");
+                    if(dayLogs.size()>0){
+                        for(TbElectricEnergyDayLog dayLog : dayLogs){
+                            BigDecimal degree = dayLog.getDegree();
+                            BigDecimal price = dayLog.getPrice();
+                            allPrice = allPrice.add(price);
+                            allDegree = allDegree.add(degree);
+                        }
+                    }
+
                     TbElectricEnergyDayLog energyDayLog = new TbElectricEnergyDayLog();
                     energyDayLog.setCompanyId(companyId);
                     energyDayLog.setCompanyName(companyName);
@@ -244,21 +289,7 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
                     logger.info("开始保存一个企业一块表的电费和电量");
                     energyDayLogMapper.insertSelective(energyDayLog);
                     logger.info("结束保存一个企业一块表的电费和电量");
-                }catch (ErrorLogException e){
-                    //记录日志
-                    if(StringUtils.isNotBlank(userMeterCode)){
-                        TbElectricErrorLog record = e.getErr();
-                        record.setModifiedTime(new Date());
-                        TbElectricErrorLogCriteria criteria = new TbElectricErrorLogCriteria();
-                        criteria.or().andCompanyIdEqualTo(companyId).andDayEqualTo(dealDate).andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andMeterCodeEqualTo(meterCode);
-                        errorLogMapper.updateByExampleSelective(record,criteria);
-                    }else{
-                        saveErrorLog(e.getErr());
-                    }
-
-                    continue;
                 }
-
             }
         }
     }
@@ -417,6 +448,7 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
         payBillCreateParamVo.setCreatorAccount(account);
         //最迟缴费时间
         payBillCreateParamVo.setLatePayment(new Date());
+        payBillCreateParamVo.setMeterCode(meterCode);
         //缴费详情【存list对象集合】
         payBillCreateParamVo.setPayBillDetails(payBillDetails);
         Result billCreateResult = payClient.billCreate(payBillCreateParamVo);

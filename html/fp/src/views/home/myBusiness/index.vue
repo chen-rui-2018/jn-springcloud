@@ -316,9 +316,7 @@ export default {
       line-height: unset;
       display: flex;
       align-items: center;
-      padding-left: 13px;
-      // padding: 15px;
-      // border-bottom: 1px solid #ccc;
+      padding: 5px 10px;
     }
   }
 

@@ -379,8 +379,7 @@ export default {
      line-height: unset;
       display: flex;
       align-items: center;
-      padding-left: 13px;
-      // padding: 15px;
+      padding: 5px 10px;
       //   border: 1px solid #ccc;
     }
     .bodyName {
@@ -477,12 +476,6 @@ export default {
   }
   .ml{
     margin-left:160px;
-  }
-  .lh{
-    line-height: 22px;
-    display: inline-block;
-    padding: 15px;
-    padding-left:2px;
   }
 }
 </style>

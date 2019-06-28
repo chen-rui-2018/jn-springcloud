@@ -74,7 +74,7 @@
           <el-tab-pane label="政策指南" name="second">
             <div class="noticeList">
               <ul>
-                <li class="noticeLi pointer" v-for="(i,k) in policyCenterList" :key="k" @click="$router.push({path:'/policyGuide',query:{policyId:i.id}})">
+                <li class="noticeLi pointer" v-for="(i,k) in policyCenterList" v-if="k<4" :key="k" @click="$router.push({path:'/policyGuide',query:{policyId:i.id}})">
                   <div class="date" v-if="i.createdTime">
                     <div class="year">{{i.createdTime.slice(0,4)}}</div>
                     <div class="month color3">{{i.createdTime.slice(5,10)}}</div>
@@ -93,7 +93,7 @@
           <el-tab-pane label="热门活动" name="third">
             <div class="noticeList">
               <ul>
-                <li class="noticeLi pointer" v-for="(i,k) in actiListSlim" :key="k" @click="$router.push({ path: '/actiDetail', query: { activityId: i.id } })">
+                <li class="noticeLi pointer" v-for="(i,k) in actiListSlim" v-if="k<4" :key="k" @click="$router.push({ path: '/actiDetail', query: { activityId: i.id } })">
                   <div class="date" v-if="i.createdTime">
                     <div class="year">{{i.createdTime.slice(0,4)}}</div>
                     <div class="month color3">{{i.createdTime.slice(5,10)}}</div>

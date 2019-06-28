@@ -1,50 +1,73 @@
-.mainBox{
+.mainBox {
     width: 5120x;
     height: 1536px;
     background: url(../image/bg.png) 100% 100% / 100% 100% no-repeat;
 }
-.navBg{
+
+.navBg {
     width: 100%;
     height: 130px;
     background: url(../image/nav.png) 100% 100% / 100% 100% no-repeat;
 }
-.content{
+
+.content {
     display: flex;
     justify-content: space-between;
     /* align-items: center; */
-    padding:0 50px;
+    padding: 0 50px;
 }
-.conLeft{
+
+.conLeft {
     width: 70%;
-    margin-top:20px;
+    margin-top: 20px;
     /* background: #00a041; */
 }
-.conRight{
-    width:28%;
+
+.conRight {
+    width: 28%;
     /* background: blue; */
 }
-.leftUl{
+
+.leftUl {
     display: flex;
     justify-content: flex-start;
     align-items: center;
     flex-wrap: wrap;
 }
-.leftLi{
-    padding-bottom:46px;
+
+.leftLi {
+    padding-bottom: 46px;
     width: 400px;
     height: 314px;
     background: url(../image/square2.png) 100% 100% / 100% 100% no-repeat;
     margin-right: 40px;
 }
-.liStatus{
+
+.canvasEchar {
+    padding: 15px;
+}
+
+.liStatus {
     height: 44px;
     line-height: 42px;
-    width: 100%;
+    width: 92.5%;
     margin: 0 auto;
     position: absolute;
-    bottom:15px;
-    left: 0;
+    bottom: 15px;
+    left: 15px;
     text-align: center;
     font-size: 15px;
-    border-top:2px solid rgba(132,151,176,1);
+    border-top: 2px solid rgba(132, 151, 176, 1);
+}
+
+.statusImg {
+    position: absolute;
+    right: 16px;
+    top: 11px;
+}
+
+.echart1 {
+    width: 300px;
+    height: 250px;
+    margin: 0 auto;
 }

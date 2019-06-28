@@ -51,7 +51,7 @@ public class ElectricReadingServiceImplTest {
         user.setAccount("sss");
         String companyId="";
         Date date = DateUtils.parseDate(DateUtils.getDate("yyyy-MM-dd"));
-        meterCalcCostService.calcCostEverdayByHandler(user,companyId,date);
+        //meterCalcCostService.calcCostEverdayByHandler(user,companyId,date);
     }
 
 }

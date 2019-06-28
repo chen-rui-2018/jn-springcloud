@@ -14,6 +14,7 @@
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
     <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="meter_code" jdbcType="VARCHAR" property="meterCode" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -75,7 +76,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, rule_id, company_id, warning_name, thresholds, warning_content, record_status, 
-    creator_account, created_time, modifier_account, modified_time, company_name
+    creator_account, created_time, modifier_account, modified_time, company_name, meter_code
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.electricmeter.entity.TbElectricWarningRecordCriteria" resultMap="BaseResultMap">
     select
@@ -111,13 +112,13 @@
     insert into tb_electric_warning_record (id, rule_id, company_id, 
       warning_name, thresholds, warning_content, 
       record_status, creator_account, created_time, 
-      modifier_account, modified_time, company_name
-      )
+      modifier_account, modified_time, company_name, 
+      meter_code)
     values (#{id,jdbcType=VARCHAR}, #{ruleId,jdbcType=VARCHAR}, #{companyId,jdbcType=VARCHAR}, 
       #{warningName,jdbcType=VARCHAR}, #{thresholds,jdbcType=DECIMAL}, #{warningContent,jdbcType=VARCHAR}, 
       #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{companyName,jdbcType=VARCHAR}
-      )
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{companyName,jdbcType=VARCHAR}, 
+      #{meterCode,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.electricmeter.entity.TbElectricWarningRecord">
     insert into tb_electric_warning_record
@@ -158,6 +159,9 @@
       <if test="companyName != null">
         company_name,
       </if>
+      <if test="meterCode != null">
+        meter_code,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -195,6 +199,9 @@
       </if>
       <if test="companyName != null">
         #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="meterCode != null">
+        #{meterCode,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -243,6 +250,9 @@
       <if test="record.companyName != null">
         company_name = #{record.companyName,jdbcType=VARCHAR},
       </if>
+      <if test="record.meterCode != null">
+        meter_code = #{record.meterCode,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -261,7 +271,8 @@
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
-      company_name = #{record.companyName,jdbcType=VARCHAR}
+      company_name = #{record.companyName,jdbcType=VARCHAR},
+      meter_code = #{record.meterCode,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -302,6 +313,9 @@
       <if test="companyName != null">
         company_name = #{companyName,jdbcType=VARCHAR},
       </if>
+      <if test="meterCode != null">
+        meter_code = #{meterCode,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -317,7 +331,8 @@
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
-      company_name = #{companyName,jdbcType=VARCHAR}
+      company_name = #{companyName,jdbcType=VARCHAR},
+      meter_code = #{meterCode,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

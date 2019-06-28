@@ -19,6 +19,17 @@ public class CompanyFailModelParam implements Serializable {
     @ApiModelProperty("处理日期")
     private Date day;
 
+    @ApiModelProperty("电表编码")
+    private String meterCode;
+
+    public String getMeterCode() {
+        return meterCode;
+    }
+
+    public void setMeterCode(String meterCode) {
+        this.meterCode = meterCode;
+    }
+
     public String getCompanyId() {
         return companyId;
     }

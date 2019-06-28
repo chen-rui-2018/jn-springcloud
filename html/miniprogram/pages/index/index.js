@@ -22,7 +22,8 @@ Page({
       propagandaType:"home_banner"
     },
     bannarList:[],
-    imgBaseUrl:''
+    imgBaseUrl:'',
+    isNone:true
   },
   onLoad: function (options) {
     app.globalData.wxHttp.getToken()
@@ -82,6 +83,11 @@ Page({
     }).then(res=>{
       // console.log(res)
       if(res.data.code==='0000'){
+        if(res.data.data.rows.length===0){
+          this.setData({
+            isNone:2,
+          })
+        }
         this.setData({
           hotList:res.data.data.rows,
         })

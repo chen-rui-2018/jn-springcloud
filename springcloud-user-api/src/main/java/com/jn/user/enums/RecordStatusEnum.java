@@ -10,6 +10,7 @@ import com.jn.common.api.CodeAndMsg;
  * @modified By:
  */
 public enum RecordStatusEnum implements CodeAndMsg {
+    FAILURE("2",(byte)2,"失效"),
     EFFECTIVE("1",(byte)1,"有效"),
     DELETE("0",(byte)0, "已删除"),
     ;

@@ -2,7 +2,9 @@ package com.jn.authorization.impl;
 
 import com.jn.authorization.LoginService;
 import com.jn.common.exception.JnSpringCloudException;
+import com.jn.common.util.encryption.AESUtil;
 import com.jn.common.util.encryption.EncryptUtil;
+import com.jn.system.common.enums.SysExceptionEnums;
 import com.jn.system.config.MyUsernamePasswordToken;
 import com.jn.system.enums.ShiroExceptionEnum;
 import com.jn.system.log.annotation.ServiceLog;
@@ -31,6 +33,10 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public void login(UserLogin user,Boolean isNoPasswordLogin) {
         try {
+            //账号密码加密传输，进行解密
+            user.setAccount(AESUtil.decrypt(user.getAccount(),AESUtil.DEFAULT_KEY));
+            user.setPassword(AESUtil.decrypt(user.getPassword(),AESUtil.DEFAULT_KEY));
+
             Subject userShiro = SecurityUtils.getSubject();
             MyUsernamePasswordToken token = new MyUsernamePasswordToken(user.getAccount(), EncryptUtil.encryptSha256(user.getPassword()).toCharArray());
             token.setNoPassword(isNoPasswordLogin);
@@ -41,6 +47,8 @@ public class LoginServiceImpl implements LoginService {
             throw new JnSpringCloudException(ShiroExceptionEnum.UNKNOWN_EFFECTIVE);
         } catch (IncorrectCredentialsException e) {
             throw new JnSpringCloudException(ShiroExceptionEnum.UNKNOWN_PASSWORD);
+        } catch (Exception e){
+            throw new JnSpringCloudException(SysExceptionEnums.DECRYPT_FAIL);
         }
     }
 

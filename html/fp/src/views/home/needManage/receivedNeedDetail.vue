@@ -10,7 +10,7 @@
         <el-form label-position="right" label-width="120px" >
           <div :model="receiveDetail" class="">
             <el-form-item label="企业名称：">
-              <span></span>
+              <span>{{receiveDetail.companyName}}</span>
             </el-form-item>
           </div>
           <div>
@@ -58,6 +58,31 @@
               <div>{{receiveDetail.requireDetail}}</div>
             </el-form-item>
           </div>
+          <div class="">
+            <el-form-item label="合同总金额：">
+              <div>{{receiveDetail.contractAmount}}万元</div>
+            </el-form-item>
+          </div>
+          <div class="">
+            <el-form-item label="对接结果：">
+              <div>{{receiveDetail.handleResult|result}}</div>
+            </el-form-item>
+          </div>
+          <div class="">
+            <el-form-item label="结果描述：">
+              <div>{{receiveDetail.resultDetail}}</div>
+            </el-form-item>
+          </div>
+          <!-- <div class="">
+            <el-form-item label="合同首页：">
+              <div><img :src="receiveDetail.contractHomePage" alt=""></div>
+            </el-form-item>
+          </div>
+          <div class="">
+            <el-form-item label="合同尾页：">
+              <div><img :src="receiveDetail.contractEndPage" alt=""></div>
+            </el-form-item>
+          </div> -->
         </el-form>
       </div>
       <div class="receiveDetail_form" v-else>
@@ -122,6 +147,31 @@
               <span>{{receiveDetail.reqEmail}}</span>
             </el-form-item>
           </div>
+          <div class="">
+            <el-form-item label="对接结果：">
+              <span>{{receiveDetail.handleResult|result}}</span>
+            </el-form-item>
+          </div>
+          <div class="">
+            <el-form-item label="实际贷款金额：">
+              <span>{{receiveDetail.actualLoanAmount}}万元</span>
+            </el-form-item>
+          </div>
+          <div class="">
+            <el-form-item label="结果描述：">
+              <span>{{receiveDetail.resultDetail}}</span>
+            </el-form-item>
+          </div>
+          <!-- <div class="">
+            <el-form-item label="合同首页：">
+              <span><img :src="receiveDetail.contractHomePage" alt=""></span>
+            </el-form-item>
+          </div>
+          <div class="">
+            <el-form-item label="合同尾页：">
+              <span><img :src="receiveDetail.contractEndPage" alt=""></span>
+            </el-form-item>
+          </div> -->
         </el-form>
       </div>
     </div>
@@ -141,6 +191,17 @@ export default {
       if(time){
         let dateee = new Date(time).toJSON();
         return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+      }
+    },
+    result(handleResult){
+      if(handleResult==="1"){
+        return "对接成功"
+      } else if(handleResult==="2"){
+        return "对接失败"
+      } else if(handleResult==="3"){
+        return "企业需求撤销"
+      }else if(handleResult==="4"){
+        return "未对接"
       }
     }
   },
@@ -203,6 +264,10 @@ export default {
         width: 43%;
         margin: 25px auto;
         margin-bottom: 153px;
+        img{
+          width: 150px;
+          height: 150px;
+        }
         .el-form-item__label{
           padding: 0 25px 0 0;
           line-height:25px;

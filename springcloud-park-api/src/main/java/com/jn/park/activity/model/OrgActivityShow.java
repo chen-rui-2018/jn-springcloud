@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author： chenr
@@ -31,6 +32,12 @@ public class OrgActivityShow  implements Serializable {
     private Integer actiLike;
     @ApiModelProperty(value = "报名人数")
     private Integer applyNum;
+    @ApiModelProperty(value = "报名人头像列表串,以逗号分隔")
+    private String avatar;
+    @ApiModelProperty(value = "报名人头像列表")
+    private List<String> avatarList;
+    @ApiModelProperty(value = "是否已报名此活动 0 否 : 1 是")
+    private String applyStatus;
     @ApiModelProperty(value = "活动状态（1草稿 2报名中 3活动结束4活动取消）")
     private String actiStatus;
     @ApiModelProperty(value = "活动总数")
@@ -39,6 +46,23 @@ public class OrgActivityShow  implements Serializable {
     private String monthNum;
     @ApiModelProperty(value = "最近一周活动数")
     private String weekNum;
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+
+    public List<String> getAvatarList() {
+        return avatarList;
+    }
+
+    public void setAvatarList(List<String> avatarList) {
+        this.avatarList = avatarList;
+    }
 
     public String getActiNum() {
         return actiNum;
@@ -144,6 +168,14 @@ public class OrgActivityShow  implements Serializable {
         this.actiStatus = actiStatus;
     }
 
+    public String getApplyStatus() {
+        return applyStatus;
+    }
+
+    public void setApplyStatus(String applyStatus) {
+        this.applyStatus = applyStatus;
+    }
+
     @Override
     public String toString() {
         return "OrgActivityShow{" +
@@ -156,6 +188,9 @@ public class OrgActivityShow  implements Serializable {
                 ", actiPosterUrl='" + actiPosterUrl + '\'' +
                 ", actiLike=" + actiLike +
                 ", applyNum=" + applyNum +
+                ", avatar='" + avatar + '\'' +
+                ", avatarList='" + avatarList + '\'' +
+                ", applyStatus='" + applyStatus + '\'' +
                 ", actiStatus='" + actiStatus + '\'' +
                 ", actiNum='" + actiNum + '\'' +
                 ", monthNum='" + monthNum + '\'' +

@@ -57,4 +57,12 @@ public interface CompanyClient {
     @RequestMapping(value = "/api/company/updateCompanyInfoAfterPay", method = RequestMethod.POST)
     Result<Boolean> updateCompanyInfoAfterPay(@Validated @RequestBody UpdateCompanyInfoParam updateCompanyInfoParam);
 
+    /**
+     * 查询用户所属的企业信息
+     * @param account 用户账号
+     * @return
+     */
+    @RequestMapping(value = "/api/company/getCurCompanyInfo", method = RequestMethod.POST)
+    public Result<ServiceCompany> getCurCompanyInfo(@RequestBody String account);
+
 }

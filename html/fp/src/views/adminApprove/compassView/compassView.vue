@@ -106,9 +106,18 @@ export default {
   },
   created () {
     this.getAllCate()
-    this.getPowerList()
+    // this.getPowerList()
     this.getImg()
-    
+    if(sessionStorage.getItem("url")){
+      this.name=sessionStorage.getItem("name")
+      this.getPowerList()
+    }else{
+       this.getPowerList()
+    }
+  },
+  destroyed () {
+    sessionStorage.removeItem("url")
+    sessionStorage.removeItem("name")
   },
   methods: {
     // 初始化swiper
@@ -203,7 +212,8 @@ export default {
     },
     //跳转到rightdetail
     gotorightdetail(id){
-      this.$router.push({path:'/rightDetail',query:{id:id}})
+      // sessionStorage.setItem("id",id)
+      this.$router.push({path:'/rightDetail',query:{id:id,name:this.name}})
     }
   }
 }

@@ -16,6 +16,10 @@
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
     <result column="record_status" jdbcType="CHAR" property="recordStatus" />
     <result column="ent_id" jdbcType="VARCHAR" property="entId" />
+    <result column="ent_name" jdbcType="VARCHAR" property="entName" />
+    <result column="build_id" jdbcType="VARCHAR" property="buildId" />
+    <result column="build_name" jdbcType="VARCHAR" property="buildName" />
+    <result column="meter_code" jdbcType="VARCHAR" property="meterCode" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -78,7 +82,7 @@
   <sql id="Base_Column_List">
     AC_BOOK_ID, ACCOUNT_ID, AC_BOOK_NAME, AC_BOOK_TYPE, BALANCE, AUTOMATIC_DEDUCTIONS, 
     CAN_RECHARGE, is_show, created_time, creator_account, modified_time, modifier_account, 
-    record_status, ent_id
+    record_status, ent_id, ent_name, build_id, build_name, meter_code
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.pay.entity.TbPayAccountBookCriteria" resultMap="BaseResultMap">
     select
@@ -115,12 +119,16 @@
       AC_BOOK_TYPE, BALANCE, AUTOMATIC_DEDUCTIONS, 
       CAN_RECHARGE, is_show, created_time, 
       creator_account, modified_time, modifier_account, 
-      record_status, ent_id)
+      record_status, ent_id, ent_name, 
+      build_id, build_name, meter_code
+      )
     values (#{acBookId,jdbcType=VARCHAR}, #{accountId,jdbcType=VARCHAR}, #{acBookName,jdbcType=VARCHAR}, 
       #{acBookType,jdbcType=VARCHAR}, #{balance,jdbcType=DECIMAL}, #{automaticDeductions,jdbcType=CHAR}, 
       #{canRecharge,jdbcType=CHAR}, #{isShow,jdbcType=CHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
       #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{recordStatus,jdbcType=CHAR}, #{entId,jdbcType=VARCHAR})
+      #{recordStatus,jdbcType=CHAR}, #{entId,jdbcType=VARCHAR}, #{entName,jdbcType=VARCHAR}, 
+      #{buildId,jdbcType=VARCHAR}, #{buildName,jdbcType=VARCHAR}, #{meterCode,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.pay.entity.TbPayAccountBook">
     insert into tb_pay_account_book
@@ -167,6 +175,18 @@
       <if test="entId != null">
         ent_id,
       </if>
+      <if test="entName != null">
+        ent_name,
+      </if>
+      <if test="buildId != null">
+        build_id,
+      </if>
+      <if test="buildName != null">
+        build_name,
+      </if>
+      <if test="meterCode != null">
+        meter_code,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="acBookId != null">
@@ -210,6 +230,18 @@
       </if>
       <if test="entId != null">
         #{entId,jdbcType=VARCHAR},
+      </if>
+      <if test="entName != null">
+        #{entName,jdbcType=VARCHAR},
+      </if>
+      <if test="buildId != null">
+        #{buildId,jdbcType=VARCHAR},
+      </if>
+      <if test="buildName != null">
+        #{buildName,jdbcType=VARCHAR},
+      </if>
+      <if test="meterCode != null">
+        #{meterCode,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -264,6 +296,18 @@
       <if test="record.entId != null">
         ent_id = #{record.entId,jdbcType=VARCHAR},
       </if>
+      <if test="record.entName != null">
+        ent_name = #{record.entName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.buildId != null">
+        build_id = #{record.buildId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.buildName != null">
+        build_name = #{record.buildName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.meterCode != null">
+        meter_code = #{record.meterCode,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -284,7 +328,11 @@
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
       record_status = #{record.recordStatus,jdbcType=CHAR},
-      ent_id = #{record.entId,jdbcType=VARCHAR}
+      ent_id = #{record.entId,jdbcType=VARCHAR},
+      ent_name = #{record.entName,jdbcType=VARCHAR},
+      build_id = #{record.buildId,jdbcType=VARCHAR},
+      build_name = #{record.buildName,jdbcType=VARCHAR},
+      meter_code = #{record.meterCode,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -331,6 +379,18 @@
       <if test="entId != null">
         ent_id = #{entId,jdbcType=VARCHAR},
       </if>
+      <if test="entName != null">
+        ent_name = #{entName,jdbcType=VARCHAR},
+      </if>
+      <if test="buildId != null">
+        build_id = #{buildId,jdbcType=VARCHAR},
+      </if>
+      <if test="buildName != null">
+        build_name = #{buildName,jdbcType=VARCHAR},
+      </if>
+      <if test="meterCode != null">
+        meter_code = #{meterCode,jdbcType=VARCHAR},
+      </if>
     </set>
     where AC_BOOK_ID = #{acBookId,jdbcType=VARCHAR}
   </update>
@@ -348,7 +408,11 @@
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
       record_status = #{recordStatus,jdbcType=CHAR},
-      ent_id = #{entId,jdbcType=VARCHAR}
+      ent_id = #{entId,jdbcType=VARCHAR},
+      ent_name = #{entName,jdbcType=VARCHAR},
+      build_id = #{buildId,jdbcType=VARCHAR},
+      build_name = #{buildName,jdbcType=VARCHAR},
+      meter_code = #{meterCode,jdbcType=VARCHAR}
     where AC_BOOK_ID = #{acBookId,jdbcType=VARCHAR}
   </update>
 </mapper>

@@ -146,7 +146,9 @@ export default {
       }
     }
   },
-  created () {
+  mounted () {
+    sessionStorage.setItem("url","rightDetail")
+    sessionStorage.setItem("name",this.$route.query.name)
     this.id=this.$route.query.id
     this.getPowerDetailList()
   },

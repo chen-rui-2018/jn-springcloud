@@ -3,6 +3,8 @@
         <div class="incubatorNav">
             <span class="pointer" @click="$router.push({path:'/'})">首页</span>
             <span>/</span>
+            <span class="pointer" @click="$router.push({path:'/noticeList'})">公告列表</span>
+            <span>/</span>
             <span class="mainColor">公告详情</span>
         </div>
         <div class="announcement1">

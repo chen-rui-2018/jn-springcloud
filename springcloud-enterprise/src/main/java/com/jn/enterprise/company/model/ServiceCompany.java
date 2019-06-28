@@ -79,6 +79,8 @@ public class ServiceCompany implements Serializable {
     private String createdTime;
     @ApiModelProperty(value = "创建者账号")
     private String creatorAccount;
+    @ApiModelProperty(value = "审核时间")
+    private String checkTime;
     @ApiModelProperty(value = "企业ID")
     private String comId;
 
@@ -338,6 +340,14 @@ public class ServiceCompany implements Serializable {
         this.creatorAccount = creatorAccount;
     }
 
+    public String getCheckTime() {
+        return checkTime;
+    }
+
+    public void setCheckTime(String checkTime) {
+        this.checkTime = checkTime;
+    }
+
     public String getComId() {
         return comId;
     }
@@ -381,6 +391,7 @@ public class ServiceCompany implements Serializable {
                 ", checkStatus='" + checkStatus + '\'' +
                 ", createdTime='" + createdTime + '\'' +
                 ", creatorAccount='" + creatorAccount + '\'' +
+                ", checkTime='" + checkTime + '\'' +
                 ", comId='" + comId + '\'' +
                 '}';
     }

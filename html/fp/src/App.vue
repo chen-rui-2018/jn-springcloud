@@ -1,9 +1,9 @@
 <template>
   <div id="app" :class="{'h-100': $store.state.isMobile}" @click="closeM">
-    <div class="s-wrapper">
-      <div class="s-content">
+    <div :class="{'h-100': $store.state.isMobile}" class="s-wrapper">
+      <div :class="{'h-100': $store.state.isMobile}" class="s-content">
         <!--    <router-view></router-view>-->
-        <div class="right_nav" v-if="($route.name=='serMatHp'||$route.name=='portalIndex'||$route.name=='enterpriseservice')||$route.name=='investment' && $store.state.hiddenNav">
+        <div class="right_nav" v-if="$store.state.hiddenNav">
           <ul>
             <li @click="isVisibility=true">
               <div class="right_nav_slide">

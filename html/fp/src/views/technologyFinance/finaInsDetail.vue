@@ -44,7 +44,8 @@
           <i class="el-icon-arrow-up"></i>
         </div>
         <div class="mainColor shouqi zhankai pointer" v-else @click='zankaiFlag=!zankaiFlag'>
-          展开<i class="el-icon-arrow-down"></i>
+          展开
+          <i class="el-icon-arrow-down"></i>
         </div>
         <el-card>
           <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -66,7 +67,7 @@
                   <tr>
                     <td class="table-orgspace-title">主营业务：</td>
                     <td class="table-orgspace-detail" colspan="4">
-                      <div class="table-orgspace-col">{{serverOrgDetailList.orgBusiness}}</div>
+                      <div v-html="serverOrgDetailList.orgBusiness"></div>
                     </td>
                   </tr>
                   <tr>
@@ -124,7 +125,7 @@
                       <div class="table-orgspace-col">{{serverOrgDetailList.orgBusinScope}}</div>
                     </td>
                   </tr> -->
-                   <tr>
+                  <tr>
                     <td class="table-orgspace-title">营业执照：</td>
                     <td class="table-orgspace-detail" colspan="6">
                       <div class="table-orgspace-col businessImg"><img :src="serverOrgDetailList.orgLicensesUrl" alt=""></div>
@@ -159,8 +160,7 @@
                         <td class="table-orgspace-title" width="120px;">员工人数：</td>
                         <td class="table-orgspace-detail" width="300px">{{serverOrgDetailList.staffCount}}</td>
                         <td class="table-orgspace-title" width="120px;">执业人员人数：</td>
-                        <td class="table-orgspace-detail" style="width:322px;">{{serverOrgDetailList.professionNum}}
-                          （占比{{(Number(serverOrgDetailList.professionNum/serverOrgDetailList.staffCount)*100).toFixed(0)}}%）
+                        <td class="table-orgspace-detail" style="width:322px;">{{serverOrgDetailList.professionNum}} （占比{{(Number(serverOrgDetailList.professionNum/serverOrgDetailList.staffCount)*100).toFixed(0)}}%）
                         </td>
                       </tr>
                       <tr>
@@ -168,8 +168,7 @@
                         <td class="table-orgspace-detail">{{serverOrgDetailList.bachelorNum}}（占比{{(Number(serverOrgDetailList.bachelorNum/serverOrgDetailList.staffCount)*100).toFixed(0)}}%）
                         </td>
                         <td class="table-orgspace-title">硕士：</td>
-                        <td class="table-orgspace-detail">{{serverOrgDetailList.masterNum}}
-                          （占比{{(Number(serverOrgDetailList.masterNum/serverOrgDetailList.staffCount)*100).toFixed(0)}}%）
+                        <td class="table-orgspace-detail">{{serverOrgDetailList.masterNum}} （占比{{(Number(serverOrgDetailList.masterNum/serverOrgDetailList.staffCount)*100).toFixed(0)}}%）
                         </td>
                       </tr>
                       <!-- <tr>
@@ -379,14 +378,14 @@
                     </div>
                     <!-- 评价 end -->
                     <!-- 交易量 begin -->
-                    
+
                     <!-- 交易量 end -->
                   </div>
                   <!-- 中间上半部分--参考信息、交易均价和交易 end -->
                 </div>
                 <div class="detail-count fr">
-                      <div class="orgBtn fr mainColor pointer" @click="demandRaise(i)">提需求</div>
-                    </div>
+                  <div class="orgBtn fr mainColor pointer" @click="demandRaise(i)">提需求</div>
+                </div>
                 <!-- 中间信息 end -->
                 <div class="clear"></div>
               </li>
@@ -476,7 +475,7 @@
           <div class="actiConsultation">
             <ul class="allActiUl clearfix">
               <li v-for="(i,k) in serverActiList" :key='k' class="pointer" @click="$router.push({ path: 'actiDetail', query: { activityId: i.id } })">
-                <div class="postImgItem pointer" >
+                <div class="postImgItem pointer">
                   <img :src="i.actiPosterUrl" class="postImg" alt="活动海报图片">
                 </div>
                 <div class="actiInfo">
@@ -495,13 +494,16 @@
                 <div class="actiNum clearfix">
                   <div class="avatar">
                     <ul>
-                      <!-- <li v-for="(i,k) in item.avatarList" v-if="i<5" :key='k'><img :src="i" alt=""></li> -->
-                      <li></li>
+                      <li v-for="(item,k) in i.avatarList" v-if="k<5" :key='k'><img :src="item" alt=""></li>
+                      <!-- <li></li> -->
                     </ul>
                   </div>
                   <i>{{i.actiNum}}/{{i.actiNumber}}</i>
-                  <span class="mainColor">
-                    <i class="iconfont icon-xihuan"></i>{{i.actiLike}}</span>
+                  <p class="mainColor">
+                    <!-- <i class="iconfont icon-xihuan"></i>{{i.actiLike}} -->
+                    <img src="@/../static/img/xin.png" alt="" style="margin-right:0">
+                    <span>{{i.actiLike}}</span>
+                  </p>
                 </div>
               </li>
             </ul>
@@ -591,9 +593,9 @@ export default {
         productId: "",
         productName: ""
       },
-      productType:'',
-      timeInterval:'0',
-      ratingType:''
+      productType: "",
+      timeInterval: "0",
+      ratingType: ""
     };
   },
   created() {
@@ -604,7 +606,7 @@ export default {
     this.getEvaluationCountInfo();
   },
   methods: {
-     goLogin() {
+    goLogin() {
       window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
       this.$router.push({ path: "/login" });
     },
@@ -618,7 +620,7 @@ export default {
     onlineContat(investorAccount, investorName) {
       if (!this.getUserInfo()) {
         this.concatVisible = true;
-        return
+        return;
       }
       this.$router.push({
         path: "/chat",
@@ -749,9 +751,9 @@ export default {
           if (res.code == "0000") {
             _this.evaCount = res.data;
             _this.total4 = res.data.total;
-            setTimeout(()=>{
-              _this.$refs['tabP'].$children[0].$forceUpdate() 
-            },0)
+            setTimeout(() => {
+              _this.$refs["tabP"].$children[0].$forceUpdate();
+            }, 0);
           } else {
             _this.$message.error(res.result);
           }
@@ -770,7 +772,7 @@ export default {
           isPublicPage: 0,
           page: _this.page4,
           rows: _this.row4,
-          ratingType:_this.ratingType
+          ratingType: _this.ratingType
         },
         callback: function(res) {
           if (res.code == "0000") {
@@ -791,7 +793,7 @@ export default {
           // actiType: "org_activity",
           page: _this.page3,
           rows: _this.row3,
-          timeInterval:_this.timeInterval
+          timeInterval: _this.timeInterval
         },
         callback: function(res) {
           if (res.code == "0000") {
@@ -818,9 +820,9 @@ export default {
           if (res.code == "0000") {
             _this.serverPro = res.data.rows;
             _this.total1 = res.data.total;
-             setTimeout(()=>{
-              _this.$refs['tabP'].$children[0].$forceUpdate() 
-            },0)
+            setTimeout(() => {
+              _this.$refs["tabP"].$children[0].$forceUpdate();
+            }, 0);
           } else {
             _this.$message.error(res.result);
           }
@@ -875,7 +877,7 @@ export default {
     display: inline-block;
     font-size: 12px;
   }
-   .el-tabs__item {
+  .el-tabs__item {
     height: 50px;
     line-height: 50px;
   }

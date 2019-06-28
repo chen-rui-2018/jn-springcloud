@@ -407,9 +407,22 @@ img {
               margin-left: 10px;
             }
 
-            >span {
+            >p {
               float: right;
               color: #00a041;
+
+              >img {
+                width: 12px;
+                height: 12px;
+                display: inline-block;
+                vertical-align: middle;
+                margin-right: 5px;
+              }
+
+              >span {
+                display: inline-block;
+                vertical-align: middle;
+              }
 
               .icon-miaojiesellerlike {
                 margin-right: 5px;
@@ -485,10 +498,25 @@ img {
             .xihuan {
               margin: 15px 0;
               color: #00a041;
+
+              >img {
+                width: 12px;
+                height: 12px;
+                display: inline-block;
+                vertical-align: middle;
+                // margin-right: 5px;
+              }
+
+              >span {
+                display: inline-block;
+                vertical-align: middle;
+              }
             }
-            .el-icon-time{
-              color:#999;
+
+            .el-icon-time {
+              color: #999;
             }
+
             .location {
               margin: 18px 0;
               color: #999;
@@ -811,6 +839,9 @@ img {
 
               >p {
                 margin-bottom: 5px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
               }
             }
 
@@ -1462,8 +1493,21 @@ img {
               margin-left: 10px;
             }
 
-            >span {
+            >p {
               float: right;
+
+              >img {
+                width: 12px;
+                height: 12px;
+                display: inline-block;
+                vertical-align: middle;
+                margin-right: 5px;
+              }
+
+              >span {
+                display: inline-block;
+                vertical-align: middle;
+              }
 
               .icon-xihuan {
                 margin-right: 5px;
@@ -1525,6 +1569,11 @@ img {
       display: inline-block;
       vertical-align: middle;
       margin-right: 5px;
+    }
+
+    >span {
+      display: inline-block;
+      vertical-align: middle;
     }
   }
 
@@ -2203,7 +2252,7 @@ img {
           float: left;
           // display: inline-block;
           width: 280px;
-          // height: 340px;
+          height: 340px;
           border: 1px solid #eee;
           margin-right: 20px;
           margin-bottom: 30px;

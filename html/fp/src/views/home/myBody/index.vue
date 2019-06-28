@@ -63,7 +63,7 @@
         <div>企业资质/荣誉</div>
         <div  class="enterpriseQualification ml" v-show="honorLicense.length===0">暂无信息</div>
         <div class="enterpriseQualification" v-for="(item, index) in honorLicense" :key="index">
-          <span class="themeColor smallSize mr">{{item.awardTime}}&nbsp;获得</span>
+          <span class="themeColor smallSize mr">{{item.awardTime?item.awardTime+'日':''}}&nbsp;获得</span>
           <div class="itemInfo">
             <div>{{item.certName}}</div>
             <div>颁发部门：{{item.awardDepart}}</div>
@@ -315,7 +315,7 @@ export default {
     display: inline-block;
     vertical-align: middle;
     margin: 10px 0px;
-    margin-left: 180px;
+    margin-left: 170px;
   }
   .businessLicense {
     display: inline-block;

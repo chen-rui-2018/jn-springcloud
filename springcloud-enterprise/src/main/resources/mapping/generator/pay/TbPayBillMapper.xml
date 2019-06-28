@@ -28,6 +28,9 @@
     <result column="record_status" jdbcType="CHAR" property="recordStatus" />
     <result column="callback_id" jdbcType="VARCHAR" property="callbackId" />
     <result column="bill_receiver" jdbcType="VARCHAR" property="billReceiver" />
+    <result column="build_id" jdbcType="VARCHAR" property="buildId" />
+    <result column="build_name" jdbcType="VARCHAR" property="buildName" />
+    <result column="meter_code" jdbcType="VARCHAR" property="meterCode" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -91,7 +94,8 @@
     BILL_ID, AC_BOOK_ID, BILL_NAME, BILL_SOURCE, BILL_EXPENSE, REMINDER_NUMBER, modified_reminder_time, 
     OBJ_TYPE, obj_id, OBJ_NAME, PAYMENT_STATE, PAYMENT_TYPE, AC_BOOK_TYPE, order_number, 
     callback_url, created_time, creator_account, modified_time, modifier_account, LATE_PAYMENT, 
-    PAYMENT_AFFIRM, AFFIRM_PART, AFFIRM_TIME, record_status, callback_id, bill_receiver
+    PAYMENT_AFFIRM, AFFIRM_PART, AFFIRM_TIME, record_status, callback_id, bill_receiver, 
+    build_id, build_name, meter_code
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.pay.entity.TbPayBillCriteria" resultMap="BaseResultMap">
     select
@@ -132,7 +136,8 @@
       created_time, creator_account, modified_time, 
       modifier_account, LATE_PAYMENT, PAYMENT_AFFIRM, 
       AFFIRM_PART, AFFIRM_TIME, record_status, 
-      callback_id, bill_receiver)
+      callback_id, bill_receiver, build_id, 
+      build_name, meter_code)
     values (#{billId,jdbcType=VARCHAR}, #{acBookId,jdbcType=VARCHAR}, #{billName,jdbcType=VARCHAR}, 
       #{billSource,jdbcType=VARCHAR}, #{billExpense,jdbcType=DECIMAL}, #{reminderNumber,jdbcType=INTEGER}, 
       #{modifiedReminderTime,jdbcType=TIMESTAMP}, #{objType,jdbcType=VARCHAR}, #{objId,jdbcType=VARCHAR}, 
@@ -141,7 +146,8 @@
       #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
       #{modifierAccount,jdbcType=VARCHAR}, #{latePayment,jdbcType=TIMESTAMP}, #{paymentAffirm,jdbcType=CHAR}, 
       #{affirmPart,jdbcType=VARCHAR}, #{affirmTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=CHAR}, 
-      #{callbackId,jdbcType=VARCHAR}, #{billReceiver,jdbcType=VARCHAR})
+      #{callbackId,jdbcType=VARCHAR}, #{billReceiver,jdbcType=VARCHAR}, #{buildId,jdbcType=VARCHAR}, 
+      #{buildName,jdbcType=VARCHAR}, #{meterCode,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.pay.entity.TbPayBill">
     insert into tb_pay_bill
@@ -224,6 +230,15 @@
       <if test="billReceiver != null">
         bill_receiver,
       </if>
+      <if test="buildId != null">
+        build_id,
+      </if>
+      <if test="buildName != null">
+        build_name,
+      </if>
+      <if test="meterCode != null">
+        meter_code,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="billId != null">
@@ -303,6 +318,15 @@
       </if>
       <if test="billReceiver != null">
         #{billReceiver,jdbcType=VARCHAR},
+      </if>
+      <if test="buildId != null">
+        #{buildId,jdbcType=VARCHAR},
+      </if>
+      <if test="buildName != null">
+        #{buildName,jdbcType=VARCHAR},
+      </if>
+      <if test="meterCode != null">
+        #{meterCode,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -393,6 +417,15 @@
       <if test="record.billReceiver != null">
         bill_receiver = #{record.billReceiver,jdbcType=VARCHAR},
       </if>
+      <if test="record.buildId != null">
+        build_id = #{record.buildId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.buildName != null">
+        build_name = #{record.buildName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.meterCode != null">
+        meter_code = #{record.meterCode,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -425,7 +458,10 @@
       AFFIRM_TIME = #{record.affirmTime,jdbcType=TIMESTAMP},
       record_status = #{record.recordStatus,jdbcType=CHAR},
       callback_id = #{record.callbackId,jdbcType=VARCHAR},
-      bill_receiver = #{record.billReceiver,jdbcType=VARCHAR}
+      bill_receiver = #{record.billReceiver,jdbcType=VARCHAR},
+      build_id = #{record.buildId,jdbcType=VARCHAR},
+      build_name = #{record.buildName,jdbcType=VARCHAR},
+      meter_code = #{record.meterCode,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -508,6 +544,15 @@
       <if test="billReceiver != null">
         bill_receiver = #{billReceiver,jdbcType=VARCHAR},
       </if>
+      <if test="buildId != null">
+        build_id = #{buildId,jdbcType=VARCHAR},
+      </if>
+      <if test="buildName != null">
+        build_name = #{buildName,jdbcType=VARCHAR},
+      </if>
+      <if test="meterCode != null">
+        meter_code = #{meterCode,jdbcType=VARCHAR},
+      </if>
     </set>
     where BILL_ID = #{billId,jdbcType=VARCHAR}
   </update>
@@ -537,7 +582,10 @@
       AFFIRM_TIME = #{affirmTime,jdbcType=TIMESTAMP},
       record_status = #{recordStatus,jdbcType=CHAR},
       callback_id = #{callbackId,jdbcType=VARCHAR},
-      bill_receiver = #{billReceiver,jdbcType=VARCHAR}
+      bill_receiver = #{billReceiver,jdbcType=VARCHAR},
+      build_id = #{buildId,jdbcType=VARCHAR},
+      build_name = #{buildName,jdbcType=VARCHAR},
+      meter_code = #{meterCode,jdbcType=VARCHAR}
     where BILL_ID = #{billId,jdbcType=VARCHAR}
   </update>
 </mapper>

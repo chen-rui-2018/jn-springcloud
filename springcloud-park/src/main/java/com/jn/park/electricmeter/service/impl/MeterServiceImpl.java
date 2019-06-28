@@ -877,6 +877,7 @@ public class MeterServiceImpl implements MeterService {
         return result;
     }
 
+
     @ServiceLog(doAction = "通过企业id查询电表信息")
     public Result getMeterInfosByCompanyId(String companyId){
         Result result = new Result();
@@ -884,8 +885,16 @@ public class MeterServiceImpl implements MeterService {
         criteria.or().andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andCompanyIdEqualTo(companyId);
         logger.info("企业id{}",companyId);
         List<TbElectricMeterInfo> meterInfos =meterInfoMapper.selectByExample(criteria);
+        List<ElectricMeterInfoModel> list = new ArrayList<>();
+        if(meterInfos.size() > 0){
+            for (TbElectricMeterInfo tb: meterInfos) {
+                ElectricMeterInfoModel el = new ElectricMeterInfoModel();
+                BeanUtils.copyProperties(tb,el);
+                list.add(el);
+            }
+        }
         logger.info("企业id{},数据{}",companyId,meterInfos);
-        result.setData(meterInfos);
+        result.setData(list);
         return result;
     }
 

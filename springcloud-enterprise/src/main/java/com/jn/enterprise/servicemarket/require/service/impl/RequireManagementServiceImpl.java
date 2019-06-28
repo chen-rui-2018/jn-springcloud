@@ -38,7 +38,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.xxpay.common.util.DateUtil;
 
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
@@ -427,12 +426,18 @@ public class RequireManagementServiceImpl implements RequireManagementService {
         RequireOtherDetails requireOtherDetails=new RequireOtherDetails();
         BeanUtils.copyProperties(tbServiceRequire, requireOtherDetails);
         //融资期限
-        if(StringUtils.isNotBlank(tbServiceRequire.getFinancingPeriodMax()+"")){
+        if(tbServiceRequire.getFinancingPeriodMax()!=null
+                && StringUtils.isNotBlank(tbServiceRequire.getFinancingPeriodMax().toString())){
             logger.info("需求详情（对他人需求）,融资期限：{}",tbServiceRequire.getFinancingPeriodMax()+"");
             requireOtherDetails.setFinancingPeriod(tbServiceRequire.getFinancingPeriodMax()+"");
-        }else if(StringUtils.isNotBlank(tbServiceRequire.getFinancingPeriodMin()+"")){
+            //是否最大值以上（0：否   1：是)
+            requireOtherDetails.setIsMax("0");
+        }else if(tbServiceRequire.getFinancingPeriodMin()!=null
+                && StringUtils.isNotBlank(tbServiceRequire.getFinancingPeriodMin().toString())){
             logger.info("需求详情（对他人需求）,融资期限：{}",tbServiceRequire.getFinancingPeriodMin()+"");
             requireOtherDetails.setFinancingPeriod(tbServiceRequire.getFinancingPeriodMin()+"");
+            //是否最大值以上（0：否   1：是 )
+            requireOtherDetails.setIsMax("1");
         }
         if(tbServiceRequire.getExpectedDate()!=null){
             requireOtherDetails.setExpectedDate(DateUtils.formatDate(tbServiceRequire.getExpectedDate(),"yyyy-MM-dd"));
@@ -581,12 +586,18 @@ public class RequireManagementServiceImpl implements RequireManagementService {
         //需求描述
         requireReceivedDetails.setRequireDetail(tbServiceRequire.getReqDetail());
         //融资期限设置
-        if(StringUtils.isNotBlank(tbServiceRequire.getFinancingPeriodMax()+"")){
+        if(tbServiceRequire.getFinancingPeriodMax()!=null
+                && StringUtils.isNotBlank(tbServiceRequire.getFinancingPeriodMax().toString())){
             logger.info("需求详情（我收到的需求）,融资期限：{}",tbServiceRequire.getFinancingPeriodMax()+"");
-            requireReceivedDetails.setFinancingPeriod(tbServiceRequire.getFinancingPeriodMax()+"");
-        }else if(StringUtils.isNotBlank(tbServiceRequire.getFinancingPeriodMin()+"")){
+            requireReceivedDetails.setFinancingPeriod(tbServiceRequire.getFinancingPeriodMax().toString());
+            //是否最大值以上（0：否   1：是)
+            requireReceivedDetails.setIsMax("0");
+        }else if(tbServiceRequire.getFinancingPeriodMin()!=null
+                && StringUtils.isNotBlank(tbServiceRequire.getFinancingPeriodMin().toString())){
             logger.info("需求详情（我收到的需求）,融资期限：{}",tbServiceRequire.getFinancingPeriodMin()+"");
-            requireReceivedDetails.setFinancingPeriod(tbServiceRequire.getFinancingPeriodMin()+"");
+            requireReceivedDetails.setFinancingPeriod(tbServiceRequire.getFinancingPeriodMin().toString());
+            //是否最大值以上（0：否   1：是)
+            requireReceivedDetails.setIsMax("1");
         }
         if(tbServiceRequire.getExpectedDate()!=null){
             requireReceivedDetails.setExpectedDate(DateUtils.formatDate(tbServiceRequire.getExpectedDate(),"yyyy-MM-dd"));

@@ -382,7 +382,12 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         }
         /**通过账户表的账户ID查询账本信息*/
         logger.info("通过账户表的账户ID查询账本信息,账户ID={}",tbPayAccount.get(0).getAccountId());
-        billCriteria.createCriteria().andAccountIdEqualTo(tbPayAccount.get(0).getAccountId()).andAcBookTypeEqualTo(payBillCreateParamVo.getAcBookType()).andRecordStatusEqualTo(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
+        /**因电费账本是一个账户下有多个，所以需要单独处理查询条件*/
+        if(PaymentBillEnum.BILL_AC_BOOK_TYPE_1.getCode().equals(payBillCreateParamVo.getAcBookType())){
+            billCriteria.createCriteria().andAccountIdEqualTo(tbPayAccount.get(0).getAccountId()).andAcBookTypeEqualTo(payBillCreateParamVo.getAcBookType()).andMeterCodeEqualTo(payBillCreateParamVo.getMeterCode()).andRecordStatusEqualTo(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
+        }else{
+            billCriteria.createCriteria().andAccountIdEqualTo(tbPayAccount.get(0).getAccountId()).andAcBookTypeEqualTo(payBillCreateParamVo.getAcBookType()).andRecordStatusEqualTo(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
+        }
         tbPayAccountBook = tbPayAccountBookMapper.selectByExample(billCriteria);
         if (tbPayAccountBook.size() > Integer.parseInt(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode()) || tbPayAccountBook.size() == Integer.parseInt(PaymentBillEnum.BILL_STATE_DELETE.getCode())) {
             /**查询账本信息异常*/

@@ -89,10 +89,9 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        electric
+                        wifi
                     </contexts>
                     <tableNames>
-                        tb_electric_energy_day_log , tb_electric_cost ,tb_electric_warning_record,tb_electric_energy_bill
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

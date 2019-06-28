@@ -1,5 +1,6 @@
 package com.jn.park.electricmeter.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
@@ -26,6 +27,9 @@ import com.jn.park.electricmeter.model.*;
 import com.jn.park.electricmeter.service.MeterService;
 import com.jn.park.enums.NoticeExceptionEnum;
 import com.jn.park.notice.service.impl.NoticeManageServiceImpl;
+import com.jn.pay.model.PayAccountBookCreateParam;
+import com.jn.send.api.DelaySendMessageClient;
+import com.jn.send.model.Delay;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.ApiModelProperty;
@@ -34,6 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,7 +73,8 @@ public class MeterServiceImpl implements MeterService {
     private TbElectricMeterCompanyDayMapper companyDayMapper;
     @Autowired
     private CompanyClient companyClient;
-
+    @Autowired
+    private DelaySendMessageClient delaySendMessageClient;
     @Override
     @ServiceLog(doAction = "电表读数定时入库")
     public void getDataFromHardare(){
@@ -580,8 +586,35 @@ public class MeterServiceImpl implements MeterService {
                 companyDayMapper.insertSelective(linkDay);
             }
         }
+        //创建账本信息
+        if(StringUtils.isNotBlank(model.getCompanyId())){
+            createAccountBook(model.getCompanyId(),meterCode);
+        }
 
         return new Result();
+    }
+
+    private void createAccountBook(String companyId,String meterCode){
+
+        Result<ServiceCompany> result = companyClient.getCompanyDetailByAccountOrCompanyId(companyId);
+        if (result.getData() != null) {
+            String comAdmin=result.getData().getComAdmin();
+            logger.info("开始调用创建账本信息的接口；企业账号为{},企业id{}，电表号：{}",comAdmin,companyId,meterCode);
+            // 4.创建企业的账本信息-延迟调度
+            PayAccountBookCreateParam payAccountBookCreateParam = new PayAccountBookCreateParam();
+            payAccountBookCreateParam.setComAdmin(comAdmin);
+            payAccountBookCreateParam.setEnterId(companyId);
+            Delay delay = new Delay();
+            delay.setServiceId("springcloud-enterprise");
+            delay.setServiceUrl("/api/payment/payAccount/createPayAccountBook");
+            delay.setTtl("30");
+            delay.setDataString(JSONObject.toJSONString(payAccountBookCreateParam));
+            logger.info("开始回调");
+            Result<Boolean> delayResult = delaySendMessageClient.delaySend(delay);
+            logger.info("结束回调,返回结果，【{}】", delayResult.toString());
+        }else{
+            logger.info("建账本信息的接口时，企业信息不存在，企业id为{}",companyId);
+        }
     }
 
     @Override
@@ -670,6 +703,10 @@ public class MeterServiceImpl implements MeterService {
                 linkDay.setMeterName(model.getMeterName());
                 companyDayMapper.insertSelective(linkDay);
             }
+        }
+
+        if(StringUtils.isNotBlank(model.getCompanyId())){
+            createAccountBook(model.getCompanyId(),model.getMeterCode());
         }
         return new Result();
     }
@@ -877,6 +914,7 @@ public class MeterServiceImpl implements MeterService {
         return result;
     }
 
+
     @ServiceLog(doAction = "通过企业id查询电表信息")
     public Result getMeterInfosByCompanyId(String companyId){
         Result result = new Result();
@@ -884,8 +922,16 @@ public class MeterServiceImpl implements MeterService {
         criteria.or().andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andCompanyIdEqualTo(companyId);
         logger.info("企业id{}",companyId);
         List<TbElectricMeterInfo> meterInfos =meterInfoMapper.selectByExample(criteria);
+        List<ElectricMeterInfoModel> list = new ArrayList<>();
+        if(meterInfos.size() > 0){
+            for (TbElectricMeterInfo tb: meterInfos) {
+                ElectricMeterInfoModel el = new ElectricMeterInfoModel();
+                BeanUtils.copyProperties(tb,el);
+                list.add(el);
+            }
+        }
         logger.info("企业id{},数据{}",companyId,meterInfos);
-        result.setData(meterInfos);
+        result.setData(list);
         return result;
     }
 

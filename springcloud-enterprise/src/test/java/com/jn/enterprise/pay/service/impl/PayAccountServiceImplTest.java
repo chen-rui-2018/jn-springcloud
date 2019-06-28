@@ -10,10 +10,12 @@ import com.jn.enterprise.pay.service.MyPayAccountService;
 import com.jn.enterprise.pd.declaration.model.DeclarationPlatformModel;
 import com.jn.pay.api.PayClient;
 import com.jn.pay.model.PayAccountBook;
+import com.jn.pay.model.PayAccountBookCreateParam;
 import com.jn.pay.model.PayAccountBookMoney;
 import com.jn.pay.model.PayBillDetails;
 import com.jn.pay.vo.PayAccountAndAccountBookVo;
 import com.jn.pay.vo.PayBillCreateParamVo;
+import com.jn.system.model.User;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -56,7 +58,7 @@ public class PayAccountServiceImplTest {
 
     @Before
     public void setUp() throws Exception {
-       String userId = "wangsong";
+       String userId = "13586415994";
     }
 
     @Test
@@ -106,6 +108,17 @@ public class PayAccountServiceImplTest {
         payBillCreateParamVo.setPayBillDetails(payBillDetails);
         Result billCreateResult = payClient.billCreate(payBillCreateParamVo);
         logger.info("获取账本明细{}", JsonUtil.object2Json(billCreateResult));
+    }
+
+    @Test
+    public void createPayAccountBook() {
+        PayAccountBookCreateParam param = new PayAccountBookCreateParam();
+        User user = new User();
+        user.setAccount("13586415994");
+        param.setComAdmin("13586415994");
+        param.setEnterId("fbb2cf99e5b5487289b1e341d68980fb");
+        Result result = myPayAccountService.createPayAccountBook(param,user);
+        logger.info("创建账户账本{}", JsonUtil.object2Json(result));
     }
 
 

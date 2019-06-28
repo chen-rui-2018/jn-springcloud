@@ -92,12 +92,12 @@ public class POICompany {
                 if(StringUtils.isNotBlank(str)){
                     String[] str1 = str.split(";");
                     int len = str1.length;
-                    for (int j = 0; j < lenth; j++) {
+                    for (int j = 0; j < len; j++) {
                         row1.createCell(2 + j).setCellValue(str1[j]);
                     }
                 }
-                row1.createCell(2 + lenth).setCellValue(child2.getSumval());
-                rowlen++;
+                    row1.createCell(2 + lenth).setCellValue(child2.getSumval());
+                    rowlen++;
             }
         }
         wb.write(resp.getOutputStream());

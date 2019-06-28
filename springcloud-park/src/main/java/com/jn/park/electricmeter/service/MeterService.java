@@ -139,4 +139,11 @@ public interface MeterService {
      * 通过仪表号和日期，小时；重新采集数据
      */
     Result dealAllFailByDealHourAndDealDateAndMeterCode(Date dealDate,String dealHour,String meterCode);
+
+    /**
+     *通过企业id查询电表信息
+     * @param companyId
+     * @return
+     */
+    Result getMeterInfosByCompanyId(String companyId);
 }

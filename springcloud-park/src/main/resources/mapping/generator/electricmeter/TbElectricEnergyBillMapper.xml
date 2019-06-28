@@ -22,6 +22,8 @@
     <result column="pay_status" jdbcType="TINYINT" property="payStatus" />
     <result column="pay_time" jdbcType="TIMESTAMP" property="payTime" />
     <result column="paier" jdbcType="VARCHAR" property="paier" />
+    <result column="meter_code" jdbcType="VARCHAR" property="meterCode" />
+    <result column="day" jdbcType="DATE" property="day" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -84,7 +86,8 @@
   <sql id="Base_Column_List">
     id, bill_name, bill_source, obj_id, obj_name, record_status, creator_account, created_time, 
     modifier_account, modified_time, bill_expense, obj_type, ac_book_type, call_back_id, 
-    call_back_url, late_payment, call_times, pay_status, pay_time, paier
+    call_back_url, late_payment, call_times, pay_status, pay_time, paier, meter_code, 
+    day
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.electricmeter.entity.TbElectricEnergyBillCriteria" resultMap="BaseResultMap">
     select
@@ -123,14 +126,16 @@
       modified_time, bill_expense, obj_type, 
       ac_book_type, call_back_id, call_back_url, 
       late_payment, call_times, pay_status, 
-      pay_time, paier)
+      pay_time, paier, meter_code, 
+      day)
     values (#{id,jdbcType=VARCHAR}, #{billName,jdbcType=VARCHAR}, #{billSource,jdbcType=VARCHAR}, 
       #{objId,jdbcType=VARCHAR}, #{objName,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
       #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
       #{modifiedTime,jdbcType=TIMESTAMP}, #{billExpense,jdbcType=DECIMAL}, #{objType,jdbcType=VARCHAR}, 
       #{acBookType,jdbcType=VARCHAR}, #{callBackId,jdbcType=VARCHAR}, #{callBackUrl,jdbcType=VARCHAR}, 
       #{latePayment,jdbcType=DATE}, #{callTimes,jdbcType=INTEGER}, #{payStatus,jdbcType=TINYINT}, 
-      #{payTime,jdbcType=TIMESTAMP}, #{paier,jdbcType=VARCHAR})
+      #{payTime,jdbcType=TIMESTAMP}, #{paier,jdbcType=VARCHAR}, #{meterCode,jdbcType=VARCHAR}, 
+      #{day,jdbcType=DATE})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.electricmeter.entity.TbElectricEnergyBill">
     insert into tb_electric_energy_bill
@@ -195,6 +200,12 @@
       <if test="paier != null">
         paier,
       </if>
+      <if test="meterCode != null">
+        meter_code,
+      </if>
+      <if test="day != null">
+        day,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -256,6 +267,12 @@
       </if>
       <if test="paier != null">
         #{paier,jdbcType=VARCHAR},
+      </if>
+      <if test="meterCode != null">
+        #{meterCode,jdbcType=VARCHAR},
+      </if>
+      <if test="day != null">
+        #{day,jdbcType=DATE},
       </if>
     </trim>
   </insert>
@@ -328,6 +345,12 @@
       <if test="record.paier != null">
         paier = #{record.paier,jdbcType=VARCHAR},
       </if>
+      <if test="record.meterCode != null">
+        meter_code = #{record.meterCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.day != null">
+        day = #{record.day,jdbcType=DATE},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -354,7 +377,9 @@
       call_times = #{record.callTimes,jdbcType=INTEGER},
       pay_status = #{record.payStatus,jdbcType=TINYINT},
       pay_time = #{record.payTime,jdbcType=TIMESTAMP},
-      paier = #{record.paier,jdbcType=VARCHAR}
+      paier = #{record.paier,jdbcType=VARCHAR},
+      meter_code = #{record.meterCode,jdbcType=VARCHAR},
+      day = #{record.day,jdbcType=DATE}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -419,6 +444,12 @@
       <if test="paier != null">
         paier = #{paier,jdbcType=VARCHAR},
       </if>
+      <if test="meterCode != null">
+        meter_code = #{meterCode,jdbcType=VARCHAR},
+      </if>
+      <if test="day != null">
+        day = #{day,jdbcType=DATE},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -442,7 +473,9 @@
       call_times = #{callTimes,jdbcType=INTEGER},
       pay_status = #{payStatus,jdbcType=TINYINT},
       pay_time = #{payTime,jdbcType=TIMESTAMP},
-      paier = #{paier,jdbcType=VARCHAR}
+      paier = #{paier,jdbcType=VARCHAR},
+      meter_code = #{meterCode,jdbcType=VARCHAR},
+      day = #{day,jdbcType=DATE}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

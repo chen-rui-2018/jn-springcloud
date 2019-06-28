@@ -10,7 +10,7 @@ public interface TbElectricCostMapper {
 
     int deleteByExample(TbElectricCostCriteria example);
 
-    int deleteByPrimaryKey(String companyId);
+    int deleteByPrimaryKey(String id);
 
     int insert(TbElectricCost record);
 
@@ -18,7 +18,7 @@ public interface TbElectricCostMapper {
 
     List<TbElectricCost> selectByExample(TbElectricCostCriteria example);
 
-    TbElectricCost selectByPrimaryKey(String companyId);
+    TbElectricCost selectByPrimaryKey(String id);
 
     int updateByExampleSelective(@Param("record") TbElectricCost record, @Param("example") TbElectricCostCriteria example);
 

@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.enviroment.dao.TbEnviDeviceRecordMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.enviroment.entity.TbEnviDeviceRecord">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="deal_date" jdbcType="DATE" property="dealDate" />
+    <result column="hour" jdbcType="INTEGER" property="hour" />
+    <result column="device_id" jdbcType="VARCHAR" property="deviceId" />
+    <result column="device_record_time" jdbcType="TIMESTAMP" property="deviceRecordTime" />
+    <result column="hum" jdbcType="VARCHAR" property="hum" />
+    <result column="lat" jdbcType="VARCHAR" property="lat" />
+    <result column="light" jdbcType="VARCHAR" property="light" />
+    <result column="log" jdbcType="VARCHAR" property="log" />
+    <result column="pm10" jdbcType="VARCHAR" property="pm10" />
+    <result column="pm25" jdbcType="VARCHAR" property="pm25" />
+    <result column="temper" jdbcType="VARCHAR" property="temper" />
+    <result column="remote_ip" jdbcType="VARCHAR" property="remoteIp" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, deal_date, hour, device_id, device_record_time, hum, lat, light, log, pm10, pm25, 
+    temper, remote_ip, record_status, creator_account, created_time, modifier_account, 
+    modified_time
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.park.enviroment.entity.TbEnviDeviceRecordCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_envi_device_record
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_envi_device_record
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_envi_device_record
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.park.enviroment.entity.TbEnviDeviceRecordCriteria">
+    delete from tb_envi_device_record
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.park.enviroment.entity.TbEnviDeviceRecord">
+    insert into tb_envi_device_record (id, deal_date, hour, 
+      device_id, device_record_time, hum, 
+      lat, light, log, pm10, 
+      pm25, temper, remote_ip, 
+      record_status, creator_account, created_time, 
+      modifier_account, modified_time)
+    values (#{id,jdbcType=VARCHAR}, #{dealDate,jdbcType=DATE}, #{hour,jdbcType=INTEGER}, 
+      #{deviceId,jdbcType=VARCHAR}, #{deviceRecordTime,jdbcType=TIMESTAMP}, #{hum,jdbcType=VARCHAR}, 
+      #{lat,jdbcType=VARCHAR}, #{light,jdbcType=VARCHAR}, #{log,jdbcType=VARCHAR}, #{pm10,jdbcType=VARCHAR}, 
+      #{pm25,jdbcType=VARCHAR}, #{temper,jdbcType=VARCHAR}, #{remoteIp,jdbcType=VARCHAR}, 
+      #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.park.enviroment.entity.TbEnviDeviceRecord">
+    insert into tb_envi_device_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="dealDate != null">
+        deal_date,
+      </if>
+      <if test="hour != null">
+        hour,
+      </if>
+      <if test="deviceId != null">
+        device_id,
+      </if>
+      <if test="deviceRecordTime != null">
+        device_record_time,
+      </if>
+      <if test="hum != null">
+        hum,
+      </if>
+      <if test="lat != null">
+        lat,
+      </if>
+      <if test="light != null">
+        light,
+      </if>
+      <if test="log != null">
+        log,
+      </if>
+      <if test="pm10 != null">
+        pm10,
+      </if>
+      <if test="pm25 != null">
+        pm25,
+      </if>
+      <if test="temper != null">
+        temper,
+      </if>
+      <if test="remoteIp != null">
+        remote_ip,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="dealDate != null">
+        #{dealDate,jdbcType=DATE},
+      </if>
+      <if test="hour != null">
+        #{hour,jdbcType=INTEGER},
+      </if>
+      <if test="deviceId != null">
+        #{deviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceRecordTime != null">
+        #{deviceRecordTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hum != null">
+        #{hum,jdbcType=VARCHAR},
+      </if>
+      <if test="lat != null">
+        #{lat,jdbcType=VARCHAR},
+      </if>
+      <if test="light != null">
+        #{light,jdbcType=VARCHAR},
+      </if>
+      <if test="log != null">
+        #{log,jdbcType=VARCHAR},
+      </if>
+      <if test="pm10 != null">
+        #{pm10,jdbcType=VARCHAR},
+      </if>
+      <if test="pm25 != null">
+        #{pm25,jdbcType=VARCHAR},
+      </if>
+      <if test="temper != null">
+        #{temper,jdbcType=VARCHAR},
+      </if>
+      <if test="remoteIp != null">
+        #{remoteIp,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.park.enviroment.entity.TbEnviDeviceRecordCriteria" resultType="java.lang.Long">
+    select count(*) from tb_envi_device_record
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_envi_device_record
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dealDate != null">
+        deal_date = #{record.dealDate,jdbcType=DATE},
+      </if>
+      <if test="record.hour != null">
+        hour = #{record.hour,jdbcType=INTEGER},
+      </if>
+      <if test="record.deviceId != null">
+        device_id = #{record.deviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deviceRecordTime != null">
+        device_record_time = #{record.deviceRecordTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.hum != null">
+        hum = #{record.hum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lat != null">
+        lat = #{record.lat,jdbcType=VARCHAR},
+      </if>
+      <if test="record.light != null">
+        light = #{record.light,jdbcType=VARCHAR},
+      </if>
+      <if test="record.log != null">
+        log = #{record.log,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pm10 != null">
+        pm10 = #{record.pm10,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pm25 != null">
+        pm25 = #{record.pm25,jdbcType=VARCHAR},
+      </if>
+      <if test="record.temper != null">
+        temper = #{record.temper,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remoteIp != null">
+        remote_ip = #{record.remoteIp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_envi_device_record
+    set id = #{record.id,jdbcType=VARCHAR},
+      deal_date = #{record.dealDate,jdbcType=DATE},
+      hour = #{record.hour,jdbcType=INTEGER},
+      device_id = #{record.deviceId,jdbcType=VARCHAR},
+      device_record_time = #{record.deviceRecordTime,jdbcType=TIMESTAMP},
+      hum = #{record.hum,jdbcType=VARCHAR},
+      lat = #{record.lat,jdbcType=VARCHAR},
+      light = #{record.light,jdbcType=VARCHAR},
+      log = #{record.log,jdbcType=VARCHAR},
+      pm10 = #{record.pm10,jdbcType=VARCHAR},
+      pm25 = #{record.pm25,jdbcType=VARCHAR},
+      temper = #{record.temper,jdbcType=VARCHAR},
+      remote_ip = #{record.remoteIp,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.enviroment.entity.TbEnviDeviceRecord">
+    update tb_envi_device_record
+    <set>
+      <if test="dealDate != null">
+        deal_date = #{dealDate,jdbcType=DATE},
+      </if>
+      <if test="hour != null">
+        hour = #{hour,jdbcType=INTEGER},
+      </if>
+      <if test="deviceId != null">
+        device_id = #{deviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceRecordTime != null">
+        device_record_time = #{deviceRecordTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hum != null">
+        hum = #{hum,jdbcType=VARCHAR},
+      </if>
+      <if test="lat != null">
+        lat = #{lat,jdbcType=VARCHAR},
+      </if>
+      <if test="light != null">
+        light = #{light,jdbcType=VARCHAR},
+      </if>
+      <if test="log != null">
+        log = #{log,jdbcType=VARCHAR},
+      </if>
+      <if test="pm10 != null">
+        pm10 = #{pm10,jdbcType=VARCHAR},
+      </if>
+      <if test="pm25 != null">
+        pm25 = #{pm25,jdbcType=VARCHAR},
+      </if>
+      <if test="temper != null">
+        temper = #{temper,jdbcType=VARCHAR},
+      </if>
+      <if test="remoteIp != null">
+        remote_ip = #{remoteIp,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.enviroment.entity.TbEnviDeviceRecord">
+    update tb_envi_device_record
+    set deal_date = #{dealDate,jdbcType=DATE},
+      hour = #{hour,jdbcType=INTEGER},
+      device_id = #{deviceId,jdbcType=VARCHAR},
+      device_record_time = #{deviceRecordTime,jdbcType=TIMESTAMP},
+      hum = #{hum,jdbcType=VARCHAR},
+      lat = #{lat,jdbcType=VARCHAR},
+      light = #{light,jdbcType=VARCHAR},
+      log = #{log,jdbcType=VARCHAR},
+      pm10 = #{pm10,jdbcType=VARCHAR},
+      pm25 = #{pm25,jdbcType=VARCHAR},
+      temper = #{temper,jdbcType=VARCHAR},
+      remote_ip = #{remoteIp,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

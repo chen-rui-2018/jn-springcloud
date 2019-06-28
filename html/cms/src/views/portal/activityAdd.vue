@@ -83,20 +83,19 @@
         </div>
       </el-form-item>
       <el-form-item label="活动详情" prop="actiDetail" class="queditor">
-        <!-- <template>
+        <template>
           <el-row>
             <div class="editor-container">
               <UE ref="ue" :disabled-editor-flag="disabledEditorFlag" :default-msg="defaultMsg" :config="config" />
             </div>
           </el-row>
-        </template> -->
-        <template>
+        </template>
+        <!-- <template>
           <div class="edit_container" style="position:relative;">
             <div v-if="disabledEditorFlag" class="edit_box" />
             <quill-editor ref="myQuillEditor" v-model="activityForm.actiDetail" :options="editorOption" @blur="onEditorBlur1($event)" @focus="onEditorFocus1($event)" @change="onEditorChange1($event)" />
-            <!-- <button @click="saveHtml">保存</button> -->
           </div>
-        </template>
+        </template> -->
       </el-form-item>
       <el-form-item label="活动状态" prop="actiStatus">
         <el-steps :space="200" :active="activityForm.actiStatus*1" finish-status="success">
@@ -315,21 +314,21 @@ export default {
     this.getActivityType()
   },
   methods: {
-    onEditorReady(editor) {
-      // 准备编辑器
-    },
-    onEditorBlur1(val, editor) {
-      console.log(val)
-    }, // 失去焦点事件
-    onEditorFocus1(val, editor) {
-      // 获得焦点事件
-      console.log(val) // 富文本获得焦点时的内容
-      // editor.enable(false) // 在获取焦点的时候禁用
-    },
-    onEditorChange1(val, editor) {
-      // 内容改变事件
-      console.log(val)
-    },
+    // onEditorReady(editor) {
+    //   // 准备编辑器
+    // },
+    // onEditorBlur1(val, editor) {
+    //   console.log(val)
+    // }, // 失去焦点事件
+    // onEditorFocus1(val, editor) {
+    //   // 获得焦点事件
+    //   console.log(val) // 富文本获得焦点时的内容
+    //   // editor.enable(false) // 在获取焦点的时候禁用
+    // },
+    // onEditorChange1(val, editor) {
+    //   // 内容改变事件
+    //   console.log(val)
+    // },
     init() {
       // const data = {
       //   activityId: this.$route.query.activityId
@@ -490,7 +489,7 @@ export default {
       //   })
       //   return
       // }
-      // this.activityForm.actiDetail = this.$refs.ue.getUEContent()
+      this.activityForm.actiDetail = this.$refs.ue.getUEContent()
       const data = this.activityForm
       // api(`${this.GLOBAL.parkUrl}activity/saveActivityDraft`, data, 'post').then(res => {
       //   console.log(res)
@@ -528,7 +527,7 @@ export default {
       })
     },
     release() {
-      // this.activityForm.actiDetail = this.$refs.ue.getUEContent()
+      this.activityForm.actiDetail = this.$refs.ue.getUEContent()
       // console.log(this.activityForm.actiDetail)
       // if (!this.activityForm.actiDetail) {
       //   this.$message({
@@ -695,20 +694,20 @@ ul {
     line-height: 36px !important;
   }
 }
-.edit_box {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 1;
-  width: 50%;
-  background-color: rgba(235, 238, 245, 0.5);
-}
-.quill-editor {
-  width: 50%;
-}
-.ql-container {
-  min-height: 200px;
-}
+// .edit_box {
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   right: 0;
+//   bottom: 0;
+//   z-index: 1;
+//   width: 50%;
+//   background-color: rgba(235, 238, 245, 0.5);
+// }
+// .quill-editor {
+//   width: 50%;
+// }
+// .ql-container {
+//   min-height: 200px;
+// }
 </style>

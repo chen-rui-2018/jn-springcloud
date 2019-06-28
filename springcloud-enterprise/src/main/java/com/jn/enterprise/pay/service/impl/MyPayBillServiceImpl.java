@@ -176,7 +176,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         TbPayBillCriteria tbPayBillCriteria = new TbPayBillCriteria();
         tbPayBillCriteria.setOrderByClause("created_time desc,payment_state desc");
         TbPayBillCriteria.Criteria criteria = tbPayBillCriteria.createCriteria();
-        criteria.andPaymentStateEqualTo(PaymentBillEnum.BILL_ORDER_IS_PAY.getCode()).andObjTypeEqualTo(PaymentBillEnum.BILL_OBJ_TYPE_IS_INDIVIDUAL.getCode()).andObjIdEqualTo(user.getAccount());
+        criteria.andPaymentStateEqualTo(PaymentBillEnum.BILL_ORDER_IS_PAY.getCode()).andObjTypeEqualTo(PaymentBillEnum.BILL_OBJ_TYPE_IS_INDIVIDUAL.getCode()).andObjIdEqualTo(user.getAccount()).andBillExpenseGreaterThan(new BigDecimal("0"));
 
         //企业账单查询条件
         Result<ServiceCompany> serviceCompanyResult=companyClient.getCurCompanyInfo(user.getAccount());
@@ -184,7 +184,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
             logger.info("用户有对应的企业[{}-{}]，可以查到企业相关的缴费记录",serviceCompanyResult.getData().getComName(),serviceCompanyResult.getData().getId());
             TbPayBillCriteria tbPayBillCriteria2=new TbPayBillCriteria();
             TbPayBillCriteria.Criteria criteria2 = tbPayBillCriteria2.createCriteria();
-            criteria2.andPaymentStateEqualTo(PaymentBillEnum.BILL_ORDER_IS_PAY.getCode()).andObjTypeEqualTo(PaymentBillEnum.BILL_OBJ_TYPE_IS_COMPANY.getCode()).andObjIdEqualTo(serviceCompanyResult.getData().getId());
+            criteria2.andPaymentStateEqualTo(PaymentBillEnum.BILL_ORDER_IS_PAY.getCode()).andObjTypeEqualTo(PaymentBillEnum.BILL_OBJ_TYPE_IS_COMPANY.getCode()).andObjIdEqualTo(serviceCompanyResult.getData().getId()).andBillExpenseGreaterThan(new BigDecimal("0"));
             tbPayBillCriteria.or(criteria2);
         }
 

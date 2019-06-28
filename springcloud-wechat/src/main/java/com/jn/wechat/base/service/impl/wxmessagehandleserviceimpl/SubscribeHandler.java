@@ -1,7 +1,5 @@
 package com.jn.wechat.base.service.impl.wxmessagehandleserviceimpl;
 
-import com.jn.common.model.Result;
-import com.jn.common.util.DateUtils;
 import com.jn.config.WxProperties;
 import com.jn.send.api.DelaySendMessageClient;
 import com.jn.send.model.Delay;
@@ -36,8 +34,6 @@ public class SubscribeHandler extends AbstractHandler {
     @Autowired
     private WxProperties wxProperties;
     @Autowired
-    private MiniProgramPublicRegisterClient miniProgramPublicRegisterClient;
-    @Autowired
     private DelaySendMessageClient delaySendMessageClient;
 
     @Override
@@ -64,7 +60,7 @@ public class SubscribeHandler extends AbstractHandler {
                 Delay delay = new Delay();
                 delay.setServiceId(this.USER_CLIENT);
                 delay.setServiceUrl(this.USER_CLIENT_CONCERNORCANCELWECHAT_URL);
-                delay.setTtl("1000");
+                delay.setTtl("100");
                 delay.setDataString(JsonStringToObjectUtil.objectToJson(weChatRequestParam));
                 delaySendMessageClient.delaySend(delay);
             }

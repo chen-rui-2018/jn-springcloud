@@ -27,8 +27,6 @@ import java.util.Map;
 public class UnsubscribeHandler extends AbstractHandler {
 
     @Autowired
-    private MiniProgramPublicRegisterClient miniProgramPublicRegisterClient;
-    @Autowired
     private DelaySendMessageClient delaySendMessageClient;
 
     @Override

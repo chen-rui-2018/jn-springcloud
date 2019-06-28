@@ -55,6 +55,11 @@ public class WxAuthController {
         String requestURI = httpRequest.getRequestURI();
         //获取参数
         Map<String,String[]> map = httpRequest.getParameterMap();
+        if(null == map || null == map.get("url") ||  map.get("url").length==0) {
+            //从微信进行授权登录，获取openid
+            this.writeMsg(httpResponse,"菜单链接异常,没有目标页面.");
+            return;
+        }
         String targetUrl = map.get("url")[0];
         logger.info("\n=============requestURI:【{}】,queryString:【{}】",requestURI);
         //根据code获取access_token、openid
@@ -63,7 +68,7 @@ public class WxAuthController {
             String oauth2AccessTokenUrl = String.format(WxService.OAUTH2_ACCESS_TOKEN_URL,wxProperties.getAppId(),wxProperties.getSecret(),code);
             String oauth2AccessTokenString = RestTemplateUtil.get(oauth2AccessTokenUrl);
             WxOAuth2AccessToken wxOAuth2AccessToken = JsonStringToObjectUtil.jsonToObject(oauth2AccessTokenString,new TypeReference<WxOAuth2AccessToken>(){});
-            logger.info("返回WxOAuth2AccessToken对象{}",wxOAuth2AccessToken.toString());
+            logger.info("\n返回WxOAuth2AccessToken对象{}",wxOAuth2AccessToken.toString());
             //检验授权凭证（access_token）是否有效
             String openId = wxOAuth2AccessToken.getOpenid();
             String access_token = wxOAuth2AccessToken.getAccess_token();
@@ -80,7 +85,7 @@ public class WxAuthController {
             }
             //根据openid判断是否绑定用户信息
             Result<String> result = miniProgramPublicRegisterClient.openIdIsBindingAccount(openId);
-            //判断小程序用户信息是否保存成功，是否有账号信息,有账号则调用免密登陆接口拿到token
+            //判断微信用户信息是否已绑定用户信息，已绑定则直接跳转目标页面，未绑定则重定向注册绑定页面
             if(null != result && GlobalConstants.SUCCESS_CODE.equals(result.getCode())) {
                 try {
                     if(StringUtils.isNotBlank(result.getData())) {
@@ -100,11 +105,17 @@ public class WxAuthController {
             }
         }else {
             //从微信进行授权登录，获取openid
-            try {
-                httpResponse.getWriter().write("请从微信进行授权登录");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            this.writeMsg(httpResponse,"请从微信进行授权登录");
+        }
+    }
+
+    public void writeMsg(HttpServletResponse httpResponse,String content) {
+        try {
+            httpResponse.setCharacterEncoding("UTF-8");
+            httpResponse.setHeader("Content-Type", "text/html; charset=UTF-8");
+            httpResponse.getWriter().write(content);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -1452,6 +1452,136 @@ public class TbElectricEnergyBillCriteria {
             addCriterion("paier not between", value1, value2, "paier");
             return (Criteria) this;
         }
+
+        public Criteria andMeterCodeIsNull() {
+            addCriterion("meter_code is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeIsNotNull() {
+            addCriterion("meter_code is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeEqualTo(String value) {
+            addCriterion("meter_code =", value, "meterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeNotEqualTo(String value) {
+            addCriterion("meter_code <>", value, "meterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeGreaterThan(String value) {
+            addCriterion("meter_code >", value, "meterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("meter_code >=", value, "meterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeLessThan(String value) {
+            addCriterion("meter_code <", value, "meterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeLessThanOrEqualTo(String value) {
+            addCriterion("meter_code <=", value, "meterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeLike(String value) {
+            addCriterion("meter_code like", value, "meterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeNotLike(String value) {
+            addCriterion("meter_code not like", value, "meterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeIn(List<String> values) {
+            addCriterion("meter_code in", values, "meterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeNotIn(List<String> values) {
+            addCriterion("meter_code not in", values, "meterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeBetween(String value1, String value2) {
+            addCriterion("meter_code between", value1, value2, "meterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeNotBetween(String value1, String value2) {
+            addCriterion("meter_code not between", value1, value2, "meterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDayIsNull() {
+            addCriterion("day is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDayIsNotNull() {
+            addCriterion("day is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDayEqualTo(Date value) {
+            addCriterionForJDBCDate("day =", value, "day");
+            return (Criteria) this;
+        }
+
+        public Criteria andDayNotEqualTo(Date value) {
+            addCriterionForJDBCDate("day <>", value, "day");
+            return (Criteria) this;
+        }
+
+        public Criteria andDayGreaterThan(Date value) {
+            addCriterionForJDBCDate("day >", value, "day");
+            return (Criteria) this;
+        }
+
+        public Criteria andDayGreaterThanOrEqualTo(Date value) {
+            addCriterionForJDBCDate("day >=", value, "day");
+            return (Criteria) this;
+        }
+
+        public Criteria andDayLessThan(Date value) {
+            addCriterionForJDBCDate("day <", value, "day");
+            return (Criteria) this;
+        }
+
+        public Criteria andDayLessThanOrEqualTo(Date value) {
+            addCriterionForJDBCDate("day <=", value, "day");
+            return (Criteria) this;
+        }
+
+        public Criteria andDayIn(List<Date> values) {
+            addCriterionForJDBCDate("day in", values, "day");
+            return (Criteria) this;
+        }
+
+        public Criteria andDayNotIn(List<Date> values) {
+            addCriterionForJDBCDate("day not in", values, "day");
+            return (Criteria) this;
+        }
+
+        public Criteria andDayBetween(Date value1, Date value2) {
+            addCriterionForJDBCDate("day between", value1, value2, "day");
+            return (Criteria) this;
+        }
+
+        public Criteria andDayNotBetween(Date value1, Date value2) {
+            addCriterionForJDBCDate("day not between", value1, value2, "day");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

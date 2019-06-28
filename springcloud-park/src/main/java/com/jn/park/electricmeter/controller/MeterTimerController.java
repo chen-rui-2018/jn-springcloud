@@ -3,6 +3,7 @@ package com.jn.park.electricmeter.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.park.api.ElectricMeterClient;
+import com.jn.park.electricmeter.model.CompanyModel;
 import com.jn.park.electricmeter.service.ElectricRulesInfoService;
 import com.jn.park.electricmeter.service.MeterRulesService;
 import com.jn.park.electricmeter.service.MeterService;
@@ -81,6 +82,11 @@ public class MeterTimerController extends BaseController implements ElectricMete
     @Override
     public void monitor() {
         electricRulesInfoService.monitor();
+    }
+    @ControllerLog(doAction = "通过企业id获取电表信息")
+    @Override
+    public Result getMeterInfosByCompanyId(@RequestBody CompanyModel companyModel){
+        return meterService.getMeterInfosByCompanyId(companyModel.getCompanyId());
     }
 
 }

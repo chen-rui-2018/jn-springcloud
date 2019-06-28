@@ -905,6 +905,76 @@ public class TbElectricWarningRecordCriteria {
             addCriterion("company_name not between", value1, value2, "companyName");
             return (Criteria) this;
         }
+
+        public Criteria andMeterCodeIsNull() {
+            addCriterion("meter_code is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeIsNotNull() {
+            addCriterion("meter_code is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeEqualTo(String value) {
+            addCriterion("meter_code =", value, "meterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeNotEqualTo(String value) {
+            addCriterion("meter_code <>", value, "meterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeGreaterThan(String value) {
+            addCriterion("meter_code >", value, "meterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("meter_code >=", value, "meterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeLessThan(String value) {
+            addCriterion("meter_code <", value, "meterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeLessThanOrEqualTo(String value) {
+            addCriterion("meter_code <=", value, "meterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeLike(String value) {
+            addCriterion("meter_code like", value, "meterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeNotLike(String value) {
+            addCriterion("meter_code not like", value, "meterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeIn(List<String> values) {
+            addCriterion("meter_code in", values, "meterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeNotIn(List<String> values) {
+            addCriterion("meter_code not in", values, "meterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeBetween(String value1, String value2) {
+            addCriterion("meter_code between", value1, value2, "meterCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeterCodeNotBetween(String value1, String value2) {
+            addCriterion("meter_code not between", value1, value2, "meterCode");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

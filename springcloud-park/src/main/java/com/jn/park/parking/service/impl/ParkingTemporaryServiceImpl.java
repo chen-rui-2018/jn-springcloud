@@ -144,7 +144,7 @@ public class ParkingTemporaryServiceImpl implements ParkingTemporaryService {
         Result<DoorTemporaryCarParkingFeeResponse> result =   parkingClient.getTemporaryCarParkingFee(temporaryCarParkingFeeRequest);
         if(result.getCode().equals(GlobalConstants.SUCCESS_CODE)){
             DoorTemporaryCarParkingFeeResponse response = result.getData();
-            return Double.valueOf(response.getDiscountAmount());
+            return Double.valueOf(response.getAmount());
         }else{
             logger.info("\n临时停车费用获取异常{}原因"+result.getResult());
             throw  new JnSpringCloudException(ParkingExceptionEnum.PARKING_GET_PAYMENT,result.getResult());

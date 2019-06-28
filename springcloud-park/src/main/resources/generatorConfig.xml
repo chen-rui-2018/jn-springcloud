@@ -1453,4 +1453,62 @@
     <table tableName="tb_video_info"></table>
   </context>
 
+  <!--大屏-环境监测-->
+  <context id="enviroment">
+    <!-- 实现Serializable接口 -->
+    <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+    <!--覆盖生成XML文件-->
+    <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin" />
+    <!--在各个字段添加注解-->
+    <plugin type="com.jn.generator.CommentsPlugin"></plugin>
+    <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+      <property name="searchString" value="Example$"/>
+      <property name="replaceString" value="Criteria"/>
+    </plugin>
+    <commentGenerator>
+      <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
+      <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
+      <property name="suppressDate" value="true"/>
+      <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+      <property name="suppressAllComments" value="true"/>
+    </commentGenerator>
+    <!--数据库链接URL，用户名、密码 -->
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+        connectionURL="jdbc:mysql://192.168.10.28:3306/dcs?useUnicode=true&amp;characterEncoding=utf-8"
+        userId="dcsuser" password="dcs_u_123">
+    </jdbcConnection>
+    <javaTypeResolver>
+      <property name="forceBigDecimals" value="false"/>
+    </javaTypeResolver>
+
+    <!-- 生成模型的包名和位置 -->
+    <javaModelGenerator targetPackage="com.jn.park.enviroment.entity"
+        targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+      <property name="trimStrings" value="true"/>
+    </javaModelGenerator>
+
+    <!-- 生成映射文件的包名和位置 -->
+    <sqlMapGenerator targetPackage="mapping.generator.enviroment"
+        targetProject="src/main/resources">
+      <property name="enableSubPackages" value="true"/>
+    </sqlMapGenerator>
+
+    <!-- 生成Mapper 接口的包名和位置-->
+    <javaClientGenerator type="XMLMAPPER"
+        targetPackage="com.jn.park.enviroment.dao"
+        targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+    </javaClientGenerator>
+
+    <!-- 环境监测设备各指标的实时数据-->
+    <table tableName="tb_envi_device_record"></table>
+    <!-- 环境监测空气质量实时数据-->
+    <table tableName="tb_envi_device_record_air_quality"></table>
+    <!-- 环境监测各指标的实时数据（各设备平均值）-->
+    <table tableName="tb_envi_device_record_avg"></table>
+  </context>
+
 </generatorConfiguration>

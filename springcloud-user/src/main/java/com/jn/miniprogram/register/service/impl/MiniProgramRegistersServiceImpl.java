@@ -4,12 +4,18 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
+import com.jn.miniprogram.register.dao.TbWechatPublicUserInfoMapper;
 import com.jn.miniprogram.register.dao.TbWechatUserInfoMapper;
+import com.jn.miniprogram.register.entity.TbWechatPublicUserInfo;
+import com.jn.miniprogram.register.entity.TbWechatPublicUserInfoCriteria;
 import com.jn.miniprogram.register.entity.TbWechatUserInfo;
 import com.jn.miniprogram.register.entity.TbWechatUserInfoCriteria;
+import com.jn.miniprogram.register.enums.RegisterTypeEnum;
 import com.jn.system.api.SystemClient;
 import com.jn.system.model.User;
+import com.jn.user.enums.IsConCornEnum;
 import com.jn.user.enums.RecordStatusEnum;
+import com.jn.user.enums.UserExtensionExceptionEnum;
 import com.jn.user.model.RegisterInfoParam;
 import com.jn.miniprogram.register.service.MiniProgramRegistersService;
 import com.jn.system.log.annotation.ServiceLog;
@@ -49,6 +55,9 @@ public class MiniProgramRegistersServiceImpl implements MiniProgramRegistersServ
     @Autowired
     private SystemClient systemClient;
 
+    @Autowired
+    private TbWechatPublicUserInfoMapper tbWechatPublicUserInfoMapper;
+
 
     /**
      * 日期格式
@@ -70,11 +79,12 @@ public class MiniProgramRegistersServiceImpl implements MiniProgramRegistersServ
     /**
      * 判断OpenId是否已绑定账号
      * @param weChatRequestParam 微信用户信息
+     *
      * @return 已绑定，返回手机号   未绑定，返回空
      */
     @ServiceLog(doAction = "判断OpenId是否已绑定")
     @Override
-    public String isBindingAccountByOpenId(WeChatRequestParam weChatRequestParam) {
+    public String isBindingAccountByOpenId(WeChatRequestParam weChatRequestParam, RegisterTypeEnum registerTypeEnum) {
         if(weChatRequestParam==null){
             logger.warn("判断OpenId是否已绑定异常，请求参数为null");
             throw new JnSpringCloudException(MiniProgramRegisterExceptionEnum.NETWORK_ANOMALY);
@@ -83,7 +93,131 @@ public class MiniProgramRegistersServiceImpl implements MiniProgramRegistersServ
         //校验openId和unionId的长度是否正常
         checkOpenIdAndUnionIdLength(weChatRequestParam.getOpenId(),weChatRequestParam.getUnionId());
         //判断openId在系统中是否存在
-        long existNum = existNumOpenId(weChatRequestParam.getOpenId());
+        long existNum = existNumOpenId(weChatRequestParam.getOpenId(),registerTypeEnum);
+        //微信小程序
+        if(StringUtils.equals(RegisterTypeEnum.SMALL_PROGRAM.getCode(), registerTypeEnum.getCode())){
+            return saveOrUpdateWeChatUserInfo(weChatRequestParam, existNum,registerTypeEnum);
+        }else if(StringUtils.equals(RegisterTypeEnum.PUBLIC_NUMBER.getCode(), registerTypeEnum.getCode())){
+            //微信公众号
+            return saveOrUpdateWeChatPublicUserInfo(weChatRequestParam, existNum,registerTypeEnum);
+        }else{
+            logger.warn("微信注册枚举:{}系统不识别",registerTypeEnum.getMessage());
+            throw new JnSpringCloudException(UserExtensionExceptionEnum.REGISTER_TYPE_NOT_ALLOW);
+        }
+    }
+
+    /**
+     * 用户关注/取消关注服务号
+     * @param weChatRequestParam
+     */
+    @ServiceLog(doAction = "用户关注/取消关注服务号")
+    @Override
+    public int concernOrCancelWeChat(WeChatRequestParam weChatRequestParam) {
+        logger.info("进入用户关注/取消关注服务号API,请求入参：{}",weChatRequestParam.toString());
+        //校验openId和unionId的长度是否正常
+        checkOpenIdAndUnionIdLength(weChatRequestParam.getOpenId(),weChatRequestParam.getUnionId());
+        //校验关注时间和关注标识
+        if(weChatRequestParam.getIsConcern()==null){
+            logger.info("用户关注/取消关注服务号的是否关注标志不能为空");
+            throw new JnSpringCloudException(MiniProgramRegisterExceptionEnum.IS_CONCERN_NOT_NULL);
+        }
+        if(StringUtils.equals(weChatRequestParam.getIsConcern().getCode(), IsConCornEnum.CORN.getCode())
+                && StringUtils.isBlank(weChatRequestParam.getSubscribeTime())){
+            logger.info("用户关注/取消关注服务号的关注时间不能为空");
+            throw new JnSpringCloudException(MiniProgramRegisterExceptionEnum.SUBSCRIBE_TIME_NOT_NULL);
+        }
+        TbWechatPublicUserInfo publicUserInfo=new TbWechatPublicUserInfo();
+        BeanUtils.copyProperties(weChatRequestParam, publicUserInfo);
+        //id
+        publicUserInfo.setId(UUID.randomUUID().toString());
+        //是否删除
+        publicUserInfo.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
+        //是否关注
+        publicUserInfo.setIsConcern(weChatRequestParam.getIsConcern().getCode());
+
+        TbWechatPublicUserInfoCriteria example = new TbWechatPublicUserInfoCriteria();
+        example.createCriteria().andOpenIdEqualTo(weChatRequestParam.getOpenId())
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        long existNum = tbWechatPublicUserInfoMapper.countByExample(example);
+        if(existNum==0){
+            //openId不存在则新增
+            //创建时间
+            publicUserInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
+            return tbWechatPublicUserInfoMapper.insertSelective(publicUserInfo);
+        }else{
+            //openId在系统中存在更新数据
+            //更新时间
+            publicUserInfo.setModifiedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
+            return tbWechatPublicUserInfoMapper.updateByExampleSelective(publicUserInfo, example);
+        }
+
+    }
+
+    /**
+     * 根据OpenId判断OpenId是否已绑定
+     * @param openId
+     * @param registerTypeEnum
+     * @return
+     */
+    @ServiceLog(doAction = "根据OpenId判断OpenId是否已绑定")
+    @Override
+    public String openIdIsBindingAccount(String openId, RegisterTypeEnum registerTypeEnum) {
+        logger.info("进入根据OpenId判断OpenId是否已绑定API,请求入参：{}",openId);
+        //校验openId和unionId的长度是否正常
+        checkOpenIdAndUnionIdLength(openId,"");
+        //判断openId在系统中是否存在
+        long existNum = existNumOpenId(openId,registerTypeEnum);
+        if(existNum==0){
+            logger.info("根据OpenId判断OpenId是否已绑定查询成功，当前openId：[{}]没有绑定账号",openId);
+            return "";
+        }else{
+            //openId在系统汇中已经存在，返回绑定的账号
+            return isBindingAccountByOpenId(openId,registerTypeEnum);
+        }
+    }
+
+    /**
+     * 保存或修改微信公众号信息
+     * @param weChatRequestParam
+     * @param existNum
+     * @return
+     */
+    private String saveOrUpdateWeChatPublicUserInfo(WeChatRequestParam weChatRequestParam, long existNum, RegisterTypeEnum registerTypeEnum)
+    {
+        //微信公众号
+        TbWechatPublicUserInfo publicUserInfo=new TbWechatPublicUserInfo();
+        BeanUtils.copyProperties(weChatRequestParam, publicUserInfo);
+        //id
+        publicUserInfo.setId(UUID.randomUUID().toString());
+        //是否删除
+        publicUserInfo.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
+        TbWechatPublicUserInfoCriteria example=new TbWechatPublicUserInfoCriteria();
+        example.createCriteria().andOpenIdEqualTo(weChatRequestParam.getOpenId())
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        if(existNum==0){
+            //openId在系统中不存在则新增数据
+            publicUserInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
+            tbWechatPublicUserInfoMapper.insertSelective(publicUserInfo);
+            //新增数据，没有绑定账号，直接返回空
+            return "";
+        }else{
+            //openId在系统中存在更新数据
+            //更新时间
+            publicUserInfo.setModifiedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
+            tbWechatPublicUserInfoMapper.updateByExampleSelective(publicUserInfo, example);
+            //根据openId判断是否已经绑定账号
+            return  isBindingAccountByOpenId(weChatRequestParam.getOpenId(),registerTypeEnum);
+        }
+    }
+
+    /**
+     * 保存或修改微信小程序信息
+     * @param weChatRequestParam
+     * @param existNum
+     * @return
+     */
+    @ServiceLog(doAction = "保存或修改微信小程序信息")
+    private String saveOrUpdateWeChatUserInfo(WeChatRequestParam weChatRequestParam, long existNum, RegisterTypeEnum registerTypeEnum) {
         TbWechatUserInfo tbWechatUserInfo=new TbWechatUserInfo();
         BeanUtils.copyProperties(weChatRequestParam, tbWechatUserInfo);
         //id
@@ -96,10 +230,10 @@ public class MiniProgramRegistersServiceImpl implements MiniProgramRegistersServ
         if(existNum>0){
             //openId在系统中存在更新数据
             //更新时间
-            tbWechatUserInfo.setModifiedTime(DateUtils.parseDate(DateUtils.getDate()));
+            tbWechatUserInfo.setModifiedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
             tbWechatUserInfoMapper.updateByExampleSelective(tbWechatUserInfo, example);
             //根据openId判断是否已经绑定账号
-            return  isBindingAccountByOpenId(weChatRequestParam.getOpenId());
+            return  isBindingAccountByOpenId(weChatRequestParam.getOpenId(),registerTypeEnum);
 
         }else{
             //openId在系统中不存在则新增数据
@@ -116,15 +250,52 @@ public class MiniProgramRegistersServiceImpl implements MiniProgramRegistersServ
      * @return
      */
     @ServiceLog(doAction = "是否绑定账号")
-    private String  isBindingAccountByOpenId(String openId) {
-        TbWechatUserInfoCriteria example=new TbWechatUserInfoCriteria();
-        example.createCriteria().andOpenIdEqualTo(openId)
-                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
-        List<TbWechatUserInfo> weChatUserInfos = tbWechatUserInfoMapper.selectByExample(example);
-        if(weChatUserInfos==null || weChatUserInfos.isEmpty()){
+    private String  isBindingAccountByOpenId(String openId,RegisterTypeEnum registerTypeEnum) {
+        //微信小程序
+        if(StringUtils.equals(RegisterTypeEnum.SMALL_PROGRAM.getCode(),registerTypeEnum.getCode())){
+            TbWechatUserInfoCriteria example=new TbWechatUserInfoCriteria();
+            example.createCriteria().andOpenIdEqualTo(openId)
+                    .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+            List<TbWechatUserInfo> weChatUserInfos = tbWechatUserInfoMapper.selectByExample(example);
+            if(weChatUserInfos==null || weChatUserInfos.isEmpty()){
+                return "";
+            }
+            String phone = weChatUserInfos.get(0).getPhone();
+            return getBindingPhone(phone);
+        }else if(StringUtils.equals(RegisterTypeEnum.PUBLIC_NUMBER.getCode(),registerTypeEnum.getCode())){
+            //微信公众号
+            TbWechatPublicUserInfoCriteria example=new TbWechatPublicUserInfoCriteria();
+            example.createCriteria().andOpenIdEqualTo(openId)
+                    .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+            List<TbWechatPublicUserInfo> publicUserInfos = tbWechatPublicUserInfoMapper.selectByExample(example);
+            if(publicUserInfos==null || publicUserInfos.isEmpty()){
+                return "";
+            }
+            String phone = publicUserInfos.get(0).getPhone();
+            return getBindingPhone(phone);
+        }else{
+            logger.warn("微信注册枚举:{}系统不识别",registerTypeEnum.getMessage());
+            throw new JnSpringCloudException(UserExtensionExceptionEnum.REGISTER_TYPE_NOT_ALLOW);
+        }
+    }
+
+    /**
+     * 获取绑定的phone
+     * @param phone
+     * @return
+     */
+    @ServiceLog(doAction = "获取绑定的phone")
+    private String getBindingPhone(String phone) {
+        if(StringUtils.isBlank(phone)){
             return "";
         }
-        return  StringUtils.isBlank(weChatUserInfos.get(0).getPhone())?"":weChatUserInfos.get(0).getPhone();
+        Result<User> systemClientUser = getUserInfo(phone);
+        if(systemClientUser==null || systemClientUser.getData()==null){
+            return  "";
+        }
+        //用户数据状态
+        Byte recordStatus = systemClientUser.getData().getRecordStatus();
+        return RecordStatusEnum.EFFECTIVE.getValue() == recordStatus ? phone : "";
     }
 
     /**
@@ -153,11 +324,23 @@ public class MiniProgramRegistersServiceImpl implements MiniProgramRegistersServ
      * @return
      */
     @ServiceLog(doAction = "openId在系统中的数据条数")
-    private long existNumOpenId(String openId) {
-        TbWechatUserInfoCriteria example=new TbWechatUserInfoCriteria();
-        example.createCriteria().andOpenIdEqualTo(openId)
-                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
-        return tbWechatUserInfoMapper.countByExample(example);
+    private long existNumOpenId(String openId,RegisterTypeEnum registerTypeEnum) {
+        //微信公众号
+        if (StringUtils.equals(RegisterTypeEnum.PUBLIC_NUMBER.getCode(), registerTypeEnum.getCode())) {
+            TbWechatPublicUserInfoCriteria example = new TbWechatPublicUserInfoCriteria();
+            example.createCriteria().andOpenIdEqualTo(openId)
+                    .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+            return tbWechatPublicUserInfoMapper.countByExample(example);
+        } else if (StringUtils.equals(RegisterTypeEnum.SMALL_PROGRAM.getCode(), registerTypeEnum.getCode())) {
+            //微信小程序
+            TbWechatUserInfoCriteria example = new TbWechatUserInfoCriteria();
+            example.createCriteria().andOpenIdEqualTo(openId)
+                    .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+            return tbWechatUserInfoMapper.countByExample(example);
+        } else {
+            logger.warn("微信注册枚举:{}系统不识别",registerTypeEnum.getMessage());
+            throw new JnSpringCloudException(UserExtensionExceptionEnum.REGISTER_TYPE_NOT_ALLOW);
+        }
     }
 
     /**
@@ -167,7 +350,7 @@ public class MiniProgramRegistersServiceImpl implements MiniProgramRegistersServ
      */
     @ServiceLog(doAction = "注册并绑定")
     @Override
-    public String registerAndBinding(RegisterInfoParam registerInfoParam) {
+    public String registerAndBinding(RegisterInfoParam registerInfoParam,RegisterTypeEnum registerTypeEnum) {
         if(registerInfoParam==null){
             logger.warn("注册并绑定异常，请求的入参为null");
             throw new JnSpringCloudException(MiniProgramRegisterExceptionEnum.NETWORK_ANOMALY);
@@ -189,58 +372,138 @@ public class MiniProgramRegistersServiceImpl implements MiniProgramRegistersServ
         String isExist="success";
         if(StringUtils.equals(isExist,stringResult.getData())){
             //若不存在，则先注册，然后再绑定账号
-            UserRegister userRegister=new UserRegister();
-            userRegister.setPhone(registerInfoParam.getPhone());
-            userRegister.setMessageCode(registerInfoParam.getCode());
-            userRegister.setPassword("weChat"+ RandomUtils.nextInt(9999));
-            userJoinService.addUser(userRegister);
+            userRegister(registerInfoParam.getPhone(),registerInfoParam.getCode());
             logger.info("注册并绑定Api注册账号[{}]成功",registerInfoParam.getPhone());
         }
-        //若存在，进入下一步绑定账号
+        Result<User> systemClientUser = getUserInfo(registerInfoParam.getPhone());
+        if(systemClientUser==null || systemClientUser.getData()==null){
+            logger.warn("注册并绑定异常，跨服务获取用户信息失败");
+            throw new JnSpringCloudException(MiniProgramRegisterExceptionEnum.REGISTER_OR_BIDING_ERROR);
+        }
+        //用户数据状态
+        Byte recordStatus = systemClientUser.getData().getRecordStatus();
+        if(RecordStatusEnum.FAILURE.getValue()==recordStatus){
+            logger.info("当前用户账号已被管理员注销，请联系管理员");
+            throw new JnSpringCloudException(UserExtensionExceptionEnum.ACCOUNT_NOT_ALLOW_LOGIN);
+        }else if(RecordStatusEnum.DELETE.getValue()==recordStatus){
+            userRegister(registerInfoParam.getPhone(),registerInfoParam.getCode());
+            logger.info("注册并绑定Api注册账号[{}]成功",registerInfoParam.getPhone());
+        }else{
+            updateRegisterAndBindingData(registerInfoParam.getOpenId(), registerTypeEnum,systemClientUser.getData().getAccount());
+        }
+        return systemClientUser.getData().getAccount();
+    }
+
+    /**
+     * 根据手机号获取用户信息
+     * @param phone
+     * @return
+     */
+    @ServiceLog(doAction = "根据手机号获取用户信息")
+    private Result<User> getUserInfo(String phone) {
+        if(StringUtils.isBlank(phone)){
+            return new Result();
+        }
         User user=new User();
         //系统中一定存在用户信息，根据账号获取用户信息
-        user.setAccount(registerInfoParam.getPhone());
+        user.setAccount(phone);
         Result<User> systemClientUser = systemClient.getUser(user);
         if(systemClientUser==null || systemClientUser.getData()==null){
-            //根据账号获取无法用户信息，改用手机号获取用户信息
+            //根据账号获取无用户信息，改用手机号获取用户信息
             user.setAccount("");
-            user.setPhone(registerInfoParam.getPhone());
+            user.setPhone(phone);
             systemClientUser = systemClient.getUser(user);
-            if(systemClientUser==null || systemClientUser.getData()==null){
-                logger.warn("注册并绑定异常，跨服务获取用户信息失败");
+        }
+        return systemClientUser;
+    }
+
+
+    /**
+     * 更新注册并绑定信息
+     * @param openId
+     * @param registerTypeEnum
+     * @param account
+     */
+    @ServiceLog(doAction = "更新注册并绑定信息")
+    private void updateRegisterAndBindingData(String openId, RegisterTypeEnum registerTypeEnum,String account) {
+        if(StringUtils.equals(RegisterTypeEnum.SMALL_PROGRAM.getCode(), registerTypeEnum.getCode())){
+            TbWechatUserInfo tbWechatUserInfo=new TbWechatUserInfo();
+            tbWechatUserInfo.setPhone(account);
+            TbWechatUserInfoCriteria example=new TbWechatUserInfoCriteria();
+            example.createCriteria().andOpenIdEqualTo(openId)
+                    .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+            int resNum = tbWechatUserInfoMapper.updateByExampleSelective(tbWechatUserInfo, example);
+            if(resNum==0){
+                logger.warn("注册并绑定失败，绑定手机号失败");
                 throw new JnSpringCloudException(MiniProgramRegisterExceptionEnum.NETWORK_ANOMALY);
             }
+            logger.info("注册并绑定Api绑定成功，数据响应条数：{}",resNum);
+        }else if(StringUtils.equals(RegisterTypeEnum.PUBLIC_NUMBER.getCode(), registerTypeEnum.getCode())){
+            TbWechatPublicUserInfo publicUserInfo=new TbWechatPublicUserInfo();
+            publicUserInfo.setPhone(account);
+            TbWechatPublicUserInfoCriteria example=new TbWechatPublicUserInfoCriteria();
+            example.createCriteria().andOpenIdEqualTo(openId)
+                    .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+            int resNum = tbWechatPublicUserInfoMapper.updateByExampleSelective(publicUserInfo, example);
+            if(resNum==0){
+                logger.warn("注册并绑定失败，绑定手机号失败");
+                throw new JnSpringCloudException(MiniProgramRegisterExceptionEnum.NETWORK_ANOMALY);
+            }
+            logger.info("注册并绑定Api绑定成功，数据响应条数：{}",resNum);
+        }else{
+            logger.warn("微信注册枚举:{}系统不识别",registerTypeEnum.getMessage());
+            throw new JnSpringCloudException(UserExtensionExceptionEnum.REGISTER_TYPE_NOT_ALLOW);
         }
-        TbWechatUserInfo tbWechatUserInfo=new TbWechatUserInfo();
-        tbWechatUserInfo.setPhone(systemClientUser.getData().getAccount());
-        TbWechatUserInfoCriteria example=new TbWechatUserInfoCriteria();
-        example.createCriteria().andOpenIdEqualTo(registerInfoParam.getOpenId())
-        .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
-        int resNum = tbWechatUserInfoMapper.updateByExampleSelective(tbWechatUserInfo, example);
-        if(resNum==0){
-            logger.warn("注册并绑定失败，绑定手机号失败");
-            throw new JnSpringCloudException(MiniProgramRegisterExceptionEnum.NETWORK_ANOMALY);
-        }
-        logger.info("注册并绑定Api绑定成功，数据响应条数：{}",resNum);
-        return systemClientUser.getData().getAccount();
+    }
+
+    /***
+     * 用户注册
+     * @param phone     手机号
+     * @param phoneCode  验证码
+     */
+    @ServiceLog(doAction = "用户注册")
+    private void userRegister(String phone,String phoneCode) {
+        UserRegister userRegister=new UserRegister();
+        userRegister.setPhone(phone);
+        userRegister.setMessageCode(phoneCode);
+        userRegister.setPassword("weChat"+ RandomUtils.nextInt(9999));
+        userJoinService.addUser(userRegister);
     }
 
     /**
      * 根据账号获取openId
      * @param account
+     * @param registerTypeEnum 微信注册枚举
      * @return
      */
     @ServiceLog(doAction = "根据账号获取openId")
     @Override
-    public String getOpenIdByAccount(String account) {
-        TbWechatUserInfoCriteria example=new TbWechatUserInfoCriteria();
-        example.createCriteria().andPhoneEqualTo(account)
-                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
-        List<TbWechatUserInfo> userInfoList = tbWechatUserInfoMapper.selectByExample(example);
-        if(userInfoList.isEmpty()|| StringUtils.isBlank(userInfoList.get(0).getOpenId())){
-            return "";
+    public String getOpenIdByAccount(String account,RegisterTypeEnum registerTypeEnum) {
+        //微信小程序
+        if(StringUtils.equals(RegisterTypeEnum.SMALL_PROGRAM.getCode(),registerTypeEnum.getCode())){
+            TbWechatUserInfoCriteria example=new TbWechatUserInfoCriteria();
+            example.createCriteria().andPhoneEqualTo(account)
+                    .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+            List<TbWechatUserInfo> userInfoList = tbWechatUserInfoMapper.selectByExample(example);
+            if(userInfoList.isEmpty()|| StringUtils.isBlank(userInfoList.get(0).getOpenId())){
+                return "";
+            }else{
+                return userInfoList.get(0).getOpenId();
+            }
+        }else if(StringUtils.equals(RegisterTypeEnum.PUBLIC_NUMBER.getCode(),registerTypeEnum.getCode())){
+            //微信公众号
+            TbWechatPublicUserInfoCriteria example=new TbWechatPublicUserInfoCriteria();
+            example.createCriteria().andPhoneEqualTo(account)
+                    .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+            List<TbWechatPublicUserInfo> userInfoList = tbWechatPublicUserInfoMapper.selectByExample(example);
+            if(userInfoList.isEmpty()|| StringUtils.isBlank(userInfoList.get(0).getOpenId())){
+                return "";
+            }else{
+                return userInfoList.get(0).getOpenId();
+            }
         }else{
-            return userInfoList.get(0).getOpenId();
+            logger.warn("微信注册枚举:{}系统不识别",registerTypeEnum.getMessage());
+            throw new JnSpringCloudException(UserExtensionExceptionEnum.REGISTER_TYPE_NOT_ALLOW);
         }
     }
 }

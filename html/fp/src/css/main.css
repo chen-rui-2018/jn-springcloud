@@ -279,6 +279,7 @@ img {
   padding-right: 40px;
   border: 1px solid #eee;
   border-radius: 5px;
+  background: #fff;
 }
 
 .actiCenter .actiContent .allActi .actiSearch > input,
@@ -420,14 +421,32 @@ img {
   margin-left: 10px;
 }
 
-.actiCenter .actiContent .actiTab .allActiUl > li .actiNum > span,
-.actiTrain .actiContent .actiTab .allActiUl > li .actiNum > span {
+.actiCenter .actiContent .actiTab .allActiUl > li .actiNum > p,
+.actiTrain .actiContent .actiTab .allActiUl > li .actiNum > p {
   float: right;
+  color: #00a041;
 }
 
-.actiCenter .actiContent .actiTab .allActiUl > li .actiNum > span .icon-xihuan,
-.actiTrain .actiContent .actiTab .allActiUl > li .actiNum > span .icon-xihuan {
+.actiCenter .actiContent .actiTab .allActiUl > li .actiNum > p > img,
+.actiTrain .actiContent .actiTab .allActiUl > li .actiNum > p > img {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  vertical-align: middle;
   margin-right: 5px;
+}
+
+.actiCenter .actiContent .actiTab .allActiUl > li .actiNum > p > span,
+.actiTrain .actiContent .actiTab .allActiUl > li .actiNum > p > span {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.actiCenter .actiContent .actiTab .allActiUl > li .actiNum > p .icon-miaojiesellerlike,
+.actiTrain .actiContent .actiTab .allActiUl > li .actiNum > p .icon-miaojiesellerlike {
+  margin-right: 5px;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .actiCenter .actiContent .actiTab .allActiUl > li .actiInfo,
@@ -501,11 +520,32 @@ img {
 .actiCenter .actiContent .actiTab .verticalUl > li .verticalMiddle .xihuan,
 .actiTrain .actiContent .actiTab .verticalUl > li .verticalMiddle .xihuan {
   margin: 15px 0;
+  color: #00a041;
+}
+
+.actiCenter .actiContent .actiTab .verticalUl > li .verticalMiddle .xihuan > img,
+.actiTrain .actiContent .actiTab .verticalUl > li .verticalMiddle .xihuan > img {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.actiCenter .actiContent .actiTab .verticalUl > li .verticalMiddle .xihuan > span,
+.actiTrain .actiContent .actiTab .verticalUl > li .verticalMiddle .xihuan > span {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.actiCenter .actiContent .actiTab .verticalUl > li .verticalMiddle .el-icon-time,
+.actiTrain .actiContent .actiTab .verticalUl > li .verticalMiddle .el-icon-time {
+  color: #999;
 }
 
 .actiCenter .actiContent .actiTab .verticalUl > li .verticalMiddle .location,
 .actiTrain .actiContent .actiTab .verticalUl > li .verticalMiddle .location {
   margin: 18px 0;
+  color: #999;
 }
 
 .actiCenter .actiContent .actiTab .verticalUl > li .verticalMiddle .actiNum > i,
@@ -911,6 +951,7 @@ img {
   padding-right: 40px;
   border: 1px solid #eee;
   border-radius: 5px;
+  background: #fff;
 }
 
 .serverOrg .serverOrgFilter .filRight > input,
@@ -1096,6 +1137,9 @@ img {
 .finaPro .serverOrgContent > ul > li .orgCon .conContent .left1 > p,
 .companyProfile .serverOrgContent > ul > li .orgCon .conContent .left1 > p {
   margin-bottom: 5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .serverOrg .serverOrgContent > ul > li .orgCon .conContent .right1,
@@ -2503,7 +2547,6 @@ img {
   float: left;
   width: 18px;
   height: 18px;
-  border: 1px solid #ccc;
   border-radius: 50%;
   margin-left: -10px;
 }
@@ -2528,21 +2571,44 @@ img {
   margin-left: 10px;
 }
 
-.serverOrgDetail .agentCon .actiConsultation .allActiUl > li .actiNum > span,
-.serverProDetail .agentCon .actiConsultation .allActiUl > li .actiNum > span,
-.serverConDetail .agentCon .actiConsultation .allActiUl > li .actiNum > span,
-.quickSearch .agentCon .actiConsultation .allActiUl > li .actiNum > span,
-.finaInsDetail .agentCon .actiConsultation .allActiUl > li .actiNum > span,
-.finaProDetail .agentCon .actiConsultation .allActiUl > li .actiNum > span {
+.serverOrgDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p,
+.serverProDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p,
+.serverConDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p,
+.quickSearch .agentCon .actiConsultation .allActiUl > li .actiNum > p,
+.finaInsDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p,
+.finaProDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p {
   float: right;
 }
 
-.serverOrgDetail .agentCon .actiConsultation .allActiUl > li .actiNum > span .icon-xihuan,
-.serverProDetail .agentCon .actiConsultation .allActiUl > li .actiNum > span .icon-xihuan,
-.serverConDetail .agentCon .actiConsultation .allActiUl > li .actiNum > span .icon-xihuan,
-.quickSearch .agentCon .actiConsultation .allActiUl > li .actiNum > span .icon-xihuan,
-.finaInsDetail .agentCon .actiConsultation .allActiUl > li .actiNum > span .icon-xihuan,
-.finaProDetail .agentCon .actiConsultation .allActiUl > li .actiNum > span .icon-xihuan {
+.serverOrgDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p > img,
+.serverProDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p > img,
+.serverConDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p > img,
+.quickSearch .agentCon .actiConsultation .allActiUl > li .actiNum > p > img,
+.finaInsDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p > img,
+.finaProDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p > img {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+.serverOrgDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p > span,
+.serverProDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p > span,
+.serverConDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p > span,
+.quickSearch .agentCon .actiConsultation .allActiUl > li .actiNum > p > span,
+.finaInsDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p > span,
+.finaProDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p > span {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.serverOrgDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p .icon-xihuan,
+.serverProDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p .icon-xihuan,
+.serverConDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p .icon-xihuan,
+.quickSearch .agentCon .actiConsultation .allActiUl > li .actiNum > p .icon-xihuan,
+.finaInsDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p .icon-xihuan,
+.finaProDetail .agentCon .actiConsultation .allActiUl > li .actiNum > p .icon-xihuan {
   margin-right: 5px;
 }
 
@@ -2622,6 +2688,12 @@ img {
   display: inline-block;
   vertical-align: middle;
   margin-right: 5px;
+}
+
+.portalIndex .avaP > span,
+.enterpriseservice .avaP > span {
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .portalIndex .el-pagination.is-background .btn-next,
@@ -3506,6 +3578,7 @@ img {
 .enterpriseservice .popularActi .acti .actiUl > li {
   float: left;
   width: 280px;
+  height: 340px;
   border: 1px solid #eee;
   margin-right: 20px;
   margin-bottom: 30px;

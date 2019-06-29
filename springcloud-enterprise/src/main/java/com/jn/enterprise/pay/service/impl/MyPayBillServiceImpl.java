@@ -9,6 +9,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.GlobalConstants;
 import com.jn.common.util.StringUtils;
+import com.jn.company.api.CompanyClient;
 import com.jn.company.model.ServiceCompany;
 import com.jn.enterprise.company.service.CompanyService;
 import com.jn.enterprise.pay.dao.*;
@@ -116,6 +117,8 @@ public class MyPayBillServiceImpl implements MyPayBillService {
 
     @Autowired
     private SystemClient systemClient;
+    @Autowired
+    private CompanyClient companyClient;
 
 
     @ServiceLog(doAction = "我的账单-查询账单信息列表(APP端)")
@@ -166,12 +169,25 @@ public class MyPayBillServiceImpl implements MyPayBillService {
     @Override
     @ServiceLog(doAction = "我的账单-查询缴费记录")
     public PaginationData<List<PayRecordVo>> billPaymentRecord(PayRecordParam payRecordParam, User user) {
+
         PageHelper.startPage(payRecordParam.getPage(), payRecordParam.getRows());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+        //个人账单查询条件
         TbPayBillCriteria tbPayBillCriteria = new TbPayBillCriteria();
         tbPayBillCriteria.setOrderByClause("created_time desc,payment_state desc");
         TbPayBillCriteria.Criteria criteria = tbPayBillCriteria.createCriteria();
-        criteria.andPaymentStateEqualTo(PaymentBillEnum.BILL_ORDER_IS_PAY.getCode());
+        criteria.andPaymentStateEqualTo(PaymentBillEnum.BILL_ORDER_IS_PAY.getCode()).andObjTypeEqualTo(PaymentBillEnum.BILL_OBJ_TYPE_IS_INDIVIDUAL.getCode()).andObjIdEqualTo(user.getAccount()).andBillExpenseGreaterThan(new BigDecimal("0"));
+
+        //企业账单查询条件
+        Result<ServiceCompany> serviceCompanyResult=companyClient.getCurCompanyInfo(user.getAccount());
+        if(StringUtils.equals(serviceCompanyResult.getCode(),"0000")&&serviceCompanyResult.getData()!=null){
+            logger.info("用户有对应的企业[{}-{}]，可以查到企业相关的缴费记录",serviceCompanyResult.getData().getComName(),serviceCompanyResult.getData().getId());
+            TbPayBillCriteria tbPayBillCriteria2=new TbPayBillCriteria();
+            TbPayBillCriteria.Criteria criteria2 = tbPayBillCriteria2.createCriteria();
+            criteria2.andPaymentStateEqualTo(PaymentBillEnum.BILL_ORDER_IS_PAY.getCode()).andObjTypeEqualTo(PaymentBillEnum.BILL_OBJ_TYPE_IS_COMPANY.getCode()).andObjIdEqualTo(serviceCompanyResult.getData().getId()).andBillExpenseGreaterThan(new BigDecimal("0"));
+            tbPayBillCriteria.or(criteria2);
+        }
+
         List<TbPayBill> tbPayBills = tbPayBillMapper.selectByExample(tbPayBillCriteria);
         //获取每个月份，通过月份组装返回给前端
         List<PayRecordVo> voList = new ArrayList<>();

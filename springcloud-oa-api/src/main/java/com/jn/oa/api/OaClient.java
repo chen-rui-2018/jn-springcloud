@@ -1,17 +1,16 @@
 package com.jn.oa.api;
 
 import com.jn.common.model.Result;
-import com.jn.oa.model.Attendance;
-import com.jn.oa.model.Email;
-import com.jn.oa.model.Leave;
-import com.jn.oa.model.Schedule;
+import com.jn.oa.model.*;
 import com.jn.oa.vo.AttendanceApiVo;
 import com.jn.oa.vo.LeaveApiVo;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -111,4 +110,36 @@ public interface OaClient {
     @RequestMapping(value = "/api/oa/scheduleRemind", method = RequestMethod.POST)
     Result scheduleRemind(@RequestBody Schedule Schedule);
 
+    /**
+     * 钉钉修改用户通讯录回调
+     * @param addressBookNotice
+     * @return
+     */
+    @RequestMapping(value = "/api/oa/updateOrInsertDingTalkUser", method = RequestMethod.POST)
+    Result updateOrInsertDingTalkUser(@RequestBody AddressBookNotice addressBookNotice);
+
+    /**
+     * 批量更新钉钉用户表
+     * @return
+     */
+    @RequestMapping(value = "/api/oa/batchInsertDingTalkUser", method = RequestMethod.GET)
+    Result batchInsertDingTalkUser();
+
+    /**
+     * 钉钉修改用户通讯录回调
+     * @param workDateFrom
+     * @param workDateTo
+     * @return
+     */
+    @RequestMapping(value = "/api/oa/batchInsertDingTalkAttendance", method = RequestMethod.POST)
+    Result batchInsertDingTalkAttendance(@RequestParam("workDateFrom")String workDateFrom, @RequestParam("workDateTo")String workDateTo);
+
+    /**
+     * 钉钉修改用户通讯录回调
+     * @param workDateFrom
+     * @param workDateTo
+     * @return
+     */
+    @RequestMapping(value = "/api/oa/batchInsertDingTalkLeave", method = RequestMethod.POST)
+    Result batchInsertDingTalkLeave(@RequestParam("workDateFrom") Date workDateFrom, @RequestParam("workDateTo")Date workDateTo);
 }

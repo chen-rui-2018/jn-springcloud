@@ -99,14 +99,16 @@
         <div class="perennial_list">
           <ul>
             <li v-for="(item,index) in perennialList" :key="index">
-              <div class="list_cont">
-                <p><img src="@/assets/image/perennial.png" alt=""> </p>
-                <p>{{item.title}}</p>
-                <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
-                <p>收益：<span>{{item.profit}}</span> </p>
-                <p>价格：{{item.price}}</p>
-              </div>
-              <div class="list_view"><span>查看详情</span> </div>
+              <a :href="item.linkAddress">
+                <div class="list_cont">
+                  <p><img src="@/assets/image/perennial.png" alt=""> </p>
+                  <p>{{item.title}}</p>
+                  <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
+                  <p>收益：<span>{{item.profit}}</span> </p>
+                  <p>价格：{{item.price}}</p>
+                </div>
+                <div class="list_view"><span>查看详情</span> </div>
+              </a>
             </li>
           </ul>
         </div>
@@ -260,11 +262,15 @@ export default {
           callback: (res)=> {
             if (res.code == "0000") {
               // console.log(res.data.roleCode)
-              if(res.data.roleCode==="COM_ADMIN"||res.data.roleCode==="COM_CONTACTS"){
-                this.$router.push({name:'declarationPlatform'})
+              if(res.data!==null){
+                if(res.data.roleCode==="COM_ADMIN"||res.data.roleCode==="COM_CONTACTS"){
+                  this.$router.push({name:'declarationPlatform'})
+                }else{
+                  this.$message.error("只有企业管理员和企业联系人才可以进申报平台,您暂时没有权限！！")
+                  return
+                }
               }else{
-                this.$message.error("只有企业管理员和企业联系人才可以进申报平台！！")
-                return
+                this.$message.error("只有企业管理员和企业联系人才可以进申报平台，您暂时没有权限")
               }
             }else{
               _this.$message.error(res.result)              
@@ -285,7 +291,19 @@ export default {
         }
       },
       gonoticedetail(item){
-        this.$router.push({path:'/declarationNoticeDetail',query:{id:item.id,rangeId:item.rangeId}})
+        this.api.get({
+          url: "addpageviews",
+          data: {
+            id:item.id
+          },
+          callback: (res)=> {
+            if(res.code==='0000'){
+              this.$router.push({path:'/declarationNoticeDetail',query:{id:item.id,rangeId:item.rangeId}})
+            }else{
+              this.$message.error(res.result)
+            }
+          }
+        });
       },
       handleSizeChange(val) {
       // console.log(`每页 ${val} 条`);
@@ -467,10 +485,11 @@ export default {
           margin-top: 25px;
           ul{
             display: flex;
+            justify-content: space-between;
             li{
               cursor: pointer;
-              width:25%;
-              margin-right: 35px;
+              width:23%;
+              // margin-right: 35px;
               border: solid 1px #eeeeee;
               transition:all .3s linear;
               &:hover{

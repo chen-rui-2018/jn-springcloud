@@ -29,9 +29,11 @@
           <div class="service_detail" v-for="(item,index) in materialList " :key="index">
             <div>
               <span class="hidden">{{item.name}}</span>
-              <span >
-                <a :href="item.sample" v-if="item.sample">下载</a>
-                <span v-else>下载</span>
+              <span @click="download">
+                <!-- <a :href="url"  download="">
+                  下载
+                </a> -->
+                <span>下载</span>
                 <i class="iconfont icon-jiantou"></i>
               </span>
             </div>
@@ -71,7 +73,8 @@ export default {
       id: '',
       serviceDetail: {},
       materialList: [],
-      dealUrl: ''
+      dealUrl: '',
+      url: ''
     }
   },
   mounted () {
@@ -90,30 +93,54 @@ export default {
         }
       })
     },
-    getserviceDetail () {
-      this.api.get({
-        url: 'getBusi',
-        data: {
-          id: this.id
-        },
-        callback: res => {
-          if (res.code === '0000') {
-            // console.log(res)
-            this.serviceDetail = res.data
-            this.materialList = res.data.materialsModelList
-          }
-        }
+    download (item) {
+      // alert(navigator.userAgent)
+      // console.log(navigator.userAgent)
+      // if (navigator.userAgent.indexOf('iPhone') > -1) {
+      //   this.$vux.toast.show({
+      //     text: '当前系统暂不支持下载',
+      //     type: 'warn',
+      //     width: '13em'
+      //   })
+      //   this.url = 'javascript:;'
+      // } else {
+      //   if (item === '') {
+      // this.$vux.toast.text('暂不支持下载', 'middle')
+      this.$vux.toast.show({
+        text: '暂不支持下载',
+        type: 'warn',
+        width: '13em'
       })
-    },
-    // goOnline () {
-    //   this.dealUrl = `http://192.168.10.31:1101/springcloud-park/guest/portal/sp/power/getDealUrl?id=${this.id}`
-    // },
-    goConsult () {
-      // console.log(1)
-      this.$router.push({path: '/guest/portal/sp/power/consult', query: {id: this.id}})
+      //   this.url = 'javascript:;'
+      // } else {
+      //   this.url = item
+      // }
     }
+  },
+  getserviceDetail () {
+    this.api.get({
+      url: 'getBusi',
+      data: {
+        id: this.id
+      },
+      callback: res => {
+        if (res.code === '0000') {
+          // console.log(res)
+          this.serviceDetail = res.data
+          this.materialList = res.data.materialsModelList
+        }
+      }
+    })
+  },
+  // goOnline () {
+  //   this.dealUrl = `http://192.168.10.31:1101/springcloud-park/guest/portal/sp/power/getDealUrl?id=${this.id}`
+  // },
+  goConsult () {
+    // console.log(1)
+    this.$router.push({path: '/guest/portal/sp/power/consult', query: {id: this.id}})
   }
 }
+// }
 </script>
 
 <style lang="scss">
@@ -139,6 +166,7 @@ export default {
           font-size: 35px;
           padding-top: 28px;
           margin-bottom: 17px;
+          font-weight: 600;
         }
       // 基本信息
       .serviceDeail_baseInfo{

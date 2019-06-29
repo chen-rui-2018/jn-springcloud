@@ -160,7 +160,6 @@ export default {
       this.$router.push({path: 'editWorkStatus', query: {id: item.id, title: '暂停'}})
     },
     toEditWorkPlan (item) {
-      console.log(item)
       this.$router.push({path: 'editWorkPlan', query: {id: item.id}})
     },
     completeWork (item) {
@@ -333,7 +332,8 @@ export default {
 // .workPlan{
 .vux-popover {
   padding: 0.096667rem;
-  left: 5.973333rem !important;
+  left:unset!important;
+  right: 0;
 }
 .vux-popover-arrow-down {
   left: 70% !important;

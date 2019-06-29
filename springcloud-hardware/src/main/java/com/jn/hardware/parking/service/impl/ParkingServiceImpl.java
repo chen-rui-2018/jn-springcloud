@@ -51,7 +51,7 @@ public class ParkingServiceImpl implements ParkingService {
      * @return
      */
     @Override
-    public Result getTemporaryCarParkingFee(TemporaryCarParkingFeeRequest temporaryCarParkingFeeRequest) {
+    public Result<DoorTemporaryCarParkingFeeResponse> getTemporaryCarParkingFee(TemporaryCarParkingFeeRequest temporaryCarParkingFeeRequest) {
         logger.info("\n临停预缴费信息(场内缴费)查询接口入参【{}】",temporaryCarParkingFeeRequest);
         Result result=new Result();
         String url = "";
@@ -456,6 +456,11 @@ public class ParkingServiceImpl implements ParkingService {
                     doorResult.getHead().setMessage(result.getResult());
                     throw new JnSpringCloudException(ParkingExceptionEnum.DOOR_CAR_PARKING_OUT,result.getResult());
                 }else {
+                    if(result.getData()==null || result.getData()==""){
+                        doorResult.getHead().setStatus(ParkingExceptionEnum.DOOR_CAR_PARKING_NOT_FIND_IN.getCode());
+                        doorResult.getHead().setMessage(ParkingExceptionEnum.DOOR_CAR_PARKING_NOT_FIND_IN.getMessage());
+                        throw new JnSpringCloudException(ParkingExceptionEnum.DOOR_CAR_PARKING_NOT_FIND_IN);
+                    }
                     doorResult.getHead().setStatus(DoorResult.SUCCESS_CODE);
                     String ids = result.getData()!=null?result.getData():"";
                     DoorInOutParkingShow show = new DoorInOutParkingShow();

@@ -100,8 +100,8 @@
       </div>
       <button class="business_footer" @click="submitForm('counselorForm')"> 提交 </button>
     </div>
-    <el-dialog :visible.sync="dialogVisible" :modal-append-to-body="false" width="50%">
-      <img :src="certificatePhoto" alt="图片" style="width:100%;height:200px">
+    <el-dialog :visible.sync="dialogVisible" :modal-append-to-body="false" width="39%">
+      <img :src="certificatePhoto" alt="图片" style="width:100%;">
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">返 回</el-button>
       </span>

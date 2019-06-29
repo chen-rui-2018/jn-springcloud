@@ -9,7 +9,6 @@
         <span>{{ currentDay }}</span>
       </div>
       <div>
-        <el-button type="primary" round><a :href="ibpsUrl+'560993009357815808.htm'">日报填写</a> </el-button>
         <el-button type="primary" round class="el-radio-group">
           <router-link :to="{path: '/planning/project'}">返回 </router-link>
         </el-button>
@@ -90,7 +89,6 @@ export default {
   components: { PieChart, BarChart, Gantt },
   data() {
     return {
-      ibpsUrl: this.GLOBAL.ibpsUrl,
       position: 'inner',
       detailData: [],
       currentDay: '',
@@ -121,14 +119,14 @@ export default {
           //   duration: 4,
           //   progress: 0.66
           // }
-        ],
-        links: [
-          // { id: 1, source: 1, target: 2, type: '0' }
         ]
       }
     }
   },
-  mounted() {
+  // mounted() {
+  //   this.init()
+  // },
+  created() {
     this.init()
   },
   methods: {
@@ -183,25 +181,20 @@ export default {
         if (res.data.code === this.GLOBAL.code) {
           this.detailData = res.data.data
           if (res.data.data) {
+            // this.tasks = { data: [] }
+            var tasksData = { data: [] }
+            // tasksData.data = []
             res.data.data.forEach((v, i) => {
-              this.tasks.data.push({
-                // $index: 0,
-                // $level: 0,
-                // $no_end: false,
-                // $no_start: false,
-                // $rendered_type: 'task',
-                // $source: [],
-                // $target: [],
+              tasksData.data.push({
                 text: v.taskName,
                 id: i + 1,
-                // start_date: this.reverseString(v.planStartTime),
                 start_date: new Date(v.planStartTime),
-                // end_date: this.reverseString(v.planStopTime),
                 duration: ((new Date(v.planStopTime).getTime() - new Date(v.planStartTime).getTime()) / 3600 / 1000 / 24) + 1,
-                // duration: 20,
                 progress: Number(v.nowadaysProgress.split('%')[0]) / 100
               })
             })
+            this.tasks = tasksData
+            console.log(this.tasks)
           }
           // console.log(this.tasks.data)
         } else {
@@ -231,20 +224,7 @@ export default {
       // console.log(data)
       var collect = this.$echarts.init(document.getElementById('pieChart'))
       if (data.length > 0) {
-        console.log(data)
-        var bar = 'inner'
-        var isFlag = false
-        data.forEach(v => {
-          if (v.value === 100) {
-            isFlag = true
-            // data = [v]
-          }
-        })
-        if (isFlag) {
-          bar = 'center'
-        } else {
-          bar = 'inner'
-        }
+        // console.log(data)
         collect.hideLoading()
         const option = {
           color: ['#fdb409', '#81ca3f', '#2181da'],
@@ -260,21 +240,22 @@ export default {
             icon: 'circle',
             data: ['已完成', '已开始', '未开始']
           },
-          grid: {
-            left: 10
-          },
+          // grid: {
+          //   left: 10,
+          //   right: 50
+          // },
           series: [
             {
               label: {
                 normal: {
-                  position: bar,
-                  textStyle: {
-                    fontSize: 16
-                  },
-                  color: '#fff',
-                  verticalAlign: 'middle',
+                  position: 'outside',
+                  //   textStyle: {
+                  //     fontSize: 16
+                  //   },
+                  //   color: '#fff',
+                  //   verticalAlign: 'middle',
                   formatter: function(value) {
-                    return value.data.value + '%'
+                    return value.data.name + value.data.value + '%'
                     // if (value.data.value === '0') {
                     //   return value.data.value
                     // } else {
@@ -283,7 +264,7 @@ export default {
                   }
                 }
               },
-              stillShowZeroSum: false,
+              // stillShowZeroSum: false,
               type: 'pie',
               radius: '60%',
               center: ['60%', 'center'],
@@ -535,6 +516,7 @@ export default {
      >div:nth-child(2){
       // flex:4;
       width:54%;
+      margin-left:-1px;
       >div:nth-child(1){
         height: 100%;
         >div:nth-child(1){
@@ -552,19 +534,22 @@ export default {
               }
               .gantt_task_scale{
                 height: 74px!important;
+                // width: 100%!important;
                 >div:nth-child(1){
                   div{
+                    text-align: left;
+                     margin-left: 423px;
                      width: 100%!important;
                   }
                 }
               }
               .gantt_scale_line {
-                height: 37px!important;
-                line-height: 37px !important;
+                height: 36px!important;
+                line-height: 36px !important;
                 background: #e0f1fc;
                 >div{
-                  height: 37px!important;
-                line-height: 37px !important;
+                  height: 36px!important;
+                line-height: 36px !important;
 
                 }
               }
@@ -610,24 +595,33 @@ export default {
   }
 .gantt_data_area{
   height: unset !important;
-  width: 100%!important;
+  // width: 100%!important;
   >div{
     width: 100%!important;
   }
 }
 .gantt_task_line{
+  // margin: 1px 0;
   background: rgb(255, 255, 105);
   border:none;
 }
-.gantt_task_scale{
-  width: 100% !important;
-}
-// .gantt_bars_area{
-//   // >div{
-//   //   // height: 44px !important;
-//   //   // line-height: 44px !important;
-//   //   // top:0px !important;
-//   // }
+// .gantt_row, .gantt_task_row{
+//   //  height: 36px!important;
 // }
+.gantt_grid_data .gantt_row.gantt_selected, .gantt_grid_data .gantt_row.odd.gantt_selected, .gantt_task_row.gantt_selected{
+  background: #fff;
+  // height: 37px!important;
+}
+.gantt_link_control.task_left,.gantt_link_target .gantt_link_control div, .gantt_task_line.gantt_drag_move .gantt_link_control div, .gantt_task_line.gantt_drag_move .gantt_task_drag, .gantt_task_line.gantt_drag_move .gantt_task_progress_drag, .gantt_task_line.gantt_drag_progress .gantt_link_control div, .gantt_task_line.gantt_drag_progress .gantt_task_drag, .gantt_task_line.gantt_drag_progress .gantt_task_progress_drag, .gantt_task_line.gantt_drag_resize .gantt_link_control div, .gantt_task_line.gantt_drag_resize .gantt_task_drag, .gantt_task_line.gantt_drag_resize .gantt_task_progress_drag, .gantt_task_line.gantt_selected .gantt_link_control div, .gantt_task_line.gantt_selected .gantt_task_drag, .gantt_task_line.gantt_selected .gantt_task_progress_drag, .gantt_task_line:hover .gantt_link_control div, .gantt_task_line:hover .gantt_task_drag, .gantt_task_line:hover .gantt_task_progress_drag{
+  display: none;
+}
+// .gantt_task_scale{
+//   // width: 100% !important;
+// }
+.gantt_bars_area{
+   >.gantt_task_line:nth-child(1){
+    margin:unset;
+  }
+}
 }
 </style>

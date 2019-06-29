@@ -1,9 +1,10 @@
 <template>
   <div class="basicInformation" v-loading="loading">
-    <div class="investorCertification-header font16">
+    <div class="ordinary_title font16">
       <div>{{title}}</div>
+      <div @click="$router.go('-1')">返回</div>
     </div>
-    <el-main style="padding:0 25px;text-align:left;background:#fff;">
+    <el-main class="basicInformation-content">
       <div class="investorCertification-content">
         <div class="step">
           <el-steps :active="status" align-center>
@@ -102,7 +103,6 @@
                     <el-upload class="avatar-uploader avatarImg" :show-file-list="false" :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
                       :on-success="handlelicense" :headers="headers" :before-upload="beforelicense" style="display:inline-block">
                       <img v-if="licenseList[scope.$index].fileUrl" :src="licenseList[scope.$index].fileUrl" class="avatar">
-
                       <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
                   </template>
@@ -118,7 +118,7 @@
               </el-form-item>
               <div class="marBtn" v-if="!isShowOtherList">
                 <el-table :data="otherList" style="width: 98%">
-                  <el-table-column prop="certName" label="资质荣誉名称" align="center"></el-table-column>
+                  <el-table-column prop="certName" label="资质荣誉名称" align="center"> </el-table-column>
                   <el-table-column label="特色标签" align="center">
                     <template>
                       <span>否</span>
@@ -313,8 +313,8 @@
         </div>
       </div>
     </el-main>
-    <el-dialog :visible.sync="dialogVisible" width="50%" :modal-append-to-body="false">
-      <img :src="otherPhoto" alt="图片" style="width:100%;height:200px;">
+    <el-dialog :visible.sync="dialogVisible" width="39%" :modal-append-to-body="false">
+      <img :src="otherPhoto" alt="图片" style="width:100%;">
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">返 回</el-button>
       </span>
@@ -750,7 +750,6 @@ export default {
             this.OrgBasicForm.licenses = this.licenseList.concat(
               this.otherList
             );
-            console.log(this.OrgBasicForm);
 
       } else if (this.investorCertificationTitle == "团队信息") {
         this.$refs["teamForm"].validate(valid => {
@@ -790,6 +789,7 @@ export default {
             this.OrgBasicForm.conName = this.contactForm.conName;
             this.OrgBasicForm.conPhone = this.contactForm.conPhone;
             this.OrgBasicForm.conEmail = this.contactForm.conEmail;
+            console.log(this.OrgBasicForm)
             this.api.post({
               url: "saveOrUpdateOrgDetail",
               data: this.OrgBasicForm,
@@ -842,10 +842,15 @@ export default {
 
     // // 编辑核心团队人员
     updataKernelList(row) {
+      console.log(row)
       this.kernelForm.conName = row.conName;
       this.kernelForm.conPosition = row.conPosition;
       this.kernelForm.conQuali = row.conQuali;
-      this.kernelForm.id = row.id;
+      if(this.title==='编辑机构'){
+        this.kernelForm.id = row.orgId;
+      }else{
+        this.kernelForm.id = row.id;
+      }
       this.kernelForm.conSpeciality = row.conSpeciality;
       this.kernelForm.conTime = row.conTime;
       this.isShowKernelList = true;
@@ -857,7 +862,7 @@ export default {
       let idx = 1;
       let delKernelList = [];
       this.kernelList.forEach(item => {
-        if (row.id != item.id) {
+        if (row.conName != item.conName) {
           delKernelList.push({
             id: idx,
             conName: item.conName,
@@ -893,9 +898,19 @@ export default {
         this.$refs["kernelForm"].validate(valid => {
           if (valid) {
             if (this.kernelForm.id != 0) {
-              let kernelFormObj = this.kernelForm.id;
-              this.kernelList[kernelFormObj - 1] = {
-                id: kernelFormObj,
+               let kernelIndex
+               if(this.ttle==="编辑机构"){
+               this.kernelList.forEach((v,index)=>{
+                if(v.conName===this.kernelForm.conName ){
+                 kernelIndex=index
+                }
+              })
+              }else{
+                kernelIndex=this.kernelList.length-1
+              }
+              // let kernelFormObj = this.kernelForm.id;
+              this.kernelList[kernelIndex] = {
+                id: this.kernelForm.id,
                 conPosition: this.kernelForm.conPosition,
                 conName: this.kernelForm.conName,
                 conTime: this.kernelForm.conTime,
@@ -912,6 +927,7 @@ export default {
                 conQuali: this.kernelForm.conQuali
               });
             }
+            console.log(this.kernelList)
             this.showBtn = false;
             this.isShowKernelList = false;
             this.kernelText = "添加核心服务团队人员";
@@ -923,10 +939,15 @@ export default {
     },
     // // 编辑其它资质/荣誉
     updataOtherList(row) {
+      console.log(row)
       this.otherForm.awardDepart = row.awardDepart;
       this.otherForm.awardTime = row.awardTime;
       this.otherForm.certName = row.certName;
-      this.otherForm.id = row.id;
+      if(this.title==='编辑机构'){
+      this.otherForm.id = row.orgId
+      }else{
+         this.otherForm.id= row.id;
+      }
       this.otherForm.fileUrl = row.fileUrl;
       this.isShowOtherList = true;
       this.showBtn=true
@@ -937,7 +958,7 @@ export default {
       let idx = 1;
       let delOtherList = [];
       this.otherList.forEach(item => {
-        if (row.id != item.id) {
+        if (row.certName != item.certName) {
           delOtherList.push({
             id: idx,
             certName: item.certName,
@@ -982,10 +1003,21 @@ export default {
                this.$message.error("请上传附件");
           return;
             }
+            // console.log(this.otherForm)
             if (this.otherForm.id != 0) {
-              let otherFormObj = this.otherForm.id;
-              this.otherList[otherFormObj - 1] = {
-                id: otherFormObj,
+              // console.log(this.otherForm)
+                let otherIndex
+              if(this.ttle==="编辑机构"){
+                this.otherList.forEach((v,index)=>{
+                  if(v.certName===this.otherForm.certName ){
+                   otherIndex=index
+                  }
+                })
+              }else{
+                otherIndex=this.otherList.length-1
+              }
+              this.otherList[otherIndex] = {
+                id: this.otherForm.id,
                 awardTime: this.otherForm.awardTime,
                 certName: this.otherForm.certName,
                 fileUrl: this.otherForm.fileUrl,
@@ -1141,6 +1173,7 @@ export default {
 .el-tooltip__popper.is-dark {
   max-width: 260px;
 }
+
 .basicInformation {
   .xian {
     margin-left: 65px;
@@ -1151,6 +1184,9 @@ export default {
       background: #dcdfe6;
     }
   }
+  .basicInformation-content{
+  padding:0 25px;text-align:left;background:#fff;margin-top:14px
+}
   .orgAddressInfo {
     .el-input {
       width: 460px !important;
@@ -1327,13 +1363,34 @@ export default {
       width: 100%;
     }
   }
-  .investorCertification-header {
-    color: #333;
+  // .investorCertification-header {
+  //   color: #333;
+  //   background-color: #fff;
+  //   padding: 17px;
+  //   margin-bottom: 14px;
+  //   // font-size: 13px;
+  //   border-radius: 5px;
+  // }
+  .ordinary_title {
     background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 17px;
-    margin-bottom: 14px;
     // font-size: 13px;
     border-radius: 5px;
+    div:nth-child(2) {
+      width: 50px;
+      height: 26px;
+      background: rgba(236, 252, 242, 1);
+      border: 1px solid rgba(65, 215, 135, 1);
+      border-radius: 4px;
+      text-align: center;
+      line-height: 26px;
+      font-size: 12px;
+      color: #00a041;
+      cursor: pointer;
+    }
   }
   .el-table__header {
     border-right: 1px solid rgba(65, 215, 135, 1);

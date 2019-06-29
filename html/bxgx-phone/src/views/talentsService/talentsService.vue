@@ -9,61 +9,19 @@
           </div>
           <div class="perennial_list">
             <ul>
-              <li>
-                <a href="http://112.94.22.222:2383/ibps-platform-portal/login.jsp" target="_blank">
+              <li v-for="(item, index) in perennialList" :key="index" @click="goelse(item.linkAddress)">
+                <!-- <a :href="item.linkAddress"> -->
                   <div class="list_cont">
-                    <p><img src="@/assets/image/perennial.png" alt=""> </p>
+                    <p><img :src="imgList[index]" alt=""> </p>
                     <!-- <p>{{item.title}}</p>
                     <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
                     <p>收益：<span>{{item.profit}}</span> </p>
                     <p>价格：{{item.price}}</p> -->
-                    <p>高层次创业人才引进计划高层次创业人才引进计划高层次创业人才引进计划高层次创业人才引进计划</p>
-                    <p>平台功能：高层次创业人才引进计划</p>
-                  </div>
-                </a>
-                <div class="list_view"><span>我要申报</span> </div>
-              </li>
-              <li>
-                <a href="http://xmsb.jsrcgz.gov.cn/" target="_blank">
-                  <div class="list_cont">
-                    <p><img src="@/assets/image/jsrcgz.png" alt=""> </p>
-                    <!-- <p>{{item.title}}</p>
-                    <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
-                    <p>收益：<span>{{item.profit}}</span> </p>
-                    <p>价格：{{item.price}}</p> -->
-                    <p>江苏省“双创计划”</p>
-                    <p>平台功能：江苏省双创计划</p>
+                    <p>{{item.platformTitle}}</p>
+                    <p>平台功能：{{item.remark}}</p>
                   </div>
                   <div class="list_view"><span>我要申报</span> </div>
-                </a>
-              </li>
-              <li>
-                <a href="http://49.65.0.223:85/njrc_cxxqyj.jsp" target="_blank">
-                  <div class="list_cont">
-                    <p><img src="@/assets/image/njrc_kjdjzj22.png" alt=""> </p>
-                    <!-- <p>{{item.title}}</p>
-                    <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
-                    <p>收益：<span>{{item.profit}}</span> </p>
-                    <p>价格：{{item.price}}</p> -->
-                    <p>创新型企业家培育计划</p>
-                    <p>平台功能：创新型企业家培育计划</p>
-                  </div>
-                  <div class="list_view"><span>我要申报</span> </div>
-                </a>
-              </li>
-              <li>
-                <a href="http://49.65.0.223:85/njrc_kjdjzj.jsp " target="_blank">
-                  <div class="list_cont">
-                    <p><img src="@/assets/image/njrc_cxxqyj.png" alt=""> </p>
-                    <!-- <p>{{item.title}}</p>
-                    <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
-                    <p>收益：<span>{{item.profit}}</span> </p>
-                    <p>价格：{{item.price}}</p> -->
-                    <p>科技顶尖专家集聚计划</p>
-                    <p>平台功能：科技顶尖专家集聚计划</p>
-                  </div>
-                  <div class="list_view"><span>我要申报</span> </div>
-                </a>
+                <!-- </a> -->
               </li>
             </ul>
           </div>
@@ -101,7 +59,8 @@
             <span @touchstart="filter('3')" :class="{'greenColor':sendData.sortType==='3'}"><i class="iconfont icon-hot"></i>热度排序</span>
           </div>
           <div class="talentsService_cont_box">
-            <div class="talentsService_cont" v-for="(item,index) in talentsList " :key="index" @click="$router.push({path:'/guest/pd/talentNotice/talentsServiceDetail',query:{id:item.id}}) ">
+            <div class="talentsService_cont" v-for="(item,index) in talentsList " :key="index" @click="goDetail(item.id)">
+
               <div class="talentsService_cont_left">
                 <div class="cont_title"><span class="greenColor">[{{item.rangeId|type}}] </span>{{item.noticeTitle}} </div>
                 <div class="cont_detail">
@@ -117,12 +76,17 @@
 </template>
 <script>
 import {Tab, TabItem, Scroller, LoadMore} from 'vux'
+import imgSrc1 from '@/assets/image/perennial.png'
+import imgSrc2 from '@/assets/image/jsrcgz.png'
+import imgSrc3 from '@/assets/image/njrc_kjdjzj22.png'
+import imgSrc4 from '@/assets/image/njrc_cxxqyj.png'
 export default {
   components: {
     Tab, TabItem, Scroller, LoadMore
   },
   data () {
     return {
+      imgList: [imgSrc1, imgSrc2, imgSrc3, imgSrc4],
       perennialList: [],
       typeList: [],
       talentsList: [],
@@ -163,6 +127,19 @@ export default {
     this.scrollBottom()
   },
   methods: {
+    goDetail (id) {
+      this.api.get({
+        url: 'trafficVolume',
+        data: {id: id},
+        callback: res => {
+          if (res.code === '0000') {
+            this.$router.push({path: '/guest/pd/talentNotice/talentsServiceDetail', query: {id: id}})
+          } else {
+            this.$vux.toast.text(res.result)
+          }
+        }
+      })
+    },
     scrollBottom () {
       window.onscroll = () => {
         var scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight)
@@ -186,12 +163,33 @@ export default {
         }
       }
     },
-    getperennialList () {
+    goelse (url) {
       this.api.get({
-        url: 'perennialList',
+        url: 'getUserExtension',
+        data: { },
+        callback: (res) => {
+          if (res.code === '0000') {
+            if (res.data !== null) {
+              if (res.data.roleCode === 'COM_ADMIN' || res.data.roleCode === 'COM_CONTACTS') {
+                window.location.href = url
+              } else {
+                this.$vux.toast.text('只有企业管理员和企业联系人才可以进申报平台！！')
+              }
+            }
+          } else {
+            this.$vux.toast.text(res.result)
+          }
+        }
+      })
+    },
+    // 申报平台列表
+    getperennialList () {
+      this.api.post({
+        url: 'queryPlatformInfo',
         data: {
           page: 1,
-          rows: 4
+          rows: 4,
+          isTalentService: 1
         },
         callback: res => {
           if (res.code === '0000') {
@@ -321,10 +319,11 @@ export default {
                   // height: 107px;
                   border-bottom: 1px solid #eeeeee;
                   padding: 13px 0;
+                  height: 150px;
                   margin-top: 0;
                   img{
                     width: 51%;
-                    // height: 100%;
+                    height: 100%;
                     display: block;
                     margin: auto;
                   }

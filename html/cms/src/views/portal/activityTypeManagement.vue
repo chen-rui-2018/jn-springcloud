@@ -58,6 +58,7 @@
             </template> -->
           </el-form-item>
           <el-form-item v-loading="loadingUpFlag" label="海报模板:" prop="templateList" style="width:615px;height:280px;overflow:auto">
+            <input v-model="templateList" type="hidden">
             <div v-if="dialogStatus==='编辑活动类型'" class="editModule">
               <ul class="editUl">
                 <li v-for="(i,k) in activityTypeForm.templateList" :key="k"><img :src="i" alt=""><span @click="delImg(k)">x</span></li>
@@ -65,7 +66,7 @@
             </div>
             <el-upload
               ref="upload"
-              :headers="headers"
+              :headers="{token: $store.getters.token}"
               :on-success="progressU"
               :before-upload="progressULod"
               :on-preview="handlePictureCardPreview"
@@ -135,7 +136,7 @@ export default {
           { required: true, message: '请选择状态', trigger: 'change' }
         ],
         templateList: [
-          { required: true, message: '请选择海报图片', trigger: 'blur' }
+          { required: true, message: '请选择海报图片', trigger: 'change' }
         ]
       },
       baseUrl: process.env.BASE_API,
@@ -193,7 +194,10 @@ export default {
       this.loadingUpFlag = false
       if (event.code === '0000') {
         this.templateList.push(event.data)
-        this.$message(event.result)
+        if (this.templateList) {
+          this.$refs['activityTypeForm'].clearValidate('templateList')
+        }
+        this.$message.success('上传成功')
       } else {
         this.$refs.upload.uploadFiles.splice(this.$refs.upload.uploadFiles.length - 1, 1)
         this.$message.error(event.result)
@@ -201,7 +205,7 @@ export default {
     },
     handleCancel() {},
     handleRemove(file, fileList) {
-      console.log(file, fileList)
+      // console.log(file, fileList)
     },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url
@@ -209,13 +213,11 @@ export default {
     },
     handleFileTotal(row) {
       this.moduleNumDialogVisible = true
-      console.log(row)
       this.moduleList[0].typeName = row.typeName
       this.moduleList[0].typeStatus = row.typeStatus
       this.moduleList[0].fileTotal = row.fileTotal
       // const data = { typeId: row.typeId }
       paramApi(`${this.GLOBAL.parkUrl}activity/activityType/findActivityType`, row.typeId, 'typeId').then(res => {
-        console.log(res)
         if (res.data.code === this.GLOBAL.code) {
           if (res.data.data.templateList.length > 0) {
             this.templateImgList = res.data.data.templateList
@@ -243,6 +245,7 @@ export default {
     },
     handleAdd() {
       this.isDisabled = true
+      this.activityTypeForm.templateList = this.templateList.join()
       this.$refs['activityTypeForm'].validate(valid => {
         if (valid) {
           api(`${this.GLOBAL.parkUrl}activity/activityType/add`, this.activityTypeForm, 'post').then((res) => {
@@ -396,7 +399,6 @@ export default {
     initList() {
       this.listLoading = true
       api(`${this.GLOBAL.parkUrl}activity/activityType/findActivityTypeList`, this.listQuery, 'post').then(res => {
-        console.log(res)
         if (res.data.code === this.GLOBAL.code) {
           this.typeList = res.data.data.rows
           this.total = res.data.data.total

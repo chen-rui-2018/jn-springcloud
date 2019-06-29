@@ -4,7 +4,7 @@
       <div class="bannerangPark">
         <div class="bannerImg pr">
           <el-carousel indicator-position="outside" @change='changImg' arrow="always">
-            <el-carousel-item v-for="(banner, index) in bannerList" :key="index">
+            <el-carousel-item v-for="(banner, index) in bannerList" :key="index" v-if="index<4" class="pointer" @click.native="goNewPage(banner.propagandaAreaUrl)">
               <img :src="banner.posterUrl" alt="">
             </el-carousel-item>
           </el-carousel>
@@ -52,7 +52,7 @@
           <i class="el-icon-arrow-right"></i>
         </div>
         <el-tabs v-model="activeName" @tab-click="handleClick">
-          <el-tab-pane label="园区公告" name="first">
+          <el-tab-pane label="资讯中心" name="first">
             <div class="noticeList">
               <ul>
                 <li class="noticeLi pointer" v-if="k<4" v-for="(i,k) in noticeList" :key="k" @click="$router.push({path:'/announcementDetails',query:{noticeId:i.id}})">
@@ -74,7 +74,7 @@
           <el-tab-pane label="政策指南" name="second">
             <div class="noticeList">
               <ul>
-                <li class="noticeLi pointer" v-for="(i,k) in policyCenterList" :key="k" @click="$router.push({path:'/policyGuide',query:{policyId:i.id}})">
+                <li class="noticeLi pointer" v-for="(i,k) in policyCenterList" v-if="k<4" :key="k" @click="$router.push({path:'/policyGuide',query:{policyId:i.id}})">
                   <div class="date" v-if="i.createdTime">
                     <div class="year">{{i.createdTime.slice(0,4)}}</div>
                     <div class="month color3">{{i.createdTime.slice(5,10)}}</div>
@@ -93,7 +93,7 @@
           <el-tab-pane label="热门活动" name="third">
             <div class="noticeList">
               <ul>
-                <li class="noticeLi pointer" v-for="(i,k) in actiListSlim" :key="k" @click="$router.push({ path: '/actiDetail', query: { activityId: i.id } })">
+                <li class="noticeLi pointer" v-for="(i,k) in actiListSlim" v-if="k<4" :key="k" @click="$router.push({ path: '/actiDetail', query: { activityId: i.id } })">
                   <div class="date" v-if="i.createdTime">
                     <div class="year">{{i.createdTime.slice(0,4)}}</div>
                     <div class="month color3">{{i.createdTime.slice(5,10)}}</div>
@@ -125,7 +125,7 @@
             <div class="swiper-wrapper">
               <div class="swiper-slide" style="width:100%" v-for="(item,index) in enterpriseList" :key="index">
                 <ul class="parkUl w clearfix">
-                  <li class="fl pointer" v-for="(i,k) in item" :key="k" @click="$router.push({path:'/parkIntroductionChild',query:{id:i.id}})">
+                  <li class="fl pointer" v-for="(i,k) in item" :key="k" :data-path="`/parkIntroductionChild?id=${i.id}`">
                     <div class="imgItem">
                       <img :src="i.mainPicture" alt="">
                     </div>
@@ -134,7 +134,7 @@
                       <div class="liBerif">
                         {{i.shortIntroduce}}
                       </div>
-                      <div class="liDetail mainBorder pointer" :data-path="`/parkIntroductionChild?id=${i.id}`">了解详情</div>
+                      <div class="liDetail mainBorder pointer" @click="$router.push({path:'/parkIntroductionChild',query:{id:i.id}})">了解详情</div>
                     </div>
                   </li>
                 </ul>
@@ -159,23 +159,11 @@
             </li>
           </ul> -->
         </div>
-        <!-- <div class="parkInfo w">
+        <div class="parkInfo w">
           <ul class="infoUl">
-            <li>
-              <img src="@/../static/img1/diqiu.png" alt="">
-              <p class="color3">地理优势</p>
-            </li>
-            <li>
-              <img src="@/../static/img1/guihuasheji.png" alt="">
-              <p class="color3">规划定位</p>
-            </li>
-            <li>
-              <img src="@/../static/img1/qiyexinxiguanli_huaban.png" alt="">
-              <p class="color3">基础设施</p>
-            </li>
-            <li>
-              <img src="@/../static/img1/xiaochengxu.png" alt="">
-              <p class="color3">招商优势</p>
+            <li v-for="(i,k) in advantages" :key="k" @click="$router.push({path:'/parkAdvantage',query:{activeName:i.actiName}})">
+              <img :src='"@/../static/img1/"+i.id+".png"' alt="">
+              <p class="color3">{{i.name}}</p>
             </li>
           </ul>
           <div class="infoMes">
@@ -196,7 +184,7 @@
               </span>
             </div>
           </div>
-        </div> -->
+        </div>
       </div>
     </div>
     <div class="enterpriseList w">
@@ -271,6 +259,12 @@ export default {
         { id: "new_materials_energy", name: "新材料与新能源" },
         { id: "intelligence_equipment", name: "智能制造与高端装备制造" }
       ],
+      advantages: [
+        { id: "diqiu", name: "地理优势", actiName: "1" },
+        { id: "guihuasheji", name: "规划定位", actiName: "2" },
+        { id: "qiyexinxiguanli_huaban", name: "基础设施", actiName: "3" },
+        { id: "xiaochengxu", name: "招商优势", actiName: "4" }
+      ],
       enterpriseList: [],
       noticeList: [],
       bannerList: [],
@@ -300,6 +294,10 @@ export default {
     calrousel.style.height = calrousel.scrollHeight;
   },
   methods: {
+    goNewPage(propagandaAreaUrl) {
+      // let routeData = this.$router.resolve({ path: "http://www.baidu.com/"});
+      window.open(propagandaAreaUrl, "_blank");
+    },
     swiperinit() {
       let _this = this;
       new swiper(".swiper-container", {
@@ -321,7 +319,10 @@ export default {
         },
         on: {
           click: function(e) {
-            let path = e.path[0].getAttribute("data-path");
+            if (e.path[2].getAttribute("data-path") == null) {
+              return;
+            }
+            let path = e.path[2].getAttribute("data-path");
             _this.$router.push(path);
           }
         },
@@ -411,8 +412,8 @@ export default {
         },
         callback: res => {
           if (res.code === "0000") {
-            res.data.rows = res.data.rows.concat(res.data.rows);
-            res.data.rows = res.data.rows.concat(res.data.rows);
+            // res.data.rows = res.data.rows.concat(res.data.rows);
+            // res.data.rows = res.data.rows.concat(res.data.rows);
             this.bannerList = res.data.rows;
           } else {
             this.$message.error(res.result);
@@ -766,14 +767,11 @@ export default {
           .liBerif {
             margin: 20px 0;
             height: 35px;
-            // display: -webkit-box;
-            // -webkit-box-orient: vertical;
-            // -webkit-line-clamp: 2;
-            // overflow: hidden;
-            // width: 100%;
             text-overflow: ellipsis;
             display: -webkit-box;
+            /*! autoprefixer: off */
             -webkit-box-orient: vertical;
+            /*! autoprefixer: on */
             -webkit-line-clamp: 2;
             overflow: hidden;
           }
@@ -954,7 +952,7 @@ export default {
       margin: 30px 0 20px;
       .proUl {
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-start;
         li {
           width: 24%;
           margin-right: 30px;
@@ -994,13 +992,11 @@ export default {
           .liBerif {
             margin: 20px 0;
             height: 35px;
-            // display: -webkit-box;
-            // -webkit-box-orient: vertical;
-            // -webkit-line-clamp: 2;
-            // overflow: hidden;
             text-overflow: ellipsis;
             display: -webkit-box;
+            /*! autoprefixer: off */
             -webkit-box-orient: vertical;
+            /*! autoprefixer: on */
             -webkit-line-clamp: 2;
             overflow: hidden;
           }

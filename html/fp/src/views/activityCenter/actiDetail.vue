@@ -18,11 +18,14 @@
       <el-card style="overflow:visible">
         <div class="infotop pr">
           <img class="infoImg" :src="activityDetail.actiPosterUrl" alt="">
-          <div class="infotitle">
-            <span>{{activityDetail.actiName}}</span>
-            <i class="iconfont  like" :class="accountIsLike ? 'icon-miaojiesellerlike mainColor' : 'icon-xihuan'" @click="handleLike(activityDetail.id)">&nbsp;
+           <i class="iconfont like" :class="accountIsLike ? 'icon-miaojiesellerlike mainColor' : 'icon-xihuan'" @click="handleLike(activityDetail.id)">&nbsp;
               <span>{{activityDetail.actiLike}}</span>
             </i>
+          <div class="infotitle">
+            <span>{{activityDetail.actiName}}</span>
+            <!-- <i class="iconfont  like" :class="accountIsLike ? 'icon-miaojiesellerlike mainColor' : 'icon-xihuan'" @click="handleLike(activityDetail.id)">&nbsp;
+              <span>{{activityDetail.actiLike}}</span>
+            </i> -->
             <!-- <i class="iconfont like" v-else @click="cancleLike(activityDetail.id)">&nbsp;
               <span>{{this.activityDetail.actiLike}}</span>
             </i> -->
@@ -31,7 +34,7 @@
               <span>{{activityDetail.actiStartTime}}-{{activityDetail.actiEndTime}}</span>
               <i class="iconfont icon-recharge">&nbsp;
                 <span v-if="activityDetail.actiCost=='0.00'">免费</span>
-                <span v-else>收费</span>
+                <span v-else>{{activityDetail.actiCost}}元</span>
               </i>
             </p>
             <div class="delAddress">
@@ -56,7 +59,7 @@
             <!-- <span class="resdeadline">报名截止还有&nbsp;{{this.sysTemTime-this.activityDetail.applyEndTime}}</span> -->
           </p>
           <div class="delshare">
-            <el-button type="success" v-if="activityApplyShow=='0'" style="background:#00a040;height:38px;width:110px" round>停止报名</el-button>
+            <el-button type="success" v-if="activityApplyShow=='0'" style="background:#eee;height:38px;width:110px;color:#999;border:none" round>停止报名</el-button>
             <el-button type="success" v-if="activityApplyShow=='1'" style="background:#00a040;height:38px;width:110px" round @click="quickApply(activityDetail.id)">立即报名</el-button>
             <el-button type="success" v-if="activityApplyShow=='2'" style="background:#00a040;height:38px;width:110px" round @click="stopApply(activityDetail.id)">取消报名</el-button>
             <!-- <el-button type="success" class="atten" round icon="iconfont icon-xihuan">&nbsp;关注&nbsp;3</el-button> -->
@@ -506,6 +509,11 @@ export default {
     }
     .infotop {
       height: 310px;
+       .like {
+          position: absolute;
+          right: 0px;
+          font-size: 20px;
+        }
       .infoImg {
         width: 548px;
         height: 323px;
@@ -518,17 +526,17 @@ export default {
         position: absolute;
         left: 537px;
         top: 20px;
-        width: 42%;
+        // width: 42%;
         > span {
           font-size: 22px;
           font-weight: bold;
           color: #2a2a2a;
         }
-        .like {
-          position: absolute;
-          right: -130px;
-          font-size: 20px;
-        }
+        // .like {
+        //   position: absolute;
+        //   right: -130px;
+        //   font-size: 20px;
+        // }
         > p {
           margin-top: 30px;
           .icon-recharge {

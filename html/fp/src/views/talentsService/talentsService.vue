@@ -6,7 +6,7 @@
               <div class="swiper-slide"> <img src="@/assets/image/talents.png" alt=""> </div>
           </div>
           <div class="swiper-pagination"></div>
-         
+
       </div>
     </div>
     <div class="talentsService_cont">
@@ -20,7 +20,7 @@
         </el-breadcrumb>
       </div>
        <!-- 申报平台 -->
-    <!--   <div class="declaration_platform">
+      <!--   <div class="declaration_platform">
         <div class="platform_titile">
           <div>申报平台</div>
           <div @click="gotalentplatform">MORE <span class="el-icon-arrow-right"></span></div>
@@ -29,7 +29,7 @@
           <p>
             <span class="iconfont icon-deng"> </span>
               汇集常用申报平台，便于企业快速查阅和进入。包含了各类科技项目、企业资质、产品认定、人才计划申报、资金兑现、 技术合同登记等业务申报系统。
-            <span >查看详情<span class="el-icon-d-arrow-right"></span> </span> 
+            <span >查看详情<span class="el-icon-d-arrow-right"></span> </span>
           </p>
           <div>
             <img src="@/assets/image/platform.png" alt="">
@@ -44,61 +44,17 @@
         </div>
         <div class="perennial_list">
           <ul>
-            <li>
-              <a href="http://112.94.22.222:2383/ibps-platform-portal/login.jsp" target="_blank">
-                <div class="list_cont">
-                  <p><img src="@/assets/image/perennial.png" alt=""> </p>
-                  <!-- <p>{{item.title}}</p>
-                  <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
-                  <p>收益：<span>{{item.profit}}</span> </p>
-                  <p>价格：{{item.price}}</p> -->
-                  <p>高层次创业人才引进计划高层次创业人才引进计划高层次创业人才引进计划高层次创业人才引进计划</p>
-                  <p>平台功能：高层次创业人才引进计划</p>
-                </div>
-              </a>
+            <li
+              v-if="index <= 3"
+              v-for="(item, index) in perennialList"
+              :key="index"
+              @click="goelse(item.linkAddress)">
+              <div class="list_cont">
+                <p><img :src="imgList[index]" alt=""> </p>
+                <p>{{item.platformTitle}} </p>
+                <p>平台功能：{{item.remark}}</p>
+              </div>
               <div class="list_view"><span>我要申报</span> </div>
-            </li>
-            <li>
-              <a href="http://xmsb.jsrcgz.gov.cn/" target="_blank">
-                <div class="list_cont">
-                  <p><img src="@/assets/image/jsrcgz.png" alt=""> </p>
-                  <!-- <p>{{item.title}}</p>
-                  <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
-                  <p>收益：<span>{{item.profit}}</span> </p>
-                  <p>价格：{{item.price}}</p> -->
-                  <p>江苏省“双创计划”</p>
-                  <p>平台功能：江苏省双创计划</p>
-                </div>
-                <div class="list_view"><span>我要申报</span> </div>
-              </a>
-            </li>
-            <li>
-              <a href="http://49.65.0.223:85/njrc_cxxqyj.jsp" target="_blank">
-                <div class="list_cont">
-                  <p><img src="@/assets/image/njrc_kjdjzj22.png" alt=""> </p>
-                  <!-- <p>{{item.title}}</p>
-                  <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
-                  <p>收益：<span>{{item.profit}}</span> </p>
-                  <p>价格：{{item.price}}</p> -->
-                  <p>创新型企业家培育计划</p>
-                  <p>平台功能：创新型企业家培育计划</p>
-                </div>
-                <div class="list_view"><span>我要申报</span> </div>
-              </a>
-            </li>
-            <li>
-              <a href="http://49.65.0.223:85/njrc_kjdjzj.jsp " target="_blank">
-                <div class="list_cont">
-                  <p><img src="@/assets/image/njrc_cxxqyj.png" alt=""> </p>
-                  <!-- <p>{{item.title}}</p>
-                  <p><span class="el-icon-location"></span>{{item.zoneApplication}}</p>
-                  <p>收益：<span>{{item.profit}}</span> </p>
-                  <p>价格：{{item.price}}</p> -->
-                  <p>科技顶尖专家集聚计划</p>
-                  <p>平台功能：科技顶尖专家集聚计划</p>
-                </div>
-                <div class="list_view"><span>我要申报</span> </div>
-              </a>
             </li>
           </ul>
         </div>
@@ -120,7 +76,7 @@
             <el-tabs v-model="rangeId"  @tab-click="switchto">
               <el-tab-pane v-for="(typeitem,typeindex) in typeList" :key="typeindex" >
                 <div slot="label" :name="typeitem.id">{{typeitem.name}}</div>
-                <div class="lists" v-for="(talentsitem,talentsindex) in talentsList" :key="talentsindex" >
+                <div class="lists" v-for="(talentsitem,talentsindex) in talentsList" :key="talentsindex" @click="gotalentdetail(talentsitem )">
                   <div class="list_cont_left">
                     <p><span>【{{talentsitem.rangeId|type}}】</span>{{talentsitem.noticeTitle}}</p>
                     <!-- <p v-show="talentsitem.rangeId=5">{{talentsitem.noticeTitle}} </p> -->
@@ -128,12 +84,12 @@
                     <p>最近要求：{{talentsitem.timeNode}}</p>
                     <p v-show="talentsitem.deadline">截止时间：<span class="fontcolor">{{talentsitem.deadline|time}}</span></p>
                   </div>
-                  <div class="list_cont_check" @click="gotalentdetail(talentsitem.id)"> <span>查看详情</span> </div>
+                  <div class="list_cont_check" @click="gotalentdetail(talentsitem)"> <span>查看详情</span> </div>
                 </div>
               </el-tab-pane>
             </el-tabs>
           </div>
-          
+
         </div>
       </div>
       <!-- 分页 -->
@@ -153,9 +109,14 @@
 </template>
 <script>
 import { getToken } from '@/util/auth'
+import imgSrc1 from '@/assets/image/perennial.png'
+import imgSrc2 from '@/assets/image/jsrcgz.png'
+import imgSrc3 from '@/assets/image/njrc_kjdjzj22.png'
+import imgSrc4 from '@/assets/image/njrc_cxxqyj.png'
 export default {
    data () {
       return {
+        imgList: [imgSrc1, imgSrc2, imgSrc3, imgSrc4],
         total:1,
         typeList:[],//区类型
         talentsList:[],
@@ -178,7 +139,7 @@ export default {
       time(time){
         if(time){
           let dateee = new Date(time).toJSON();
-          return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '') 
+          return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
           // return time.split("T")[0]
         }
       },
@@ -202,6 +163,39 @@ export default {
       this.getperennialList()//常年申报
     },
     methods: {
+      goelse(url){
+        if(getToken()){
+          this.api.get({
+          url: "getUserExtension",
+          data: { },
+          callback: (res)=> {
+            if (res.code == "0000") {
+              if(res.data!==null){
+                if(res.data.roleCode==="COM_ADMIN"||res.data.roleCode==="COM_CONTACTS"){
+                  window.location.href=url
+                }else{
+                  this.$message.error("只有企业管理员和企业联系人才可以进申报平台！！")
+                  return
+                }
+              }
+            }else{
+              this.$message.error(res.result)
+            }
+          }
+        })
+        }else{
+          this.$confirm('亲，您需要登录后才能访问以下界面哦！', '提示', {
+            confirmButtonText: '去登陆',
+            cancelButtonText: '留在当前页面',
+            type: 'warning',
+            center: true
+          }).then(() => {
+             window.sessionStorage.setItem("PresetRoute", this.$route.fullPath)
+             this.$router.push({path:"/login"})
+          }).catch(() => {
+          })
+        }
+      },
       //区类型获取
       getdeclarationcentertype(){
         let _this = this;
@@ -226,7 +220,7 @@ export default {
               })
               _this.typeList = typelist;
             }else{
-              _this.$message.error(res.result)              
+              _this.$message.error(res.result)
             }
           }
         });
@@ -248,7 +242,7 @@ export default {
               _this.talentsList = res.data.rows;
               _this.total=res.data.total
             }else{
-              _this.$message.error(res.result)              
+              _this.$message.error(res.result)
             }
           }
         });
@@ -256,18 +250,19 @@ export default {
       //常年申报列表
       getperennialList(){
         let _this = this;
-        this.api.get({
-          url: "list",
+        this.api.post({
+          url: "queryPlatformInfo",
           data: {
             page:1,
-            rows:4
+            rows:4,
+            isTalentService:1
           },
           callback: function(res) {
             if (res.code == "0000") {
               // console.log(res)
               _this.perennialList = res.data.rows;
             }else{
-              _this.$message.error(res.result)              
+              _this.$message.error(res.result)
             }
           }
         });
@@ -290,7 +285,6 @@ export default {
           data: { },
           callback: (res)=> {
             if (res.code == "0000") {
-              // console.log(res.data.roleCode)
               if(res.data.roleCode==="COM_ADMIN"||res.data.roleCode==="COM_CONTACTS"){
                 this.$router.push({name:'talentPlatform'})
               }else{
@@ -298,7 +292,7 @@ export default {
                 return
               }
             }else{
-              _this.$message.error(res.result)              
+              _this.$message.error(res.result)
             }
           }
         })
@@ -315,8 +309,20 @@ export default {
         }
       },
       //跳转页面
-      gotalentdetail(id){
-        this.$router.push({path:'/talentsServiceDetail',query:{id:id}})
+      gotalentdetail(item){
+        this.api.get({
+          url: "addtalentviews",
+          data: {
+            id:item.id
+          },
+          callback: (res)=> {
+            if(res.code==='0000'){
+               this.$router.push({path:'/talentsServiceDetail',query:{id:item.id,rangeId:item.rangeId}})
+            }else{
+              this.$message.error(res.result)
+            }
+          }
+        });
       },
       //翻页
       handleSizeChange(val) {
@@ -424,7 +430,7 @@ export default {
         padding: 15px 0;
         font-size: 12px;
         .el-breadcrumb__item:last-child .el-breadcrumb__inner a{
-          color:#00a041;  
+          color:#00a041;
         }
       }
       // 申报平台
@@ -496,16 +502,17 @@ export default {
           margin-top: 25px;
           ul{
             display: flex;
+            justify-content: space-between;
             li{
               cursor: pointer;
-              width:25%;
-              margin-right: 35px;
+              width:23%;
+              // margin-right: 35px;
               border: solid 1px #eeeeee;
               transition:all .3s ease 0s;
               &:hover{
-                box-shadow: 0px 0px 14px 4px rgba(0, 0, 0, 0.09);                
+                box-shadow: 0px 0px 14px 4px rgba(0, 0, 0, 0.09);
               }
-              
+
               &:last-child{
                 margin-right: 0;
               }
@@ -514,9 +521,9 @@ export default {
                 color:#797979;
                 font-size: 12px;
                 p{
-                  margin: 7px 0; 
+                  margin: 7px 0;
                   &:last-child{
-                    // margin-bottom: 
+                    // margin-bottom:
                   }
                 }
                 p:nth-child(1){
@@ -618,6 +625,7 @@ export default {
               border-bottom: solid 1px #eeeeee;
               padding-bottom: 15px;
               margin-top: 30px;
+              cursor: pointer;
               .list_cont_left{
                 color:#999999;
                 font-size: 12px;
@@ -634,7 +642,7 @@ export default {
                       padding-right: 121px;
                     }
                   }
-                  
+
                 }
               }
               .list_cont_check{
@@ -680,7 +688,7 @@ export default {
         .el-select .el-input__inner:focus{
           border-color:#00a041;
         }
-        
+
       }
     }
   }

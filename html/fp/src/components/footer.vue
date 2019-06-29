@@ -4,7 +4,7 @@
       <div class="footer1 clearfix">
         <div class="footLeft clearfix">
           <h5>友情链接</h5>
-          <div class="line"></div>
+          <!-- <div class="line"></div> -->
           <div class="help">
             <!-- <h5>国家</h5> -->
             <!-- <div class="line"></div> -->
@@ -168,14 +168,15 @@ export default {
         float: left;
         h5 {
           font-size: 14px;
+          margin-bottom: 20px;
         }
-        .line {
-          height: 1px;
-          width: 12px;
-          background: #000;
-          font-weight: bold;
-          margin: 10px 0 15px 0;
-        }
+        // .line {
+        //   height: 1px;
+        //   width: 12px;
+        //   background: #000;
+        //   font-weight: bold;
+        //   margin: 10px 0 15px 0;
+        // }
         .help {
           margin-right: 20px;
           // display: inline-block;

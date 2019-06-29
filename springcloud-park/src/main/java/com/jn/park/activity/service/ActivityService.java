@@ -107,9 +107,10 @@ public interface ActivityService {
      * @param query
      * @param activityType
      * @param needPage
+     * @param account
      * @return
      */
-    PaginationData findOrgActivityList( OrgActivityParam query,String activityType,boolean needPage);
+    PaginationData findOrgActivityList( OrgActivityParam query,String activityType,String account,boolean needPage);
 
     /**
      * 获取有效活动总数

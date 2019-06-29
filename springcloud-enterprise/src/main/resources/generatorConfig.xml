@@ -160,7 +160,9 @@
                              targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
-
+        <!--正式表-->
+        <table tableName="tb_service_org">
+        </table>
         <table tableName="tb_service_org_team">
         </table>
         <table tableName="tb_service_org_element">
@@ -171,9 +173,19 @@
         </table>
         <table tableName="tb_service_org_license">
         </table>
-        <table tableName="tb_service_org">
-        </table>
+
+        <!--临时表-->
         <table tableName="tb_service_org_temp">
+        </table>
+        <table tableName="tb_service_org_team_temp">
+        </table>
+        <table tableName="tb_service_org_element_temp">
+        </table>
+        <table tableName="tb_service_org_info_temp">
+        </table>
+        <table tableName="tb_service_org_trait_temp">
+        </table>
+        <table tableName="tb_service_org_license_temp">
         </table>
     </context>
     <!--服务产品-->

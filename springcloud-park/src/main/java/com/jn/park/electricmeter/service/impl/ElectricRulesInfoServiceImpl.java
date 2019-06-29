@@ -137,7 +137,7 @@ public class ElectricRulesInfoServiceImpl implements ElectricRulesInfoService {
         for(User u:userResult.getData()){
             SmsTemplateVo smsTemplateVo = new SmsTemplateVo();
             smsTemplateVo.setTemplateId("999");
-            smsTemplateVo.setTemplateId(monitorContent);
+            smsTemplateVo.setContents(new String[]{monitorContent});
             smsTemplateVo.setMobiles(new String[]{u.getPhone()});
             logger.info("短信推送{}",smsTemplateVo);
             messageSource.outputSms().send(MessageBuilder.withPayload(smsTemplateVo).build());

@@ -69,8 +69,7 @@ Page({
                 'content-type': 'multipart/form-data',
                 'token': token
               },
-              // url: 'http://112.94.22.222:8000/springcloud-app-fastdfs/upload/fastUpload',
-              url: 'http://112.94.22.222:8000/springcloud-app-fastdfs/guest/upload/fastUpload',
+              url: baseUrl + '/springcloud-app-fastdfs/guest/upload/fastUpload',
               filePath: tempFilePath,
               name: 'file',
               success: (res) => {

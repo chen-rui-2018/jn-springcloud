@@ -1,4 +1,4 @@
-var apiHost = "http://112.94.22.222:8000/";
+var apiHost = "https://cms.bxgxq.com/";
 var tokenKey = "token";
 // 登录地址, 根据这个地址来设置token
 var logInUrl = "/Account/LogInForMiniProgram";

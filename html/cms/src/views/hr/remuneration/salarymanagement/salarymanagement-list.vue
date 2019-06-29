@@ -5,7 +5,6 @@
         class="filter-item"
         type="primary"
         icon="el-icon-circle-plus-outline"
-        style="margin-left:10px;"
         @click="handleCreate">新增
       </el-button>
       <el-button class="filter-item" type="primary" @click="handleExport">导出</el-button>

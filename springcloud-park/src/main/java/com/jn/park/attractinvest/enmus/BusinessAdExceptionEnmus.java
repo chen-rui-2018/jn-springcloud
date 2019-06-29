@@ -12,6 +12,7 @@ public enum BusinessAdExceptionEnmus implements CodeAndMsg {
     BUSSINESS_AD_NOT_EXIST("4021501", "您查询的信息已下架或已删除"),
     ROOM_ORDER_FAILER("4021502", "企业房间租赁订单生成失败"),
     BILL_CRATE_FAILER("4021503", "企业房间租赁缴费单生成失败"),
+    GET_TOWER_INFO_FAILER("4021504", "获取楼宇信息失败"),
     ;
     private String code;
 

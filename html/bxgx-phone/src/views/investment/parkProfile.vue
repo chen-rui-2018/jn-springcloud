@@ -42,7 +42,7 @@ export default {
 <style lang="scss" scoped>
   @import '~@/assets/styles/common';
   .park-profile {
-    padding: 40px;
+    padding: 30px;
     .park-profile-title {
       font-size: 30px;
       color: #333333;
@@ -54,6 +54,7 @@ export default {
       background-repeat: no-repeat;
       border-radius: 10px;
       overflow: hidden;
+      margin-bottom: 30px;
     }
   }
 </style>

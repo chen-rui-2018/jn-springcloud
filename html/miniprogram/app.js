@@ -1,27 +1,15 @@
 const openIdUrl = require('./config').openIdUrl
 import wxHttp from './utils/http.js'
-import { baseUrl, wechatPath, imgBaseUrl } from './utils/http.js'
+import { baseUrl, wechatPath, imgBaseUrl ,h5Url} from './utils/http.js'
 import util from './utils/util.js'
 App({
   onLaunch(opts) {
-    // console.log('App Launch', opts)
     Promise.all([
-      this.login(),
       this.getSetting()
     ])
       .then(res => {
-        wx.redirectTo({
-          url: '/pages/index/index'
-        })
-        // 登录获取到code和获取到用户信息之后，传到后台
-        // wxHttp.getToken()
-        // .then(() => {
-          // 授权成功后，跳转进入小程序首页
-        // wx.switchTab({
-        //   url: '/pages/index/index'
-        // })
-        // })
-        // console.dir(res)
+        // 每次打开小程序都把上一次的token删掉，再重新请求
+        wx.removeStorageSync('token')
       })
   },
   login() {
@@ -54,17 +42,14 @@ App({
               success: res => {
                 // 可以将 res 发送给后台解码出 unionId
                 this.globalData.userInfo = res.userInfo
-                wx.setStorage({
-                  key: 'userInfo',
-                  data: JSON.stringify(res.userInfo)
-                })
+                wx.setStorageSync('userInfo', JSON.stringify(res.userInfo))
                 // console.log('=====>' + res.userInfo)
                 // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
                 // 所以此处加入 callback 以防止这种情况
                 if (this.userInfoReadyCallback) {
+                  resolve(res)
                   this.userInfoReadyCallback(res)
                 }
-                resolve(res)
               }
             })
           } else {
@@ -125,6 +110,7 @@ App({
     wxHttp,
     imgBaseUrl,
     baseUrl,
+    h5Url,
     ...util
   }
 })

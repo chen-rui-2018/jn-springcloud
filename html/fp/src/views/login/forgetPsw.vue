@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import { encrypt } from '@/util'
 export default {
   data() {
     return {
@@ -67,8 +68,8 @@ export default {
         url: "updatePassword",
         data: {
           messageCode: _this.messageCode,
-          password: _this.password,
-          phone: _this.phone
+          password: encrypt(_this.password),
+          phone: encrypt(_this.phone)
         },
         // dataFlag: false,
         callback: function(res) {
@@ -128,7 +129,6 @@ export default {
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: -1;
   background: url("../../../static/img/beijing.png") 100% 100% / 100% 100%
     no-repeat;
   input:focus {

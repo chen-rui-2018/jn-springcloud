@@ -1,5 +1,7 @@
 package com.jn.hardware.ding.service;
 
+import com.jn.hardware.model.dingtalk.user.DepartmentDetailsInfoParam;
+import com.jn.hardware.model.dingtalk.user.DepartmentDetailsInfoResult;
 import com.jn.hardware.model.dingtalk.user.DepartmentListParam;
 import com.jn.hardware.model.dingtalk.user.DepartmentListResult;
 
@@ -17,6 +19,10 @@ public interface DingTalkDepartmentService {
      * 获取部门列表接口url
      */
     String GET_DEPARTMENT_LIST_URL = "https://oapi.dingtalk.com/department/list";
+    /**
+     * 获取部门详情接口url
+     */
+    String GET_DEPARTMENT_DETAILS_URL = "https://oapi.dingtalk.com/department/get";
 
     /**
      * 获取部门列表
@@ -24,5 +30,12 @@ public interface DingTalkDepartmentService {
      * @return
      */
     DepartmentListResult getDepartmentList(DepartmentListParam departmentListParam);
+
+    /**
+     * 获取部门详情
+     * @param departmentDetailsInfoParam
+     * @return
+     */
+    DepartmentDetailsInfoResult getDepartmentDetails(DepartmentDetailsInfoParam departmentDetailsInfoParam);
 
 }

@@ -15,4 +15,13 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractHandler implements WxMessageHandleService {
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
+    /**
+     * user服务实例id
+     */
+    protected String USER_CLIENT = "springcloud-user";
+    /**
+     * 关注/取关公众号 保存微信用户信息至数据库
+     */
+    protected String USER_CLIENT_CONCERNORCANCELWECHAT_URL = "/api/miniProgramPublicController/concernOrCancelWeChat";
+
 }

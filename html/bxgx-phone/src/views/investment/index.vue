@@ -19,150 +19,39 @@
     <div class="investment-main">
       <div class="investment-block">
         <div class="investment-block-title">
-          <div class="block-title">园区概况</div>
           <div
-            class="block-more"
-            @click="$router.push({path:'/parkProfile'})"
-          >
-            <span>查看详情</span>
-            <i class="icon iconfont icon-jiantou"></i>
-          </div>
+            class="block-title"
+            @click="$linkTo({path:'/parkProfile', appPath: api.link + '#/parkProfile'})"
+          >南京白下高新技术产业园区</div>
         </div>
         <div class="investment-block-content investment-park">
-          <div v-if="!showMore" class="park-profile-desc">{{  parkDesc | formatParkDesc}}</div>
-          <div v-else class="park-profile-desc">{{ parkDesc }}</div>
-          <more-btn v-if="!showMore" class="more-desc" @click.native="showMore = true"></more-btn>
+          <div class="park-profile-desc">{{  parkDesc | formatParkDesc }}</div>
+          <div
+            class="more-desc main-color"
+            @click="$linkTo({path:'/parkProfile', appPath: api.link + '#/parkProfile'})"
+          >查看详情</div>
         </div>
       </div>
 
-<!--      <div class="investment-block">-->
-<!--        <div class="investment-block-title">-->
-<!--          <div class="block-title">招商政策</div>-->
-<!--          <div-->
-<!--            class="block-more"-->
-<!--            @click="$router.push({path:'/investmentPolicy'})"-->
-<!--          >-->
-<!--            <span>更多</span>-->
-<!--            <i class="icon iconfont icon-jiantou"></i>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="investment-block-content">-->
-<!--          <div-->
-<!--            v-for="(item, index) in businessAdPolicy"-->
-<!--            :key="index"-->
-<!--            class="card-list"-->
-<!--            @click="$router.push({path:'/investmentPolicyDetail',query:{id: item.id}})"-->
-<!--          >-->
-<!--            <div class="card-list-poster" :style="{backgroundImage: 'url(' + item.adCover + ')'}">-->
-<!--            </div>-->
-<!--            <div class="card-list-content">-->
-<!--              <div class="card-list-title">{{ item.title }}</div>-->
-<!--              <div class="card-list-text">{{ item.subTitle }}</div>-->
-<!--              <div class="card-list-tips">-->
-<!--                <span>{{ item.startTime }}</span>-->
-<!--                <span class="flex-center">-->
-<!--                  <i class="view-icon icon iconfont icon-view"></i>-->
-<!--                  <span class="card-list-warning">{{ item.viewCount }}</span>-->
-<!--                </span>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-
-<!--      <div class="investment-block">-->
-<!--        <div class="investment-block-title">-->
-<!--          <div class="block-title">招商动态</div>-->
-<!--          <div-->
-<!--            class="block-more"-->
-<!--            @click="$router.push({path:'/investmentDynamic'})"-->
-<!--          >-->
-<!--            <span>更多</span>-->
-<!--            <i class="icon iconfont icon-jiantou"></i>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="investment-block-content">-->
-<!--          <div-->
-<!--            v-for="(item, index) in businessAdDynamic"-->
-<!--            :key="index"-->
-<!--            class="card-list"-->
-<!--            @click="$router.push({path:'/investmentDynamicDetail',query:{id: item.id}})"-->
-<!--          >-->
-<!--            <div class="card-list-poster" :style="{backgroundImage: 'url(' + item.adCover + ')'}"></div>-->
-<!--            <div class="card-list-content">-->
-<!--              <div class="card-list-title">{{ item.title }}</div>-->
-<!--              <div class="card-list-text">{{ item.content }}</div>-->
-<!--              <div class="card-list-tips">-->
-<!--                <span>{{ item.startTime }}</span>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-
-      <div class="investment-block br-n">
-        <div class="investment-block-title">
-          <div class="block-title">一区多园</div>
-          <div class="block-more">
-            <span>{{ parkList.length }}个园区</span>
-          </div>
+      <div class="investment-block">
+        <div class="investment-block-title br-b">
+          <div class="block-title">多园介绍</div>
         </div>
         <div class="investment-block-content">
-          <div class="tab-nav">
-            <tab
-              v-model="activePark"
-              bar-active-color="#00a041"
-              :line-width="1"
-            >
-              <tab-item
-                v-for="(park, parkIndex) in parkList"
-                :key="parkIndex"
-                @on-item-click="tabPark"
-              >{{ park.parkName }}</tab-item>
-            </tab>
-          </div>
           <div
-            v-show="activePark === parkIndex"
-            v-for="(park, parkIndex) in parkList"
-            :key="parkIndex">
-            <div v-if="park.list && park.list.length > 0">
-              <div
-                v-for="(item, index) in park.list"
-                :key="index"
-                class="card-list"
-                @click="$router.push({path:'/investmentInfoDetail',query:{id: item.id}})"
-              >
-                <div class="card-list-poster" :style="{backgroundImage: 'url('+ item.adCover +')'}">
-                </div>
-                <div class="card-list-content">
-                  <div class="card-list-title">{{ item.title }}</div>
-                  <div class="card-list-text">{{ item.subTitle }}</div>
-                  <div class="card-list-tips">
-                    <div class="tag-row">
-                      <tag-btn
-                        v-if="index < 2"
-                        v-for="(tag, index) in item.adFlag.split(',')"
-                        :key="index"
-                        :title="tag"
-                        class="tag-list"
-                      ></tag-btn>
-                      <span v-if="item.adFlag.split(',').length > 1" class="main-color">...</span>
-                    </div>
-                    <div class="main-color">立即考察</div>
-                  </div>
-                </div>
-              </div>
-              <now-loading v-show="park.loadMore && park.loading"></now-loading>
-              <no-more v-show="park.loadMore && park.noMore"></no-more>
+            v-for="(item, index) in parkList"
+            :key="index"
+            class="card-list"
+            @click="$linkTo({path:'/parkDetails', appPath: api.link + '#/parkDetails?id=' + item.id, query:{id: item.id}})"
+          >
+            <div class="card-list-poster" :style="{backgroundImage: 'url(' + item.mainPicture + ')'}">
             </div>
-            <div class="no-more-row" v-else>暂无相关信息</div>
-            <div
-              v-if="!park.loadMore"
-              class="read-more"
-              @click="loadMore(park)"
-            >
-              <span>更多</span>
-              <i class="read-more-icon icon iconfont icon-jiantou"></i>
+            <div class="card-list-content">
+              <div class="card-list-title">{{ item.parkName }}</div>
+              <div class="card-list-text">{{ item.shortIntroduce }}</div>
+              <div class="card-list-tips">
+                <span class="main-color">查看详情</span>
+              </div>
             </div>
           </div>
         </div>
@@ -209,86 +98,15 @@ export default {
     }
   },
   methods: {
-    tabPark (index) {
-      this.activeItem = this.parkList[index]
-    },
-    handleScroll () {
-      window.onscroll = () => {
-        // 文档内容实际高度（包括超出视窗的溢出部分）
-        const scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight)
-        // 滚动条滚动距离
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
-        // 窗口可视范围高度
-        const clientHeight = window.innerHeight || Math.min(document.documentElement.clientHeight, document.body.clientHeight)
-        if (clientHeight + scrollTop >= scrollHeight - 10) {
-          // 到底部加载信息
-          this.getMore()
-        }
-      }
-    },
-    getMore () {
-      // tab的查看更多被点击且不是加载中状态且没有全部加载完再执行
-      if (this.activeItem.loadMore && !this.activeItem.loading && !this.activeItem.noMore) {
-        // 如果当前没有选中的tab，则取第一个
-        if (!this.activeItem.hasOwnProperty('query')) {
-          this.activeItem = this.parkList[this.activePark]
-        }
-        this.activeItem.query.page++
-        this.getPartDetail(this.activeItem)
-      }
-    },
     init () {
       this.getPartList()
-        .then(() => {
-          this.parkList.forEach((item, index) => {
-            const query = {
-              parkId: item.id,
-              page: 1,
-              rows: 10
-            }
-            // 在tab对象上set属性
-            this.$set(item, 'noMore', false)
-            this.$set(item, 'loading', false)
-            this.$set(item, 'query', query)
-            this.$set(item, 'allList', [])
-            this.$set(item, 'list', [])
-            this.$set(item, 'loadMore', false)
-            this.$nextTick(() => {
-              this.getPartDetail(item)
-                .then((data) => {
-                  const rows = data.rows
-                  let list
-                  let flag
-                  if (rows.length > 2) {
-                    list = rows.slice(0, 2)
-                    flag = false
-                  } else {
-                    list = rows
-                    flag = true
-                  }
-                  item.list = list
-                  item.loadMore = flag
-                })
-            })
-          })
-        })
-      Promise.all([
-        this.getBanner(),
-        this.getBusinessAdDynamic(),
-        this.getBusinessAdPolicy()
-      ])
+      this.getBanner()
         .then(() => {
           const swiper = new Swiper('.swiper-container', {
             autoplay: true
           })
           console.dir(swiper)
-          this.handleScroll()
         })
-    },
-    loadMore (park) {
-      // 点击查看按钮
-      park.loadMore = true
-      park.list = park.allList
     },
     getBanner () {
       return new Promise((resolve, reject) => {
@@ -311,36 +129,6 @@ export default {
         })
       })
     },
-    getBusinessAdDynamic () {
-      return new Promise((resolve, reject) => {
-        this.api.get({
-          url: 'getBusinessAdDynamic',
-          callback: (res) => {
-            if (res.code === '0000') {
-              this.businessAdDynamic = res.data
-              resolve()
-            } else {
-              reject(res.data)
-            }
-          }
-        })
-      })
-    },
-    getBusinessAdPolicy () {
-      return new Promise((resolve, reject) => {
-        this.api.get({
-          url: 'getBusinessAdPolicy',
-          callback: (res) => {
-            if (res.code === '0000') {
-              this.businessAdPolicy = res.data
-              resolve()
-            } else {
-              reject(res.data)
-            }
-          }
-        })
-      })
-    },
     getPartList () {
       return new Promise((resolve, reject) => {
         this.api.get({
@@ -351,28 +139,6 @@ export default {
               resolve()
             } else {
               reject(res)
-            }
-          }
-        })
-      })
-    },
-    getPartDetail (item) {
-      return new Promise((resolve, reject) => {
-        item.loading = true
-        this.api.get({
-          url: 'getBusinessAdContent',
-          data: item.query,
-          callback: (res) => {
-            if (res.code === '0000') {
-              const rows = res.data.rows
-              item.loading = false
-              if (res.data.rows.length < item.query.rows) {
-                item.noMore = true
-              }
-              item.allList = item.allList.concat(rows)
-              resolve(res.data)
-            } else {
-              reject(res.data)
             }
           }
         })
@@ -422,38 +188,43 @@ export default {
     .card-list-poster {
       background-size: cover;
       width: 180px;
-      height: 180px;
+      height: 220px;
       overflow: hidden;
-      border-radius: 8px;
+      border-radius: 4px;
       flex: none;
       img {
         height: 100%;
       }
     }
     .card-list-content {
-      padding: 18px;
+      padding-left: 18px;
       font-size: 28px;
       color:rgba(51,51,51,1);
       flex: 1;
+      width: 285px;
     }
     .card-list-title {
       width: 100%;
+      height: 32px;
+      line-height: 32px;
       font-size: 32px;
       font-weight:bold;
-      color:rgba(34,34,34,1);
-      @include clamp(1);
+      color: rgba(34,34,34,1);
+      overflow: hidden;
+      text-overflow:ellipsis;
+      white-space: nowrap;
     }
     .card-list-text {
       width: 100%;
-      height: 72px;
+      height: 100px;
       line-height: 36px;
-      margin: 10px 0;
-      @include clamp(2);
+      margin: 20px 0 10px;
+      @include clamp(3);
       color: #666666;
     }
     .card-list-tips {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-end;
       align-items:center;
       margin-top: 8px;
       font-size: 24px;
@@ -472,7 +243,7 @@ export default {
 
     }
     .investment-block {
-      border-bottom: 22px solid #fafafa;
+      border-bottom: 4px solid #fafafa;
       background-color: #fff;
       &.br-n {
         border-bottom: none;
@@ -481,20 +252,23 @@ export default {
         border-bottom: none;
       }
       .investment-park {
-        line-height: 50px;
+        line-height: 40px;
         letter-spacing: 4px;
         padding: 0 40px;
         .park-profile-desc {
-          font-size: 28px;
+          font-size: 26px;
           text-indent: 2em;
         }
       }
       .investment-block-title {
         padding: 20px 40px;
         @include flex($h: space-between);
+        cursor: pointer;
+        &.br-b {
+          border-bottom: 4px solid #fafafa;
+        }
         .block-title {
-          font-size: 40px;
-          font-weight: 600;
+          font-size: 34px;
         }
         .block-more {
           align-self: flex-end;
@@ -524,7 +298,8 @@ export default {
         position: absolute;
         right: 40px;
         bottom: 0;
-        font-size: 28px;
+        font-size: 24px;
+        cursor: pointer;
       }
     }
     .investment-banner {

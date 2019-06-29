@@ -280,13 +280,14 @@ public class ParkingServerServiceImpl implements ParkingServerService {
                 logger.error("账单创建时停车场免费时间对应数据转换失败，改用当前时间。",e);
                 parkingRecordNew.setStartBillingTime(DateUtils.addMinutes(new Date(),tbParkingArea.getTempFreeTime()));
             }
-
             parkingRecordNew.setCreatedTime(new Date());
+            parkingRecordNew.setParkingId(UUID.randomUUID().toString().replaceAll("-",""));
             int insert = tbParkingRecordMapper.insert(parkingRecordNew);
             logger.info("临停支付成功，创建新的停车记录。缴费开始计算时间为缴费时间+免费分钟，响应条数：{}",insert);
             //修改停车记录数据
             tbParkingRecord.setPayTime(new Date());
             tbParkingRecord.setPayStatus(ParkingEnums.PARKING_CARE_APPLY_PAYED.getCode());
+            tbParkingRecord.setActualMoney(payBillDetailByIdOrNum.getData().getPayAmount());
             int i = tbParkingRecordMapper.updateByPrimaryKey(tbParkingRecord);
             logger.info("修改停车记录数据支付状态，响应条数：{}",i);
         }else{
@@ -347,8 +348,8 @@ public class ParkingServerServiceImpl implements ParkingServerService {
         }
         int i = parkingRecordMapper.updateParkingRecordByRamp(parkingRecordRampParam);
         logger.info("处理道尔推送车辆出场数据成功，响应条数：-- {}",i);
-        String s = sb.toString();
-        return s.substring(0,s.length()-1);
+        String s = carList.size()==i?sb.toString():"";
+        return s==""?"":s.substring(0,s.length()-1);
     }
 
 }

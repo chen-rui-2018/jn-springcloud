@@ -85,8 +85,8 @@
         </el-table>
       </div>
     </div>
- <el-dialog :visible.sync="dialogVisible" :modal-append-to-body="false" width="50%">
-      <img :src="certificatePhoto" alt="图片" style="width:100%;height:200px">
+ <el-dialog :visible.sync="dialogVisible" :modal-append-to-body="false" width="39%">
+      <img :src="certificatePhoto" alt="图片" style="width:100%;">
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">返 回</el-button>
       </span>
@@ -152,6 +152,8 @@ export default {
             _this.serviceExperienceData = res.data.serviceExperienceList;
             _this.serviceProjectExperienceList =
               res.data.serviceProjectExperienceList;
+          }else{
+            _this.$message.error(res.result)
           }
         }
       });
@@ -231,8 +233,11 @@ export default {
     }
     .el-form-item__content {
       flex: 1;
-      display: inline-block;
-      padding-left: 13px;
+      // display: inline-block;
+      padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  line-height: unset;
       // padding: 15px;
       //   border: 1px solid #ccc;
     }

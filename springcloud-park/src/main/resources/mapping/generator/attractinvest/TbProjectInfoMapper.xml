@@ -47,6 +47,7 @@
     <result column="actual_total_account" jdbcType="DECIMAL" property="actualTotalAccount" />
     <result column="room_bill_id" jdbcType="VARCHAR" property="roomBillId" />
     <result column="enter_time" jdbcType="TIMESTAMP" property="enterTime" />
+    <result column="main_tower_id" jdbcType="VARCHAR" property="mainTowerId" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.jn.park.attractinvest.entity.TbProjectInfoWithBLOBs">
     <result column="project_introduce" jdbcType="LONGVARCHAR" property="projectIntroduce" />
@@ -118,7 +119,7 @@
     pm_approver_time, company_name, company_id, rent_info, expect_enter_time, sure_time, 
     approval_opioion, legal_personer, legal_phone, com_admin, linker, linker_phone, enterprise_property, 
     industry_type_name, industry_type, rent_start_time, com_ent_time, rent_month_num, 
-    remerk, actual_total_account, room_bill_id, enter_time
+    remerk, actual_total_account, room_bill_id, enter_time, main_tower_id
   </sql>
   <sql id="Blob_Column_List">
     project_introduce, company_require
@@ -187,8 +188,9 @@
       linker_phone, enterprise_property, industry_type_name, 
       industry_type, rent_start_time, com_ent_time, 
       rent_month_num, remerk, actual_total_account, 
-      room_bill_id, enter_time, project_introduce, 
-      company_require)
+      room_bill_id, enter_time, main_tower_id, 
+      project_introduce, company_require
+      )
     values (#{id,jdbcType=VARCHAR}, #{projectName,jdbcType=VARCHAR}, #{source,jdbcType=VARCHAR}, 
       #{size,jdbcType=CHAR}, #{introducer,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
       #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
@@ -204,8 +206,9 @@
       #{linkerPhone,jdbcType=VARCHAR}, #{enterpriseProperty,jdbcType=VARCHAR}, #{industryTypeName,jdbcType=VARCHAR}, 
       #{industryType,jdbcType=VARCHAR}, #{rentStartTime,jdbcType=TIMESTAMP}, #{comEntTime,jdbcType=TIMESTAMP}, 
       #{rentMonthNum,jdbcType=INTEGER}, #{remerk,jdbcType=VARCHAR}, #{actualTotalAccount,jdbcType=DECIMAL}, 
-      #{roomBillId,jdbcType=VARCHAR}, #{enterTime,jdbcType=TIMESTAMP}, #{projectIntroduce,jdbcType=LONGVARCHAR}, 
-      #{companyRequire,jdbcType=LONGVARCHAR})
+      #{roomBillId,jdbcType=VARCHAR}, #{enterTime,jdbcType=TIMESTAMP}, #{mainTowerId,jdbcType=VARCHAR}, 
+      #{projectIntroduce,jdbcType=LONGVARCHAR}, #{companyRequire,jdbcType=LONGVARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.attractinvest.entity.TbProjectInfoWithBLOBs">
     insert into tb_project_info
@@ -344,6 +347,9 @@
       </if>
       <if test="enterTime != null">
         enter_time,
+      </if>
+      <if test="mainTowerId != null">
+        main_tower_id,
       </if>
       <if test="projectIntroduce != null">
         project_introduce,
@@ -487,6 +493,9 @@
       </if>
       <if test="enterTime != null">
         #{enterTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mainTowerId != null">
+        #{mainTowerId,jdbcType=VARCHAR},
       </if>
       <if test="projectIntroduce != null">
         #{projectIntroduce,jdbcType=LONGVARCHAR},
@@ -640,6 +649,9 @@
       <if test="record.enterTime != null">
         enter_time = #{record.enterTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.mainTowerId != null">
+        main_tower_id = #{record.mainTowerId,jdbcType=VARCHAR},
+      </if>
       <if test="record.projectIntroduce != null">
         project_introduce = #{record.projectIntroduce,jdbcType=LONGVARCHAR},
       </if>
@@ -698,6 +710,7 @@
       actual_total_account = #{record.actualTotalAccount,jdbcType=DECIMAL},
       room_bill_id = #{record.roomBillId,jdbcType=VARCHAR},
       enter_time = #{record.enterTime,jdbcType=TIMESTAMP},
+      main_tower_id = #{record.mainTowerId,jdbcType=VARCHAR},
       project_introduce = #{record.projectIntroduce,jdbcType=LONGVARCHAR},
       company_require = #{record.companyRequire,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
@@ -750,7 +763,8 @@
       remerk = #{record.remerk,jdbcType=VARCHAR},
       actual_total_account = #{record.actualTotalAccount,jdbcType=DECIMAL},
       room_bill_id = #{record.roomBillId,jdbcType=VARCHAR},
-      enter_time = #{record.enterTime,jdbcType=TIMESTAMP}
+      enter_time = #{record.enterTime,jdbcType=TIMESTAMP},
+      main_tower_id = #{record.mainTowerId,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -890,6 +904,9 @@
       <if test="enterTime != null">
         enter_time = #{enterTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="mainTowerId != null">
+        main_tower_id = #{mainTowerId,jdbcType=VARCHAR},
+      </if>
       <if test="projectIntroduce != null">
         project_introduce = #{projectIntroduce,jdbcType=LONGVARCHAR},
       </if>
@@ -945,6 +962,7 @@
       actual_total_account = #{actualTotalAccount,jdbcType=DECIMAL},
       room_bill_id = #{roomBillId,jdbcType=VARCHAR},
       enter_time = #{enterTime,jdbcType=TIMESTAMP},
+      main_tower_id = #{mainTowerId,jdbcType=VARCHAR},
       project_introduce = #{projectIntroduce,jdbcType=LONGVARCHAR},
       company_require = #{companyRequire,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=VARCHAR}
@@ -994,7 +1012,8 @@
       remerk = #{remerk,jdbcType=VARCHAR},
       actual_total_account = #{actualTotalAccount,jdbcType=DECIMAL},
       room_bill_id = #{roomBillId,jdbcType=VARCHAR},
-      enter_time = #{enterTime,jdbcType=TIMESTAMP}
+      enter_time = #{enterTime,jdbcType=TIMESTAMP},
+      main_tower_id = #{mainTowerId,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

@@ -146,7 +146,9 @@ export default {
       }
     }
   },
-  created () {
+  mounted () {
+    sessionStorage.setItem("url","rightDetail")
+    sessionStorage.setItem("name",this.$route.query.name)
     this.id=this.$route.query.id
     this.getPowerDetailList()
   },
@@ -170,7 +172,6 @@ export default {
           id:this.id
          },
         callback: function(res) {
-          console.log(res);
           if (res.code == "0000") {
             _this.loading=false
             _this.powerDetail=res.data[0];
@@ -179,6 +180,8 @@ export default {
             if(_this.word===null){
               _this.word='暂无'
             }
+          }else{
+            _this.$message.error(res.result)
           }
         }
       });

@@ -5,7 +5,7 @@
       <div class="business_nav">
         <div @click="toBasicInformation" v-show="isEditBody">编辑机构</div>
         <div @click="toCounselorManagement" v-show="isCounselor">专员管理</div>
-        <div @click="toEnterprisePropaganda" v-show="isPublicity">企业宣传</div>
+        <div @click="toEnterprisePropaganda" v-show="isPublicity">机构宣传</div>
       </div>
 
     </div>
@@ -35,12 +35,12 @@
         </div>
         <div style="display:flex">
           <el-form-item label="服务机构简介:" class="inline">
-            <span class="lh">{{orgSynopsis}}</span>
+            <span>{{orgSynopsis}}</span>
           </el-form-item>
         </div>
         <div style="display:flex">
           <el-form-item label="核心服务:" class="inline border-bottom">
-            <span class="lh">{{orgBusiness}}</span>
+            <span >{{orgBusiness}}</span>
           </el-form-item>
         </div>
       </el-form>
@@ -63,7 +63,7 @@
         <div>企业资质/荣誉</div>
         <div  class="enterpriseQualification ml" v-show="honorLicense.length===0">暂无信息</div>
         <div class="enterpriseQualification" v-for="(item, index) in honorLicense" :key="index">
-          <span class="themeColor smallSize mr">{{item.awardTime}}&nbsp;获得</span>
+          <span class="themeColor smallSize mr" v-show="item.awardTime">{{item.awardTime?item.awardTime+'日':''}}&nbsp;获得</span>
           <div class="itemInfo">
             <div>{{item.certName}}</div>
             <div>颁发部门：{{item.awardDepart}}</div>
@@ -137,7 +137,7 @@
         </div>
       </el-form>
     </div>
-    <el-dialog :visible.sync="dialogVisible" :append-to-body="true" width="50%">
+    <el-dialog :visible.sync="dialogVisible" :append-to-body="true" width="39%">
       <img :src="photoUrl" alt="图片" style="width:100%">
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">返 回</el-button>
@@ -268,7 +268,7 @@ export default {
       this.$router.push({ name: "agencyColleaguesList" });
     },
     toEnterprisePropaganda() {
-      this.$router.push({ name: "enterprisePropaganda" });
+      this.$router.push({ name: "organizationPropaganda" });
     },
     toRecruitmentManagement() {
       this.$router.push({ name: "recruitmentManagement" });
@@ -289,7 +289,7 @@ export default {
 <style lang="scss" >
 .myBody {
   .mr {
-    margin-right: 36px;
+    margin-right: 130px;
   }
   .businessLicenseImg {
     display: inline-block;
@@ -315,7 +315,7 @@ export default {
     display: inline-block;
     vertical-align: middle;
     margin: 10px 0px;
-    margin-left: 180px;
+    margin-left: 150px;
   }
   .businessLicense {
     display: inline-block;
@@ -376,9 +376,10 @@ export default {
     }
     .el-form-item__content {
       flex: 1;
-      display: inline-block;
-      padding-left: 13px;
-      // padding: 15px;
+     line-height: unset;
+      display: flex;
+      align-items: center;
+      padding: 5px 10px;
       //   border: 1px solid #ccc;
     }
     .bodyName {
@@ -475,12 +476,6 @@ export default {
   }
   .ml{
     margin-left:160px;
-  }
-  .lh{
-    line-height: 22px;
-    display: inline-block;
-    padding: 15px;
-    padding-left:2px;
   }
 }
 </style>

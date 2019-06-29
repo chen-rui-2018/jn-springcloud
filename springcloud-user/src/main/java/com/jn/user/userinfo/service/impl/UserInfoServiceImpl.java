@@ -39,6 +39,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -116,22 +117,50 @@ public class UserInfoServiceImpl implements UserInfoService {
             return userExtensionInfo;
         }
         //redis中没有数据，从数据库中获取
-        List<TbUserPerson> tbUserPeople = getTbUserPeople(account);
-        //用户扩展表有当前用户信息，直接返回用户扩展信息,没有返回null
-        if (tbUserPeople.isEmpty()) {
-            logger.warn("用户[{}]扩展信息不存在或已被删除",account);
+        //获取基础库用户基本信息
+        User user=new User();
+        user.setAccount(account);
+        Result<User> systemClientUser = systemClient.getUser(user);
+        //非正常用户信息直接返回空
+        if(systemClientUser==null || systemClientUser.getData()==null
+                || !(RecordStatusEnum.EFFECTIVE.getValue()==systemClientUser.getData().getRecordStatus())){
             return null;
-        }else{
-            TbUserPerson tbUserPerson = tbUserPeople.get(0);
-            BeanUtils.copyProperties(tbUserPerson, userExtensionInfo);
-            getUserHobbyAndJobs(userExtensionInfo);
-
-            userExtensionInfo = setUserExtensionRoleInfo(userExtensionInfo);
-
-            //把用户拓展信息写入redis中
-            cache.put(account, userExtensionInfo);
-            return userExtensionInfo;
         }
+        //数据库基本用户信息
+        user= systemClientUser.getData();
+        //只包含用户账号，姓名，手机，邮箱的基本信息
+        BaseUser baseUser=new BaseUser();
+        BeanUtils.copyProperties(user, baseUser);
+        List<TbUserPerson> tbUserPeople = getTbUserPeople(account);
+        //用户扩展表信息
+        TbUserPerson tbUserPerson = tbUserPeople.isEmpty()?new TbUserPerson():tbUserPeople.get(0);
+        BeanUtils.copyProperties(tbUserPerson, userExtensionInfo);
+        BeanUtils.copyProperties(baseUser, userExtensionInfo);
+        //更新用户扩展表的基本信息
+        updateUserExtensionBaseInfo(baseUser);
+        //获取兴趣爱好和工作
+        getUserHobbyAndJobs(userExtensionInfo);
+        userExtensionInfo = setUserExtensionRoleInfo(userExtensionInfo);
+
+        //把用户拓展信息写入redis中
+        cache.put(account, userExtensionInfo);
+        return userExtensionInfo;
+
+    }
+
+    /**
+     * 更新扩展表用户基本信息
+     * @param baseUser
+     */
+    @ServiceLog(doAction = "更新扩展表用户基本信息")
+    private void updateUserExtensionBaseInfo(BaseUser baseUser) {
+        TbUserPerson userPerson=new TbUserPerson();
+        BeanUtils.copyProperties(baseUser, userPerson);
+        TbUserPersonCriteria example=new TbUserPersonCriteria();
+        example.createCriteria().andAccountEqualTo(baseUser.getAccount())
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        int resNum = tbUserPersonMapper.updateByExampleSelective(userPerson, example);
+        logger.info("更新扩展表用户基本信息成功，数据响应条数：{}",resNum);
     }
 
     /**
@@ -439,8 +468,10 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     @ServiceLog(doAction = "保存/修改用户信息")
+    @Transactional(rollbackFor = Exception.class)
     public int saveOrUpdateUserInfo(UserInfoParam userInfoParam, User user){
         if(null == user ){
+            logger.warn("[保存用户信息] 用户信息获取失败");
             throw new JnSpringCloudException(UserExtensionExceptionEnum.USER_INFO_GET_ERROR);
         }
         TbUserPersonCriteria personCriteria = new TbUserPersonCriteria();
@@ -449,12 +480,14 @@ public class UserInfoServiceImpl implements UserInfoService {
         TbUserPerson tbUserPerson = new TbUserPerson();
         BeanUtils.copyProperties(user,tbUserPerson);
         BeanUtils.copyProperties(userInfoParam,tbUserPerson);
+        BeanUtils.copyProperties(userInfoParam,user);
 
         // 出生年月不为空时，判断日期格式
         if (StringUtils.isNotEmpty(userInfoParam.getBirthday())) {
             try {
                 tbUserPerson.setBirthday(DateUtils.parseDate(userInfoParam.getBirthday(),"yyyy-MM-dd"));
             } catch (ParseException e) {
+                logger.warn("[保存用户信息] 出生日期格式化错误");
                 throw new JnSpringCloudException(UserExtensionExceptionEnum.BIRTHDAY_FORMAT_ERROR);
             }
         }
@@ -466,8 +499,8 @@ public class UserInfoServiceImpl implements UserInfoService {
             tbUserPerson.setCreatedTime(new Date());
             tbUserPerson.setCreatorAccount(user.getAccount());
 
-            tbUserPerson.setRecordStatus(new Byte(RECORD_STATUS_VALID));
-            a = tbUserPersonMapper.insert(tbUserPerson);
+            tbUserPerson.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
+            a = tbUserPersonMapper.insertSelective(tbUserPerson);
         }else if(null!=tbUserPeople && tbUserPeople.size()==1){
             //修改
             tbUserPerson.setId(tbUserPeople.get(0).getId());
@@ -475,11 +508,11 @@ public class UserInfoServiceImpl implements UserInfoService {
             tbUserPerson.setModifierAccount(user.getAccount());
             a = tbUserPersonMapper.updateByPrimaryKeySelective(tbUserPerson);
         }else{
-            //用户数据存在多条
+            logger.warn("[保存用户信息] 用户数据存在多条，account：{}", user.getAccount());
             throw new JnSpringCloudException(UserExtensionExceptionEnum.USER_DATA_MULTIPLE_ERROR);
         }
         TbTagCodeCriteria tbTagCodeCriteria = new TbTagCodeCriteria();
-        tbTagCodeCriteria.createCriteria().andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
+        tbTagCodeCriteria.createCriteria().andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         List<TbTagCode> tagCodes = tbTagCodeMapper.selectByExample(tbTagCodeCriteria);
         List<TbUserTag> hobbys = getUserTagList(userInfoParam.getHobbys(), TAG_CODE_IS_HOBBY, tbUserPerson.getId(), user.getAccount(),tagCodes);
         List<TbUserTag> jobs = getUserTagList(userInfoParam.getJobs(), TAG_CODE_IS_JOB, tbUserPerson.getId(), user.getAccount(),tagCodes);
@@ -487,13 +520,16 @@ public class UserInfoServiceImpl implements UserInfoService {
         TbUserTagCriteria tagCriteria = new TbUserTagCriteria();
         tagCriteria.createCriteria().andCreatorAccountEqualTo(user.getAccount());
         int i = tbUserTagMapper.deleteByExample(tagCriteria);
-        logger.info("删除用户兴趣爱好/职业标签数据 {} 条",i);
+        logger.info("[保存用户信息] 删除用户兴趣爱好/职业标签数据 {} 条",i);
         if(null!=hobbys && hobbys.size()>0){
             int i1 = userTagMapper.insertUserTag(hobbys);
-            logger.info("【插入新数据】用户兴趣爱好/职业标签数据 {} 条",i1);
+            logger.info("[保存用户信息] 【插入新数据】用户兴趣爱好/职业标签数据 {} 条",i1);
         }
 
-        //更新redis缓存数据
+        // 修改基础库用户表信息
+        systemClient.updateSysUser(user);
+
+        // 更新redis缓存数据
         updateRedisUserInfo(user.getAccount());
         return a;
     }

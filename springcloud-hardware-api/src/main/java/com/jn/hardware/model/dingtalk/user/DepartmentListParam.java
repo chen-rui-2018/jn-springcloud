@@ -1,6 +1,6 @@
 package com.jn.hardware.model.dingtalk.user;
 
-import org.hibernate.validator.constraints.NotBlank;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 
@@ -22,7 +22,8 @@ public class DepartmentListParam implements Serializable {
     /**
      * 不必填:是否递归部门的全部子部门，ISV微应用固定传递false
      */
-    private String fetch_child;
+    @JsonProperty("fetch_child")
+    private Boolean fetchChild;
     /**
      * 必填：父部门id（如果不传，默认部门为根部门，根部门ID为1）
      */
@@ -36,13 +37,7 @@ public class DepartmentListParam implements Serializable {
         this.lang = lang;
     }
 
-    public String getFetch_child() {
-        return fetch_child;
-    }
 
-    public void setFetch_child(String fetch_child) {
-        this.fetch_child = fetch_child;
-    }
 
     public String getId() {
         return id;
@@ -52,11 +47,19 @@ public class DepartmentListParam implements Serializable {
         this.id = id;
     }
 
+    public Boolean getFetchChild() {
+        return fetchChild;
+    }
+
+    public void setFetchChild(Boolean fetchChild) {
+        this.fetchChild = fetchChild;
+    }
+
     @Override
     public String toString() {
         return "DepartmentListParam{" +
                 "lang='" + lang + '\'' +
-                ", fetch_child='" + fetch_child + '\'' +
+                ", fetchChild=" + fetchChild +
                 ", id='" + id + '\'' +
                 '}';
     }

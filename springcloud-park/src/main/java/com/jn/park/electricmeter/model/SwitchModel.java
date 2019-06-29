@@ -27,6 +27,16 @@ public class SwitchModel implements Serializable {
     private String companyName;
     @ApiModelProperty("企业的余额")
     private String balance;
+    @ApiModelProperty("电表编码")
+    private String meterCode;
+
+    public String getMeterCode() {
+        return meterCode;
+    }
+
+    public void setMeterCode(String meterCode) {
+        this.meterCode = meterCode;
+    }
 
     public String getId() {
         return id;

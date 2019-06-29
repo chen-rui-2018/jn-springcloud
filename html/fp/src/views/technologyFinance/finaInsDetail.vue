@@ -44,7 +44,8 @@
           <i class="el-icon-arrow-up"></i>
         </div>
         <div class="mainColor shouqi zhankai pointer" v-else @click='zankaiFlag=!zankaiFlag'>
-          展开<i class="el-icon-arrow-down"></i>
+          展开
+          <i class="el-icon-arrow-down"></i>
         </div>
         <el-card>
           <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -66,7 +67,7 @@
                   <tr>
                     <td class="table-orgspace-title">主营业务：</td>
                     <td class="table-orgspace-detail" colspan="4">
-                      <div class="table-orgspace-col">{{serverOrgDetailList.orgBusiness}}</div>
+                      <div v-html="serverOrgDetailList.orgBusiness"></div>
                     </td>
                   </tr>
                   <tr>
@@ -124,7 +125,7 @@
                       <div class="table-orgspace-col">{{serverOrgDetailList.orgBusinScope}}</div>
                     </td>
                   </tr> -->
-                   <tr>
+                  <tr>
                     <td class="table-orgspace-title">营业执照：</td>
                     <td class="table-orgspace-detail" colspan="6">
                       <div class="table-orgspace-col businessImg"><img :src="serverOrgDetailList.orgLicensesUrl" alt=""></div>
@@ -159,8 +160,7 @@
                         <td class="table-orgspace-title" width="120px;">员工人数：</td>
                         <td class="table-orgspace-detail" width="300px">{{serverOrgDetailList.staffCount}}</td>
                         <td class="table-orgspace-title" width="120px;">执业人员人数：</td>
-                        <td class="table-orgspace-detail" style="width:322px;">{{serverOrgDetailList.professionNum}}
-                          （占比{{(Number(serverOrgDetailList.professionNum/serverOrgDetailList.staffCount)*100).toFixed(0)}}%）
+                        <td class="table-orgspace-detail" style="width:322px;">{{serverOrgDetailList.professionNum}} （占比{{(Number(serverOrgDetailList.professionNum/serverOrgDetailList.staffCount)*100).toFixed(0)}}%）
                         </td>
                       </tr>
                       <tr>
@@ -168,8 +168,7 @@
                         <td class="table-orgspace-detail">{{serverOrgDetailList.bachelorNum}}（占比{{(Number(serverOrgDetailList.bachelorNum/serverOrgDetailList.staffCount)*100).toFixed(0)}}%）
                         </td>
                         <td class="table-orgspace-title">硕士：</td>
-                        <td class="table-orgspace-detail">{{serverOrgDetailList.masterNum}}
-                          （占比{{(Number(serverOrgDetailList.masterNum/serverOrgDetailList.staffCount)*100).toFixed(0)}}%）
+                        <td class="table-orgspace-detail">{{serverOrgDetailList.masterNum}} （占比{{(Number(serverOrgDetailList.masterNum/serverOrgDetailList.staffCount)*100).toFixed(0)}}%）
                         </td>
                       </tr>
                       <!-- <tr>
@@ -360,9 +359,9 @@
                     <!-- 参考信息、交易均价 begin -->
                     <div class="detail-contact inner-product">
                       <div class="search_area text-of" title="王振英 , 包美芬 , 高凤清">顾&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;问：{{i.advisorName}}</div>
-                      <div class="text-of mt5">参考价格：{{i.referPrice}}</div>
+                      <div class="text-of mt5">参考价格：{{i.referPrice}}元</div>
                       <div>累计
-                        <span class="mainColor">{{i.transactionsNumber}}</span>笔交易</div>
+                        <span class="mainColor">{{i.transactionsNumber}}</span>&nbsp;笔交易</div>
                     </div>
                     <!-- 参考信息、交易均价 end -->
                     <!-- 评价 begin -->
@@ -379,20 +378,20 @@
                     </div>
                     <!-- 评价 end -->
                     <!-- 交易量 begin -->
-                    
+
                     <!-- 交易量 end -->
                   </div>
                   <!-- 中间上半部分--参考信息、交易均价和交易 end -->
                 </div>
                 <div class="detail-count fr">
-                      <div class="orgBtn fr mainColor pointer" @click="demandRaise(i)">提需求</div>
-                    </div>
+                  <div class="orgBtn fr mainColor pointer" @click="demandRaise(i)">提需求</div>
+                </div>
                 <!-- 中间信息 end -->
                 <div class="clear"></div>
               </li>
             </ul>
             <div class="pagination-container">
-              <el-pagination background @size-change="handleSizeChange1" @current-change="handleCurrentChange1" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row1" layout="total, sizes, prev, pager, next, jumper" :total="total1">
+              <el-pagination background @size-change="handleSizeChange1" @current-change="handleCurrentChange1" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row1" layout="total, sizes, prev, pager, next, jumper" :total="total1">
               </el-pagination>
             </div>
           </div>
@@ -401,17 +400,14 @@
           <span slot="label">服务评价({{evaCount.evaluationTotal}})</span>
           <div class="serEvaluation">
             <ul class="list-imgleft">
-              <li class="list-item pr" v-for="(i,k) in serviceRatingList" :key='k'>
-                <!-- 上架时间 begin -->
-                <div class="list-item-date"></div>
-                <!-- 上架时间 end -->
+              <li class="list-item pr clearfix" v-for="(i,k) in serviceRatingList" :key='k'>
                 <!-- 左侧logo begin-->
-                <div class="list-imgleft-container product nopic">
+                <div class="list-imgleft-container product nopic fl">
                   <img :src="i.pictureUrl" alt="">
                 </div>
                 <!-- 左侧logo end-->
                 <!-- 中间信息 beign -->
-                <div class="list-info-middle inner-product">
+                <div class="list-info-middle inner-product fl">
                   <!-- 中间上半部分--标题和标签 begin -->
                   <div class="list-info-top-title">
                     <!-- 头部 begin -->
@@ -424,7 +420,7 @@
                   </div>
                   <!-- 中间上半部分--标题和标签 end -->
                   <!-- 中间下半部分--参考信息、交易均价和交易 begin -->
-                  <div class="list-info-bottom-detail clearfix">
+                  <div class="list-info-bottom-detail">
                     <!-- 参考信息、交易均价 begin -->
                     <div class="detail-contact inner-product">
                       <div class="search_area text-of" title="王振英 , 包美芬 , 高凤清">服务专员：{{i.advisorName}}</div>
@@ -447,25 +443,22 @@
                       </div>
                     </div>
                     <!-- 评价 end -->
-                    <!-- 交易量 begin -->
-                    <div class="detail-count" clearfix>
+                  </div>
+                  
+                  <!-- 中间上半部分--参考信息、交易均价和交易 end -->
+                </div>
+                  <div class="detail-count fr">
                       <!-- <span>累计
                         <span class="c_default ml5 mr5">40</span>笔交易</span> -->
-                      <div class="list-item-info fr">
+                      <div class="list-item-info">
                         <p>{{i.evaluationAccount}}</p>
                         <p>{{i.evaluationTime}}</p>
                       </div>
                     </div>
-                    <!-- 交易量 end -->
-                  </div>
-                  <!-- 中间上半部分--参考信息、交易均价和交易 end -->
-                </div>
-                <!-- 中间信息 end -->
-                <div class="clear"></div>
               </li>
             </ul>
             <div class="pagination-container">
-              <el-pagination background @size-change="handleSizeChange4" @current-change="handleCurrentChange4" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row4" layout="total, sizes, prev, pager, next, jumper" :total="total4">
+              <el-pagination background @size-change="handleSizeChange4" @current-change="handleCurrentChange4" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row4" layout="total, sizes, prev, pager, next, jumper" :total="total4">
               </el-pagination>
             </div>
           </div>
@@ -476,7 +469,7 @@
           <div class="actiConsultation">
             <ul class="allActiUl clearfix">
               <li v-for="(i,k) in serverActiList" :key='k' class="pointer" @click="$router.push({ path: 'actiDetail', query: { activityId: i.id } })">
-                <div class="postImgItem pointer" >
+                <div class="postImgItem pointer">
                   <img :src="i.actiPosterUrl" class="postImg" alt="活动海报图片">
                 </div>
                 <div class="actiInfo">
@@ -495,18 +488,21 @@
                 <div class="actiNum clearfix">
                   <div class="avatar">
                     <ul>
-                      <!-- <li v-for="(i,k) in item.avatarList" v-if="i<5" :key='k'><img :src="i" alt=""></li> -->
-                      <li></li>
+                      <li v-for="(item,k) in i.avatarList" v-if="k<5" :key='k'><img :src="item" alt=""></li>
+                      <!-- <li></li> -->
                     </ul>
                   </div>
                   <i>{{i.actiNum}}/{{i.actiNumber}}</i>
-                  <span class="mainColor">
-                    <i class="iconfont icon-xihuan"></i>{{i.actiLike}}</span>
+                  <p class="mainColor">
+                    <!-- <i class="iconfont icon-xihuan"></i>{{i.actiLike}} -->
+                    <img src="@/../static/img/xin.png" alt="" style="margin-right:0">
+                    <span>{{i.actiLike}}</span>
+                  </p>
                 </div>
               </li>
             </ul>
             <div class="pagination-container">
-              <el-pagination background @size-change="handleSizeChange3" @current-change="handleCurrentChange3" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row3" layout="total, sizes, prev, pager, next, jumper" :total="total3">
+              <el-pagination background @size-change="handleSizeChange3" @current-change="handleCurrentChange3" :current-page="currentPage1" :page-sizes="[4, 8, 12, 16]" :page-size="row3" layout="total, sizes, prev, pager, next, jumper" :total="total3">
               </el-pagination>
             </div>
           </div>
@@ -567,16 +563,16 @@ export default {
         // }
       ],
       currentPage1: 1,
-      row1: 5,
+      row1: 3,
       page1: 1,
       total1: 0,
       serviceConsultant: [],
       serverActiList: [],
-      row3: 5,
+      row3: 4,
       page3: 1,
       total3: 0,
       serviceRatingList: [],
-      row4: 5,
+      row4: 3,
       page4: 1,
       total4: 0,
       evaCount: {},
@@ -591,9 +587,9 @@ export default {
         productId: "",
         productName: ""
       },
-      productType:'',
-      timeInterval:'0',
-      ratingType:''
+      productType: "",
+      timeInterval: "0",
+      ratingType: ""
     };
   },
   created() {
@@ -604,7 +600,7 @@ export default {
     this.getEvaluationCountInfo();
   },
   methods: {
-     goLogin() {
+    goLogin() {
       window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
       this.$router.push({ path: "/login" });
     },
@@ -618,7 +614,7 @@ export default {
     onlineContat(investorAccount, investorName) {
       if (!this.getUserInfo()) {
         this.concatVisible = true;
-        return
+        return;
       }
       this.$router.push({
         path: "/chat",
@@ -748,10 +744,9 @@ export default {
         callback: function(res) {
           if (res.code == "0000") {
             _this.evaCount = res.data;
-            _this.total4 = res.data.total;
-            setTimeout(()=>{
-              _this.$refs['tabP'].$children[0].$forceUpdate() 
-            },0)
+            setTimeout(() => {
+              _this.$refs["tabP"].$children[0].$forceUpdate();
+            }, 0);
           } else {
             _this.$message.error(res.result);
           }
@@ -770,7 +765,7 @@ export default {
           isPublicPage: 0,
           page: _this.page4,
           rows: _this.row4,
-          ratingType:_this.ratingType
+          ratingType: _this.ratingType
         },
         callback: function(res) {
           if (res.code == "0000") {
@@ -791,7 +786,7 @@ export default {
           // actiType: "org_activity",
           page: _this.page3,
           rows: _this.row3,
-          timeInterval:_this.timeInterval
+          timeInterval: _this.timeInterval
         },
         callback: function(res) {
           if (res.code == "0000") {
@@ -818,9 +813,9 @@ export default {
           if (res.code == "0000") {
             _this.serverPro = res.data.rows;
             _this.total1 = res.data.total;
-             setTimeout(()=>{
-              _this.$refs['tabP'].$children[0].$forceUpdate() 
-            },0)
+            setTimeout(() => {
+              _this.$refs["tabP"].$children[0].$forceUpdate();
+            }, 0);
           } else {
             _this.$message.error(res.result);
           }
@@ -875,7 +870,7 @@ export default {
     display: inline-block;
     font-size: 12px;
   }
-   .el-tabs__item {
+  .el-tabs__item {
     height: 50px;
     line-height: 50px;
   }

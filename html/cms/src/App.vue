@@ -52,7 +52,9 @@ export default{
   ul {
     list-style: none
   }
-
+.el-transfer-panel__item.el-checkbox{
+  display: block;
+}
   .download {
     display: inline-block;
     line-height: 1;
@@ -82,10 +84,6 @@ export default{
 
   .demo > a:hover {
     color: #fff !important;
-  }
-
-  .el-pagination{
-    margin-top:15px;
   }
   .el-dialog__footer {
     text-align: center;

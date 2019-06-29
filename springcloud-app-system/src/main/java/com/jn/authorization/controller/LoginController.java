@@ -4,6 +4,7 @@ import com.jn.authorization.LoginService;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.common.util.CallOtherSwaggerUtils;
+import com.jn.common.util.encryption.AESUtil;
 import com.jn.common.util.encryption.EncryptUtil;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.UserLogin;
@@ -68,7 +69,10 @@ public class LoginController extends BaseController {
             notes = "ibps 调用 swagger接口，登录鉴权", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/noPwdLogin")
     public Result noPwdLogin(@RequestBody @Validated UserLogin userLogin) {
-        if (userLogin.getPassword().equals(EncryptUtil.encryptSha256(userLogin.getAccount()))) {
+        if (userLogin.getPassword().equals(
+                EncryptUtil.encryptSha256(
+                        AESUtil.decrypt(userLogin.getAccount(), AESUtil.DEFAULT_KEY)
+                ))) {
             userLogin.setPassword("");
             loginService.login(userLogin, Boolean.TRUE);
             return new Result(SecurityUtils.getSubject().getSession().getId());

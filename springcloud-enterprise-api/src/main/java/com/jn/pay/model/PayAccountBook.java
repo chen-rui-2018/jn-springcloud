@@ -24,12 +24,14 @@ public class PayAccountBook implements Serializable {
     @ApiModelProperty(value="账本ID")
     private String acBookId;
 
+    @ApiModelProperty(value="企业ID")
+    private String entId;
+
     @ApiModelProperty(value="账号ID")
     private String accountId;
 
     @ApiModelProperty(value="账本名称")
     private String acBookName;
-
 
     @ApiModelProperty(value="账本类型【ELECTRIC:电费，PROPERTY:物业费，REPAIR:维修费，ROOM_LEASE:房租费，GOODS_LEASE:物品租赁费，TEMPORARY_PARKING:停车费，PARKING_LEASE:车位费，WATER:水费，PROMOTION:宣传费，HEALTH:体检费】")
     private String acBookType;
@@ -59,6 +61,17 @@ public class PayAccountBook implements Serializable {
 
     @ApiModelProperty(value="记录状态   0标记删除，1正常")
     private String recordStatus;
+
+    @ApiModelProperty(value="电表编码")
+    private String meterCode;
+
+    public String getMeterCode() {
+        return meterCode;
+    }
+
+    public void setMeterCode(String meterCode) {
+        this.meterCode = meterCode;
+    }
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -158,5 +171,13 @@ public class PayAccountBook implements Serializable {
 
     public void setRecordStatus(String recordStatus) {
         this.recordStatus = recordStatus;
+    }
+
+    public String getEntId() {
+        return entId;
+    }
+
+    public void setEntId(String entId) {
+        this.entId = entId;
     }
 }

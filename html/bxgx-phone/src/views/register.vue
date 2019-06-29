@@ -97,16 +97,16 @@ export default {
     // 点击完成按钮后的操作
     finishRegister () {
       // 手机号
-      // const phone = this.phone
-      // // 验证码
-      // const code = this.code
-      // if (code === '' || phone === '') {
-      //   this.$vux.toast.text('手机号或验证码填写有误请重新填写', 'middle')
-      //   setTimeout(() => {
-      //     this.$vux.toast.hide()
-      //   }, 2000)
-      //   return
-      // }
+      const phone = this.phone
+      // 验证码
+      const code = this.code
+      if (code === '' || phone === '') {
+        this.$vux.toast.text('手机号或验证码填写有误请重新填写', 'middle')
+        setTimeout(() => {
+          this.$vux.toast.hide()
+        }, 2000)
+        return
+      }
       // 注册
       this.api.post({
         url: 'registerUrl',
@@ -121,7 +121,7 @@ export default {
             setTimeout(() => {
               this.$vux.toast.hide()
               window.location.href = hexToDec(urlSearch.targetUrl)
-            }, 1500)
+            }, 1000)
           } else {
             this.$vux.toast.text(res.result == null ? '验证码错误或验证码已过期' : res.result, 'middle')
             setTimeout(() => {

@@ -312,10 +312,11 @@ export default {
     }
     .el-form-item__content {
       flex: 1;
-      display: inline-block;
-      padding-left: 13px;
-      // padding: 15px;
-      // border-bottom: 1px solid #ccc;
+      // display: inline-block;
+      line-height: unset;
+      display: flex;
+      align-items: center;
+      padding: 5px 10px;
     }
   }
 

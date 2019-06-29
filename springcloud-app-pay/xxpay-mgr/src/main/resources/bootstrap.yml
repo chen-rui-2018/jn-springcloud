@@ -26,4 +26,4 @@ management:
     enabled: false
 
 server:
-  port: 8092
+  port: 7000

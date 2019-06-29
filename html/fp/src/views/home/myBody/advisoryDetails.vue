@@ -152,6 +152,8 @@ export default {
             _this.serviceExperienceData = res.data.serviceExperienceList;
             _this.serviceProjectExperienceList =
               res.data.serviceProjectExperienceList;
+          }else{
+            _this.$message.error(res.result)
           }
         }
       });
@@ -231,8 +233,11 @@ export default {
     }
     .el-form-item__content {
       flex: 1;
-      display: inline-block;
-      padding-left: 13px;
+      // display: inline-block;
+      padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  line-height: unset;
       // padding: 15px;
       //   border: 1px solid #ccc;
     }

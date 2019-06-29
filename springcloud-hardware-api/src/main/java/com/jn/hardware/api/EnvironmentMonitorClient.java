@@ -31,7 +31,7 @@ public interface EnvironmentMonitorClient {
 
     /**
      * 获取设备的实时数据
-     * 包含设备的指标实时值、设备的实时空气质量、设备的实时污染级别、实时南京市平均空气质量
+     * 包含设备的指标实时值、设备的实时空气质量、实时南京市平均空气质量
      * @param count
      * @return
      */
@@ -39,7 +39,7 @@ public interface EnvironmentMonitorClient {
     Result<EnvironmentMonitorRealTimeDataResult> getEnvironmentMonitorRealTimeDate(@RequestParam(value = "count") int count);
 
     /**
-     * 获取设备的实时空气质量、设备的实时污染级别、实时南京市平均空气质量
+     * 获取设备的实时空气质量、实时南京市平均空气质量
      * @return
      */
     @RequestMapping(value = "/api/hardware/environment/getDeviceAirQualityAll")

@@ -158,4 +158,12 @@ public class RoomManageController {
         return roomInformationService.createBill(billParam.getBillId(),billParam.getBillSum());
     }
 
+    @ControllerLog(doAction = "撤销缴费单")
+    @ApiOperation(value = "撤销缴费单",notes = "撤销缴费单")
+    @PostMapping(value = "/withdrawBill")
+    public Result withdrawBill(@RequestBody BillParam billParam){
+        Assert.notNull(billParam.getBillId(),"缴费单id不能为空");
+        return roomInformationService.withdrawBill(billParam.getBillId());
+    }
+
 }

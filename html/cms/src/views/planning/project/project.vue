@@ -108,7 +108,7 @@
         </el-col>
       </div> -->
       <project-grid v-for="(item,index) in dataList" v-show="dataList.length>0" :i-data="item" :g-index="index" :key="index" />
-      <div v-show="dataList.length===0||dataList===null">暂无数据</div>
+      <div v-show="dataList.length===0||dataList===null" class="noData">暂无数据</div>
     </el-row>
   </div>
 </template>
@@ -512,7 +512,11 @@ export default {
   }
 }
 </script>
-<style lang='scss'   >
+<style lang='scss' >
+.noData{
+  text-align: center;
+  margin-top:350px;
+}
 @import "project.scss";
 .project {
   .el-radio-button--medium .el-radio-button__inner {

@@ -102,17 +102,21 @@ public class CallOtherSwaggerUtils {
     public static JSONObject request(String account, String curl, HttpMethod method, MultiValueMap<String, Object> param, MediaType mediaType) {
         JSONObject result = new JSONObject();
         try {
-            String token = callOtherSwaggerUtils.jedisFactory.getJedis().get(PREFIX + account);
-            if (StringUtils.isEmpty(token)) {
-                token = getToken(account);
-            }
-            Map dynamicHeaders = new HashMap<>();
-            dynamicHeaders.put("X-Authorization-access_token", token);
-            result = RestTemplateUtil.request(url + curl, method, param, dynamicHeaders, mediaType);
-            if(result==null){
-                token = getToken(account);
+            if(StringUtils.isBlank(account)){
+                result = RestTemplateUtil.request(url + curl, method, param, null, mediaType);
+            }else{
+                String token = callOtherSwaggerUtils.jedisFactory.getJedis().get(PREFIX + account);
+                if (StringUtils.isEmpty(token)) {
+                    token = getToken(account);
+                }
+                Map dynamicHeaders = new HashMap<>();
                 dynamicHeaders.put("X-Authorization-access_token", token);
                 result = RestTemplateUtil.request(url + curl, method, param, dynamicHeaders, mediaType);
+                if(result==null){
+                    token = getToken(account);
+                    dynamicHeaders.put("X-Authorization-access_token", token);
+                    result = RestTemplateUtil.request(url + curl, method, param, dynamicHeaders, mediaType);
+                }
             }
         } catch (Exception e) {
             logger.error("连接IBPS通信异常",e);

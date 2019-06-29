@@ -1,5 +1,6 @@
 
 import axios from 'axios'
+import { getToken } from '@/utils/auth'
 export default {
   // host: 'http://172.16.160.19:6063/',
   host: 'https://portal.bxgxq.com/',
@@ -110,7 +111,7 @@ export default {
       params: data || {},
       headers: {
         'Content-Type': headerType || 'application/json;charset=UTF-8',
-        'token': sessionStorage.token || ''
+        'token': getToken() || ''
       }
     })
       .then(function (response) {
@@ -179,7 +180,7 @@ export default {
 
       headers: {
         'Content-Type': headerType || headerSS,
-        'token': sessionStorage.token || ''
+        'token': getToken() || ''
       }
 
     })

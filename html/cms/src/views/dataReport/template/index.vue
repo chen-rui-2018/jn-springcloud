@@ -661,7 +661,7 @@ export default {
                 formData.taskCreateTime = this.getDate(this.formData.taskCreateTime)
               }
               // 预警方式数据格式由数组转字符串
-              formData.warningBy = formData.warningBy.join(',')
+              formData.warningBy = formData.warningBy && formData.warningBy.length > 0 ? formData.warningBy.split(',') : []
               // 附件和图片url
               formData.pcAd = this.tempPcUrl ? this.tempPcUrl : formData.pcAd
               formData.appAd = this.tempAppUrl ? this.tempAppUrl : formData.appAd
@@ -790,7 +790,7 @@ export default {
               })
 
               // 返回的字符串放回多选v-model数组 预警方式
-            formData.warningBy = formData.warningBy.length > 0 ? formData.warningBy.split(',') : []
+            formData.warningBy = formData.warningBy && formData.warningBy.length > 0 ? formData.warningBy.split(',') : []
             if (formData.modelCycle === 0) {
               // 如果填报周期是月
               this.filllInFormDeadlineMonth = formData.filllInFormDeadline.substring(0, 2)

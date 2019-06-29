@@ -50,7 +50,7 @@
             <div class="slide_nav">
               <p @click="$router.push({path:'/'})">首页</p>
               <p @click="$router.push({path:'/parkIntroduction'})">园区介绍</p>
-              <!-- <p @click="$router.push({path:'/compassView'})">行政审批</p> -->
+              <p @click="$router.push({path:'/compassView'})">行政审批</p>
               <!-- <p >智慧党建</p> -->
               <p @click="$router.push({path:'/enterpriseservice'})">企业服务</p>
               <div class="slide_nav_fence">
@@ -61,7 +61,7 @@
                   <li @click="$router.push({path:'/tfindex'})">科技金融</li>
                   <li @click="$router.push({path:'/recruitmentList'})">人力资源</li>
                   <!-- <li @click="$router.push({path:'/incubatorEnterprises'})">孵化企业</li> -->
-                  <li @click="$router.push({path:'/compassView'})">行政审批</li>
+                  <!-- <li @click="$router.push({path:'/compassView'})">行政审批</li> -->
                   <li @click="$router.push({path:'/declarationCenter'})">申报中心</li>
                   <li @click="$router.push({path:'/serMatHp'})">服务超市</li>
                 </ul>

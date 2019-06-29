@@ -146,7 +146,7 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
             List<TbElectricEnergyGroupLog> groupLogs = new ArrayList<>();
             //数据是否缺失;默认数据都是完整的的。一个公司的所有电表信息都有24条的历史数据时，才是数据完整的状态
             for(String meterCode : eleMeters){
-
+                groupLogs = new ArrayList<>();
                 try{
                     //查询出每块电表的用电量
                     logger.info("开始查询一个企业的一块电表一天的读数历史数据,电表编码:{}",meterCode);
@@ -233,7 +233,15 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
                         meterDao.saveGroupLogs(groupLogs);
                         logger.info("结束保存一个企业的电费的分段费用记录");
                     }
-
+                    TbElectricErrorLogCriteria criteria = new TbElectricErrorLogCriteria();
+                    criteria.or().andCompanyIdEqualTo(companyId).andDayEqualTo(dealDate).andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andMeterCodeEqualTo(meterCode);
+                    TbElectricErrorLog record = new TbElectricErrorLog();
+                    record.setRecordStatus(new Byte(MeterConstants.INVALID));
+                    record.setCompanyId(companyId);
+                    //作废失败的记录日志
+                    errorLogMapper.updateByExampleSelective(record,criteria);
+                    criteria.or().andCompanyIdEqualTo(companyId).andDayEqualTo(dealDate).andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andMeterCodeIsNull();
+                    errorLogMapper.updateByExampleSelective(record,criteria);
                 }catch (ErrorLogException e){
                     //记录日志
                     if(StringUtils.isNotBlank(userMeterCode)){
@@ -371,7 +379,7 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
         if(StringUtils.isNotBlank(meterCode)){
             criteria.or().andCompanyIdEqualTo(companyId).andDayEqualTo(day).andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andMeterCodeEqualTo(meterCode);
         }else{
-            criteria.or().andCompanyIdEqualTo(companyId).andDayEqualTo(day).andRecordStatusEqualTo(new Byte(MeterConstants.VALID));
+            criteria.or().andCompanyIdEqualTo(companyId).andDayEqualTo(day).andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andMeterCodeIsNull();
         }
         List<TbElectricErrorLog>  logs = errorLogMapper.selectByExample(criteria);
         if(logs==null || logs.size()==0){
@@ -388,12 +396,6 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
             }else{
                 calcCostEverdayBySomeOneCompany(companyId,day,user.getAccount(),null);
             }
-
-            TbElectricErrorLog record = new TbElectricErrorLog();
-            record.setRecordStatus(new Byte(MeterConstants.INVALID));
-            record.setCompanyId(companyId);
-            //作废失败的记录日志
-            errorLogMapper.updateByExampleSelective(record,criteria);
         }catch(ErrorLogException e){
             TbElectricErrorLog record = e.getErr();
             errorLogMapper.updateByExampleSelective(record,criteria);
@@ -616,41 +618,47 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
             String comAdinOrCompanyId = energyBill.getObjId();
             String companyName = energyBill.getObjName();
             //通过企业id,更新其余额
-            PayAccountBookMoney payAccountBookMoney = new PayAccountBookMoney();
-            payAccountBookMoney.setAcBookType(energyBill.getAcBookType());
-            payAccountBookMoney.setObjId(comAdinOrCompanyId);
-            payAccountBookMoney.setObjType(MeterConstants.OBJ_TYPE);
-            Result<PayAccountBook>  bookResult =  payAccountClient.queryPayAccountBookMoney(payAccountBookMoney);
-            if(bookResult.getData() ==null){
+            PayAccountBookEntIdOrUserIdParam param = new PayAccountBookEntIdOrUserIdParam();
+            param.setObjId(comAdinOrCompanyId);
+            param.setObjType(MeterConstants.ELEC_BOOK);
+            Result<ArrayList<PayAccountBook>>  bookResult =  payAccountClient.queryAccountBook(param);
+            if(bookResult.getData() ==null || bookResult.getData().size()==0){
                 logger.info("查询企业的余额失败，企业id为{}",comAdinOrCompanyId);
                 throw new JnSpringCloudException(MeterExceptionEnums.COMPANY_BALANCE_NOT_FOUND);
             }
-            PayAccountBook payBook = bookResult.getData();
-            TbElectricCostCriteria costCriteria = new TbElectricCostCriteria();
-            costCriteria.or().andAccountTypeEqualTo(energyBill.getAcBookType()).andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andCompanyIdEqualTo(comAdinOrCompanyId) ;
-            List<TbElectricCost> costbeans =tbElectricCostMapper.selectByExample(costCriteria);
-            //检测企业的费用是否已经在表中存在，不存在则插入，否则更新
-            if(costbeans == null && costbeans.size()==0){
-                logger.info("插入企业的余额，企业id为{}",comAdinOrCompanyId);
-                TbElectricCost costbean = new TbElectricCost();
-                costbean.setBalance(payBook.getBalance());
-                costbean.setCompanyId(comAdinOrCompanyId);
-                costbean.setCreatedTime(new Date());
-                costbean.setCreatorAccount(MeterConstants.SYSTEM_USER);
-                costbean.setRecordStatus(new Byte(MeterConstants.VALID));
-                costbean.setCompanyName(companyName);
-                costbean.setId(UUID.randomUUID().toString().replaceAll("-",""));
-                costbean.setAccountType(energyBill.getAcBookType());
-                tbElectricCostMapper.insertSelective(costbean);
-            }else{
-                //更新数据
-                logger.info("更新企业的余额，企业id为{}",comAdinOrCompanyId);
-                TbElectricCost costbean = new TbElectricCost();
-                costbean.setBalance(payBook.getBalance());
-                costCriteria.or().andCompanyIdEqualTo(comAdinOrCompanyId).andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andAccountTypeEqualTo(energyBill.getAcBookType());
-                tbElectricCostMapper.updateByExampleSelective(costbean,costCriteria);
+            ArrayList<PayAccountBook> payBook = bookResult.getData();
+            for(PayAccountBook book:payBook){
+                if(book.getMeterCode().equals(energyBill.getMeterCode())){
 
+                    TbElectricCostCriteria costCriteria = new TbElectricCostCriteria();
+                    costCriteria.or().andAccountTypeEqualTo(energyBill.getAcBookType()).andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andCompanyIdEqualTo(comAdinOrCompanyId).andMeterCodeEqualTo(energyBill.getMeterCode()); ;
+                    List<TbElectricCost> costbeans =tbElectricCostMapper.selectByExample(costCriteria);
+                    //检测企业的费用是否已经在表中存在，不存在则插入，否则更新
+                    if(costbeans == null || costbeans.size()==0){
+                        logger.info("插入企业的余额，企业id为{}",comAdinOrCompanyId);
+                        TbElectricCost costbean = new TbElectricCost();
+                        costbean.setBalance(book.getBalance());
+                        costbean.setCompanyId(comAdinOrCompanyId);
+                        costbean.setCreatedTime(new Date());
+                        costbean.setCreatorAccount(MeterConstants.SYSTEM_USER);
+                        costbean.setRecordStatus(new Byte(MeterConstants.VALID));
+                        costbean.setCompanyName(companyName);
+                        costbean.setId(UUID.randomUUID().toString().replaceAll("-",""));
+                        costbean.setAccountType(energyBill.getAcBookType());
+                        costbean.setMeterCode(energyBill.getMeterCode());
+                        tbElectricCostMapper.insertSelective(costbean);
+                    }else{
+                        //更新数据
+                        logger.info("更新企业的余额，企业id为{}",comAdinOrCompanyId);
+                        TbElectricCost costbean = new TbElectricCost();
+                        costbean.setBalance(book.getBalance());
+                        costCriteria.or().andCompanyIdEqualTo(comAdinOrCompanyId).andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andAccountTypeEqualTo(energyBill.getAcBookType()).andMeterCodeEqualTo(energyBill.getMeterCode());
+                        tbElectricCostMapper.updateByExampleSelective(costbean,costCriteria);
+
+                    }
+                }
             }
+
         }
         return new Result<>();
     }

@@ -24,4 +24,4 @@ management:
     enabled: false
 
 server:
-  port: 3000
+  port: 7200

@@ -67,14 +67,14 @@ public class EnvironmentMonitorServiceImpl implements EnvironmentMonitorService 
     @Override
     @ServiceLog(doAction = "获取环境监测时时数据")
     @Transactional(rollbackFor = Exception.class)
-    public void getEnvironmentMonitorRealTimeDate(Integer hour) {
+    public Integer getEnvironmentMonitorRealTimeDate(Integer hour) {
         //当前时间小时
         Calendar calendar = Calendar.getInstance();
         int currHour = calendar.get(Calendar.HOUR_OF_DAY);
 
         //判断传入的hour数值,-1直接跳过,不是-1且hour与当前小时不能,则终止方法,防止方法获取不到监测数据,无限发定时消息
         if (hour != -1 && currHour != hour) {
-            return;
+            return 1;
         }
 
         //1.查询当前小时时候存在环境指标数值
@@ -88,7 +88,7 @@ public class EnvironmentMonitorServiceImpl implements EnvironmentMonitorService 
 
         //如果当前时间指标值已存在,则不再获取数值
         if (tbEnviDeviceRecordAvgs != null && tbEnviDeviceRecordAvgs.size() > 0) {
-            return;
+            return 2;
         }
 
         //2.调用硬件接口,获取环境设置监测数据
@@ -98,7 +98,7 @@ public class EnvironmentMonitorServiceImpl implements EnvironmentMonitorService 
         } catch (Exception e) {
             //10分钟后重新获取环境监测数据
             delayGetEnviRecord(currHour);
-            return;
+            return 0;
         }
         if (StringUtils.equals(GlobalConstants.SUCCESS_CODE, result.getCode())) {
 
@@ -142,7 +142,9 @@ public class EnvironmentMonitorServiceImpl implements EnvironmentMonitorService 
         } else {
             //10分钟后重新获取环境监测数据
             delayGetEnviRecord(currHour);
+            return 0;
         }
+        return 1;
     }
 
     /**

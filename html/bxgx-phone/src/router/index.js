@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import { urlSearch } from '../utils/index'
+import { setToken } from '../utils/auth'
 
 Vue.use(Router)
 
@@ -257,9 +258,9 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   const token = urlSearch.token
-  alert(token)
+  // alert(token)
   if (token) {
-    sessionStorage.setItem('token', token)
+    setToken(token)
   }
   next()
 })

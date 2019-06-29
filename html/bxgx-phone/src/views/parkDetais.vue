@@ -23,8 +23,8 @@ export default {
       this.api.get({
         url: 'findNoticeDetails',
         data: {
-          // noticeId: '536d4e9c22a1465dbb1f1644f793e900'
-          noticeId: this.$route.query.noticeId
+          noticeId: '536d4e9c22a1465dbb1f1644f793e900'
+          // noticeId: this.$route.query.noticeId
         },
         callback: res => {
           if (res.code === '0000') {
@@ -52,14 +52,16 @@ export default {
  .anTitle{
      font-size: 30px;
      color:#333;
+     font-weight: bold;
  }
  .anTime{
      font-size: 24px;
      color:#A2A2A2;
  }
- .anContent{
-     font-size: 26px;
-     color:#666;
- }
+//  .anContent{
+//      font-size: 26px;
+//      color:#666;
+//      max-width:100%
+//  }
 }
 </style>

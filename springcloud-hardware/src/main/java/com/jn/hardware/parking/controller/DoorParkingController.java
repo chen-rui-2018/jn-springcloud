@@ -36,7 +36,7 @@ public class DoorParkingController extends BaseController {
 
     @ApiOperation(value = "道尔: 车辆入场信息保存",notes = "返回保存的数据的id string")
     @RequestMapping(value = "/saveDoorCarInParkingInfo/{parkId}",method = RequestMethod.POST)
-    public DoorResult saveDoorCarInParkingInfo( DoorCarInParkingParam doorCarInParkingParam, HttpServletRequest request,@PathVariable String parkId){
+    public DoorResult saveDoorCarInParkingInfo(DoorCarInParkingParam doorCarInParkingParam, HttpServletRequest request,@PathVariable String parkId){
         String  url = request.getRequestURL().toString();
         logger.info("\n道尔: 车辆入场信息推送,parkId:【{}】,车辆信息:【{}】",parkId,doorCarInParkingParam.toString());
         DoorResult result =  parkingService.saveDoorCarInParkingInfo(doorCarInParkingParam,url,parkId);

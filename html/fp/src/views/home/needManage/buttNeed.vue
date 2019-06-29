@@ -59,7 +59,7 @@
           </div>
           <div class="">
             <el-form-item label="合同总金额：">
-              <el-input v-model="sendData.contractAmount" placeholder="请填写合同总金额"></el-input>
+              <el-input v-model="sendData.contractAmount" placeholder="请填写合同总金额"><template slot="append">万元</template></el-input>
             </el-form-item>
           </div>
           <div class="">
@@ -80,7 +80,7 @@
               </el-input>
             </el-form-item>
           </div>
-          <el-form-item label="合同首页：" >
+          <!-- <el-form-item label="合同首页：" >
             <el-upload
               :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
               list-type="picture-card"
@@ -94,10 +94,10 @@
               <i class="el-icon-plus"></i>
             </el-upload>
           </el-form-item>
-            <el-form-item label="合同尾页：">
-              <el-upload
+          <el-form-item label="合同尾页：">
+            <el-upload
               :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
-              
+              list-type="picture-card"
               :on-success="endPageuploadsuccess"
               :headers="headers"
               :limit="1"
@@ -107,7 +107,7 @@
               >
               <i class="el-icon-plus"></i>
             </el-upload>
-            </el-form-item>
+          </el-form-item> -->
         </el-form>
       </div>
       <div class="buttNeed_submit" @click="submit">提交</div>
@@ -115,7 +115,7 @@
   </div>
 </template>
 <script>
-import { getToken, removeToken } from '@/util/auth'
+import { getToken } from '@/util/auth'
 export default {
   data () {
     return {

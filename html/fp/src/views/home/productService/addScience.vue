@@ -434,7 +434,7 @@ export default {
         background-color: #ecfcf2;
         border-radius: 5px;
         border: solid 2px #41d787;
-        padding:5px 22px;
+        padding:8px 11px;
         font-size: 14px;
         cursor: pointer;
         color:#00a041;

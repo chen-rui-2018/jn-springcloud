@@ -27,24 +27,33 @@
       <!-- 所有类别 -->
       <div class="all_cate clearfix">
         <!-- <div class="fl all" @click="changename('')"><span :class="{'isSlect_all':name===''}">所有类别：</span></div> -->
-        <ul>
-          <li style="font-size:14px">省级：</li>
-          <li v-for="(item,index) in allCateList[0]" :key="index" @click="changename(item.id)"><span :class="{'isSlect_cate':item.id===name}">{{item.name}}</span></li>
-        </ul>
-        <ul>
-          <li style="font-size:14px">市级：</li>
-          <li v-for="(item,index) in allCateList[1]" :key="index" @click="changename(item.id)"><span :class="{'isSlect_cate':item.id===name}">{{item.name}}</span></li>
-        </ul>
-        <ul>
-          <li style="font-size:14px">区级：</li>
-          <li v-for="(item,index) in allCateList[2]" :key="index" @click="changename(item.id)"><span :class="{'isSlect_cate':item.id===name}">{{item.name}}</span></li>
-        </ul>
+        <div class="all_cate_box clearfix">
+          <div>省级：</div>
+          <ul>
+            <!-- <li style="font-size:14px">省级：</li> -->
+            <li v-for="(item,index) in allCateList[0]" :key="index" @click="changename(item.id)"><span :class="{'isSlect_cate':item.id===name}">{{item.name}}</span></li>
+          </ul>
+        </div>
+        <div class="all_cate_box clearfix">
+          <div>市级：</div>
+          <ul>
+            <!-- <li style="font-size:14px">市级：</li> -->
+            <li v-for="(item,index) in allCateList[1]" :key="index" @click="changename(item.id)"><span :class="{'isSlect_cate':item.id===name}">{{item.name}}</span></li>
+          </ul>
+        </div>
+        <div class="all_cate_box clearfix">
+          <div>区级：</div>
+          <ul>
+            <!-- <li style="font-size:14px">区级：</li> -->
+            <li v-for="(item,index) in allCateList[2]" :key="index" @click="changename(item.id)"><span :class="{'isSlect_cate':item.id===name}">{{item.name}}</span></li>
+          </ul>
+        </div>
       </div>
       <!-- 直接审批 -->
       <div>
         <!-- 标题 -->
         <div class="direct_approve">
-          <div class="direct_title">直接审批</div>
+          <div class="direct_title">审批范围</div>
           <div class="actiSearch">
             <input type="text" placeholder="输入要搜索的关键字" v-model="search">
             <i class="iconfont icon-sousuo" @click="handlesearch"></i>
@@ -97,9 +106,18 @@ export default {
   },
   created () {
     this.getAllCate()
-    this.getPowerList()
+    // this.getPowerList()
     this.getImg()
-    
+    if(sessionStorage.getItem("url")){
+      this.name=sessionStorage.getItem("name")
+      this.getPowerList()
+    }else{
+       this.getPowerList()
+    }
+  },
+  destroyed () {
+    sessionStorage.removeItem("url")
+    sessionStorage.removeItem("name")
   },
   methods: {
     // 初始化swiper
@@ -194,7 +212,8 @@ export default {
     },
     //跳转到rightdetail
     gotorightdetail(id){
-      this.$router.push({path:'/rightDetail',query:{id:id}})
+      // sessionStorage.setItem("id",id)
+      this.$router.push({path:'/rightDetail',query:{id:id,name:this.name}})
     }
   }
 }
@@ -296,6 +315,12 @@ export default {
       border: 1px solid #eeeeee;
       padding:16px;
       font-size: 12px;
+      .all_cate_box{
+        div{
+          float: left;
+          line-height: 45px;
+        }
+      }
       .all{
         width:8.3%;
         border-bottom: 1px solid #eeeeee;

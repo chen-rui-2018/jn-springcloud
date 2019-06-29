@@ -20,7 +20,7 @@
       </div>
       <div class="receivedEvaluate_table">
         <el-table :data="receiveList" stripe border :header-cell-style="{background:'#f8f8f8',color:'#666666'}" style="width: 100%">
-          <el-table-column prop="id" label="评价编号" align="center" width="170"> </el-table-column>
+          <!-- <el-table-column prop="id" label="评价编号" align="center" width="170"> </el-table-column> -->
           <el-table-column prop="orgName" label="服务机构" align="center"> </el-table-column>
           <el-table-column prop="orgTelephone" label="机构电话" align="center"> </el-table-column>
           <el-table-column prop="productName" label="服务产品" align="center"> </el-table-column>
@@ -85,7 +85,7 @@ export default {
       })
     },
     goDetail(row){
-      this.$router.push({path:'/serviceMarket/comment/evaluateDetail',query:{id:row.id,}})
+      this.$router.push({path:'/serviceMarket/comment/evaluateDetail',query:{id:row.id,businessId:row.businessId}})
     },
     confirm(){
       this.getReceivedValuate()

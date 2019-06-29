@@ -30,9 +30,9 @@
           <!-- 如果需要滚动条 -->
           <!-- <div class="swiper-scrollbar"></div> -->
         </div>
-        <!-- <div class="quickEnter">
+        <div class="quickEnter">
           <ul>
-            <li @click="$router.push({path:'/talentsService'})">
+            <!-- <li @click="$router.push({path:'/talentsService'})">
               <span>人才服务</span>
               <p>THE&nbsp;TALENT&nbsp;SERVICE</p>
               <img src="@/../static/img/right-arrow.png" alt="">
@@ -51,9 +51,44 @@
               <span>行政审批</span>
               <p>ADMINISTRATIVE&nbsp;EXAMINATIO</p>
               <img src="@/../static/img/right-arrow.png" alt="">
+            </li> -->
+            <li @click="$router.push({path:'/declarationCenter'})">
+              <span>申报中心</span>
+              <p>DECLARE&nbsp;CENTER</p>
+              <img src="@/../static/img/right-arrow.png" alt="">
+            </li>
+            <li @click="$router.push({path:'/policyCenter'})">
+              <span>政策中心</span>
+              <p>POLICY&nbsp;CENTERE</p>
+              <img src="@/../static/img/right-arrow.png" alt="">
+            </li>
+            <li @click="$router.push({path:'/actiCenter'})">
+              <span>活动中心</span>
+              <p>ACTIVITY&nbsp;CENTERE</p>
+              <img src="@/../static/img/right-arrow.png" alt="">
+            </li>
+            <li @click="$router.push({path:'/compassView'})">
+              <span>行政审批</span>
+              <p>ADMINISTRATIVE&nbsp;EXAMINATIO</p>
+              <img src="@/../static/img/right-arrow.png" alt="">
+            </li>
+            <li @click="$router.push({path:'/tfindex'})">
+              <span>科技金融</span>
+              <p>SCIENCE&nbsp;FINACIAL</p>
+              <img src="@/../static/img/right-arrow.png" alt="">
+            </li>
+            <li @click="$router.push({path:'/recruitmentList'})">
+              <span>人力资源</span>
+              <p>HUMEN&nbsp;RESOURCES</p>
+              <img src="@/../static/img/right-arrow.png" alt="">
+            </li>
+            <li @click="$router.push({path:'/serMatHp'})">
+              <span>服务超市</span>
+              <p>SERVICE&nbsp;SUPERMARKET</p>
+              <img src="@/../static/img/right-arrow.png" alt="">
             </li>
           </ul>
-        </div> -->
+        </div>
       </div>
       <div class="declarationNotice w pr" ref="declarationNotice" data-class="bottom">
         <div ref="deNotice1" data-class="bottom" class="pointer" @click="$router.push({path:'/declarationCenter'})">
@@ -159,7 +194,7 @@
           <i class="iconfont icon-leftarrow pointer" @click="leftPage"></i>
           <i class="iconfont icon-rightarrow pointer" @click="rightPage"></i>
           <ul class="actiUl clearfix">
-            <li v-for="(i,k) in actiListSlim" :key="k" class="pointer"  @click="$router.push({ path: '/actiDetail', query: { activityId: i.id } })">
+            <li v-for="(i,k) in actiListSlim" :key="k" class="pointer" @click="$router.push({ path: '/actiDetail', query: { activityId: i.id } })">
               <div class="postImgItem" @mouseenter.stop="show1=i.id,show11=i.id" @mouseleave.stop="show1='',show11=''">
                 <img :src="i.actiPosterUrl" :class="{'poIm':show1==i.id}" class="postImg pointer" alt="活动海报图片">
                 <img src="@/../static/img/组 40.png" :class="{'poIm':show11==i.id}" class="postImg1 pointer" alt="活动海报图片">
@@ -186,7 +221,7 @@
                 <i>{{i.applyNum}}/{{i.actiNumber}}名</i>
                 <p class="avaP">
                   <!-- <i class="iconfont icon-xihuan"></i>16 -->
-                  <img src="@/../static/img/xin.png" alt="">{{i.actiLike}}
+                  <img src="@/../static/img/xin.png" alt=""><span>{{i.actiLike}}</span>
                 </p>
               </div>
             </li>
@@ -264,7 +299,7 @@
                     <div class="pointer" v-for="(item,index) in investorInfoList" :key="index" v-if="index<2" @click="$router.push({path:'investorDetail',query:{investorAccount:item.investorAccount}})">
                       <a href="javascript:;">
                         <div class="info_img">
-                          <div ><img v-if="item.avatar" :src="item.avatar" alt=""> <img v-else src="@/../static/img/larImg.png" alt=""></div>
+                          <div><img v-if="item.avatar" :src="item.avatar" alt=""> <img v-else src="@/../static/img/larImg.png" alt=""></div>
                         </div>
                         <div class="info_all">
                           <div class="info_name">
@@ -280,7 +315,7 @@
                     </div>
                   </li>
                   <li class="conselor_mid">
-                    <div v-for="(item2,index2) in investorInfoList" :key="index2" v-if="index2>1&&index2<10" class="conselor_mid_list"  @click="$router.push({path:'investorDetail',query:{investorAccount:item2.investorAccount}})">
+                    <div v-for="(item2,index2) in investorInfoList" :key="index2" v-if="index2>1&&index2<10" class="conselor_mid_list" @click="$router.push({path:'investorDetail',query:{investorAccount:item2.investorAccount}})">
                       <a href="javascript:;">
                         <div class="info_img"><img :src="item2.avatar" alt=""></div>
                         <div class="info_all">
@@ -514,19 +549,25 @@
               <el-input v-model.trim="serverProform.requireDetail" class="demandTextArea" :rows="4" type="textarea" placeholder="可不填" maxlength="100" clearable/>
             </el-form-item>
           </el-form>
-          <div class="demandLine"></div>
-          <div class="serverTip mainColor">市场提醒：请务必在线订购，线下交易无法享受市场交易安全保障</div>
-          <div class="demandDia" @click="demandDia1()" style="   display: inline-block;
+          <div class="demandLine" style=" height: 1px;
+    width: 530px;
+    position: relative;
+    left: -20px;
+    background: #eee;
+    margin-bottom: 20px;
+    margin-top: 10px;"></div>
+          <div class="serverTip mainColor" style="display:inline-block;font-size:12px">市场提醒：请务必在线订购，线下交易无法享受市场交易安全保障</div>
+          <div class="demandDia" @click="demandDia1()" style=" display: inline-block;
     background: #ecfcf2;
     padding: 8px 10px;
     width: 80px;
-        margin-left: 200px;
-    margin-top: 20px;
+    margin: 0 auto;
     border: 1px solid #00a041;
     border-radius: 4px;
     text-align: center;
     cursor: pointer;
     color: #00a041;
+    margin-left: 20px;
     font-size: 12px;">提交需求</div>
         </div>
         <div v-else class="loginTip" style="text-align:center;padding-bottom:20px">
@@ -626,7 +667,7 @@ export default {
           { required: true, message: "请选择融资期限", trigger: "change" }
         ],
         expectedDate: [
-          { required: true, message: "请输入需求日期", trigger: "blur" }
+          { required: true, message: "请选择需求日期", trigger: "blur" }
         ]
       },
       detailFlag: "",
@@ -726,14 +767,14 @@ export default {
     },
     //判断是否登录
     isLogin() {
-      const token=this.getToken()
+      const token = this.getToken();
       if (!token) {
         this.islogin = false;
       }
     },
     //在线联系
     onlineContat(orgAccount, orgName) {
-      const userInfo=this.getUserInfo()
+      const userInfo = this.getUserInfo();
       // console.log(JSON.parse(userInfo))
       if (!userInfo) {
         this.concatVisible = true;
@@ -762,9 +803,7 @@ export default {
         callback: res => {
           if (res.code == "0000") {
             // this.typeList = res.data;
-            if (
-              JSON.parse(this.getUserInfo()).account == res.data.account
-            ) {
+            if (JSON.parse(this.getUserInfo()).account == res.data.account) {
               this.$message.error("当前登录的账号跟聊天对象一样");
               return;
             }
@@ -801,31 +840,32 @@ export default {
     },
     //用户提交需求
     demandDia() {
-      // if(!this.financialProform.financingPeriod){
-      //   return
-      // }
-      let _this = this;
-      let max = this.arr[this.financialProform.financingPeriod].loanTermMax;
-      let min = this.arr[this.financialProform.financingPeriod].loanTermMin;
-      this.api.post({
-        url: "userDemandTechnology",
-        data: {
-          expectedDate: _this.financialProform.expectedDate,
-          financingAmount: _this.financialProform.financingAmount,
-          financingPeriodMax: max,
-          financingPeriodMin: min,
-          productId: _this.financialProform.productId,
-          productName: _this.financialProform.productName,
-          fundsReqDesc: _this.financialProform.fundsReqDesc
-        },
-        callback: function(res) {
-          if (res.code == "0000") {
-            _this.$message.success("提交需求成功");
-            _this.financialProVisible = false;
-          } else {
-            _this.$message.error(res.result);
-            _this.financialProVisible = false;
-          }
+      this.$refs["financialProform"].validate(valid => {
+        if (valid) {
+          let _this = this;
+          let max = this.arr[this.financialProform.financingPeriod].loanTermMax;
+          let min = this.arr[this.financialProform.financingPeriod].loanTermMin;
+          this.api.post({
+            url: "userDemandTechnology",
+            data: {
+              expectedDate: _this.financialProform.expectedDate,
+              financingAmount: _this.financialProform.financingAmount,
+              financingPeriodMax: max,
+              financingPeriodMin: min,
+              productId: _this.financialProform.productId,
+              productName: _this.financialProform.productName,
+              fundsReqDesc: _this.financialProform.fundsReqDesc
+            },
+            callback: function(res) {
+              if (res.code == "0000") {
+                _this.$message.success("提交需求成功");
+                _this.financialProVisible = false;
+              } else {
+                _this.$message.error(res.result);
+                _this.financialProVisible = false;
+              }
+            }
+          });
         }
       });
     },
@@ -1115,8 +1155,10 @@ export default {
     //活动中心右翻页
     rightPage() {
       if (this.page3 >= Math.ceil(this.total3 / this.rows3)) {
-        this.page3 = 1;
-        this.getActiList();
+        this.$message.error("没有更多数据了");
+        return;
+        // this.page3 = 1;
+        // this.getActiList();
       } else {
         this.page3++;
         this.getActiList();
@@ -1456,8 +1498,8 @@ export default {
   .policyCenter {
     .paging {
       overflow: hidden;
-      margin-top:50px;
-      padding-bottom:20px;
+      margin-top: 50px;
+      padding-bottom: 20px;
       .swiper-container {
         padding: 40px 0;
       }
@@ -1515,6 +1557,10 @@ export default {
             text-align: left;
             .rightTit {
               font-size: 14px;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              height: 20px;
             }
             > p {
               margin-top: 20px;
@@ -1528,7 +1574,9 @@ export default {
             .policyCon {
               height: 50px;
               display: -webkit-box;
+              /*! autoprefixer: off */
               -webkit-box-orient: vertical;
+              /*! autoprefixer: on */
               -webkit-line-clamp: 3;
               overflow: hidden;
             }

@@ -1,5 +1,5 @@
 <template>
-    <div class="actiTrain">
+    <div class="actiTrain" v-loading="actiloading">
         <div class="trainContent">
             <div class="actiContent">
                 <div class="actiNav">
@@ -52,8 +52,8 @@
                         <i class="iconfont icon-sousuo" @click="handleSearchList"></i>
                     </div>
                 </div>
-                <div class="actiTab" v-loading="actiloading">
-                    <div v-if="actiListSlim.length==0">
+                <div class="actiTab">
+                    <div v-if="actiListSlim.length==0&&!actiloading">
                         <nodata></nodata>
                     </div>
                     <div v-else>
@@ -76,12 +76,14 @@
                                 <div class="actiNum clearfix">
                                     <div class="avatar">
                                         <ul>
-                                            <li v-for="(avr,key) in item.avatarList" :key="key"><img :src="avr" alt=""></li>
+                                            <li v-for="(avr,key) in item.avatarList" v-if="key<5" :key="key"><img :src="avr" alt=""></li>
                                         </ul>
                                     </div>
                                     <i>{{item.applyNum}}/{{item.actiNumber}}</i>
-                                    <span>
-                                        <i class="iconfont icon-xihuan"></i>{{item.actiLike}}</span>
+                                    <p>
+                                        <img src="@/../static/img/xin.png" alt="" style="margin-right:0">
+                                        <span>{{item.actiLike}}</span>
+                                    </p>
                                 </div>
                             </li>
                         </ul>
@@ -93,7 +95,7 @@
                                 <div class="verticalMiddle fl">
                                     <h3 class="verticalTit">{{item.actiName}}</h3>
                                     <div class="xihuan">
-                                        <i class="iconfont icon-xihuan"></i>
+                                        <img src="@/../static/img/xin.png" alt="">
                                         <span>{{item.actiLike}}</span>
                                     </div>
                                     <p>
@@ -107,7 +109,7 @@
                                     <div class="actiNum clearfix">
                                         <div class="avatar">
                                             <ul class="clearfix">
-                                                <li v-for="(avr,key) in item.avatarList" :key="key"><img :src="avr" alt=""></li>
+                                                <li v-for="(avr,key) in item.avatarList" v-if="key<5" :key="key"><img :src="avr" alt=""></li>
                                                 <!-- <li><img src="@/../static/img/heng1.png" alt=""></li> -->
                                             </ul>
                                         </div>

@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import { urlSearch, hexToDec } from '@/utils'
 export default {
   data () {
     return {
@@ -74,7 +75,7 @@ export default {
             phone: this.phone
           },
           callback: res => {
-            if (res.data.code === '0000') {
+            if (res.code === '0000') {
               this.$vux.toast.text('发送成功', 'middle')
               // 将获取验证码按钮隐藏60s，60s后再次显示
               this.is_show = !this.is_show
@@ -83,7 +84,7 @@ export default {
                 this.$vux.toast.hide()
               }, 2000)
             }
-            if (res.data.code === 1) {
+            if (res.code === 1) {
               this.$vux.toast.text('发送失败', 'middle')
               setTimeout(() => {
                 this.$vux.toast.hide()
@@ -93,50 +94,42 @@ export default {
         })
       }
     },
-    login () {
-      return new Promise((resolve, reject) => {
-        // 登录
-        resolve()
-      })
-    },
     // 点击完成按钮后的操作
     finishRegister () {
       // 手机号
       const phone = this.phone
       // 验证码
-      const phoneCode = this.code
-      this.login()
-        .then(code => {
-          if (phoneCode === '' || phone === '') {
-            this.$vux.toast.text('手机号或验证码填写有误请重新填写', 'middle')
+      const code = this.code
+      if (code === '' || phone === '') {
+        this.$vux.toast.text('手机号或验证码填写有误请重新填写', 'middle')
+        setTimeout(() => {
+          this.$vux.toast.hide()
+        }, 2000)
+        return
+      }
+      // 注册
+      this.api.post({
+        url: 'registerUrl',
+        data: {
+          phoneNo: this.phone,
+          phoneCode: this.code,
+          userFlag: urlSearch.userFlag
+        },
+        callback: res => {
+          if (res.code === '0000') {
+            this.$vux.toast.text('注册绑定成功', 'middle')
+            setTimeout(() => {
+              this.$vux.toast.hide()
+              window.location.href = hexToDec(urlSearch.targetUrl)
+            }, 1000)
+          } else {
+            this.$vux.toast.text(res.result == null ? '验证码错误或验证码已过期' : res.result, 'middle')
             setTimeout(() => {
               this.$vux.toast.hide()
             }, 2000)
-            return
           }
-          // 注册
-          this.api.post({
-            url: 'registerUrl',
-            data: {
-              phone: this.phone,
-              phoneCode: this.phoneCode,
-              code: this.code
-            },
-            callback: res => {
-              if (res.data.code === '0000') {
-                this.$vux.toast.text('注册绑定成功', 'middle')
-                setTimeout(() => {
-                  this.$vux.toast.hide()
-                }, 2000)
-              } else {
-                this.$vux.toast.text(res.data.result == null ? '验证码错误或验证码已过期' : res.data.result, 'middle')
-                setTimeout(() => {
-                  this.$vux.toast.hide()
-                }, 2000)
-              }
-            }
-          })
-        })
+        }
+      })
     }
   }
 }

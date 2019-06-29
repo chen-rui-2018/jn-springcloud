@@ -18,7 +18,7 @@
             <el-aside width="150px">
               <el-menu :default-active="this.$route.path" class="el-menu-vertical-demo" @open="handleOpen"
                 @close="handleClose" @select="handleSelect">
-                <sidebar-item v-for="(item,index,key) in menuItems" :key="key" :item="item" :index="item.id" />
+                <sidebar-item v-for="(item,index,key) in $store.state.menuItems" :key="key" :item="item" :index="item.id" />
               </el-menu>
             </el-aside>
           </div>
@@ -44,14 +44,14 @@ import { isMobile } from "@/util"
 import bus from "@/util/bus"
 import UserHome from "@/components/userHome"
 import ElementUI from 'element-ui'
-import { getToken, removeToken } from '@/util/auth'
+import { getToken, removeToken, removeIbpsToken } from '@/util/auth'
+import store from '@/store'
 export default {
   components: { UserHome ,SidebarItem},
   //  components: { SidebarItem },
   data() {
     return {
       businessArea:'',
-      menuItems:[],
       isMobile: isMobile(),
       orgArr: [],
       organizationForm: {
@@ -92,32 +92,20 @@ export default {
   //   }
   // },
   beforeRouteEnter(to, from, next) {
-
-    let token = getToken()
-    api.post({
-      url: "getDynamicMenu",
-      headers: { token: token },
-      callback: res => {
-        if (res.code === "0000") {
-          res.data.forEach(val=>{
-            if(val.label==='门户'){
-              let menuItems = val.children[0].children
-              sessionStorage.menuItems= JSON.stringify(menuItems)
-              next(vm => {
-                vm.menuItems = menuItems
-                }
-              )
-            }
+    if (store.state.menuItems.length === 0) {
+      let menuItems = sessionStorage.getItem('menuItems')
+      if (menuItems) {
+        store.commit('setInfo', {key: 'menuItems', data: JSON.parse(menuItems)})
+        next()
+      } else {
+        store.dispatch('getMenuItems')
+          .then(() => {
+            next()
           })
-        }
-        // else {
-        //   ElementUI.Message.error('请登录后再访问个人中心');
-        //   setTimeout(() => {
-        //     next('/login')
-        //   }, 1000)
-        // }
       }
-    });
+    } else {
+      next()
+    }
   },
   mounted() {
     let _this = this
@@ -190,7 +178,8 @@ export default {
     },
     handleSearch() {},
     loginOut() {
-      removeToken()
+      removeToken();
+      removeIbpsToken();
       this.$router.push({ path: "/" });
     },
     dianji(i) {

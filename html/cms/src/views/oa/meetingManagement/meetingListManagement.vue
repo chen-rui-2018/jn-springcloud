@@ -258,7 +258,7 @@ export default {
     .el-dialog{
       height: 400px;
       img{
-           width: 45%;
+           width: 32%;
     display: block;
     border-style: none;
     margin: 0 auto;

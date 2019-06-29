@@ -1,7 +1,9 @@
 package com.jn.hardware.parking.service.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
+import com.jn.common.util.GlobalConstants;
 import com.jn.common.util.RestTemplateUtil;
 import com.jn.common.util.StringUtils;
 import com.jn.hardware.config.ParkingDrUrlProperties;
@@ -49,7 +51,7 @@ public class ParkingServiceImpl implements ParkingService {
      * @return
      */
     @Override
-    public Result getTemporaryCarParkingFee(TemporaryCarParkingFeeRequest temporaryCarParkingFeeRequest) {
+    public Result<DoorTemporaryCarParkingFeeResponse> getTemporaryCarParkingFee(TemporaryCarParkingFeeRequest temporaryCarParkingFeeRequest) {
         logger.info("\n临停预缴费信息(场内缴费)查询接口入参【{}】",temporaryCarParkingFeeRequest);
         Result result=new Result();
         String url = "";
@@ -387,16 +389,24 @@ public class ParkingServiceImpl implements ParkingService {
                 if(doorCarInParkingParam.getCarinlist()!=null) {
                     String  inString = doorCarInParkingParam.getCarinlist().replaceAll(ParkingCompanyEnum.REPLACE_ALL.getCode(),"\"");
                     inString = inString.replaceAll(ParkingCompanyEnum.REPLACE_PAY_DATE_U.getCode(),ParkingCompanyEnum.REPLACE_PAY_DATE_L.getCode());
+                    inString = inString.replaceAll(ParkingCompanyEnum.REPLACE_ALL_SLASH.getCode(),"\\\\\\\\");
+                    logger.info("\n转换完成后的入场信息字符串inString:"+inString);
                     list = JsonStringToObjectUtil.jsonToObject(inString, new TypeReference<List<DoorCarInParkingShow>>() {});
                 }
                 info.setCarinlist(list);
                 info.setParkId(parkId);
                 Result<String> result  = parkingClient.carJoinParking(info);
-                doorResult.getHead().setStatus(DoorResult.SUCCESS_CODE);
-                String ids = result.getData()!=null?result.getData():"";
-                DoorInOutParkingShow show = new DoorInOutParkingShow();
-                show.setIds(ids);
-                doorResult.setBody(show);
+                if(!result.getCode().equals(GlobalConstants.SUCCESS_CODE)){
+                    doorResult.getHead().setStatus(result.getCode());
+                    doorResult.getHead().setMessage(result.getResult());
+                    throw new JnSpringCloudException(ParkingExceptionEnum.DOOR_CAR_PARKING_IN,result.getResult());
+                }else{
+                    doorResult.getHead().setStatus(DoorResult.SUCCESS_CODE);
+                    String ids = result.getData() != null ? result.getData() : "";
+                    DoorInOutParkingShow show = new DoorInOutParkingShow();
+                    show.setIds(ids);
+                    doorResult.setBody(show);
+                }
             }else {
                 DoorHeadResult headResult = new DoorHeadResult();
                 headResult.setStatus(ParkingExceptionEnum.DOOR_CAR_PARKING_SIGNNATURE.getCode());
@@ -405,7 +415,9 @@ public class ParkingServiceImpl implements ParkingService {
                 logger.info("\n车场入场信息录入失败，失败原因：{}",ParkingExceptionEnum.DOOR_CAR_PARKING_SIGNNATURE.getMessage());
             }
         }catch (Exception e){
-            logger.info("车场入场信息录入失败，失败原因：{}");
+            doorResult.getHead().setStatus(e.getMessage());
+            doorResult.getHead().setMessage(e.getMessage());
+            logger.info("车场入场信息录入失败，失败原因：{}"+e.getMessage());
             e.printStackTrace();
         }
         return doorResult;
@@ -429,18 +441,33 @@ public class ParkingServiceImpl implements ParkingService {
                 DoorCarOutParkingInfo info = new DoorCarOutParkingInfo();
                 List<DoorCarOutParkingShow> list= new ArrayList<DoorCarOutParkingShow>();
                 if(doorCarOutParkingParam.getCaroutlist()!=null) {
+
                     String  outString = doorCarOutParkingParam.getCaroutlist().replaceAll(ParkingCompanyEnum.REPLACE_ALL.getCode(),"\"");
                     outString = outString.replaceAll(ParkingCompanyEnum.REPLACE_PAY_DATE_U.getCode(),ParkingCompanyEnum.REPLACE_PAY_DATE_L.getCode());
+                    outString = outString.replaceAll(ParkingCompanyEnum.REPLACE_ALL_SLASH.getCode(),"\\\\\\\\");
+                    logger.info("\n转换完成后的出场信息字符串inString:"+outString);
                     list = JsonStringToObjectUtil.jsonToObject(outString, new TypeReference<List<DoorCarOutParkingShow>>() {});
                 }
                 info.setParkId(parkId);
                 info.setCaroutlist(list);
                 Result<String> result  = parkingClient.carOutParking(info);
-                doorResult.getHead().setStatus(DoorResult.SUCCESS_CODE);
-                String ids = result.getData()!=null?result.getData():"";
-                DoorInOutParkingShow show = new DoorInOutParkingShow();
-                show.setIds(ids);
-                doorResult.setBody(show);
+                if(!result.getCode().equals(GlobalConstants.SUCCESS_CODE)){
+                    doorResult.getHead().setStatus(result.getCode());
+                    doorResult.getHead().setMessage(result.getResult());
+                    throw new JnSpringCloudException(ParkingExceptionEnum.DOOR_CAR_PARKING_OUT,result.getResult());
+                }else {
+                    if(result.getData()==null || result.getData()==""){
+                        doorResult.getHead().setStatus(ParkingExceptionEnum.DOOR_CAR_PARKING_NOT_FIND_IN.getCode());
+                        doorResult.getHead().setMessage(ParkingExceptionEnum.DOOR_CAR_PARKING_NOT_FIND_IN.getMessage());
+                        throw new JnSpringCloudException(ParkingExceptionEnum.DOOR_CAR_PARKING_NOT_FIND_IN);
+                    }
+                    doorResult.getHead().setStatus(DoorResult.SUCCESS_CODE);
+                    String ids = result.getData()!=null?result.getData():"";
+                    DoorInOutParkingShow show = new DoorInOutParkingShow();
+                    show.setIds(ids);
+                    doorResult.setBody(show);
+                }
+
             }else {
                 DoorHeadResult headResult = new DoorHeadResult();
                 headResult.setStatus(ParkingExceptionEnum.DOOR_CAR_PARKING_SIGNNATURE.getCode());
@@ -449,12 +476,16 @@ public class ParkingServiceImpl implements ParkingService {
                 logger.info("\n车场出场信息录入失败，失败原因：{}",ParkingExceptionEnum.DOOR_CAR_PARKING_SIGNNATURE.getMessage());
             }
         }catch (Exception e){
-            logger.info("车场出场信息录入失败，失败原因：{}");
+            doorResult.getHead().setStatus(e.getMessage());
+            doorResult.getHead().setMessage(e.getMessage());
+            logger.info("车场出场信息录入失败，失败原因：{}"+e.getMessage());
             e.printStackTrace();
         }
 
         return doorResult;
     }
+
+
     /**
      * @param text
      * @return 传统的MD5加密方式，与客户端加密方法相同

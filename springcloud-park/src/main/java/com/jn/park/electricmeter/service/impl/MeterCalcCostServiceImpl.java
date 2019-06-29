@@ -6,6 +6,7 @@ import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.GlobalConstants;
 import com.jn.common.util.StringUtils;
+import com.jn.common.util.bean.BeanHeader;
 import com.jn.company.api.CompanyClient;
 import com.jn.company.model.ServiceCompany;
 import com.jn.news.vo.SmsTemplateVo;
@@ -15,6 +16,7 @@ import com.jn.park.electricmeter.enums.MeterConstants;
 import com.jn.park.electricmeter.enums.MeterExceptionEnums;
 import com.jn.park.electricmeter.exception.ErrorLogException;
 import com.jn.park.electricmeter.service.MeterCalcCostService;
+import com.jn.park.electricmeter.service.MeterService;
 import com.jn.park.property.model.PayCallBackNotify;
 import com.jn.pay.api.PayAccountClient;
 import com.jn.pay.api.PayClient;
@@ -22,6 +24,7 @@ import com.jn.pay.model.*;
 import com.jn.pay.vo.PayBillCreateParamVo;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
+import org.apache.catalina.core.ApplicationContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -30,6 +33,9 @@ import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.ContextLoader;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -60,6 +66,10 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
     private TbElectricMeterDayLogMapper meterDayLogMapper;
 
     @Autowired(required = false)
+    private TbElectricMeterCompanyDayMapper tbElectricMeterCompanyDayMapper;
+
+
+    @Autowired(required = false)
     private TbElectricEnergyDayLogMapper energyDayLogMapper;
     @Autowired(required = false)
     private TbElectricErrorLogMapper errorLogMapper;
@@ -78,22 +88,35 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
     @Autowired(required = false)
     private PayClient payClient;
 
+    @Autowired(required = false)
+    private TbElectricMeterInfoMapper tbElectricMeterInfoMapper;
+
+    @Autowired(required = false)
+    private TbElectricPriceruleCompanyMapper tbElectricPriceruleCompanyMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void calcCostEverdayBySomeOneCompany(String companyId,Date dealDate,String account ) throws ErrorLogException{
+    public void calcCostEverdayBySomeOneCompany(String companyId,Date dealDate,String account,String userMeterCode) throws ErrorLogException{
         logger.info("通过企业id获取企业的基本信息");
         Result<ServiceCompany> companyInfo =companyClient.getCompanyDetailByAccountOrCompanyId(companyId);
         if(companyInfo.getData() == null){
             logger.info("通过企业id没有找到企业基本信息,入参{}",companyId);
-            throw new ErrorLogException(getErr(account, "企业基本信息找不到", null, companyId, null,dealDate));
+            throw new ErrorLogException(getErr(account, "企业基本信息找不到", null, companyId, "未知的企业名称",dealDate));
         }
         String companyName =companyInfo.getData().getComName();
         logger.info("结束企业id获取企业的基本信息");
 
-        logger.info("开始通过企业id获取电表设备code集合");
-        List<String> eleMeters = meterDao.getElectricMeterByCompanyId(companyId,dealDate);
-        logger.info("结束通过企业id获取电表设备code集合");
+        List<String> eleMeters = null;
+
+        if(StringUtils.isNotBlank(userMeterCode)){
+            eleMeters = new ArrayList<>();
+            eleMeters.add(userMeterCode);
+        }else{
+            logger.info("开始通过企业id获取电表设备code集合");
+            eleMeters = meterDao.getElectricMeterByCompanyId(companyId,dealDate);
+            logger.info("结束通过企业id获取电表设备code集合");
+        }
+
 
         if(eleMeters !=null && eleMeters.size()>0){
             //查询出企业的计价规则
@@ -123,77 +146,158 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
             List<TbElectricEnergyGroupLog> groupLogs = new ArrayList<>();
             //数据是否缺失;默认数据都是完整的的。一个公司的所有电表信息都有24条的历史数据时，才是数据完整的状态
             for(String meterCode : eleMeters){
-                //查询出每块电表的用电量
-                logger.info("开始查询一个企业的一块电表一天的读数历史数据,电表编码:{}",meterCode);
-                List<TbElectricReading> readings = meterDao.getDegreeByMeterCode(meterCode,dealDate);
-                logger.info("结束查询一个企业的一块电表一天的读数历史数据");
-                TbElectricMeterDayLog meterDayLog =null;
-                if(readings.size() ==24){
-                    logger.info("开始计算一个企业的一块电表一天的电量和电费,企业id:{},电表编码:{}",companyId,meterCode);
-                    meterDayLog =calcost(groupLogs,companyName,account,dealDate,companyId, rulesContents,readings );
-                    logger.info("结束计算一个企业的一块电表一天的电量和电费");
-                    meterDayLogs.add(meterDayLog);
-                }else{
-                    logger.info("开始记录错误日志-原因：当前企业的电表的读数数据不完整,{}",companyId);
-                    throw new ErrorLogException(getErr(account, "当前企业的电表的读数数据不完整", meterCode, companyId, companyName,dealDate));
+                groupLogs = new ArrayList<>();
+                try{
+                    //查询出每块电表的用电量
+                    logger.info("开始查询一个企业的一块电表一天的读数历史数据,电表编码:{}",meterCode);
+                    List<TbElectricReading> readings = meterDao.getDegreeByMeterCode(meterCode,dealDate);
+                    logger.info("结束查询一个企业的一块电表一天的读数历史数据");
+                    TbElectricMeterDayLog meterDayLog =null;
+                    //再次验证是否已经拥有24tiao数据
+                    if(readings.size() !=24){
+                        //查询电表
+                        logger.info("这块表，{}，没有24条数据；开始进行重新采集数据",meterCode);
+                        TbElectricMeterInfoCriteria criteria = new TbElectricMeterInfoCriteria();
+                        criteria.or().andMeterCodeEqualTo(meterCode).andRecordStatusEqualTo(new Byte(MeterConstants.VALID));
+                        List<TbElectricMeterInfo>  meters = tbElectricMeterInfoMapper.selectByExample(criteria);
+                        if(meters !=null && meters.size()>0){
+                            logger.info("这块表，{}，没有24条数据；开始进行重新采集数据;他的原始编码为：",meterCode,meters.get(0).getFactoryMeterCode());
+                            //没有24条数据；进行重新采集
+                            if(readings !=null){
+                                for(int i=0;i<24;i++){
+                                    //默认没有采集到
+                                    boolean isNotExist = true;
+                                    for(TbElectricReading reBean : readings){
+                                        if(reBean.getDealHour().equals(String.valueOf(i))){
+                                            isNotExist = false;
+                                            break;
+                                        }
+                                    }
+                                    //不存在，进行数据重新采集
+                                    if(isNotExist){
+                                        MeterService meterService = BeanHeader.getBean(MeterService.class);
+                                        meterService.dealAllFailByDealHourAndDealDateAndMeterCode(dealDate,String.valueOf(i),meters.get(0).getFactoryMeterCode());
+                                    }
+                                }
+                            }
+                        }else{
+                            //记录日志，此表的
+                            throw new ErrorLogException(getErr(account, "重新采集数据时，发现"+meterCode+"表信息不存在", meterCode, companyId, companyName,dealDate));
+                        }
+
+                        readings = meterDao.getDegreeByMeterCode(meterCode,dealDate);
+                    }
+
+
+                    if(readings.size() ==24){
+                        logger.info("开始计算一个企业的一块电表一天的电量和电费,企业id:{},电表编码:{}",companyId,meterCode);
+                        meterDayLog =calcost(groupLogs,companyName,account,dealDate,companyId, rulesContents,readings );
+                        logger.info("结束计算一个企业的一块电表一天的电量和电费");
+                        meterDayLogs.add(meterDayLog);
+                    }else{
+                        logger.info("开始记录错误日志-原因：当前企业的电表的读数数据不完整,{}",companyId);
+                        throw new ErrorLogException(getErr(account, "当前企业的电表的读数数据不完整", meterCode, companyId, companyName,dealDate));
+                    }
+
+                    logger.info("结束处理企业每块电表的用电量及费用");
+                    BigDecimal allPrice =new BigDecimal("0");
+                    BigDecimal allDegree = new BigDecimal("0");
+                    List<PayBillDetails> payBillDetails = new ArrayList<>();
+                    PayBillDetails billDetails=null;
+                    int sort=0;
+                    String ten ="10";
+                    BigDecimal tenDivisor = new BigDecimal(ten);
+                    for(TbElectricMeterDayLog  meterDayLogBean : meterDayLogs ){
+                        billDetails = new PayBillDetails();
+                        allPrice = allPrice.add(meterDayLogBean.getPrice());
+                        allDegree = allDegree.add(meterDayLogBean.getDegree());
+                        String name = "[电表编号]:"+meterDayLogBean.getMeterId();
+                        billDetails.setCostName(name);
+                        billDetails.setCostValue(meterDayLogBean.getPrice().divide(tenDivisor,2, RoundingMode.HALF_UP).toString());
+                        sort++;
+                        billDetails.setSort(sort);
+                        payBillDetails.add(billDetails);
+                        meterDayLogBean.setPrice(meterDayLogBean.getPrice().divide(tenDivisor,2, RoundingMode.HALF_UP));
+                    }
+                    // 创建账单和保存
+                    //计价规则那边是角，此处要除10，才得出元
+                    allPrice = allPrice.divide(tenDivisor,2, RoundingMode.HALF_UP);
+                    boolean success = createBill(allPrice,companyId,companyName,account,  payBillDetails,meterCode,dealDate);
+                    if(! success){
+                        throw new ErrorLogException(getErr(account, "创建账单失败", meterCode, companyId, companyName,dealDate));
+                    }
+
+                    //保存通过企业id没有找到企业基本信息
+                    if(groupLogs !=null && groupLogs.size()>0){
+                        logger.info("开始保存一个企业的电费的分段费用记录");
+                        meterDao.saveGroupLogs(groupLogs);
+                        logger.info("结束保存一个企业的电费的分段费用记录");
+                    }
+                    TbElectricErrorLogCriteria criteria = new TbElectricErrorLogCriteria();
+                    criteria.or().andCompanyIdEqualTo(companyId).andDayEqualTo(dealDate).andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andMeterCodeEqualTo(meterCode);
+                    TbElectricErrorLog record = new TbElectricErrorLog();
+                    record.setRecordStatus(new Byte(MeterConstants.INVALID));
+                    record.setCompanyId(companyId);
+                    //作废失败的记录日志
+                    errorLogMapper.updateByExampleSelective(record,criteria);
+                    criteria.or().andCompanyIdEqualTo(companyId).andDayEqualTo(dealDate).andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andMeterCodeIsNull();
+                    errorLogMapper.updateByExampleSelective(record,criteria);
+                }catch (ErrorLogException e){
+                    //记录日志
+                    if(StringUtils.isNotBlank(userMeterCode)){
+                        TbElectricErrorLog record = e.getErr();
+                        record.setModifiedTime(new Date());
+                        TbElectricErrorLogCriteria criteria = new TbElectricErrorLogCriteria();
+                        criteria.or().andCompanyIdEqualTo(companyId).andDayEqualTo(dealDate).andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andMeterCodeEqualTo(meterCode);
+                        errorLogMapper.updateByExampleSelective(record,criteria);
+                    }else{
+                        saveErrorLog(e.getErr());
+                    }
+
+                    continue;
                 }
             }
+            //查询账单的条数和电表的个数，在当日是否一致，一致时才是完整的计算出了一个企业当天的价钱
+            //查询出所有的电表
+            TbElectricMeterCompanyDayCriteria companyDayCriteria = new TbElectricMeterCompanyDayCriteria();
+            companyDayCriteria.or().andDayEqualTo(dealDate).andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andCompanyIdEqualTo(companyId);
+            List<TbElectricMeterCompanyDay>  companyDays = tbElectricMeterCompanyDayMapper.selectByExample(companyDayCriteria);
 
+            //查询出所有的账单
+            TbElectricEnergyDayLogCriteria dayLogCriteria = new TbElectricEnergyDayLogCriteria();
+            dayLogCriteria.or().andCompanyIdEqualTo(companyId).andDayEqualTo(dealDate).andRecordStatusEqualTo(new Byte(MeterConstants.VALID));
+            List<TbElectricEnergyDayLog> dayLogs = energyDayLogMapper.selectByExample(dayLogCriteria);
 
-            logger.info("结束处理企业每块电表的用电量及费用");
+            if(companyDays !=null && dayLogs!=null){
+                if(companyDays.size()==dayLogs.size()){
 
-            //电表的个数和每日电表的对象数是一样的，才是一个企业完整的一天的用电量
-            if(meterDayLogs!=null && meterDayLogs.size()==eleMeters.size()){
-                BigDecimal allPrice =new BigDecimal("0");
-                BigDecimal allDegree = new BigDecimal("0");
-                List<PayBillDetails> payBillDetails = new ArrayList<>();
-                PayBillDetails billDetails=null;
-                int sort=0;
-                String ten ="10";
-                BigDecimal tenDivisor = new BigDecimal(ten);
-                for(TbElectricMeterDayLog  meterDayLog : meterDayLogs ){
-                    billDetails = new PayBillDetails();
-                    allPrice = allPrice.add(meterDayLog.getPrice());
-                    allDegree = allDegree.add(meterDayLog.getDegree());
-                    String name = "[电表编号]:"+meterDayLog.getMeterId();
-                    billDetails.setCostName(name);
-                    billDetails.setCostValue(meterDayLog.getPrice().divide(tenDivisor,2, RoundingMode.HALF_UP).toString());
-                    sort++;
-                    billDetails.setSort(sort);
-                    payBillDetails.add(billDetails);
-                    meterDayLog.setPrice(meterDayLog.getPrice().divide(tenDivisor,2, RoundingMode.HALF_UP));
+                    BigDecimal allPrice = new BigDecimal("0");
+                    BigDecimal allDegree = new  BigDecimal("0");
+                    if(dayLogs.size()>0){
+                        for(TbElectricEnergyDayLog dayLog : dayLogs){
+                            BigDecimal degree = dayLog.getDegree();
+                            BigDecimal price = dayLog.getPrice();
+                            allPrice = allPrice.add(price);
+                            allDegree = allDegree.add(degree);
+                        }
+                    }
+
+                    TbElectricEnergyDayLog energyDayLog = new TbElectricEnergyDayLog();
+                    energyDayLog.setCompanyId(companyId);
+                    energyDayLog.setCompanyName(companyName);
+                    energyDayLog.setCreatedTime(new Date());
+                    energyDayLog.setPrice(allPrice);
+                    energyDayLog.setCreatorAccount(account);
+                    energyDayLog.setDegree(allDegree);
+                    energyDayLog.setDay(dealDate);
+                    energyDayLog.setRecordStatus(new Byte(MeterConstants.VALID));
+                    energyDayLog.setRuleName(rulesContents.get(0).getRuleName());
+                    energyDayLog.setRuleId(rulesContents.get(0).getRuleId());
+                    energyDayLog.setId(UUID.randomUUID().toString().replaceAll("-",""));
+                    logger.info("开始保存一个企业一块表的电费和电量");
+                    energyDayLogMapper.insertSelective(energyDayLog);
+                    logger.info("结束保存一个企业一块表的电费和电量");
                 }
-                // 创建账单和保存
-                //计价规则那边是角，此处要除10，才得出元
-                allPrice = allPrice.divide(tenDivisor,2, RoundingMode.HALF_UP);
-                boolean success = createBill(allPrice,companyId,companyName,account,  payBillDetails);
-                if(! success){
-                    throw new ErrorLogException(getErr(account, "创建账单失败", null, companyId, companyName,dealDate));
-                }
-
-                //保存
-                if(groupLogs !=null && groupLogs.size()>0){
-                    logger.info("开始保存一个企业的电费的分段费用记录");
-                    meterDao.saveGroupLogs(groupLogs);
-                    logger.info("结束保存一个企业的电费的分段费用记录");
-                }
-
-
-                TbElectricEnergyDayLog energyDayLog = new TbElectricEnergyDayLog();
-                energyDayLog.setCompanyId(companyId);
-                energyDayLog.setCompanyName(companyName);
-                energyDayLog.setCreatedTime(new Date());
-                energyDayLog.setPrice(allPrice);
-                energyDayLog.setCreatorAccount(account);
-                energyDayLog.setDegree(allDegree);
-                energyDayLog.setDay(dealDate);
-                energyDayLog.setRecordStatus(new Byte(MeterConstants.VALID));
-                energyDayLog.setRuleName(rulesContents.get(0).getRuleName());
-                energyDayLog.setRuleId(rulesContents.get(0).getRuleId());
-                energyDayLog.setId(UUID.randomUUID().toString().replaceAll("-",""));
-                logger.info("开始保存一个企业一天的电费和电量");
-                energyDayLogMapper.insertSelective(energyDayLog);
-                logger.info("结束保存一个企业一天的电费和电量");
             }
         }
     }
@@ -238,7 +342,7 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
         String account =MeterConstants.SYSTEM_USER;
         for(String companyId : hosters){
             try{
-                calcCostEverdayBySomeOneCompany(companyId,dealDate,account);
+                calcCostEverdayBySomeOneCompany(companyId,dealDate,account,null);
             }catch(ErrorLogException e){
                 //记录日志
                 saveErrorLog(e.getErr());
@@ -254,16 +358,29 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
 
     @Override
     @ServiceLog(doAction = "手动计算企业每日的电费")
-    public Result calcCostEverdayByHandler(User user, String companyId, Date day ) {
+    public Result calcCostEverdayByHandler(User user, String companyId, Date day ,String meterCode) {
         //所有电表的业主查询处
         Result result = new Result();
+        result.setData("0000");
+        String date = DateUtils.formatDate(day,"yyyy-MM-dd");
+        try{
+            day = DateUtils.parseDate(date,"yyyy-MM-dd");
+        }catch (Exception e){
+            logger.info("日期转换错误");
+            throw new JnSpringCloudException(MeterExceptionEnums.DAY_FORMATE_WRONG);
+        }
+
         List<String> hosters=new ArrayList<>();
         if(StringUtils.isNotBlank(companyId) && day != null){
             hosters =meterDao.getElectricMeterByCompanyId(companyId, day);
         }
         //检查企业是否被定时器调用时产生了错误
         TbElectricErrorLogCriteria criteria = new TbElectricErrorLogCriteria();
-        criteria.or().andCompanyIdEqualTo(companyId).andDayEqualTo(day).andRecordStatusEqualTo(new Byte(MeterConstants.VALID));
+        if(StringUtils.isNotBlank(meterCode)){
+            criteria.or().andCompanyIdEqualTo(companyId).andDayEqualTo(day).andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andMeterCodeEqualTo(meterCode);
+        }else{
+            criteria.or().andCompanyIdEqualTo(companyId).andDayEqualTo(day).andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andMeterCodeIsNull();
+        }
         List<TbElectricErrorLog>  logs = errorLogMapper.selectByExample(criteria);
         if(logs==null || logs.size()==0){
             throw new JnSpringCloudException(MeterExceptionEnums.CANT_REPEAT_DEAL);
@@ -274,14 +391,17 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
         }
 
         try{
-            calcCostEverdayBySomeOneCompany(companyId,day,user.getAccount());
-            TbElectricErrorLog record = new TbElectricErrorLog();
-            record.setRecordStatus(new Byte(MeterConstants.INVALID));
-            record.setCompanyId(companyId);
-            //作废失败的记录日志
-            errorLogMapper.updateByExampleSelective(record,criteria);
+            if(StringUtils.isNotBlank(meterCode)){
+                calcCostEverdayBySomeOneCompany(companyId,day,user.getAccount(),meterCode);
+            }else{
+                calcCostEverdayBySomeOneCompany(companyId,day,user.getAccount(),null);
+            }
         }catch(ErrorLogException e){
+            TbElectricErrorLog record = e.getErr();
+            errorLogMapper.updateByExampleSelective(record,criteria);
             result.setData(e.getErr().toString());
+            result.setCode("1");
+            result.setResult(e.getErr().toString());
         }
         return result;
     }
@@ -294,7 +414,7 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
      * @param account
      * @param payBillDetails
      */
-    private boolean createBill(BigDecimal allPrice,String companyId,String companyName,String account, List<PayBillDetails> payBillDetails){
+    private boolean createBill(BigDecimal allPrice,String companyId,String companyName,String account, List<PayBillDetails> payBillDetails,String meterCode,Date dealDate){
         boolean success = true;
         logger.info("开始调用接口创建账单");
 
@@ -330,6 +450,7 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
         payBillCreateParamVo.setCreatorAccount(account);
         //最迟缴费时间
         payBillCreateParamVo.setLatePayment(new Date());
+        payBillCreateParamVo.setMeterCode(meterCode);
         //缴费详情【存list对象集合】
         payBillCreateParamVo.setPayBillDetails(payBillDetails);
         Result billCreateResult = payClient.billCreate(payBillCreateParamVo);
@@ -337,7 +458,7 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
         //保存账单信息
         if(billCreateResult.getCode().equals(GlobalConstants.SUCCESS_CODE)){
             logger.info("开始保存成功创建的账单");
-            saveBill(payBillCreateParamVo);
+            saveBill(payBillCreateParamVo,meterCode,dealDate);
             logger.info("结束保存成功创建的账单");
         }else{
             logger.info("调用创建账单接口失败");
@@ -346,14 +467,16 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
         return success;
     }
 
-    private void saveBill(PayBillCreateParamVo payBill){
+    private void saveBill(PayBillCreateParamVo payBill,String meterCode,Date dealDate){
         TbElectricEnergyBill bill = new TbElectricEnergyBill();
         BeanUtils.copyProperties(payBill,bill);
         bill.setAcBookType(payBill.getAcBookType());
         bill.setPayStatus(new Byte(MeterConstants.NOT_PAY));
         bill.setRecordStatus(new Byte(MeterConstants.VALID));
         bill.setCallTimes(0);
+        bill.setDay(dealDate);
         bill.setId(payBill.getBillId());
+        bill.setMeterCode(meterCode);
         energyBillMapper.insertSelective(bill);
         //保存明细
         List<TbElectricEnergyBillDetail> saveDetails = new ArrayList<>();
@@ -496,7 +619,7 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
             String companyName = energyBill.getObjName();
             //通过企业id,更新其余额
             PayAccountBookMoney payAccountBookMoney = new PayAccountBookMoney();
-            payAccountBookMoney.setAcBookType(MeterConstants.ELEC_BOOK);
+            payAccountBookMoney.setAcBookType(energyBill.getAcBookType());
             payAccountBookMoney.setObjId(comAdinOrCompanyId);
             payAccountBookMoney.setObjType(MeterConstants.OBJ_TYPE);
             Result<PayAccountBook>  bookResult =  payAccountClient.queryPayAccountBookMoney(payAccountBookMoney);
@@ -505,24 +628,28 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
                 throw new JnSpringCloudException(MeterExceptionEnums.COMPANY_BALANCE_NOT_FOUND);
             }
             PayAccountBook payBook = bookResult.getData();
-            TbElectricCost costbean =tbElectricCostMapper.selectByPrimaryKey(comAdinOrCompanyId);
+            TbElectricCostCriteria costCriteria = new TbElectricCostCriteria();
+            costCriteria.or().andAccountTypeEqualTo(energyBill.getAcBookType()).andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andCompanyIdEqualTo(comAdinOrCompanyId) ;
+            List<TbElectricCost> costbeans =tbElectricCostMapper.selectByExample(costCriteria);
             //检测企业的费用是否已经在表中存在，不存在则插入，否则更新
-            if(costbean == null){
+            if(costbeans == null && costbeans.size()==0){
                 logger.info("插入企业的余额，企业id为{}",comAdinOrCompanyId);
-                costbean = new TbElectricCost();
+                TbElectricCost costbean = new TbElectricCost();
                 costbean.setBalance(payBook.getBalance());
                 costbean.setCompanyId(comAdinOrCompanyId);
                 costbean.setCreatedTime(new Date());
                 costbean.setCreatorAccount(MeterConstants.SYSTEM_USER);
                 costbean.setRecordStatus(new Byte(MeterConstants.VALID));
                 costbean.setCompanyName(companyName);
+                costbean.setId(UUID.randomUUID().toString().replaceAll("-",""));
+                costbean.setAccountType(energyBill.getAcBookType());
                 tbElectricCostMapper.insertSelective(costbean);
             }else{
                 //更新数据
                 logger.info("更新企业的余额，企业id为{}",comAdinOrCompanyId);
+                TbElectricCost costbean = new TbElectricCost();
                 costbean.setBalance(payBook.getBalance());
-                TbElectricCostCriteria costCriteria = new TbElectricCostCriteria();
-                costCriteria.or().andCompanyIdEqualTo(comAdinOrCompanyId).andRecordStatusEqualTo(new Byte(MeterConstants.VALID));
+                costCriteria.or().andCompanyIdEqualTo(comAdinOrCompanyId).andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andAccountTypeEqualTo(energyBill.getAcBookType());
                 tbElectricCostMapper.updateByExampleSelective(costbean,costCriteria);
 
             }

@@ -1,5 +1,5 @@
 <template>
-  <div class="serverPro w" style="padding-top:65px;">
+  <div class="serverPro w" style="padding-top:65px;" v-loading="proloading">
     <div class="serverOrgMenu">
       <span class="pointer" @click="$router.push({path:'/serMatHp'})">首页</span>
       <span>/</span>
@@ -38,8 +38,8 @@
         <i class="iconfont icon-sousuo" @click="handleSearchList"></i>
       </div>
     </div>
-    <div class="serverOrgContent" v-loading="proloading">
-      <div v-if="serverProList.length==0">
+    <div class="serverOrgContent">
+      <div v-if="serverProList.length==0&&!proloading">
         <nodata></nodata>
       </div>
       <ul v-else>
@@ -76,7 +76,7 @@
       </ul>
     </div>
     <div class="pagination-container">
-      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
+      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row" layout="total,prev, pager, next,sizes" :total="total">
       </el-pagination>
     </div>
     <!-- 提需求弹框 -->
@@ -122,7 +122,7 @@ export default {
       keyW: "",
       currentPage1: 1,
       page: 1,
-      row: 5,
+      row: 3,
       total: 0,
       signoryId: "",
       keyWords: "",
@@ -138,7 +138,8 @@ export default {
     };
   },
   mounted() {
-    this.selectIndustryList();
+    // this.selectIndustryList();
+    this.getIndustryForMarket();
     if (this.$route.query.searchData) {
       this.keyW = this.$route.query.searchData;
       this.initList();
@@ -259,25 +260,39 @@ export default {
         }
       });
     },
-    selectIndustryList() {
+    // selectIndustryList() {
+    //   let _this = this;
+    //   this.api.get({
+    //     url: "selectIndustryProductList",
+    //     data: {},
+    //     callback: function(res) {
+    //       if (res.code == "0000") {
+    //         // for (let it in res.data) {
+    //         //   if (res.data[it].preType == "0") {
+    //         //     _this.businessArea.push(res.data[it]);
+    //         //   }
+    //         // }
+    //         _this.businessArea = res.data;
+    //       } else {
+    //         _this.$message.error(res.result);
+    //       }
+    //     }
+    //   });
+    // },
+     getIndustryForMarket() {
       let _this = this;
       this.api.get({
-        url: "selectIndustryProductList",
+        url: "getIndustryForMarket",
         data: {},
         callback: function(res) {
           if (res.code == "0000") {
-            // for (let it in res.data) {
-            //   if (res.data[it].preType == "0") {
-            //     _this.businessArea.push(res.data[it]);
-            //   }
-            // }
             _this.businessArea = res.data;
           } else {
             _this.$message.error(res.result);
           }
         }
       });
-    }
+    },
   }
 };
 </script>

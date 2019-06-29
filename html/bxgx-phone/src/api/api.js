@@ -1,8 +1,10 @@
 
 import axios from 'axios'
+import { getToken } from '@/utils/auth'
 export default {
   // host: 'http://172.16.160.19:6063/',
   host: 'http://112.94.22.222:8000/',
+  link: 'http://112.94.22.222:8002/',
   apiURL: {
     departList: 'springcloud-park/guest/portal/sp/power/departList', // 实施部门列表
     powerList: 'springcloud-park/guest/portal/sp/power/list', // 权利清单列表
@@ -30,7 +32,7 @@ export default {
     talentsDetail: 'springcloud-enterprise/guest/pd/talentNotice/selectByTalentNotice', // 人才服务详情
     talentsVolume: 'springcloud-enterprise/guest/pd/talentNotice/trafficVolume', // 人才服务访问量
     // loginURL: 'springcloud-app-system/login',
-
+    registerUrl: 'springcloud-wechat/guest/wx/user/registerBinding',
     // 工作计划管理
     getWorkList: 'springcloud-oa/oa/workPlan/list', // 获取工作计划管理列表
     getItemAll: 'springcloud-oa/oa/workPlan/getItemAll', // 获取所有项目信息
@@ -80,7 +82,8 @@ export default {
     addOrEditMemorandum: 'springcloud-enterprise/pd/declaration/addOrEditMemorandum', // 申报平台备忘录
     fastUpload: 'springcloud-app-fastdfs/upload/fastUpload', // 上传文件
     queryOnlineInfo: 'springcloud-enterprise/pd/online/queryOnlineInfo', // 通过公告ID和登录人查询预约信息
-    getUserExtension: 'springcloud-user/user/userInfo/getUserExtension'
+    getUserExtension: 'springcloud-user/user/userInfo/getUserExtension',
+    queryPlatformInfo: 'springcloud-enterprise/guest/pd/talentNotice/queryPlatformInfo'// 人才服务-首页申报平台查询
 
   },
   setToken: function (obj) {
@@ -108,7 +111,7 @@ export default {
       params: data || {},
       headers: {
         'Content-Type': headerType || 'application/json;charset=UTF-8',
-        'token': sessionStorage.token || ''
+        'token': getToken() || ''
       }
     })
       .then(function (response) {
@@ -177,7 +180,7 @@ export default {
 
       headers: {
         'Content-Type': headerType || headerSS,
-        'token': sessionStorage.token || ''
+        'token': getToken() || ''
       }
 
     })

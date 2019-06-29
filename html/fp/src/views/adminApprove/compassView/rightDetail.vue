@@ -57,17 +57,18 @@
                     <el-form-item label="实施依据：">
                       <div class="table_item_cont">
                         <!-- <span v-if="isWord&&word&&word.length>135" class="66">{{word|word}} </span> -->
-                        <span v-html="powerDetail.settingBasis"></span>
+                        <span v-if="powerDetail.settingBasis===null">暂无</span>
+                        <span v-html="powerDetail.settingBasis" v-else></span>
                         <!-- <span @click="isWord=!isWord" v-show="isWord&&word&&word.length>135" class="pack_up">[点击展开]</span>
                         <span @click="isWord=!isWord" v-show="isWord===false&&word&&word.length>135" class="pack_up">[点击收起]</span> -->
                       </div> 
                     </el-form-item>
                   </div>
-                  <div class="baseIfor_table_item full_line">
+                  <!-- <div class="baseIfor_table_item full_line">
                     <el-form-item label="权力来源：">
                       <span class="table_item_cont">{{powerDetail.comeFrom===null?'暂无':powerDetail.level}}</span>
                     </el-form-item>
-                  </div>
+                  </div> -->
                   <div class="baseIfor_table_item full_line">
                     <el-form-item label="备注：">
                       <span class="table_item_cont">{{ powerDetail.notes===null?'暂无':powerDetail.notes}}</span>
@@ -145,7 +146,9 @@ export default {
       }
     }
   },
-  created () {
+  mounted () {
+    sessionStorage.setItem("url","rightDetail")
+    sessionStorage.setItem("name",this.$route.query.name)
     this.id=this.$route.query.id
     this.getPowerDetailList()
   },
@@ -169,7 +172,6 @@ export default {
           id:this.id
          },
         callback: function(res) {
-          console.log(res);
           if (res.code == "0000") {
             _this.loading=false
             _this.powerDetail=res.data[0];
@@ -178,6 +180,8 @@ export default {
             if(_this.word===null){
               _this.word='暂无'
             }
+          }else{
+            _this.$message.error(res.result)
           }
         }
       });
@@ -322,7 +326,7 @@ export default {
                 .el-form-item__content{
                   line-height: 1;
                   background-color: #fff;
-                  padding: 10px 0;
+                  padding: 12px 0;
                 }
                 .table_item_cont{
                   

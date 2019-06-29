@@ -63,7 +63,7 @@
       </navigator>
     </view>
     <view class="hot_ul">
-      <block wx:for="{{hotList}}" wx:key="{{index}}">
+      <block wx:for="{{hotList}}" wx:key="{{index}}" >
         <!-- <navigator url="/pages/index/actiDetail/actiDetail" > -->
           <view class="hot_li" bindtap="goDetail" data-id="{{item.id}}">
             <view class="hot_li_img">
@@ -77,7 +77,7 @@
               </view>
               <view>
                 <text class="icon-countdown icon"></text>
-                <text>10/17  周日14:00-17:00</text>
+                <text>{{item.startTime}}-{{item.endTime}}</text>
               </view>
             </view>
             <view class="hot_li_num paddihng_side">
@@ -95,6 +95,10 @@
           </view>
         <!-- </navigator> -->
       </block>
+      <view class="none" wx:if="{{isNone===2 }}">
+        <text class=""> 暂无!!! </text>
+        <!-- <image class="" src="{{imgBaseUrl}}success.png" wx:if="{{imgBaseUrl}}" ></image> -->
+      </view>
     </view>
   </view>
 </view>

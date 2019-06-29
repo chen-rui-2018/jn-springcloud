@@ -1,5 +1,6 @@
 package com.jn.hardware.model.dingtalk.attendance;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
 import java.io.Serializable;
@@ -19,11 +20,31 @@ public class LeaveApproveDurationParam implements Serializable {
     @NotBlank(message = "员工在企业内的UserID，企业用来唯一标识用户的字段")
     private String userid;
 
+    @JsonProperty("from_date")
     @NotBlank(message = "请假开始时间。格式为“yyyy-MM-dd HH:mm:ss")
-    private String from_date;
+    private String fromDate;
 
+    @JsonProperty("to_date")
     @NotBlank(message = "请假结束时间。格式为“yyyy-MM-dd HH:mm:ss")
-    private String to_date;
+    private String toDate;
+
+
+
+    public String getFromDate() {
+        return fromDate;
+    }
+
+    public void setFromDate(String fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    public String getToDate() {
+        return toDate;
+    }
+
+    public void setToDate(String toDate) {
+        this.toDate = toDate;
+    }
 
     public String getUserid() {
         return userid;
@@ -33,28 +54,12 @@ public class LeaveApproveDurationParam implements Serializable {
         this.userid = userid;
     }
 
-    public String getFrom_date() {
-        return from_date;
-    }
-
-    public void setFrom_date(String from_date) {
-        this.from_date = from_date;
-    }
-
-    public String getTo_date() {
-        return to_date;
-    }
-
-    public void setTo_date(String to_date) {
-        this.to_date = to_date;
-    }
-
     @Override
     public String toString() {
-        return "LeaveApproveduRationParam{" +
+        return "LeaveApproveDurationParam{" +
                 "userid='" + userid + '\'' +
-                ", from_date='" + from_date + '\'' +
-                ", to_date='" + to_date + '\'' +
+                ", fromDate='" + fromDate + '\'' +
+                ", toDate='" + toDate + '\'' +
                 '}';
     }
 }

@@ -63,7 +63,7 @@
                 v-model="sendData.resultDetail">
               </el-input>
             </el-form-item>
-          <el-form-item label="合同首页：" >
+          <!-- <el-form-item label="合同首页：" >
             <el-upload
               :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
               list-type="picture-card"
@@ -90,7 +90,7 @@
               >
               <i class="el-icon-plus"></i>
             </el-upload>
-            </el-form-item>
+            </el-form-item> -->
         </el-form>
       </div>
       <div class="buttNeedFinancial_submit" @click="submit">提交</div>
@@ -98,7 +98,7 @@
   </div>
 </template>
 <script>
-import { getToken, removeToken } from '@/util/auth'
+import { getToken } from '@/util/auth'
 export default {
   data () {
     return {

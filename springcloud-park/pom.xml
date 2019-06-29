@@ -89,10 +89,9 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        activity
+                        wifi
                     </contexts>
                     <tableNames>
-                        tb_activity
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

@@ -14,6 +14,7 @@ import com.jn.oa.common.enums.OaExceptionEnums;
 import com.jn.oa.common.enums.OaReturnMessageEnum;
 import com.jn.oa.common.enums.OaStatusEnums;
 import com.jn.oa.meeting.dao.*;
+import com.jn.oa.meeting.domain.SystemUrlProperties;
 import com.jn.oa.meeting.entity.*;
 import com.jn.oa.meeting.enums.*;
 import com.jn.oa.meeting.model.*;
@@ -75,6 +76,9 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Autowired
     private SystemClient systemClient;
+
+    @Autowired
+    private SystemUrlProperties systemUrlProperties;
 
     @Autowired
     public MeetingServiceImpl(ResourceLoader resourceLoader) {
@@ -140,7 +144,7 @@ public class MeetingServiceImpl implements MeetingService {
         TbOaMeeting tbOaMeeting = new TbOaMeeting();
         BeanUtils.copyProperties(oaMeetingAdd, tbOaMeeting);
 
-        if(tbOaMeeting.getStartTime()!=null&&(tbOaMeeting.getStartTime().getTime() < new Date().getTime())){
+        if(tbOaMeeting.getStartTime()!=null&&(tbOaMeeting.getStartTime().getTime() < System.currentTimeMillis())){
             logger.warn("[会议申请] 会议申请失败,会议开始时间不能小于当前时间,oaMeetingId: {},oaMeetingRoomId:{}", oaMeetingAdd.getId(),oaMeetingAdd.getMeetingRoomId());
             throw new JnSpringCloudException(MeetingExceptionEnums.ADD_MEETING_TIME_CONFLICT);
         }
@@ -183,7 +187,7 @@ public class MeetingServiceImpl implements MeetingService {
         TbOaMeeting tbOaMeeting = new TbOaMeeting();
         BeanUtils.copyProperties(oaMeetingAdd, tbOaMeeting);
 
-        if(tbOaMeeting.getStartTime()!=null&&(tbOaMeeting.getStartTime().getTime() < new Date().getTime())){
+        if(tbOaMeeting.getStartTime()!=null&&(tbOaMeeting.getStartTime().getTime() < System.currentTimeMillis())){
             logger.warn("[会议申请] 更改会议申请失败,会议开始时间不能小于当前时间,oaMeetingId: {},oaMeetingRoomId:{}", oaMeetingAdd.getId(),oaMeetingAdd.getMeetingRoomId());
             throw new JnSpringCloudException(MeetingExceptionEnums.UPDATE_MEETING_TIME_CONFLICT);
         }
@@ -263,7 +267,7 @@ public class MeetingServiceImpl implements MeetingService {
             String outFilePath = tempUpload.getAbsolutePath() + File.separator + fileName;  
 
             //4、二维码连接
-            String contents = "https://njbxq.mynatapp.cc/springcloud-oa/oa/meeting?id="+tbOaMeeting.getId();
+            String contents = systemUrlProperties.getSystemUrl()+"/springcloud-oa/oa/oaMeetingAttendance/attendance?meetingId="+tbOaMeeting.getId();
 
             //5、调用工具类生成二维码
             QRCodeUtils.EncodeHelper(QRCodeUtils.width, QRCodeUtils.height, contents, outFilePath, "");

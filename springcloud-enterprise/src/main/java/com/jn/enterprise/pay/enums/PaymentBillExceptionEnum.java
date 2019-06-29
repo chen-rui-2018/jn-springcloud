@@ -43,6 +43,12 @@ public enum PaymentBillExceptionEnum implements CodeAndMsg {
     PAYMENT_STATUS_IS_PAY_CONFIRM("6020541","账单已支付，无需缴费确认"),
     PAYMENT_OFFLINE_CONFIRM_FAIL("6020542","线下缴费确认失败"),
     PAYMENT_EMAIL_CONTEXT("6020543","【白下高新区】您名下有待缴账单，请及时处理，以免影响您的园区信用分。"),
+    PAYMENT_STATUS_IS_PAY_2("6020544","账单已支付，无法进行状态变更"),
+    PAYMENT_STATUS_IS_RESCINDED("6020545","账单已撤销，无法进行状态变更"),
+    PAYMENT_STATUS_IS_RESCINDED_ERROR("6020546","账单撤销失败"),
+    PAYMENT_GET_USER_INFO("6020547","发送通知获取用户信息异常"),
+    PAYMENT_BUILD_ERROR("6020548","请选择相同的楼宇账单进行支付"),
+    PAYMENT_ACCOUNT_BOOK_EXIT("6020549","该账户下已存在账本"),
     ;
     /**
      * 编码

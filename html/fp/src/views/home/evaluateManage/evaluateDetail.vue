@@ -72,7 +72,7 @@
               <span >{{sevaluateDetail.financingAmount}}万元</span>
             </el-form-item>
             <el-form-item label="融资期限：">
-              <span>{{sevaluateDetail.financingPeriod|time}} </span>
+              <span>{{sevaluateDetail.financingPeriod|time}}</span>
             </el-form-item>
             <el-form-item label="资金需求日期：">
               <span>{{sevaluateDetail.expectedDate|time}}</span>
@@ -98,8 +98,8 @@
             <el-form-item label="实际贷款金额：">
               <span>{{sevaluateDetail.actualLoanAmount}}万元</span>
             </el-form-item>
-            <el-form-item label="结果描述">
-              <span>{{sevaluateDetail.serviceCycle}}</span>
+            <el-form-item label="结果描述：">
+              <span>{{sevaluateDetail.resultDetail}}</span>
             </el-form-item>
             <el-form-item label="服务评分：">
               <el-rate

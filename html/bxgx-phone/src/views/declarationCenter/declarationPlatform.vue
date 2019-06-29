@@ -13,7 +13,7 @@
       <div class="declarationPlatform_cont">
         <ul>
           <li v-for="(item,index) in platFormList " :key="index" >
-            <p>{{item.platformTitle}}</p>
+            <p><a :href="item.linkAddress">{{item.platformTitle}}</a> </p>
             <p>
               <span>业务咨询：</span>
               <span v-html="item.businessConsult"></span>
@@ -53,7 +53,6 @@ export default {
   mounted () {
     this.getTypeList()
     this.getPlatformList()
-    console.log(sessionStorage.getItem('token'))
   },
   methods: {
     // 备忘录
@@ -70,6 +69,8 @@ export default {
         callback: (res) => {
           // console.log(res);
           if (res.code === '0000') {
+          } else {
+            this.$vux.toast.text(res.result, 'middle')
           }
         }
       })
@@ -83,6 +84,9 @@ export default {
             this.typeList = res.data
           } else {
             this.$vux.toast.text(res.result)
+            setTimeout(() => {
+              this.$router.go(-1)
+            }, 1000)
           }
         }
       })
@@ -98,6 +102,9 @@ export default {
             this.total = res.data.total
           } else {
             this.$vux.toast.text(res.result)
+            setTimeout(() => {
+              this.$router.go(-1)
+            }, 1000)
           }
         }
       })
@@ -116,6 +123,8 @@ export default {
                   this.onFetching = false
                   this.platFormList.push(...res.data.rows)
                   // console.log(...res.data.rows)
+                } else {
+                  this.$vux.toast.text(res.result, 'middle')
                 }
               }
             })
@@ -191,7 +200,10 @@ export default {
             font-size: 26px;
             p:nth-child(1){
               font-size: 34px;
-              color:#538aef;
+              color:#538AEF;
+              a:visited{color:#538aef;}
+              a:active{color:#538aef;}
+              a{color:#538aef;}
             }
             p:nth-child(2){
               padding-top: 32px;

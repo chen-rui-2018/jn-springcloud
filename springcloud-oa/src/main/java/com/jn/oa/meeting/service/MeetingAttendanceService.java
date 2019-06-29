@@ -2,6 +2,7 @@ package com.jn.oa.meeting.service;
 
 
 import com.jn.common.model.PaginationData;
+import com.jn.oa.attendance.vo.AttendanceResultVo;
 import com.jn.oa.meeting.model.OaMeetingAttendancePage;
 import com.jn.oa.meeting.model.OaMeetingParticipantsAttendance;
 import com.jn.oa.meeting.vo.OaMeetingAttendanceVo;
@@ -26,7 +27,7 @@ public interface MeetingAttendanceService {
      * @param oaMeetingParticipantsAttendance
      * @param user
      */
-    void meetingAttendanceSignIn(OaMeetingParticipantsAttendance oaMeetingParticipantsAttendance, User user);
+    AttendanceResultVo meetingAttendanceSignIn(OaMeetingParticipantsAttendance oaMeetingParticipantsAttendance, User user);
 
 
     /**

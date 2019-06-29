@@ -5,6 +5,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.enterprise.pay.entity.TbPayBillDetails;
+import com.jn.enterprise.pay.enums.PaymentBillEnum;
 import com.jn.enterprise.pay.service.MyPayBillService;
 import com.jn.pay.vo.PayBillDetailsVo;
 import com.jn.pay.vo.PayBillVo;
@@ -102,6 +103,9 @@ public class MyPayBillController extends BaseController {
         Assert.notNull(payBillCreateParamVo.getBillId(),"账本编号不能为空");
         Assert.notNull(payBillCreateParamVo.getLatePayment(),"最迟缴费时间不能为空");
         Assert.notNull(payBillCreateParamVo.getObjType(),"对象类型不能为空");
+        if(PaymentBillEnum.BILL_AC_BOOK_TYPE_1.getCode().equals(payBillCreateParamVo.getAcBookType())){
+            Assert.notNull(payBillCreateParamVo.getMeterCode(),"电表编号不能为空");
+        }
         Result result=myPayBillService.billCreate(payBillCreateParamVo);
         return result;
     }
@@ -119,12 +123,23 @@ public class MyPayBillController extends BaseController {
     @ControllerLog(doAction = "我的账单-线下缴费确认回调各业务侧接口")
     @ApiOperation(value = "我的账单-线下缴费确认回调各业务侧接口",notes = "我的账单-线下缴费确认回调各业务侧接口")
     @RequestMapping(value = "/callbackServiceSide",method = RequestMethod.POST)
-    @RequiresPermissions("/payment/payAccount/callbackServiceSide")
+    @RequiresPermissions("/payment/payBill/callbackServiceSide")
     public Result callbackServiceSide(@RequestBody @Validated PayCallbackServiceSideParam payCallbackServiceSideParam){
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         Assert.notNull(payCallbackServiceSideParam.getBillId(),"账单编号不能为空");
         return myPayBillService.callbackServiceSide(payCallbackServiceSideParam,user);
+    }
+
+    @ControllerLog(doAction = "我的账单-账单状态变更（已撤销）,各业务调用")
+    @ApiOperation(value = "我的账单-账单状态变更（已撤销）,各业务调用",notes = "我的账单-账单状态变更（已撤销）,各业务调用")
+    @RequestMapping(value = "/cancelBill",method = RequestMethod.POST)
+    @RequiresPermissions("/payment/payBill/cancelBill")
+    public Result cancelBill(@ApiParam(name="billId",value = "账单编号",required = true,example = "201905090000001") @RequestParam(value = "billId") String billId){
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        Assert.notNull(billId,"账单编号不能为空");
+        return myPayBillService.cancelBill(billId,user);
     }
 
 }

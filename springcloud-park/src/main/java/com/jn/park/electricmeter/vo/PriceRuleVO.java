@@ -30,6 +30,17 @@ public class PriceRuleVO implements Serializable {
     @ApiModelProperty("规则内容")
     private List<PriceRuleContentModel> priceRuleContents;
 
+    @ApiModelProperty("是否默认使用的计价规则【只能有一条有效】1默认计价规则 0：正常规则")
+    private String isDefaultUse;
+
+    public String getIsDefaultUse() {
+        return isDefaultUse;
+    }
+
+    public void setIsDefaultUse(String isDefaultUse) {
+        this.isDefaultUse = isDefaultUse;
+    }
+
     public List<PriceRuleContentModel> getPriceRuleContents() {
         return priceRuleContents;
     }

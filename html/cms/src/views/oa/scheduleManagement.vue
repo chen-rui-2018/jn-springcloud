@@ -7,10 +7,10 @@
     <el-dialog :visible.sync="addDialogVisible" :title="titleText" width="600" class="sched">
       <el-form ref="scheduleForm" :rules="rules" :disabled="isdisabled" :model="scheduleForm" label-width="100px">
         <el-form-item label="日程标题:" prop="title">
-          <el-input v-model="scheduleForm.title" />
+          <el-input v-model="scheduleForm.title" clearable />
         </el-form-item>
         <el-form-item label="日程内容:" prop="content">
-          <el-input v-model="scheduleForm.content" type="textarea" />
+          <el-input v-model="scheduleForm.content" :autosize="{ minRows: 0, maxRows: 6}" type="textarea" placeholder="请输入内容" maxlength="500" show-word-limit clearable/>
         </el-form-item>
         <el-form-item label="全天:">
           <el-radio-group v-model="scheduleForm.allDay">
@@ -18,7 +18,7 @@
             <el-radio label="0">否</el-radio>
           </el-radio-group>
         </el-form-item>
-        <div>
+        <div class="timeStyle">
           <el-form-item v-if="scheduleForm.allDay==='0'" label="开始时间:" prop="startTime">
             <el-date-picker
               v-model="scheduleForm.startTime"
@@ -34,7 +34,7 @@
               placeholder="选择日期" />
           </el-form-item>
         </div>
-        <div>
+        <div class="timeStyle">
           <el-form-item v-if="scheduleForm.allDay==='0'" label="结束时间:" prop="endTime">
             <el-date-picker
               v-model="scheduleForm.endTime"
@@ -73,7 +73,7 @@
             <el-radio label="0">否</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item v-if="scheduleForm.isRemind==='1'" label="提醒时间" prop="remindTime">
+        <el-form-item v-if="scheduleForm.isRemind==='1'" label="提醒时间" class="timeStyle" prop="remindTime">
           <el-date-picker
             v-model="scheduleForm.remindTime"
             value-format="yyyy-MM-dd HH:mm:ss"
@@ -85,12 +85,11 @@
           <el-checkbox-group v-model="scheduleForm.remindWay">
             <el-checkbox label="1">微信</el-checkbox>
             <el-checkbox label="2">短信</el-checkbox>
-            <el-checkbox label="3">pc端</el-checkbox>
             <el-checkbox label="4">app端</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
         <el-form-item label="备注:" prop="remark">
-          <el-input v-model="scheduleForm.remark" type="textarea" />
+          <el-input v-model="scheduleForm.remark" :autosize="{ minRows: 0, maxRows: 6}" type="textarea" clearable maxlength="500"/>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -162,12 +161,12 @@ export default {
           { required: true, message: '请输入日程内容', trigger: 'blur' }
         ],
         startTime: [
-          { required: true, message: '请选择日期', trigger: 'change' }
+          { required: true, message: '请选择开始时间', trigger: 'change' }
         ],
         dateTime: [
           { required: true, message: '请选择日期', trigger: 'change' }
         ],
-        endTime: [{ required: true, message: '请选择日期', trigger: 'change' }]
+        endTime: [{ required: true, message: '请选择结束时间', trigger: 'change' }]
       }
     }
   },
@@ -255,10 +254,14 @@ export default {
                 this.scheduleForm.remindWay = res.data.data.remindWay.split(
                   ','
                 )
+              } else {
+                this.scheduleForm.remindWay = ['4']
               }
 
               if (res.data.data.remindTime) {
                 this.scheduleForm.remindTime = res.data.data.remindTime + ':00'
+              } else {
+                this.scheduleForm.remindTime = ''
               }
               this.addDialogVisible = true
               if (
@@ -402,6 +405,8 @@ export default {
               }
             }
             this.scheduleForm.remindWay = this.scheduleForm.remindWay.toString()
+          } else {
+            this.scheduleForm.remindWay = ''
           }
           if (this.scheduleForm.allDay === '1') {
             this.scheduleForm.endTime = this.scheduleForm.dateTime + ' 23:59'
@@ -414,6 +419,8 @@ export default {
             'post'
           ).then(res => {
             if (res.data.code === this.GLOBAL.code) {
+              console.log(this)
+              this.reload()
               if (this.titleText === '新增日程') {
                 this.$message({
                   message: '添加成功',
@@ -425,11 +432,13 @@ export default {
                   type: 'success'
                 })
               }
-              this.reload()
+
               this.isDisabled = false
               this.addDialogVisible = false
             } else {
-              this.scheduleForm.remindWay = this.scheduleForm.remindWay.split(',')
+              // if (this.scheduleForm.remindWay) {
+              //   this.scheduleForm.remindWay = this.scheduleForm.remindWay.split(',')
+              // }
               this.$message.error(res.data.result)
               this.isDisabled = false
               return false
@@ -484,7 +493,7 @@ export default {
   .sched {
     .el-dialog {
       margin-top: 6vh !important;
-      width: 45% !important;
+      width: 45% ;
     }
   }
   //  .tooltip {
@@ -498,6 +507,9 @@ export default {
   //     padding: 10px;
   //     text-align: center;
   //   }
+}
+.el-textarea__inner {
+  min-height:90px!important;
 }
 .fc-button-primary {
   color: unset;
@@ -603,5 +615,126 @@ export default {
   top: calc(50% - 5px);
   margin-left: 0;
   margin-right: 0;
+}
+.fc-day-grid-event .fc-content{
+    display: block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+@media screen and (max-width: 900px) {
+    .fc-widget-content{
+      .fc-day-grid-container{
+        height:unset !important;
+      }
+    }
+    body .fc {
+    font-size: 0.5em;
+}
+.el-date-picker .el-picker-panel__content{
+  width: 90%;
+}
+.el-date-picker{
+  left:5%!important;
+   width: 90%;
+}
+.el-picker-panel{
+  line-height: 10px;
+}
+// .el-date-table td.current:not(.disabled) span{
+//       color: #fff;
+//     background-color: #00a041;
+// }
+// .el-date-table td.today span,.el-radio__input.is-checked+.el-radio__label,.el-checkbox__input.is-checked+.el-checkbox__label{
+//   color: #00a041;
+// }
+// .el-radio__input.is-checked .el-radio__inner,.el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner{
+//     color: #00a041;
+//     background-color: #00a041;
+//     border-color:#00a041;
+
+// }
+// .el-checkbox__inner:hover{
+//    border-color:#00a041;
+// }
+.el-popper[x-placement^=bottom] .popper__arrow{
+  display: none;
+}
+.fc-dayGrid-view .fc-body .fc-row{
+  min-height: 6em;
+}
+.el-date-table td span,.el-date-table td div,.el-date-table td{
+  height: 20px;
+  line-height: 20px;
+}
+
+    .fc table{
+      font-size: 0.8em;
+    }
+    .fc-toolbar.fc-header-toolbar{
+      margin-bottom: 1em !important;
+    }
+    .fc-button-primary:not(:disabled):active:focus, .fc-button-primary:not(:disabled).fc-button-active:focus{
+      box-shadow:unset;
+    }
+    .fc-button-primary:not(:disabled):active, .fc-button-primary:not(:disabled).fc-button-active{
+      color:unset;
+    background-color: unset;
+    border-color:unset;
+    }
+    .fc-button-primary:hover{
+       color: unset;
+    background-color: unset;
+    border-color: unset;
+    }
+    .fc-button-primary:focus{
+       color: unset;
+    background-color: unset;
+    border-color: unset;
+     box-shadow:unset;
+    }
+    .el-dialog {
+    // margin-top: 6vh !important;
+    width: 90% !important;
+}
+.dialog__body ,.el-textarea__inner{
+      padding: 5px ;
+    font-size: 11px;
+    min-height: 60px!important;
+}
+.el-dialog__body {
+  padding: 5px ;
+}
+.el-date-editor.el-input, .el-date-editor.el-input__inner{
+  width: unset;
+}
+.el-form-item__label{
+  width:84px !important;
+}
+.el-form-item__content{
+
+  margin-left:84px !important;
+}
+.el-input--medium .el-input__inner{
+  height: 28px;
+  line-height: 28px;
+}
+.el-textarea__inner{
+  line-height: 1.2;
+}
+.el-checkbox__label{
+  padding-left:3px;
+}
+.el-checkbox+.el-checkbox{
+      margin-left:10px;
+}
+.timeStyle{
+  .el-input--suffix .el-input__inner{
+    padding-right:unset;
+  }
+}
+.el-form-item--medium .el-form-item__content, .el-form-item--medium .el-form-item__label{
+  line-height: 30px;
+}
 }
 </style>

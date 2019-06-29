@@ -13,6 +13,8 @@ import java.io.Serializable;
  */
 @ApiModel(value = "RequireInfoList", description = "需求列表信息")
 public class RequireInfoList implements Serializable {
+    @ApiModelProperty(value = "需求id")
+    private String id;
     @ApiModelProperty(value = "需求单号")
     private String reqNum;
     @ApiModelProperty(value = "领域id")
@@ -44,6 +46,13 @@ public class RequireInfoList implements Serializable {
     @ApiModelProperty(value = "评价描述")
     private String evaluationDesc;
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getReqNum() {
         return reqNum;

@@ -146,6 +146,10 @@ public class DataUploadConstants {
     public final static String WARNING_BY_SMSTEXT="0";
 
     /**
+     * 微信预警方式
+     */
+    public final static String WARNING_BY_WEIXIN="3";
+    /**
      *是否必填
      */
     public final static String  REQUIRED="1";

@@ -27,7 +27,7 @@ export default {
   $gray: #ccc;
   .table-row {
     width: 100%;
-    @include  flex;
+    @include  flex($v: stretch);
     border: 1px solid $gray;
     .row-l {
       width: 10%;
@@ -37,6 +37,7 @@ export default {
       color: #A8A8A8;
     }
     .row-r {
+      @include flex($v: flex-start, $d: column);
       width: 90%;
       padding: 20px;
       font-size: 14px;

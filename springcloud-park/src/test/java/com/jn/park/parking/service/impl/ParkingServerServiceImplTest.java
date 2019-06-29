@@ -82,4 +82,42 @@ public class ParkingServerServiceImplTest {
         List<ParkingRecordRampParam> parkingRecordRampParams = parkingServerService.selectParkingRecordByRamp(parkingRecordRampParam);
         logger.info("批量插入入参数据响应条数{}",parkingRecordRampParams.size());
     }
+
+    @Test
+    public void getInParkingCarInfoList() {
+    }
+
+    @Test
+    public void getOutParkingCarInfoList() {
+    }
+
+    @Test
+    public void getParkingByCarLicense1() {
+    }
+
+    @Test
+    public void insertParkingRecordByRamp() {
+    }
+
+    @Test
+    public void selectParkingRecordByRamp1() {
+    }
+
+    @Test
+    public void parkingSpaceBillCallBack() {
+    }
+
+    @Test
+    public void saveParkingMonthlyRentCard() {
+    }
+
+    @Test
+    public void saveMonthlyRentalCardRenewalFee() {
+    }
+
+    @Test
+    public void parkingCarBillCallBack() {
+        String billNum ="PK-20190624161431445";
+        parkingServerService.parkingCarBillCallBack(billNum);
+    }
 }

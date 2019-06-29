@@ -33,6 +33,8 @@ public class BusinessPromotionListShow implements Serializable {
     private String invalidDate;
     @ApiModelProperty(value = "宣传海报")
     private String posterUrl;
+    @ApiModelProperty(value = "宣传区域url")
+    private String propagandaAreaUrl;
     @ApiModelProperty(value = "宣传费用")
     private String propagandaFee;
     @ApiModelProperty(value = "宣传详情")
@@ -130,6 +132,14 @@ public class BusinessPromotionListShow implements Serializable {
         this.posterUrl = posterUrl;
     }
 
+    public String getPropagandaAreaUrl() {
+        return propagandaAreaUrl;
+    }
+
+    public void setPropagandaAreaUrl(String propagandaAreaUrl) {
+        this.propagandaAreaUrl = propagandaAreaUrl;
+    }
+
     public String getPropagandaFee() {
         return propagandaFee;
     }
@@ -207,6 +217,7 @@ public class BusinessPromotionListShow implements Serializable {
                 ", effectiveDate='" + effectiveDate + '\'' +
                 ", invalidDate='" + invalidDate + '\'' +
                 ", posterUrl='" + posterUrl + '\'' +
+                ", propagandaAreaUrl='" + propagandaAreaUrl + '\'' +
                 ", propagandaFee='" + propagandaFee + '\'' +
                 ", propagandaDetails='" + propagandaDetails + '\'' +
                 ", propagandaSummaries='" + propagandaSummaries + '\'' +

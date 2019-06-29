@@ -14,6 +14,8 @@ import java.util.Date;
  */
 @ApiModel(value = "RequireReceivedDetails", description = "我收到的需求详情")
 public class RequireReceivedDetails implements Serializable {
+    @ApiModelProperty(value = "需求id")
+    private String id;
     @ApiModelProperty(value = "企业名称")
     private String companyName;
     @ApiModelProperty(value = "需求单号")
@@ -49,6 +51,8 @@ public class RequireReceivedDetails implements Serializable {
     private String financingAmount;
     @ApiModelProperty(value = "[科技金融]融资期限")
     private String financingPeriod;
+    @ApiModelProperty(value = "是否最大值及以上（0：否   1：是  （若isMax为1，financingPeriod为36，表示36个月以上，isMax为0，financingPeriod为36，表示36个月及以下））")
+    private String isMax;
     @ApiModelProperty(value = "[科技金融]实际贷款金额(万元)")
     private String actualLoanAmount;
     @ApiModelProperty(value = "[科技金融]资金需求说明")
@@ -61,6 +65,13 @@ public class RequireReceivedDetails implements Serializable {
     @ApiModelProperty(value = "评价描述")
     private String evaluationDesc;
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getCompanyName() {
         return companyName;
@@ -198,6 +209,14 @@ public class RequireReceivedDetails implements Serializable {
         this.financingPeriod = financingPeriod;
     }
 
+    public String getIsMax() {
+        return isMax;
+    }
+
+    public void setIsMax(String isMax) {
+        this.isMax = isMax;
+    }
+
     public String getActualLoanAmount() {
         return actualLoanAmount;
     }
@@ -241,7 +260,8 @@ public class RequireReceivedDetails implements Serializable {
     @Override
     public String toString() {
         return "RequireReceivedDetails{" +
-                "companyName='" + companyName + '\'' +
+                "id='" + id + '\'' +
+                ", companyName='" + companyName + '\'' +
                 ", reqNum='" + reqNum + '\'' +
                 ", issueTime=" + issueTime +
                 ", orgName='" + orgName + '\'' +
@@ -258,9 +278,12 @@ public class RequireReceivedDetails implements Serializable {
                 ", contractEndPage='" + contractEndPage + '\'' +
                 ", financingAmount='" + financingAmount + '\'' +
                 ", financingPeriod='" + financingPeriod + '\'' +
+                ", isMax='" + isMax + '\'' +
                 ", actualLoanAmount='" + actualLoanAmount + '\'' +
                 ", fundsReqDesc='" + fundsReqDesc + '\'' +
-                ", expectedDate=" + expectedDate +
+                ", expectedDate='" + expectedDate + '\'' +
+                ", ratingScore='" + ratingScore + '\'' +
+                ", evaluationDesc='" + evaluationDesc + '\'' +
                 '}';
     }
 }

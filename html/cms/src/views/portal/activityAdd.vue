@@ -1,8 +1,8 @@
 <template>
   <div id="queditor">
-    <el-form ref="activityForm" :model="activityForm" :disabled="disabledEditorFlag" label-width="200px">
+    <el-form ref="activityForm" :model="activityForm" :rules="rules" :disabled="disabledEditorFlag" label-width="200px">
       <el-form-item label="排序" prop="actiOrder">
-        <el-input v-model="activityForm.actiOrder" style="width: 205px;"/>
+        <el-input v-model="activityForm.actiOrder" style="width: 205px;" />
       </el-form-item>
       <el-form-item label="首页展示" prop="isIndex" class="setHeight">
         <el-radio-group v-model="activityForm.isIndex">
@@ -18,7 +18,7 @@
       <el-form-item label="活动名称" prop="actiName">
         <el-input v-model="activityForm.actiName" style="width: 205px;" />
       </el-form-item>
-      <el-form-item label="活动时间" class="setHeight">
+      <el-form-item label="活动时间" class="setHeight" prop="actiStartTime">
         <el-col :span="11" style="width:auto;">
           <el-date-picker v-model="activityForm.actiStartTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择开始日期" style="width: 100%;" @change="getStarttime" />
         </el-col>
@@ -27,10 +27,10 @@
           <el-date-picker v-model="activityForm.actiEndTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择结束时间" style="width: 100%;" @change="getEndtime" />
         </el-col>
       </el-form-item>
-      <el-form-item label="报名截止时间">
+      <el-form-item label="报名截止时间" prop="applyEndTime">
         <el-date-picker v-model="activityForm.applyEndTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间" />
       </el-form-item>
-      <el-form-item label="通知推送时间">
+      <el-form-item label="通知推送时间" prop="mesSendTime">
         <el-date-picker v-model="activityForm.mesSendTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间" />
       </el-form-item>
       <el-form-item label="活动园区" prop="parkId">
@@ -90,6 +90,12 @@
             </div>
           </el-row>
         </template>
+        <!-- <template>
+          <div class="edit_container" style="position:relative;">
+            <div v-if="disabledEditorFlag" class="edit_box" />
+            <quill-editor ref="myQuillEditor" v-model="activityForm.actiDetail" :options="editorOption" @blur="onEditorBlur1($event)" @focus="onEditorFocus1($event)" @change="onEditorChange1($event)" />
+          </div>
+        </template> -->
       </el-form-item>
       <el-form-item label="活动状态" prop="actiStatus">
         <el-steps :space="200" :active="activityForm.actiStatus*1" finish-status="success">
@@ -115,7 +121,7 @@
         <i class="el-icon-plus" />
       </el-upload> -->
       <!-- <p>已选择的图片</p> -->
-      <el-upload :headers="headers" :show-file-list="false" :multiple="false" :on-change="changeImg" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload" class="avatar-uploader" action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload">
+      <el-upload :headers="{token: $store.getters.token}" :show-file-list="false" :multiple="false" :on-change="changeImg" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload" :action="baseURL+'springcloud-app-fastdfs/upload/fastUpload'" class="avatar-uploader">
         <img v-if="imageUrl" :src="imageUrl" class="avatar">
         <i v-else class="el-icon-plus avatar-uploader-icon" />
       </el-upload>
@@ -149,19 +155,44 @@ import { getToken } from '@/utils/auth'
 //   publishActivity,
 //   getActivityDetailsForManage
 // } from '@/api/portalManagement/activity'
-import {
-  api, paramApi
-} from '@/api/axios'
+import { api, paramApi } from '@/api/axios'
 export default {
   components: { UE },
   data() {
     return {
+      // content1: `<p>hello world</p>`,
+      // editorOption1: {},
+      baseURL: process.env.BASE_API,
       // disabled: false,
       headers: {
         token: getToken()
       },
       content: '',
-      editorOption: {},
+      editorOption: {
+        // modules: {
+        //   toolbar: [
+        //     ['bold', 'italic', 'underline', 'strike'], // 加粗，斜体，下划线，删除线
+        //     ['blockquote', 'code-block'], // 引用，代码块
+
+        //     [{ 'header': 1 }, { 'header': 2 }], // 标题，键值对的形式；1、2表示字体大小
+        //     [{ 'list': 'ordered' }, { 'list': 'bullet' }], // 列表
+        //     [{ 'script': 'sub' }, { 'script': 'super' }], // 上下标
+        //     [{ 'indent': '-1' }, { 'indent': '+1' }], // 缩进
+        //     [{ 'direction': 'rtl' }], // 文本方向
+
+        //     [{ 'size': ['small', false, 'large', 'huge'] }], // 字体大小
+        //     [{ 'header': [1, 2, 3, 4, 5, 6, false] }], // 几级标题
+
+        //     [{ 'color': [] }, { 'background': [] }], // 字体颜色，字体背景颜色
+        //     [{ 'font': [] }], // 字体
+        //     [{ 'align': [] }], // 对齐方式
+
+        //     ['clean'], // 清除字体样式
+        //     ['image', 'video'] // 上传图片、上传视频
+
+        //   ]
+        // }
+      },
       typeOptions: [],
       parkIdOptions: [],
       activityForm: {
@@ -190,6 +221,65 @@ export default {
         actiUndertakeOrganizer: '',
         actiCoOrganizer: ''
       },
+      rules: {
+        actiOrder: [{ required: true, message: '请输入排序', trigger: 'blur' }],
+        isIndex: [
+          { required: true, message: '请选择首页是否展示', trigger: 'change' }
+        ],
+        actiType: [
+          { required: true, message: '请选择活动类型', trigger: 'change' }
+        ],
+        actiName: [
+          { required: true, message: '请输入活动名称', trigger: 'blur' }
+        ],
+        actiStartTime: [
+          { required: true, message: '请选择活动开始时间', trigger: 'change' }
+        ],
+        actiEndTime: [
+          { required: true, message: '请选择活动结束时间', trigger: 'change' }
+        ],
+        applyEndTime: [
+          { required: true, message: '请选择报名截止时间', trigger: 'change' }
+        ],
+        mesSendTime: [
+          { required: true, message: '请选择通知推送时间', trigger: 'change' }
+        ],
+        parkId: [
+          { required: true, message: '请选择活动园区', trigger: 'change' }
+        ],
+        actiAddress: [
+          { required: true, message: '请输入活动地址', trigger: 'blur' }
+        ],
+        actiCost: [
+          { required: true, message: '请输入活动费用', trigger: 'blur' }
+        ],
+        actiOrganizer: [
+          { required: true, message: '请输入主办单位', trigger: 'blur' }
+        ],
+        showApplyNum: [
+          {
+            required: true,
+            message: '请选择是否展示报名人数',
+            trigger: 'change'
+          }
+        ],
+        applyCheck: [
+          {
+            required: true,
+            message: '请选择报名是否需要审批',
+            trigger: 'change'
+          }
+        ],
+        actiNumber: [
+          { required: true, message: '请输入活动人数', trigger: 'blur' }
+        ],
+        actiPosterUrl: [
+          { required: true, message: '请选择活动海报', trigger: 'change' }
+        ],
+        actiDetail: [
+          { required: true, message: '请输入活动详情', trigger: 'blur' }
+        ]
+      },
       defaultMsg: '',
       config: {
         initialFrameWidth: 800,
@@ -206,9 +296,13 @@ export default {
       disabledEditorFlag: false
     }
   },
+  computed: {
+    editor() {
+      return this.$refs.myQuillEditor.quill
+    }
+  },
   mounted() {
-    console.log(this.$route.query.activityId)
-    console.log(this.$route.query.disabled)
+    // console.log(this.$route.query.disabled)
     if (this.$route.query.disabled) {
       this.disabledEditorFlag = true
     }
@@ -220,11 +314,30 @@ export default {
     this.getActivityType()
   },
   methods: {
+    // onEditorReady(editor) {
+    //   // 准备编辑器
+    // },
+    // onEditorBlur1(val, editor) {
+    //   console.log(val)
+    // }, // 失去焦点事件
+    // onEditorFocus1(val, editor) {
+    //   // 获得焦点事件
+    //   console.log(val) // 富文本获得焦点时的内容
+    //   // editor.enable(false) // 在获取焦点的时候禁用
+    // },
+    // onEditorChange1(val, editor) {
+    //   // 内容改变事件
+    //   console.log(val)
+    // },
     init() {
       // const data = {
       //   activityId: this.$route.query.activityId
       // }
-      paramApi(`${this.GLOBAL.parkUrl}activity/getActivityDetailsForManage`, this.$route.query.activityId, 'activityId').then(res => {
+      paramApi(
+        `${this.GLOBAL.parkUrl}activity/getActivityDetailsForManage`,
+        this.$route.query.activityId,
+        'activityId'
+      ).then(res => {
         if (res.data.code === this.GLOBAL.code) {
           this.activityForm = res.data.data
           this.defaultMsg = this.activityForm.actiDetail
@@ -238,7 +351,7 @@ export default {
     getEndtime() {},
     getStarttime() {},
     selecteType(value) {
-      console.log(value)
+      // console.log(value)
       this.activityForm.actiType = value
       // this.activityForm.typeId = value
     },
@@ -254,7 +367,7 @@ export default {
     onEditorChange({ editor, html, text }) {
       // 编辑器文本发生变化
       // this.content可以实时获取到当前编辑器内的文本内容
-      console.log(this.content)
+      // console.log(this.content)
     },
     handleClick() {
       if (this.disabledEditorFlag) {
@@ -269,8 +382,11 @@ export default {
         return
       }
       this.dialogPosterVisible = true
-      paramApi(`${this.GLOBAL.parkUrl}activity/activityType/findActivityType`, this.activityForm.actiType, 'typeId').then(res => {
-        console.log(res)
+      paramApi(
+        `${this.GLOBAL.parkUrl}activity/activityType/findActivityType`,
+        this.activityForm.actiType,
+        'typeId'
+      ).then(res => {
         if (res.data.code === this.GLOBAL.code) {
           if (res.data.data.templateList.length > 0) {
             this.templateImgList = res.data.data.templateList
@@ -298,6 +414,9 @@ export default {
     confirm() {
       this.dialogPosterVisible = false
       this.activityForm.actiPosterUrl = this.imageUrl
+      if (this.activityForm.actiPosterUrl) {
+        this.$refs['activityForm'].clearValidate('actiPosterUrl')
+      }
     },
     handleAvatarSuccess(res, file) {
       this.imageUrl = res.data
@@ -321,7 +440,11 @@ export default {
       }
     },
     getActivityType() {
-      api(`${this.GLOBAL.parkUrl}guest/activity/findActivityTypeList`, '', 'post').then(res => {
+      api(
+        `${this.GLOBAL.parkUrl}guest/activity/findActivityTypeList`,
+        '',
+        'post'
+      ).then(res => {
         if (res.data.code === this.GLOBAL.code) {
           res.data.data.rows.forEach(val => {
             this.typeOptions.push({
@@ -357,161 +480,111 @@ export default {
       this.activityForm.parkId = row.parkId
       this.activityForm.showApplyNum = row.showApplyNum
     },
-    saveDrafts() { // 保存草稿
-      if (!this.activityForm.actiName) {
-        this.$message({
-          message: '活动名称不能为空',
-          type: 'error'
-        })
-        return
-      }
-      const data = this.activityForm
-      api(`${this.GLOBAL.parkUrl}activity/saveActivityDraft`, data, 'post').then(res => {
-        console.log(res)
-        if (res.data.code === this.GLOBAL.code) {
-          this.$message({
-            message: '保存草稿成功',
-            type: 'success'
-          })
-          this.goBack()
-          this.$router.push({ path: 'activityManagement' })
-        } else {
-          this.$message(res.data.result)
-        }
-      })
-    },
-    release() { // 发布活动
-      if (this.activityForm.actiOrder === 'undefined') {
-        this.$message({
-          message: '排序不能为空',
-          type: 'error'
-        })
-        return
-      }
-      if (!this.activityForm.isIndex) {
-        this.$message({
-          message: '首页展示没有选择',
-          type: 'error'
-        })
-        return
-      }
-      if (!this.activityForm.actiType) {
-        this.$message({
-          message: '请选择活动类型',
-          type: 'error'
-        })
-        return
-      }
-      if (!this.activityForm.actiName) {
-        this.$message({
-          message: '请选择活动名称',
-          type: 'error'
-        })
-        return
-      }
-      if (!this.activityForm.actiStartTime) {
-        this.$message({
-          message: '请选择活动开始时间',
-          type: 'error'
-        })
-        return
-      }
-      if (!this.activityForm.actiEndTime) {
-        this.$message({
-          message: '请选择活动结束时间',
-          type: 'error'
-        })
-        return
-      }
-      if (!this.activityForm.mesSendTime) {
-        this.$message({
-          message: '请选择活动推送时间',
-          type: 'error'
-        })
-        return
-      }
-      if (!this.activityForm.parkId) {
-        this.$message({
-          message: '请选择活动园区',
-          type: 'error'
-        })
-        return
-      }
-      if (!this.activityForm.actiAddress) {
-        this.$message({
-          message: '活动地址不能为空',
-          type: 'error'
-        })
-        return
-      }
-      if (this.activityForm.actiCost === 'undefined') {
-        this.$message({
-          message: '活动费用不能为空',
-          type: 'error'
-        })
-        return
-      }
-      if (!this.activityForm.actiOrganizer) {
-        this.$message({
-          message: '主办方不能为空',
-          type: 'error'
-        })
-        return
-      }
-      if (!this.activityForm.showApplyNum) {
-        this.$message({
-          message: '报名人数没有选择',
-          type: 'error'
-        })
-        return
-      }
-      if (!this.activityForm.applyCheck) {
-        this.$message({
-          message: '报名审批没有选择',
-          type: 'error'
-        })
-        return
-      }
-      if (this.activityForm.actiNumber === 'undefined') {
-        this.$message({
-          message: '请填写活动人数',
-          type: 'error'
-        })
-        return
-      }
-      if (!this.activityForm.actiPosterUrl) {
-        this.$message({
-          message: '请选择活动海报',
-          type: 'error'
-        })
-        return
-      }
+    saveDrafts() {
+      // 保存草稿
+      // if (!this.activityForm.actiName) {
+      //   this.$message({
+      //     message: '活动名称不能为空',
+      //     type: 'error'
+      //   })
+      //   return
+      // }
       this.activityForm.actiDetail = this.$refs.ue.getUEContent()
-      console.log(this.activityForm.actiDetail)
-      if (!this.activityForm.actiDetail) {
-        this.$message({
-          message: '活动详情不能为空',
-          type: 'error'
-        })
-        return
-      }
-      this.activityForm.actiStatus = 2
       const data = this.activityForm
-      api(`${this.GLOBAL.parkUrl}activity/publishActivity`, data, 'post').then(res => {
-        console.log(res)
-        if (res.data.code === this.GLOBAL.code) {
-          this.$message({
-            message: '发布成功',
-            type: 'success'
+      // api(`${this.GLOBAL.parkUrl}activity/saveActivityDraft`, data, 'post').then(res => {
+      //   console.log(res)
+      //   if (res.data.code === this.GLOBAL.code) {
+      //     this.$message({
+      //       message: '保存草稿成功',
+      //       type: 'success'
+      //     })
+      //     this.goBack()
+      //     this.$router.push({ path: 'activityManagement' })
+      //   } else {
+      //     this.$message(res.data.result)
+      //   }
+      // })
+      this.$refs['activityForm'].validate(valid => {
+        if (valid) {
+          api(
+            `${this.GLOBAL.parkUrl}activity/saveActivityDraft`,
+            data,
+            'post'
+          ).then(res => {
+            if (res.data.code === this.GLOBAL.code) {
+              this.$message({
+                message: '保存草稿成功',
+                type: 'success'
+              })
+              this.$refs['activityForm'].resetFields()
+              this.goBack()
+              this.$router.push({ path: 'activityManagement' })
+            } else {
+              this.$message(res.data.result)
+            }
           })
-          this.goBack()
-          this.$router.push({ path: 'activityManagement' })
-        } else {
-          this.$message(res.data.result)
         }
       })
     },
-    goBack() { // 返回
+    release() {
+      this.activityForm.actiDetail = this.$refs.ue.getUEContent()
+      // console.log(this.activityForm.actiDetail)
+      // if (!this.activityForm.actiDetail) {
+      //   this.$message({
+      //     message: '活动详情不能为空',
+      //     type: 'error'
+      //   })
+      //   return
+      // }
+      // this.activityForm.actiStatus = 2
+      const data = this.activityForm
+      // api(`${this.GLOBAL.parkUrl}activity/publishActivity`, data, 'post').then(res => {
+      //   console.log(res)
+      //   if (res.data.code === this.GLOBAL.code) {
+      //     this.$message({
+      //       message: '发布成功',
+      //       type: 'success'
+      //     })
+      //     this.goBack()
+      //     this.$router.push({ path: 'activityManagement' })
+      //   } else {
+      //     this.$message(res.data.result)
+      //   }
+      // })
+      this.$refs['activityForm'].validate(valid => {
+        if (valid) {
+          if (
+            new Date(this.activityForm.applyEndTime) >
+            new Date(this.activityForm.actiStartTime)
+          ) {
+            this.$message.error('活动报名时间不能大于活动开始时间')
+            return false
+          }
+          this.activityForm.actiStatus = 2
+          // this.activityForm.actiStatus = 2
+          api(
+            `${this.GLOBAL.parkUrl}activity/publishActivity`,
+            data,
+            'post'
+          ).then(res => {
+            // console.log(res)
+            if (res.data.code === this.GLOBAL.code) {
+              this.$message({
+                message: '发布成功',
+                type: 'success'
+              })
+
+              this.goBack()
+              this.$router.push({ path: 'activityManagement' })
+            } else {
+              this.$message(res.data.result)
+            }
+          })
+        }
+      })
+    },
+    goBack() {
+      // 返回
       this.$emit('goBack')
     }
   }
@@ -519,8 +592,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.btns{
-  margin-left:200px;
+.btns {
+  margin-left: 200px;
 }
 ul {
   list-style: none;
@@ -543,14 +616,14 @@ ul {
   align-items: center;
   .el-icon-plus {
     font-weight: bold;
-    position:absolute;
-    left:54px;
-    top:54px;
+    position: absolute;
+    left: 54px;
+    top: 54px;
   }
-  img{
+  img {
     width: 100%;
     height: 100%;
-    z-index: 2
+    z-index: 2;
   }
 }
 .avatar-uploader .el-upload {
@@ -610,14 +683,31 @@ ul {
 }
 </style>
 <style lang="scss" >
-#queditor{
- .el-form-item--medium .el-form-item__content, .el-form-item--medium  {
-    line-height: 22px ;
-}
-}
-.setHeight{
-  >div{
-    line-height:36px !important;
+#queditor {
+  .el-form-item--medium .el-form-item__content,
+  .el-form-item--medium {
+    line-height: 22px;
   }
 }
+.setHeight {
+  > div {
+    line-height: 36px !important;
+  }
+}
+// .edit_box {
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   right: 0;
+//   bottom: 0;
+//   z-index: 1;
+//   width: 50%;
+//   background-color: rgba(235, 238, 245, 0.5);
+// }
+// .quill-editor {
+//   width: 50%;
+// }
+// .ql-container {
+//   min-height: 200px;
+// }
 </style>

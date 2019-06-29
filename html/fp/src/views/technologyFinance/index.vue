@@ -138,7 +138,7 @@
               <li class="clearfix">
                 <div class="liLeft fl">
                   <div class="intorImgLar">
-                    <img class="pointer"  v-if="InvestorInfoList.length > 0" :src="InvestorInfoList[0].avatar" alt="" @click="$router.push({path:'/investorDetail',query: { investorAccount: InvestorInfoList[0].investorAccount }})">
+                    <img class="pointer" v-if="InvestorInfoList.length > 0" :src="InvestorInfoList[0].avatar" alt="" @click="$router.push({path:'/investorDetail',query: { investorAccount: InvestorInfoList[0].investorAccount }})">
                     <img class="pointer" v-else src="@/../static/img/larImg.png" alt="" @click="$router.push({path:'/investorDetail',query: { investorAccount: InvestorInfoList[0].investorAccount }})">
                   </div>
                   <div class="leftInfo" v-if="InvestorInfoList.length > 0">
@@ -325,11 +325,12 @@
                 <div class="finaDiv1">
                   <!-- <div class="finaTit"></div> -->
                   <!-- <div class="finaTit">{{i.orgName}}</div> -->
-                  <div class="finaContent">
+                  <div class="finaContent clearfix">
                     <p class="finaPhone">电话：
                       <span class="mainColor">{{i.orgPhone}}</span>
                     </p>
-                    <p class="finaAddress">地址：{{i.orgAddress}}</p>
+                    <p class="fl" style="font-size:13px;">地址：</p>
+                    <p class="finaAddress">{{i.orgAddress}}</p>
                   </div>
                 </div>
                 <p class="finaPP lejie">
@@ -482,7 +483,7 @@ export default {
           { required: true, message: "请选择融资期限", trigger: "change" }
         ],
         expectedDate: [
-          { required: true, message: "请输入需求日期", trigger: "blur" }
+          { required: true, message: "请选择需求日期", trigger: "blur" }
         ]
       }
     };
@@ -504,7 +505,7 @@ export default {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
   },
   methods: {
-     goLogin() {
+    goLogin() {
       window.sessionStorage.setItem("PresetRoute", this.$route.fullPath);
       this.$router.push({ path: "/login" });
     },
@@ -609,33 +610,47 @@ export default {
     },
     //用户提需求
     demandDia() {
-      let _this = this;
-      // if(!this.financialProform.financingPeriod){
-      //   return
-      // }
-      let max = this.arr[this.financialProform.financingPeriod].loanTermMax;
-      let min = this.arr[this.financialProform.financingPeriod].loanTermMin;
-      this.api.post({
-        url: "userDemandTechnology",
-        data: {
-          expectedDate: _this.financialProform.expectedDate,
-          financingAmount: _this.financialProform.financingAmount,
-          financingPeriodMax: max,
-          financingPeriodMin: min,
-          productId: _this.financialProform.productId,
-          productName: _this.financialProform.productName,
-          fundsReqDesc: _this.financialProform.fundsReqDesc
-        },
-        callback: function(res) {
-          if (res.code == "0000") {
-            _this.$message.success("提交需求成功");
-            _this.financialProVisible = false;
-          } else {
-            _this.$message.error(res.result);
-            _this.financialProVisible = false;
-          }
+      this.$refs["financialProform"].validate(valid => {
+        if (valid) {
+          let _this = this;
+          let max = this.arr[this.financialProform.financingPeriod].loanTermMax;
+          let min = this.arr[this.financialProform.financingPeriod].loanTermMin;
+          this.api.post({
+            url: "userDemandTechnology",
+            data: {
+              expectedDate: _this.financialProform.expectedDate,
+              financingAmount: _this.financialProform.financingAmount,
+              financingPeriodMax: max,
+              financingPeriodMin: min,
+              productId: _this.financialProform.productId,
+              productName: _this.financialProform.productName,
+              fundsReqDesc: _this.financialProform.fundsReqDesc
+            },
+            callback: function(res) {
+              if (res.code == "0000") {
+                _this.$message.success("提交需求成功");
+                _this.financialProVisible = false;
+              } else {
+                _this.$message.error(res.result);
+                _this.financialProVisible = false;
+              }
+            }
+          });
         }
       });
+      // if(this.financialProform.financingAmount == ''){
+      //   _this.$message.error("请输入融资金额");
+      //   return
+      // }
+      // if(this.financialProform.financingPeriod == ''){
+      //   _this.$message.error("请选择融资期限");
+      //   return
+      // }
+
+      // if(this.financialProform.expectedDate == ''){
+      //   _this.$message.error("请选择日期");
+      //   return
+      // }
     },
     //提需求
     raiseDemand(i) {
@@ -1071,7 +1086,7 @@ export default {
             width: 57.4%;
             > ul {
               > li {
-                padding: 9px 33px;
+                padding: 8px 33px;
                 border: 1px solid #dedede;
                 float: left;
                 margin-right: 20px;
@@ -1255,13 +1270,20 @@ export default {
               }
               > .finaContent {
                 .finaPhone {
-                  font-size: 15px;
+                  font-size: 13px;
                 }
               }
               .finaAddress {
-                text-indent: -35px;
-                margin-left: 35px;
-                font-size: 15px;
+                text-indent: -38px;
+                margin-left: 38px;
+                font-size: 13px;
+                height: 36px;
+                display: -webkit-box;
+                /*! autoprefixer: off */
+                -webkit-box-orient: vertical;
+                /*! autoprefixer: on */
+                -webkit-line-clamp: 2;
+                overflow: hidden;
               }
             }
             > .finaPP {

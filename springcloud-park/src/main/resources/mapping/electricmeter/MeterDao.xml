@@ -284,6 +284,7 @@
         from
         tb_electric_meter_company_day
         where record_status=1
+        and company_id !=''
         <if test="companyId !=null">
             and company_id=#{companyId}
             and day = #{day}
@@ -337,7 +338,7 @@
         where record_status=1
         <if test="companyId !=null">
             and company_id=#{companyId}
-            and day = #{day}
+            and day = #{day,jdbcType=DATE}
         </if>
         <if test="companyId == null">
             and day=date_sub(curdate(),interval 1 day)
@@ -399,15 +400,9 @@
         (<include refid="com.jn.park.electricmeter.dao.TbElectricEnergyBillDetailMapper.Base_Column_List"/>)
         <foreach collection="saveData"  index="index" item="item" separator="UNION ALL">
             select
-            #{ item.id,jdbcType=VARCHAR},
-            #{ item.billId,jdbcType=VARCHAR},
-            #{ item.sort,jdbcType=INTEGER},
-            #{ item.costName,jdbcType=VARCHAR},
-            #{ item.costValue,jdbcType=VARCHAR},
-            #{ item.recordStatus,jdbcType=TINYINT},
-            #{ item.creatorAccount,jdbcType=VARCHAR},
-            #{ item.createdTime,jdbcType=TIMESTAMP},
-            #{ item.modifierAccount,jdbcType=VARCHAR},
+            #{ item.id,jdbcType=VARCHAR}, #{ item.billId,jdbcType=VARCHAR}, #{ item.sort,jdbcType=INTEGER},
+            #{ item.costName,jdbcType=VARCHAR}, #{ item.costValue,jdbcType=VARCHAR}, #{ item.recordStatus,jdbcType=TINYINT},
+            #{ item.creatorAccount,jdbcType=VARCHAR}, #{ item.createdTime,jdbcType=TIMESTAMP}, #{ item.modifierAccount,jdbcType=VARCHAR},
             #{ item.modifiedTime,jdbcType=TIMESTAMP}
             from  dual
         </foreach>
@@ -421,7 +416,8 @@
             #{ item.id,jdbcType=VARCHAR}, #{ item.ruleId,jdbcType=VARCHAR}, #{ item.companyId,jdbcType=VARCHAR},
             #{ item.warningName,jdbcType=VARCHAR}, #{ item.thresholds,jdbcType=DECIMAL}, #{ item.warningContent,jdbcType=VARCHAR},
             #{ item.recordStatus,jdbcType=TINYINT}, #{ item.creatorAccount,jdbcType=VARCHAR}, #{ item.createdTime,jdbcType=TIMESTAMP},
-            #{ item.modifierAccount,jdbcType=VARCHAR}, #{ item.modifiedTime,jdbcType=TIMESTAMP}, #{ item.companyName,jdbcType=VARCHAR}
+            #{ item.modifierAccount,jdbcType=VARCHAR}, #{ item.modifiedTime,jdbcType=TIMESTAMP}, #{ item.companyName,jdbcType=VARCHAR},
+            #{ item.meterCode,jdbcType=VARCHAR}
             from  dual
         </foreach>
     </insert>
@@ -429,13 +425,14 @@
     <!--停电的企业-->
     <select id="stopElectric" resultType="com.jn.park.electricmeter.model.SwitchModel">
         select
-        id as id
+        t.id as id
         , turn_name as turnName
         , thresholds as thresholds
         , turn_content as turnContent
         , company_id as companyId
         , company_name as companyName
         , balance as balance
+        , p.meter_code as meterCode
         from tb_electric_turn_rules t ,
         tb_electric_cost p
         where p.balance &lt; t.thresholds
@@ -446,13 +443,14 @@
     <!--有电的企业-->
     <select id="getElectric" resultType="com.jn.park.electricmeter.model.SwitchModel">
         select
-        id as id
+        t.id as id
         , turn_name as turnName
         , thresholds as thresholds
         , turn_content as turnContent
         , company_id as companyId
         , company_name as companyName
         , balance as balance
+        , p.meter_code as meterCode
         from tb_electric_turn_rules t ,
         tb_electric_cost p
         where p.balance &gt;= t.thresholds
@@ -706,6 +704,59 @@
 
     </select>
 
+    <select id="getUseDefualtPriceCompany"  parameterType="java.util.Date">
+            insert into tb_electric_pricerule_company_in_day
+            select
+            concat(CURDATE(),p.companyId),
+            t.id as rule_id,
+            t.rule_name asrule_name,
+            p.companyId as company_id,
+            #{ dealDate,jdbcType=DATE} day,
+            '1' as record_status,
+            'systemTimer' as creator_account,
+             SYSDATE() as created_time,
+            'systemTimer' modifier_account,
+            SYSDATE() as modified_time,
+            p.companyName as company_name
+            from (
+            SELECT
+                company_id as companyId,
+                company_name as companyName
+            FROM
+                tb_electric_meter_info
+            WHERE
+                company_id IN (
+                SELECT
+                    company_id
+                FROM
+                    tb_electric_meter_company_day
+                WHERE
+                    record_status = 1
+                    AND DAY =#{ dealDate,jdbcType=DATE}
 
+                    AND company_id != ''
+                    AND company_id IS NOT NULL
+                    AND company_id NOT IN ( SELECT company_id FROM tb_electric_pricerule_company_in_day WHERE record_status = 1 AND DAY =#{ dealDate,jdbcType=DATE} )	group by company_id
+                    )
+                GROUP BY
+                company_id,
+                company_name
+
+                ) p
+
+                left join (
+                select
+                id,
+                rule_name,
+                rule_desc,
+                record_status,
+                creator_account,
+                created_time,
+                modifier_account,
+                modified_time,
+                is_default_use
+                from tb_electric_price_rules t where t.is_default_use=1
+                )  t on 1=1
+    </select>
 
 </mapper>

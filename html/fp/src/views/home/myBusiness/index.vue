@@ -38,9 +38,12 @@
           </el-form-item>
         </div>
         <div style="display:flex">
-          <el-form-item label="落地时间:" class="">
-            <span>{{runTime}}</span>
+           <el-form-item label="所属园区:" >
+            <span>{{affiliatedName}}</span>
           </el-form-item>
+          <!-- <el-form-item label="落地时间:" class="">
+            <span>{{runTime}}</span>
+          </el-form-item> -->
           <el-form-item label="注册地址:" class="borr">
             <span>{{comAddress}}</span>
           </el-form-item>
@@ -70,9 +73,7 @@
           </el-form-item>
         </div>
         <div style="display:flex">
-          <el-form-item label="所属园区:" class=" borb">
-            <span>{{affiliatedName}}</span>
-          </el-form-item>
+
           <el-form-item label="企业官网地址:" class=" borb borr">
             <span>{{comWeb}}</span>
           </el-form-item>
@@ -122,7 +123,7 @@ export default {
       induTypeName: "", //行业分类ID(产业领域、所属行业)
       ownerLaw: "", //法人
       comTele: "", //固定电话
-      runTime: "", //落地时间
+      // runTime: "", //落地时间
       unifyCode: "", //统一社会信用代码
       comAddress: "", //注册地址
       addrPark: "", //公司园区地址-实际经营地址
@@ -214,7 +215,7 @@ export default {
             _this.comPropertyName = res.data.comPropertyName;
             _this.ownerLaw = res.data.ownerLaw;
             _this.comTele = res.data.comTele;
-            _this.runTime = res.data.runTime;
+            // _this.runTime = res.data.runTime;
             _this.unifyCode = res.data.unifyCode;
             _this.comAddress = res.data.comAddress;
             _this.addrPark = res.data.addrPark;
@@ -311,10 +312,11 @@ export default {
     }
     .el-form-item__content {
       flex: 1;
-      display: inline-block;
-      padding-left: 13px;
-      // padding: 15px;
-      // border-bottom: 1px solid #ccc;
+      // display: inline-block;
+      line-height: unset;
+      display: flex;
+      align-items: center;
+      padding: 5px 10px;
     }
   }
 

@@ -8,10 +8,7 @@ import com.jn.hardware.ding.service.DingTalkDepartmentService;
 import com.jn.hardware.ding.service.DingTalkUserService;
 import com.jn.hardware.model.dingtalk.BaseResult;
 import com.jn.hardware.model.dingtalk.attendance.*;
-import com.jn.hardware.model.dingtalk.user.DepartmentListParam;
-import com.jn.hardware.model.dingtalk.user.DepartmentListResult;
-import com.jn.hardware.model.dingtalk.user.DepartmentUserInfoParam;
-import com.jn.hardware.model.dingtalk.user.DepartmentUserInfoResult;
+import com.jn.hardware.model.dingtalk.user.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,6 +42,7 @@ public class DingTalkController implements DingTalkClient {
     public Result<String> getAccessToken() {
         return new Result(dingTalkBaseService.getAccessToken());
     }
+
 
     @Override
     public Result<DepartmentUserInfoResult> getDepartUserByPage(@RequestBody DepartmentUserInfoParam departmentUserInfoParam) {
@@ -125,5 +123,39 @@ public class DingTalkController implements DingTalkClient {
         return result;
     }
 
+    /**
+     * 获取用户详情
+     * @param userInfoParam
+     * @return
+     */
+    @Override
+    public Result<UserDetailsInfoResult> getUserInfo(@RequestBody UserDetailsInfoParam userInfoParam) {
+        Result<UserDetailsInfoResult> result = new Result<>();
+        UserDetailsInfoResult userInfoResult = dingTalkUserService.getUserInfo(userInfoParam);
 
+        if(!BaseResult.SUCCESS_CODE.equals(userInfoResult.getErrcode())) {
+            result.setCode(userInfoResult.getErrcode());
+            result.setResult(userInfoResult.getErrmsg());
+        }
+        result.setData(userInfoResult);
+        return result;
+    }
+
+    /**
+     * 获取部门详情
+     * @param departmentDetailsInfoParam
+     * @return
+     */
+    @Override
+    public Result<DepartmentDetailsInfoResult> getDepartmentDetails(@RequestBody DepartmentDetailsInfoParam departmentDetailsInfoParam) {
+        Result<DepartmentDetailsInfoResult> result = new Result<>();
+        DepartmentDetailsInfoResult departmentDetailsInfoResult = dingTalkDepartmentService.getDepartmentDetails(departmentDetailsInfoParam);
+
+        if(!BaseResult.SUCCESS_CODE.equals(departmentDetailsInfoResult.getErrcode())) {
+            result.setCode(departmentDetailsInfoResult.getErrcode());
+            result.setResult(departmentDetailsInfoResult.getErrmsg());
+        }
+        result.setData(departmentDetailsInfoResult);
+        return result;
+    }
 }

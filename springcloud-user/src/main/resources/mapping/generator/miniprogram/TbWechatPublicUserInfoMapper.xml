@@ -13,6 +13,8 @@
     <result column="province" jdbcType="VARCHAR" property="province" />
     <result column="city" jdbcType="VARCHAR" property="city" />
     <result column="language" jdbcType="VARCHAR" property="language" />
+    <result column="subscribe_time" jdbcType="VARCHAR" property="subscribeTime" />
+    <result column="is_concern" jdbcType="VARCHAR" property="isConcern" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
@@ -79,7 +81,8 @@
   </sql>
   <sql id="Base_Column_List">
     id, phone, open_id, union_id, nick_name, avatar_url, gender, country, province, city, 
-    language, created_time, creator_account, modified_time, modifier_account, record_status
+    language, subscribe_time, is_concern, created_time, creator_account, modified_time, 
+    modifier_account, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.miniprogram.register.entity.TbWechatPublicUserInfoCriteria" resultMap="BaseResultMap">
     select
@@ -115,15 +118,17 @@
     insert into tb_wechat_public_user_info (id, phone, open_id, 
       union_id, nick_name, avatar_url, 
       gender, country, province, 
-      city, language, created_time, 
-      creator_account, modified_time, modifier_account, 
-      record_status)
+      city, language, subscribe_time, 
+      is_concern, created_time, creator_account, 
+      modified_time, modifier_account, record_status
+      )
     values (#{id,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{openId,jdbcType=VARCHAR}, 
       #{unionId,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, #{avatarUrl,jdbcType=VARCHAR}, 
       #{gender,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, 
-      #{city,jdbcType=VARCHAR}, #{language,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{recordStatus,jdbcType=TINYINT})
+      #{city,jdbcType=VARCHAR}, #{language,jdbcType=VARCHAR}, #{subscribeTime,jdbcType=VARCHAR}, 
+      #{isConcern,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.miniprogram.register.entity.TbWechatPublicUserInfo">
     insert into tb_wechat_public_user_info
@@ -160,6 +165,12 @@
       </if>
       <if test="language != null">
         language,
+      </if>
+      <if test="subscribeTime != null">
+        subscribe_time,
+      </if>
+      <if test="isConcern != null">
+        is_concern,
       </if>
       <if test="createdTime != null">
         created_time,
@@ -210,6 +221,12 @@
       </if>
       <if test="language != null">
         #{language,jdbcType=VARCHAR},
+      </if>
+      <if test="subscribeTime != null">
+        #{subscribeTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isConcern != null">
+        #{isConcern,jdbcType=VARCHAR},
       </if>
       <if test="createdTime != null">
         #{createdTime,jdbcType=TIMESTAMP},
@@ -270,6 +287,12 @@
       <if test="record.language != null">
         language = #{record.language,jdbcType=VARCHAR},
       </if>
+      <if test="record.subscribeTime != null">
+        subscribe_time = #{record.subscribeTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isConcern != null">
+        is_concern = #{record.isConcern,jdbcType=VARCHAR},
+      </if>
       <if test="record.createdTime != null">
         created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       </if>
@@ -303,6 +326,8 @@
       province = #{record.province,jdbcType=VARCHAR},
       city = #{record.city,jdbcType=VARCHAR},
       language = #{record.language,jdbcType=VARCHAR},
+      subscribe_time = #{record.subscribeTime,jdbcType=VARCHAR},
+      is_concern = #{record.isConcern,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
@@ -345,6 +370,12 @@
       <if test="language != null">
         language = #{language,jdbcType=VARCHAR},
       </if>
+      <if test="subscribeTime != null">
+        subscribe_time = #{subscribeTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isConcern != null">
+        is_concern = #{isConcern,jdbcType=VARCHAR},
+      </if>
       <if test="createdTime != null">
         created_time = #{createdTime,jdbcType=TIMESTAMP},
       </if>
@@ -375,6 +406,8 @@
       province = #{province,jdbcType=VARCHAR},
       city = #{city,jdbcType=VARCHAR},
       language = #{language,jdbcType=VARCHAR},
+      subscribe_time = #{subscribeTime,jdbcType=VARCHAR},
+      is_concern = #{isConcern,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},

@@ -662,19 +662,25 @@ public class ExaminaServiceImpl implements ExaminaService {
 	public void sendExaminaManagement(ExaminaManagement examinaManagement, User user) {
 		String id = examinaManagement.getId();
 		TbManpowerExaminaManagement tbExaminaManagement = selectExaminaManagement(id);
-		Date startDate = tbExaminaManagement.getEffectiveTimeStart();
+		// Date startDate = tbExaminaManagement.getEffectiveTimeStart();
 		Date endDate = tbExaminaManagement.getEffectiveTimeEnd();
 		Date xtsj = new Date();
-		if (startDate.compareTo(xtsj) < 0) {
-			logger.warn("发放考试失败，当前考试已开始,examinaName:{}", tbExaminaManagement.getExaminaName());
-			if (!tbExaminaManagement.getStatus().equals(Byte.parseByte(ExaminaStatusEnmus.UNDER_WAY.getCode()))) {
-				TbManpowerExaminaManagement updExaminaManagement = new TbManpowerExaminaManagement();
-				updExaminaManagement.setId(id);
-				updExaminaManagement.setStatus(Byte.parseByte(ExaminaStatusEnmus.UNDER_WAY.getCode()));
-				tbManpowerExaminaManagementMapper.updateByPrimaryKeySelective(updExaminaManagement);
-			}
-			throw new JnSpringCloudException(ExaminaExceptionEnums.SEND_MANAGEMENT_ERROR, "发放考试失败，当前考试已开始");
-		}
+		// if (startDate.compareTo(xtsj) < 0) {
+		// logger.warn("发放考试失败，当前考试已开始,examinaName:{}",
+		// tbExaminaManagement.getExaminaName());
+		// if
+		// (!tbExaminaManagement.getStatus().equals(Byte.parseByte(ExaminaStatusEnmus.UNDER_WAY.getCode())))
+		// {
+		// TbManpowerExaminaManagement updExaminaManagement = new
+		// TbManpowerExaminaManagement();
+		// updExaminaManagement.setId(id);
+		// updExaminaManagement.setStatus(Byte.parseByte(ExaminaStatusEnmus.UNDER_WAY.getCode()));
+		// tbManpowerExaminaManagementMapper.updateByPrimaryKeySelective(updExaminaManagement);
+		// }
+		// throw new
+		// JnSpringCloudException(ExaminaExceptionEnums.SEND_MANAGEMENT_ERROR,
+		// "发放考试失败，当前考试已开始");
+		// }
 		if (endDate.compareTo(xtsj) < 0) {
 			logger.warn("发放考试失败，当前考试已结束,examinaName:{}", tbExaminaManagement.getExaminaName());
 			if (!tbExaminaManagement.getStatus().equals(Byte.parseByte(ExaminaStatusEnmus.HAS_END.getCode()))) {

@@ -36,7 +36,9 @@ public class UserInfoController {
     @RequiresPermissions("/user/userInfo/saveUserInfo")
     @RequestMapping(value = "/saveUserInfo",method = RequestMethod.POST)
     public Result<Integer> saveUserInfo(@RequestBody @Validated UserInfoParam userInfoParam) {
-        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        User currentUser=(User) SecurityUtils.getSubject().getPrincipal();
+        User user = new User();
+        user.setAccount(currentUser.getAccount());
         int i = userInfoService.saveOrUpdateUserInfo(userInfoParam,user);
         return new Result(i);
     }

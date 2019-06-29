@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>白下园区重点在建工程</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/keyProject.css">
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/echarts.js"></script>
+    <script src="./js/vue.js"></script>
+</head>
+<body>
+    <div class="mainBox" id="mainbox">
+        <div class="navBg"></div>
+        <div class="content">
+            <div class="conLeft">
+                <ul class="leftUl clearfix">
+                    <li class="leftLi fl pr">
+                        <div class="canvasEchar">
+                            <div class="echart1" id="echart1">
+                                
+                            </div>
+                        </div>
+                        <div class="liStatus">
+                            <span>未开始&nbsp;></span>
+                            <img src="./image/circle2.png" class="statusImg" alt="">
+                        </div>
+                    </li>
+                    <!-- <li class="leftLi fl"></li>
+                    <li class="leftLi fl"></li>
+                    <li class="leftLi fl"></li>
+                    <li class="leftLi fl"></li> -->
+                </ul>
+            </div>
+            <div class="conRight">
+                <ul>
+                    <li v-for="(item,key) in arr">{{item.name}}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    new Vue({
+        el:'#mainbox',
+        data:{
+            msg:'右侧内容',
+            arr:[
+            {name:'11',id:1},
+            {name:'22',id:2},
+            {name:'33',id:3},
+            {name:'44',id:4},
+            ]
+        },
+        mounted:function(){
+          this.$nextTick(function () {
+
+          })
+        },
+        methods:{
+          getEhart: function () {
+            var self = this;
+            var myChart = echarts.init(document.getElementById('echart1'));
+            option = {
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [{
+                    data: [820, 932, 901, 934, 1290, 1330, 1320],
+                    type: 'line',
+                    areaStyle: {}
+                }]
+            };
+            myChart.setOption(options);
+          }
+        }
+    })
+   
+</script>
+</html>

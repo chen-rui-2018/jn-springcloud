@@ -21,10 +21,9 @@
           <div style="float:right;margin-left:10px;height:36px; line-height: 36px;color:#333;font-size:18px;">预算使用状态:<span
             :class="textRatio!=='正常'?'ratioRed ratio':'ratioGreen ratio'">{{ textRatio }}</span></div>
           <div style="float:right;">
-            <el-button type="primary">
-              <router-link :to="{name:'income'}">收入情况</router-link>
+            <el-button type="primary" @click="$router.push({name:'income'})">
+              收入情况
             </el-button>
-            <el-button type="primary">返回主页</el-button>
           </div>
         </el-col>
       </el-row>
@@ -43,9 +42,9 @@
             <span v-show="Number(item.ratio.split('%')[0])<=Number(ratio.split('%')[0])" class="iconfont" style="color:blue;float:right;font-size:20px;">&#xe68b;</span>
           </div>
       </div></el-col>
-      <div v-show="headerArr.length<=0" class="write" style="text-align:center;height:200px;line-height:200px;">暂无数据</div>
+      <div v-show="headerArr.length<=0" class="write mediate">暂无数据</div>
     </el-row>
-    <div style="margin:20px 0px ; background:#fff;padding:10px 0; ">
+    <div class="chartStyle">
     <chart id="myChart" :style="{width: '99%', height: '350px'}"/></div>
 </div></template>
 
@@ -303,6 +302,12 @@ export default {
   background: #fff;
   border-radius: 8px;
   cursor:pointer;
+}
+.chartStyle{
+  margin:20px 0px ; background:#fff;padding:10px 0;
+}
+.mediate{
+    text-align:center;height:200px;line-height:200px;
 }
 .ratio{
    height: 32px;

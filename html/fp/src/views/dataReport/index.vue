@@ -201,7 +201,8 @@
       }
     },
     filters: {
-      getDate(str) {
+      getDate(time) {
+        const str = time.substr(0, 10)
         const date = new Date(str)
         const y = date.getFullYear()
         let m = date.getMonth() + 1
@@ -211,7 +212,8 @@
         return y + '/'+ m + '/' + d
       },
       formatDate(time) {
-        const date = new Date(time)
+        const str = time.substr(0, 10)
+        const date = new Date(str)
         const y = date.getFullYear()
         const m = date.getMonth() + 1
         const d = date.getDate()

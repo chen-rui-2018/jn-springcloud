@@ -124,22 +124,17 @@
             t3.id AS postId,
             t3.post_name AS postName,
             t1.user_id,
-            t1.is_default AS isDefault,
-            t4.id as postTypeId,
-            t4.post_type_name as postTypeName
+            t1.is_default AS isDefault
         FROM
             tb_sys_user_department_post t1,
             tb_sys_department t2,
-            tb_sys_post t3,
-            tb_sys_post_type t4
+            tb_sys_post t3
         WHERE
             t1.department_id = t2.id
         AND t1.post_id = t3.id
-        AND t3.post_type_id = t4.id
         AND t1.`record_status` = 1
         AND t2.`record_status` = 1
         AND t3.`record_status` = 1
-        AND t4.record_status = 1
         AND t1.user_id = #{id,jdbcType=VARCHAR}
         ORDER BY
             t1.is_default DESC

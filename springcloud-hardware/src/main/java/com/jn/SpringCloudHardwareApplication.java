@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.client.SpringCloudApplication;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
  * 硬件服务
@@ -19,6 +20,7 @@ import org.springframework.cloud.netflix.feign.EnableFeignClients;
 @EnableFeignClients
 @EnableSwagger2Doc
 @SpringCloudApplication
+@EnableAsync
 @EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
 public class SpringCloudHardwareApplication {
     public static void main(String[] args) {

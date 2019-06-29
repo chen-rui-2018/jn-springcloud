@@ -4,13 +4,9 @@ import com.jn.enterprise.data.model.CompanyTree;
 import com.jn.enterprise.data.tool.GetCompanyTree;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,23 +19,23 @@ public class POIScienceHeader {
     public void getScienceHeaderTable(List<CompanyTree> list, HttpServletRequest req,
                                       HttpServletResponse resp)throws IOException {
 
-        String fileName = DateFormatUtils.format(new Date(),"yyyyMMddHHmm") +".xls"; //设置文件名
-        resp.setHeader("Content-disposition", "attachment;filename=" + new String(fileName.getBytes("gb2312"), "ISO8859-1"));//设置文件头编码格式
-        resp.setContentType("APPLICATION/OCTET-STREAM;charset=UTF-8");//设置类型
+        String fileName = DateFormatUtils.format(new Date(),"yyyyMMddHHmm"); //设置文件名
+        resp.addHeader("Content-Disposition", "attachment;filename=" +fileName+ ".xlsx");//设置文件头编码格式
+        resp.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");//设置类型
         resp.setDateHeader("Expires", 0);//设置日期头
         //转换成树形
         GetCompanyTree getCompanyTree = new GetCompanyTree();
         List<CompanyTree> treeList = getCompanyTree.listToTree(list);
         List<CompanyTree> companyTreeslist = getCompanyTree.treeToList(treeList);
-        //构建HSSFWorkBook
-        HSSFWorkbook wb = new HSSFWorkbook();
+        //构建XSSFWorkBook
+        Workbook wb = new XSSFWorkbook();
         // 生成一个样式
-        HSSFCellStyle headstyle = wb.createCellStyle();
+        XSSFCellStyle headstyle=((XSSFWorkbook) wb).createCellStyle();
         headstyle.setAlignment(HorizontalAlignment.CENTER);// 左右居中
         headstyle.setVerticalAlignment(VerticalAlignment.CENTER);// 上下居中
         headstyle.setLocked(true);
         //文件名
-        HSSFSheet sheet = wb.createSheet(fileName);
+        Sheet sheet = wb.createSheet();
         int length = 0;
         //得到最长指标值
         for (CompanyTree trees : companyTreeslist
@@ -55,11 +51,11 @@ public class POIScienceHeader {
         }
         int lent = 0;
         //创建第一行
-        HSSFRow headrow1 = sheet.createRow(0);
+        Row headrow1 = sheet.createRow(0);
         //得到数值行数
-        HSSFRow[] row = new HSSFRow[length];
+        Row[] row = new Row[length];
         for (int j = 0; j < length; j++) {
-            HSSFRow headrow2 = sheet.createRow(j + 1);
+            Row headrow2 = sheet.createRow(j + 1);
             row[j] = headrow2;
         }
         for (int i = 0; i < companyTreeslist.size(); i++) {
@@ -78,7 +74,6 @@ public class POIScienceHeader {
         resp.getOutputStream().flush();
         resp.getOutputStream().close();
         wb.close();
-
     }
 
 }

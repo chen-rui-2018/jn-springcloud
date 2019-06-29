@@ -20,7 +20,7 @@ public class UserNoPasswordLogin implements Serializable {
     private static final long serialVersionUID = -7484136779753770396L;
 
     @ApiModelProperty(value = "账户名",required = true)
-    @Size(min = 1, max = 16, message = "账号不正确")
+    @Size(min = 1, max = 100, message = "账号不正确")
     private String account;
 
     public String getAccount() {

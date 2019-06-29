@@ -60,7 +60,7 @@ export default {
 
       policyClass: [],
       page: 1,
-      row: 5,
+      row: 8,
       policyCenterList: [],
       policyClassCode: ''
     }
@@ -346,6 +346,8 @@ export default {
         padding: 30px;
         .tit {
           font-weight: bold;
+          height: 32px;
+          line-height: 32px;
         }
         .tit,
         .info {
@@ -373,7 +375,7 @@ export default {
         p {
           font-size: 26px;
           color: #666;
-          height: 70px;
+          height: 75px;
           display: -webkit-box;
           -webkit-box-orient: vertical;
           -webkit-line-clamp: 2;

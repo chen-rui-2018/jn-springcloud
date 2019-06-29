@@ -28,10 +28,16 @@ public class TbPdDeclarationPlatformManage implements Serializable {
     /*@ApiModelProperty("状态（1：草稿，2：已发布，3：已下架）")*/
     private Byte status;
 
+    /*@ApiModelProperty("是否属于人才服务（1：是，2：否）")*/
+    private String isTalentService;
+
+    /*@ApiModelProperty("排序")*/
+    private Integer sort;
+
     /*@ApiModelProperty("是否删除（0标记删除，1正常）")*/
     private Byte recordStatus;
 
-    /*@ApiModelProperty("")*/
+    /*@ApiModelProperty("创建人")*/
     private String creatorAccount;
 
     /*@ApiModelProperty("创建时间")*/
@@ -109,6 +115,22 @@ public class TbPdDeclarationPlatformManage implements Serializable {
         this.status = status;
     }
 
+    public String getIsTalentService() {
+        return isTalentService;
+    }
+
+    public void setIsTalentService(String isTalentService) {
+        this.isTalentService = isTalentService == null ? null : isTalentService.trim();
+    }
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
+    }
+
     public Byte getRecordStatus() {
         return recordStatus;
     }
@@ -169,6 +191,8 @@ public class TbPdDeclarationPlatformManage implements Serializable {
             && (this.getSystemSupport() == null ? other.getSystemSupport() == null : this.getSystemSupport().equals(other.getSystemSupport()))
             && (this.getSubordinatePlatformName() == null ? other.getSubordinatePlatformName() == null : this.getSubordinatePlatformName().equals(other.getSubordinatePlatformName()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
+            && (this.getIsTalentService() == null ? other.getIsTalentService() == null : this.getIsTalentService().equals(other.getIsTalentService()))
+            && (this.getSort() == null ? other.getSort() == null : this.getSort().equals(other.getSort()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
@@ -188,6 +212,8 @@ public class TbPdDeclarationPlatformManage implements Serializable {
         result = prime * result + ((getSystemSupport() == null) ? 0 : getSystemSupport().hashCode());
         result = prime * result + ((getSubordinatePlatformName() == null) ? 0 : getSubordinatePlatformName().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        result = prime * result + ((getIsTalentService() == null) ? 0 : getIsTalentService().hashCode());
+        result = prime * result + ((getSort() == null) ? 0 : getSort().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
@@ -210,6 +236,8 @@ public class TbPdDeclarationPlatformManage implements Serializable {
         sb.append(", systemSupport=").append(systemSupport);
         sb.append(", subordinatePlatformName=").append(subordinatePlatformName);
         sb.append(", status=").append(status);
+        sb.append(", isTalentService=").append(isTalentService);
+        sb.append(", sort=").append(sort);
         sb.append(", recordStatus=").append(recordStatus);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", createdTime=").append(createdTime);

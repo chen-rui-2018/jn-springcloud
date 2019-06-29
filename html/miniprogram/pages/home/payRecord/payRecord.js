@@ -15,7 +15,7 @@ Page({
       rows:5,
     },
     parkDetail:[],
-    isShow:false,
+    isClassId:'',
     total:0
   },
   onLoad: function (options) {
@@ -91,9 +91,10 @@ Page({
   // 搜索停车场信息
   search(e){
     this.setData({
-      "detailSend.areaName":e.detail.value
+      "detailSend.carLicense":e.detail.value
     })
     this.getparkDetail()
+    
   },
     /*时间选择器 */
   bindDateBeforeChange: function (e) {
@@ -124,22 +125,26 @@ Page({
     })
     if(e.currentTarget.dataset.id==='1'){
       this.setData({
-        "detailSend.startTime":this.getDateStr(-7)
+        "detailSend.startTime":this.getDateStr(-7),
+        isClassId:e.currentTarget.dataset.id
       })
       this.getparkDetail()
     }else if(e.currentTarget.dataset.id==='2'){
       this.setData({
-        "detailSend.startTime":this.getDateStr(-30)
+        "detailSend.startTime":this.getDateStr(-30),
+        isClassId:e.currentTarget.dataset.id
       })
       this.getparkDetail()
     }else if(e.currentTarget.dataset.id==='3'){
       this.setData({
-        "detailSend.startTime":this.getDateStr(-180)
+        "detailSend.startTime":this.getDateStr(-180),
+        isClassId:e.currentTarget.dataset.id
       })
       this.getparkDetail()
     }else if(e.currentTarget.dataset.id==='4'){
       this.setData({
-        "detailSend.startTime":this.getDateStr(-360)
+        "detailSend.startTime":this.getDateStr(-360),
+        isClassId:e.currentTarget.dataset.id
       })
       this.getparkDetail()
     }

@@ -224,8 +224,8 @@
       </div>
 
     </div>
-    <el-dialog :visible.sync="dialogVisible" width="50%" :modal-append-to-body="false">
-      <img :src="certificatePhoto" alt="图片" style="width:100%;height:200px;">
+    <el-dialog :visible.sync="dialogVisible" width="39%" :modal-append-to-body="false">
+      <img :src="certificatePhoto" alt="图片" style="width:100%;">
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">返 回</el-button>
       </span>
@@ -424,6 +424,7 @@ export default {
               message: "操作成功",
               type: "success"
             });
+            this.$router.push({ path: "/home" });
             this.changeStatus();
           } else {
             this.$message.error(res.result);
@@ -450,6 +451,7 @@ export default {
               message: "操作成功,请等待后台审核",
               type: "success"
             });
+            this.$router.push({ path: "/home" });
             this.changeStatus();
 
           } else {
@@ -925,10 +927,10 @@ export default {
     }
     .el-form-item__content {
       flex: 1;
-      display: inline-block;
-      padding-left: 13px;
-      // padding: 15px;
-      //   border: 1px solid #ccc;
+      line-height: unset;
+      display: flex;
+      align-items: center;
+     padding: 5px 10px;
     }
     .bodyName {
       border-left: unset;

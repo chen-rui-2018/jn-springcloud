@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import { urlSearch } from '../utils/index'
+import { setToken } from '../utils/auth'
 
 Vue.use(Router)
 
@@ -101,6 +102,12 @@ const router = new Router({
       name: 'declarationCenter',
       meta: {title: '申报中心'},
       component: () => import('@/views/declarationCenter/declarationCenter')
+    },
+    {
+      path: '/guest/pd/DeclarationItems',
+      name: 'declarationItems',
+      meta: {title: '即时申报项目'},
+      component: () => import('@/views/declarationCenter/DeclarationItems')
     },
     {
       path: '/guest/pd/declarationPlatform',
@@ -251,8 +258,9 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   const token = urlSearch.token
+  // alert(token)
   if (token) {
-    sessionStorage.setItem('token', token)
+    setToken(token)
   }
   next()
 })

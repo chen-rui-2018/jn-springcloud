@@ -15,6 +15,8 @@ import com.jn.enterprise.servicemarket.comment.entity.TbServiceRatingCriteria;
 import com.jn.enterprise.servicemarket.org.dao.TbServiceOrgInfoMapper;
 import com.jn.enterprise.servicemarket.org.entity.TbServiceOrgInfo;
 import com.jn.enterprise.servicemarket.org.entity.TbServiceOrgInfoCriteria;
+import com.jn.enterprise.servicemarket.org.model.UserRoleInfo;
+import com.jn.enterprise.servicemarket.org.service.OrgColleagueService;
 import com.jn.enterprise.servicemarket.product.dao.TbServiceAndAdvisorMapper;
 import com.jn.enterprise.servicemarket.product.dao.TbServiceProductMapper;
 import com.jn.enterprise.servicemarket.product.entity.TbServiceAndAdvisor;
@@ -29,18 +31,15 @@ import com.jn.enterprise.servicemarket.require.model.*;
 import com.jn.enterprise.servicemarket.require.service.RequireManagementService;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
+import com.jn.user.enums.HomeRoleEnum;
 import com.jn.user.model.UserExtensionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.xxpay.common.util.DateUtil;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -73,6 +72,9 @@ public class RequireManagementServiceImpl implements RequireManagementService {
 
     @Autowired
     private RequireManagementMapper requireManagementMapper;
+
+    @Autowired
+    private OrgColleagueService orgColleagueService;
 
     @Autowired
     private UserExtensionClient userExtensionClient;
@@ -423,13 +425,20 @@ public class RequireManagementServiceImpl implements RequireManagementService {
         TbServiceRequire tbServiceRequire = getTbServiceRequire(reqNum);
         RequireOtherDetails requireOtherDetails=new RequireOtherDetails();
         BeanUtils.copyProperties(tbServiceRequire, requireOtherDetails);
+        tbServiceRequire.setReqDetail(tbServiceRequire.getReqDetail());
         //融资期限
-        if(StringUtils.isNotBlank(tbServiceRequire.getFinancingPeriodMax()+"")){
+        if(tbServiceRequire.getFinancingPeriodMax()!=null
+                && StringUtils.isNotBlank(tbServiceRequire.getFinancingPeriodMax().toString())){
             logger.info("需求详情（对他人需求）,融资期限：{}",tbServiceRequire.getFinancingPeriodMax()+"");
             requireOtherDetails.setFinancingPeriod(tbServiceRequire.getFinancingPeriodMax()+"");
-        }else if(StringUtils.isNotBlank(tbServiceRequire.getFinancingPeriodMin()+"")){
+            //是否最大值以上（0：否   1：是)
+            requireOtherDetails.setIsMax("0");
+        }else if(tbServiceRequire.getFinancingPeriodMin()!=null
+                && StringUtils.isNotBlank(tbServiceRequire.getFinancingPeriodMin().toString())){
             logger.info("需求详情（对他人需求）,融资期限：{}",tbServiceRequire.getFinancingPeriodMin()+"");
             requireOtherDetails.setFinancingPeriod(tbServiceRequire.getFinancingPeriodMin()+"");
+            //是否最大值以上（0：否   1：是 )
+            requireOtherDetails.setIsMax("1");
         }
         if(tbServiceRequire.getExpectedDate()!=null){
             requireOtherDetails.setExpectedDate(DateUtils.formatDate(tbServiceRequire.getExpectedDate(),"yyyy-MM-dd"));
@@ -496,16 +505,21 @@ public class RequireManagementServiceImpl implements RequireManagementService {
     @Override
     public PaginationData getRequireReceivedList(RequireReceivedParam requireReceivedParam, String account) {
         com.github.pagehelper.Page<Object> objects = null;
-        //判断当前账号是否为机构管理员或机构联系人
-        Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(account);
-        if(userExtension==null || userExtension.getData()==null){
-            logger.warn("我收到的需求列表查询根据账号获取用户信息失败");
-            throw new JnSpringCloudException(RequireExceptionEnum.NETWORK_ANOMALY);
-        }
+        //判断当前账号是否为机构专员
+        List<UserRoleInfo> userRoleInfoList = orgColleagueService.getUserRoleInfoList(Arrays.asList(account), HomeRoleEnum.ORG_ADVISER.getCode());
         String orgId="";
-        if(StringUtils.isNotBlank(userExtension.getData().getAffiliateCode())){
-            orgId=userExtension.getData().getAffiliateCode();
+        //若不是机构专员，查看全部，若是机构专员，只能看自己的
+        if(userRoleInfoList.isEmpty()|| !StringUtils.equals(userRoleInfoList.get(0).getRoleName(),HomeRoleEnum.ORG_ADVISER.getCode())){
+            Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(account);
+            if(userExtension==null || userExtension.getData()==null){
+                logger.warn("我收到的需求列表查询根据账号获取用户信息失败");
+                throw new JnSpringCloudException(RequireExceptionEnum.NETWORK_ANOMALY);
+            }
+            if(StringUtils.isNotBlank(userExtension.getData().getAffiliateCode())){
+                orgId=userExtension.getData().getAffiliateCode();
+            }
         }
+
         if(StringUtils.isBlank(requireReceivedParam.getNeedPage())){
             //默认查询第1页的15条数据
             int pageNum=1;
@@ -570,13 +584,21 @@ public class RequireManagementServiceImpl implements RequireManagementService {
         TbServiceRequire tbServiceRequire = getTbServiceRequire(reqNum);
         RequireReceivedDetails requireReceivedDetails=new RequireReceivedDetails();
         BeanUtils.copyProperties(tbServiceRequire, requireReceivedDetails);
+        //需求描述
+        requireReceivedDetails.setRequireDetail(tbServiceRequire.getReqDetail());
         //融资期限设置
-        if(StringUtils.isNotBlank(tbServiceRequire.getFinancingPeriodMax()+"")){
+        if(tbServiceRequire.getFinancingPeriodMax()!=null
+                && StringUtils.isNotBlank(tbServiceRequire.getFinancingPeriodMax().toString())){
             logger.info("需求详情（我收到的需求）,融资期限：{}",tbServiceRequire.getFinancingPeriodMax()+"");
-            requireReceivedDetails.setFinancingPeriod(tbServiceRequire.getFinancingPeriodMax()+"");
-        }else if(StringUtils.isNotBlank(tbServiceRequire.getFinancingPeriodMin()+"")){
+            requireReceivedDetails.setFinancingPeriod(tbServiceRequire.getFinancingPeriodMax().toString());
+            //是否最大值以上（0：否   1：是)
+            requireReceivedDetails.setIsMax("0");
+        }else if(tbServiceRequire.getFinancingPeriodMin()!=null
+                && StringUtils.isNotBlank(tbServiceRequire.getFinancingPeriodMin().toString())){
             logger.info("需求详情（我收到的需求）,融资期限：{}",tbServiceRequire.getFinancingPeriodMin()+"");
-            requireReceivedDetails.setFinancingPeriod(tbServiceRequire.getFinancingPeriodMin()+"");
+            requireReceivedDetails.setFinancingPeriod(tbServiceRequire.getFinancingPeriodMin().toString());
+            //是否最大值以上（0：否   1：是)
+            requireReceivedDetails.setIsMax("1");
         }
         if(tbServiceRequire.getExpectedDate()!=null){
             requireReceivedDetails.setExpectedDate(DateUtils.formatDate(tbServiceRequire.getExpectedDate(),"yyyy-MM-dd"));

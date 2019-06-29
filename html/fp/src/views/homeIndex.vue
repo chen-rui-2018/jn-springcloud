@@ -36,7 +36,7 @@
               </li>
               <li>
                 <router-link to="/compassView" class="router-link" :class="{'ru-active':$route.path == '/compassView'}">行政审批</router-link>
-              </li>
+              </li> 
               <!-- <li>
                 <router-link to="/investment" class="router-link" :class="{'ru-active':$route.path == '/investment'}">招商引资</router-link>
               </li> -->
@@ -45,22 +45,30 @@
                 <div id="enterMenu" v-if="showMenuFlag" @mouseleave.stop.native="showMenuFlag=false">
                   <p class="pointer" @click="$router.push({path:'/policyCenter'})">政策中心</p>
                   <p class="pointer" @click="$router.push({path:'/actiCenter'})">活动中心</p>
-                  <p class="pointer" @click="$router.push({path:'/tfindex'})">科技金融</p>
+                  <router-link to="/tfindex" target="_blank">
+                    <p class="pointer">科技金融</p>
+                  </router-link>
                   <p class="pointer" @click="$router.push({path:'/recruitmentList'})">人力资源</p>
+                  <!-- <p class="pointer" @click="$router.push({path:'/compassView'})">行政审批</p> -->
+                  <p class="pointer" @click="$router.push({path:'/declarationCenter'})">申报中心</p>
+                  <router-link to="/serMatHp" target="_blank">
+                    <p class="pointer">服务超市</p>
+                  </router-link>
+
                 </div>
               </li>
               <li>
                 <router-link to="/talentsService" class="router-link" :class="{'ru-active':$route.path == '/talentsService'}">人才服务</router-link>
               </li>
-              <li>
+              <!-- <li>
                 <router-link to="/declarationCenter" class="router-link" :class="{'ru-active':$route.path == '/declarationCenter'}">申报中心</router-link>
-              </li>
+              </li> -->
               <li>
                 <router-link to="/incubatorEnterprises" class="router-link" :class="{'ru-active':$route.path == '/incubatorEnterprises'}">孵化企业</router-link>
               </li>
-              <li>
+              <!-- <li>
                 <router-link to="/serMatHp" class="router-link" :class="{'ru-active':$route.path == '/serMatHp'}">服务超市</router-link>
-              </li>
+              </li> -->
             </ul>
             <!-- <div class="enterMenu" v-if="showMenuFlag">
               <p>政策中心</p>
@@ -138,7 +146,7 @@ export default {
   computed: {
     isCenter() {
       const list =
-        "enterpriseservice,investment,serMatHp,tfindex,actiCenter,incubatorEnterprises,compassView,declarationCenter,talentsService,academicExchange,policyCenter,recruitmentList,profileDetails,noticeList";
+        "enterpriseservice,investment,serMatHp,tfindex,actiCenter,incubatorEnterprises,compassView,declarationCenter,talentsService,academicExchange,policyCenter,recruitmentList,profileDetails,noticeList,parkAdvantage";
       return this.$route.matched.some(item => {
         if (item.name) {
           return list.indexOf(item.name) == -1;

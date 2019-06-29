@@ -280,13 +280,14 @@ public class ParkingServerServiceImpl implements ParkingServerService {
                 logger.error("账单创建时停车场免费时间对应数据转换失败，改用当前时间。",e);
                 parkingRecordNew.setStartBillingTime(DateUtils.addMinutes(new Date(),tbParkingArea.getTempFreeTime()));
             }
-
             parkingRecordNew.setCreatedTime(new Date());
+            parkingRecordNew.setParkingId(UUID.randomUUID().toString().replaceAll("-",""));
             int insert = tbParkingRecordMapper.insert(parkingRecordNew);
             logger.info("临停支付成功，创建新的停车记录。缴费开始计算时间为缴费时间+免费分钟，响应条数：{}",insert);
             //修改停车记录数据
             tbParkingRecord.setPayTime(new Date());
             tbParkingRecord.setPayStatus(ParkingEnums.PARKING_CARE_APPLY_PAYED.getCode());
+            tbParkingRecord.setActualMoney(payBillDetailByIdOrNum.getData().getPayAmount());
             int i = tbParkingRecordMapper.updateByPrimaryKey(tbParkingRecord);
             logger.info("修改停车记录数据支付状态，响应条数：{}",i);
         }else{
@@ -310,7 +311,8 @@ public class ParkingServerServiceImpl implements ParkingServerService {
              ) {
             ParkingRecordRampParam param = new ParkingRecordRampParam();
             DoorCarInParkingShow door = (DoorCarInParkingShow)obj;
-            param.setParkingId(door.getId());
+            param.setParkingId(UUID.randomUUID().toString().replaceAll("-",""));
+            param.setMessageId(door.getId());
             param.setParkingStatus(ParkingEnums.CAR_IS_IN_PARKING.getCode());
             param.setAdmissionTime(door.getEntranceTime());
             param.setCarLicense(door.getCarNo());
@@ -334,8 +336,7 @@ public class ParkingServerServiceImpl implements ParkingServerService {
         }
         logger.info("开始处理道尔推送车辆出场数据，数据总条数：-- {}",carList.size());
         List<ParkingRecordRampParam> parkingRecordRampParam = new ArrayList<>(16);
-        for (Object obj:carList
-             ) {
+        for (Object obj:carList ) {
             ParkingRecordRampParam param = new ParkingRecordRampParam();
             DoorCarOutParkingShow door = (DoorCarOutParkingShow)obj;
             param.setParkingStatus(ParkingEnums.CAR_IS_IN_PARKING.getCode());
@@ -343,26 +344,12 @@ public class ParkingServerServiceImpl implements ParkingServerService {
             param.setDepartureTime(door.getExportTime());
             param.setCarLicense(door.getCarNo());
             parkingRecordRampParam.add(param);
-
-
+            sb.append(door.getId()+",");
         }
         int i = parkingRecordMapper.updateParkingRecordByRamp(parkingRecordRampParam);
         logger.info("处理道尔推送车辆出场数据成功，响应条数：-- {}",i);
-
-        //处理返回接口
-        List<ParkingRecordRampParam> parkingRecordRampParams = parkingRecordMapper.selectParkingRecordByRamp(parkingRecordRampParam);
-        for (ParkingRecordRampParam ramp:parkingRecordRampParams
-             ) {
-            for (Object obj:carList
-                ) {
-                DoorCarOutParkingShow door = (DoorCarOutParkingShow)obj;
-                if(StringUtils.equals(ramp.getParkingId(),door.getId())){
-                    sb.append(door.getId()+",");
-                }
-            }
-        }
-        String s = sb.toString();
-        return s.substring(0,s.length()-1);
+        String s = carList.size()==i?sb.toString():"";
+        return s==""?"":s.substring(0,s.length()-1);
     }
 
 }

@@ -618,41 +618,47 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
             String comAdinOrCompanyId = energyBill.getObjId();
             String companyName = energyBill.getObjName();
             //通过企业id,更新其余额
-            PayAccountBookMoney payAccountBookMoney = new PayAccountBookMoney();
-            payAccountBookMoney.setAcBookType(energyBill.getAcBookType());
-            payAccountBookMoney.setObjId(comAdinOrCompanyId);
-            payAccountBookMoney.setObjType(MeterConstants.OBJ_TYPE);
-            Result<PayAccountBook>  bookResult =  payAccountClient.queryPayAccountBookMoney(payAccountBookMoney);
-            if(bookResult.getData() ==null){
+            PayAccountBookEntIdOrUserIdParam param = new PayAccountBookEntIdOrUserIdParam();
+            param.setObjId(comAdinOrCompanyId);
+            param.setObjType(MeterConstants.ELEC_BOOK);
+            Result<ArrayList<PayAccountBook>>  bookResult =  payAccountClient.queryAccountBook(param);
+            if(bookResult.getData() ==null || bookResult.getData().size()==0){
                 logger.info("查询企业的余额失败，企业id为{}",comAdinOrCompanyId);
                 throw new JnSpringCloudException(MeterExceptionEnums.COMPANY_BALANCE_NOT_FOUND);
             }
-            PayAccountBook payBook = bookResult.getData();
-            TbElectricCostCriteria costCriteria = new TbElectricCostCriteria();
-            costCriteria.or().andAccountTypeEqualTo(energyBill.getAcBookType()).andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andCompanyIdEqualTo(comAdinOrCompanyId) ;
-            List<TbElectricCost> costbeans =tbElectricCostMapper.selectByExample(costCriteria);
-            //检测企业的费用是否已经在表中存在，不存在则插入，否则更新
-            if(costbeans == null && costbeans.size()==0){
-                logger.info("插入企业的余额，企业id为{}",comAdinOrCompanyId);
-                TbElectricCost costbean = new TbElectricCost();
-                costbean.setBalance(payBook.getBalance());
-                costbean.setCompanyId(comAdinOrCompanyId);
-                costbean.setCreatedTime(new Date());
-                costbean.setCreatorAccount(MeterConstants.SYSTEM_USER);
-                costbean.setRecordStatus(new Byte(MeterConstants.VALID));
-                costbean.setCompanyName(companyName);
-                costbean.setId(UUID.randomUUID().toString().replaceAll("-",""));
-                costbean.setAccountType(energyBill.getAcBookType());
-                tbElectricCostMapper.insertSelective(costbean);
-            }else{
-                //更新数据
-                logger.info("更新企业的余额，企业id为{}",comAdinOrCompanyId);
-                TbElectricCost costbean = new TbElectricCost();
-                costbean.setBalance(payBook.getBalance());
-                costCriteria.or().andCompanyIdEqualTo(comAdinOrCompanyId).andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andAccountTypeEqualTo(energyBill.getAcBookType());
-                tbElectricCostMapper.updateByExampleSelective(costbean,costCriteria);
+            ArrayList<PayAccountBook> payBook = bookResult.getData();
+            for(PayAccountBook book:payBook){
+                if(book.getMeterCode().equals(energyBill.getMeterCode())){
 
+                    TbElectricCostCriteria costCriteria = new TbElectricCostCriteria();
+                    costCriteria.or().andAccountTypeEqualTo(energyBill.getAcBookType()).andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andCompanyIdEqualTo(comAdinOrCompanyId).andMeterCodeEqualTo(energyBill.getMeterCode()); ;
+                    List<TbElectricCost> costbeans =tbElectricCostMapper.selectByExample(costCriteria);
+                    //检测企业的费用是否已经在表中存在，不存在则插入，否则更新
+                    if(costbeans == null || costbeans.size()==0){
+                        logger.info("插入企业的余额，企业id为{}",comAdinOrCompanyId);
+                        TbElectricCost costbean = new TbElectricCost();
+                        costbean.setBalance(book.getBalance());
+                        costbean.setCompanyId(comAdinOrCompanyId);
+                        costbean.setCreatedTime(new Date());
+                        costbean.setCreatorAccount(MeterConstants.SYSTEM_USER);
+                        costbean.setRecordStatus(new Byte(MeterConstants.VALID));
+                        costbean.setCompanyName(companyName);
+                        costbean.setId(UUID.randomUUID().toString().replaceAll("-",""));
+                        costbean.setAccountType(energyBill.getAcBookType());
+                        costbean.setMeterCode(energyBill.getMeterCode());
+                        tbElectricCostMapper.insertSelective(costbean);
+                    }else{
+                        //更新数据
+                        logger.info("更新企业的余额，企业id为{}",comAdinOrCompanyId);
+                        TbElectricCost costbean = new TbElectricCost();
+                        costbean.setBalance(book.getBalance());
+                        costCriteria.or().andCompanyIdEqualTo(comAdinOrCompanyId).andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andAccountTypeEqualTo(energyBill.getAcBookType()).andMeterCodeEqualTo(energyBill.getMeterCode());
+                        tbElectricCostMapper.updateByExampleSelective(costbean,costCriteria);
+
+                    }
+                }
             }
+
         }
         return new Result<>();
     }

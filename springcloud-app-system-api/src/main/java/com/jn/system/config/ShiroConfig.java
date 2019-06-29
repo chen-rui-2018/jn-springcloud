@@ -48,6 +48,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/login", "anon");
         filterChainDefinitionMap.put("/authLogin", "anon");
         filterChainDefinitionMap.put("/noPwdLogin", "anon");
+        filterChainDefinitionMap.put("/securityInfo", "anon");
         //所有内部提供的api接口不需要拦截
         filterChainDefinitionMap.put("/api/**", "anon");
         filterChainDefinitionMap.put("/metaData/**", "anon");

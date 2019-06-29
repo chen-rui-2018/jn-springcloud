@@ -78,4 +78,11 @@ public interface MyPayAccountService {
      * @return
      */
     Result automaticDeduction(PayAutoDeduParam payAutoDeduParam,User user);
+
+    /**
+     * 通过企业或用户ID查询账户下账本信息
+     * @param payAccountBookEntIdOrUserIdParam
+     * @return
+     */
+    Result queryAccountBook(PayAccountBookEntIdOrUserIdParam payAccountBookEntIdOrUserIdParam);
 }

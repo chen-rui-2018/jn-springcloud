@@ -2,6 +2,7 @@ package com.jn.park.api;
 
 import com.jn.common.model.Result;
 import com.jn.park.electricmeter.model.CompanyModel;
+import com.jn.park.electricmeter.model.CostBillModel;
 import com.jn.park.message.model.AddMessageModel;
 import com.jn.park.property.model.PayCallBackNotify;
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -50,4 +51,10 @@ public interface ElectricMeterClient {
      */
     @RequestMapping(value = "/api/meter/getMeterInfosByCompanyId", method = RequestMethod.POST)
     Result getMeterInfosByCompanyId(CompanyModel companyModel);
+
+    /**
+     * 能耗监控程序
+     */
+    @RequestMapping(value = "/api/meter/updateBillCost", method = RequestMethod.POST)
+    Result updateBillCost(CostBillModel companyModel);
 }

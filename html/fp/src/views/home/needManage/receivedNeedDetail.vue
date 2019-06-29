@@ -60,7 +60,7 @@
           </div>
           <div class="">
             <el-form-item label="合同总金额：">
-              <div>{{receiveDetail.contractAmount}}万元</div>
+              <div>{{receiveDetail.contractAmount}}元</div>
             </el-form-item>
           </div>
           <div class="">

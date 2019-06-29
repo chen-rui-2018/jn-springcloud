@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
  * @Modified By:
  */
 @Component
-@ConfigurationProperties(prefix = "sdnware.ap")
+@ConfigurationProperties(prefix = "jn.sdnware.ap")
 @RefreshScope
 public class SdnwareApProperties {
 

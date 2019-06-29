@@ -55,7 +55,7 @@ public class EnvironmentMonitorAsyncTask {
     @Async
     public Future<String> getDeviceRealTimePolluteLeveByAsync(String url) {
         String result = RestTemplateUtil.get(url);
-        logger.info("\n获取环境监测设备实时空气或南京市空气或设备实时污染级别或未来pm10和pm2.5预测值的接口入参：【{}】,接口出参：【{}】",url,result);
+        logger.info("\n获取环境监测设备实时空气或南京市空气或未来pm10和pm2.5预测值的接口入参：【{}】,接口出参：【{}】",url,result);
         return new AsyncResult<String>(result);
     }
 

@@ -1,4 +1,4 @@
 <!--pages/index/declarationNotice/declarationNotice.wxml-->
 <view>
-  <web-view src="{{url}}?isShow='0'&token={{token}}"></web-view>
+  <web-view src="{{url}}?isShow=0&token={{token}}"></web-view>
 </view>

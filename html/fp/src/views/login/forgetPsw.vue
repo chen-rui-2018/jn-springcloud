@@ -15,7 +15,7 @@
       </div>
       <div class="tipPsw">请输入收到短信中的验证码</div>
       <input class="input" type="password" placeholder="请输入新密码" v-model="password">
-      <div class="tipPsw">密码至少为字母、数字、符号两种组成的8-16字符</div>
+      <div class="tipPsw">{{validateRules}}</div>
       <input class="input" type="password" style="margin-bottom:30px" placeholder="请确认登录密码" v-model="password1">
       <el-button type="success" plain style="width:100%;height:35px;border:1px solid #41d787;color:#00a041;background:#ecfcf2;font-size:14px;line-height: 5px;" @click="submit()">提交</el-button>
       <div class="returnBack" @click="handleLogin">返回登录页</div>
@@ -28,6 +28,7 @@ import { encrypt } from '@/util'
 export default {
   data() {
     return {
+      validateRules:'',
       sendAuthCode: true,
       auth_time: 0,
       phone: "",
@@ -36,14 +37,26 @@ export default {
       password1: ""
     };
   },
-  created() {},
+  created() {
+    this.securityInfo()
+  },
   methods: {
     handleLogin() {
       this.$router.push({ path: "/login" });
     },
+     securityInfo() {
+      this.api.get({
+        url: "securityInfo",
+        callback: res => {
+          if (res.code == "0000") {
+              this.validateRules=res.data.message
+          }
+        }
+      });
+    },
     submit() {
       let phone = /^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\d{8}$/;
-      let psw = /^(?!^\d+$)(?!^[A-Za-z]+$)(?!^[^A-Za-z0-9]+$)(?!^.*[\u4E00-\u9FA5].*$)^\S{8,16}$/;
+      // let psw = /^(?!^\d+$)(?!^[A-Za-z]+$)(?!^[^A-Za-z0-9]+$)(?!^.*[\u4E00-\u9FA5].*$)^\S{8,16}$/;
       let code = /^[0-9]{6}$/;
       if (!phone.test(this.phone)) {
         this.$message.error("请输入11位正确的手机号码");
@@ -53,9 +66,9 @@ export default {
         this.$message.error("请输入6位数字验证码");
         return;
       }
-      if (!psw.test(this.password)) {
+      if (!this.password) {
         this.$message.error(
-          "密码至少为字母、数字、符号两种组成的8-16字符，不包含空格,不能输入中文"
+          "密码不能为空"
         );
         return;
       }

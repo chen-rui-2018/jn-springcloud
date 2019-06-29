@@ -101,6 +101,7 @@ public class SysUserServiceImpl implements SysUserService {
         BeanUtils.copyProperties(sysUser, tbSysUser);
         tbSysUser.setCreatedTime(new Date());
         tbSysUser.setCreatorAccount(user.getAccount());
+        tbSysUser.setModifiedTime(new Date());
         if (StringUtils.isBlank(tbSysUser.getPassword())) {
             tbSysUser.setPassword(EncryptUtil.encryptSha256(RandomStringUtils.random(6, true, true)));
         }

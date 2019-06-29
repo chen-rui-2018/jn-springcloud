@@ -23,10 +23,6 @@ public class EnvironmentMonitorAirQualityAllResult implements Serializable {
      * 获取实时南京市平均空气质量
      */
     private List<DeviceRealTimeCityAirQualityResult> deviceRealTimeCityAirQualityResults;
-    /**
-     * 获取实时设备污染级别
-     */
-    private List<DeviceRealTimePolluteLevelResult> deviceRealTimePolluteLevelResults;
 
     public List<DeviceRealTimeAirQualityResult> getDeviceRealTimeAirQualityResults() {
         return deviceRealTimeAirQualityResults;
@@ -44,20 +40,11 @@ public class EnvironmentMonitorAirQualityAllResult implements Serializable {
         this.deviceRealTimeCityAirQualityResults = deviceRealTimeCityAirQualityResults;
     }
 
-    public List<DeviceRealTimePolluteLevelResult> getDeviceRealTimePolluteLevelResults() {
-        return deviceRealTimePolluteLevelResults;
-    }
-
-    public void setDeviceRealTimePolluteLevelResults(List<DeviceRealTimePolluteLevelResult> deviceRealTimePolluteLevelResults) {
-        this.deviceRealTimePolluteLevelResults = deviceRealTimePolluteLevelResults;
-    }
-
     @Override
     public String toString() {
         return "EnvironmentMonitorAirQualityAllResult{" +
                 "deviceRealTimeAirQualityResults=" + deviceRealTimeAirQualityResults +
                 ", deviceRealTimeCityAirQualityResults=" + deviceRealTimeCityAirQualityResults +
-                ", deviceRealTimePolluteLevelResults=" + deviceRealTimePolluteLevelResults +
                 '}';
     }
 }

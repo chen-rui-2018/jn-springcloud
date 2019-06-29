@@ -317,9 +317,9 @@ export default {
         return;
       }
       if (this.getUserInfo()) {
-        _this.userAccount = JSON.parse(this.getUserInfo()).account;
+        this.userAccount = JSON.parse(this.getUserInfo()).account;
       } else{
-        _this.userAccount=''
+        this.userAccount=''
       }
       let _this = this;
       this.api.post({

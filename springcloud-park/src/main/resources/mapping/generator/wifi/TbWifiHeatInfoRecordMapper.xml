@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.wifi.dao.TbWifiHeatInfoRecordMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.wifi.entity.TbWifiHeatInfoRecord">
+    <id column="id_" jdbcType="VARCHAR" property="id" />
+    <result column="tenant_id_" jdbcType="VARCHAR" property="tenantId" />
+    <result column="ip_" jdbcType="VARCHAR" property="ip" />
+    <result column="create_by_" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_time_" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_by_" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_time_" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="batch_id" jdbcType="VARCHAR" property="batchId" />
+    <result column="ap_name" jdbcType="VARCHAR" property="apName" />
+    <result column="count" jdbcType="INTEGER" property="count" />
+    <result column="device" jdbcType="VARCHAR" property="device" />
+    <result column="tower_id" jdbcType="VARCHAR" property="towerId" />
+    <result column="ap_name_tower" jdbcType="VARCHAR" property="apNameTower" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id_, tenant_id_, ip_, create_by_, create_time_, update_by_, update_time_, batch_id, 
+    ap_name, count, device, tower_id, ap_name_tower
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.park.wifi.entity.TbWifiHeatInfoRecordCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_wifi_heat_info_record
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_wifi_heat_info_record
+    where id_ = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_wifi_heat_info_record
+    where id_ = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.park.wifi.entity.TbWifiHeatInfoRecordCriteria">
+    delete from tb_wifi_heat_info_record
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.park.wifi.entity.TbWifiHeatInfoRecord">
+    insert into tb_wifi_heat_info_record (id_, tenant_id_, ip_, 
+      create_by_, create_time_, update_by_, 
+      update_time_, batch_id, ap_name, 
+      count, device, tower_id, 
+      ap_name_tower)
+    values (#{id,jdbcType=VARCHAR}, #{tenantId,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}, 
+      #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{batchId,jdbcType=VARCHAR}, #{apName,jdbcType=VARCHAR}, 
+      #{count,jdbcType=INTEGER}, #{device,jdbcType=VARCHAR}, #{towerId,jdbcType=VARCHAR}, 
+      #{apNameTower,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.park.wifi.entity.TbWifiHeatInfoRecord">
+    insert into tb_wifi_heat_info_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id_,
+      </if>
+      <if test="tenantId != null">
+        tenant_id_,
+      </if>
+      <if test="ip != null">
+        ip_,
+      </if>
+      <if test="createBy != null">
+        create_by_,
+      </if>
+      <if test="createTime != null">
+        create_time_,
+      </if>
+      <if test="updateBy != null">
+        update_by_,
+      </if>
+      <if test="updateTime != null">
+        update_time_,
+      </if>
+      <if test="batchId != null">
+        batch_id,
+      </if>
+      <if test="apName != null">
+        ap_name,
+      </if>
+      <if test="count != null">
+        count,
+      </if>
+      <if test="device != null">
+        device,
+      </if>
+      <if test="towerId != null">
+        tower_id,
+      </if>
+      <if test="apNameTower != null">
+        ap_name_tower,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null">
+        #{tenantId,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null">
+        #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="batchId != null">
+        #{batchId,jdbcType=VARCHAR},
+      </if>
+      <if test="apName != null">
+        #{apName,jdbcType=VARCHAR},
+      </if>
+      <if test="count != null">
+        #{count,jdbcType=INTEGER},
+      </if>
+      <if test="device != null">
+        #{device,jdbcType=VARCHAR},
+      </if>
+      <if test="towerId != null">
+        #{towerId,jdbcType=VARCHAR},
+      </if>
+      <if test="apNameTower != null">
+        #{apNameTower,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.park.wifi.entity.TbWifiHeatInfoRecordCriteria" resultType="java.lang.Long">
+    select count(*) from tb_wifi_heat_info_record
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_wifi_heat_info_record
+    <set>
+      <if test="record.id != null">
+        id_ = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tenantId != null">
+        tenant_id_ = #{record.tenantId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ip != null">
+        ip_ = #{record.ip,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createBy != null">
+        create_by_ = #{record.createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time_ = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateBy != null">
+        update_by_ = #{record.updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null">
+        update_time_ = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.batchId != null">
+        batch_id = #{record.batchId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.apName != null">
+        ap_name = #{record.apName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.count != null">
+        count = #{record.count,jdbcType=INTEGER},
+      </if>
+      <if test="record.device != null">
+        device = #{record.device,jdbcType=VARCHAR},
+      </if>
+      <if test="record.towerId != null">
+        tower_id = #{record.towerId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.apNameTower != null">
+        ap_name_tower = #{record.apNameTower,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_wifi_heat_info_record
+    set id_ = #{record.id,jdbcType=VARCHAR},
+      tenant_id_ = #{record.tenantId,jdbcType=VARCHAR},
+      ip_ = #{record.ip,jdbcType=VARCHAR},
+      create_by_ = #{record.createBy,jdbcType=VARCHAR},
+      create_time_ = #{record.createTime,jdbcType=TIMESTAMP},
+      update_by_ = #{record.updateBy,jdbcType=VARCHAR},
+      update_time_ = #{record.updateTime,jdbcType=TIMESTAMP},
+      batch_id = #{record.batchId,jdbcType=VARCHAR},
+      ap_name = #{record.apName,jdbcType=VARCHAR},
+      count = #{record.count,jdbcType=INTEGER},
+      device = #{record.device,jdbcType=VARCHAR},
+      tower_id = #{record.towerId,jdbcType=VARCHAR},
+      ap_name_tower = #{record.apNameTower,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.wifi.entity.TbWifiHeatInfoRecord">
+    update tb_wifi_heat_info_record
+    <set>
+      <if test="tenantId != null">
+        tenant_id_ = #{tenantId,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null">
+        ip_ = #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        create_by_ = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time_ = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        update_by_ = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time_ = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="batchId != null">
+        batch_id = #{batchId,jdbcType=VARCHAR},
+      </if>
+      <if test="apName != null">
+        ap_name = #{apName,jdbcType=VARCHAR},
+      </if>
+      <if test="count != null">
+        count = #{count,jdbcType=INTEGER},
+      </if>
+      <if test="device != null">
+        device = #{device,jdbcType=VARCHAR},
+      </if>
+      <if test="towerId != null">
+        tower_id = #{towerId,jdbcType=VARCHAR},
+      </if>
+      <if test="apNameTower != null">
+        ap_name_tower = #{apNameTower,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id_ = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.wifi.entity.TbWifiHeatInfoRecord">
+    update tb_wifi_heat_info_record
+    set tenant_id_ = #{tenantId,jdbcType=VARCHAR},
+      ip_ = #{ip,jdbcType=VARCHAR},
+      create_by_ = #{createBy,jdbcType=VARCHAR},
+      create_time_ = #{createTime,jdbcType=TIMESTAMP},
+      update_by_ = #{updateBy,jdbcType=VARCHAR},
+      update_time_ = #{updateTime,jdbcType=TIMESTAMP},
+      batch_id = #{batchId,jdbcType=VARCHAR},
+      ap_name = #{apName,jdbcType=VARCHAR},
+      count = #{count,jdbcType=INTEGER},
+      device = #{device,jdbcType=VARCHAR},
+      tower_id = #{towerId,jdbcType=VARCHAR},
+      ap_name_tower = #{apNameTower,jdbcType=VARCHAR}
+    where id_ = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

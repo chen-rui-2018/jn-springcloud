@@ -202,9 +202,10 @@ export default {
         this.$refs.upload.uploadFiles.splice(this.$refs.upload.uploadFiles.length - 1, 1)
         return false
         // this.uploadComplete = false
+      } else {
+        this.meetingroomForm.attachmentPaths.push(res.data)
+        this.dialogImageUrl = res.data
       }
-      this.meetingroomForm.attachmentPaths.push(res.data)
-      this.dialogImageUrl = res.data
       // this.uploadComplete = true
       // console.log(this.meetingroomForm.attachmentPaths)
       // console.log(file)

@@ -1,5 +1,6 @@
 package com.jn.enterprise.pay.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
@@ -13,6 +14,9 @@ import com.jn.enterprise.pay.entity.*;
 import com.jn.enterprise.pay.enums.*;
 import com.jn.enterprise.pay.service.MyPayAccountService;
 import com.jn.enterprise.pay.util.AutoOrderUtil;
+import com.jn.park.api.ElectricMeterClient;
+import com.jn.park.electricmeter.model.CompanyModel;
+import com.jn.park.electricmeter.model.ElectricMeterInfoModel;
 import com.jn.pay.model.*;
 import com.jn.pay.vo.*;
 import com.jn.send.api.DelaySendMessageClient;
@@ -32,6 +36,7 @@ import org.xxpay.common.util.JsonUtil;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import com.jn.park.api.*;
 
 /**
  * 我的账户(业务实现层)
@@ -72,6 +77,9 @@ public class MyPayAccountServiceImpl implements MyPayAccountService {
 
     @Autowired
     private DelaySendMessageClient delaySendMessageClient;
+
+    @Autowired
+    private ElectricMeterClient ElectricMeterClient;
 
     @ServiceLog(doAction = "我的账户-查询当前账户下所有账本信息")
     @Override
@@ -225,16 +233,88 @@ public class MyPayAccountServiceImpl implements MyPayAccountService {
 
     @Override
     @ServiceLog(doAction = "创建账户和账本")
-    @Transactional(rollbackFor = RuntimeException.class)
+    @Transactional(rollbackFor = Exception.class)
     public Result createPayAccountBook(PayAccountBookCreateParam payAccountBookCreateParam, User user) {
         logger.info("【进入创建账户和账本方法】，入參【{}】",JsonUtil.object2Json(payAccountBookCreateParam),JsonUtil.object2Json(user));
         /**1.验证该企业用户是否有统一缴费账户，不处理以后企业管理员是否变更*/
         TbPayAccount tbPayAccount1 = tbPayAccountMapper.selectByPrimaryKey(payAccountBookCreateParam.getComAdmin());
-        /**查询传的账本编号是否存在*/
-        if (tbPayAccount1 != null) {
-            throw new JnSpringCloudException(PaymentBillExceptionEnum.BILL_ACCOUNT_EXIT);
+        /**调用内部接口电费点位接口,获取电表数据*/
+        CompanyModel companyModel = new CompanyModel();
+        companyModel.setCompanyId(payAccountBookCreateParam.getEnterId());
+        logger.info("【统一缴费-创建账户和账本】，调用电费点位接口入參【{}】",JsonUtil.object2Json(companyModel));
+        Result meterInfos = ElectricMeterClient.getMeterInfosByCompanyId(companyModel);
+        logger.info("【统一缴费-创建账户和账本】，调用电费点位接口返回参数【{}】",JsonUtil.object2Json(meterInfos));
+        List<ElectricMeterInfoModel> els = new ArrayList<>();
+        if(meterInfos.getData() != null){
+            els = (List<ElectricMeterInfoModel>) meterInfos.getData();
         }
-        /**2.有：则返回提示信息 无：新建统一缴费账户和账本信息*/
+        /**存储点位电表编码*/
+        List<String> list = new ArrayList<>();
+        /**存储电费账本电表编码*/
+        List<String> list2 = new ArrayList<>();
+        TbPayAccountBook tbPayAccountBook = new TbPayAccountBook();
+        /**如果账本存在，需查询该账户下的电费账本是否存在*/
+        List<TbPayAccountBook> tbPayAccountBooks = null;
+        if (tbPayAccount1 != null) {
+            /**1.查询该账户下电费账本信息*/
+            TbPayAccountBookCriteria criteria = new TbPayAccountBookCriteria();
+            TbPayAccountBookCriteria.Criteria criteriaCriteria = criteria.createCriteria();
+            criteriaCriteria.andAccountIdEqualTo(tbPayAccount1.getAccountId());
+            criteriaCriteria.andAcBookTypeEqualTo(PaymentBillEnum.BILL_AC_BOOK_TYPE_1.getCode());
+            logger.info("【统一缴费-创建账户和账本】，查询该账户下电费账本信息入參【{}】",JsonUtil.object2Json(criteria));
+            tbPayAccountBooks = tbPayAccountBookMapper.selectByExample(criteria);
+            logger.info("【统一缴费-创建账户和账本】，查询该账户下电费账本信息返回参数【{}】",JsonUtil.object2Json(tbPayAccountBooks));
+
+            /**如果账本存在且有电费账本信息，则需与电表点位接口进行对比*/
+            /**遍历点位接口数据*/
+            if(els.size() > 0){
+                for (int i = 0; i < els.size(); i++) {
+                    ElectricMeterInfoModel model = JSON.parseObject(JSON.toJSONString(els.get(i)),ElectricMeterInfoModel.class);
+                    if(StringUtils.isNotBlank(model.getMeterCode())){
+                        list.add(model.getMeterCode());
+                    }
+                }
+            }
+            /**遍历电费账本*/
+            if(tbPayAccountBooks.size() > 0){
+                for (TbPayAccountBook tb: tbPayAccountBooks) {
+                    if(StringUtils.isNotBlank(tb.getMeterCode())) {
+                        list2.add(tb.getMeterCode());
+                    }
+                }
+            }
+            /**获取电表点位接口中不包含的电费账本编码*/
+            Collection<String> exists=new ArrayList<String>(list);
+            exists.removeAll(list2);
+            /**如果exists等于0，代表无需新增，则提示信息;如果大于0则新增电费账本*/
+            if(exists.size() == 0){
+                throw new JnSpringCloudException(PaymentBillExceptionEnum.PAYMENT_ACCOUNT_BOOK_EXIT);
+            }else{
+                /**新增当前账户下没有的电费账本*/
+                for (String str : exists) {
+                    tbPayAccountBook.setAccountId(tbPayAccount1.getAccountId());
+                    tbPayAccountBook.setEntId(tbPayAccount1.getEntId());
+                    tbPayAccountBook.setCreatedTime(new Date());
+                    if(user != null) {
+                        tbPayAccountBook.setCreatorAccount(user.getAccount());
+                    }
+                    tbPayAccountBook.setRecordStatus(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
+                    tbPayAccountBook.setAcBookId(AutoOrderUtil.autoOrderId());
+                    tbPayAccountBook.setAcBookType(PaymentBillEnum.BILL_AC_BOOK_TYPE_1.getCode());
+                    tbPayAccountBook.setAcBookName("电费账本["+str+"]");
+                    tbPayAccountBook.setAutomaticDeductions(PayAccountBookEnum.ACCOUNT_BOOK_AUTO.getCode());
+                    tbPayAccountBook.setCanRecharge(PayAccountBookEnum.ACCOUNT_BOOK_RECHARGE.getCode());
+                    tbPayAccountBook.setIsShow(PayAccountBookEnum.ACCOUNT_BOOK_IS_SHOW.getCode());
+                    tbPayAccountBook.setMeterCode(str);
+                    logger.info("【统一缴费-创建账户和账本】，新增当前账户下没有的电费账本入參【{}】",JsonUtil.object2Json(tbPayAccountBook));
+                    tbPayAccountBookMapper.insertSelective(tbPayAccountBook);
+                }
+                return new Result("新增电费账本成功");
+            }
+        }
+
+
+        /**2.无：新建统一缴费账户和账本信息*/
         TbPayAccount tbPayAccount = new TbPayAccount();
         tbPayAccount.setUserId(payAccountBookCreateParam.getComAdmin());
         tbPayAccount.setEntId(payAccountBookCreateParam.getEnterId());
@@ -250,7 +330,6 @@ public class MyPayAccountServiceImpl implements MyPayAccountService {
         logger.info("【统一缴费-创建账户和账本】，创建账户结束");
         /**创建该企业账本信息*/
         Map<String,String>  map = new HashMap<>();
-        map.put(PaymentBillEnum.BILL_AC_BOOK_TYPE_1.getCode(),PaymentBillEnum.BILL_AC_BOOK_TYPE_1.getMessage().substring(0,PaymentBillEnum.BILL_AC_BOOK_TYPE_1.getMessage().length()-2));
         map.put(PaymentBillEnum.BILL_AC_BOOK_TYPE_2.getCode(),PaymentBillEnum.BILL_AC_BOOK_TYPE_2.getMessage().substring(0,PaymentBillEnum.BILL_AC_BOOK_TYPE_2.getMessage().length()-2));
         map.put(PaymentBillEnum.BILL_AC_BOOK_TYPE_3.getCode(),PaymentBillEnum.BILL_AC_BOOK_TYPE_3.getMessage().substring(0,PaymentBillEnum.BILL_AC_BOOK_TYPE_3.getMessage().length()-2));
         map.put(PaymentBillEnum.BILL_AC_BOOK_TYPE_4.getCode(),PaymentBillEnum.BILL_AC_BOOK_TYPE_4.getMessage().substring(0,PaymentBillEnum.BILL_AC_BOOK_TYPE_4.getMessage().length()-2));
@@ -260,9 +339,8 @@ public class MyPayAccountServiceImpl implements MyPayAccountService {
         map.put(PaymentBillEnum.BILL_AC_BOOK_TYPE_8.getCode(),PaymentBillEnum.BILL_AC_BOOK_TYPE_8.getMessage().substring(0,PaymentBillEnum.BILL_AC_BOOK_TYPE_8.getMessage().length()-2));
         map.put(PaymentBillEnum.BILL_AC_BOOK_TYPE_9.getCode(),PaymentBillEnum.BILL_AC_BOOK_TYPE_9.getMessage().substring(0,PaymentBillEnum.BILL_AC_BOOK_TYPE_9.getMessage().length()-2));
         map.put(PaymentBillEnum.BILL_AC_BOOK_TYPE_10.getCode(),PaymentBillEnum.BILL_AC_BOOK_TYPE_10.getMessage().substring(0,PaymentBillEnum.BILL_AC_BOOK_TYPE_10.getMessage().length()-2));
-        TbPayAccountBook tbPayAccountBook = new TbPayAccountBook();
         tbPayAccountBook.setAccountId(tbPayAccount.getAccountId());
-        tbPayAccountBook.setEntId(payAccountBookCreateParam.getEnterId());
+        tbPayAccountBook.setEntId(tbPayAccount.getEntId());
         tbPayAccountBook.setCreatedTime(new Date());
         if(user != null) {
             tbPayAccountBook.setCreatorAccount(user.getAccount());
@@ -272,19 +350,28 @@ public class MyPayAccountServiceImpl implements MyPayAccountService {
             tbPayAccountBook.setAcBookId(AutoOrderUtil.autoOrderId());
             tbPayAccountBook.setAcBookType(entry.getKey());
             tbPayAccountBook.setAcBookName(entry.getValue());
-            if(entry.getKey().equals(PaymentBillEnum.BILL_AC_BOOK_TYPE_1.getCode())){
-                tbPayAccountBook.setAutomaticDeductions(PayAccountBookEnum.ACCOUNT_BOOK_AUTO.getCode());
-                tbPayAccountBook.setCanRecharge(PayAccountBookEnum.ACCOUNT_BOOK_RECHARGE.getCode());
-                tbPayAccountBook.setIsShow(PayAccountBookEnum.ACCOUNT_BOOK_IS_SHOW.getCode());
-            }else{
-                tbPayAccountBook.setAutomaticDeductions(PayAccountBookEnum.ACCOUNT_BOOK_NOT_AUTO.getCode());
-                tbPayAccountBook.setCanRecharge(PayAccountBookEnum.ACCOUNT_BOOK_NOT_RECHARGE.getCode());
-                tbPayAccountBook.setIsShow(PayAccountBookEnum.ACCOUNT_BOOK_IS_NOT_SHOW.getCode());
-            }
+            tbPayAccountBook.setAutomaticDeductions(PayAccountBookEnum.ACCOUNT_BOOK_NOT_AUTO.getCode());
+            tbPayAccountBook.setCanRecharge(PayAccountBookEnum.ACCOUNT_BOOK_NOT_RECHARGE.getCode());
+            tbPayAccountBook.setIsShow(PayAccountBookEnum.ACCOUNT_BOOK_IS_NOT_SHOW.getCode());
             logger.info("【统一缴费-创建账户和账本】，创建账本开始");
             logger.info("【统一缴费-创建账户和账本】，创建账本入參【{}】",JsonUtil.object2Json(tbPayAccountBook));
             tbPayAccountBookMapper.insertSelective(tbPayAccountBook);
             logger.info("【统一缴费-创建账户和账本】，创建账本结束");
+        }
+        /**因电费账本是一对多，单独创建*/
+        if(els.size() > 0){
+            for (ElectricMeterInfoModel el: els) {
+                tbPayAccountBook.setAcBookId(AutoOrderUtil.autoOrderId());
+                tbPayAccountBook.setAcBookType(PaymentBillEnum.BILL_AC_BOOK_TYPE_1.getCode());
+                tbPayAccountBook.setAcBookName("电费账本["+el+"]");
+                tbPayAccountBook.setAutomaticDeductions(PayAccountBookEnum.ACCOUNT_BOOK_AUTO.getCode());
+                tbPayAccountBook.setCanRecharge(PayAccountBookEnum.ACCOUNT_BOOK_RECHARGE.getCode());
+                tbPayAccountBook.setIsShow(PayAccountBookEnum.ACCOUNT_BOOK_IS_SHOW.getCode());
+                tbPayAccountBook.setMeterCode(el.getMeterCode());
+                tbPayAccountBook.setRecordStatus(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
+                logger.info("【统一缴费-创建账户和账本】，创建电费账本入參【{}】",JsonUtil.object2Json(tbPayAccountBook));
+                tbPayAccountBookMapper.insertSelective(tbPayAccountBook);
+            }
         }
         return new Result("创建账户和账本成功");
     }

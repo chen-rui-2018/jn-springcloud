@@ -5,6 +5,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.enterprise.pay.entity.TbPayBillDetails;
+import com.jn.enterprise.pay.enums.PaymentBillEnum;
 import com.jn.enterprise.pay.service.MyPayBillService;
 import com.jn.pay.vo.PayBillDetailsVo;
 import com.jn.pay.vo.PayBillVo;
@@ -102,6 +103,9 @@ public class MyPayBillController extends BaseController {
         Assert.notNull(payBillCreateParamVo.getBillId(),"账本编号不能为空");
         Assert.notNull(payBillCreateParamVo.getLatePayment(),"最迟缴费时间不能为空");
         Assert.notNull(payBillCreateParamVo.getObjType(),"对象类型不能为空");
+        if(PaymentBillEnum.BILL_AC_BOOK_TYPE_1.getCode().equals(payBillCreateParamVo.getAcBookType())){
+            Assert.notNull(payBillCreateParamVo.getMeterCode(),"电表编号不能为空");
+        }
         Result result=myPayBillService.billCreate(payBillCreateParamVo);
         return result;
     }

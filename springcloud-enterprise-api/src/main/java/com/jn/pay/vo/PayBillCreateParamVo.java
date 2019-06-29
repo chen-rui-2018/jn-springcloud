@@ -63,6 +63,9 @@ public class PayBillCreateParamVo implements Serializable {
     @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
     private Date latePayment;
 
+    @ApiModelProperty(value="电表编码[电费账单必传]",example = "1234")
+    private String meterCode;
+
     @ApiModelProperty(value="缴费详情【存list对象集合】")
     List<PayBillDetails> payBillDetails;
 
@@ -180,5 +183,13 @@ public class PayBillCreateParamVo implements Serializable {
 
     public void setPayBillDetails(List<PayBillDetails> payBillDetails) {
         this.payBillDetails = payBillDetails;
+    }
+
+    public String getMeterCode() {
+        return meterCode;
+    }
+
+    public void setMeterCode(String meterCode) {
+        this.meterCode = meterCode;
     }
 }

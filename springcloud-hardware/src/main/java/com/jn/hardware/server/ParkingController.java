@@ -34,7 +34,7 @@ public class ParkingController extends BaseController implements ParkingClient {
     private ParkingService parkingService;
 
     @Override
-    public Result getTemporaryCarParkingFee(@RequestBody TemporaryCarParkingFeeRequest temporaryCarParkingFeeRequest) {
+    public Result<DoorTemporaryCarParkingFeeResponse> getTemporaryCarParkingFee(@RequestBody TemporaryCarParkingFeeRequest temporaryCarParkingFeeRequest) {
         return parkingService.getTemporaryCarParkingFee(temporaryCarParkingFeeRequest);
     }
 

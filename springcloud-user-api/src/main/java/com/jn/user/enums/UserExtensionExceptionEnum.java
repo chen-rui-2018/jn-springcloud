@@ -22,6 +22,7 @@ public enum UserExtensionExceptionEnum implements CodeAndMsg {
     SEARCH_PARAM_NOT_NULL("3020509","查询入参不能为空"),
     BIRTHDAY_FORMAT_ERROR("3020510","出生年月传参格式错误"),
     REGISTER_TYPE_NOT_ALLOW("3020511","微信注册枚举系统不识别"),
+    ACCOUNT_NOT_ALLOW_LOGIN("3020512","前用户账号已被管理员注销，请联系管理员"),
     ;
     /**
      * 编码

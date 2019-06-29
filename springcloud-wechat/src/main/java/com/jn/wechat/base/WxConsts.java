@@ -31,6 +31,7 @@ public class WxConsts {
     public static class EventType {
         public static final String SUBSCRIBE = "subscribe";
         public static final String UNSUBSCRIBE = "unsubscribe";
+        public static final String MENU_VIEW="VIEW";
     }
 
     /**

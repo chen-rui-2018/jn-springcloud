@@ -57,7 +57,7 @@
                 </p>
                 <p>服务顾问：{{i.advisorName}}</p>
                 <p>参考价格：
-                  <span class="mainColor">{{i.referPrice}}</span>&nbsp;万元</p>
+                  <span class="mainColor">{{i.referPrice}}</span>&nbsp;元</p>
                 <p>累计
                   <span class="mainColor">{{i.transactionsNumber}}</span>&nbsp;笔交易</p>
               </div>

@@ -90,7 +90,7 @@
                 </p>
                 <p>地址：{{i.orgAddress}}</p>
                 <p>累计
-                  <span class="mainColor">{{i.transactionNum}}</span>笔交易</p>
+                  <span class="mainColor">{{i.transactionNum}}</span>&nbsp;笔交易</p>
               </div>
               <div class="right1 fl">
                 <p>

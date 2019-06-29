@@ -133,7 +133,8 @@ export default {
         getScienceExcel:"springcloud-enterprise/data/garden/getScienceExcel", // 科技园模板
         getCompanyExcel:"springcloud-enterprise/data/garden/getCompanyExcel", // 纵向树形指标导出模式
         getScienceHeaderExcel:"springcloud-enterprise/data/garden/getScienceHeaderExcel", // 科技园模板表头
-
+             //用户资料设置
+             securityInfo:"springcloud-app-system/securityInfo", // 获取加密规则
         // 个人中心首页
         findEmployeeRequisition:"springcloud-enterprise/userCenter/Index/findEmployeeRequisition", // 员工申请
         findActivityManage:"springcloud-enterprise/userCenter/Index/findActivityManage", // 活动管理

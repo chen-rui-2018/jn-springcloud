@@ -62,8 +62,10 @@ export default {
   },
   mounted () {
     this.id = this.$route.query.id
+    console.log(this.$route.query)
     if (this.$route.query.isShow === '0') {
       this.isShow = this.$route.query.isShow
+      console.log(this.isShow)
     }
     this.getDetail()
   },

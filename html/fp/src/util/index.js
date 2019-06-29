@@ -348,17 +348,11 @@ export function getDateString (str) {
 }
 
 const encryptKey = CryptoJS.enc.Utf8.parse('123!@#avrd59aNJA');
-
-// const encryptKey = '123!@#avrd59aNJA'
 // 加密方法
 function encrypt(str) {
   str = CryptoJS.AES.encrypt(str, encryptKey, {mode:CryptoJS.mode.ECB, padding: CryptoJS.pad.Pkcs7}).toString();
   return str.replace(/\r\n/g, '').replace(/\+/g, '/add/');
 }
-// function encrypt(str) {
-//   return CryptoJS.AES.encrypt(str, encryptKey).toString()
-// }
-
 // 解密方法
 function decrypt(str) {
   const bytes  = CryptoJS.AES.decrypt(str, encryptKey)

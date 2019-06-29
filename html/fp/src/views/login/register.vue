@@ -15,7 +15,7 @@
       </div>
       <div class="tipPsw">请输入收到短信中的验证码</div>
       <input class="input" type="password" placeholder="请输入登录密码" v-model="password">
-      <div class="tipPsw">密码至少为字母、数字、符号两种组成的8-16字符</div>
+      <div class="tipPsw">{{validateRules}}</div>
       <input class="input" type="password" placeholder="请确认登录密码" v-model="password1">
       <div class="userAgree">
         <!-- <input id="usercheckBox" v-model="checked" type="checkbox"> -->
@@ -112,6 +112,7 @@ import { encrypt } from '@/util'
 export default {
   data() {
     return {
+      validateRules:'',
       showAgreement: false,
       sendAuthCode: true,
       auth_time: 0,
@@ -124,7 +125,9 @@ export default {
       loading: false
     };
   },
-  created() {},
+  created() {
+    this.securityInfo()
+  },
   methods: {
     inputBlur() {
       let _this=this
@@ -139,6 +142,17 @@ export default {
               _this.$message.error("当前账号已注册");
               return
             }
+          }
+        }
+      });
+    },
+     securityInfo() {
+      this.api.get({
+        url: "securityInfo",
+        callback: res => {
+          console.log(res)
+          if (res.code == "0000") {
+              this.validateRules=res.data.message
           }
         }
       });
@@ -158,9 +172,9 @@ export default {
         this.$message.error("请输入6位数字验证码");
         return;
       }
-      if (!psw.test(this.password)) {
+      if (!this.password) {
         this.$message.error(
-          "密码至少为字母、数字、符号两种组成的8-16字符，不包含空格,不能输入中文"
+          "密码不能为空"
         );
         return;
       }

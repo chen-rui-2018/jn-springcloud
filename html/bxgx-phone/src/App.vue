@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <administrative-header v-if="this.$route.name==='electricInfo'"></administrative-header>
+    <!-- <administrative-header v-if="this.$route.name==='electricInfo'"></administrative-header> -->
     <router-view/>
   </div>
 </template>

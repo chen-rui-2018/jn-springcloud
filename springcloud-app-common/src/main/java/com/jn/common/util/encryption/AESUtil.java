@@ -10,7 +10,6 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
 public class AESUtil {
-	//	public static final String DEFAULT_KEY = "123!@#abcs59aYGM";
 	public static final String DEFAULT_KEY = "123!@#avrd59aNJA";
 	private static final String ADD = "/add/";
 

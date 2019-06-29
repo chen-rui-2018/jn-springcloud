@@ -47,8 +47,6 @@ public class LoginServiceImpl implements LoginService {
             throw new JnSpringCloudException(ShiroExceptionEnum.UNKNOWN_EFFECTIVE);
         } catch (IncorrectCredentialsException e) {
             throw new JnSpringCloudException(ShiroExceptionEnum.UNKNOWN_PASSWORD);
-        } catch (Exception e){
-            throw new JnSpringCloudException(SysExceptionEnums.DECRYPT_FAIL);
         }
     }
 

@@ -19,6 +19,7 @@
 
 <script>
 import { setToken, setUserInfo } from '@/util/auth'
+import { encrypt } from '@/util'
 export default {
   data() {
     return {
@@ -56,8 +57,8 @@ export default {
       this.api.post({
         url: "loginURL",
         data: {
-          account: this.loginform.account,
-          password: this.loginform.password
+          account: encrypt(this.loginform.account),
+          password: encrypt(this.loginform.password)
         },
         dataFlag: false,
         callback: res => {

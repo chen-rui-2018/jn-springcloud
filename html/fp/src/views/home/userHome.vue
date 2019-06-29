@@ -155,6 +155,7 @@
 </template>
 <script>
 import { getToken } from "@/util/auth";
+import { encrypt } from '@/util'
 import bus from "@/util/bus";
 export default {
   props: ["userData"],
@@ -324,10 +325,10 @@ export default {
       this.api.post({
         url: "modifyUserPassword",
         data: {
-          account: _this.userAccount,
-          newPassword: _this.newPassword,
+          account: encrypt(_this.userAccount),
+          newPassword: encrypt(_this.newPassword),
           // newPasswordB: _this.newPasswordB,
-          oldPassword: _this.oldPassword
+          oldPassword: encrypt(_this.oldPassword)
         },
         // dataFlag: false,
         callback: function(res) {

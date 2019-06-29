@@ -4,6 +4,7 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.park.api.ElectricMeterClient;
 import com.jn.park.electricmeter.model.CompanyModel;
+import com.jn.park.electricmeter.model.CostBillModel;
 import com.jn.park.electricmeter.service.ElectricRulesInfoService;
 import com.jn.park.electricmeter.service.MeterRulesService;
 import com.jn.park.electricmeter.service.MeterService;
@@ -13,6 +14,8 @@ import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,4 +92,10 @@ public class MeterTimerController extends BaseController implements ElectricMete
         return meterService.getMeterInfosByCompanyId(companyModel.getCompanyId());
     }
 
+
+    @ControllerLog(doAction = "更新企业余额")
+    @Override
+    public Result updateBillCost(@RequestBody CostBillModel companyModel){
+        return meterService.updateBillCost(companyModel);
+    }
 }

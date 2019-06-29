@@ -24,6 +24,9 @@ public class PayAccountBook implements Serializable {
     @ApiModelProperty(value="账本ID")
     private String acBookId;
 
+    @ApiModelProperty(value="企业ID")
+    private String entId;
+
     @ApiModelProperty(value="账号ID")
     private String accountId;
 
@@ -168,5 +171,13 @@ public class PayAccountBook implements Serializable {
 
     public void setRecordStatus(String recordStatus) {
         this.recordStatus = recordStatus;
+    }
+
+    public String getEntId() {
+        return entId;
+    }
+
+    public void setEntId(String entId) {
+        this.entId = entId;
     }
 }

@@ -189,7 +189,7 @@ public class MeterController extends BaseController {
         return meterCalcCostService.calcCostEverdayByHandler( user,  param.getCompanyId(),  param.getDay(),param.getMeterCode());
     }
 
-    //电表业主维护
+    //电表业主维
 
     @ControllerLog(doAction = "电表业主维护")
     @ApiOperation(value = "电表业主维护",notes = "电表业主维护", httpMethod = "POST")

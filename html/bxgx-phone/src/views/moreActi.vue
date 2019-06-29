@@ -39,7 +39,7 @@
               <div class="apply">
                 <div class="apply1">
                   <ul>
-                    <li v-for="(item,index) in i.avatarList" :key="index"><img :src="item" alt=""></li>
+                    <li v-for="(item,index) in i.avatarList" v-if="index<5" :key="index"><img :src="item" alt=""></li>
                     <!-- <li><img src="@/./assets/images/tuceng.png" alt=""></li> -->
                   </ul>
                   <span>{{i.applyNum}}/{{i.actiNumber}}</span>

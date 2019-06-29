@@ -9,6 +9,26 @@ body {
     height: 100%;
     font-family: '微软雅黑';
 }
+ul {
+    list-style: none;
+  }
+  
+  a {
+    text-decoration: none;
+    color: inherit
+  }
+  
+  i {
+    font-style: normal;
+  }
+  
+  input {
+    outline-style: none;
+  }
+  
+  img {
+    vertical-align: middle;
+  }
 
 .clearfix:after {
     content: "";
@@ -27,6 +47,9 @@ body {
     color: #d7d400;
 }
 
+.fl {
+    float: left;
+}
 .fr {
     float: right;
 }

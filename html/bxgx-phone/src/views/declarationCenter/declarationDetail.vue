@@ -27,11 +27,11 @@
             <span>附件: 暂无</span>
           </a>
         </div>
-        <div v-else  class="accessory" v-for="(item,index) in fileList" :key="index" @click="download(item.filePath)">
-          <a :href="url" download=""> <!-- {{item.fileName}} -->
+        <div v-else  class="accessory" v-for="(item,index) in fileList" :key="index" @click="download">
+          <!-- <a href="" download=""> {{item.fileName}} -->
             <span>附件：{{item.fileName}}</span>
             <span>下载<i class="iconfont icon-jiantou"></i></span>
-          </a>
+          <!-- </a> -->
         </div>
       </div>
       <div class="declaration_consult" @click="goConsult" v-if="isShow===1">预约申报</div>
@@ -40,7 +40,6 @@
 </div>
 </template>
 <script>
-// import axios from 'axios'
 export default {
   data () {
     return {
@@ -83,10 +82,8 @@ export default {
         }
       })
     },
-    download (item) {
-      alert(navigator.userAgent)
-      // console.log(navigator.userAgent)
-      if (navigator.userAgent.indexOf('iPhone') > -1) {
+    download () {
+      /* if (navigator.userAgent.indexOf('iPhone') > -1) {
         this.$vux.toast.show({
           text: '当前系统暂不支持下载',
           type: 'warn',
@@ -95,16 +92,15 @@ export default {
         this.url = 'javascript:;'
       } else {
         if (item === '') {
-          this.url = 'javascript:;'
-          this.$vux.toast.show({
-            text: '暂不支持下载',
-            type: 'warn',
-            width: '13em'
-          })
-        } else {
-          this.url = item
-        }
-      }
+          return */ this.$vux.toast.show({
+        text: '暂不支持下载',
+        type: 'warn',
+        width: '13em'
+      })
+      //   } else {
+      //     window.location.href = item
+      //   }
+      // }
     },
     goConsult () {
       let myDate = new Date()
@@ -116,14 +112,14 @@ export default {
       // let deadline = new Date(+new Date(time) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '').replace(/[^0-9]/ig, '')
       // console.log(deadline)
       // console.log(deadline)
-
+      // console.log(myDateStr, deadline)
       this.api.get({
         url: 'getUserExtension',
         data: { },
         callback: (res) => {
           if (res.code === '0000') {
             if (res.data.roleCode === 'COM_ADMIN' || res.data.roleCode === 'COM_CONTACTS') {
-              if (myDateStr < deadline) {
+              if (myDateStr < deadline || this.detailData.preliminaryDeadline === null || this.detailData.preliminaryDeadline === '') {
                 this.$router.push({path: '/guest/pd/consult', query: {id: this.id, title: this.detailData.titleName}})
               } else {
                 // this.$vux.toast.text('您申报的项目已经截止', 'middle')

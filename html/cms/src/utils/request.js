@@ -1,10 +1,11 @@
 import axios from 'axios'
 import $ from 'jquery'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getToken, setToken, removeToken, isMobile } from '@/utils/auth'
 
 // create an axios instance
 const BASE_API = process.env.BASE_API
 const BASE_IBPS_LOGOUT_API = process.env.BASE_IBPS_LOGOUT_API
+const BASE_APP_URL = process.env.BASE_APP_API
 const service = axios.create({
   baseURL: BASE_API, // api 的 base_url
   timeout: 1000 // request timeout
@@ -15,29 +16,33 @@ service.interceptors.request.use(
     // Do something before request is sent
     // console.log('================>getToken：' + getToken() + '<1>' + !getToken())
     if (!getToken()) {
-      $.ajax({
-        url: BASE_API + 'springcloud-app-system/authLogin',
-        type: 'POST',
-        async: false,
-        data: {
-        },
-        dataType: 'json',
-        beforeSend: function(xhr) {
-        },
-        success: function(data, textStatus, jqXHR) {
-          // console.log('================>authLogin请求返回data：' + data)
-          if (data.code === '0000') {
-            if (data.data !== null) {
-              // console.log('================>authLogin请求返回：' + data.data)
-              setToken(data.data)
+      if (isMobile()) {
+        location.href = BASE_APP_URL
+      } else {
+        $.ajax({
+          url: BASE_API + 'springcloud-app-system/authLogin',
+          type: 'POST',
+          async: false,
+          data: {
+          },
+          dataType: 'json',
+          beforeSend: function(xhr) {
+          },
+          success: function(data, textStatus, jqXHR) {
+            // console.log('================>authLogin请求返回data：' + data)
+            if (data.code === '0000') {
+              if (data.data !== null) {
+                // console.log('================>authLogin请求返回：' + data.data)
+                setToken(data.data)
+              }
             }
+          },
+          error: function(xhr, textStatus) {
+          },
+          complete: function() {
           }
-        },
-        error: function(xhr, textStatus) {
-        },
-        complete: function() {
-        }
-      })
+        })
+      }
     }
     // console.log('================>getToken：' + getToken() + '<2>' + !getToken())
     if (getToken() != null) {
@@ -58,21 +63,27 @@ service.interceptors.request.use(
 
 service.interceptors.response.use(response => {
   const res = response.data
-  // console.log('================>请求返回code：' + res.code)
   if (res.code === 'index') {
     removeToken()
-    location.href = BASE_IBPS_LOGOUT_API
+    if (isMobile()) {
+      location.href = BASE_APP_URL
+    } else {
+      location.href = BASE_IBPS_LOGOUT_API
+    }
   } else {
     return response
   }
 }, error => {
   removeToken()
   console.log('请重新登录：' + error)
-  location.href = BASE_IBPS_LOGOUT_API
+  if (isMobile()) {
+    location.href = BASE_APP_URL
+  } else {
+    location.href = BASE_IBPS_LOGOUT_API
+  }
   return Promise.reject(error)
 })
 
-// response interceptor
 // service.interceptors.response.use(
 //   console.log(123),
 //   response => response,

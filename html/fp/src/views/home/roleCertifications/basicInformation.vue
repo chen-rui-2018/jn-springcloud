@@ -846,7 +846,11 @@ export default {
       this.kernelForm.conName = row.conName;
       this.kernelForm.conPosition = row.conPosition;
       this.kernelForm.conQuali = row.conQuali;
-      this.kernelForm.id = row.orgId;
+      if(this.title==='编辑机构'){
+        this.kernelForm.id = row.orgId;
+      }else{
+        this.kernelForm.id = row.id;
+      }
       this.kernelForm.conSpeciality = row.conSpeciality;
       this.kernelForm.conTime = row.conTime;
       this.isShowKernelList = true;
@@ -895,11 +899,15 @@ export default {
           if (valid) {
             if (this.kernelForm.id != 0) {
                let kernelIndex
-              this.kernelList.forEach((v,index)=>{
+               if(this.ttle==="编辑机构"){
+               this.kernelList.forEach((v,index)=>{
                 if(v.conName===this.kernelForm.conName ){
                  kernelIndex=index
                 }
               })
+              }else{
+                kernelIndex=this.kernelList.length-1
+              }
               // let kernelFormObj = this.kernelForm.id;
               this.kernelList[kernelIndex] = {
                 id: this.kernelForm.id,
@@ -935,7 +943,11 @@ export default {
       this.otherForm.awardDepart = row.awardDepart;
       this.otherForm.awardTime = row.awardTime;
       this.otherForm.certName = row.certName;
-      this.otherForm.id = row.orgId;
+      if(this.title==='编辑机构'){
+      this.otherForm.id = row.orgId
+      }else{
+         this.otherForm.id= row.id;
+      }
       this.otherForm.fileUrl = row.fileUrl;
       this.isShowOtherList = true;
       this.showBtn=true
@@ -994,12 +1006,16 @@ export default {
             // console.log(this.otherForm)
             if (this.otherForm.id != 0) {
               // console.log(this.otherForm)
-              let otherIndex
-              this.otherList.forEach((v,index)=>{
-                if(v.certName===this.otherForm.certName ){
-                 otherIndex=index
-                }
-              })
+                let otherIndex
+              if(this.ttle==="编辑机构"){
+                this.otherList.forEach((v,index)=>{
+                  if(v.certName===this.otherForm.certName ){
+                   otherIndex=index
+                  }
+                })
+              }else{
+                otherIndex=this.otherList.length-1
+              }
               this.otherList[otherIndex] = {
                 id: this.otherForm.id,
                 awardTime: this.otherForm.awardTime,
@@ -1007,9 +1023,7 @@ export default {
                 fileUrl: this.otherForm.fileUrl,
                 awardDepart: this.otherForm.awardDepart
               };
-                // console.log(this.otherList)
             } else {
-              // console.log(234)
               this.otherList.push({
                 id: this.otherList.length + 1,
                 certName: this.otherForm.certName,

@@ -54,12 +54,12 @@ const oaRouter = {
       name: 'attendanceManagementList',
       meta: { title: '考勤管理列表', noCache: false }
     },
-    {
-      path: 'attendanceSign',
-      component: () => import('@/views/oa/attendance/attendanceSign'),
-      name: 'attendanceSign',
-      meta: { title: '考勤管理', noCache: true }
-    },
+    // {
+    //   path: 'attendanceSign',
+    //   component: () => import('@/views/oa/attendance/attendanceSign'),
+    //   name: 'attendanceSign',
+    //   meta: { title: '考勤管理', noCache: true }
+    // },
     // {
     //   path: 'att',
     //   component: () => import('@/views/components/attendance'),

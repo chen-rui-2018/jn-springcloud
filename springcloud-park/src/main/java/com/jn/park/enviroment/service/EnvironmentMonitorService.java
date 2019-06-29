@@ -14,8 +14,9 @@ public interface EnvironmentMonitorService {
      * 获取设备的实时数据
      * 包含设备的指标实时值、设备的实时空气质量、设备的实时污染级别、实时南京市平均空气质量
      *
-     * @param hour 小时
+     * @param hour
+     * @return 1:获取数据成功 2:当前时间数据已存在 0:获取数据失败
      */
-    void getEnvironmentMonitorRealTimeDate(Integer hour);
+    Integer getEnvironmentMonitorRealTimeDate(Integer hour);
 
 }

@@ -39,6 +39,10 @@
 			<groupId>com.jn</groupId>
 			<artifactId>springcloud-enterprise-api</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.jn</groupId>
+			<artifactId>springcloud-app-delay-stream-api</artifactId>
+		</dependency>
 
     </dependencies>
 	<build>

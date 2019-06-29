@@ -1,5 +1,6 @@
 package com.jn.common.util.encryption;
 
+import com.jn.common.util.StringUtils;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
@@ -8,10 +9,18 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class AESUtil {
 	//	public static final String DEFAULT_KEY = "123!@#abcs59aYGM";
-	public static final String DEFAULT_KEY = "springcloud_2019";
+	public static final String DEFAULT_KEY = "123!@#avrd59aNJA";
 	private static final String ADD = "/add/";
+
+	/**
+	 * 加密
+	 * @param str
+	 * @param key
+	 * @return
+	 * @throws Exception
+	 */
 	public static String encrypt(String str, String key) throws Exception {
-		if (str == null || key == null) {
+		if (StringUtils.isBlank(str)||StringUtils.isBlank(key)){
 			return null;
 		}
 		Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
@@ -23,8 +32,15 @@ public class AESUtil {
 		return result;
 	}
 
+	/**
+	 * 解密
+	 * @param str
+	 * @param key
+	 * @return
+	 * @throws Exception
+	 */
 	public static String decrypt(String str, String key) throws Exception {
-		if (str == null || key == null){
+		if (StringUtils.isBlank(str)||StringUtils.isBlank(key)){
 			return null;
 		}
 		//把/and/还原成+加号

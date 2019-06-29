@@ -146,7 +146,7 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
             List<TbElectricEnergyGroupLog> groupLogs = new ArrayList<>();
             //数据是否缺失;默认数据都是完整的的。一个公司的所有电表信息都有24条的历史数据时，才是数据完整的状态
             for(String meterCode : eleMeters){
-
+                groupLogs = new ArrayList<>();
                 try{
                     //查询出每块电表的用电量
                     logger.info("开始查询一个企业的一块电表一天的读数历史数据,电表编码:{}",meterCode);
@@ -233,7 +233,15 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
                         meterDao.saveGroupLogs(groupLogs);
                         logger.info("结束保存一个企业的电费的分段费用记录");
                     }
-
+                    TbElectricErrorLogCriteria criteria = new TbElectricErrorLogCriteria();
+                    criteria.or().andCompanyIdEqualTo(companyId).andDayEqualTo(dealDate).andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andMeterCodeEqualTo(meterCode);
+                    TbElectricErrorLog record = new TbElectricErrorLog();
+                    record.setRecordStatus(new Byte(MeterConstants.INVALID));
+                    record.setCompanyId(companyId);
+                    //作废失败的记录日志
+                    errorLogMapper.updateByExampleSelective(record,criteria);
+                    criteria.or().andCompanyIdEqualTo(companyId).andDayEqualTo(dealDate).andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andMeterCodeIsNull();
+                    errorLogMapper.updateByExampleSelective(record,criteria);
                 }catch (ErrorLogException e){
                     //记录日志
                     if(StringUtils.isNotBlank(userMeterCode)){
@@ -371,7 +379,7 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
         if(StringUtils.isNotBlank(meterCode)){
             criteria.or().andCompanyIdEqualTo(companyId).andDayEqualTo(day).andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andMeterCodeEqualTo(meterCode);
         }else{
-            criteria.or().andCompanyIdEqualTo(companyId).andDayEqualTo(day).andRecordStatusEqualTo(new Byte(MeterConstants.VALID));
+            criteria.or().andCompanyIdEqualTo(companyId).andDayEqualTo(day).andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andMeterCodeIsNull();
         }
         List<TbElectricErrorLog>  logs = errorLogMapper.selectByExample(criteria);
         if(logs==null || logs.size()==0){
@@ -388,12 +396,6 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
             }else{
                 calcCostEverdayBySomeOneCompany(companyId,day,user.getAccount(),null);
             }
-
-            TbElectricErrorLog record = new TbElectricErrorLog();
-            record.setRecordStatus(new Byte(MeterConstants.INVALID));
-            record.setCompanyId(companyId);
-            //作废失败的记录日志
-            errorLogMapper.updateByExampleSelective(record,criteria);
         }catch(ErrorLogException e){
             TbElectricErrorLog record = e.getErr();
             errorLogMapper.updateByExampleSelective(record,criteria);

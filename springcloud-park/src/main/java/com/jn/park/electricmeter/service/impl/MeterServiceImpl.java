@@ -16,10 +16,7 @@ import com.jn.hardware.enums.ElectricMeterEnum;
 import com.jn.hardware.model.electricmeter.ElectricMeterDataCollectionParam;
 import com.jn.hardware.model.electricmeter.ElectricMeterWaterOrElectricShow;
 import com.jn.hardware.model.electricmeter.ElectricOrWaterConditionShow;
-import com.jn.park.electricmeter.dao.MeterDao;
-import com.jn.park.electricmeter.dao.TbElectricMeterCompanyDayMapper;
-import com.jn.park.electricmeter.dao.TbElectricMeterInfoMapper;
-import com.jn.park.electricmeter.dao.TbElectricReadingFailLogMapper;
+import com.jn.park.electricmeter.dao.*;
 import com.jn.park.electricmeter.entity.*;
 import com.jn.park.electricmeter.enums.MeterConstants;
 import com.jn.park.electricmeter.enums.MeterExceptionEnums;
@@ -27,7 +24,11 @@ import com.jn.park.electricmeter.model.*;
 import com.jn.park.electricmeter.service.MeterService;
 import com.jn.park.enums.NoticeExceptionEnum;
 import com.jn.park.notice.service.impl.NoticeManageServiceImpl;
+import com.jn.pay.api.PayAccountClient;
+import com.jn.pay.model.PayAccountBook;
 import com.jn.pay.model.PayAccountBookCreateParam;
+import com.jn.pay.model.PayAccountBookEntIdOrUserIdParam;
+import com.jn.pay.model.PayAccountBookMoney;
 import com.jn.send.api.DelaySendMessageClient;
 import com.jn.send.model.Delay;
 import com.jn.system.log.annotation.ServiceLog;
@@ -42,6 +43,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.xxpay.common.util.DateUtil;
 
 import javax.xml.crypto.Data;
@@ -75,6 +77,10 @@ public class MeterServiceImpl implements MeterService {
     private CompanyClient companyClient;
     @Autowired
     private DelaySendMessageClient delaySendMessageClient;
+    @Autowired
+    private TbElectricCostMapper tbElectricCostMapper;
+    @Autowired(required = false)
+    private PayAccountClient payAccountClient;
     @Override
     @ServiceLog(doAction = "电表读数定时入库")
     public void getDataFromHardare(){
@@ -933,6 +939,53 @@ public class MeterServiceImpl implements MeterService {
         logger.info("企业id{},数据{}",companyId,meterInfos);
         result.setData(list);
         return result;
+    }
+    @ServiceLog(doAction = "更新企业余额")
+    public Result updateBillCost(CostBillModel companyModel){
+
+        PayAccountBookMoney payAccountBookMoney = new PayAccountBookMoney();
+        payAccountBookMoney.setAcBookId(companyModel.getAcBookId());
+        Result<PayAccountBook>  bookResult =  payAccountClient.queryPayAccountBookMoney(payAccountBookMoney);
+        if(bookResult.getData() ==null){
+            logger.info("查询企业的余额失败，账户id为{}",companyModel.getAcBookId());
+            throw new JnSpringCloudException(MeterExceptionEnums.COMPANY_BALANCE_NOT_FOUND);
+        }
+        String companyId=bookResult.getData().getEntId();
+        String meterCode = bookResult.getData().getMeterCode();
+        Result<ServiceCompany> comp = companyClient.getCompanyDetailByAccountOrCompanyId(companyId);
+        if (comp.getData() != null) {
+            String comAdmin=comp.getData().getComAdmin();
+            logger.info("开始调用创建账本信息的接口；企业账号为{},企业id{}，电表号：{}",comAdmin,companyId,meterCode);
+            // 4开始更新
+            TbElectricCostCriteria costCriteria = new TbElectricCostCriteria();
+            costCriteria.or().andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andCompanyIdEqualTo(companyId).andMeterCodeEqualTo(meterCode); ;
+            List<TbElectricCost> costbeans =tbElectricCostMapper.selectByExample(costCriteria);
+            //检测企业的费用是否已经在表中存在，不存在则插入，否则更新
+            if(costbeans == null || costbeans.size()==0){
+                logger.info("插入企业的余额，企业id为{}",companyId);
+                TbElectricCost costbean = new TbElectricCost();
+                costbean.setBalance(bookResult.getData().getBalance());
+                costbean.setCompanyId(companyId);
+                costbean.setCreatedTime(new Date());
+                costbean.setCreatorAccount(MeterConstants.SYSTEM_USER);
+                costbean.setRecordStatus(new Byte(MeterConstants.VALID));
+                costbean.setCompanyName(comp.getData().getComName());
+                costbean.setId(UUID.randomUUID().toString().replaceAll("-",""));
+                costbean.setAccountType(MeterConstants.ELEC_BOOK);
+                costbean.setMeterCode(meterCode);
+                tbElectricCostMapper.insertSelective(costbean);
+            }else{
+                //更新数据
+                logger.info("更新企业的余额，企业id为{}",companyId);
+                TbElectricCost costbean = new TbElectricCost();
+                costbean.setBalance(bookResult.getData().getBalance());
+                costCriteria.or().andCompanyIdEqualTo(companyId).andRecordStatusEqualTo(new Byte(MeterConstants.VALID)).andMeterCodeEqualTo(meterCode);
+                tbElectricCostMapper.updateByExampleSelective(costbean,costCriteria);
+            }
+        }else{
+            logger.info("建账本信息的接口时，企业信息不存在，企业id为{}",companyId);
+        }
+        return new Result();
     }
 
 }

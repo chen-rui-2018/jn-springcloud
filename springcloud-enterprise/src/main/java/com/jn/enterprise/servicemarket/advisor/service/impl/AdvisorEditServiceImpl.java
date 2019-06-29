@@ -30,7 +30,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 /**
- * 编辑顾问资料
+ * 编辑专员资料
  * @Author: yangph
  * @Date: 2019/2/27 10:13
  * @Version v1.0
@@ -77,11 +77,11 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
     private static final String PARAM_EXAMPLE="string";
 
     /**
-     * 判断当前登录用户认证顾问的状态
+     * 判断当前登录用户认证专员的状态
      * @param loginAccount 当前登录用户
      * @return
      */
-    @ServiceLog(doAction = "判断当前登录用户认证顾问的状态")
+    @ServiceLog(doAction = "判断当前登录用户认证专员的状态")
     @Override
     public  AdvisorApprovalStatus getUserApprovalStatus(String loginAccount) {
         //已拒绝和已解除可以再次认证
@@ -121,7 +121,7 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
 
     /**
      * 基本信息保存并更新
-     * @param advisorBaseInfoParam  顾问资料基本信息
+     * @param advisorBaseInfoParam  专员资料基本信息
      */
     @ServiceLog(doAction = "基本信息保存并更新")
     @Override
@@ -133,11 +133,11 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
         //校验机构id并获取机构信息
         TbServiceOrg tbServiceOrg = checkOrgIdAdnGetOrgInfo(advisorBaseInfoParam.getOrgId());
 
-        //根据账号查询是否存在顾问信息
+        //根据账号查询是否存在专员信息
         TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
         example.createCriteria().andAdvisorAccountEqualTo(advisorBaseInfoParam.getAdvisorAccount())
                 .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
-        //根据账号获取数据库现有顾问信息
+        //根据账号获取数据库现有专员信息
         List<TbServiceAdvisor> tbServiceAdvisorList = tbServiceAdvisorMapper.selectByExample(example);
         if(tbServiceAdvisorList.isEmpty()){
             //通过账号获取到用户头像
@@ -213,16 +213,16 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
     }
 
     /**
-     * 新增顾问信息
+     * 新增专员信息
      * @param advisorBaseInfoParam
      */
-    @ServiceLog(doAction = "新增顾问信息")
+    @ServiceLog(doAction = "新增专员信息")
     private int insertServiceAdvisorInfo(AdvisorBaseInfoParam advisorBaseInfoParam,String orgName,String avatar) {
         if(StringUtils.isBlank(advisorBaseInfoParam.getOrgId()) || StringUtils.isBlank(orgName)){
             logger.warn("基本信息保存并更新，机构id或机构名称不能为空");
             throw new JnSpringCloudException(AdvisorExceptionEnum.ORG_INFO_NOT_NULL);
         }
-        //没有顾问信息，添加顾问
+        //没有专员信息，添加专员
         TbServiceAdvisor tbServiceAdvisor=new TbServiceAdvisor();
         BeanUtils.copyProperties(advisorBaseInfoParam,tbServiceAdvisor);
         //主键id
@@ -236,15 +236,15 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
         tbServiceAdvisor.setPageViews(0);
         //业务领域
         tbServiceAdvisor.setBusinessArea(StringUtils.join(advisorBaseInfoParam.getBusinessAreas(), ","));
-        //根据顾问账号获取顾问信息
+        //根据专员账号获取专员信息
         Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(advisorBaseInfoParam.getAdvisorAccount());
         if(userExtension==null ||userExtension.getData()==null){
-            logger.warn("基本信息保存并更新顾问：[{}]的信息失败", advisorBaseInfoParam.getAdvisorAccount());
+            logger.warn("基本信息保存并更新专员：[{}]的信息失败", advisorBaseInfoParam.getAdvisorAccount());
             throw new JnSpringCloudException(AdvisorExceptionEnum.GET_ADVISOR_INFO_FAIL);
         }
-        //顾问账号
+        //专员账号
         tbServiceAdvisor.setAdvisorAccount(userExtension.getData().getAccount());
-        //顾问姓名
+        //专员姓名
         tbServiceAdvisor.setAdvisorName(userExtension.getData().getName());
         //头像
         tbServiceAdvisor.setAvatar(userExtension.getData().getAvatar());
@@ -356,10 +356,10 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
     }
 
     /**
-     * 判断当前登录用户是否为顾问
+     * 判断当前登录用户是否为专员
      * @param loginAccount  用户账号
      */
-    @ServiceLog(doAction = "判断当前登录用户是否为顾问")
+    @ServiceLog(doAction = "判断当前登录用户是否为专员")
     @Override
     public void currentUserIsAdvisor(String loginAccount) {
         TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
@@ -368,7 +368,7 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
                 .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
         long existNum = tbServiceAdvisorMapper.countByExample(example);
         if(existNum>0){
-            logger.warn("当前用户[{}]已经是审批通过的机构顾问，不允许编辑顾问信息",loginAccount);
+            logger.warn("当前用户[{}]已经是审批通过的机构专员，不允许编辑专员信息",loginAccount);
             throw new JnSpringCloudException(AdvisorExceptionEnum.ADVISOR_HAS_EXIST);
         }
     }

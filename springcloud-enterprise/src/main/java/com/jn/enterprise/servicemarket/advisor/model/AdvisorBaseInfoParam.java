@@ -14,7 +14,7 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "AdvisorBaseInfoParam", description = "顾问资料基本信息")
+@ApiModel(value = "AdvisorBaseInfoParam", description = "专员资料基本信息")
 public class AdvisorBaseInfoParam implements Serializable {
     @ApiModelProperty(value = "主键id(新增时传空，修改时必传)")
     private String id;
@@ -24,8 +24,8 @@ public class AdvisorBaseInfoParam implements Serializable {
     @ApiModelProperty(value = "业务领域(从邀请信息中获取),可以有多个",required = true,example ="[technology_finance]")
     @NotNull(message="业务领域不能为空")
     private String[] businessAreas;
-    @ApiModelProperty(value = "顾问账号",required = true,example = "wangsong")
-    @NotNull(message="顾问账号不能为空")
+    @ApiModelProperty(value = "专员账号",required = true,example = "wangsong")
+    @NotNull(message="专员账号不能为空")
     private String advisorAccount;
     @ApiModelProperty(value = "从业年限",example ="10")
     @Pattern(regexp = "^([0-9]*)|([0-9]*)(\\.[0-9]{0,2})$",message = "workingYears:只能输入的数字和小数点")

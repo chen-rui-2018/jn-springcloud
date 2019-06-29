@@ -49,7 +49,7 @@ public class OrgColleagueServiceImplTest {
      */
     private OrgColleagueParam orgColleagueParam =new OrgColleagueParam();
     /**
-     * 删除顾问或联系人
+     * 删除专员或联系人
      */
     private String[] accountList={"18674398739","18565007009"};
 
@@ -117,15 +117,15 @@ public class OrgColleagueServiceImplTest {
     }
 
     /**
-     * 删除联系人或顾问
+     * 删除联系人或专员
      */
     @Test
     public void deleteContactOrAdvisor() {
         try {
             int responseNum = orgColleagueService.deleteContactOrAdvisor(loginAccount, accountList);
-            logger.info("删除联系人或顾问数据响应条数:{}",responseNum);
+            logger.info("删除联系人或专员数据响应条数:{}",responseNum);
         } catch (JnSpringCloudException e) {
-            logger.warn("删除联系人或顾问的账号不能为空");
+            logger.warn("删除联系人或专员的账号不能为空");
             assertThat(e.getCode(), Matchers.anyOf(
                     Matchers.containsString(OrgExceptionEnum.LOGIN_ACCOUNT_NOT_ORG_MANAGE.getCode()),
                     Matchers.containsString(OrgExceptionEnum.ACCOUNT_NOT_NULL.getCode()),

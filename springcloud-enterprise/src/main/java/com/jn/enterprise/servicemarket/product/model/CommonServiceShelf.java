@@ -22,7 +22,7 @@ public class CommonServiceShelf implements Serializable {
     private String productId;
     @ApiModelProperty(value = "服务产品名称")
     private String productName;
-    @ApiModelProperty(value = "服务产品顾问账号,多个时使用逗号','分隔")
+    @ApiModelProperty(value = "服务产品专员账号,多个时使用逗号','分隔")
     private String advisorAccount;
     @ApiModelProperty(value = "上架此产品的机构id" ,required = true)
     @NotBlank(message = "机构名称不能为空")

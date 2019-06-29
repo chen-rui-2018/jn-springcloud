@@ -90,8 +90,8 @@ public class OrgColleagueController extends BaseController {
         return  new Result(responseNum);
     }
 
-    @ControllerLog(doAction = "删除联系人或顾问")
-    @ApiOperation(value = "删除联系人或顾问(pc/app删除顾问操作)",notes = "accountList：删除联系人或顾问的账号，支持多个，返回数据响应条数，正常情况为1")
+    @ControllerLog(doAction = "删除联系人或专员")
+    @ApiOperation(value = "删除联系人或专员(pc/app删除专员操作)",notes = "accountList：删除联系人或专员的账号，支持多个，返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/deleteContactOrAdvisor",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/orgColleagueController/deleteContactOrAdvisor")
     public Result deleteContactOrAdvisor(String[] accountList){
@@ -103,7 +103,7 @@ public class OrgColleagueController extends BaseController {
             return new Result(OrgExceptionEnum.NETWORK_ANOMALY.getCode(),OrgExceptionEnum.NETWORK_ANOMALY.getMessage());
         }
         int responseNum = orgColleagueService.deleteContactOrAdvisor(user.getAccount(), accountList);
-        logger.info("------删除联系人或顾问成功，数据响应条数：{}-------",responseNum);
+        logger.info("------删除联系人或专员成功，数据响应条数：{}-------",responseNum);
         return  new Result(responseNum);
     }
 

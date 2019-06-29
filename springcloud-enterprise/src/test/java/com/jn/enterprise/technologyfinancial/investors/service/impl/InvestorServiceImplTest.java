@@ -111,7 +111,7 @@ public class InvestorServiceImplTest {
         investorAuthenticateParam.setSex("1");
         investorAuthenticateParam.setOrgId("040e6f1a459e49989fd6db3dc2dfd6a4");
         investorAuthenticateParam.setOrgName("江苏鑫欧宇");
-        investorAuthenticateParam.setPosition("律师顾问");
+        investorAuthenticateParam.setPosition("律师专员");
         investorAuthenticateParam.setAddressProvince("湖南省");
         investorAuthenticateParam.setAddressCity("苏州市");
         investorAuthenticateParam.setAddressArea("白下区");

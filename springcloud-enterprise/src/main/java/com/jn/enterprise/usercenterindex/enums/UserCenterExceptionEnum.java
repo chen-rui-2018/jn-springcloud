@@ -15,7 +15,7 @@ public enum UserCenterExceptionEnum implements CodeAndMsg {
     IS_ENTERPRISE_OR_ORGANIZATION_USER_NOT_LOOK("5020531","非企业或机构用户不能查看员工申请"),
     IS_ENTERPRISE_OR_ORGANIZATION_USER_NOT_LOOK_1("5020532","非企业或机构用户不能查看需求管理"),
     IS_ENTERPRISE_USER_NOT_LOOK("5020533","非企业用户不能查看评价管理"),
-    IS_ENTERPRISE_OR_ORGANIZATION_USER_NOT_LOOK_2("5020533","非机构管理员或机构联系人不能查看顾问管理"),
+    IS_ENTERPRISE_OR_ORGANIZATION_USER_NOT_LOOK_2("5020533","非机构管理员或机构联系人不能查看专员管理"),
 
     ;
 

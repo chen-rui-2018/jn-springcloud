@@ -92,7 +92,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    @ServiceLog(doAction = "获取我收到的评价列表(机构/顾问收到的评价)")
+    @ServiceLog(doAction = "获取我收到的评价列表(机构/专员收到的评价)")
     public PaginationData getGiveMeCommentList(ReceiveRatingParameter receiveRatingParameter, String userAccount){
         Page<Object> objects = PageHelper.startPage(receiveRatingParameter.getPage(), receiveRatingParameter.getRows() == 0 ? 15 : receiveRatingParameter.getRows());
         receiveRatingParameter.setAccount(userAccount);

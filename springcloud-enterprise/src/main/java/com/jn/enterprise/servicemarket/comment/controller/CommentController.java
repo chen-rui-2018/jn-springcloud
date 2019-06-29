@@ -52,8 +52,8 @@ public class CommentController extends BaseController {
         return new Result(data);
     }
 
-    @ControllerLog(doAction = "获取我收到的评价列表(机构/顾问收到的评价)")
-    @ApiOperation(value = "获取我收到的评价列表",notes = "机构/顾问收到的评价")
+    @ControllerLog(doAction = "获取我收到的评价列表(机构/专员收到的评价)")
+    @ApiOperation(value = "获取我收到的评价列表",notes = "机构/专员收到的评价")
     @RequestMapping(value = "/getGiveMeCommentList",method = RequestMethod.GET)
     @RequiresPermissions("/serviceMarket/comment/getGiveMeCommentList")
     public Result<PaginationData<List<Rating>>> getGiveMeCommentList(@Validated ReceiveRatingParameter receiveRatingParameter){

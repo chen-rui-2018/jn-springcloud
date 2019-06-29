@@ -39,9 +39,9 @@ public interface OrgColleagueService {
     int cancelAsContact(String loginAccount,String account);
 
     /**
-     * 删除联系人或顾问
+     * 删除联系人或专员
      * @param loginAccount 登录用户账号
-     * @param accountList 删除联系人或顾问的账号
+     * @param accountList 删除联系人或专员的账号
      * @return
      */
     int deleteContactOrAdvisor(String loginAccount,String[] accountList);

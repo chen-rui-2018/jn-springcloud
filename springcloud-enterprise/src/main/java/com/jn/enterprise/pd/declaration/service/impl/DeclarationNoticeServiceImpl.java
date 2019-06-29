@@ -208,14 +208,14 @@ public class DeclarationNoticeServiceImpl implements DeclarationNoticeService {
                         TbPdDeclarationPushInformationManage manage = new TbPdDeclarationPushInformationManage();
                         manage.setId(pushNotileId.get(i));
                         manage.setPushSms("1");
-                        TbPdDeclarationPushInformationManageMapper.updateByPrimaryKey(manage);
+                        TbPdDeclarationPushInformationManageMapper.updateByPrimaryKeySelective(manage);
                     }
                 }else {
                     for (int j = 0; j < pushNotileId.size(); j++) {
                         TbPdDeclarationPushInformationManage manage = new TbPdDeclarationPushInformationManage();
                         manage.setId(pushNotileId.get(i));
                         manage.setPushSms("2");
-                        TbPdDeclarationPushInformationManageMapper.updateByPrimaryKey(manage);
+                        TbPdDeclarationPushInformationManageMapper.updateByPrimaryKeySelective(manage);
                     }
                 }
             }

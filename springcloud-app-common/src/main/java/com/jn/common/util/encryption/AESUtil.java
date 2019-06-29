@@ -1,5 +1,7 @@
 package com.jn.common.util.encryption;
 
+import com.jn.common.enums.CommonExceptionEnum;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.util.StringUtils;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
@@ -19,16 +21,23 @@ public class AESUtil {
 	 * @return
 	 * @throws Exception
 	 */
-	public static String encrypt(String str, String key) throws Exception {
+	public static String encrypt(String str, String key)  {
 		if (StringUtils.isBlank(str)||StringUtils.isBlank(key)){
 			return null;
 		}
-		Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-		cipher.init(Cipher.ENCRYPT_MODE,
-				new SecretKeySpec(key.getBytes("utf-8"), "AES"));
-		byte[] bytes = cipher.doFinal(str.getBytes("utf-8"));
-		//+加号替换成/and/，避免url传递后丢失或者转变成空格。
-		String result =  new BASE64Encoder().encode(bytes).replaceAll("\r\n", "").replaceAll("\\+", ADD);
+		String result;
+		try {
+			Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+			cipher.init(Cipher.ENCRYPT_MODE,
+					new SecretKeySpec(key.getBytes("utf-8"), "AES"));
+			byte[] bytes = cipher.doFinal(str.getBytes("utf-8"));
+			//+加号替换成/and/，避免url传递后丢失或者转变成空格。
+			result =  new BASE64Encoder().encode(bytes).replaceAll("\r\n", "").replaceAll("\\+", ADD);
+		}catch (Exception e){
+			throw new JnSpringCloudException(CommonExceptionEnum.ENCRYPT_FAIL);
+		}
+
+
 		return result;
 	}
 
@@ -39,17 +48,22 @@ public class AESUtil {
 	 * @return
 	 * @throws Exception
 	 */
-	public static String decrypt(String str, String key) throws Exception {
+	public static String decrypt(String str, String key) {
 		if (StringUtils.isBlank(str)||StringUtils.isBlank(key)){
 			return null;
 		}
-		//把/and/还原成+加号
-		str = str.replaceAll(ADD,"+");
-		Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-		cipher.init(Cipher.DECRYPT_MODE,
-				new SecretKeySpec(key.getBytes("utf-8"), "AES"));
-		byte[] bytes = new BASE64Decoder().decodeBuffer(str);
-		bytes = cipher.doFinal(bytes);
+		byte[] bytes;
+		try {
+			//把/and/还原成+加号
+			str = str.replaceAll(ADD, "+");
+			Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+			cipher.init(Cipher.DECRYPT_MODE,
+					new SecretKeySpec(key.getBytes("utf-8"), "AES"));
+			bytes = new BASE64Decoder().decodeBuffer(str);
+			bytes = cipher.doFinal(bytes);
+		}catch (Exception e){
+			throw new JnSpringCloudException(CommonExceptionEnum.DECRYPT_FAIL);
+		}
 		return new String(bytes, "utf-8");
 	}
 

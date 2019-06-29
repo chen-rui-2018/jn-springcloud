@@ -3,16 +3,19 @@ package com.jn.authorization.controller;
 import com.jn.authorization.LoginService;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
-import com.jn.common.util.StringUtils;
+import com.jn.common.util.CallOtherSwaggerUtils;
 import com.jn.common.util.encryption.EncryptUtil;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.UserLogin;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -71,6 +74,14 @@ public class LoginController extends BaseController {
             return new Result(SecurityUtils.getSubject().getSession().getId());
         }
         return new Result();
+    }
+
+    @ControllerLog(doAction = "securityInfo")
+    @ApiOperation(value = "securityInfo", notes = "获取加密规则", httpMethod = "GET", response = Result.class)
+    @RequestMapping(value = "/securityInfo")
+    public Result securityInfo() {
+        JSONObject jsonObject = CallOtherSwaggerUtils.request("", "/api/security/getInfo", HttpMethod.GET, new LinkedMultiValueMap<String, Object>());
+        return new Result(jsonObject);
     }
 
 

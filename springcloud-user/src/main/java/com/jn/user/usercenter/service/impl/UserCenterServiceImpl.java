@@ -2,13 +2,11 @@ package com.jn.user.usercenter.service.impl;
 
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
-import com.jn.common.util.GlobalConstants;
 import com.jn.common.util.encryption.AESUtil;
 import com.jn.common.util.encryption.EncryptUtil;
 import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
-import com.jn.system.model.UserLogin;
 import com.jn.user.enums.UserExtensionExceptionEnum;
 import com.jn.user.model.UserExtensionInfo;
 import com.jn.user.usercenter.model.ModifyPassword;
@@ -50,18 +48,9 @@ public class UserCenterServiceImpl implements UserCenterService {
         String newPassword = AESUtil.decrypt(modifyPassword.getNewPassword(), AESUtil.DEFAULT_KEY);
         String account = AESUtil.decrypt(modifyPassword.getAccount(), AESUtil.DEFAULT_KEY);
 
-        UserLogin userLogin = new UserLogin();
-        userLogin.setAccount(account);
-        userLogin.setPassword(oldPassword);
-        Result result = systemClient.login(userLogin);
-        if (!GlobalConstants.SUCCESS_CODE.equals(result.getCode())) {
-            logger.warn("[用户密码修改]，用户旧密码{}密码错误：oldPassword{},密码错误,请重新输入正确的密码");
-            throw new JnSpringCloudException(UserExtensionExceptionEnum.USER_PASSWORD_IS_ERROR);
-        }
         User user = new User();
         user.setAccount(account);
         Result<User> resultUser = systemClient.getUser(user);
-
         String passwordSha256 = EncryptUtil.encryptSha256(oldPassword);
         if (!resultUser.getData().getPassword().equals(passwordSha256)) {
             logger.warn("[用户密码修改]，用户旧密码{}密码错误：oldPassword{},密码错误,请重新输入正确的密码");

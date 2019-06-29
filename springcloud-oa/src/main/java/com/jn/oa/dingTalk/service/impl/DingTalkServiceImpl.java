@@ -86,8 +86,10 @@ public class DingTalkServiceImpl implements DingTalkUserService {
             tbOaDingTalkUser.setUnionId(dingTalkUser.getUnionid());
 
             //时间戳转换成date
-            ZonedDateTime checkTimeZdt= LocalDateTime.ofInstant(Instant.ofEpochMilli(Long.valueOf(dingTalkUser.getHiredDate())), ZoneId.systemDefault()).atZone(ZoneId.systemDefault());
-            tbOaDingTalkUser.setHiredDate(Date.from(checkTimeZdt.toInstant()));
+            if(dingTalkUser.getHiredDate()!=null){
+                ZonedDateTime checkTimeZdt= LocalDateTime.ofInstant(Instant.ofEpochMilli(Long.valueOf(dingTalkUser.getHiredDate())), ZoneId.systemDefault()).atZone(ZoneId.systemDefault());
+                tbOaDingTalkUser.setHiredDate(Date.from(checkTimeZdt.toInstant()));
+            }
 
             //默认在职
             tbOaDingTalkUser.setStatus(OaDingTalkEnums.JOB_STATUS_ON_JOB.getCode());

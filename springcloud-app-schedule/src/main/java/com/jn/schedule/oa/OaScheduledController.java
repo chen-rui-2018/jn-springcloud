@@ -101,9 +101,9 @@ public class OaScheduledController {
     }
 
     /**
-     * 每天凌晨00点执行一次同步批量更新钉钉考勤
+     * 每天凌晨1点执行一次同步批量更新钉钉考勤
      */
-    @Scheduled(cron = "0 0 0 * * ? ")
+    @Scheduled(cron = "0 0 1 * * ? ")
     public void batchInsertDingTalkAttendance() {
         //批量更新钉钉考勤
         logger.info("批量更新钉钉考勤");
@@ -112,14 +112,14 @@ public class OaScheduledController {
         String workDateTo = now.format(format);
 
         //减一天
-        now.plusDays(-1);
-        String workDateFrom = now.format(format);
+        LocalDateTime from=now.plusDays(-1);
+        String workDateFrom = from.format(format);
         oaClient.batchInsertDingTalkAttendance(workDateFrom,workDateTo);
     }
     /**
-     * 每天凌晨00点执行一次同步批量更新钉钉考勤（当前时间往后一周的请假）
+     * 每天凌晨1点执行一次同步批量更新钉钉考勤（当前时间往后一周的请假）
      */
-    @Scheduled(cron = "0 0 0 * * ? ")
+    @Scheduled(cron = "0 0 1 * * ? ")
     public void batchInsertDingTalkLeave() {
         LocalDateTime now = LocalDateTime.now();
         ZoneId zoneId = ZoneId.systemDefault();
@@ -127,8 +127,8 @@ public class OaScheduledController {
         Date workDateFrom = Date.from(zdt.toInstant());
 
 
-        now.plusDays(7);
-        Date workDateTo = Date.from(now.atZone(zoneId).toInstant());
+        LocalDateTime to=now.plusDays(7);
+        Date workDateTo = Date.from(to.atZone(zoneId).toInstant());
         //更新会议状态
         logger.info("批量更新钉钉考勤");
         oaClient.batchInsertDingTalkLeave(workDateFrom,workDateTo);

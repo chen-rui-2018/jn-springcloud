@@ -9,10 +9,7 @@ import com.jn.enterprise.company.enums.CompanyExceptionEnum;
 import com.jn.enterprise.pay.service.MyPayAccountService;
 import com.jn.enterprise.pd.declaration.model.DeclarationPlatformModel;
 import com.jn.pay.api.PayClient;
-import com.jn.pay.model.PayAccountBook;
-import com.jn.pay.model.PayAccountBookCreateParam;
-import com.jn.pay.model.PayAccountBookMoney;
-import com.jn.pay.model.PayBillDetails;
+import com.jn.pay.model.*;
 import com.jn.pay.vo.PayAccountAndAccountBookVo;
 import com.jn.pay.vo.PayBillCreateParamVo;
 import com.jn.system.model.User;
@@ -65,9 +62,7 @@ public class PayAccountServiceImplTest {
     public void queryPayAccountBookMoney() {
         try {
             PayAccountBookMoney payAccountBookMoney = new PayAccountBookMoney();
-            payAccountBookMoney.setObjType("1");
-            payAccountBookMoney.setObjId("wangsong");
-            payAccountBookMoney.setAcBookType("1");
+            payAccountBookMoney.setAcBookId("156170997200058032");
             PayAccountBook payAccountBook = myPayAccountService.queryPayAccountBookMoney(payAccountBookMoney);
             logger.info("获取账本明细{}", payAccountBook.toString());
         } catch (Exception e) {
@@ -119,6 +114,17 @@ public class PayAccountServiceImplTest {
         param.setEnterId("fbb2cf99e5b5487289b1e341d68980fb");
         Result result = myPayAccountService.createPayAccountBook(param,user);
         logger.info("创建账户账本{}", JsonUtil.object2Json(result));
+    }
+
+    @Test
+    public void queryAccountBook() {
+        PayAccountBookEntIdOrUserIdParam param = new PayAccountBookEntIdOrUserIdParam();
+        User user = new User();
+        user.setAccount("wangsong");
+        param.setObjType("1");
+        param.setObjId("fbb2cf99e5b5487289b1e341d68980fb");
+        Result result = myPayAccountService.queryAccountBook(param);
+        logger.info("查询账户下账本{}", JsonUtil.object2Json(result));
     }
 
 

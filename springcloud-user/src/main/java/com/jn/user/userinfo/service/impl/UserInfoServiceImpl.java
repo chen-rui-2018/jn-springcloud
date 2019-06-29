@@ -117,22 +117,50 @@ public class UserInfoServiceImpl implements UserInfoService {
             return userExtensionInfo;
         }
         //redis中没有数据，从数据库中获取
-        List<TbUserPerson> tbUserPeople = getTbUserPeople(account);
-        //用户扩展表有当前用户信息，直接返回用户扩展信息,没有返回null
-        if (tbUserPeople.isEmpty()) {
-            logger.warn("用户[{}]扩展信息不存在或已被删除",account);
+        //获取基础库用户基本信息
+        User user=new User();
+        user.setAccount(account);
+        Result<User> systemClientUser = systemClient.getUser(user);
+        //非正常用户信息直接返回空
+        if(systemClientUser==null || systemClientUser.getData()==null
+                || !(RecordStatusEnum.EFFECTIVE.getValue()==systemClientUser.getData().getRecordStatus())){
             return null;
-        }else{
-            TbUserPerson tbUserPerson = tbUserPeople.get(0);
-            BeanUtils.copyProperties(tbUserPerson, userExtensionInfo);
-            getUserHobbyAndJobs(userExtensionInfo);
-
-            userExtensionInfo = setUserExtensionRoleInfo(userExtensionInfo);
-
-            //把用户拓展信息写入redis中
-            cache.put(account, userExtensionInfo);
-            return userExtensionInfo;
         }
+        //数据库基本用户信息
+        user= systemClientUser.getData();
+        //只包含用户账号，姓名，手机，邮箱的基本信息
+        BaseUser baseUser=new BaseUser();
+        BeanUtils.copyProperties(user, baseUser);
+        List<TbUserPerson> tbUserPeople = getTbUserPeople(account);
+        //用户扩展表信息
+        TbUserPerson tbUserPerson = tbUserPeople.isEmpty()?new TbUserPerson():tbUserPeople.get(0);
+        BeanUtils.copyProperties(tbUserPerson, userExtensionInfo);
+        BeanUtils.copyProperties(baseUser, userExtensionInfo);
+        //更新用户扩展表的基本信息
+        updateUserExtensionBaseInfo(baseUser);
+        //获取兴趣爱好和工作
+        getUserHobbyAndJobs(userExtensionInfo);
+        userExtensionInfo = setUserExtensionRoleInfo(userExtensionInfo);
+
+        //把用户拓展信息写入redis中
+        cache.put(account, userExtensionInfo);
+        return userExtensionInfo;
+
+    }
+
+    /**
+     * 更新扩展表用户基本信息
+     * @param baseUser
+     */
+    @ServiceLog(doAction = "更新扩展表用户基本信息")
+    private void updateUserExtensionBaseInfo(BaseUser baseUser) {
+        TbUserPerson userPerson=new TbUserPerson();
+        BeanUtils.copyProperties(baseUser, userPerson);
+        TbUserPersonCriteria example=new TbUserPersonCriteria();
+        example.createCriteria().andAccountEqualTo(baseUser.getAccount())
+                .andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
+        int resNum = tbUserPersonMapper.updateByExampleSelective(userPerson, example);
+        logger.info("更新扩展表用户基本信息成功，数据响应条数：{}",resNum);
     }
 
     /**

@@ -1,32 +1,36 @@
 <template>
-      <div class="declaration_item">
-      <div class="declaration_list_tab">
-        <ul >
-          <li :class="{'active':sendData.rangeId===''}" @touchstart="changetype('') ">全部</li>
-          <li :class="{'active':typeitem.id===sendData.rangeId}" @touchstart="changetype(typeitem.id) " v-for="(typeitem,typeindex) in  typeList" :key="typeindex">{{typeitem.name}} </li>
-        </ul>
-      </div>
-      <div class="declaration_list_filter">
-        <span @touchstart="filter('1')" :class="{'greenColor':sendData.sortType==='1'}"><i class="iconfont icon-clock-"></i>发布时间排序 </span>
-        <span @touchstart="filter('2')" :class="{'greenColor':sendData.sortType==='2'}"><i class="iconfont icon-tiaozheng"></i>时间节点排序 </span>
-        <span @touchstart="filter('3')" :class="{'greenColor':sendData.sortType==='3'}"><i class="iconfont icon-hot"></i>热度排序</span>
-      </div>
-      <div class="declaration_cont_box">
-        <div class="declaration_cont" v-for="(item,index) in declarationList " :key="index" @click="goDetail(item.id)">
-          <div class="declaration_cont_left">
-            <div class="cont_title"><span class="greenColor">[{{item.rangeId|type}}] </span>{{item.titleName}} </div>
-            <div class="cont_detail">
-              <div>
-                <span>开始：{{item.createdTime|time}}</span><span>截止：{{item.deadline|time}}</span>
-                </div>
-              <span class="greenColor">{{item.isRoofPlacement===1?'置顶':'不置顶'}}</span>
-            </div>
-            <div class="cont_depart"><span>申报部门：{{item.timeNode}}</span><span v-if="item.preliminaryDeadline!=null">初审截止时间：{{item.preliminaryDeadline|time}} </span></div>
+    <div class="declaration_item">
+      <div class="declarationCenter_search " v-show="isShow!=1" >
+        <i class="weui-icon-search" v-if="sendData.titleName===''"></i>
+        <input type="text" placeholder="搜索" @change="gosearch" v-model="sendData.titleName" >
+    </div>
+    <div class="declaration_list_tab " :class="{'padding-top':isShow!=1}">
+      <ul >
+        <li :class="{'active':sendData.rangeId===''}" @touchstart="changetype('') ">全部</li>
+        <li :class="{'active':typeitem.id===sendData.rangeId}" @touchstart="changetype(typeitem.id) " v-for="(typeitem,typeindex) in  typeList" :key="typeindex">{{typeitem.name}} </li>
+      </ul>
+    </div>
+    <div class="declaration_list_filter">
+      <span @touchstart="filter('1')" :class="{'greenColor':sendData.sortType==='1'}"><i class="iconfont icon-clock-"></i>发布时间排序 </span>
+      <span @touchstart="filter('2')" :class="{'greenColor':sendData.sortType==='2'}"><i class="iconfont icon-tiaozheng"></i>时间节点排序 </span>
+      <span @touchstart="filter('3')" :class="{'greenColor':sendData.sortType==='3'}"><i class="iconfont icon-hot"></i>热度排序</span>
+    </div>
+    <div class="declaration_cont_box">
+      <div class="declaration_cont" v-for="(item,index) in declarationList " :key="index" @click="goDetail(item.id)">
+        <div class="declaration_cont_left">
+          <div class="cont_title"><span class="greenColor">[{{item.rangeId|type}}] </span>{{item.titleName}} </div>
+          <div class="cont_detail">
+            <div>
+              <span>开始：{{item.createdTime|time}}</span><span>截止：{{item.deadline|time}}</span>
+              </div>
+            <span class="greenColor">{{item.isRoofPlacement===1?'置顶':'不置顶'}}</span>
           </div>
-          <div class="declaration_cont_right"><span class="iconfont icon-jiantou"></span> </div>
+          <div class="cont_depart"><span>申报部门：{{item.timeNode}}</span><span v-if="item.preliminaryDeadline!=null">初审截止时间：{{item.preliminaryDeadline|time}} </span></div>
         </div>
+        <div class="declaration_cont_right"><span class="iconfont icon-jiantou"></span> </div>
       </div>
     </div>
+  </div>
 </template>
 <script>
 export default {
@@ -66,18 +70,26 @@ export default {
     }
   },
   mounted () {
-    this.isShow = this.$route.query.isShow
+    if (this.$route.query.isShow) {
+      this.isShow = this.$route.query.isShow
+    }
     this.getTypeList()
     this.getdeclarationList()
     this.scrollBottom()
   },
   methods: {
     goDetail (id) {
-      // if (this.isShow === 1) {
-      this.$router.push({path: '/guest/pd/declarationDetail', query: {id: id, isShow: this.isShow}})
-      // } else {
-      //   this.$router.push({path: '/guest/pd/declarationDetail', query: {id: id, isShow: '0'}})
-      // }
+      this.api.get({
+        url: 'trafficVolume',
+        data: {id: id},
+        callback: res => {
+          if (res.code === '0000') {
+            this.$router.push({path: '/guest/pd/declarationDetail', query: {id: id, isShow: this.isShow}})
+          } else {
+            this.$vux.toast.text(res.result)
+          }
+        }
+      })
     },
     gosearch () {
       this.getdeclarationList()
@@ -157,6 +169,31 @@ export default {
 <style lang="scss">
   .declaration_item{
     // margin-top: 31px;
+      .declarationCenter_search{
+        position: fixed;
+        z-index: 10;
+        width: 100%;
+        background-color: #F5F5F5;
+        padding: 0 35px;
+        display: flex;
+        input::placeholder{
+          text-align: center;
+          font-size: 28px;
+        }
+        input{
+          height: 60px;
+          width:100%;
+          margin: 22px 0;
+          border-radius: 30px;
+          padding: 0 40px;
+        }
+        i{
+          position: absolute;
+          top: 38%;
+          right: 54%;
+          font-size: 28px;
+        }
+     }
     .greenColor{
       color:#07ab50;
     }
@@ -168,12 +205,16 @@ export default {
         li{
           padding: 25px 0 18px 0;
           font-size: 24px;
+          font-weight: 600;
         }
         .active{
           color:#07ab50;
           border-bottom: 5px solid #07ab50;
         }
       }
+    }
+    .padding-top{
+      padding-top: 100px;
     }
     .declaration_list_filter{
       background-color: #f6f6f6;
@@ -212,6 +253,7 @@ export default {
             font-size: 26px;
             padding-top: 37px;
             line-height: 28px;
+            font-weight: 600;
           }
           .cont_detail{
             font-size: 23px;

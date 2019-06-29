@@ -8,7 +8,7 @@ Page({
   onLoad: function (options) {
     this.setData({
       token:wx.getStorageSync("token"),
-      url:app.globalData.h5Url+"guest/pd/declarationCenter"
+      url:app.globalData.h5Url+"guest/pd/DeclarationItems"
     })
   },
  onReady: function () { },

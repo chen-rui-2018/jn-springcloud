@@ -59,7 +59,7 @@
           </div>
           <div class="">
             <el-form-item label="合同总金额：">
-              <el-input v-model="sendData.contractAmount" placeholder="请填写合同总金额"><template slot="append">万元</template></el-input>
+              <el-input v-model="sendData.contractAmount" placeholder="请填写合同总金额"><template slot="append">元</template></el-input>
             </el-form-item>
           </div>
           <div class="">

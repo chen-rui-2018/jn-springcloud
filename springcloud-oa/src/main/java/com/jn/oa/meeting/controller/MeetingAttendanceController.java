@@ -5,6 +5,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.common.util.excel.ExcelUtil;
+import com.jn.oa.attendance.vo.AttendanceResultVo;
 import com.jn.oa.meeting.model.OaMeetingAttendancePage;
 import com.jn.oa.meeting.model.OaMeetingParticipantsAttendance;
 import com.jn.oa.meeting.service.MeetingAttendanceService;
@@ -43,13 +44,16 @@ public class MeetingAttendanceController extends BaseController {
 
     @ControllerLog(doAction = "会议考勤签到、签退接口")
     @ApiOperation(value = "会议考勤签到、签退接口" , notes = "会议考勤签到/签退类型:1:签到，2：签退")
-    @RequestMapping(value = "/attendance", method = RequestMethod.POST)
+    @RequestMapping(value = "/attendance", method = RequestMethod.GET)
     @RequiresPermissions("/oa/oaMeetingAttendance/attendance")
-    public Result attendance(@Validated @RequestBody OaMeetingParticipantsAttendance oaMeetingParticipantsAttendance) {
+    public Result attendance(@RequestParam(value = "meetingId")String meetingId) {
+        Assert.notNull(meetingId, "会议ID不能为空");
+        OaMeetingParticipantsAttendance oaMeetingParticipantsAttendance=new OaMeetingParticipantsAttendance();
+        oaMeetingParticipantsAttendance.setMeetingId(meetingId);
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        meetingAttendanceService.meetingAttendanceSignIn(oaMeetingParticipantsAttendance,user);
-        return new Result();
+        AttendanceResultVo attendanceResultVo=meetingAttendanceService.meetingAttendanceSignIn(oaMeetingParticipantsAttendance,user);
+        return new Result(attendanceResultVo);
     }
 
     @ControllerLog(doAction = "会议考勤列表查询")

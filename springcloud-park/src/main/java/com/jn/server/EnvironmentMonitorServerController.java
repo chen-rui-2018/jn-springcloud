@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @modified By:
  **/
 @RestController
-public class EnvironmentMonitorController implements EnvironmentMonitorClient {
+public class EnvironmentMonitorServerController implements EnvironmentMonitorClient {
 
     @Autowired
     private EnvironmentMonitorService environmentMonitorService;

@@ -1,7 +1,10 @@
 package com.jn.schedule.park.environment;
 
+import com.jn.common.model.Result;
 import com.jn.park.api.EnvironmentMonitorClient;
 import com.jn.schedule.park.attractinvest.BusinessAdScheduledController;
+import com.jn.send.api.DelaySendMessageClient;
+import com.jn.send.model.Delay;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +25,7 @@ public class EnvironmentMonitorScheduleController {
     private static Logger logger = LoggerFactory.getLogger(EnvironmentMonitorScheduleController.class);
 
     @Autowired
-    private EnvironmentMonitorClient environmentMonitorClient;
+    private DelaySendMessageClient delaySendMessageClient;
 
     /**
      * 定时每小时获取环境监测数据
@@ -31,6 +34,14 @@ public class EnvironmentMonitorScheduleController {
     public void updateWorkPlanStatus() {
         //更新会议状态
         logger.info("每小时自动获取环境监测数据");
-        environmentMonitorClient.getEnvironmentMonitorRealTimeDate("-1");
+        Delay delay = new Delay();
+        delay.setServiceId("springcloud-park");
+        delay.setServiceUrl("/api/park/getEnvironmentMonitorRealTimeDate");
+        //设置延时10分钟
+        delay.setTtl("30");
+        delay.setDataString("-1");
+        logger.info("开始回调");
+        Result<Boolean> delayResult = delaySendMessageClient.delaySend(delay);
+        logger.info("结束回调,返回结果，【{}】", delayResult.toString());
     }
 }

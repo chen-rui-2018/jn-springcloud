@@ -61,7 +61,7 @@ public class WxAuthController {
             return;
         }
         String targetUrl = map.get("url")[0];
-        logger.info("\n=============requestURI:【{}】,queryString:【{}】",requestURI);
+        logger.info("\n=============requestURI:【{}】,queryString:【{}】",requestURI,httpRequest.getQueryString());
         //根据code获取access_token、openid
         String code = httpRequest.getParameter("code");
         if(StringUtils.isNotBlank(code)) {

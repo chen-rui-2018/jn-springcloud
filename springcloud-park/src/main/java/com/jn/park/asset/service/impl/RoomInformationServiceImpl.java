@@ -872,6 +872,7 @@ public class RoomInformationServiceImpl implements RoomInformationService {
         return new Result("0000", "生成缴费单成功");
     }
 
+
     @Override
     @ServiceLog(doAction = "缴费单回调")
     public Result updateBill(PayCallBackNotify payCallBackNotify) {
@@ -921,6 +922,37 @@ public class RoomInformationServiceImpl implements RoomInformationService {
             return new Result("回调成功，支付状态更新为：已支付");
         }
         return new Result();
+    }
+
+    /**
+     * 撤销缴费单
+     * @param billIds
+     * @return
+     */
+    @Override
+    public Result withdrawBill(String billIds) {
+        String[] billId = billIds.split(",");
+        for (int i = 0; i < billId.length; i++){
+            //获取缴费单
+            TbRoomOrdersBill tbRoomOrdersBill = tbRoomOrdersBillMapper.selectByPrimaryKey(billId[i]);
+            //判断缴费单是否生成
+            if(tbRoomOrdersBill.getBillStatus() == 0){
+                throw new JnSpringCloudException(new Result("-1","缴费单还未生成,撤销失败"));
+            }
+            //判断缴费单是否已缴费,已缴费无法撤销
+            if(tbRoomOrdersBill.getBillStatus() == 1&&tbRoomOrdersBill.getPaySum() == 1){
+                throw new JnSpringCloudException(new Result("-1","缴费单已缴费,撤销失败"));
+            }
+            //撤销缴费单状态为:未生成
+            tbRoomOrdersBill.setBillStatus(Byte.parseByte("0"));
+            logger.info("更新缴费单生成状态:参数{}",tbRoomOrdersBill);
+            int updateCount = tbRoomOrdersBillMapper.updateByPrimaryKeySelective(tbRoomOrdersBill);
+            if (updateCount != 1){
+                throw new JnSpringCloudException(new Result("-1","更新缴费单tb_room_orders_bill失败"));
+            }
+            logger.info("撤销缴费单成功,状态更改为:未生成");
+        }
+        return new Result("撤销缴费单成功");
     }
 
     /**

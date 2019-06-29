@@ -360,17 +360,19 @@ public class MyPayAccountServiceImpl implements MyPayAccountService {
         }
         /**因电费账本是一对多，单独创建*/
         if(els.size() > 0){
-            for (ElectricMeterInfoModel el: els) {
+            for (int i = 0; i < els.size(); i++) {
+                ElectricMeterInfoModel model = JSON.parseObject(JSON.toJSONString(els.get(i)),ElectricMeterInfoModel.class);
                 tbPayAccountBook.setAcBookId(AutoOrderUtil.autoOrderId());
                 tbPayAccountBook.setAcBookType(PaymentBillEnum.BILL_AC_BOOK_TYPE_1.getCode());
-                tbPayAccountBook.setAcBookName("电费账本["+el+"]");
+                tbPayAccountBook.setAcBookName("电费账本["+model.getMeterCode()+"]");
                 tbPayAccountBook.setAutomaticDeductions(PayAccountBookEnum.ACCOUNT_BOOK_AUTO.getCode());
                 tbPayAccountBook.setCanRecharge(PayAccountBookEnum.ACCOUNT_BOOK_RECHARGE.getCode());
                 tbPayAccountBook.setIsShow(PayAccountBookEnum.ACCOUNT_BOOK_IS_SHOW.getCode());
-                tbPayAccountBook.setMeterCode(el.getMeterCode());
+                tbPayAccountBook.setMeterCode(model.getMeterCode());
                 tbPayAccountBook.setRecordStatus(PaymentBillEnum.BILL_STATE_NOT_DELETE.getCode());
                 logger.info("【统一缴费-创建账户和账本】，创建电费账本入參【{}】",JsonUtil.object2Json(tbPayAccountBook));
                 tbPayAccountBookMapper.insertSelective(tbPayAccountBook);
+                logger.info("【统一缴费-创建账户和账本】，创建电费账本结束");
             }
         }
         return new Result("创建账户和账本成功");

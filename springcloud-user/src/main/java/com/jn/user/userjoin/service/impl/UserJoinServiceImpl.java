@@ -1,6 +1,7 @@
 package com.jn.user.userjoin.service.impl;
 
 import com.jn.common.channel.MessageSource;
+import com.jn.common.enums.CommonExceptionEnum;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
@@ -8,6 +9,7 @@ import com.jn.common.util.GlobalConstants;
 import com.jn.common.util.StringUtils;
 import com.jn.common.util.cache.RedisCacheFactory;
 import com.jn.common.util.cache.service.Cache;
+import com.jn.common.util.encryption.AESUtil;
 import com.jn.news.vo.SmsTemplateVo;
 import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
@@ -36,6 +38,7 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 /**
  * 加入园区
@@ -68,6 +71,12 @@ public class UserJoinServiceImpl implements UserJoinService {
      */
     private static final String USER_MESSAGE_CODE="user_message_code";
 
+    // 密码正则（密码至少为字母、数字、符号两种组成的8-16字符，不包含空格,不能输入中文）
+    public static final String PASSWORD_REG = "^(?!^\\d+$)(?!^[A-Za-z]+$)(?!^[^A-Za-z0-9]+$)(?!^.*[\\u4E00-\\u9FA5].*$)^\\S{8,16}$";
+
+    // 账号正则（手机号）
+    public static final String PHONE_REG = "^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\\d{8}$";
+
     @Autowired
     private MessageSource messageSource;
 
@@ -97,19 +106,22 @@ public class UserJoinServiceImpl implements UserJoinService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Result addUser(UserRegister userRegister){
-        //从redis中取出短信验证码
-        String code = this.getSendCodeByPhone(userRegister.getPhone());
+        String phone = AESUtil.decrypt(userRegister.getPhone(), AESUtil.DEFAULT_KEY);
+        String plainPassword = AESUtil.decrypt(userRegister.getPassword(), AESUtil.DEFAULT_KEY);
+
+        String code = this.getSendCodeByPhone(phone);
         if(!StringUtils.equals(code,userRegister.getMessageCode())){
-            //验证码有误
+            logger.warn("[用户注册] 验证码错误，phone：{}", phone);
             throw new JnSpringCloudException(UserJoinExceptionEnum.MESSAGE_CODE_IS_WRONG);
         }
-        User user = new User();
-        user.setPhone(userRegister.getPhone());
-        user.setAccount(userRegister.getPhone());
-        user.setPassword(userRegister.getPassword());
-        user.setName(userRegister.getPhone());
-        Result result = systemClient.addSysUser(user);
+        checkInfo(plainPassword, phone);
 
+        User user = new User();
+        user.setPhone(phone);
+        user.setAccount(phone);
+        user.setPassword(plainPassword);
+        user.setName(phone);
+        Result result = systemClient.addSysUser(user);
         if (result != null && result.getCode() != null && result.getCode().equals(GlobalConstants.SUCCESS_CODE)) {
             //给用户添加"普通用户"角色
             String roleName = HomeRoleEnum.NORMAL_USER.getCode();
@@ -124,7 +136,7 @@ public class UserJoinServiceImpl implements UserJoinService {
             tbUserPerson.setId(UUID.randomUUID().toString());
             tbUserPerson.setRecordStatus(RecordStatusEnum.EFFECTIVE.getValue());
             tbUserPerson.setCreatedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
-            tbUserPerson.setCreatorAccount(user.getPhone());
+            tbUserPerson.setCreatorAccount(phone);
             int resNum = tbUserPersonMapper.insertSelective(tbUserPerson);
             if (resNum == 0) {
                 logger.warn("用户注册失败，失败原因：添加用户信息到用户扩展信息表失败");
@@ -151,15 +163,19 @@ public class UserJoinServiceImpl implements UserJoinService {
     @ServiceLog(doAction = "修改密码")
     @Override
     public Result updateUser(UserRegister userRegister){
-        //从redis中取出短信验证码
-        String code = this.getSendCodeByPhone(userRegister.getPhone());
+        String phone = AESUtil.decrypt(userRegister.getPhone(), AESUtil.DEFAULT_KEY);
+        String plainPassword = AESUtil.decrypt(userRegister.getPassword(), AESUtil.DEFAULT_KEY);
+
+        String code = this.getSendCodeByPhone(phone);
         if(!StringUtils.equals(code,userRegister.getMessageCode())){
-            //验证码有误
+            logger.warn("[修改密码] 验证码错误，phone：{}", phone);
             throw new JnSpringCloudException(UserJoinExceptionEnum.MESSAGE_CODE_IS_WRONG);
         }
+        checkInfo(plainPassword, phone);
+
         User user = new User();
-        user.setAccount(userRegister.getPhone());
-        user.setPassword(userRegister.getPassword());
+        user.setAccount(phone);
+        user.setPassword(plainPassword);
         return systemClient.updateSysUser(user);
     }
 
@@ -167,6 +183,23 @@ public class UserJoinServiceImpl implements UserJoinService {
     public String getSendCodeByPhone(String phone){
         Cache<Object> cache = redisCacheFactory.getCache(USER_MESSAGE_CODE, expire);
         return (String)cache.get(phone);
+    }
+
+    /**
+     * 正则判断数据有效性
+     * @param password
+     * @return
+     */
+    private boolean checkInfo(String password, String phone) {
+        if (!Pattern.matches(PASSWORD_REG, password)) {
+            logger.warn("[用户注册] 密码校验错误，至少为字母、数字、符号两种组成的8-16字符，不包含空格,不能输入中文");
+            throw new JnSpringCloudException(UserJoinExceptionEnum.PASSWORD_INVALID);
+        }
+        if (!Pattern.matches(PHONE_REG, phone)) {
+            logger.warn("[用户注册] 手机号校验错误，请输入正确的手机号，account:{}", phone);
+            throw new JnSpringCloudException(UserJoinExceptionEnum.PHONE_INVALID);
+        }
+        return true;
     }
 
 }

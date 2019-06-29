@@ -53,7 +53,6 @@ export default {
   mounted () {
     this.getTypeList()
     this.getPlatformList()
-    console.log(sessionStorage.getItem('token'))
   },
   methods: {
     // 备忘录

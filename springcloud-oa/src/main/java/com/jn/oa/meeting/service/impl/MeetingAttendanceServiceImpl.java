@@ -1,19 +1,25 @@
 package com.jn.oa.meeting.service.impl;
 
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.oa.attendance.enmus.AttendanceTypeEnums;
+import com.jn.oa.attendance.vo.AttendanceResultVo;
 import com.jn.oa.common.enums.OaStatusEnums;
 import com.jn.oa.meeting.dao.MeetingParticipantMapper;
+import com.jn.oa.meeting.dao.TbOaMeetingMapper;
 import com.jn.oa.meeting.dao.TbOaMeetingParticipantsMapper;
 import com.jn.oa.meeting.dao.TbOaMeetingRoomMapper;
+import com.jn.oa.meeting.entity.TbOaMeeting;
 import com.jn.oa.meeting.entity.TbOaMeetingParticipants;
 import com.jn.oa.meeting.entity.TbOaMeetingParticipantsCriteria;
 import com.jn.oa.meeting.entity.TbOaMeetingRoom;
 import com.jn.oa.meeting.enums.MeetingAttendanceTypeEnums;
 import com.jn.oa.meeting.enums.MeetingExceptionEnums;
+import com.jn.oa.meeting.enums.MeetingStatusEnums;
 import com.jn.oa.meeting.model.OaMeetingAttendancePage;
 import com.jn.oa.meeting.model.OaMeetingParticipantsAttendance;
 import com.jn.oa.meeting.service.MeetingAttendanceService;
@@ -54,6 +60,9 @@ public class MeetingAttendanceServiceImpl implements MeetingAttendanceService {
     @Autowired
     private TbOaMeetingRoomMapper tbOaMeetingRoomMapper;
 
+    @Autowired
+    private TbOaMeetingMapper tbOaMeetingMapper;
+
     /**
      * 会议考勤签到、签退接口
      *
@@ -63,7 +72,19 @@ public class MeetingAttendanceServiceImpl implements MeetingAttendanceService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     @ServiceLog(doAction = "会议考勤签到、签退接口")
-    public void meetingAttendanceSignIn(OaMeetingParticipantsAttendance oaMeetingParticipantsAttendance, User user) {
+    public AttendanceResultVo meetingAttendanceSignIn(OaMeetingParticipantsAttendance oaMeetingParticipantsAttendance, User user) {
+        logger.info("[会议考勤] 会议考勤签到/签退，会议参数！,oaMeetingParticipantsAttendance: {},userId：{}", JSON.toJSON(oaMeetingParticipantsAttendance),user.getId());
+        TbOaMeeting tbOaMeeting=tbOaMeetingMapper.selectByPrimaryKey(oaMeetingParticipantsAttendance.getMeetingId());
+
+        if(MeetingStatusEnums.CANCELLED.getCode().equals(tbOaMeeting.getMeetingStatus())){
+            //取消
+            logger.warn("[会议考勤] 考勤失败，该会议已取消！,meetingId: {},userId：{}", oaMeetingParticipantsAttendance.getMeetingId(),user.getId());
+            throw  new JnSpringCloudException(MeetingExceptionEnums.MEETING_ATTENDANCE_CANCELLED_ERROR);
+        }else if(MeetingStatusEnums.TO_BEGIN.getCode().equals(tbOaMeeting.getMeetingStatus())){
+            //待开始
+            logger.warn("[会议考勤] 考勤失败，该会议未开始！,meetingId: {},userId：{}", oaMeetingParticipantsAttendance.getMeetingId(),user.getId());
+            throw  new JnSpringCloudException(MeetingExceptionEnums.MEETING_ATTENDANCE_TO_BEGIN_ERROR);
+        }
 
         TbOaMeetingParticipantsCriteria participantsCriteria=new TbOaMeetingParticipantsCriteria();
         TbOaMeetingParticipantsCriteria.Criteria criteria=participantsCriteria.createCriteria();
@@ -78,41 +99,38 @@ public class MeetingAttendanceServiceImpl implements MeetingAttendanceService {
         tbOaMeetingParticipants.setMeetingUserId(user.getId());
         tbOaMeetingParticipants.setMeetingId(oaMeetingParticipantsAttendance.getMeetingId());
 
-        //签到
-        if(MeetingAttendanceTypeEnums.MEETING_SIGN_IN.getCode().equals(oaMeetingParticipantsAttendance.getMeetingAttendanceType())){
+        AttendanceResultVo attendanceResultVo=new AttendanceResultVo();
 
-            if(tbOaMeetingParticipantsList!=null&&tbOaMeetingParticipantsList.size()!=0){
-                logger.warn("[会议考勤] 会议考勤签到失败，用户不能进行多次签到！,meetingId: {},userId：{}", oaMeetingParticipantsAttendance.getMeetingId(),user.getId());
-                throw  new JnSpringCloudException(MeetingExceptionEnums.MEETING_ATTENDANCE_SIGN_IN);
+        //签到
+        if(tbOaMeetingParticipantsList==null||tbOaMeetingParticipantsList.size()==0){
+
+            if(MeetingStatusEnums.COMPLETED.getCode().equals(tbOaMeeting.getMeetingStatus())){
+                //已结束
+                logger.warn("[会议考勤] 考勤失败，该会议已结束！,meetingId: {},userId：{}", oaMeetingParticipantsAttendance.getMeetingId(),user.getId());
+                throw  new JnSpringCloudException(MeetingExceptionEnums.MEETING_ATTENDANCE_COMPLETED_ERROR);
             }
             tbOaMeetingParticipants.setId(UUID.randomUUID().toString());
             tbOaMeetingParticipants.setCreatorAccount(user.getAccount());
             tbOaMeetingParticipants.setCreatedTime(new Date());
             //签到时间
             tbOaMeetingParticipants.setSignInTime(new Date());
+            attendanceResultVo.setType(AttendanceTypeEnums.SIGN_IN.getCode());
+            attendanceResultVo.setAttendanceTime(tbOaMeetingParticipants.getSignInTime());
+            logger.info("[会议考勤] 会议考勤签到，会议参数！,tbOaMeetingParticipants: {},userId：{}", JSON.toJSON(tbOaMeetingParticipants),user.getId());
             tbOaMeetingParticipantsMapper.insert(tbOaMeetingParticipants);
-            return;
-        }
-        //签退
-        else if(MeetingAttendanceTypeEnums.MEETING_SIGN_OUT.getCode().equals(oaMeetingParticipantsAttendance.getMeetingAttendanceType())){
-            //无签到数据
-            if(tbOaMeetingParticipantsList==null||tbOaMeetingParticipantsList.size()==0){
-                logger.warn("[会议考勤] 会议考勤签退失败，用户未进行签到，不能进行签退！,meetingId: {},userId：{}", oaMeetingParticipantsAttendance.getMeetingId(),user.getId());
-                throw  new JnSpringCloudException(MeetingExceptionEnums.MEETING_ATTENDANCE_SIGN_OUT);
-            }
+        }else{
+            //有签到数据,则签退
             tbOaMeetingParticipants.setModifiedTime(new Date());
             tbOaMeetingParticipants.setModifierAccount(user.getAccount());
             //签退时间
             tbOaMeetingParticipants.setSignBackTime(new Date());
-
+            attendanceResultVo.setType(AttendanceTypeEnums.SIGN_OUT.getCode());
+            attendanceResultVo.setAttendanceTime(tbOaMeetingParticipants.getSignBackTime());
+            logger.info("[会议考勤] 会议考勤签退，会议参数！,tbOaMeetingParticipants: {},userId：{}", JSON.toJSON(tbOaMeetingParticipants),user.getId());
             tbOaMeetingParticipantsMapper.updateByExampleSelective(tbOaMeetingParticipants,participantsCriteria);
-
-            return;
         }
-
-        logger.warn("[会议考勤] 会议考勤签到/签退异常，该考勤类型不存在！,meetingId: {},userId：{}，type：{}", oaMeetingParticipantsAttendance.getMeetingId(),user.getId(),oaMeetingParticipantsAttendance.getMeetingAttendanceType());
-        throw  new JnSpringCloudException(MeetingExceptionEnums.MEETING_ATTENDANCE_ERROR);
-    }
+        return attendanceResultVo;
+}
 
     /**
      * 会议考勤根据id查询考勤会议详情

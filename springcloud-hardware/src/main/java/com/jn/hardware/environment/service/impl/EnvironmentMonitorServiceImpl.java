@@ -111,23 +111,22 @@ public class EnvironmentMonitorServiceImpl implements EnvironmentMonitorService 
 
     /**
      * 获取设备的实时数据
-     * 包含设备的指标实时值、设备的实时空气质量、设备的实时污染级别、实时南京市平均空气质量
+     * 包含设备的指标实时值、设备的实时空气质量、实时南京市平均空气质量
      * @return
      */
     @Override
     public EnvironmentMonitorRealTimeDataResult getEnvironmentMonitorRealTimeDate(int count) {
-        logger.info("\n获取设备的实时数据(包含设备的实时指标值、空气质量、污染级别、南京市平均空气质量)开始,方法入参：【{}】",count);
+        logger.info("\n获取设备的实时数据(包含设备的实时指标值、空气质量、南京市平均空气质量)开始,方法入参：【{}】",count);
         //获取设备的实时指标数据
         List<DeviceRealTimeDataResult> deviceRealTimeDataResults = this.getDeviceRealTimeData(count);
-        //获取设备实时空气质量、实时南京市平均空气质量、实时设备污染级别入参
+        //获取设备实时空气质量、实时南京市平均空气质量入参
         EnvironmentMonitorAirQualityAllResult environmentMonitorAirQualityAllResult = this.getDeviceAirQualityAll();
-        //保存设备的实时指标值、设备的实时空气质量、设备的实时污染级别、实时南京市平均空气质量
+        //保存设备的实时指标值、设备的实时空气质量、实时南京市平均空气质量
         EnvironmentMonitorRealTimeDataResult environmentMonitorRealTimeDataResult = new EnvironmentMonitorRealTimeDataResult();
         environmentMonitorRealTimeDataResult.setDeviceRealTimeDataResults(deviceRealTimeDataResults);
         environmentMonitorRealTimeDataResult.setDeviceRealTimeAirQualityResults(environmentMonitorAirQualityAllResult.getDeviceRealTimeAirQualityResults());
         environmentMonitorRealTimeDataResult.setDeviceRealTimeCityAirQualityResults(environmentMonitorAirQualityAllResult.getDeviceRealTimeCityAirQualityResults());
-        environmentMonitorRealTimeDataResult.setDeviceRealTimePolluteLevelResults(environmentMonitorAirQualityAllResult.getDeviceRealTimePolluteLevelResults());
-        logger.info("\n获取设备的实时数据(包含设备的实时指标值、空气质量、污染级别、南京市平均空气质量)结束,方法出参：【{}】",environmentMonitorRealTimeDataResult);
+        logger.info("\n获取设备的实时数据(包含设备的实时指标值、空气质量、南京市平均空气质量)结束,方法出参：【{}】",environmentMonitorRealTimeDataResult);
         return environmentMonitorRealTimeDataResult;
     }
 
@@ -147,29 +146,24 @@ public class EnvironmentMonitorServiceImpl implements EnvironmentMonitorService 
     }
 
     /**
-     * 获取设备的实时空气质量、设备的实时污染级别、实时南京市平均空气质量
+     * 获取设备的实时空气质量、实时南京市平均空气质量
      * @return
      */
     @Override
     public EnvironmentMonitorAirQualityAllResult getDeviceAirQualityAll() {
-        logger.info("\n获取设备的实时空气质量、设备的实时污染级别、实时南京市平均空气质量开始");
+        logger.info("\n获取设备的实时空气质量、实时南京市平均空气质量开始");
         //获取设备的实时空气质量
         List<EnvironmentMonitorAsyncResult> futureList = this.getEnvironmentMonitorAsyncResult(EnvironmentMonitorService.DEVICE_REAL_TIME_AIR_QUALITY_URL);
         //实时南京市平均空气质量
         List<EnvironmentMonitorAsyncResult> futureList2 = this.getEnvironmentMonitorAsyncResult(EnvironmentMonitorService.DEVICE_REAL_TIME_CITY_AIR_QUALITY_URL);
-        //设备的实时污染级别
-        List<EnvironmentMonitorAsyncResult> futureList3 = this.getEnvironmentMonitorAsyncResult(EnvironmentMonitorService.DEVICE_REAL_TIME_POLLUTE_LEVEL_URL);
         //设备的实时空气质量结果归集
         List<DeviceRealTimeAirQualityResult> deviceRealTimeAirQualityResults = this.getDeviceRealTimeAirQualityJoinResult(futureList);
         //实时南京市平均空气质量结果归集
         List<DeviceRealTimeCityAirQualityResult> deviceRealTimeCityAirQualityResults = this.getDeviceRealTimeCityAirQualityJoinResult(futureList2);
-        //设备的实时污染级别结果归集
-        List<DeviceRealTimePolluteLevelResult> deviceRealTimePolluteLevelResults = this.getDeviceRealTimePolluteLevelJoinResult(futureList3);
         EnvironmentMonitorAirQualityAllResult environmentMonitorAirQualityAllResult = new EnvironmentMonitorAirQualityAllResult();
         environmentMonitorAirQualityAllResult.setDeviceRealTimeAirQualityResults(deviceRealTimeAirQualityResults);
         environmentMonitorAirQualityAllResult.setDeviceRealTimeCityAirQualityResults(deviceRealTimeCityAirQualityResults);
-        environmentMonitorAirQualityAllResult.setDeviceRealTimePolluteLevelResults(deviceRealTimePolluteLevelResults);
-        logger.info("\n获取设备的实时空气质量、设备的实时污染级别、实时南京市平均空气质量结束,方法出参:【{}】",environmentMonitorAirQualityAllResult);
+        logger.info("\n获取设备的实时空气质量、实时南京市平均空气质量结束,方法出参:【{}】",environmentMonitorAirQualityAllResult);
         return environmentMonitorAirQualityAllResult;
     }
 
@@ -216,27 +210,6 @@ public class EnvironmentMonitorServiceImpl implements EnvironmentMonitorService 
     }
 
     /**
-     * 设备的实时污染级别结果归集
-     * @return
-     */
-    public List<DeviceRealTimePolluteLevelResult> getDeviceRealTimePolluteLevelJoinResult(List<EnvironmentMonitorAsyncResult> futureList) {
-        List<EnvironmentMonitorAsyncResult> resultList = getEnvironmentMonitorAsyncResult(futureList);
-        List<DeviceRealTimePolluteLevelResult> deviceRealTimePolluteLevelResults = null;
-        if(null != resultList && resultList.size()>0) {
-            deviceRealTimePolluteLevelResults = new ArrayList<>();
-            for(EnvironmentMonitorAsyncResult asyncResult : resultList) {
-                DeviceRealTimePolluteLevelResult deviceRealTimePolluteLevelResult = JsonStringToObjectUtil.jsonToObject(asyncResult.getResult(),new TypeReference<DeviceRealTimePolluteLevelResult>(){});
-                if(null != deviceRealTimePolluteLevelResult) {
-                    //把设备id保存进去
-                    deviceRealTimePolluteLevelResult.setDeviceId(asyncResult.getDeviceId());
-                }
-                deviceRealTimePolluteLevelResults.add(deviceRealTimePolluteLevelResult);
-            }
-        }
-        return deviceRealTimePolluteLevelResults;
-    }
-
-    /**
      * 获取设备的环境预测值 pm10、pm2.5 结果归集
      * @return
      */
@@ -258,7 +231,7 @@ public class EnvironmentMonitorServiceImpl implements EnvironmentMonitorService 
     }
 
     /**
-     * 异步获取环境监测设备实时空气或南京市空气或设备实时污染级别
+     * 异步获取环境监测设备实时空气或南京市空气
      * @param url
      * @return
      */

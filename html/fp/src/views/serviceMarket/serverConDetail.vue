@@ -226,7 +226,7 @@
                             </li>
                         </ul>
                         <div class="pagination-container">
-                            <el-pagination background @size-change="handleSizeChange1" @current-change="handleCurrentChange1" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row1" layout="total,prev, pager, next,sizes" :total="total1">
+                            <el-pagination background @size-change="handleSizeChange1" @current-change="handleCurrentChange1" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row1" layout="total,prev, pager, next,sizes" :total="total1">
                             </el-pagination>
                         </div>
                     </div>
@@ -235,17 +235,14 @@
                     <span slot="label">服务评价({{evaluationCountInfo.evaluationTotal}})</span>
                     <div class="serEvaluation" v-if="serviceRatingList">
                         <ul class="list-imgleft">
-                            <li class="list-item pr" v-for="(i,k) in serviceRatingList" :key='k'>
-                                <!-- 上架时间 begin -->
-                                <div class="list-item-date"></div>
-                                <!-- 上架时间 end -->
+                            <li class="list-item pr clearfix" v-for="(i,k) in serviceRatingList" :key='k'>
                                 <!-- 左侧logo begin-->
-                                <div class="list-imgleft-container product nopic">
+                                <div class="list-imgleft-container product nopic fl">
                                     <img :src="i.pictureUrl" alt="">
                                 </div>
                                 <!-- 左侧logo end-->
                                 <!-- 中间信息 beign -->
-                                <div class="list-info-middle inner-product">
+                                <div class="list-info-middle inner-product fl">
                                     <!-- 中间上半部分--标题和标签 begin -->
                                     <div class="list-info-top-title">
                                         <!-- 头部 begin -->
@@ -258,9 +255,9 @@
                                     </div>
                                     <!-- 中间上半部分--标题和标签 end -->
                                     <!-- 中间下半部分--参考信息、交易均价和交易 begin -->
-                                    <div class="list-info-bottom-detail clearfix">
+                                    <div class="list-info-bottom-detail">
                                         <!-- 参考信息、交易均价 begin -->
-                                        <div class="detail-contact inner-product fl">
+                                        <div class="detail-contact inner-product">
                                             <div class="search_area text-of" title="王振英 , 包美芬 , 高凤清">服务专员：{{i.advisorName}}</div>
                                             <!-- <div class="text-of mt5">参考价格：1000-10000元</div> -->
                                             <span class="evaluate-container">
@@ -269,7 +266,7 @@
                                         </div>
                                         <!-- 参考信息、交易均价 end -->
                                         <!-- 评价 begin -->
-                                        <div class="detail-evaluate inner-product fl">
+                                        <div class="detail-evaluate inner-product">
                                             <div class="score">
                                                 <el-rate v-model="i.evaluationScore*1" :colors="['#00a041', '#00a041', '#00a041']" disabled text-color="#00a041" style="display:inline-block" score-template="{value}">
                                                 </el-rate>
@@ -281,23 +278,20 @@
                                             </div>
                                         </div>
                                         <!-- 评价 end -->
-                                        <!-- 交易量 begin -->
-                                        <div class="detail-count fr conAccou">
-                                            <div class="list-item-info fr">
-                                                <p class="mainColor">{{i.evaluationAccount}}</p>
-                                                <p>{{i.evaluationTime}}</p>
-                                            </div>
-                                        </div>
-                                        <!-- 交易量 end -->
                                     </div>
                                     <!-- 中间上半部分--参考信息、交易均价和交易 end -->
                                 </div>
                                 <!-- 中间信息 end -->
-                                <div class="clear"></div>
+                                <div class="detail-count fr conAccou">
+                                    <div class="list-item-info">
+                                        <p class="mainColor">{{i.evaluationAccount}}</p>
+                                        <p>{{i.evaluationTime}}</p>
+                                    </div>
+                                </div>
                             </li>
                         </ul>
                         <div class="pagination-container">
-                            <el-pagination background @size-change="handleSizeChange2" @current-change="handleCurrentChange2" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row2" layout="total,prev, pager, next,sizes" :total="total2">
+                            <el-pagination background @size-change="handleSizeChange2" @current-change="handleCurrentChange2" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row2" layout="total,prev, pager, next,sizes" :total="total2">
                             </el-pagination>
                         </div>
                     </div>
@@ -351,10 +345,10 @@ export default {
       serverConDetailList: "",
       serverPro: [],
       currentPage1: 1,
-      row1: 5,
+      row1: 3,
       page1: 1,
       total1: 0,
-      row2: 5,
+      row2: 3,
       page2: 1,
       total2: 0,
       serviceRatingList: "",

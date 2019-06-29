@@ -42,6 +42,11 @@ public class WxProperties {
      */
     private String subscribe;
 
+    /**
+     * 微信绑定手机号码页面
+     */
+    private String registerUrl;
+
     public String getAppId() {
         return appId;
     }
@@ -80,5 +85,13 @@ public class WxProperties {
 
     public void setSubscribe(String subscribe) {
         this.subscribe = subscribe;
+    }
+
+    public String getRegisterUrl() {
+        return registerUrl;
+    }
+
+    public void setRegisterUrl(String registerUrl) {
+        this.registerUrl = registerUrl;
     }
 }

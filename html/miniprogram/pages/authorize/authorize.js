@@ -50,10 +50,7 @@ Page({
       // const that = this
       app.globalData.userInfo = e.detail.userInfo
       const userInfo = e.detail.userInfo
-      wx.setStorage({
-        key: 'userInfo',
-        data: JSON.stringify(userInfo)
-      })
+      wx.setStorageSync('userInfo', JSON.stringify(userInfo))
       // 插入登录的用户的相关信息到数据库
       wx.showLoading({
         title: '跳转中',
@@ -94,12 +91,18 @@ Page({
                
               } else if (code === '0000') {
                 // 授权成功后，成功获取到token之后，跳转进入小程序首页
-                wx.setStorage({
-                  key: 'token',
-                  data: res.data.data
-                })
+                wx.setStorageSync('token', res.data.data)
                 wx.switchTab({
                   url: '/pages/index/index'
+                })
+              } else {
+                wx.showModal({
+                  title: '提示',
+                  content: res.data.data,
+                  cancelText: '确定',
+                  success(res) {
+
+                  }
                 })
               }
             }

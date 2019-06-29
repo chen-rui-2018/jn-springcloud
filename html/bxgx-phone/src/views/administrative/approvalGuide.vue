@@ -78,7 +78,7 @@ export default {
         name: '',
         page: 1,
         parentId: '',
-        rows: 10,
+        rows: 20,
         type: ''
       },
       poweList: [],
@@ -208,7 +208,7 @@ export default {
       }
       i{
         position: absolute;
-        top: 38%;
+        top: 38.5%;
         right: 54%;
         font-size: 21px;
       }

@@ -34,7 +34,8 @@
         <el-button
           type="primary"
           style="margin-right:10px;"
-        ><router-link :to="{name:'expenses'}">支出录入</router-link></el-button>
+          @click="$router.push({name:'expenses'})"
+        >支出录入</el-button>
         <el-button
           type="primary"
           style="margin-right:10px;"
@@ -43,8 +44,8 @@
         <el-button
           type="primary"
           style="margin-right:10px;"
-          @click="handleFilter"
-        ><router-link :to="{name:'monitoring'}">返回</router-link></el-button>
+          @click="$router.push({name:'monitoring'})"
+        >返回</el-button>
       </el-form>
     </header>
     <el-row :gutter="10">

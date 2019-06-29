@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.wifi.dao.WifiTowerHeatDao">
+
+  <select id="recordGroupByBatchId" parameterType="map" resultMap="com.jn.park.wifi.dao.TbWifiTowerHeatInfoMapper.BaseResultMap">
+    SELECT r.ap_name_tower,sum(r.count) `count`,count(1) device_count FROM `tb_wifi_heat_info_record` r where r.batch_id=#{batchId,jdbcType=VARCHAR}
+      GROUP BY r.ap_name_tower
+  </select>
+
+  <insert id="insertBatchRecord" parameterType="java.util.List">
+    insert into tb_wifi_heat_info_record (id_, tenant_id_, ip_,
+    create_by_, create_time_, update_by_,
+    update_time_, batch_id, ap_name,
+    count, device, tower_id,
+    ap_name_tower)
+    values
+    <foreach collection ="list" item="item" index= "index" separator =",">
+      (#{item.id,jdbcType=VARCHAR}, #{item.tenantId,jdbcType=VARCHAR}, #{item.ip,jdbcType=VARCHAR},
+      #{item.createBy,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateBy,jdbcType=VARCHAR},
+      #{item.updateTime,jdbcType=TIMESTAMP}, #{item.batchId,jdbcType=VARCHAR}, #{item.apName,jdbcType=VARCHAR},
+      #{item.count,jdbcType=INTEGER}, #{item.device,jdbcType=VARCHAR}, #{item.towerId,jdbcType=VARCHAR},
+      #{item.apNameTower,jdbcType=VARCHAR})
+    </foreach >
+  </insert>
+</mapper>

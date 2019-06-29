@@ -16,17 +16,17 @@ import java.io.Serializable;
 public class FinanceIndexDownTypeModel implements Serializable {
 
     @ApiModelProperty("财务项目ID")
-    private int financeId;
+    private String financeId;
 
     @ApiModelProperty("财务项目名称")
     private String financeName;
 
 
-    public int getFinanceId() {
+    public String getFinanceId() {
         return financeId;
     }
 
-    public void setFinanceId(int financeId) {
+    public void setFinanceId(String financeId) {
         this.financeId = financeId;
     }
 
@@ -41,7 +41,7 @@ public class FinanceIndexDownTypeModel implements Serializable {
     @Override
     public String toString() {
         return "FinanceIndexDownTypeModel{" +
-                "financeId=" + financeId +
+                "financeId='" + financeId + '\'' +
                 ", financeName='" + financeName + '\'' +
                 '}';
     }

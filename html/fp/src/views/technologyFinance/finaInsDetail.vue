@@ -359,9 +359,9 @@
                     <!-- 参考信息、交易均价 begin -->
                     <div class="detail-contact inner-product">
                       <div class="search_area text-of" title="王振英 , 包美芬 , 高凤清">顾&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;问：{{i.advisorName}}</div>
-                      <div class="text-of mt5">参考价格：{{i.referPrice}}</div>
+                      <div class="text-of mt5">参考价格：{{i.referPrice}}元</div>
                       <div>累计
-                        <span class="mainColor">{{i.transactionsNumber}}</span>笔交易</div>
+                        <span class="mainColor">{{i.transactionsNumber}}</span>&nbsp;笔交易</div>
                     </div>
                     <!-- 参考信息、交易均价 end -->
                     <!-- 评价 begin -->
@@ -391,7 +391,7 @@
               </li>
             </ul>
             <div class="pagination-container">
-              <el-pagination background @size-change="handleSizeChange1" @current-change="handleCurrentChange1" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row1" layout="total, sizes, prev, pager, next, jumper" :total="total1">
+              <el-pagination background @size-change="handleSizeChange1" @current-change="handleCurrentChange1" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row1" layout="total, sizes, prev, pager, next, jumper" :total="total1">
               </el-pagination>
             </div>
           </div>
@@ -400,17 +400,14 @@
           <span slot="label">服务评价({{evaCount.evaluationTotal}})</span>
           <div class="serEvaluation">
             <ul class="list-imgleft">
-              <li class="list-item pr" v-for="(i,k) in serviceRatingList" :key='k'>
-                <!-- 上架时间 begin -->
-                <div class="list-item-date"></div>
-                <!-- 上架时间 end -->
+              <li class="list-item pr clearfix" v-for="(i,k) in serviceRatingList" :key='k'>
                 <!-- 左侧logo begin-->
-                <div class="list-imgleft-container product nopic">
+                <div class="list-imgleft-container product nopic fl">
                   <img :src="i.pictureUrl" alt="">
                 </div>
                 <!-- 左侧logo end-->
                 <!-- 中间信息 beign -->
-                <div class="list-info-middle inner-product">
+                <div class="list-info-middle inner-product fl">
                   <!-- 中间上半部分--标题和标签 begin -->
                   <div class="list-info-top-title">
                     <!-- 头部 begin -->
@@ -423,7 +420,7 @@
                   </div>
                   <!-- 中间上半部分--标题和标签 end -->
                   <!-- 中间下半部分--参考信息、交易均价和交易 begin -->
-                  <div class="list-info-bottom-detail clearfix">
+                  <div class="list-info-bottom-detail">
                     <!-- 参考信息、交易均价 begin -->
                     <div class="detail-contact inner-product">
                       <div class="search_area text-of" title="王振英 , 包美芬 , 高凤清">服务专员：{{i.advisorName}}</div>
@@ -446,25 +443,22 @@
                       </div>
                     </div>
                     <!-- 评价 end -->
-                    <!-- 交易量 begin -->
-                    <div class="detail-count" clearfix>
+                  </div>
+                  
+                  <!-- 中间上半部分--参考信息、交易均价和交易 end -->
+                </div>
+                  <div class="detail-count fr">
                       <!-- <span>累计
                         <span class="c_default ml5 mr5">40</span>笔交易</span> -->
-                      <div class="list-item-info fr">
+                      <div class="list-item-info">
                         <p>{{i.evaluationAccount}}</p>
                         <p>{{i.evaluationTime}}</p>
                       </div>
                     </div>
-                    <!-- 交易量 end -->
-                  </div>
-                  <!-- 中间上半部分--参考信息、交易均价和交易 end -->
-                </div>
-                <!-- 中间信息 end -->
-                <div class="clear"></div>
               </li>
             </ul>
             <div class="pagination-container">
-              <el-pagination background @size-change="handleSizeChange4" @current-change="handleCurrentChange4" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row4" layout="total, sizes, prev, pager, next, jumper" :total="total4">
+              <el-pagination background @size-change="handleSizeChange4" @current-change="handleCurrentChange4" :current-page="currentPage1" :page-sizes="[3, 6, 9, 12]" :page-size="row4" layout="total, sizes, prev, pager, next, jumper" :total="total4">
               </el-pagination>
             </div>
           </div>
@@ -508,7 +502,7 @@
               </li>
             </ul>
             <div class="pagination-container">
-              <el-pagination background @size-change="handleSizeChange3" @current-change="handleCurrentChange3" :current-page="currentPage1" :page-sizes="[5, 10, 15, 20]" :page-size="row3" layout="total, sizes, prev, pager, next, jumper" :total="total3">
+              <el-pagination background @size-change="handleSizeChange3" @current-change="handleCurrentChange3" :current-page="currentPage1" :page-sizes="[4, 8, 12, 16]" :page-size="row3" layout="total, sizes, prev, pager, next, jumper" :total="total3">
               </el-pagination>
             </div>
           </div>
@@ -569,16 +563,16 @@ export default {
         // }
       ],
       currentPage1: 1,
-      row1: 5,
+      row1: 3,
       page1: 1,
       total1: 0,
       serviceConsultant: [],
       serverActiList: [],
-      row3: 5,
+      row3: 4,
       page3: 1,
       total3: 0,
       serviceRatingList: [],
-      row4: 5,
+      row4: 3,
       page4: 1,
       total4: 0,
       evaCount: {},
@@ -750,7 +744,6 @@ export default {
         callback: function(res) {
           if (res.code == "0000") {
             _this.evaCount = res.data;
-            _this.total4 = res.data.total;
             setTimeout(() => {
               _this.$refs["tabP"].$children[0].$forceUpdate();
             }, 0);

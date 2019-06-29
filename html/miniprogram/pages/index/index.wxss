@@ -1,6 +1,9 @@
 .index{
   height: 100%;
-
+}
+.none{
+  text-align: center;
+  font-size: 30rpx;
 }
 .swiper_box{
   background-repeat:no-repeat;

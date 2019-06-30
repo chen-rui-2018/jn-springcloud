@@ -17,6 +17,9 @@ import java.util.List;
 @Repository
 public interface MeterDao {
 
+
+    List<String> getHosterFormMeter();
+
     /**
      * 保存电表的采集读数到源表中
      * @param readings

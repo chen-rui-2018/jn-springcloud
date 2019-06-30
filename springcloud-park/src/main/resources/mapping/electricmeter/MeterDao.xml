@@ -440,6 +440,10 @@
         and t.record_status=1
     </select>
 
+    <select id="">
+
+    </select>
+
     <!--有电的企业-->
     <select id="getElectric" resultType="com.jn.park.electricmeter.model.SwitchModel">
         select
@@ -759,4 +763,14 @@
                 )  t on 1=1
     </select>
 
+    <select id="getHosterFormMeter" resultType="java.lang.String">
+
+        select
+        company_id
+        from
+        tb_electric_meter_info
+        where record_status=1
+        and company_id is not null
+        GROUP BY company_id
+    </select>
 </mapper>

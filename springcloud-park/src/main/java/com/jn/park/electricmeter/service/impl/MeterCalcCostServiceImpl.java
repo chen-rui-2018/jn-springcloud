@@ -292,7 +292,9 @@ public class MeterCalcCostServiceImpl implements MeterCalcCostService {
 
                         }
                     }
-
+                    String ten ="10";
+                    BigDecimal tenDivisor = new BigDecimal(ten);
+                    allPrice = allPrice.divide(tenDivisor,2, RoundingMode.HALF_UP);
                     TbElectricEnergyDayLog energyDayLog = new TbElectricEnergyDayLog();
                     energyDayLog.setCompanyId(companyId);
                     energyDayLog.setCompanyName(companyName);

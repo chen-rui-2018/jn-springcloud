@@ -20,7 +20,7 @@ public class ServiceEvaluationParam extends Page implements Serializable {
     private String orgId;
     @ApiModelProperty(value = "产品id（查询产品的评价必传）",example = "xxx456")
     private String productId;
-    @ApiModelProperty(value = "服务顾问账号(查询顾问的评价必传)",example = "wangsong")
+    @ApiModelProperty(value = "服务专员账号(查询专员的评价必传)",example = "wangsong")
     private String advisorAccount;
     @ApiModelProperty(value = "评价类型:praise:好评  average:中评  badReview:差评,不传查询全部",example = "praise")
     private String ratingType;

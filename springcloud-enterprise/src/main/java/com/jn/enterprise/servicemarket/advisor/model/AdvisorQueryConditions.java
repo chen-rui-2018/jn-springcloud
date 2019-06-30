@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "AdvisorQueryConditions", description = "服务顾问列表查询条件")
+@ApiModel(value = "AdvisorQueryConditions", description = "服务专员列表查询条件")
 public class AdvisorQueryConditions implements Serializable {
     @ApiModelProperty(value = "人气权重")
     private Float popularityWeight=0.01f;
@@ -29,7 +29,7 @@ public class AdvisorQueryConditions implements Serializable {
     private String keyWords;
     @ApiModelProperty(value = "机构id")
     private String orgId;
-    @ApiModelProperty(value = "产品模板id(根据常规产品类型查询产品关联的顾问)",example="xxx1234")
+    @ApiModelProperty(value = "产品模板id(根据常规产品类型查询产品关联的专员)",example="xxx1234")
     private String templateId;
 
     private static final long serialVersionUID = 1L;

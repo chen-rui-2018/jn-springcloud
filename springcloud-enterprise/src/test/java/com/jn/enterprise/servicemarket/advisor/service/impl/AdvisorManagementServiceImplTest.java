@@ -47,16 +47,16 @@ public class AdvisorManagementServiceImplTest {
 
     @Before
     public void setUp() throws Exception {
-        //顾问邀请
+        //专员邀请
         loginAccount="18073856620";
         registerAccount="18674398739";
 
-        //顾问管理  审批状态(rejected：已拒绝    noFeedBack：未反馈   pending：待审批   approvalNotPassed：审批不通过)
+        //专员管理  审批状态(rejected：已拒绝    noFeedBack：未反馈   pending：待审批   approvalNotPassed：审批不通过)
         advisorManagementParam.setApprovalStatus("pending");
         //不要分页
         advisorManagementParam.setNeedPage("0");
 
-        //顾问审批
+        //专员审批
         approvalParam.setAdvisorAccount(registerAccount);
         //审批结果(approved:审批通过   approvalNotPassed:审批不通过)
         approvalParam.setApprovalResults("approved");
@@ -67,7 +67,7 @@ public class AdvisorManagementServiceImplTest {
 
 
     /**
-     * 顾问邀请
+     * 专员邀请
      */
     @Test
     public void inviteAdvisor(){
@@ -75,7 +75,7 @@ public class AdvisorManagementServiceImplTest {
             advisorManagementService.inviteAdvisor(registerAccount,loginAccount);
             assertThat(anything(),anything());
         } catch (JnSpringCloudException e) {
-            logger.warn("邀请顾问失败");
+            logger.warn("邀请专员失败");
             assertThat(e.getCode(),
                     Matchers.anyOf(
                             Matchers.containsString(AdvisorExceptionEnum.SERVICE_ORG_NOT_EXIST.getCode()),
@@ -90,7 +90,7 @@ public class AdvisorManagementServiceImplTest {
 
 
     /**
-     * 顾问管理
+     * 专员管理
      */
     @Test
     public void getAdvisorManagementInfo() {
@@ -99,14 +99,14 @@ public class AdvisorManagementServiceImplTest {
             List<TbServiceAdvisor> list= (List<TbServiceAdvisor>)paginationData.getRows();
             if(list!=null){
                 for(TbServiceAdvisor advisor:list){
-                    logger.info("顾问管理{}",advisor.toString());
+                    logger.info("专员管理{}",advisor.toString());
                 }
                 assertThat(list.size(),greaterThanOrEqualTo(0));
             }else{
                 assertThat(anything(),anything());
             }
         } catch (JnSpringCloudException e) {
-            logger.warn("顾问管理查询失败");
+            logger.warn("专员管理查询失败");
             assertThat(e.getCode(),
                     Matchers.anyOf(
                             Matchers.containsString(AdvisorExceptionEnum.APPROVAL_STATUS_NOT_EXIST.getCode())
@@ -116,7 +116,7 @@ public class AdvisorManagementServiceImplTest {
     }
 
     /**
-     * 顾问审批
+     * 专员审批
      */
     @Test
     public void approvalAdvisorInfo(){
@@ -124,7 +124,7 @@ public class AdvisorManagementServiceImplTest {
             advisorManagementService.approvalAdvisorInfo(approvalParam);
             assertThat(anything(),anything());
         } catch (JnSpringCloudException e) {
-            logger.warn("顾问审批失败");
+            logger.warn("专员审批失败");
             assertThat(e.getCode(),
                     Matchers.anyOf(
                             Matchers.containsString(AdvisorExceptionEnum.PENDING_ADVISOR_NOT_EXIT.getCode()),
@@ -145,7 +145,7 @@ public class AdvisorManagementServiceImplTest {
             advisorManagementService.inviteAgain(registerAccount,loginAccount);
             assertThat(anything(),anything());
         } catch (JnSpringCloudException e) {
-            logger.warn("再次邀请顾问失败");
+            logger.warn("再次邀请专员失败");
             assertThat(e.getCode(),
                     Matchers.anyOf(
                             Matchers.containsString(AdvisorExceptionEnum.SERVICE_ORG_NOT_EXIST.getCode()),

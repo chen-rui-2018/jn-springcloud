@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 编辑顾问资料
+ * 编辑专员资料
  * @Author: yangph
  * @Date: 2019/2/27 10:12
  * @Version v1.0
@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public interface AdvisorEditService {
     /**
-     * 判断当前登录用户认证顾问的状态
+     * 判断当前登录用户认证专员的状态
      * @param loginAccount 当前登录用户
      * @return
      */
@@ -23,7 +23,7 @@ public interface AdvisorEditService {
 
     /**
      * 基本信息保存并更新
-     * @param advisorBaseInfoParam  顾问资料基本信息
+     * @param advisorBaseInfoParam  专员资料基本信息
      * @return
      */
     int saveOrUpdateAdvisorBaseInfo(AdvisorBaseInfoParam advisorBaseInfoParam);
@@ -57,7 +57,7 @@ public interface AdvisorEditService {
     List<AdvisorCertificateTypeShow> getCertificateTypeList(String certificateType);
 
     /**
-     * 判断当前登录用户是否为顾问
+     * 判断当前登录用户是否为专员
      * @param loginAccount  用户账号
      */
     void currentUserIsAdvisor(String loginAccount);

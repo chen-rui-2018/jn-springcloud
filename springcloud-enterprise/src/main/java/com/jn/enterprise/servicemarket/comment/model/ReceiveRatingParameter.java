@@ -17,7 +17,7 @@ public class ReceiveRatingParameter extends Page {
     private String issueAccount;
     @ApiModelProperty(value = "服务产品名称[模糊搜索]",example = "代理记账")
     private String productName;
-    @ApiModelProperty(value = "顾问名称[模糊搜索]",example = "战三")
+    @ApiModelProperty(value = "专员名称[模糊搜索]",example = "战三")
     private String advisorName;
     @ApiModelProperty("当前用户[前台请忽略此参数]")
     private String account;

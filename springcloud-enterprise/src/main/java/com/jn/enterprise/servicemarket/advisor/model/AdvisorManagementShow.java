@@ -11,11 +11,11 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "AdvisorManagementShow",description = "顾问管理出参")
+@ApiModel(value = "AdvisorManagementShow",description = "专员管理出参")
 public class AdvisorManagementShow implements Serializable {
-    @ApiModelProperty(value = "顾问名称")
+    @ApiModelProperty(value = "专员名称")
     private String advisorName;
-    @ApiModelProperty(value = "顾问账号（注册手机/邮箱）")
+    @ApiModelProperty(value = "专员账号（注册手机/邮箱）")
     private String advisorAccount;
     @ApiModelProperty(value = "职务")
     private String position;

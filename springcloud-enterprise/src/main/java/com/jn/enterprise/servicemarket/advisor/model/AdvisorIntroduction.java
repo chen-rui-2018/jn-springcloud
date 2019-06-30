@@ -11,9 +11,9 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "AdvisorIntroduction", description = "服务顾问详情简介")
+@ApiModel(value = "AdvisorIntroduction", description = "服务专员详情简介")
 public class AdvisorIntroduction  implements Serializable {
-    @ApiModelProperty(value = "顾问姓名")
+    @ApiModelProperty(value = "专员姓名")
     private String advisorName;
     @ApiModelProperty(value = "职务")
     private String position;

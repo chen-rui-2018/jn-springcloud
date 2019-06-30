@@ -13,6 +13,9 @@ import java.io.Serializable;
  */
 @ApiModel(value = "BaseUser", description = "用户基本信息")
 public class BaseUser implements Serializable {
+    @ApiModelProperty(value = "id")
+    private String id;
+
     @ApiModelProperty(value = "账户名")
     private String account;
 
@@ -24,6 +27,14 @@ public class BaseUser implements Serializable {
 
     @ApiModelProperty("创建邮箱")
     private String email;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getAccount() {
         return account;

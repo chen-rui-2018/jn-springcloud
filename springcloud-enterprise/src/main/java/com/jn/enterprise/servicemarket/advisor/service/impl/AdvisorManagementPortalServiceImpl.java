@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * 服务顾问管理(后台门户管理)
+ * 服务专员管理(后台门户管理)
  * @Author: yangph
  * @Date: 2019/2/28 9:52
  * @Version v1.0
@@ -40,11 +40,11 @@ public class AdvisorManagementPortalServiceImpl implements AdvisorManagementPort
     @Autowired
     private AdvisorService advisorService;
     /**
-     * 服务顾问管理列表查询
-     * @param advisorManagementParam  服务顾问管理列表查询入参
+     * 服务专员管理列表查询
+     * @param advisorManagementParam  服务专员管理列表查询入参
      * @return
      */
-    @ServiceLog(doAction = "服务顾问管理列表查询")
+    @ServiceLog(doAction = "服务专员管理列表查询")
     @Override
     public PaginationData getAdvisorManagementInfoList(AdvisorManagementPortalParam advisorManagementParam) {
         com.github.pagehelper.Page<Object> objects = null;
@@ -61,7 +61,7 @@ public class AdvisorManagementPortalServiceImpl implements AdvisorManagementPort
             int startTime = Integer.parseInt(advisorManagementParam.getSubmitStartTime());
             int endTime=Integer.parseInt(advisorManagementParam.getSubmitEndTime());
             if(startTime>endTime){
-                logger.warn("服务顾问管理提交开始时间：[{}]晚于提交结束时间：[{}]",advisorManagementParam.getSubmitStartTime(),advisorManagementParam.getSubmitEndTime());
+                logger.warn("服务专员管理提交开始时间：[{}]晚于提交结束时间：[{}]",advisorManagementParam.getSubmitStartTime(),advisorManagementParam.getSubmitEndTime());
                 throw new JnSpringCloudException(AdvisorExceptionEnum.START_MORE_THEN_END);
             }
         }
@@ -77,21 +77,21 @@ public class AdvisorManagementPortalServiceImpl implements AdvisorManagementPort
     }
 
     /**
-     * 服务顾问详情
-     * @param advisorAccount  顾问账号
+     * 服务专员详情
+     * @param advisorAccount  专员账号
      * @return
      */
-    @ServiceLog(doAction = "服务顾问详情")
+    @ServiceLog(doAction = "服务专员详情")
     @Override
     public AdvisorManagementDetailsVo getAdvisorManagementDetails(String advisorAccount) {
-        //根据顾问账号获取顾问简介信息
+        //根据专员账号获取专员简介信息
         AdvisorServiceManagementInfo advisorIntroduction = advisorManagementPortalMapper.getAdvisorIntroduction(advisorAccount);
         if(advisorIntroduction==null){
             throw new JnSpringCloudException(AdvisorExceptionEnum.SERVICE_ORG_NOT_EXIST);
         }
         AdvisorManagementDetailsVo advisorManagementDetailsVo =new AdvisorManagementDetailsVo();
         advisorManagementDetailsVo.setAdvisorIntroduction(advisorIntroduction);
-        //顾问基本资料
+        //专员基本资料
         AdvisorServiceInfo advisorServiceInfo = advisorService.getAdvisorInfoByAccount(advisorAccount, ApprovalStatusEnum.APPROVED.getValue());
         AdvisorBaseInfoParam advisorBaseInfoParam =new AdvisorBaseInfoParam();
         BeanUtils.copyProperties(advisorServiceInfo, advisorBaseInfoParam);

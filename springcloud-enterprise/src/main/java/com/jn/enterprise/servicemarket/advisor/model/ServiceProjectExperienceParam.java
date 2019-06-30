@@ -14,12 +14,12 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "ServiceProjectExperienceParam",description = "顾问项目经验入参")
+@ApiModel(value = "ServiceProjectExperienceParam",description = "专员项目经验入参")
 public class ServiceProjectExperienceParam  implements Serializable {
     @ApiModelProperty(value = "主键id(新增时为空，修改时必传)")
     private String id;
-    @ApiModelProperty(value = "顾问账号",required = true,example = "wangsong")
-    @NotNull(message="顾问账号不能为空")
+    @ApiModelProperty(value = "专员账号",required = true,example = "wangsong")
+    @NotNull(message="专员账号不能为空")
     private String advisorAccount;
     @ApiModelProperty(value = "公司名称",required = true,example = "xxx公司")
     @NotNull(message="公司名称不能为空")

@@ -22,7 +22,7 @@ public interface CommentService {
     PaginationData getGiveOthersCommentList(RatingParameter ratingParameter,String userAccount);
 
     /**
-     * 获取我收到的评价列表(机构/顾问收到的评价)
+     * 获取我收到的评价列表(机构/专员收到的评价)
      * @param receiveRatingParameter
      * @param userAccount
      * @return

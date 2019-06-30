@@ -11,15 +11,15 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "AdvisorListInfo", description = "服务顾问列表信息")
+@ApiModel(value = "AdvisorListInfo", description = "服务专员列表信息")
 public class AdvisorListInfo implements Serializable {
     @ApiModelProperty(value = "机构id")
     private String orgId;
     @ApiModelProperty(value = "所属机构名称")
     private String orgName;
-    @ApiModelProperty(value = "顾问账号")
+    @ApiModelProperty(value = "专员账号")
     private String advisorAccount;
-    @ApiModelProperty(value = "顾问姓名")
+    @ApiModelProperty(value = "专员姓名")
     private String advisorName;
     @ApiModelProperty(value = "头像")
     private String avatar;

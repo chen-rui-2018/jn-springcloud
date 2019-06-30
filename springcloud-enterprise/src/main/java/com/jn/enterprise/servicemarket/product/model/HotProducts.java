@@ -27,7 +27,7 @@ public class HotProducts  implements Serializable {
     private String referPrice;
     @ApiModelProperty(value = "机构个数")
     private Integer orgCount;
-    @ApiModelProperty(value = "顾问人数")
+    @ApiModelProperty(value = "专员人数")
     private Integer advisorCount;
     @ApiModelProperty(value = "评论次数")
     private Integer ratingCount;

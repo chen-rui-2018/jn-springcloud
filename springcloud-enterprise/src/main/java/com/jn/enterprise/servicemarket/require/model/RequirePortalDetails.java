@@ -27,7 +27,7 @@ public class RequirePortalDetails implements Serializable {
     private String orgName;
     @ApiModelProperty(value = "服务产品")
     private String productName;
-    @ApiModelProperty(value = "服务顾问")
+    @ApiModelProperty(value = "服务专员")
     private String advisorName;
     @ApiModelProperty(value = "产品分类")
     private String productType;

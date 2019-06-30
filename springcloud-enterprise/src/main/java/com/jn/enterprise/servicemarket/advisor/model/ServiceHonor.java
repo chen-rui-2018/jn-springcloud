@@ -12,11 +12,11 @@ import java.util.Date;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "ServiceHonor",description = "顾问荣誉资质出参")
+@ApiModel(value = "ServiceHonor",description = "专员荣誉资质出参")
 public class ServiceHonor implements Serializable {
     @ApiModelProperty(value = "主键id")
     private String id;
-    @ApiModelProperty(value = "顾问账号")
+    @ApiModelProperty(value = "专员账号")
     private String advisorAccount;
     @ApiModelProperty(value = "证书名称")
     private String certificateName;

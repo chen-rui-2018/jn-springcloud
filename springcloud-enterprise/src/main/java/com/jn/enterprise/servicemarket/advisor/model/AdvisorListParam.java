@@ -12,7 +12,7 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "AdvisorListParam",description = "服务顾问列表查询入参")
+@ApiModel(value = "AdvisorListParam",description = "服务专员列表查询入参")
 public class AdvisorListParam extends Page implements Serializable {
     @ApiModelProperty(value = "机构id",example = "xxx123")
     private String orgId;
@@ -22,7 +22,7 @@ public class AdvisorListParam extends Page implements Serializable {
     private String sortTypes;
     @ApiModelProperty(value = "关键词",example="上海")
     private String keyWords;
-    @ApiModelProperty(value = "产品模板id(根据常规产品类型查询产品关联的顾问)",example="xxx1234")
+    @ApiModelProperty(value = "产品模板id(根据常规产品类型查询产品关联的专员)",example="xxx1234")
     private String templateId;
 
     public String getOrgId() {

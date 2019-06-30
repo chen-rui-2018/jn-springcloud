@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * 服务顾问列表信息
+ * 服务专员列表信息
  * @Author: yangph
  * @Date: 2019/2/14 11:04
  * @Version v1.0
@@ -22,7 +22,7 @@ import java.util.List;
 @Repository
 public interface AdvisorMapper {
     /**
-     * 根据查询条件获取顾问列表信息
+     * 根据查询条件获取专员列表信息
      * @param advisorQueryConditions
      * @return
      */
@@ -36,21 +36,21 @@ public interface AdvisorMapper {
     List<ServiceRating>getServiceRatingInfo(ServiceEvaluationParam serviceEvaluationParam);
 
     /**
-     * 批量插入顾问荣誉资质
+     * 批量插入专员荣誉资质
      * @param list
      * @return
      */
     int insertServiceHonorList(List<TbServiceHonor> list);
 
     /**
-     * 批量插入顾问项目经验
+     * 批量插入专员项目经验
      * @param list
      * @return
      */
     int insertServiceProjectList(List<TbServiceProExper> list);
 
     /**
-     * 批量插入顾问服务经验
+     * 批量插入专员服务经验
      * @param list
      * @return
      */

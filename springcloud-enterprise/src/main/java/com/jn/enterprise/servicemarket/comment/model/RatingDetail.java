@@ -21,7 +21,7 @@ public class RatingDetail {
     private String issueTime;
     @ApiModelProperty(value = "意向机构")
     private String orgName;
-    @ApiModelProperty(value = "意向顾问")
+    @ApiModelProperty(value = "意向专员")
     private String advisorName;
     @ApiModelProperty(value = "意向产品")
     private String productName;

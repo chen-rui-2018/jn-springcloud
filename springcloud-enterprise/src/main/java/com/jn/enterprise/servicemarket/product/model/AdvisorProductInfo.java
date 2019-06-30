@@ -6,13 +6,13 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 /**
- * 顾问-服务产品列表信息
+ * 专员-服务产品列表信息
  * @author： chenr
  * @date： Created on 2019/2/27 17:08
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "AdvisorProductInfo" ,description = "顾问-服务产品列表信息")
+@ApiModel(value = "AdvisorProductInfo" ,description = "专员-服务产品列表信息")
 public class AdvisorProductInfo implements Serializable {
     @ApiModelProperty(value = "产品Id")
     private String productId;
@@ -24,7 +24,7 @@ public class AdvisorProductInfo implements Serializable {
     private String signoryId;
     @ApiModelProperty(value ="机构名称")
     private String orgName;
-    @ApiModelProperty(value = "顾问名称")
+    @ApiModelProperty(value = "专员名称")
     private String advisorName;
     @ApiModelProperty(value = "参考价格")
     private String referPrice;

@@ -21,7 +21,7 @@ public interface UserCenterIndexService {
 
 
     /**
-     *顾问管理
+     *专员管理
      * @param user
      * @return
      */

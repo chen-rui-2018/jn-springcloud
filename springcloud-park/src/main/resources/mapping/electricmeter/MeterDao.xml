@@ -440,10 +440,6 @@
         and t.record_status=1
     </select>
 
-    <select id="">
-
-    </select>
-
     <!--有电的企业-->
     <select id="getElectric" resultType="com.jn.park.electricmeter.model.SwitchModel">
         select

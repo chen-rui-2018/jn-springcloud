@@ -11,6 +11,7 @@ import com.jn.enterprise.pd.evaluate.entity.TbPdEvaluateKeyCriteria;
 import com.jn.enterprise.pd.evaluate.model.EvaluateTargetModel;
 import com.jn.enterprise.pd.evaluate.service.EvaluateService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ import java.util.List;
  * 创建时间：2019/6/20
  * </pre>
  */
+@Service
 public class EvaluateServiceImpl implements EvaluateService {
     @Autowired
     private TbPdEvaluateKeyMapper tbPdEvaluateKeyMapper;

@@ -15,7 +15,7 @@ import java.io.Serializable;
 public class DoorInOutParkingShow implements Serializable {
 
     private static final long serialVersionUID = -6445519824088459777L;
-    @ApiModelProperty(value = "存储成功的id列表组成的字符串")
+    @ApiModelProperty(value = "接受到的id列表组成的字符串")
     private String ids;
 
     public String getIds() {

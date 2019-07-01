@@ -239,7 +239,7 @@
         select t.id		from
         (
         SELECT
-        round( ( UNIX_TIMESTAMP( meeting.start_time ) - UNIX_TIMESTAMP( NOW( ) ) ) / 60 ) as sub_time,
+        round( ( UNIX_TIMESTAMP( meeting.end_time ) - UNIX_TIMESTAMP( NOW( ) ) ) / 60 ) as sub_time,
         meeting.id
         FROM
         tb_oa_meeting meeting

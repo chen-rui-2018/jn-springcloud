@@ -16,6 +16,7 @@ import com.jn.park.activity.ApplyStatusEnum;
 import com.jn.park.activity.dao.ActivityApplyMapper;
 import com.jn.park.activity.dao.TbActivityApplyMapper;
 import com.jn.park.activity.dao.TbActivityMapper;
+import com.jn.park.activity.domain.SystemUrlProperties;
 import com.jn.park.activity.entity.TbActivity;
 import com.jn.park.activity.entity.TbActivityApply;
 import com.jn.park.activity.entity.TbActivityApplyCriteria;
@@ -71,6 +72,9 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
 
     @Autowired
     private TbActivityMapper tbActivityMapper;
+
+    @Autowired
+    private SystemUrlProperties systemUrlProperties;
 
 
     /**
@@ -374,14 +378,14 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
      * 二维码生成
      *
      * @param outputStream
-     * @param data         :需要生成二维码的数据
+     * @param activityId   活动id
      * @throws IOException
      */
     @ServiceLog(doAction = "二维码生成")
     @Override
-    public void getQrCode(OutputStream outputStream, String data) throws IOException {
+    public void getQrCode(OutputStream outputStream, String activityId) throws IOException {
+        String data = systemUrlProperties.getSystemUrl()+"/springcloud-park/activity/signInActivity?activityId=" + activityId;
         try {
-
             String dataHandle = new String(data.getBytes("UTF-8"), "UTF-8");
             BitMatrix bitMatrix = new MultiFormatWriter().encode(dataHandle, BarcodeFormat.QR_CODE, 800, 800);
 

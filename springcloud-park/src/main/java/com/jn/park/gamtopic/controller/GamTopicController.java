@@ -52,7 +52,7 @@ public class GamTopicController extends BaseController {
     @ControllerLog(doAction = "删除话题[前端使用]")
     @ApiOperation(value = "删除话题[前端使用]",notes = "根据话题ID删除话题（只能删除当前用户的话题数据）。返回值为响应数据条数，正常为1")
     @RequestMapping(value = "/deleteGamTopic",method = RequestMethod.POST)
-    public Result<Integer> deleteGamTopic(@ApiParam(name = "topicId", value = "话题ID", required = true,example = "s342***")String topicId){
+    public Result<Integer> deleteGamTopic(String topicId){
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         return new Result<>(gamTopicService.deleteGamTopic(topicId,user.getAccount()));
     }

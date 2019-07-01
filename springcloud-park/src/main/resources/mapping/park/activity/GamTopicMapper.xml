@@ -26,7 +26,7 @@
         ,t.creator_account AS "t_creatorAccount"
         ,t.modifier_account AS "t_modifierAccount"
         ,DATE_FORMAT(t.modified_time,'%Y-%m-%d %H:%i:%s') AS "t_modifiedTime"
-        FROM tb_gam_topic t WHERE t.record_status = '1'
+        FROM tb_gam_topic t WHERE t.record_status = '1' and t.topic_status = '1'
         <if test="topicContent != null and topicContent != ''">
             and t.topic_content = #{topicContent}
         </if>

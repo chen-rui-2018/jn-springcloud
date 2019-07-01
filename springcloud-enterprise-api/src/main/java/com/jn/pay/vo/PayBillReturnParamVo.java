@@ -71,6 +71,18 @@ public class PayBillReturnParamVo implements Serializable {
     @ApiModelProperty(value="记录状态   0标记删除，1正常")
     private String recordStatus;
 
+    @ApiModelProperty(value="支付时间")
+    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
+    private Date paymentTime;
+
+    public Date getPaymentTime() {
+        return paymentTime;
+    }
+
+    public void setPaymentTime(Date paymentTime) {
+        this.paymentTime = paymentTime;
+    }
+
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }

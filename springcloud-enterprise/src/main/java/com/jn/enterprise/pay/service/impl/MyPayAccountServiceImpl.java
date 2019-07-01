@@ -402,9 +402,37 @@ public class MyPayAccountServiceImpl implements MyPayAccountService {
                 /**更新账单状态*/
                 logger.info("开始执行统一缴费更新账单状态操作");
                 tb.setPaymentState(PaymentBillEnum.BILL_ORDER_IS_PAY.getCode());
+                tb.setPaymentTime(new Date());
+                tb.setModifiedTime(new Date());
+                if(user != null && StringUtils.isNotBlank(user.getAccount())){
+                    tb.setModifierAccount(user.getAccount());
+                }
                 logger.info("执行统一缴费更新账单状态操作,入參【{}】", tb.toString());
                 tbPayBillMapper.updateByPrimaryKeySelective(tb);
                 logger.info("结束执行统一缴费更新账单状态操作");
+                logger.info("查询账单状态是否更新,入參【{}】", tb.getBillId());
+                TbPayBill tbPayBill = tbPayBillMapper.selectByPrimaryKey(tb.getBillId());
+                logger.info("查询账单状态是否更新,返回參数【{}】", JsonUtil.object2Json(tbPayBill));
+                /**更新成功就回调各业务侧*/
+                if(PaymentBillEnum.BILL_ORDER_IS_PAY.getCode().equals(tbPayBill.getPaymentState())){
+                    /**判断账单回调ID和url是否为空*/
+                    if(StringUtils.isNotBlank(tbPayBill.getCallbackId()) && StringUtils.isNotBlank(tbPayBill.getCallbackUrl())){
+                        PayCallBackNotify payCallBackNotify = new PayCallBackNotify();
+                        payCallBackNotify.setBillId(tbPayBill.getBillId());
+                        payCallBackNotify.setPaymentState(tbPayBill.getPaymentState());
+                        Delay delay = new Delay();
+                        delay.setServiceId(tbPayBill.getCallbackId());
+                        delay.setServiceUrl(tbPayBill.getCallbackUrl());
+                        delay.setTtl("30");
+                        delay.setDataString(JSONObject.toJSONString(payCallBackNotify));
+                        logger.info("接收到延迟消息内容：【{}】", JSONObject.toJSONString(payCallBackNotify));
+                        logger.info("开始回调");
+                        Result<Boolean> result = delaySendMessageClient.delaySend(delay);
+                        logger.info("结束回调,返回结果，【{}】", result.toString());
+                    }else{
+                        return new Result("执行回调各业务侧失败，回调地址为空");
+                    }
+                }
             }
         }
         return new Result("执行自动扣费成功！");

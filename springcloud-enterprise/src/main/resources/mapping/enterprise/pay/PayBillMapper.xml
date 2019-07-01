@@ -29,6 +29,8 @@
         <result column="payment_method" jdbcType="VARCHAR" property="paymentMethod" />
         <result column="payment_action" jdbcType="VARCHAR" property="paymentAction" />
         <result column="nature_code" jdbcType="VARCHAR" property="natureCode" />
+        <result column="payment_time" jdbcType="TIMESTAMP" property="paymentTime" />
+
         <!-- 多条详细记录 -->
         <collection property="payBillDetails" ofType="com.jn.pay.model.PayBillDetails">
             <id column="details_id" jdbcType="VARCHAR"  property="detailsId"/>
@@ -105,6 +107,7 @@
     END paymentAffirm,
      affirm_part AS affirmPart,
      affirm_time AS affirmTime,
+     payment_time as paymentTime,
      record_status AS recordStatus,
      deduction_id AS deductionId,
      money AS money,
@@ -204,6 +207,7 @@ and obj_id = #{payBill.objId,jdbcType=VARCHAR}
         END acBookType,
         created_time AS createdTime,
         creator_account AS creatorAccount,
+        payment_time as paymentTime,
         late_payment AS latePayment,
         CASE payment_affirm
         WHEN '1' THEN

@@ -585,6 +585,7 @@ public class MeterRulesServiceImpl implements MeterRulesService {
                         warningRecord.setRecordStatus(new Byte(MeterConstants.VALID));
                         warningRecord.setCreatedTime(new Date());
                         warningRecord.setMeterCode(book.getMeterCode());
+                        warningRecord.setCompanyName(serviceCompany.getData().getComName());
                         warningRecords.add(warningRecord);
                         msg = msg +",电表号为："+book.getMeterCode();
                         sendSMS(phone, msg);

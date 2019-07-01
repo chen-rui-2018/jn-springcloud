@@ -4,6 +4,7 @@ import com.codingapi.tx.annotation.TxTransaction;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
+import com.jn.common.util.encryption.AESUtil;
 import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
@@ -57,6 +58,9 @@ public class UserJoinController extends BaseController {
     @RequestMapping(value = "/addUser",method = RequestMethod.POST)
     @TxTransaction(isStart = true)
     public Result addUser(@RequestBody @Validated UserRegister userRegister){
+        //账号密码解密
+        userRegister.setPhone(AESUtil.decrypt(userRegister.getPhone(), AESUtil.DEFAULT_KEY));
+        userRegister.setPassword(AESUtil.decrypt(userRegister.getPassword(), AESUtil.DEFAULT_KEY));
         return userJoinService.addUser(userRegister);
     }
 

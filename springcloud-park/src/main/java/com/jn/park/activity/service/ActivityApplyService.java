@@ -56,10 +56,10 @@ public interface ActivityApplyService {
     /**
      * 生成二维码
      * @param outputStream
-     * @param data :需要生成二维码的数据
+     * @param activityId 活动id
      * @throws  IOException
      */
-    void getQrCode (OutputStream outputStream, String data) throws IOException;
+    void getQrCode (OutputStream outputStream, String activityId) throws IOException;
 
     /**
      * 前台用户签到接口

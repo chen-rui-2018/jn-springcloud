@@ -191,8 +191,7 @@ public class ActivityController extends BaseController {
         httpServletResponse.reset();//清空输出流
         try {
             OutputStream outputStream = httpServletResponse.getOutputStream();
-            String url = "/activity/signInActivity?activityId=" + activityId;
-            activityApplyService.getQrCode(outputStream, url);
+            activityApplyService.getQrCode(outputStream, activityId);
         } catch (IOException e) {
             logger.error("[活动二维码下载],IO异常，activityId: {},查询响应条数{}", activityId, e);
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_APPLY_CODE_DOWN_IO_EXCEPTION);

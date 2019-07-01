@@ -14,18 +14,15 @@ import java.io.Serializable;
 @ApiModel(value = "EvaluateTargetModel",description = "测评指标信息")
 public class EvaluateTargetModel implements Serializable {
 
-    @ApiModelProperty(value = "指标ID",example = "2323232323")
+    @ApiModelProperty(value = "关键指标ID",example = "2323232323")
     private String id;
-    @ApiModelProperty(value = "指标名称",example = "主营业务收入")
+    @ApiModelProperty(value = "关键指标名称",example = "主营业务收入")
     private String name;
     @ApiModelProperty(value = "指标值",example = "3400")
     private String value;
     @ApiModelProperty(value = "指标单位",example = "万元")
     private String unit;
-    @ApiModelProperty(value = "指标类型（0：月指标，1：年指标）",example = "0")
-    private String type;
-    @ApiModelProperty(value = "指标时间(格式YYYYMM，年指标没有月份)",example = "201904")
-    private String time;
+
 
     public String getId() {
         return id;
@@ -59,19 +56,13 @@ public class EvaluateTargetModel implements Serializable {
         this.unit = unit;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
+    @Override
+    public String toString() {
+        return "EvaluateTargetModel{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", value='" + value + '\'' +
+                ", unit='" + unit + '\'' +
+                '}';
     }
 }

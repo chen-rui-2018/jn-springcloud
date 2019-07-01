@@ -202,7 +202,7 @@ public class ElectricRulesInfoServiceImpl implements ElectricRulesInfoService {
             name.append("[").append(typeCode).append("]");
         }
 
-        String msg=String.format("【白下高新区】系统监控通知：[%s]的电表触发了规则[%s]，实际值[%s],请知悉。",name,vElectricRulesInfo.getRuleShowValue(),actualVal);
+        String msg=String.format("：[%s]的电表触发了规则[%s]，实际值[%s],请知悉。",name,vElectricRulesInfo.getRuleShowValue(),actualVal);
         logger.info("告警内容：{}",msg);
         return msg;
     }

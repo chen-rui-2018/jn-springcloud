@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
  * @modified By:
  **/
 @ConfigurationProperties(
-        prefix = "jn.systemUrl"
+        prefix = "jn.cms"
 )
 @Component
 @RefreshScope

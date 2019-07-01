@@ -711,7 +711,7 @@ public class MeterRulesServiceImpl implements MeterRulesService {
                         if (status.equals(show.getStatus())) {
                             continue;
                         }
-                        //SwitchMeter(meterCode, status);
+                        SwitchMeter(model.getFactoryCode(), status);
                         //记录日志
                         TbElectricMeterSwitchLog switchLog = new TbElectricMeterSwitchLog();
                         switchLog.setCompanyId(model.getCompanyId());

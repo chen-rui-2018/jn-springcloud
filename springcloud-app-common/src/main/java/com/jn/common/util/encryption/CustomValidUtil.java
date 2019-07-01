@@ -1,6 +1,11 @@
 package com.jn.common.util.encryption;
 
 
+import com.jn.common.util.CallOtherSwaggerUtils;
+import org.json.simple.JSONObject;
+import org.springframework.http.HttpMethod;
+import org.springframework.util.LinkedMultiValueMap;
+
 import java.util.regex.Pattern;
 
 /**
@@ -18,6 +23,24 @@ public class CustomValidUtil {
     public static String SPECIAL = "^.*[(/) | (\\\\) | (:) | (\\*) | (\\?) | (\\.) | (\\%) | (\\@) | (\\&) | (\") | (<) | (>)].*$";
 
 
+    /**
+     * 获取密码校验规则
+     * @return
+     */
+    public static JSONObject securityInfo(){
+        JSONObject jsonObject = CallOtherSwaggerUtils.request("", "/api/security/getInfo", HttpMethod.GET, new LinkedMultiValueMap<String, Object>());
+        return jsonObject;
+    }
+
+    /**
+     * 判断密码是否符合指定校验规则
+     * @param validStr
+     * @param isUseComp
+     * @param minLength
+     * @param maxLength
+     * @param complexity
+     * @return
+     */
     public  static boolean valid(String validStr,String isUseComp,int minLength,int maxLength,String complexity){
         boolean flag=true;
         //只判断长度

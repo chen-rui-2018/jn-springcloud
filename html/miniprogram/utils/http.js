@@ -1,6 +1,5 @@
 // http.js
-const baseUrl = 'https://cms.bxgxq.com'
-const wechatPath = 'https://cms.bxgxq.com/springcloud-wechat-miniprogram/'
+const baseUrl = 'http://192.168.10.31:1101/'
 const imgBaseUrl = 'https://m.bxgxq.com/imgs/'
 const h5Url="https://screan.bxgxq.com/#/"
 // http://112.94.22.222:8002/#/
@@ -38,7 +37,7 @@ class WxHttp {
             let userInfo = wx.getStorageSync('userInfo')
             userInfo = userInfo ? JSON.parse(userInfo) : userInfo
             wx.request({
-              url: wechatPath + 'guest/mini/user/checkCodeAndGetToken',
+              url: baseUrl + 'springcloud-wechat-miniprogram/guest/mini/user/checkCodeAndGetToken',
               method: 'POST',
               data: {
                 ...userInfo,
@@ -116,7 +115,6 @@ class WxHttp {
 
 export {
   baseUrl,
-  wechatPath,
   imgBaseUrl,
   h5Url
 }

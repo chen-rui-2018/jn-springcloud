@@ -45,6 +45,7 @@
 
 <script>
 // import { isvalidUsername } from '@/utils/validate'
+import { encrypt } from '@/utils'
 export default {
   name: 'Login',
   data() {
@@ -123,7 +124,10 @@ export default {
         if (valid) {
           this.loading = true
           this.$store
-            .dispatch('LoginByUsername', this.loginForm)
+            .dispatch('LoginByUsername', {
+              username: encrypt(this.username),
+              password: encrypt(this.password)
+            })
             .then((response) => {
               _this.loading = false
               if (response.code === '0000') {

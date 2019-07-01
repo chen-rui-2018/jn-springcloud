@@ -59,7 +59,7 @@ Page({
       this.login()
         .then(code => {
           wx.request({
-            url: app.globalData.wechatPath + 'guest/mini/user/checkCodeAndGetToken',
+            url: app.globalData.baseUrl + 'springcloud-wechat-miniprogram/guest/mini/user/checkCodeAndGetToken',
             method: 'POST',
             data: {
               code,

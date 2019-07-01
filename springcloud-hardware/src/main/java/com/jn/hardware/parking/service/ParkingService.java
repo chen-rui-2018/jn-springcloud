@@ -78,7 +78,7 @@ public interface ParkingService {
      * @param parkId 车场id
      * @return
      */
-    DoorResult saveDoorCarInParkingInfo(DoorCarInParkingParam doorCarInParkingShow, String url,String parkId);
+    DoorParam saveDoorCarInParkingInfo(DoorCarInParkingParam doorCarInParkingShow, String url,String parkId);
 
     /**
      * 车辆出场记录信息
@@ -87,6 +87,6 @@ public interface ParkingService {
      * @param parkId 车场id
      * @return
      */
-    DoorResult  saveDoorCarOutParkingInfo(@RequestBody DoorCarOutParkingParam doorCarOutParkingShow, String url,String parkId);
+    DoorParam  saveDoorCarOutParkingInfo(@RequestBody DoorCarOutParkingParam doorCarOutParkingShow, String url,String parkId);
 
 }

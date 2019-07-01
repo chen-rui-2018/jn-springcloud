@@ -26,7 +26,10 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-app-delay-stream-api</artifactId>
+        </dependency>
         <!-- 视频安防 -->
         <dependency>
             <groupId>artemis</groupId>

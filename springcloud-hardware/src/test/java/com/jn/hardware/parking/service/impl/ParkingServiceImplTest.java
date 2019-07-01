@@ -209,7 +209,7 @@ public class ParkingServiceImplTest {
         doorCarInParkingParam.setT("1557927122");
         String url= "http://112.94.22.222:8000/springcloud-hardware/hardware/parking/saveDoorCarInParkingInfo";
         String parkId = "100010_0004";
-        DoorResult result = parkingService.saveDoorCarInParkingInfo(doorCarInParkingParam,url,parkId);
+        DoorParam result = parkingService.saveDoorCarInParkingInfo(doorCarInParkingParam,url,parkId);
         logger.info("\n车场车辆入场信息,结果说明：{}",result.getBody());
 
     }
@@ -268,7 +268,7 @@ public class ParkingServiceImplTest {
         doorCarOutParkingParam.setSignature("SJDKLSJKLDJSKLSHJKSHDJKHJKHJK");
         String url = "";
         String parkId = "";
-        DoorResult doorResult =  parkingService.saveDoorCarOutParkingInfo(doorCarOutParkingParam,url,parkId);
+        DoorParam doorResult =  parkingService.saveDoorCarOutParkingInfo(doorCarOutParkingParam,url,parkId);
         logger.info("\n车场车辆出场信息,结果说明：{}",doorResult.getBody());
     }
 

@@ -1,9 +1,7 @@
 package com.jn.hardware.parking.service.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
-import com.jn.common.util.GlobalConstants;
 import com.jn.common.util.RestTemplateUtil;
 import com.jn.common.util.StringUtils;
 import com.jn.hardware.config.ParkingDrUrlProperties;
@@ -14,7 +12,8 @@ import com.jn.hardware.model.parking.door.*;
 import com.jn.hardware.parking.service.ParkingService;
 import com.jn.hardware.util.JsonStringToObjectUtil;
 import com.jn.park.api.ParkingClient;
-import org.apache.commons.codec.digest.DigestUtils;
+import com.jn.send.api.DelaySendMessageClient;
+import com.jn.send.model.Delay;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.stream.Collectors;
 
 
 /**
@@ -41,9 +40,20 @@ public class ParkingServiceImpl implements ParkingService {
     private ParkingDrUrlProperties parkingDrUrlProperties;
     @Autowired
     private ParkingClient parkingClient;
-
-     private static final char[] HEX_CHAR = {'0', '1', '2', '3', '4', '5',
-            '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+    @Autowired
+    private DelaySendMessageClient delaySendMessageClient;
+    /**
+     * 园区服务实例id名称
+     */
+    private static final String PARKING_CLIENT = "springcloud-park";
+    /**
+     * 道尔车辆入场推送接口地址
+     */
+    private static final String PARKING_CLIENT_CARJOINPARKING_URL = "/api/parking/carJoinParking";
+    /**
+     * 道尔车辆出场推送接口地址
+     */
+    private static final String PARKING_CLIENT_CAROUTPARKING_URL = "/api/parking/carOutParking";
 
     /**
      * 临停预缴费信息(场内缴费)查询
@@ -375,52 +385,36 @@ public class ParkingServiceImpl implements ParkingService {
      * @return
      */
     @Override
-    public DoorResult saveDoorCarInParkingInfo(DoorCarInParkingParam doorCarInParkingParam ,String requestUrl,String parkId) {
-        String signatureKey =  ParkingCompanyEnum.SIGNATURE_KEY.getMessage();
-        String secretString = String.format("%s@#%s@#%s", requestUrl, doorCarInParkingParam.getT(), signatureKey);
-
-        DoorResult doorResult = new DoorResult();
-        try {
-            secretString = traditionMd5(secretString);
-            //secretString.equals(doorCarInParkingParam.getSignature())
-            if(StringUtils.isNotBlank(secretString)){
-                DoorCarInParkingInfo info = new DoorCarInParkingInfo();
-                List<DoorCarInParkingShow> list= new ArrayList<DoorCarInParkingShow>();
-                if(doorCarInParkingParam.getCarinlist()!=null) {
-                    String  inString = doorCarInParkingParam.getCarinlist().replaceAll(ParkingCompanyEnum.REPLACE_ALL.getCode(),"\"");
-                    inString = inString.replaceAll(ParkingCompanyEnum.REPLACE_PAY_DATE_U.getCode(),ParkingCompanyEnum.REPLACE_PAY_DATE_L.getCode());
-                    inString = inString.replaceAll(ParkingCompanyEnum.REPLACE_ALL_SLASH.getCode(),"\\\\\\\\");
-                    logger.info("\n转换完成后的入场信息字符串inString:"+inString);
-                    list = JsonStringToObjectUtil.jsonToObject(inString, new TypeReference<List<DoorCarInParkingShow>>() {});
-                }
-                info.setCarinlist(list);
-                info.setParkId(parkId);
-                Result<String> result  = parkingClient.carJoinParking(info);
-                if(!result.getCode().equals(GlobalConstants.SUCCESS_CODE)){
-                    doorResult.getHead().setStatus(result.getCode());
-                    doorResult.getHead().setMessage(result.getResult());
-                    throw new JnSpringCloudException(ParkingExceptionEnum.DOOR_CAR_PARKING_IN,result.getResult());
-                }else{
-                    doorResult.getHead().setStatus(DoorResult.SUCCESS_CODE);
-                    String ids = result.getData() != null ? result.getData() : "";
-                    DoorInOutParkingShow show = new DoorInOutParkingShow();
-                    show.setIds(ids);
-                    doorResult.setBody(show);
-                }
-            }else {
-                DoorHeadResult headResult = new DoorHeadResult();
-                headResult.setStatus(ParkingExceptionEnum.DOOR_CAR_PARKING_SIGNNATURE.getCode());
-                headResult.setMessage(ParkingExceptionEnum.DOOR_CAR_PARKING_SIGNNATURE.getMessage());
-                doorResult.setHead(headResult);
-                logger.info("\n车场入场信息录入失败，失败原因：{}",ParkingExceptionEnum.DOOR_CAR_PARKING_SIGNNATURE.getMessage());
-            }
-        }catch (Exception e){
-            doorResult.getHead().setStatus(e.getMessage());
-            doorResult.getHead().setMessage(e.getMessage());
-            logger.info("车场入场信息录入失败，失败原因：{}"+e.getMessage());
-            e.printStackTrace();
+    public DoorParam saveDoorCarInParkingInfo(DoorCarInParkingParam doorCarInParkingParam ,String requestUrl,String parkId) {
+        DoorParam doorParam = new DoorParam();
+        DoorCarInParkingInfo info = new DoorCarInParkingInfo();
+        List<DoorCarInParkingShow> list= new ArrayList<DoorCarInParkingShow>();
+        if(doorCarInParkingParam.getCarinlist()!=null) {
+            String  inString = doorCarInParkingParam.getCarinlist().replaceAll(ParkingCompanyEnum.REPLACE_ALL.getCode(),"\"");
+            inString = inString.replaceAll(ParkingCompanyEnum.REPLACE_PAY_DATE_U.getCode(),ParkingCompanyEnum.REPLACE_PAY_DATE_L.getCode());
+            inString = inString.replaceAll(ParkingCompanyEnum.REPLACE_ALL_SLASH.getCode(),"\\\\\\\\");
+            logger.info("\n转换完成后的入场信息字符串inString:"+inString);
+            list = JsonStringToObjectUtil.jsonToObject(inString, new TypeReference<List<DoorCarInParkingShow>>() {});
         }
-        return doorResult;
+        info.setCarinlist(list);
+        info.setParkId(parkId);
+        Delay delay = new Delay();
+        delay.setServiceId(PARKING_CLIENT);
+        delay.setServiceUrl(PARKING_CLIENT_CARJOINPARKING_URL);
+        delay.setDataString(JsonStringToObjectUtil.objectToJson(info));
+        Result<Boolean> booleanResult = delaySendMessageClient.delaySend(delay);
+        if(null != booleanResult && booleanResult.getData()) {
+            doorParam.getHead().setStatus(DoorParam.SUCCESS_CODE);
+            List<String> idsList = info.getCarinlist().stream().map(DoorCarInParkingShow :: getId).filter(x -> x !=null ).collect(Collectors.toList());
+            String ids = StringUtils.join(idsList,",");
+            DoorInOutParkingShow show = new DoorInOutParkingShow();
+            show.setIds(ids);
+            doorParam.setBody(show);
+        }else {
+            doorParam.getHead().setStatus(DoorParam.FAIL_CODE);
+            doorParam.getHead().setMessage(DoorParam.FAIL_MSG);
+        }
+        return doorParam;
     }
 
     /**
@@ -429,104 +423,35 @@ public class ParkingServiceImpl implements ParkingService {
      * @return
      */
     @Override
-    public DoorResult saveDoorCarOutParkingInfo(DoorCarOutParkingParam doorCarOutParkingParam,String requestUrl,String parkId) {
-        String signatureKey =  ParkingCompanyEnum.SIGNATURE_KEY.getMessage();
-        String secretString = String.format("%s@#%s@#%s", requestUrl, doorCarOutParkingParam.getT(), signatureKey);
-
-        DoorResult doorResult = new DoorResult();
-        try {
-            secretString = traditionMd5(secretString);
-            //secretString.equals(doorCarInParkingParam.getSignature())
-            if(StringUtils.isNotBlank(secretString)){
-                DoorCarOutParkingInfo info = new DoorCarOutParkingInfo();
-                List<DoorCarOutParkingShow> list= new ArrayList<DoorCarOutParkingShow>();
-                if(doorCarOutParkingParam.getCaroutlist()!=null) {
-
-                    String  outString = doorCarOutParkingParam.getCaroutlist().replaceAll(ParkingCompanyEnum.REPLACE_ALL.getCode(),"\"");
-                    outString = outString.replaceAll(ParkingCompanyEnum.REPLACE_PAY_DATE_U.getCode(),ParkingCompanyEnum.REPLACE_PAY_DATE_L.getCode());
-                    outString = outString.replaceAll(ParkingCompanyEnum.REPLACE_ALL_SLASH.getCode(),"\\\\\\\\");
-                    logger.info("\n转换完成后的出场信息字符串inString:"+outString);
-                    list = JsonStringToObjectUtil.jsonToObject(outString, new TypeReference<List<DoorCarOutParkingShow>>() {});
-                }
-                info.setParkId(parkId);
-                info.setCaroutlist(list);
-                Result<String> result  = parkingClient.carOutParking(info);
-                if(!result.getCode().equals(GlobalConstants.SUCCESS_CODE)){
-                    doorResult.getHead().setStatus(result.getCode());
-                    doorResult.getHead().setMessage(result.getResult());
-                    throw new JnSpringCloudException(ParkingExceptionEnum.DOOR_CAR_PARKING_OUT,result.getResult());
-                }else {
-                    if(result.getData()==null || result.getData()==""){
-                        doorResult.getHead().setStatus(ParkingExceptionEnum.DOOR_CAR_PARKING_NOT_FIND_IN.getCode());
-                        doorResult.getHead().setMessage(ParkingExceptionEnum.DOOR_CAR_PARKING_NOT_FIND_IN.getMessage());
-                        throw new JnSpringCloudException(ParkingExceptionEnum.DOOR_CAR_PARKING_NOT_FIND_IN);
-                    }
-                    doorResult.getHead().setStatus(DoorResult.SUCCESS_CODE);
-                    String ids = result.getData()!=null?result.getData():"";
-                    DoorInOutParkingShow show = new DoorInOutParkingShow();
-                    show.setIds(ids);
-                    doorResult.setBody(show);
-                }
-
-            }else {
-                DoorHeadResult headResult = new DoorHeadResult();
-                headResult.setStatus(ParkingExceptionEnum.DOOR_CAR_PARKING_SIGNNATURE.getCode());
-                headResult.setMessage(ParkingExceptionEnum.DOOR_CAR_PARKING_SIGNNATURE.getMessage());
-                doorResult.setHead(headResult);
-                logger.info("\n车场出场信息录入失败，失败原因：{}",ParkingExceptionEnum.DOOR_CAR_PARKING_SIGNNATURE.getMessage());
-            }
-        }catch (Exception e){
-            doorResult.getHead().setStatus(e.getMessage());
-            doorResult.getHead().setMessage(e.getMessage());
-            logger.info("车场出场信息录入失败，失败原因：{}"+e.getMessage());
-            e.printStackTrace();
+    public DoorParam saveDoorCarOutParkingInfo(DoorCarOutParkingParam doorCarOutParkingParam,String requestUrl,String parkId) {
+        DoorParam doorParam = new DoorParam();
+        DoorCarOutParkingInfo info = new DoorCarOutParkingInfo();
+        List<DoorCarOutParkingShow> list= new ArrayList<DoorCarOutParkingShow>();
+        if(doorCarOutParkingParam.getCaroutlist()!=null) {
+            String  outString = doorCarOutParkingParam.getCaroutlist().replaceAll(ParkingCompanyEnum.REPLACE_ALL.getCode(),"\"");
+            outString = outString.replaceAll(ParkingCompanyEnum.REPLACE_PAY_DATE_U.getCode(),ParkingCompanyEnum.REPLACE_PAY_DATE_L.getCode());
+            outString = outString.replaceAll(ParkingCompanyEnum.REPLACE_ALL_SLASH.getCode(),"\\\\\\\\");
+            logger.info("\n转换完成后的出场信息字符串inString:"+outString);
+            list = JsonStringToObjectUtil.jsonToObject(outString, new TypeReference<List<DoorCarOutParkingShow>>() {});
         }
-
-        return doorResult;
-    }
-
-
-    /**
-     * @param text
-     * @return 传统的MD5加密方式，与客户端加密方法相同
-     * @throws Exception
-     */
-    public  String traditionMd5(String text) throws Exception {
-        try
-        {
-            //加密后的字符串
-            byte[] bytes=text.getBytes("utf-8");
-            byte[] encodeStrByte=DigestUtils.md5(bytes);
-            String re=bytesToHexFun1(encodeStrByte);
-            return re.toUpperCase();
+        info.setParkId(parkId);
+        info.setCaroutlist(list);
+        Delay delay = new Delay();
+        delay.setServiceId(PARKING_CLIENT);
+        delay.setServiceUrl(PARKING_CLIENT_CAROUTPARKING_URL);
+        delay.setDataString(JsonStringToObjectUtil.objectToJson(info));
+        Result<Boolean> booleanResult = delaySendMessageClient.delaySend(delay);
+        if(null != booleanResult && booleanResult.getData()) {
+            doorParam.getHead().setStatus(DoorParam.SUCCESS_CODE);
+            List<String> idsList = info.getCaroutlist().stream().map(DoorCarOutParkingShow :: getId).filter(x -> x !=null ).collect(Collectors.toList());
+            String ids = StringUtils.join(idsList,",");
+            DoorInOutParkingShow show = new DoorInOutParkingShow();
+            show.setIds(ids);
+            doorParam.setBody(show);
+        }else {
+            doorParam.getHead().setStatus(DoorParam.FAIL_CODE);
+            doorParam.getHead().setMessage(DoorParam.FAIL_MSG);
         }
-        catch (Exception e){
-            logger.info("MD5加密失败!");
-            e.printStackTrace();
-        }
-        return "";
-    }
-    /**
-     * byte[]数组转16进制字符串
-     * @param bytes
-     * @return
-     */
-    private  String bytesToHexFun1(byte[] bytes) {
-        // 一个byte为8位，可用两个十六进制位标识
-        char[] buf = new char[bytes.length * 2];
-        int a = 0;
-        int index = 0;
-        // 使用除与取余进行转换
-        for(byte b : bytes) {
-            if(b < 0) {
-                a = 256 + b;
-            } else {
-                a = b;
-            }
-            buf[index++] = HEX_CHAR[a / 16];
-            buf[index++] = HEX_CHAR[a % 16];
-        }
-
-        return new String(buf);
+        return doorParam;
     }
 }

@@ -3,6 +3,7 @@ package com.jn.system.config;
 import com.jn.common.model.Result;
 import com.jn.common.util.LoadBalancerUtil;
 import com.jn.common.util.StringUtils;
+import com.jn.common.util.encryption.AESUtil;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,7 +71,7 @@ public class AccessAutoLoginManager implements Filter {
             ///logger.info("【oauth】 ibps,ccount不为空,tokenid:{}",tokenId);
             if (StringUtils.isEmpty(tokenId)) {
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("account", account);
+                jsonObject.put("account",AESUtil.encrypt(account, AESUtil.DEFAULT_KEY));
                 Result result = loadBalancerUtils.getClientPostForEntity(SYSTEM_CLIENT, SYSTEM_CLIENT_NOPASSWORDLOGIN_SERVICE, jsonObject.toString());
                 String id = result.getData().toString();
                 AccessContext.setTokenContext(id);

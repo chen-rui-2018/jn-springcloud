@@ -1,36 +1,164 @@
-.mainBox{
+.mainBox {
     width: 5120x;
     height: 1536px;
     background: url(../image/bg.png) 100% 100% / 100% 100% no-repeat;
 }
-.navBg{
+
+.navBg {
     width: 100%;
     height: 130px;
     background: url(../image/nav.png) 100% 100% / 100% 100% no-repeat;
 }
-.content{
+.navBg>div{
+    color: rgba(184, 255, 253, 1);
+    font-size: 30px;
+    padding: 15px 50px;
+}
+.content {
     display: flex;
     justify-content: space-between;
     /* align-items: center; */
-    padding:0 50px;
+    padding: 0 50px;
 }
-.conLeft{
-    width: 70%;
+
+.conLeft {
+    width: 73%;
+    margin-top: 20px;
     /* background: #00a041; */
 }
-.conRight{
-    width:28%;
+
+.conRight {
+    width: 24%;
     /* background: blue; */
 }
-.leftUl{
+
+.leftUl {
     display: flex;
     justify-content: flex-start;
     align-items: center;
     flex-wrap: wrap;
 }
-.leftLi{
+
+.leftLi {
+    padding-bottom: 46px;
     width: 400px;
-    height: 360px;
+    height: 314px;
     background: url(../image/square2.png) 100% 100% / 100% 100% no-repeat;
     margin-right: 40px;
+}
+
+.canvasEchar {
+    padding: 15px;
+}
+
+.liStatus {
+    height: 44px;
+    line-height: 42px;
+    width: 92.5%;
+    margin: 0 auto;
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    text-align: center;
+    font-size: 15px;
+    border-top: 2px solid rgba(132, 151, 176, 1);
+}
+
+.statusImg {
+    position: absolute;
+    right: 16px;
+    top: 11px;
+}
+
+.echart1 {
+    width: 300px;
+    height: 250px;
+    margin: 0 auto;
+}
+
+.dateTime {
+    font-size: 44px;
+    color: rgba(184, 255, 253, 1);
+}
+
+.logoImg {
+    width: 228px;
+    height: 189px;
+}
+
+.cavanBg {
+    width: 896px;
+    height: 896px;
+    margin-top: -109px;
+    margin-left: 25px;
+    background: url(../image/bg1.png) 100% 100% / 100% 100% no-repeat;
+}
+
+.cavanBg1 {
+    width: 484px;
+    height: 480px;
+    position: absolute;
+    top: 198px;
+    left: 209px;
+    /* background: url(../image/circle1.png) 100% 100% / 100% 100% no-repeat; */
+}
+
+.canvaInfo {
+    text-align: center;
+    margin-top: -378px;
+    margin-left: 20px;
+}
+
+.cavavNum {
+    font-size: 144px;
+    font-weight: bold;
+    height: 180px;
+}
+
+.cavavName {
+    font-size: 40px;
+}
+.canvaAmount{
+    width: 81%;
+    margin: 100px auto;
+}
+.libg1,.libg2,.libg3 {
+    width: 17px;
+    height: 105px;
+    background: #FF8989;
+    margin-right: 18px;
+}
+.libg2{
+    background: #00a041;
+}
+.libg3{
+    background: #36DE83;
+}
+.canvanLi>div{
+    display: inline-block;
+    vertical-align: top;
+}
+.canvanLi span{
+    font-size: 40px;
+    color:#B8FFFD;
+}
+.canvanLi .liAccout{
+    font-size: 30px;
+    font-weight: normal;
+}
+.canvanLi>.liNum p{
+    font-size: 30px;
+}
+.canvanLi>.liNum p:nth-child(1){
+    margin-top: -8px;
+    margin-bottom: 20px;
+}
+.canvanLi:nth-child(2){
+    margin:0 200px;
+}
+.pieChart{
+    left: 70px;
+    top: 50px;
+    width: 770px;
+    height: 770px;
 }

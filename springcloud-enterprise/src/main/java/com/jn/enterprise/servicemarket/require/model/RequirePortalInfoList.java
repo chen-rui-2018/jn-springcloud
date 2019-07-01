@@ -32,9 +32,9 @@ public class RequirePortalInfoList  implements Serializable {
     private String orgId;
     @ApiModelProperty(value = "服务机构名称")
     private String orgName;
-    @ApiModelProperty(value = "服务顾问账号")
+    @ApiModelProperty(value = "服务专员账号")
     private String advisorAccount;
-    @ApiModelProperty(value = "服务顾问名称")
+    @ApiModelProperty(value = "服务专员名称")
     private String advisorName;
     @ApiModelProperty(value = "需求人")
     private String issueAccount;

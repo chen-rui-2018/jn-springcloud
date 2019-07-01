@@ -133,4 +133,11 @@ public interface RoomInformationService {
      * @return
      */
     Result createBill(String billId,String billSum);
+
+    /**
+     * 撤销缴费单
+     * @param billIds
+     * @return
+     */
+    Result withdrawBill(String billIds);
 }

@@ -66,7 +66,7 @@ public class AdvisorServiceImplTest {
     }
 
     /**
-     * 服务顾问列表查询
+     * 服务专员列表查询
      */
     @Test
     public void getServiceConsultantList() {
@@ -74,7 +74,7 @@ public class AdvisorServiceImplTest {
         List<AdvisorListInfo> list= (List<AdvisorListInfo>)paginationData.getRows();
         if(list!=null){
             for(AdvisorListInfo advisorListInfo:list){
-                logger.info("服务顾问列表查询{}",advisorListInfo.toString());
+                logger.info("服务专员列表查询{}",advisorListInfo.toString());
             }
             assertThat(list.size(),greaterThanOrEqualTo(0));
         }else{
@@ -83,7 +83,7 @@ public class AdvisorServiceImplTest {
     }
 
     /**
-     * 根据顾问账号获取顾问详情
+     * 根据专员账号获取专员详情
      */
     @Test
     public void getServiceAdvisorInfo(){
@@ -98,7 +98,7 @@ public class AdvisorServiceImplTest {
             }
             assertThat(advisorDetailsVo,notNullValue());
         } catch (JnSpringCloudException e) {
-            logger.info("根据顾问账号获取顾问详情失败");
+            logger.info("根据专员账号获取专员详情失败");
             assertThat(e.getCode(),
                     Matchers.anyOf(
                             Matchers.containsString(AdvisorExceptionEnum.ADVISOR_INFO_NOT_EXIST.getCode())
@@ -138,7 +138,7 @@ public class AdvisorServiceImplTest {
     }
 
     /**
-     * 获取顾问服务经验
+     * 获取专员服务经验
      */
     @Test
     public void getServiceExperienceInfo(){
@@ -154,7 +154,7 @@ public class AdvisorServiceImplTest {
     }
 
     /**
-     * 获取顾问项目经验
+     * 获取专员项目经验
      */
     @Test
     public void getProjectExperienceInfo(){
@@ -170,7 +170,7 @@ public class AdvisorServiceImplTest {
     }
 
     /**
-     * 获取顾问荣誉资质信息
+     * 获取专员荣誉资质信息
      */
     @Test
     public void getAdvisorHonorInfo(){
@@ -186,7 +186,7 @@ public class AdvisorServiceImplTest {
     }
 
     /**
-     * 根据顾问账号获取顾问基本信息
+     * 根据专员账号获取专员基本信息
      */
     @Test
     public void getAdvisorInfoByAccount(){
@@ -194,7 +194,7 @@ public class AdvisorServiceImplTest {
             AdvisorServiceInfo advisorInfoByAccount = advisorService.getAdvisorInfoByAccount(advisorAccount,"2");
             assertThat(advisorInfoByAccount, notNullValue());
         } catch (JnSpringCloudException e) {
-            logger.info("根据顾问账号获取顾问基本信息失败");
+            logger.info("根据专员账号获取专员基本信息失败");
             assertThat(e.getCode(),
                     Matchers.anyOf(
                             Matchers.containsString(AdvisorExceptionEnum.ADVISOR_INFO_NOT_EXIST.getCode())

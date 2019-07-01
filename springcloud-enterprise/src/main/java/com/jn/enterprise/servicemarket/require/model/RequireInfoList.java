@@ -29,9 +29,9 @@ public class RequireInfoList implements Serializable {
     private String orgId;
     @ApiModelProperty(value = "意向机构名称")
     private String orgName;
-    @ApiModelProperty(value = "意向顾问账号")
+    @ApiModelProperty(value = "意向专员账号")
     private String advisorAccount;
-    @ApiModelProperty(value = "意向顾问名称")
+    @ApiModelProperty(value = "意向专员名称")
     private String advisorName;
     @ApiModelProperty(value = "提需求日期")
     private String requireTime;

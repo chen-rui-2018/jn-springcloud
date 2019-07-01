@@ -1,8 +1,8 @@
 // http.js
-const baseUrl = 'https://njbxq.mynatapp.cc'
-const wechatPath = 'https://njbxq.mynatapp.cc/springcloud-wechat-miniprogram/'
-const imgBaseUrl = 'https://njbxq.mynatapp.cc/h5/imgs/'
-const h5Url="https://22d2325e.cpolar.io/#/"
+const baseUrl = 'https://cms.bxgxq.com'
+const wechatPath = 'https://cms.bxgxq.com/springcloud-wechat-miniprogram/'
+const imgBaseUrl = 'https://m.bxgxq.com/imgs/'
+const h5Url="https://screan.bxgxq.com/#/"
 // http://112.94.22.222:8002/#/
 // https://22d2325e.cpolar.io/#/
 class WxHttp {
@@ -20,7 +20,6 @@ class WxHttp {
         success: res => {
           // 发送 res.code 到后台换取 openId, sessionKey, unionId
           resolve(res.code)
-          // console.log(res)
         },
         fail: err => {
           reject(err)
@@ -49,10 +48,7 @@ class WxHttp {
               success: (res) => {
                 if (res.data.code === '0000') {
                   const token = res.data.data
-                  wx.setStorage({
-                    key: 'token',
-                    data: token
-                  })
+                  wx.setStorageSync('token', token)
                   this.header.token = token
                   resolve(res)
                 }
@@ -102,11 +98,10 @@ class WxHttp {
                   wx.removeStorage({
                     key: 'token',
                     success(res) {
-                      // console.log(res)
+                      _operationRequest(requestData)
+                      time++
                     }
                   })
-                  _operationRequest(requestData)
-                  time++
                 } else {
                   resolve(this.response(res))
                 }

@@ -1,12 +1,7 @@
 <template>
 <div>
-    <div class="declarationCenter_search" v-if="isShow!=1">
-      <i class="weui-icon-search" v-if="sendData.titleName===''"></i>
-      <input type="text" placeholder="搜索" @change="gosearch" v-model="sendData.titleName" >
-    </div>
-    <!-- v-if="isShow!=1" gosearch-->
-  <div class="declarationCenter" :class="{'padding':isShow!=1} ">
-    <div class="banner" v-if="isShow===1"><img src="@/assets/image/declarationCenter-baner.png" alt=""></div>
+  <div class="declarationCenter" >
+    <div class="banner" ><img src="@/assets/image/declarationCenter-baner.png" alt=""></div>
      <!-- 申报中心列表 -->
     <div class="declaration_list">
       <div class="declaration_titile">
@@ -41,7 +36,7 @@
       </div>
     </div>
     <!-- 常年申报 -->
-    <div class="perennial" v-if="isShow===1">
+    <div class="perennial">
       <div class="perennial_titile">
         <div>常年申报</div>
         <div>MORE <span class="iconfont icon-jiantou "></span></div>
@@ -64,7 +59,7 @@
       </div>
     </div>
     <!-- 申报平台 -->
-    <div class="declaration_platform" v-if="isShow===1">
+    <div class="declaration_platform" >
       <div class="platform_titile">
         <div>申报平台</div>
         <div @click="goplatform">MORE <span class="iconfont icon-jiantou"></span></div>
@@ -80,7 +75,7 @@
         </div>
       </div>
     </div>
-    <div class="before" v-if="isShow===1"></div>
+    <div class="before"></div>
   </div>
 </div>
 </template>
@@ -102,8 +97,7 @@ export default {
         rows: 3,
         sortType: '1',
         titleName: ''
-      },
-      isShow: 1
+      }
     }
   },
   filters: {
@@ -127,9 +121,6 @@ export default {
     }
   },
   mounted () {
-    if (this.$route.query.isShow) {
-      this.isShow = this.$route.query.isShow
-    }
     this.getperennialList()// 常年申报
     this.getTypeList()
     this.getdeclarationList()
@@ -137,34 +128,20 @@ export default {
   },
   methods: {
     goItems () {
-      this.$router.push({path: '/guest/pd/DeclarationItems', query: {isShow: this.isShow}})
+      this.$router.push({path: '/guest/pd/DeclarationItems'})
     },
     goDetail (id) {
-      if (this.isShow === 1) {
-        this.api.get({
-          url: 'trafficVolume',
-          data: {id: id},
-          callback: res => {
-            if (res.code === '0000') {
-              this.$router.push({path: '/guest/pd/declarationDetail', query: {id: id}})
-            } else {
-              this.$vux.toast.text(res.result)
-            }
+      this.api.get({
+        url: 'trafficVolume',
+        data: {id: id},
+        callback: res => {
+          if (res.code === '0000') {
+            this.$router.push({path: '/guest/pd/declarationDetail', query: {id: id}})
+          } else {
+            this.$vux.toast.text(res.result)
           }
-        })
-      } else {
-        this.api.get({
-          url: 'trafficVolume',
-          data: {id: id},
-          callback: res => {
-            if (res.code === '0000') {
-              this.$router.push({path: '/guest/pd/declarationDetail', query: {id: id, isShow: '0'}})
-            } else {
-              this.$vux.toast.text(res.result)
-            }
-          }
-        })
-      }
+        }
+      })
     },
     gosearch () {
       this.getdeclarationList()
@@ -257,7 +234,7 @@ export default {
               this.$vux.toast.show({
                 text: '只有企业管理员和企业联系人才可以进申报平台！！',
                 type: 'warn',
-                width: '13em'
+                width: '15em'
               })
             }
           } else {
@@ -292,31 +269,10 @@ export default {
 </script>
 
 <style lang="scss">
-  .declarationCenter_search{
-    position: fixed;
-    z-index: 10;
-    width: 100%;
-    background-color: #F5F5F5;
-    padding: 0 35px;
-    display: flex;
-    input::placeholder{
-      text-align: center;
-      font-size: 21px;
-    }
-    input{
-      height: 60px;
-      width:100%;
-      margin: 22px 0;
-      border-radius: 30px;
-      padding: 0 40px;
-    }
-    i{
-      position: absolute;
-      top: 42%;
-      right: 54%;
-      font-size: 21px;
-    }
-  }
+.weui-toast__content{
+  font-size: 35px;
+}
+
   .padding{
     padding-top: 95px;
   }
@@ -334,6 +290,7 @@ export default {
           border-left: 7px solid #00a041;
           line-height: 1;
           font-size: 29px;
+          font-weight: 600;
         }
         div:nth-child(2){
           font-size: 25px;
@@ -481,6 +438,7 @@ export default {
           border-left: 7px solid #00a041;
           line-height: 1;
           font-size: 29px;
+          font-weight: 600;
         }
         div:nth-child(2){
           font-size: 25px;
@@ -496,6 +454,7 @@ export default {
           li{
             padding: 25px 0 18px 0;
             font-size: 24px;
+            font-weight: 600;
           }
           .active{
             color:#07ab50;
@@ -540,6 +499,7 @@ export default {
               font-size: 26px;
               padding-top: 37px;
               line-height: 28px;
+              font-weight: 600
             }
             .cont_detail{
               font-size: 23px;

@@ -14,12 +14,12 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "ServiceHonorParam",description = "顾问荣誉资质入参")
+@ApiModel(value = "ServiceHonorParam",description = "专员荣誉资质入参")
 public class ServiceHonorParam implements Serializable {
     @ApiModelProperty(value = "主键id(新增时传空，修改时必传)")
     private String id;
-    @ApiModelProperty(value = "顾问账号",required = true,example = "wangsong")
-    @NotNull(message="顾问账号不能为空")
+    @ApiModelProperty(value = "专员账号",required = true,example = "wangsong")
+    @NotNull(message="专员账号不能为空")
     private String advisorAccount;
     @ApiModelProperty(value = "颁发机构",required = true,example = "xxx机构")
     @Size(max=64,message = "颁发机构长度最多为64个字")

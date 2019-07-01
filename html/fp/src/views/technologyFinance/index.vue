@@ -240,9 +240,9 @@
                 </div>
               </li>
             </ul>
-            <div class="bannerImg">
+            <!-- <div class="bannerImg">
               <img src="@/../static/img/smallBanner.png" alt="">
-            </div>
+            </div> -->
           </div>
           <div class="investor financialPro pr">
             <div class="inverTil clearfix">
@@ -305,9 +305,9 @@
                 <div class="rightInfo" @click="raiseDemand">提需求></div>
               </li> -->
             </ul>
-            <div class="bannerImg">
+            <!-- <div class="bannerImg">
               <img src="@/../static/img/smallBanner.png" alt="">
-            </div>
+            </div> -->
           </div>
           <div class="investor financialPro financialIns">
             <div class="inverTil clearfix">
@@ -325,11 +325,12 @@
                 <div class="finaDiv1">
                   <!-- <div class="finaTit"></div> -->
                   <!-- <div class="finaTit">{{i.orgName}}</div> -->
-                  <div class="finaContent">
+                  <div class="finaContent clearfix">
                     <p class="finaPhone">电话：
                       <span class="mainColor">{{i.orgPhone}}</span>
                     </p>
-                    <p class="finaAddress">地址：{{i.orgAddress}}</p>
+                    <p class="fl" style="font-size:13px;">地址：</p>
+                    <p class="finaAddress">{{i.orgAddress}}</p>
                   </div>
                 </div>
                 <p class="finaPP lejie">
@@ -415,7 +416,7 @@ export default {
       investorsNum: "",
       total1: 0,
       page: 1,
-      rows: 8,
+      rows: 4,
       financialProVisible: false,
       financialProform: {
         financingAmount: "",
@@ -1227,7 +1228,7 @@ export default {
           font-size: 34px;
           height: 34px;
           color: #d0d0d0;
-          top: 440px;
+          top: 253px;
         }
         > .icon-rightarrow {
           position: absolute;
@@ -1235,7 +1236,7 @@ export default {
           font-size: 34px;
           height: 34px;
           color: #d0d0d0;
-          top: 440px;
+          top: 253px;
         }
       }
       .financialIns {
@@ -1273,8 +1274,8 @@ export default {
                 }
               }
               .finaAddress {
-                text-indent: -35px;
-                margin-left: 35px;
+                text-indent: -38px;
+                margin-left: 38px;
                 font-size: 13px;
                 height: 36px;
                 display: -webkit-box;

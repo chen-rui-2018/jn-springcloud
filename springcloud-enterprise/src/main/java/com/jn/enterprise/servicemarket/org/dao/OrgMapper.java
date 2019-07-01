@@ -35,7 +35,7 @@ public interface OrgMapper {
     OrgDetailVo getServiceOrgDetail(@Param("orgId")String orgId);
 
     /**
-     * 机构的产品/顾问数统计
+     * 机构的产品/专员数统计
      * @param orgId
      * @return
      */

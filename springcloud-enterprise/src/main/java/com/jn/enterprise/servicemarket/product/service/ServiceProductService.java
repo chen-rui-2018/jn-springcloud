@@ -133,7 +133,7 @@ public interface ServiceProductService {
     void updateFeatureProduct( OrgUpdateFeatureProduct content,String account);
 
     /**
-     * 顾问-服务产品列表
+     * 专员-服务产品列表
      * @param query
      * @return
      */

@@ -39,7 +39,7 @@ public class AddFeatureProduct implements Serializable {
     @ApiModelProperty(value = "服务产品类型(0-常规产品,1-特色产品)0 ",hidden = true,example = "1")
     //@NotBlank(message = "服务产品类型不能为空")
     private String productType;
-    @ApiModelProperty(value = "服务产品顾问账号,多个时使用逗号','分隔",example = "wangsong,qianqi")
+    @ApiModelProperty(value = "服务产品专员账号,多个时使用逗号','分隔",example = "wangsong,qianqi")
     private String advisorAccount;
     @ApiModelProperty(value = "服务产品详情",example = "本产品,服务........")
     private String productDetails;

@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * 服务顾问的关联操作
+ * 服务专员的关联操作
  * @author： chenr
  * @date： Created on 2019/2/15 11:30
  * @version： v1.0
@@ -15,13 +15,13 @@ import java.util.List;
  */
 public interface ServiceAdvisorDao {
     /**
-     * 服务和顾问关联插入
+     * 服务和专员关联插入
      * @param advisorList
      */
     void addServiceAdvisor(List<TbServiceAndAdvisor> advisorList);
 
     /**
-     * 顾问-服务产品列表
+     * 专员-服务产品列表
      * @param advisorAccount
      * @param productType
      * @param praise

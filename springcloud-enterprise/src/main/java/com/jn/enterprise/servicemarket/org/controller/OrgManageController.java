@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 顾问认证管理
+ * 专员认证管理
  * @author： jiangyl
  * @date： Created on 2019/2/15 15:38
  * @version： v1.0
@@ -115,7 +115,7 @@ public class OrgManageController extends BaseController {
 
     @TxTransaction(isStart = true)
     @ControllerLog(doAction = "添加机构管理员角色")
-    @ApiOperation(value = "添加机构管理员角色",notes = "originalId:原有机构id(修改时，旧数据的机构id,新增时可为空),机构认证审批通过后，ibps后置处理器调用此接口添加机构顾问角色,返回数据响应条数")
+    @ApiOperation(value = "添加机构管理员角色",notes = "originalId:原有机构id(修改时，旧数据的机构id,新增时可为空),机构认证审批通过后，ibps后置处理器调用此接口添加机构专员角色,返回数据响应条数")
     @RequiresPermissions("/serviceMarket/org/addOrgRole")
     @RequestMapping(value = "/addOrgRole",method = RequestMethod.POST)
     public Result<Integer> addOrgRole(@RequestBody TbServiceOrgCopy  tbServiceOrgCopy){

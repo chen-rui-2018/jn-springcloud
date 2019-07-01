@@ -13,14 +13,14 @@ import java.util.Date;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "AdvisorServiceInfo",description = "服务顾问信息")
+@ApiModel(value = "AdvisorServiceInfo",description = "服务专员信息")
 public class AdvisorServiceInfo implements Serializable {
     @ApiModelProperty(value = "机构ID")
     private String orgId;
-    @ApiModelProperty(value = "顾问账号",required = true)
-    @NotNull(message="顾问账号不能为空")
+    @ApiModelProperty(value = "专员账号",required = true)
+    @NotNull(message="专员账号不能为空")
     private String advisorAccount;
-    @ApiModelProperty(value = "顾问姓名")
+    @ApiModelProperty(value = "专员姓名")
     private String advisorName;
     @ApiModelProperty(value = "业务领域")
     private String businessArea;

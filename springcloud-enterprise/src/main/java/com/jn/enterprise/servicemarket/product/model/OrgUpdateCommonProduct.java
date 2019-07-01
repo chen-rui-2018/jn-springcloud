@@ -18,7 +18,7 @@ public class OrgUpdateCommonProduct implements Serializable {
     @ApiModelProperty(value = "服务产品Id",required = true,example = "id")
     @NotBlank(message = "服务产品id不能为空")
     private String productId;
-    @ApiModelProperty(value = "顾问账号",example = "wangsong,qianqi")
+    @ApiModelProperty(value = "专员账号",example = "wangsong,qianqi")
     private String advisorAccount;
 
     public String getProductId() {

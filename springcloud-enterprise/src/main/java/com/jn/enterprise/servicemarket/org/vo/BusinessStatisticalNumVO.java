@@ -21,7 +21,7 @@ public class BusinessStatisticalNumVO implements Serializable {
     @ApiModelProperty(value = "产品")
     private String productNum;
 
-    @ApiModelProperty(value = "顾问数")
+    @ApiModelProperty(value = "专员数")
     private String advisorNum;
 
     @ApiModelProperty(value = "评价数")

@@ -36,7 +36,7 @@ public class ServiceProductManage implements Serializable {
     private String conPhone;
     @ApiModelProperty(value = "服务产品状态,(-1无效0待审核1有效2审核不通过)")
     private String status;
-    @ApiModelProperty(value = "顾问名称")
+    @ApiModelProperty(value = "专员名称")
     private String advisorName;
     @ApiModelProperty(value="参考价格")
     private String  referPrice;

@@ -759,4 +759,14 @@
                 )  t on 1=1
     </select>
 
+    <select id="getHosterFormMeter" resultType="java.lang.String">
+
+        select
+        company_id
+        from
+        tb_electric_meter_info
+        where record_status=1
+        and company_id is not null
+        GROUP BY company_id
+    </select>
 </mapper>

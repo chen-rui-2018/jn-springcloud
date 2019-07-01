@@ -37,7 +37,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * 服务顾问
+ * 服务专员
  * @Author: yangph
  * @Date: 2019/2/12 16:40
  * @Version v1.0
@@ -78,13 +78,13 @@ public class AdvisorServiceImpl implements AdvisorService {
     private AdvisorEditService advisorEditService;
 
     /**
-     * 服务顾问列表查询
+     * 服务专员列表查询
      * @param advisorListParam 查询条件
      * @param needPage           是否需要分页
      * @return
      */
     @Override
-    @ServiceLog(doAction = "服务顾问列表查询")
+    @ServiceLog(doAction = "服务专员列表查询")
     public PaginationData getServiceConsultantList(AdvisorListParam advisorListParam, Boolean needPage) {
         com.github.pagehelper.Page<Object> objects = null;
         if(needPage){
@@ -106,12 +106,12 @@ public class AdvisorServiceImpl implements AdvisorService {
     }
 
     /**
-     * 根据顾问账号获取顾问详情
-     * @param advisorAccount 顾问账号
+     * 根据专员账号获取专员详情
+     * @param advisorAccount 专员账号
      * @param approvalStatus 审批状态 ( - 1：已拒绝    0：未反馈   1：待审批     2：审批通过    3：审批不通过    4：已解除)
      * @return
      */
-    @ServiceLog(doAction = "根据顾问账号获取顾问详情")
+    @ServiceLog(doAction = "根据专员账号获取专员详情")
     @Override
     public AdvisorDetailsVo getServiceAdvisorInfo(String advisorAccount,String approvalStatus) {
         AdvisorDetailsVo advisorDetailsVo=new AdvisorDetailsVo();
@@ -120,24 +120,24 @@ public class AdvisorServiceImpl implements AdvisorService {
         if(advisorServiceInfo==null){
             return null;
         }
-        //设置顾问基础信息
+        //设置专员基础信息
         advisorDetailsVo.setAdvisorServiceInfo(advisorServiceInfo);
-        //创建顾问详情简介对象
+        //创建专员详情简介对象
         AdvisorIntroduction advisorIntroduction=new AdvisorIntroduction();
         BeanUtils.copyProperties(advisorServiceInfo, advisorIntroduction);
-        //设置顾问简介信息
+        //设置专员简介信息
         advisorDetailsVo.setAdvisorIntroduction(advisorIntroduction);
-        //2.获取顾问荣誉资质
+        //2.获取专员荣誉资质
         List<ServiceHonor> advisorHonorInfoList = getAdvisorHonorInfo(advisorAccount);
-        //设置顾问荣誉资质信息
+        //设置专员荣誉资质信息
         advisorDetailsVo.setServiceHonorList(advisorHonorInfoList);
-        //3.获取顾问项目经验
+        //3.获取专员项目经验
         List<ServiceProjectExperience> serviceProjectExperienceList = getProjectExperienceInfo(advisorAccount);
-        //设置顾问项目经验
+        //设置专员项目经验
         advisorDetailsVo.setServiceProjectExperienceList(serviceProjectExperienceList);
-        //4.获取顾问服务经历
+        //4.获取专员服务经历
         List<ServiceExperience> serviceExperienceList = getServiceExperienceInfo(advisorAccount);
-        //设置顾问服务经历
+        //设置专员服务经历
         advisorDetailsVo.setServiceExperienceList(serviceExperienceList);
         //5.获取服务产品
         AdvisorProductQuery advisorProductQuery=new AdvisorProductQuery();
@@ -159,18 +159,18 @@ public class AdvisorServiceImpl implements AdvisorService {
             advisorDetailsVo.setServiceRatingList(serviceRatingInfoList);
         }
 
-        //7.更新顾问信息浏览量
+        //7.更新专员信息浏览量
         updateAdvisorPageviews(advisorAccount);
         return advisorDetailsVo;
     }
 
     /**
-     * 设置顾问详情中服务评价的评价数量
-     * @param advisorDetailsVo      顾问详情返回前端对象
-     * @param advisorIntroduction   顾问详情简介对象
+     * 设置专员详情中服务评价的评价数量
+     * @param advisorDetailsVo      专员详情返回前端对象
+     * @param advisorIntroduction   专员详情简介对象
      * @param serviceRatingInfoList 服务评价查询结果集
      */
-    @ServiceLog(doAction = "设置顾问详情中服务评价的评价数量")
+    @ServiceLog(doAction = "设置专员详情中服务评价的评价数量")
     private void setRatingNum(AdvisorDetailsVo advisorDetailsVo, AdvisorIntroduction advisorIntroduction, List<ServiceRating> serviceRatingInfoList) {
         //好评得分
         int praiseScore=5;
@@ -200,10 +200,10 @@ public class AdvisorServiceImpl implements AdvisorService {
         //评价总数
         advisorDetailsVo.setEvaluationTotal(advisorDetailsVo.getPraiseNum()+advisorDetailsVo.getAverageNum()+advisorDetailsVo.getBadReviewNum());
 
-        //计算顾问最终服务评分
+        //计算专员最终服务评分
         evaluationScore=evaluationScore/serviceRatingInfoList.size();
         if(evaluationScore>0){
-            //顾问详情简介设置服务评分
+            //专员详情简介设置服务评分
             advisorIntroduction.setEvaluationScore(evaluationScore+"");
         }
     }
@@ -232,7 +232,7 @@ public class AdvisorServiceImpl implements AdvisorService {
         String isPublicPage="0";
         if(isPublicPage.equals(serviceEvaluationParam.getIsPublicPage()) && StringUtils.isBlank(serviceEvaluationParam.getOrgId())
                 && StringUtils.isBlank(serviceEvaluationParam.getProductId()) && StringUtils.isBlank(serviceEvaluationParam.getAdvisorAccount())){
-            logger.warn("根据查询条件获取服务评价信息的机构id,产品id,顾问账号不能都为空");
+            logger.warn("根据查询条件获取服务评价信息的机构id,产品id,专员账号不能都为空");
             throw new JnSpringCloudException(AdvisorExceptionEnum.EVALUATION_ID_NOT_NULL);
         }
         Page<Object> objects = null;
@@ -292,16 +292,16 @@ public class AdvisorServiceImpl implements AdvisorService {
     }
 
     /**
-     * 更新顾问信息的浏览量
+     * 更新专员信息的浏览量
      * @param advisorAccount
      */
-    @ServiceLog(doAction = "更新顾问信息的浏览量")
+    @ServiceLog(doAction = "更新专员信息的浏览量")
     private void updateAdvisorPageviews(String advisorAccount) {
         TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
         example.createCriteria().andAdvisorAccountEqualTo(advisorAccount);
         List<TbServiceAdvisor> tbServiceAdvisors = tbServiceAdvisorMapper.selectByExample(example);
         if(tbServiceAdvisors.isEmpty()){
-            logger.warn("当前顾问[{}]信息不存在",advisorAccount);
+            logger.warn("当前专员[{}]信息不存在",advisorAccount);
             throw new JnSpringCloudException(AdvisorExceptionEnum.ADVISOR_INFO_NOT_EXIST);
         }
         TbServiceAdvisor advisorInfo=new TbServiceAdvisor();
@@ -312,11 +312,11 @@ public class AdvisorServiceImpl implements AdvisorService {
     }
 
     /**
-     * 获取顾问服务经验
+     * 获取专员服务经验
      * @param advisorAccount
      * @return
      */
-    @ServiceLog(doAction = "获取顾问服务经验")
+    @ServiceLog(doAction = "获取专员服务经验")
     @Override
     public List<ServiceExperience> getServiceExperienceInfo(String advisorAccount) {
         List<ServiceExperience>serviceExperienceList=new ArrayList<>(16);
@@ -349,11 +349,11 @@ public class AdvisorServiceImpl implements AdvisorService {
     }
 
     /**
-     * 获取顾问项目经验
-     * @param advisorAccount 顾问账号
+     * 获取专员项目经验
+     * @param advisorAccount 专员账号
      * @return
      */
-    @ServiceLog(doAction = "获取顾问项目经验")
+    @ServiceLog(doAction = "获取专员项目经验")
     @Override
     public List<ServiceProjectExperience> getProjectExperienceInfo(String advisorAccount) {
         List<ServiceProjectExperience> serviceProjectExperienceList=new ArrayList<>(16);
@@ -374,10 +374,10 @@ public class AdvisorServiceImpl implements AdvisorService {
     }
 
     /**
-     * 获取顾问荣誉资质信息
-     * @param advisorAccount 顾问账号
+     * 获取专员荣誉资质信息
+     * @param advisorAccount 专员账号
      */
-    @ServiceLog(doAction = "获取顾问荣誉资质信息")
+    @ServiceLog(doAction = "获取专员荣誉资质信息")
     @Override
     public List<ServiceHonor> getAdvisorHonorInfo(String advisorAccount) {
         List<ServiceHonor>serviceHonorList=new ArrayList<>(16);
@@ -404,11 +404,11 @@ public class AdvisorServiceImpl implements AdvisorService {
     }
 
     /**
-     * 根据顾问账号获取顾问基本信息
-     * @param advisorAccount 顾问账号
+     * 根据专员账号获取专员基本信息
+     * @param advisorAccount 专员账号
      * @param approvalStatus 审批状态 ( - 1：已拒绝    0：未反馈   1：待审批     2：审批通过    3：审批不通过    4：已解除)
      */
-    @ServiceLog(doAction = "根据顾问账号获取顾问基本信息")
+    @ServiceLog(doAction = "根据专员账号获取专员基本信息")
     @Override
     public AdvisorServiceInfo getAdvisorInfoByAccount(String advisorAccount,String approvalStatus) {
         TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();

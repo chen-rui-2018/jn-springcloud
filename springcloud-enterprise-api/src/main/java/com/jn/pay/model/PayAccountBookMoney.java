@@ -17,39 +17,15 @@ import java.io.Serializable;
 @ApiModel(value = "PayAccountBookMoney" ,description = "查询账本余额实体类")
 public class PayAccountBookMoney implements Serializable {
 
-    @ApiModelProperty(value="对象类型【1：企业，2：个人】",example = "1")
-    @NotNull(message = "对象类型不能为空")
-    private String objType;
+    @ApiModelProperty(value="账本ID",example = "1234")
+    @NotNull(message = "账本ID不能为空")
+    private String acBookId;
 
-    @ApiModelProperty(value="对象ID【可传企业ID，企业管理员账号，用户名】",example = "wangsong")
-    @NotNull(message = "对象ID不能为空")
-    private String objId;
-
-    @ApiModelProperty(value="账本类型【ELECTRIC:电费，PROPERTY:物业费，REPAIR:维修费，ROOM_LEASE:房租费，GOODS_LEASE:物品租赁费，TEMPORARY_PARKING:停车费，PARKING_LEASE:车位费，WATER:水费，PROMOTION:宣传费，HEALTH:体检费】")
-    @NotNull(message = "账本类型不能为空")
-    private String acBookType;
-
-    public String getObjType() {
-        return objType;
+    public String getAcBookId() {
+        return acBookId;
     }
 
-    public void setObjType(String objType) {
-        this.objType = objType;
-    }
-
-    public String getObjId() {
-        return objId;
-    }
-
-    public void setObjId(String objId) {
-        this.objId = objId;
-    }
-
-    public String getAcBookType() {
-        return acBookType;
-    }
-
-    public void setAcBookType(String acBookType) {
-        this.acBookType = acBookType;
+    public void setAcBookId(String acBookId) {
+        this.acBookId = acBookId;
     }
 }

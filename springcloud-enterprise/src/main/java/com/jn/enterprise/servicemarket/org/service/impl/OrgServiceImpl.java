@@ -143,7 +143,7 @@ public class OrgServiceImpl implements OrgService {
      */
     private final static String STATUS_EFFECTIVE = "1";
     /**
-     * 顾问审核通过
+     * 专员审核通过
      */
     private final static String ADVISOR_STATUS_EFFECTIVE = "2";
     /**
@@ -853,7 +853,7 @@ public class OrgServiceImpl implements OrgService {
             businessStatisticalNumVO.setOrgNum(orgNum+"");
             productCriteriac.andSignoryIdEqualTo(businessType);
 
-            //顾问数
+            //专员数
             TbServiceAdvisorCriteria advisorCriteria = new TbServiceAdvisorCriteria();
             advisorCriteria.createCriteria().andBusinessAreaLike("%"+businessType+"%").andApprovalStatusEqualTo(ADVISOR_STATUS_EFFECTIVE).andRecordStatusEqualTo(RecordStatusEnum.EFFECTIVE.getValue());
             long advisorNum = tbServiceAdvisorMapper.countByExample(advisorCriteria);

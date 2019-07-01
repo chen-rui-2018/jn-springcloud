@@ -34,9 +34,9 @@
               <li>
                 <router-link to="/parkIntroduction" class="router-link" :class="{'ru-active':$route.path == '/parkIntroduction'}">园区介绍</router-link>
               </li>
-              <!-- <li>
+              <li>
                 <router-link to="/compassView" class="router-link" :class="{'ru-active':$route.path == '/compassView'}">行政审批</router-link>
-              </li>  -->
+              </li> 
               <!-- <li>
                 <router-link to="/investment" class="router-link" :class="{'ru-active':$route.path == '/investment'}">招商引资</router-link>
               </li> -->
@@ -49,7 +49,7 @@
                     <p class="pointer">科技金融</p>
                   </router-link>
                   <p class="pointer" @click="$router.push({path:'/recruitmentList'})">人力资源</p>
-                  <p class="pointer" @click="$router.push({path:'/compassView'})">行政审批</p>
+                  <!-- <p class="pointer" @click="$router.push({path:'/compassView'})">行政审批</p> -->
                   <p class="pointer" @click="$router.push({path:'/declarationCenter'})">申报中心</p>
                   <router-link to="/serMatHp" target="_blank">
                     <p class="pointer">服务超市</p>

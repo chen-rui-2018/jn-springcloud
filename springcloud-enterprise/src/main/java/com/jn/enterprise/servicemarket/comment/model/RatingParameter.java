@@ -17,7 +17,7 @@ public class RatingParameter extends Page {
     private String orgName;
     @ApiModelProperty(value = "服务产品名称",example = "通讯服务")
     private String productName;
-    @ApiModelProperty(value = "顾问账号",example = "wangsong")
+    @ApiModelProperty(value = "专员账号",example = "wangsong")
     private String advisorAccount;
 
     public String getOrgName() {

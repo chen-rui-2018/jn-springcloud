@@ -89,14 +89,14 @@ public class OrgController extends BaseController {
     }
 
     @ControllerLog(doAction = "获取服务超市统计数据")
-    @ApiOperation(value = "获取服务超市统计数据",notes = "查询机构、顾问、买家、活动、投资人 统计数据")
+    @ApiOperation(value = "获取服务超市统计数据",notes = "查询机构、专员、买家、活动、投资人 统计数据")
     @RequestMapping(value = "/selectServiceStatisticalNum",method = RequestMethod.GET)
     public Result<ServiceStatisticalNumVO> selectServiceStatisticalNum(){
         return new Result<>(orgService.selectServiceStatisticalNum());
     }
 
     @ControllerLog(doAction = "根据业务领域查询服务超市统计数据")
-    @ApiOperation(value = "根据业务领域查询服务超市统计数据",notes = "查询机构、顾问、产品、评价、交易量 统计数据。[产品ID和业务领域不能同时为空]")
+    @ApiOperation(value = "根据业务领域查询服务超市统计数据",notes = "查询机构、专员、产品、评价、交易量 统计数据。[产品ID和业务领域不能同时为空]")
     @RequestMapping(value = "/selectBusinessAreaStatisticalNum",method = RequestMethod.GET)
     public Result<BusinessStatisticalNumVO> selectBusinessAreaStatisticalNum(BusinessStatisticalParam businessStatisticalParam){
         return new Result<>(orgService.selectBusinessAreaStatisticalNum(businessStatisticalParam));

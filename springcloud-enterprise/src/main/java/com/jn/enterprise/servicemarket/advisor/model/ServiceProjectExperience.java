@@ -12,11 +12,11 @@ import java.util.Date;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "ServiceProjectExperience",description = "顾问项目经验出参")
+@ApiModel(value = "ServiceProjectExperience",description = "专员项目经验出参")
 public class ServiceProjectExperience  implements Serializable {
     @ApiModelProperty(value = "主键id")
     private String id;
-    @ApiModelProperty(value = "顾问账号")
+    @ApiModelProperty(value = "专员账号")
     private String advisorAccount;
     @ApiModelProperty(value = "公司名称")
     private String companyName;

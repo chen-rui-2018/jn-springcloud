@@ -30,7 +30,7 @@ import java.util.List;
  * @Version v1.0
  * @modified By:
  */
-@Api(tags = "服务超市-服务顾问管理(后台门户管理)")
+@Api(tags = "服务超市-服务专员管理(后台门户管理)")
 @RestController
 @RequestMapping(value = "/serviceMarket/advisorManagementPortalController")
 public class AdvisorManagementPortalController extends BaseController {
@@ -46,32 +46,32 @@ public class AdvisorManagementPortalController extends BaseController {
     private AdvisorEditService advisorEditService;
 
 
-    @ControllerLog(doAction = "服务顾问管理(后台门户管理)")
+    @ControllerLog(doAction = "服务专员管理(后台门户管理)")
     @RequiresPermissions("/advisor/advisorManagementPortalController/getAdvisorManagementInfoList")
-    @ApiOperation(value = "服务顾问管理(后台门户管理)")
+    @ApiOperation(value = "服务专员管理(后台门户管理)")
     @RequestMapping(value = "/getAdvisorManagementInfoList",method = RequestMethod.GET)
     public Result<PaginationData<List<AdvisorServiceManagementInfo>>> getAdvisorManagementInfoList(@Validated AdvisorManagementPortalParam advisorManagementParam){
         PaginationData advisorManagementInfo = advisorManagementPortalService.getAdvisorManagementInfoList(advisorManagementParam);
         return  new Result(advisorManagementInfo);
     }
 
-    @ControllerLog(doAction = "服务顾问详情(后台门户管理)")
+    @ControllerLog(doAction = "服务专员详情(后台门户管理)")
     @RequiresPermissions("/advisor/advisorManagementPortalController/getAdvisorManagementDetails")
-    @ApiOperation(value = "服务顾问详情(后台门户管理)")
+    @ApiOperation(value = "服务专员详情(后台门户管理)")
     @RequestMapping(value = "/getAdvisorManagementDetails",method = RequestMethod.GET)
-    public Result<AdvisorManagementDetailsVo> getAdvisorManagementDetails(@ApiParam(value = "顾问账号" ,required = true,example = "wangsong") @RequestParam("advisorAccount") String advisorAccount){
+    public Result<AdvisorManagementDetailsVo> getAdvisorManagementDetails(@ApiParam(value = "专员账号" ,required = true,example = "wangsong") @RequestParam("advisorAccount") String advisorAccount){
         Assert.notNull(advisorAccount, AdvisorExceptionEnum.ADVISOR_ACCOUNT_NOT_NULL.getMessage());
         AdvisorManagementDetailsVo advisorManagementDetails = advisorManagementPortalService.getAdvisorManagementDetails(advisorAccount);
         return  new Result(advisorManagementDetails);
     }
 
-    @ControllerLog(doAction = "服务顾问基本资料修改(后台门户管理)")
+    @ControllerLog(doAction = "服务专员基本资料修改(后台门户管理)")
     @RequiresPermissions("/advisor/advisorManagementPortalController/updateAdvisorBaseInfo")
-    @ApiOperation(value = "服务顾问基本资料修改(后台门户管理)",notes = "返回数据响应条数，正常情况为1")
+    @ApiOperation(value = "服务专员基本资料修改(后台门户管理)",notes = "返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/updateAdvisorBaseInfo",method = RequestMethod.POST)
     public Result<Integer> updateAdvisorBaseInfo(@RequestBody @Validated AdvisorBaseInfoParam advisorBaseInfoParam){
         int responseNum = advisorEditService.saveOrUpdateAdvisorBaseInfo(advisorBaseInfoParam);
-        logger.info("------服务顾问基本资料修改(后台门户管理)成功，数据响应条数：{}-------",responseNum);
+        logger.info("------服务专员基本资料修改(后台门户管理)成功，数据响应条数：{}-------",responseNum);
         return  new Result(responseNum);
     }
 }

@@ -87,6 +87,7 @@
 
 <script>
 import axios from 'axios'
+import { getToken } from '@/utils/auth'
 export default {
   data () {
     return {
@@ -169,7 +170,7 @@ export default {
             url: item.url
           },
           headers: {
-            token: sessionStorage.token
+            token: getToken()
           }
         })
         .then(res => {

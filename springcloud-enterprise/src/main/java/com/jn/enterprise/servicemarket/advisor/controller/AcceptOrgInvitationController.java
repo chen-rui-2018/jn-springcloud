@@ -34,7 +34,7 @@ public class AcceptOrgInvitationController extends BaseController {
     private AcceptOrgInvitationService acceptOrgInvitationService;
 
     @ControllerLog(doAction = "接受机构邀请")
-    @ApiOperation(value = "接受机构邀请",notes = "advisorAccount:顾问账号，返回数据响应条数，正常情况为1")
+    @ApiOperation(value = "接受机构邀请",notes = "advisorAccount:专员账号，返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/acceptOrgInvitation",method = RequestMethod.POST)
     public Result<Integer> acceptOrgInvitation(String advisorAccount){
         Assert.notNull(advisorAccount, AdvisorExceptionEnum.ADVISOR_ACCOUNT_NOT_NULL.getMessage());
@@ -44,7 +44,7 @@ public class AcceptOrgInvitationController extends BaseController {
     }
 
     @ControllerLog(doAction = "拒绝邀请")
-    @ApiOperation(value = "拒绝邀请",notes = "advisorAccount:顾问账号，返回数据响应条数，正常情况为1")
+    @ApiOperation(value = "拒绝邀请",notes = "advisorAccount:专员账号，返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/refuseInvitation",method = RequestMethod.POST)
     public Result refuseInvitation(String advisorAccount){
         Assert.notNull(advisorAccount, AdvisorExceptionEnum.ADVISOR_ACCOUNT_NOT_NULL.getMessage());

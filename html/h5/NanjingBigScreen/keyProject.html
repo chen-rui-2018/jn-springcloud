@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,18 +8,218 @@
     <title>白下园区重点在建工程</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/keyProject.css">
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/echarts.min.js"></script>
+    <script src="./js/vue.js"></script>
 </head>
+
 <body>
-    <div class="mainBox">
-        <div class="navBg"></div>
+    <div class="mainBox" id="mainbox">
+        <div class="navBg clearfix">
+            <div class="fr">2019年06月25日 09:45:14</div>
+        </div>
         <div class="content">
             <div class="conLeft">
-                <ul class="leftUl">
-                    <li class="leftLi"></li>
+                <ul class="leftUl clearfix">
+                    <li class="leftLi fl pr">
+                        <div class="canvasEchar">
+                            <div class="echart1" id="echart1">
+
+                            </div>
+                        </div>
+                        <div class="liStatus">
+                            <span>未开始&nbsp;></span>
+                            <img src="./image/circle2.png" class="statusImg" alt="">
+                        </div>
+                    </li>
+                    <!-- <li class="leftLi fl"></li>
+                    <li class="leftLi fl"></li>
+                    <li class="leftLi fl"></li>
+                    <li class="leftLi fl"></li> -->
                 </ul>
             </div>
-            <div class="conRight">222222555555</div>
+            <div class="conRight">
+                <div class="clearfix">
+                    <div class="dateTime fl">2019年6月24日</div>
+                    <div class="logoImg fr">
+                        <img src="./image/logo.png" alt="">
+                    </div>
+                </div>
+                <div class="cavanBg pr">
+                    <div class="cavanBg1">
+                        <img src="./image/circle1.png" alt="">
+                        <div class="canvaInfo">
+                            <p class="cavavNum">21</p>
+                            <p class="cavavName">建设项目</p>
+                        </div>
+                    </div>
+                    <div class="pieChart" id="pieChart">
+
+                    </div>
+                </div>
+                <div class="canvaAmount">
+                    <ul class="clearfix">
+                        <li class="fl canvanLi">
+                            <div class="libg1"></div>
+                            <div class="liNum">
+                                <p><span class="">5&nbsp;</span>项</p>
+                                <p>未开始<span class="liAccout">24</span>%</p>
+                            </div>
+                        </li>
+                        <li class="fl canvanLi">
+                            <div class="libg2"></div>
+                            <div class="liNum">
+                                <p><span class="">5&nbsp;</span>项</p>
+                                <p>未开始<span class="liAccout">24</span>%</p>
+                            </div>
+                        </li>
+                        <li class="fl canvanLi">
+                            <div class="libg3"></div>
+                            <div class="liNum">
+                                <p><span class="">5&nbsp;</span>项</p>
+                                <p>未开始<span class="liAccout">24</span>%</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 </body>
+<script>
+    new Vue({
+        el: '#mainbox',
+        data: {
+            msg: '右侧内容',
+            arr: [{
+                    name: '11',
+                    id: 1
+                },
+                {
+                    name: '22',
+                    id: 2
+                },
+                {
+                    name: '33',
+                    id: 3
+                },
+                {
+                    name: '44',
+                    id: 4
+                },
+            ]
+        },
+        mounted: function () {
+            this.$nextTick(function () {
+
+            })
+        },
+        methods: {
+            getEhart: function () {
+                var self = this;
+                var myChart = echarts.init(document.getElementById('echart1'));
+                option = {
+                    xAxis: {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [{
+                        data: [820, 932, 901, 934, 1290, 1330, 1320],
+                        type: 'line',
+                        areaStyle: {}
+                    }]
+                };
+                myChart.setOption(options);
+            }
+        }
+    })
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/4.2.1/echarts-en.common.js"></script>
+<script type="text/javascript">
+    getEhart()
+    getEchart1()
+
+    function getEhart() {
+        var self = this;
+        var myChart1 = echarts.init(document.getElementById('echart1'));
+        option = {
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                data: [820, 932, 901, 934, 1290, 1330, 1320],
+                type: 'line',
+                areaStyle: {}
+            }]
+        };
+        myChart1.setOption(option,true);
+    }
+
+    function getEchart1() {
+        var myChart = echarts.init(document.getElementById("pieChart"));
+        option = {
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b}: {c} ({d}%)"
+            },
+            legend: {
+                orient: 'vertical',
+                x: 'left',
+                data: ['直接访问', '邮件营销', '视频广告']
+            },
+            series: [{
+                name: '访问来源',
+                type: 'pie',
+                radius: ['50%', '60%'],
+                avoidLabelOverlap: false,
+                label: {
+                    normal: {
+                        show: false,
+                        position: 'center'
+                    },
+                    emphasis: {
+                        show: false,
+                        textStyle: {
+                            fontSize: '30',
+                            fontWeight: 'bold'
+                        }
+                    }
+                },
+                labelLine: {
+                    normal: {
+                        show: false
+                    }
+                },
+                data: [{
+                        value: 335,
+                        name: '直接访问'
+                    },
+                    {
+                        value: 310,
+                        name: '邮件营销'
+                    },
+                    // {value:234, name:'联盟广告'},
+                    {
+                        value: 135,
+                        name: '视频广告'
+                    },
+                    // {value:1548, name:'搜索引擎'}
+                ]
+            }]
+        };
+        if (option && typeof option === "object") {
+            myChart.setOption(option);
+        }
+    }
+</script>
+
 </html>

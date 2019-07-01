@@ -94,7 +94,7 @@ public class UserCenterIndexServiceImpl implements UserCenterIndexService {
 
 
 
-    @ServiceLog(doAction = "顾问管理")
+    @ServiceLog(doAction = "专员管理")
     @Override
     public String findAdviserInvitation(User user) {
         // 企业用户是提交   机构用户是接到
@@ -114,7 +114,7 @@ public class UserCenterIndexServiceImpl implements UserCenterIndexService {
         //查询机构下未审批的信息
         String s1=userCenterIndexDao.findAdviserInvitation("1",affiliateCode);
 
-        String str="已收到"+s+"条顾问邀请的回馈,"+s1+"条仍未审批。";
+        String str="已收到"+s+"条专员邀请的回馈,"+s1+"条仍未审批。";
 
         if(StringUtils.isBlank(s) && StringUtils.isBlank(s1)){
             str="";

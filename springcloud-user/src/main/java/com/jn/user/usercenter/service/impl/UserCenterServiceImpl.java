@@ -13,12 +13,12 @@ import com.jn.user.usercenter.model.ModifyPassword;
 import com.jn.user.usercenter.service.UserCenterService;
 import com.jn.user.userinfo.service.UserInfoService;
 import com.jn.user.userjoin.enums.UserJoinExceptionEnum;
+import com.jn.user.utils.PasswordRuleUtil;
+import com.jn.user.vo.PasswordValidVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.regex.Pattern;
 
 /**
  *
@@ -38,9 +38,6 @@ public class UserCenterServiceImpl implements UserCenterService {
     @Autowired
     private UserInfoService userInfoService;
 
-    // 密码正则（密码至少为字母、数字、符号两种组成的8-16字符，不包含空格,不能输入中文）
-    public static final String PASSWORD_REG = "^(?!^\\d+$)(?!^[A-Za-z]+$)(?!^[^A-Za-z0-9]+$)(?!^.*[\\u4E00-\\u9FA5].*$)^\\S{8,16}$";
-
     @Override
     @ServiceLog(doAction = "修改用户密码信息")
     public void modifyUserPassword(ModifyPassword modifyPassword) {
@@ -57,11 +54,11 @@ public class UserCenterServiceImpl implements UserCenterService {
             throw new JnSpringCloudException(UserExtensionExceptionEnum.USER_PASSWORD_IS_ERROR);
         }
 
-        if (!Pattern.matches(PASSWORD_REG, newPassword)) {
-            logger.warn("[用户密码修改] 新密码校验错误，至少为字母、数字、符号两种组成的8-16字符，不包含空格,不能输入中文");
-            throw new JnSpringCloudException(UserJoinExceptionEnum.PASSWORD_INVALID);
+        PasswordValidVO valid = PasswordRuleUtil.isValid(newPassword);
+        if (!valid.isValid()) {
+            logger.warn("[用户密码修改] {}", valid.getMessage());
+            throw new JnSpringCloudException(UserJoinExceptionEnum.PASSWORD_INVALID, UserJoinExceptionEnum.PASSWORD_INVALID.getMessage() + "（" + valid.getMessage() + "）");
         }
-
         user.setPassword(newPassword);
         systemClient.updateSysUser(user);
     }

@@ -96,6 +96,7 @@ public class GamTopicServiceImpl implements GamTopicService {
             throw new JnSpringCloudException(GamTopicExceptionEnum.GAM_TOPIC_IS_NOT_NOW_USER);
         }
         tbGamTopic.setTopicStatus(GAM_TOPIC_STATUS_IS_INVALID);
+        tbGamTopic.setRecordStatus(new Byte(GAM_TOPIC_STATUS_IS_INVALID));
         tbGamTopic.setModifiedTime(new Date());
         tbGamTopic.setModifierAccount(account);
         return tbGamTopicMapper.updateByPrimaryKeySelective(tbGamTopic);

@@ -104,8 +104,8 @@ public class UserJoinServiceImpl implements UserJoinService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Result addUser(UserRegister userRegister){
-        String phone = AESUtil.decrypt(userRegister.getPhone(), AESUtil.DEFAULT_KEY);
-        String plainPassword = AESUtil.decrypt(userRegister.getPassword(), AESUtil.DEFAULT_KEY);
+        String phone = userRegister.getPhone();
+        String plainPassword = userRegister.getPassword();
 
         String code = this.getSendCodeByPhone(phone);
         if(!StringUtils.equals(code,userRegister.getMessageCode())){

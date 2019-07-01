@@ -63,7 +63,7 @@
                   <div class="noticeCon">
                     <div class="clearfix">
                       <h5 class="fl">{{i.title}}</h5>
-                      <span class="fr mainColor" v-if="i.isStick=='1'">置顶</span>
+                      <!--<span class="fr mainColor" v-if="i.isStick=='1'">置顶</span>-->
                     </div>
                     <p class="color3">{{i.noticeBiref}}</p>
                   </div>
@@ -82,7 +82,7 @@
                   <div class="noticeCon">
                     <div class="clearfix">
                       <h5 class="fl">{{i.title}}</h5>
-                      <span class="fr mainColor" v-if="i.isStick=='1'">置顶</span>
+                     <!--<span class="fr mainColor" v-if="i.isStick=='1'">置顶</span>-->
                     </div>
                     <p class="color3">{{i.noticeBiref}}</p>
                   </div>
@@ -101,7 +101,7 @@
                   <div class="noticeCon">
                     <div class="clearfix">
                       <h5 class="fl">{{i.title}}</h5>
-                      <span class="fr mainColor" v-if="i.isStick=='1'">置顶</span>
+                     <!--<span class="fr mainColor" v-if="i.isStick=='1'">置顶</span>-->
                     </div>
                     <p class="color3">{{i.noticeBiref}}</p>
                   </div>

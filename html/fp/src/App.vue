@@ -56,13 +56,13 @@
               <div class="slide_nav_fence">
                 <ul>
                   <!-- <li @click="$router.push({path:'/talentsService'})">人才服务</li> -->
+                  <li @click="$router.push({path:'/declarationCenter'})">申报中心</li>
                   <li @click="$router.push({path:'/policyCenter'})">政策中心</li>
                   <li @click="$router.push({path:'/actiCenter'})">活动中心</li>
                   <li @click="$router.push({path:'/tfindex'})">科技金融</li>
                   <li @click="$router.push({path:'/recruitmentList'})">人力资源</li>
                   <!-- <li @click="$router.push({path:'/incubatorEnterprises'})">孵化企业</li> -->
                   <!-- <li @click="$router.push({path:'/compassView'})">行政审批</li> -->
-                  <li @click="$router.push({path:'/declarationCenter'})">申报中心</li>
                   <li @click="$router.push({path:'/serMatHp'})">服务超市</li>
                 </ul>
               </div>

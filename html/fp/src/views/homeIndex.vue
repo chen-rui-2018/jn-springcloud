@@ -43,6 +43,7 @@
               <li @mouseenter="showMenuFlag=true" @mouseleave="showMenuFlag=false">
                 <router-link to="/enterpriseservice" class="router-link" :class="{'ru-active':$route.path == '/enterpriseservice'}">企业服务</router-link>
                 <div id="enterMenu" v-if="showMenuFlag" @mouseleave.stop.native="showMenuFlag=false">
+                  <p class="pointer" @click="$router.push({path:'/declarationCenter'})">申报中心</p>
                   <p class="pointer" @click="$router.push({path:'/policyCenter'})">政策中心</p>
                   <p class="pointer" @click="$router.push({path:'/actiCenter'})">活动中心</p>
                   <router-link to="/tfindex" target="_blank">
@@ -50,7 +51,6 @@
                   </router-link>
                   <p class="pointer" @click="$router.push({path:'/recruitmentList'})">人力资源</p>
                   <!-- <p class="pointer" @click="$router.push({path:'/compassView'})">行政审批</p> -->
-                  <p class="pointer" @click="$router.push({path:'/declarationCenter'})">申报中心</p>
                   <router-link to="/serMatHp" target="_blank">
                     <p class="pointer">服务超市</p>
                   </router-link>

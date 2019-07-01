@@ -177,7 +177,9 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         tbPayBillCriteria.setOrderByClause("created_time desc,payment_state desc");
         TbPayBillCriteria.Criteria criteria = tbPayBillCriteria.createCriteria();
         criteria.andPaymentStateEqualTo(PaymentBillEnum.BILL_ORDER_IS_PAY.getCode()).andObjTypeEqualTo(PaymentBillEnum.BILL_OBJ_TYPE_IS_INDIVIDUAL.getCode()).andObjIdEqualTo(user.getAccount()).andBillExpenseGreaterThan(new BigDecimal("0"));
-
+        if(StringUtils.isNotBlank(payRecordParam.getAcBookId())){
+            criteria.andAcBookIdEqualTo(payRecordParam.getAcBookId());
+        }
         //企业账单查询条件
         Result<ServiceCompany> serviceCompanyResult=companyClient.getCurCompanyInfo(user.getAccount());
         if(StringUtils.equals(serviceCompanyResult.getCode(),"0000")&&serviceCompanyResult.getData()!=null){
@@ -185,6 +187,9 @@ public class MyPayBillServiceImpl implements MyPayBillService {
             TbPayBillCriteria tbPayBillCriteria2=new TbPayBillCriteria();
             TbPayBillCriteria.Criteria criteria2 = tbPayBillCriteria2.createCriteria();
             criteria2.andPaymentStateEqualTo(PaymentBillEnum.BILL_ORDER_IS_PAY.getCode()).andObjTypeEqualTo(PaymentBillEnum.BILL_OBJ_TYPE_IS_COMPANY.getCode()).andObjIdEqualTo(serviceCompanyResult.getData().getId()).andBillExpenseGreaterThan(new BigDecimal("0"));
+            if(StringUtils.isNotBlank(payRecordParam.getAcBookId())){
+                criteria2.andAcBookIdEqualTo(payRecordParam.getAcBookId());
+            }
             tbPayBillCriteria.or(criteria2);
         }
 
@@ -446,6 +451,11 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         BigDecimal amount = new BigDecimal(0);
         if(tbs.getBillExpense().compareTo(amount) == 0){
             tbs.setPaymentState(PaymentBillEnum.BILL_ORDER_IS_PAY.getCode());
+            tbs.setModifiedTime(new Date());
+            tbs.setPaymentTime(new Date());
+            if(StringUtils.isNotBlank(payBillCreateParamVo.getCreatorAccount())){
+                tbs.setModifierAccount(payBillCreateParamVo.getCreatorAccount());
+            }
             int i = tbPayBillMapper.updateByPrimaryKeySelective(tbs);
             if (i > 0){
                 /**回调通知各业务测账单状态*/
@@ -492,6 +502,11 @@ public class MyPayBillServiceImpl implements MyPayBillService {
                     /**更新账单状态*/
                     logger.info("开始执行统一缴费更新账单状态操作");
                     tbs.setPaymentState(PaymentBillEnum.BILL_ORDER_IS_PAY.getCode());
+                    tbs.setPaymentTime(new Date());
+                    tbs.setModifiedTime(new Date());
+                    if(StringUtils.isNotBlank(payBillCreateParamVo.getCreatorAccount())){
+                        tbs.setModifierAccount(payBillCreateParamVo.getCreatorAccount());
+                    }
                     logger.info("执行统一缴费更新账单状态操作,入參【{}】", tbs.toString());
                     tbPayBillMapper.updateByPrimaryKeySelective(tbs);
                     logger.info("结束执行统一缴费更新账单状态操作");
@@ -717,6 +732,11 @@ public class MyPayBillServiceImpl implements MyPayBillService {
                     /**更新账单状态*/
                     logger.info("调用统一支付下单接口回调，更新账单状态操作开始");
                     tbPayBills.get(i).setPaymentState(PaymentBillEnum.BILL_ORDER_IS_PAY.getCode());
+                    if(user != null && StringUtils.isNotBlank(user.getAccount())){
+                        tbPayBills.get(i).setModifierAccount(user.getAccount());
+                    }
+                    tbPayBills.get(i).setModifiedTime(new Date());
+                    tbPayBills.get(i).setPaymentTime(new Date());
                     tbPayBillMapper.updateByPrimaryKeySelective(tbPayBills.get(i));
                     logger.info("调用统一支付下单接口回调，更新账单状态操作结束");
                     /**回调通知各业务测账单状态*/
@@ -950,6 +970,7 @@ public class MyPayBillServiceImpl implements MyPayBillService {
         tbPayBill.setPaymentType(PaymentBillEnum.PAY_METHOD_OFFLINE.getCode());
         tbPayBill.setAffirmPart(user.getAccount());
         tbPayBill.setAffirmTime(new Date());
+        tbPayBill.setPaymentTime(new Date());
         logger.info("进入【我的账单-线下缴费确认回调各业务侧接口】方法,更新账单为线下缴费入參【{}】",JsonUtil.object2Json(tbPayBill));
         int i = tbPayBillMapper.updateByPrimaryKey(tbPayBill);
         if(i == 0){

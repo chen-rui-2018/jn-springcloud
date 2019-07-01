@@ -6,7 +6,7 @@ import com.jn.hardware.model.parking.door.*;
 import org.springframework.web.bind.annotation.RequestBody;
 
 /**
- * TODO：未添加类描述
+ * 道闸接口类
  *
  * @Author： cm
  * @Date： Created on 2019/4/17 17:12
@@ -78,7 +78,7 @@ public interface ParkingService {
      * @param parkId 车场id
      * @return
      */
-    DoorResult saveDoorCarInParkingInfo(DoorCarInParkingParam doorCarInParkingShow, String url,String parkId);
+    DoorParam saveDoorCarInParkingInfo(DoorCarInParkingParam doorCarInParkingShow, String url,String parkId);
 
     /**
      * 车辆出场记录信息
@@ -87,6 +87,6 @@ public interface ParkingService {
      * @param parkId 车场id
      * @return
      */
-    DoorResult  saveDoorCarOutParkingInfo(@RequestBody DoorCarOutParkingParam doorCarOutParkingShow, String url,String parkId);
+    DoorParam  saveDoorCarOutParkingInfo(@RequestBody DoorCarOutParkingParam doorCarOutParkingShow, String url,String parkId);
 
 }

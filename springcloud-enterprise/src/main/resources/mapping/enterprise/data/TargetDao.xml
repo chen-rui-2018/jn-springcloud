@@ -1187,7 +1187,6 @@
         AND t2.target_id = t3.target_id
         INNER JOIN des.tb_data_reporting_snapshot_model_tab t4
         ON t.task_batch = t4.task_batch
-        #AND t2.tab_id = t4.tab_id
         and t2.model_id = t4.model_id
         and t4.status = 1
         INNER JOIN des.tb_data_reporting_snapshot_target_group T5

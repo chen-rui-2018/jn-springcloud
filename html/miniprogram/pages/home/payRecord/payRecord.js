@@ -29,7 +29,7 @@ Page({
     if(this.data.detailSend.page<Math.ceil(this.data.total/this.data.detailSend.rows)){
       this.data.detailSend.page++
       request.send({
-        url: '/springcloud-park/user/parking/carInfo/getCarParkingRecordList',
+        url: 'springcloud-park/user/parking/carInfo/getCarParkingRecordList',
         data: this.data.detailSend,
         method: 'GET',
       }).then(res=>{
@@ -51,7 +51,7 @@ Page({
   // 获取车辆列表
   getcarLicenseList(){
     request.send({
-      url: '/springcloud-park/user/parking/carInfo/getCarInfoListByNowUser',
+      url: 'springcloud-park/user/parking/carInfo/getCarInfoListByNowUser',
       data: {
         page:1,
         rows:100
@@ -70,7 +70,7 @@ Page({
   // 获取详情
   getparkDetail(){
     request.send({
-      url: '/springcloud-park/user/parking/carInfo/getCarParkingRecordList',
+      url: 'springcloud-park/user/parking/carInfo/getCarParkingRecordList',
       data: this.data.detailSend,
       method: 'GET',
     }).then(res=>{

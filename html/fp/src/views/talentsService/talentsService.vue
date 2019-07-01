@@ -80,7 +80,7 @@
                   <div class="list_cont_left">
                     <p><span>【{{talentsitem.rangeId|type}}】</span>{{talentsitem.noticeTitle}}</p>
                     <!-- <p v-show="talentsitem.rangeId=5">{{talentsitem.noticeTitle}} </p> -->
-                    <p><span>发布日期：{{talentsitem.createdTime|time}}</span><span>状态：<span class="fontcolor">{{talentsitem.isRoofPlacement|isRoof}}</span></span></p>
+                    <p><span>发布日期：{{talentsitem.createdTime|time}}</span><!-- <span>状态：<span class="fontcolor">{{talentsitem.isRoofPlacement|isRoof}}</span></span> --></p>
                     <p>最近要求：{{talentsitem.timeNode}}</p>
                     <p v-show="talentsitem.deadline">截止时间：<span class="fontcolor">{{talentsitem.deadline|time}}</span></p>
                   </div>

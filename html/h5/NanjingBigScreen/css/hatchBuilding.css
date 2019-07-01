@@ -1,0 +1,111 @@
+.hatchBuilding{
+  width: 5120x;
+  height: 1536px;
+  background: url(./../image/hatchBuilding/bg.png) 100% 100% / 100% 100% no-repeat;
+  position: relative;
+}
+.head{
+  background: url(./../image/hatchBuilding/head.png) 100% 100% / 100% 100% no-repeat;
+  height: 129px;
+}
+.left{
+  height: 1336px;
+  width: 1351px;
+  background: url(./../image/hatchBuilding/left.png) 100% 100% / 100% 100% no-repeat;
+  position: absolute;
+  top: 115px;
+  left: 184px;
+
+}
+.left_title{
+  color:rgba(184,255,253,1);
+  font-size: 69px;
+  font-weight:400;
+}
+.left_discrib{
+  display: flex;
+  justify-content: space-between;
+  font-size: 46px;
+  font-weight: bold;
+  color:#57B2AF;
+  opacity:0.7;
+  margin-top: 51px;
+}
+.left_randa{
+  background: url(./../image/hatchBuilding/randa.png) 100% 100% / 100% 100% no-repeat;
+  height: 836px;
+  width: 855px;
+  margin: 80px auto;
+  margin-bottom: 0;
+}
+.left_electric{
+  text-align: right;
+  font-weight:500;
+  opacity:0.7;
+}
+.left_electric span:nth-child(1){
+  color: #34F4F5;
+  font-size: 78px;
+}
+.left_electric span:nth-child(2){
+  color: #34F4F5;
+  font-size: 31px;
+}
+.left_ele_disc{
+  font-size: 39px;
+  color: #57B2AF;
+  text-align: right;
+  margin-top: 34px;
+}
+.left_ele_disc span{
+  opacity:0.7;
+}
+.left_ele_disc img{
+  width: 60px;
+}
+.right{
+  width: 1659px;
+  height: 1068px;
+  background: url(./../image/hatchBuilding/right.png) 100% 100% / 100% 100% no-repeat;
+  position: absolute;
+  top: 231px;
+  right: 112px;
+}
+.right_title{
+  font-weight:400;
+  color:rgba(184,255,253,1);
+  font-size: 68px;
+}
+.right_dis{
+  font-size:50px;
+  font-weight:bold;
+  color:rgba(87,178,175,1);
+  font-family:MicrosoftYaHei-Bold;
+  opacity:0.7;
+  margin-top: 57px;
+}
+.right_dis img{
+  width: 37px;
+}
+.right_list{
+  margin-top: 92px;
+  height: 750px;
+}
+.right_list li{
+  height: 110px;
+  background: url(./../image/hatchBuilding/li.png) 100% 100% / 100% 100% no-repeat;
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  /* justify-content: space-between; */
+  font-size:36px;
+  font-weight:400;
+  color:rgba(184,255,253,1);
+}
+.right_list_logo {
+  width: 230px;
+  height: 63px;
+}
+.right_list_logo img{
+  height: 100%;
+}

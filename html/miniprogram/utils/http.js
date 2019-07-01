@@ -1,10 +1,10 @@
 // http.js
-const baseUrl = 'https://cms.bxgxq.com'
-const wechatPath = 'https://cms.bxgxq.com/springcloud-wechat-miniprogram/'
+const baseUrl = 'https://cms.bxgxq.com/'
 const imgBaseUrl = 'https://m.bxgxq.com/imgs/'
 const h5Url="https://screan.bxgxq.com/#/"
 // http://112.94.22.222:8002/#/
-// https://22d2325e.cpolar.io/#/
+// https://22d2325e.cpolar.io/#/ 
+// http://192.168.10.31:1101/   https://cms.bxgxq.com
 class WxHttp {
   constructor() {
     // 设置 post、put 默认 Content-Type
@@ -38,7 +38,7 @@ class WxHttp {
             let userInfo = wx.getStorageSync('userInfo')
             userInfo = userInfo ? JSON.parse(userInfo) : userInfo
             wx.request({
-              url: wechatPath + 'guest/mini/user/checkCodeAndGetToken',
+              url: baseUrl + 'springcloud-wechat-miniprogram/guest/mini/user/checkCodeAndGetToken',
               method: 'POST',
               data: {
                 ...userInfo,
@@ -116,7 +116,6 @@ class WxHttp {
 
 export {
   baseUrl,
-  wechatPath,
   imgBaseUrl,
   h5Url
 }

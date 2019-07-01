@@ -1,7 +1,6 @@
 package com.jn.user.userjoin.service.impl;
 
 import com.jn.common.channel.MessageSource;
-import com.jn.common.enums.CommonExceptionEnum;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
@@ -24,6 +23,8 @@ import com.jn.user.userinfo.entity.TbUserPerson;
 import com.jn.user.userjoin.enums.UserJoinExceptionEnum;
 import com.jn.user.userjoin.model.UserRegister;
 import com.jn.user.userjoin.service.UserJoinService;
+import com.jn.user.utils.PasswordRuleUtil;
+import com.jn.user.vo.PasswordValidVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -71,9 +72,6 @@ public class UserJoinServiceImpl implements UserJoinService {
      */
     private static final String USER_MESSAGE_CODE="user_message_code";
 
-    // 密码正则（密码至少为字母、数字、符号两种组成的8-16字符，不包含空格,不能输入中文）
-    public static final String PASSWORD_REG = "^(?!^\\d+$)(?!^[A-Za-z]+$)(?!^[^A-Za-z0-9]+$)(?!^.*[\\u4E00-\\u9FA5].*$)^\\S{8,16}$";
-
     // 账号正则（手机号）
     public static final String PHONE_REG = "^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\\d{8}$";
 
@@ -106,8 +104,8 @@ public class UserJoinServiceImpl implements UserJoinService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Result addUser(UserRegister userRegister){
-        String phone = AESUtil.decrypt(userRegister.getPhone(), AESUtil.DEFAULT_KEY);
-        String plainPassword = AESUtil.decrypt(userRegister.getPassword(), AESUtil.DEFAULT_KEY);
+        String phone = userRegister.getPhone();
+        String plainPassword = userRegister.getPassword();
 
         String code = this.getSendCodeByPhone(phone);
         if(!StringUtils.equals(code,userRegister.getMessageCode())){
@@ -191,13 +189,15 @@ public class UserJoinServiceImpl implements UserJoinService {
      * @return
      */
     private boolean checkInfo(String password, String phone) {
-        if (!Pattern.matches(PASSWORD_REG, password)) {
-            logger.warn("[用户注册] 密码校验错误，至少为字母、数字、符号两种组成的8-16字符，不包含空格,不能输入中文");
-            throw new JnSpringCloudException(UserJoinExceptionEnum.PASSWORD_INVALID);
-        }
         if (!Pattern.matches(PHONE_REG, phone)) {
             logger.warn("[用户注册] 手机号校验错误，请输入正确的手机号，account:{}", phone);
             throw new JnSpringCloudException(UserJoinExceptionEnum.PHONE_INVALID);
+        }
+
+        PasswordValidVO valid = PasswordRuleUtil.isValid(password);
+        if (!valid.isValid()) {
+            logger.warn("[用户注册] {}", valid.getMessage());
+            throw new JnSpringCloudException(UserJoinExceptionEnum.PASSWORD_INVALID, UserJoinExceptionEnum.PASSWORD_INVALID.getMessage() + "（" + valid.getMessage() + "）");
         }
         return true;
     }

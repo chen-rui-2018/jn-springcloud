@@ -1,6 +1,7 @@
 /**
  * Created by jiachenpan on 16/11/18.
  */
+const CryptoJS = require('crypto-js')
 
 export function parseTime(time, cFormat) {
   if (arguments.length === 0) {
@@ -317,6 +318,14 @@ export function uniqueArr(arr) {
 export function isExternal(path) {
   return /^(https?:|mailto:|tel:)/.test(path)
 }
+
+const encryptKey = CryptoJS.enc.Utf8.parse('123!@#avrd59aNJA')
+// 加密方法
+export function encrypt(str) {
+  str = CryptoJS.AES.encrypt(str, encryptKey, { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Pkcs7 }).toString()
+  return str.replace(/\r\n/g, '').replace(/\+/g, '/add/')
+}
+
 function UrlSearch() {
   var name, value
   var str = location.href // 取得整个地址栏

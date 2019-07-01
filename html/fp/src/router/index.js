@@ -125,6 +125,14 @@ const router= new Router({
           name: 'declarationCenter'
         },
         {
+          path: '/declarationTimely',
+          component: resolve => require(['@/views/declarationCenter/declarationTimely'], resolve),
+          meta: {
+            title: '及时申报项目'
+          },
+          name: 'declarationTimely'
+        },
+        {
           path: '/declarationNoticeDetail',
           component: resolve => require(['@/views/declarationCenter/declarationNoticeDetail'], resolve),
           meta: {

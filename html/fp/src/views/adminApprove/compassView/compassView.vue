@@ -3,7 +3,11 @@
     <div class="banner" ref="banner">
       <div class="swiper-container">
           <div class="swiper-wrapper">
-              <div class="swiper-slide" v-for="(item,index) in bannerList"> <img :src="item.adUrl" alt=""> </div>
+              <div class="swiper-slide" v-for="(item,index) in bannerList"> 
+                <a :href="item.adAddress">
+                  <img :src="item.adUrl" alt=""> 
+                </a>
+              </div>
           </div>
           <div class="swiper-pagination"></div>
            <div class="swiper-button-prev">

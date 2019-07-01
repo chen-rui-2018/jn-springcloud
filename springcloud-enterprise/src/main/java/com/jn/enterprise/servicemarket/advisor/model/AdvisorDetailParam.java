@@ -15,7 +15,7 @@ import java.util.List;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "AdvisorDetailParam", description = "顾问认证资料信息")
+@ApiModel(value = "AdvisorDetailParam", description = "专员认证资料信息")
 public class AdvisorDetailParam implements Serializable {
     @ApiModelProperty(value = "机构Id",required = true,example = "123xxx")
     @NotNull(message = "机构id不能为空")

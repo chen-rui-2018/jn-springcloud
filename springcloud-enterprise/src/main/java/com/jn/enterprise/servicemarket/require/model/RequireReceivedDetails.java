@@ -26,7 +26,7 @@ public class RequireReceivedDetails implements Serializable {
     private String orgName;
     @ApiModelProperty(value = "意向产品名称")
     private String productName;
-    @ApiModelProperty(value = "意向顾问名称")
+    @ApiModelProperty(value = "意向专员名称")
     private String advisorName;
     @ApiModelProperty(value = "需求联系人姓名")
     private String reqName;

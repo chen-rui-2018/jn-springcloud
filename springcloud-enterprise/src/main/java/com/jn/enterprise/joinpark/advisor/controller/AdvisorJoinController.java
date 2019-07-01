@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @version： v1.0
  * @modified By:
  */
-@Api(tags = "加入园区-顾问认证")
+@Api(tags = "加入园区-专员认证")
 @RestController
 @RequestMapping("/advisorJoinPark")
 public class AdvisorJoinController {
@@ -34,14 +34,14 @@ public class AdvisorJoinController {
     @Autowired
     private AdvisorJoinService advisorJoinService;
 
-    @ControllerLog(doAction = "保存/修改顾问认证信息")
-    @ApiOperation(value = "保存/修改顾问认证信息", notes = "返回数据响应条数，正常情况为1")
+    @ControllerLog(doAction = "保存/修改专员认证信息")
+    @ApiOperation(value = "保存/修改专员认证信息", notes = "返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/saveOrUpdateOrgDetail",method = RequestMethod.POST)
     @RequiresPermissions("/advisorJoinPark/saveOrUpdateOrgDetail")
     public Result<Integer> saveOrUpdateOrgDetail(@RequestBody @Validated AdvisorDetailParam advisorDetailParam) {
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         int i = advisorJoinService.saveOrUpdateAdvisorDetail(advisorDetailParam,user.getAccount());
-        logger.info("保存/修改顾问认证信息成功，响应条数{}",i);
+        logger.info("保存/修改专员认证信息成功，响应条数{}",i);
         return new Result<>(i);
     }
 

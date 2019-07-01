@@ -41,7 +41,7 @@ public class ServiceContent  implements Serializable {
     private String productType;
     @ApiModelProperty(value = "状态( -1无效(下架) 0-待审核 1-有效(上架/审核通过) 2-审核不通过)")
     private String status;
-    @ApiModelProperty(value = "服务产品顾问账号")
+    @ApiModelProperty(value = "服务产品专员账号")
     private String advisorAccount;
     @ApiModelProperty(value = "服务产品的详情存入数据库时,后台转换使用")
     private String  serviceDetails;
@@ -62,7 +62,7 @@ public class ServiceContent  implements Serializable {
     @ApiModelProperty(value = "浏览数", hidden = true)
     private String viewCount;
 
-    @ApiModelProperty(value = "顾问")
+    @ApiModelProperty(value = "专员")
     private List<TbServiceAndAdvisor> tb_service_and_advisor;
 
     private static final long serialVersionUID = 1L;

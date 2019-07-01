@@ -84,5 +84,5 @@ public interface MyPayAccountService {
      * @param payAccountBookEntIdOrUserIdParam
      * @return
      */
-    Result queryAccountBook(PayAccountBookEntIdOrUserIdParam payAccountBookEntIdOrUserIdParam);
+    Result<List<PayAccountBook>> queryAccountBook(PayAccountBookEntIdOrUserIdParam payAccountBookEntIdOrUserIdParam);
 }

@@ -39,7 +39,7 @@
               <div>{{sevaluateDetail.reqDetail}}</div>
             </el-form-item>
             <el-form-item label="合同总金额：">
-              <div>{{sevaluateDetail.contractAmount}}万元</div>
+              <div>{{sevaluateDetail.contractAmount}}元</div>
             </el-form-item>
             <el-form-item label="结果描述：">
               <div> {{sevaluateDetail.resultDetail}}</div>

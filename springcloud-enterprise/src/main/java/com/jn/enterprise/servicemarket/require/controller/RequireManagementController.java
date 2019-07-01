@@ -116,7 +116,7 @@ public class RequireManagementController extends BaseController {
     }
 
     @ControllerLog(doAction = "我收到的需求列表查询")
-    @ApiOperation(value = "我收到的需求列表查询 (pc/app 需求管理(机构/顾问))")
+    @ApiOperation(value = "我收到的需求列表查询 (pc/app 需求管理(机构/专员))")
     @RequiresPermissions("/serviceMarket/requireManagementController/getRequireReceivedList")
     @RequestMapping(value = "/getRequireReceivedList",method = RequestMethod.GET)
     public Result<PaginationData<List<RequireInfoList>>> getRequireReceivedList(@Validated RequireReceivedParam requireReceivedParam){

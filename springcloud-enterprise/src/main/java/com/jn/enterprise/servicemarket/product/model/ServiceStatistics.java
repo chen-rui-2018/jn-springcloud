@@ -18,7 +18,7 @@ public class ServiceStatistics  implements Serializable {
     private Integer orgCount;
     @ApiModelProperty(value = "产品数")
     private Integer productCount;
-    @ApiModelProperty(value = "顾问数")
+    @ApiModelProperty(value = "专员数")
     private Integer advisorCount;
     @ApiModelProperty(value = "交易数")
     private Integer requireCount;

@@ -240,9 +240,9 @@
                 </div>
               </li>
             </ul>
-            <div class="bannerImg">
+            <!-- <div class="bannerImg">
               <img src="@/../static/img/smallBanner.png" alt="">
-            </div>
+            </div> -->
           </div>
           <div class="investor financialPro pr">
             <div class="inverTil clearfix">
@@ -305,9 +305,9 @@
                 <div class="rightInfo" @click="raiseDemand">提需求></div>
               </li> -->
             </ul>
-            <div class="bannerImg">
+            <!-- <div class="bannerImg">
               <img src="@/../static/img/smallBanner.png" alt="">
-            </div>
+            </div> -->
           </div>
           <div class="investor financialPro financialIns">
             <div class="inverTil clearfix">
@@ -416,7 +416,7 @@ export default {
       investorsNum: "",
       total1: 0,
       page: 1,
-      rows: 8,
+      rows: 4,
       financialProVisible: false,
       financialProform: {
         financingAmount: "",
@@ -1228,7 +1228,7 @@ export default {
           font-size: 34px;
           height: 34px;
           color: #d0d0d0;
-          top: 440px;
+          top: 253px;
         }
         > .icon-rightarrow {
           position: absolute;
@@ -1236,7 +1236,7 @@ export default {
           font-size: 34px;
           height: 34px;
           color: #d0d0d0;
-          top: 440px;
+          top: 253px;
         }
       }
       .financialIns {

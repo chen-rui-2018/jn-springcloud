@@ -137,6 +137,8 @@ public class UserInfoServiceImpl implements UserInfoService {
         BeanUtils.copyProperties(tbUserPerson, userExtensionInfo);
         BeanUtils.copyProperties(baseUser, userExtensionInfo);
         //更新用户扩展表的基本信息
+        //不更新userId
+        baseUser.setId("");
         updateUserExtensionBaseInfo(baseUser);
         //获取兴趣爱好和工作
         getUserHobbyAndJobs(userExtensionInfo);

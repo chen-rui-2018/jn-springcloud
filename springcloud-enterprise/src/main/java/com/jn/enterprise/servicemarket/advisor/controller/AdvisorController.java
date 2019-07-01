@@ -26,13 +26,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * 服务顾问
+ * 服务专员
  * @Author: yangph
  * @Date: 2019/2/12 15:16
  * @Version v1.0
  * @modified By:
  */
-@Api(tags = "服务超市-服务顾问")
+@Api(tags = "服务超市-服务专员")
 @RestController
 @RequestMapping(value = "/guest/serviceMarket/advisorController")
 public class AdvisorController extends BaseController {
@@ -45,25 +45,25 @@ public class AdvisorController extends BaseController {
     private AdvisorService advisorService;
 
 
-    @ControllerLog(doAction = "服务顾问列表")
-    @ApiOperation(value = "服务顾问列表",notes = "查询条件--活动ID，关键字,分页页码及行数，不传页码行数默认查询前15条")
+    @ControllerLog(doAction = "服务专员列表")
+    @ApiOperation(value = "服务专员列表",notes = "查询条件--活动ID，关键字,分页页码及行数，不传页码行数默认查询前15条")
     @RequestMapping(value = "/getServiceConsultantList",method = RequestMethod.GET)
     public Result<PaginationData<List<AdvisorListInfo>>>getServiceConsultantList(AdvisorListParam advisorListParam){
         PaginationData serviceConsultantList = advisorService.getServiceConsultantList(advisorListParam, Boolean.TRUE);
         return  new Result(serviceConsultantList);
     }
 
-    @ControllerLog(doAction = "服务顾问详情")
-    @ApiOperation(value = "服务顾问详情 (pc/app顾问详情+顾问信息)",notes="根据顾问账号获取顾问详情")
+    @ControllerLog(doAction = "服务专员详情")
+    @ApiOperation(value = "服务专员详情 (pc/app专员详情+专员信息)",notes="根据专员账号获取专员详情")
     @RequestMapping(value = "/getServiceAdvisorInfo",method = RequestMethod.GET)
-    public Result<AdvisorDetailsVo> getServiceAdvisorInfo(@ApiParam(value = "顾问账号" ,required = true,example = "wangsong")@RequestParam("advisorAccount") String advisorAccount){
+    public Result<AdvisorDetailsVo> getServiceAdvisorInfo(@ApiParam(value = "专员账号" ,required = true,example = "wangsong")@RequestParam("advisorAccount") String advisorAccount){
         Assert.notNull(advisorAccount, AdvisorExceptionEnum.ADVISOR_ACCOUNT_NOT_NULL.getMessage());
         AdvisorDetailsVo advisorDetailsVo = advisorService.getServiceAdvisorInfo(advisorAccount, ApprovalStatusEnum.APPROVED.getValue());
         return  new Result(advisorDetailsVo);
     }
 
     @ControllerLog(doAction = "服务评价")
-    @ApiOperation(value = "服务评价",notes="根据机构id/产品id/顾问账号和评价类型获取机构/产品/顾问的评价")
+    @ApiOperation(value = "服务评价",notes="根据机构id/产品id/专员账号和评价类型获取机构/产品/专员的评价")
     @RequestMapping(value = "/getServiceRatingInfo",method = RequestMethod.GET)
     public Result<PaginationData<List<ServiceRating>>> getServiceRatingInfo(@Validated ServiceEvaluationParam serviceEvaluationParam){
         PaginationData serviceRatingInfo = advisorService.getServiceRatingInfo(serviceEvaluationParam);
@@ -71,7 +71,7 @@ public class AdvisorController extends BaseController {
     }
 
     @ControllerLog(doAction = "服务评价统计信息")
-    @ApiOperation(value = "服务评价统计信息",notes="根据机构id/产品id/顾问账号和评价类型获取机构/产品/顾问的评价统计信息（评价总数，好评数，中评数，差评数）")
+    @ApiOperation(value = "服务评价统计信息",notes="根据机构id/产品id/专员账号和评价类型获取机构/产品/专员的评价统计信息（评价总数，好评数，中评数，差评数）")
     @RequestMapping(value = "/getEvaluationCountInfo",method = RequestMethod.GET)
     public Result<EvaluationCountInfo> getEvaluationCountInfo(@Validated ServiceEvaluationParam serviceEvaluationParam){
         EvaluationCountInfo evaluationCountInfo=advisorService.getEvaluationCountInfo(serviceEvaluationParam);

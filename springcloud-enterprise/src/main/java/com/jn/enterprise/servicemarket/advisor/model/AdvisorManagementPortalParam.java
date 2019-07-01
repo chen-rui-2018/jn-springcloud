@@ -14,9 +14,9 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "AdvisorManagementPortalParam",description = "(门户管理)顾问管理入参")
+@ApiModel(value = "AdvisorManagementPortalParam",description = "(门户管理)专员管理入参")
 public class AdvisorManagementPortalParam extends Page implements Serializable {
-    @ApiModelProperty(value = "顾问账号",example = "wangsong")
+    @ApiModelProperty(value = "专员账号",example = "wangsong")
     private String advisorName;
     @ApiModelProperty(value = "是否认证  1:是   0：否",example = "1")
     @Pattern(regexp = "^[01]|(\\s+)$", message = "{isDefault:'默认值只允许为0,1'}")

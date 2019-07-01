@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 
 /**
- * 服务顾问列表信息
+ * 服务专员列表信息
  * @Author: yangph
  * @Date: 2019/2/14 11:04
  * @Version v1.0

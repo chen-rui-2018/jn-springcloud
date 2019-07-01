@@ -44,10 +44,10 @@
               <span>{{receiveDetail.reqEmail}}</span>
             </el-form-item>
             <el-form-item label="实际贷款金额：" prop="actualLoanAmount" :rules="[
-              { required: true, message: '合同总金额不能为空',trigger: 'blur'},
-              { type: 'number', message: '合同总金额必须为数字值'}
+              { required: true, message: '贷款金额不能为空',trigger: 'blur'},
+              { type: 'number', message: '贷款金额必须为数字值'}
         ]">
-              <el-input v-model.number="sendData.actualLoanAmount" placeholder="请填写合同总金额"><template slot="append">万元</template></el-input>
+              <el-input v-model.number="sendData.actualLoanAmount" placeholder="请填写贷款金额"><template slot="append">万元</template></el-input>
             </el-form-item>
             <el-form-item label="对接结果：" >
               <el-radio-group v-model="sendData.handleResult">

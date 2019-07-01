@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 顾问认证
+ * 专员认证
  * @author： jiangyl
  * @date： Created on 2019/3/4 16:33
  * @version： v1.0
@@ -43,7 +43,7 @@ public class AdvisorJoinServiceImpl implements AdvisorJoinService {
     private static final int ISSUING_AGENCY_LENGTH=64;
 
     @Override
-    @ServiceLog(doAction = "顾问认证保存/更新")
+    @ServiceLog(doAction = "专员认证保存/更新")
     @Transactional(rollbackFor = Exception.class)
     public int saveOrUpdateAdvisorDetail(AdvisorDetailParam advisorDetailParam, String account){
         //判断当前用户是否可以认证
@@ -60,7 +60,7 @@ public class AdvisorJoinServiceImpl implements AdvisorJoinService {
         advisorBaseInfoParam.setBusinessAreas(businessAreas);
         advisorBaseInfoParam.setAdvisorAccount(account);
         int resNum=advisorEditService.saveOrUpdateAdvisorBaseInfo(advisorBaseInfoParam);
-        logger.info("顾问认证基本信息保存成功，数据响应条数：{}",resNum);
+        logger.info("专员认证基本信息保存成功，数据响应条数：{}",resNum);
         //荣誉资质保存
         List<ServiceHonorParam> serviceHonorList = advisorDetailParam.getServiceHonors();
         if(!serviceHonorList.isEmpty()){
@@ -71,7 +71,7 @@ public class AdvisorJoinServiceImpl implements AdvisorJoinService {
                 serviceHonorParam.setAdvisorAccount(account);
                 resNum+=advisorEditService.saveOrUpdateAdvisorHonor(serviceHonorParam);
             }
-            logger.info("顾问认证荣誉资质保存成功，数据响应条数：{}",resNum);
+            logger.info("专员认证荣誉资质保存成功，数据响应条数：{}",resNum);
         }
         //服务经历保存
         List<ServiceExperienceParam> serviceExperienceList= advisorDetailParam.getServiceExperiences();
@@ -83,7 +83,7 @@ public class AdvisorJoinServiceImpl implements AdvisorJoinService {
                 experienceParam.setAdvisorAccount(account);
                 resNum+=advisorEditService.saveOrUpdateAdvisorExperience(experienceParam);
             }
-            logger.info("顾问认证服务经历保存成功，数据响应条数：{}",resNum);
+            logger.info("专员认证服务经历保存成功，数据响应条数：{}",resNum);
         }
         //项目经验保存
         List<ServiceProjectExperienceParam> projectExperienceList = advisorDetailParam.getProjectExperiences();
@@ -94,7 +94,7 @@ public class AdvisorJoinServiceImpl implements AdvisorJoinService {
                 projectExperienceParam.setAdvisorAccount(account);
                 resNum+=advisorEditService.saveOrUpdateAdvisorProjectExperience(projectExperienceParam);
             }
-            logger.info("顾问认证项目经验保存成功，数据响应条数：{}",resNum);
+            logger.info("专员认证项目经验保存成功，数据响应条数：{}",resNum);
         }
         //调用发送申请接口，把状态改为待审批
         return advisorEditService.sendApproval(account);

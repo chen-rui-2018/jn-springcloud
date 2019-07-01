@@ -143,7 +143,7 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
         String roleName="机构";
         List<UserRoleInfo> userRoleInfoList = getUserRoleInfoList(accountList,roleName);
         logger.info("---获取用户角色信息成功---");
-        //从顾问信息表获取用户毕业学校，担任职务，入驻时间
+        //从专员信息表获取用户毕业学校，担任职务，入驻时间
         List<TbServiceAdvisor> tbServiceAdvisorList = getTbServiceAdvisorList(accountList);
         List<OrgColleagueInfo> orgColleagueInfoList=new ArrayList<>();
         String loginAccountRoleName="";
@@ -275,7 +275,7 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
     }
 
     /**
-     * 根据账号从顾问信息表获取用户信息
+     * 根据账号从专员信息表获取用户信息
      * @param accountList
      * @return
      */
@@ -360,7 +360,7 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
         String roleName= HomeRoleEnum.ORG_ADVISER.getCode();
         List<UserRoleInfo> userRoleInfoList = getUserRoleInfoList(accountList, roleName);
         if(userRoleInfoList.isEmpty() || !roleName.equals(userRoleInfoList.get(0).getRoleName())){
-            logger.warn("设置为联系人的账号：[{}]，不是机构顾问",account);
+            logger.warn("设置为联系人的账号：[{}]，不是机构专员",account);
             throw new JnSpringCloudException(OrgExceptionEnum.ACCOUNT_NOT_ORG_ADVISOR);
         }
         //获取机构联系人角色id
@@ -394,11 +394,11 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
             logger.warn("取消联系人的账号：[{}]，不是机构联系人",account);
             throw new JnSpringCloudException(OrgExceptionEnum.ACCOUNT_NOT_ORG_CONTACT);
         }
-        //获取机构顾问角色id
+        //获取机构专员角色id
         roleName=HomeRoleEnum.ORG_ADVISER.getCode();
         Result<SysRole> sysRoleData = systemClient.getRoleByName(roleName);
         if(sysRoleData==null || sysRoleData.getData()==null){
-            logger.warn("取消联系人,获取机构顾问角色id失败");
+            logger.warn("取消联系人,获取机构专员角色id失败");
             throw new JnSpringCloudException(OrgExceptionEnum.NETWORK_ANOMALY);
         }
         Boolean isSuccess = updateOrgUserRole(account, userRoleInfoList.get(0).getRoleId(), sysRoleData.getData().getId());
@@ -448,12 +448,12 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
     }
 
     /**
-     * 删除联系人或顾问
+     * 删除联系人或专员
      * @param loginAccount 登录用户账号
-     * @param accountList 删除联系人或顾问的账号
+     * @param accountList 删除联系人或专员的账号
      * @return
      */
-    @ServiceLog(doAction = "删除联系人或顾问")
+    @ServiceLog(doAction = "删除联系人或专员")
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int deleteContactOrAdvisor(String loginAccount,String[] accountList) {
@@ -463,7 +463,7 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
             throw new JnSpringCloudException(OrgExceptionEnum.ACCOUNT_NOT_NULL);
         }
         List<String> delAccountList = Arrays.asList(accountList);
-        //把顾问信息表中的数据状态值为删除
+        //把专员信息表中的数据状态值为删除
         TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
         example.createCriteria().andAdvisorAccountIn(delAccountList);
         TbServiceAdvisor tbServiceAdvisor=new TbServiceAdvisor();
@@ -485,7 +485,7 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
         roleName="普通用户";
         Result<SysRole> roleByName = systemClient.getRoleByName(roleName);
         if(roleByName==null || roleByName.getData()==null){
-            logger.warn("删除联系人或顾问异常，获取“普通用户”角色信息失败");
+            logger.warn("删除联系人或专员异常，获取“普通用户”角色信息失败");
             throw new JnSpringCloudException(OrgExceptionEnum.NETWORK_ANOMALY);
         }
         String addRoleId=roleByName.getData().getId();

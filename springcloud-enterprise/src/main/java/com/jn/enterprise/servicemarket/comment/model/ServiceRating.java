@@ -21,9 +21,9 @@ public class ServiceRating implements Serializable {
     private String productId;
     @ApiModelProperty(value = "服务产品名称")
     private String productName;
-    @ApiModelProperty(value = "服务顾问账号")
+    @ApiModelProperty(value = "服务专员账号")
     private String advisorAccount;
-    @ApiModelProperty(value = "服务顾问名称")
+    @ApiModelProperty(value = "服务专员名称")
     private String advisorName;
     @ApiModelProperty(value = "服务产品图片")
     private String pictureUrl;

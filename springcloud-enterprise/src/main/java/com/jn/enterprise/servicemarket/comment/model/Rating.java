@@ -16,7 +16,7 @@ public class Rating {
     private String id;
     @ApiModelProperty(value = "服务机构")
     private String orgName;
-    @ApiModelProperty(value = "服务顾问")
+    @ApiModelProperty(value = "服务专员")
     private String advisorName;
     @ApiModelProperty(value = "服务产品")
     private String productName;

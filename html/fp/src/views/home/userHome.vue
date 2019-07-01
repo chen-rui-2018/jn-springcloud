@@ -140,7 +140,7 @@
           <div>
             <span class="textRight">新密码：</span>
             <input type="password" class="inputItem" v-model="newPassword">
-            <div class="tip">密码至少为字母、数字、符号两种组成的8-16字符</div>
+            <div class="tip">{{validateRules}}</div>
           </div>
           <div>
             <span class="textRight">确认密码：</span>
@@ -161,6 +161,7 @@ export default {
   props: ["userData"],
   data() {
     return {
+      validateRules:'',
       baseUrl: this.api.host,
       signature: "",
       oldPassword: "",
@@ -182,12 +183,23 @@ export default {
     };
   },
   created() {
+     this.securityInfo()
     this.getTagCodeList();
   },
   methods: {
     editClick() {
       this.editFlag = false;
       this.init();
+    },
+      securityInfo() {
+      this.api.get({
+        url: "securityInfo",
+        callback: res => {
+          if (res.code == "0000") {
+              this.validateRules=res.data.message
+          }
+        }
+      });
     },
     init() {
       this.nickName = this.userData.nickName;
@@ -301,14 +313,14 @@ export default {
       this.avarUrl = file.data;
     },
     submit() {
-      let psw = /^(?!^\d+$)(?!^[A-Za-z]+$)(?!^[^A-Za-z0-9]+$)(?!^.*[\u4E00-\u9FA5].*$)^\S{8,16}$/;
-      if (!psw.test(this.oldPassword)) {
-        this.$message.error("旧密码校验错误");
+      // let psw = /^(?!^\d+$)(?!^[A-Za-z]+$)(?!^[^A-Za-z0-9]+$)(?!^.*[\u4E00-\u9FA5].*$)^\S{8,16}$/;
+      if (!this.oldPassword) {
+        this.$message.error("请输入旧密码");
         return;
       }
-      if (!psw.test(this.newPassword)) {
+      if (!this.newPassword) {
         this.$message.error(
-          "请输入新密码，密码至少为字母、数字、符号两种组成的8-16字符，不包含空格,不能输入中文"
+          "请输入新密码"
         );
         return;
       }
@@ -317,9 +329,9 @@ export default {
         return;
       }
       if (this.getUserInfo()) {
-        _this.userAccount = JSON.parse(this.getUserInfo()).account;
+        this.userAccount = JSON.parse(this.getUserInfo()).account;
       } else{
-        _this.userAccount=''
+        this.userAccount=''
       }
       let _this = this;
       this.api.post({

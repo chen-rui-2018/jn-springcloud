@@ -47,10 +47,10 @@ public class AdvisorManagementPortalServiceImplTest {
     public void setUp() throws Exception {
         advisorAccount="wangsong";
 
-        //服务顾问管理列表查询
+        //服务专员管理列表查询
         //需要分页
         advisorManagementParam.setNeedPage("1");
-        //顾问名称
+        //专员名称
         advisorManagementParam.setAdvisorName("王");
         //提交结束时间
         advisorManagementParam.setSubmitStartTime("201901");
@@ -62,7 +62,7 @@ public class AdvisorManagementPortalServiceImplTest {
     }
 
     /**
-     * 服务顾问管理列表查询
+     * 服务专员管理列表查询
      */
     @Test
     public void getAdvisorManagementInfoList() {
@@ -78,7 +78,7 @@ public class AdvisorManagementPortalServiceImplTest {
                 assertThat(anything(),anything());
             }
         } catch (JnSpringCloudException e) {
-            logger.warn("服务顾问管理列表查询失败");
+            logger.warn("服务专员管理列表查询失败");
             assertThat(e.getCode(),
                     Matchers.anyOf(
                             Matchers.containsString(AdvisorExceptionEnum.START_MORE_THEN_END.getCode())
@@ -88,7 +88,7 @@ public class AdvisorManagementPortalServiceImplTest {
     }
 
     /**
-     * 服务顾问详情
+     * 服务专员详情
      */
     @Test
     public void getAdvisorManagementDetails() {
@@ -121,7 +121,7 @@ public class AdvisorManagementPortalServiceImplTest {
             }
             assertThat(advisorManagementDetails,notNullValue());
         } catch (JnSpringCloudException e) {
-            logger.warn("服务顾问详情获取失败");
+            logger.warn("服务专员详情获取失败");
             assertThat(e.getCode(),
                     Matchers.anyOf(
                             Matchers.containsString(AdvisorExceptionEnum.SERVICE_ORG_NOT_EXIST.getCode()),

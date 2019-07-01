@@ -7,7 +7,7 @@ import com.jn.enterprise.servicemarket.advisor.vo.AdvisorDetailsVo;
 import java.util.List;
 
 /**
- * 服务顾问
+ * 服务专员
  * @Author: yangph
  * @Date: 2019/2/12 16:37
  * @Version v1.0
@@ -15,7 +15,7 @@ import java.util.List;
  */
 public interface AdvisorService {
     /**
-     * 服务顾问列表查询
+     * 服务专员列表查询
      * @param advisorListParam 查询条件
      * @param needPage           是否需要分页
      * @return
@@ -23,8 +23,8 @@ public interface AdvisorService {
     PaginationData getServiceConsultantList(AdvisorListParam advisorListParam, Boolean needPage);
 
     /**
-     * 根据顾问账号获取顾问详情
-     * @param advisorAccount 顾问账号
+     * 根据专员账号获取专员详情
+     * @param advisorAccount 专员账号
      * @param approvalStatus 审批状态 ( - 1：已拒绝    0：未反馈   1：待审批     2：审批通过    3：审批不通过    4：已解除)
      * @return
      */
@@ -38,28 +38,28 @@ public interface AdvisorService {
     PaginationData getServiceRatingInfo(ServiceEvaluationParam serviceEvaluationParam);
 
     /**
-     * 根据顾问账号获取顾问基本信息
-     * @param advisorAccount 顾问账号
+     * 根据专员账号获取专员基本信息
+     * @param advisorAccount 专员账号
      * @param approvalStatus 审批状态 ( - 1：已拒绝    0：未反馈   1：待审批     2：审批通过    3：审批不通过    4：已解除)
      * @return
      */
     AdvisorServiceInfo getAdvisorInfoByAccount(String advisorAccount,String approvalStatus);
 
     /**
-     * 获取顾问荣誉资质信息
-     * @param advisorAccount 顾问账号
+     * 获取专员荣誉资质信息
+     * @param advisorAccount 专员账号
      */
     List<ServiceHonor> getAdvisorHonorInfo(String advisorAccount);
 
     /**
-     * 获取顾问项目经验
-     * @param advisorAccount 顾问账号
+     * 获取专员项目经验
+     * @param advisorAccount 专员账号
      * @return
      */
     List<ServiceProjectExperience> getProjectExperienceInfo(String advisorAccount);
 
     /**
-     * 获取顾问服务经验
+     * 获取专员服务经验
      * @param advisorAccount
      * @return
      */

@@ -30,6 +30,16 @@ public class SwitchModel implements Serializable {
     @ApiModelProperty("电表编码")
     private String meterCode;
 
+    private String factoryCode;
+
+    public String getFactoryCode() {
+        return factoryCode;
+    }
+
+    public void setFactoryCode(String factoryCode) {
+        this.factoryCode = factoryCode;
+    }
+
     public String getMeterCode() {
         return meterCode;
     }

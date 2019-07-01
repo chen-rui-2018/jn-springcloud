@@ -21,6 +21,7 @@
         ,t.topic_type AS "t_topicType"
         ,ifnull((SELECT SUM(1) FROM tb_comment com WHERE com.root_id = t.topic_id ),0) AS "t_comNum"
         ,ifnull((SELECT SUM(1) FROM tb_park_like li WHERE li.like_parent_id = t.topic_id and li.record_status=1 and li.like_status =1),0) AS "t_comLike"
+        ,t.topic_content as "t_topicContent"
         ,t.topic_status AS "t_topicStatus"
         ,DATE_FORMAT(t.created_time,'%Y-%m-%d %H:%i:%s') AS "t_createdTime"
         ,t.creator_account AS "t_creatorAccount"

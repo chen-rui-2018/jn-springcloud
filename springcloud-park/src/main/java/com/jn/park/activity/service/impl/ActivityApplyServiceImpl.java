@@ -384,7 +384,7 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
     @ServiceLog(doAction = "二维码生成")
     @Override
     public void getQrCode(OutputStream outputStream, String activityId) throws IOException {
-        String data = systemUrlProperties.getSystemUrl()+"/springcloud-park/activity/signInActivity?activityId=" + activityId;
+        String data = systemUrlProperties.getSystemUrl()+"/springcloud-park/activity/activityApply/signInActivity?activityId=" + activityId;
         try {
             String dataHandle = new String(data.getBytes("UTF-8"), "UTF-8");
             BitMatrix bitMatrix = new MultiFormatWriter().encode(dataHandle, BarcodeFormat.QR_CODE, 800, 800);

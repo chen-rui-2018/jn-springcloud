@@ -61,7 +61,7 @@ public interface PayAccountClient {
 
     @ApiOperation(value = "我的账本-通过企业或用户ID查询账户下账本信息",notes = "我的账本-通过企业或用户ID查询账户下账本信息")
     @RequestMapping(value = "/api/payment/payAccount/queryAccountBook",method = RequestMethod.POST)
-    Result queryAccountBook(@RequestBody @Validated PayAccountBookEntIdOrUserIdParam payAccountBookEntIdOrUserIdParam);
+    Result<List<PayAccountBook>> queryAccountBook(@RequestBody @Validated PayAccountBookEntIdOrUserIdParam payAccountBookEntIdOrUserIdParam);
 
 
 }

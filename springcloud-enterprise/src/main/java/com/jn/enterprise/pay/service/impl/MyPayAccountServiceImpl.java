@@ -412,7 +412,7 @@ public class MyPayAccountServiceImpl implements MyPayAccountService {
 
     @Override
     @ServiceLog(doAction = "通过企业或用户ID查询账户下账本信息")
-    public Result queryAccountBook(PayAccountBookEntIdOrUserIdParam payAccountBookEntIdOrUserIdParam) {
+    public Result<List<PayAccountBook>> queryAccountBook(PayAccountBookEntIdOrUserIdParam payAccountBookEntIdOrUserIdParam) {
         /**根据用户账号/企业ID查询企业信息（用户为企业管理员） */
         logger.info("通过企业或用户ID查询账户下账本信息,参数：payAccountBookEntIdOrUserIdParam={}", JsonUtil.object2Json(payAccountBookEntIdOrUserIdParam));
         List<TbPayAccountBook> tbPayAccountBook = null;

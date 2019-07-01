@@ -425,7 +425,7 @@ public class RequireManagementServiceImpl implements RequireManagementService {
         TbServiceRequire tbServiceRequire = getTbServiceRequire(reqNum);
         RequireOtherDetails requireOtherDetails=new RequireOtherDetails();
         BeanUtils.copyProperties(tbServiceRequire, requireOtherDetails);
-        tbServiceRequire.setReqDetail(tbServiceRequire.getReqDetail());
+        requireOtherDetails.setRequireDetail(tbServiceRequire.getReqDetail());
         //融资期限
         if(tbServiceRequire.getFinancingPeriodMax()!=null
                 && StringUtils.isNotBlank(tbServiceRequire.getFinancingPeriodMax().toString())){

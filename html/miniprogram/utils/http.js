@@ -1,5 +1,5 @@
 // http.js
-const baseUrl = 'http://192.168.10.31:1101/'
+const baseUrl = 'https://cms.bxgxq.com/'
 const imgBaseUrl = 'https://m.bxgxq.com/imgs/'
 const h5Url="https://screan.bxgxq.com/#/"
 // http://112.94.22.222:8002/#/

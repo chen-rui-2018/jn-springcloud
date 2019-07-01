@@ -120,7 +120,7 @@
           </div>
         </div> -->
         <div class="footRight">
-          <div class="erweima1">
+          <!-- <div class="erweima1">
             <div><img src="@/../static/img/apple.png" alt=""></div>
             <p>ios</p>
           </div>
@@ -131,7 +131,7 @@
           <div class="erweima2">
             <div><img src="@/../static/img/xiaocehngxu.png" alt=""></div>
             <p>小程序</p>
-          </div>
+          </div> -->
         </div>
       </div>
       <div class="footer2">

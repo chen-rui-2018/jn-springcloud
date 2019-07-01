@@ -24,15 +24,14 @@
             </div>
         </div>
       </div>
-      <div class="park_enterprise">
+      <div v-if="parkEnterprise && parkEnterprise.length > 0" class="park_enterprise">
         <div class="w">
           <div class="parkTitle clearfix">
             <h5 class="fl color1">园区企业</h5>
           </div>
           <div class="parkEnterpriseDetail">
             <ul>
-              <li class="none" v-if="parkEnterprise.length===0">暂无</li>
-              <li class="parkLogo" v-for="(item,index) in parkEnterprise" :key="index" v-else>
+              <li class="parkLogo" v-for="(item,index) in parkEnterprise" :key="index">
                 <div><img :src="item.avatar" alt=""></div>
                 <div>{{item.comName}}</div>
               </li>
@@ -97,12 +96,12 @@ export default {
 .park_child {
   padding-top: 65px;
   .parkDetai {
-      // margin-bottom:35px;
+      margin-bottom:35px;
     .approve_breadcrumb{
       padding: 15px 0;
       font-size: 12px;
       .el-breadcrumb__item:last-child .el-breadcrumb__inner a{
-        color:#00a041;  
+        color:#00a041;
       }
     }
     .park_main {
@@ -135,7 +134,6 @@ export default {
   }
   .park_enterprise{
     background: #f5f5f5;
-    margin-top: 35px;
     padding-top: 44px;
     .parkTitle{
       h5 {

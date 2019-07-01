@@ -56,7 +56,7 @@
         <span>/</span>
         <span class="mainColor">政策中心</span>
       </div>
-      <div class="serverOrgNav w mainBorder" v-if="tableType=='allPolicy'">
+      <!-- <div class="serverOrgNav w mainBorder" v-if="tableType=='allPolicy'">
         <div class="policynav">
           <div class="nav1 clearfix">
             <div class="nav1Tit fl">政策级别：</div>
@@ -73,7 +73,6 @@
           </div>
           <div class="nav1 clearfix">
             <div class="nav1Tit fl">政策分类：</div>
-            <!-- <div class="fl" :class="{'active':filterFlag1 == ''}" @click="handleFilter1('')">不限</div> -->
             <ul class="nav1Ul fl clearfix" style="width:auto;">
               <li :class="{'active0':filterFlag1 == ''}" @click="handleFilter1('')">不限</li>
             </ul>
@@ -105,16 +104,13 @@
               <li class="wid4" v-for="(i,k) in arrYear" v-if='k<9' :key='k' @click="handleFilter3(i)" :class="{'active0':filterFlag3 == i}">{{i}}年</li>
               <li class="wid4" id="lastLi" @click="handleFilter3('1')" :class="{'active0':filterFlag3 == '1'}">{{arrYear[arrYear.length-1]}}年及以前</li>
             </ul>
-            <!-- <ul class="nav1Ul fl clearfix" style="width:auto">
-            <li @click="handleFilter3('1')" :class="{'active':filterFlag3 == '1'}">{{arrYear[arrYear.length-1]}}年及以前</li>
-          </ul> -->
             <div class="fr" v-if="widFun('wid4')">
               <i class="el-icon-arrow-down" v-if="flag4" @click="flag4 = !flag4"></i>
               <i class="el-icon-arrow-up" v-else @click="flag4 = !flag4"></i>
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
       <div class="policyTab  w">
         <div class="pr">
           <span class="wenzi color3">政策检索</span>
@@ -130,6 +126,61 @@
         </div>
         <el-tabs v-model="activeName" @tab-click="handleClick" class="tabBox">
           <el-tab-pane label="政策一览" name="first">
+             <div class="serverOrgNav w mainBorder" v-if="tableType=='allPolicy'">
+        <div class="policynav">
+          <div class="nav1 clearfix">
+            <div class="nav1Tit fl">政策级别：</div>
+            <ul class="nav1Ul fl clearfix" style="width:auto;">
+              <li :class="{'active0':filterFlag == ''}" @click="handleFilter('')">不限</li>
+            </ul>
+            <ul class="nav1Ul fl clearfix" :class="{'sh':!flag1}">
+              <li class="wid1" v-for="(i,k) in policyLevel" :key='k' @click="handleFilter(i.policyLevelCode)" :class="{'active0':filterFlag == i.policyLevelCode}">{{i.policyLevelName}}</li>
+            </ul>
+            <div class="fr" v-if="widFun('wid1')">
+              <i class="el-icon-arrow-down" v-if="flag1" @click="flag1 = !flag1"></i>
+              <i class="el-icon-arrow-up" v-else @click="flag1 = !flag1"></i>
+            </div>
+          </div>
+          <div class="nav1 clearfix">
+            <div class="nav1Tit fl">政策分类：</div>
+            <ul class="nav1Ul fl clearfix" style="width:auto;">
+              <li :class="{'active0':filterFlag1 == ''}" @click="handleFilter1('')">不限</li>
+            </ul>
+            <ul class="nav1Ul fl clearfix" :class="{'sh':!flag2}">
+              <li class="wid2" v-for="(i,k) in policyClass" :key='k' @click="handleFilter1(i.policyClassCode)" :class="{'active0':filterFlag1 == i.policyClassCode}">{{i.policyClassName}}</li>
+            </ul>
+            <div class="fr" v-if="widFun('wid2')">
+              <i class="el-icon-arrow-down" v-if="flag2" @click="flag2 = !flag2"></i>
+              <i class="el-icon-arrow-up" v-else @click="flag2 = !flag2"></i>
+            </div>
+          </div>
+          <div class="nav1 clearfix">
+            <div class="nav1Tit fl">政策类型：</div>
+            <ul class="nav1Ul fl clearfix" :class="{'sh':!flag3}">
+              <li class="wid3" @click="handleFilter2('0')" :class="{'active0':filterFlag2 == '0'}">普通政策</li>
+              <li class="wid3" @click="handleFilter2('1')" :class="{'active0':filterFlag2 == '1'}">图解政策</li>
+            </ul>
+            <div class="fr" v-if="widFun('wid3')">
+              <i class="el-icon-arrow-down" v-if="flag3" @click="flag3 = !flag3"></i>
+              <i class="el-icon-arrow-up" v-else @click="flag3 = !flag3"></i>
+            </div>
+          </div>
+          <div class="nav1 nav2 clearfix">
+            <div class="nav1Tit fl">发布时间：</div>
+            <ul class="nav1Ul fl clearfix" style="width:auto">
+              <li :class="{'active0':filterFlag3 == ''}" @click="handleFilter3('')">不限</li>
+            </ul>
+            <ul class="nav1Ul fl clearfix" :class="{'sh':!flag4}">
+              <li class="wid4" v-for="(i,k) in arrYear" v-if='k<9' :key='k' @click="handleFilter3(i)" :class="{'active0':filterFlag3 == i}">{{i}}年</li>
+              <li class="wid4" id="lastLi" @click="handleFilter3('1')" :class="{'active0':filterFlag3 == '1'}">{{arrYear[arrYear.length-1]}}年及以前</li>
+            </ul>
+            <div class="fr" v-if="widFun('wid4')">
+              <i class="el-icon-arrow-down" v-if="flag4" @click="flag4 = !flag4"></i>
+              <i class="el-icon-arrow-up" v-else @click="flag4 = !flag4"></i>
+            </div>
+          </div>
+        </div>
+      </div>
             <ul class="fir">
               <li class="clearfix" v-for="(i,k) in policyCenterList" :key="k">
                 <div class="fir1 fl pointer" @click="godetails(i)">
@@ -442,7 +493,7 @@ export default {
     scrollTopAnimate(){
       console.log(document.documentElement.scrollTop)
       // document.documentElement.scrollTop = document.getElementsByClassName("tabBox")[0].offsetTop - 100;
-      document.documentElement.scrollTop = document.getElementsByClassName("techContent")[0].offsetTop-10;
+      document.documentElement.scrollTop = document.getElementsByClassName("techContent")[0].offsetTop-20;
     //   let times = setInterval(()=>{
     //     document.documentElement.scrollTop = this.getScrollTop() + 10;
     //     if(this.getScrollTop() + this.getWindowHeight() >= this.getScrollHeight() || this.getScrollTop() >= document.getElementsByClassName("tabBox")[0].offsetTop - 100){
@@ -521,6 +572,9 @@ export default {
 </script>
 <style lang="scss">
 .policyCenter0 {
+  .el-tabs__nav-wrap::after{
+    height: 1px;
+  }
   #lastLi {
     float: right;
     margin-top: -26px;

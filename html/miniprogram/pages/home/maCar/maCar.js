@@ -59,7 +59,7 @@ Page({
       success (res) {
         if (res.confirm) {
           request.send({
-            url: '/springcloud-park/user/parking/carInfo/deleteCarInfoByUser?carId='+_this.data.carId,
+            url: 'springcloud-park/user/parking/carInfo/deleteCarInfoByUser?carId='+_this.data.carId,
             data: {},
             method: 'POST',
           }).then(res=>{
@@ -93,7 +93,7 @@ Page({
       "sendData.page":1
     })
     request.send({
-      url: '/springcloud-park/user/parking/carInfo/getCarInfoListByNowUser',
+      url: 'springcloud-park/user/parking/carInfo/getCarInfoListByNowUser',
       data: this.data.sendData,
       method: 'GET',
     }).then(res=>{

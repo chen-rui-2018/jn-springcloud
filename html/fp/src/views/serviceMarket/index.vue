@@ -20,7 +20,7 @@
                     <li @click='$router.push({path:"/serverCon"})'>服务专员</li>
                     <li @click='$router.push({path:"/actiTrain"})'>活动培训</li>
                     <li @click='$router.push({path:"/aboutUs"})'>关于我们</li>
-                    <li @click='$router.push({path:"/register"})'>加入我们</li>
+                    <li @click='goregister'>加入我们</li>
                 </div>
                 <div class="headerRight pr">
                   <div class="search" >
@@ -215,7 +215,7 @@
       <!-- 优质专员 -->
       <div class="counselor" ref="counselor2" data-class="allFade">
         <div class="counselor_title">
-          <span>优质专员</span>
+          <span>优质服务专员</span>
           <span class="pointer" @click="$router.push({path:'/serverCon'})">MORE<i class="iconfont icon-you"></i></span>
         </div>
         <div class="conselor_introduce">
@@ -330,6 +330,7 @@
 <script>
 import Swiper from 'swiper'
 import userInfo from '../common/userInfoData'
+import { getToken } from '@/util/auth'
 export default {
   components: {
       userInfo
@@ -404,6 +405,15 @@ export default {
     window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
   },
   methods: {
+    // 去注册
+    goregister(){
+      if(getToken()){
+        this.$router.push({path:"/roleCertifications/basicInformation"})
+      }else{
+        sessionStorage.setItem("marketurl","/serMatHp")
+        this.$router.push({path:"/register"})
+      }
+    },
     handleFather(id){
       if(id!=='technology_finance'){
         $router.push({path:'/quickSearch',query:{signoryId:slideitem.id,preValue:slideitem.preValue}})

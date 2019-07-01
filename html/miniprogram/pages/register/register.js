@@ -181,7 +181,7 @@ Page({
         }
         // 注册
         wx.request({
-          url: app.globalData.wechatPath + '/guest/mini/user/registerUserAndGetToken',
+          url: app.globalData.baseUrl + 'springcloud-wechat-miniprogram/guest/mini/user/registerUserAndGetToken',
           data: {
             phone,
             phoneCode,

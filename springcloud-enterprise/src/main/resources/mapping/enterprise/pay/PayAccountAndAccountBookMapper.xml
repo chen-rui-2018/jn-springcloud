@@ -88,6 +88,7 @@
      b.record_status AS recordStatus,
      b.modified_time AS modifiedTime,
      b.modifier_account AS modifierAccount,
+     t.payment_time as paymentTime,
      CASE  WHEN  t.payment_state = '1' or  T.BILL_ID IS NULL THEN '已支付'
                WHEN  t.payment_state = '2' THEN '待支付'
 				 ELSE
@@ -147,6 +148,7 @@
          b.record_status AS recordStatus,
          b.modified_time AS modifiedTime,
          b.modifier_account AS modifierAccount,
+         t.payment_time as paymentTime,
          CASE  WHEN  t.payment_state = '1' or  T.BILL_ID IS NULL THEN '已支付'
                WHEN  t.payment_state = '2' THEN '待支付'
 				 ELSE

@@ -11,7 +11,6 @@ import com.jn.hardware.model.parking.*;
 import com.jn.hardware.model.parking.door.*;
 import com.jn.hardware.parking.service.ParkingService;
 import com.jn.hardware.util.JsonStringToObjectUtil;
-import com.jn.park.api.ParkingClient;
 import com.jn.send.api.DelaySendMessageClient;
 import com.jn.send.model.Delay;
 import org.slf4j.Logger;
@@ -25,7 +24,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * 导致接口实现类
+ * 道闸接口实现类
  *
  * @Author： cm
  * @Date： Created on 2019/4/17 17:22
@@ -38,8 +37,6 @@ public class ParkingServiceImpl implements ParkingService {
     private final Logger logger = LoggerFactory.getLogger(ParkingServiceImpl.class);
     @Autowired
     private ParkingDrUrlProperties parkingDrUrlProperties;
-    @Autowired
-    private ParkingClient parkingClient;
     @Autowired
     private DelaySendMessageClient delaySendMessageClient;
     /**

@@ -6,7 +6,7 @@ import com.jn.hardware.model.parking.door.*;
 import org.springframework.web.bind.annotation.RequestBody;
 
 /**
- * TODO：未添加类描述
+ * 道闸接口类
  *
  * @Author： cm
  * @Date： Created on 2019/4/17 17:12

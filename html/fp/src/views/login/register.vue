@@ -128,6 +128,9 @@ export default {
   created() {
     this.securityInfo()
   },
+  destroyed () {
+    sessionStorage.removeItem("marketurl")
+  },
   methods: {
     inputBlur() {
       let _this=this
@@ -186,6 +189,7 @@ export default {
         this.$message.error("请先同意用户协议");
         return;
       }
+     
       this.loading = true;
       let _this = this;
       this.api.post({
@@ -200,8 +204,7 @@ export default {
           _this.loading = false;
           if (res.code == "0000") {
             _this.$message.success("注册成功");
-            _this
-              .$confirm("注册成功, 是否登录?", "提示", {
+            _this.$confirm("注册成功, 是否登录?", "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
                 type: "success "
@@ -211,18 +214,19 @@ export default {
                 _this.api.post({
                   url: "loginURL",
                   data: {
-                    account: _this.phone,
-                    password: _this.password
+                    account: encrypt(_this.phone),
+                    password: encrypt(_this.password)
                   },
                   dataFlag: false,
                   callback: function(res) {
                     _this.loading = false;
                     if (res.code == "0000") {
                       setToken(res.data)
-                      _this.$router.push({
-                        path: "/"
-                        // query: { account: _this.phone }
-                      });
+                      if(sessionStorage.getItem('marketurl')){
+                        _this.$router.push({ path: "/roleCertifications/basicInformation" });
+                      }else{
+                        _this.$router.push({ path: "/" });
+                      }
                     } else {
                       _this.$message.error(res.result);
                     }

@@ -10,16 +10,16 @@
                 <i class="iconfont icon-menu1"></i>
               </div>
             </li>
-            <li>
+            <!-- <li>
               <div class="right_nav_tel" @mouseenter="telShow=true" @mouseleave="telShow=false">
                 <i class="iconfont icon-phone"></i>
               </div>
-            </li>
-            <li>
+            </li> -->
+            <!-- <li>
               <div class="weixin" @mouseenter="show=true" @mouseleave="show=false">
                 <i class="iconfont icon-weixin2"></i>
               </div>
-            </li>
+            </li> -->
             <li>
               <div class="online_service">
                 <i class="iconfont icon-kefu"></i>

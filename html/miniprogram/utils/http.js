@@ -3,7 +3,8 @@ const baseUrl = 'https://cms.bxgxq.com/'
 const imgBaseUrl = 'https://m.bxgxq.com/imgs/'
 const h5Url="https://screan.bxgxq.com/#/"
 // http://112.94.22.222:8002/#/
-// https://22d2325e.cpolar.io/#/
+// https://22d2325e.cpolar.io/#/ 
+// http://192.168.10.31:1101/   https://cms.bxgxq.com
 class WxHttp {
   constructor() {
     // 设置 post、put 默认 Content-Type

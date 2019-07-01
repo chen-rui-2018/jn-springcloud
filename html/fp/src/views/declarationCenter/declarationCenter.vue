@@ -43,8 +43,8 @@
                     <p>【{{centeritem.rangeId|type}}】{{centeritem.titleName}}</p> 
                     <p>
                       <span>发布日期：{{centeritem.createdTime|time}}</span>
-                      <span>状态：<span class="fontcolor">{{centeritem.isRoofPlacement|isRoof}}</span>
-                      </span>
+                      <!-- <span>状态：<span class="fontcolor">{{centeritem.isRoofPlacement|isRoof}}</span>
+                      </span> -->
                     </p>
                     <p>申报部门：{{centeritem.timeNode}}</p>
                     <p>
@@ -62,7 +62,7 @@
         </div>
       </div>
       <!-- 分页 -->
-      <div class="paging" ref="paging" id="paging" v-show="isPage" >
+      <!-- <div class="paging" ref="paging" id="paging" >
         <el-pagination
           background
           @size-change="handleSizeChange"
@@ -72,7 +72,7 @@
           layout="total,prev, pager, next,sizes"
           :total="total">
         </el-pagination>
-      </div>
+      </div> -->
       <!-- 申报平台 -->
       <div class="declaration_platform" id="declaration_platform">
         <div class="platform_titile">
@@ -129,7 +129,7 @@ export default {
         page:1,
         rows:6,
         perennialList:[],
-        isPage:false
+        // isPage:false
       }
     },
     filters: {
@@ -242,12 +242,13 @@ export default {
         this.getdeclarationcenterList()
       },
       showpaging(){
-        this.isPage=!this.isPage
-        if(this.isPage===true){
-          this.$nextTick(()=>{
-            document.documentElement.scrollTop=this.$refs.paging.offsetTop-300;
-          })
-        }
+        this.$router.push({path:'/declarationTimely'})
+        // this.isPage=!this.isPage
+        // if(this.isPage===true){
+        //   this.$nextTick(()=>{
+        //     document.documentElement.scrollTop=this.$refs.paging.offsetTop-300;
+        //   })
+        // }
       },
       //切换区
       switchto(){

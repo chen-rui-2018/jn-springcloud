@@ -26,7 +26,7 @@ Page({
   },
   add(){
     request.send({
-      url: '/springcloud-park/user/parking/carInfo/saveCarInfo',
+      url: 'springcloud-park/user/parking/carInfo/saveCarInfo',
       data: {carLicense:this.data.carLicense},
       method: 'POST',
     }).then(res=>{

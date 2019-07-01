@@ -63,6 +63,8 @@ public class TbPayBill implements Serializable {
 
     private String meterCode;
 
+    private Date paymentTime;
+
     private static final long serialVersionUID = 1L;
 
     public String getBillId() {
@@ -297,6 +299,14 @@ public class TbPayBill implements Serializable {
         this.meterCode = meterCode == null ? null : meterCode.trim();
     }
 
+    public Date getPaymentTime() {
+        return paymentTime;
+    }
+
+    public void setPaymentTime(Date paymentTime) {
+        this.paymentTime = paymentTime;
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -337,7 +347,8 @@ public class TbPayBill implements Serializable {
             && (this.getBillReceiver() == null ? other.getBillReceiver() == null : this.getBillReceiver().equals(other.getBillReceiver()))
             && (this.getBuildId() == null ? other.getBuildId() == null : this.getBuildId().equals(other.getBuildId()))
             && (this.getBuildName() == null ? other.getBuildName() == null : this.getBuildName().equals(other.getBuildName()))
-            && (this.getMeterCode() == null ? other.getMeterCode() == null : this.getMeterCode().equals(other.getMeterCode()));
+            && (this.getMeterCode() == null ? other.getMeterCode() == null : this.getMeterCode().equals(other.getMeterCode()))
+            && (this.getPaymentTime() == null ? other.getPaymentTime() == null : this.getPaymentTime().equals(other.getPaymentTime()));
     }
 
     @Override
@@ -373,6 +384,7 @@ public class TbPayBill implements Serializable {
         result = prime * result + ((getBuildId() == null) ? 0 : getBuildId().hashCode());
         result = prime * result + ((getBuildName() == null) ? 0 : getBuildName().hashCode());
         result = prime * result + ((getMeterCode() == null) ? 0 : getMeterCode().hashCode());
+        result = prime * result + ((getPaymentTime() == null) ? 0 : getPaymentTime().hashCode());
         return result;
     }
 
@@ -411,6 +423,7 @@ public class TbPayBill implements Serializable {
         sb.append(", buildId=").append(buildId);
         sb.append(", buildName=").append(buildName);
         sb.append(", meterCode=").append(meterCode);
+        sb.append(", paymentTime=").append(paymentTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

@@ -6,59 +6,72 @@
     <!-- <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/> -->
     <title>白下高新智慧园区</title>
     <script>
-      function initJsBridge (readyCallback) {
-        const u = navigator.userAgent
-        const isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1 // android终端
-        const isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) // ios终端
-        // 注册jsbridge
-        function connectWebViewJavascriptBridge (callback) {
-          if (isAndroid) {
-            const WebViewJavascriptBridge = window.WebViewJavascriptBridge
-            if (WebViewJavascriptBridge) {
-              callback(WebViewJavascriptBridge)
-            } else {
-              document.addEventListener(
-                'WebViewJavascriptBridgeReady'
-                , function () {
-                  callback(WebViewJavascriptBridge)
-                },
-                false
-              )
-            }
-            return
-          }
-
-          if (isiOS) {
-            const WebViewJavascriptBridge = window.WebViewJavascriptBridge
-            if (WebViewJavascriptBridge) {
-              return callback(WebViewJavascriptBridge)
-            }
-            if (window.WVJBCallbacks) {
-              return window.WVJBCallbacks.push(callback)
-            }
-            window.WVJBCallbacks = [callback]
-            const WVJBIframe = document.createElement('iframe')
-            WVJBIframe.style.display = 'none'
-            WVJBIframe.src = 'https://__bridge_loaded__'
-            document.documentElement.appendChild(WVJBIframe)
-            setTimeout(function () {
-              document.documentElement.removeChild(WVJBIframe)
-            }, 0)
-          }
+      // 判断是否是微信浏览器的函数
+      function isWeiXin () {
+        // window.navigator.userAgent属性包含了浏览器类型、版本、操作系统类型、浏览器引擎类型等信息，这个属性可以用来判断浏览器类型
+        var ua = window.navigator.userAgent.toLowerCase()
+        // 通过正则表达式匹配ua中是否含有MicroMessenger字符串
+        if (ua.match(/MicroMessenger/i) === 'micromessenger') {
+          return true
+        } else {
+          return false
         }
-
-        // 调用注册方法
-        connectWebViewJavascriptBridge(function (bridge) {
-          if (isAndroid) {
-            bridge.init(function (message, responseCallback) {
-              console.log('JS got a message', message)
-              responseCallback(message)
-            })
-          }
-          readyCallback()
-        })
       }
-      initJsBridge(function () {})
+      if (isWeiXin()) {
+        function initJsBridge (readyCallback) {
+          const u = navigator.userAgent
+          const isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1 // android终端
+          const isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) // ios终端
+          // 注册jsbridge
+          function connectWebViewJavascriptBridge (callback) {
+            if (isAndroid) {
+              const WebViewJavascriptBridge = window.WebViewJavascriptBridge
+              if (WebViewJavascriptBridge) {
+                callback(WebViewJavascriptBridge)
+              } else {
+                document.addEventListener(
+                  'WebViewJavascriptBridgeReady'
+                  , function () {
+                    callback(WebViewJavascriptBridge)
+                  },
+                  false
+                )
+              }
+              return
+            }
+
+            if (isiOS) {
+              const WebViewJavascriptBridge = window.WebViewJavascriptBridge
+              if (WebViewJavascriptBridge) {
+                return callback(WebViewJavascriptBridge)
+              }
+              if (window.WVJBCallbacks) {
+                return window.WVJBCallbacks.push(callback)
+              }
+              window.WVJBCallbacks = [callback]
+              const WVJBIframe = document.createElement('iframe')
+              WVJBIframe.style.display = 'none'
+              WVJBIframe.src = 'https://__bridge_loaded__'
+              document.documentElement.appendChild(WVJBIframe)
+              setTimeout(function () {
+                document.documentElement.removeChild(WVJBIframe)
+              }, 0)
+            }
+          }
+
+          // 调用注册方法
+          connectWebViewJavascriptBridge(function (bridge) {
+            if (isAndroid) {
+              bridge.init(function (message, responseCallback) {
+                console.log('JS got a message', message)
+                responseCallback(message)
+              })
+            }
+            readyCallback()
+          })
+        }
+        initJsBridge(function () {})
+      }
     </script>
     <script src="./static/js/flexibleJs/flexible_css.debug.js"></script>
     <script src="./static/js/flexibleJs/flexible.debug.js"></script>

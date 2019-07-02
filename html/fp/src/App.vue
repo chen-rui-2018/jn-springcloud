@@ -59,11 +59,19 @@
                   <li @click="$router.push({path:'/declarationCenter'})">申报中心</li>
                   <li @click="$router.push({path:'/policyCenter'})">政策中心</li>
                   <li @click="$router.push({path:'/actiCenter'})">活动中心</li>
-                  <li @click="$router.push({path:'/tfindex'})">科技金融</li>
+                  <li>
+                  <router-link to="/tfindex" target="_blank">
+                    科技金融
+                  </router-link>
+                  </li>
                   <li @click="$router.push({path:'/recruitmentList'})">人力资源</li>
                   <!-- <li @click="$router.push({path:'/incubatorEnterprises'})">孵化企业</li> -->
                   <!-- <li @click="$router.push({path:'/compassView'})">行政审批</li> -->
-                  <li @click="$router.push({path:'/serMatHp'})">服务超市</li>
+                  <li>
+                  <router-link to="/serMatHp" target="_blank">
+                    服务超市
+                  </router-link>
+                  </li>
                 </ul>
               </div>
               <p @click="$router.push({path:'/talentsService'})" style="margin-top:30px">人才服务</p>

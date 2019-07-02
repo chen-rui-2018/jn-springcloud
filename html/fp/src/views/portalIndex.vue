@@ -10,8 +10,8 @@
           </el-carousel>
           <div class="bannerText color3">
             <ul :style="`top:${ulTopNum}px;${hastrFlag ? 'transition: all 0.5s;' : ''}`">
-              <li v-for="banner in bannerList">{{banner.propagandaTitle}}</li>
-              <li v-for="(banner, index) in bannerList" :key="index" v-if="index == bannerList.length - 1">{{banner.propagandaTitle}}</li>
+              <li v-for="banner in bannerList" @click="goNewPage(banner.propagandaAreaUrl)">{{banner.propagandaTitle}}</li>
+              <li v-for="(banner, index) in bannerList" :key="index" v-if="index == bannerList.length - 1" @click="goNewPage(banner.propagandaAreaUrl)">{{banner.propagandaTitle}}</li>
             </ul>
           </div>
           <!-- <div class="swiper-container"> -->
@@ -600,6 +600,7 @@ export default {
             font-size: 14px;
             height: 20px;
             line-height: 20px;
+            cursor: pointer;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -665,6 +666,10 @@ export default {
           h5 {
             color: #333;
             font-size: 15px;
+            width: 90%;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
           }
           p {
             font-size: 13px;

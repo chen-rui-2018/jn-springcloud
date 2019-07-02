@@ -45,7 +45,7 @@
       <div style="display:flex">
         <el-form-item label="公告内容" prop="noticeContent" lass="inline">
           <div class="editor-container">
-            <UE ref="ue" :default-msg="defaultMsg" :config="config"/>
+            <UE ref="ueditor" :config="config" />
           </div>
         </el-form-item>
       </div>
@@ -62,7 +62,7 @@
 import {
   api, paramApi
 } from '@/api/axios'
-import UE from '@/components/ue.vue'
+import UE from '@/components/ueditor/ueditor.vue'
 export default {
   components: { UE },
   data() {

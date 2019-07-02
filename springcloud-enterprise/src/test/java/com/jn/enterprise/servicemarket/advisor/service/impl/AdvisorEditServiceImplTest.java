@@ -97,7 +97,7 @@ public class AdvisorEditServiceImplTest {
         //荣誉资质信息保存并更新
         //主键id
         serviceHonor.setId("9e5c70bd003a4e1082b9995d98ccecf2");
-        //顾问账号
+        //专员账号
         serviceHonor.setAdvisorAccount(advisorAccount);
         //证书名称
         serviceHonor.setCertificateName("高级律师证");
@@ -112,7 +112,7 @@ public class AdvisorEditServiceImplTest {
         certificateType="honor";
 
         //服务经历保存并更新
-        //顾问账号
+        //专员账号
         serviceExperience.setAdvisorAccount(advisorAccount);
         //公司名称
         serviceExperience.setCompanyName("江苏工业园");
@@ -122,7 +122,7 @@ public class AdvisorEditServiceImplTest {
         serviceExperience.setWorkTime("201713");
 
         //项目经验保存并更新
-        //顾问账号
+        //专员账号
         serviceProjectExperience.setAdvisorAccount(advisorAccount);
         //公司名称
         //serviceProjectExperience.setCompanyName("苏州工程技术有限公司");

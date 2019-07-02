@@ -155,7 +155,18 @@ public class CareServiceImpl implements CareService {
     @ServiceLog(doAction = "企业/个人粉丝数查询")
     @Override
     public CareUserDetails findCompanyCareInfo(String account,String currentAccount) {
+
         CareUserDetails userDetails =  careDao.findCareDetails(account,currentAccount);
+        Result<UserExtensionInfo> result =  userExtensionClient.getUserExtension(account);
+        if(result.getData()!=null){
+            userDetails.setAccount(account);
+            userDetails.setAvatar(result.getData().getAvatar());
+            if (result.getData().getNickName()==null ||result.getData().getNickName()==""){
+                userDetails.setNickName(hidePhoneNumber(account));
+            }else{
+                userDetails.setNickName(result.getData().getNickName());
+            }
+        };
         return userDetails;
     }
 

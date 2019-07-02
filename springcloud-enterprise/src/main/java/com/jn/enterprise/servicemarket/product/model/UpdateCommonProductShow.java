@@ -35,7 +35,7 @@ public class UpdateCommonProductShow implements Serializable {
     private String orgName;
     @ApiModelProperty(value = "服务产品图片路径")
     private String pictureUrl;
-    @ApiModelProperty(value = "顾问名称")
+    @ApiModelProperty(value = "专员名称")
     private String advisorName ;
     @ApiModelProperty(value = "服务产品的详情存入数据库时,后台转换使用")
     private String serviceDetails;

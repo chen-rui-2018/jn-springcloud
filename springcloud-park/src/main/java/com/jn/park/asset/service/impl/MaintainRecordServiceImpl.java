@@ -49,7 +49,7 @@ public class MaintainRecordServiceImpl implements MaintainRecordService {
             tbAssetMaintainRecord.setMaintainName(maintain.getName());
             tbAssetMaintainRecord.setTypeId(maintain.getTypeId());
             tbAssetMaintainRecord.setAssetType(maintain.getAssetType());
-            tbAssetMaintainRecord.setMaintenanceTime(maintain.getMaintenanceTime());
+            tbAssetMaintainRecord.setMaintenanceTime(new Date());
             tbAssetMaintainRecord.setMessage(maintainRecordModel.getMessage());
             tbAssetMaintainRecord.setImgUrl(maintainRecordModel.getImgUrl());
             tbAssetMaintainRecord.setRecordStatus(Byte.parseByte(AssetStatusEnums.EFFECTIVE.getCode()));

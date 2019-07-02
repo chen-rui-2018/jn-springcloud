@@ -362,7 +362,7 @@ public class ServiceProductServiceImplTest {
     }
 
     /**
-     * 顾问关联的服务产品列表
+     * 专员关联的服务产品列表
      */
     @Test
     public void advisorProductList() {

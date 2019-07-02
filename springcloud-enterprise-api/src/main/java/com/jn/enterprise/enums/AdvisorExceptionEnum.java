@@ -3,7 +3,7 @@ package com.jn.enterprise.enums;
 import com.jn.common.api.CodeAndMsg;
 
 /**
- * 服务顾问异常枚举
+ * 服务专员异常枚举
  * @Author: yangph
  * @Date: 2019/02/14 10:02
  * @Version v1.0

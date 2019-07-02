@@ -15,7 +15,7 @@ import java.util.List;
  */
 public interface CommentMapper {
     /**
-     * 获取我收到的评价列表(机构/顾问收到的评价)
+     * 获取我收到的评价列表(机构/专员收到的评价)
      * @param receiveRatingParameter
      * @return
      */

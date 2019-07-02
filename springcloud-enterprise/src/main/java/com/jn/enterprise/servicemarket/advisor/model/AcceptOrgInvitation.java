@@ -15,13 +15,13 @@ import java.util.List;
  */
 @ApiModel(value = "AcceptOrgInvitation", description = "接受机构邀请入参")
 public class AcceptOrgInvitation implements Serializable {
-    @ApiModelProperty(value = "顾问基本信息)")
+    @ApiModelProperty(value = "专员基本信息)")
     private AdvisorServiceInfo advisorServiceInfo;
-    @ApiModelProperty(value = "顾问荣誉资质)")
+    @ApiModelProperty(value = "专员荣誉资质)")
     private List<ServiceHonor> serviceHonorList;
-    @ApiModelProperty(value = "顾问服务经历)")
+    @ApiModelProperty(value = "专员服务经历)")
     private List<ServiceExperience> serviceExperienceList;
-    @ApiModelProperty(value = "顾问项目经验)")
+    @ApiModelProperty(value = "专员项目经验)")
     private List<ServiceProjectExperience> serviceProjectExperienceList;
     @ApiModelProperty(value = "服务评价)")
     private List<ServiceRating> serviceRatingList;

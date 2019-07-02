@@ -11,11 +11,11 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "AdvisorApprovalStatus", description = "认证顾问的状态出参")
+@ApiModel(value = "AdvisorApprovalStatus", description = "认证专员的状态出参")
 public class AdvisorApprovalStatus implements Serializable {
-    @ApiModelProperty(value = "顾问认证状态(0：未认证  1：认证中  2：已认证  3：认证通过)")
+    @ApiModelProperty(value = "专员认证状态(0：未认证  1：认证中  2：已认证  3：认证通过)")
     private int approvalStatus;
-    @ApiModelProperty(value = "顾问认证状态说明)")
+    @ApiModelProperty(value = "专员认证状态说明)")
     private String approvalDesc;
 
     public int getApprovalStatus() {

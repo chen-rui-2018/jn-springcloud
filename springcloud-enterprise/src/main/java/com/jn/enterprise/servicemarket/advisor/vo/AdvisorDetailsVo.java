@@ -10,23 +10,23 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * 服务顾问详情
+ * 服务专员详情
  * @Author: yangph
  * @Date: 2019/2/14 16:28
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "AdvisorDetailsVo", description = "服务顾问详情")
+@ApiModel(value = "AdvisorDetailsVo", description = "服务专员详情")
 public class AdvisorDetailsVo implements Serializable {
-    @ApiModelProperty(value = "顾问详情简介)")
+    @ApiModelProperty(value = "专员详情简介)")
     private AdvisorIntroduction advisorIntroduction;
-    @ApiModelProperty(value = "顾问基本信息)")
+    @ApiModelProperty(value = "专员基本信息)")
     private AdvisorServiceInfo advisorServiceInfo;
-    @ApiModelProperty(value = "顾问荣誉资质)")
+    @ApiModelProperty(value = "专员荣誉资质)")
     private List<ServiceHonor> serviceHonorList;
-    @ApiModelProperty(value = "顾问服务经历)")
+    @ApiModelProperty(value = "专员服务经历)")
     private List<ServiceExperience> serviceExperienceList;
-    @ApiModelProperty(value = "顾问项目经验)")
+    @ApiModelProperty(value = "专员项目经验)")
     private List<ServiceProjectExperience> serviceProjectExperienceList;
     @ApiModelProperty(value = "服务评价)")
     private List<ServiceRating> serviceRatingList;

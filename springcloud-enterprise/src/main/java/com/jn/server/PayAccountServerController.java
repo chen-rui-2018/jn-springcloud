@@ -86,4 +86,12 @@ public class PayAccountServerController extends BaseController implements PayAcc
         return myPayAccountService.automaticDeduction(payAutoDeduParam,user);
     }
 
+    @Override
+    @ControllerLog(doAction = "通过企业或用户ID查询账户下账本信息")
+    public Result<List<PayAccountBook>> queryAccountBook(@RequestBody @Validated PayAccountBookEntIdOrUserIdParam payAccountBookEntIdOrUserIdParam) {
+        Assert.notNull(payAccountBookEntIdOrUserIdParam.getObjId(),"对象ID不能为空");
+        Assert.notNull(payAccountBookEntIdOrUserIdParam.getObjType(),"对象类型不能为空");
+        return myPayAccountService.queryAccountBook(payAccountBookEntIdOrUserIdParam);
+    }
+
 }

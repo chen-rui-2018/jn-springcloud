@@ -25,7 +25,7 @@ import java.util.List;
  * @Version v1.0
  * @modified By:
  */
-@Api(tags = "用户中心--角色认证--服务顾问认证--选择机构")
+@Api(tags = "用户中心--角色认证--服务专员认证--选择机构")
 @RestController
 @RequestMapping(value = "/serviceMarket/advisorApproveController")
 public class AdvisorApproveController extends BaseController {

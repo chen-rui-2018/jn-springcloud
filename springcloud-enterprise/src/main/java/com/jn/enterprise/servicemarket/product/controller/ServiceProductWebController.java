@@ -152,8 +152,8 @@ public class ServiceProductWebController  extends BaseController {
         productService.updateFeatureProduct(product,user.getAccount());
         return new Result();
     }
-    @ControllerLog(doAction = "顾问-服务产品列表")
-    @ApiOperation(value="顾问-服务产品列表")
+    @ControllerLog(doAction = "专员-服务产品列表")
+    @ApiOperation(value="专员-服务产品列表")
     @RequestMapping(value = "/guest/servicemarket/product/web/advisorProductList",method = RequestMethod.GET)
     public Result<PaginationData< List<AdvisorProductInfo>>> advisorProductList( @Validated AdvisorProductQuery query){
         Assert.notNull(query.getAdvisorAccount(), ServiceProductExceptionEnum.SERVICE_PRODUCT_ADVISOR_ACCOUNT_EMPTY.getMessage());

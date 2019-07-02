@@ -3,6 +3,7 @@ package com.jn.park.electricmeter.service;
 import com.jn.common.model.Result;
 import com.jn.hardware.model.electricmeter.ElectricMeterWaterOrElectricShow;
 import com.jn.park.electricmeter.entity.TbElectricMeterInfo;
+import com.jn.park.electricmeter.model.CostBillModel;
 import com.jn.park.electricmeter.model.MeterInfoModel;
 import com.jn.park.electricmeter.model.TrendChartPageParam;
 import com.jn.park.electricmeter.model.TrendChartParam;
@@ -146,4 +147,7 @@ public interface MeterService {
      * @return
      */
     Result getMeterInfosByCompanyId(String companyId);
+
+
+    Result updateBillCost(CostBillModel companyModel);
 }

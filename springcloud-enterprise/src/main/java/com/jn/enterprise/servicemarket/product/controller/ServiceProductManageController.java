@@ -112,7 +112,7 @@ public class ServiceProductManageController extends BaseController {
         return new Result(show);
     }
     @ControllerLog(doAction = "编辑修改常规服务产品")
-    @ApiOperation(value ="修改常规服务产品",notes = "编辑常规产品时,1、产品类型、业务领域、相关机构和相关顾问是不可编辑项")
+    @ApiOperation(value ="修改常规服务产品",notes = "编辑常规产品时,1、产品类型、业务领域、相关机构和相关专员是不可编辑项")
     @RequiresPermissions("/servicemarket/product/modifyCommonService")
     @RequestMapping(value = "/modifyCommonService",method = RequestMethod.POST)
     public Result modifyCommonService(@RequestBody @Validated UpdateCommonProduct product){

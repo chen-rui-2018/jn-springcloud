@@ -269,7 +269,7 @@ public class RequireManagementServiceImpl implements RequireManagementService {
         //意向产品
         tbServiceRequire.setProductId(productId);
         tbServiceRequire.setProductName(productName);
-        //根据产品id查询产品和顾问关联表（tb_service_and_advisor），获取账号
+        //根据产品id查询产品和专员关联表（tb_service_and_advisor），获取账号
         List<TbServiceAndAdvisor> advisorByProductId = getAdvisorByProductId(productId);
         if(!advisorByProductId.isEmpty()){
             List<String> accountList=new ArrayList<>(16);
@@ -286,7 +286,7 @@ public class RequireManagementServiceImpl implements RequireManagementService {
             }
             String accounts = StringUtils.join(accountList, ",");
             String names=StringUtils.join(advisorNameList,",");
-            //意向顾问账号，顾问姓名
+            //意向专员账号，专员姓名
             tbServiceRequire.setAdvisorAccount(accounts);
             tbServiceRequire.setAdvisorName(names);
         }
@@ -320,11 +320,11 @@ public class RequireManagementServiceImpl implements RequireManagementService {
     }
 
     /**
-     * 根据产品id获取产品管理的顾问信息
+     * 根据产品id获取产品管理的专员信息
      * @param productId  产品id
      * @return
      */
-    @ServiceLog(doAction = "根据产品id获取产品管理的顾问信息")
+    @ServiceLog(doAction = "根据产品id获取产品管理的专员信息")
     private List<TbServiceAndAdvisor> getAdvisorByProductId(String productId) {
         TbServiceAndAdvisorCriteria example=new TbServiceAndAdvisorCriteria();
         example.createCriteria().andProductIdEqualTo(productId);
@@ -425,7 +425,7 @@ public class RequireManagementServiceImpl implements RequireManagementService {
         TbServiceRequire tbServiceRequire = getTbServiceRequire(reqNum);
         RequireOtherDetails requireOtherDetails=new RequireOtherDetails();
         BeanUtils.copyProperties(tbServiceRequire, requireOtherDetails);
-        tbServiceRequire.setReqDetail(tbServiceRequire.getReqDetail());
+        requireOtherDetails.setRequireDetail(tbServiceRequire.getReqDetail());
         //融资期限
         if(tbServiceRequire.getFinancingPeriodMax()!=null
                 && StringUtils.isNotBlank(tbServiceRequire.getFinancingPeriodMax().toString())){
@@ -548,7 +548,7 @@ public class RequireManagementServiceImpl implements RequireManagementService {
     @ServiceLog(doAction = "对接需求操作")
     @Override
     public int handleOperating(String reqNum, String account,String advisorName) {
-        //根据需求单号，修改当前数据的需求状态字段，修改对接结果字段，对接日期字段，意向顾问字段
+        //根据需求单号，修改当前数据的需求状态字段，修改对接结果字段，对接日期字段，意向专员字段
         TbServiceRequireCriteria example=new TbServiceRequireCriteria();
         //数据状态  0：删除  1：有效
         byte recordStatus=1;
@@ -566,9 +566,9 @@ public class RequireManagementServiceImpl implements RequireManagementService {
         tbServiceRequire.setHandleResult("1");
         //对接日期
         tbServiceRequire.setHandleTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
-        //顾问账号
+        //专员账号
         tbServiceRequire.setAdvisorAccount(account);
-        //顾问名称
+        //专员名称
         tbServiceRequire.setAdvisorName(advisorName);
         return tbServiceRequireMapper.updateByExampleSelective(tbServiceRequire, example);
     }

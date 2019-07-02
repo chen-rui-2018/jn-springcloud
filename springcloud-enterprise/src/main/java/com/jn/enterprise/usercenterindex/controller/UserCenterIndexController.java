@@ -51,8 +51,8 @@ public class UserCenterIndexController {
 
 
 
-    @ControllerLog(doAction = "顾问管理")
-    @ApiOperation(value = "顾问管理",notes = "顾问管理小方块", httpMethod = "GET")
+    @ControllerLog(doAction = "专员管理")
+    @ApiOperation(value = "专员管理",notes = "专员管理小方块", httpMethod = "GET")
     @GetMapping(value = "/findAdviserInvitation")
     @RequiresPermissions("/userCenter/Index/findAdviserInvitation")
     public Result findAdviserInvitation(){

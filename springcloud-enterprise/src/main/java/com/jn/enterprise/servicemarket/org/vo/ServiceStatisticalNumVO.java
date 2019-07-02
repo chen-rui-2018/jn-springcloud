@@ -24,7 +24,7 @@ public class ServiceStatisticalNumVO implements Serializable {
     @ApiModelProperty(value = "活动场数")
     private String activityNum;
 
-    @ApiModelProperty(value = "入驻顾问数")
+    @ApiModelProperty(value = "入驻专员数")
     private String advisorNum;
 
     @ApiModelProperty(value = "入驻投资人数 ")

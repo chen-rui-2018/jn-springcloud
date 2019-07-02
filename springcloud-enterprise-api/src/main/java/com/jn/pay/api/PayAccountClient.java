@@ -46,7 +46,7 @@ public interface PayAccountClient {
     Result<PayOrderRsp> createOrderAndPay(@RequestBody CreateOrderAndPayReqModel createOrderAndPayReqModel);
 
 
-    @ApiOperation(value = "我的账户-通过企业ID和账本类型查询账号余额",notes = "我的账户-通过企业ID和账本类型查询账号余额")
+    @ApiOperation(value = "我的账户-通过账本ID查询账本余额",notes = "我的账户-通过账本ID查询账本余额")
     @RequestMapping(value = "/api/payment/payAccount/queryPayAccountBookMoney",method = RequestMethod.POST)
     Result<PayAccountBook> queryPayAccountBookMoney(@RequestBody @Validated PayAccountBookMoney payAccountBookMoney);
 
@@ -58,6 +58,10 @@ public interface PayAccountClient {
     @ApiOperation(value = "我的账本-用户充值后自动扣费",notes = "我的账本-用户充值后自动扣费")
     @RequestMapping(value = "/api/payment/payAccount/automaticDeduction",method = RequestMethod.POST)
     Result automaticDeduction(@RequestBody @Validated PayAutoDeduParam payAutoDeduParam);
+
+    @ApiOperation(value = "我的账本-通过企业或用户ID查询账户下账本信息",notes = "我的账本-通过企业或用户ID查询账户下账本信息")
+    @RequestMapping(value = "/api/payment/payAccount/queryAccountBook",method = RequestMethod.POST)
+    Result<List<PayAccountBook>> queryAccountBook(@RequestBody @Validated PayAccountBookEntIdOrUserIdParam payAccountBookEntIdOrUserIdParam);
 
 
 }

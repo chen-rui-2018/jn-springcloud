@@ -31,7 +31,7 @@ import java.util.Map;
  * @Version v1.0
  * @modified By:
  */
-@Api(tags = "用户中心--角色认证--服务顾问认证--填写顾问资料")
+@Api(tags = "用户中心--角色认证--服务专员认证--填写专员资料")
 @RestController
 @RequestMapping(value = "/serviceMarket/advisorEditController")
 public class AdvisorEditController extends BaseController {
@@ -47,15 +47,15 @@ public class AdvisorEditController extends BaseController {
     private AdvisorService advisorService;
 
 
-    @ControllerLog(doAction = "判断当前登录用户认证顾问的状态")
-    @ApiOperation(value = "判断当前登录用户认证顾问的状态",notes = "返回顾问的认证状态以及状态说明：0：未认证  1：认证中  2：认证通过  3：认证不通过")
+    @ControllerLog(doAction = "判断当前登录用户认证专员的状态")
+    @ApiOperation(value = "判断当前登录用户认证专员的状态",notes = "返回专员的认证状态以及状态说明：0：未认证  1：认证中  2：认证通过  3：认证不通过")
     @RequestMapping(value = "/getUserApprovalStatus",method = RequestMethod.GET)
     @RequiresPermissions("/serviceMarket/advisorEditController/getUserApprovalStatus")
     public Result<AdvisorApprovalStatus> getUserApprovalStatus(){
         //获取当前登录用户基本信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         if(user==null || user.getAccount()==null){
-            logger.warn("判断当前登录用户认证顾问的状态获取当前登录用户信息失败");
+            logger.warn("判断当前登录用户认证专员的状态获取当前登录用户信息失败");
             return new Result(RequireExceptionEnum.NETWORK_ANOMALY.getCode(),RequireExceptionEnum.NETWORK_ANOMALY.getMessage());
         }
         return new Result(advisorEditService.getUserApprovalStatus(user.getAccount()));
@@ -114,11 +114,11 @@ public class AdvisorEditController extends BaseController {
         return new Result(certificateTypeList);
     }
 
-    @ControllerLog(doAction = "服务顾问详情")
-    @ApiOperation(value = "服务顾问详情 (回显顾问认证信息)",notes="根据顾问账号获取顾问详情")
+    @ControllerLog(doAction = "服务专员详情")
+    @ApiOperation(value = "服务专员详情 (回显专员认证信息)",notes="根据专员账号获取专员详情")
     @RequiresPermissions("/serviceMarket/advisorEditController/getServiceAdvisorInfo")
     @RequestMapping(value = "/getServiceAdvisorInfo",method = RequestMethod.GET)
-    public Result<AdvisorDetailsVo> getServiceAdvisorInfo(@ApiParam(value = "顾问账号" ,required = true,example = "wangsong")@RequestParam("advisorAccount") String advisorAccount){
+    public Result<AdvisorDetailsVo> getServiceAdvisorInfo(@ApiParam(value = "专员账号" ,required = true,example = "wangsong")@RequestParam("advisorAccount") String advisorAccount){
         Assert.notNull(advisorAccount, AdvisorExceptionEnum.ADVISOR_ACCOUNT_NOT_NULL.getMessage());
         //获取当前登录用户基本信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
@@ -131,7 +131,7 @@ public class AdvisorEditController extends BaseController {
     }
 
    @ControllerLog(doAction = "发送申请/提交审批")
-   @ApiOperation(value = "发送申请/提交审批(将顾问信息审批状态由未反馈改为待审批)")
+   @ApiOperation(value = "发送申请/提交审批(将专员信息审批状态由未反馈改为待审批)")
    @RequestMapping(value = "/sendApproval",method = RequestMethod.POST)
    @RequiresPermissions("/serviceMarket/advisorEditController/sendApproval")
    public Result<Integer> sendApproval(){

@@ -20,10 +20,10 @@ public class UserLogin implements Serializable {
     private static final long serialVersionUID = -7484136779753770396L;
 
     @ApiModelProperty(value = "账户名",required = true,example = "")
-    @Size(min = 1, max = 16, message = "账号不正确")
+    @Size(min = 1, max = 100, message = "账号不正确")
     private String account;
     @ApiModelProperty(value = "密码",required = true,example = "")
-    @Size(min = 6, max = 50, message = "密码不正确")
+    @Size(min = 6, max = 100, message = "密码不正确")
     private String password;
 
     public String getAccount() {

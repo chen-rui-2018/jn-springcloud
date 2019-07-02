@@ -118,7 +118,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
             content.setViewCount("0");
         }
 
-        //设置服务顾问
+        //设置服务专员
         List<TbServiceAndAdvisor> tb_service_and_advisor = new ArrayList<>();
         if (StringUtils.isNotBlank(content.getAdvisorAccount())){
             String[] advisorArr = content.getAdvisorAccount().split(",");
@@ -447,7 +447,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
 
         startProductIbps(content, account, tbServiceProduct.getTemplateId(), tbServiceProduct);
     }
-    @ServiceLog(doAction = "顾问-服务产品列表")
+    @ServiceLog(doAction = "专员-服务产品列表")
     @Override
     public PaginationData advisorProductList(AdvisorProductQuery query,Boolean needPage) {
         com.github.pagehelper.Page<Object> objects = null;
@@ -629,7 +629,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
 
 
     /**
-     * 添加顾问信息
+     * 添加专员信息
      * @param account
      * @param productId
      */

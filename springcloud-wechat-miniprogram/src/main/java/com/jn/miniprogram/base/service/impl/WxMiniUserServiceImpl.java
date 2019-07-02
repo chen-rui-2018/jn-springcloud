@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
 import com.jn.common.util.GlobalConstants;
+import com.jn.common.util.encryption.AESUtil;
 import com.jn.miniprogram.base.enums.WxExceptionEnums;
 import com.jn.miniprogram.base.model.WxMiniGetTokenParam;
 import com.jn.miniprogram.base.model.WxMiniJscode2SessionResult;
@@ -140,7 +141,7 @@ public class WxMiniUserServiceImpl implements WxMiniUserService {
             return "";
         }
         UserNoPasswordLogin userNoPasswordLogin = new UserNoPasswordLogin();
-        userNoPasswordLogin.setAccount(account);
+        userNoPasswordLogin.setAccount(AESUtil.encrypt(account, AESUtil.DEFAULT_KEY));
         Result<String> result = systemClient.noPasswordLogin(userNoPasswordLogin);
         logger.info("\n调用免密登陆接口获取TOKEN的入参：【{}】,出参：【{}】",account,result);
         if(null != result && GlobalConstants.SUCCESS_CODE.equals(result.getCode())) {
